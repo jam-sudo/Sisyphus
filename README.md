@@ -28,19 +28,19 @@ t½: 4.32 h
 The body is represented as a 34-compartment directed multi-graph comprising blood pools (arterial, venous, portal vein), perfusion-limited organs (11), permeability-limited organs (4, each split into vascular and extravascular sub-compartments), GI lumen segments (8, ACAT model), and mass-balance sinks (4). Physiological parameters follow the ICRP Reference Man (ICRP, 2002). Tissue compositions for partition coefficient estimation are taken from Rodgers & Rowland (2005).
 
 ```
-                     ┌───────────────────────────────────────────────┐
-                     │                                               │
-   ┌──────┐    ┌─────┴────┐                                   ┌─────┴────┐
-   │ lung │───►│ arterial │──► brain ─────────────────────────►│ venous   │
-   └──┬───┘    │  blood   │──► heart ─────────────────────────►│  blood   │
-      │        │          │──► kidney ────────────────────────►│          │
-      │        │          │                                    │          │
-      │        │          │──► gut wall ──┐                    │          │
-      │        │          │──► spleen  ───┤ portal ──► liver ─►│          │
-      │        │          │──► pancreas ──┘  vein    (CYP450)  │          │
-      │        │          │                                    │          │
-      │        │          │──► muscle, adipose, skin, bone ───►│          │
-      │        └──────────┘                                    └────┬─────┘
+                      ┌─────────────────────────────────────────────┐
+                      │                                             │
+   ┌──────┐    ┌──────┴───┐                                   ┌─────┴────┐
+   │ lung │───►│ arterial │─► brain ─────────────────────────►│ venous   │
+   └──┬───┘    │  blood   │─► heart ─────────────────────────►│  blood   │
+      │        │          │─► kidney ────────────────────────►│          │
+      │        │          │                                   │          │
+      │        │          │─► gut wall ──┐                    │          │
+      │        │          │─► spleen  ───┤ portal ► liver ───►│          │
+      │        │          │─► pancreas ──┘  vein   (CYP450)   │          │
+      │        │          │                                   │          │
+      │        │          │─► muscle, adipose, skin, bone ───►│          │
+      │        └──────────┘                                   └─────┬────┘
       │                                                             │
       └─────────────────────────────────────────────────────────────┘
 
