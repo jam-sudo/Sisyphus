@@ -20,20 +20,24 @@ def one_compartment_oral(
 ) -> NDArray[np.float64]:
     """Analytical 1-compartment oral PK model.
 
-    C(t) = (F × Dose × ka) / (Vd × (ka − ke)) × (e^(−ke·t) − e^(−ka·t))
+    C(t) = (F * Dose * ka) / (Vd * (ka - ke)) * (e^(-ke*t) - e^(-ka*t))
 
     Args:
         time: Time points (h).
         dose_mg: Dose (mg).
-        ka: Absorption rate constant (h⁻¹).
-        ke: Elimination rate constant (h⁻¹).
+        ka: Absorption rate constant (h^-1).
+        ke: Elimination rate constant (h^-1).
         vd: Volume of distribution (L).
-        f: Bioavailability (0–1).
+        f: Bioavailability (0-1).
 
     Returns:
         Concentration array (mg/L).
     """
-    raise NotImplementedError
+    if abs(ka - ke) < 1e-12:
+        # Degenerate case: ka ≈ ke
+        return (f * dose_mg * ka / vd) * time * np.exp(-ke * time)
+    coeff = (f * dose_mg * ka) / (vd * (ka - ke))
+    return coeff * (np.exp(-ke * time) - np.exp(-ka * time))
 
 
 def two_compartment_iv(
@@ -46,17 +50,17 @@ def two_compartment_iv(
 ) -> NDArray[np.float64]:
     """Analytical 2-compartment IV bolus model.
 
-    C(t) = A·e^(−α·t) + B·e^(−β·t)
+    C(t) = A * e^(-alpha*t) + B * e^(-beta*t)
 
     Args:
         time: Time points (h).
         dose_mg: Dose (mg).
         a: Coefficient A (mg/L).
         b: Coefficient B (mg/L).
-        alpha: Distribution rate constant (h⁻¹).
-        beta: Elimination rate constant (h⁻¹).
+        alpha: Distribution rate constant (h^-1).
+        beta: Elimination rate constant (h^-1).
 
     Returns:
         Concentration array (mg/L).
     """
-    raise NotImplementedError
+    return a * np.exp(-alpha * time) + b * np.exp(-beta * time)
