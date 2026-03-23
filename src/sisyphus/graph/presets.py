@@ -6,7 +6,12 @@ and return ready-to-use BodyGraph instances.
 
 from __future__ import annotations
 
+from pathlib import Path
+
 from sisyphus.graph.body import BodyGraph
+from sisyphus.graph.builder import build_from_yaml
+
+_PHYSIOLOGY_DIR = Path(__file__).resolve().parent.parent.parent.parent / "data" / "physiology"
 
 
 def reference_man() -> BodyGraph:
@@ -15,7 +20,7 @@ def reference_man() -> BodyGraph:
     Loads ``data/physiology/reference_man.yaml`` and returns a
     validated BodyGraph.
     """
-    raise NotImplementedError
+    return build_from_yaml(_PHYSIOLOGY_DIR / "reference_man.yaml")
 
 
 def reference_woman() -> BodyGraph:
@@ -24,4 +29,4 @@ def reference_woman() -> BodyGraph:
     Loads ``data/physiology/reference_woman.yaml`` and returns a
     validated BodyGraph.
     """
-    raise NotImplementedError
+    return build_from_yaml(_PHYSIOLOGY_DIR / "reference_woman.yaml")
