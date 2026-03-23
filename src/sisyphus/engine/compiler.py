@@ -52,6 +52,10 @@ class ResolvedParams:
             for name, node in graph.nodes.items()
         }
         self._ivive_scaling = {name: node.ivive_scaling for name, node in graph.nodes.items()}
+        self._lookup_names = {
+            name: node.lookup_name if node.lookup_name else name
+            for name, node in graph.nodes.items()
+        }
         self._drug = drug
         self._kp = self._build_kp_map(graph, drug)
         self._inflows = self._compute_inflows(graph)
@@ -105,7 +109,14 @@ class ResolvedParams:
         return 0.0
 
     def drug_ps(self, node_name: str) -> float:
-        """Return drug-specific PS for a node, or 0.0 if not overridden."""
+        """Return drug-specific PS for a node, or 0.0 if not overridden.
+
+        Uses the node's ``lookup_name`` for resolution, so the engine
+        does not need to know naming conventions.
+        """
+        lookup = self._lookup_names.get(node_name, node_name)
+        if lookup in self._drug.ps_overrides:
+            return self._drug.ps_overrides[lookup].mean
         if node_name in self._drug.ps_overrides:
             return self._drug.ps_overrides[node_name].mean
         return 0.0
@@ -119,21 +130,23 @@ class ResolvedParams:
         return self._global_params.get(param, 0.0)
 
     def _build_kp_map(self, graph: BodyGraph, drug: DrugOnGraph) -> dict[str, float]:
-        """Build node_name -> Kp mapping."""
+        """Build node_name -> Kp mapping.
+
+        Uses ``node.lookup_name`` (set by graph builder) to resolve Kp
+        for nodes whose name differs from their drug-parameter key
+        (e.g. ``adipose_tissue`` has ``lookup_name="adipose"``).
+        No string manipulation — identity-blind.
+        """
         kp: dict[str, float] = {}
         for name, node in graph.nodes.items():
             if node.node_type in ("blood_pool", "lumen", "sink"):
                 kp[name] = 1.0
             elif name in drug.kp_overrides:
                 kp[name] = drug.kp_overrides[name].mean
+            elif node.lookup_name and node.lookup_name in drug.kp_overrides:
+                kp[name] = drug.kp_overrides[node.lookup_name].mean
             else:
-                # Check if this is a permeability-limited tissue node
-                # e.g., "adipose_tissue" — check if base name "adipose" is in kp_overrides
-                base = name.replace("_tissue", "")
-                if base in drug.kp_overrides:
-                    kp[name] = drug.kp_overrides[base].mean
-                else:
-                    kp[name] = 1.0  # default
+                kp[name] = 1.0  # default
         return kp
 
     def _compute_inflows(self, graph: BodyGraph) -> dict[str, float]:
@@ -246,9 +259,7 @@ class ODECompiler:
         # Map each edge to its FluxSpec via the flux registry.
         for edge_id, edge in enumerate(graph.edges):
             if edge.edge_type not in FLUX_REGISTRY:
-                raise ValueError(
-                    f"No FluxSpec registered for edge type: {edge.edge_type!r}"
-                )
+                raise ValueError(f"No FluxSpec registered for edge type: {edge.edge_type!r}")
             flux_cls = FLUX_REGISTRY[edge.edge_type]
             spec = flux_cls.from_edge(edge_id, edge, compiled.state_index)
             compiled.flux_specs.append(spec)
