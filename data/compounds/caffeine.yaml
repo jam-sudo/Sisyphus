@@ -14,7 +14,7 @@ administration_node: stomach_lumen
 fup: 0.65
 rbp: 1.0
 kp_method: provided
-particle_radius_um: 25.0
+particle_radius_um: 14.9
 renal_clearance: 0.08    # L/h
 
 # Back-calculated enzyme affinities (unitless)
