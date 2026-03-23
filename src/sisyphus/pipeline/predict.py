@@ -1,0 +1,159 @@
+"""Pipeline orchestrator -- SMILES -> PredictionResult.
+
+Thin coordination layer that wires predict, engine, ml, and pk
+together.  All logic lives in the sub-layers; this module only
+calls them in the right order and combines results.
+"""
+
+from __future__ import annotations
+
+import logging
+from pathlib import Path
+
+import numpy as np
+
+from sisyphus.core import Distribution, PKEndpoints, PredictionResult
+
+logger = logging.getLogger(__name__)
+
+# Resolve physiology YAML relative to repository root.
+# src/sisyphus/pipeline/predict.py -> ../../../../data/physiology
+_PHYSIOLOGY_DIR = Path(__file__).resolve().parent.parent.parent.parent / "data" / "physiology"
+
+
+def predict(smiles: str, dose_mg: float, route: str = "oral") -> PredictionResult:
+    """End-to-end prediction: SMILES -> PredictionResult.
+
+    Pipeline:
+    1. predict layer: SMILES -> MolecularProfile -> ADMEProperties -> DrugOnGraph
+    2. engine layer: DrugOnGraph + BodyGraph -> SimResult (with MC)
+    3. pk layer: SimResult -> PKEndpoints
+    4. ml layer: SMILES -> direct PKEndpoints
+    5. meta-learner: combine engine + ML -> final PKEndpoints
+
+    Args:
+        smiles: Input SMILES string.
+        dose_mg: Dose in mg.
+        route: Administration route (``"oral"`` or ``"iv"``).
+
+    Returns:
+        PredictionResult with combined PK endpoints and uncertainty.
+
+    Raises:
+        ValueError: If the SMILES string is invalid.
+    """
+    # Import sub-layers here to avoid circular imports and to register flux specs.
+    import sisyphus.engine.flux  # noqa: F401 -- register flux specs
+    from sisyphus.engine.compiler import ODECompiler, ResolvedParams
+    from sisyphus.engine.solver import solve
+    from sisyphus.graph.builder import build_from_yaml
+    from sisyphus.ml.ensemble import MetaLearner
+    from sisyphus.ml.models import PKPredictor
+    from sisyphus.pk.endpoints import compute_endpoints
+    from sisyphus.predict.adme import predict_adme
+    from sisyphus.predict.chemistry import compute_profile
+    from sisyphus.predict.ivive import build_drug_on_graph
+
+    warnings_list: list[str] = []
+
+    # ── Step 1: Chemistry + ADME ─────────────────────────────────────────
+    profile = compute_profile(smiles)
+    adme = predict_adme(profile)
+    drug = build_drug_on_graph(profile, adme, dose_mg, route)
+
+    # ── Step 2: Engine (PBPK simulation) ─────────────────────────────────
+    engine_pk: PKEndpoints | None = None
+    try:
+        graph = build_from_yaml(_PHYSIOLOGY_DIR / "reference_man.yaml")
+        compiler = ODECompiler()
+        compiled = compiler.compile(graph)
+
+        # Single deterministic run (seed=42)
+        rng = np.random.default_rng(42)
+        realized_graph = graph.sample(rng)
+        realized_drug = drug.sample(rng)
+        params = ResolvedParams(realized_graph, realized_drug)
+
+        y0 = np.zeros(compiled.n_states)
+        admin_idx = compiled.state_index[drug.administration_node]
+        y0[admin_idx] = drug.dose_mg
+
+        sim_result = solve(compiled, params, y0, t_span=(0, 24))
+        if sim_result.solver_success:
+            engine_pk = compute_endpoints(sim_result)
+            logger.info(
+                "Engine PK: Cmax=%.4f mg/L, Tmax=%.2f h, AUC=%.4f mg*h/L",
+                engine_pk.cmax.mean,
+                engine_pk.tmax.mean,
+                engine_pk.auc_0t.mean,
+            )
+        else:
+            warnings_list.append("ODE solver did not converge")
+            logger.warning("ODE solver did not converge")
+    except Exception as e:
+        warnings_list.append(f"Engine failed: {e}")
+        logger.warning("Engine simulation failed: %s", e)
+
+    # ── Step 3: ML direct Cmax ───────────────────────────────────────────
+    ml_pk: PKEndpoints | None = None
+    try:
+        predictor = PKPredictor()
+        ml_cmax = predictor.predict_cmax(smiles, dose_mg)
+        ml_pk = PKEndpoints(
+            cmax=ml_cmax,
+            tmax=Distribution(1.0),  # ML does not predict Tmax
+            auc_0t=Distribution(0.0),  # ML does not predict AUC
+        )
+        logger.info("ML PK: Cmax=%.4f mg/L", ml_cmax.mean)
+    except Exception as e:
+        warnings_list.append(f"ML prediction failed: {e}")
+        logger.warning("ML prediction failed: %s", e)
+
+    # ── Step 4: Meta-learner ─────────────────────────────────────────────
+    meta = MetaLearner()
+    final_pk = meta.combine(
+        engine_pk,
+        ml_pk,
+        dose_mg=dose_mg,
+        logp=profile.logp,
+        tpsa=profile.tpsa,
+        mw=profile.mw,
+        fup=adme.fup.mean,
+        clint=adme.clint.mean,
+        compound_type=profile.compound_type,
+        pgp_flag="PGP_EFFLUX_RISK" in profile.ad_flags,
+    )
+
+    # ── Determine method ─────────────────────────────────────────────────
+    if engine_pk and ml_pk:
+        method = "hybrid"
+    elif engine_pk:
+        method = "engine"
+    elif ml_pk:
+        method = "ml"
+    else:
+        method = "none"
+
+    # ── Confidence ────────────────────────────────────────────────────────
+    if not profile.in_ad:
+        confidence = "low"
+    elif engine_pk and engine_pk.cmax.mean > 0:
+        confidence = "high"
+    else:
+        confidence = "medium"
+
+    return PredictionResult(
+        drug_name=profile.smiles[:30],
+        smiles=profile.smiles,
+        dose_mg=dose_mg,
+        route=route,
+        pk=final_pk,
+        method=method,
+        engine_pk=engine_pk,
+        ml_pk=ml_pk,
+        confidence=confidence,
+        in_applicability_domain=profile.in_ad,
+        ad_flags=profile.ad_flags,
+        warnings=warnings_list,
+        cmax_90ci=None,  # Will be computed from MC in future
+    )
