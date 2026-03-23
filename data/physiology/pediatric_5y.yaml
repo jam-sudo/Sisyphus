@@ -1,0 +1,282 @@
+# Pediatric 5-year-old — 18 kg, whole-body PBPK graph
+# Derived from ICRP Reference Man (70 kg) with:
+#   - Volumes scaled by BW ratio: vol_ped = vol_adult * (18/70)
+#   - Cardiac output scaled allometrically: CO_ped = CO_adult * (18/70)^0.75
+#   - Enzyme abundances scaled by BW ratio * ontogeny factor
+# Sources: Edginton 2006, Johnson 2006, Ontogeny: Hines 2008
+# BW_ratio = 18/70 = 0.2571
+# CO_scale = (18/70)^0.75 = 0.3704
+
+global_params:
+  cardiac_output: {mean: 140.8, cv: 0.10}   # 390 * (18/70)^0.75 = 140.8 L/h
+  body_weight: {mean: 18.0, cv: 0.0}
+  hematocrit: {mean: 0.40, cv: 0.0}         # slightly lower in children
+  ivive_scaling: 0.00006
+
+# ---- NODES (34 total, same structure as reference_man) ----
+nodes:
+
+  # -- Blood pools (3) --
+  - name: venous_blood
+    type: blood_pool
+    volume: 0.951                 # 3.7 * 0.2571
+
+  - name: arterial_blood
+    type: blood_pool
+    volume: 0.386                 # 1.5 * 0.2571
+
+  - name: portal_vein
+    type: blood_pool
+    volume: 0.013                 # 0.05 * 0.2571
+
+  # -- Perfusion-limited organs (11) --
+  - name: lung
+    type: organ
+    volume: 0.129                 # 0.50 * 0.2571
+    composition: {fn: 0.0030, fp: 0.0128, fw: 0.811, pH: 7.0}
+
+  - name: brain
+    type: organ
+    volume: 0.373                 # 1.45 * 0.2571
+    composition: {fn: 0.0391, fp: 0.0550, fw: 0.620, pH: 7.0}
+
+  - name: heart
+    type: organ
+    volume: 0.085                 # 0.33 * 0.2571
+    composition: {fn: 0.0117, fp: 0.0166, fw: 0.758, pH: 7.0}
+
+  - name: kidney
+    type: organ
+    volume: 0.080                 # 0.31 * 0.2571
+    composition: {fn: 0.0121, fp: 0.0242, fw: 0.783, pH: 7.0}
+
+  - name: liver
+    type: organ
+    volume: 0.463                 # 1.80 * 0.2571
+    composition: {fn: 0.0348, fp: 0.0252, fw: 0.751, pH: 7.0}
+    enzymes:
+      # adult_abundance * BW_ratio * ontogeny_factor
+      # CYP3A4 ontogeny at 5y: ~0.5 (Hines 2008)
+      CYP3A4: 1189107       # 9247500 * 0.2571 * 0.5
+      # CYP2D6 ontogeny at 5y: ~0.7
+      CYP2D6: 121500        # 675000 * 0.2571 * 0.7
+      # CYP1A2 ontogeny at 5y: ~0.4
+      CYP1A2: 312343        # 3037500 * 0.2571 * 0.4
+      # CYP2C9 ontogeny at 5y: ~0.6
+      CYP2C9: 999771        # 6480000 * 0.2571 * 0.6
+      # CYP2E1 ontogeny at 5y: ~0.8
+      CYP2E1: 680274        # 3307500 * 0.2571 * 0.8
+    ivive_scaling: 0.00006
+
+  - name: spleen
+    type: organ
+    volume: 0.039                 # 0.15 * 0.2571
+    composition: {fn: 0.0077, fp: 0.0113, fw: 0.788, pH: 7.0}
+
+  - name: gut_wall
+    type: barrier_organ
+    volume: 0.265                 # 1.03 * 0.2571
+    composition: {fn: 0.0163, fp: 0.0185, fw: 0.718, pH: 7.0}
+    enzymes:
+      # CYP3A4 in gut: ontogeny ~0.5 at age 5
+      CYP3A4: 2728341       # 21224338 * 0.2571 * 0.5
+    ivive_scaling: 0.00006
+
+  - name: pancreas
+    type: organ
+    volume: 0.026                 # 0.10 * 0.2571
+    composition: {fn: 0.0348, fp: 0.0252, fw: 0.751, pH: 7.0}
+
+  - name: thymus
+    type: organ
+    volume: 0.005                 # 0.02 * 0.2571
+    composition: {fn: 0.0132, fp: 0.0100, fw: 0.700, pH: 7.0}
+
+  - name: reproductive
+    type: organ
+    volume: 0.010                 # 0.04 * 0.2571
+    composition: {fn: 0.0132, fp: 0.0100, fw: 0.700, pH: 7.0}
+
+  - name: rest
+    type: organ
+    volume: 0.643                 # 2.50 * 0.2571
+    composition: {fn: 0.0132, fp: 0.0100, fw: 0.700, pH: 7.0}
+
+  # -- Permeability-limited organs (4 x 2 = 8 nodes) --
+  - name: adipose_vasc
+    type: blood_pool
+    volume: 0.186                 # 0.725 * 0.2571
+    lookup_name: adipose
+
+  - name: adipose_tissue
+    type: organ
+    volume: 3.542                 # 13.775 * 0.2571
+    composition: {fn: 0.7021, fp: 0.0022, fw: 0.150, pH: 7.0}
+    lookup_name: adipose
+
+  - name: muscle_vasc
+    type: blood_pool
+    volume: 0.360                 # 1.40 * 0.2571
+    lookup_name: muscle
+
+  - name: muscle_tissue
+    type: organ
+    volume: 6.838                 # 26.60 * 0.2571
+    composition: {fn: 0.0238, fp: 0.0072, fw: 0.760, pH: 7.0}
+    lookup_name: muscle
+
+  - name: bone_vasc
+    type: blood_pool
+    volume: 0.062                 # 0.243 * 0.2571
+    lookup_name: bone
+
+  - name: bone_tissue
+    type: organ
+    volume: 1.187                 # 4.617 * 0.2571
+    composition: {fn: 0.0174, fp: 0.0010, fw: 0.439, pH: 7.0}
+    lookup_name: bone
+
+  - name: skin_vasc
+    type: blood_pool
+    volume: 0.042                 # 0.165 * 0.2571
+    lookup_name: skin
+
+  - name: skin_tissue
+    type: organ
+    volume: 0.806                 # 3.135 * 0.2571
+    composition: {fn: 0.0284, fp: 0.0111, fw: 0.718, pH: 7.0}
+    lookup_name: skin
+
+  # -- GI lumen segments (8) --
+  - name: stomach_lumen
+    type: lumen
+    volume: 0.064                 # 0.25 * 0.2571
+
+  - name: duodenum_lumen
+    type: lumen
+    volume: 0.013                 # 0.05 * 0.2571
+
+  - name: jejunum1_lumen
+    type: lumen
+    volume: 0.018                 # 0.07 * 0.2571
+
+  - name: jejunum2_lumen
+    type: lumen
+    volume: 0.018                 # 0.07 * 0.2571
+
+  - name: ileum1_lumen
+    type: lumen
+    volume: 0.015                 # 0.06 * 0.2571
+
+  - name: ileum2_lumen
+    type: lumen
+    volume: 0.015                 # 0.06 * 0.2571
+
+  - name: ileum3_lumen
+    type: lumen
+    volume: 0.015                 # 0.06 * 0.2571
+
+  - name: colon_lumen
+    type: lumen
+    volume: 0.077                 # 0.30 * 0.2571
+
+  # -- Sinks (4) --
+  - name: metabolized_hepatic
+    type: sink
+    volume: 1.0e+10
+
+  - name: excreted_renal
+    type: sink
+    volume: 1.0e+10
+
+  - name: metabolized_gut
+    type: sink
+    volume: 1.0e+10
+
+  - name: excreted_fecal
+    type: sink
+    volume: 1.0e+10
+
+# ---- EDGES (same structure as reference_man, same flow_fractions) ----
+# Flow rates are computed as flow_fraction * cardiac_output.
+# Since CO is already scaled, absolute flows are pediatric-appropriate.
+edges:
+
+  # -- Pulmonary circulation --
+  - {source: venous_blood, target: lung, type: flow, flow_fraction: 1.0}
+  - {source: lung, target: arterial_blood, type: flow, flow_fraction: 1.0}
+
+  # -- Systemic: perfusion-limited organs --
+  - {source: arterial_blood, target: brain, type: flow, flow_fraction: 0.12}
+  - {source: brain, target: venous_blood, type: flow}
+
+  - {source: arterial_blood, target: heart, type: flow, flow_fraction: 0.04}
+  - {source: heart, target: venous_blood, type: flow}
+
+  - {source: arterial_blood, target: kidney, type: flow, flow_fraction: 0.19}
+  - {source: kidney, target: venous_blood, type: flow}
+
+  - {source: arterial_blood, target: liver, type: flow, flow_fraction: 0.065}
+  - {source: liver, target: venous_blood, type: flow, flow_fraction: 0.255}
+
+  - {source: arterial_blood, target: gut_wall, type: flow, flow_fraction: 0.15}
+  - {source: gut_wall, target: portal_vein, type: flow}
+
+  - {source: arterial_blood, target: spleen, type: flow, flow_fraction: 0.03}
+  - {source: spleen, target: portal_vein, type: flow}
+
+  - {source: arterial_blood, target: pancreas, type: flow, flow_fraction: 0.01}
+  - {source: pancreas, target: portal_vein, type: flow}
+
+  - {source: portal_vein, target: liver, type: flow, flow_fraction: 0.19}
+
+  - {source: arterial_blood, target: thymus, type: flow, flow_fraction: 0.002}
+  - {source: thymus, target: venous_blood, type: flow}
+
+  - {source: arterial_blood, target: reproductive, type: flow, flow_fraction: 0.002}
+  - {source: reproductive, target: venous_blood, type: flow}
+
+  - {source: arterial_blood, target: rest, type: flow, flow_fraction: 0.069}
+  - {source: rest, target: venous_blood, type: flow}
+
+  # -- Systemic: permeability-limited organs --
+  - {source: arterial_blood, target: adipose_vasc, type: flow, flow_fraction: 0.052}
+  - {source: adipose_vasc, target: venous_blood, type: flow}
+  - {source: adipose_vasc, target: adipose_tissue, type: diffusion, ps_product: 2.571}  # 10.0 * 0.2571
+
+  - {source: arterial_blood, target: muscle_vasc, type: flow, flow_fraction: 0.17}
+  - {source: muscle_vasc, target: venous_blood, type: flow}
+  - {source: muscle_vasc, target: muscle_tissue, type: diffusion, ps_product: 2.571}   # 10.0 * 0.2571
+
+  - {source: arterial_blood, target: bone_vasc, type: flow, flow_fraction: 0.05}
+  - {source: bone_vasc, target: venous_blood, type: flow}
+  - {source: bone_vasc, target: bone_tissue, type: diffusion, ps_product: 2.571}       # 10.0 * 0.2571
+
+  - {source: arterial_blood, target: skin_vasc, type: flow, flow_fraction: 0.05}
+  - {source: skin_vasc, target: venous_blood, type: flow}
+  - {source: skin_vasc, target: skin_tissue, type: diffusion, ps_product: 2.571}       # 10.0 * 0.2571
+
+  # -- GI transit (same rates as adult — limited data on pediatric GI transit) --
+  - {source: stomach_lumen, target: duodenum_lumen, type: transit, transit_rate: 4.0}
+  - {source: duodenum_lumen, target: jejunum1_lumen, type: transit, transit_rate: 3.846}
+  - {source: jejunum1_lumen, target: jejunum2_lumen, type: transit, transit_rate: 2.105}
+  - {source: jejunum2_lumen, target: ileum1_lumen, type: transit, transit_rate: 2.105}
+  - {source: ileum1_lumen, target: ileum2_lumen, type: transit, transit_rate: 1.471}
+  - {source: ileum2_lumen, target: ileum3_lumen, type: transit, transit_rate: 1.471}
+  - {source: ileum3_lumen, target: colon_lumen, type: transit, transit_rate: 1.471}
+  - {source: colon_lumen, target: excreted_fecal, type: transit, transit_rate: 0.074}
+
+  # -- Absorption (lumen -> gut_wall) --
+  - {source: stomach_lumen, target: gut_wall, type: absorption, ka_fraction: 0.0}
+  - {source: duodenum_lumen, target: gut_wall, type: absorption, ka_fraction: 1.0}
+  - {source: jejunum1_lumen, target: gut_wall, type: absorption, ka_fraction: 1.0}
+  - {source: jejunum2_lumen, target: gut_wall, type: absorption, ka_fraction: 1.0}
+  - {source: ileum1_lumen, target: gut_wall, type: absorption, ka_fraction: 0.8}
+  - {source: ileum2_lumen, target: gut_wall, type: absorption, ka_fraction: 0.6}
+  - {source: ileum3_lumen, target: gut_wall, type: absorption, ka_fraction: 0.3}
+  - {source: colon_lumen, target: gut_wall, type: absorption, ka_fraction: 0.05}
+
+  # -- Clearance --
+  - {source: liver, target: metabolized_hepatic, type: clearance, model: well_stirred}
+  - {source: gut_wall, target: metabolized_gut, type: clearance, model: well_stirred}
+  - {source: kidney, target: excreted_renal, type: clearance, model: gfr_filtration}

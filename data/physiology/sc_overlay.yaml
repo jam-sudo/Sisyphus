@@ -1,0 +1,15 @@
+# SC injection overlay — merge with reference_man.yaml
+# Adds a subcutaneous depot compartment with first-order absorption
+# directly into venous blood (bypasses GI tract and gut first-pass).
+description: "Subcutaneous injection depot"
+
+nodes:
+  - name: sc_depot
+    type: lumen
+    volume: 0.01  # small depot volume (L)
+
+edges:
+  - source: sc_depot
+    target: venous_blood
+    type: absorption
+    ka_fraction: 1.0  # SC absorption directly to venous blood
