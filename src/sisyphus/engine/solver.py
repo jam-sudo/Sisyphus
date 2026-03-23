@@ -49,15 +49,20 @@ def solve(
     )
 
     # Build named concentration and amount dicts
+    # Blood pool: C = A / V (blood concentration, mg/L)
+    # Tissue:     C = A / (V * Kp) (plasma-equivalent concentration)
+    # Sinks/lumen: raw amount
     concentrations = {}
     amounts = {}
     for name, idx in compiled.state_index.items():
         amounts[name] = sol.y[idx]
         v = params.node_param(name, "volume")
-        kp = params.drug_kp(name)
-        rbp = params.drug_param("rbp")
-        if v > 0 and kp > 0:
-            concentrations[name] = sol.y[idx] * rbp / (v * kp)
+        if v > 0:
+            if params.is_blood_pool(name):
+                concentrations[name] = sol.y[idx] / v
+            else:
+                kp = params.drug_kp(name)
+                concentrations[name] = sol.y[idx] / (v * kp) if kp > 0 else sol.y[idx] / v
         else:
             concentrations[name] = sol.y[idx]  # sinks, etc.
 
