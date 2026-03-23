@@ -1,0 +1,232 @@
+"""PK/PD link -- effect compartment and Emax response.
+
+Computes pharmacodynamic effects from plasma concentration time course.
+Uses analytical convolution for effect-site equilibration, not ODE.
+This keeps the engine identity-blind and avoids adding PD-specific
+flux types.
+
+The effect compartment equilibrates with plasma via ke0::
+
+    dCe/dt = ke0 * (Cp - Ce)
+
+Solved exactly per time step::
+
+    Ce(t+dt) = Ce(t) * exp(-ke0*dt) + Cp(t) * (1 - exp(-ke0*dt))
+
+The pharmacodynamic effect uses a sigmoid Emax model::
+
+    E = baseline + Emax * Ce^n / (EC50^n + Ce^n)
+"""
+
+from __future__ import annotations
+
+import logging
+from dataclasses import dataclass
+
+import numpy as np
+from numpy.typing import NDArray
+
+from sisyphus.core import SimResult
+
+logger = logging.getLogger(__name__)
+
+
+# ---------------------------------------------------------------------------
+# PD model specification
+# ---------------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class PDModel:
+    """Pharmacodynamic model specification.
+
+    Attributes:
+        ke0: Effect-site equilibration rate constant (h^-1).
+            Controls delay between plasma and effect-site concentrations.
+            Typical range: 0.1-10 h^-1.
+        emax: Maximum effect (arbitrary units, 0-100%).
+        ec50: Concentration producing 50% of Emax (mg/L).
+        hill: Hill coefficient (sigmoidicity). 1.0 = standard Emax.
+        baseline: Baseline effect (at zero concentration).
+    """
+
+    ke0: float              # h^-1
+    emax: float = 100.0     # max effect (%)
+    ec50: float = 1.0       # mg/L
+    hill: float = 1.0       # sigmoidicity
+    baseline: float = 0.0   # baseline effect
+
+    def __post_init__(self) -> None:
+        if self.ke0 <= 0:
+            raise ValueError(f"ke0 must be positive, got {self.ke0}")
+        if self.ec50 <= 0:
+            raise ValueError(f"ec50 must be positive, got {self.ec50}")
+        if self.hill <= 0:
+            raise ValueError(f"hill must be positive, got {self.hill}")
+
+
+# ---------------------------------------------------------------------------
+# PD result
+# ---------------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class PDResult:
+    """PK/PD simulation result.
+
+    Attributes:
+        time_h: Time points (h).
+        cp: Plasma concentration (mg/L).
+        ce: Effect-site concentration (mg/L).
+        effect: Pharmacodynamic effect (0-Emax + baseline).
+        emax_achieved: Peak effect.
+        temax: Time of peak effect (h).
+    """
+
+    time_h: NDArray[np.float64]
+    cp: NDArray[np.float64]
+    ce: NDArray[np.float64]
+    effect: NDArray[np.float64]
+    emax_achieved: float
+    temax: float
+
+
+# ---------------------------------------------------------------------------
+# Core computation
+# ---------------------------------------------------------------------------
+
+
+def _compute_effect_site(
+    time: NDArray[np.float64],
+    cp: NDArray[np.float64],
+    ke0: float,
+) -> NDArray[np.float64]:
+    """Compute effect-site concentration via exact discrete convolution.
+
+    Solves dCe/dt = ke0 * (Cp - Ce) stepwise using the exact solution
+    for each interval (piecewise-constant Cp assumption)::
+
+        Ce(t+dt) = Ce(t) * exp(-ke0*dt) + Cp(t) * (1 - exp(-ke0*dt))
+
+    Args:
+        time: Time points (h), monotonically increasing.
+        cp: Plasma concentration at each time point (mg/L).
+        ke0: Effect-site equilibration rate constant (h^-1).
+
+    Returns:
+        Effect-site concentration array, same shape as cp.
+    """
+    ce = np.zeros_like(cp)
+    for i in range(1, len(time)):
+        dt = time[i] - time[i - 1]
+        decay = np.exp(-ke0 * dt)
+        ce[i] = ce[i - 1] * decay + cp[i - 1] * (1.0 - decay)
+    return ce
+
+
+def _sigmoid_emax(
+    ce: NDArray[np.float64],
+    emax: float,
+    ec50: float,
+    hill: float,
+    baseline: float,
+) -> NDArray[np.float64]:
+    """Apply sigmoid Emax model to effect-site concentrations.
+
+    E = baseline + Emax * Ce^n / (EC50^n + Ce^n)
+
+    Args:
+        ce: Effect-site concentration (mg/L).
+        emax: Maximum effect.
+        ec50: Concentration at 50% Emax (mg/L).
+        hill: Hill coefficient.
+        baseline: Baseline effect.
+
+    Returns:
+        Effect array, same shape as ce.
+    """
+    ce_pos = np.maximum(ce, 0.0)
+    ce_n = ce_pos ** hill
+    ec50_n = ec50 ** hill
+    return baseline + emax * ce_n / (ec50_n + ce_n)
+
+
+def compute_effect(
+    sim_result: SimResult,
+    pd_model: PDModel,
+    observation_node: str = "venous_blood",
+) -> PDResult:
+    """Compute PK/PD effect from simulation result.
+
+    1. Extract plasma C(t) from SimResult
+    2. Compute effect-site Ce(t) via discrete convolution with ke0
+    3. Apply Emax model: E = baseline + Emax * Ce^n / (EC50^n + Ce^n)
+
+    Args:
+        sim_result: ODE simulation result.
+        pd_model: PD model parameters.
+        observation_node: Node for plasma concentration.
+
+    Returns:
+        PDResult with time courses and peak effect.
+
+    Raises:
+        KeyError: If observation_node not found in sim_result.
+    """
+    if observation_node not in sim_result.concentrations:
+        raise KeyError(
+            f"Observation node {observation_node!r} not found in SimResult. "
+            f"Available: {sorted(sim_result.concentrations.keys())}"
+        )
+
+    time = sim_result.time_h
+    cp = sim_result.concentrations[observation_node]
+
+    # Effect-site equilibration
+    ce = _compute_effect_site(time, cp, pd_model.ke0)
+
+    # Sigmoid Emax model
+    effect = _sigmoid_emax(ce, pd_model.emax, pd_model.ec50, pd_model.hill, pd_model.baseline)
+
+    emax_achieved = float(np.max(effect))
+    temax = float(time[np.argmax(effect)])
+
+    logger.debug(
+        "PK/PD: peak effect=%.2f at t=%.2f h (ke0=%.3f, EC50=%.4f, hill=%.1f)",
+        emax_achieved, temax, pd_model.ke0, pd_model.ec50, pd_model.hill,
+    )
+
+    return PDResult(
+        time_h=time,
+        cp=cp,
+        ce=ce,
+        effect=effect,
+        emax_achieved=emax_achieved,
+        temax=temax,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Preset PD models for common drug-effect pairs
+# ---------------------------------------------------------------------------
+
+# Sources:
+#   Mandema et al. (1996) J Pharmacokinet Biopharm 24:25-46 (midazolam sedation)
+#   Holford (1986) Clin Pharmacokinet 11:483-504 (warfarin PD)
+#   Sheiner et al. (1979) Clin Pharmacol Ther 25:358-371 (warfarin INR)
+
+MIDAZOLAM_SEDATION = PDModel(
+    ke0=0.5,          # 0.5 h^-1 (moderate equilibration delay)
+    emax=100.0,       # % sedation
+    ec50=0.05,        # mg/L (typical sedation EC50)
+    hill=2.0,         # steep dose-response
+    baseline=0.0,
+)
+
+WARFARIN_INR = PDModel(
+    ke0=0.02,         # 0.02 h^-1 (very slow -- INR response takes days)
+    emax=5.0,         # INR units above baseline
+    ec50=1.0,         # mg/L
+    hill=1.0,
+    baseline=1.0,     # baseline INR = 1.0
+)
