@@ -1,0 +1,53 @@
+# Propranolol — beta-adrenergic blocker
+# Source: Omega PBPK codebase
+# 80 mg oral dose, CYP2D6 substrate
+
+name: Propranolol
+smiles: "CC(C)NCC(O)COc1cccc2ccccc12"
+mw: 259.34
+pka: 9.5
+compound_type: base
+dose_mg: 80.0
+route: oral
+administration_node: stomach_lumen
+
+fup: 0.13
+rbp: 0.81
+kp_method: provided
+particle_radius_um: 25.0
+renal_clearance: 0.5     # L/h
+
+# Back-calculated enzyme affinities (unitless)
+# CYP2D6: (1050 * 0.70) / (675000 * 6e-5) = 18.148
+# CYP1A2: (1050 * 0.25) / (3037500 * 6e-5) = 1.4404
+enzyme_affinity:
+  CYP2D6: 18.148
+  CYP1A2: 1.4404
+
+# Tissue:plasma partition coefficients (from Omega)
+kp_overrides:
+  lung: 8.0
+  brain: 10.5
+  heart: 12.0
+  kidney: 8.5
+  liver: 15.0
+  spleen: 7.0
+  gut_wall: 9.0
+  pancreas: 6.5
+  thymus: 5.5
+  reproductive: 6.0
+  rest: 5.0
+  adipose: 3.5
+  muscle: 7.5
+  bone: 3.0
+  skin: 4.5
+
+# Permeability-surface area products for permeability-limited organs (L/h)
+ps_overrides:
+  adipose: 60.0
+  muscle: 150.0
+  bone: 20.0
+  skin: 35.0
+
+solubility: 0.11         # mg/mL
+peff: 4.2                # cm/s x 1e-4 (effective permeability)

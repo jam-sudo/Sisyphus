@@ -1,0 +1,53 @@
+# Caffeine — xanthine stimulant
+# Source: Omega PBPK codebase
+# 100 mg oral dose, CYP1A2 substrate
+
+name: Caffeine
+smiles: "Cn1c(=O)c2c(ncn2C)n(C)c1=O"
+mw: 194.19
+pka: 14.0                # neutral compound (pKa > 12)
+compound_type: neutral
+dose_mg: 100.0
+route: oral
+administration_node: stomach_lumen
+
+fup: 0.65
+rbp: 1.0
+kp_method: provided
+particle_radius_um: 25.0
+renal_clearance: 0.08    # L/h
+
+# Back-calculated enzyme affinities (unitless)
+# CYP1A2: (11 * 0.95) / (3037500 * 6e-5) = 0.0573
+# CYP2E1: (11 * 0.03) / (3307500 * 6e-5) = 0.00166
+enzyme_affinity:
+  CYP1A2: 0.0573
+  CYP2E1: 0.00166
+
+# Tissue:plasma partition coefficients (from Omega)
+kp_overrides:
+  lung: 0.82
+  brain: 0.98
+  heart: 0.83
+  kidney: 1.00
+  liver: 0.95
+  spleen: 0.87
+  gut_wall: 0.92
+  pancreas: 0.85
+  thymus: 0.80
+  reproductive: 0.82
+  rest: 0.80
+  adipose: 0.30
+  muscle: 0.82
+  bone: 0.60
+  skin: 0.75
+
+# Permeability-surface area products for permeability-limited organs (L/h)
+ps_overrides:
+  adipose: 20.0
+  muscle: 40.0
+  bone: 10.0
+  skin: 15.0
+
+solubility: 21.6         # mg/mL
+peff: 7.0                # cm/s x 1e-4 (effective permeability)
