@@ -1,0 +1,69 @@
+"""Feature engineering for ML-based PK prediction.
+
+Transforms molecular descriptors, ADME predictions, and optionally
+engine outputs into feature vectors for the ML models.
+"""
+
+from __future__ import annotations
+
+import numpy as np
+from numpy.typing import NDArray
+from rdkit import Chem
+from rdkit.Chem import AllChem, Descriptors
+
+
+def compute_features(smiles: str) -> NDArray[np.float64]:
+    """Compute 2057-element feature vector for XGBoost Cmax model.
+
+    Features: Morgan FP (2048 bits, radius=2) + 9 normalized RDKit descriptors.
+
+    Descriptor order and normalization:
+        0. LogP (Crippen) / 1.0
+        1. TPSA / 200.0
+        2. MW / 600.0
+        3. NumHAcceptors / 10.0
+        4. NumHDonors / 5.0
+        5. NumRotatableBonds / 15.0
+        6. RingCount / 5.0
+        7. FractionCSP3 / 1.0
+        8. MolMR / 150.0
+
+    Args:
+        smiles: Input SMILES.
+
+    Returns:
+        1-D float64 array of length 2057.
+
+    Raises:
+        ValueError: If the SMILES string is invalid.
+    """
+    if not smiles or not smiles.strip():
+        raise ValueError(f"Invalid SMILES: {smiles!r}")
+
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is None or mol.GetNumAtoms() == 0:
+        raise ValueError(f"Invalid SMILES: {smiles!r}")
+
+    # Morgan fingerprint (2048 bits, radius 2)
+    fp = AllChem.GetMorganFingerprintAsBitVect(mol, radius=2, nBits=2048)
+    fp_array = np.zeros(2048, dtype=np.float64)
+    for bit in fp.GetOnBits():
+        fp_array[bit] = 1.0
+
+    # 9 RDKit descriptors (normalized)
+    descriptors = np.array(
+        [
+            Descriptors.MolLogP(mol),  # LogP / 1.0
+            Descriptors.TPSA(mol) / 200.0,  # TPSA
+            Descriptors.MolWt(mol) / 600.0,  # MW
+            Descriptors.NumHAcceptors(mol) / 10.0,  # HBA
+            Descriptors.NumHDonors(mol) / 5.0,  # HBD
+            Descriptors.NumRotatableBonds(mol) / 15.0,  # RotBonds
+            Descriptors.RingCount(mol) / 5.0,  # Rings
+            Descriptors.FractionCSP3(mol),  # FractionCSP3 / 1.0
+            Descriptors.MolMR(mol) / 150.0,  # MolMR
+        ],
+        dtype=np.float64,
+    )
+
+    return np.concatenate([fp_array, descriptors])
