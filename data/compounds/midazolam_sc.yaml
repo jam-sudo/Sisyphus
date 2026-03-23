@@ -1,0 +1,52 @@
+# Midazolam — subcutaneous injection
+# Source: Adapted from oral midazolam (Omega PBPK)
+# 5 mg SC dose, CYP3A4 substrate
+# SC bioavailability ~90% (bypasses gut first-pass), Ka slower (~0.5 h^-1)
+
+name: Midazolam_SC
+smiles: "Clc1ccc2c(c1)C(=NCc3nccn3C)c1cc(F)ccc1N2"
+mw: 325.77
+pka: 6.15
+compound_type: base
+dose_mg: 5.0
+route: sc
+administration_node: sc_depot
+
+fup: 0.032
+rbp: 0.66
+kp_method: provided
+particle_radius_um: 5.0   # adjusted for SC absorption rate (smaller = faster ka)
+renal_clearance: 0.0
+
+# Same enzyme affinities as oral midazolam
+enzyme_affinity:
+  CYP3A4: 1.257
+  CYP3A5: 0.741
+
+# Same Kp values as oral midazolam
+kp_overrides:
+  lung: 0.6
+  brain: 6.61
+  heart: 5.04
+  kidney: 5.12
+  liver: 5.87
+  spleen: 3.8
+  gut_wall: 4.2
+  pancreas: 3.5
+  thymus: 2.8
+  reproductive: 3.0
+  rest: 2.5
+  adipose: 0.5
+  muscle: 1.0
+  bone: 1.5
+  skin: 2.0
+
+# PS overrides same as oral
+ps_overrides:
+  adipose: 8.0
+  muscle: 25.0
+  bone: 5.0
+  skin: 8.0
+
+solubility: 0.024       # mg/mL
+peff: 5.37              # cm/s x 1e-4 (used by absorption edge formula)

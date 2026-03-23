@@ -1,0 +1,20 @@
+# Tumor compartment overlay — merge with reference_man.yaml
+# Adds a solid tumor as a new organ node with its own blood flow.
+# Tumor pH is slightly acidic (6.8), which affects basic drug accumulation.
+# Flow is diverted from the "rest" compartment (0.5% of CO).
+description: "Solid tumor compartment"
+
+nodes:
+  - name: tumor
+    type: organ
+    volume: 0.05  # 50 mL tumor
+    composition: {fn: 0.0132, fp: 0.0100, fw: 0.700, pH: 6.8}
+
+edges:
+  - source: arterial_blood
+    target: tumor
+    type: flow
+    flow_fraction: 0.005  # 0.5% of CO diverted to tumor
+  - source: tumor
+    target: venous_blood
+    type: flow
