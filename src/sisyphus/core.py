@@ -4,11 +4,12 @@ This module defines the foundational data types that flow between layers.
 Every layer may import from here. No layer-specific logic belongs here.
 
 Types defined:
-    Distribution    — parameter value with uncertainty (the atomic unit)
-    DrugOnGraph     — drug properties mapped to graph (predict → engine)
-    SimResult       — raw ODE solution (engine → pk)
-    PKEndpoints     — pharmacokinetic endpoints (pk → pipeline)
-    PredictionResult — final pipeline output (pipeline → caller)
+    Distribution       — parameter value with uncertainty (the atomic unit)
+    TissueComposition  — tissue fractions for Kp calculation
+    DrugOnGraph        — drug properties mapped to graph (predict → engine)
+    SimResult          — raw ODE solution (engine → pk)
+    PKEndpoints        — pharmacokinetic endpoints (pk → pipeline)
+    PredictionResult   — final pipeline output (pipeline → caller)
 """
 
 from __future__ import annotations
@@ -78,6 +79,29 @@ class Distribution:
     def std(self) -> float:
         """Standard deviation (mean × cv)."""
         return abs(self.mean) * self.cv
+
+
+# ---------------------------------------------------------------------------
+# TissueComposition — shared data type for Kp estimation
+# ---------------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class TissueComposition:
+    """Fractional tissue composition used for tissue:plasma partition
+    coefficient (Kp) estimation via Rodgers & Rowland or Berezhkovskiy.
+
+    All fractions are dimensionless (volume fraction of wet tissue weight).
+
+    Note: kept as bare floats (not Distribution) because Kp sensitivity
+    to tissue composition fractions is low relative to fup/CLint
+    uncertainty.  This is a conscious exception to Invariant 2.
+    """
+
+    fn: float  # neutral lipid fraction
+    fp: float  # phospholipid fraction
+    fw: float  # water fraction
+    pH: float  # intracellular pH
 
 
 # ---------------------------------------------------------------------------
@@ -230,6 +254,6 @@ class PredictionResult:
     ml_pk: PKEndpoints | None
     confidence: str  # "high", "medium", "low"
     in_applicability_domain: bool
-    ad_flags: list[str]
-    warnings: list[str]
+    ad_flags: tuple[str, ...]
+    warnings: tuple[str, ...]
     cmax_90ci: tuple[float, float] | None

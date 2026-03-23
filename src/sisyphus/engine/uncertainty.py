@@ -212,7 +212,11 @@ class UncertaintyEngine:
 
             try:
                 cmax, tmax, auc, success = solve_mc(
-                    compiled, params, y0_template, t_span, observation_node,
+                    compiled,
+                    params,
+                    y0_template,
+                    t_span,
+                    observation_node,
                 )
                 if success and cmax > 0:
                     cmax_samples.append(cmax)

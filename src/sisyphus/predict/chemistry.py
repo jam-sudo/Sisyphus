@@ -29,8 +29,11 @@ logger = logging.getLogger(__name__)
 # Source: Rautio et al., Nature Reviews Drug Discovery (2008) 7:255.
 
 _PRODRUG_SMARTS_PATTERNS: list[tuple[str, str]] = [
-    # Ester prodrug: R-C(=O)-O-C (e.g., valacyclovir, valganciclovir, fesoterodine, molnupiravir)
+    # Ester prodrug (sp3 carbon): R-C(=O)-O-C (e.g., valacyclovir, valganciclovir)
     ("[OX2][CX3](=O)[CX4]", "ESTER_PRODRUG_MOTIF"),
+    # Ester prodrug (general, includes sp2 carbon): R-C(=O)-O-C
+    # Catches vinyl/aryl esters (e.g., molnupiravir, fesoterodine)
+    ("[OX2][CX3](=O)[#6]", "GENERAL_ESTER_MOTIF"),
     # Carbonate ester: R-O-C(=O)-O-R (e.g., tenofovir disoproxil)
     ("[OX2][CX3](=O)[OX2]", "CARBONATE_PRODRUG_MOTIF"),
     # Phosphonate ester prodrug: R-O-P(=O) (e.g., tenofovir disoproxil, adefovir dipivoxil)
@@ -73,20 +76,23 @@ def _check_prodrug(mol: Chem.Mol) -> list[str]:
     """
     flags: list[str] = []
 
-    ester_count = 0
+    # Collect unique ester-bond atom tuples to avoid double-counting
+    # across the sp3-specific and general ester patterns.
+    ester_atom_sets: set[frozenset[int]] = set()
     has_phosphonate = False
 
     for pattern, label in _PRODRUG_COMPILED:
         if pattern is None:
             continue
         matches = mol.GetSubstructMatches(pattern)
-        n_matches = len(matches)
-        if n_matches > 0:
+        if len(matches) > 0:
             if "ESTER" in label or "CARBONATE" in label:
-                ester_count += n_matches
+                for match in matches:
+                    ester_atom_sets.add(frozenset(match))
             if "PHOSPHONATE" in label:
                 has_phosphonate = True
 
+    ester_count = len(ester_atom_sets)
     has_ester = ester_count > 0
 
     # Check amino acid ester (val-ester prodrugs)
@@ -96,8 +102,8 @@ def _check_prodrug(mol: Chem.Mol) -> list[str]:
     has_di_n_ring = bool(mol.HasSubstructMatch(_DI_N_RING_SMARTS))
 
     # Check phenol ester without free carboxylic acid
-    has_phenol_ester = (
-        _PHENOL_ESTER_SMARTS is not None and bool(mol.HasSubstructMatch(_PHENOL_ESTER_SMARTS))
+    has_phenol_ester = _PHENOL_ESTER_SMARTS is not None and bool(
+        mol.HasSubstructMatch(_PHENOL_ESTER_SMARTS)
     )
     has_cooh = bool(mol.HasSubstructMatch(_CARBOXYLIC_ACID_SMARTS))
 
@@ -113,7 +119,7 @@ def _check_prodrug(mol: Chem.Mol) -> list[str]:
         reason = "phosphonate ester motif"
     elif ester_count >= 3:
         is_prodrug = True
-        reason = "multiple ester/carbonate motifs ({})".format(ester_count)
+        reason = f"multiple ester/carbonate motifs ({ester_count})"
     elif has_ester and has_di_n_ring:
         is_prodrug = True
         reason = "nucleoside ester motif (ester + di-N heterocycle)"
@@ -156,7 +162,7 @@ class MolecularProfile:
     tpsa: float
     rotatable_bonds: int
     in_ad: bool
-    ad_flags: list[str]
+    ad_flags: tuple[str, ...]
 
 
 # ---------------------------------------------------------------------------
@@ -315,5 +321,5 @@ def compute_profile(smiles: str) -> MolecularProfile:
         tpsa=tpsa,
         rotatable_bonds=rotatable_bonds,
         in_ad=len(ad_flags) == 0,
-        ad_flags=ad_flags,
+        ad_flags=tuple(ad_flags),
     )

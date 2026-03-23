@@ -11,29 +11,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from sisyphus.core import Distribution
+from sisyphus.core import Distribution, TissueComposition
 
-# ---------------------------------------------------------------------------
-# Tissue composition (for Kp estimation)
-# ---------------------------------------------------------------------------
-
-
-@dataclass(frozen=True)
-class TissueComposition:
-    """Fractional tissue composition used for tissue:plasma partition
-    coefficient (Kp) estimation via Rodgers & Rowland or Berezhkovskiy.
-
-    All fractions are dimensionless (volume fraction of wet tissue weight).
-
-    Note: kept as bare floats (not Distribution) because Kp sensitivity
-    to tissue composition fractions is low relative to fup/CLint
-    uncertainty.  This is a conscious exception to Invariant 2.
-    """
-
-    fn: float  # neutral lipid fraction
-    fp: float  # phospholipid fraction
-    fw: float  # water fraction
-    pH: float  # intracellular pH
+# Re-export TissueComposition for backward compatibility (defined in core.py).
+__all__ = ["TissueComposition"]
 
 
 # ---------------------------------------------------------------------------

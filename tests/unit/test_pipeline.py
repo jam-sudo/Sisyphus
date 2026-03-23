@@ -38,17 +38,17 @@ class TestPipeline:
         result = predict("Cn1c(=O)c2c(ncn2C)n(C)c1=O", dose_mg=100.0, route="iv")
         assert result.route == "iv"
 
-    def test_result_has_warnings_list(self):
-        """PredictionResult always has a warnings list."""
+    def test_result_has_warnings_tuple(self):
+        """PredictionResult always has a warnings tuple."""
         from sisyphus.pipeline.predict import predict
 
         result = predict("Cn1c(=O)c2c(ncn2C)n(C)c1=O", dose_mg=100.0)
-        assert isinstance(result.warnings, list)
+        assert isinstance(result.warnings, tuple)
 
     def test_result_has_ad_flags(self):
         """PredictionResult carries applicability domain flags."""
         from sisyphus.pipeline.predict import predict
 
         result = predict("Cn1c(=O)c2c(ncn2C)n(C)c1=O", dose_mg=100.0)
-        assert isinstance(result.ad_flags, list)
+        assert isinstance(result.ad_flags, tuple)
         assert isinstance(result.in_applicability_domain, bool)

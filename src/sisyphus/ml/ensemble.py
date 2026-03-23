@@ -77,10 +77,10 @@ class MetaLearner:
         Returns:
             Combined PKEndpoints with cv=0.3 on Cmax.
         """
-        cmax_pbpk = engine_pk.cmax.mean if engine_pk else None
-        cmax_ml = ml_pk.cmax.mean if ml_pk else None
+        cmax_pbpk = engine_pk.cmax.mean if engine_pk is not None else None
+        cmax_ml = ml_pk.cmax.mean if ml_pk is not None else None
 
-        if cmax_pbpk and cmax_ml and cmax_pbpk > 0 and cmax_ml > 0:
+        if cmax_pbpk is not None and cmax_ml is not None and cmax_pbpk > 0 and cmax_ml > 0:
             log_eng = np.log10(max(cmax_pbpk, 1e-10))
             log_ml = np.log10(max(cmax_ml, 1e-10))
 
@@ -97,9 +97,9 @@ class MetaLearner:
 
             log_cmax = w_eng * log_eng + w_ml * log_ml
             cmax_final = float(10**log_cmax)
-        elif cmax_pbpk and cmax_pbpk > 0:
+        elif cmax_pbpk is not None and cmax_pbpk > 0:
             cmax_final = cmax_pbpk
-        elif cmax_ml and cmax_ml > 0:
+        elif cmax_ml is not None and cmax_ml > 0:
             cmax_final = cmax_ml
         else:
             cmax_final = 0.0

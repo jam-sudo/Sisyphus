@@ -26,10 +26,12 @@ logger = logging.getLogger(__name__)
 # methylphenidate: 72 mg = Concerta (OROS), IR is 5/10/20 mg
 # oxybutynin:      5 mg Cmax=0.001 mg/L = Ditropan XL, IR Cmax ~0.008 mg/L
 # ---------------------------------------------------------------------------
-_KNOWN_ER_FORMULATIONS: frozenset[str] = frozenset({
-    "methylphenidate",
-    "oxybutynin",
-})
+_KNOWN_ER_FORMULATIONS: frozenset[str] = frozenset(
+    {
+        "methylphenidate",
+        "oxybutynin",
+    }
+)
 
 
 @dataclass(frozen=True)
@@ -118,7 +120,12 @@ def run_benchmark(
                 excluded.append((ref.name, exclude_reason))
                 logger.info(
                     "[%d/%d] %s: pred=%.4f obs=%.4f fold=%.2f [EXCLUDED: %s]",
-                    i + 1, len(refs), ref.name, cmax_pred, ref.cmax_obs, fold,
+                    i + 1,
+                    len(refs),
+                    ref.name,
+                    cmax_pred,
+                    ref.cmax_obs,
+                    fold,
                     exclude_reason,
                 )
             else:
@@ -126,7 +133,12 @@ def run_benchmark(
                 id_observed.append(ref.cmax_obs)
                 logger.info(
                     "[%d/%d] %s: pred=%.4f obs=%.4f fold=%.2f",
-                    i + 1, len(refs), ref.name, cmax_pred, ref.cmax_obs, fold,
+                    i + 1,
+                    len(refs),
+                    ref.name,
+                    cmax_pred,
+                    ref.cmax_obs,
+                    fold,
                 )
         except Exception as e:
             skipped += 1
@@ -146,12 +158,18 @@ def run_benchmark(
 
     logger.info(
         "Benchmark complete: %d drugs evaluated, AAFE=%.3f, %%2-fold=%.1f%%, %d skipped",
-        len(all_predicted), result_aafe, result_pct2, skipped,
+        len(all_predicted),
+        result_aafe,
+        result_pct2,
+        skipped,
     )
     logger.info(
         "In-domain: %d drugs, AAFE=%.3f, %%2-fold=%.1f%% (%d excluded: %s)",
-        len(id_predicted), id_aafe, id_pct2, len(excluded),
-        ", ".join("{} ({})".format(n, r) for n, r in excluded),
+        len(id_predicted),
+        id_aafe,
+        id_pct2,
+        len(excluded),
+        ", ".join(f"{n} ({r})" for n, r in excluded),
     )
 
     return BenchmarkResult(
