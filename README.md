@@ -8,7 +8,7 @@
 
 Sisyphus is a computational pharmacokinetics platform that represents the human body as a **typed directed multi-graph**, automatically derives ODE systems from graph topology, and propagates uncertainty natively through all predictions.
 
-Give it a SMILES string and a dose. It returns Cmax, AUC, and t&frac12; &mdash; in 350 milliseconds.
+Give it a SMILES string and a dose. It returns Cmax, Tmax, and t&frac12; &mdash; in 350 milliseconds.
 
 ```
 $ sisyphus predict --smiles "Cn1c(=O)c2c(ncn2C)n(C)c1=O" --dose 100
@@ -30,32 +30,28 @@ t½: 4.32 h
 Organs are nodes. Blood vessels, GI transit paths, and clearance routes are typed directed edges. The ODE system is **derived from graph topology**, not hand-written. To add a new organ, you edit YAML. You do not touch the engine.
 
 ```
-                        ┌─────────────────────────────────────────────┐
-                        │                                             │
-    ┌──────┐     ┌──────┴──┐     ┌────────┐                   ┌──────┴──┐
-    │ lung │────►│arterial │────►│ brain  │──────────────────►│ venous  │
-    └──┬───┘     │ blood   │     └────────┘                   │ blood   │
-       │         │         ├────►│ heart  │──────────────────►│         │
-       │         │         │     └────────┘                   │         │
-       │         │         ├────►│ kidney │──────────────────►│         │
-       │         │         │     └────────┘   ┌────────┐      │         │
-       │         │         ├────►│gut wall├──►│portal  ├──┐   │         │
-       │         │         │     └────────┘   │ vein   │  │   │         │
-       │         │         ├────►│ spleen ├──►│        │  │   │         │
-       │         │         │     └────────┘   └────────┘  │   │         │
-       │         │         ├────►│liver◄──────────────────┘   │         │
-       │         │         │     │(CYP3A4, 2D6, 1A2, 2C9)├──►│         │
-       │         │         │     └────────┘                   │         │
-       │         │         ├────►│muscle  │──────────────────►│         │
-       │         │         ├────►│adipose │──────────────────►│         │
-       │         └─────────┘     └────────┘                   └────┬────┘
-       │                                                           │
-       └───────────────────────────────────────────────────────────┘
+                     ┌───────────────────────────────────────────────┐
+                     │                                               │
+   ┌──────┐    ┌─────┴────┐                                   ┌─────┴────┐
+   │ lung │───►│ arterial │──► brain ─────────────────────────►│ venous   │
+   └──┬───┘    │  blood   │──► heart ─────────────────────────►│  blood   │
+      │        │          │──► kidney ────────────────────────►│          │
+      │        │          │                                    │          │
+      │        │          │──► gut wall ──┐                    │          │
+      │        │          │──► spleen  ───┤ portal ──► liver ─►│          │
+      │        │          │──► pancreas ──┘  vein    (CYP450)  │          │
+      │        │          │                                    │          │
+      │        │          │──► muscle ─────────────────────────►│          │
+      │        │          │──► adipose ────────────────────────►│          │
+      │        │          │──► skin, bone, rest, ... ─────────►│          │
+      │        └──────────┘                                    └────┬─────┘
+      │                                                             │
+      └─────────────────────────────────────────────────────────────┘
 
-    stomach ──► duodenum ──► jejunum ──► ileum ──► colon ──► fecal
-                    │            │          │                (excretion)
-                    └────────────┴──────────┘
-                         absorption ──► gut wall
+   stomach ──► duodenum ──► jejunum ──► ileum ──► colon ──► fecal
+                  │            │          │                 (excretion)
+                  └────────────┴──────────┘
+                       absorption ──► gut wall
 ```
 
 34 nodes. 54 edges. 5 flux types. The engine walks the graph, dispatches flux functions by edge type, and assembles the right-hand side automatically.
