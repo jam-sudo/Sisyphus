@@ -360,10 +360,9 @@ class DiffusionFluxSpec(FluxSpec):
         fup = params.drug_param("fup")
         rbp = params.drug_param("rbp")
 
-        # PS: prefer drug-specific override, fall back to edge parameter
-        # Extract base organ name from source_name (e.g. "adipose_vasc" -> "adipose")
-        base_name = self.source_name.replace("_vasc", "")
-        ps = params.drug_ps(base_name)
+        # PS: prefer drug-specific override (resolved via lookup_name),
+        # fall back to edge parameter.  No string manipulation — identity-blind.
+        ps = params.drug_ps(self.source_name)
         if ps <= 0:
             ps = params.edge_param(self.edge_id, "ps_product")
         if ps <= 0:
