@@ -153,6 +153,7 @@ class FlowFluxSpec(FluxSpec):
     ) -> None:
         q = params.edge_param(self.edge_id, "flow_rate")
         v_source = params.node_param(self.source_name, "volume")
+
         kp = params.drug_kp(self.source_name)
         rbp = params.drug_param("rbp")
 

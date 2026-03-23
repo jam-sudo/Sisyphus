@@ -46,6 +46,7 @@ class ResolvedParams:
     def __init__(self, graph: BodyGraph, drug: DrugOnGraph) -> None:
         # Pre-compute lookups for fast access during RHS evaluation
         self._volumes = {name: node.volume.mean for name, node in graph.nodes.items()}
+        self._node_types = {name: node.node_type for name, node in graph.nodes.items()}
         self._enzymes = {
             name: {tag: d.mean for tag, d in node.enzymes.items()}
             for name, node in graph.nodes.items()
@@ -64,6 +65,10 @@ class ResolvedParams:
         if param == "ivive_scaling":
             return self._ivive_scaling.get(node_name, 0.0)
         raise KeyError(f"Unknown node param: {param}")
+
+    def is_blood_pool(self, node_name: str) -> bool:
+        """Return True if the node is a blood_pool type (no Kp/RBP correction)."""
+        return self._node_types.get(node_name, "") == "blood_pool"
 
     def edge_param(self, edge_id: int, param: str) -> float:
         """Look up a scalar edge parameter (e.g. ``"flow_rate"``)."""
