@@ -1,0 +1,53 @@
+# Warfarin — anticoagulant
+# Source: Omega PBPK codebase
+# 10 mg oral dose, CYP2C9 substrate
+
+name: Warfarin
+smiles: "OC(CC(=O)c1ccccc1)c1c(=O)oc2ccccc12"
+mw: 308.33
+pka: 5.1
+compound_type: acid
+dose_mg: 10.0
+route: oral
+administration_node: stomach_lumen
+
+fup: 0.01
+rbp: 0.58
+kp_method: provided
+particle_radius_um: 25.0
+renal_clearance: 0.0
+
+# Back-calculated enzyme affinities (unitless)
+# CYP2C9: (161 * 0.80) / (6480000 * 6e-5) = 0.3313
+# CYP3A4: (161 * 0.15) / (9247500 * 6e-5) = 0.04353
+enzyme_affinity:
+  CYP2C9: 0.3313
+  CYP3A4: 0.04353
+
+# Tissue:plasma partition coefficients (from Omega)
+kp_overrides:
+  lung: 0.40
+  brain: 0.20
+  heart: 0.35
+  kidney: 0.50
+  liver: 1.50
+  spleen: 0.40
+  gut_wall: 0.55
+  pancreas: 0.35
+  thymus: 0.25
+  reproductive: 0.30
+  rest: 0.40
+  adipose: 0.35
+  muscle: 1.00
+  bone: 0.25
+  skin: 0.35
+
+# Permeability-surface area products for permeability-limited organs (L/h)
+ps_overrides:
+  adipose: 12.0
+  muscle: 30.0
+  bone: 5.0
+  skin: 10.0
+
+solubility: 0.054        # mg/mL
+peff: 2.5                # cm/s x 1e-4 (effective permeability)
