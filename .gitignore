@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Models (large binary artifacts)
+models/**/*.json
+!models/**/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment
+.env
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+*:Zone.Identifier
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Jupyter
+.ipynb_checkpoints/
