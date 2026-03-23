@@ -1,11 +1,13 @@
 """Unit tests for engine/uncertainty.py -- Monte Carlo propagation."""
 
+import time
+
 import numpy as np
 
 import sisyphus.engine.flux  # noqa: F401 -- register flux specs
 from sisyphus.core import Distribution, DrugOnGraph
 from sisyphus.engine.compiler import ODECompiler
-from sisyphus.engine.uncertainty import UncertaintyEngine, UncertaintyResult
+from sisyphus.engine.uncertainty import MCResult, UncertaintyEngine, UncertaintyResult
 from sisyphus.graph.body import BodyGraph
 from sisyphus.graph.types import ClearanceEdge, FlowEdge, Node
 
@@ -108,3 +110,79 @@ class TestUncertaintyEngine:
         c1 = r1.sim_results[0].concentrations["venous_blood"]
         c2 = r2.sim_results[0].concentrations["venous_blood"]
         assert not np.allclose(c1, c2)
+
+
+class TestPropagateFast:
+    """Tests for the fast MC propagation path (propagate_fast)."""
+
+    def test_returns_mc_result(self):
+        graph = _make_simple_graph()
+        drug = _make_simple_drug()
+        compiled = ODECompiler().compile(graph)
+        ue = UncertaintyEngine()
+        mc = ue.propagate_fast(compiled, graph, drug, n_samples=10, seed=42)
+        assert isinstance(mc, MCResult)
+        assert mc.n_samples + mc.n_failures == 10
+        assert mc.n_samples > 0
+
+    def test_produces_distribution_with_cv(self):
+        """MC samples with cv > 0 should produce non-zero CV in output."""
+        graph = _make_simple_graph()
+        drug = _make_simple_drug()
+        compiled = ODECompiler().compile(graph)
+        ue = UncertaintyEngine()
+        mc = ue.propagate_fast(compiled, graph, drug, n_samples=50, seed=42)
+        # Drug has fup cv=0.2 and enzyme_affinity cv=0.3 -> output CV should be > 0
+        assert mc.pk.cmax.cv > 0, "Cmax CV should be > 0 with uncertain inputs"
+        assert mc.pk.cmax.mean > 0, "Cmax median should be > 0"
+        assert mc.pk.auc_0t.cv > 0, "AUC CV should be > 0 with uncertain inputs"
+
+    def test_90ci_brackets_median(self):
+        """90% CI lower bound < median < upper bound.
+
+        Uses AUC because IV bolus Cmax = dose/V is deterministic (no CV),
+        while AUC depends on clearance (which varies with fup and enzyme affinity).
+        """
+        graph = _make_simple_graph()
+        drug = _make_simple_drug()
+        compiled = ODECompiler().compile(graph)
+        ue = UncertaintyEngine()
+        mc = ue.propagate_fast(compiled, graph, drug, n_samples=50, seed=42)
+        lo, hi = mc.auc_90ci
+        assert lo < mc.pk.auc_0t.mean < hi, (
+            f"AUC 90% CI ({lo:.4f}, {hi:.4f}) should bracket median {mc.pk.auc_0t.mean:.4f}"
+        )
+
+    def test_reproducible(self):
+        """Same seed produces identical results."""
+        graph = _make_simple_graph()
+        drug = _make_simple_drug()
+        compiled = ODECompiler().compile(graph)
+        ue = UncertaintyEngine()
+        mc1 = ue.propagate_fast(compiled, graph, drug, n_samples=10, seed=42)
+        mc2 = ue.propagate_fast(compiled, graph, drug, n_samples=10, seed=42)
+        np.testing.assert_array_equal(mc1.cmax_samples, mc2.cmax_samples)
+        np.testing.assert_array_equal(mc1.auc_samples, mc2.auc_samples)
+
+    def test_raw_samples_stored(self):
+        """MCResult should contain raw sample arrays."""
+        graph = _make_simple_graph()
+        drug = _make_simple_drug()
+        compiled = ODECompiler().compile(graph)
+        ue = UncertaintyEngine()
+        mc = ue.propagate_fast(compiled, graph, drug, n_samples=20, seed=42)
+        assert len(mc.cmax_samples) == mc.n_samples
+        assert len(mc.tmax_samples) == mc.n_samples
+        assert len(mc.auc_samples) == mc.n_samples
+
+    def test_performance_n100(self):
+        """MC N=100 on simple graph should complete in <5s."""
+        graph = _make_simple_graph()
+        drug = _make_simple_drug()
+        compiled = ODECompiler().compile(graph)
+        ue = UncertaintyEngine()
+        t0 = time.perf_counter()
+        mc = ue.propagate_fast(compiled, graph, drug, n_samples=100, seed=42)
+        elapsed = time.perf_counter() - t0
+        assert mc.n_samples > 90, f"Too many failures: {mc.n_failures}"
+        assert elapsed < 5.0, f"MC N=100 took {elapsed:.1f}s (limit: 5s)"

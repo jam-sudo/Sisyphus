@@ -83,3 +83,62 @@ def solve(
         mass_balance_error=mbe,
         solver_success=bool(sol.success),
     )
+
+
+def solve_mc(
+    compiled: CompiledODE,
+    params: ResolvedParams,
+    y0: np.ndarray,
+    t_span: tuple[float, float],
+    observation_node: str = "venous_blood",
+) -> tuple[float, float, float, bool]:
+    """Fast MC solve -- returns only (cmax, tmax, auc, success).
+
+    Optimized for Monte Carlo sampling:
+    - rtol=1e-4, atol=1e-6 (sufficient for Cmax/AUC accuracy across N samples)
+    - No t_eval (solver chooses its own adaptive grid)
+    - Returns scalars, not full SimResult (avoids dict/array allocation)
+
+    Args:
+        compiled: Compiled ODE skeleton.
+        params: Resolved point-value parameters.
+        y0: Initial state vector (amounts in mg).
+        t_span: Integration interval ``(t_start, t_end)`` in hours.
+        observation_node: Node to extract PK from (default: venous_blood).
+
+    Returns:
+        Tuple of (cmax, tmax, auc, success).
+    """
+    rhs = compiled.make_rhs(params)
+
+    sol = solve_ivp(
+        rhs,
+        t_span,
+        y0,
+        method="LSODA",
+        rtol=1e-4,
+        atol=1e-6,
+    )
+
+    if not sol.success:
+        return 0.0, 0.0, 0.0, False
+
+    # Extract concentration from the observation node
+    obs_idx = compiled.state_index.get(observation_node)
+    if obs_idx is None:
+        return 0.0, 0.0, 0.0, False
+
+    v = params.node_param(observation_node, "volume")
+    if v > 0 and params.is_blood_pool(observation_node):
+        conc = sol.y[obs_idx] / v
+    elif v > 0:
+        kp = params.drug_kp(observation_node)
+        conc = sol.y[obs_idx] / (v * kp) if kp > 0 else sol.y[obs_idx] / v
+    else:
+        conc = sol.y[obs_idx]
+
+    cmax = float(np.max(conc))
+    tmax = float(sol.t[np.argmax(conc)])
+    auc = float(np.trapezoid(conc, sol.t))
+
+    return cmax, tmax, auc, True
