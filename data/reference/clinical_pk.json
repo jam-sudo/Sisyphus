@@ -8009,7 +8009,7 @@
           0.254071
         ]
       },
-      "smiles": "CCO.CC(C)CN(CC(C(CC1=CC=CC=C1)NC(=O)OC2COC3C2CCO3)O)S(=O)(=O)C4=CC=C(C=C4)N"
+      "smiles": "CC(C)CN(CC(C(CC1=CC=CC=C1)NC(=O)OC2COC3C2CCO3)O)S(=O)(=O)C4=CC=C(C=C4)N"
     },
     "dasatinib": {
       "name": "dasatinib",
@@ -30349,8 +30349,8 @@
     "temozolomide": {
       "name": "temozolomide",
       "tier": "gold",
-      "source": "FDA label (analytical model from PK params)",
-      "dose_mg": 150.0,
+      "source": "FDA label (150 mg/m2 = 260 mg for 1.73 m2 reference man)",
+      "dose_mg": 260.0,
       "route": "oral",
       "pk_params": {
         "cmax_mg_L": 7.5,

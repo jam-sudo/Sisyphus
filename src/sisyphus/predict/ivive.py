@@ -280,8 +280,11 @@ def _compute_kp_rodgers_rowland(
         kp_den = plasma_comp.fw + _lipid_partition(plasma_comp, p)
         kp = kp_num / kp_den if kp_den > 0 else 1.0
 
-    # Clamp to physiological range
-    kp = float(np.clip(kp, 0.01, 200.0))
+    # Clamp to physiological range.  Upper cap of 100 prevents unrealistic
+    # tissue trapping for highly lipophilic drugs (e.g., dasatinib logP > 4).
+    # Literature: measured Kp values rarely exceed 50 for most tissues.
+    # Source: Poulin & Theil (2002), J Pharm Sci 91:1358.
+    kp = float(np.clip(kp, 0.01, 100.0))
     return kp
 
 

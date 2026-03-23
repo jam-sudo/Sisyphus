@@ -2,6 +2,7 @@
 
 Computes physicochemical descriptors, pKa, logP, and checks
 applicability domain.  Uses RDKit for descriptor calculation.
+Includes SMARTS-based prodrug detection.
 """
 
 from __future__ import annotations
@@ -13,6 +14,118 @@ from rdkit import Chem
 from rdkit.Chem import Descriptors
 
 logger = logging.getLogger(__name__)
+
+
+# ---------------------------------------------------------------------------
+# Prodrug SMARTS patterns
+# ---------------------------------------------------------------------------
+# These detect ester, amide, and phosphate prodrug motifs.  When matched,
+# the drug is flagged as PRODRUG in AD flags.  The rationale: prodrugs are
+# designed to be rapidly converted to the active metabolite in vivo.
+# Clinical Cmax references report the metabolite, but we simulate the
+# prodrug itself.  These drugs are out-of-applicability-domain for PBPK
+# prediction of parent compound Cmax.
+#
+# Source: Rautio et al., Nature Reviews Drug Discovery (2008) 7:255.
+
+_PRODRUG_SMARTS_PATTERNS: list[tuple[str, str]] = [
+    # Ester prodrug: R-C(=O)-O-C (e.g., valacyclovir, valganciclovir, fesoterodine, molnupiravir)
+    ("[OX2][CX3](=O)[CX4]", "ESTER_PRODRUG_MOTIF"),
+    # Carbonate ester: R-O-C(=O)-O-R (e.g., tenofovir disoproxil)
+    ("[OX2][CX3](=O)[OX2]", "CARBONATE_PRODRUG_MOTIF"),
+    # Phosphonate ester prodrug: R-O-P(=O) (e.g., tenofovir disoproxil, adefovir dipivoxil)
+    ("[OX2][PX4](=O)", "PHOSPHONATE_PRODRUG_MOTIF"),
+]
+
+_PRODRUG_COMPILED = [
+    (Chem.MolFromSmarts(smarts), label) for smarts, label in _PRODRUG_SMARTS_PATTERNS
+]
+
+# --- Specific prodrug sub-patterns ---
+
+# Amino acid ester: ester adjacent to a free amine (val-ester prodrugs:
+# valacyclovir, valganciclovir).
+_AMINO_ACID_ESTER_SMARTS = Chem.MolFromSmarts("[NX3;H2,H1][CX4][CX3](=O)[OX2]")
+
+# Nucleoside ester: ester + heterocyclic ring with >=2 ring nitrogens
+# (catches nucleoside/nucleotide prodrugs: molnupiravir, valacyclovir, valganciclovir).
+_DI_N_RING_SMARTS = Chem.MolFromSmarts("[nR]~*~[nR]")
+
+# Phenol ester without free carboxylic acid: aromatic C bonded to ester oxygen,
+# where the molecule lacks a free -COOH on the same ring system.
+# Catches fesoterodine (isobutyrate ester of 5-HMT phenol).
+# Excludes aspirin (has -COOH, indicating the ester is part of the drug, not a prodrug linkage).
+_PHENOL_ESTER_SMARTS = Chem.MolFromSmarts("[c]([c])([c])[OX2][CX3](=O)[CX4;!$(C-c)]")
+_CARBOXYLIC_ACID_SMARTS = Chem.MolFromSmarts("[CX3](=O)[OX2H1]")
+
+
+def _check_prodrug(mol: Chem.Mol) -> list[str]:
+    """Detect prodrug motifs using SMARTS matching.
+
+    Detection rules (each sufficient on its own):
+    1. Amino acid ester — ester adjacent to free amine (val-ester prodrugs).
+    2. Phosphonate + carbonate/ester — phosphonate ester prodrugs (tenofovir disoproxil).
+    3. Multiple (>=3) ester/carbonate motifs — multi-ester prodrugs.
+    4. Nucleoside ester — ester + di-nitrogen heterocycle (molnupiravir).
+    5. Phenol ester without free carboxylic acid — phenol ester prodrugs (fesoterodine).
+
+    Returns a list of prodrug-related AD flags (empty if no prodrug detected).
+    """
+    flags: list[str] = []
+
+    ester_count = 0
+    has_phosphonate = False
+
+    for pattern, label in _PRODRUG_COMPILED:
+        if pattern is None:
+            continue
+        matches = mol.GetSubstructMatches(pattern)
+        n_matches = len(matches)
+        if n_matches > 0:
+            if "ESTER" in label or "CARBONATE" in label:
+                ester_count += n_matches
+            if "PHOSPHONATE" in label:
+                has_phosphonate = True
+
+    has_ester = ester_count > 0
+
+    # Check amino acid ester (val-ester prodrugs)
+    has_amino_acid_ester = bool(mol.HasSubstructMatch(_AMINO_ACID_ESTER_SMARTS))
+
+    # Check nucleoside ester (ester + heterocyclic ring with 2+ ring nitrogens)
+    has_di_n_ring = bool(mol.HasSubstructMatch(_DI_N_RING_SMARTS))
+
+    # Check phenol ester without free carboxylic acid
+    has_phenol_ester = (
+        _PHENOL_ESTER_SMARTS is not None and bool(mol.HasSubstructMatch(_PHENOL_ESTER_SMARTS))
+    )
+    has_cooh = bool(mol.HasSubstructMatch(_CARBOXYLIC_ACID_SMARTS))
+
+    # Decision logic — each rule is independently sufficient
+    is_prodrug = False
+    reason = ""
+
+    if has_amino_acid_ester:
+        is_prodrug = True
+        reason = "amino acid ester motif (val-ester type)"
+    elif has_phosphonate and ester_count >= 1:
+        is_prodrug = True
+        reason = "phosphonate ester motif"
+    elif ester_count >= 3:
+        is_prodrug = True
+        reason = "multiple ester/carbonate motifs ({})".format(ester_count)
+    elif has_ester and has_di_n_ring:
+        is_prodrug = True
+        reason = "nucleoside ester motif (ester + di-N heterocycle)"
+    elif has_phenol_ester and not has_cooh:
+        is_prodrug = True
+        reason = "phenol ester without free carboxylic acid"
+
+    if is_prodrug:
+        flags.append("PRODRUG")
+        logger.info("Prodrug detected: %s", reason)
+
+    return flags
 
 
 @dataclass(frozen=True)
@@ -186,6 +299,10 @@ def compute_profile(smiles: str) -> MolecularProfile:
     pka, compound_type = _estimate_pka_type(mol, logp)
 
     ad_flags = _check_ad(mol, mw, logp, tpsa)
+
+    # Prodrug detection — adds PRODRUG flag if ester/phosphonate prodrug motifs found
+    prodrug_flags = _check_prodrug(mol)
+    ad_flags.extend(prodrug_flags)
 
     return MolecularProfile(
         smiles=canonical,
