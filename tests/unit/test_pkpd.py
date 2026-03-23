@@ -311,8 +311,7 @@ class TestPDResult:
 
         tmax_pk = float(time[np.argmax(cp)])
         assert result.temax > tmax_pk, (
-            f"PD peak (t={result.temax:.2f}h) should be after "
-            f"PK peak (t={tmax_pk:.2f}h)"
+            f"PD peak (t={result.temax:.2f}h) should be after PK peak (t={tmax_pk:.2f}h)"
         )
 
 

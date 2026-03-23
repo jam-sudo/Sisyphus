@@ -14,9 +14,12 @@ Extensions:
 from pathlib import Path
 
 import numpy as np
-import pytest
 
+import sisyphus.engine.flux  # noqa: F401 -- register flux specs
+from sisyphus.compounds import load_compound
 from sisyphus.core import Distribution, DrugOnGraph
+from sisyphus.engine.compiler import ODECompiler, ResolvedParams
+from sisyphus.engine.solver import solve
 from sisyphus.graph.body import BodyGraph
 from sisyphus.graph.builder import build_from_yaml
 from sisyphus.graph.types import (
@@ -25,12 +28,7 @@ from sisyphus.graph.types import (
     Node,
     TissueComposition,
 )
-from sisyphus.compounds import load_compound
-from sisyphus.engine.compiler import ODECompiler, ResolvedParams
-from sisyphus.engine.solver import solve
 from sisyphus.pk.endpoints import compute_endpoints
-import sisyphus.engine.flux  # noqa: F401 -- register flux specs
-
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -67,6 +65,7 @@ def _run_simulation(
 # Extension 1: SC (Subcutaneous) Injection
 # ---------------------------------------------------------------------------
 
+
 class TestSCInjection:
     """SC injection: add a depot node + absorption edge to existing graph."""
 
@@ -83,11 +82,13 @@ class TestSCInjection:
         graph.add_node(sc_node)
 
         # Add absorption edge: sc_depot -> venous_blood
-        graph.add_edge(AbsorptionEdge(
-            source="sc_depot",
-            target="venous_blood",
-            ka_fraction=Distribution(1.0),
-        ))
+        graph.add_edge(
+            AbsorptionEdge(
+                source="sc_depot",
+                target="venous_blood",
+                ka_fraction=Distribution(1.0),
+            )
+        )
 
         return graph
 
@@ -185,6 +186,7 @@ class TestSCInjection:
 # Extension 2: Pediatric (5-year-old) Model
 # ---------------------------------------------------------------------------
 
+
 class TestPediatricModel:
     """Pediatric model: same graph topology, different parameter values."""
 
@@ -225,9 +227,7 @@ class TestPediatricModel:
         print(f"Ratio (ped/adult) = {ped_pk.cmax.mean / adult_pk.cmax.mean:.2f}")
 
         assert ped_pk.cmax.mean > 0, "Pediatric Cmax should be > 0"
-        assert ped_pk.cmax.mean != adult_pk.cmax.mean, (
-            "Pediatric and adult Cmax should differ"
-        )
+        assert ped_pk.cmax.mean != adult_pk.cmax.mean, "Pediatric and adult Cmax should differ"
 
     def test_pediatric_higher_cmax_per_kg(self):
         """Pediatric should have higher Cmax (same dose, smaller body).
@@ -262,14 +262,14 @@ class TestPediatricModel:
         actual_ratio = ped_co / adult_co
 
         assert abs(actual_ratio - expected_ratio) / expected_ratio < 0.02, (
-            f"Pediatric CO scaling: expected ratio {expected_ratio:.3f}, "
-            f"got {actual_ratio:.3f}"
+            f"Pediatric CO scaling: expected ratio {expected_ratio:.3f}, got {actual_ratio:.3f}"
         )
 
 
 # ---------------------------------------------------------------------------
 # Extension 3: Tumor Compartment
 # ---------------------------------------------------------------------------
+
 
 class TestTumorCompartment:
     """Tumor compartment: add an organ node with flow to existing graph."""
@@ -286,7 +286,10 @@ class TestTumorCompartment:
             node_type="organ",
             volume=Distribution(0.05),
             composition=TissueComposition(
-                fn=0.0132, fp=0.0100, fw=0.700, pH=6.8,
+                fn=0.0132,
+                fp=0.0100,
+                fw=0.700,
+                pH=6.8,
             ),
         )
         graph.add_node(tumor)
@@ -295,16 +298,20 @@ class TestTumorCompartment:
         tumor_flow = 0.005 * co  # 1.95 L/h
 
         # Add flow edges for tumor
-        graph.add_edge(FlowEdge(
-            source="arterial_blood",
-            target="tumor",
-            flow_rate=Distribution(tumor_flow),
-        ))
-        graph.add_edge(FlowEdge(
-            source="tumor",
-            target="venous_blood",
-            flow_rate=Distribution(tumor_flow),
-        ))
+        graph.add_edge(
+            FlowEdge(
+                source="arterial_blood",
+                target="tumor",
+                flow_rate=Distribution(tumor_flow),
+            )
+        )
+        graph.add_edge(
+            FlowEdge(
+                source="tumor",
+                target="venous_blood",
+                flow_rate=Distribution(tumor_flow),
+            )
+        )
 
         # Reduce rest flow to compensate (maintain flow conservation)
         # Current rest inflow = 0.069 * 390 = 26.91
@@ -312,7 +319,8 @@ class TestTumorCompartment:
         # Remove old rest edges and re-add with reduced flow
         rest_new_flow = (0.069 - 0.005) * co
         graph.edges = [
-            e for e in graph.edges
+            e
+            for e in graph.edges
             if not (
                 isinstance(e, FlowEdge)
                 and (
@@ -321,16 +329,20 @@ class TestTumorCompartment:
                 )
             )
         ]
-        graph.add_edge(FlowEdge(
-            source="arterial_blood",
-            target="rest",
-            flow_rate=Distribution(rest_new_flow),
-        ))
-        graph.add_edge(FlowEdge(
-            source="rest",
-            target="venous_blood",
-            flow_rate=Distribution(rest_new_flow),
-        ))
+        graph.add_edge(
+            FlowEdge(
+                source="arterial_blood",
+                target="rest",
+                flow_rate=Distribution(rest_new_flow),
+            )
+        )
+        graph.add_edge(
+            FlowEdge(
+                source="rest",
+                target="venous_blood",
+                flow_rate=Distribution(rest_new_flow),
+            )
+        )
 
         return graph
 
@@ -473,6 +485,4 @@ class TestTumorCompartment:
         print(f"Tumor Cmax = {tumor_pk.cmax.mean:.6f}")
         print(f"Relative difference = {rel_diff:.2%}")
 
-        assert rel_diff < 0.05, (
-            f"Tumor addition changed Cmax by {rel_diff:.1%} (>5%)"
-        )
+        assert rel_diff < 0.05, f"Tumor addition changed Cmax by {rel_diff:.1%} (>5%)"

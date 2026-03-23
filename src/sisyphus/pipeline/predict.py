@@ -21,7 +21,9 @@ logger = logging.getLogger(__name__)
 _PHYSIOLOGY_DIR = Path(__file__).resolve().parent.parent.parent.parent / "data" / "physiology"
 
 
-def predict(smiles: str, dose_mg: float, route: str = "oral") -> PredictionResult:
+def predict(
+    smiles: str, dose_mg: float, route: str = "oral", n_mc_samples: int = 0
+) -> PredictionResult:
     """End-to-end prediction: SMILES -> PredictionResult.
 
     Pipeline:
@@ -35,6 +37,9 @@ def predict(smiles: str, dose_mg: float, route: str = "oral") -> PredictionResul
         smiles: Input SMILES string.
         dose_mg: Dose in mg.
         route: Administration route (``"oral"`` or ``"iv"``).
+        n_mc_samples: Number of Monte Carlo samples for uncertainty
+            propagation.  When > 0, runs MC and computes 90% PI
+            for Cmax.  0 (default) skips MC for speed.
 
     Returns:
         PredictionResult with combined PK endpoints and uncertainty.
@@ -46,6 +51,7 @@ def predict(smiles: str, dose_mg: float, route: str = "oral") -> PredictionResul
     import sisyphus.engine.flux  # noqa: F401 -- register flux specs
     from sisyphus.engine.compiler import ODECompiler, ResolvedParams
     from sisyphus.engine.solver import solve
+    from sisyphus.engine.uncertainty import UncertaintyEngine
     from sisyphus.graph.builder import build_from_yaml
     from sisyphus.ml.ensemble import MetaLearner
     from sisyphus.ml.models import PKPredictor
@@ -55,6 +61,9 @@ def predict(smiles: str, dose_mg: float, route: str = "oral") -> PredictionResul
     from sisyphus.predict.ivive import build_drug_on_graph
 
     warnings_list: list[str] = []
+    cmax_90ci: tuple[float, float] | None = None
+    graph = None
+    compiled = None
 
     # ── Step 1: Chemistry + ADME ─────────────────────────────────────────
     profile = compute_profile(smiles)
@@ -65,6 +74,15 @@ def predict(smiles: str, dose_mg: float, route: str = "oral") -> PredictionResul
     engine_pk: PKEndpoints | None = None
     try:
         graph = build_from_yaml(_PHYSIOLOGY_DIR / "reference_man.yaml")
+
+        # Pass enzyme abundances from the graph to IVIVE (fix DRY violation).
+        # Rebuild DrugOnGraph with graph-sourced enzyme abundances.
+        if "liver" in graph.nodes and graph.nodes["liver"].enzymes:
+            liver_enzymes: dict[str, float] = {
+                tag: dist.mean for tag, dist in graph.nodes["liver"].enzymes.items()
+            }
+            drug = build_drug_on_graph(profile, adme, dose_mg, route, liver_enzymes=liver_enzymes)
+
         compiler = ODECompiler()
         compiled = compiler.compile(graph)
 
@@ -93,6 +111,23 @@ def predict(smiles: str, dose_mg: float, route: str = "oral") -> PredictionResul
     except Exception as e:
         warnings_list.append(f"Engine failed: {e}")
         logger.warning("Engine simulation failed: %s", e)
+
+    # ── Step 2b: MC uncertainty propagation ────────────────────────────
+    if n_mc_samples > 0 and compiled is not None and graph is not None:
+        try:
+            ue = UncertaintyEngine()
+            mc = ue.propagate_fast(compiled, graph, drug, n_samples=n_mc_samples)
+            if mc.n_samples > 0:
+                cmax_90ci = mc.cmax_90ci
+                logger.info(
+                    "MC propagation: %d samples, Cmax 90%% PI = (%.4f, %.4f)",
+                    mc.n_samples,
+                    cmax_90ci[0],
+                    cmax_90ci[1],
+                )
+        except Exception as e:
+            warnings_list.append(f"MC propagation failed: {e}")
+            logger.warning("MC propagation failed: %s", e)
 
     # ── Step 3: ML direct Cmax ───────────────────────────────────────────
     ml_pk: PKEndpoints | None = None
@@ -154,6 +189,6 @@ def predict(smiles: str, dose_mg: float, route: str = "oral") -> PredictionResul
         confidence=confidence,
         in_applicability_domain=profile.in_ad,
         ad_flags=profile.ad_flags,
-        warnings=warnings_list,
-        cmax_90ci=None,  # Will be computed from MC in future
+        warnings=tuple(warnings_list),
+        cmax_90ci=cmax_90ci,
     )

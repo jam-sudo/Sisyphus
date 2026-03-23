@@ -50,11 +50,11 @@ class PDModel:
         baseline: Baseline effect (at zero concentration).
     """
 
-    ke0: float              # h^-1
-    emax: float = 100.0     # max effect (%)
-    ec50: float = 1.0       # mg/L
-    hill: float = 1.0       # sigmoidicity
-    baseline: float = 0.0   # baseline effect
+    ke0: float  # h^-1
+    emax: float = 100.0  # max effect (%)
+    ec50: float = 1.0  # mg/L
+    hill: float = 1.0  # sigmoidicity
+    baseline: float = 0.0  # baseline effect
 
     def __post_init__(self) -> None:
         if self.ke0 <= 0:
@@ -146,8 +146,8 @@ def _sigmoid_emax(
         Effect array, same shape as ce.
     """
     ce_pos = np.maximum(ce, 0.0)
-    ce_n = ce_pos ** hill
-    ec50_n = ec50 ** hill
+    ce_n = ce_pos**hill
+    ec50_n = ec50**hill
     return baseline + emax * ce_n / (ec50_n + ce_n)
 
 
@@ -193,7 +193,11 @@ def compute_effect(
 
     logger.debug(
         "PK/PD: peak effect=%.2f at t=%.2f h (ke0=%.3f, EC50=%.4f, hill=%.1f)",
-        emax_achieved, temax, pd_model.ke0, pd_model.ec50, pd_model.hill,
+        emax_achieved,
+        temax,
+        pd_model.ke0,
+        pd_model.ec50,
+        pd_model.hill,
     )
 
     return PDResult(
@@ -216,17 +220,17 @@ def compute_effect(
 #   Sheiner et al. (1979) Clin Pharmacol Ther 25:358-371 (warfarin INR)
 
 MIDAZOLAM_SEDATION = PDModel(
-    ke0=0.5,          # 0.5 h^-1 (moderate equilibration delay)
-    emax=100.0,       # % sedation
-    ec50=0.05,        # mg/L (typical sedation EC50)
-    hill=2.0,         # steep dose-response
+    ke0=0.5,  # 0.5 h^-1 (moderate equilibration delay)
+    emax=100.0,  # % sedation
+    ec50=0.05,  # mg/L (typical sedation EC50)
+    hill=2.0,  # steep dose-response
     baseline=0.0,
 )
 
 WARFARIN_INR = PDModel(
-    ke0=0.02,         # 0.02 h^-1 (very slow -- INR response takes days)
-    emax=5.0,         # INR units above baseline
-    ec50=1.0,         # mg/L
+    ke0=0.02,  # 0.02 h^-1 (very slow -- INR response takes days)
+    emax=5.0,  # INR units above baseline
+    ec50=1.0,  # mg/L
     hill=1.0,
-    baseline=1.0,     # baseline INR = 1.0
+    baseline=1.0,  # baseline INR = 1.0
 )
