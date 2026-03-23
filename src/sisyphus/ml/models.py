@@ -13,7 +13,7 @@ from pathlib import Path
 import xgboost as xgb
 
 from sisyphus.core import Distribution
-from sisyphus.ml.features import compute_features
+from sisyphus.descriptors import compute_features
 
 logger = logging.getLogger(__name__)
 

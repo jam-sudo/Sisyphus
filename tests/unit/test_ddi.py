@@ -34,26 +34,32 @@ from sisyphus.pk.endpoints import compute_endpoints
 def _make_simple_graph() -> BodyGraph:
     """Minimal 3-node graph: blood -> liver -> sink, with CYP3A4 enzymes."""
     g = BodyGraph()
-    g.add_node(Node(
-        name="blood",
-        node_type="blood_pool",
-        volume=Distribution(5.0),
-    ))
-    g.add_node(Node(
-        name="liver",
-        node_type="organ",
-        volume=Distribution(1.8),
-        enzymes={
-            "CYP3A4": Distribution(9247500.0),
-            "CYP2D6": Distribution(675000.0),
-        },
-        ivive_scaling=0.00006,
-    ))
-    g.add_node(Node(
-        name="sink",
-        node_type="sink",
-        volume=Distribution(1.0e10),
-    ))
+    g.add_node(
+        Node(
+            name="blood",
+            node_type="blood_pool",
+            volume=Distribution(5.0),
+        )
+    )
+    g.add_node(
+        Node(
+            name="liver",
+            node_type="organ",
+            volume=Distribution(1.8),
+            enzymes={
+                "CYP3A4": Distribution(9247500.0),
+                "CYP2D6": Distribution(675000.0),
+            },
+            ivive_scaling=0.00006,
+        )
+    )
+    g.add_node(
+        Node(
+            name="sink",
+            node_type="sink",
+            volume=Distribution(1.0e10),
+        )
+    )
     g.add_edge(FlowEdge(source="blood", target="liver", flow_rate=Distribution(90.0)))
     g.add_edge(FlowEdge(source="liver", target="blood", flow_rate=Distribution(90.0)))
     g.add_edge(ClearanceEdge(source="liver", target="sink", model="well_stirred"))
@@ -138,12 +144,14 @@ class TestApplyInhibition:
     def test_preserves_cv(self):
         """Inhibition should preserve the CV of the enzyme distribution."""
         g = BodyGraph()
-        g.add_node(Node(
-            name="organ",
-            node_type="organ",
-            volume=Distribution(1.0),
-            enzymes={"CYP3A4": Distribution(1000.0, cv=0.3)},
-        ))
+        g.add_node(
+            Node(
+                name="organ",
+                node_type="organ",
+                volume=Distribution(1.0),
+                enzymes={"CYP3A4": Distribution(1000.0, cv=0.3)},
+            )
+        )
         inhibitor = Inhibitor(
             name="test",
             enzyme_ki={"CYP3A4": 1.0},

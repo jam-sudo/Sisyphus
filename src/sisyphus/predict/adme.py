@@ -18,7 +18,7 @@ import numpy as np
 import xgboost as xgb
 
 from sisyphus.core import Distribution
-from sisyphus.ml.features import compute_features
+from sisyphus.descriptors import compute_features
 from sisyphus.predict.chemistry import MolecularProfile
 
 logger = logging.getLogger(__name__)

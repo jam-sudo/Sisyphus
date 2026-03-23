@@ -15,8 +15,7 @@ import logging
 
 import numpy as np
 
-from sisyphus.core import Distribution, DrugOnGraph
-from sisyphus.graph.types import TissueComposition
+from sisyphus.core import Distribution, DrugOnGraph, TissueComposition
 from sisyphus.predict.adme import ADMEProperties
 from sisyphus.predict.chemistry import MolecularProfile
 
@@ -159,6 +158,7 @@ def _decompose_clint(
     clint: Distribution,
     compound_type: str,
     pka: float | None,
+    enzyme_abundances: dict[str, float] | None = None,
 ) -> dict[str, Distribution]:
     """Decompose total hepatic CLint into per-enzyme affinities.
 
@@ -174,19 +174,22 @@ def _decompose_clint(
         clint: Total hepatic CLint as Distribution (uL/min/10^6 cells).
         compound_type: Compound ionization class.
         pka: pKa value (unused currently, reserved for refinement).
+        enzyme_abundances: Enzyme abundances (tag -> pmol).  If ``None``,
+            uses the hardcoded ``_LIVER_ENZYME_ABUNDANCE`` fallback.
 
     Returns:
         Dict mapping enzyme tag -> CLint per pmol enzyme (uL/min/pmol)
         as Distributions.
     """
     fm = _get_fm_fractions(compound_type)
+    abundances = enzyme_abundances if enzyme_abundances is not None else _LIVER_ENZYME_ABUNDANCE
 
     # Scale CLint from cellular basis to whole-liver L/h
     clint_hepatic_l_per_h = clint.mean * _CLINT_SCALING
 
     enzyme_affinity: dict[str, Distribution] = {}
     for enzyme, fraction in fm.items():
-        abundance = _LIVER_ENZYME_ABUNDANCE[enzyme]
+        abundance = abundances.get(enzyme, _LIVER_ENZYME_ABUNDANCE.get(enzyme, 1.0))
         # affinity such that: abundance * affinity * ivive_scaling = CLint_hepatic * fm
         # affinity = (CLint_hepatic * fm) / (abundance * ivive_scaling)
         affinity = (clint_hepatic_l_per_h * fraction) / (abundance * _IVIVE_SCALING)
@@ -387,6 +390,7 @@ def build_drug_on_graph(
     adme: ADMEProperties,
     dose_mg: float,
     route: str = "oral",
+    liver_enzymes: dict[str, float] | None = None,
 ) -> DrugOnGraph:
     """Construct a DrugOnGraph from predicted properties.
 
@@ -400,12 +404,20 @@ def build_drug_on_graph(
         adme: Predicted ADME properties.
         dose_mg: Dose in mg.
         route: Administration route ("oral" or "iv").
+        liver_enzymes: Enzyme abundances from the graph (tag -> pmol).
+            If provided, used instead of the hardcoded fallback values.
+            The pipeline passes ``graph.nodes["liver"].enzymes`` values.
 
     Returns:
         A fully parameterized DrugOnGraph ready for the engine.
     """
+    # Use graph-supplied abundances when available, fall back to hardcoded defaults.
+    abundances = liver_enzymes if liver_enzymes is not None else _LIVER_ENZYME_ABUNDANCE
+
     # Decompose CLint to per-enzyme affinities
-    enzyme_affinity = _decompose_clint(adme.clint, profile.compound_type, profile.pka)
+    enzyme_affinity = _decompose_clint(
+        adme.clint, profile.compound_type, profile.pka, enzyme_abundances=abundances
+    )
 
     # Compute Kp for each tissue using Rodgers & Rowland
     kp_overrides = _compute_all_kp(profile.logp, profile.pka, profile.compound_type)

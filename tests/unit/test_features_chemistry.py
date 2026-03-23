@@ -79,7 +79,7 @@ class TestChemistry:
         assert profile.compound_type == "acid"  # carboxylic acid
         assert profile.pka == pytest.approx(4.5)
         assert profile.in_ad is True
-        assert profile.ad_flags == []
+        assert profile.ad_flags == ()
 
     def test_midazolam_is_base(self):
         # Midazolam has a basic amine in the diazepine ring

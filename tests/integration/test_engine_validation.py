@@ -11,19 +11,18 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from sisyphus.graph.builder import build_from_yaml
+import sisyphus.engine.flux  # noqa: F401 -- register flux specs
 from sisyphus.compounds import load_compound
 from sisyphus.engine.compiler import ODECompiler, ResolvedParams
 from sisyphus.engine.solver import solve
+from sisyphus.graph.builder import build_from_yaml
 from sisyphus.pk.endpoints import compute_endpoints
-import sisyphus.engine.flux  # noqa: F401 -- register flux specs
-
 
 OMEGA_TARGETS = {
-    "midazolam":   {"cmax": 0.006943, "tmax": 1.5},
-    "caffeine":    {"cmax": 1.7139,   "tmax": 1.0},
-    "warfarin":    {"cmax": 0.4922,   "tmax": 3.0},
-    "propranolol": {"cmax": 0.1355,   "tmax": 1.5},
+    "midazolam": {"cmax": 0.006943, "tmax": 1.5},
+    "caffeine": {"cmax": 1.7139, "tmax": 1.0},
+    "warfarin": {"cmax": 0.4922, "tmax": 3.0},
+    "propranolol": {"cmax": 0.1355, "tmax": 1.5},
 }
 
 
