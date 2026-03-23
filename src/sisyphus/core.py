@@ -135,7 +135,32 @@ class DrugOnGraph:
         Returns a new ``DrugOnGraph`` where every Distribution field is
         replaced by ``Distribution(mean=sampled_value, cv=0.0)``.
         """
-        raise NotImplementedError
+        return DrugOnGraph(
+            name=self.name,
+            smiles=self.smiles,
+            dose_mg=self.dose_mg,
+            route=self.route,
+            administration_node=self.administration_node,
+            mw=self.mw,
+            pka=self.pka,
+            compound_type=self.compound_type,
+            particle_radius_um=self.particle_radius_um,
+            fup=Distribution(mean=self.fup.sample(rng), cv=0.0),
+            rbp=Distribution(mean=self.rbp.sample(rng), cv=0.0),
+            kp_method=self.kp_method,
+            kp_overrides={
+                k: Distribution(mean=v.sample(rng), cv=0.0) for k, v in self.kp_overrides.items()
+            },
+            peff=Distribution(mean=self.peff.sample(rng), cv=0.0),
+            solubility=Distribution(mean=self.solubility.sample(rng), cv=0.0),
+            enzyme_affinity={
+                k: Distribution(mean=v.sample(rng), cv=0.0) for k, v in self.enzyme_affinity.items()
+            },
+            renal_clearance=Distribution(mean=self.renal_clearance.sample(rng), cv=0.0),
+            ps_overrides={
+                k: Distribution(mean=v.sample(rng), cv=0.0) for k, v in self.ps_overrides.items()
+            },
+        )
 
 
 # ---------------------------------------------------------------------------

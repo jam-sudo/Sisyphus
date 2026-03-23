@@ -1,0 +1,80 @@
+"""ODE solver wrapper.
+
+Wraps SciPy's ``solve_ivp`` with PBPK-appropriate defaults
+(LSODA method, mass-balance checking, event detection).
+"""
+
+from __future__ import annotations
+
+import numpy as np
+from scipy.integrate import solve_ivp
+
+from sisyphus.core import SimResult
+from sisyphus.engine.compiler import CompiledODE, ResolvedParams
+
+
+def solve(
+    compiled: CompiledODE,
+    params: ResolvedParams,
+    y0: np.ndarray,
+    t_span: tuple[float, float],
+    t_eval: np.ndarray | None = None,
+) -> SimResult:
+    """Solve the ODE system for a single parameter realization.
+
+    Args:
+        compiled: Compiled ODE skeleton.
+        params: Resolved point-value parameters.
+        y0: Initial state vector (amounts in mg).
+        t_span: Integration interval ``(t_start, t_end)`` in hours.
+        t_eval: Optional time points for output.  If ``None``, 500
+            evenly-spaced points are used.
+
+    Returns:
+        A SimResult with concentration and amount time series.
+    """
+    rhs = compiled.make_rhs(params)
+
+    if t_eval is None:
+        t_eval = np.linspace(t_span[0], t_span[1], 500)
+
+    sol = solve_ivp(
+        rhs,
+        t_span,
+        y0,
+        method="LSODA",
+        t_eval=t_eval,
+        rtol=1e-8,
+        atol=1e-10,
+    )
+
+    # Build named concentration and amount dicts
+    concentrations = {}
+    amounts = {}
+    for name, idx in compiled.state_index.items():
+        amounts[name] = sol.y[idx]
+        v = params.node_param(name, "volume")
+        kp = params.drug_kp(name)
+        rbp = params.drug_param("rbp")
+        if v > 0 and kp > 0:
+            concentrations[name] = sol.y[idx] * rbp / (v * kp)
+        else:
+            concentrations[name] = sol.y[idx]  # sinks, etc.
+
+    # Mass balance check: sum of all states should equal dose at all times
+    total = np.zeros_like(sol.t)
+    for idx in range(compiled.n_states):
+        total += sol.y[idx]
+    dose = params.drug_param("dose_mg")
+    if dose > 0:
+        mbe = float(np.max(np.abs(total - dose) / dose))
+    else:
+        mbe = 0.0
+
+    return SimResult(
+        time_h=sol.t,
+        concentrations=concentrations,
+        amounts=amounts,
+        mass_balance_error=mbe,
+        solver_success=bool(sol.success),
+    )
