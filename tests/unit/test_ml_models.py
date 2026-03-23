@@ -125,8 +125,8 @@ class TestMetaLearner:
         result = ml.combine(engine_pk, None)
         assert isinstance(result, PKEndpoints)
 
-    def test_lazy_loading(self):
+    def test_stateless_construction(self):
         ml = MetaLearner()
-        assert not ml._loaded
-        ml.combine(None, None)
-        assert ml._loaded
+        # MetaLearner is stateless -- no model loading needed
+        result = ml.combine(None, None)
+        assert isinstance(result, PKEndpoints)

@@ -33,9 +33,9 @@ _HPGL = 120e6  # cells/g
 _LIVER_WEIGHT_G = 1500.0  # g
 
 # CLint scaling factor: converts uL/min/10^6 cells -> L/h (whole liver basis)
-# = HPGL * liver_weight * 60 min/h / 1e6 uL/mL / 1e3 mL/L
-# = 120e6 * 1500 * 60 / 1e6 / 1e3 = 10.8
-_CLINT_SCALING = _HPGL * _LIVER_WEIGHT_G * 60.0 / 1e6 / 1e3  # 10.8 L/h per uL/min/10^6 cells
+# = (HPGL [cells/g] / 1e6 [cells/million]) * liver_weight [g] * 60 [min/h] / 1e6 [uL/L]
+# = (120e6/1e6) * 1500 * 60 / 1e6 = 120 * 1500 * 60 / 1e6 = 10.8
+_CLINT_SCALING = (_HPGL / 1e6) * _LIVER_WEIGHT_G * 60.0 / 1e6  # 10.8 L/h per uL/min/10^6 cells
 
 # IVIVE scaling factor: converts uL/min -> L/h = 60/1e6
 _IVIVE_SCALING = 6e-5  # from reference_man.yaml

@@ -720,7 +720,7 @@
       "name": "alosetron",
       "tier": "gold",
       "source": "FDA label (analytical model from PK params)",
-      "dose_mg": 4.0,
+      "dose_mg": 1.0,
       "route": "oral",
       "pk_params": {
         "cmax_mg_L": 0.005,
@@ -5441,7 +5441,7 @@
       "name": "ciprofloxacin",
       "tier": "gold",
       "source": "FDA label (analytical model from PK params)",
-      "dose_mg": 50.0,
+      "dose_mg": 500.0,
       "route": "oral",
       "pk_params": {
         "cmax_mg_L": 2.97,
@@ -7900,7 +7900,7 @@
       "dose_mg": 100.0,
       "route": "oral",
       "pk_params": {
-        "cmax_mg_L": 7.32,
+        "cmax_mg_L": 1.2,
         "thalf_h": 7.0
       },
       "ct_curve": {
@@ -8609,7 +8609,7 @@
       "dose_mg": 25.0,
       "route": "oral",
       "pk_params": {
-        "cmax_mg_L": 0.024,
+        "cmax_mg_L": 0.5,
         "thalf_h": 1.0
       },
       "ct_curve": {
@@ -20700,7 +20700,7 @@
       "tier": "platinum",
       "source": "PK-DB (Bell1985, PMID: 2857025)",
       "dose_mg": 30.0,
-      "route": "unknown",
+      "route": "oral",
       "pk_params": {
         "cmax_mg_L": 0.01865,
         "thalf_h": 2.0
@@ -32241,7 +32241,7 @@
       "name": "valacyclovir",
       "tier": "gold",
       "source": "FDA label (analytical model from PK params)",
-      "dose_mg": 20.0,
+      "dose_mg": 1000.0,
       "route": "oral",
       "pk_params": {
         "cmax_mg_L": 4.03,
@@ -32364,7 +32364,7 @@
       "dose_mg": 900.0,
       "route": "oral",
       "pk_params": {
-        "cmax_mg_L": 58.0,
+        "cmax_mg_L": 5.8,
         "thalf_h": 73.0
       },
       "ct_curve": {
