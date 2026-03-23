@@ -419,8 +419,22 @@ class TestDiffusionFlux:
     def test_equilibrium_no_flux(self):
         """When unbound concentrations are equal, flux is zero."""
         g = BodyGraph()
-        g.add_node(Node(name="adipose_vasc", node_type="organ", volume=Distribution(1.0)))
-        g.add_node(Node(name="adipose_tissue", node_type="organ", volume=Distribution(10.0)))
+        g.add_node(
+            Node(
+                name="adipose_vasc",
+                node_type="organ",
+                volume=Distribution(1.0),
+                lookup_name="adipose",
+            )
+        )
+        g.add_node(
+            Node(
+                name="adipose_tissue",
+                node_type="organ",
+                volume=Distribution(10.0),
+                lookup_name="adipose",
+            )
+        )
         g.add_edge(
             DiffusionEdge(
                 source="adipose_vasc",
@@ -458,8 +472,22 @@ class TestDiffusionFlux:
     def test_net_flux_direction(self):
         """Flux flows from higher to lower unbound concentration."""
         g = BodyGraph()
-        g.add_node(Node(name="adipose_vasc", node_type="organ", volume=Distribution(1.0)))
-        g.add_node(Node(name="adipose_tissue", node_type="organ", volume=Distribution(10.0)))
+        g.add_node(
+            Node(
+                name="adipose_vasc",
+                node_type="organ",
+                volume=Distribution(1.0),
+                lookup_name="adipose",
+            )
+        )
+        g.add_node(
+            Node(
+                name="adipose_tissue",
+                node_type="organ",
+                volume=Distribution(10.0),
+                lookup_name="adipose",
+            )
+        )
         g.add_edge(
             DiffusionEdge(
                 source="adipose_vasc",
@@ -491,8 +519,19 @@ class TestDiffusionFlux:
     def test_ps_override(self):
         """Drug-specific PS takes precedence over edge PS."""
         g = BodyGraph()
-        g.add_node(Node(name="brain_vasc", node_type="organ", volume=Distribution(0.5)))
-        g.add_node(Node(name="brain_tissue", node_type="organ", volume=Distribution(1.4)))
+        g.add_node(
+            Node(
+                name="brain_vasc", node_type="organ", volume=Distribution(0.5), lookup_name="brain"
+            )
+        )
+        g.add_node(
+            Node(
+                name="brain_tissue",
+                node_type="organ",
+                volume=Distribution(1.4),
+                lookup_name="brain",
+            )
+        )
         g.add_edge(
             DiffusionEdge(
                 source="brain_vasc",

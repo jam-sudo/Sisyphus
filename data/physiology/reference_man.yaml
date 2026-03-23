@@ -97,41 +97,49 @@ nodes:
   - name: adipose_vasc
     type: blood_pool
     volume: 0.725          # 0.05 * 14.5
+    lookup_name: adipose
 
   - name: adipose_tissue
     type: organ
     volume: 13.775         # 0.95 * 14.5
     composition: {fn: 0.7021, fp: 0.0022, fw: 0.150, pH: 7.0}
+    lookup_name: adipose
 
   # Muscle
   - name: muscle_vasc
     type: blood_pool
     volume: 1.40           # 0.05 * 28.0
+    lookup_name: muscle
 
   - name: muscle_tissue
     type: organ
     volume: 26.60          # 0.95 * 28.0
     composition: {fn: 0.0238, fp: 0.0072, fw: 0.760, pH: 7.0}
+    lookup_name: muscle
 
   # Bone
   - name: bone_vasc
     type: blood_pool
     volume: 0.243          # 0.05 * 4.86
+    lookup_name: bone
 
   - name: bone_tissue
     type: organ
     volume: 4.617          # 0.95 * 4.86
     composition: {fn: 0.0174, fp: 0.0010, fw: 0.439, pH: 7.0}
+    lookup_name: bone
 
   # Skin
   - name: skin_vasc
     type: blood_pool
     volume: 0.165          # 0.05 * 3.30
+    lookup_name: skin
 
   - name: skin_tissue
     type: organ
     volume: 3.135          # 0.95 * 3.30
     composition: {fn: 0.0284, fp: 0.0111, fw: 0.718, pH: 7.0}
+    lookup_name: skin
 
   # ── GI lumen segments (8) ───────────────
   - name: stomach_lumen

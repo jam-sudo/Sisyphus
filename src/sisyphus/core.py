@@ -60,6 +60,9 @@ class Distribution:
             return self.mean
         sigma = self.cv * abs(self.mean)
         if self.dist_type == "lognormal":
+            if self.mean <= 0:
+                # Lognormal undefined for non-positive mean; fall back to normal
+                return float(rng.normal(self.mean, sigma))
             # Parameterize so E[X] = mean, CV = cv
             mu_ln = np.log(self.mean**2 / np.sqrt(sigma**2 + self.mean**2))
             sigma_ln = np.sqrt(np.log(1 + (sigma / self.mean) ** 2))
