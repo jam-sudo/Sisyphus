@@ -3,31 +3,11 @@
 import numpy as np
 import pytest
 
+import sisyphus.engine.flux  # noqa: F401 — registers all FluxSpec implementations
 from sisyphus.core import Distribution, DrugOnGraph
 from sisyphus.engine.compiler import ODECompiler, ResolvedParams
-from sisyphus.engine.flux import FluxSpec, register_flux
 from sisyphus.graph.body import BodyGraph
 from sisyphus.graph.types import FlowEdge, Node
-
-# ---------------------------------------------------------------------------
-# Register a dummy flux spec for "flow" so compiler tests work without Task 7
-# ---------------------------------------------------------------------------
-
-@register_flux("flow")
-class _DummyFlowFlux(FluxSpec):
-    @classmethod
-    def from_edge(cls, edge_id, edge, state_index):
-        return cls(
-            edge_id,
-            state_index[edge.source],
-            state_index[edge.target],
-            edge.source,
-            edge.target,
-        )
-
-    def apply(self, t, y, dydt, params):
-        pass  # no-op for testing
-
 
 # ---------------------------------------------------------------------------
 # Fixtures
