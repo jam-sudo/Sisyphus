@@ -4,8 +4,8 @@
     "n_drugs": 290,
     "tiers": {
       "platinum": 16,
-      "gold": 99,
-      "silver": 175
+      "gold": 100,
+      "silver": 174
     }
   },
   "drugs": {
@@ -3437,7 +3437,7 @@
       "name": "bexagliflozin",
       "tier": "silver",
       "source": "FDA label (analytical model from PK params)",
-      "dose_mg": 20.0,
+      "dose_mg": null,
       "route": "oral",
       "pk_params": {
         "thalf_h": 12.0
@@ -5917,7 +5917,7 @@
       "name": "clomipramine",
       "tier": "silver",
       "source": "FDA label (analytical model from PK params)",
-      "dose_mg": 50.0,
+      "dose_mg": null,
       "route": "oral",
       "pk_params": {
         "thalf_h": 19.0
@@ -6034,7 +6034,7 @@
       "name": "clonidine",
       "tier": "silver",
       "source": "FDA label (analytical model from PK params)",
-      "dose_mg": 0.2,
+      "dose_mg": null,
       "route": "oral",
       "pk_params": {
         "thalf_h": 0.33,
@@ -12136,12 +12136,13 @@
     },
     "febuxostat": {
       "name": "febuxostat",
-      "tier": "silver",
-      "source": "FDA label (analytical model from PK params)",
+      "tier": "gold",
+      "source": "DrugBank [L32238]: 40mg oral, Cmax=1.6\u00b10.6 \u00b5g/mL",
       "dose_mg": 40.0,
       "route": "oral",
       "pk_params": {
-        "thalf_h": 5.0
+        "thalf_h": 5.0,
+        "cmax_mg_L": 1.6
       },
       "ct_curve": {
         "time_h": [
