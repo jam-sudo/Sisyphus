@@ -138,14 +138,42 @@ Source 2: DrugBank parsed fup (~1,439 drugs)
   - Quality filter: 0.001 ≤ fup ≤ 0.999 (물리적 범위)
 
 Holdout 제외 절차 (CRITICAL):
-  1. holdout.json에서 drug names 로드: ["alosetron", "apixaban", ...]
-  2. clinical_pk.json에서 name → SMILES 매핑
-  3. SMILES → canonical SMILES (isomericSmiles=True)
-  4. Canonical SMILES set을 holdout_exclusion으로 저장
-  5. TDC/DrugBank training data에서 holdout_exclusion에 있는 SMILES 제거
-  6. holdout drug이 clinical_pk.json에 SMILES가 없으면 → name matching fallback
-  7. 학습 완료 후 POST-TRAINING 오염 검사:
-     holdout canonical SMILES가 training set에 있는지 재확인
+
+  Pre-training exclusion — multi-key matching:
+
+  Canonical SMILES만으로는 salt form ("metoprolol" vs "metoprolol tartrate"),
+  tautomer, stereo 변형을 잡지 못한다. 3가지 key를 모두 사용:
+
+  1. holdout.json에서 drug names 로드
+  2. clinical_pk.json에서 name → SMILES → 3가지 exclusion key 생성:
+     a) canonical SMILES (isomericSmiles=True)
+     b) InChIKey 첫 14자 (connectivity layer — salt/tautomer/stereo 무관)
+     c) drug name (lowercase)
+  3. TDC/DrugBank training data에서 ANY key match → 제거:
+     ```python
+     def is_holdout(smiles: str, name: str | None = None) -> bool:
+         canonical = Chem.MolToSmiles(Chem.MolFromSmiles(smiles), isomericSmiles=True)
+         if canonical in holdout_canonical_smiles:
+             return True
+         inchi = MolToInchi(Chem.MolFromSmiles(smiles))
+         if inchi:
+             ik = InchiToInchiKey(inchi)
+             if ik and ik[:14] in holdout_inchikey14:
+                 return True  # catches salt forms, tautomers
+         if name and name.lower() in holdout_names:
+             return True  # catches name variants
+         return False
+     ```
+  4. clinical_pk.json에 SMILES 없는 holdout drug → name-only exclusion
+     (conservative: name match면 제거)
+
+  Post-training 오염 검사:
+
+  학습 완료 후 training set 전체를 is_holdout()로 재검사.
+  - 오염 0건: 정상 진행
+  - 오염 ≤ 3건: 해당 samples 제거 후 재학습 (XGBoost <5분)
+  - 오염 > 3건: exclusion logic에 구조적 결함. 원인 분석 후 수정, 재학습
+  - **오염이 있는 상태로 benchmark 진행 금지**
 
 Merge rules:
   - TDC-DrugBank overlap: canonical SMILES dedup, DrugBank 우선 (더 curated)
