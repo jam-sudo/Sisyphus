@@ -4,8 +4,8 @@
     "n_drugs": 290,
     "tiers": {
       "platinum": 16,
-      "gold": 100,
-      "silver": 174
+      "gold": 105,
+      "silver": 169
     }
   },
   "drugs": {
@@ -3435,12 +3435,13 @@
     },
     "bexagliflozin": {
       "name": "bexagliflozin",
-      "tier": "silver",
-      "source": "FDA label (analytical model from PK params)",
-      "dose_mg": null,
+      "tier": "gold",
+      "source": "DrugBank: 20mg fasted, Cmax=134 ng/mL",
+      "dose_mg": 20.0,
       "route": "oral",
       "pk_params": {
-        "thalf_h": 12.0
+        "thalf_h": 12.0,
+        "cmax_mg_L": 0.134
       },
       "ct_curve": {
         "time_h": [
@@ -5915,12 +5916,13 @@
     },
     "clomipramine": {
       "name": "clomipramine",
-      "tier": "silver",
-      "source": "FDA label (analytical model from PK params)",
-      "dose_mg": null,
+      "tier": "gold",
+      "source": "DrugBank: 50mg oral, mean peak 92 ng/mL (range 56-154)",
+      "dose_mg": 50.0,
       "route": "oral",
       "pk_params": {
-        "thalf_h": 19.0
+        "thalf_h": 19.0,
+        "cmax_mg_L": 0.092
       },
       "ct_curve": {
         "time_h": [
@@ -6032,13 +6034,14 @@
     },
     "clonidine": {
       "name": "clonidine",
-      "tier": "silver",
-      "source": "FDA label (analytical model from PK params)",
-      "dose_mg": null,
+      "tier": "gold",
+      "source": "DrugBank [A180577]: 100\u00b5g oral, Cmax=400.72 pg/mL",
+      "dose_mg": 0.1,
       "route": "oral",
       "pk_params": {
         "thalf_h": 0.33,
-        "bioavailability_pct": 70.0
+        "bioavailability_pct": 70.0,
+        "cmax_mg_L": 0.00040072
       },
       "ct_curve": {
         "time_h": [
@@ -24528,12 +24531,13 @@
     },
     "pindolol": {
       "name": "pindolol",
-      "tier": "silver",
-      "source": "FDA label (analytical model from PK params)",
-      "dose_mg": null,
+      "tier": "gold",
+      "source": "DrugBank [L32388]: 5mg oral, Cmax=33.1 ng/mL",
+      "dose_mg": 5.0,
       "route": "oral",
       "pk_params": {
-        "thalf_h": 8.0
+        "thalf_h": 8.0,
+        "cmax_mg_L": 0.0331
       },
       "ct_curve": {
         "time_h": [
@@ -29526,13 +29530,14 @@
     },
     "sumatriptan": {
       "name": "sumatriptan",
-      "tier": "silver",
-      "source": "FDA label (analytical model from PK params)",
-      "dose_mg": null,
+      "tier": "gold",
+      "source": "DrugBank [A179737]: 25mg oral, Cmax=16.5 ng/mL",
+      "dose_mg": 25.0,
       "route": "oral",
       "pk_params": {
         "thalf_h": 2.5,
-        "bioavailability_pct": 15.0
+        "bioavailability_pct": 15.0,
+        "cmax_mg_L": 0.0165
       },
       "ct_curve": {
         "time_h": [
