@@ -190,6 +190,27 @@ _DEFAULT_PKA: dict[str, float | None] = {
 }
 
 
+def _classify_from_pka(pka_acidic: float, pka_basic: float) -> tuple[float | None, str]:
+    """ChemAxon pKa → (pka_for_rr, compound_type).
+
+    Henderson-Hasselbalch thresholds:
+    - acidic < 7.0: >71% ionized at pH 7.4, R&R ion_ratio effect 43%+
+    - basic > 8.0: >80% protonated at pH 7.4, R&R ion_ratio effect 121%+
+    - pKa 7.0-8.0: uncertainty zone → neutral (safe default)
+    """
+    is_acidic = pka_acidic < 7.0
+    is_basic = pka_basic > 8.0
+
+    if is_acidic and is_basic:
+        return pka_basic, "zwitterion"
+    elif is_acidic:
+        return pka_acidic, "acid"
+    elif is_basic:
+        return pka_basic, "base"
+    else:
+        return None, "neutral"
+
+
 def _estimate_pka_type(mol: Chem.Mol, logp: float) -> tuple[float | None, str]:
     """Estimate pKa and compound type from structural patterns.
 
@@ -302,8 +323,22 @@ def compute_profile(smiles: str) -> MolecularProfile:
     hba = Descriptors.NumHAcceptors(mol)
     rotatable_bonds = Descriptors.NumRotatableBonds(mol)
 
-    pka, compound_type = _estimate_pka_type(mol, logp)
+    # ── DrugBank overrides ──
+    from sisyphus.predict.drugbank import drugbank_lookup
+    db = drugbank_lookup()
 
+    db_logp = db.get_logp(canonical)
+    if db_logp is not None:
+        logp = db_logp  # experimental overrides Crippen
+
+    # pKa: DrugBank ChemAxon → fallback SMARTS
+    db_pka = db.get_pka(canonical)
+    if db_pka is not None:
+        pka, compound_type = _classify_from_pka(db_pka[0], db_pka[1])
+    else:
+        pka, compound_type = _estimate_pka_type(mol, logp)
+
+    # _check_ad uses the local `logp` which may be overridden — correct per spec
     ad_flags = _check_ad(mol, mw, logp, tpsa)
 
     # Prodrug detection — adds PRODRUG flag if ester/phosphonate prodrug motifs found
