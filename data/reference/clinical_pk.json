@@ -11902,12 +11902,12 @@
     "febuxostat": {
       "name": "febuxostat",
       "tier": "gold",
-      "source": "DrugBank [L32238]: 40mg oral, Cmax=1.6\u00b10.6 \u00b5g/mL [NOTE: once-daily but t\u00bd=5-8h/q24h \u2192 accumulation ~1.0]",
+      "source": "DrugBank [L32238]: 40mg oral, Cmax=1.6\u00b10.6 \u00b5g/mL [CORRECTED: Css,max=1.600000 mg/L \u00f7 R=1.0667 (ke=ln2/6.0h, \u03c4=24.0h) \u2192 SD Cmax=1.500000 mg/L]",
       "dose_mg": 40.0,
       "route": "oral",
       "pk_params": {
         "thalf_h": 5.0,
-        "cmax_mg_L": 1.6
+        "cmax_mg_L": 1.5
       },
       "ct_curve": {
         "time_h": [
@@ -33319,12 +33319,12 @@
     "cetirizine": {
       "name": "cetirizine",
       "tier": "gold",
-      "source": "DrugBank: 10mg oral, Cmax=311 ng/mL [NOTE: Css,max but t\u00bd=8h/q24h \u2192 accumulation ~1.0]",
+      "source": "DrugBank: 10mg oral, Cmax=311 ng/mL [CORRECTED: Css,max=0.311000 mg/L \u00f7 R=1.1429 (ke=ln2/8.0h, \u03c4=24.0h) \u2192 SD Cmax=0.272125 mg/L]",
       "dose_mg": 10.0,
       "route": "oral",
       "smiles": "O=C(O)COCCN1CCN(C(c2ccccc2)c2ccc(Cl)cc2)CC1",
       "pk_params": {
-        "cmax_mg_L": 0.311
+        "cmax_mg_L": 0.272125
       },
       "ct_curve": null,
       "in_holdout": true
