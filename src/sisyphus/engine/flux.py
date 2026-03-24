@@ -241,6 +241,36 @@ class ClearanceFluxSpec(FluxSpec):
 
             rate = clh * c_out
 
+        elif self.model == "parallel_tube":
+            # Compute organ-level CLint (same as well-stirred)
+            clint_organ = 0.0
+            ivive = params.node_param(self.source_name, "ivive_scaling")
+            for tag, abundance in params.node_enzymes(self.source_name).items():
+                affinity = params.drug_enzyme_affinity(tag)
+                if affinity > 0 and abundance > 0:
+                    clint_organ += abundance * affinity * ivive
+
+            if clint_organ <= 0:
+                return
+
+            fup = params.drug_param("fup")
+            q = params.total_inflow(self.source_name)
+
+            # Parallel-tube: CL = Q × (1 - e^(-fup × CLint / Q))
+            if q < 1e-12:
+                return
+            exponent = -fup * clint_organ / q
+            # Clamp exponent to avoid overflow for very high CLint
+            exponent = max(exponent, -50.0)
+            clh = q * (1.0 - np.exp(exponent))
+
+            v = params.node_param(self.source_name, "volume")
+            kp = params.drug_kp(self.source_name)
+            rbp = params.drug_param("rbp")
+            c_out = y[self.source_idx] * rbp / (v * kp) if v > 0 else 0.0
+
+            rate = clh * c_out
+
         elif self.model == "gfr_filtration":
             renal_cl = params.drug_param("renal_clearance")
             if renal_cl <= 0:
