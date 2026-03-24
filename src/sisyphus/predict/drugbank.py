@@ -166,7 +166,7 @@ class DrugBankLookup:
         # InChIKey fallback
         try:
             from rdkit import Chem
-            from rdkit.Chem.inchi import MolToInchi, InchiToInchiKey
+            from rdkit.Chem.inchi import InchiToInchiKey, MolToInchi
             mol = Chem.MolFromSmiles(canonical_smiles)
             if mol is not None:
                 inchi = MolToInchi(mol)
@@ -226,10 +226,16 @@ _INSTANCE: DrugBankLookup | None = None
 
 
 def drugbank_lookup(config: DrugBankConfig | None = None) -> DrugBankLookup:
-    """Get module-level singleton. Creates on first call."""
+    """Get module-level singleton. Creates on first call.
+
+    Config is only used on first call.  Subsequent calls with a different
+    config are ignored (call ``_reset_singleton()`` first to reconfigure).
+    """
     global _INSTANCE
     if _INSTANCE is None:
         _INSTANCE = DrugBankLookup(config=config)
+    elif config is not None:
+        logger.warning("drugbank_lookup() singleton already initialized, config argument ignored")
     return _INSTANCE
 
 
