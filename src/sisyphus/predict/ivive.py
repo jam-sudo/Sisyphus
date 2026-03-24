@@ -203,6 +203,10 @@ def _decompose_clint(
         pka: pKa value (unused currently, reserved for refinement).
         enzyme_abundances: Enzyme abundances (tag -> pmol).  If ``None``,
             uses the hardcoded ``_LIVER_ENZYME_ABUNDANCE`` fallback.
+        substrate_enzymes: DrugBank CYP substrate annotations (Sisyphus
+            CYP tags, e.g. ``{"CYP3A4", "CYP2D6"}``).  If provided,
+            overrides compound_type-based fm fractions.  ``None`` falls
+            back to compound_type defaults.
 
     Returns:
         Dict mapping enzyme tag -> CLint per pmol enzyme (uL/min/pmol)
