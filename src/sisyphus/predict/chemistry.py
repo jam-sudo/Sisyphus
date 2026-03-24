@@ -315,7 +315,7 @@ def compute_profile(smiles: str) -> MolecularProfile:
     if mol is None or mol.GetNumAtoms() == 0:
         raise ValueError(f"Invalid SMILES: {smiles!r}")
 
-    canonical = Chem.MolToSmiles(mol)
+    canonical = Chem.MolToSmiles(mol, isomericSmiles=True)
     mw = Descriptors.MolWt(mol)
     logp = Descriptors.MolLogP(mol)
     tpsa = Descriptors.TPSA(mol)
