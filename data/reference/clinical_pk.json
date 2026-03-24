@@ -838,11 +838,12 @@
     "amantadine": {
       "name": "amantadine",
       "tier": "silver",
-      "source": "FDA label (analytical model from PK params)",
-      "dose_mg": null,
+      "source": "DailyMed label, 100mg fasted healthy volunteers single dose",
+      "dose_mg": 100.0,
       "route": "oral",
       "pk_params": {
-        "thalf_h": 16.0
+        "thalf_h": 16.0,
+        "cmax_mg_L": 0.22
       },
       "ct_curve": {
         "time_h": [
@@ -1662,12 +1663,13 @@
     "apixaban": {
       "name": "apixaban",
       "tier": "silver",
-      "source": "FDA label (analytical model from PK params)",
+      "source": "PMC6769096, healthy volunteers, 5mg fasted IR single dose",
       "dose_mg": 5.0,
       "route": "oral",
       "pk_params": {
         "thalf_h": 12.0,
-        "bioavailability_pct": 50.0
+        "bioavailability_pct": 50.0,
+        "cmax_mg_L": 0.126
       },
       "ct_curve": {
         "time_h": [
@@ -6270,10 +6272,12 @@
     "codeine": {
       "name": "codeine",
       "tier": "platinum",
-      "source": "PK-DB (Rogers1982, PMID: 7094509)",
+      "source": "PubMed 7983238, 60mg IR fasted healthy volunteers single dose",
       "dose_mg": 60.0,
       "route": "oral",
-      "pk_params": {},
+      "pk_params": {
+        "cmax_mg_L": 0.139
+      },
       "ct_curve": {
         "time_h": [
           0.0,
@@ -6359,7 +6363,8 @@
           0.0,
           0.0
         ]
-      }
+      },
+      "smiles": "COc1ccc2c3c1O[C@H]1[C@@H](O)C=C[C@H]4[C@@H](C2)N(C)CC[C@@]341"
     },
     "colchicine": {
       "name": "colchicine",
@@ -11784,12 +11789,13 @@
     "famotidine": {
       "name": "famotidine",
       "tier": "silver",
-      "source": "FDA label (analytical model from PK params)",
+      "source": "FDA Pepcid label, 20mg fasted healthy volunteers single dose",
       "dose_mg": 20.0,
       "route": "oral",
       "pk_params": {
         "auc_mg_h_L": 0.58,
-        "thalf_h": 2.5
+        "thalf_h": 2.5,
+        "cmax_mg_L": 0.073
       },
       "ct_curve": {
         "time_h": [
@@ -13435,12 +13441,13 @@
     "fluvoxamine": {
       "name": "fluvoxamine",
       "tier": "silver",
-      "source": "FDA label (analytical model from PK params)",
-      "dose_mg": null,
+      "source": "PubMed 8499580, 50mg fasted healthy volunteers single dose",
+      "dose_mg": 50.0,
       "route": "oral",
       "pk_params": {
         "thalf_h": 16.3,
-        "bioavailability_pct": 84.0
+        "bioavailability_pct": 84.0,
+        "cmax_mg_L": 0.015
       },
       "ct_curve": {
         "time_h": [
@@ -24408,12 +24415,13 @@
     "pravastatin": {
       "name": "pravastatin",
       "tier": "silver",
-      "source": "FDA label (analytical model from PK params)",
+      "source": "FDA Pravachol label, 20mg fasted healthy volunteers single dose",
       "dose_mg": 20.0,
       "route": "oral",
       "pk_params": {
         "thalf_h": 1.8,
-        "bioavailability_pct": 17.0
+        "bioavailability_pct": 17.0,
+        "cmax_mg_L": 0.025
       },
       "ct_curve": {
         "time_h": [
@@ -25935,12 +25943,13 @@
     "ranitidine": {
       "name": "ranitidine",
       "tier": "silver",
-      "source": "FDA label (analytical model from PK params)",
+      "source": "FDA Zantac label, 150mg fasted healthy volunteers single dose",
       "dose_mg": 150.0,
       "route": "oral",
       "pk_params": {
         "thalf_h": 2.5,
-        "bioavailability_pct": 48.0
+        "bioavailability_pct": 48.0,
+        "cmax_mg_L": 0.44
       },
       "ct_curve": {
         "time_h": [
@@ -27702,12 +27711,13 @@
     "sildenafil": {
       "name": "sildenafil",
       "tier": "silver",
-      "source": "FDA label (analytical model from PK params)",
-      "dose_mg": null,
+      "source": "PMC1874258, 50mg fasted healthy males IR single dose",
+      "dose_mg": 50.0,
       "route": "oral",
       "pk_params": {
         "thalf_h": 2.9,
-        "bioavailability_pct": 41.0
+        "bioavailability_pct": 41.0,
+        "cmax_mg_L": 0.27
       },
       "ct_curve": {
         "time_h": [
@@ -33393,6 +33403,28 @@
       },
       "ct_curve": null,
       "in_holdout": true
+    },
+    "montelukast": {
+      "name": "montelukast",
+      "tier": "silver",
+      "source": "PubMed 8692739, 10mg fasted healthy volunteers IR single dose",
+      "dose_mg": 10.0,
+      "route": "oral",
+      "pk_params": {
+        "cmax_mg_L": 0.35
+      },
+      "smiles": "CC(C)(O)c1ccccc1CC[C@@H](SCC1(CC(=O)O)CC1)c1cccc(/C=C/c2ccc3ccc(Cl)cc3n2)c1"
+    },
+    "trazodone": {
+      "name": "trazodone",
+      "tier": "silver",
+      "source": "PubMed 1438031, 100mg IR fasted healthy volunteers single dose",
+      "dose_mg": 100.0,
+      "route": "oral",
+      "pk_params": {
+        "cmax_mg_L": 1.62
+      },
+      "smiles": "O=c1n(CCCN2CCN(c3cccc(Cl)c3)CC2)nc2ccccn12"
     }
   }
 }
