@@ -21,6 +21,8 @@ import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
+from rdkit import Chem, rdBase
+
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
 
@@ -218,7 +220,7 @@ def extract() -> None:
     w_drugs.writerow([
         "drugbank_id", "name", "cas", "smiles", "inchikey", "mw", "logp_calc",
         "pka_acidic", "pka_basic", "psa", "hba", "hbd", "rotatable_bonds",
-        "state", "groups", "n_ddi",
+        "state", "groups", "n_ddi", "canonical_smiles", "inchikey_14",
     ])
 
     w_exp = csv.writer(f_exp)
@@ -291,6 +293,19 @@ def extract() -> None:
         if smiles:
             stats["has_smiles"] += 1
 
+        # -- Canonical SMILES + InChIKey-14 (RDKit) --
+        canonical_smiles = ""
+        inchikey_14 = ""
+        if smiles:
+            try:
+                mol = Chem.MolFromSmiles(smiles)
+                if mol is not None:
+                    canonical_smiles = Chem.MolToSmiles(mol)
+            except Exception:
+                pass
+        if inchikey and len(inchikey) >= 14:
+            inchikey_14 = inchikey[:14]
+
         # -- DDI count --
         ddi_el = elem.find(NS + "drug-interactions")
         n_ddi = len(list(ddi_el)) if ddi_el is not None else 0
@@ -298,7 +313,7 @@ def extract() -> None:
         w_drugs.writerow([
             dbid, name, cas, smiles, inchikey, mw, logp_calc,
             pka_acidic, pka_basic, psa, hba, hbd, rotatable,
-            state, groups, n_ddi,
+            state, groups, n_ddi, canonical_smiles, inchikey_14,
         ])
 
         # -- Experimental properties --
@@ -410,6 +425,7 @@ def extract() -> None:
     # Write summary
     summary = {
         "source": "DrugBank 5.1 (exported 2026-03-05)",
+        "rdkit_version": rdBase.rdkitVersion,
         "small_molecules_total": stats["total_sm"],
         "has_smiles": stats["has_smiles"],
         "has_enzyme_annotations": stats["has_enzymes"],
