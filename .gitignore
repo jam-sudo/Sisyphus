@@ -33,3 +33,9 @@ htmlcov/
 
 # Jupyter
 .ipynb_checkpoints/
+
+# DrugBank derived data (license restricted, user must extract)
+data/drugbank/
+
+# DrugBank raw XML
+full database.xml
