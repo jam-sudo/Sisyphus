@@ -300,7 +300,7 @@ def extract() -> None:
             try:
                 mol = Chem.MolFromSmiles(smiles)
                 if mol is not None:
-                    canonical_smiles = Chem.MolToSmiles(mol)
+                    canonical_smiles = Chem.MolToSmiles(mol, isomericSmiles=True)
             except Exception:
                 pass
         if inchikey and len(inchikey) >= 14:

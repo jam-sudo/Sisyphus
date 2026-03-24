@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
+from pathlib import Path
 
 from rdkit import Chem
 from rdkit.Chem import Descriptors
@@ -315,7 +316,7 @@ def compute_profile(smiles: str) -> MolecularProfile:
     if mol is None or mol.GetNumAtoms() == 0:
         raise ValueError(f"Invalid SMILES: {smiles!r}")
 
-    canonical = Chem.MolToSmiles(mol)
+    canonical = Chem.MolToSmiles(mol, isomericSmiles=True)
     mw = Descriptors.MolWt(mol)
     logp = Descriptors.MolLogP(mol)
     tpsa = Descriptors.TPSA(mol)
@@ -330,6 +331,22 @@ def compute_profile(smiles: str) -> MolecularProfile:
     db_logp = db.get_logp(canonical)
     if db_logp is not None:
         logp = db_logp  # experimental overrides Crippen
+
+    # logP correction (residual learning) — only for Crippen, not experimental
+    _LOGP_CORR_PATH = Path(__file__).resolve().parent.parent.parent.parent / "models" / "adme" / "logp_correction.json"
+    if db_logp is None and _LOGP_CORR_PATH.exists():
+        try:
+            import xgboost as xgb
+            if not hasattr(compute_profile, "_logp_model"):
+                m = xgb.XGBRegressor()
+                m.load_model(str(_LOGP_CORR_PATH))
+                compute_profile._logp_model = m  # type: ignore[attr-defined]
+            import numpy as np
+            corr_features = np.array([[logp, mw, tpsa, float(hbd), float(hba), float(rotatable_bonds)]])
+            correction = float(compute_profile._logp_model.predict(corr_features)[0])  # type: ignore[attr-defined]
+            logp = logp + correction
+        except Exception as e:
+            logger.warning("logP correction failed: %s", e)
 
     # pKa: DrugBank ChemAxon → fallback SMARTS
     db_pka = db.get_pka(canonical)
