@@ -151,7 +151,28 @@ def _predict_vdss(features: np.ndarray) -> Distribution:
     return Distribution(mean=vdss, cv=_VDSS_CV)
 
 
-def _estimate_peff(profile: MolecularProfile) -> Distribution:
+_PEFF_MODEL_PATH = _MODEL_DIR / "xgboost_peff.json"
+_PEFF_CV_TRAINED = 0.35  # from 5-fold CV: RMSE=0.42 log units, R²=0.71
+
+
+def _predict_peff_xgb(features: np.ndarray) -> Distribution:
+    """Predict Peff from XGBoost model trained on TDC Caco2_Wang.
+
+    Model predicts log10(Papp [x10^-4 cm/s]) from Caco-2 in vitro data.
+    A calibration offset converts Caco-2 Papp to in vivo Peff, accounting
+    for villous amplification (~20x, Helander & Fändriks 2014).
+    Offset = +1.29 log10 units (calibrated on N=65 training drugs only).
+    Output clamped to [0.01, 100.0].
+    """
+    _CACO2_TO_INVIVO_OFFSET = 1.29  # log10 units, ~20x (training-set calibrated)
+    model = _load_model("xgboost_peff.json")
+    log_peff_caco2 = float(model.predict(features)[0])
+    log_peff_invivo = log_peff_caco2 + _CACO2_TO_INVIVO_OFFSET
+    peff = float(np.clip(10**log_peff_invivo, 0.01, 100.0))
+    return Distribution(mean=peff, cv=_PEFF_CV_TRAINED)
+
+
+def _estimate_peff_heuristic(profile: MolecularProfile) -> Distribution:
     """Estimate effective permeability from LogP using sigmoidal relationship.
 
     Peff (x10^-4 cm/s) ~ 10^(0.4 * logP - 0.4) for passive diffusion.
@@ -162,6 +183,17 @@ def _estimate_peff(profile: MolecularProfile) -> Distribution:
     peff = 10 ** (0.4 * profile.logp - 0.4)
     peff = float(np.clip(peff, 0.1, 50.0))
     return Distribution(mean=peff, cv=_PEFF_CV)
+
+
+def _estimate_peff(profile: MolecularProfile) -> Distribution:
+    """Estimate Peff: XGBoost model if available, logP heuristic fallback."""
+    if _PEFF_MODEL_PATH.exists():
+        try:
+            features = compute_features(profile.smiles)
+            return _predict_peff_xgb(features.reshape(1, -1))
+        except Exception as exc:
+            logger.warning("Peff XGBoost prediction failed, using heuristic: %s", exc)
+    return _estimate_peff_heuristic(profile)
 
 
 def _estimate_solubility(profile: MolecularProfile) -> Distribution:

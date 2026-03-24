@@ -314,11 +314,12 @@ def _compute_kp_rodgers_rowland(
         kp_den = plasma_comp.fw + _lipid_partition(plasma_comp, p)
         kp = kp_num / kp_den if kp_den > 0 else 1.0
 
-    # Clamp to physiological range.  Upper cap of 100 prevents unrealistic
-    # tissue trapping for highly lipophilic drugs (e.g., dasatinib logP > 4).
-    # Literature: measured Kp values rarely exceed 50 for most tissues.
+    # Clamp to physiological range.  Upper cap of 50 models tissue binding
+    # saturation — measured Kp values rarely exceed 50 for any tissue.
+    # For fup < 0.05 drugs, the R&R formula can produce Kp >> 100 due to
+    # unconstrained phospholipid binding, causing systematic over-prediction.
     # Source: Poulin & Theil (2002), J Pharm Sci 91:1358.
-    kp = float(np.clip(kp, 0.01, 100.0))
+    kp = float(np.clip(kp, 0.01, 50.0))
     return kp
 
 
