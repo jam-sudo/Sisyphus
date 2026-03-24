@@ -139,6 +139,7 @@ def solve_mc(
 
     cmax = float(np.max(conc))
     tmax = float(sol.t[np.argmax(conc)])
-    auc = float(np.trapezoid(conc, sol.t))
+    _trapz = getattr(np, "trapezoid", np.trapz)  # numpy 2.0+ vs 1.x
+    auc = float(_trapz(conc, sol.t))
 
     return cmax, tmax, auc, True
