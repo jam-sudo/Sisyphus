@@ -77,7 +77,9 @@ class TestChemistry:
         profile = compute_profile("CC(=O)Oc1ccccc1C(=O)O")
         assert profile.mw == pytest.approx(180.16, abs=1.0)
         assert profile.compound_type == "acid"  # carboxylic acid
-        assert profile.pka == pytest.approx(4.5)
+        # pKa: ChemAxon ~3.41 if DrugBank present, SMARTS default 4.5 otherwise
+        assert profile.pka is not None
+        assert 2.5 <= profile.pka <= 5.0  # covers both paths
         assert profile.in_ad is True
         assert profile.ad_flags == ()
 
@@ -96,7 +98,9 @@ class TestChemistry:
         # Glycine: has both -COOH and -NH2
         profile = compute_profile("NCC(=O)O")
         assert profile.compound_type == "zwitterion"
-        assert profile.pka == pytest.approx(7.0)
+        # pKa: ChemAxon basic ~9.24 if DrugBank present, SMARTS default 7.0 otherwise
+        assert profile.pka is not None
+        assert 6.5 <= profile.pka <= 10.0  # covers both paths
 
     def test_canonical_smiles(self):
         # Different representations of aspirin should give the same canonical
