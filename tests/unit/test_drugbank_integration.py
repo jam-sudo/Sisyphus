@@ -72,3 +72,36 @@ class TestIviveFmFractions:
         from sisyphus.predict.ivive import _get_fm_fractions
         fm = _get_fm_fractions("neutral", substrate_enzymes={"CYP_UNKNOWN"})
         assert fm["CYP3A4"] == pytest.approx(0.50)
+
+
+class TestBenchmarkGoldSilverSplit:
+    def test_benchmark_result_has_gold_silver_defaults(self):
+        from sisyphus.validation.benchmark import BenchmarkResult
+        br = BenchmarkResult(
+            n_drugs=10, aafe=2.0, pct_2fold=50.0,
+            n_in_domain=8, aafe_in_domain=1.8, pct_2fold_in_domain=60.0,
+        )
+        assert br.aafe_gold is None
+        assert br.n_gold == 0
+
+    def test_benchmark_result_with_gold_silver(self):
+        from sisyphus.validation.benchmark import BenchmarkResult
+        br = BenchmarkResult(
+            n_drugs=10, aafe=2.0, pct_2fold=50.0,
+            n_in_domain=8, aafe_in_domain=1.8, pct_2fold_in_domain=60.0,
+            aafe_gold=1.5, aafe_silver=2.5, n_gold=7, n_silver=3,
+        )
+        assert br.aafe_gold == pytest.approx(1.5)
+        assert br.n_gold == 7
+
+
+class TestRegressionNoDrugBank:
+    def test_predict_caffeine_works(self):
+        """Pipeline works regardless of DrugBank presence."""
+        from sisyphus.predict.drugbank import _reset_singleton
+        _reset_singleton()
+        from sisyphus.pipeline.predict import predict
+        result = predict("Cn1c(=O)c2c(ncn2C)n(C)c1=O", dose_mg=100.0)
+        assert result.pk.cmax.mean > 0
+        assert result.method in ("engine", "ml", "hybrid")
+        _reset_singleton()
