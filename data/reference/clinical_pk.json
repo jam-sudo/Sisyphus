@@ -1,10 +1,10 @@
 {
   "metadata": {
     "created": "2026-03-19",
-    "n_drugs": 297,
+    "n_drugs": 291,
     "tiers": {
       "platinum": 16,
-      "gold": 112,
+      "gold": 106,
       "silver": 169
     }
   },
@@ -11902,7 +11902,7 @@
     "febuxostat": {
       "name": "febuxostat",
       "tier": "gold",
-      "source": "DrugBank [L32238]: 40mg oral, Cmax=1.6\u00b10.6 \u00b5g/mL",
+      "source": "DrugBank [L32238]: 40mg oral, Cmax=1.6\u00b10.6 \u00b5g/mL [NOTE: once-daily but t\u00bd=5-8h/q24h \u2192 accumulation ~1.0]",
       "dose_mg": 40.0,
       "route": "oral",
       "pk_params": {
@@ -33316,49 +33316,10 @@
       "ct_curve": null,
       "in_holdout": true
     },
-    "sirolimus": {
-      "name": "sirolimus",
-      "tier": "gold",
-      "source": "DrugBank: 2mg oral, Cmax=14.4 ng/mL",
-      "dose_mg": 2.0,
-      "route": "oral",
-      "smiles": "CO[C@H]1C[C@@H]2CC[C@@H](C)[C@@](O)(O2)C(=O)C(=O)N2CCCC[C@H]2C(=O)O[C@H]([C@H](C)C[C@@H]2CC[C@@H](O)[C@H](OC)C2)CC(=O)[C@H](C)/C=C(\\C)[C@@H](O)[C@@H](OC)C(=O)[C@H](C)C[C@H](C)/C=C/C=C/C=C/1C",
-      "pk_params": {
-        "cmax_mg_L": 0.0144
-      },
-      "ct_curve": null,
-      "in_holdout": true
-    },
-    "ponatinib": {
-      "name": "ponatinib",
-      "tier": "gold",
-      "source": "DrugBank: 45mg oral, Cmax=73 ng/mL",
-      "dose_mg": 45.0,
-      "route": "oral",
-      "smiles": "Cc1ccc(C(=O)Nc2ccc(CN3CCN(C)CC3)c(C(F)(F)F)c2)cc1C#Cc1cnc2cccnn12",
-      "pk_params": {
-        "cmax_mg_L": 0.073
-      },
-      "ct_curve": null,
-      "in_holdout": true
-    },
-    "venlafaxine": {
-      "name": "venlafaxine",
-      "tier": "gold",
-      "source": "DrugBank: 75mg oral IR, Cmax=150 ng/mL",
-      "dose_mg": 75.0,
-      "route": "oral",
-      "smiles": "COc1ccc(C(CN(C)C)C2(O)CCCCC2)cc1",
-      "pk_params": {
-        "cmax_mg_L": 0.15
-      },
-      "ct_curve": null,
-      "in_holdout": true
-    },
     "cetirizine": {
       "name": "cetirizine",
       "tier": "gold",
-      "source": "DrugBank: 10mg oral, Cmax=311 ng/mL",
+      "source": "DrugBank: 10mg oral, Cmax=311 ng/mL [NOTE: Css,max but t\u00bd=8h/q24h \u2192 accumulation ~1.0]",
       "dose_mg": 10.0,
       "route": "oral",
       "smiles": "O=C(O)COCCN1CCN(C(c2ccccc2)c2ccc(Cl)cc2)CC1",
@@ -33381,41 +33342,15 @@
       "ct_curve": null,
       "in_holdout": true
     },
-    "lamivudine": {
-      "name": "lamivudine",
-      "tier": "gold",
-      "source": "DrugBank: ~150mg oral, Cmax=1.5 mcg/mL",
-      "dose_mg": 150.0,
-      "route": "oral",
-      "smiles": "Nc1ccn([C@@H]2CS[C@H](CO)O2)c(=O)n1",
-      "pk_params": {
-        "cmax_mg_L": 1.5
-      },
-      "ct_curve": null,
-      "in_holdout": true
-    },
     "adefovir dipivoxil": {
       "name": "adefovir dipivoxil",
       "tier": "gold",
-      "source": "DrugBank: 10mg oral, Cmax=18.4 ng/mL",
+      "source": "DrugBank: 10mg oral, Cmax=18.4 ng/mL [NOTE: hepatitis B patients (single dose, minimal CYP impact)]",
       "dose_mg": 10.0,
       "route": "oral",
       "smiles": "CC(C)(C)C(=O)OCOP(=O)(COCCn1cnc2c(N)ncnc21)OCOC(=O)C(C)(C)C",
       "pk_params": {
         "cmax_mg_L": 0.0184
-      },
-      "ct_curve": null,
-      "in_holdout": true
-    },
-    "donepezil": {
-      "name": "donepezil",
-      "tier": "gold",
-      "source": "DrugBank: 5mg oral, Cmax=8.34 ng/mL",
-      "dose_mg": 5.0,
-      "route": "oral",
-      "smiles": "COc1cc2c(cc1OC)C(=O)C(CC1CCN(Cc3ccccc3)CC1)C2",
-      "pk_params": {
-        "cmax_mg_L": 0.00834
       },
       "ct_curve": null,
       "in_holdout": true
@@ -33442,19 +33377,6 @@
       "smiles": "Cc1ncc([N+](=O)[O-])n1CCO",
       "pk_params": {
         "cmax_mg_L": 13.0
-      },
-      "ct_curve": null,
-      "in_holdout": true
-    },
-    "lopinavir": {
-      "name": "lopinavir",
-      "tier": "gold",
-      "source": "DrugBank: 400mg oral (+RTV), Cmax=11.8 \u00b5g/mL",
-      "dose_mg": 400.0,
-      "route": "oral",
-      "smiles": "Cc1cccc(C)c1OCC(=O)N[C@@H](Cc1ccccc1)[C@@H](O)C[C@H](Cc1ccccc1)NC(=O)[C@H](C(C)C)N1CCCNC1=O",
-      "pk_params": {
-        "cmax_mg_L": 11.8
       },
       "ct_curve": null,
       "in_holdout": true
