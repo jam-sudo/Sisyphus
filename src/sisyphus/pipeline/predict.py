@@ -70,6 +70,28 @@ def predict(
     adme = predict_adme(profile)
     drug = build_drug_on_graph(profile, adme, dose_mg, route)
 
+    # ── DrugBank enrichment tags ──────────────────────────────────────
+    # NOTE: fup tag checks data availability + sanity range but does NOT
+    # replicate the 5x cross-validation guard from adme.py.  This means
+    # a drug whose DrugBank fup was rejected by the 5x guard will still
+    # be tagged as "drugbank:fup" (~5-10% of cases).  This is an accepted
+    # imprecision per spec §5.5 — gold group has minor silver contamination.
+    try:
+        from sisyphus.predict.drugbank import drugbank_lookup
+        db = drugbank_lookup()
+        canonical = profile.smiles
+        if db.get_substrate_enzymes(canonical) is not None:
+            warnings_list.append("drugbank:enzyme_fm")
+        db_fup = db.get_fup(canonical)
+        if db_fup is not None and 0.001 <= db_fup <= 1.0:
+            warnings_list.append("drugbank:fup")
+        if db.get_pka(canonical) is not None:
+            warnings_list.append("drugbank:pka")
+        if db.get_logp(canonical) is not None:
+            warnings_list.append("drugbank:logp")
+    except Exception:
+        pass  # DrugBank tagging is advisory, never blocks pipeline
+
     # ── Step 2: Engine (PBPK simulation) ─────────────────────────────────
     engine_pk: PKEndpoints | None = None
     try:
