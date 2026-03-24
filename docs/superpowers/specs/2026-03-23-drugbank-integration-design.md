@@ -262,14 +262,38 @@ ChemAxon pKa는 계산값 (RMSE ~0.7 pKa units)이지, 실측값이 아님.
 def _classify_from_pka(pka_acidic: float, pka_basic: float) -> tuple[float | None, str]:
     """ChemAxon pKa → (pka_for_rr, compound_type).
 
-    Physiological pH 7.4 기준 ionization 판단.
-    Thresholds: acidic < 9 → R&R acid pathway에서 의미 있는 ionization
-                basic > 4 → R&R base pathway에서 의미 있는 protonation
-    경계값 (e.g., acidic=8.9)에서 acid pathway의 ionization ratio는 ~1.13으로
-    neutral과 거의 동일 → threshold 불연속점은 Kp에 실질적 영향 없음.
+    Henderson-Hasselbalch 기반 threshold 선택:
+
+    핵심 원리: R&R Kp 계산에서 acid/base pathway의 ionization ratio가
+    neutral 대비 의미 있게 달라지려면 physiological pH 7.4에서 substantial
+    ionization이 필요. compound_type은 fm 분배에도 사용되므로
+    misclassification cost가 높음 (acid→CYP2C9 40%, neutral→CYP2C9 20%).
+
+    Threshold 도출:
+    - acid pKa < 7.0: pH 7.4에서 71.5%+ ionized, R&R ion_ratio=0.57 (43% Kp 효과)
+    - base pKa > 8.0: pH 7.4에서 79.9%+ protonated, R&R ion_ratio=2.21 (121% Kp 효과)
+    - pKa 7.0-8.0 "uncertainty zone" → neutral (safe default)
+
+    ChemAxon 오차 마진: RMSE ~0.7 pKa units.
+    - acid threshold 7.0 ± 0.7 → worst case pKa=7.7에서도 33% ionized
+    - base threshold 8.0 ± 0.7 → worst case pKa=7.3에서도 44% protonated
+    → 오분류 시에도 R&R Kp 영향은 moderate (catastrophic 아님)
+
+    비교:
+    | pKa (acid) | ion_ratio | Kp 효과 | 분류     |
+    |------------|-----------|---------|---------|
+    | 4.5        | 0.40      | 60%     | acid ✓  |
+    | 7.0        | 0.57      | 43%     | acid ✓  |
+    | 7.4        | 0.70      | 30%     | neutral |
+    | 8.0        | 0.88      | 12%     | neutral |
+    | 9.0        | 0.99      | 1.5%    | neutral |
+    | pKa (base) | ion_ratio | Kp 효과 | 분류     |
+    | 5.0        | 1.01      | 0.6%    | neutral |
+    | 8.0        | 2.21      | 121%    | base ✓  |
+    | 9.0        | 2.47      | 148%    | base ✓  |
     """
-    is_acidic = pka_acidic < 9.0
-    is_basic = pka_basic > 4.0
+    is_acidic = pka_acidic < 7.0   # >71% ionized at pH 7.4
+    is_basic = pka_basic > 8.0     # >80% protonated at pH 7.4
 
     if is_acidic and is_basic:
         return pka_basic, "zwitterion"    # R&R base 경로 사용
