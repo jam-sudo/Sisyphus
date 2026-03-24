@@ -57,6 +57,10 @@ class BenchmarkResult:
     pct_2fold_in_domain: float
     excluded_drugs: list[tuple[str, str]] = field(default_factory=list)
     pi_coverage_90: float | None = None
+    aafe_gold: float | None = None
+    aafe_silver: float | None = None
+    n_gold: int = 0
+    n_silver: int = 0
 
 
 def run_benchmark(
@@ -91,6 +95,10 @@ def run_benchmark(
     # In-domain drugs only
     id_predicted: list[float] = []
     id_observed: list[float] = []
+    gold_predicted: list[float] = []
+    gold_observed: list[float] = []
+    silver_predicted: list[float] = []
+    silver_observed: list[float] = []
 
     excluded: list[tuple[str, str]] = []
     skipped = 0
@@ -106,6 +114,14 @@ def run_benchmark(
 
             all_predicted.append(cmax_pred)
             all_observed.append(ref.cmax_obs)
+
+            is_gold = any("drugbank:" in w for w in result.warnings)
+            if is_gold:
+                gold_predicted.append(cmax_pred)
+                gold_observed.append(ref.cmax_obs)
+            else:
+                silver_predicted.append(cmax_pred)
+                silver_observed.append(ref.cmax_obs)
 
             fold = cmax_pred / ref.cmax_obs if ref.cmax_obs > 0 else float("inf")
 
@@ -172,6 +188,13 @@ def run_benchmark(
         ", ".join(f"{n} ({r})" for n, r in excluded),
     )
 
+    gold_p = np.array(gold_predicted)
+    gold_o = np.array(gold_observed)
+    silver_p = np.array(silver_predicted)
+    silver_o = np.array(silver_observed)
+    aafe_gold_val = aafe(gold_p, gold_o) if len(gold_p) >= 3 else None
+    aafe_silver_val = aafe(silver_p, silver_o) if len(silver_p) >= 3 else None
+
     return BenchmarkResult(
         n_drugs=len(all_predicted),
         aafe=result_aafe,
@@ -181,4 +204,8 @@ def run_benchmark(
         pct_2fold_in_domain=id_pct2,
         excluded_drugs=excluded,
         pi_coverage_90=None,
+        aafe_gold=aafe_gold_val,
+        aafe_silver=aafe_silver_val,
+        n_gold=len(gold_predicted),
+        n_silver=len(silver_predicted),
     )

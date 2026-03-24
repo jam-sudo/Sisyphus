@@ -132,11 +132,27 @@ _KP_CV = 0.4
 # ---------------------------------------------------------------------------
 
 
-def _get_fm_fractions(compound_type: str) -> dict[str, float]:
+def _normalize_fm(fm: dict[str, float]) -> dict[str, float]:
+    """Normalize fm fractions to sum to 1.0."""
+    total = sum(fm.values())
+    if total > 0:
+        return {k: v / total for k, v in fm.items()}
+    return fm
+
+
+def _get_fm_fractions(
+    compound_type: str,
+    substrate_enzymes: set[str] | None = None,
+) -> dict[str, float]:
     """Get fraction metabolized by each CYP enzyme, adjusted for compound type.
+
+    If substrate_enzymes is provided (from DrugBank annotations), known substrates
+    are given equal weight and non-substrates are floored at _NON_SUBSTRATE_FLOOR.
 
     Args:
         compound_type: One of "neutral", "acid", "base", "zwitterion".
+        substrate_enzymes: Set of CYP tags for which this drug is a known substrate.
+            If None or empty, compound-type defaults are used.
 
     Returns:
         Dict mapping enzyme tag -> fraction metabolized.
@@ -147,11 +163,21 @@ def _get_fm_fractions(compound_type: str) -> dict[str, float]:
     else:
         fm = dict(_DEFAULT_FM)
 
-    # Normalize to ensure sum = 1.0
-    total = sum(fm.values())
-    if total > 0:
-        fm = {k: v / total for k, v in fm.items()}
-    return fm
+    if not substrate_enzymes:
+        return _normalize_fm(fm)
+
+    known_substrates = substrate_enzymes & set(fm.keys())
+    if not known_substrates:
+        return _normalize_fm(fm)
+
+    _NON_SUBSTRATE_FLOOR = 0.05
+    for enzyme in fm:
+        if enzyme in known_substrates:
+            fm[enzyme] = 1.0 / len(known_substrates)
+        else:
+            fm[enzyme] = _NON_SUBSTRATE_FLOOR
+
+    return _normalize_fm(fm)
 
 
 def _decompose_clint(
@@ -159,6 +185,7 @@ def _decompose_clint(
     compound_type: str,
     pka: float | None,
     enzyme_abundances: dict[str, float] | None = None,
+    substrate_enzymes: set[str] | None = None,
 ) -> dict[str, Distribution]:
     """Decompose total hepatic CLint into per-enzyme affinities.
 
@@ -176,12 +203,16 @@ def _decompose_clint(
         pka: pKa value (unused currently, reserved for refinement).
         enzyme_abundances: Enzyme abundances (tag -> pmol).  If ``None``,
             uses the hardcoded ``_LIVER_ENZYME_ABUNDANCE`` fallback.
+        substrate_enzymes: DrugBank CYP substrate annotations (Sisyphus
+            CYP tags, e.g. ``{"CYP3A4", "CYP2D6"}``).  If provided,
+            overrides compound_type-based fm fractions.  ``None`` falls
+            back to compound_type defaults.
 
     Returns:
         Dict mapping enzyme tag -> CLint per pmol enzyme (uL/min/pmol)
         as Distributions.
     """
-    fm = _get_fm_fractions(compound_type)
+    fm = _get_fm_fractions(compound_type, substrate_enzymes)
     abundances = enzyme_abundances if enzyme_abundances is not None else _LIVER_ENZYME_ABUNDANCE
 
     # Scale CLint from cellular basis to whole-liver L/h
@@ -414,9 +445,15 @@ def build_drug_on_graph(
     # Use graph-supplied abundances when available, fall back to hardcoded defaults.
     abundances = liver_enzymes if liver_enzymes is not None else _LIVER_ENZYME_ABUNDANCE
 
+    # DrugBank CYP substrate annotations → improve fm fractions
+    from sisyphus.predict.drugbank import drugbank_lookup
+    substrate_enzymes = drugbank_lookup().get_substrate_enzymes(profile.smiles)
+
     # Decompose CLint to per-enzyme affinities
     enzyme_affinity = _decompose_clint(
-        adme.clint, profile.compound_type, profile.pka, enzyme_abundances=abundances
+        adme.clint, profile.compound_type, profile.pka,
+        enzyme_abundances=abundances,
+        substrate_enzymes=substrate_enzymes,
     )
 
     # Compute Kp for each tissue using Rodgers & Rowland

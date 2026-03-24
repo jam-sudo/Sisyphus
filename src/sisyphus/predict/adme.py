@@ -184,8 +184,24 @@ def predict_adme(profile: MolecularProfile) -> ADMEProperties:
     features = compute_features(profile.smiles)
     features_2d = features.reshape(1, -1)
 
-    # XGBoost predictions
-    fup = _predict_fup(features_2d)
+    # fup: DrugBank measured → XGBoost fallback
+    from sisyphus.predict.drugbank import drugbank_lookup
+    db = drugbank_lookup()
+    db_fup = db.get_fup(profile.smiles)
+    if db_fup is not None and 0.001 <= db_fup <= 1.0:
+        xgb_fup = _predict_fup(features_2d)
+        if xgb_fup.mean > 0 and (db_fup / xgb_fup.mean > 5.0 or xgb_fup.mean / db_fup > 5.0):
+            logger.warning(
+                "DrugBank fup (%.3f) disagrees with XGBoost (%.3f) by >5x, using XGBoost",
+                db_fup, xgb_fup.mean,
+            )
+            fup = xgb_fup
+        else:
+            fup = Distribution(mean=db_fup, cv=0.20)
+            logger.info("Using DrugBank measured fup=%.3f", db_fup)
+    else:
+        fup = _predict_fup(features_2d)
+
     clint = _predict_clint(features_2d)
     rbp = _predict_rbp(features_2d[:, :2048])  # RBP model uses only Morgan FP
     vdss = _predict_vdss(features_2d)
