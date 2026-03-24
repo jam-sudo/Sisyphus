@@ -137,7 +137,7 @@ PredictionResult (with uncertainty)
 |-------|------|----------|----------------|
 | `graph` | BodyGraph 정의, node/edge types | 없음 | |
 | `engine` | Graph → ODE 유도, solver, MC propagation | `graph` | `predict`, `ml` |
-| `predict` | SMILES → MolecularProfile → ADMEProperties → DrugOnGraph | 없음 | `engine`, `ml` |
+| `predict` | SMILES → MolecularProfile → ADMEProperties → DrugOnGraph | reference data (DrugBank CSV, optional) | `engine`, `ml` |
 | `ml` | Direct PK prediction, ensemble | 없음 | `engine`, `predict` |
 | `pk` | SimResult → PKEndpoints | 없음 | |
 | `validation` | Reference data, benchmark, metrics | 없음 | |
