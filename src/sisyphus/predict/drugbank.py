@@ -30,6 +30,17 @@ _CYP_NORMALIZATION: dict[str, str] = {
     # CYP2B6 intentionally absent — no Sisyphus equivalent
 }
 
+# UGT name normalization: DrugBank full names → Sisyphus YAML tags
+# Only isoforms present in reference_man.yaml (liver or gut_wall)
+_UGT_NORMALIZATION: dict[str, str] = {
+    "UDP-glucuronosyltransferase 2B7": "UGT2B7",
+    "UDP-glucuronosyltransferase 1A1": "UGT1A1",
+    "UDP-glucuronosyltransferase 1A4": "UGT1A4",
+    "UDP-glucuronosyltransferase 1A9": "UGT1A9",
+    # UGTs not in YAML (no abundance → engine ignores them):
+    # UGT1A3, UGT1A6, UGT1A8, UGT1A10, UGT2B4, UGT2B10, UGT2B15
+}
+
 _DEFAULT_DATA_DIR = Path(__file__).resolve().parent.parent.parent.parent / "data" / "drugbank"
 
 
@@ -57,6 +68,7 @@ class DrugBankLookup:
         self._smiles_to_id: dict[str, str] = {}
         self._inchikey14_to_id: dict[str, str] = {}
         self._enzyme_substrates: dict[str, set[str]] = {}  # dbid → {CYP tags}
+        self._ugt_substrates: dict[str, set[str]] = {}  # dbid → {UGT tags}
         self._fup: dict[str, float] = {}  # dbid → fup
         self._pka: dict[str, tuple[float, float]] = {}  # dbid → (acidic, basic)
         self._logp: dict[str, float] = {}  # dbid → logP
@@ -111,9 +123,14 @@ class DrugBankLookup:
                         continue
                     dbid = row.get("drugbank_id", "")
                     enz_name = row.get("enzyme_name", "")
+                    # CYP substrates
                     cyp_tag = _CYP_NORMALIZATION.get(enz_name)
                     if cyp_tag and dbid:
                         self._enzyme_substrates.setdefault(dbid, set()).add(cyp_tag)
+                    # UGT substrates
+                    ugt_tag = _UGT_NORMALIZATION.get(enz_name)
+                    if ugt_tag and dbid:
+                        self._ugt_substrates.setdefault(dbid, set()).add(ugt_tag)
         except Exception as e:
             logger.warning("Failed to load DrugBank enzyme_annotations.csv: %s", e)
 
@@ -192,6 +209,21 @@ class DrugBankLookup:
             return None
         enzymes = self._enzyme_substrates.get(dbid)
         return set(enzymes) if enzymes else None
+
+    def get_ugt_enzymes(self, canonical_smiles: str) -> set[str] | None:
+        """Return set of UGT tags for which this drug is a substrate, or None if unknown.
+
+        Only returns UGT isoforms that have abundance entries in reference_man.yaml
+        (UGT2B7, UGT1A1, UGT1A4, UGT1A9). Other isoforms are filtered out because
+        the engine cannot compute clearance without a matching node abundance.
+        """
+        if not self._config.enable_enzyme_fm:
+            return None
+        dbid = self.lookup(canonical_smiles)
+        if dbid is None:
+            return None
+        ugts = self._ugt_substrates.get(dbid)
+        return set(ugts) if ugts else None
 
     def get_fup(self, canonical_smiles: str) -> float | None:
         """Return fraction unbound in plasma from DrugBank, or None if unknown."""
