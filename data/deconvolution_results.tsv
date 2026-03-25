@@ -1,0 +1,1205 @@
+name	smiles	dose_mg	cmax_obs	cmax_pred_original	clint_original	clint_deconv	cmax_at_deconv	status	error_msg
+norgestrel	C#CC1(O)CCC2C3CCC4=CC(=O)CCC4C3CCC21CC	0.3	0.0104999999999999	0.002449	45.9202			no_root	f(lo)=-0.219, f(hi)=-1.468 — same sign
+ethinamate	C#CC1(OC(N)=O)CCCCC1	1000.0	5.9	2.806133	28.1069	4.6558	5.902652	success	
+selegiline	C#CCN(C)[C@H](C)Cc1ccccc1	10.0	0.0022099773754498	0.038405	40.2313			no_root	f(lo)=1.900, f(hi)=0.823 — same sign
+rasagiline	C#CCN[C@@H]1CCc2ccccc21	0.5	0.0026554103302162	0.005519	21.0437	141.1569	0.002659	success	
+Islatravir	C#C[C@]1(CO)O[C@@H](n2cnc3c(N)nc(F)nc32)C[C@@H]1O	5.0	0.0431099999999999	0.006523	10.5782			no_root	f(lo)=-0.147, f(hi)=-1.454 — same sign
+etonogestrel	C#C[C@]1(O)CC[C@H]2[C@@H]3CCC4=CC(=O)CC[C@@H]4[C@H]3C(=C)C[C@@]21CC	0.15	0.0012899999999999	0.001515	34.5995	30.3256	0.001290	success	
+norethisterone (norethindrone)	C#C[C@]1(O)CC[C@H]2[C@@H]3CCC4=CC(=O)CC[C@@H]4[C@H]3CC[C@@]21C	0.3	0.0043599999999999	0.001730	56.4053	5.7426	0.004360	success	
+levonorgestrel	C#C[C@]1(O)CC[C@H]2[C@@H]3CCC4=CC(=O)CC[C@@H]4[C@H]3CC[C@@]21CC	0.75	0.0110620251310508	0.008119	45.9202	11.9284	0.011069	success	
+danazol	C#C[C@]1(O)CC[C@H]2[C@@H]3CCC4=Cc5oncc5C[C@]4(C)[C@H]3CC[C@@]21C	100.0	0.037	0.830017	42.1589			no_root	f(lo)=1.977, f(hi)=0.515 — same sign
+tibolone	C#C[C@]1(O)CC[C@H]2[C@@H]3[C@H](C)CC4=C(CCC(=O)C4)[C@H]3CC[C@@]21C	1.25	0.0008999999999999	0.008676	47.5877			no_root	f(lo)=1.416, f(hi)=0.149 — same sign
+3alpha-hydroxytibolone	C#C[C@]1(O)CC[C@H]2[C@@H]3[C@H](C)CC4=C(CC[C@@H](O)C4)[C@H]3CC[C@@]21C	1.25	0.0082999999999999	0.006591	46.8186	20.2391	0.008292	success	
+3beta-hydroxytibolone	C#C[C@]1(O)CC[C@H]2[C@@H]3[C@H](C)CC4=C(CC[C@H](O)C4)[C@H]3CC[C@@]21C	1.25	0.0021	0.006591	46.8186	220.0844	0.002103	success	
+erlotinib	C#Cc1cccc(Nc2ncnc3cc(OCCOC)c(OCCOC)cc23)c1	150.0	1.233599269314674	1.622326	9.9533	15.0417	1.236027	success	
+Icotinib	C#Cc1cccc(Nc2ncnc3cc4c(cc23)OCCOCCOCCO4)c1	100.0	0.728	0.971236	12.8698	21.9736	0.728884	success	
+cinnarizine	C(=C/c1ccccc1)\CN1CCN(C(c2ccccc2)c2ccccc2)CC1	25.0	0.03539	0.161545	31.2233	365.7858	0.035396	success	
+teriflunomide	C/C(O)=C(\C#N)C(=O)Nc1ccc(C(F)(F)F)cc1	10.0	0.8388325220209335	0.180949	14.6211			no_root	f(lo)=-0.569, f(hi)=-1.967 — same sign
+cyclosporine	C/C=C/C[C@@H](C)[C@@H](O)[C@H]1C(=O)N[C@@H](CC)C(=O)N(C)CC(=O)N(C)[C@@H](CC(C)C)C(=O)N[C@@H](C(C)C)C(=O)N(C)[C@@H](CC(C)C)C(=O)N[C@@H](C)C(=O)N[C@H](C)C(=O)N(C)[C@@H](CC(C)C)C(=O)N(C)[C@@H](CC(C)C)C(=O)N(C)[C@@H](C(C)C)C(=O)N1C	347.5	0.8	0.162398	18.0758	0.5294	0.801243	success	
+huperzine a	C/C=C1\[C@H]2C=C(C)C[C@]1(N)c1ccc(=O)[nH]c1C2	0.2	0.0015499999999999	0.000199	24.6860			no_root	f(lo)=-0.227, f(hi)=-1.442 — same sign
+perhexiline	C1CCC(C(CC2CCCCN2)C2CCCCC2)CC1	300.0	0.09944	1.369975	33.0453			no_root	f(lo)=1.626, f(hi)=0.392 — same sign
+rilmenidine	C1COC(NC(C2CC2)C2CC2)=N1	0.5	0.0014	0.001651	35.3683	29.7727	0.001400	success	
+methenamine	C1N2CN3CN1CN(C2)C3	1000.0	30.246652707365826	2.560668	30.3348			no_root	f(lo)=-0.329, f(hi)=-1.406 — same sign
+cannabidiol	C=C(C)[C@@H]1CCC(C)=C[C@H]1c1c(O)cc(CCCCC)cc1O	200.0	0.153	1.305080	46.3230	2429.3507	0.152955	success	
+Bevirimat	C=C(C)[C@@H]1CC[C@]2(C(=O)O)CC[C@]3(C)[C@H](CC[C@@H]4[C@@]5(C)CC[C@H](OC(=O)CC(C)(C)C(=O)O)C(C)(C)[C@@H]5CC[C@]43C)[C@@H]12	25.0	2.24	0.043765	42.2802			no_root	f(lo)=-1.497, f(hi)=-2.640 — same sign
+adagrasib	C=C(F)C(=O)N1CCN(c2nc(OC[C@@H]3CCCN3C)nc3c2CCN(c2cccc4cccc(Cl)c24)C3)C[C@@H]1CC#N	600.0	0.984	2.232908	38.8720	136.6585	0.985436	success	
+voclosporin	C=C/C=C/C[C@@H](C)[C@@H](O)[C@H]1C(=O)N[C@@H](CC)C(=O)N(C)CC(=O)N(C)[C@@H](CC(C)C)C(=O)N[C@@H](C(C)C)C(=O)N(C)[C@@H](CC(C)C)C(=O)N[C@@H](C)C(=O)N[C@H](C)C(=O)N(C)[C@@H](CC(C)C)C(=O)N(C)[C@@H](CC(C)C)C(=O)N(C)[C@@H](C(C)C)C(=O)N1C	18.07	0.032	0.024340	16.7022	4.5110	0.031993	success	
+nalmefene	C=C1CC[C@@]2(O)[C@H]3Cc4ccc(O)c5c4[C@@]2(CCN3CC2CC2)[C@H]1O5	18.06	0.0165	0.019164	20.8293	19.0624	0.016495	success	
+calcifediol (25-hydroxyvitamin d3)	C=C1CC[C@H](O)C/C1=C/C=C1\CCC[C@]2(C)[C@@H]([C@H](C)CCCC(C)(C)O)CC[C@@H]12	0.9	0.0231	0.002298	68.2696			no_root	f(lo)=-0.435, f(hi)=-1.766 — same sign
+exemestane	C=C1C[C@@H]2[C@H](CC[C@]3(C)C(=O)CC[C@@H]23)[C@@]2(C)C=CC(=O)C=C12	25.0	0.0128506731341202	0.117263	38.8027			no_root	f(lo)=1.554, f(hi)=0.364 — same sign
+Evobrutinib	C=CC(=O)N1CCC(CNc2ncnc(N)c2-c2ccc(Oc3ccccc3)cc2)CC1	25.0	0.0699	0.023387	24.4195	0.6657	0.069896	success	
+zanubrutinib	C=CC(=O)N1CCC([C@@H]2CCNc3c(C(N)=O)c(-c4ccc(Oc5ccccc5)cc4)nn32)CC1	20.0	0.0479999999999999	0.039234	17.2622	7.0056	0.048048	success	
+ibrutinib	C=CC(=O)N1CCC[C@@H](n2nc(-c3ccc(Oc4ccccc4)cc3)c3c(N)ncnc32)C1	140.0	0.0086599999999999	0.037051	44.8984			no_root	f(lo)=1.498, f(hi)=0.430 — same sign
+sotorasib	C=CC(=O)N1CCN(c2nc(=O)n(-c3c(C)ccnc3C(C)C)c3nc(-c4c(O)cccc4F)c(F)cc23)[C@@H](C)C1	360.0	6.13	1.208561	18.9285			no_root	f(lo)=-0.365, f(hi)=-1.524 — same sign
+futibatinib	C=CC(=O)N1CC[C@H](n2nc(C#Cc3cc(OC)cc(OC)c3)c3c(N)ncnc32)C1	20.0	0.140415894716479	0.246852	7.3689	17.5089	0.140478	success	
+ritlecitinib	C=CC(=O)N1C[C@H](Nc2ncnc3[nH]ccc23)CC[C@@H]1C	50.0	0.2971	0.096528	10.8737	0.9265	0.296662	success	
+mobocertinib	C=CC(=O)Nc1cc(Nc2ncc(C(=O)OC(C)C)c(-c3cn(C)c4ccccc34)n2)c(OC)cc1N(C)CCN(C)C	20.0	0.0031999999999999	0.086907	43.3550			no_root	f(lo)=1.656, f(hi)=0.280 — same sign
+osimertinib	C=CC(=O)Nc1cc(Nc2nccc(-c3cn(C)c4ccccc34)n2)c(OC)cc1N(C)CCN(C)C	20.0	0.01579	0.029720	32.1336	56.7159	0.015780	success	
+Lazertinib	C=CC(=O)Nc1cc(Nc2nccc(-n3cc(CN(C)C)c(-c4ccccc4)n3)n2)c(OC)cc1N1CCOCC1	240.0	0.3860854265573877	2.003838	32.4888	511.2543	0.386195	success	
+vigabatrin	C=CC(N)CCC(=O)O	500.0	17.999999999999996	1.395930	6.6769			no_root	f(lo)=-0.662, f(hi)=-1.803 — same sign
+cefdinir	C=CC1=C(C(=O)O)N2C(=O)[C@@H](NC(=O)/C(=N\O)c3csc(N)n3)[C@H]2SC1	100.0	0.88	0.114849	4.4415			no_root	f(lo)=-0.414, f(hi)=-1.894 — same sign
+cefixime	C=CC1=C(C(=O)O)N2C(=O)[C@@H](NC(=O)/C(=N\OCC(=O)O)c3csc(N)n3)[C@H]2SC1	50.0	0.69	0.059398	3.5102			no_root	f(lo)=-0.677, f(hi)=-2.181 — same sign
+secobarbital	C=CCC1(C(C)CCC)C(=O)NC(=O)NC1=O	244.2	2.01	0.948992	16.0878	2.6543	2.010635	success	
+naloxegol	C=CCN1CC[C@]23c4c5ccc(O)c4O[C@H]2[C@@H](OCCOCCOCCOCCOCCOCCOCCOC)CC[C@@]3(O)[C@H]1C5	8.0	0.0094999999999999	0.006507	33.0374	7.8385	0.009502	success	
+cabergoline	C=CCN1C[C@H](C(=O)N(CCCN(C)C)C(=O)NCC)C[C@@H]2c3cccc4[nH]cc(c34)C[C@H]21	0.5	3.299999999999997e-05	0.000153	45.5074			no_root	f(lo)=1.575, f(hi)=0.477 — same sign
+almitrine	C=CCNc1nc(NCC=C)nc(N2CCN(C(c3ccc(F)cc3)c3ccc(F)cc3)CC2)n1	25.0	0.0389	0.100344	21.2563	83.0373	0.038903	success	
+oxprenolol	C=CCOc1ccccc1OCC(O)CNC(C)C	20.0	0.1774399999999999	0.044961	136.1115	3.3370	0.177437	success	
+tacrolimus	C=CC[C@@H]1/C=C(\C)C[C@H](C)C[C@H](OC)[C@H]2O[C@@](O)(C(=O)C(=O)N3CCCC[C@H]3C(=O)O[C@H](/C(C)=C/[C@@H]3CC[C@@H](O)[C@H](OC)C3)[C@H](C)[C@@H](O)CC1=O)[C@H](C)C[C@@H]2OC	2.0	0.00397	0.004408	120.2023	90.1485	0.003969	success	
+asunaprevir	C=C[C@@H]1C[C@]1(NC(=O)[C@@H]1C[C@@H](Oc2ncc(OC)c3ccc(Cl)cc23)CN1C(=O)[C@@H](NC(=O)OC(C)(C)C)C(C)(C)C)C(=O)NS(=O)(=O)C1CC1	10.0	0.00096	0.135079	13.7797			no_root	f(lo)=2.294, f(hi)=0.532 — same sign
+quinidine	C=C[C@H]1CN2CC[C@H]1C[C@@H]2[C@@H](O)c1ccnc2ccc(OC)cc12	0.1	8.2e-05	0.000365	24.5748	388.2963	0.000082	success	
+quinine	C=C[C@H]1C[N@@]2CC[C@H]1C[C@H]2[C@H](O)c1ccnc2ccc(OC)cc12	300.0	1.6	0.710513	24.5748	3.7452	1.600409	success	
+lefamulin	C=C[C@]1(C)C[C@@H](OC(=O)CS[C@@H]2CC[C@@H](N)C[C@H]2O)[C@]2(C)C(C)CC[C@]3(CCC(=O)[C@H]32)[C@@H](C)[C@@H]1O	600.0	1.56	1.270980	54.9865	24.2026	1.560399	success	
+Avoralstat	C=Cc1cc(C(=O)Nc2ccc(C(=N)N)cc2)c(-c2ccc(C(=O)NCC3CC3)nc2C(=O)O)cc1OC	50.0	0.0264	0.005903	25.8264			no_root	f(lo)=-0.334, f(hi)=-1.771 — same sign
+acalabrutinib	CC#CC(=O)N1CCC[C@H]1c1nc(-c2ccc(C(=O)Nc3ccccn3)cc2)c2c(N)nccn12	50.0	0.1525	0.501719	29.5748	112.8526	0.151925	success	
+Branebrutinib	CC#CC(=O)N[C@H]1CCCN(c2c(F)cc(C(N)=O)c3[nH]c(C)c(C)c23)C1	0.3	0.0016999999999999	0.000378	30.3339	1.1490	0.001702	success	
+linagliptin	CC#CCn1c(N2CCC[C@@H](N)C2)nc2c1c(=O)n(Cc1nc(C)c3ccccc3n1)c(=O)n2C	1.0	0.00202	0.001356	18.4389	5.9691	0.002020	success	
+mifepristone	CC#C[C@]1(O)CC[C@H]2[C@@H]3CCC4=CC(=O)CCC4=C3[C@@H](c3ccc(N(C)C)cc3)C[C@@]21C	2.0	0.155	0.004925	44.9100			no_root	f(lo)=-1.112, f(hi)=-2.491 — same sign
+acenocoumarol	CC(=O)CC(c1ccc([N+](=O)[O-])cc1)c1c(O)c2ccccc2oc1=O	4.0	0.18697	0.144043	3.3950			no_root	f(lo)=-0.050, f(hi)=-1.742 — same sign
+warfarin	CC(=O)CC(c1ccccc1)c1c(O)c2ccccc2oc1=O	2.0	0.19	0.068820	2.0226			no_root	f(lo)=-0.413, f(hi)=-2.000 — same sign
+pentoxifylline	CC(=O)CCCCn1c(=O)c2c(ncn2C)n(C)c1=O	100.0	0.2719999999999999	1.049250	12.4980			no_root	f(lo)=1.111, f(hi)=0.031 — same sign
+(s)-warfarin	CC(=O)C[C@@H](c1ccccc1)c1c(O)c2ccccc2oc1=O	7.5	0.329	0.158969	2.0226			no_root	f(lo)=-0.299, f(hi)=-1.693 — same sign
+(r)-warfarin	CC(=O)C[C@H](c1ccccc1)c1c(O)c2ccccc2oc1=O	7.5	0.375	0.158245	2.0226			no_root	f(lo)=-0.356, f(hi)=-1.743 — same sign
+acamprosate	CC(=O)NCCCS(=O)(=O)O	333.0	0.1348	3.348915	6.1345			no_root	f(lo)=1.870, f(hi)=0.516 — same sign
+linezolid	CC(=O)NC[C@H]1CN(c2ccc(N3CCOCC3)c(F)c2)C(=O)O1	375.0	7.899113874353248	0.960439	19.8124			no_root	f(lo)=-0.114, f(hi)=-1.257 — same sign
+Sutezolid	CC(=O)NC[C@H]1CN(c2ccc(N3CCSCC3)c(F)c2)C(=O)O1	300.0	0.408	1.000258	21.6275	111.2059	0.407678	success	
+acetylcysteine (n-acetylcysteine)	CC(=O)N[C@@H](CS)C(=O)O	600.0	2.801996611346988	4.862666	4.8026	7.7969	2.802070	success	
+4-acetylaminoantipyrine	CC(=O)Nc1c(C)n(C)n(-c2ccccc2)c1=O	750.0	2.1	3.024705	27.8564	32.8076	2.098299	success	
+acetaminophen (paracetamol)	CC(=O)Nc1ccc(O)cc1	0.1	0.0010999999999999	0.000266	54.6851	2.2101	0.001103	success	
+trametinib	CC(=O)Nc1cccc(-n2c(=O)n(C3CC3)c(=O)c3c(Nc4ccc(I)cc4F)n(C)c(=O)c(C)c32)c1	2.0	0.0089	0.006454	31.2493	8.9110	0.008900	success	
+acetazolamide	CC(=O)Nc1nnc(S(N)(=O)=O)s1	250.0	16.65721775520779	6.036078	3.7196			no_root	f(lo)=-0.360, f(hi)=-2.069 — same sign
+acetylcarnitine	CC(=O)O[C@H](CC(=O)[O-])C[N+](C)(C)C	500.0	1.188	6.087185	11.3935	316.1100	1.188399	success	
+fusidic acid	CC(=O)O[C@H]1C[C@@]2(C)[C@@H](C[C@@H](O)[C@H]3[C@@]4(C)CC[C@@H](O)[C@@H](C)[C@@H]4CC[C@@]32C)/C1=C(\CCC=C(C)C)C(=O)O	550.0	32.599999999999994	1.724614	36.1558			no_root	f(lo)=-1.061, f(hi)=-2.310 — same sign
+megestrol acetate	CC(=O)O[C@]1(C(C)=O)CC[C@H]2[C@@H]3C=C(C)C4=CC(=O)CC[C@]4(C)[C@H]3CC[C@@]21C	800.0	0.19679354664216	5.614524	22.7400			no_root	f(lo)=1.659, f(hi)=0.293 — same sign
+cyproterone acetate	CC(=O)O[C@]1(C(C)=O)CC[C@H]2[C@@H]3C=C(Cl)C4=CC(=O)[C@@H]5C[C@@H]5[C@]4(C)[C@H]3CC[C@@]21C	2.0	0.0111799999999999	0.006247	29.1387	3.3698	0.011177	success	
+triflusal	CC(=O)Oc1cc(C(F)(F)F)ccc1C(=O)O	300.0	5.005	14.173744	15.7389	104.4239	5.003680	success	
+acetylsalicylic acid	CC(=O)Oc1ccccc1C(=O)O	75.0	0.971	0.457294	25.6394	4.3174	0.970719	success	
+spironolactone	CC(=O)S[C@@H]1CC2=CC(=O)CC[C@]2(C)[C@H]2CC[C@@]3(C)[C@@H](CC[C@@]34CCC(=O)O4)[C@H]12	100.0	0.0474	0.187574	37.3088	456.2401	0.047374	success	
+ulipristal	CC(=O)[C@@]1(O)CC[C@H]2[C@@H]3CCC4=CC(=O)CCC4=C3[C@@H](c3ccc(N(C)C)cc3)C[C@@]21C	5.0	0.0477	0.013977	59.1237			no_root	f(lo)=-0.249, f(hi)=-1.627 — same sign
+dydrogesterone	CC(=O)[C@H]1CC[C@H]2[C@@H]3C=CC4=CC(=O)CC[C@@]4(C)[C@@H]3CC[C@]12C	10.0	0.0031299999999999	0.057190	48.3523			no_root	f(lo)=1.708, f(hi)=0.401 — same sign
+progesterone	CC(=O)[C@H]1CC[C@H]2[C@@H]3CCC4=CC(=O)CC[C@]4(C)[C@H]3CC[C@]12C	20.0	0.00305	0.100418	102.5802			no_root	f(lo)=2.065, f(hi)=0.795 — same sign
+palbociclib	CC(=O)c1c(C)c2cnc(Nc3ccc(N4CCNCC4)cn3)nc2n(C2CCCC2)c1=O	125.0	0.0513560123062529	0.441964	9.8619			no_root	f(lo)=1.364, f(hi)=0.047 — same sign
+flurbiprofen	CC(C(=O)O)c1ccc(-c2ccccc2)c(F)c1	40.0	7.510000000000001	1.526346	16.9167			no_root	f(lo)=-0.626, f(hi)=-1.886 — same sign
+tiaprofenic acid	CC(C(=O)O)c1ccc(C(=O)c2ccccc2)s1	300.0	40.10000000000001	7.737792	16.1197			no_root	f(lo)=-0.491, f(hi)=-2.167 — same sign
+suprofen	CC(C(=O)O)c1ccc(C(=O)c2cccs2)cc1	200.0	18.95	1.125318	15.6552			no_root	f(lo)=-0.594, f(hi)=-1.846 — same sign
+loxoprofen	CC(C(=O)O)c1ccc(CC2CCCC2=O)cc1	60.0	5.60520735824679	2.481435	15.8222			no_root	f(lo)=-0.201, f(hi)=-1.841 — same sign
+carprofen	CC(C(=O)O)c1ccc2c(c1)[nH]c1ccc(Cl)cc12	100.0	10.2	2.085217	15.9952			no_root	f(lo)=-0.544, f(hi)=-2.151 — same sign
+benoxaprofen	CC(C(=O)O)c1ccc2oc(-c3ccc(Cl)cc3)nc2c1	100.0	12.999999999999998	4.079977	13.3765			no_root	f(lo)=-0.440, f(hi)=-1.996 — same sign
+ketoprofen	CC(C(=O)O)c1cccc(C(=O)c2ccccc2)c1	50.0	7.093659140387279	2.251637	15.3980			no_root	f(lo)=-0.397, f(hi)=-1.938 — same sign
+fenoprofen	CC(C(=O)O)c1cccc(Oc2ccccc2)c1	60.0	6.2	1.414920	63.1771			no_root	f(lo)=-0.257, f(hi)=-1.900 — same sign
+lenacapavir	CC(C)(C#Cc1ccc(-c2ccc(Cl)c3c(NS(C)(=O)=O)nn(CC(F)(F)F)c23)c([C@H](Cc2cc(F)cc(F)c2)NC(=O)Cn2nc(C(F)(F)F)c3c2C(F)(F)[C@@H]2C[C@H]32)n1)S(C)(=O)=O	300.0	0.0214704448020994	1.150737	3.6945			no_root	f(lo)=1.751, f(hi)=0.627 — same sign
+anastrozole	CC(C)(C#N)c1cc(Cn2cncn2)cc(C(C)(C)C#N)c1	1.0	0.0186593922750118	0.003278	16.1854			no_root	f(lo)=-0.077, f(hi)=-1.199 — same sign
+carebastine	CC(C)(C(=O)O)c1ccc(C(=O)CCCN2CCC(OC(c3ccccc3)c3ccccc3)CC2)cc1	10.0	0.0838642653339311	0.022165	10.8804			no_root	f(lo)=-0.399, f(hi)=-1.757 — same sign
+fexofenadine	CC(C)(C(=O)O)c1ccc(C(O)CCCN2CCC(C(O)(c3ccccc3)c3ccccc3)CC2)cc1	10.0	0.0456	0.000861	10.4753			no_root	f(lo)=-1.260, f(hi)=-2.447 — same sign
+metyrapone	CC(C)(C(=O)c1cccnc1)c1cccnc1	750.0	3.7	1.906306	28.0656	5.3383	3.701932	success	
+pivmecillinam	CC(C)(C)C(=O)OCOC(=O)[C@@H]1N2C(=O)[C@@H](N=CN3CCCCCC3)[C@H]2SC1(C)C	200.0	0.0001099999999999	0.283206	57.9311			no_root	f(lo)=4.284, f(hi)=2.999 — same sign
+stiripentol	CC(C)(C)C(O)/C=C/c1ccc2c(c1)OCO2	500.0	2.6	6.256061	25.1357	172.5390	2.599493	success	
+Icapamespib	CC(C)(C)CNCCn1c(Sc2cc3c(cc2I)OCO3)nc2c(N)ncnc21	10.0	0.0231	0.019983	22.5088	9.7484	0.023109	success	
+boceprevir	CC(C)(C)NC(=O)N[C@H](C(=O)N1C[C@H]2[C@@H]([C@H]1C(=O)NC(CC1CCC1)C(=O)C(N)=O)C2(C)C)C(C)(C)C	400.0	0.557	0.251867	25.4959	4.7083	0.556934	success	
+indinavir	CC(C)(C)NC(=O)[C@@H]1CN(Cc2cccnc2)CCN1C[C@@H](O)C[C@@H](Cc1ccccc1)C(=O)N[C@H]1c2ccccc2C[C@H]1O	400.0	2.7498400000000003	0.064431	23.9768			no_root	f(lo)=-0.850, f(hi)=-2.020 — same sign
+saquinavir	CC(C)(C)NC(=O)[C@@H]1C[C@@H]2CCCC[C@@H]2CN1C[C@@H](O)[C@H](Cc1ccccc1)NC(=O)[C@H](CC(N)=O)NC(=O)c1ccc2ccccc2n1	600.0	0.0090884542140014	0.163277	46.3915			no_root	f(lo)=1.661, f(hi)=0.255 — same sign
+finasteride	CC(C)(C)NC(=O)[C@H]1CC[C@H]2[C@@H]3CC[C@H]4NC(=O)C=C[C@]4(C)[C@H]3CC[C@]12C	1.0	0.0068392104807499	0.001581	71.1196	2.6368	0.006839	success	
+carteolol	CC(C)(C)NCC(O)COc1cccc2c1CCC(=O)N2	20.0	0.0459	0.065005	19.9619	19.8596	0.045857	success	
+nadolol	CC(C)(C)NCC(O)COc1cccc2c1C[C@H](O)[C@H](O)C2	30.0	0.0578619045659577	0.019421	16.8171	1.3795	0.057856	success	
+salbutamol (albuterol)	CC(C)(C)NCC(O)c1ccc(O)c(CO)c1	4.0	0.0128120017740545	0.001768	15.5124			no_root	f(lo)=-0.209, f(hi)=-1.351 — same sign
+penbutolol	CC(C)(C)NC[C@H](O)COc1ccccc1C1CCCC1	40.0	0.2454699999999999	0.165909	65.7846	14.4874	0.245845	success	
+timolol	CC(C)(C)NC[C@H](O)COc1nsnc1N1CCOCC1	5.0	0.0151	0.006872	35.7655	3.8681	0.015090	success	
+glecaprevir	CC(C)(C)[C@@H]1NC(=O)O[C@@H]2CCC[C@H]2OC/C=C/C(F)(F)c2nc3ccccc3nc2O[C@@H]2C[C@@H](C(=O)N[C@]3(C(=O)NS(=O)(=O)C4(C)CC4)C[C@H]3C(F)F)N(C2)C1=O	200.0	0.0645	1.202715	14.7766	900.1436	0.064468	success	
+ivacaftor	CC(C)(C)c1cc(C(C)(C)C)c(NC(=O)c2c[nH]c3ccccc3c2=O)cc1O	150.0	0.9944	0.468409	25.7024			no_root	f(lo)=-0.131, f(hi)=-1.537 — same sign
+quizartinib	CC(C)(C)c1cc(NC(=O)Nc2ccc(-c3cn4c(n3)sc3cc(OCCN5CCOCC5)ccc34)cc2)no1	30.0	0.1027033709606577	0.134515	23.1200	31.6130	0.102724	success	
+ebastine	CC(C)(C)c1ccc(C(=O)CCCN2CCC(OC(c3ccccc3)c3ccccc3)CC2)cc1	10.0	0.0006799999999999	0.023456	30.8154			no_root	f(lo)=1.970, f(hi)=0.622 — same sign
+terfenadine	CC(C)(C)c1ccc(C(O)CCCN2CCC(C(O)(c3ccccc3)c3ccccc3)CC2)cc1	60.0	0.0017549928774784	0.020515	34.9018			no_root	f(lo)=1.812, f(hi)=0.616 — same sign
+Vercirnon	CC(C)(C)c1ccc(S(=O)(=O)Nc2ccc(Cl)cc2C(=O)c2cc[n+]([O-])cc2)cc1	250.0	0.743	1.829155	6.2235	75.4297	0.741957	success	
+dabrafenib	CC(C)(C)c1nc(-c2cccc(NS(=O)(=O)c3c(F)cccc3F)c2F)c(-c2ccnc(N)n2)s1	75.0	1.3901	0.321276	23.0288			no_root	f(lo)=-0.542, f(hi)=-1.899 — same sign
+bempedoic acid	CC(C)(CCCCCC(O)CCCCCC(C)(C)C(=O)O)C(=O)O	2.5	0.1059999999999999	0.029371	22.8827			no_root	f(lo)=-0.386, f(hi)=-1.934 — same sign
+Odanacatib	CC(C)(F)C[C@H](N[C@@H](c1ccc(-c2ccc(S(C)(=O)=O)cc2)cc1)C(F)(F)F)C(=O)NC1(C#N)CC1	10.0	0.0634899999999999	0.039085	8.8676			no_root	f(lo)=-0.097, f(hi)=-1.475 — same sign
+macimorelin	CC(C)(N)C(=O)N[C@H](Cc1c[nH]c2ccccc12)C(=O)N[C@H](Cc1c[nH]c2ccccc12)NC=O	32.5	0.0105799999999999	0.017190	11.1605	15.1811	0.010597	success	
+naldemedine	CC(C)(NC(=O)C1=C(O)[C@@H]2Oc3c(O)ccc4c3[C@@]23CCN(CC2CC2)[C@H](C4)[C@]3(O)C1)c1nc(-c2ccccc2)no1	0.1	0.0019799999999999	0.000015	20.9504			no_root	f(lo)=-1.775, f(hi)=-3.134 — same sign
+Venglustat	CC(C)(NC(=O)O[C@@H]1CN2CCC1CC2)c1csc(-c2ccc(F)cc2)n1	2.0	0.0055999999999999	0.010000	41.0162	70.8234	0.005602	success	
+2-hydroxyflutamide	CC(C)(O)C(=O)Nc1ccc([N+](=O)[O-])c(C(F)(F)F)c1	250.0	1.183934119788766	2.309908	5.8900	13.9763	1.185313	success	
+enasidenib	CC(C)(O)CNc1nc(Nc2ccnc(C(F)(F)F)c2)nc(-c2cccc(C(F)(F)F)n2)n1	50.0	0.4651859843116514	0.236642	18.8091			no_root	f(lo)=-0.151, f(hi)=-1.522 — same sign
+Mavatrep	CC(C)(O)c1ccccc1-c1ccc2nc(/C=C/c3ccc(C(F)(F)F)cc3)[nH]c2c1	10.0	0.0575831572597404	0.069107	18.8386	35.0157	0.057577	success	
+fenofibric acid	CC(C)(Oc1ccc(C(=O)c2ccc(Cl)cc2)cc1)C(=O)O	67.0	4.09	2.535724	13.4914			no_root	f(lo)=-0.064, f(hi)=-1.738 — same sign
+ciprofibrate	CC(C)(Oc1ccc(C2CC2(Cl)Cl)cc1)C(=O)O	100.0	24.000000000000007	0.990060	43.6392			no_root	f(lo)=-0.792, f(hi)=-2.420 — same sign
+bezafibrate	CC(C)(Oc1ccc(CCNC(=O)c2ccc(Cl)cc2)cc1)C(=O)O	200.0	7.390000000000001	1.549588	13.6016			no_root	f(lo)=-0.221, f(hi)=-1.884 — same sign
+clofibric acid	CC(C)(Oc1ccc(Cl)cc1)C(=O)O	500.0	48.72033887992586	8.143189	18.7868			no_root	f(lo)=-0.351, f(hi)=-1.925 — same sign
+penicillamine	CC(C)(S)[C@@H](N)C(=O)O	500.0	3.05	2.517512	8.8839	3.7199	3.043600	success	
+Verinurad	CC(C)(Sc1ccncc1-c1ccc(C#N)c2ccccc12)C(=O)O	2.0	0.0363999999999999	0.045219	14.2948	18.4850	0.036381	success	
+vitamin e (delta-tocotrienol)	CC(C)=CCC/C(C)=C/CC/C(C)=C/CC[C@]1(C)CCc2cc(O)cc(C)c2O1	100.0	1.4196	0.184557	37.3956			no_root	f(lo)=-0.614, f(hi)=-1.738 — same sign
+pentazocine	CC(C)=CCN1CCC2(C)c3cc(O)ccc3CC1C2C	100.0	0.045	0.197662	85.4972			no_root	f(lo)=1.443, f(hi)=0.253 — same sign
+flutamide	CC(C)C(=O)Nc1ccc([N+](=O)[O-])c(C(F)(F)F)c1	250.0	0.0283019433961698	2.866477	10.2061			no_root	f(lo)=2.216, f(hi)=0.959 — same sign
+Isobutyramide	CC(C)C(N)=O	1000.0	18.879999999999995	4.756106	21.0692	0.9613	18.893158	success	
+sibutramine	CC(C)CC(N(C)C)C1(c2ccc(Cl)cc2)CCC1	15.0	0.0028738715167826	0.143736	26.9057			no_root	f(lo)=2.003, f(hi)=0.738 — same sign
+amprenavir	CC(C)CN(C[C@@H](O)[C@H](Cc1ccccc1)NC(=O)O[C@H]1CCOC1)S(=O)(=O)c1ccc(N)cc1	150.0	2.0	0.242351	33.8915			no_root	f(lo)=-0.291, f(hi)=-1.772 — same sign
+darunavir	CC(C)CN(C[C@@H](O)[C@H](Cc1ccccc1)NC(=O)O[C@H]1CO[C@H]2OCC[C@H]21)S(=O)(=O)c1ccc(N)cc1	400.0	2.73	0.439611	39.3626			no_root	f(lo)=-0.164, f(hi)=-1.644 — same sign
+pimavanserin	CC(C)COc1ccc(CNC(=O)N(Cc2ccc(F)cc2)C2CCN(C)CC2)cc1	20.0	0.0091999999999999	0.056980	51.2655	1875.5858	0.009199	success	
+pregabalin	CC(C)C[C@H](CN)CC(=O)O	1.0	0.0382999999999999	0.004218	12.6925			no_root	f(lo)=-0.407, f(hi)=-1.482 — same sign
+ixazomib	CC(C)C[C@H](NC(=O)CNC(=O)c1cc(Cl)ccc1Cl)B(O)O	4.0	0.0662476386959502	0.040705	8.0384			no_root	f(lo)=-0.129, f(hi)=-1.717 — same sign
+bromocriptine	CC(C)C[C@H]1C(=O)N2CCC[C@H]2[C@]2(O)O[C@](NC(=O)[C@@H]3C=C4c5cccc6[nH]c(Br)c(c56)C[C@H]4N(C)C3)(C(C)C)C(=O)N12	5.0	0.0006899999999999	0.008053	18.1926			no_root	f(lo)=1.484, f(hi)=0.148 — same sign
+dihydro-alpha-ergocryptine (alpha-dihydroergocryptine)	CC(C)C[C@H]1C(=O)N2CCC[C@H]2[C@]2(O)O[C@](NC(=O)[C@@H]3C[C@@H]4c5cccc6[nH]cc(c56)C[C@H]4N(C)C3)(C(C)C)C(=O)N12	10.0	9.700000000000008e-05	0.006302	34.2870			no_root	f(lo)=2.515, f(hi)=1.247 — same sign
+ibuprofen	CC(C)Cc1ccc(C(C)C(=O)O)cc1	292.6	31.0	10.126881	18.0515			no_root	f(lo)=-0.357, f(hi)=-1.815 — same sign
+dexibuprofen	CC(C)Cc1ccc([C@H](C)C(=O)O)cc1	400.0	26.500000000000004	19.002039	18.0515			no_root	f(lo)=-0.031, f(hi)=-1.512 — same sign
+disopyramide	CC(C)N(CCC(C(N)=O)(c1ccccc1)c1ccccn1)C(C)C	92.0	2.4	0.111933	30.4570			no_root	f(lo)=-0.503, f(hi)=-1.597 — same sign
+selexipag	CC(C)N(CCCCOCC(=O)NS(C)(=O)=O)c1cnc(-c2ccccc2)c(-c2ccccc2)n1	0.1	0.0021999999999999	0.001313	25.4351	0.9803	0.002200	success	
+act-333679	CC(C)N(CCCCOCC(=O)O)c1cnc(-c2ccccc2)c(-c2ccccc2)n1	0.1	0.00199	0.000632	26.2540			no_root	f(lo)=-0.387, f(hi)=-1.740 — same sign
+pramiracetam	CC(C)N(CCNC(=O)CN1CCCC1=O)C(C)C	400.0	2.71	0.848732	33.3530	2.3297	2.708922	success	
+5-hmt	CC(C)N(CC[C@H](c1ccccc1)c1cc(CO)ccc1O)C(C)C	4.0	0.0021	0.011356	65.2914	804.5060	0.002098	success	
+clofazimine	CC(C)N=c1cc2n(-c3ccc(Cl)cc3)c3ccccc3nc-2cc1Nc1ccc(Cl)cc1	200.0	0.21871	1.074111	15.0913	800.1527	0.219034	success	
+proguanil	CC(C)NC(=N)NC(=N)Nc1ccc(Cl)cc1	200.0	0.1881781071219497	0.110281	21.5310	4.2013	0.188165	success	
+belumosudil	CC(C)NC(=O)COc1cccc(-c2nc(Nc3ccc4[nH]ncc4c3)c3ccccc3n2)c1	200.0	1.829562789302406	0.686908	21.9354			no_root	f(lo)=-0.369, f(hi)=-1.497 — same sign
+atenolol	CC(C)NCC(O)COc1ccc(CC(N)=O)cc1	25.0	0.1239999999999999	0.171707	4.2073	7.1650	0.124107	success	
+betaxolol	CC(C)NCC(O)COc1ccc(CCOCC2CC2)cc1	10.0	0.0216	0.032481	11.5469	26.0965	0.021615	success	
+bisoprolol	CC(C)NCC(O)COc1ccc(COCCOC(C)C)cc1	5.0	0.0167	0.005875	29.1968	2.1953	0.016690	success	
+propranolol	CC(C)NCC(O)COc1cccc2ccccc12	40.0	0.0249	0.053946	295.7876			no_root	f(lo)=1.346, f(hi)=0.102 — same sign
+oxamniquine	CC(C)NCC1CCc2cc(CO)c([N+](=O)[O-])cc2N1	1000.0	1.85713	2.515938	14.7376	13.7930	1.856799	success	
+d-sotalol ((+)-sotalol)	CC(C)NC[C@@H](O)c1ccc(NS(C)(=O)=O)cc1	50.0	0.4699999999999999	0.041031	18.4258			no_root	f(lo)=-0.524, f(hi)=-1.610 — same sign
+maribavir	CC(C)Nc1nc2cc(Cl)c(Cl)cc2n1[C@H]1O[C@@H](CO)[C@H](O)[C@@H]1O	50.0	2.66	0.363652	9.2879			no_root	f(lo)=-0.682, f(hi)=-2.258 — same sign
+tenofovir alafenamide	CC(C)OC(=O)[C@H](C)N[P@](=O)(CO[C@H](C)Cn1cnc2c(N)ncnc21)Oc1ccccc1	25.0	0.2769173125682105	0.008746	65.3068			no_root	f(lo)=-0.470, f(hi)=-1.837 — same sign
+sofosbuvir	CC(C)OC(=O)[C@H](C)N[P@](=O)(OC[C@H]1O[C@@H](n2ccc(=O)[nH]c2=O)[C@](C)(F)[C@@H]1O)Oc1ccccc1	400.0	0.8981843611113518	0.104556	29.9275			no_root	f(lo)=-0.055, f(hi)=-1.338 — same sign
+ozanimod	CC(C)Oc1ccc(-c2nc(-c3cccc4c3CC[C@@H]4NCCO)no2)cc1C#N	0.3	7.100000000000003e-05	0.001157	35.5973			no_root	f(lo)=1.481, f(hi)=0.110 — same sign
+dihydrotachysterol	CC(C)[C@@H](C)/C=C/[C@@H](C)[C@H]1CC[C@H]2/C(=C/C=C3\C[C@@H](O)CC[C@@H]3C)CCC[C@]12C	1.0	0.0218	0.004110	60.6839			no_root	f(lo)=-0.446, f(hi)=-1.816 — same sign
+ibrexafungerp	CC(C)[C@@H](C)[C@@]1(C)CC[C@]2(C)[C@H]3CC[C@@H]4[C@@]5(COC[C@@]4(C)[C@@H](OC[C@](C)(N)C(C)(C)C)[C@H](n4ncnc4-c4ccncc4)C5)C3=CC[C@@]2(C)[C@@H]1C(=O)O	300.0	0.29169	1.872852	28.3351	1075.2143	0.291724	success	
+dihydroergocristine	CC(C)[C@@]1(NC(=O)[C@@H]2C[C@@H]3c4cccc5[nH]cc(c45)C[C@H]3N(C)C2)O[C@@]2(O)[C@@H]3CCCN3C(=O)[C@H](Cc3ccccc3)N2C1=O	18.0	0.00028	0.005642	27.3003			no_root	f(lo)=2.075, f(hi)=0.893 — same sign
+valaciclovir	CC(C)[C@H](N)C(=O)OCCOCn1cnc2c(=O)nc(N)[nH]c21	1000.0	0.19136	0.465194	13.3291	1454.0795	0.191358	success	
+Semagacestat	CC(C)[C@H](O)C(=O)N[C@@H](C)C(=O)N[C@@H]1C(=O)N(C)CCc2ccccc21	140.0	2.08	0.158971	7.6831			no_root	f(lo)=-0.543, f(hi)=-1.835 — same sign
+nateglinide	CC(C)[C@H]1CC[C@H](C(=O)N[C@H](Cc2ccccc2)C(=O)O)CC1	30.0	1.5	0.698923	41.8879	1.8544	1.499064	success	
+propantheline	CC(C)[N+](C)(CCOC(=O)C1c2ccccc2Oc2ccccc21)C(C)C	30.0	0.0270899999999999	0.061722	94.0523	225.8491	0.027089	success	
+atorvastatin	CC(C)c1c(C(=O)Nc2ccccc2)c(-c2ccccc2)c(-c2ccc(F)cc2)n1CC[C@@H](O)C[C@@H](O)CC(=O)O	20.0	0.0078525057250294	0.011001	291.3059	333.7003	0.007854	success	
+cobicistat (gs-9350)	CC(C)c1nc(CN(C)C(=O)N[C@@H](CCN2CCOCC2)C(=O)N[C@H](CC[C@H](Cc2ccccc2)NC(=O)OCc2cncs2)Cc2ccccc2)cs1	50.0	0.0615999999999999	0.056791	71.1851	36.1166	0.061635	success	
+ritonavir	CC(C)c1nc(CN(C)C(=O)N[C@H](C(=O)N[C@@H](Cc2ccccc2)C[C@H](O)[C@H](Cc2ccccc2)NC(=O)OCc2cncs2)C(C)C)cs1	400.0	5.104	0.178296	157.5135			no_root	f(lo)=-0.912, f(hi)=-2.315 — same sign
+rosuvastatin	CC(C)c1nc(N(C)S(C)(=O)=O)nc(-c2ccc(F)cc2)c1/C=C/[C@@H](O)C[C@@H](O)CC(=O)O	5.0	0.0079825107519707	0.078381	10.1945	397.9972	0.007988	success	
+fluvastatin	CC(C)n1c(/C=C/C(O)CC(O)CC(=O)O)c(-c2ccc(F)cc2)c2ccccc21	10.0	0.0489999999999999	0.020265	10.0770			no_root	f(lo)=-0.278, f(hi)=-1.734 — same sign
+mavacamten	CC(C)n1c(=O)cc(N[C@@H](C)c2ccccc2)[nH]c1=O	15.0	0.3954	0.127288	12.8837			no_root	f(lo)=-0.205, f(hi)=-1.526 — same sign
+voxelotor	CC(C)n1nccc1-c1ncccc1COc1cccc(O)c1C=O	100.0	0.2689999999999999	1.911466	36.9365	2991.1750	0.268946	success	
+labetalol	CC(CCc1ccccc1)NCC(O)c1ccc(O)c(C(N)=O)c1	143.0	0.07	0.318673	15.9022	595.9859	0.069964	success	
+trimipramine	CC(CN(C)C)CN1c2ccccc2CCc2ccccc21	75.0	0.0223999999999999	0.784514	28.8579			no_root	f(lo)=1.783, f(hi)=0.575 — same sign
+alimemazine	CC(CN(C)C)CN1c2ccccc2Sc2ccccc21	20.0	0.00455	0.245163	34.6756			no_root	f(lo)=2.030, f(hi)=0.879 — same sign
+promethazine	CC(CN1c2ccccc2Sc2ccccc21)N(C)C	50.0	0.0193	0.795790	46.5274			no_root	f(lo)=1.838, f(hi)=0.785 — same sign
+phenylpropanolamine	CC(N)C(O)c1ccccc1	25.0	0.1131199999999999	0.043819	19.1775	2.0643	0.113112	success	
+rimantadine	CC(N)C12CC3CC(CC(C3)C1)C2	100.0	0.077	0.197244	36.0147			no_root	f(lo)=1.150, f(hi)=0.125 — same sign
+pinacidil	CC(N/C(=N/c1ccncc1)NC#N)C(C)(C)C	12.5	0.0298	0.042445	15.3131	17.4000	0.029789	success	
+bupropion	CC(NC(C)(C)C)C(=O)c1cccc(Cl)c1	50.0	0.0724430811050993	0.535953	28.9448			no_root	f(lo)=1.177, f(hi)=0.101 — same sign
+bicalutamide	CC(O)(CS(=O)(=O)c1ccc(F)cc1)C(=O)Nc1ccc(C#N)c(C(F)(F)F)c1	50.0	0.9459657061662258	0.597138	5.0902			no_root	f(lo)=-0.073, f(hi)=-1.425 — same sign
+Tecarfarin	CC(OC(=O)c1ccc(Cc2c(O)c3ccccc3oc2=O)cc1)(C(F)(F)F)C(F)(F)F	0.2	0.00309	0.001254	13.4095			no_root	f(lo)=-0.325, f(hi)=-1.555 — same sign
+lofexidine	CC(Oc1c(Cl)cccc1Cl)C1=NCCN1	0.36	0.00082	0.001813	9.9854	47.9174	0.000820	success	
+tiopronin	CC(S)C(=O)NCC(=O)O	500.0	3.2639600000000004	2.179307	3.8797	1.2292	3.263471	success	
+zileuton	CC(c1cc2ccccc2s1)N(O)C(N)=O	200.0	1.44	3.511397	10.6471	40.1159	1.435132	success	
+muzolimine	CC(c1ccc(Cl)c(Cl)c1)N1N=C(N)CC1=O	40.0	0.27	0.347459	8.3712	9.6547	0.269339	success	
+gepirone	CC1(C)CC(=O)N(CCCCN2CCN(c3ncccn3)CC2)C(=O)C1	20.0	0.0187299999999999	0.055597	37.1205			no_root	f(lo)=1.266, f(hi)=0.105 — same sign
+palovarotene	CC1(C)CCC(C)(C)c2cc(Cn3cccn3)c(/C=C/c3ccc(C(=O)O)cc3)cc21	1.0	0.00978	0.002094	15.2288			no_root	f(lo)=-0.550, f(hi)=-1.765 — same sign
+venetoclax	CC1(C)CCC(CN2CCN(c3ccc(C(=O)NS(=O)(=O)c4ccc(NCC5CCOCC5)c([N+](=O)[O-])c4)c(Oc4cnc5[nH]ccc5c4)c3)CC2)=C(c2ccc(Cl)cc2)C1	100.0	0.1726267650163207	0.278428	18.9041	81.9875	0.172444	success	
+Lapachone	CC1(C)CCC2=C(O1)c1ccccc1C(=O)C2=O	10.0	0.00088	0.112237	20.4017			no_root	f(lo)=2.411, f(hi)=1.172 — same sign
+omaveloxolone	CC1(C)CC[C@]2(NC(=O)C(C)(F)F)CC[C@]3(C)[C@H](C(=O)C=C4[C@@]5(C)C=C(C#N)C(=O)C(C)(C)[C@@H]5CC[C@]43C)[C@@H]2C1	150.0	0.0324099999999999	0.647958	17.8635			no_root	f(lo)=1.511, f(hi)=0.152 — same sign
+nilutamide	CC1(C)NC(=O)N(c2ccc([N+](=O)[O-])c(C(F)(F)F)c2)C1=O	100.0	0.8	1.630997	18.0066	53.9239	0.800080	success	
+Acoziborole	CC1(C)OB(O)c2cc(NC(=O)c3ccc(F)cc3C(F)(F)F)ccc21	20.0	1.14	0.084880	14.5528			no_root	f(lo)=-0.745, f(hi)=-2.028 — same sign
+dimethadione	CC1(C)OC(=O)NC1=O	65.3	3.32	0.510760	12.4074			no_root	f(lo)=-0.233, f(hi)=-1.439 — same sign
+topiramate	CC1(C)O[C@@H]2[C@@H](CO[C@@]3(COS(N)(=O)=O)OC(C)(C)O[C@@H]23)O1	100.0	1.73	1.506481	8.5728	4.2190	1.730441	success	
+mecillinam	CC1(C)S[C@@H]2[C@H](N=CN3CCCCCC3)C(=O)N2[C@H]1C(=O)O	200.0	2.829	0.501128	20.4158	0.6387	2.829621	success	
+cyclacillin	CC1(C)S[C@@H]2[C@H](NC(=O)C3(N)CCCCC3)C(=O)N2[C@H]1C(=O)O	250.0	5.405034689990435	0.180349	4.1437			no_root	f(lo)=-1.128, f(hi)=-2.270 — same sign
+phenoxymethylpenicillin	CC1(C)S[C@@H]2[C@H](NC(=O)COc3ccccc3)C(=O)N2[C@H]1C(=O)O	400.0	5.140000000000001	0.284049	7.0698			no_root	f(lo)=-0.675, f(hi)=-2.174 — same sign
+amoxicillin	CC1(C)S[C@@H]2[C@H](NC(=O)[C@H](N)c3ccc(O)cc3)C(=O)N2[C@H]1C(=O)O	375.0	8.1	0.180187	2.3780			no_root	f(lo)=-1.250, f(hi)=-2.601 — same sign
+ampicillin	CC1(C)S[C@@H]2[C@H](NC(=O)[C@H](N)c3ccccc3)C(=O)N2[C@H]1C(=O)O	394.0	7.1	0.246065	4.4464			no_root	f(lo)=-0.959, f(hi)=-2.369 — same sign
+memantine	CC12CC3CC(C)(C1)CC(N)(C3)C2	5.0	0.0062	0.012510	23.6612	99.9591	0.006201	success	
+beta carotene	CC1=C(/C=C/C(C)=C/C=C/C(C)=C/C=C/C=C(C)/C=C/C=C(C)/C=C/C2=C(C)CCCC2(C)C)C(C)(C)CCC1	30.0	0.1626999999999999	0.072220	36.7056	4.8163	0.162756	success	
+isotretinoin	CC1=C(/C=C/C(C)=C/C=C/C(C)=C\C(=O)O)C(C)(C)CCC1	40.0	0.314	0.253911	30.2568	3.1081	0.313998	success	
+alitretinoin (9-cis-retinoic acid)	CC1=C(/C=C/C(C)=C\C=C\C(C)=C\C(=O)O)C(C)(C)CCC1	5.0	0.0247	0.083179	30.2568	237.5755	0.024792	success	
+cefradine	CC1=C(C(=O)O)N2C(=O)[C@@H](NC(=O)[C@H](N)C3=CCC=CC3)[C@H]2SC1	250.0	9.4	0.768511	1.9206			no_root	f(lo)=-0.840, f(hi)=-2.297 — same sign
+cefadroxil	CC1=C(C(=O)O)N2C(=O)[C@@H](NC(=O)[C@H](N)c3ccc(O)cc3)[C@H]2SC1	250.0	8.848728722251575	0.147836	2.8604			no_root	f(lo)=-1.344, f(hi)=-2.721 — same sign
+cephalexin	CC1=C(C(=O)O)N2C(=O)[C@@H](NC(=O)[C@H](N)c3ccccc3)[C@H]2SC1	250.0	12.000000000000002	0.218489	4.1750			no_root	f(lo)=-1.455, f(hi)=-3.106 — same sign
+Azelnidipine	CC1=C(C(=O)OC(C)C)C(c2cccc([N+](=O)[O-])c2)C(C(=O)OC2CN(C(c3ccccc3)c3ccccc3)C2)=C(N)N1	8.0	0.0086599999999999	0.006096	30.9729	11.0066	0.008658	success	
+sulindac	CC1=C(CC(=O)O)c2cc(F)ccc2/C1=C\c1ccc([S+](C)[O-])cc1	150.0	3.8	1.529592	11.5572			no_root	f(lo)=-0.023, f(hi)=-1.636 — same sign
+sulindac sulfone	CC1=C(CC(=O)O)c2cc(F)ccc2C1=Cc1ccc(S(C)(=O)=O)cc1	150.0	3.2000000000000006	2.429899	7.0933	0.5471	3.199840	success	
+lutein	CC1=C[C@H](O)CC(C)(C)[C@H]1/C=C/C(C)=C/C=C/C(C)=C/C=C/C=C(C)/C=C/C=C(C)/C=C/C1=C(C)C[C@@H](O)CC1(C)C	19.91	0.42098	0.109870	47.6682			no_root	f(lo)=-0.317, f(hi)=-1.671 — same sign
+eltrombopag	CC1=NN(c2ccc(C)c(C)c2)C(=O)/C1=N\Nc1cccc(-c2cccc(C(=O)O)c2)c1O	25.0	2.55	0.074066	9.7912			no_root	f(lo)=-1.409, f(hi)=-3.068 — same sign
+edaravone	CC1=NN(c2ccccc2)C(=O)C1	30.0	0.208	1.043577	6.0329	95.8917	0.207857	success	
+diazoxide	CC1=NS(=O)(=O)c2cc(Cl)ccc2N1	100.0	4.99	2.757769	5.5715			no_root	f(lo)=-0.063, f(hi)=-1.364 — same sign
+21-desacetyldeflazacort	CC1=N[C@]2(C(=O)CO)[C@@H](C[C@H]3[C@@H]4CCC5=CC(=O)C=C[C@]5(C)[C@H]4[C@@H](O)C[C@@]32C)O1	3.0	0.0103999999999999	0.001739	54.3079	1.3197	0.010406	success	
+ofloxacin	CC1COc2c(N3CCN(C)CC3)c(F)cc3c(=O)c(C(=O)O)cn1c23	100.0	1.32	1.023283	5.5705	2.4329	1.319822	success	
+nifurtimox	CC1CS(=O)(=O)CCN1/N=C/c1ccc([N+](=O)[O-])o1	862.5	0.751	5.961670	7.8232			no_root	f(lo)=1.309, f(hi)=0.248 — same sign
+indapamide	CC1Cc2ccccc2N1NC(=O)c1ccc(Cl)c(S(N)(=O)=O)c1	2.5	0.1055120846159339	0.007105	10.2683			no_root	f(lo)=-0.657, f(hi)=-1.943 — same sign
+cevimeline (sni-2011)	CC1O[C@@]2(CS1)CN1CCC2CC1	30.0	90.00000000000003	0.050418	63.5770			no_root	f(lo)=-2.369, f(hi)=-3.394 — same sign
+cefprozil	CC=CC1=C(C(=O)O)N2C(=O)[C@@H](NC(=O)[C@H](N)c3ccc(O)cc3)[C@H]2SC1	250.0	5.524872802023761	0.121142	3.2849			no_root	f(lo)=-1.202, f(hi)=-2.603 — same sign
+methadone	CCC(=O)C(CC(C)N(C)C)(c1ccccc1)c1ccccc1	10.0	0.0359165699921359	0.036725	36.0007	28.3834	0.035819	success	
+alfentanil	CCC(=O)N(c1ccccc1)C1(COC)CCN(CCn2nnn(CC)c2=O)CC1	1.5	0.016	0.005197	14.8872			no_root	f(lo)=-0.089, f(hi)=-1.425 — same sign
+leniolisib	CCC(=O)N1CC[C@H](Nc2ncnc3c2CN(c2cnc(OC)c(C(F)(F)F)c2)CC3)C1	400.0	13.513950000000005	4.172778	12.1052			no_root	f(lo)=-0.276, f(hi)=-1.603 — same sign
+ramelteon	CCC(=O)NCC[C@@H]1CCc2ccc3c(c21)CCO3	4.0	0.00115	0.018109	39.6390			no_root	f(lo)=1.866, f(hi)=0.700 — same sign
+tasimelteon	CCC(=O)NC[C@@H]1C[C@H]1c1cccc2c1CCO2	5.0	0.068	0.024396	53.8254	7.0371	0.067857	success	
+dextropropoxyphene	CCC(=O)O[C@](Cc1ccccc1)(c1ccccc1)[C@H](C)CN(C)C	65.0	0.0526032318398784	0.110621	89.1049	306.0480	0.052657	success	
+beclomethasone 17-monopropionate	CCC(=O)O[C@]1(C(=O)CO)[C@@H](C)C[C@H]2[C@@H]3CCC4=CC(=O)C=C[C@]4(C)[C@@]3(Cl)[C@@H](O)C[C@@]21C	4.0	0.0007	0.004086	62.0376			no_root	f(lo)=1.514, f(hi)=0.180 — same sign
+simvastatin acid	CCC(C)(C)C(=O)O[C@H]1C[C@@H](C)C=C2C=C[C@H](C)[C@H](CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H]21	20.0	0.0013398465471905	0.066674	30.3304			no_root	f(lo)=2.225, f(hi)=0.553 — same sign
+simvastatin	CCC(C)(C)C(=O)O[C@H]1C[C@@H](C)C=C2C=C[C@H](C)[C@H](CC[C@@H]3C[C@@H](O)CC(=O)O3)[C@H]21	20.0	0.0032928799198274	0.015308	244.0441			no_root	f(lo)=1.564, f(hi)=0.222 — same sign
+Dalcetrapib	CCC(CC)CC1(C(=O)Nc2ccccc2SC(=O)C(C)C)CCCCC1	2100.0	5.150000000000001	9.600640	25.5230	55.9497	5.153678	success	
+oseltamivir acid	CCC(CC)O[C@@H]1C=C(C(=O)O)C[C@H](N)[C@H]1NC(C)=O	20.0	0.0679	0.010079	6.6777			no_root	f(lo)=-0.346, f(hi)=-1.482 — same sign
+methysergide	CCC(CO)NC(=O)[C@@H]1C=C2c3cccc4c3c(cn4C)C[C@H]2N(C)C1	2.0	0.00177	0.004339	20.1665	82.7747	0.001769	success	
+benzoic acid	CCC(COC(=O)c1cc(OC)c(OC)c(OC)c1)(NC)c1ccccc1	125.0	0.9489	0.123462	134.9384	0.8501	0.949117	success	
+trimebutine	CCC(COC(=O)c1cc(OC)c(OC)c(OC)c1)(c1ccccc1)N(C)C	125.0	0.0181399999999999	0.059427	118.0071			no_root	f(lo)=1.462, f(hi)=0.460 — same sign
+phenprocoumon	CCC(c1ccccc1)c1c(O)c2ccccc2oc1=O	15.0	1.375	0.218829	6.5177			no_root	f(lo)=-0.754, f(hi)=-2.052 — same sign
+ponesimod	CCC/N=C1\S/C(=C\c2ccc(OC[C@H](O)CO)c(Cl)c2)C(=O)N1c1ccccc1C	1.0	0.0033999999999999	0.003887	25.2651	23.6013	0.003400	success	
+ethosuximide	CCC1(C)CC(=O)NC1=O	500.0	12.724173843515343	3.298467	14.7595	0.2374	12.720716	success	
+methyprylon	CCC1(CC)C(=O)NCC(C)C1=O	300.0	5.45	1.468422	18.4495	0.9075	5.457128	success	
+aminoglutethimide	CCC1(c2ccc(N)cc2)CCC(=O)NC1=O	500.0	5.91	2.080284	20.3934	2.0304	5.909539	success	
+phenobarbital	CCC1(c2ccccc2)C(=O)NC(=O)NC1=O	0.1	0.0025999999999999	0.000960	9.8634			no_root	f(lo)=-0.127, f(hi)=-1.357 — same sign
+primidone	CCC1(c2ccccc2)C(=O)NCNC1=O	500.0	8.97032	8.044931	10.9241	4.9458	8.959253	success	
+glimepiride	CCC1=C(C)CN(C(=O)NCCc2ccc(S(=O)(=O)NC(=O)N[C@H]3CC[C@H](C)CC3)cc2)C1=O	1.0	0.0863851839148357	0.023276	16.1907			no_root	f(lo)=-0.489, f(hi)=-2.050 — same sign
+vinorelbine	CCC1=C[C@@H]2CN(C1)Cc1c([nH]c3ccccc13)[C@@](C(=O)OC)(c1cc3c(cc1OC)N(C)[C@H]1[C@@](O)(C(=O)OC)[C@H](OC(C)=O)[C@]4(CC)C=CCN5CC[C@]31[C@@H]54)C2	138.4	0.1381166173926946	0.174507	19.0472	17.6374	0.138072	success	
+Mirogabalin	CCC1=C[C@@H]2[C@H](C1)C[C@]2(CN)CC(=O)O	3.0	0.0489999999999999	0.005182	18.6110			no_root	f(lo)=-0.300, f(hi)=-1.389 — same sign
+acebutolol	CCCC(=O)Nc1ccc(OCC(O)CNC(C)C)c(C(C)=O)c1	400.0	0.7382961779063909	0.850101	13.4442	9.1336	0.738975	success	
+carisoprodol	CCCC(C)(COC(N)=O)COC(=O)NC(C)C	350.0	2.31647	0.993337	75.6736	8.5021	2.311507	success	
+meprobamate	CCCC(C)(COC(N)=O)COC(N)=O	400.0	7.67	0.668778	42.6146			no_root	f(lo)=-0.105, f(hi)=-1.348 — same sign
+valproic acid	CCCC(CCC)C(=O)O	500.0	62.220000000000006	4.532446	30.4449			no_root	f(lo)=-0.466, f(hi)=-1.967 — same sign
+budesonide	CCCC1O[C@@H]2C[C@H]3[C@@H]4CCC5=CC(=O)C=C[C@]5(C)[C@H]4[C@@H](O)C[C@]3(C)[C@]2(C(=O)CO)O1	3.0	0.00082	0.002516	74.4983			no_root	f(lo)=1.449, f(hi)=0.075 — same sign
+valsartan	CCCCC(=O)N(Cc1ccc(-c2ccccc2-c2nn[nH]n2)cc1)[C@H](C(=O)O)C(C)C	80.0	1.6928832210167364	0.173927	15.3336			no_root	f(lo)=-0.685, f(hi)=-2.387 — same sign
+misoprostol acid	CCCCC(C)(O)C/C=C/[C@H]1[C@H](O)CC(=O)[C@@H]1CCCCCCC(=O)O	0.4	0.0007344477317432	0.001644	22.9711	46.8327	0.000735	success	
+butobarbital	CCCCC1(CC)C(=O)NC(=O)NC1=O	200.0	3.5000000000000004	0.952407	10.0648			no_root	f(lo)=-0.053, f(hi)=-1.232 — same sign
+odevixibat	CCCCC1(CCCC)CN(c2ccccc2)c2cc(SC)c(OCC(=O)N[C@@H](C(=O)N[C@@H](CC)C(=O)O)c3ccc(O)cc3)cc2S(=O)(=O)N1	7.2	0.00047	0.012494	27.9316	3651.7936	0.000470	success	
+maralixibat	CCCCC1(CCCC)CS(=O)(=O)c2ccc(N(C)C)cc2[C@@H](c2ccc(OCc3ccc(C[N+]45CCN(CC4)CC5)cc3)cc2)[C@H]1O	30.0	0.00165	0.060378	17.1462			no_root	f(lo)=1.952, f(hi)=0.644 — same sign
+irbesartan	CCCCC1=NC2(CCCC2)C(=O)N1Cc1ccc(-c2ccccc2-c2nn[nH]n2)cc1	50.0	1.309	0.047772	14.3097			no_root	f(lo)=-1.269, f(hi)=-2.403 — same sign
+sparsentan	CCCCC1=NC2(CCCC2)C(=O)N1Cc1ccc(-c2ccccc2S(=O)(=O)Nc2noc(C)c2C)c(COCC)c1	400.0	6.970000000000001	0.872177	21.8656			no_root	f(lo)=-0.772, f(hi)=-1.936 — same sign
+phenylbutazone	CCCCC1C(=O)N(c2ccccc2)N(c2ccccc2)C1=O	100.0	14.169999999999996	1.709410	14.8462			no_root	f(lo)=-0.839, f(hi)=-2.060 — same sign
+nabilone	CCCCCCC(C)(C)c1cc(O)c2c(c1)OC(C)(C)[C@@H]1CCC(=O)C[C@@H]21	2.0	0.002	0.017488	45.0335	2626.5432	0.002000	success	
+eliglustat	CCCCCCCC(=O)N[C@H](CN1CCCC1)[C@H](O)c1ccc2c(c1)OCCO2	23.49	0.0027	0.026138	25.6262			no_root	f(lo)=1.607, f(hi)=0.394 — same sign
+brincidofovir	CCCCCCCCCCCCCCCCOCCCOP(=O)(O)CO[C@H](CO)Cn1ccc(N)nc1=O	1.75	0.0025799999999999	0.003225	26.9213	24.1631	0.002587	success	
+fingolimod	CCCCCCCCc1ccc(CCC(N)(CO)CO)cc1	1.0	0.00065	0.007828	29.2579	4917.2752	0.000651	success	
+lusutrombopag	CCCCCCO[C@@H](C)c1cccc(-c2csc(NC(=O)c3cc(Cl)c(/C=C(\C)C(=O)O)c(Cl)c3)n2)c1OC	0.75	0.0191999999999999	0.005092	27.4792			no_root	f(lo)=-0.522, f(hi)=-1.496 — same sign
+ibandronate	CCCCCN(C)CCC(O)(P(=O)(O)O)P(=O)(O)O	20.0	0.0090199999999999	0.186242	5.2481			no_root	f(lo)=1.465, f(hi)=0.079 — same sign
+Dexloxiglumide	CCCCCN(CCCOC)C(=O)[C@@H](CCC(=O)O)NC(=O)c1ccc(Cl)c(Cl)c1	100.0	1.7	0.451695	31.6180			no_root	f(lo)=-0.096, f(hi)=-1.745 — same sign
+tegaserod	CCCCCNC(=N)N/N=C/c1c[nH]c2ccc(OC)cc12	4.0	0.0012499999999999	0.004470	30.0241	256.5599	0.001250	success	
+capecitabine	CCCCCOC(=O)Nc1nc(=O)n([C@@H]2O[C@H](C)[C@@H](O)[C@H]2O)cc1F	150.0	0.257355903176904	0.310404	10.2694	8.9605	0.258270	success	
+treprostinil	CCCCC[C@H](O)CC[C@@H]1[C@H]2Cc3cccc(OCC(=O)O)c3C[C@H]2C[C@H]1O	1.0	0.0004899999999999	0.002837	33.9946	430.6600	0.000490	success	
+dronabinol	CCCCCc1cc(O)c2c(c1)OC(C)(C)[C@@H]1CCC(C)=C[C@@H]21	5.0	0.00219	0.029859	57.1358			no_root	f(lo)=1.543, f(hi)=0.240 — same sign
+Atrasentan	CCCCN(CCCC)C(=O)CN1C[C@H](c2ccc3c(c2)OCO3)[C@@H](C(=O)O)[C@@H]1c1ccc(OC)cc1	10.0	0.0609999999999999	0.029933	39.4107			no_root	f(lo)=-0.115, f(hi)=-1.500 — same sign
+halofantrine	CCCCN(CCCC)CCC(O)c1cc2c(Cl)cc(Cl)cc2c2cc(C(F)(F)F)ccc12	250.0	0.1849999999999999	0.245952	21.6033	22.5215	0.184962	success	
+miglustat	CCCCN1C[C@H](O)[C@@H](O)[C@H](O)[C@H]1CO	100.0	1.328	0.384214	7.4075			no_root	f(lo)=-0.093, f(hi)=-1.209 — same sign
+tolbutamide	CCCCNC(=O)NS(=O)(=O)c1ccc(C)cc1	125.0	14.216891362038329	1.868663	8.1906			no_root	f(lo)=-0.782, f(hi)=-2.093 — same sign
+bumetanide	CCCCNc1cc(C(=O)O)cc(S(N)(=O)=O)c1Oc1ccccc1	0.5	0.0103	0.001298	53.3421			no_root	f(lo)=-0.248, f(hi)=-1.979 — same sign
+benzonatate	CCCCNc1ccc(C(=O)OCCOCCOCCOCCOCCOCCOCCOCCOCCOC)cc1	100.0	1.063	0.102336	90.4474			no_root	f(lo)=-0.134, f(hi)=-1.372 — same sign
+Linerixibat	CCCC[C@]1(CC)CS(=O)(=O)c2cc(CNC(CC(=O)O)CC(=O)O)c(OC)cc2[C@@H](c2ccccc2)N1	90.0	0.0001199999999999	0.206418	15.6423			no_root	f(lo)=3.369, f(hi)=1.948 — same sign
+butylscopolamine	CCCC[N+]1(C)[C@@H]2C[C@@H](OC(=O)[C@H](CO)c3ccccc3)C[C@H]1[C@@H]1O[C@@H]12	10.0	6.199999999999993e-05	0.006400	83.7781			no_root	f(lo)=3.015, f(hi)=1.848 — same sign
+Fimasartan	CCCCc1nc(C)c(CC(=S)N(C)C)c(=O)n1Cc1ccc(-c2ccccc2-c2nnn[nH]2)cc1	20.0	0.0115999999999999	0.148143	22.9177	878.1382	0.011601	success	
+losartan carboxylic acid (e-3174)	CCCCc1nc(Cl)c(C(=O)O)n1Cc1ccc(-c2ccccc2-c2nn[nH]n2)cc1	25.0	0.1889	0.089997	23.6565			no_root	f(lo)=-0.166, f(hi)=-1.845 — same sign
+eprosartan	CCCCc1ncc(/C=C(\Cc2cccs2)C(=O)O)n1Cc1ccc(C(=O)O)cc1	100.0	0.4334651081690427	0.284445	63.4746	21.8357	0.434668	success	
+dronedarone	CCCCc1oc2ccc(NS(C)(=O)=O)cc2c1C(=O)c1ccc(OCCCN(CCCC)CCCC)cc1	400.0	0.0257999999999999	6.869644	23.8687			no_root	f(lo)=2.490, f(hi)=1.270 — same sign
+amiodarone	CCCCc1oc2ccccc2c1C(=O)c1cc(I)c(OCCN(CC)CC)c(I)c1	200.0	0.17028	0.999324	25.9171	358.7604	0.170368	success	
+ropinirole	CCCN(CCC)CCc1cccc2c1CC(=O)N2	1.0	0.00156	0.004131	11.2177	209.9337	0.001560	success	
+probenecid	CCCN(CCC)S(=O)(=O)c1ccc(C(=O)O)cc1	500.0	35.300000000000004	3.185088	11.8551			no_root	f(lo)=-0.545, f(hi)=-2.052 — same sign
+Pridopidine	CCCN1CCC(c2cccc(S(C)(=O)=O)c2)CC1	45.0	0.270396005887661	0.169849	32.2726	8.5822	0.270197	success	
+OSU-6162 (PNU-96391)	CCCN1CCC[C@@H](c2cccc(S(C)(=O)=O)c2)C1	3.0	0.01069	0.010455	33.9745	19.6280	0.010687	success	
+pergolide	CCCN1C[C@H](CSC)C[C@@H]2c3cccc4[nH]cc(c34)C[C@H]21	0.15	3.8e-05	0.000467	36.0767			no_root	f(lo)=1.600, f(hi)=0.332 — same sign
+chlorpropamide	CCCNC(=O)NS(=O)(=O)c1ccc(Cl)cc1	250.0	30.51175266860848	5.406034	5.1452			no_root	f(lo)=-0.697, f(hi)=-1.975 — same sign
+propafenone	CCCNCC(O)COc1ccccc1C(=O)CCc1ccccc1	0.1	1.5000000000000004e-05	0.000482	54.1387			no_root	f(lo)=1.931, f(hi)=0.603 — same sign
+Mesdopetam	CCCNCCOc1cc(F)cc(S(C)(=O)=O)c1	5.0	0.01977	0.023502	17.0488	13.7376	0.019767	success	
+macitentan	CCCNS(=O)(=O)Nc1ncnc(OCCOc2ncc(Br)cn2)c1-c1ccc(Br)cc1	10.0	0.2017218532625373	0.073015	15.7882			no_root	f(lo)=-0.332, f(hi)=-1.745 — same sign
+Dexpramipexole	CCCN[C@@H]1CCc2nc(N)sc2C1	50.0	0.125	0.084793	29.0076	8.6889	0.124741	success	
+pramipexole	CCCN[C@H]1CCc2nc(N)sc2C1	0.25	0.00073	0.000420	29.0076	5.8387	0.000732	success	
+propiverine	CCCOC(C(=O)OC1CCN(C)CC1)(c1ccccc1)c1ccccc1	10.0	0.0528	0.041600	24.6306	9.7644	0.052856	success	
+udenafil	CCCOc1ccc(S(=O)(=O)NCCC2CCCN2C)cc1-c1nc(=O)c2c([nH]1)c(CCC)nn2C	25.0	0.0575	0.020927	26.3178	1.3048	0.057536	success	
+abrocitinib	CCCS(=O)(=O)N[C@H]1C[C@@H](N(C)c2ncnc3[nH]ccc23)C1	3.0	0.0171	0.011963	15.8844	5.6847	0.017099	success	
+vemurafenib	CCCS(=O)(=O)Nc1ccc(F)c(C(=O)c2c[nH]c3ncc(-c4ccc(Cl)cc4)cc23)c1F	960.0	4.224926034855521	5.688019	7.4713	18.3517	4.218443	success	
+albendazole	CCCSc1ccc2nc(NC(=O)OC)[nH]c2c1	400.0	0.0153	1.037099	34.2540			no_root	f(lo)=2.543, f(hi)=1.404 — same sign
+ticagrelor	CCCSc1nc(N[C@@H]2C[C@H]2c2ccc(F)c(F)c2)c2nnn([C@@H]3C[C@H](OCCO)[C@@H](O)[C@H]3O)c2n1	1.0	0.0049999999999999	0.004196	23.1690	8.4820	0.005004	success	
+brivaracetam	CCC[C@@H]1CC(=O)N([C@@H](CC)C(N)=O)C1	2.5	0.087	0.006644	25.7891			no_root	f(lo)=-0.283, f(hi)=-1.392 — same sign
+clindamycin	CCC[C@@H]1C[C@@H](C(=O)N[C@@H]([C@H]2O[C@H](SC)[C@H](O)[C@@H](O)[C@H]2O)[C@H](C)Cl)N(C)C1	300.0	3.06	0.291373	7.0158			no_root	f(lo)=-0.597, f(hi)=-1.886 — same sign
+telaprevir	CCC[C@H](NC(=O)[C@@H]1[C@H]2CCC[C@H]2CN1C(=O)[C@@H](NC(=O)[C@@H](NC(=O)c1cnccn1)C1CCCCC1)C(C)(C)C)C(=O)C(=O)NC1CC1	500.0	0.2126052680438563	0.222903	45.9785	32.3852	0.212509	success	
+perindoprilat	CCC[C@H](N[C@@H](C)C(=O)N1[C@H](C(=O)O)C[C@@H]2CCCC[C@@H]21)C(=O)O	4.0	0.0040150965119159	0.003926	17.2117	10.2778	0.004006	success	
+perindopril	CCC[C@H](N[C@@H](C)C(=O)N1[C@H](C(=O)O)C[C@@H]2CCCC[C@@H]21)C(=O)OCC	4.0	0.074036450482178	0.009924	31.9333			no_root	f(lo)=-0.024, f(hi)=-1.586 — same sign
+albendazole sulfoxide	CCC[S+]([O-])c1ccc2[nH]c(NC(=O)OC)nc2c1	400.0	0.576652441562221	2.174959	24.3737	246.8646	0.576871	success	
+propylthiouracil	CCCc1cc(=O)[nH]c(=S)[nH]1	50.0	1.62	0.629660	11.8644	0.4448	1.620541	success	
+olmesartan	CCCc1nc(C(C)(C)O)c(C(=O)O)n1Cc1ccc(-c2ccccc2-c2nnn[nH]2)cc1	10.0	0.224	0.050064	12.7614			no_root	f(lo)=-0.489, f(hi)=-2.280 — same sign
+vardenafil	CCCc1nc(C)c2c(=O)nc(-c3cc(S(=O)(=O)N4CCN(CC)CC4)ccc3OCC)[nH]n12	10.0	0.014993331851193	0.056407	13.6530	69.3530	0.014988	success	
+telmisartan	CCCc1nc2c(C)cc(-c3nc4ccccc4n3C)cc2n1Cc1ccc(-c2ccccc2C(=O)O)cc1	20.0	0.0162	0.058155	10.9171	675.0822	0.016202	success	
+enprofylline	CCCn1c(=O)[nH]c(=O)c2[nH]cnc21	152.0	2.04	0.825214	8.7378	0.9732	2.043750	success	
+Tonapofylline	CCCn1c(=O)c2[nH]c(C34CCC(CCC(=O)O)(CC3)CC4)nc2n(CCC)c1=O	0.2	0.0089999999999999	0.000577	8.5025			no_root	f(lo)=-0.839, f(hi)=-2.492 — same sign
+zaleplon	CCN(C(C)=O)c1cccc(-c2ccnc3c(C#N)cnn23)c1	5.0	0.0144999999999999	0.024688	25.9771	64.7910	0.014513	success	
+rivastigmine	CCN(C)C(=O)Oc1cccc([C@H](C)N(C)C)c1	1.5	0.00309	0.003047	68.5242	39.3352	0.003089	success	
+entacapone	CCN(CC)C(=O)/C(C#N)=C/c1cc(O)c(O)c([N+](=O)[O-])c1	5.0	0.062	0.041191	15.5924			no_root	f(lo)=-0.000, f(hi)=-1.489 — same sign
+milnacipran	CCN(CC)C(=O)C1(c2ccccc2)CC1CN	25.0	0.0737999999999999	0.029343	42.3198	3.1478	0.073835	success	
+diethylcarbamazine	CCN(CC)C(=O)N1CCN(C)CC1	150.0	0.5	0.764616	32.4250	65.1835	0.500034	success	
+celiprolol	CCN(CC)C(=O)Nc1ccc(OCC(O)CNC(C)(C)C)c(C(C)=O)c1	100.0	0.3023408672343188	0.352736	21.6690	15.0116	0.302037	success	
+levomilnacipran	CCN(CC)C(=O)[C@@]1(c2ccccc2)C[C@H]1CN	25.0	0.0477	0.035415	42.3198	13.0618	0.047818	success	
+disulfiram	CCN(CC)C(=S)SSC(=S)N(CC)CC	250.0	0.38	0.811939	68.4341	215.7072	0.379566	success	
+lidocaine	CCN(CC)CC(=O)Nc1c(C)cccc1C	66.5	0.127	0.260613	47.7352	371.6206	0.127024	success	
+chloroquine	CCN(CC)CCCC(C)Nc1ccnc2cc(Cl)ccc12	300.0	0.1047295946712294	0.557762	31.9394			no_root	f(lo)=1.414, f(hi)=0.307 — same sign
+flurazepam	CCN(CC)CCN1C(=O)CN=C(c2ccccc2F)c2cc(Cl)ccc21	30.0	0.0021	0.092160	17.5623			no_root	f(lo)=2.173, f(hi)=0.969 — same sign
+sunitinib	CCN(CC)CCNC(=O)c1c(C)[nH]c(/C=C2\C(=O)Nc3ccc(F)cc32)c1C	50.0	0.0242988720707978	0.252029	10.0157	933.7073	0.024278	success	
+metoclopramide	CCN(CC)CCNC(=O)c1cc(Cl)c(N)cc1OC	10.0	0.0411168950377477	0.011833	26.6933	1.8539	0.041101	success	
+procainamide	CCN(CC)CCNC(=O)c1ccc(N)cc1	500.0	2.7	2.700860	33.6309	17.0126	2.700085	success	
+clomifene (clomiphene)	CCN(CC)CCOc1ccc(C(=C(Cl)c2ccccc2)c2ccccc2)cc1	50.0	0.0084137506499776	0.048405	113.5893			no_root	f(lo)=1.476, f(hi)=0.135 — same sign
+amodiaquine	CCN(CC)Cc1cc(Nc2ccnc3cc(Cl)ccc23)ccc1O	200.0	0.016	0.847417	43.1785			no_root	f(lo)=1.923, f(hi)=0.616 — same sign
+Givinostat	CCN(CC)Cc1ccc2cc(COC(=O)Nc3ccc(C(=O)NO)cc3)ccc2c1	50.0	0.0529999999999999	0.061783	51.3640	40.0074	0.053060	success	
+alverine	CCN(CCCc1ccccc1)CCCc1ccccc1	120.0	0.0084613474104305	0.393108	71.5745			no_root	f(lo)=2.355, f(hi)=1.170 — same sign
+hydroxychloroquine	CCN(CCO)CCCC(C)Nc1ccnc2cc(Cl)ccc12	155.0	0.046	0.206966	35.0904			no_root	f(lo)=1.369, f(hi)=0.225 — same sign
+pemigatinib	CCN1C(=O)N(c2c(F)c(OC)cc(OC)c2F)Cc2cnc3[nH]c(CN4CCOCC4)cc3c21	4.5	0.0292999999999999	0.012527	17.0097	0.9946	0.029302	success	
+(+)-ethotoin	CCN1C(=O)N[C@@H](c2ccccc2)C1=O	1000.0	29.880000000000003	5.317651	23.0867			no_root	f(lo)=-0.049, f(hi)=-1.275 — same sign
+(-)-ethotoin	CCN1C(=O)N[C@H](c2ccccc2)C1=O	1000.0	26.07	5.317651	23.0867	0.1614	26.071128	success	
+amisulpride	CCN1CCCC1CNC(=O)c1cc(S(=O)(=O)CC)c(N)cc1OC	50.0	0.0371	0.070842	12.0197	26.0047	0.037167	success	
+sultopride	CCN1CCCC1CNC(=O)c1cc(S(=O)(=O)CC)ccc1OC	50.0	0.33	0.130099	21.4510	2.3186	0.329463	success	
+sulpiride	CCN1CCCC1CNC(=O)c1cc(S(N)(=O)=O)ccc1OC	100.0	0.0884	0.152834	8.7153	13.0193	0.088516	success	
+remoxipride	CCN1CCC[C@H]1CNC(=O)c1c(OC)ccc(Br)c1OC	20.0	0.40469	0.087622	43.9396			no_root	f(lo)=-0.186, f(hi)=-1.398 — same sign
+abemaciclib	CCN1CCN(Cc2ccc(Nc3ncc(F)c(-c4cc(F)c5nc(C)n(C(C)C)c5c4)n3)nc2)CC1	200.0	0.102	0.656655	15.1452	274.7753	0.101759	success	
+Blonanserin	CCN1CCN(c2cc(-c3ccc(F)cc3)c3c(n2)CCCCCC3)CC1	2.0	0.0001	0.020850	23.4670			no_root	f(lo)=2.418, f(hi)=1.114 — same sign
+fenfluramine	CCNC(C)Cc1cccc(C(F)(F)F)c1	29.86	0.0275	0.086100	21.9920			no_root	f(lo)=1.119, f(hi)=0.074 — same sign
+etilefrine	CCNCC(O)c1cccc(O)c1	20.0	0.0184999999999999	0.014009	49.6733	15.7647	0.018482	success	
+elacestrant	CCNCCc1ccc(CN(CC)c2cc(OC)ccc2[C@@H]2CCc3cc(O)ccc3C2)cc1	1.0	6.000000000000003e-05	0.002786	84.3430			no_root	f(lo)=1.990, f(hi)=0.612 — same sign
+desethylamodiaquine	CCNCc1cc(Nc2ccnc3cc(Cl)ccc23)ccc1O	200.0	0.0509999999999999	0.749938	24.8472	3975.8306	0.050971	success	
+dexfenfluramine	CCN[C@@H](C)Cc1cccc(C(F)(F)F)c1	30.0	0.0272999999999999	0.095421	21.9920			no_root	f(lo)=1.088, f(hi)=0.068 — same sign
+meperidine	CCOC(=O)C1(c2ccccc2)CCN(C)CC1	50.0	118.17000000000004	0.118162	58.7741			no_root	f(lo)=-2.228, f(hi)=-3.344 — same sign
+diphenoxylate	CCOC(=O)C1(c2ccccc2)CCN(CCC(C#N)(c2ccccc2)c2ccccc2)CC1	5.0	0.0094999999999999	0.005057	37.3872	7.6907	0.009511	success	
+felodipine	CCOC(=O)C1=C(C)NC(C)=C(C(=O)OC)C1c1cccc(Cl)c1Cl	5.0	0.00553	0.029795	84.9513	1081.1761	0.005539	success	
+nitrendipine	CCOC(=O)C1=C(C)NC(C)=C(C(=O)OC)C1c1cccc([N+](=O)[O-])c1	20.0	0.0075971047116648	0.113017	101.9898			no_root	f(lo)=1.596, f(hi)=0.237 — same sign
+lacidipine	CCOC(=O)C1=C(C)NC(C)=C(C(=O)OCC)C1c1ccccc1/C=C/C(=O)OC(C)(C)C	2.0	0.00124	0.002915	68.1496	194.9202	0.001240	success	
+amlodipine	CCOC(=O)C1=C(COCCN)NC(C)=C(C(=O)OC)C1c1ccccc1Cl	2.5	0.0011999999999999	0.011422	84.8417			no_root	f(lo)=1.490, f(hi)=0.156 — same sign
+levamlodipine	CCOC(=O)C1=C(COCCN)NC(C)=C(C(=O)OC)[C@@H]1c1ccccc1Cl	5.0	0.0028118916017344	0.010419	84.8417			no_root	f(lo)=1.345, f(hi)=0.063 — same sign
+oseltamivir (gs4104)	CCOC(=O)C1=C[C@@H](OC(CC)CC)[C@H](NC(C)=O)[C@@H](N)C1	20.0	0.0114999999999999	0.019630	115.0890			no_root	f(lo)=1.192, f(hi)=0.157 — same sign
+ximelagatran	CCOC(=O)CN[C@@H](C(=O)N1CC[C@H]1C(=O)NCc1ccc(/C(N)=N/O)cc1)C1CCCCC1	50.0	0.4084885708511591	0.023797	31.4392			no_root	f(lo)=-0.533, f(hi)=-1.897 — same sign
+loratadine	CCOC(=O)N1CCC(=C2c3ccc(Cl)cc3CCc3cccnc32)CC1	10.0	0.0042813549257215	0.091598	31.0127			no_root	f(lo)=1.549, f(hi)=0.236 — same sign
+molsidomine	CCOC(=O)N=C1CN(N2CCOCC2)NO1	1.0	0.0054999999999999	0.006876	13.7438	12.2559	0.005499	success	
+vorapaxar	CCOC(=O)N[C@@H]1CC[C@@H]2[C@@H](C1)C[C@H]1C(=O)O[C@H](C)[C@H]1[C@H]2/C=C/c1ccc(-c2cccc(F)c2)cn1	5.0	0.0577937712906849	0.010070	83.5587			no_root	f(lo)=-0.363, f(hi)=-1.753 — same sign
+ezogabine (retigabine)	CCOC(=O)Nc1ccc(NCc2ccc(F)cc2)cc1N	100.0	0.329	0.154888	33.7032	6.1753	0.328369	success	
+moricizine (en-313)	CCOC(=O)Nc1ccc2c(c1)N(C(=O)CCN1CCOCC1)c1ccccc1S2	100.0	0.254	0.231753	50.3471	28.5056	0.254027	success	
+telotristat ethyl	CCOC(=O)[C@@H](N)Cc1ccc(-c2cc(O[C@H](c3ccc(Cl)cc3-n3ccc(C)n3)C(F)(F)F)nc(N)n2)cc1	500.0	0.0044	2.084656	19.6879			no_root	f(lo)=2.815, f(hi)=1.401 — same sign
+enalapril	CCOC(=O)[C@H](CCc1ccccc1)N[C@@H](C)C(=O)N1CCC[C@H]1C(=O)O	10.0	0.06945134987889	0.005912	40.4852	0.2579	0.069510	success	
+moexipril	CCOC(=O)[C@H](CCc1ccccc1)N[C@@H](C)C(=O)N1Cc2cc(OC)c(OC)cc2C[C@H]1C(=O)O	15.0	0.0781999999999999	0.002473	55.2227			no_root	f(lo)=-0.315, f(hi)=-1.740 — same sign
+quinapril	CCOC(=O)[C@H](CCc1ccccc1)N[C@@H](C)C(=O)N1Cc2ccccc2C[C@H]1C(=O)O	20.0	0.257	0.044019	59.9772			no_root	f(lo)=-0.060, f(hi)=-1.813 — same sign
+ramipril	CCOC(=O)[C@H](CCc1ccccc1)N[C@@H](C)C(=O)N1[C@H](C(=O)O)C[C@@H]2CCC[C@@H]21	2.5	0.0062	0.001118	41.1252	2.1017	0.006207	success	
+trandolapril	CCOC(=O)[C@H](CCc1ccccc1)N[C@@H](C)C(=O)N1[C@H](C(=O)O)C[C@H]2CCCC[C@@H]21	1.0	0.0015699999999999	0.000533	45.1068	6.6734	0.001570	success	
+cilazapril	CCOC(=O)[C@H](CCc1ccccc1)N[C@H]1CCCN2CCC[C@@H](C(=O)O)N2C1=O	0.5	0.0169999999999999	0.000546	39.0475			no_root	f(lo)=-0.455, f(hi)=-1.986 — same sign
+benazepril	CCOC(=O)[C@H](CCc1ccccc1)N[C@H]1CCc2ccccc2N(CC(=O)O)C1=O	10.0	0.1354099999999999	0.044849	54.0823	4.7998	0.135378	success	
+Temocapril	CCOC(=O)[C@H](CCc1ccccc1)N[C@H]1CS[C@H](c2cccs2)CN(CC(=O)O)C1=O	20.0	0.1239999999999999	0.196899	43.9366	78.6067	0.123895	success	
+flumazenil	CCOC(=O)c1ncn2c1CN(C)C(=O)c1cc(F)ccc1-2	30.0	0.24683	0.087677	57.4853	5.2016	0.246734	success	
+bilastine	CCOCCn1c(C2CCN(CCc3ccc(C(C)(C)C(=O)O)cc3)CC2)nc2ccccc21	10.0	0.15313	0.007779	26.1390			no_root	f(lo)=-0.768, f(hi)=-2.056 — same sign
+emedastine	CCOCCn1c(N2CCCN(C)CC2)nc2ccccc21	2.0	0.002	0.003952	38.2137	103.8125	0.001998	success	
+Tesaglitazar	CCO[C@@H](Cc1ccc(OCCc2ccc(OS(C)(=O)=O)cc2)cc1)C(=O)O	1.0	0.2328685517625769	0.006852	16.8802			no_root	f(lo)=-1.082, f(hi)=-2.753 — same sign
+Saroglitazar	CCO[C@@H](Cc1ccc(OCCn2c(C)ccc2-c2ccc(SC)cc2)cc1)C(=O)O	0.12	0.0039799999999999	0.000472	26.4120			no_root	f(lo)=-0.731, f(hi)=-2.285 — same sign
+Seladelpar	CCO[C@H](COc1ccc(C(F)(F)F)cc1)CSc1ccc(OCC(=O)O)c(C)c1	10.0	0.0719	0.129798	13.9323	39.1071	0.071918	success	
+iptacopan	CCO[C@H]1CCN(Cc2c(OC)cc(C)c3[nH]ccc23)[C@H](c2ccc(C(=O)O)cc2)C1	100.0	2.132	0.147545	14.3971			no_root	f(lo)=-0.847, f(hi)=-2.061 — same sign
+repaglinide	CCOc1cc(CC(=O)N[C@@H](CC(C)C)c2ccccc2N2CCCCC2)ccc1C(=O)O	0.25	0.0044	0.000426	25.9298			no_root	f(lo)=-0.822, f(hi)=-2.115 — same sign
+Mosapride	CCOc1cc(N)c(Cl)cc1C(=O)NCC1CN(Cc2ccc(F)cc2)CCO1	10.0	0.07069	0.085390	9.0666	10.5505	0.070828	success	
+Cinitapride	CCOc1cc(N)c([N+](=O)[O-])cc1C(=O)NC1CCN(CC2CC=CCC2)CC1	1.0	0.0004	0.002176	18.4309	195.4142	0.000399	success	
+apremilast	CCOc1cc([C@@H](CS(C)(=O)=O)N2C(=O)c3cccc(NC(C)=O)c3C2=O)ccc1OC	20.0	0.2244749429223672	0.023095	30.0398			no_root	f(lo)=-0.164, f(hi)=-1.359 — same sign
+neratinib	CCOc1cc2ncc(C#N)c(Nc3ccc(OCc4ccccn4)c(Cl)c3)c2cc1NC(=O)/C=C/CN(C)C	120.0	0.0231	0.735268	13.7410			no_root	f(lo)=1.623, f(hi)=0.250 — same sign
+drotaverine	CCOc1ccc(/C=C2\NCCc3cc(OCC)c(OCC)cc32)cc1OCC	40.0	0.1218499999999999	0.137083	23.9901	18.9163	0.121845	success	
+dapagliflozin	CCOc1ccc(Cc2cc([C@@H]3O[C@H](CO)[C@@H](O)[C@H](O)[C@H]3O)ccc2Cl)cc1	0.1	0.0011999999999999	0.000091	19.0899			no_root	f(lo)=-0.723, f(hi)=-2.077 — same sign
+Luseogliflozin	CCOc1ccc(Cc2cc([C@@H]3S[C@H](CO)[C@@H](O)[C@H](O)[C@H]3O)c(OC)cc2C)cc1	1.0	0.0382	0.002945	13.2621			no_root	f(lo)=-0.802, f(hi)=-2.222 — same sign
+Henagliflozin	CCOc1ccc(Cc2cc([C@@]34OC[C@@](CO)(O3)[C@@H](O)[C@H](O)[C@H]4O)ccc2Cl)cc1F	2.5	0.0575	0.004432	12.2235			no_root	f(lo)=-0.756, f(hi)=-2.242 — same sign
+ertugliflozin	CCOc1ccc(Cc2cc([C@]34OC[C@](CO)(O3)[C@@H](O)[C@H](O)[C@H]4O)ccc2Cl)cc1	1.0	0.0172377492730344	0.002157	12.4232			no_root	f(lo)=-0.537, f(hi)=-2.082 — same sign
+reboxetine	CCOc1ccccc1OC(c1ccccc1)C1CNCCO1	2.0	0.074	0.016063	35.3439			no_root	f(lo)=-0.353, f(hi)=-1.671 — same sign
+viloxazine	CCOc1ccccc1OCC1CNCCO1	100.0	1.5923	0.780123	32.3242	1.5633	1.593143	success	
+candesartan	CCOc1nc2cccc(C(=O)O)c2n1Cc1ccc(-c2ccccc2-c2nnn[nH]2)cc1	8.0	0.055	0.022080	7.1031			no_root	f(lo)=-0.345, f(hi)=-1.990 — same sign
+azilsartan	CCOc1nc2cccc(C(=O)O)c2n1Cc1ccc(-c2ccccc2-c2noc(=O)[nH]2)cc1	40.0	2.4522065308174046	0.154126	7.8570			no_root	f(lo)=-1.105, f(hi)=-2.887 — same sign
+finerenone	CCOc1ncc(C)c2c1[C@H](c1ccc(C#N)cc1OC)C(C(N)=O)=C(C)N2	1.25	0.0118	0.004414	13.3187			no_root	f(lo)=-0.123, f(hi)=-1.465 — same sign
+tinidazole	CCS(=O)(=O)CCn1c([N+](=O)[O-])cnc1C	500.0	11.08018627476417	4.413637	4.2613	0.2450	11.080032	success	
+baricitinib	CCS(=O)(=O)N1CC(CC#N)(n2cc(-c3ncnc4[nH]ccc34)cn2)C1	2.0	0.0245999999999999	0.002781	38.0871			no_root	f(lo)=-0.006, f(hi)=-1.199 — same sign
+levetiracetam	CC[C@@H](C(N)=O)N1CCCC1=O	500.0	13.599999999999998	2.510647	11.0513			no_root	f(lo)=-0.062, f(hi)=-1.141 — same sign
+methylergometrine	CC[C@@H](CO)NC(=O)[C@@H]1C=C2c3cccc4[nH]cc(c34)C[C@H]2N(C)C1	0.12	0.0009652460826131	0.000144	15.6551			no_root	f(lo)=-0.069, f(hi)=-1.327 — same sign
+ethambutol	CC[C@@H](CO)NCCN[C@@H](CC)CO	882.0	3.95	3.556335	11.1728	5.5641	3.944637	success	
+procaterol	CC[C@@H](NC(C)C)[C@@H](O)c1ccc(O)c2[nH]c(=O)ccc12	0.1	0.000334108418554	0.000080	15.2932			no_root	f(lo)=-0.094, f(hi)=-1.334 — same sign
+posaconazole	CC[C@@H]([C@H](C)O)n1ncn(-c2ccc(N3CCN(c4ccc(OC[C@@H]5CO[C@@](Cn6cncn6)(c6ccc(F)cc6F)C5)cc4)CC3)cc2)c1=O	50.0	0.113	0.450982	18.1466	167.3599	0.113230	success	
+tapentadol	CC[C@@H](c1cccc(O)c1)[C@@H](C)CN(C)C	86.0	0.0734	0.143631	56.1712	470.9560	0.073360	success	
+pimecrolimus	CC[C@@H]1/C=C(\C)C[C@H](C)C[C@H](OC)[C@H]2O[C@@](O)(C(=O)C(=O)N3CCCC[C@H]3C(=O)O[C@H](/C(C)=C/[C@@H]3CC[C@H](Cl)[C@H](OC)C3)[C@H](C)[C@@H](O)CC1=O)[C@H](C)C[C@@H]2OC	15.0	0.0411999999999999	0.007145	73.6614	1.4622	0.041236	success	
+pilocarpine	CC[C@@H]1C(=O)OC[C@@H]1Cc1cncn1C	3.0	0.0156	0.015414	30.1162	19.4346	0.015594	success	
+upadacitinib	CC[C@@H]1CN(C(=O)NCC(F)(F)F)C[C@@H]1c1cnc2cnc3[nH]ccc3n12	1.0	0.0077199999999999	0.005723	20.8459	5.1034	0.007719	success	
+Vaniprevir	CC[C@@H]1C[C@]1(NC(=O)[C@@H]1C[C@@H]2CN1C(=O)[C@H](C(C)(C)C)NC(=O)OCC(C)(C)CCCCc1cccc3c1CN(C3)C(=O)O2)C(=O)NS(=O)(=O)C1CC1	40.0	0.01704	0.057317	25.2011	91.5623	0.017038	success	
+topotecan	CC[C@@]1(O)C(=O)OCc2c1cc1n(c2=O)Cc2cc3c(CN(C)C)c(O)ccc3nc2-1	2.6	0.0053691072799302	0.007185	4.5058	4.5555	0.005366	success	
+lovastatin acid	CC[C@H](C)C(=O)O[C@H]1C[C@@H](C)C=C2C=C[C@H](C)[C@H](CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H]21	80.0	0.00466	0.443946	18.7132			no_root	f(lo)=2.423, f(hi)=0.758 — same sign
+lovastatin	CC[C@H](C)C(=O)O[C@H]1C[C@@H](C)C=C2C=C[C@H](C)[C@H](CC[C@@H]3C[C@@H](O)CC(=O)O3)[C@H]21	80.0	0.0060699999999999	0.125059	139.4609			no_root	f(lo)=2.097, f(hi)=0.774 — same sign
+idelalisib	CC[C@H](Nc1ncnc2[nH]cnc12)c1nc2cccc(F)c2c(=O)n1-c1ccccc1	150.0	2.239256917063456	0.124363	15.1156			no_root	f(lo)=-0.734, f(hi)=-2.005 — same sign
+levacetylmethadol (laam)	CC[C@H](OC(C)=O)C(C[C@H](C)N(C)C)(c1ccccc1)c1ccccc1	5.0	0.0048799999999999	0.007258	63.7470	114.1321	0.004886	success	
+Solithromycin	CC[C@H]1OC(=O)[C@@](C)(F)C(=O)[C@H](C)[C@@H](O[C@@H]2O[C@H](C)C[C@H](N(C)C)[C@H]2O)[C@](C)(OC)C[C@@H](C)C(=O)[C@H](C)[C@H]2N(CCCCn3cc(-c4cccc(N)c4)nn3)C(=O)O[C@]12C	50.0	0.0223	0.023461	25.8003	16.8072	0.022260	success	
+Modithromycin	CC[C@H]1OC(=O)[C@H](C)C(=O)[C@H](C)[C@@H](O[C@@H]2O[C@H](C)C[C@H](N(C)C)[C@H]2O)[C@@]2(C)C[C@@H](C)/C(=N\C(C)=O)[C@H](C)[C@@H](OC/C(=N\OCc3ccc(-n4cccn4)nc3)CO2)[C@]1(C)O	100.0	0.1959999999999999	0.104804	53.7615	9.2775	0.196380	success	
+telithromycin	CC[C@H]1OC(=O)[C@H](C)C(=O)[C@H](C)[C@@H](O[C@@H]2O[C@H](C)C[C@H](N(C)C)[C@H]2O)[C@](C)(OC)C[C@@H](C)C(=O)[C@H](C)[C@H]2N(CCCCn3cnc(-c4cccnc4)c3)C(=O)O[C@]12C	400.0	0.8	0.127309	41.2525	0.4813	0.800336	success	
+Nafithromycin	CC[C@H]1OC(=O)[C@H](C)C(=O)[C@H](C)[C@@H](O[C@@H]2O[C@H](C)C[C@H](N(C)C)[C@H]2O)[C@](C)(OC)C[C@@H](C)C(=O)[C@H](C)[C@H]2[C@H](/C(N)=N/O[C@@H](C)c3nnc(-c4ccccn4)s3)C(=O)O[C@@]21C	100.0	0.0989999999999999	0.045716	44.4137	7.1968	0.099018	success	
+roxithromycin	CC[C@H]1OC(=O)[C@H](C)[C@@H](O[C@H]2C[C@@](C)(OC)[C@@H](O)[C@H](C)O2)[C@H](C)[C@@H](O[C@@H]2O[C@H](C)C[C@H](N(C)C)[C@H]2O)[C@](C)(O)C[C@@H](C)C(=NOCOCCOC)[C@H](C)[C@@H](O)[C@]1(C)O	150.0	6.0969796029772265	0.083332	72.2914			no_root	f(lo)=-1.151, f(hi)=-2.591 — same sign
+erythromycin	CC[C@H]1OC(=O)[C@H](C)[C@@H](O[C@H]2C[C@@](C)(OC)[C@@H](O)[C@H](C)O2)[C@H](C)[C@@H](O[C@@H]2O[C@H](C)C[C@H](N(C)C)[C@H]2O)[C@](C)(O)C[C@@H](C)C(=O)[C@H](C)[C@@H](O)[C@]1(C)O	250.0	1.5245245160377054	0.042836	53.6785			no_root	f(lo)=-0.698, f(hi)=-1.992 — same sign
+clarithromycin	CC[C@H]1OC(=O)[C@H](C)[C@@H](O[C@H]2C[C@@](C)(OC)[C@@H](O)[C@H](C)O2)[C@H](C)[C@@H](O[C@@H]2O[C@H](C)C[C@H](N(C)C)[C@H]2O)[C@](C)(OC)C[C@@H](C)C(=O)[C@H](C)[C@@H](O)[C@]1(C)O	0.1	0.0001899999999999	0.000019	65.5618			no_root	f(lo)=-0.057, f(hi)=-1.253 — same sign
+obeticholic acid	CC[C@H]1[C@@H](O)[C@@H]2[C@H](CC[C@]3(C)[C@@H]([C@H](C)CCC(=O)O)CC[C@@H]23)[C@@]2(C)CC[C@@H](O)C[C@@H]12	10.0	0.0454746372031977	0.033834	30.3348	0.5760	0.045480	success	
+ajmaline	CC[C@H]1[C@@H]2C[C@H]3[C@@H]4N(C)c5ccccc5[C@]45C[C@@H](C2[C@H]5O)N3[C@@H]1O	50.0	0.018	0.086909	27.7109			no_root	f(lo)=1.448, f(hi)=0.187 — same sign
+vinflunine	CC[C@]12C=CCN3CC[C@@]4(c5cc([C@@]6(C(=O)OC)C[C@@H]7C[C@@H](C(C)(F)F)C[N@](Cc8c6[nH]c6ccccc86)C7)c(OC)cc5N(C)[C@H]4[C@@](O)(C(=O)OC)[C@@H]1OC(C)=O)[C@@H]32	207.6	0.235	0.090519	14.2019	1.3184	0.234879	success	
+bretylium	CC[N+](C)(C)Cc1ccccc1Br	100.0	0.0357	0.583182	52.2962			no_root	f(lo)=1.807, f(hi)=0.686 — same sign
+methantheline	CC[N+](C)(CC)CCOC(=O)C1c2ccccc2Oc2ccccc21	100.0	0.0251	0.250144	135.5494			no_root	f(lo)=1.684, f(hi)=0.355 — same sign
+Denatonium	CC[N+](CC)(CC(=O)Nc1c(C)cccc1C)Cc1ccccc1	40.0	0.001	0.283577	73.4712			no_root	f(lo)=2.851, f(hi)=1.557 — same sign
+fidaxomicin	CCc1c(Cl)c(O)c(Cl)c(O)c1C(=O)O[C@H]1[C@H](O)[C@H](OC)[C@H](OC/C2=C\C=C\C[C@H](O)/C(C)=C/[C@H](CC)[C@@H](O[C@@H]3OC(C)(C)[C@@H](OC(=O)C(C)C)[C@H](O)[C@@H]3O)/C(C)=C/C(C)=C/C[C@@H]([C@@H](C)O)OC2=O)O[C@@H]1C	100.0	0.0044999999999999	0.016262	52.0812	356.9416	0.004491	success	
+Cenerimod	CCc1cc(-c2noc(-c3cc(OC)nc(C4CCCC4)c3)n2)cc(C)c1OC[C@@H](O)CO	1.0	0.0038999999999999	0.004299	23.6745	21.6592	0.003901	success	
+siponimod	CCc1cc(/C(C)=N/OCc2ccc(C3CCCCC3)c(C(F)(F)F)c2)ccc1CN1CC(C(=O)O)C1	0.25	0.0018466596372557	0.001037	25.3633			no_root	f(lo)=-0.181, f(hi)=-1.339 — same sign
+ethionamide	CCc1cc(C(N)=S)ccn1	250.0	2.047574174480622	1.110362	13.5211	3.1096	2.045569	success	
+alectinib	CCc1cc2c(cc1N1CCC(N3CCOCC3)CC1)C(C)(C)c1[nH]c3cc(C#N)ccc3c1C2=O	600.0	0.103	2.841449	7.3739			no_root	f(lo)=1.505, f(hi)=0.121 — same sign
+clotiazepam	CCc1cc2c(s1)N(C)C(=O)CN=C2c1ccccc1Cl	5.0	0.1788	0.086917	27.3793			no_root	f(lo)=-0.187, f(hi)=-1.446 — same sign
+pioglitazone	CCc1ccc(CCOc2ccc(CC3SC(=O)NC3=O)cc2)nc1	15.0	0.5807550774638135	0.124438	70.0470			no_root	f(lo)=-0.420, f(hi)=-1.697 — same sign
+Tofogliflozin	CCc1ccc(Cc2ccc3c(c2)[C@]2(OC3)O[C@H](CO)[C@@H](O)[C@H](O)[C@H]2O)cc1	10.0	0.2611512971440118	0.005449	34.5454			no_root	f(lo)=-0.799, f(hi)=-2.205 — same sign
+etodolac	CCc1cccc2c3c([nH]c12)C(CC)(CC(=O)O)OCC3	200.0	19.584769592721788	3.752332	15.4101			no_root	f(lo)=-0.483, f(hi)=-2.103 — same sign
+Aficamten	CCc1nc(-c2ccc3c(c2)CC[C@H]3NC(=O)c2cnn(C)c2)no1	10.0	0.1153	0.089381	18.6770	6.3736	0.115286	success	
+pyrimethamine	CCc1nc(N)nc(N)c1-c1ccc(Cl)cc1	25.0	0.234	0.144915	26.9327	7.2203	0.233403	success	
+Ziritaxestat	CCc1nc2c(C)cc(N3CCN(CC(=O)N4CC(O)C4)CC3)cn2c1N(C)c1nc(-c2ccc(F)cc2)c(C#N)s1	600.0	8.4	4.447518	33.5041	1.8805	8.404772	success	
+Telacebec	CCc1nc2ccc(Cl)cn2c1C(=O)NCc1ccc(N2CCC(c3ccc(OC(F)(F)F)cc3)CC2)cc1	10.0	0.01803	0.049777	50.8819	510.4640	0.017969	success	
+nefazodone	CCc1nn(CCCN2CCN(c3cccc(Cl)c3)CC2)c(=O)n1CCOc1ccccc1	50.0	0.0839999999999999	0.240026	24.3976	167.5883	0.083993	success	
+ripretinib	CCn1c(=O)c(-c2cc(NC(=O)Nc3ccccc3)c(F)cc2Br)cc2cnc(NC)cc21	50.0	0.2899982758569436	0.113343	51.0691			no_root	f(lo)=-0.178, f(hi)=-1.567 — same sign
+istradefylline	CCn1c(=O)c2c(nc(/C=C/c3ccc(OC)c(OC)c3)n2C)n(CC)c1=O	40.0	0.1810999999999999	0.462111	18.8900	104.8899	0.181071	success	
+pefloxacin	CCn1cc(C(=O)O)c(=O)c2cc(F)c(N3CCN(C)CC3)cc21	400.0	4.374598267269808	3.555999	16.7256	8.2560	4.365825	success	
+lomefloxacin	CCn1cc(C(=O)O)c(=O)c2cc(F)c(N3CCNC(C)C3)c(F)c21	100.0	1.0105444077327823	0.446019	5.7553	0.8484	1.010762	success	
+norfloxacin	CCn1cc(C(=O)O)c(=O)c2cc(F)c(N3CCNCC3)cc21	200.0	0.65	0.701078	13.5646	9.6666	0.650485	success	
+enoxacin	CCn1cc(C(=O)O)c(=O)c2cc(F)c(N3CCNCC3)nc21	200.0	1.22	0.637350	3.9906	0.3427	1.220117	success	
+rosoxacin	CCn1cc(C(=O)O)c(=O)c2ccc(-c3ccncc3)cc21	300.0	4.53	3.541389	10.6807	1.7565	4.531819	success	
+nalidixic acid	CCn1cc(C(=O)O)c(=O)c2ccc(C)nc21	1000.0	30.60000000000001	22.356924	7.0705	1.8402	30.605477	success	
+cinoxacin	CCn1nc(C(=O)O)c(=O)c2cc3c(cc21)OCO3	500.0	15.688530842625134	2.404369	5.3043			no_root	f(lo)=-0.379, f(hi)=-1.845 — same sign
+metformin	CN(C)C(=N)NC(=N)N	500.0	1.3561038829751082	0.502645	5.0104			no_root	f(lo)=-0.061, f(hi)=-1.254 — same sign
+loperamide	CN(C)C(=O)C(CCN1CCC(O)(c2ccc(Cl)cc2)CC1)(c1ccccc1)c1ccccc1	4.0	0.00074	0.012486	29.3390			no_root	f(lo)=1.562, f(hi)=0.224 — same sign
+cariprazine	CN(C)C(=O)N[C@H]1CC[C@H](CCN2CCN(c3cccc(Cl)c3Cl)CC2)CC1	1.5	0.00088	0.004683	30.0436	336.7910	0.000880	success	
+pyridostigmine	CN(C)C(=O)Oc1ccc[n+](C)c1	120.0	0.052	0.863035	23.9601			no_root	f(lo)=1.918, f(hi)=0.838 — same sign
+neostigmine	CN(C)C(=O)Oc1cccc([N+](C)(C)C)c1	30.0	0.00575	0.127672	32.6724			no_root	f(lo)=2.082, f(hi)=0.950 — same sign
+ribociclib	CN(C)C(=O)c1cc2cnc(Nc3ccc(N4CCNCC4)cn3)nc2n1C1CCCC1	400.0	0.317	0.358771	9.6735	7.5072	0.316303	success	
+zimelidine	CN(C)C/C=C(/c1ccc(Br)cc1)c1cccnc1	100.0	0.09825	0.184756	49.7336	2883.7143	0.098250	success	
+afatinib	CN(C)C/C=C/C(=O)Nc1cc2c(Nc3ccc(F)c(Cl)c3)ncnc2cc1O[C@H]1CCOC1	15.0	0.00619	0.092370	7.9562	3455.5039	0.006188	success	
+medifoxamine	CN(C)CC(Oc1ccccc1)Oc1ccccc1	200.0	0.226	0.320915	102.7807	176.9654	0.226005	success	
+desvenlafaxine	CN(C)CC(c1ccc(O)cc1)C1(O)CCCCC1	25.0	0.0609999999999999	0.023012	25.5097	2.6353	0.060987	success	
+olopatadine	CN(C)CC/C=C1/c2ccccc2COc2ccc(CC(=O)O)cc21	5.0	0.06998	0.003500	37.8748			no_root	f(lo)=-0.451, f(hi)=-1.566 — same sign
+brompheniramine	CN(C)CCC(c1ccc(Br)cc1)c1ccccn1	9.46	0.01123	0.048281	30.3707	890.2166	0.011229	success	
+chlorpheniramine	CN(C)CCC(c1ccc(Cl)cc1)c1ccccn1	8.0	0.01736	0.026954	30.0897	40.5186	0.017388	success	
+pheniramine	CN(C)CCC(c1ccccc1)c1ccccn1	30.5	0.2235	0.101985	28.8886	3.9506	0.222952	success	
+cyclobenzaprine	CN(C)CCC=C1c2ccccc2C=Cc2ccccc21	2.5	0.0021	0.014087	47.7378			no_root	f(lo)=1.345, f(hi)=0.126 — same sign
+amitriptyline	CN(C)CCC=C1c2ccccc2CCc2ccccc21	10.0	0.00596	0.088821	73.0629			no_root	f(lo)=1.629, f(hi)=0.492 — same sign
+doxepin	CN(C)CCC=C1c2ccccc2COc2ccccc21	3.0	0.00059	0.006887	81.3923			no_root	f(lo)=1.887, f(hi)=0.771 — same sign
+imipramine	CN(C)CCCN1c2ccccc2CCc2ccccc21	50.0	0.0286208846997949	0.111796	30.5665			no_root	f(lo)=1.215, f(hi)=0.028 — same sign
+chlorpromazine	CN(C)CCCN1c2ccccc2Sc2ccc(Cl)cc21	25.0	0.00431	0.124657	42.5120			no_root	f(lo)=1.943, f(hi)=0.730 — same sign
+benzydamine	CN(C)CCCOc1nn(Cc2ccccc2)c2ccccc12	50.0	0.5006136234662417	0.052703	55.8030			no_root	f(lo)=-0.127, f(hi)=-1.142 — same sign
+escitalopram	CN(C)CCC[C@@]1(c2ccc(F)cc2)OCc2cc(C#N)ccc21	10.0	0.0111806976526511	0.063454	19.0639			no_root	f(lo)=1.285, f(hi)=0.248 — same sign
+doxylamine	CN(C)CCOC(C)(c1ccccc1)c1ccccn1	12.5	0.06194	0.018380	88.3745	5.0856	0.061999	success	
+carbinoxamine	CN(C)CCOC(c1ccc(Cl)cc1)c1ccccn1	8.0	0.0957399999999999	0.015044	73.1073	0.4311	0.095759	success	
+diphenhydramine	CN(C)CCOC(c1ccccc1)c1ccccc1	25.0	0.0349987142620982	0.113071	97.3815	3256.9124	0.034985	success	
+zotepine	CN(C)CCOC1=Cc2ccccc2Sc2ccc(Cl)cc21	25.0	0.0059	0.127765	47.2632			no_root	f(lo)=1.782, f(hi)=0.470 — same sign
+toremifene	CN(C)CCOc1ccc(/C(=C(/CCCl)c2ccccc2)c2ccccc2)cc1	120.0	0.63	0.098290	90.4768	0.6091	0.630273	success	
+almotriptan	CN(C)CCc1c[nH]c2ccc(CS(=O)(=O)N3CCCC3)cc12	5.0	0.018	0.008985	37.4411	6.2703	0.017992	success	
+zolmitriptan (311c90)	CN(C)CCc1c[nH]c2ccc(C[C@H]3COC(=O)N3)cc12	2.5	0.0035411862419251	0.005021	11.3144	31.2836	0.003538	success	
+rizatriptan (mk-462)	CN(C)CCc1c[nH]c2ccc(Cn3cncn3)cc12	2.5	0.0061497967446087	0.004317	22.0745	6.6542	0.006162	success	
+EVT 201 (Dimdazenil)	CN(C)Cc1nc(-c2ncn3c2CN(C)C(=O)c2c(Cl)cccc2-3)no1	1.5	0.02282	0.017689	16.7721	4.5063	0.022816	success	
+pipotiazine	CN(C)S(=O)(=O)c1ccc2c(c1)N(CCCN1CCC(CCO)CC1)c1ccccc1S2	10.0	0.01	0.041444	30.0251	230.6544	0.010002	success	
+Dapoxetine	CN(C)[C@@H](CCOc1cccc2ccccc12)c1ccccc1	30.0	0.2689999999999999	0.151701	108.1045	20.4079	0.269126	success	
+lymecycline	CN(C)[C@@H]1C(O)=C(C(=O)NCNCCCC[C@H](N)C(=O)O)C(=O)[C@@]2(O)C(O)=C3C(=O)c4c(O)cccc4[C@@](C)(O)[C@H]3C[C@@H]12	300.0	2.13	0.074156	8.1601			no_root	f(lo)=-0.998, f(hi)=-2.250 — same sign
+tetracycline	CN(C)[C@@H]1C(O)=C(C(N)=O)C(=O)[C@@]2(O)C(O)=C3C(=O)c4c(O)cccc4[C@@](C)(O)[C@H]3C[C@@H]12	300.0	2.5	0.117287	7.5874			no_root	f(lo)=-0.770, f(hi)=-1.996 — same sign
+omadacycline	CN(C)c1cc(CNCC(C)(C)C)c(O)c2c1C[C@H]1C[C@H]3[C@H](N(C)C)C(O)=C(C(N)=O)C(=O)[C@@]3(O)C(O)=C1C2=O	300.0	0.5305657357952923	0.023805	24.3319			no_root	f(lo)=-0.529, f(hi)=-1.647 — same sign
+minocycline	CN(C)c1ccc(O)c2c1C[C@H]1C[C@H]3[C@H](N(C)C)C(O)=C(C(N)=O)C(=O)[C@@]3(O)C(O)=C1C2=O	100.0	1.112854932145246	0.083969	7.4204			no_root	f(lo)=-0.755, f(hi)=-2.066 — same sign
+methylene blue	CN(C)c1ccc2nc3ccc(N(C)C)cc3[s+]c2c1	500.0	3.5715100000000004	4.734217	52.7233	54.6986	3.582187	success	
+altretamine	CN(C)c1nc(N(C)C)nc(N(C)C)n1	200.0	0.2770000000000001	0.875923	12.9591	61.7572	0.276754	success	
+terbinafine	CN(C/C=C/C#CC(C)(C)C)Cc1cccc2ccccc12	125.0	0.565	1.641948	33.4435	285.2388	0.565980	success	
+creatine	CN(CC(=O)O)C(=N)N	5000.0	102.10000000000004	3.098939	3.8643			no_root	f(lo)=-1.188, f(hi)=-2.367 — same sign
+revefenacin	CN(CCN1CCC(OC(=O)Nc2ccccc2-c2ccccc2)CC1)C(=O)c1ccc(CN2CCC(C(N)=O)CC2)cc1	0.2	0.00013	0.000237	25.3381	40.8188	0.000130	success	
+xanthinol	CN(CCO)CC(O)Cn1cnc2c1c(=O)n(C)c(=O)n2C	150.0	0.615	0.857344	7.1334	7.6239	0.614817	success	
+rosiglitazone	CN(CCOc1ccc(CC2SC(=O)NC2=O)cc1)c1ccccn1	2.0	0.152	0.044497	42.8136			no_root	f(lo)=-0.454, f(hi)=-1.677 — same sign
+dofetilide (uk-68,798)	CN(CCOc1ccc(NS(C)(=O)=O)cc1)CCc1ccc(NS(C)(=O)=O)cc1	0.15	0.0004499999999999	0.000212	10.8284	1.6194	0.000450	success	
+bromhexine	CN(Cc1cc(Br)cc(Br)c1N)C1CCCCC1	8.0	0.0245999999999999	0.050747	31.5200	67.2314	0.024549	success	
+methotrexate	CN(Cc1cnc2nc(N)nc(N)c2n1)c1ccc(C(=O)N[C@@H](CCC(=O)O)C(=O)O)cc1	5.0	0.0919	0.000865	11.7024			no_root	f(lo)=-1.334, f(hi)=-2.543 — same sign
+mizolastine	CN(c1nccc(=O)[nH]1)C1CCN(c2nc3ccccc3n2Cc2ccc(F)cc2)CC1	10.0	0.321827688822039	0.032176	21.1661			no_root	f(lo)=-0.576, f(hi)=-1.884 — same sign
+cimetidine	CN/C(=N/C#N)NCCSCc1nc[nH]c1C	200.0	0.79	0.230192	4.2265			no_root	f(lo)=-0.052, f(hi)=-1.260 — same sign
+temazepam	CN1C(=O)C(O)N=C(c2ccccc2)c2cc(Cl)ccc21	20.0	0.5242788465935281	0.326353	11.2940			no_root	f(lo)=-0.030, f(hi)=-1.364 — same sign
+lormetazepam	CN1C(=O)C(O)N=C(c2ccccc2Cl)c2cc(Cl)ccc21	1.0	0.00565	0.011722	19.2002	65.8425	0.005646	success	
+clobazam	CN1C(=O)CC(=O)N(c2ccccc2)c2cc(Cl)ccc21	10.0	0.19696	0.120980	11.9369	3.9281	0.197204	success	
+methsuximide	CN1C(=O)CC(C)(c2ccccc2)C1=O	300.0	1.62808	3.059893	21.9833	50.0602	1.630824	success	
+chlormezanone	CN1C(=O)CCS(=O)(=O)C1c1ccc(Cl)cc1	200.0	2.75	1.582420	13.5748	3.2305	2.750877	success	
+diazepam	CN1C(=O)CN=C(c2ccccc2)c2cc(Cl)ccc21	2.0	0.075	0.046414	7.2316			no_root	f(lo)=-0.154, f(hi)=-1.399 — same sign
+flunitrazepam	CN1C(=O)CN=C(c2ccccc2F)c2cc([N+](=O)[O-])ccc21	1.0	0.0059999999999999	0.024295	8.9931	123.2146	0.006003	success	
+trimethadione	CN1C(=O)OC(C)(C)C1=O	65.3	1.04	1.146282	21.7932	15.9663	1.040551	success	
+piroxicam	CN1C(C(=O)Nc2ccccn2)=C(O)c2ccccc2S1(=O)=O	20.0	2.350106380570888	0.479261	59.7733			no_root	f(lo)=-0.395, f(hi)=-1.930 — same sign
+lornoxicam	CN1C(C(=O)Nc2ccccn2)=C(O)c2sc(Cl)cc2S1(=O)=O	8.0	0.8249430182572687	0.174067	52.8890			no_root	f(lo)=-0.405, f(hi)=-2.012 — same sign
+tenoxicam	CN1C(C(=O)Nc2ccccn2)=C(O)c2sccc2S1(=O)=O	10.0	1.5	0.278502	77.7591			no_root	f(lo)=-0.414, f(hi)=-1.962 — same sign
+Verubecestat	CN1C(N)=N[C@](C)(c2cc(NC(=O)c3ccc(F)cn3)ccc2F)CS1(=O)=O	20.0	0.05128	0.074173	14.0178	16.1716	0.051209	success	
+tadalafil	CN1CC(=O)N2[C@H](c3ccc4c(c3)OCO4)c3[nH]c4ccccc4c3C[C@@H]2C1=O	10.0	0.1687944109196462	0.032817	22.8513			no_root	f(lo)=-0.272, f(hi)=-1.609 — same sign
+cyproheptadine	CN1CCC(=C2c3ccccc3C=Cc3ccccc32)CC1	8.0	0.0299999999999999	0.091952	23.0689	113.7965	0.029945	success	
+ketotifen	CN1CCC(=C2c3ccccc3CC(=O)c3sccc32)CC1	2.0	0.00027	0.007504	51.5841			no_root	f(lo)=2.160, f(hi)=1.108 — same sign
+azatadine	CN1CCC(=C2c3ccccc3CCc3cccnc32)CC1	2.0	0.0014	0.020461	42.8013			no_root	f(lo)=1.539, f(hi)=0.398 — same sign
+lasmiditan	CN1CCC(C(=O)c2cccc(NC(=O)c3c(F)cc(F)cc3F)n2)CC1	50.0	0.0532432155302438	0.053550	37.4263	25.3070	0.053177	success	
+tepotinib	CN1CCC(COc2cnc(-c3cccc(Cn4nc(-c5cccc(C#N)c5)ccc4=O)c3)nc2)CC1	500.0	0.487	1.774162	22.2056	163.1333	0.486151	success	
+azelastine	CN1CCCC(n2nc(Cc3ccc(Cl)cc3)c3ccccc3c2=O)CC1	2.0	0.0010199999999999	0.005279	23.4980	526.0546	0.001019	success	
+sulforidazine	CN1CCCCC1CCN1c2ccccc2Sc2ccc(S(C)(=O)=O)cc21	25.0	0.03171	0.066196	41.9458	81.3688	0.031630	success	
+mesoridazine	CN1CCCCC1CCN1c2ccccc2Sc2ccc([S+](C)[O-])cc21	25.0	0.16854	0.097490	48.3351	3.9600	0.168535	success	
+pyrantel	CN1CCCN=C1/C=C/c1cccs1	750.0	0.03756	5.909503	34.2545			no_root	f(lo)=2.655, f(hi)=1.517 — same sign
+clemastine	CN1CCC[C@@H]1CCO[C@](C)(c1ccccc1)c1ccc(Cl)cc1	2.0	0.00115	0.002806	61.1224	348.8360	0.001151	success	
+eletriptan	CN1CCC[C@@H]1Cc1c[nH]c2ccc(CCS(=O)(=O)c3ccccc3)cc12	1.5	0.00507	0.002350	21.4856	2.0855	0.005072	success	
+zopiclone	CN1CCN(C(=O)OC2c3nccnc3C(=O)N2c2ccc(Cl)cn2)CC1	7.5	0.0496437307220156	0.025164	12.8846	2.6347	0.049598	success	
+eszopiclone	CN1CCN(C(=O)O[C@H]2c3nccnc3C(=O)N2c2ccc(Cl)cn2)CC1	1.5	0.01808	0.005941	12.8846	0.9255	0.018093	success	
+cyclizine	CN1CCN(C(c2ccccc2)c2ccccc2)CC1	50.0	0.0174769047602829	0.290877	35.5019			no_root	f(lo)=1.704, f(hi)=0.512 — same sign
+pirenzepine	CN1CCN(CC(=O)N2c3ccccc3C(=O)Nc3cccnc32)CC1	12.5	0.0121999999999999	0.073751	7.2091			no_root	f(lo)=1.286, f(hi)=0.097 — same sign
+thiothixene	CN1CCN(CC/C=C2/c3ccccc3Sc3ccc(S(=O)(=O)N(C)C)cc32)CC1	20.0	0.0272	0.088526	34.4383	501.1742	0.027204	success	
+trifluoperazine	CN1CCN(CCCN2c3ccccc3Sc3ccc(C(F)(F)F)cc32)CC1	1.0	0.00013	0.006228	36.0079			no_root	f(lo)=2.017, f(hi)=0.748 — same sign
+prochlorperazine	CN1CCN(CCCN2c3ccccc3Sc3ccc(Cl)cc32)CC1	5.0	0.00026	0.043058	36.6262			no_root	f(lo)=2.454, f(hi)=1.206 — same sign
+entrectinib	CN1CCN(c2ccc(C(=O)Nc3n[nH]c4ccc(Cc5cc(F)cc(F)c5)cc34)c(NC3CCOCC3)c2)CC1	600.0	1.2416799211552063	3.246828	19.1287	111.4713	1.241481	success	
+mianserin	CN1CCN2c3ccccc3Cc3ccccc3C2C1	30.0	0.02979	0.160762	40.6604			no_root	f(lo)=1.275, f(hi)=0.084 — same sign
+mirtazapine	CN1CCN2c3ncccc3Cc3ccccc3C2C1	15.0	0.0324894949874615	0.044310	42.6987	56.5253	0.032488	success	
+nefopam	CN1CCOC(c2ccccc2)c2ccccc2C1	20.0	0.01229	0.067131	86.0858			no_root	f(lo)=1.442, f(hi)=0.241 — same sign
+oxymorphone	CN1CC[C@]23c4c5ccc(O)c4O[C@H]2C(=O)CC[C@@]3(O)[C@H]1C5	5.0	0.0010999999999999	0.011655	9.9828			no_root	f(lo)=1.534, f(hi)=0.362 — same sign
+hydromorphone	CN1CC[C@]23c4c5ccc(O)c4O[C@H]2C(=O)CC[C@H]3[C@H]1C5	4.0	0.01295	0.032164	32.4461	121.6430	0.012960	success	
+pholcodine	CN1CC[C@]23c4c5ccc(OCCN6CCOCC6)c4O[C@H]2[C@@H](O)C=C[C@H]3[C@H]1C5	20.0	0.01189	0.032715	53.4962	3274.9116	0.011889	success	
+edoxaban	CN1CCc2nc(C(=O)N[C@@H]3C[C@@H](C(=O)N(C)C)CC[C@@H]3NC(=O)C(=O)Nc3ccc(Cl)cn3)sc2C1	10.0	0.0334999999999999	0.008132	16.3076	0.7060	0.033516	success	
+ergotamine	CN1C[C@H](C(=O)N[C@]2(C)O[C@@]3(O)[C@@H]4CCCN4C(=O)[C@H](Cc4ccccc4)N3C2=O)C=C2c3cccc4[nH]cc(c34)C[C@H]21	2.0	0.00036	0.002201	12.3748	375.8860	0.000360	success	
+nomifensine	CN1Cc2c(N)cccc2C(c2ccccc2)C1	100.0	0.058341066154125	0.421280	32.0170			no_root	f(lo)=1.409, f(hi)=0.236 — same sign
+tropisetron	CN1[C@@H]2CC[C@H]1C[C@@H](OC(=O)c1c[nH]c3ccccc13)C2	5.0	0.00346	0.007541	39.1426	161.6965	0.003459	success	
+scopolamine	CN1[C@@H]2C[C@@H](OC(=O)[C@H](CO)c3ccccc3)C[C@H]1[C@@H]1O[C@@H]12	0.4	0.0004899999999999	0.000394	40.7593	13.5423	0.000491	success	
+nizatidine	CNC(=C[N+](=O)[O-])NCCSCc1csc(CN(C)C)n1	150.0	1.3537296628204614	0.365308	10.7489			no_root	f(lo)=-0.023, f(hi)=-1.130 — same sign
+Almorexant	CNC(=O)[C@@H](c1ccccc1)N1CCc2cc(OC)c(OC)cc2[C@@H]1CCc1ccc(C(F)(F)F)cc1	100.0	0.0503999999999999	0.325090	37.9073	650.4772	0.050396	success	
+fruquintinib	CNC(=O)c1c(C)oc2cc(Oc3ncnc4cc(OC)c(OC)cc34)ccc12	2.0	0.0547	0.013742	8.4652			no_root	f(lo)=-0.440, f(hi)=-1.768 — same sign
+regorafenib	CNC(=O)c1cc(Oc2ccc(NC(=O)Nc3ccc(Cl)c(C(F)(F)F)c3)c(F)c2)ccn1	40.0	0.59914	0.193176	21.4938			no_root	f(lo)=-0.367, f(hi)=-1.741 — same sign
+sorafenib	CNC(=O)c1cc(Oc2ccc(NC(=O)Nc3ccc(Cl)c(C(F)(F)F)c3)cc2)ccn1	50.0	0.46	0.193217	21.1347			no_root	f(lo)=-0.269, f(hi)=-1.624 — same sign
+capmatinib	CNC(=O)c1ccc(-c2cnc3ncc(Cc4ccc5ncccc5c4)n3n2)cc1F	200.0	1.480675521510368	1.069998	16.4243	4.0676	1.480092	success	
+enzalutamide	CNC(=O)c1ccc(N2C(=S)N(c3ccc(C#N)c(C(F)(F)F)c3)C(=O)C2(C)C)cc1F	160.0	4.55485973603195	1.324992	25.7668			no_root	f(lo)=-0.276, f(hi)=-1.606 — same sign
+apalutamide	CNC(=O)c1ccc(N2C(=S)N(c3cnc(C#N)c(C(F)(F)F)c3)C(=O)C23CCC3)cc1F	240.0	3.2500000000000004	1.736488	15.3003			no_root	f(lo)=-0.055, f(hi)=-1.389 — same sign
+axitinib	CNC(=O)c1ccccc1Sc1ccc2c(/C=C/c3ccccn3)n[nH]c2c1	5.0	0.05125538567237	0.013558	31.8561			no_root	f(lo)=-0.388, f(hi)=-1.771 — same sign
+ketamine	CNC1(c2ccccc2Cl)CCCCC1=O	35.35	0.044	0.150236	13.4489			no_root	f(lo)=1.045, f(hi)=0.002 — same sign
+chlordiazepoxide	CNC1=Nc2ccc(Cl)cc2C(c2ccccc2)=[N+]([O-])C1	50.0	3.12	1.187182	10.8349			no_root	f(lo)=-0.147, f(hi)=-1.817 — same sign
+fluoxetine	CNCCC(Oc1ccc(C(F)(F)F)cc1)c1ccccc1	20.0	0.02256	0.032412	146.4405	204.4356	0.022551	success	
+nortriptyline	CNCCC=C1c2ccccc2CCc2ccccc21	25.0	0.0107983332047126	0.145149	89.1206			no_root	f(lo)=1.724, f(hi)=0.566 — same sign
+maprotiline	CNCCCC12CCC(c3ccccc31)c1ccccc12	75.0	0.0230699999999999	0.264874	54.5957			no_root	f(lo)=1.631, f(hi)=0.416 — same sign
+protriptyline	CNCCCC1c2ccccc2C=Cc2ccccc21	30.0	0.0137399999999999	0.201388	31.2651			no_root	f(lo)=1.537, f(hi)=0.286 — same sign
+desipramine	CNCCCN1c2ccccc2CCc2ccccc21	50.0	0.0183432403082008	0.241368	47.0824			no_root	f(lo)=1.561, f(hi)=0.386 — same sign
+atomoxetine	CNCC[C@@H](Oc1ccccc1C)c1ccccc1	25.0	0.2238300734932641	0.401590	185.4000	350.5192	0.223932	success	
+duloxetine	CNCC[C@H](Oc1cccc2ccccc12)c1cccs1	15.0	0.01044	0.029157	197.6386			no_root	f(lo)=1.247, f(hi)=0.007 — same sign
+n-desmethyl zolmitriptan (183c91)	CNCCc1c[nH]c2ccc(C[C@H]3COC(=O)N3)cc12	2.5	0.002	0.003535	18.6669	32.1422	0.001999	success	
+phenylephrine	CNC[C@H](O)c1cccc(O)c1	10.0	0.00135	0.007562	22.0299			no_root	f(lo)=1.505, f(hi)=0.362 — same sign
+vonoprazan	CNCc1cc(-c2ccccc2F)n(S(=O)(=O)c2cccnc2)c1	1.0	0.0005291502622129	0.007091	21.5188			no_root	f(lo)=1.537, f(hi)=0.354 — same sign
+procarbazine	CNNCc1ccc(C(=O)NC(C)C)cc1	300.0	0.561	0.307849	41.4507	8.7841	0.561104	success	
+pseudoephedrine	CN[C@@H](C)[C@@H](O)c1ccccc1	30.0	0.0984999999999999	0.044894	18.1691	2.5722	0.098383	success	
+ephedrine	CN[C@@H](C)[C@H](O)c1ccccc1	50.0	0.1378	0.074521	18.1691	3.4890	0.138050	success	
+frovatriptan	CN[C@@H]1CCc2[nH]c3ccc(C(N)=O)cc3c2C1	2.5	0.0057047329111144	0.003093	12.3645	4.2731	0.005712	success	
+sertraline	CN[C@H]1CC[C@@H](c2ccc(Cl)c(Cl)c2)c2ccccc21	5.0	0.0002999999999999	0.056453	45.0616			no_root	f(lo)=2.499, f(hi)=1.224 — same sign
+esketamine (s-ketamine)	CN[C@]1(c2ccccc2Cl)CCCCC1=O	14.0	0.0082999999999999	0.051226	13.4489			no_root	f(lo)=1.330, f(hi)=0.312 — same sign
+4-methylaminoantipyrine	CNc1c(C)n(C)n(-c2ccccc2)c1=O	750.0	10.599999999999998	7.125751	6.4076	0.9804	10.609466	success	
+cefditoren	CO/N=C(\C(=O)N[C@@H]1C(=O)N2C(C(=O)O)=C(/C=C\c3scnc3C)CS[C@H]12)c1csc(N)n1	200.0	2.3	0.170740	16.3973			no_root	f(lo)=-0.493, f(hi)=-2.144 — same sign
+cefuroxime	CO/N=C(\C(=O)N[C@@H]1C(=O)N2C(C(=O)O)=C(COC(N)=O)CS[C@H]12)c1ccco1	250.0	4.039999999999999	0.111201	6.1515			no_root	f(lo)=-0.957, f(hi)=-2.402 — same sign
+gemifloxacin	CO/N=C1\CN(c2nc3c(cc2F)c(=O)c(C(=O)O)cn3C2CC2)CC1CN	20.0	0.1199999999999999	0.020037	10.5136			no_root	f(lo)=-0.306, f(hi)=-1.501 — same sign
+moxidectin	CO/N=C1\C[C@]2(C[C@@H]3C[C@@H](C/C=C(\C)C[C@@H](C)/C=C/C=C4\CO[C@@H]5[C@H](O)C(C)=C[C@@H](C(=O)O3)[C@]45O)O2)O[C@H](/C(C)=C/C(C)C)[C@H]1C	3.0	0.0223999999999999	0.012843	47.4744	7.4640	0.022378	success	
+monomethyl fumarate	COC(=O)/C=C/C(=O)O	190.0	1.804048779828306	4.491038	8.0574	23.0474	1.803133	success	
+nilvadipine	COC(=O)C1=C(C#N)NC(C)=C(C(=O)OC(C)C)C1c1cccc([N+](=O)[O-])c1	2.0	0.00148	0.010443	69.5307	1778.9533	0.001480	success	
+lercanidipine	COC(=O)C1=C(C)NC(C)=C(C(=O)OC(C)(C)CN(C)CCC(c2ccccc2)c2ccccc2)C1c1cccc([N+](=O)[O-])c1	10.0	0.003	0.031258	55.1988			no_root	f(lo)=1.423, f(hi)=0.056 — same sign
+(r)-lercanidipine	COC(=O)C1=C(C)NC(C)=C(C(=O)OC(C)(C)CN(C)CCC(c2ccccc2)c2ccccc2)[C@@H]1c1cccc([N+](=O)[O-])c1	20.0	0.0016799999999999	0.062516	55.1988			no_root	f(lo)=1.976, f(hi)=0.608 — same sign
+(s)-lercanidipine	COC(=O)C1=C(C)NC(C)=C(C(=O)OC(C)(C)CN(C)CCC(c2ccccc2)c2ccccc2)[C@H]1c1cccc([N+](=O)[O-])c1	20.0	0.00207	0.062516	55.1988			no_root	f(lo)=1.885, f(hi)=0.518 — same sign
+isradipine	COC(=O)C1=C(C)NC(C)=C(C(=O)OC(C)C)C1c1cccc2nonc12	2.5	0.00246	0.008060	98.7456	2246.9604	0.002460	success	
+nifedipine	COC(=O)C1=C(C)NC(C)=C(C(=O)OC)C1c1ccccc1[N+](=O)[O-]	10.0	0.1142466947176963	0.057762	77.4366	21.2875	0.114262	success	
+nisoldipine	COC(=O)C1=C(C)NC(C)=C(C(=O)OCC(C)C)C1c1ccccc1[N+](=O)[O-]	5.0	0.00106	0.021093	89.2754			no_root	f(lo)=1.699, f(hi)=0.328 — same sign
+nicardipine	COC(=O)C1=C(C)NC(C)=C(C(=O)OCCN(C)Cc2ccccc2)C1c1cccc([N+](=O)[O-])c1	10.0	0.013	0.008265	129.0102	39.5301	0.013032	success	
+manidipine	COC(=O)C1=C(C)NC(C)=C(C(=O)OCCN2CCN(C(c3ccccc3)c3ccccc3)CC2)C1c1cccc([N+](=O)[O-])c1	10.0	0.0035099999999999	0.022130	52.0480	829.5181	0.003508	success	
+remimazolam	COC(=O)CC[C@@H]1N=C(c2ccccn2)c2cc(Br)ccc2-n2c(C)cnc21	9.8	0.00455	0.025083	32.5480	3663.5048	0.004551	success	
+riociguat	COC(=O)N(C)c1c(N)nc(-c2nn(Cc3ccccc3F)c3ncccc23)nc1N	0.5	0.0158	0.003637	15.3892			no_root	f(lo)=-0.363, f(hi)=-1.758 — same sign
+encorafenib	COC(=O)N[C@@H](C)CNc1nccc(-c2cn(C(C)C)nc2-c2cc(Cl)cc(NS(C)(=O)=O)c2F)n1	50.0	0.5167475205552514	0.056926	18.8397			no_root	f(lo)=-0.499, f(hi)=-1.848 — same sign
+pibrentasvir	COC(=O)N[C@H](C(=O)N1CCC[C@H]1c1nc2cc([C@H]3CC[C@H](c4cc5nc([C@@H]6CCCN6C(=O)[C@@H](NC(=O)OC)[C@@H](C)OC)[nH]c5cc4F)N3c3cc(F)c(N4CCC(c5ccc(F)cc5)CC4)c(F)c3)c(F)cc2[nH]1)[C@@H](C)OC	1.5	0.0001	0.002821	16.5167			no_root	f(lo)=1.509, f(hi)=0.322 — same sign
+daclatasvir	COC(=O)N[C@H](C(=O)N1CCC[C@H]1c1ncc(-c2ccc(-c3ccc(-c4cnc([C@@H]5CCCN5C(=O)[C@@H](NC(=O)OC)C(C)C)[nH]4)cc3)cc2)[nH]1)C(C)C	1.0	0.0187	0.001290	26.4484			no_root	f(lo)=-0.961, f(hi)=-2.366 — same sign
+elbasvir	COC(=O)N[C@H](C(=O)N1CCC[C@H]1c1ncc(-c2ccc3c(c2)O[C@@H](c2ccccc2)n2c-3cc3cc(-c4cnc([C@@H]5CCCN5C(=O)[C@@H](NC(=O)OC)C(C)C)[nH]4)ccc32)[nH]1)C(C)C	50.0	0.1067299999999999	0.086521	26.8711			no_root	f(lo)=-0.002, f(hi)=-1.241 — same sign
+atazanavir	COC(=O)N[C@H](C(=O)N[C@@H](Cc1ccccc1)[C@@H](O)CN(Cc1ccc(-c2ccccn2)cc1)NC(=O)[C@@H](NC(=O)OC)C(C)(C)C)C(C)(C)C	400.0	2.25558	0.107190	36.6689			no_root	f(lo)=-0.668, f(hi)=-1.956 — same sign
+vericiguat	COC(=O)Nc1c(N)nc(-c2nn(Cc3ccccc3F)c3ncc(F)cc23)nc1N	1.25	0.062	0.004310	34.7599			no_root	f(lo)=-0.843, f(hi)=-2.286 — same sign
+Oxfendazole	COC(=O)Nc1nc2cc([S+]([O-])c3ccccc3)ccc2[nH]1	41.0	0.944	0.190676	59.0448			no_root	f(lo)=-0.158, f(hi)=-1.487 — same sign
+mebendazole	COC(=O)Nc1nc2ccc(C(=O)c3ccccc3)cc2[nH]1	1000.0	0.0309999999999999	5.975243	27.2878			no_root	f(lo)=2.725, f(hi)=1.454 — same sign
+eplerenone	COC(=O)[C@@H]1CC2=CC(=O)CC[C@]2(C)[C@@]23O[C@@H]2C[C@@]2(C)[C@@H](CC[C@@]24CCC(=O)O4)[C@H]13	25.0	0.5865249355313037	0.045734	35.5674			no_root	f(lo)=-0.194, f(hi)=-1.372 — same sign
+yohimbine	COC(=O)[C@@H]1[C@H]2C[C@H]3c4[nH]c5ccccc5c4CCN3C[C@@H]2CC[C@@H]1O	8.0	0.0226299999999999	0.023913	27.1636	17.4445	0.022627	success	
+dexmethylphenidate	COC(=O)[C@H](c1ccccc1)[C@H]1CCCCN1	20.0	0.0237199999999999	0.137929	29.7018			no_root	f(lo)=1.243, f(hi)=0.059 — same sign
+cocaine	COC(=O)[C@H]1[C@@H](OC(=O)c2ccccc2)C[C@@H]2CC[C@H]1N2C	100.0	0.115	0.176475	38.2761	184.0022	0.115015	success	
+deserpidine	COC(=O)[C@H]1[C@H]2C[C@@H]3c4[nH]c5ccccc5c4CCN3C[C@H]2C[C@@H](OC(=O)c2cc(OC)c(OC)c(OC)c2)[C@@H]1OC	0.25	0.00017	0.000125	53.6364	20.6444	0.000170	success	
+nintedanib	COC(=O)c1ccc2c(c1)NC(=O)/C2=C(\Nc1ccc(N(C)C(=O)CN2CCN(C)CC2)cc1)c1ccccc1	50.0	0.0041899999999999	0.204328	33.4601			no_root	f(lo)=2.027, f(hi)=0.656 — same sign
+ambrisentan	COC(c1ccccc1)(c1ccccc1)[C@H](Oc1nc(C)cc(C)n1)C(=O)O	2.5	0.1789999999999999	0.038762	27.4974			no_root	f(lo)=-0.399, f(hi)=-2.140 — same sign
+10alpha-methoxy-9,10-dihydrolysergol	COC12C[C@@H](CO)CN(C)C1Cc1c[nH]c3cccc2c13	30.0	0.03285	0.080704	18.9825	126.8595	0.032853	success	
+idebenone	COC1=C(OC)C(=O)C(CCCCCCCCCCO)=C(C)C1=O	150.0	1.631	0.593478	47.9156	2.7615	1.629662	success	
+griseofulvin	COC1=CC(=O)C[C@@H](C)[C@]12Oc1c(Cl)c(OC)cc(OC)c1C2=O	125.0	1.1	1.223875	24.8948	19.8315	1.100394	success	
+cefpodoxime	COCC1=C(C(=O)O)N2C(=O)[C@@H](NC(=O)/C(=N\OC)c3csc(N)n3)[C@H]2SC1	100.0	1.258912136198182	0.178054	4.9792			no_root	f(lo)=-0.408, f(hi)=-1.945 — same sign
+prucalopride	COCCCN1CCC(NC(=O)c2cc(Cl)c(N)c3c2OCC3)CC1	2.0	0.0047767863531869	0.002188	26.7424	3.4027	0.004778	success	
+aliskiren	COCCCOc1cc(C[C@@H](C[C@H](N)[C@@H](O)C[C@H](C(=O)NCC(C)(C)C(N)=O)C(C)C)C(C)C)ccc1OC	75.0	0.0403806884537646	0.014854	30.0816	2.9596	0.040366	success	
+rabeprazole	COCCCOc1ccnc(C[S+]([O-])c2nc3ccccc3[nH]2)c1C	10.0	0.2170345594600085	0.099236	82.8256	13.5787	0.217021	success	
+nimodipine	COCCOC(=O)C1=C(C)NC(C)=C(C(=O)OC(C)C)C1c1cccc([N+](=O)[O-])c1	60.0	0.0332705575546909	0.039048	102.4838	83.8490	0.033304	success	
+Preladenant	COCCOc1ccc(N2CCN(CCn3ncc4c3nc(N)n3nc(-c5ccco5)nc43)CC2)cc1	5.0	0.0705	0.013444	18.8856			no_root	f(lo)=-0.367, f(hi)=-1.759 — same sign
+metoprolol	COCCc1ccc(OCC(O)CNC(C)C)cc1	50.0	0.0742874148157007	0.057487	195.8011	28.7477	0.074279	success	
+lacosamide	COC[C@@H](NC(C)=O)C(=O)NCc1ccccc1	50.0	1.6743954132760874	0.089131	17.2996			no_root	f(lo)=-0.480, f(hi)=-1.623 — same sign
+velpatasvir	COC[C@H]1C[C@@H](c2ncc(-c3ccc4c(c3)COc3cc5c(ccc6nc([C@@H]7CC[C@H](C)N7C(=O)[C@@H](NC(=O)OC)C(C)C)[nH]c65)cc3-4)[nH]2)N(C(=O)[C@H](NC(=O)OC)c2ccccc2)C1	5.0	0.0223999999999999	0.006331	24.8193			no_root	f(lo)=-0.433, f(hi)=-1.817 — same sign
+cerivastatin	COCc1c(C(C)C)nc(C(C)C)c(/C=C/[C@@H](O)C[C@@H](O)CC(=O)O)c1-c1ccc(F)cc1	0.1	0.0010540398474441	0.001066	10.0350	6.6347	0.001054	success	
+relugolix	CONC(=O)Nc1ccc(-c2sc3c(c2CN(C)C)c(=O)n(-c2ccc(OC)nn2)c(=O)n3Cc2c(F)cccc2F)cc1	80.0	0.0396	0.098104	21.0936	83.0821	0.039578	success	
+spiramycin	CO[C@@H]1[C@@H](O[C@@H]2O[C@H](C)[C@@H](O[C@H]3C[C@@](C)(O)[C@@H](O)[C@H](C)O3)[C@H](N(C)C)[C@H]2O)[C@@H](CC=O)C[C@@H](C)[C@@H](O[C@H]2CC[C@H](N(C)C)[C@@H](C)O2)/C=C/C=C/C[C@@H](C)OC(=O)C[C@H]1O	1000.0	0.96	0.243306	105.2891	6.9189	0.960213	success	
+midostaurin	CO[C@@H]1[C@H](N(C)C(=O)c2ccccc2)C[C@H]2O[C@]1(C)n1c3ccccc3c3c4c(c5c6ccccc6n2c5c31)C(=O)NC4	50.0	1.6030375931961172	0.436068	30.0760			no_root	f(lo)=-0.462, f(hi)=-1.742 — same sign
+rifampicin	CO[C@H]1/C=C/O[C@@]2(C)Oc3c(C)c(O)c4c(O)c(c(/C=N/N5CCN(C)CC5)c(O)c4c3C2=O)NC(=O)/C(C)=C\C=C\[C@H](C)[C@H](O)[C@@H](C)[C@@H](O)[C@@H](C)[C@H](OC(C)=O)[C@@H]1C	300.0	5.222068555658764	0.196540	7.3525			no_root	f(lo)=-1.121, f(hi)=-2.378 — same sign
+rifapentine	CO[C@H]1/C=C/O[C@@]2(C)Oc3c(C)c(O)c4c(O)c(c(/C=N/N5CCN(C6CCCC6)CC5)c(O)c4c3C2=O)NC(=O)/C(C)=C\C=C\[C@H](C)[C@H](O)[C@@H](C)[C@@H](O)[C@@H](C)[C@H](OC(C)=O)[C@@H]1C	150.0	3.6	0.118677	6.5769			no_root	f(lo)=-1.388, f(hi)=-2.653 — same sign
+rifaximin	CO[C@H]1/C=C/O[C@@]2(C)Oc3c(C)c(O)c4c(O)c(c5c(nc6cc(C)ccn65)c4c3C2=O)NC(=O)/C(C)=C\C=C\[C@H](C)[C@H](O)[C@@H](C)[C@@H](O)[C@@H](C)[C@H](OC(C)=O)[C@@H]1C	200.0	0.0015899999999999	0.363078	11.2823			no_root	f(lo)=2.591, f(hi)=1.167 — same sign
+rifabutin	CO[C@H]1/C=C/O[C@@]2(C)Oc3c(C)c(O)c4c(c3C2=O)C2=NC3(CCN(CC(C)C)CC3)NC2=C(NC(=O)/C(C)=C\C=C\[C@H](C)[C@H](O)[C@@H](C)[C@@H](O)[C@@H](C)[C@H](OC(C)=O)[C@@H]1C)C4=O	150.0	0.1879	0.098668	9.7228	1.1920	0.187893	success	
+sirolimus	CO[C@H]1C[C@@H]2CC[C@@H](C)[C@@](O)(O2)C(=O)C(=O)N2CCCC[C@H]2C(=O)O[C@H]([C@H](C)C[C@@H]2CC[C@@H](O)[C@H](OC)C2)CC(=O)[C@H](C)/C=C(\C)[C@@H](O)[C@@H](OC)C(=O)[C@H](C)C[C@H](C)/C=C/C=C/C=C/1C	2.0	0.0049	0.002611	79.2403	17.3940	0.004899	success	
+everolimus	CO[C@H]1C[C@@H]2CC[C@@H](C)[C@@](O)(O2)C(=O)C(=O)N2CCCC[C@H]2C(=O)O[C@H]([C@H](C)C[C@@H]2CC[C@@H](OCCO)[C@H](OC)C2)CC(=O)[C@H](C)/C=C(\C)[C@@H](O)[C@@H](OC)C(=O)[C@H](C)C[C@H](C)/C=C/C=C/C=C/1C	2.0	0.0172261624113814	0.001654	81.2243			no_root	f(lo)=-0.073, f(hi)=-1.247 — same sign
+Ridaforolimus	CO[C@H]1C[C@@H]2CC[C@@H](C)[C@@](O)(O2)C(=O)C(=O)N2CCCC[C@H]2C(=O)O[C@H]([C@H](C)C[C@@H]2CC[C@@H](OP(C)(C)=O)[C@H](OC)C2)CC(=O)[C@H](C)/C=C(\C)[C@@H](O)[C@@H](OC)C(=O)[C@H](C)C[C@H](C)/C=C/C=C/C=C/1C	5.0	0.0075	0.004876	86.6732	27.4512	0.007497	success	
+artemether	CO[C@H]1O[C@@H]2O[C@@]3(C)CC[C@H]4[C@H](C)CC[C@@H]([C@H]1C)[C@@]24OO3	100.0	0.042	0.354957	47.9414			no_root	f(lo)=1.400, f(hi)=0.074 — same sign
+pralsetinib	CO[C@]1(C(=O)N[C@@H](C)c2ccc(-n3cc(F)cn3)nc2)CC[C@H](c2nc(C)cc(Nc3cc(C)[nH]n3)n2)CC1	200.0	0.6333340350873305	0.700648	24.4311	24.2341	0.633339	success	
+mycophenolic acid	COc1c(C)c2c(c(O)c1C/C=C(\C)CCC(=O)O)C(=O)OC2	500.0	15.272257913831869	5.909296	19.4731			no_root	f(lo)=-0.102, f(hi)=-1.842 — same sign
+mycophenolate mofetil	COc1c(C)c2c(c(O)c1C/C=C(\C)CCC(=O)OCCN1CCOCC1)C(=O)OC2	500.0	0.0029793959119257	1.593577	59.3943			no_root	f(lo)=3.203, f(hi)=1.799 — same sign
+gatifloxacin	COc1c(N2CCNC(C)C2)c(F)cc2c(=O)c(C(=O)O)cn(C3CC3)c12	400.0	3.918968085996582	0.735162	7.4298			no_root	f(lo)=-0.248, f(hi)=-1.291 — same sign
+Nemonoxacin	COc1c(N2C[C@@H](C)C[C@H](N)C2)ccc2c(=O)c(C(=O)O)cn(C3CC3)c12	25.0	0.15	0.078710	15.2891	2.3312	0.149989	success	
+methoxsalen	COc1c2occc2cc2ccc(=O)oc12	40.0	0.178	0.472941	48.0632	156.9701	0.177671	success	
+pinaverium	COc1cc(Br)c(C[N+]2(CCOCCC3CCC4CC3C4(C)C)CCOCC2)cc1OC	50.0	0.0017099999999999	0.068295	44.1072			no_root	f(lo)=2.067, f(hi)=0.690 — same sign
+zafirlukast	COc1cc(C(=O)NS(=O)(=O)c2ccccc2C)ccc1Cc1cn(C)c2ccc(NC(=O)OC3CCCC3)cc12	20.0	0.597534936217122	0.056717	26.1052			no_root	f(lo)=-0.892, f(hi)=-2.155 — same sign
+iloperidone	COc1cc(C(C)=O)ccc1OCCCN1CCC(c2noc3cc(F)ccc23)CC1	4.0	0.0032399999999999	0.026861	20.2812	778.2815	0.003240	success	
+gefapixant	COc1cc(C(C)C)c(Oc2cnc(N)nc2N)cc1S(N)(=O)=O	10.0	0.0715	0.004508	17.9320			no_root	f(lo)=-0.405, f(hi)=-1.687 — same sign
+acitretin	COc1cc(C)c(/C=C/C(C)=C/C=C/C(C)=C/C(=O)O)c(C)c1C	50.0	0.245	0.267520	37.4296	72.1306	0.245000	success	
+ro 13-7652	COc1cc(C)c(/C=C/C(C)=C/C=C/C(C)=C\C(=O)O)c(C)c1C	50.0	0.0205999999999999	0.267520	37.4296			no_root	f(lo)=1.168, f(hi)=0.295 — same sign
+tafenoquine	COc1cc(C)c2c(Oc3cccc(C(F)(F)F)c3)c(OC)cc(NC(C)CCCN)c2n1	200.0	0.13818	1.153306	63.3678	4225.8922	0.137866	success	
+Anacetrapib	COc1cc(F)c(C(C)C)cc1-c1ccc(C(F)(F)F)cc1CN1C(=O)O[C@H](c2cc(C(F)(F)F)cc(C(F)(F)F)c2)[C@@H]1C	2.0	0.0153	0.012246	42.7068	5.8653	0.015294	success	
+cisapride	COc1cc(N)c(Cl)cc1C(=O)N[C@@H]1CCN(CCCOc2ccc(F)cc2)C[C@@H]1OC	10.0	0.0392199999999999	0.108407	13.0549	82.1749	0.039224	success	
+brigatinib	COc1cc(N2CCC(N3CCN(C)CC3)CC2)ccc1Nc1ncc(Cl)c(Nc2ccccc2P(C)(C)=O)n1	90.0	0.3394497606421309	0.049814	18.1290			no_root	f(lo)=-0.223, f(hi)=-1.401 — same sign
+primaquine	COc1cc(NC(C)CCCN)c2ncccc2c1	15.0	0.0465606408128129	0.028621	55.3322	21.4806	0.046535	success	
+bosutinib	COc1cc(Nc2c(C#N)cnc3cc(OCCCN4CCN(C)CC4)c(OC)cc23)c(Cl)cc1Cl	200.0	0.0168999999999999	0.949219	13.5712			no_root	f(lo)=2.062, f(hi)=0.749 — same sign
+tamatinib (r406)	COc1cc(Nc2ncc(F)c(Nc3ccc4c(n3)NC(=O)C(C)(C)O4)n2)cc(OC)c1OC	150.0	0.3129999999999999	0.430772	33.3596	42.5978	0.313172	success	
+erdafitinib	COc1cc(OC)cc(N(CCNC(C)C)c2ccc3ncc(-c4cnn(C)c4)nc3c2)c1	4.0	0.138	0.026250	43.7467			no_root	f(lo)=-0.612, f(hi)=-1.879 — same sign
+etoposide	COc1cc([C@@H]2c3cc4c(cc3[C@@H](O[C@@H]3O[C@@H]5CO[C@@H](C)O[C@H]5[C@H](O)[C@H]3O)[C@H]3COC(=O)[C@H]23)OCO4)cc(OC)c1O	100.0	3.0	0.238105	9.5226			no_root	f(lo)=-0.881, f(hi)=-2.520 — same sign
+vandetanib	COc1cc2c(Nc3ccc(Br)cc3F)ncnc2cc1OCC1CCN(C)CC1	300.0	0.1531621659056195	1.269337	9.7037	1061.5824	0.153168	success	
+donepezil	COc1cc2c(cc1OC)C(=O)C(CC1CCN(Cc3ccccc3)CC1)C2	2.0	0.0031999999999999	0.004835	35.4924	45.2993	0.003203	success	
+tetrabenazine	COc1cc2c(cc1OC)C1CC(=O)C(CC(C)C)CN1CC2	25.0	0.000693829950348	0.152727	40.5210			no_root	f(lo)=2.735, f(hi)=1.539 — same sign
+dihydrotetrabenazine (htbz)	COc1cc2c(cc1OC)C1CC(O)C(CC(C)C)CN1CC2	15.0	0.0225	0.092754	38.8624	255.6729	0.022472	success	
+ivabradine	COc1cc2c(cc1OC)CC(=O)N(CCCN(C)C[C@H]1Cc3cc(OC)c(OC)cc31)CC2	5.0	0.0087	0.002395	45.1110	2.6401	0.008700	success	
+moexiprilat	COc1cc2c(cc1OC)CN(C(=O)[C@H](C)N[C@@H](CCc1ccccc1)C(=O)O)[C@H](C(=O)O)C2	15.0	0.0183999999999999	0.007181	26.9440	4.8665	0.018448	success	
+valbenazine	COc1cc2c(cc1OC)[C@H]1C[C@@H](OC(=O)[C@@H](N)C(C)C)[C@H](CC(C)C)CN1CC2	1.0	0.00294	0.007499	33.5695	162.5671	0.002940	success	
+alfuzosin	COc1cc2nc(N(C)CCCNC(=O)C3CCCO3)nc(N)c2cc1OC	1.0	0.0025999999999999	0.001166	10.8536	1.3944	0.002597	success	
+terazosin	COc1cc2nc(N3CCN(C(=O)C4CCCO4)CC3)nc(N)c2cc1OC	1.0	0.0196	0.015281	8.3743	2.7362	0.019603	success	
+doxazosin	COc1cc2nc(N3CCN(C(=O)C4COc5ccccc5O4)CC3)nc(N)c2cc1OC	1.0	0.0074399999999999	0.007834	15.6670	11.3306	0.007455	success	
+prazosin	COc1cc2nc(N3CCN(C(=O)c4ccco4)CC3)nc(N)c2cc1OC	0.5	0.00249	0.003538	9.1236	10.8010	0.002483	success	
+cabozantinib	COc1cc2nccc(Oc3ccc(NC(=O)C4(C(=O)Nc5ccc(F)cc5)CC4)cc3)c2cc1OC	20.0	0.117	0.124230	6.8394	9.7509	0.116978	success	
+lenvatinib	COc1cc2nccc(Oc3ccc(NC(=O)NC4CC4)c(Cl)c3)c2cc1C(N)=O	5.0	0.0437399999999999	0.022936	7.4214			no_root	f(lo)=-0.165, f(hi)=-1.555 — same sign
+tivozanib	COc1cc2nccc(Oc3ccc(NC(=O)Nc4cc(C)on4)c(Cl)c3)c2cc1OC	1.5	0.0209641292391017	0.010322	12.3750			no_root	f(lo)=-0.197, f(hi)=-1.567 — same sign
+dacomitinib	COc1cc2ncnc(Nc3ccc(F)c(Cl)c3)c2cc1NC(=O)/C=C/CN1CCCCC1	30.0	0.0137498654538871	0.185586	6.2628	1180.3064	0.013748	success	
+gefitinib	COc1cc2ncnc(Nc3ccc(F)c(Cl)c3)c2cc1OCCCN1CCOCC1	50.0	0.0118	0.404020	13.0470			no_root	f(lo)=1.815, f(hi)=0.580 — same sign
+anethole trithione	COc1ccc(-c2cc(=S)ss2)cc1	75.0	0.00096	0.486375	43.7074			no_root	f(lo)=3.229, f(hi)=2.086 — same sign
+arzoxifene	COc1ccc(-c2sc3cc(O)ccc3c2Oc2ccc(OCCN3CCCCC3)cc2)cc1	10.0	0.0008	0.021181	49.2385			no_root	f(lo)=1.618, f(hi)=0.234 — same sign
+daridorexant	COc1ccc(-n2nccn2)c(C(=O)N2CCC[C@@]2(C)c2nc3c(C)c(Cl)ccc3[nH]2)c1	25.0	0.8195877012254393	0.161073	27.3840			no_root	f(lo)=-0.589, f(hi)=-1.931 — same sign
+Fipaxalparant	COc1ccc(C(=O)NC2(C(=O)O)Cc3ccccc3C2)cc1OCCc1cccc(C)c1	150.0	11.099999999999998	0.643517	37.0110			no_root	f(lo)=-0.760, f(hi)=-2.515 — same sign
+encainide	COc1ccc(C(=O)Nc2ccccc2CCC2CCCCN2C)cc1	25.0	0.0607999999999999	0.103815	89.0138	122.9676	0.060623	success	
+venlafaxine	COc1ccc(C(CN(C)C)C2(O)CCCCC2)cc1	25.0	0.037	0.036232	24.5788	14.1450	0.037091	success	
+formoterol	COc1ccc(CC(C)NCC(O)c2ccc(O)c(NC=O)c2)cc1	0.17	9.399999999999993e-05	0.000278	8.6609	51.4506	0.000094	success	
+verapamil	COc1ccc(CCN(C)CCCC(C#N)(c2ccc(OC)c(OC)c2)C(C)C)cc1OC	0.1	3.400000000000002e-05	0.000160	159.3936			no_root	f(lo)=1.499, f(hi)=0.198 — same sign
+astemizole	COc1ccc(CCN2CCC(Nc3nc4ccccc4n3Cc3ccc(F)cc3)CC2)cc1	10.0	0.00074	0.016911	83.6530			no_root	f(lo)=1.900, f(hi)=0.538 — same sign
+vernakalant	COc1ccc(CCO[C@@H]2CCCC[C@H]2N2CC[C@@H](O)C2)cc1OC	240.0	0.4811999999999999	1.108468	15.8562	46.2088	0.481172	success	
+eluxadoline	COc1ccc(CN(C(=O)[C@@H](N)Cc2c(C)cc(C(N)=O)cc2C)[C@@H](C)c2nc(-c3ccccc3)c[nH]2)cc1C(=O)O	100.0	0.0033769870329216	0.023573	35.9791			no_root	f(lo)=1.825, f(hi)=0.240 — same sign
+trimetazidine	COc1ccc(CN2CCNCC2)c(OC)c1OC	20.0	0.0735468286195945	0.049196	20.5245	5.7963	0.073346	success	
+avanafil	COc1ccc(CNc2nc(N3CCC[C@H]3CO)ncc2C(=O)NCc2ncccn2)cc1Cl	50.0	1.206	0.264816	25.4077			no_root	f(lo)=-0.465, f(hi)=-2.029 — same sign
+papaverine	COc1ccc(Cc2nccc3cc(OC)c(OC)cc23)cc1OC	80.0	0.1815	0.222193	56.5443	51.9616	0.181997	success	
+glyburide	COc1ccc(Cl)cc1C(=O)NCCc1ccc(S(=O)(=O)NC(=O)NC2CCCCC2)cc1	1.75	0.0911	0.041094	12.3397			no_root	f(lo)=-0.288, f(hi)=-1.734 — same sign
+desglymidodrine	COc1ccc(OC)c(C(O)CN)c1	2.5	0.00565	0.007604	4.8788	4.9439	0.005646	success	
+midodrine	COc1ccc(OC)c(C(O)CNC(=O)CN)c1	2.5	0.01165	0.008496	3.8439	0.4129	0.011651	success	
+diltiazem	COc1ccc([C@@H]2Sc3ccccc3N(CCN(C)C)C(=O)[C@@H]2OC(C)=O)cc1	60.0	0.0582957974471573	0.187683	32.5921	721.9507	0.058286	success	
+melatonin	COc1ccc2[nH]cc(CCNC(C)=O)c2c1	2.0	0.00217	0.013166	19.6889			no_root	f(lo)=1.313, f(hi)=0.119 — same sign
+acemetacin	COc1ccc2c(c1)c(CC(=O)OCC(=O)O)c(C)n2C(=O)c1ccc(Cl)cc1	60.0	0.245	0.252729	14.3482	10.0799	0.245165	success	
+noscapine	COc1ccc2c(c1OC)C(=O)O[C@@H]2[C@H]1c2c(cc3c(c2OC)OCO3)CCN1C	100.0	0.129	0.364548	35.8381	134.7131	0.128913	success	
+oxycodone	COc1ccc2c3c1O[C@H]1C(=O)CC[C@@]4(O)[C@@H](C2)N(C)CC[C@]314	5.0	0.01	0.010086	27.5793	16.4532	0.009973	success	
+hydrocodone	COc1ccc2c3c1O[C@H]1C(=O)CC[C@H]4[C@@H](C2)N(C)CC[C@]314	20.0	0.02274	0.039771	36.6196	213.5279	0.022741	success	
+galantamine	COc1ccc2c3c1O[C@H]1C[C@@H](O)C=C[C@@]31CCN(C)C2	4.0	0.022289010745208	0.004481	45.4491	0.8700	0.022277	success	
+dihydrocodeine	COc1ccc2c3c1O[C@H]1[C@@H](O)CC[C@H]4[C@@H](C2)N(C)CC[C@@]341	20.0	0.0592034602029306	0.031792	43.1087	8.0642	0.059224	success	
+6-methoxy-2-naphthylacetic acid	COc1ccc2cc(CC(=O)O)ccc2c1	500.0	12.75	7.749936	33.0338	7.3733	12.749481	success	
+nabumetone	COc1ccc2cc(CCC(C)=O)ccc2c1	500.0	0.56		76.8731			error	bound eval: (34, 'Numerical result out of range')
+naproxen	COc1ccc2cc([C@H](C)C(=O)O)ccc2c1	250.0	44.3	5.700173	51.4573			no_root	f(lo)=-0.547, f(hi)=-2.102 — same sign
+agomelatine	COc1ccc2cccc(CCNC(C)=O)c2c1	25.0	0.0098093200936572	0.164334	84.2754			no_root	f(lo)=1.802, f(hi)=0.591 — same sign
+omeprazole	COc1ccc2nc([S+]([O-])Cc3ncc(C)c(OC)c3C)[nH]c2c1	20.0	0.4899999999999999	0.200680	38.9004	0.9616	0.489989	success	
+elagolix	COc1cccc(-c2c(C)n(Cc3c(F)cccc3C(F)(F)F)c(=O)n(C[C@H](NCCCC(=O)O)c3ccccc3)c2=O)c1F	25.0	0.0555	0.060485	17.8525	12.4394	0.055546	success	
+tramadol	COc1cccc(C2(O)CCCCC2CN(C)C)c1	100.0	0.29	0.226366	24.8933	8.7537	0.290126	success	
+letermovir	COc1cccc(N2CCN(C3=Nc4c(F)cccc4[C@H](CC(=O)O)N3c3cc(C(F)(F)F)ccc3OC)CC2)c1	240.0	11.000000000000002	2.577527	13.5853			no_root	f(lo)=-0.573, f(hi)=-1.965 — same sign
+methocarbamol	COc1ccccc1OCC(O)COC(N)=O	1500.0	23.003388880771464	3.938885	10.3675			no_root	f(lo)=-0.127, f(hi)=-1.382 — same sign
+carvedilol	COc1ccccc1OCCNCC(O)COc1cccc2[nH]c3ccccc3c12	6.25	0.02126	0.019764	30.4092	18.0545	0.021264	success	
+bosentan	COc1ccccc1Oc1c(NS(=O)(=O)c2ccc(C(C)(C)C)cc2)nc(-c2ncccn2)nc1OCCO	3.0	0.0386799999999999	0.006060	10.4442			no_root	f(lo)=-0.702, f(hi)=-2.027 — same sign
+pantoprazole	COc1ccnc(C[S+]([O-])c2nc3ccc(OC(F)F)cc3[nH]2)c1OC	40.0	2.644252238167657	0.491971	32.9421			no_root	f(lo)=-0.458, f(hi)=-1.866 — same sign
+moxonidine	COc1nc(C)nc(Cl)c1NC1=NCCN1	0.2	0.0013390421609688	0.000776	2.8959	0.2803	0.001338	success	
+bedaquiline	COc1nc2ccc(Br)cc2cc1[C@@H](c1ccccc1)[C@@](O)(CCN(C)C)c1cccc2ccccc12	100.0	1.16	0.765522	18.2366			no_root	f(lo)=-0.113, f(hi)=-1.302 — same sign
+Golidocitinib	COc1nn(C)cc1Nc1nccc(-c2c[nH]c3c(NC(=O)[C@@H](C)N4CCN(C)CC4)cccc23)n1	5.0	0.00514	0.004828	17.5284	10.1824	0.005152	success	
+lapatinib	CS(=O)(=O)CCNCc1ccc(-c2ccc3ncnc(Nc4ccc(OCc5cccc(F)c5)c(Cl)c4)c3c2)o1	100.0	0.115	0.588262	47.0518	579.9210	0.115040	success	
+Iguratimod	CS(=O)(=O)Nc1cc2occ(NC=O)c(=O)c2cc1Oc1ccccc1	25.0	1.24	0.200734	16.9332			no_root	f(lo)=-0.641, f(hi)=-2.085 — same sign
+nimesulide	CS(=O)(=O)Nc1ccc([N+](=O)[O-])cc1Oc1ccccc1	100.0	3.2310060352775576	0.712873	34.7713			no_root	f(lo)=-0.287, f(hi)=-1.652 — same sign
+busulfan	CS(=O)(=O)OCCCCOS(C)(=O)=O	2.0	0.0321999999999999	0.019694	6.0144	1.4212	0.032202	success	
+laropiprant	CS(=O)(=O)c1cc(F)cc2c3c(n(Cc4ccc(Cl)cc4)c12)[C@@H](CC(=O)O)CC3	40.0	0.9561373577265222	0.688596	4.3628			no_root	f(lo)=-0.077, f(hi)=-1.727 — same sign
+vismodegib	CS(=O)(=O)c1ccc(C(=O)Nc2ccc(Cl)c(-c3ccccn3)c2)c(Cl)c1	150.0	2.47727	0.925010	25.2156			no_root	f(lo)=-0.276, f(hi)=-1.680 — same sign
+rofecoxib	CS(=O)(=O)c1ccc(C2=C(c3ccccc3)C(=O)OC2)cc1	12.5	0.1321294819485794	0.073057	20.8047	4.6345	0.132194	success	
+Omarigliptin	CS(=O)(=O)n1cc2c(n1)CN([C@H]1CO[C@H](c3cc(F)ccc3F)[C@@H](N)C1)C2	0.5	0.00259	0.002448	12.1534	6.6186	0.002582	success	
+sulindac sulfide	CSc1ccc(/C=C2/C(C)=C(CC(=O)O)c3cc(F)ccc32)cc1	150.0	2.6	1.185778	31.8239			no_root	f(lo)=-0.227, f(hi)=-1.444 — same sign
+fexinidazole	CSc1ccc(OCc2ncc([N+](=O)[O-])n2C)cc1	100.0	0.1299999999999999	0.973606	51.3404	3273.3841	0.129970	success	
+thioridazine	CSc1ccc2c(c1)N(CCC1CCCCN1C)c1ccccc1S2	25.0	0.1108299999999999	0.131971	94.2754	76.7518	0.110932	success	
+(r)-fenoprofen	C[C@@H](C(=O)O)c1cccc(Oc2ccccc2)c1	600.0	10.8	14.149195	63.1771	68.8178	10.781086	success	
+ergometrine	C[C@@H](CO)NC(=O)[C@@H]1C=C2c3cccc4[nH]cc(c34)C[C@H]2N(C)C1	0.2	0.0010399999999999	0.000222	17.9978	0.6108	0.001042	success	
+lisdexamfetamine	C[C@@H](Cc1ccccc1)NC(=O)[C@@H](N)CCCCN	30.0	0.0157	0.081874	12.8537			no_root	f(lo)=1.274, f(hi)=0.113 — same sign
+(+)-prenylamine	C[C@@H](Cc1ccccc1)NCCC(c1ccccc1)c1ccccc1	200.0	0.0091999999999999	1.148986	48.4943			no_root	f(lo)=2.471, f(hi)=1.142 — same sign
+cinacalcet	C[C@@H](NCCCc1cccc(C(F)(F)F)c1)c1cccc2ccccc12	25.0	0.0068220817937049	0.101768	34.9376			no_root	f(lo)=1.655, f(hi)=0.354 — same sign
+ritodrine	C[C@@H](NCCc1ccc(O)cc1)[C@@H](O)c1ccc(O)cc1	10.0	0.0040999999999999	0.007219	40.9281	128.6415	0.004100	success	
+Evocalcet	C[C@@H](N[C@H]1CCN(c2ccc(CC(=O)O)cc2)C1)c1cccc2ccccc12	1.0	0.059	0.003701	27.5923			no_root	f(lo)=-1.008, f(hi)=-2.386 — same sign
+rolapitant	C[C@@H](OC[C@@]1(c2ccccc2)CC[C@]2(CCC(=O)N2)CN1)c1cc(C(F)(F)F)cc(C(F)(F)F)c1	180.0	0.9474386999325534	0.742136	34.0067	0.8720	0.947435	success	
+aprepitant	C[C@@H](O[C@H]1OCCN(Cc2n[nH]c(=O)[nH]2)[C@H]1c1ccc(F)cc1)c1cc(C(F)(F)F)cc(C(F)(F)F)c1	80.0	0.6578999999999999	0.429247	10.7632			no_root	f(lo)=-0.047, f(hi)=-1.183 — same sign
+crizotinib	C[C@@H](Oc1cc(-c2cnn(C3CCNCC3)c2)cnc1N)c1c(Cl)ccc(F)c1Cl	150.0	0.0654999999999999	0.791378	4.8824	740.9841	0.065503	success	
+Savolitinib	C[C@@H](c1ccc2nccn2c1)n1nnc2ncc(-c3cnn(C)c3)nc21	600.0	2.36	5.816628	21.4723	60.4494	2.359882	success	
+isavuconazole	C[C@@H](c1nc(-c2ccc(C#N)cc2)cs1)[C@](O)(Cn1cncn1)c1cc(F)ccc1F	100.0	0.84	1.216761	13.8881	31.6576	0.840650	success	
+voriconazole	C[C@@H](c1ncncc1F)[C@](O)(Cn1cncn1)c1ccc(F)cc1F	50.0	0.135	0.280631	12.0013	29.2494	0.134872	success	
+Milvexian	C[C@@H]1CCC[C@H](n2cnc(-c3cc(Cl)ccc3-n3cc(Cl)nn3)cc2=O)c2cc(ccn2)-c2c(cnn2C(F)F)NC1=O	4.0	0.0133	0.014229	12.6691	9.8712	0.013310	success	
+tofacitinib	C[C@@H]1CCN(C(=O)CC#N)C[C@@H]1N(C)c1ncnc2[nH]ccc12	0.1	0.0012699999999999	0.000324	8.1889			no_root	f(lo)=-0.080, f(hi)=-1.213 — same sign
+dolutegravir (s/gsk1394572)	C[C@@H]1CCO[C@H]2Cn3cc(C(=O)NCc4ccc(F)cc4F)c(=O)c(O)c3C(=O)N12	2.0	0.231	0.018905	15.4944			no_root	f(lo)=-0.958, f(hi)=-2.406 — same sign
+Ensartinib	C[C@@H]1CN(C(=O)c2ccc(NC(=O)c3cc(O[C@H](C)c4c(Cl)ccc(F)c4Cl)c(N)nn3)cc2)C[C@H](C)N1	225.0	0.264	0.459315	9.2675	17.6990	0.264858	success	
+levocabastine	C[C@@H]1CN([C@H]2CC[C@](C#N)(c3ccc(F)cc3)CC2)CC[C@]1(C(=O)O)c1ccccc1	0.5	0.0074	0.002194	12.1257			no_root	f(lo)=-0.326, f(hi)=-1.659 — same sign
+sparfloxacin	C[C@@H]1CN(c2c(F)c(N)c3c(=O)c(C(=O)O)cn(C4CC4)c3c2F)C[C@H](C)N1	200.0	0.6979648988308795	0.405013	6.8287	1.2824	0.698150	success	
+Zoliflodacin	C[C@@H]1CN2c3c(cc4c(N5C(=O)OC[C@@H]5C)noc4c3F)CC3(C(=O)NC(=O)NC3=O)[C@H]2[C@H](C)O1	200.0	2.01	0.634305	9.9404			no_root	f(lo)=-0.042, f(hi)=-1.450 — same sign
+vamorolone	C[C@@H]1C[C@H]2[C@@H]3CCC4=CC(=O)C=C[C@]4(C)C3=CC[C@]2(C)[C@@]1(O)C(=O)CO	7.0	0.0130999999999999	0.033205	24.3602	70.8731	0.013139	success	
+dexamethasone	C[C@@H]1C[C@H]2[C@@H]3CCC4=CC(=O)C=C[C@]4(C)[C@@]3(F)[C@@H](O)C[C@]2(C)[C@@]1(O)C(=O)CO	0.5	0.0078999999999999	0.000684	25.1494			no_root	f(lo)=-0.292, f(hi)=-1.592 — same sign
+fluocortolone	C[C@@H]1C[C@H]2[C@@H]3C[C@H](F)C4=CC(=O)C=C[C@]4(C)[C@H]3[C@@H](O)C[C@]2(C)[C@H]1C(=O)CO	10.0	0.086	0.006225	47.1615			no_root	f(lo)=-0.232, f(hi)=-1.321 — same sign
+fosfomycin	C[C@@H]1O[C@@H]1P(=O)(O)O	2000.0	16.0	13.428880	10.0028	5.1242	15.991607	success	
+atogepant	C[C@@H]1[C@H](c2c(F)ccc(F)c2F)C[C@H](NC(=O)c2cnc3c(c2)C[C@@]2(C3)C(=O)Nc3ncccc32)C(=O)N1CC(F)(F)F	40.0	0.48885	0.141170	17.6274			no_root	f(lo)=-0.208, f(hi)=-1.546 — same sign
+ubrogepant	C[C@@H]1[C@H](c2ccccc2)C[C@H](NC(=O)c2cnc3c(c2)C[C@@]2(C3)C(=O)Nc3ncccc32)C(=O)N1CC(F)(F)F	25.0	0.0942	0.028310	17.6122	0.1078	0.094194	success	
+zuranolone	C[C@@]1(O)CC[C@H]2[C@H](CC[C@@H]3[C@@H]2CC[C@]2(C)[C@@H](C(=O)Cn4cc(C#N)cn4)CC[C@@H]32)C1	30.0	0.0183	0.140327	56.3039	1593.4972	0.018316	success	
+dexketoprofen	C[C@H](C(=O)O)c1cccc(C(=O)c2ccccc2)c1	25.0	3.4305760294175927	0.988857	15.3980			no_root	f(lo)=-0.386, f(hi)=-2.032 — same sign
+(s)-fenoprofen	C[C@H](C(=O)O)c1cccc(Oc2ccccc2)c1	600.0	35.2	14.149195	63.1771			no_root	f(lo)=-0.011, f(hi)=-1.654 — same sign
+ursodeoxycholic acid	C[C@H](CCC(=O)O)[C@H]1CC[C@H]2[C@@H]3[C@@H](O)C[C@@H]4C[C@H](O)CC[C@]4(C)[C@H]3CC[C@]12C	150.0	1.33477	0.153479	28.5704			no_root	f(lo)=-0.028, f(hi)=-1.464 — same sign
+Lecozotan	C[C@H](CN(C(=O)c1ccc(C#N)cc1)c1ccccn1)N1CCN(c2cccc3c2OCCO3)CC1	2.0	0.1414999999999999	0.011906	28.7444			no_root	f(lo)=-0.881, f(hi)=-2.244 — same sign
+isoxsuprine	C[C@H](COc1ccccc1)N[C@H](C)[C@@H](O)c1ccc(O)cc1	30.0	0.04582	0.035073	66.9022	26.3354	0.045838	success	
+captopril	C[C@H](CS)C(=O)N1CCC[C@H]1C(=O)O	25.0	0.1629	0.170106	18.1345	12.9484	0.162891	success	
+zofenoprilat	C[C@H](CS)C(=O)N1C[C@@H](Sc2ccccc2)C[C@H]1C(=O)O	10.0	0.0969999999999999	0.058702	22.8003	7.2124	0.097240	success	
+zofenopril	C[C@H](CSC(=O)c1ccccc1)C(=O)N1C[C@@H](Sc2ccccc2)C[C@H]1C(=O)O	60.0	0.0911599999999999	0.442495	43.7854	265.8781	0.091174	success	
+silodosin	C[C@H](Cc1cc2c(c(C(N)=O)c1)N(CCCO)CC2)NCCOc1ccccc1OCC(F)(F)F	4.0	0.0266999999999999	0.013040	12.9281			no_root	f(lo)=-0.091, f(hi)=-1.469 — same sign
+(-)-prenylamine	C[C@H](Cc1ccccc1)NCCC(c1ccccc1)c1ccccc1	200.0	0.0507	1.148986	48.4943			no_root	f(lo)=1.730, f(hi)=0.401 — same sign
+tenofovir	C[C@H](Cn1cnc2c(N)ncnc21)OCP(=O)(O)O	300.0	0.2657767523107157	0.436529	6.3483	9.1872	0.266019	success	
+dextroamphetamine	C[C@H](N)Cc1ccccc1	30.0	0.0321999999999999	0.147388	27.3576			no_root	f(lo)=1.140, f(hi)=0.076 — same sign
+Taranabant	C[C@H](NC(=O)C(C)(C)Oc1ccc(C(F)(F)F)cn1)[C@@H](Cc1ccc(Cl)cc1)c1cccc(C#N)c1	0.5	0.00192	0.002553	16.9251	40.4664	0.001920	success	
+safinamide	C[C@H](NCc1ccc(OCc2cccc(F)c2)cc1)C(N)=O	1.75	0.00292	0.006501	47.9894	159.2147	0.002921	success	
+spiraprilat	C[C@H](N[C@@H](CCc1ccccc1)C(=O)O)C(=O)N1CC2(C[C@H]1C(=O)O)SCCS2	1.5	0.01	0.000954	14.6045			no_root	f(lo)=-0.519, f(hi)=-1.881 — same sign
+enalaprilat	C[C@H](N[C@@H](CCc1ccccc1)C(=O)O)C(=O)N1CCC[C@H]1C(=O)O	10.0	0.0367522788409099	0.002666	21.2421			no_root	f(lo)=-0.162, f(hi)=-1.605 — same sign
+quinaprilat	C[C@H](N[C@@H](CCc1ccccc1)C(=O)O)C(=O)N1Cc2ccccc2C[C@H]1C(=O)O	0.5	0.004	0.000579	20.9941			no_root	f(lo)=-0.205, f(hi)=-1.875 — same sign
+ramiprilat	C[C@H](N[C@@H](CCc1ccccc1)C(=O)O)C(=O)N1[C@H](C(=O)O)C[C@@H]2CCC[C@@H]21	2.5	0.0027	0.002211	18.0099	8.0629	0.002701	success	
+trandolaprilat	C[C@H](N[C@@H](CCc1ccccc1)C(=O)O)C(=O)N1[C@H](C(=O)O)C[C@H]2CCCC[C@@H]21	1.0	0.00107	0.000670	20.0723	5.5748	0.001070	success	
+sapropterin	C[C@H](O)[C@H](O)[C@H]1CNc2nc(N)[nH]c(=O)c2N1	730.0	0.0841	0.606297	4.2532			no_root	f(lo)=1.350, f(hi)=0.084 — same sign
+alvimopan	C[C@H]1CN(C[C@H](Cc2ccccc2)C(=O)NCC(=O)O)CC[C@@]1(C)c1cccc(O)c1	6.0	0.0087899999999999	0.004519	20.7346	3.7830	0.008791	success	
+lorcaserin	C[C@H]1CNCCc2ccc(Cl)cc21	10.0	0.0355436057426465	0.064225	10.0032	21.8291	0.035567	success	
+cabotegravir	C[C@H]1CO[C@@H]2Cn3cc(C(=O)NCc4ccc(F)cc4F)c(=O)c(O)c3C(=O)N12	30.0	3.349940297975473	0.678455	13.6468			no_root	f(lo)=-0.626, f(hi)=-2.124 — same sign
+methylprednisolone	C[C@H]1C[C@@H]2[C@H]([C@@H](O)C[C@@]3(C)[C@H]2CC[C@]3(O)C(=O)CO)[C@@]2(C)C=CC(=O)C=C12	2.0	0.0227999999999999	0.002135	32.4368			no_root	f(lo)=-0.160, f(hi)=-1.494 — same sign
+betamethasone	C[C@H]1C[C@H]2[C@@H]3CCC4=CC(=O)C=C[C@]4(C)[C@@]3(F)[C@@H](O)C[C@]2(C)[C@@]1(O)C(=O)CO	2.0	0.0247	0.005125	25.1494	0.4837	0.024702	success	
+Cipargamin	C[C@H]1Cc2c([nH]c3cc(Cl)c(F)cc23)[C@@]2(N1)C(=O)Nc1ccc(Cl)cc12	1.0	0.0141	0.006814	6.9727			no_root	f(lo)=-0.222, f(hi)=-1.589 — same sign
+Imeglimin	C[C@H]1N=C(N(C)C)N=C(N)N1	250.0	0.488	1.420404	4.7715	18.9044	0.487543	success	
+digitoxin	C[C@H]1O[C@@H](O[C@H]2[C@@H](O)C[C@H](O[C@H]3[C@@H](O)C[C@H](O[C@H]4CC[C@@]5(C)[C@H](CC[C@@H]6[C@@H]5CC[C@]5(C)[C@@H](C7=CC(=O)OC7)CC[C@]65O)C4)O[C@@H]3C)O[C@@H]2C)C[C@H](O)[C@@H]1O	0.56	0.0301	0.000106	48.1200			no_root	f(lo)=-1.579, f(hi)=-2.980 — same sign
+acarbose	C[C@H]1O[C@H](O[C@H]2[C@H](O)[C@@H](O)[C@@H](O[C@@H]([C@H](O)[C@@H](O)C=O)[C@H](O)CO)O[C@@H]2CO)[C@H](O)[C@@H](O)[C@@H]1N[C@H]1C=C(CO)[C@@H](O)[C@H](O)[C@H]1O	300.0	0.0109999999999999	0.145006	20.5514	710.7324	0.011022	success	
+lorlatinib	C[C@H]1Oc2cc(cnc2N)-c2c(nn(C)c2C#N)CN(C)C(=O)c2ccc(F)cc21	100.0	0.5387738173926159	0.686708	16.5685	17.8455	0.539548	success	
+artenimol (dihydroartemisinin)	C[C@H]1[C@@H](O)O[C@@H]2O[C@]3(C)CC[C@H]4[C@H](C)CC[C@@H]1[C@]24OO3	103.0	0.181	0.142792	37.1486	16.3372	0.180899	success	
+aztreonam	C[C@H]1[C@H](NC(=O)/C(=N\OC(C)(C)C(=O)O)c2csc(N)n2)C(=O)N1S(=O)(=O)O	500.0	0.14	0.541046	3.8149	17.8579	0.140362	success	
+artesunate	C[C@H]1[C@H](OC(=O)CCC(=O)O)O[C@@H]2O[C@@]3(C)CC[C@H]4[C@H](C)CC[C@@H]1[C@@]24OO3	200.0	0.11	0.519237	25.1411	144.0478	0.109924	success	
+doxycycline	C[C@H]1c2cccc(O)c2C(=O)C2=C(O)[C@]3(O)C(=O)C(C(N)=O)=C(O)[C@@H](N(C)C)[C@@H]3[C@@H](O)[C@@H]21	100.0	1.6133	0.046979	4.2647			no_root	f(lo)=-1.306, f(hi)=-2.635 — same sign
+methyldopa	C[C@](N)(Cc1ccc(O)c(O)c1)C(=O)O	250.0	1.5020936322346887	0.042418	4.2137			no_root	f(lo)=-1.141, f(hi)=-2.266 — same sign
+delamanid	C[C@]1(COc2ccc(N3CCC(Oc4ccc(OC(F)(F)F)cc4)CC3)cc2)Cn2cc([N+](=O)[O-])nc2O1	25.0	0.136	0.138066	19.6782	13.2889	0.136050	success	
+fluoxymesterone	C[C@]1(O)CC[C@H]2[C@@H]3CCC4=CC(=O)CC[C@]4(C)[C@@]3(F)[C@@H](O)C[C@@]21C	10.0	0.0799999999999999	0.149660	30.1882	91.5749	0.079933	success	
+oxymetholone	C[C@]12C/C(=C/O)C(=O)C[C@@H]1CC[C@@H]1[C@@H]2CC[C@@]2(C)[C@H]1CC[C@]2(C)O	50.0	0.0187999999999999	0.114860	69.4269			no_root	f(lo)=1.418, f(hi)=0.096 — same sign
+prednisone	C[C@]12C=CC(=O)C=C1CC[C@@H]1[C@@H]2C(=O)C[C@@]2(C)[C@H]1CC[C@]2(O)C(=O)CO	10.0	0.0244999999999999	0.018750	26.6326	9.9715	0.024508	success	
+prednisolone	C[C@]12C=CC(=O)C=C1CC[C@@H]1[C@@H]2[C@@H](O)C[C@@]2(C)[C@H]1CC[C@]2(O)C(=O)CO	1.25	0.0526999999999999	0.000946	55.8503			no_root	f(lo)=-0.759, f(hi)=-2.093 — same sign
+triamcinolone	C[C@]12C=CC(=O)C=C1CC[C@H]1[C@@H]3C[C@@H](O)[C@](O)(C(=O)CO)[C@@]3(C)C[C@H](O)[C@@]12F	5.0	0.0104999999999999	0.003133	11.9213	0.8273	0.010479	success	
+dutasteride	C[C@]12C=CC(=O)N[C@@H]1CC[C@@H]1[C@@H]2CC[C@]2(C)[C@@H](C(=O)Nc3cc(C(F)(F)F)ccc3C(F)(F)F)CC[C@@H]12	0.5	0.0028112630613302	0.002231	30.8954	7.7080	0.002809	success	
+canrenoic acid	C[C@]12CCC(=O)C=C1C=C[C@@H]1[C@@H]2CC[C@@]2(C)[C@H]1CC[C@@]2(O)CCC(=O)O	100.0	4.126	1.215020	9.4559			no_root	f(lo)=-0.297, f(hi)=-1.933 — same sign
+canrenone	C[C@]12CCC(=O)C=C1C=C[C@@H]1[C@@H]2CC[C@@]2(C)[C@H]1CC[C@@]21CCC(=O)O1	100.0	0.1233499999999999	0.461267	19.4161	117.8593	0.123159	success	
+cortisone	C[C@]12CCC(=O)C=C1CC[C@@H]1[C@@H]2C(=O)C[C@@]2(C)[C@H]1CC[C@]2(O)C(=O)CO	5.0	0.01574	0.028638	26.6766	46.4131	0.015720	success	
+methyltestosterone	C[C@]12CCC(=O)C=C1CC[C@@H]1[C@@H]2CC[C@@]2(C)[C@H]1CC[C@]2(C)O	10.0	0.0205699999999999	0.012013	45.4700	8.1271	0.020574	success	
+hydrocortisone	C[C@]12CCC(=O)C=C1CC[C@@H]1[C@@H]2[C@@H](O)C[C@@]2(C)[C@H]1CC[C@]2(O)C(=O)CO	5.0	0.1189999999999999	0.020002	40.7887			no_root	f(lo)=-0.032, f(hi)=-1.405 — same sign
+fludrocortisone	C[C@]12CCC(=O)C=C1CC[C@H]1[C@@H]3CC[C@](O)(C(=O)CO)[C@@]3(C)C[C@H](O)[C@@]12F	0.1	0.00124	0.000165	32.8253			no_root	f(lo)=-0.040, f(hi)=-1.314 — same sign
+drospirenone	C[C@]12CCC(=O)C=C1[C@@H]1C[C@@H]1[C@H]1[C@@H]3[C@@H]4C[C@@H]4[C@@]4(CCC(=O)O4)[C@@]3(C)CC[C@@H]12	1.0	0.0113159179919262	0.004582	36.0673	1.4456	0.011322	success	
+dienogest	C[C@]12CCC3=C4CCC(=O)C=C4CC[C@H]3[C@@H]1CC[C@@]2(O)CC#N	2.0	0.0526414285520444	0.006713	37.2545			no_root	f(lo)=-0.274, f(hi)=-1.515 — same sign
+estetrol	C[C@]12CC[C@@H]3c4ccc(O)cc4CC[C@H]3[C@@H]1[C@@H](O)[C@@H](O)[C@@H]2O	1.0	0.0005499999999999	0.000129	79.3461	2.5152	0.000550	success	
+estromustine	C[C@]12CC[C@@H]3c4ccc(OC(=O)N(CCCl)CCCl)cc4CC[C@H]3[C@@H]1CC[C@@H]2O	420.0	0.4533982673103195	0.374788	135.9602	61.8573	0.453502	success	
+oxandrolone	C[C@]12COC(=O)C[C@@H]1CC[C@@H]1[C@@H]2CC[C@@]2(C)[C@H]1CC[C@]2(C)O	10.0	0.4066	0.041748	53.1438			no_root	f(lo)=-0.398, f(hi)=-1.633 — same sign
+Vilaprisan	C[C@]12C[C@H](c3ccc(S(C)(=O)=O)cc3)C3=C4CCC(=O)C=C4CC[C@H]3[C@@H]1CC[C@@]2(O)C(F)(F)C(F)(F)F	2.0	0.0083165497653774	0.006690	17.0377	4.0215	0.008314	success	
+betaine	C[N+](C)(C)CC(=O)[O-]	3500.0	110.00197	22.717910	27.2474	0.4640	109.910318	success	
+amitriptylinoxide	C[N+](C)([O-])CCC=C1c2ccccc2CCc2ccccc21	50.0	0.4838	0.428661	89.7197	46.8314	0.483635	success	
+diphemanil	C[N+]1(C)CCC(=C(c2ccccc2)c2ccccc2)CC1	250.0	0.04085	1.658575	50.6645			no_root	f(lo)=2.100, f(hi)=0.894 — same sign
+ademetionine (same)	C[S+](CC[C@H](N)C(=O)[O-])C[C@H]1O[C@@H](n2cnc3c(N)ncnc32)[C@H](O)[C@@H]1O	500.0	0.93737	0.343064	8.7446	0.5983	0.937655	success	
+milrinone	Cc1[nH]c(=O)c(C#N)cc1-c1ccncc1	0.91	0.0259	0.004793	15.7509			no_root	f(lo)=-0.136, f(hi)=-1.349 — same sign
+panobinostat	Cc1[nH]c2ccccc2c1CCNCc1ccc(/C=C/C(=O)NO)cc1	30.0	0.023947860029656	0.057996	20.4145	62.6184	0.023994	success	
+BMS-986142	Cc1c(-c2c(F)cc(C(N)=O)c3[nH]c4c(c23)CC[C@H](C(C)(C)O)C4)cccc1-n1c(=O)c2cccc(F)c2n(C)c1=O	5.0	0.0090299999999999	0.010941	14.2297	15.4497	0.009034	success	
+bazedoxifene	Cc1c(-c2ccc(O)cc2)n(Cc2ccc(OCCN3CCCCCC3)cc2)c2ccc(O)cc12	0.1	6.000000000000003e-05	0.000276	29.0126	307.6814	0.000060	success	
+3-methylflavone-8-carboxylic acid (mfca)	Cc1c(-c2ccccc2)oc2c(C(=O)O)cccc2c1=O	200.0	11.5732233671523	4.555188	17.8404			no_root	f(lo)=-0.210, f(hi)=-1.849 — same sign
+rimonabant	Cc1c(C(=O)NN2CCCCC2)nn(-c2ccc(Cl)cc2Cl)c1-c1ccc(Cl)cc1	20.0	0.21223	0.105232	18.0950			no_root	f(lo)=-0.167, f(hi)=-1.544 — same sign
+troglitazone	Cc1c(C)c2c(c(C)c1O)CCC(C)(COc1ccc(CC3SC(=O)NC3=O)cc1)O2	400.0	0.9612491872558332	1.361443	46.8096	112.1453	0.959410	success	
+Fevipiprant	Cc1c(CC(=O)O)c2cccnc2n1Cc1ccc(S(C)(=O)=O)cc1C(F)(F)F	10.0	0.021	0.126017	8.5549	100.4629	0.020986	success	
+opicapone	Cc1c(Cl)c(C)[n+]([O-])c(Cl)c1-c1noc(-c2cc(O)c(O)c([N+](=O)[O-])c2)n1	10.0	0.1309999999999999	0.072646	20.8641			no_root	f(lo)=-0.111, f(hi)=-1.594 — same sign
+tolfenamic acid	Cc1c(Cl)cccc1Nc1ccccc1C(=O)O	100.0	1.98	1.546379	48.1126	3.9455	1.980311	success	
+grepafloxacin	Cc1c(F)c(N2CCNC(C)C2)cc2c1c(=O)c(C(=O)O)cn2C1CC1	200.0	0.45	0.191694	16.7064	3.2336	0.450327	success	
+Losmapimod	Cc1c(F)cc(C(=O)NC2CC2)cc1-c1ccc(C(=O)NCC(C)(C)C)cn1	2.5	0.0120499999999999	0.018488	6.9906	14.1066	0.012061	success	
+4-aminoantipyrine	Cc1c(N)c(=O)n(-c2ccccc2)n1C	750.0	1.01	5.365289	13.5740	2707.5558	1.010007	success	
+4-formylaminoantipyrine	Cc1c(NC=O)c(=O)n(-c2ccccc2)n1C	750.0	1.61	5.419487	14.0753	79.0096	1.612133	success	
+deferiprone	Cc1c(O)c(=O)ccn1C	1407.5	24.6	2.000362	21.4856			no_root	f(lo)=-0.233, f(hi)=-1.359 — same sign
+nelfinavir	Cc1c(O)cccc1C(=O)N[C@@H](CSc1ccccc1)[C@H](O)CN1C[C@H]2CCCC[C@H]2C[C@H]1C(=O)NC(C)(C)C	750.0	2.619	0.312757	39.3622			no_root	f(lo)=-0.625, f(hi)=-2.025 — same sign
+lansoprazole	Cc1c(OCC(F)(F)F)ccnc1C[S+]([O-])c1nc2ccccc2[nH]1	15.0	0.5305552751599026	0.149208	45.1884			no_root	f(lo)=-0.216, f(hi)=-1.475 — same sign
+rilpivirine	Cc1cc(/C=C/C#N)cc(C)c1Nc1ccnc(Nc2ccc(C#N)cc2)n1	75.0	0.1699999999999999	0.402618	34.2181	147.7325	0.169964	success	
+etravirine	Cc1cc(C#N)cc(C)c1Oc1nc(Nc2ccc(C#N)cc2)nc(N)c1Br	100.0	0.089	0.430250	11.0997	2035.7403	0.088879	success	
+Valemetostat	Cc1cc(C)c(CNC(=O)c2cc(Cl)c3c(c2C)O[C@@](C)([C@H]2CC[C@H](N(C)C)CC2)O3)c(=O)[nH]1	50.0	0.386	0.100194	40.7504			no_root	f(lo)=-0.164, f(hi)=-1.509 — same sign
+metaxalone	Cc1cc(C)cc(OCC2CNC(=O)O2)c1	400.0	0.983	1.497926	27.0157	38.9167	0.985364	success	
+sulfamethazine	Cc1cc(C)nc(NS(=O)(=O)c2ccc(N)cc2)n1	850.0	40.11999999999999	6.469865	11.4728			no_root	f(lo)=-0.386, f(hi)=-1.925 — same sign
+Pleconaril	Cc1cc(CCCOc2c(C)cc(-c3noc(C(F)(F)F)n3)cc2C)on1	50.0	0.31	0.594949	19.7766	84.1629	0.309636	success	
+Selonsertib	Cc1cc(F)c(C(=O)Nc2cccc(-c3nncn3C(C)C)n2)cc1-n1cnc(C2CC2)c1	1.0	0.0240999999999999	0.002901	27.2166			no_root	f(lo)=-0.669, f(hi)=-2.049 — same sign
+isoxicam	Cc1cc(NC(=O)C2=C(O)c3ccccc3S(=O)(=O)N2C)no1	200.0	12.2	3.119964	69.9741			no_root	f(lo)=-0.023, f(hi)=-1.643 — same sign
+sulfamethoxazole	Cc1cc(NS(=O)(=O)c2ccc(N)cc2)no1	1200.0	94.42	7.894577	6.4968			no_root	f(lo)=-0.612, f(hi)=-2.025 — same sign
+ceritinib	Cc1cc(Nc2ncc(Cl)c(=Nc3ccccc3S(=O)(=O)C(C)C)[nH]2)c(OC(C)C)cc1C1CCNCC1	500.0	0.159	0.631916	27.6683	177.2788	0.159091	success	
+tucatinib	Cc1cc(Nc2ncnc3ccc(NC4=NC(C)(C)CO4)cc23)ccc1Oc1ccn2ncnc2c1	300.0	0.4028786727997867	0.840734	28.4267	97.7274	0.402834	success	
+deacetylmetipranolol	Cc1cc(OCC(O)CNC(C)C)c(C)c(C)c1O	40.0	0.0219999999999999	0.060636	30.2858			no_root	f(lo)=1.203, f(hi)=0.015 — same sign
+deacetylmoxisylyte	Cc1cc(OCCN(C)C)c(C(C)C)cc1O	120.0	3.026	0.264385	44.9808			no_root	f(lo)=-0.320, f(hi)=-1.478 — same sign
+olanzapine	Cc1cc2c(s1)Nc1ccccc1N=C2N1CCN(C)CC1	2.5	0.00416	0.025889	14.0222	777.7799	0.004163	success	
+riboflavin	Cc1cc2nc3c(=O)[nH]c(=O)nc-3n(C[C@H](O)[C@H](O)[C@H](O)CO)c2cc1C	20.0	0.08194	0.035883	4.2161	0.4213	0.081954	success	
+celecoxib	Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(S(N)(=O)=O)cc2)cc1	200.0	0.6832255170437157	1.658002	12.1414	60.4225	0.684223	success	
+etoricoxib	Cc1ccc(-c2ncc(Cl)cc2-c2ccc(S(C)(=O)=O)cc2)cn1	5.0	0.095	0.029281	19.2504			no_root	f(lo)=-0.144, f(hi)=-1.409 — same sign
+suvorexant	Cc1ccc(-n2nccn2)c(C(=O)N2CCN(c3nc4cc(Cl)ccc4o3)CC[C@H]2C)c1	4.0	0.12626	0.027602	14.7037			no_root	f(lo)=-0.535, f(hi)=-1.906 — same sign
+acrivastine	Cc1ccc(/C(=C\CN2CCCC2)c2cccc(/C=C/C(=O)O)n2)cc1	4.0	0.073	0.000447	34.9011			no_root	f(lo)=-1.369, f(hi)=-2.406 — same sign
+triprolidine	Cc1ccc(/C(=C\CN2CCCC2)c2ccccn2)cc1	2.5	0.0068585712797928	0.002708	74.4477	6.9118	0.006856	success	
+pirfenidone	Cc1ccc(=O)n(-c2ccccc2)c1	200.0	6.3	2.162695	12.1545			no_root	f(lo)=-0.116, f(hi)=-1.167 — same sign
+ponatinib	Cc1ccc(C(=O)Nc2ccc(CN3CCN(C)CC3)c(C(F)(F)F)c2)cc1C#Cc1cnc2cccnn12	15.0	0.0161	0.077339	6.9322	314.0766	0.016100	success	
+tolcapone	Cc1ccc(C(=O)c2cc(O)c(O)c([N+](=O)[O-])c2)cc1	5.0	0.2999999999999999	0.048965	18.5963			no_root	f(lo)=-0.744, f(hi)=-1.738 — same sign
+tolmetin	Cc1ccc(C(=O)c2ccc(CC(=O)O)n2C)cc1	81.5	12.999999999999998	2.935507	7.9949			no_root	f(lo)=-0.555, f(hi)=-2.248 — same sign
+gemfibrozil	Cc1ccc(C)c(OCCCC(C)(C)C(=O)O)c1	900.0	46.21449988910408	7.240238	78.0930			no_root	f(lo)=-0.379, f(hi)=-1.853 — same sign
+meclofenamic acid	Cc1ccc(Cl)c(Nc2ccccc2C(=O)O)c1Cl	300.0	15.1	1.930051	63.3824			no_root	f(lo)=-0.575, f(hi)=-2.082 — same sign
+phentolamine	Cc1ccc(N(CC2=NCCN2)c2cccc(O)c2)cc1	60.0	0.06705	0.282306	32.6136	217.1236	0.067006	success	
+avacopan	Cc1ccc(NC(=O)[C@H]2CCCN(C(=O)c3c(C)cccc3F)[C@H]2c2ccc(NC3CCCC3)cc2)cc1C(F)(F)F	1.0	0.002	0.007482	12.2773	1081.6013	0.002000	success	
+imatinib	Cc1ccc(NC(=O)c2ccc(CN3CCN(C)CC3)cc2)cc1Nc1nccc(-c2cccnc2)n1	100.0	0.388	0.151633	25.9691			no_root	f(lo)=-0.052, f(hi)=-1.425 — same sign
+lumiracoxib	Cc1ccc(Nc2c(F)cccc2Cl)c(CC(=O)O)c1	200.0	3.998	2.797440	44.4678	23.2834	3.993282	success	
+pazopanib	Cc1ccc(Nc2nccc(N(C)c3ccc4c(C)n(C)nc4c3)n2)cc1S(N)(=O)=O	200.0	15.4	0.590350	12.4894			no_root	f(lo)=-1.315, f(hi)=-2.720 — same sign
+tolterodine	Cc1ccc(O)c([C@H](CCN(C(C)C)C(C)C)c2ccccc2)c1	2.0	0.0018796256988343	0.010571	44.1771	546.4640	0.001880	success	
+tolazamide	Cc1ccc(S(=O)(=O)NC(=O)NN2CCCCCC2)cc1	250.0	25.4	4.350066	7.2373			no_root	f(lo)=-0.560, f(hi)=-2.129 — same sign
+gliclazide	Cc1ccc(S(=O)(=O)NC(=O)NN2C[C@H]3CCC[C@H]3C2)cc1	80.0	4.068209423912289	1.177984	11.5044			no_root	f(lo)=-0.290, f(hi)=-1.917 — same sign
+vortioxetine	Cc1ccc(Sc2ccccc2N2CCNCC2)c(C)c1	2.5	0.0007797435475847	0.033041	26.3065			no_root	f(lo)=1.792, f(hi)=0.516 — same sign
+canagliflozin	Cc1ccc([C@@H]2O[C@H](CO)[C@@H](O)[C@H](O)[C@H]2O)cc1Cc1ccc(-c2ccc(F)cc2)s1	50.0	0.5357900708299848	0.106394	21.7516			no_root	f(lo)=-0.526, f(hi)=-1.933 — same sign
+Amenamevir	Cc1cccc(C)c1N(CC(=O)Nc1ccc(-c2ncon2)cc1)C(=O)C1CCS(=O)(=O)CC1	5.0	0.0429	0.006914	33.2908			no_root	f(lo)=-0.259, f(hi)=-1.590 — same sign
+tocainide	Cc1cccc(C)c1NC(=O)C(C)N	400.0	2.68	1.258939	26.2048	6.7969	2.682811	success	
+Nefiracetam	Cc1cccc(C)c1NC(=O)CN1CCCC1=O	10.0	0.2299999999999999	0.037535	34.6490			no_root	f(lo)=-0.045, f(hi)=-1.266 — same sign
+mexiletine	Cc1cccc(C)c1OCC(C)N	100.0	0.177	0.259735	37.1152	68.6773	0.176987	success	
+meclizine	Cc1cccc(CN2CCN(C(c3ccccc3)c3ccc(Cl)cc3)CC2)c1	25.0	0.0800699999999999	0.124914	25.6079	54.3799	0.080232	success	
+mefenamic acid	Cc1cccc(Nc2ccccc2C(=O)O)c1C	250.0	2.68	3.809546	47.6597	155.1510	2.682471	success	
+torasemide	Cc1cccc(Nc2ccncc2S(=O)(=O)NC(=O)NC(C)C)c1	10.0	1.2793146602771346	0.067452	63.8581			no_root	f(lo)=-1.101, f(hi)=-2.350 — same sign
+tolvaptan	Cc1ccccc1C(=O)Nc1ccc(C(=O)N2CCC[C@@H](O)c3cc(Cl)ccc32)c(C)c1	15.0	0.1319659046875366	0.033222	29.6472			no_root	f(lo)=-0.386, f(hi)=-1.783 — same sign
+orphenadrine	Cc1ccccc1C(OCCN(C)C)c1ccccc1	100.0	0.1468799999999999	0.347230	90.2840	326.1253	0.146886	success	
+metolazone	Cc1ccccc1N1C(=O)c2cc(S(N)(=O)=O)c(Cl)cc2NC1C	0.5	0.0075357149627623	0.000436	10.1308			no_root	f(lo)=-0.707, f(hi)=-1.892 — same sign
+telotristat	Cc1ccn(-c2cc(Cl)ccc2[C@@H](Oc2cc(-c3ccc(C[C@H](N)C(=O)O)cc3)nc(N)n2)C(F)(F)F)n1	500.0	0.61	0.970567	8.8881	30.8469	0.608928	success	
+nevirapine	Cc1ccnc2c1NC(=O)c1cccnc1N2C1CC1	2.5	0.0346399999999999	0.005837	16.6622			no_root	f(lo)=-0.188, f(hi)=-1.333 — same sign
+tiagabine	Cc1ccsc1C(=CCCN1CCC[C@@H](C(=O)O)C1)c1sccc1C	2.0	0.0434	0.004382	28.5684			no_root	f(lo)=-0.571, f(hi)=-1.947 — same sign
+nilotinib	Cc1cn(-c2cc(NC(=O)c3ccc(C)c(Nc4nccc(-c5cccnc5)n4)c3)cc(C(F)(F)F)c2)cn1	200.0	0.4139891302920886	0.598803	19.2012	54.7312	0.413172	success	
+telbivudine	Cc1cn([C@@H]2C[C@@H](O)[C@H](CO)O2)c(=O)[nH]c1=O	200.0	1.8	0.655671	6.2001	0.5983	1.801714	success	
+stavudine (d4t)	Cc1cn([C@H]2C=C[C@@H](CO)O2)c(=O)[nH]c1=O	5.0	0.11036	0.021523	5.8552			no_root	f(lo)=-0.218, f(hi)=-1.477 — same sign
+zidovudine	Cc1cn([C@H]2C[C@H](N=[N+]=[N-])[C@@H](CO)O2)c(=O)[nH]c1=O	100.0	0.7444400000000001	0.958152	3.2797	3.3642	0.746549	success	
+risdiplam	Cc1cn2nc(-c3cc(=O)n4cc(N5CCNC6(CC6)C5)ccc4n3)cc(C)c2n1	0.6	0.0028799999999999	0.002609	4.2357	1.9510	0.002880	success	
+Presatovir	Cc1cn2nc([C@@H]3CCCCN3C(=O)c3cc(Cl)ccc3NS(C)(=O)=O)cc2nc1N1CC[C@H](N)C1	25.0	0.3507	0.036551	12.7768			no_root	f(lo)=-0.784, f(hi)=-2.171 — same sign
+fomepizole	Cc1cn[nH]c1	490.0	12.3159	8.173404	15.6146	2.8253	12.304952	success	
+glipizide	Cc1cnc(C(=O)NCCc2ccc(S(=O)(=O)NC(=O)NC3CCCCC3)cc2)cn1	2.5	0.1544	0.087957	7.1047			no_root	f(lo)=-0.169, f(hi)=-1.791 — same sign
+paritaprevir	Cc1cnc(C(=O)N[C@H]2CCCCC/C=C\[C@@H]3C[C@@]3(C(=O)NS(=O)(=O)C3CC3)NC(=O)[C@@H]3C[C@@H](Oc4nc5ccccc5c5ccccc45)CN3C2=O)cn1	300.0	0.1199999999999999	1.593622	18.2804	601.1186	0.119953	success	
+acipimox	Cc1cnc(C(=O)O)c[n+]1[O-]	150.0	1.75	1.438751	5.6015	2.6757	1.752330	success	
+meloxicam	Cc1cnc(NC(=O)C2=C(O)c3ccccc3S(=O)(=O)N2C)s1	7.5	0.7496441014900893	0.367414	45.6854			no_root	f(lo)=-0.099, f(hi)=-1.630 — same sign
+fedratinib	Cc1cnc(Nc2ccc(OCCN3CCCC3)cc2)nc1Nc1cccc(S(=O)(=O)NC(C)(C)C)c1	10.0	0.00414	0.010045	19.8726	52.5289	0.004151	success	
+rupatadine	Cc1cncc(CN2CCC(=C3c4ccc(Cl)cc4CCc4cccnc43)CC2)c1	10.0	0.0044049971623146	0.130635	35.0527			no_root	f(lo)=1.664, f(hi)=0.249 — same sign
+Acoramidis	Cc1n[nH]c(C)c1CCCOc1cc(C(=O)O)ccc1F	50.0	2.11	0.596187	23.9080			no_root	f(lo)=-0.103, f(hi)=-1.752 — same sign
+roxadustat	Cc1nc(C(=O)NCC(=O)O)c(O)c2ccc(Oc3ccccc3)cc12	40.0	3.67	0.263831	24.9345			no_root	f(lo)=-0.965, f(hi)=-2.644 — same sign
+Brecanavir	Cc1nc(COc2ccc(C[C@H](NC(=O)O[C@H]3CO[C@H]4OCC[C@H]43)[C@H](O)CN(CC(C)C)S(=O)(=O)c3ccc4c(c3)OCO4)cc2)cs1	25.0	0.0017099999999999	0.038710	47.7592			no_root	f(lo)=1.751, f(hi)=0.365 — same sign
+Pritelivir	Cc1nc(N(C)C(=O)Cc2ccc(-c3ccccn3)cc2)sc1S(N)(=O)=O	5.0	0.07376	0.031798	17.3541			no_root	f(lo)=-0.085, f(hi)=-1.497 — same sign
+alpelisib	Cc1nc(NC(=O)N2CCC[C@H]2C(N)=O)sc1-c1ccnc(C(C)(C)C(F)(F)F)c1	400.0	1.32	0.592282	19.9903	2.2554	1.319915	success	
+Tegoprazan	Cc1nc2cc(C(=O)N(C)C)cc(O[C@H]3CCOc4cc(F)cc(F)c43)c2[nH]1	50.0	0.8138	0.240885	35.6660			no_root	f(lo)=-0.041, f(hi)=-1.310 — same sign
+risperidone	Cc1nc2n(c(=O)c1CCN1CCC(c3noc4cc(F)ccc34)CC1)CCCC2	1.0	0.0054192527160116	0.003970	11.3475	2.9504	0.005426	success	
+paliperidone	Cc1nc2n(c(=O)c1CCN1CCC(c3noc4cc(F)ccc34)CC1)CCCC2O	1.0	0.0079491508980519	0.003719	12.0428	1.1387	0.007949	success	
+thiamine	Cc1ncc(C[n+]2csc(CCO)c2C)c(N)n1	50.0	0.0093699999999999	0.284407	13.3273			no_root	f(lo)=1.902, f(hi)=0.384 — same sign
+lemborexant	Cc1ncc(OC[C@@]2(c3cccc(F)c3)C[C@H]2C(=O)Nc2ccc(F)cn2)c(C)n1	1.0	0.0051999999999999	0.003582	37.0678	11.6650	0.005210	success	
+secnidazole	Cc1ncc([N+](=O)[O-])n1CC(C)O	500.0	10.54	2.495725	4.7569			no_root	f(lo)=-0.105, f(hi)=-1.185 — same sign
+midazolam	Cc1ncc2n1-c1ccc(Cl)cc1C(c1ccccc1F)=NC2	0.98	0.0038999999999999	0.009614	49.9988	157.7285	0.003894	success	
+ondansetron	Cc1nccn1CC1CCc2c(c3ccccc3n2C)C1=O	8.0	0.0399393371401247	0.047122	11.0785	10.9751	0.039850	success	
+Imidafenacin	Cc1nccn1CCC(C(N)=O)(c1ccccc1)c1ccccc1	0.1	0.0004199999999999	0.000269	24.5591	7.0761	0.000419	success	
+raltegravir	Cc1nnc(C(=O)NC(C)(C)c2nc(C(=O)NCc3ccc(F)cc3)c(O)c(=O)n2C)o1	10.0	0.2577699999999999	0.020527	13.2415			no_root	f(lo)=-0.539, f(hi)=-1.979 — same sign
+maraviroc	Cc1nnc(C(C)C)n1[C@@H]1C[C@H]2CC[C@@H](C1)N2CC[C@H](NC(=O)C1CCC(F)(F)CC1)c1ccccc1	3.0	0.00058	0.000428	23.8862	8.9579	0.000581	success	
+alprazolam	Cc1nnc2n1-c1ccc(Cl)cc1C(c1ccccc1)=NC2	0.8	0.0113	0.002960	22.8945			no_root	f(lo)=-0.044, f(hi)=-1.218 — same sign
+triazolam	Cc1nnc2n1-c1ccc(Cl)cc1C(c1ccccc1Cl)=NC2	0.25	0.0025215074856125	0.001047	68.9863	8.8227	0.002522	success	
+sulfisoxazole	Cc1noc(NS(=O)(=O)c2ccc(N)cc2)c1C	500.0	51.85	8.003098	6.9322			no_root	f(lo)=-0.528, f(hi)=-2.102 — same sign
+fezolinetant	Cc1nsc(-c2nnc3n2CCN(C(=O)c2ccc(F)cc2)[C@@H]3C)n1	12.0	0.0775	0.065393	12.8633	9.2288	0.077487	success	
+dicloxacillin	Cc1onc(-c2c(Cl)cccc2Cl)c1C(=O)N[C@@H]1C(=O)N2[C@@H]1SC(C)(C)[C@@H]2C(=O)O	250.0	13.62	0.461309	16.6454			no_root	f(lo)=-0.789, f(hi)=-2.331 — same sign
+flucloxacillin	Cc1onc(-c2c(F)cccc2Cl)c1C(=O)N[C@@H]1C(=O)N2[C@@H]1SC(C)(C)[C@@H]2C(=O)O	750.0	34.50000000000001	0.957883	13.9090			no_root	f(lo)=-0.753, f(hi)=-2.216 — same sign
+valdecoxib	Cc1onc(-c2ccccc2)c1-c1ccc(S(N)(=O)=O)cc1	10.0	0.146	0.142270	14.9265	8.3405	0.146110	success	
+cloxacillin	Cc1onc(-c2ccccc2Cl)c1C(=O)N[C@@H]1C(=O)N2[C@@H]1SC(C)(C)[C@@H]2C(=O)O	250.0	4.8	0.999718	13.7153			no_root	f(lo)=-0.257, f(hi)=-1.952 — same sign
+econazole	Clc1ccc(COC(Cn2ccnc2)c2ccc(Cl)cc2Cl)cc1	250.0	2.1	1.526618	42.2564	10.6928	2.097246	success	
+piperaquine	Clc1ccc2c(N3CCN(CCCN4CCN(c5ccnc6cc(Cl)ccc56)CC4)CC3)ccnc2c1	500.0	0.0351	3.417219	22.6719			no_root	f(lo)=2.120, f(hi)=0.761 — same sign
+amoxapine	Clc1ccc2c(c1)C(N1CCNCC1)=Nc1ccccc1O2	25.0	0.0182299999999999	0.233000	12.8275			no_root	f(lo)=1.261, f(hi)=0.028 — same sign
+estazolam	Clc1ccc2c(c1)C(c1ccccc1)=NCc1nncn1-2	1.0	0.0547	0.004699	17.3138			no_root	f(lo)=-0.686, f(hi)=-1.971 — same sign
+desloratadine	Clc1ccc2c(c1)CCc1cccnc1C2=C1CCNCC1	5.0	0.0021191507733051	0.044602	21.7078			no_root	f(lo)=1.704, f(hi)=0.607 — same sign
+tizanidine	Clc1ccc2nsnc2c1NC1=NCCN1	2.0	0.0017999999999999	0.004908	13.0285	340.6007	0.001801	success	
+clotrimazole	Clc1ccccc1C(c1ccccc1)(c1ccccc1)n1ccnc1	1000.0	0.80349	8.119295	33.0168	6290.2117	0.803458	success	
+ticlopidine	Clc1ccccc1CN1CCc2sccc2C1	250.0	0.3608545413320996	3.787966	117.0723			no_root	f(lo)=1.281, f(hi)=0.166 — same sign
+theophylline	Cn1c(=O)c2[nH]cnc2n(C)c1=O	250.0	6.5	2.285952	9.2276	0.4249	6.495825	success	
+caffeine	Cn1c(=O)c2c(ncn2C)n(C)c1=O	100.0	1.5	0.744744	10.7732	2.0183	1.503064	success	
+dyphylline	Cn1c(=O)c2c(ncn2CC(O)CO)n(C)c1=O	1000.0	15.619999999999996	15.602669	3.9334	2.5570	15.625884	success	
+alogliptin	Cn1c(=O)cc(N2CCC[C@@H](N)C2)n(Cc2ccccc2C#N)c1=O	25.0	0.11	0.111056	5.5930	3.3349	0.109914	success	
+Brensocatib	Cn1c(=O)oc2ccc(-c3ccc(C[C@@H](C#N)NC(=O)[C@@H]4CNCCCO4)cc3)cc21	10.0	0.0600100658223268	0.038923	12.4982	2.4758	0.060021	success	
+Tanaproget	Cn1c(C#N)ccc1-c1ccc2c(c1)C(C)(C)OC(=S)N2	0.1	0.0002999999999999	0.002773	18.6510	394.5429	0.000301	success	
+dabigatran	Cn1c(CNc2ccc(C(=N)N)cc2)nc2cc(C(=O)N(CCC(=O)O)c3ccccn3)ccc21	10.0	0.0082999999999999	0.000573	15.2783			no_root	f(lo)=-0.595, f(hi)=-1.857 — same sign
+doravirine	Cn1c(Cn2ccc(C(F)(F)F)c(Oc3cc(Cl)cc(C#N)c3)c2=O)n[nH]c1=O	6.0	0.0664599999999999	0.021654	8.8776			no_root	f(lo)=-0.033, f(hi)=-1.258 — same sign
+avapritinib	Cn1cc(-c2cc3c(N4CCN(c5ncc([C@@](C)(N)c6ccc(F)cc6)cn5)CC4)ncnn3c2)cn1	300.0	0.492	1.330034	28.1806	145.5206	0.491879	success	
+Enzastaurin	Cn1cc(C2=C(c3cn(C4CCN(Cc5ccccn5)CC4)c4ccccc34)C(=O)NC2=O)c2ccccc21	2.0	0.00273	0.016652	9.1823	677.6915	0.002730	success	
+flosequinan	Cn1cc([S+](C)[O-])c(=O)c2ccc(F)cc21	100.0	1.294990347454374	0.530860	21.1983	2.5121	1.295492	success	
+methimazole	Cn1cc[nH]c1=S	10.0	0.24599	0.029919	31.8852			no_root	f(lo)=-0.059, f(hi)=-1.214 — same sign
+selumetinib	Cn1cnc2c(F)c(Nc3ccc(Br)cc3Cl)c(C(=O)NOCCO)cc21	25.0	0.409	0.082204	24.4809			no_root	f(lo)=-0.395, f(hi)=-1.758 — same sign
+talazoparib	Cn1ncnc1[C@H]1c2n[nH]c(=O)c3cc(F)cc(c23)N[C@@H]1c1ccc(F)cc1	1.0	0.0076999999999999	0.001941	22.2904	0.5465	0.007704	success	
+tedizolid	Cn1nnc(-c2ccc(-c3ccc(N4C[C@H](CO)OC4=O)cc3F)cn2)n1	200.0	2.187684587130375	1.518943	9.8809	3.1784	2.191618	success	
+pexidartinib	FC(F)(F)c1ccc(CNc2ccc(Cc3c[nH]c4ncc(Cl)cc34)cn2)cn1	200.0	2.487	0.990909	12.9585			no_root	f(lo)=-0.283, f(hi)=-1.665 — same sign
+Sarizotan	Fc1ccc(-c2cncc(CNC[C@H]3CCc4ccccc4O3)c2)cc1	0.5	0.03761	0.003095	26.3618			no_root	f(lo)=-0.753, f(hi)=-2.033 — same sign
+flunarizine	Fc1ccc(C(c2ccc(F)cc2)N2CCN(C/C=C/c3ccccc3)CC2)cc1	5.0	0.026041390131865	0.034722	27.1506	53.5393	0.026085	success	
+paroxetine	Fc1ccc([C@@H]2CCNC[C@H]2COc2ccc3c(c2)OCO3)cc1	7.5	0.00277	0.070396	23.3118			no_root	f(lo)=1.698, f(hi)=0.419 — same sign
+quazepam	Fc1ccccc1C1=NCC(=S)N(CC(F)(F)F)c2ccc(Cl)cc21	20.0	0.0367626029936317	0.110572	44.8945	179.9301	0.036755	success	
+Zagociguat	Fc1ccccc1Cc1nc(-c2nc(C(F)(F)F)n[nH]2)cn2ccnc12	0.3	0.03995	0.004157	26.6299			no_root	f(lo)=-0.807, f(hi)=-2.108 — same sign
+diphenoxylic acid	N#CC(CCN1CCC(C(=O)O)(c2ccccc2)CC1)(c1ccccc1)c1ccccc1	5.0	0.0401	0.022676	18.6406			no_root	f(lo)=-0.114, f(hi)=-1.490 — same sign
+momelotinib	N#CCNC(=O)c1ccc(-c2ccnc(Nc3ccc(N4CCOCC4)cc3)n2)cc1	200.0	0.4837207061099389	0.431327	9.7694	6.1425	0.483948	success	
+ruxolitinib	N#CC[C@H](C1CCCC1)n1cc(-c2ncnc3[nH]ccc23)cn1	10.0	0.1862740799724946	0.111489	37.6801	3.5319	0.186268	success	
+vildagliptin	N#C[C@@H]1CCCN1C(=O)CNC12CC3CC(CC(O)(C3)C1)C2	25.0	0.117	0.036661	21.1151	1.3816	0.117058	success	
+saxagliptin	N#C[C@@H]1C[C@@H]2C[C@@H]2N1C(=O)[C@@H](N)C12CC3CC(CC(O)(C3)C1)C2	5.0	0.0253836089921467	0.005902	15.5250	0.5733	0.025390	success	
+finafloxacin	N#Cc1c(N2C[C@@H]3NCCO[C@H]3C2)c(F)cc2c(=O)c(C(=O)O)cn(C3CC3)c12	25.0	0.24	0.066851	8.9481	0.3777	0.240050	success	
+letrozole	N#Cc1ccc(C(c2ccc(C#N)cc2)n2cncn2)cc1	2.5	0.0359993674785985	0.007933	10.3987			no_root	f(lo)=-0.116, f(hi)=-1.236 — same sign
+perampanel	N#Cc1ccccc1-c1cc(-c2ccccn2)cn(-c2ccccc2)c1=O	2.0	0.0779	0.011958	21.6771			no_root	f(lo)=-0.463, f(hi)=-1.771 — same sign
+ivosidenib	N#Cc1ccnc(N2C(=O)CC[C@H]2C(=O)N(c2cncc(F)c2)[C@H](C(=O)NC2CC(F)(F)C2)c2ccccc2Cl)c1	250.0	1.6098640626968073	0.761168	14.7699	0.2756	1.610216	success	
+guanfacine	N=C(N)NC(=O)Cc1c(Cl)cccc1Cl	3.0	0.0054999999999999	0.002939	12.3733	2.5172	0.005502	success	
+amiloride	N=C(N)NC(=O)c1nc(Cl)c(N)nc1N	10.0	0.0191774346563871	0.007169	2.8689			no_root	f(lo)=-0.099, f(hi)=-1.415 — same sign
+desmopressin	N=C(N)NCCC[C@@H](NC(=O)[C@@H]1CCCN1C(=O)[C@@H]1CSSCCC(=O)N[C@@H](Cc2ccc(O)cc2)C(=O)N[C@@H](Cc2ccccc2)C(=O)N[C@@H](CCC(N)=O)C(=O)N[C@@H](CC(N)=O)C(=O)N1)C(=O)NCC(N)=O	0.4	3.130495168499707e-05	0.000032	11.5260	6.9760	0.000031	success	
+melagatran	N=C(N)c1ccc(CNC(=O)[C@@H]2CCN2C(=O)[C@H](NCC(=O)O)C2CCCCC2)cc1	5.0	0.01976	0.000949	4.6054			no_root	f(lo)=-0.999, f(hi)=-2.249 — same sign
+darifenacin	NC(=O)C(c1ccccc1)(c1ccccc1)[C@@H]1CCN(CCc2ccc3c(c2)CCO3)C1	5.0	0.00135	0.010543	20.0576	504.0071	0.001350	success	
+piracetam	NC(=O)CN1CCCC1=O	800.0	14.529999999999998	4.352560	8.3183	0.3334	14.524129	success	
+modafinil	NC(=O)C[S+]([O-])C(c1ccccc1)c1ccccc1	100.0	2.19	0.346306	18.6917			no_root	f(lo)=-0.028, f(hi)=-1.257 — same sign
+armodafinil	NC(=O)C[S@@+]([O-])C(c1ccccc1)c1ccccc1	50.0	1.3	0.173153	18.6917			no_root	f(lo)=-0.103, f(hi)=-1.332 — same sign
+lonafarnib	NC(=O)N1CCC(CC(=O)N2CCC([C@H]3c4ncc(Br)cc4CCc4cc(Cl)cc(Br)c43)CC2)CC1	100.0	0.323	0.515656	8.4881	50.7702	0.323317	success	
+oxcarbazepine	NC(=O)N1c2ccccc2CC(=O)c2ccccc21	300.0	0.3956789923662868	1.104674	9.0597	57.7417	0.395469	success	
+licarbazepine	NC(=O)N1c2ccccc2CC(O)c2ccccc21	300.0	2.33	1.499627	15.2824	4.3055	2.332838	success	
+(r)-licarbazepine	NC(=O)N1c2ccccc2C[C@@H](O)c2ccccc21	300.0	0.76287	1.499627	15.2824	31.2161	0.762315	success	
+eslicarbazepine	NC(=O)N1c2ccccc2C[C@H](O)c2ccccc21	300.0	2.79718	1.499627	15.2824	2.7633	2.799177	success	
+hydroxyurea	NC(=O)NO	1107.0	28.32	7.990016	5.8544			no_root	f(lo)=-0.156, f(hi)=-1.522 — same sign
+felbamate	NC(=O)OCC(COC(N)=O)c1ccccc1	600.0	0.0089	3.272324	12.8683			no_root	f(lo)=3.128, f(hi)=1.807 — same sign
+chlorphenesin carbamate	NC(=O)OCC(O)COc1ccc(Cl)cc1	250.0	3.4300000000000006	1.349548	14.2236	1.5476	3.430354	success	
+solriamfetol	NC(=O)OC[C@H](N)Cc1ccccc1	75.0	0.499	0.087417	15.4471			no_root	f(lo)=-0.066, f(hi)=-1.153 — same sign
+cenobamate	NC(=O)O[C@@H](Cn1ncnn1)c1ccccc1Cl	5.0	0.101	0.028361	19.8467	0.8571	0.101055	success	
+Avagacestat	NC(=O)[C@@H](CCC(F)(F)F)N(Cc1ccc(-c2ncon2)cc1F)S(=O)(=O)c1ccc(Cl)cc1	0.3	0.001	0.001661	9.7563	35.5099	0.001001	success	
+Vixotrigine	NC(=O)[C@@H]1CC[C@H](c2ccc(OCc3ccccc3F)cc2)N1	10.0	0.0383999999999999	0.058734	34.2037	42.1173	0.038305	success	
+samidorphan	NC(=O)c1ccc2c(c1O)[C@]13CCN(CC4CC4)[C@H](C2)[C@]1(O)CCC(=O)C3	2.0	0.0040699999999999	0.001298	10.8143	0.2731	0.004070	success	
+niraparib	NC(=O)c1cccc2cn(-c3ccc([C@@H]4CCCNC4)cc3)nc12	300.0	1.010296491135152	1.720150	14.7594	22.0357	1.013809	success	
+salicylamide	NC(=O)c1ccccc1O	1500.0	30.9	4.780920	11.1670			no_root	f(lo)=-0.213, f(hi)=-1.446 — same sign
+nicotinamide	NC(=O)c1cccnc1	187.5	3.3000000000000003	2.708697	10.5858	3.7429	3.300954	success	
+rufinamide	NC(=O)c1cn(Cc2c(F)cccc2F)nn1	200.0	1.8065	0.635819	12.0062	1.1956	1.806976	success	
+Peficitinib	NC(=O)c1cnc2[nH]ccc2c1N[C@@H]1[C@@H]2CC3C[C@H]1C[C@](O)(C3)C2	3.0	0.008	0.002421	22.6968	1.9434	0.008013	success	
+pyrazinamide	NC(=O)c1cnccn1	1890.0	38.7	8.727703	9.4440	0.1170	38.715748	success	
+favipiravir	NC(=O)c1nc(F)cnc1O	200.0	5.240712695529576	1.703860	4.2392			no_root	f(lo)=-0.102, f(hi)=-1.348 — same sign
+Mizoribine	NC(=O)c1ncn([C@@H]2O[C@H](CO)[C@@H](O)[C@H]2O)c1O	234.0	2.7	0.262957	3.6847			no_root	f(lo)=-0.554, f(hi)=-1.811 — same sign
+ribavirin	NC(=O)c1ncn([C@@H]2O[C@H](CO)[C@@H](O)[C@H]2O)n1	300.0	0.25	0.304568	3.3182	2.9737	0.249502	success	
+guanadrel	NC(N)=NCC1COC2(CCCCC2)O1	25.0	0.042	0.079910	6.1046	11.4293	0.042066	success	
+guanabenz	NC(N)=NN=Cc1c(Cl)cccc1Cl	8.0	0.00214	0.053725	16.6743			no_root	f(lo)=1.772, f(hi)=0.560 — same sign
+capivasertib	NC1(C(=O)N[C@@H](CCO)c2ccc(Cl)cc2)CCN(c2ncnc3[nH]ccc23)CC1	80.0	0.121	0.010921	13.5077			no_root	f(lo)=-0.324, f(hi)=-1.406 — same sign
+pemoline	NC1=NC(=O)C(c2ccccc2)O1	50.0	0.995	0.175269	14.4392			no_root	f(lo)=-0.051, f(hi)=-1.260 — same sign
+epinastine	NC1=NCC2c3ccccc3Cc3ccccc3N12	20.0	0.013024478085686	0.042056	27.7229			no_root	f(lo)=1.175, f(hi)=0.058 — same sign
+Clinafloxacin	NC1CCN(c2c(F)cc3c(=O)c(C(=O)O)cn(C4CC4)c3c2Cl)C1	25.0	0.14	0.073396	13.1324	2.2490	0.140104	success	
+aminolevulinic acid	NCC(=O)CCC(=O)O	100.0	4.65	0.415408	4.8957			no_root	f(lo)=-0.492, f(hi)=-1.810 — same sign
+baclofen	NCC(CC(=O)O)c1ccc(Cl)cc1	10.0	0.1462942240828393	0.056499	4.8301			no_root	f(lo)=-0.061, f(hi)=-1.110 — same sign
+gabapentin	NCC1(CC(=O)O)CCCCC1	200.0	2.4	0.656807	9.3501			no_root	f(lo)=-0.014, f(hi)=-1.017 — same sign
+gamma-aminobutyric acid	NCCCC(=O)O	2000.0	0.68853	10.854301	5.9304			no_root	f(lo)=1.590, f(hi)=0.502 — same sign
+alendronic acid (alendronate)	NCCCC(O)(P(=O)(O)O)P(=O)(O)O	70.0	0.0384179697537493	0.289331	2.7174	67.4542	0.038419	success	
+aminocaproic acid	NCCCCCC(=O)O	500.0	16.355000000000004	2.415186	7.5648			no_root	f(lo)=-0.373, f(hi)=-1.443 — same sign
+Mavorixafor	NCCCCN(Cc1nc2ccccc2[nH]1)[C@H]1CCCc2cccnc21	50.0	0.159	0.238364	27.4358	34.1167	0.158448	success	
+lisinopril	NCCCC[C@H](N[C@@H](CCc1ccccc1)C(=O)O)C(=O)N1CCC[C@H]1C(=O)O	10.0	0.0509999999999999	0.000823	15.1871			no_root	f(lo)=-1.181, f(hi)=-2.451 — same sign
+triethylenetetramine	NCCNCCNCCN	600.0	0.866	2.327087	6.0435	19.8795	0.864324	success	
+cysteamine	NCCS	1200.0	4.87601	7.699295	13.2121	18.1040	4.874654	success	
+taurine	NCCS(=O)(=O)O	4000.0	84.17000000000002	25.871270	6.6104			no_root	f(lo)=-0.124, f(hi)=-1.216 — same sign
+Etamicastat	NCCc1c[nH]c(=S)n1[C@H]1COc2c(F)cc(F)cc2C1	20.0	0.023	0.038645	53.9368	112.7834	0.022968	success	
+Lesogaberan	NC[C@@H](F)C[PH](=O)O	100.0	0.3527	0.638053	9.3905	16.6305	0.352638	success	
+tranexamic acid	NC[C@H]1CC[C@H](C(=O)O)CC1	1000.0	7.0	3.332854	8.2433	1.1532	7.001935	success	
+isoniazid	NNC(=O)c1ccncc1	100.0	1.2	3.737625	6.7598	67.2154	1.200070	success	
+phenelzine	NNCCc1ccccc1	15.0	0.0101399999999999	0.121420	13.7035			no_root	f(lo)=1.512, f(hi)=0.398 — same sign
+dihydralazine	NNc1nnc(NN)c2ccccc12	20.0	0.04662	0.042992	3.7898	4.8383	0.046600	success	
+hydralazine	NNc1nncc2ccccc12	10.0	0.0509999999999999	0.055205	9.4937	6.7252	0.051001	success	
+Aprocitentan	NS(=O)(=O)Nc1ncnc(OCCOc2ncc(Br)cn2)c1-c1ccc(Br)cc1	5.0	0.3499999999999999	0.034123	12.5973			no_root	f(lo)=-0.904, f(hi)=-2.366 — same sign
+furosemide	NS(=O)(=O)c1cc(C(=O)O)c(NCc2ccco2)cc1Cl	20.0	1.34	0.140307	10.8806			no_root	f(lo)=-0.648, f(hi)=-2.347 — same sign
+piretanide	NS(=O)(=O)c1cc(C(=O)O)cc(N2CCCC2)c1Oc1ccccc1	3.0	0.2	0.009788	22.4062			no_root	f(lo)=-0.889, f(hi)=-2.412 — same sign
+chlorthalidone	NS(=O)(=O)c1cc(C2(O)NC(=O)c3ccccc32)ccc1Cl	25.0	1.952	0.076520	12.4615			no_root	f(lo)=-1.008, f(hi)=-2.547 — same sign
+diclofenamide	NS(=O)(=O)c1cc(Cl)c(Cl)c(S(N)(=O)=O)c1	25.0	0.2979999999999999	0.175182	3.9543	0.7365	0.298116	success	
+bendroflumethiazide	NS(=O)(=O)c1cc2c(cc1C(F)(F)F)NC(Cc1ccccc1)NS2(=O)=O	1.25	0.00927	0.001926	9.6368			no_root	f(lo)=-0.466, f(hi)=-1.970 — same sign
+trichlormethiazide	NS(=O)(=O)c1cc2c(cc1Cl)NC(C(Cl)Cl)NS2(=O)=O	4.0	0.03879	0.010733	2.9091			no_root	f(lo)=-0.360, f(hi)=-1.828 — same sign
+chlorothiazide	NS(=O)(=O)c1cc2c(cc1Cl)NC=NS2(=O)=O	500.0	0.513	3.631032	2.1339	73.4022	0.513183	success	
+hydrochlorothiazide	NS(=O)(=O)c1cc2c(cc1Cl)NCNS2(=O)=O	12.0	0.0688199999999999	0.030164	2.0805			no_root	f(lo)=-0.100, f(hi)=-1.413 — same sign
+loracarbef	N[C@@H](C(=O)N[C@@H]1C(=O)N2C(C(=O)O)=C(Cl)CC[C@H]12)c1ccccc1	200.0	9.01	0.023477	3.6528			no_root	f(lo)=-2.074, f(hi)=-3.447 — same sign
+cefaclor	N[C@@H](C(=O)N[C@@H]1C(=O)N2C(C(=O)O)=C(Cl)CS[C@H]12)c1ccccc1	125.0	7.006519999999999	0.034574	4.1179			no_root	f(lo)=-1.760, f(hi)=-3.127 — same sign
+sitagliptin	N[C@@H](CC(=O)N1CCn2c(nnc2C(F)(F)F)C1)Cc1cc(F)c(F)cc1F	1.5	0.0029699999999999	0.003174	6.6879	4.7318	0.002969	success	
+carbocisteine	N[C@@H](CSCC(=O)O)C(=O)O	750.0	6.889999999999999	1.858078	2.2129			no_root	f(lo)=-0.423, f(hi)=-1.719 — same sign
+tryptophan	N[C@@H](Cc1c[nH]c2ccccc12)C(=O)O	700.0	25.000000000000007	2.930387	17.6997			no_root	f(lo)=-0.414, f(hi)=-1.676 — same sign
+levothyroxine (l-t4)	N[C@@H](Cc1cc(I)c(Oc2cc(I)c(O)c(I)c2)c(I)c1)C(=O)O	0.1	0.0362	0.000382	25.0899			no_root	f(lo)=-1.835, f(hi)=-3.217 — same sign
+melphalan	N[C@@H](Cc1ccc(N(CCCl)CCCl)cc1)C(=O)O	5.0	0.05213	0.009252	19.0703			no_root	f(lo)=-0.086, f(hi)=-1.213 — same sign
+levodopa	N[C@@H](Cc1ccc(O)c(O)c1)C(=O)O	250.0	1.077	0.165502	4.5921			no_root	f(lo)=-0.512, f(hi)=-1.767 — same sign
+Sitafloxacin	N[C@@H]1CN(c2c(F)cc3c(=O)c(C(=O)O)cn([C@@H]4C[C@@H]4F)c3c2Cl)CC12CC2	50.0	0.72	0.087274	8.7775			no_root	f(lo)=-0.464, f(hi)=-1.596 — same sign
+cycloserine	N[C@@H]1CONC1=O	250.0	19.420000000000005	0.617908	7.5068			no_root	f(lo)=-1.009, f(hi)=-2.152 — same sign
+(+)-tranylcypromine	N[C@@H]1C[C@H]1c1ccccc1	20.0	0.0143	0.071301	22.7150			no_root	f(lo)=1.333, f(hi)=0.265 — same sign
+trovafloxacin	N[C@@H]1[C@H]2CN(c3nc4c(cc3F)c(=O)c(C(=O)O)cn4-c3ccc(F)cc3F)C[C@@H]12	30.0	0.2999999999999999	0.190900	6.5229	1.1250	0.299969	success	
+rimegepant	N[C@@H]1c2cccnc2[C@H](OC(=O)N2CCC(n3c(=O)[nH]c4ncccc43)CC2)CC[C@H]1c1cccc(F)c1F	25.0	0.3111	0.035882	20.6595			no_root	f(lo)=-0.657, f(hi)=-2.031 — same sign
+droxidopa	N[C@H](C(=O)O)[C@H](O)c1ccc(O)c(O)c1	200.0	0.965	0.167336	3.3399			no_root	f(lo)=-0.469, f(hi)=-1.672 — same sign
+(-)-tranylcypromine	N[C@H]1C[C@@H]1c1ccccc1	20.0	0.0561	0.071301	22.7150	21.5305	0.056009	success	
+ambroxol	Nc1c(Br)cc(Br)cc1CN[C@H]1CC[C@H](O)CC1	15.0	0.0257	0.020871	27.9101	12.3085	0.025696	success	
+bromfenac	Nc1c(CC(=O)O)cccc1C(=O)c1ccc(Br)cc1	50.0	4.137691745835627	1.225557	11.4586			no_root	f(lo)=-0.315, f(hi)=-1.980 — same sign
+tacrine	Nc1c2c(nc3ccccc13)CCCC2	25.0	0.00939	0.065836	23.5649			no_root	f(lo)=1.454, f(hi)=0.363 — same sign
+1-hydroxytacrine	Nc1c2c(nc3ccccc13)CCCC2O	40.0	0.0322999999999999	0.356590	18.2436	3315.1755	0.032309	success	
+amrinone	Nc1cc(-c2ccncc2)c[nH]c1=O	75.0	0.9515513648773776	0.266453	22.4824	1.4855	0.949593	success	
+minoxidil	Nc1cc(N2CCCCC2)nc(N)[n+]1[O-]	2.5	0.0168	0.004455	6.7867			no_root	f(lo)=-0.035, f(hi)=-1.222 — same sign
+phenazopyridine	Nc1ccc(/N=N/c2ccccc2)c(N)n1	200.0	0.065	1.496346	13.3935			no_root	f(lo)=1.639, f(hi)=0.323 — same sign
+aminosalicylic acid (para-aminosalicylic acid)	Nc1ccc(C(=O)O)c(O)c1	4000.0	46.52536942357364	5.249371	7.8544			no_root	f(lo)=-0.295, f(hi)=-1.746 — same sign
+mesalazine (5-asa)	Nc1ccc(O)c(C(=O)O)c1	1200.0	0.857	1.322584	6.9562	9.1887	0.857667	success	
+sulfadiazine	Nc1ccc(S(=O)(=O)Nc2ncccn2)cc1	500.0	18.236205601242897	8.032059	6.1016			no_root	f(lo)=-0.024, f(hi)=-1.416 — same sign
+dapsone	Nc1ccc(S(=O)(=O)c2ccc(N)cc2)cc1	100.0	1.710263137648707	0.666542	10.1339			no_root	f(lo)=-0.067, f(hi)=-1.319 — same sign
+lenalidomide	Nc1cccc2c1CN(C1CCC(=O)NC1=O)C2=O	5.0	0.0662	0.013046	4.6358			no_root	f(lo)=-0.206, f(hi)=-1.435 — same sign
+cidofovir	Nc1ccn(C[C@@H](CO)OCP(=O)(O)O)c(=O)n1	3.5	0.00176	0.004098	3.9018	9.4637	0.001761	success	
+lamivudine	Nc1ccn([C@@H]2CS[C@H](CO)O2)c(=O)n1	100.0	1.176	0.345749	3.6086			no_root	f(lo)=-0.100, f(hi)=-1.360 — same sign
+zalcitabine	Nc1ccn([C@H]2CC[C@@H](CO)O2)c(=O)n1	0.75	0.0125	0.002285	3.3187			no_root	f(lo)=-0.278, f(hi)=-1.463 — same sign
+Apricitabine	Nc1ccn([C@H]2CO[C@@H](CO)S2)c(=O)n1	400.0	4.1	1.807414	4.5545	0.4474	4.095160	success	
+dalfampridine	Nc1ccncc1	10.0	0.0426999999999999	0.103638	18.3856	72.6030	0.042686	success	
+amifampridine	Nc1ccncc1N	5.0	0.0039799999999999	0.020260	7.7756			no_root	f(lo)=1.182, f(hi)=0.108 — same sign
+delafloxacin	Nc1nc(-n2cc(C(=O)O)c(=O)c3cc(F)c(N4CC(O)C4)c(Cl)c32)c(F)cc1F	50.0	0.949	0.182335	6.8928			no_root	f(lo)=-0.325, f(hi)=-1.866 — same sign
+ceftibuten (7432-s)	Nc1nc(/C(=C/CC(=O)O)C(=O)N[C@@H]2C(=O)N3C(C(=O)O)=CCS[C@H]23)cs1	25.0	1.9	0.023823	5.7199			no_root	f(lo)=-1.380, f(hi)=-2.883 — same sign
+Peldesine	Nc1nc(=O)c2[nH]cc(Cc3cccnc3)c2[nH]1	61.1	0.2536	0.100740	7.3346	0.4997	0.253533	success	
+folic acid	Nc1nc(=O)c2nc(CNc3ccc(C(=O)N[C@@H](CCC(=O)O)C(=O)O)cc3)cnc2[nH]1	0.4	0.01611	0.000088	6.9448			no_root	f(lo)=-1.798, f(hi)=-3.385 — same sign
+penciclovir	Nc1nc(=O)c2ncn(CCC(CO)CO)c2[nH]1	125.0	0.84	0.087682	3.7746			no_root	f(lo)=-0.488, f(hi)=-1.739 — same sign
+acyclovir	Nc1nc(=O)c2ncn(COCCO)c2[nH]1	100.0	0.83	0.190246	6.9500			no_root	f(lo)=-0.189, f(hi)=-1.647 — same sign
+emtricitabine	Nc1nc(=O)n([C@@H]2CS[C@H](CO)O2)cc1F	200.0	2.26839	0.428310	4.4884			no_root	f(lo)=-0.143, f(hi)=-1.436 — same sign
+tioguanine	Nc1nc(=S)c2[nH]cnc2[nH]1	40.0	0.0083599999999999	0.179408	3.5142			no_root	f(lo)=1.678, f(hi)=0.394 — same sign
+mirabegron	Nc1nc(CC(=O)Nc2ccc(CCNC[C@H](O)c3ccccc3)cc2)cs1	25.0	0.0098807894421447	0.006661	22.1663	6.8108	0.009899	success	
+cladribine	Nc1nc(Cl)nc2c1ncn2[C@H]1C[C@H](O)[C@@H](CO)O1	10.0	0.0254999999999999	0.008565	7.3896	0.6522	0.025501	success	
+fludarabine	Nc1nc(F)nc2c1ncn2[C@@H]1O[C@H](CO)[C@@H](O)[C@@H]1O	74.0	0.279	0.166327	5.3715	1.1764	0.278535	success	
+triamterene	Nc1nc(N)c2nc(-c3ccccc3)c(N)nc2n1	50.0	0.026	0.059303	9.8178	65.4297	0.025971	success	
+abacavir	Nc1nc(NC2CC2)c2ncn([C@H]3C=C[C@@H](CO)C3)c2n1	100.0	0.58	0.066895	23.1454			no_root	f(lo)=-0.077, f(hi)=-1.329 — same sign
+leucovorin	Nc1nc2c(c(=O)[nH]1)N(C=O)C(CNc1ccc(C(=O)N[C@@H](CCC(=O)O)C(=O)O)cc1)CN2	75.0	0.64	0.002388	9.7328			no_root	f(lo)=-1.609, f(hi)=-2.959 — same sign
+ganciclovir	Nc1nc2c(ncn2COC(CO)CO)c(=O)[nH]1	360.0	2.9800000000000004	2.236120	7.5845	0.1738	2.980167	success	
+riluzole	Nc1nc2ccc(OC(F)(F)F)cc2s1	25.0	0.091	0.208141	37.1783	265.0570	0.091006	success	
+adefovir	Nc1ncnc2c1ncn2CCOCP(=O)(O)O	10.0	0.023883048381645	0.024637	7.1773	5.0000	0.023871	success	
+lamotrigine	Nc1nnc(-c2cccc(Cl)c2Cl)c(N)n1	25.0	0.29	0.125470	11.6627	1.3870	0.290106	success	
+Vafidemstat	Nc1nnc(CN[C@@H]2C[C@H]2c2ccc(OCc3ccccc3)cc2)o1	0.2	0.00111	0.000437	69.5244	7.5737	0.001110	success	
+selinexor	O=C(/C=C\n1cnc(-c2cc(C(F)(F)F)cc(C(F)(F)F)c2)n1)NNc1cnccn1	60.0	0.442	0.266229	17.5261	2.6455	0.441977	success	
+praziquantel	O=C(C1CCCCC1)N1CC(=O)N2CCc3ccccc3C2C1	1282.0	0.14879	6.705266	25.1037			no_root	f(lo)=2.248, f(hi)=1.061 — same sign
+vorinostat	O=C(CCCCCCC(=O)Nc1ccccc1)NO	400.0	0.3171899999999999	0.122395	57.3900	7.5692	0.317165	success	
+bromperidol	O=C(CCCN1CCC(O)(c2ccc(Br)cc2)CC1)c1ccc(F)cc1	10.0	0.0045099999999999	0.053294	25.9810			no_root	f(lo)=1.380, f(hi)=0.070 — same sign
+haloperidol	O=C(CCCN1CCC(O)(c2ccc(Cl)cc2)CC1)c1ccc(F)cc1	4.0	0.00133	0.020338	16.5470			no_root	f(lo)=1.517, f(hi)=0.252 — same sign
+benperidol	O=C(CCCN1CCC(n2c(O)nc3ccccc32)CC1)c1ccc(F)cc1	6.0	0.0073	0.044506	15.3705	263.9492	0.007305	success	
+Lafutidine	O=C(C[S+]([O-])Cc1ccco1)NC/C=C\COc1cc(CN2CCCCC2)ccn1	10.0	0.24665	0.015504	21.2072			no_root	f(lo)=-0.568, f(hi)=-1.803 — same sign
+benznidazole	O=C(Cn1ccnc1[N+](=O)[O-])NCc1ccccc1	100.0	2.2	0.946836	12.5362	1.2239	2.199962	success	
+rebamipide	O=C(NC(Cc1cc(=O)[nH]c2ccccc12)C(=O)O)c1ccc(Cl)cc1	100.0	0.2183690186358861	0.691429	18.1575	80.5684	0.218391	success	
+lomitapide	O=C(NC1CCN(CCCCC2(C(=O)NCC(F)(F)F)c3ccccc3-c3ccccc32)CC1)c1ccccc1-c1ccc(C(F)(F)F)cc1	10.0	0.0005007993610219	0.079005	19.6741			no_root	f(lo)=2.284, f(hi)=0.993 — same sign
+indoramin	O=C(NC1CCN(CCc2c[nH]c3ccccc23)CC1)c1ccccc1	50.0	0.02671	0.326248	43.1713			no_root	f(lo)=1.403, f(hi)=0.081 — same sign
+flecainide	O=C(NCC1CCCCN1)c1cc(OCC(F)(F)F)ccc1OCC(F)(F)F	50.0	0.0675647837264354	0.111803	6.8116	19.2293	0.067604	success	
+moclobemide	O=C(NCCN1CCOCC1)c1ccc(Cl)cc1	100.0	1.556	0.296400	23.6563			no_root	f(lo)=-0.251, f(hi)=-1.331 — same sign
+xamoterol	O=C(NCCNCC(O)COc1ccc(O)cc1)N1CCOCC1	50.0	0.0276	0.028385	8.9705	5.5925	0.027614	success	
+nicorandil	O=C(NCCO[N+](=O)[O-])c1cccnc1	5.0	0.0609261848469112	0.026265	6.6560	0.8455	0.060917	success	
+rivaroxaban	O=C(NC[C@H]1CN(c2ccc(N3CCOCC3=O)cc2)C(=O)O1)c1ccc(Cl)s1	2.5	0.0516337099190054	0.016473	12.9515			no_root	f(lo)=-0.130, f(hi)=-1.460 — same sign
+tecovirimat	O=C(NN1C(=O)[C@@H]2[C@@H]3C=C[C@@H]([C@H]4C[C@@H]34)[C@@H]2C1=O)c1ccc(C(F)(F)F)cc1	500.0	0.934	1.258238	15.2482	16.1608	0.932781	success	
+Telcagepant	O=C(N[C@@H]1CC[C@@H](c2cccc(F)c2F)CN(CC(F)(F)F)C1=O)N1CCC(n2c(=O)[nH]c3ncccc32)CC1	400.0	3.69378	0.872629	14.0777			no_root	f(lo)=-0.340, f(hi)=-1.697 — same sign
+Omapatrilat	O=C(N[C@H]1CCS[C@H]2CCC[C@@H](C(=O)O)N2C1=O)[C@@H](S)Cc1ccccc1	2.5	0.0012799999999999	0.002192	21.5817	30.4206	0.001277	success	
+Encenicline	O=C(N[C@H]1CN2CCC1CC2)c1cc2cccc(Cl)c2s1	1.0	0.00059	0.004979	57.3109			no_root	f(lo)=1.416, f(hi)=0.107 — same sign
+roflumilast n-oxide	O=C(Nc1c(Cl)c[n+]([O-])cc1Cl)c1ccc(OC(F)F)c(OCC2CC2)c1	0.25	0.0063667102965346	0.001830	37.9332			no_root	f(lo)=-0.265, f(hi)=-1.596 — same sign
+roflumilast	O=C(Nc1c(Cl)cncc1Cl)c1ccc(OC(F)F)c(OCC2CC2)c1	0.25	0.0056625082781396	0.001805	40.8729			no_root	f(lo)=-0.257, f(hi)=-1.596 — same sign
+vibegron	O=C(Nc1ccc(C[C@@H]2CC[C@H]([C@H](O)c3ccccc3)N2)cc1)[C@@H]1CCc2nccc(=O)n21	75.0	0.1326999999999999	0.016592	14.4853			no_root	f(lo)=-0.217, f(hi)=-1.357 — same sign
+asciminib	O=C(Nc1ccc(OC(F)(F)Cl)cc1)c1cnc(N2CC[C@@H](O)C2)c(-c2ccn[nH]2)c1	40.0	0.5638841369562784	0.095824	8.8485			no_root	f(lo)=-0.599, f(hi)=-1.991 — same sign
+avatrombopag	O=C(Nc1nc(-c2cc(Cl)cs2)c(N2CCN(C3CCCCC3)CC2)s1)c1cnc(N2CCC(C(=O)O)CC2)c(Cl)c1	1.0	0.0057	0.002593	14.2829			no_root	f(lo)=-0.127, f(hi)=-1.490 — same sign
+filgotinib	O=C(Nc1nc2cccc(-c3ccc(CN4CCS(=O)(=O)CC4)cc3)n2n1)C1CC1	100.0	0.916	0.192955	13.3283			no_root	f(lo)=-0.033, f(hi)=-1.243 — same sign
+tizoxanide	O=C(Nc1ncc([N+](=O)[O-])s1)c1ccccc1O	500.0	7.180000000000001	15.671924	24.4696	80.6372	7.172898	success	
+r-138727	O=C(O)/C=C1/CN(C(C(=O)C2CC2)c2ccccc2F)CCC1S	2.0	0.0209	0.018302	12.8310	4.7405	0.020899	success	
+fenbufen	O=C(O)CCC(=O)c1ccc(-c2ccccc2)cc1	600.0	3.83	9.776272	28.5582	77.1839	3.829662	success	
+lipoic acid (r-lipoic acid)	O=C(O)CCCC[C@@H]1CCSS1	200.0	3.7817	0.846134	35.4281	2.0261	3.780848	success	
+bepotastine	O=C(O)CCCN1CCC(OC(c2ccc(Cl)cc2)c2ccccn2)CC1	5.0	0.05441	0.005139	7.7191			no_root	f(lo)=-0.609, f(hi)=-1.749 — same sign
+gamma-hydroxybutyric acid	O=C(O)CCCO	990.0	23.0	9.303254	6.9803	0.6441	23.024344	success	
+chlorambucil	O=C(O)CCCc1ccc(N(CCCl)CCCl)cc1	15.0	0.3499999999999999	0.136446	53.3615	7.0560	0.350317	success	
+phenylbutyrate	O=C(O)CCCc1ccccc1	5000.0	218.0000000000001	36.954519	29.9329			no_root	f(lo)=-0.007, f(hi)=-1.427 — same sign
+oxaprozin	O=C(O)CCc1nc(-c2ccccc2)c(-c2ccccc2)o1	1200.0	90.77444574328172	23.596101	13.4130			no_root	f(lo)=-0.531, f(hi)=-1.807 — same sign
+benazeprilat	O=C(O)CN1C(=O)[C@@H](N[C@@H](CCc2ccccc2)C(=O)O)CCc2ccccc21	10.0	0.19505	0.029702	30.1447			no_root	f(lo)=-0.200, f(hi)=-1.904 — same sign
+daprodustat	O=C(O)CNC(=O)C1C(=O)N(C2CCCCC2)C(=O)N(C2CCCCC2)C1=O	4.0	0.0793	0.029957	6.1600			no_root	f(lo)=-0.202, f(hi)=-1.918 — same sign
+Vadadustat	O=C(O)CNC(=O)c1ncc(-c2cccc(Cl)c2)cc1O	80.0	9.1	2.608737	7.9873			no_root	f(lo)=-0.475, f(hi)=-2.176 — same sign
+aceclofenac	O=C(O)COC(=O)Cc1ccccc1Nc1c(Cl)cccc1Cl	100.0	9.572585857541316	3.585378	70.1319			no_root	f(lo)=-0.149, f(hi)=-1.648 — same sign
+Ralinepag	O=C(O)COC[C@H]1CC[C@H](COC(=O)N(c2ccccc2)c2ccc(Cl)cc2)CC1	0.1	0.00265	0.000507	25.3010			no_root	f(lo)=-0.541, f(hi)=-1.988 — same sign
+bendazac	O=C(O)COc1nn(Cc2ccccc2)c2ccccc12	500.0	41.900000000000006	13.740491	21.6485			no_root	f(lo)=-0.275, f(hi)=-1.974 — same sign
+erdosteine	O=C(O)CSCC(=O)NC1CCSC1=O	600.0	2.506	3.735516	4.0795	5.0177	2.504617	success	
+lesinurad	O=C(O)CSc1nnc(Br)n1-c1ccc(C2CC2)c2ccccc12	5.0	0.303	0.031250	27.4463			no_root	f(lo)=-0.714, f(hi)=-2.413 — same sign
+pitavastatin	O=C(O)C[C@H](O)C[C@H](O)/C=C/c1c(C2CC2)nc2ccccc2c1-c1ccc(F)cc1	1.0	0.0667999999999999	0.008985	10.4567			no_root	f(lo)=-0.789, f(hi)=-2.406 — same sign
+etrasimod	O=C(O)C[C@H]1CCc2c1[nH]c1ccc(OCc3ccc(C4CCCC4)c(C(F)(F)F)c3)cc21	0.1	0.0016999999999999	0.000110	13.3626			no_root	f(lo)=-1.087, f(hi)=-2.252 — same sign
+2-pyridylacetic acid	O=C(O)Cc1ccccn1	8.0	0.218	0.058569	15.2621	0.8411	0.218089	success	
+Setipiprant	O=C(O)Cn1c2c(c3cc(F)ccc31)CN(C(=O)c1cccc3ccccc13)CC2	5.0	0.0210999999999999	0.019496	10.0529	5.3776	0.021098	success	
+fosinoprilat	O=C(O)[C@@H]1C[C@@H](C2CCCCC2)CN1C(=O)CP(=O)(O)CCCCc1ccccc1	10.0	0.1550012903172099	0.026165	26.7771			no_root	f(lo)=-0.218, f(hi)=-1.939 — same sign
+cilazaprilat	O=C(O)[C@H](CCc1ccccc1)N[C@H]1CCCN2CCC[C@@H](C(=O)O)N2C1=O	0.5	0.0054	0.000209	18.3705			no_root	f(lo)=-0.616, f(hi)=-2.171 — same sign
+clopidogrel carboxylic acid	O=C(O)[C@H](c1ccccc1Cl)N1CCc2sccc2C1	75.0	2.60886	0.596491	47.2580			no_root	f(lo)=-0.318, f(hi)=-1.619 — same sign
+diflunisal	O=C(O)c1cc(-c2ccc(F)cc2F)ccc1O	250.0	36.318590281011744	7.305304	10.3477			no_root	f(lo)=-0.544, f(hi)=-2.235 — same sign
+olsalazine	O=C(O)c1cc(/N=N/c2ccc(O)c(C(=O)O)c2)ccc1O	1000.0	1.08807	7.895532	11.9406	250.8511	1.087995	success	
+sulfasalazine	O=C(O)c1cc(/N=N/c2ccc(S(=O)(=O)Nc3ccccn3)cc2)ccc1O	500.0	4.9490609210233005	4.617235	10.7111	4.8373	4.952674	success	
+Tropifexor	O=C(O)c1cc(F)c2nc(N3[C@@H]4CC[C@H]3C[C@@H](OCc3c(-c5ccccc5OC(F)(F)F)noc3C3CC3)C4)sc2c1	0.1	0.0016999999999999	0.000253	29.2074			no_root	f(lo)=-0.709, f(hi)=-1.853 — same sign
+rhein	O=C(O)c1cc(O)c2c(c1)C(=O)c1cccc(O)c1C2=O	50.0	3.2000000000000006	0.350294	11.0757			no_root	f(lo)=-0.816, f(hi)=-2.602 — same sign
+deferasirox	O=C(O)c1ccc(-n2nc(-c3ccccc3O)nc2-c2ccccc2O)cc1	375.0	9.81958	3.369474	9.8509			no_root	f(lo)=-0.348, f(hi)=-2.057 — same sign
+tafamidis	O=C(O)c1ccc2nc(-c3cc(Cl)cc(Cl)c3)oc2c1	400.0	20.360000000000007	17.401808	14.1267			no_root	f(lo)=-0.016, f(hi)=-1.431 — same sign
+ataluren	O=C(O)c1cccc(-c2noc(-c3ccccc3F)n2)c1	210.0	6.0	10.219101	16.4436	71.7572	6.006885	success	
+salicylic acid	O=C(O)c1ccccc1O	100.0	4.19	1.137709	17.9255			no_root	f(lo)=-0.150, f(hi)=-1.735 — same sign
+Cilofexor	O=C(O)c1ccnc(N2CC(O)(c3ccc(OCc4c(-c5c(Cl)cccc5Cl)noc4C4CC4)cc3Cl)C2)c1	10.0	0.304	0.034758	18.7874			no_root	f(lo)=-0.843, f(hi)=-2.221 — same sign
+pyrazinoic acid	O=C(O)c1cnccn1	1890.0	4.500000000000001	10.541337	13.5239	46.0425	4.490957	success	
+dolasetron	O=C(O[C@@H]1C[C@@H]2C[C@H]3C[C@H](C1)N2CC3=O)c1c[nH]c2ccccc12	50.0	0.1166699999999999	0.169954	24.0406	26.8551	0.116561	success	
+solifenacin	O=C(O[C@H]1CN2CCC1CC2)N1CCc2ccccc2[C@@H]1c1ccccc1	5.0	0.0065	0.015058	63.3368	144.8626	0.006499	success	
+trospium	O=C(O[C@H]1C[C@H]2CC[C@@H](C1)[N+]21CCCC1)C(O)(c1ccccc1)c1ccccc1	20.0	0.0033	0.013706	37.4559			no_root	f(lo)=1.366, f(hi)=0.124 — same sign
+salsalate	O=C(Oc1ccccc1C(=O)O)c1ccccc1O	1500.0	30.800000000000008	11.737288	33.1499	4.2734	30.797419	success	
+Etavopivat	O=C([C@H](CO)c1ccccc1)N1CC2=C(C1)CN(S(=O)(=O)c1cnc3c(c1)OCCO3)C2	200.0	0.447	0.448207	5.4281	3.5567	0.446724	success	
+olaparib	O=C(c1cc(Cc2n[nH]c(=O)c3ccccc23)ccc1F)N1CCN(C(=O)C2CC2)CC1	300.0	7.165576422098049	1.040338	17.0197			no_root	f(lo)=-0.248, f(hi)=-1.529 — same sign
+cobimetinib	O=C(c1ccc(F)c(F)c1Nc1ccc(I)cc1F)N1CC(O)([C@@H]2CCCCN2)C1	10.0	0.0090699999999999	0.035025	14.8892	97.1118	0.009098	success	
+mitapivat	O=C(c1ccc(NS(=O)(=O)c2cccc3cccnc23)cc1)N1CCN(CC2CC2)CC1	30.0	0.469	0.100425	25.6254			no_root	f(lo)=-0.426, f(hi)=-1.773 — same sign
+raloxifene	O=C(c1ccc(OCCN2CCCCC2)cc1)c1c(-c2ccc(O)cc2)sc2cc(O)ccc12	60.0	0.0003046309242345	0.051170	28.3548			no_root	f(lo)=2.576, f(hi)=1.212 — same sign
+ketorolac	O=C(c1ccccc1)c1ccc2n1CCC2C(=O)O	10.0	0.8346256645946133	0.229015	11.3258			no_root	f(lo)=-0.284, f(hi)=-1.791 — same sign
+Soticlestat	O=C(c1cccnc1-c1ccncc1)N1CCC(O)(Cc2ccccc2)CC1	15.0	0.0434999999999999	0.109929	21.0222	73.9170	0.043360	success	
+sulfinpyrazone	O=C1C(CC[S+]([O-])c2ccccc2)C(=O)N(c2ccccc2)N1c1ccccc1	200.0	12.97	1.733831	33.3242			no_root	f(lo)=-0.414, f(hi)=-2.167 — same sign
+atovaquone	O=C1C(O)=C([C@H]2CC[C@H](c3ccc(Cl)cc3)CC2)C(=O)c2ccccc21	500.0	1.6454419657297856	2.417418	20.7259	236.9402	1.645710	success	
+n-desmethylclobazam	O=C1CC(=O)N(c2ccccc2)c2cc(Cl)ccc2N1	20.0	0.082	0.283070	10.4758	91.3285	0.081818	success	
+buspirone	O=C1CC2(CCCC2)CC(=O)N1CCCCN1CCN(c2ncccn2)CC1	10.0	0.0012389511595793	0.021044	27.8787			no_root	f(lo)=1.778, f(hi)=0.507 — same sign
+thalidomide	O=C1CCC(N2C(=O)c3ccccc3C2=O)C(=O)N1	50.0	0.62	0.595342	4.5786	2.6753	0.618227	success	
+nitisinone (ntbc)	O=C1CCCC(=O)C1C(=O)c1ccc(C(F)(F)F)cc1[N+](=O)[O-]	70.0	7.809999999999999	0.940445	19.5866			no_root	f(lo)=-0.531, f(hi)=-1.908 — same sign
+naltrexone	O=C1CC[C@@]2(O)[C@H]3Cc4ccc(O)c5c4[C@@]2(CCN3CC2CC2)[C@H]1O5	50.0	0.01144	0.065844	14.6216			no_root	f(lo)=1.399, f(hi)=0.331 — same sign
+Iberdomide	O=C1CC[C@H](N2Cc3c(OCc4ccc(CN5CCOCC5)cc4)cccc3C2=O)C(=O)N1	0.1	0.0002999999999999	0.000160	26.3084	6.5489	0.000300	success	
+cilostazol	O=C1CCc2cc(OCCCCc3nnnn3C3CCCCC3)ccc2N1	50.0	0.411	0.440711	15.7896	14.6482	0.411873	success	
+aripiprazole	O=C1CCc2ccc(OCCCCN3CCN(c4cccc(Cl)c4Cl)CC3)cc2N1	5.0	0.0196484096048509	0.022066	21.7650	20.6736	0.019659	success	
+dantrolene	O=C1CN(/N=C/c2ccc(-c3ccc([N+](=O)[O-])cc3)o2)C(=O)N1	100.0	2.72	1.129452	15.4085			no_root	f(lo)=-0.078, f(hi)=-1.506 — same sign
+nitrofurantoin	O=C1CN(/N=C/c2ccc([N+](=O)[O-])o2)C(=O)N1	50.0	0.4087	1.370326	4.0823	27.0247	0.409003	success	
+anagrelide	O=C1CN2Cc3c(ccc(Cl)c3Cl)N=C2N1	1.0	0.00508	0.006692	8.7284	22.7852	0.005084	success	
+desmethyldiazepam	O=C1CN=C(c2ccccc2)c2cc(Cl)ccc2N1	15.0	0.2616772821625905	0.173146	6.6751			no_root	f(lo)=-0.003, f(hi)=-1.233 — same sign
+halazepam	O=C1CN=C(c2ccccc2)c2cc(Cl)ccc2N1CC(F)(F)F	20.0	0.03034	0.319908	16.2336	1996.5063	0.030318	success	
+nitrazepam	O=C1CN=C(c2ccccc2)c2cc([N+](=O)[O-])ccc2N1	5.0	0.0438159623644899	0.057283	7.2283	8.1988	0.043890	success	
+clonazepam	O=C1CN=C(c2ccccc2Cl)c2cc([N+](=O)[O-])ccc2N1	2.0	0.014393117467165	0.015726	7.2749	5.4337	0.014380	success	
+desalkylflurazepam	O=C1CN=C(c2ccccc2F)c2cc(Cl)ccc2N1	30.0	0.0282703024391321	0.346140	10.6700			no_root	f(lo)=1.326, f(hi)=0.134 — same sign
+bromazepam	O=C1CN=C(c2ccccn2)c2cc(Br)ccc2N1	3.0	0.0382805433608249	0.028026	7.3170	3.4612	0.038287	success	
+ziprasidone	O=C1Cc2cc(CCN3CCN(c4nsc5ccccc45)CC3)c(Cl)cc2N1	20.0	0.046	0.095961	14.8126	66.8044	0.045936	success	
+3-hydroxyanagrelide	O=C1NC2=Nc3ccc(Cl)c(Cl)c3CN2C1O	1.0	0.0082899999999999	0.006179	9.0885	2.9327	0.008298	success	
+sertindole	O=C1NCCN1CCN1CCC(c2cn(-c3ccc(F)cc3)c3ccc(Cl)cc23)CC1	4.0	0.0024722459424579	0.018184	7.3590	293.6236	0.002466	success	
+oxazepam	O=C1Nc2ccc(Cl)cc2C(c2ccccc2)=NC1O	15.0	0.3241978408317982	0.113743	7.8566			no_root	f(lo)=-0.188, f(hi)=-1.501 — same sign
+lorazepam	O=C1Nc2ccc(Cl)cc2C(c2ccccc2Cl)=NC1O	2.0	0.0221269066975029	0.011137	10.2563	0.7711	0.022111	success	
+efavirenz	O=C1Nc2ccc(Cl)cc2[C@@](C#CC2CC2)(C(F)(F)F)O1	600.0	2.543433694368189	15.736411	10.1125	1971.5768	2.540392	success	
+lurasidone	O=C1[C@@H]2[C@H]3CC[C@H](C3)[C@@H]2C(=O)N1C[C@@H]1CCCC[C@H]1CN1CCN(c2nsc3ccccc23)CC1	20.0	0.0328999999999999	0.042173	33.2946	38.6269	0.032909	success	
+ezetimibe	O=C1[C@H](CC[C@H](O)c2ccc(F)cc2)[C@@H](c2ccc(O)cc2)N1c1ccc(F)cc1	10.0	0.0042350424137815	0.019862	14.7192	138.5530	0.004236	success	
+baloxavir	O=C1c2c(O)c(=O)ccn2N([C@@H]2c3ccccc3SCc3c2ccc(F)c3F)[C@@H]2COCCN12	6.0	0.0109999999999999	0.027425	16.6126	60.2626	0.010987	success	
+palonosetron	O=C1c2cccc3c2[C@H](CCC3)CN1[C@@H]1CN2CCC1CC2	0.25	0.00067	0.000604	29.1742	18.7623	0.000670	success	
+risedronic acid (risedronate)	O=P(O)(O)C(O)(Cc1cccnc1)P(=O)(O)O	2.5	0.0004099999999999	0.006005	2.2934			no_root	f(lo)=1.540, f(hi)=0.187 — same sign
+tiludronic acid	O=P(O)(O)C(Sc1ccc(Cl)cc1)P(=O)(O)O	400.0	3.0	4.118008	8.3645	9.5318	3.008272	success	
+ifosfamide	O=P1(NCCCl)OCCCN1CCCl	1730.0	44.90731	7.605950	26.8274			no_root	f(lo)=-0.108, f(hi)=-1.196 — same sign
+nitroglycerin	O=[N+]([O-])OCC(CO[N+](=O)[O-])O[N+](=O)[O-]	6.5	0.00028	0.024404	7.9084			no_root	f(lo)=2.431, f(hi)=1.212 — same sign
+isosorbide dinitrate	O=[N+]([O-])O[C@H]1CO[C@H]2[C@@H]1OC[C@H]2O[N+](=O)[O-]	15.0	0.0063	0.057804	5.9845			no_root	f(lo)=1.433, f(hi)=0.255 — same sign
+pretomanid	O=[N+]([O-])c1cn2c(n1)OC[C@@H](OCc1ccc(OC(F)(F)F)cc1)C2	50.0	0.3364992577922629	0.140294	25.0102	2.8204	0.336613	success	
+oxypurinol	O=c1[nH]c(=O)c2cn[nH]c2[nH]1	200.0	4.10705	2.815826	6.1723	1.4902	4.113119	success	
+brivudine	O=c1[nH]c(=O)n([C@H]2C[C@H](O)[C@@H](CO)O2)cc1/C=C/Br	125.0	1.82	0.399610	6.3842			no_root	f(lo)=-0.112, f(hi)=-1.343 — same sign
+trifluridine	O=c1[nH]c(=O)n([C@H]2C[C@H](O)[C@@H](CO)O2)cc1C(F)(F)F	60.55	0.096	0.444848	5.9216	42.2034	0.095973	success	
+chlorzoxazone	O=c1[nH]c2cc(Cl)ccc2o1	250.0	3.4500000000000006	4.180905	9.7767	10.8630	3.452419	success	
+pimozide	O=c1[nH]c2ccccc2n1C1CCN(CCCC(c2ccc(F)cc2)c2ccc(F)cc2)CC1	6.0	0.0050079936102195	0.016603	19.9472	150.5630	0.005010	success	
+domperidone	O=c1[nH]c2ccccc2n1CCCN1CCC(n2c(=O)[nH]c3cc(Cl)ccc32)CC1	10.0	0.0167616526631475	0.025605	14.5805	24.4163	0.016763	success	
+flibanserin	O=c1[nH]c2ccccc2n1CCN1CCN(c2cccc(C(F)(F)F)c2)CC1	100.0	0.4386397154841316	0.870188	11.3772	38.5024	0.437731	success	
+quercetin	O=c1c(O)c(-c2ccc(O)c(O)c2)oc2cc(O)cc(O)c12	16.0	0.0235	0.038537	19.4299	27.6631	0.023504	success	
+Gepotidacin	O=c1ccc2ncc(=O)n3c2n1C[C@H]3CN1CCC(NCc2cc3c(cn2)OCCC3)CC1	100.0	0.1	0.049466	18.0737	3.0148	0.100044	success	
+didanosine	O=c1nc[nH]c2c1ncn2[C@H]1CC[C@@H](CO)O1	200.0	0.9914156545062216	0.337026	4.7742	0.3388	0.991594	success	
+dicoumarol	O=c1oc2ccccc2c(O)c1Cc1c(O)c2ccccc2oc1=O	250.0	14.699999999999998	8.767003	5.1153			no_root	f(lo)=-0.174, f(hi)=-1.791 — same sign
+procyclidine	OC(CCN1CCCC1)(c1ccccc1)C1CCCCC1	10.0	0.116	0.026552	35.3056			no_root	f(lo)=-0.034, f(hi)=-1.223 — same sign
+biperiden	OC(CCN1CCCCC1)(c1ccccc1)C1CC2C=CC1C2	4.0	0.0039299999999999	0.005393	32.6687	37.0387	0.003924	success	
+trihexyphenidyl	OC(CCN1CCCCC1)(c1ccccc1)C1CCCCC1	4.0	0.00668	0.005620	34.8291	15.3735	0.006678	success	
+nebivolol	OC(CNCC(O)C1CCc2cc(F)ccc2O1)C1CCc2cc(F)ccc2O1	5.0	0.0015194735930578	0.032587	16.5398			no_root	f(lo)=1.464, f(hi)=0.107 — same sign
+fluconazole	OC(Cn1cncn1)(Cn1cncn1)c1ccc(F)cc1F	50.0	0.93	1.359751	2.3807	4.6895	0.930467	success	
+mefloquine	OC(c1cc(C(F)(F)F)nc2c(C(F)(F)F)cccc12)C1CCCCN1	250.0	0.315	1.327936	15.5755	155.3677	0.315731	success	
+mazindol	OC1(c2ccc(Cl)cc2)c2ccccc2C2=NCCN21	1.0	0.00252	0.007723	13.8093	66.0193	0.002520	success	
+trichloroethanol	OCC(Cl)(Cl)Cl	500.0	4.631519999999999	1.169914	59.0450	2.5584	4.627688	success	
+dipyridamole	OCCN(CCO)c1nc(N2CCCCC2)c2nc(N(CCO)CCO)nc(N3CCCCC3)c2n1	25.0	0.375	0.025951	4.9244			no_root	f(lo)=-1.097, f(hi)=-2.703 — same sign
+zuclopenthixol	OCCN1CCN(CC/C=C2/c3ccccc3Sc3ccc(Cl)cc32)CC1	10.0	0.00441	0.065121	30.4486			no_root	f(lo)=1.361, f(hi)=0.005 — same sign
+fluphenazine	OCCN1CCN(CCCN2c3ccccc3Sc3ccc(C(F)(F)F)cc32)CC1	12.0	0.0023	0.096291	30.0893			no_root	f(lo)=1.807, f(hi)=0.465 — same sign
+miglitol	OCCN1C[C@H](O)[C@@H](O)[C@H](O)[C@H]1CO	50.0	1.297	0.048312	7.0601			no_root	f(lo)=-0.745, f(hi)=-1.956 — same sign
+hydroxyzine	OCCOCCN1CCN(C(c2ccccc2)c2ccc(Cl)cc2)CC1	25.0	0.04308	0.062524	22.8396	26.4662	0.043009	success	
+quetiapine	OCCOCCN1CCN(C2=Nc3ccccc3Sc3ccccc32)CC1	25.0	0.0789999999999999	0.049810	24.2194	6.4207	0.078830	success	
+ospemifene	OCCOc1ccc(/C(=C(/CCCl)c2ccccc2)c2ccccc2)cc1	60.0	0.6468437214660123	0.224360	72.4053			no_root	f(lo)=-0.168, f(hi)=-1.539 — same sign
+migalastat	OC[C@H]1NC[C@H](O)[C@@H](O)[C@H]1O	25.0	0.2104999999999999	0.052252	5.0112			no_root	f(lo)=-0.203, f(hi)=-1.352 — same sign
+empagliflozin	OC[C@H]1O[C@@H](c2ccc(Cl)c(Cc3ccc(O[C@H]4CCOC4)cc3)c2)[C@H](O)[C@@H](O)[C@@H]1O	0.5	0.00421	0.000455	17.7735			no_root	f(lo)=-0.364, f(hi)=-1.825 — same sign
+vilanterol	OCc1cc([C@@H](O)CNCCCCCCOCCOCc2c(Cl)cccc2Cl)ccc1O	0.2	1.799999999999998e-05	0.000150	57.2219			no_root	f(lo)=1.602, f(hi)=0.259 — same sign
+triclosan	Oc1cc(Cl)ccc1Oc1ccc(Cl)cc1Cl	4.0	0.2100999999999999	0.045155	51.8704			no_root	f(lo)=-0.429, f(hi)=-1.709 — same sign
+fenoldopam	Oc1ccc(C2CNCCc3c2cc(O)c(O)c3Cl)cc1	100.0	0.0632999999999999	0.143616	35.7218	76.9246	0.063267	success	
+lasofoxifene	Oc1ccc2c(c1)CC[C@H](c1ccccc1)[C@@H]2c1ccc(OCCN2CCCC2)cc1	0.25	0.0001933907960581	0.000587	37.2405	225.6130	0.000194	success	
+8-hydroxyamoxapine	Oc1ccc2c(c1)N=C(N1CCNCC1)c1cc(Cl)ccc1O2	25.0	0.0303599999999999	0.115724	22.1878	126.3879	0.030306	success	
+7-hydroxyamoxapine	Oc1ccc2c(c1)Oc1ccc(Cl)cc1C(N1CCNCC1)=N2	25.0	0.00554	0.108924	22.1878			no_root	f(lo)=1.664, f(hi)=0.349 — same sign
+nalbuphine	Oc1ccc2c3c1O[C@H]1[C@@H](O)CC[C@@]4(O)[C@@H](C2)N(CC2CCC2)CC[C@]314	30.0	0.00613	0.040911	20.2103			no_root	f(lo)=1.499, f(hi)=0.355 — same sign
+allopurinol	Oc1ncnc2[nH]ncc12	200.0	2.064663943599539	1.778892	5.7681	2.8545	2.063632	success	
+mercaptopurine (6-mercaptopurine)	S=c1nc[nH]c2nc[nH]c12	50.0	0.0502349317459521	0.188619	13.7233			no_root	f(lo)=1.301, f(hi)=0.189 — same sign
+deucravacitinib	[2H]C([2H])([2H])NC(=O)c1nnc(NC(=O)C2CC2)cc1Nc1cccc(-c2ncn(C)n2)c1OC	1.0	0.0033299999999999	0.001802	20.3298	6.5841	0.003337	success	
+deutetrabenazine	[2H]C([2H])([2H])Oc1cc2c(cc1OC([2H])([2H])[2H])[C@@H]1CC(=O)[C@@H](CC(C)C)CN1CC2	25.0	0.00027	0.071738	45.9638			no_root	f(lo)=3.135, f(hi)=1.954 — same sign
+Seletalisib	[O-][n+]1cccc(-c2nc3c(Cl)cccc3cc2[C@@H](Nc2ncnc3cccnc23)C(F)(F)F)c1	1.0	0.0266999999999999	0.007613	48.0810			no_root	f(lo)=-0.357, f(hi)=-1.696 — same sign
+Eltoprazine	c1cc2c(c(N3CCNCC3)c1)OCCO2	5.0	0.0129	0.033355	9.8345	34.6384	0.012888	success	
+Dotarizine	c1ccc(C(c2ccccc2)N2CCN(CCCC3(c4ccccc4)OCCO3)CC2)cc1	50.0	0.0232999999999999	0.053257	28.7227	70.4046	0.023298	success	
+levamisole	c1ccc([C@H]2CN3CCSC3=N2)cc1	150.0	0.7166699999999999	0.632196	44.0750	21.4177	0.715808	success	
+Entospletinib	c1cn2cc(-c3ccc4cn[nH]c4c3)nc(Nc3ccc(N4CCOCC4)cc3)c2n1	25.0	0.0423	0.135584	14.3870	106.5336	0.042298	success	
+varenicline	c1cnc2cc3c(cc2n1)C1CNCC3C1	0.1	0.00082	0.000420	13.2784	2.2010	0.000821	success	
+amphetamine	CC(N)Cc1ccccc1	18.8	0.0449	0.072050	27.3576	43.8779	0.044896	success	
+carglumic acid	NC(=O)NC(CCC(=O)O)C(=O)O	100.0	8.613	0.095282	3.1467			no_root	f(lo)=-1.570, f(hi)=-3.005 — same sign
+cefpodoxime proxetil	COCC1=C(C(=O)OC(C)OC(=O)OC(C)C)N2C(=O)C(NC(=O)C(=NOC)c3csc(N)n3)C2SC1	100.0	3.1	0.059540	52.8137			no_root	f(lo)=-0.798, f(hi)=-1.979 — same sign
+ciprofolxacin	O=C(O)c1cn(C2CC2)c2cc(N3CCC(NN4CCNCC4)C3)c(F)cc2c1=O	50.0	2.97	0.036028	25.8635			no_root	f(lo)=-1.146, f(hi)=-2.452 — same sign
+clopidogrel bisulfate	COC(=O)C(c1ccccc1Cl)N1CCc2sccc2C1.O=S(=O)(O)O	300.0	0.3	1.247119	44.3444	271.2211	0.300534	success	
+entecavir	C=C1C(CO)C(O)CC1n1cnc2c(=O)[nH]c(N)nc21	1.0	0.0042	0.000591	9.1691			no_root	f(lo)=-0.111, f(hi)=-1.337 — same sign
+oseltamivir	CCOC(=O)C1=CC(OC(CC)CC)C(NC(C)=O)C(N)C1	30.0	0.065	0.029445	115.0890	7.2749	0.065016	success	
+serdexmethylphenidate	COC(=O)C(c1ccccc1)C1CCCCN1C(=O)OC[n+]1cccc(C(=O)NC(CO)C(=O)[O-])c1	52.3	0.014	0.026340	32.3697	103.8596	0.014002	success	
+sodium oxybate	O=C([O-])CCCO.[Na+]	25.0	66.0	0.107880	13.6898			no_root	f(lo)=-1.979, f(hi)=-3.168 — same sign
