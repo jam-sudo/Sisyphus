@@ -20,6 +20,7 @@ from sisyphus.engine.flux import FLUX_REGISTRY
 from sisyphus.graph.body import BodyGraph
 from sisyphus.graph.types import (
     AbsorptionEdge,
+    ActiveTransportEdge,
     ClearanceEdge,
     DiffusionEdge,
     FlowEdge,
@@ -54,6 +55,10 @@ class ResolvedParams:
         self._ivive_scaling = {name: node.ivive_scaling for name, node in graph.nodes.items()}
         self._lookup_names = {
             name: node.lookup_name if node.lookup_name else name
+            for name, node in graph.nodes.items()
+        }
+        self._transporters = {
+            name: {tag: d.mean for tag, d in node.transporters.items()}
             for name, node in graph.nodes.items()
         }
         self._drug = drug
@@ -107,6 +112,24 @@ class ResolvedParams:
         if tag in self._drug.enzyme_affinity:
             return self._drug.enzyme_affinity[tag].mean
         return 0.0
+
+    def node_transporters(self, node_name: str) -> dict[str, float]:
+        """Return ``{transporter_tag: abundance}`` for a node."""
+        return self._transporters.get(node_name, {})
+
+    def drug_transporter_jmax(self, tag: str) -> float:
+        """Return the drug's Jmax for a transporter tag, or 0.0."""
+        tk = self._drug.transporter_kinetics.get(tag)
+        return tk.jmax.mean if tk is not None else 0.0
+
+    def drug_transporter_km(self, tag: str) -> float:
+        """Return the drug's Km for a transporter tag, or 0.0."""
+        tk = self._drug.transporter_kinetics.get(tag)
+        return tk.km.mean if tk is not None else 0.0
+
+    def drug_mw(self) -> float:
+        """Return the drug's molecular weight (g/mol)."""
+        return self._drug.mw
 
     def drug_ps(self, node_name: str) -> float:
         """Return drug-specific PS for a node, or 0.0 if not overridden.
@@ -172,6 +195,8 @@ class ResolvedParams:
                 params["ka_fraction"] = edge.ka_fraction.mean
             elif isinstance(edge, ClearanceEdge):
                 params["model"] = edge.model  # type: ignore[assignment]
+            elif isinstance(edge, ActiveTransportEdge):
+                pass  # No static params — kinetics come from drug at runtime
             edge_params[i] = params
         return edge_params
 

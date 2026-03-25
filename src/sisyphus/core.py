@@ -105,6 +105,31 @@ class TissueComposition:
 
 
 # ---------------------------------------------------------------------------
+# TransporterKinetics — Michaelis-Menten parameters for active transport
+# ---------------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class TransporterKinetics:
+    """Single transporter's Michaelis-Menten parameters.
+
+    Used for saturable active transport (e.g., P-gp efflux, OATP uptake).
+    Full Michaelis-Menten: rate = abundance × Jmax × C / (Km + C).
+
+    Separate from enzyme_affinity because transporters are saturable at
+    therapeutic concentrations (gut lumen C >> Km), while CYP clearance
+    is approximately linear (hepatic C << Km).
+
+    Attributes:
+        jmax: Maximum transport rate (pmol/min/cm² or REF-scaled units).
+        km: Michaelis constant (µM). Drug concentration at half-max rate.
+    """
+
+    jmax: Distribution
+    km: Distribution
+
+
+# ---------------------------------------------------------------------------
 # DrugOnGraph — predict → engine contract
 # ---------------------------------------------------------------------------
 
@@ -153,6 +178,12 @@ class DrugOnGraph:
     # Formulation (absorption model)
     particle_radius_um: float = 25.0  # particle radius for absorption rate calc
 
+    # Active transport — transporter-level, NOT organ-level
+    # Parallel to enzyme_affinity: tag → kinetics.  Engine multiplies
+    # node.transporters[tag] × drug.transporter_kinetics[tag].(jmax,km)
+    # Empty dict = no active transport (default for drugs without measured kinetics).
+    transporter_kinetics: dict[str, TransporterKinetics] = field(default_factory=dict)
+
     # Permeability-surface area overrides for perm-limited organs
     ps_overrides: dict[str, Distribution] = field(default_factory=dict)
 
@@ -182,6 +213,12 @@ class DrugOnGraph:
             solubility=Distribution(mean=self.solubility.sample(rng), cv=0.0),
             enzyme_affinity={
                 k: Distribution(mean=v.sample(rng), cv=0.0) for k, v in self.enzyme_affinity.items()
+            },
+            transporter_kinetics={
+                k: TransporterKinetics(
+                    jmax=Distribution(mean=v.jmax.sample(rng), cv=0.0),
+                    km=Distribution(mean=v.km.sample(rng), cv=0.0),
+                ) for k, v in self.transporter_kinetics.items()
             },
             renal_clearance=Distribution(mean=self.renal_clearance.sample(rng), cv=0.0),
             ps_overrides={

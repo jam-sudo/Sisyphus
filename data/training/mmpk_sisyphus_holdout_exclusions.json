@@ -1,0 +1,226 @@
+{
+  "ketoconazole": {
+    "smiles": "CC(=O)N1CCN(c2ccc(OCC3COC(Cn4ccnc4)(c4ccc(Cl)cc4Cl)O3)cc2)CC1",
+    "match": "name"
+  },
+  "montelukast": {
+    "smiles": "CC(C)(O)c1ccccc1CC[C@@H](SCC1(CC(=O)O)CC1)c1cccc(/C=C/c2ccc3ccc(Cl)cc3n2)c1",
+    "match": "name"
+  },
+  "pindolol": {
+    "smiles": "CC(C)NCC(O)COc1cccc2[nH]ccc12",
+    "match": "name"
+  },
+  "valganciclovir": {
+    "smiles": "CC(C)[C@H](N)C(=O)OCC(CO)OCn1cnc2c(=O)nc(N)[nH]c21",
+    "match": "name"
+  },
+  "darolutamide": {
+    "smiles": "CC(O)c1cc(C(=O)N[C@@H](C)Cn2ccc(-c3ccc(C#N)c(Cl)c3)n2)n[nH]1",
+    "match": "name"
+  },
+  "tamoxifen": {
+    "smiles": "CC/C(=C(\\c1ccccc1)c1ccc(OCCN(C)C)cc1)c1ccccc1",
+    "match": "name"
+  },
+  "itraconazole": {
+    "smiles": "CCC(C)n1ncn(-c2ccc(N3CCN(c4ccc(OC[C@H]5CO[C@](Cn6cncn6)(c6ccc(Cl)cc6Cl)O5)cc4)CC3)cc2)c1=O",
+    "match": "name"
+  },
+  "losartan": {
+    "smiles": "CCCCc1nc(Cl)c(CO)n1Cc1ccc(-c2ccccc2-c2nn[nH]n2)cc1",
+    "match": "name"
+  },
+  "sildenafil": {
+    "smiles": "CCCc1nn(C)c2c(=O)[nH]c(-c3cc(S(=O)(=O)N4CCN(C)CC4)ccc3OCC)nc12",
+    "match": "name"
+  },
+  "oxybutynin": {
+    "smiles": "CCN(CC)CC#CCOC(=O)C(O)(c1ccccc1)C1CCCCC1",
+    "match": "name"
+  },
+  "tamsulosin": {
+    "smiles": "CCOc1ccccc1OCCN[C@H](C)Cc1ccc(OC)c(S(N)(=O)=O)c1",
+    "match": "name"
+  },
+  "pravastatin": {
+    "smiles": "CC[C@H](C)C(=O)O[C@H]1C[C@H](O)C=C2C=C[C@H](C)[C@H](CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H]21",
+    "match": "name"
+  },
+  "azithromycin": {
+    "smiles": "CC[C@H]1OC(=O)[C@H](C)[C@@H](O[C@H]2C[C@@](C)(OC)[C@@H](O)[C@H](C)O2)[C@H](C)[C@@H](O[C@@H]2O[C@H](C)C[C@H](N(C)C)[C@H]2O)[C@](C)(O)C[C@@H](C)CN(C)[C@H](C)[C@@H](O)[C@]1(C)O",
+    "match": "name"
+  },
+  "clomipramine": {
+    "smiles": "CN(C)CCCN1c2ccccc2CCc2ccc(Cl)cc21",
+    "match": "name"
+  },
+  "clozapine": {
+    "smiles": "CN1CCN(C2=Nc3cc(Cl)ccc3Nc3ccccc32)CC1",
+    "match": "name"
+  },
+  "glasdegib": {
+    "smiles": "CN1CC[C@@H](NC(=O)Nc2ccc(C#N)cc2)C[C@@H]1c1nc2ccccc2[nH]1",
+    "match": "name"
+  },
+  "morphine": {
+    "smiles": "CN1CC[C@]23c4c5ccc(O)c4O[C@H]2[C@@H](O)C=C[C@H]3[C@H]1C5",
+    "match": "name"
+  },
+  "ranitidine": {
+    "smiles": "CNC(=C[N+](=O)[O-])NCCSCc1ccc(CN(C)C)o1",
+    "match": "name"
+  },
+  "sumatriptan": {
+    "smiles": "CNS(=O)(=O)Cc1ccc2[nH]cc(CCN(C)C)c2c1",
+    "match": "name"
+  },
+  "methylphenidate": {
+    "smiles": "COC(=O)C(c1ccccc1)C1CCCCN1",
+    "match": "name"
+  },
+  "clopidogrel": {
+    "smiles": "COC(=O)[C@H](c1ccccc1Cl)N1CCc2sccc2C1",
+    "match": "name"
+  },
+  "fluvoxamine": {
+    "smiles": "COCCCC/C(=N\\OCCN)c1ccc(C(F)(F)F)cc1",
+    "match": "name"
+  },
+  "moxifloxacin": {
+    "smiles": "COc1c(N2C[C@@H]3CCCN[C@@H]3C2)c(F)cc2c(=O)c(C(=O)O)cn(C3CC3)c12",
+    "match": "name"
+  },
+  "colchicine": {
+    "smiles": "COc1cc2c(c(OC)c1OC)-c1ccc(OC)c(=O)cc1[C@@H](NC(C)=O)CC2",
+    "match": "name"
+  },
+  "apixaban": {
+    "smiles": "COc1ccc(-n2nc(C(N)=O)c3c2C(=O)N(c2ccc(N4CCCCC4=O)cc2)CC3)cc1",
+    "match": "name"
+  },
+  "indomethacin": {
+    "smiles": "COc1ccc2c(c1)c(CC(=O)O)c(C)n2C(=O)c1ccc(Cl)cc1",
+    "match": "name"
+  },
+  "codeine": {
+    "smiles": "COc1ccc2c3c1O[C@H]1[C@@H](O)C=C[C@H]4[C@@H](C2)N(C)CC[C@@]341",
+    "match": "name"
+  },
+  "levofloxacin": {
+    "smiles": "C[C@H]1COc2c(N3CCN(C)CC3)c(F)cc3c(=O)c(C(=O)O)cn1c23",
+    "match": "name"
+  },
+  "digoxin": {
+    "smiles": "C[C@H]1O[C@@H](O[C@H]2[C@@H](O)C[C@H](O[C@H]3[C@@H](O)C[C@H](O[C@H]4CC[C@@]5(C)[C@H](CC[C@@H]6[C@@H]5C[C@@H](O)[C@]5(C)[C@@H](C7=CC(=O)OC7)CC[C@]65O)C4)O[C@@H]3C)O[C@@H]2C)C[C@H](O)[C@@H]1O",
+    "match": "name"
+  },
+  "abiraterone": {
+    "smiles": "C[C@]12CC[C@H](O)CC1=CC[C@@H]1[C@@H]2CC[C@]2(C)C(c3cccnc3)=CC[C@@H]12",
+    "match": "name"
+  },
+  "alosetron": {
+    "smiles": "Cc1[nH]cnc1CN1CCc2c(c3ccccc3n2C)C1=O",
+    "match": "name"
+  },
+  "sonidegib": {
+    "smiles": "Cc1c(C(=O)Nc2ccc(N3C[C@@H](C)O[C@@H](C)C3)nc2)cccc1-c1ccc(OC(F)(F)F)cc1",
+    "match": "name"
+  },
+  "zolpidem": {
+    "smiles": "Cc1ccc(-c2nc3ccc(C)cn3c2CC(=O)N(C)C)cc1",
+    "match": "name"
+  },
+  "febuxostat": {
+    "smiles": "Cc1nc(-c2ccc(OCC(C)C)c(C#N)c2)sc1C(=O)O",
+    "match": "name"
+  },
+  "dasatinib": {
+    "smiles": "Cc1nc(Nc2ncc(C(=O)Nc3c(C)cccc3Cl)s2)cc(N2CCN(CCO)CC2)n1",
+    "match": "name"
+  },
+  "metronidazole": {
+    "smiles": "Cc1ncc([N+](=O)[O-])n1CCO",
+    "match": "name"
+  },
+  "clonidine": {
+    "smiles": "Clc1cccc(Cl)c1NC1=NCCN1",
+    "match": "name"
+  },
+  "temozolomide": {
+    "smiles": "Cn1nnc2c(C(N)=O)ncn2c1=O",
+    "match": "name"
+  },
+  "vilazodone": {
+    "smiles": "N#Cc1ccc2[nH]cc(CCCCN3CCN(c4ccc5oc(C(N)=O)cc5c4)CC3)c2c1",
+    "match": "name"
+  },
+  "carbamazepine": {
+    "smiles": "NC(=O)N1c2ccccc2C=Cc2ccccc21",
+    "match": "name"
+  },
+  "famotidine": {
+    "smiles": "NC(N)=Nc1nc(CSCCC(N)=NS(N)(=O)=O)cs1",
+    "match": "name"
+  },
+  "amantadine": {
+    "smiles": "NC12CC3CC(CC(C3)C1)C2",
+    "match": "name"
+  },
+  "zonisamide": {
+    "smiles": "NS(=O)(=O)Cc1noc2ccccc12",
+    "match": "name"
+  },
+  "pomalidomide": {
+    "smiles": "Nc1cccc2c1C(=O)N(C1CCC(=O)NC1=O)C2=O",
+    "match": "name"
+  },
+  "azacitidine": {
+    "smiles": "Nc1ncn([C@@H]2O[C@H](CO)[C@@H](O)[C@H]2O)c(=O)n1",
+    "match": "name"
+  },
+  "cetirizine": {
+    "smiles": "O=C(O)COCCN1CCN(C(c2ccccc2)c2ccc(Cl)cc2)CC1",
+    "match": "name"
+  },
+  "levocetirizine": {
+    "smiles": "O=C(O)COCCN1CCN([C@H](c2ccccc2)c2ccc(Cl)cc2)CC1",
+    "match": "name"
+  },
+  "diclofenac": {
+    "smiles": "O=C(O)Cc1ccccc1Nc1c(Cl)cccc1Cl",
+    "match": "name"
+  },
+  "ciprofloxacin": {
+    "smiles": "O=C(O)c1cn(C2CC2)c2cc(N3CCNCC3)c(F)cc2c1=O",
+    "match": "name"
+  },
+  "phenytoin": {
+    "smiles": "O=C1NC(=O)C(c2ccccc2)(c2ccccc2)N1",
+    "match": "name"
+  },
+  "isosorbide mononitrate": {
+    "smiles": "O=[N+]([O-])O[C@@H]1CO[C@H]2[C@@H]1OC[C@@H]2O",
+    "match": "name"
+  },
+  "trazodone": {
+    "smiles": "O=c1n(CCCN2CCN(c3cccc(Cl)c3)CC2)nc2ccccn12",
+    "match": "name"
+  },
+  "adefovir dipivoxil": {
+    "smiles": "CC(C)(C)C(=O)OCOP(=O)(COCCn1cnc2c(N)ncnc21)OCOC(=O)C(C)(C)C",
+    "match": "name"
+  },
+  "fesoterodine": {
+    "smiles": "CC(C)C(=O)Oc1ccc(CO)cc1C(CCN(C(C)C)C(C)C)c1ccccc1",
+    "match": "name"
+  },
+  "norethindrone": {
+    "smiles": "C#CC1(O)CCC2C3CCC4=CC(=O)CCC4C3CCC21C",
+    "match": "name"
+  },
+  "tenofovir disoproxil": {
+    "smiles": "CC(C)OC(=O)OCOP(=O)(COC(C)Cn1cnc2c(N)ncnc21)OCOC(=O)OC(C)C",
+    "match": "name"
+  }
+}

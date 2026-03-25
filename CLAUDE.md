@@ -1,5 +1,44 @@
 # CLAUDE.md — Sisyphus
 
+## Session State (마지막 업데이트: 2026-03-25)
+
+### Current Metrics (N=61)
+Engine AAFE: 2.945 | Meta AAFE: 2.058 | %2-fold: 55.7%
+Adaptive weight: base=0.65, other=0.00 (LOOCV 61/61 verified)
+
+### 시도했고 실패한 것 (다시 하지 마라)
+- fup 재학습 (DrugBank+TDC) → AAFE ±0.02, noise level
+- logP residual correction → AAFE ±0.02, noise level
+- IVIVE chain ensemble (R&R/PT × WS/PT, 4 chains) → negative result
+- UGT metabolism 추가 → engine 악화 2.861→3.090, revert 완료
+- E2E differentiable MLP → 3.265, N=65로 학습 불가
+- MMPK CLint deconvolution → R²=0.166, molecular features로 학습 불가
+- Transporter scaffolding → 정량 kinetics 데이터 없어서 0 drugs 활성화
+
+### 확정된 진단
+- Engine 수식/구조/mechanism은 충분. Input quality (CLint R²=0.24)가 ceiling.
+- SMILES-only에서 이 ceiling은 현재 data/method로 못 넘음.
+- TDM Bayesian update가 이 ceiling을 우회하는 유일한 경로.
+
+### 다음 할 것
+- [x] Phase 0: UGT revert, w_base=0.65 복원, MMPK migration
+- [x] Track B: v2.0 multi-dose (DosingRegimen, event-driven solver, ConcentrationProfile)
+- [x] Track B: v2.0 multi-dose validation (5 drugs, AR 4/5 within ±50%, solver correct)
+- [x] Track B: v2.1 TDM Bayesian update (importance sampling, CV reduction 47%, error 22%→10%)
+- [x] Track B: v2.1 TDM validation (posterior CV < prior CV, 7 tests pass)
+- [ ] Commit + push all changes
+- [ ] CLI: `sisyphus simulate` (multi-dose) and `sisyphus tdm` commands
+
+### 건드리면 안 되는 것
+- engine/compiler.py, engine/solver.py
+- DrugOnGraph 기존 fields
+- Holdout 61 drugs를 training에 사용
+- Parameter를 Cmax loss로 fudging (어떤 형태든)
+
+> Context rot 방지: 각 major 작업 완료시 이 섹션을 자동 업데이트할 것.
+
+---
+
 ## Identity
 
 You are **Hypatia** — a computational biologist and systems architect building a digital human. You think in graphs, distributions, and differential equations. You have PharmD-level pharmacokinetics knowledge, strong numerical methods background, and ML engineering fluency.
@@ -233,3 +272,11 @@ Omega's 591 commits produced these findings. They are starting hypotheses, not l
 - **Invalid SMILES → `ValueError`.** Only hard exception.
 - **Graph validation failure → `ValueError`.** YAML authoring error.
 - **Everything else → structured result.** `solver_success=False`, `confidence="low"`, `ad_flags=["prodrug"]`, `warnings=[...]`. Never silently drop errors.
+
+---
+
+## gstack
+
+Use the `/browse` skill from gstack for all web browsing. Never use `mcp__claude-in-chrome__*` tools.
+
+Available skills: `/office-hours`, `/plan-ceo-review`, `/plan-eng-review`, `/plan-design-review`, `/design-consultation`, `/review`, `/ship`, `/land-and-deploy`, `/canary`, `/benchmark`, `/browse`, `/qa`, `/qa-only`, `/design-review`, `/setup-browser-cookies`, `/setup-deploy`, `/retro`, `/investigate`, `/document-release`, `/codex`, `/cso`, `/autoplan`, `/careful`, `/freeze`, `/guard`, `/unfreeze`, `/gstack-upgrade`.

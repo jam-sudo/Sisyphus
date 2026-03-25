@@ -39,3 +39,4 @@ data/drugbank/
 
 # DrugBank raw XML
 full database.xml
+.gstack/
