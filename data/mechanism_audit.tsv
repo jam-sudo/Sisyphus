@@ -1,0 +1,62 @@
+Drug	Type	Cmax_obs	Eng_Cmax	Eng_fold	Meta_fold	P-gp	BCRP	OATP1B1	OATP1B3	OAT	OCT	UGT	UGT_isoforms	CYP_isoforms	AD_flags	Expected_mechanism
+abiraterone	neutral	0.0730	1.5182	20.80	2.39									CYP3A4		none
+montelukast	acid	0.3500	0.0190	0.05	0.22									CYP3A4;CYP2C9;CYP2C8	EXTREME_LIPOPHILIC	none
+methylphenidate	base	0.0091	0.1375	15.11	13.14											none
+digoxin	neutral	0.0015	0.0001	0.09	0.94											none
+apixaban	neutral	0.1260	0.0115	0.09	0.54	Y	Y							CYP3A4;CYP1A2;CYP2C8;CYP2C9;CYP2C19;CYP3A5		none
+darunavir ethanolate	neutral	1.2000	0.1099	0.09	0.41	Y								CYP3A4		none
+azithromycin	base	0.5000	0.0589	0.12	0.97	Y								CYP3A4	HIGH_MW	none
+moxifloxacin	zwitterion	4.1000	0.5010	0.12	0.71											none
+valacyclovir	neutral	4.0300	0.5327	0.13	0.19										PRODRUG	none
+oxybutynin	base	0.0010	0.0069	6.92	7.26									CYP3A4;CYP3A5		none
+sildenafil	neutral	0.2700	0.0432	0.16	1.10	Y								CYP3A4;CYP3A5;CYP2C9;CYP2C19;CYP2D6;CYP2E1		none
+ranolazine	neutral	2.6000	0.4271	0.16	0.92	Y								CYP3A4;CYP2D6		none
+fluvoxamine	base	0.0150	0.0910	6.07	4.87									CYP2D6;CYP1A2;CYP3A4		none
+fesoterodine	base	0.0019	0.0112	5.95	5.06	Y								CYP2D6;CYP3A4	PRODRUG	P-gp_efflux
+isosorbide mononitrate	neutral	1.2420	0.2138	0.17	0.42											none
+cetirizine	acid	0.2721	0.0562	0.21	0.55	Y										none
+indomethacin	acid	1.5400	0.3317	0.22	0.76	Y				Y		Y	UGT1A9;UGT1A1;UGT2B7	CYP2C19;CYP2C9		UGT_fm,renal_secretion
+metronidazole	neutral	13.0000	2.9627	0.23	0.36							Y	UGT1A1	CYP3A5		UGT_fm
+bexagliflozin	neutral	0.1340	0.0337	0.25	1.46	Y						Y	UGT1A9;UGT1A1	CYP3A4;CYP2C8;CYP2D6		UGT_fm
+sumatriptan	base	0.0165	0.0656	3.97	3.85	Y	Y	Y								P-gp_efflux,BCRP_efflux,OATP_uptake
+clomipramine	base	0.0920	0.3536	3.84	0.91									CYP2D6;CYP2C19;CYP1A2;CYP3A4		none
+pindolol	base	0.0331	0.0087	0.26	0.29						Y			CYP2D6		renal_secretion
+darolutamide	neutral	4.7900	1.3396	0.28	0.48	Y	Y							CYP3A4		none
+tamsulosin	base	0.0101	0.0032	0.31	0.46									CYP2D6;CYP3A4		none
+glasdegib	neutral	1.2520	0.4002	0.32	0.64	Y	Y					Y	UGT1A9	CYP2C8;CYP3A4		UGT_fm
+valganciclovir	neutral	5.8000	1.9068	0.33	0.08										PRODRUG	none
+trazodone	base	1.6200	0.5397	0.33	0.32									CYP3A4;CYP3A5;CYP2D6		none
+azacitidine	neutral	0.1450	0.3936	2.71	3.80											none
+levocetirizine	acid	0.4500	0.1687	0.37	1.00	Y										none
+pomalidomide	neutral	0.0531	0.0205	0.39	0.98	Y								CYP1A2;CYP3A4		none
+tenofovir disoproxil	neutral	0.3800	0.1538	0.40	0.93	Y				Y					PRODRUG	renal_secretion
+tamoxifen	base	0.0400	0.0972	2.43	1.68	Y	Y					Y	UGT1A10;UGT2B7	CYP2D6;CYP3A4;CYP3A5;CYP2C9;CYP2C19;CYP2B6;CYP2E1;CYP1A2	EXTREME_LIPOPHILIC	P-gp_efflux,BCRP_efflux,UGT_fm
+ketoconazole	base	3.0000	1.2399	0.41	0.34									CYP3A4		none
+itraconazole	base	0.5000	1.1406	2.28	1.24									CYP3A4	HIGH_MW,EXTREME_LIPOPHILIC,PGP_EFFLUX_RISK	none
+dasatinib	neutral	0.0822	0.1861	2.26	3.71	Y	Y							CYP1A2;CYP3A5;CYP3A4		P-gp_efflux,BCRP_efflux
+amantadine	base	0.2200	0.4759	2.16	1.96						Y					renal_secretion
+clozapine	neutral	0.4130	0.8754	2.12	0.22	Y					Y	Y	UGT1A4	CYP1A2;CYP2D6;CYP2C9;CYP3A4;CYP2C19;CYP2C8		P-gp_efflux,UGT_fm,renal_secretion
+famotidine	base	0.0730	0.0359	0.49	0.59					Y						renal_secretion
+temozolomide	neutral	7.5000	3.7225	0.50	0.65	Y	Y									none
+morphine	base	0.0186	0.0374	2.00	2.20	Y						Y	UGT2B7;UGT1A1;UGT1A8;UGT2B15;UGT2B4;UGT1A3	CYP2C8;CYP3A4		P-gp_efflux,UGT_fm
+vilazodone	base	0.1560	0.3059	1.96	1.22									CYP3A4;CYP2D6;CYP2C19		none
+clopidogrel	base	0.3000	0.5835	1.94	1.00	Y								CYP2C9;CYP1A2;CYP3A4;CYP2B6;CYP3A5;CYP2C19		P-gp_efflux
+colchicine	neutral	0.0025	0.0047	1.89	1.04	Y								CYP3A4		P-gp_efflux
+phenytoin	neutral	5.0000	3.1296	0.63	1.28	Y						Y	UGT1A1;UGT1A6;UGT1A9;UGT1A4	CYP2C9;CYP2C19;CYP2C8;CYP2B6;CYP3A4;CYP3A5;CYP2D6;CYP2E1		UGT_fm
+codeine	base	0.1390	0.2210	1.59	1.37						Y	Y	UGT2B7;UGT2B4	CYP2D6;CYP3A4		UGT_fm,renal_secretion
+adefovir dipivoxil	neutral	0.0184	0.0122	0.66	0.32					Y					PRODRUG	renal_secretion
+clonidine	base	0.0004	0.0006	1.41	0.88									CYP1A2;CYP3A4;CYP3A5;CYP2D6		none
+molnupiravir	neutral	2.3300	1.6751	0.72	0.42										PRODRUG	none
+sonidegib	neutral	1.0300	0.7644	0.74	0.34									CYP3A4		none
+ciprofloxacin	zwitterion	2.9700	2.2697	0.76	1.01	Y										none
+zolpidem	neutral	0.1340	0.1706	1.27	0.73									CYP2C9;CYP2C19;CYP2D6;CYP3A4;CYP1A2		none
+levofloxacin	acid	6.2000	5.0618	0.82	0.81	Y										none
+ranitidine	base	0.4400	0.5308	1.21	1.46	Y					Y			CYP1A2		renal_secretion
+losartan	acid	0.2240	0.1878	0.84	0.63	Y						Y	UGT1A1;UGT1A3;UGT1A10;UGT2B7	CYP2C9;CYP3A4		UGT_fm
+zonisamide	neutral	2.0000	2.3417	1.17	2.36							Y	UGT1A1	CYP3A4;CYP3A5;CYP2C19		UGT_fm
+diclofenac	acid	0.5000	0.5713	1.14	1.45							Y	UGT2B7;UGT1A3;UGT1A9;UGT2B4	CYP2C9;CYP2C19;CYP1A2;CYP2C8;CYP3A4;CYP2B6		UGT_fm
+alosetron	neutral	0.0050	0.0045	0.89	2.20									CYP1A2;CYP3A4;CYP2C9		none
+norethindrone	neutral	0.0262	0.0288	1.10	1.17									CYP3A4;CYP2C19;CYP1A2		none
+febuxostat	acid	1.5000	1.6493	1.10	0.53							Y	UGT1A1;UGT1A3;UGT1A9;UGT2B7	CYP1A2;CYP2C8;CYP2C9		UGT_fm
+pravastatin	acid	0.0250	0.0273	1.09	0.27	Y	Y	Y	Y	Y						OATP_uptake,renal_secretion
+carbamazepine	neutral	1.0000	1.0572	1.06	1.84							Y	UGT2B7	CYP3A4;CYP2C8;CYP2B6;CYP3A5		UGT_fm

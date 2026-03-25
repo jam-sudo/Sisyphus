@@ -1,0 +1,769 @@
+Loading reference data...
+  61 holdout drugs
+Loading DrugBank data...
+  Transporters: 885 drugs annotated
+  UGT: 188 drugs annotated
+  CYP: 1136 drugs annotated
+Running predictions...
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [1/61] alosetron: eng=0.0045 meta=0.0110 obs=0.0050 type=neutral
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [2/61] amantadine: eng=0.4759 meta=0.4302 obs=0.2200 type=base
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [3/61] apixaban: eng=0.0115 meta=0.0682 obs=0.1260 type=neutral
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+  [4/61] azacitidine: eng=0.3936 meta=0.5517 obs=0.1450 type=neutral
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+  [5/61] azithromycin: eng=0.0589 meta=0.4866 obs=0.5000 type=base
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+[19:51:36] WARNING: Omitted undefined stereo
+
+  [6/61] bexagliflozin: eng=0.0337 meta=0.1961 obs=0.1340 type=neutral
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [7/61] carbamazepine: eng=1.0572 meta=1.8448 obs=1.0000 type=neutral
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [8/61] ciprofloxacin: eng=2.2697 meta=3.0056 obs=2.9700 type=zwitterion
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [9/61] clomipramine: eng=0.3536 meta=0.0835 obs=0.0920 type=base
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [10/61] clonidine: eng=0.0006 meta=0.0004 obs=0.0004 type=base
+[19:51:37] WARNING: Omitted undefined stereo
+
+[19:51:37] WARNING: Omitted undefined stereo
+
+[19:51:37] WARNING: Omitted undefined stereo
+
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:51:37] WARNING: Omitted undefined stereo
+
+[19:51:37] WARNING: Omitted undefined stereo
+
+[19:51:37] WARNING: Omitted undefined stereo
+
+[19:51:37] WARNING: Omitted undefined stereo
+
+[19:51:37] WARNING: Omitted undefined stereo
+
+[19:51:37] WARNING: Omitted undefined stereo
+
+[19:51:37] WARNING: Omitted undefined stereo
+
+[19:51:37] WARNING: Omitted undefined stereo
+
+  [11/61] clopidogrel: eng=0.5835 meta=0.2987 obs=0.3000 type=base
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [12/61] clozapine: eng=0.8754 meta=0.0923 obs=0.4130 type=neutral
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [13/61] codeine: eng=0.2210 meta=0.1900 obs=0.1390 type=base
+[19:51:37] WARNING: Omitted undefined stereo
+
+[19:51:37] WARNING: Omitted undefined stereo
+
+[19:51:37] WARNING: Omitted undefined stereo
+
+WARNING sisyphus.predict.adme: DrugBank fup (0.950) disagrees with XGBoost (0.120) by >5x, using XGBoost
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:51:37] WARNING: Omitted undefined stereo
+
+[19:51:37] WARNING: Omitted undefined stereo
+
+[19:51:37] WARNING: Omitted undefined stereo
+
+[19:51:37] WARNING: Omitted undefined stereo
+
+[19:51:37] WARNING: Omitted undefined stereo
+
+[19:51:37] WARNING: Omitted undefined stereo
+
+[19:51:37] WARNING: Omitted undefined stereo
+
+[19:51:37] WARNING: Omitted undefined stereo
+
+  [14/61] colchicine: eng=0.0047 meta=0.0026 obs=0.0025 type=neutral
+[19:51:37] WARNING: Omitted undefined stereo
+
+[19:51:37] WARNING: Omitted undefined stereo
+
+[19:51:37] WARNING: Omitted undefined stereo
+
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:51:38] WARNING: Omitted undefined stereo
+
+[19:51:38] WARNING: Omitted undefined stereo
+
+[19:51:38] WARNING: Omitted undefined stereo
+
+[19:51:38] WARNING: Omitted undefined stereo
+
+[19:51:38] WARNING: Omitted undefined stereo
+
+[19:51:38] WARNING: Omitted undefined stereo
+
+[19:51:38] WARNING: Omitted undefined stereo
+
+[19:51:38] WARNING: Omitted undefined stereo
+
+  [15/61] darolutamide: eng=1.3396 meta=2.3135 obs=4.7900 type=neutral
+[19:51:38] WARNING: Omitted undefined stereo
+
+[19:51:38] WARNING: Omitted undefined stereo
+
+[19:51:38] WARNING: Omitted undefined stereo
+
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:51:38] WARNING: Omitted undefined stereo
+
+[19:51:38] WARNING: Omitted undefined stereo
+
+[19:51:38] WARNING: Omitted undefined stereo
+
+[19:51:38] WARNING: Omitted undefined stereo
+
+[19:51:38] WARNING: Omitted undefined stereo
+
+[19:51:38] WARNING: Omitted undefined stereo
+
+[19:51:38] WARNING: Omitted undefined stereo
+
+[19:51:38] WARNING: Omitted undefined stereo
+
+  [16/61] darunavir ethanolate: eng=0.1099 meta=0.4930 obs=1.2000 type=neutral
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [17/61] dasatinib: eng=0.1861 meta=0.3051 obs=0.0822 type=neutral
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [18/61] diclofenac: eng=0.5713 meta=0.7249 obs=0.5000 type=acid
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [19/61] digoxin: eng=0.0001 meta=0.0014 obs=0.0015 type=neutral
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [20/61] famotidine: eng=0.0359 meta=0.0429 obs=0.0730 type=base
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [21/61] febuxostat: eng=1.6493 meta=0.7930 obs=1.5000 type=acid
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+WARNING sisyphus.predict.adme: DrugBank fup (0.500) disagrees with XGBoost (0.030) by >5x, using XGBoost
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+  [22/61] fesoterodine: eng=0.0112 meta=0.0096 obs=0.0019 type=base
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+  [23/61] fluvoxamine: eng=0.0910 meta=0.0730 obs=0.0150 type=base
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+  [24/61] glasdegib: eng=0.4002 meta=0.7996 obs=1.2520 type=neutral
+[19:51:39] WARNING: Charges were rearranged; Omitted undefined stereo
+
+[19:51:39] WARNING: Charges were rearranged; Omitted undefined stereo
+
+[19:51:39] WARNING: Charges were rearranged; Omitted undefined stereo
+
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:51:39] WARNING: Charges were rearranged; Omitted undefined stereo
+
+[19:51:39] WARNING: Charges were rearranged; Omitted undefined stereo
+
+[19:51:39] WARNING: Charges were rearranged; Omitted undefined stereo
+
+[19:51:39] WARNING: Charges were rearranged; Omitted undefined stereo
+
+[19:51:39] WARNING: Charges were rearranged; Omitted undefined stereo
+
+[19:51:39] WARNING: Charges were rearranged; Omitted undefined stereo
+
+[19:51:39] WARNING: Charges were rearranged; Omitted undefined stereo
+
+[19:51:39] WARNING: Charges were rearranged; Omitted undefined stereo
+
+  [25/61] isosorbide mononitrate: eng=0.2138 meta=0.5244 obs=1.2420 type=neutral
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+WARNING sisyphus.predict.adme: DrugBank fup (0.002) disagrees with XGBoost (0.025) by >5x, using XGBoost
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+[19:51:39] WARNING: Omitted undefined stereo
+
+  [26/61] itraconazole: eng=1.1406 meta=0.6205 obs=0.5000 type=base
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [27/61] levocetirizine: eng=0.1687 meta=0.4504 obs=0.4500 type=acid
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [28/61] losartan: eng=0.1878 meta=0.1401 obs=0.2240 type=acid
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [29/61] methylphenidate: eng=0.1375 meta=0.1195 obs=0.0091 type=base
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+  [30/61] molnupiravir: eng=1.6751 meta=0.9865 obs=2.3300 type=neutral
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+  [31/61] morphine: eng=0.0374 meta=0.0411 obs=0.0186 type=base
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+  [32/61] moxifloxacin: eng=0.5010 meta=2.8914 obs=4.1000 type=zwitterion
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+WARNING sisyphus.predict.adme: DrugBank fup (0.620) disagrees with XGBoost (0.080) by >5x, using XGBoost
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+[19:51:40] WARNING: Omitted undefined stereo
+
+  [33/61] norethindrone: eng=0.0288 meta=0.0305 obs=0.0262 type=neutral
+WARNING sisyphus.predict.adme: DrugBank fup (0.030) disagrees with XGBoost (0.209) by >5x, using XGBoost
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [34/61] oxybutynin: eng=0.0069 meta=0.0073 obs=0.0010 type=base
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [35/61] phenytoin: eng=3.1296 meta=6.3959 obs=5.0000 type=neutral
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [36/61] pindolol: eng=0.0087 meta=0.0096 obs=0.0331 type=base
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [37/61] pomalidomide: eng=0.0205 meta=0.0519 obs=0.0531 type=neutral
+[19:51:41] WARNING: Omitted undefined stereo
+
+[19:51:41] WARNING: Omitted undefined stereo
+
+[19:51:41] WARNING: Omitted undefined stereo
+
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:51:41] WARNING: Omitted undefined stereo
+
+[19:51:41] WARNING: Omitted undefined stereo
+
+[19:51:41] WARNING: Omitted undefined stereo
+
+[19:51:41] WARNING: Omitted undefined stereo
+
+[19:51:41] WARNING: Omitted undefined stereo
+
+[19:51:41] WARNING: Omitted undefined stereo
+
+[19:51:41] WARNING: Omitted undefined stereo
+
+[19:51:41] WARNING: Omitted undefined stereo
+
+  [38/61] pravastatin: eng=0.0273 meta=0.0067 obs=0.0250 type=acid
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [39/61] ranitidine: eng=0.5308 meta=0.6429 obs=0.4400 type=base
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [40/61] ranolazine: eng=0.4271 meta=2.3863 obs=2.6000 type=neutral
+WARNING sisyphus.predict.adme: DrugBank fup (0.040) disagrees with XGBoost (0.257) by >5x, using XGBoost
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [41/61] sildenafil: eng=0.0432 meta=0.2980 obs=0.2700 type=neutral
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+WARNING sisyphus.predict.adme: DrugBank fup (0.030) disagrees with XGBoost (0.005) by >5x, using XGBoost
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+  [42/61] sonidegib: eng=0.7644 meta=0.3492 obs=1.0300 type=neutral
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [43/61] sumatriptan: eng=0.0656 meta=0.0636 obs=0.0165 type=base
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+  [44/61] tamoxifen: eng=0.0972 meta=0.0672 obs=0.0400 type=base
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+[19:51:42] WARNING: Omitted undefined stereo
+
+  [45/61] tamsulosin: eng=0.0032 meta=0.0047 obs=0.0101 type=base
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [46/61] temozolomide: eng=3.7225 meta=4.8884 obs=7.5000 type=neutral
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+  [47/61] tenofovir disoproxil: eng=0.1538 meta=0.3518 obs=0.3800 type=neutral
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+  [48/61] valacyclovir: eng=0.5327 meta=0.7603 obs=4.0300 type=neutral
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+WARNING sisyphus.predict.adme: DrugBank fup (0.990) disagrees with XGBoost (0.195) by >5x, using XGBoost
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+[19:51:43] WARNING: Omitted undefined stereo
+
+  [49/61] valganciclovir: eng=1.9068 meta=0.4366 obs=5.8000 type=neutral
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [50/61] vilazodone: eng=0.3059 meta=0.1900 obs=0.1560 type=base
+WARNING sisyphus.predict.adme: DrugBank fup (0.999) disagrees with XGBoost (0.035) by >5x, using XGBoost
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [51/61] zolpidem: eng=0.1706 meta=0.0983 obs=0.1340 type=neutral
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [52/61] zonisamide: eng=2.3417 meta=4.7159 obs=2.0000 type=neutral
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [53/61] levofloxacin: eng=5.0618 meta=5.0152 obs=6.2000 type=acid
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [54/61] cetirizine: eng=0.0562 meta=0.1501 obs=0.2721 type=acid
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [55/61] indomethacin: eng=0.3317 meta=1.1769 obs=1.5400 type=acid
+WARNING sisyphus.predict.adme: DrugBank fup (0.960) disagrees with XGBoost (0.150) by >5x, using XGBoost
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [56/61] adefovir dipivoxil: eng=0.0122 meta=0.0059 obs=0.0184 type=neutral
+WARNING sisyphus.predict.adme: DrugBank fup (0.160) disagrees with XGBoost (0.019) by >5x, using XGBoost
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [57/61] ketoconazole: eng=1.2399 meta=1.0281 obs=3.0000 type=base
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [58/61] metronidazole: eng=2.9627 meta=4.7418 obs=13.0000 type=neutral
+WARNING sisyphus.predict.adme: DrugBank fup (0.010) disagrees with XGBoost (0.085) by >5x, using XGBoost
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [59/61] abiraterone: eng=1.5182 meta=0.1746 obs=0.0730 type=neutral
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [60/61] montelukast: eng=0.0190 meta=0.0775 obs=0.3500 type=acid
+WARNING sisyphus.predict.adme: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  [61/61] trazodone: eng=0.5397 meta=0.5120 obs=1.6200 type=base
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Charges were rearranged; Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Charges were rearranged; Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+[19:51:45] WARNING: Omitted undefined stereo
+
+
+
+# ── SUMMARY ──
+Total holdout drugs: 61
+P-gp substrates:    28 (46%)
+BCRP substrates:    8 (13%)
+OATP substrates:    2 (3%)
+UGT substrates:     14 (23%)
+OAT/OCT substrates: 10 (16%)
+
+P-gp substrates (N=28): AAFE=2.921, over=8, under=15
+  apixaban: eng_fold=0.09 UGT=- CYP=CYP3A4;CYP1A2;CYP2C8;CYP2C9;CYP2C19;CYP3A5
+  darunavir ethanolate: eng_fold=0.09 UGT=- CYP=CYP3A4
+  azithromycin: eng_fold=0.12 UGT=- CYP=CYP3A4
+  sildenafil: eng_fold=0.16 UGT=- CYP=CYP3A4;CYP3A5;CYP2C9;CYP2C19;CYP2D6;CYP2E1
+  ranolazine: eng_fold=0.16 UGT=- CYP=CYP3A4;CYP2D6
+
+UGT substrates (N=14): AAFE=1.960, over=4, under=5
+  indomethacin: eng_fold=0.22 UGT=UGT1A9;UGT1A1;UGT2B7 CYP=CYP2C19;CYP2C9
+  metronidazole: eng_fold=0.23 UGT=UGT1A1 CYP=CYP3A5
+  bexagliflozin: eng_fold=0.25 UGT=UGT1A9;UGT1A1 CYP=CYP3A4;CYP2C8;CYP2D6
+  glasdegib: eng_fold=0.32 UGT=UGT1A9 CYP=CYP2C8;CYP3A4
+  tamoxifen: eng_fold=2.43 UGT=UGT1A10;UGT2B7 CYP=CYP2D6;CYP3A4;CYP3A5;CYP2C9;CYP2C19;CYP2B6;CYP2E1;CYP1A2
+
+OATP substrates (N=2): AAFE=2.081, over=1, under=0
+  sumatriptan: eng_fold=3.97 UGT=- CYP=-
+  pravastatin: eng_fold=1.09 UGT=- CYP=-
+
+No transporter/UGT (N=27): AAFE=3.456, over=9, under=12
+  abiraterone: eng_fold=20.80 UGT=- CYP=CYP3A4
+  montelukast: eng_fold=0.05 UGT=- CYP=CYP3A4;CYP2C9;CYP2C8
+  methylphenidate: eng_fold=15.11 UGT=- CYP=-
+  digoxin: eng_fold=0.09 UGT=- CYP=-
+  moxifloxacin: eng_fold=0.12 UGT=- CYP=-
+
+# ── UGT IMPACT CANDIDATES ──
+  indomethacin: eng_fold=0.22 (UNDER) UGT=UGT1A9;UGT1A1;UGT2B7 CYP=CYP2C19;CYP2C9 type=acid
+  metronidazole: eng_fold=0.23 (UNDER) UGT=UGT1A1 CYP=CYP3A5 type=neutral
+  bexagliflozin: eng_fold=0.25 (UNDER) UGT=UGT1A9;UGT1A1 CYP=CYP3A4;CYP2C8;CYP2D6 type=neutral
+  glasdegib: eng_fold=0.32 (UNDER) UGT=UGT1A9 CYP=CYP2C8;CYP3A4 type=neutral
+  tamoxifen: eng_fold=2.43 (OVER) UGT=UGT1A10;UGT2B7 CYP=CYP2D6;CYP3A4;CYP3A5;CYP2C9;CYP2C19;CYP2B6;CYP2E1;CYP1A2 type=base
+  clozapine: eng_fold=2.12 (OVER) UGT=UGT1A4 CYP=CYP1A2;CYP2D6;CYP2C9;CYP3A4;CYP2C19;CYP2C8 type=neutral
+  morphine: eng_fold=2.00 (OVER) UGT=UGT2B7;UGT1A1;UGT1A8;UGT2B15;UGT2B4;UGT1A3 CYP=CYP2C8;CYP3A4 type=base
+  phenytoin: eng_fold=0.63 (UNDER) UGT=UGT1A1;UGT1A6;UGT1A9;UGT1A4 CYP=CYP2C9;CYP2C19;CYP2C8;CYP2B6;CYP3A4;CYP3A5;CYP2D6;CYP2E1 type=neutral
+  codeine: eng_fold=1.59 (OVER) UGT=UGT2B7;UGT2B4 CYP=CYP2D6;CYP3A4 type=base
+  losartan: eng_fold=0.84 (UNDER) UGT=UGT1A1;UGT1A3;UGT1A10;UGT2B7 CYP=CYP2C9;CYP3A4 type=acid
+  zonisamide: eng_fold=1.17 (OVER) UGT=UGT1A1 CYP=CYP3A4;CYP3A5;CYP2C19 type=neutral
+  diclofenac: eng_fold=1.14 (OVER) UGT=UGT2B7;UGT1A3;UGT1A9;UGT2B4 CYP=CYP2C9;CYP2C19;CYP1A2;CYP2C8;CYP3A4;CYP2B6 type=acid
+  febuxostat: eng_fold=1.10 (OVER) UGT=UGT1A1;UGT1A3;UGT1A9;UGT2B7 CYP=CYP1A2;CYP2C8;CYP2C9 type=acid
+  carbamazepine: eng_fold=1.06 (OVER) UGT=UGT2B7 CYP=CYP3A4;CYP2C8;CYP2B6;CYP3A5 type=neutral
+
+# ── P-gp IMPACT CANDIDATES ──
+  fesoterodine: eng_fold=5.95 (OVER) type=base
+  sumatriptan: eng_fold=3.97 (OVER) type=base
+  tamoxifen: eng_fold=2.43 (OVER) type=base
+  dasatinib: eng_fold=2.26 (OVER) type=neutral
+  clozapine: eng_fold=2.12 (OVER) type=neutral
+  morphine: eng_fold=2.00 (OVER) type=base
+  clopidogrel: eng_fold=1.94 (OVER) type=base
+  colchicine: eng_fold=1.89 (OVER) type=neutral

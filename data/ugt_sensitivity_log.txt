@@ -1,0 +1,87 @@
+Building graph with UGT abundances...
+Drug	Type	Cmax_obs	fold_0.0	fold_0.1	fold_0.3	fold_0.5	fold_0.7	fold_0.9
+[19:55:06] WARNING: Omitted undefined stereo
+
+[19:55:06] WARNING: Omitted undefined stereo
+
+[19:55:06] WARNING: Omitted undefined stereo
+
+WARNING: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:55:06] WARNING: Omitted undefined stereo
+
+  morphine: 0.90	0.91	0.94	0.98	1.06	1.23
+WARNING: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  codeine: 0.59	0.60	0.64	0.69	0.77	0.95
+WARNING: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  phenytoin: 0.27	0.27	0.29	0.30	0.32	0.35
+WARNING: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  indomethacin: 0.11	0.11	0.10	0.10	0.10	0.10
+WARNING: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  diclofenac: 0.63	0.64	0.66	0.68	0.71	0.73
+WARNING: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  losartan: 0.26	0.27	0.30	0.33	0.38	0.45
+WARNING: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  carbamazepine: 0.42	0.43	0.46	0.50	0.56	0.65
+WARNING: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  zonisamide: 0.47	0.48	0.53	0.60	0.69	0.84
+WARNING: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  clozapine: 1.10	1.11	1.13	1.16	1.18	1.21
+[19:55:13] WARNING: Omitted undefined stereo
+
+[19:55:13] WARNING: Omitted undefined stereo
+
+[19:55:13] WARNING: Omitted undefined stereo
+
+WARNING: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:55:13] WARNING: Omitted undefined stereo
+
+  tamoxifen: 1.05	1.06	1.06	1.07	1.08	1.09
+WARNING: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  metronidazole: 0.09	0.09	0.10	0.11	0.13	0.17
+[19:55:14] WARNING: Omitted undefined stereo
+
+[19:55:14] WARNING: Omitted undefined stereo
+
+[19:55:14] WARNING: Omitted undefined stereo
+
+WARNING: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:55:14] WARNING: Omitted undefined stereo
+
+  bexagliflozin: 0.08	0.09	0.09	0.10	0.11	0.12
+[19:55:15] WARNING: Omitted undefined stereo
+
+[19:55:15] WARNING: Omitted undefined stereo
+
+[19:55:15] WARNING: Omitted undefined stereo
+
+WARNING: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+[19:55:15] WARNING: Omitted undefined stereo
+
+  glasdegib: 0.11	0.11	0.12	0.13	0.14	0.16
+WARNING: RBP prediction 3.00 far from 1.0, defaulting to 1.0
+  febuxostat: 0.79	0.79	0.78	0.77	0.76	0.75
+
+
+# ── SUMMARY ──
+fm_ugt=0.0: AAFE=2.954 (N=14)
+fm_ugt=0.1: AAFE=2.910 (N=14)
+fm_ugt=0.3: AAFE=2.790 (N=14)
+fm_ugt=0.5: AAFE=2.646 (N=14)
+fm_ugt=0.7: AAFE=2.488 (N=14)
+fm_ugt=0.9: AAFE=2.295 (N=14)
+
+# ── BEST fm_ugt PER DRUG ──
+  morphine: base_fold=0.90 best_fold=0.98 at fm_ugt=0.5 (IMPROVED) type=base
+  codeine: base_fold=0.59 best_fold=0.95 at fm_ugt=0.9 (IMPROVED) type=base
+  phenytoin: base_fold=0.27 best_fold=0.35 at fm_ugt=0.9 (IMPROVED) type=neutral
+  indomethacin: base_fold=0.11 best_fold=0.11 at fm_ugt=0.0 (WORSE/SAME) type=acid
+  diclofenac: base_fold=0.63 best_fold=0.73 at fm_ugt=0.9 (IMPROVED) type=acid
+  losartan: base_fold=0.26 best_fold=0.45 at fm_ugt=0.9 (IMPROVED) type=acid
+  carbamazepine: base_fold=0.42 best_fold=0.65 at fm_ugt=0.9 (IMPROVED) type=neutral
+  zonisamide: base_fold=0.47 best_fold=0.84 at fm_ugt=0.9 (IMPROVED) type=neutral
+  clozapine: base_fold=1.10 best_fold=1.10 at fm_ugt=0.0 (WORSE/SAME) type=neutral
+  tamoxifen: base_fold=1.05 best_fold=1.05 at fm_ugt=0.0 (WORSE/SAME) type=base
+  metronidazole: base_fold=0.09 best_fold=0.17 at fm_ugt=0.9 (IMPROVED) type=neutral
+  bexagliflozin: base_fold=0.08 best_fold=0.12 at fm_ugt=0.9 (IMPROVED) type=neutral
+  glasdegib: base_fold=0.11 best_fold=0.16 at fm_ugt=0.9 (IMPROVED) type=neutral
+  febuxostat: base_fold=0.79 best_fold=0.79 at fm_ugt=0.0 (WORSE/SAME) type=acid
