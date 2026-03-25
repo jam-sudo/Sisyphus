@@ -137,3 +137,19 @@ class ClearanceEdge(Edge):
 
     edge_type: str = field(default="clearance", init=False)
     model: str = "well_stirred"
+
+
+@dataclass(frozen=True)
+class ActiveTransportEdge(Edge):
+    """Active transporter-mediated mass transfer (efflux or uptake).
+
+    Full Michaelis-Menten: rate = abundance × Jmax × C / (Km + C).
+    Direction is determined by edge source → target:
+    - Gut efflux: gut_wall → lumen (P-gp: tissue → lumen)
+    - Hepatic uptake: liver_blood → liver (OATP: blood → tissue)
+
+    Identity-blind: engine matches node.transporters[tag] with
+    drug.transporter_kinetics[tag], never inspecting tag names.
+    """
+
+    edge_type: str = field(default="active_transport", init=False)

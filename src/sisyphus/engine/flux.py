@@ -412,3 +412,82 @@ class DiffusionFluxSpec(FluxSpec):
         flux = ps * (cu_vasc - cu_tissue)
         dydt[self.source_idx] -= flux
         dydt[self.target_idx] += flux
+
+
+@register_flux("active_transport")
+class ActiveTransportFluxSpec(FluxSpec):
+    """Transporter-mediated efflux or uptake. Full Michaelis-Menten.
+
+    For each transporter tag present in both node.transporters and
+    drug.transporter_kinetics::
+
+        C_µM = (A / V) * 1000 / MW        # mg/L → µM
+        rate = abundance × Jmax × C_µM / (Km + C_µM)
+
+    Direction is source → target (edge direction):
+    - Gut efflux: gut_wall → lumen (P-gp: tissue → lumen, reduces Fg)
+    - Hepatic uptake: blood → liver (OATP: increases clearance)
+
+    Identity-blind: engine matches tags, never inspects names.
+
+    Unit conversion note: Km is in µM, concentration is computed in mg/L.
+    MW is needed to convert mg/L → µM: C_µM = C_mg_L × 1000 / MW.
+    """
+
+    @classmethod
+    def from_edge(cls, edge_id: int, edge, state_index: dict[str, int]) -> ActiveTransportFluxSpec:
+        return cls(
+            edge_id,
+            state_index[edge.source],
+            state_index[edge.target],
+            edge.source,
+            edge.target,
+        )
+
+    def apply(
+        self,
+        t: float,
+        y: np.ndarray,
+        dydt: np.ndarray,
+        params: ResolvedParams,
+    ) -> None:
+        mw = params.drug_mw()
+        if mw <= 0:
+            return
+
+        v_source = params.node_param(self.source_name, "volume")
+        if v_source <= 0:
+            return
+
+        # Source concentration in µM
+        c_mg_l = y[self.source_idx] / v_source
+        c_um = c_mg_l * 1000.0 / mw
+
+        if c_um <= 0:
+            return
+
+        total_rate = 0.0
+        node_transporters = params.node_transporters(self.source_name)
+
+        for tag, abundance in node_transporters.items():
+            jmax = params.drug_transporter_jmax(tag)
+            km = params.drug_transporter_km(tag)
+
+            if jmax <= 0 or km <= 0 or abundance <= 0:
+                continue
+
+            # Full Michaelis-Menten (saturable)
+            rate = abundance * jmax * c_um / (km + c_um)
+            total_rate += rate
+
+        if total_rate <= 0:
+            return
+
+        # Convert from µM·volume/time units back to mg/time
+        # rate is in arbitrary units scaled by abundance, jmax, and concentration
+        # The IVIVE scaling factor handles unit conversion
+        ivive = params.node_param(self.source_name, "ivive_scaling")
+        mass_rate = total_rate * ivive
+
+        dydt[self.source_idx] -= mass_rate
+        dydt[self.target_idx] += mass_rate
