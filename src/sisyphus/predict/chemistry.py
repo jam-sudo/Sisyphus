@@ -297,6 +297,51 @@ def _check_ad(mol: Chem.Mol, mw: float, logp: float, tpsa: float) -> list[str]:
     return flags
 
 
+_PKA_MODEL_DIR = Path(__file__).resolve().parent.parent.parent.parent / "models" / "adme"
+
+
+def _load_pka_models() -> tuple | None:
+    """Load acidic and basic pKa XGBoost models. Returns (acid_model, base_model) or None."""
+    acid_path = _PKA_MODEL_DIR / "xgboost_pka_acidic.json"
+    base_path = _PKA_MODEL_DIR / "xgboost_pka_basic.json"
+    if not acid_path.exists() or not base_path.exists():
+        return None
+    try:
+        import xgboost as xgb
+
+        if not hasattr(_load_pka_models, "_cache"):
+            acid_model = xgb.XGBRegressor()
+            acid_model.load_model(str(acid_path))
+            base_model = xgb.XGBRegressor()
+            base_model.load_model(str(base_path))
+            _load_pka_models._cache = (acid_model, base_model)  # type: ignore[attr-defined]
+            logger.info("Loaded pKa models: %s, %s", acid_path.name, base_path.name)
+        return _load_pka_models._cache  # type: ignore[attr-defined]
+    except Exception as e:
+        logger.warning("pKa model loading failed: %s", e)
+        return None
+
+
+def _predict_pka_from_model(
+    canonical_smiles: str, mol: Chem.Mol, logp: float
+) -> tuple[float | None, str]:
+    """Predict pKa via XGBoost model, fall back to SMARTS heuristic on failure."""
+    models = _load_pka_models()
+    if models is None:
+        return _estimate_pka_type(mol, logp)
+    try:
+        from sisyphus.descriptors import compute_features
+
+        features = compute_features(canonical_smiles).reshape(1, -1)
+        acid_model, base_model = models
+        acidic_pred = float(acid_model.predict(features)[0])
+        basic_pred = float(base_model.predict(features)[0])
+        return _classify_from_pka(acidic_pred, basic_pred)
+    except Exception as e:
+        logger.warning("pKa prediction failed: %s, using SMARTS fallback", e)
+        return _estimate_pka_type(mol, logp)
+
+
 def compute_profile(smiles: str) -> MolecularProfile:
     """Compute molecular profile from a SMILES string.
 
@@ -348,12 +393,12 @@ def compute_profile(smiles: str) -> MolecularProfile:
         except Exception as e:
             logger.warning("logP correction failed: %s", e)
 
-    # pKa: DrugBank ChemAxon → fallback SMARTS
+    # pKa: DrugBank ChemAxon → XGBoost model → fallback SMARTS
     db_pka = db.get_pka(canonical)
     if db_pka is not None:
         pka, compound_type = _classify_from_pka(db_pka[0], db_pka[1])
     else:
-        pka, compound_type = _estimate_pka_type(mol, logp)
+        pka, compound_type = _predict_pka_from_model(canonical, mol, logp)
 
     # _check_ad uses the local `logp` which may be overridden — correct per spec
     ad_flags = _check_ad(mol, mw, logp, tpsa)
