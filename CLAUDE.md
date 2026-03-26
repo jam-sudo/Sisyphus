@@ -25,11 +25,23 @@ Adaptive weight: base=0.65, other=0.00 (LOOCV 61/61 verified)
 - E2E differentiable MLP → 3.265, N=65로 학습 불가
 - MMPK CLint deconvolution → R²=0.166, molecular features로 학습 불가
 - Transporter scaffolding → 정량 kinetics 데이터 없어서 0 drugs 활성화
+- pKa XGBoost 모델 (DrugBank 9,974건, R²=0.79, MAE=1.6) → engine AAFE +0.005 (noise), meta AAFE 악화 2.058→2.153. error cancellation 파괴. revert 완료.
+- Berezhkovskiy Kp correction 활성화 → engine AAFE +0.021 (noise), meta AAFE 악화 2.058→2.067. revert 완료.
+- pKa + Berezhkovskiy 복합 → engine AAFE +0.021 (noise). Kp는 engine 오차의 주 원인이 아님.
 
-### 확정된 진단
+### Engine-only ablation 결과 (2026-03-26)
+- DrugBank enrichment: engine AAFE 3.074→2.945 (Δ=-0.129, 유의미), meta는 0.17 weight로 0.021만 전달
+- Meta-learner LOOCV 재검증: w_base=0.60, w_other=0.00 최적 (100% stable). 현재 0.65와 거의 동일.
+- Oracle selector AAFE: 1.791 (engine/ML 중 최선을 약물별로 고를 수 있는 이론적 한계)
+- pKa model (ON/OFF) × Berezhkovskiy (ON/OFF) 4실험: 모든 Δ ≤ 0.02 (noise)
+- 결론: CLint가 유일한 지배적 병목. pKa, Kp method는 engine AAFE에 기여하지 않음.
+
+### 확정된 진단 (강화)
 - Engine 수식/구조/mechanism은 충분. Input quality (CLint R²=0.24)가 ceiling.
-- SMILES-only에서 이 ceiling은 현재 data/method로 못 넘음.
-- TDM Bayesian update가 이 ceiling을 우회하는 유일한 경로.
+- pKa 개선 (MAE 2.5→1.6)과 Kp method 변경은 engine AAFE를 움직이지 않음 → CLint가 유일한 병목 확정.
+- SMILES-only에서 이 ceiling을 넘으려면 CLint 훈련 데이터 확장 (ChEMBL 10K+) + GNN (Chemprop) 필요.
+- TDM Bayesian update가 현재 ceiling을 우회하는 실용적 경로.
+- Error cancellation이 시스템에 존재: 더 정확한 개별 input이 오히려 전체 정확도를 악화시킴.
 
 ### 다음 할 것
 - [x] Phase 0: UGT revert, w_base=0.65 복원, MMPK migration
@@ -48,6 +60,12 @@ Adaptive weight: base=0.65, other=0.00 (LOOCV 61/61 verified)
 - [x] Phase 4 PK/PD link (effect compartment + sigmoid Emax, 28/28 tests, midazolam sedation + warfarin INR presets)
 - [x] MIPD: dose recommendation from TDM posterior (14 tests, `sisyphus dose-adjust`)
 - [x] Full test suite: 348/348 pass
+- [x] Engine-only benchmark 인프라 구축 (benchmark.py에 engine_aafe, ml_aafe 필드 추가)
+- [x] Engine-only ablation: DrugBank Δ=-0.129 확인, meta-learner trap 진단
+- [x] LOOCV weight 재검증: w_base=0.60/w_other=0.00 최적, oracle=1.791
+- [x] pKa XGBoost 모델 훈련 (acidic R²=0.79, basic R²=0.80) → engine 미개선, revert
+- [x] Berezhkovskiy Kp correction 시도 → engine 미개선, revert
+- [x] Full test suite: 357/357 pass
 
 ### AAFE ≤1.7 평가
 - Population level AAFE 1.7은 CLint R²=0.24 ceiling으로 SMILES-only에서 도달 불가.

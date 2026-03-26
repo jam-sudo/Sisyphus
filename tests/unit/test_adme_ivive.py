@@ -171,15 +171,19 @@ class TestIVIVE:
         drug = build_drug_on_graph(profile, adme, dose_mg=500.0)
         assert drug.compound_type == profile.compound_type
 
-    def test_default_kp_method_is_berezhkovskiy(self):
-        """Default kp_method should be 'berezhkovskiy'."""
+    def test_default_kp_method_is_rodgers_rowland(self):
+        """Default kp_method should be 'rodgers_rowland'.
+
+        Berezhkovskiy was tested (2026-03-26) but reverted — broke error
+        cancellation, Meta AAFE worsened 2.058→2.067.
+        """
         import inspect
 
         from sisyphus.predict.ivive import build_drug_on_graph
 
         sig = inspect.signature(build_drug_on_graph)
         default = sig.parameters["kp_method"].default
-        assert default == "berezhkovskiy"
+        assert default == "rodgers_rowland"
 
     def test_base_increases_cyp2d6_fraction(self):
         """Bases should have higher CYP2D6 fraction than neutrals."""

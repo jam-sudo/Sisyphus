@@ -61,6 +61,13 @@ class BenchmarkResult:
     aafe_silver: float | None = None
     n_gold: int = 0
     n_silver: int = 0
+    # Engine-only and ML-only AAFE (for ablation diagnostics)
+    engine_aafe: float | None = None
+    engine_pct_2fold: float | None = None
+    ml_aafe: float | None = None
+    ml_pct_2fold: float | None = None
+    n_engine: int = 0
+    n_ml: int = 0
 
 
 def run_benchmark(
@@ -99,6 +106,11 @@ def run_benchmark(
     gold_observed: list[float] = []
     silver_predicted: list[float] = []
     silver_observed: list[float] = []
+    # Engine-only and ML-only (for ablation diagnostics)
+    engine_predicted: list[float] = []
+    engine_observed: list[float] = []
+    ml_predicted: list[float] = []
+    ml_observed: list[float] = []
 
     excluded: list[tuple[str, str]] = []
     skipped = 0
@@ -122,6 +134,14 @@ def run_benchmark(
             else:
                 silver_predicted.append(cmax_pred)
                 silver_observed.append(ref.cmax_obs)
+
+            # Engine-only and ML-only Cmax
+            if result.engine_pk and result.engine_pk.cmax.mean > 0:
+                engine_predicted.append(result.engine_pk.cmax.mean)
+                engine_observed.append(ref.cmax_obs)
+            if result.ml_pk and result.ml_pk.cmax.mean > 0:
+                ml_predicted.append(result.ml_pk.cmax.mean)
+                ml_observed.append(ref.cmax_obs)
 
             fold = cmax_pred / ref.cmax_obs if ref.cmax_obs > 0 else float("inf")
 
@@ -195,6 +215,24 @@ def run_benchmark(
     aafe_gold_val = aafe(gold_p, gold_o) if len(gold_p) >= 3 else None
     aafe_silver_val = aafe(silver_p, silver_o) if len(silver_p) >= 3 else None
 
+    # Engine-only and ML-only metrics
+    eng_p = np.array(engine_predicted)
+    eng_o = np.array(engine_observed)
+    ml_p = np.array(ml_predicted)
+    ml_o = np.array(ml_observed)
+    engine_aafe_val = aafe(eng_p, eng_o) if len(eng_p) >= 3 else None
+    engine_pct2_val = pct_within_n_fold(eng_p, eng_o) if len(eng_p) >= 3 else None
+    ml_aafe_val = aafe(ml_p, ml_o) if len(ml_p) >= 3 else None
+    ml_pct2_val = pct_within_n_fold(ml_p, ml_o) if len(ml_p) >= 3 else None
+
+    logger.info(
+        "Engine-only: %d drugs, AAFE=%.3f | ML-only: %d drugs, AAFE=%.3f",
+        len(engine_predicted),
+        engine_aafe_val or float("inf"),
+        len(ml_predicted),
+        ml_aafe_val or float("inf"),
+    )
+
     return BenchmarkResult(
         n_drugs=len(all_predicted),
         aafe=result_aafe,
@@ -208,4 +246,10 @@ def run_benchmark(
         aafe_silver=aafe_silver_val,
         n_gold=len(gold_predicted),
         n_silver=len(silver_predicted),
+        engine_aafe=engine_aafe_val,
+        engine_pct_2fold=engine_pct2_val,
+        ml_aafe=ml_aafe_val,
+        ml_pct_2fold=ml_pct2_val,
+        n_engine=len(engine_predicted),
+        n_ml=len(ml_predicted),
     )
