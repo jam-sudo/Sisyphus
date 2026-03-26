@@ -1,10 +1,21 @@
 # CLAUDE.md — Sisyphus
 
-## Session State (마지막 업데이트: 2026-03-25)
+## Session State (마지막 업데이트: 2026-03-26)
 
 ### Current Metrics (N=61)
 Engine AAFE: 2.945 | Meta AAFE: 2.058 | %2-fold: 55.7%
 Adaptive weight: base=0.65, other=0.00 (LOOCV 61/61 verified)
+
+### v2.0 Multi-Dose 검증 결과
+- Atorvastatin 40mg QD: Css_max 0.027 vs FDA 0.029 mg/L (fold error 0.93) — 7% 오차
+- Metformin 500mg BID: Css_max 0.55 vs FDA 1.0 mg/L (0.55x) — 신장배설 주도약, 예상된 under-prediction
+- Warfarin 5mg QD: Css_max 0.34 vs FDA 1.4 mg/L (0.24x) — fup=0.01 극고결합약, CLint over-prediction
+- Solver 3/3 성공, accumulation ratio 방향 정확, SS detection 작동
+
+### v2.1 TDM 검증 결과
+- Midazolam 5mg single dose, t=1h noisy observation
+- CV reduction: 55.4% (44.3% → 19.8%), ESS=586.6 (29.3%)
+- Bayesian update 메커니즘 정상 작동 확인
 
 ### 시도했고 실패한 것 (다시 하지 마라)
 - fup 재학습 (DrugBank+TDC) → AAFE ±0.02, noise level
@@ -26,7 +37,9 @@ Adaptive weight: base=0.65, other=0.00 (LOOCV 61/61 verified)
 - [x] Track B: v2.0 multi-dose validation (5 drugs, AR 4/5 within ±50%, solver correct)
 - [x] Track B: v2.1 TDM Bayesian update (importance sampling, CV reduction 47%, error 22%→10%)
 - [x] Track B: v2.1 TDM validation (posterior CV < prior CV, 7 tests pass)
-- [ ] Commit + push all changes
+- [x] Commit + push all changes
+- [x] v2.0/v2.1 functional verification (3 drugs multi-dose + TDM Bayesian, scripts/verify_v2.py)
+- [ ] Multi-dose MBE 계산 수정 (cumulative dose 기준으로 변경)
 - [ ] CLI: `sisyphus simulate` (multi-dose) and `sisyphus tdm` commands
 
 ### 건드리면 안 되는 것
