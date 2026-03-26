@@ -28,6 +28,7 @@ Adaptive weight: base=0.65, other=0.00 (LOOCV 61/61 verified)
 - pKa XGBoost 모델 (DrugBank 9,974건, R²=0.79, MAE=1.6) → engine AAFE +0.005 (noise), meta AAFE 악화 2.058→2.153. error cancellation 파괴. revert 완료.
 - Berezhkovskiy Kp correction 활성화 → engine AAFE +0.021 (noise), meta AAFE 악화 2.058→2.067. revert 완료.
 - pKa + Berezhkovskiy 복합 → engine AAFE +0.021 (noise). Kp는 engine 오차의 주 원인이 아님.
+- CLint 확장 학습 (Hep_AZ 986 + Mic_AZ 420 = 1402 compounds) → CV R² 0.229→0.273 (+0.044), engine AAFE 2.945→2.930 (-0.015), meta AAFE 2.058→2.110 (+0.052 악화). error cancellation 파괴. revert 완료.
 
 ### Engine-only ablation 결과 (2026-03-26)
 - DrugBank enrichment: engine AAFE 3.074→2.945 (Δ=-0.129, 유의미), meta는 0.17 weight로 0.021만 전달
@@ -39,7 +40,8 @@ Adaptive weight: base=0.65, other=0.00 (LOOCV 61/61 verified)
 ### 확정된 진단 (강화)
 - Engine 수식/구조/mechanism은 충분. Input quality (CLint R²=0.24)가 ceiling.
 - pKa 개선 (MAE 2.5→1.6)과 Kp method 변경은 engine AAFE를 움직이지 않음 → CLint가 유일한 병목 확정.
-- SMILES-only에서 이 ceiling을 넘으려면 CLint 훈련 데이터 확장 (ChEMBL 10K+) + GNN (Chemprop) 필요.
+- CLint 훈련 데이터 확장 (TDC Microsome_AZ +420 compounds): CV R² 개선 (0.229→0.273)에도 meta AAFE 악화. Error cancellation으로 인해 더 정확한 CLint가 역효과.
+- SMILES-only에서 이 ceiling을 넘으려면 measured CLint 데이터 또는 새로운 in vitro 데이터 소스 필요 (단순 확장은 실패).
 - TDM Bayesian update가 현재 ceiling을 우회하는 실용적 경로.
 - Error cancellation이 시스템에 존재: 더 정확한 개별 input이 오히려 전체 정확도를 악화시킴.
 
