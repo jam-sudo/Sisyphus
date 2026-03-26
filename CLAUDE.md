@@ -46,7 +46,8 @@ Adaptive weight: base=0.65, other=0.00 (LOOCV 61/61 verified)
 - [x] Phase 4 perf: deterministic predict 414ms mean (target ≤500ms)
 - [x] Multi-dose MBE 수정 완료 (cumulative dose 기준, 0.929→0.500)
 - [x] Phase 4 PK/PD link (effect compartment + sigmoid Emax, 28/28 tests, midazolam sedation + warfarin INR presets)
-- [x] Full test suite: 334/334 pass
+- [x] MIPD: dose recommendation from TDM posterior (14 tests, `sisyphus dose-adjust`)
+- [x] Full test suite: 348/348 pass
 
 ### AAFE ≤1.7 평가
 - Population level AAFE 1.7은 CLint R²=0.24 ceiling으로 SMILES-only에서 도달 불가.
@@ -60,7 +61,8 @@ Adaptive weight: base=0.65, other=0.00 (LOOCV 61/61 verified)
 - **Phase 3 (Extensibility v0.3)**: ✅ SC/pediatric/tumor, engine/ diff=0, 17 tests
 - **Phase 4 (Production v1.0)**: ✅ DDI (22 tests), PK/PD (28 tests), perf 414ms
 - **Track B (Clinical)**: ✅ Multi-dose v2.0, TDM v2.1 Bayesian update
-- **CLI**: predict, simulate, tdm, ddi, benchmark
+- **MIPD**: ✅ TDM posterior → dose recommendation (14 tests)
+- **CLI**: predict, simulate, tdm, ddi, dose-adjust, benchmark
 
 ### 건드리면 안 되는 것
 - engine/compiler.py, engine/solver.py
