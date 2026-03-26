@@ -51,6 +51,23 @@ def main() -> None:
     tdm_parser.add_argument("--n-samples", type=int, default=2000, help="Prior MC samples (default: 2000)")
     tdm_parser.add_argument("--verbose", "-v", action="store_true")
 
+    # ddi command
+    ddi_parser = subparsers.add_parser("ddi", help="DDI prediction (inhibition/induction)")
+    ddi_parser.add_argument("--smiles", required=True, help="Victim drug SMILES")
+    ddi_parser.add_argument("--dose", type=float, required=True, help="Victim dose (mg)")
+    ddi_parser.add_argument("--route", default="oral", choices=["oral", "iv"])
+    ddi_parser.add_argument(
+        "--inhibitor", default=None,
+        choices=["ketoconazole", "fluconazole", "quinidine"],
+        help="Preset inhibitor name",
+    )
+    ddi_parser.add_argument(
+        "--inducer", default=None,
+        choices=["rifampin"],
+        help="Preset inducer name",
+    )
+    ddi_parser.add_argument("--verbose", "-v", action="store_true")
+
     # benchmark command
     bench_parser = subparsers.add_parser("benchmark", help="Run holdout benchmark")
     bench_parser.add_argument("--holdout", action="store_true", help="Run on holdout set only")
@@ -65,6 +82,8 @@ def main() -> None:
         _run_simulate(args)
     elif args.command == "tdm":
         _run_tdm(args)
+    elif args.command == "ddi":
+        _run_ddi(args)
     elif args.command == "benchmark":
         _run_benchmark(args)
     else:
@@ -233,6 +252,76 @@ def _run_tdm(args: argparse.Namespace) -> None:
 
     cv_red = (1.0 - result.posterior_cmax.cv / result.prior_cmax.cv) * 100 if result.prior_cmax.cv > 0 else 0.0
     print(f"\nCV reduction: {cv_red:.1f}%")
+
+
+def _run_ddi(args: argparse.Namespace) -> None:
+    """Run DDI prediction: victim alone vs victim + perpetrator."""
+    logging.basicConfig(
+        level=logging.DEBUG if args.verbose else logging.WARNING,
+        format="%(levelname)s %(name)s: %(message)s",
+    )
+    import numpy as np
+
+    from sisyphus.ddi import (
+        FLUCONAZOLE,
+        KETOCONAZOLE,
+        QUINIDINE,
+        RIFAMPIN,
+        apply_induction,
+        apply_inhibition,
+    )
+    from sisyphus.engine.compiler import ODECompiler, ResolvedParams
+    from sisyphus.engine.solver import solve
+    from sisyphus.pk.endpoints import compute_endpoints
+
+    graph, compiled, drug = _build_drug_and_graph(args.smiles, args.dose, args.route)
+
+    # Resolve perpetrator
+    inhibitors = {"ketoconazole": KETOCONAZOLE, "fluconazole": FLUCONAZOLE, "quinidine": QUINIDINE}
+    inducers = {"rifampin": RIFAMPIN}
+
+    if args.inhibitor and args.inducer:
+        print("Error: specify --inhibitor or --inducer, not both", file=sys.stderr)
+        sys.exit(1)
+    if not args.inhibitor and not args.inducer:
+        print("Error: specify --inhibitor or --inducer", file=sys.stderr)
+        sys.exit(1)
+
+    if args.inhibitor:
+        perpetrator = inhibitors[args.inhibitor]
+        ddi_graph = apply_inhibition(graph, perpetrator)
+        ddi_type = f"inhibition ({perpetrator.name})"
+    else:
+        perpetrator = inducers[args.inducer]
+        ddi_graph = apply_induction(graph, perpetrator)
+        ddi_type = f"induction ({perpetrator.name})"
+
+    def _solve_pk(g):
+        import sisyphus.engine.flux  # noqa: F401
+        comp = ODECompiler().compile(g)
+        rng = np.random.default_rng(42)
+        params = ResolvedParams(g.sample(rng), drug.sample(rng))
+        y0 = np.zeros(comp.n_states)
+        y0[comp.state_index[drug.administration_node]] = drug.dose_mg
+        result = solve(comp, params, y0, t_span=(0, 24))
+        return compute_endpoints(result)
+
+    base_pk = _solve_pk(graph)
+    ddi_pk = _solve_pk(ddi_graph)
+
+    cmax_ratio = ddi_pk.cmax.mean / base_pk.cmax.mean if base_pk.cmax.mean > 0 else 0.0
+    auc_ratio = ddi_pk.auc_0t.mean / base_pk.auc_0t.mean if base_pk.auc_0t.mean > 0 else 0.0
+
+    print(f"Drug: {drug.name}")
+    print(f"DDI: {ddi_type}")
+    print()
+    print(f"{'':20s} {'Alone':>12s} {'With DDI':>12s} {'Ratio':>8s}")
+    print("-" * 52)
+    print(f"{'Cmax (mg/L)':<20s} {base_pk.cmax.mean:>12.4f} {ddi_pk.cmax.mean:>12.4f} {cmax_ratio:>8.2f}")
+    print(f"{'AUC (mg*h/L)':<20s} {base_pk.auc_0t.mean:>12.4f} {ddi_pk.auc_0t.mean:>12.4f} {auc_ratio:>8.2f}")
+    if base_pk.t_half and ddi_pk.t_half:
+        thalf_ratio = ddi_pk.t_half.mean / base_pk.t_half.mean if base_pk.t_half.mean > 0 else 0.0
+        print(f"{'t½ (h)':<20s} {base_pk.t_half.mean:>12.2f} {ddi_pk.t_half.mean:>12.2f} {thalf_ratio:>8.2f}")
 
 
 def _run_benchmark(args: argparse.Namespace) -> None:
