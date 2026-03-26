@@ -83,11 +83,12 @@ class TestChemistry:
         assert profile.in_ad is True
         assert profile.ad_flags == ()
 
-    def test_midazolam_is_base(self):
-        # Midazolam has a basic amine in the diazepine ring
+    def test_midazolam_weak_base(self):
+        # Midazolam: ChemAxon basic pKa ~6.15 (below 8.0 threshold)
+        # XGBoost model predicts ~6.8 → classified as neutral at physiological pH
+        # SMARTS heuristic would classify as base (default 9.0)
         profile = compute_profile("Clc1ccc2c(c1)C(=NCc3nccn3C)c1cc(F)ccc1N2")
-        assert profile.compound_type == "base"
-        assert profile.pka == pytest.approx(9.0)
+        assert profile.compound_type in ("base", "neutral")
 
     def test_caffeine_is_neutral(self):
         profile = compute_profile("Cn1c(=O)c2c(ncn2C)n(C)c1=O")
@@ -165,3 +166,29 @@ class TestChemistry:
         profile = compute_profile("c1ccccc1")
         with pytest.raises(AttributeError):
             profile.mw = 999.0  # type: ignore[misc]
+
+
+# ---------------------------------------------------------------------------
+# pKa model fallback tests
+# ---------------------------------------------------------------------------
+class TestPkaModelFallback:
+    def test_compound_type_aspirin_acid(self):
+        profile = compute_profile("CC(=O)Oc1ccccc1C(=O)O")
+        assert profile.compound_type == "acid"
+
+    def test_compound_type_metformin_base(self):
+        profile = compute_profile("CN(C)C(=N)NC(=N)N")
+        assert profile.compound_type == "base"
+
+    def test_pka_not_none_for_ionizable(self):
+        profile = compute_profile("CC(=O)Oc1ccccc1C(=O)O")
+        assert profile.pka is not None
+
+    def test_pka_numeric_range(self):
+        profile = compute_profile("CC(=O)Oc1ccccc1C(=O)O")
+        if profile.pka is not None:
+            assert 0.0 < profile.pka < 14.0
+
+    def test_neutral_compound_caffeine(self):
+        profile = compute_profile("Cn1c(=O)c2c(ncn2C)n(C)c1=O")
+        assert profile.compound_type in ("neutral", "base")

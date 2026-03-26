@@ -9,6 +9,7 @@ from sisyphus.predict.chemistry import compute_profile
 _MIDAZOLAM_SMILES = "Clc1ccc2c(c1)C(=NCc3nccn3C)c1cc(F)ccc1N2"
 _BENZENE_SMILES = "c1ccccc1"
 _ASPIRIN_SMILES = "CC(=O)Oc1ccccc1C(=O)O"
+_DIPHENHYDRAMINE_SMILES = "O(CCN(C)C)C(c1ccccc1)c1ccccc1"  # strong base, pKa ~9.8
 
 
 # ═══════════════════════════════════════════════════════════════════
@@ -175,8 +176,8 @@ class TestIVIVE:
         from sisyphus.predict.adme import predict_adme
         from sisyphus.predict.ivive import build_drug_on_graph
 
-        # Midazolam is classified as a base (aromatic N-H)
-        profile_base = compute_profile(_MIDAZOLAM_SMILES)
+        # Diphenhydramine is a strong base (tertiary amine, pKa ~9.8)
+        profile_base = compute_profile(_DIPHENHYDRAMINE_SMILES)
         adme_base = predict_adme(profile_base)
         drug_base = build_drug_on_graph(profile_base, adme_base, dose_mg=2.0)
 
