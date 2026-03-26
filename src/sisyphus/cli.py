@@ -68,6 +68,21 @@ def main() -> None:
     )
     ddi_parser.add_argument("--verbose", "-v", action="store_true")
 
+    # dose-adjust command (MIPD)
+    da_parser = subparsers.add_parser("dose-adjust", help="MIPD dose recommendation from TDM")
+    da_parser.add_argument("--smiles", required=True, help="SMILES string")
+    da_parser.add_argument("--dose", type=float, required=True, help="Current dose (mg)")
+    da_parser.add_argument(
+        "--obs", required=True, nargs="+",
+        help="Observations as time_h:conc_mg_L pairs (e.g. '1.0:0.015')",
+    )
+    da_parser.add_argument("--target-css", type=float, required=True, help="Target Css_max (mg/L)")
+    da_parser.add_argument("--interval", type=float, default=None, help="Dosing interval (h)")
+    da_parser.add_argument("--doses", type=int, default=1, help="Number of doses administered")
+    da_parser.add_argument("--route", default="oral", choices=["oral", "iv"])
+    da_parser.add_argument("--n-samples", type=int, default=2000, help="Prior MC samples")
+    da_parser.add_argument("--verbose", "-v", action="store_true")
+
     # benchmark command
     bench_parser = subparsers.add_parser("benchmark", help="Run holdout benchmark")
     bench_parser.add_argument("--holdout", action="store_true", help="Run on holdout set only")
@@ -84,6 +99,8 @@ def main() -> None:
         _run_tdm(args)
     elif args.command == "ddi":
         _run_ddi(args)
+    elif args.command == "dose-adjust":
+        _run_dose_adjust(args)
     elif args.command == "benchmark":
         _run_benchmark(args)
     else:
@@ -252,6 +269,55 @@ def _run_tdm(args: argparse.Namespace) -> None:
 
     cv_red = (1.0 - result.posterior_cmax.cv / result.prior_cmax.cv) * 100 if result.prior_cmax.cv > 0 else 0.0
     print(f"\nCV reduction: {cv_red:.1f}%")
+
+
+def _run_dose_adjust(args: argparse.Namespace) -> None:
+    """Run MIPD dose recommendation."""
+    logging.basicConfig(
+        level=logging.DEBUG if args.verbose else logging.WARNING,
+        format="%(levelname)s %(name)s: %(message)s",
+    )
+    from sisyphus.regimen.dosing import recommend_dose
+    from sisyphus.regimen.types import DosingRegimen
+
+    graph, compiled, drug = _build_drug_and_graph(args.smiles, args.dose, args.route)
+
+    if args.doses == 1:
+        if args.route == "oral":
+            regimen = DosingRegimen.single_oral(args.dose)
+        else:
+            regimen = DosingRegimen.single_iv(args.dose)
+    else:
+        if args.interval is None:
+            print("Error: --interval required for multi-dose regimens", file=sys.stderr)
+            sys.exit(1)
+        if args.route == "oral":
+            regimen = DosingRegimen.oral_repeated(args.dose, args.interval, args.doses)
+        else:
+            regimen = DosingRegimen.iv_infusion(args.dose, 0.0, args.interval, args.doses)
+
+    observations = _parse_observations(args.obs)
+
+    result = recommend_dose(
+        compiled, graph, drug, regimen,
+        observations=observations,
+        target_css=args.target_css,
+        n_prior=args.n_samples,
+        seed=42,
+    )
+
+    print(f"Drug: {drug.name}")
+    print(f"Current dose:     {result.current_dose_mg:.0f} mg")
+    print(f"Target Css:       {result.target_css:.4f} mg/L")
+    print()
+    print(f"Posterior Css (current dose): {result.posterior_css_current:.4f} mg/L (CV {result.posterior_cv:.1%})")
+    print(f"Scaling ratio:               {result.scaling_ratio:.2f}x")
+    print()
+    print(f"  Recommended dose:  {result.recommended_dose_mg:.0f} mg")
+    print(f"  Predicted Css:     {result.predicted_css_recommended:.4f} mg/L")
+    print()
+    print(f"TDM: {result.tdm_result.n_successful}/{result.tdm_result.n_prior} samples, "
+          f"ESS={result.tdm_result.ess:.0f}")
 
 
 def _run_ddi(args: argparse.Namespace) -> None:
