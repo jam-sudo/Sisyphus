@@ -300,13 +300,20 @@ def solve_regimen(
         name: np.concatenate(arrs) for name, arrs in all_amounts.items()
     }
 
-    # Recompute mass balance over full time course
+    # Recompute mass balance over full time course using cumulative dose
+    # at each time point (fixes spurious MBE for multi-dose regimens where
+    # early time points only have the first dose administered).
     total = np.zeros_like(time_concat)
     for name in compiled.state_index:
         total += amt_concat[name]
-    total_dose = regimen.total_dose_mg
-    if total_dose > 0:
-        full_mbe = float(np.max(np.abs(total - total_dose) / total_dose))
+
+    cumulative_dose = np.zeros_like(time_concat)
+    for ev in regimen.events:
+        cumulative_dose[time_concat >= ev.time_h - 1e-12] += ev.dose_mg
+
+    valid = cumulative_dose > 0
+    if np.any(valid):
+        full_mbe = float(np.max(np.abs(total[valid] - cumulative_dose[valid]) / cumulative_dose[valid]))
     else:
         full_mbe = 0.0
 
