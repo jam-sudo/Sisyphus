@@ -29,6 +29,7 @@ Adaptive weight: base=0.65, other=0.00 (LOOCV 61/61 verified)
 - Berezhkovskiy Kp correction 활성화 → engine AAFE +0.021 (noise), meta AAFE 악화 2.058→2.067. revert 완료.
 - pKa + Berezhkovskiy 복합 → engine AAFE +0.021 (noise). Kp는 engine 오차의 주 원인이 아님.
 - CLint 확장 학습 (Hep_AZ 986 + Mic_AZ 420 = 1402 compounds) → CV R² 0.229→0.273 (+0.044), engine AAFE 2.945→2.930 (-0.015), meta AAFE 2.058→2.110 (+0.052 악화). error cancellation 파괴. revert 완료.
+- **ALL-ON (pKa + Berezhkovskiy + expanded CLint 동시)** → engine AAFE 2.945→3.016 (+0.072), meta AAFE 2.058→2.135 (+0.077). 개별 악화의 합산. 동시 개선으로 새로운 균형 형성 불가 확인.
 
 ### Engine-only ablation 결과 (2026-03-26)
 - DrugBank enrichment: engine AAFE 3.074→2.945 (Δ=-0.129, 유의미), meta는 0.17 weight로 0.021만 전달
@@ -37,13 +38,13 @@ Adaptive weight: base=0.65, other=0.00 (LOOCV 61/61 verified)
 - pKa model (ON/OFF) × Berezhkovskiy (ON/OFF) 4실험: 모든 Δ ≤ 0.02 (noise)
 - 결론: CLint가 유일한 지배적 병목. pKa, Kp method는 engine AAFE에 기여하지 않음.
 
-### 확정된 진단 (강화)
+### 확정된 진단 (최종, 2026-03-26)
 - Engine 수식/구조/mechanism은 충분. Input quality (CLint R²=0.24)가 ceiling.
-- pKa 개선 (MAE 2.5→1.6)과 Kp method 변경은 engine AAFE를 움직이지 않음 → CLint가 유일한 병목 확정.
-- CLint 훈련 데이터 확장 (TDC Microsome_AZ +420 compounds): CV R² 개선 (0.229→0.273)에도 meta AAFE 악화. Error cancellation으로 인해 더 정확한 CLint가 역효과.
-- SMILES-only에서 이 ceiling을 넘으려면 measured CLint 데이터 또는 새로운 in vitro 데이터 소스 필요 (단순 확장은 실패).
-- TDM Bayesian update가 현재 ceiling을 우회하는 실용적 경로.
-- Error cancellation이 시스템에 존재: 더 정확한 개별 input이 오히려 전체 정확도를 악화시킴.
+- 12회 시도 결과: 개별 ADME 파라미터 개선(fup, logP, pKa, CLint, Kp method)은 어느 것도 meta AAFE를 개선하지 못함.
+- **Error cancellation이 시스템 전체에 고착화.** 현재 파이프라인은 Omega에서 물려받은 특정 오차 프로파일에 calibration되어 있음. 부분 교체로는 이 균형을 깰 수 없음.
+- ALL-ON 실험 (pKa+BZ+CLint 동시 교체): 악화 합산 (+0.077). 동시 개선도 해결 불가.
+- **유일한 돌파 경로**: predict layer 전체를 새 데이터+새 모델로 일괄 교체 + meta-learner 재학습. 또는 TDM Bayesian update로 ceiling을 우회.
+- TDM Bayesian update가 현재 가장 실용적인 정확도 향상 경로 (CV 55% 감소 확인됨).
 
 ### 다음 할 것
 - [x] Phase 0: UGT revert, w_base=0.65 복원, MMPK migration
