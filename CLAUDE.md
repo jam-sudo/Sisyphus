@@ -44,10 +44,23 @@ Adaptive weight: base=0.65, other=0.00 (LOOCV 61/61 verified)
 - [x] Phase 4 DDI: inhibition + induction (22/22 tests, ketoconazole/fluconazole/quinidine/rifampin)
 - [x] Phase 4 CLI: `sisyphus ddi` command
 - [x] Phase 4 perf: deterministic predict 414ms mean (target ≤500ms)
+- [x] Multi-dose MBE 수정 완료 (cumulative dose 기준, 0.929→0.500)
+- [x] Phase 4 PK/PD link (effect compartment + sigmoid Emax, 28/28 tests, midazolam sedation + warfarin INR presets)
 - [x] Full test suite: 334/334 pass
-- [ ] Multi-dose MBE 계산 수정 (cumulative dose 기준으로 변경)
-- [ ] Phase 4 PK/PD link (effect compartment, Emax model)
-- [ ] AAFE ≤1.7 — population level에서는 CLint ceiling으로 불가, TDM 경로로만 가능
+
+### AAFE ≤1.7 평가
+- Population level AAFE 1.7은 CLint R²=0.24 ceiling으로 SMILES-only에서 도달 불가.
+- TDM Bayesian update로 개인 환자 수준에서는 CV 55%+ 감소 → 실질적 정밀도 향상 달성.
+- 이 ceiling을 넘으려면 measured CLint 데이터 또는 새로운 in vitro 데이터 소스 필요.
+
+### 프로젝트 완료 상태
+- **Phase 0 (Skeleton)**: ✅ Graph + YAML builder + flow conservation
+- **Phase 1 (Engine v0.1)**: ✅ ODE compiler, 6 flux types, LSODA solver, MC propagation
+- **Phase 2 (Prediction v0.2)**: ✅ Meta AAFE 2.058, N=61, 12 TDC ADME models
+- **Phase 3 (Extensibility v0.3)**: ✅ SC/pediatric/tumor, engine/ diff=0, 17 tests
+- **Phase 4 (Production v1.0)**: ✅ DDI (22 tests), PK/PD (28 tests), perf 414ms
+- **Track B (Clinical)**: ✅ Multi-dose v2.0, TDM v2.1 Bayesian update
+- **CLI**: predict, simulate, tdm, ddi, benchmark
 
 ### 건드리면 안 되는 것
 - engine/compiler.py, engine/solver.py
