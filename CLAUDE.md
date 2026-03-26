@@ -39,8 +39,15 @@ Adaptive weight: base=0.65, other=0.00 (LOOCV 61/61 verified)
 - [x] Track B: v2.1 TDM validation (posterior CV < prior CV, 7 tests pass)
 - [x] Commit + push all changes
 - [x] v2.0/v2.1 functional verification (3 drugs multi-dose + TDM Bayesian, scripts/verify_v2.py)
+- [x] CLI: `sisyphus simulate` (multi-dose) and `sisyphus tdm` commands
+- [x] Phase 3: Extensibility proof (SC/pediatric/tumor, 17/17 tests pass, engine/ diff=0)
+- [x] Phase 4 DDI: inhibition + induction (22/22 tests, ketoconazole/fluconazole/quinidine/rifampin)
+- [x] Phase 4 CLI: `sisyphus ddi` command
+- [x] Phase 4 perf: deterministic predict 414ms mean (target ≤500ms)
+- [x] Full test suite: 334/334 pass
 - [ ] Multi-dose MBE 계산 수정 (cumulative dose 기준으로 변경)
-- [ ] CLI: `sisyphus simulate` (multi-dose) and `sisyphus tdm` commands
+- [ ] Phase 4 PK/PD link (effect compartment, Emax model)
+- [ ] AAFE ≤1.7 — population level에서는 CLint ceiling으로 불가, TDM 경로로만 가능
 
 ### 건드리면 안 되는 것
 - engine/compiler.py, engine/solver.py
