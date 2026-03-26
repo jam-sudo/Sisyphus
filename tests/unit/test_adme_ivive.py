@@ -171,6 +171,16 @@ class TestIVIVE:
         drug = build_drug_on_graph(profile, adme, dose_mg=500.0)
         assert drug.compound_type == profile.compound_type
 
+    def test_default_kp_method_is_berezhkovskiy(self):
+        """Default kp_method should be 'berezhkovskiy'."""
+        import inspect
+
+        from sisyphus.predict.ivive import build_drug_on_graph
+
+        sig = inspect.signature(build_drug_on_graph)
+        default = sig.parameters["kp_method"].default
+        assert default == "berezhkovskiy"
+
     def test_base_increases_cyp2d6_fraction(self):
         """Bases should have higher CYP2D6 fraction than neutrals."""
         from sisyphus.predict.adme import predict_adme
@@ -195,3 +205,33 @@ class TestIVIVE:
                 base_frac = drug_base.enzyme_affinity["CYP2D6"].mean / base_total
                 neutral_frac = drug_neutral.enzyme_affinity["CYP2D6"].mean / neutral_total
                 assert base_frac > neutral_frac
+
+
+# ═══════════════════════════════════════════════════════════════════
+#  Berezhkovskiy correction
+# ═══════════════════════════════════════════════════════════════════
+
+
+class TestBerezhkovskiyCorrection:
+    def test_bz_reduces_kp_for_low_fup(self):
+        """BZ correction halves Kp for highly bound drugs (fup=0.01)."""
+        from sisyphus.predict.ivive import _apply_bz_correction
+
+        kp_rr = 100.0
+        kp_bz = _apply_bz_correction(kp_rr, fup=0.01)
+        assert kp_bz < kp_rr
+        assert abs(kp_bz - 50.25) < 1.0
+
+    def test_bz_minimal_for_high_fup(self):
+        """BZ correction still reduces Kp even at high fup."""
+        from sisyphus.predict.ivive import _apply_bz_correction
+
+        kp_rr = 5.0
+        kp_bz = _apply_bz_correction(kp_rr, fup=0.9)
+        assert kp_bz < kp_rr
+
+    def test_bz_kp_one_unchanged(self):
+        """Kp=1.0 is a fixed point of BZ correction."""
+        from sisyphus.predict.ivive import _apply_bz_correction
+
+        assert _apply_bz_correction(1.0, 0.5) == 1.0

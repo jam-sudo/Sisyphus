@@ -555,7 +555,7 @@ def build_drug_on_graph(
     dose_mg: float,
     route: str = "oral",
     liver_enzymes: dict[str, float] | None = None,
-    kp_method: str = "rodgers_rowland",
+    kp_method: str = "berezhkovskiy",
 ) -> DrugOnGraph:
     """Construct a DrugOnGraph from predicted properties.
 
