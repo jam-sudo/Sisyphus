@@ -61,7 +61,7 @@ def main():
     print(f"Valid drugs: {len(drugs)} (base: {sum(d['is_base'] for d in drugs)}, other: {sum(not d['is_base'] for d in drugs)})")
 
     # LOOCV-B: grid search over (w_base, w_other)
-    w_range = np.arange(0.0, 0.65, 0.05)
+    w_range = np.arange(0.0, 1.01, 0.05)
     disagreement_threshold = 1.0  # log10 units
 
     best_aafe = float("inf")
@@ -185,6 +185,7 @@ def main():
     print("COMPARISON WITH OLD WEIGHTS")
     print(f"{'='*60}")
     for label, wb, wo in [
+        ("Current (0.65/0.00)", 0.65, 0.00),
         ("Old (0.30/0.15)", 0.30, 0.15),
         ("Optimal", best_wb, best_wo),
         ("ML-only (0.00/0.00)", 0.00, 0.00),

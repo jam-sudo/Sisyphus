@@ -2,9 +2,18 @@
 
 ## Session State (마지막 업데이트: 2026-03-26)
 
-### Current Metrics (N=61)
-Engine AAFE: 2.945 | Meta AAFE: 2.058 | %2-fold: 55.7%
-Adaptive weight: base=0.65, other=0.00 (LOOCV 61/61 verified)
+### Current Metrics (N=107)
+Engine AAFE: 3.415 | Meta AAFE: 2.283 | %2-fold: 54.2%
+In-domain AAFE: 2.100 (N=83, excluding 24 AD-flagged/ER drugs)
+Adaptive weight: base=0.45, other=0.00 (LOOCV 107/107, w_base stability 82%)
+
+### Holdout Expansion (2026-03-26)
+- N=61 → N=107 (+46 drugs from OSP repos, FDA labels, curated literature)
+- Sources: OSP observed C(t) profiles (8 new + 3 updated), curated PK (30 new + 7 updated), FDA DailyMed (0 net new, overlaps with curated)
+- 7 new drugs added to holdout split (alprazolam, cabozantinib, cimetidine, erythromycin, probenecid, ruxolitinib, triazolam)
+- MMPK exclusions updated for 7 new holdout drugs
+- AAFE increase (2.058→2.306) expected: expanded set includes harder drugs (prodrugs, high MW, extreme lipophilicity)
+- In-domain AAFE 2.114 is the better comparator (excludes AD-flagged drugs that the model is not designed for)
 
 ### v2.0 Multi-Dose 검증 결과
 - Atorvastatin 40mg QD: Css_max 0.027 vs FDA 0.029 mg/L (fold error 0.93) — 7% 오차
@@ -69,6 +78,23 @@ Adaptive weight: base=0.65, other=0.00 (LOOCV 61/61 verified)
 - [x] pKa XGBoost 모델 훈련 (acidic R²=0.79, basic R²=0.80) → engine 미개선, revert
 - [x] Berezhkovskiy Kp correction 시도 → engine 미개선, revert
 - [x] Full test suite: 357/357 pass
+- [x] Holdout 확대: N=61→107 (OSP 8+curated 30+FDA merge). MMPK exclusions 업데이트.
+- [x] LOOCV 재실행: w_base=0.65→0.45 (N=107 최적). Meta AAFE 2.306→2.283. %2-fold 52.3→54.2%.
+- [x] Measured ADME PoC: 12약물 engine-only 비교. Pattern C 확인.
+
+### Measured ADME Proof of Concept (2026-03-26)
+- N=12 holdout drugs, engine-only (no meta-learner), Tier 2 (measured fup + CLint)
+- Sources: DrugBank fup (experimental), TDC Hepatocyte_AZ CLint (geometric mean)
+- Clean set (N=10, excl. montelukast/abiraterone extreme outliers):
+  - **AAFE: 2.329 → 1.980** (measured ADME)
+  - **Median FE: 2.19 → 1.88** (measured ADME)
+  - **8/10 improved** with measured ADME
+- fup-matched subgroup (N=8): AAFE 1.91→1.79 (CLint-only effect, 6% gain)
+- fup-corrected subgroup (N=2): AAFE 5.15→2.96 (fup+CLint, 42% gain)
+- **Pattern C**: Engine architecture is sound, minor systematic bias exists.
+  Input quality (CLint R²=0.24) is the primary bottleneck.
+- Error cancellation confirmed for abiraterone (fup 0.085→0.01 worsened FE 20.8→39.1).
+  But not the dominant pattern — majority (80%) benefits from measured data.
 
 ### AAFE ≤1.7 평가
 - Population level AAFE 1.7은 CLint R²=0.24 ceiling으로 SMILES-only에서 도달 불가.

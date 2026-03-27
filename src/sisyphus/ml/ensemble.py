@@ -4,11 +4,11 @@ The meta-learner combines engine PK predictions and ML PK predictions
 into a final calibrated output using a geometric-weighted combination
 in log space.
 
-Adaptive weighting by compound_type (LOOCV-validated, N=61):
-- Base drugs: w_engine=0.65 (R&R Kp + CYP IVIVE + calibrated Peff)
+Adaptive weighting by compound_type (LOOCV-validated, N=107):
+- Base drugs: w_engine=0.45 (R&R Kp + CYP IVIVE + calibrated Peff)
 - Other drugs: w_engine=0.00 (engine adds no value; ML dominates)
-- LOOCV-A AAFE: 2.022, overfitting: 0.0000 (fully generalizable)
-- LOOCV-B weight stability: w_base=0.65 100%, w_other=0.00 100%
+- LOOCV-A AAFE: 2.323, overfitting: 0.040
+- LOOCV-B weight stability: w_base=0.45 82%, w_other=0.00 100%
 
 When engine and ML disagree by >10-fold, the engine prediction is
 down-weighted as it is more likely to be wrong at extreme values.
@@ -25,12 +25,12 @@ from sisyphus.core import Distribution, PKEndpoints
 logger = logging.getLogger(__name__)
 
 # Adaptive engine weights by compound_type.
-# LOOCV-validated on N=61 holdout (AAFE 2.022 vs ML-only 2.206).
+# LOOCV-validated on N=107 holdout (AAFE 2.283 vs ML-only 2.340).
 # Mechanistic basis: R&R Kp phospholipid binding for bases +
 # enzyme-level CYP IVIVE + calibrated Peff model.
 # For non-base drugs, engine predictions do not improve over ML alone.
-# LOOCV-B stability: w_base=0.65 in 100% of folds, w_other=0.00 in 100%.
-_W_ENGINE_BASE = 0.65
+# LOOCV-B stability: w_base=0.45 in 82% of folds, w_other=0.00 in 100%.
+_W_ENGINE_BASE = 0.45
 _W_ENGINE_OTHER = 0.00
 
 # When engine and ML disagree by more than this factor (in log10 units),
@@ -45,7 +45,7 @@ class MetaLearner:
         log10(Cmax_final) = w_engine * log10(Cmax_engine) + w_ml * log10(Cmax_ml)
 
     Engine weight is adaptive:
-        - compound_type == "base": w_engine = 0.65
+        - compound_type == "base": w_engine = 0.45
         - otherwise: w_engine = 0.00 (ML only)
 
     When engine and ML disagree by >10-fold, engine weight is further reduced.
@@ -67,7 +67,7 @@ class MetaLearner:
         """Produce combined PK endpoints from engine and ML results.
 
         Uses adaptive geometric weighting in log space. Engine gets
-        significant weight only for base drugs (0.65) based on LOOCV-validated
+        significant weight only for base drugs (0.45) based on LOOCV-validated
         mechanistic advantage (R&R Kp + gut CYP3A4 IVIVE + calibrated Peff).
         Non-base drugs use ML only (w_engine=0.00).
 
