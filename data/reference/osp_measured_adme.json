@@ -1,0 +1,251 @@
+[
+  {
+    "drug": "alprazolam",
+    "repo": "Alprazolam-Model",
+    "fup": 0.233,
+    "fup_source": "Measurement",
+    "logp": 2.0799268917,
+    "perm_cm_per_min": 7.6146060669,
+    "perm_source": "Optimized",
+    "solubility_mg_ml": 40.0,
+    "sol_ph": 7.0,
+    "pka_types": [
+      [
+        "Base",
+        2.4
+      ]
+    ],
+    "enzymes": [
+      {
+        "enzyme": "CYP3A4",
+        "vmax": 0.131,
+        "km": 269.0,
+        "clint_hlm": 0.0,
+        "source": "alpha-OH pathway",
+        "type": "HLM"
+      },
+      {
+        "enzyme": "CYP3A4",
+        "vmax": 2.23,
+        "km": 704.0,
+        "clint_hlm": 0.0,
+        "source": "4-OH pathway",
+        "type": "HLM"
+      }
+    ],
+    "total_clint_hlm": 0.0,
+    "total_clint_hep": 0.0,
+    "kp_method": "Cellular partition coefficient method - Rodgers and Rowland"
+  },
+  {
+    "drug": "carbamazepine",
+    "repo": "Carbamazepine-Model",
+    "fup": 0.243,
+    "fup_source": "Morselli 1975",
+    "logp": 2.0067753065,
+    "solubility_mg_ml": 546.0199756643,
+    "sol_ph": 6.7,
+    "pka_types": [],
+    "enzymes": [
+      {
+        "enzyme": "UGT2B7",
+        "vmax": 3.5,
+        "km": 234.0,
+        "clint_hlm": 0.01,
+        "source": "N-Glucuronidation_Staines2004",
+        "type": "HLM"
+      },
+      {
+        "enzyme": "CYP2B6",
+        "vmax": 49.0,
+        "km": 235.0,
+        "clint_hlm": 0.21,
+        "source": "3-Hydroxylation_Pearce2002",
+        "type": "HLM"
+      },
+      {
+        "enzyme": "CYP3A4",
+        "vmax": 726.0,
+        "km": 808.0,
+        "clint_hlm": 0.9,
+        "source": "Epoxidation_Sakamoto2013",
+        "type": "HLM"
+      }
+    ],
+    "total_clint_hlm": 1.12,
+    "total_clint_hep": 0.42,
+    "kp_method": "Cellular partition coefficient method - Rodgers and Rowland"
+  },
+  {
+    "drug": "cimetidine",
+    "repo": "Cimetidine-Model",
+    "fup": 0.78,
+    "fup_source": "Measurement",
+    "logp": 1.655,
+    "perm_cm_per_min": 5.2554004942e-06,
+    "perm_source": "Fit",
+    "solubility_mg_ml": 24.0,
+    "sol_ph": 6.8,
+    "pka_types": [
+      [
+        "Base",
+        6.93
+      ],
+      [
+        "Acid",
+        13.38
+      ]
+    ],
+    "enzymes": [],
+    "total_clint_hlm": 0,
+    "total_clint_hep": 0.0,
+    "kp_method": "Cellular partition coefficient method - Rodgers and Rowland"
+  },
+  {
+    "drug": "dapagliflozin",
+    "repo": "Dapagliflozin-Model",
+    "fup": 0.09,
+    "fup_source": "Human",
+    "logp": 2.6719093089,
+    "perm_cm_per_min": 3.9684694792e-05,
+    "perm_source": "Optimized",
+    "solubility_mg_ml": 0.2210041453,
+    "sol_ph": 7.0,
+    "pka_types": [
+      [
+        "Acid",
+        12.75
+      ]
+    ],
+    "enzymes": [],
+    "total_clint_hlm": 0,
+    "total_clint_hep": 0.0,
+    "kp_method": "Cellular partition coefficient method - Rodgers and Rowland"
+  },
+  {
+    "drug": "digoxin",
+    "repo": "Digoxin-Model",
+    "fup": 0.71,
+    "fup_source": "Neuhoff (2013)",
+    "logp": 1.40017663,
+    "perm_cm_per_min": 2.7627e-07,
+    "perm_source": "fitted",
+    "solubility_mg_ml": 64.8,
+    "sol_ph": 7.0,
+    "pka_types": [],
+    "enzymes": [],
+    "total_clint_hlm": 0,
+    "total_clint_hep": 0.0,
+    "kp_method": "Cellular partition coefficient method - Rodgers and Rowland"
+  },
+  {
+    "drug": "erythromycin",
+    "repo": "Erythromycin-Model",
+    "fup": 0.305,
+    "fup_source": "Barre 1987",
+    "logp": 2.82,
+    "perm_cm_per_min": 0.00038668371665,
+    "perm_source": "Fitted",
+    "solubility_mg_ml": 8.3990771997,
+    "sol_ph": 7.0,
+    "pka_types": [
+      [
+        "Base",
+        8.88
+      ]
+    ],
+    "enzymes": [
+      {
+        "enzyme": "CYP3A4",
+        "vmax": 918.33333,
+        "km": 70.0,
+        "clint_hlm": 13.12,
+        "source": "Biotransformation_fitted",
+        "type": "HLM"
+      }
+    ],
+    "total_clint_hlm": 13.12,
+    "total_clint_hep": 4.92,
+    "kp_method": "Cellular partition coefficient method - Rodgers and Rowland"
+  },
+  {
+    "drug": "itraconazole",
+    "repo": "Itraconazole-Model",
+    "fup": 0.6016197247,
+    "fup_source": "Templeton, 2008",
+    "logp": 4.624,
+    "perm_cm_per_min": 5.3261558344e-05,
+    "perm_source": "Fit",
+    "solubility_mg_ml": 0.7,
+    "sol_ph": 6.5,
+    "pka_types": [
+      [
+        "Base",
+        3.7
+      ]
+    ],
+    "enzymes": [],
+    "total_clint_hlm": 0,
+    "total_clint_hep": 0.0,
+    "kp_method": "Cellular partition coefficient method - Rodgers and Rowland"
+  },
+  {
+    "drug": "sildenafil",
+    "repo": "Sildenafil-Model",
+    "fup": 0.04,
+    "fup_source": "Measurement",
+    "logp": 2.8413676507,
+    "perm_cm_per_min": 0.0012071993309,
+    "perm_source": "Optimized",
+    "solubility_mg_ml": 100.0,
+    "sol_ph": 7.0,
+    "pka_types": [
+      [
+        "Base",
+        5.97
+      ]
+    ],
+    "enzymes": [],
+    "total_clint_hlm": 0,
+    "total_clint_hep": 0.0,
+    "kp_method": "Cellular partition coefficient method - Rodgers and Rowland"
+  },
+  {
+    "drug": "triazolam",
+    "repo": "Triazolam-Model",
+    "fup": 0.174,
+    "fup_source": "Measurement",
+    "logp": 1.897007419,
+    "perm_cm_per_min": 7.0220146601e-05,
+    "perm_source": "Optimized",
+    "solubility_mg_ml": 4.53,
+    "sol_ph": 7.0,
+    "pka_types": [
+      [
+        "Base",
+        1.52
+      ]
+    ],
+    "enzymes": [
+      {
+        "enzyme": "CYP3A4",
+        "vmax": 2.36,
+        "km": 74.2,
+        "clint_hlm": 0.03,
+        "source": "alpha-OH pathway",
+        "type": "HLM"
+      },
+      {
+        "enzyme": "CYP3A4",
+        "vmax": 10.27,
+        "km": 305.0,
+        "clint_hlm": 0.03,
+        "source": "4-OH pathway",
+        "type": "HLM"
+      }
+    ],
+    "total_clint_hlm": 0.06,
+    "total_clint_hep": 0.02,
+    "kp_method": "Cellular partition coefficient method - Rodgers and Rowland"
+  }
+]
