@@ -294,3 +294,4 @@ class PredictionResult:
     ad_flags: tuple[str, ...]
     warnings: tuple[str, ...]
     cmax_90ci: tuple[float, float] | None
+    clf_pk: PKEndpoints | None = None
