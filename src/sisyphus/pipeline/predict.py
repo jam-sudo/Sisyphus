@@ -166,6 +166,28 @@ def predict(
         warnings_list.append(f"ML prediction failed: {e}")
         logger.warning("ML prediction failed: %s", e)
 
+    # ── Step 3b: CL/F analytical Cmax (3rd track) ─────────────────────
+    clf_pk: PKEndpoints | None = None
+    try:
+        from sisyphus.ml.clf_predictor import CLFPredictor
+        clf_pred = CLFPredictor()
+        # Pass engine Tmax for ka estimation (method 1)
+        engine_tmax = engine_pk.tmax.mean if engine_pk is not None else None
+        # Pass Peff for ka estimation (method 2)
+        peff_val = adme.peff.mean if adme is not None else None
+        clf_cmax, ka_method = clf_pred.predict_cmax(
+            smiles, dose_mg, engine_tmax=engine_tmax, peff=peff_val,
+        )
+        clf_pk = PKEndpoints(
+            cmax=clf_cmax,
+            tmax=Distribution(1.0),
+            auc_0t=Distribution(0.0),
+        )
+        logger.info("CL/F PK: Cmax=%.4f mg/L (ka=%s)", clf_cmax.mean, ka_method)
+    except Exception as e:
+        warnings_list.append(f"CL/F prediction failed: {e}")
+        logger.warning("CL/F prediction failed: %s", e)
+
     # ── Step 4: Meta-learner ─────────────────────────────────────────────
     meta = MetaLearner()
     final_pk = meta.combine(
@@ -179,6 +201,7 @@ def predict(
         clint=adme.clint.mean,
         compound_type=profile.compound_type,
         pgp_flag="PGP_EFFLUX_RISK" in profile.ad_flags,
+        clf_pk=clf_pk,
     )
 
     # ── Determine method ─────────────────────────────────────────────────
@@ -208,6 +231,7 @@ def predict(
         method=method,
         engine_pk=engine_pk,
         ml_pk=ml_pk,
+        clf_pk=clf_pk,
         confidence=confidence,
         in_applicability_domain=profile.in_ad,
         ad_flags=profile.ad_flags,
