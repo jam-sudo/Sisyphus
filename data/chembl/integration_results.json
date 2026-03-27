@@ -1,0 +1,33 @@
+{
+  "baseline": {
+    "label": "Baseline CLint",
+    "n_drugs": 107,
+    "engine_aafe": 3.4157473278768773,
+    "ml_aafe": 2.336333939401001,
+    "meta_aafe": 2.2774140851831626,
+    "pct_2fold": 53.271028037383175,
+    "in_domain_aafe": 2.0929765808385077,
+    "in_domain_pct_2fold": 57.831325301204814,
+    "n_in_domain": 83
+  },
+  "expanded": {
+    "label": "Expanded CLint",
+    "n_drugs": 107,
+    "engine_aafe": 3.5146364865525115,
+    "ml_aafe": 2.336333939401001,
+    "meta_aafe": 2.3155392943673356,
+    "pct_2fold": 52.336448598130836,
+    "in_domain_aafe": 2.1335443288552507,
+    "in_domain_pct_2fold": 55.42168674698795,
+    "n_in_domain": 83
+  },
+  "loocv": {
+    "w_base": 0.25,
+    "w_other": 0.0,
+    "aafe": 2.3012020164757003,
+    "n_drugs": 107
+  },
+  "engine_delta": 0.09888915867563419,
+  "meta_delta": 0.03812520918417306,
+  "decision": "REVERT"
+}
