@@ -26,6 +26,32 @@ Adaptive weight: base=0.45, other=0.00 (LOOCV 107/107, w_base stability 82%)
 - CV reduction: 55.4% (44.3% → 19.8%), ESS=586.6 (29.3%)
 - Bayesian update 메커니즘 정상 작동 확인
 
+### v2.1 TDM Multi-Drug Benchmark (2026-03-27)
+- 5 holdout drugs (morphine, amantadine, ketorolac, clozapine, rivaroxaban)
+- 2 base + 1 acid + 2 neutral, fold error 2.0-3.25x
+- Synthetic patient: engine C(t) scaled to observed Cmax + 10% assay noise (seed=42)
+
+**Main results (15 runs: 5 drugs × 3 scenarios)**:
+| Metric | 1 obs | 2 obs | 3 obs |
+|--------|-------|-------|-------|
+| Mean CV reduction | 78.1% | 82.7% | 82.9% |
+| Mean error reduction | 79.4% | 80.8% | 79.1% |
+| Mean posterior CV | 8.4% | 6.5% | 6.4% |
+
+**Per-drug highlights**:
+- Morphine (base): CVred 74-77%, ErrRed 92-96%, ESS 114-428. 모든 시나리오 healthy/caution.
+- Amantadine (base): CVred 74-75%, ErrRed 88-94%, ESS 66-514.
+- Clozapine (neutral): CVred 69-77%, ErrRed 85-90%, ESS 59-482.
+- Ketorolac (acid, FE=3.25): CVred 88-93% 높지만 ErrRed 36-44% 낮음. **ESS 2.5-3.3 (degenerate)**. Prior가 truth에서 너무 멀어 importance sampling 한계.
+- Rivaroxaban (neutral, FE=2.17): CVred 84-98% 높지만 **ESS 1.0-7.1 (degenerate)**. Multi-obs에서 particle degeneracy 심각.
+
+**90% CI coverage**: 10/15 (67%). Ketorolac + rivaroxaban multi-obs가 CI miss.
+**ESS health**: 3 healthy (>200), 4 caution (100-200), 8 degenerate (<100).
+**Timepoint sensitivity** (morphine): t=1.0h 최적 (CVred=76.3%). 4h 이후 급감 (34%).
+**Seed sensitivity**: Δ=0.8% (seed 42/123/456). N=2000에서 완전 robust.
+
+**결론**: Single observation으로 CV 70-88% 감소, Cmax error 44-92% 감소. FE<2.5x인 약물에서 강력히 작동. FE>3x 또는 multi-obs에서 ESS degeneracy 발생 → EnKF/particle filter 필요 (Future work).
+
 ### 시도했고 실패한 것 (다시 하지 마라)
 - fup 재학습 (DrugBank+TDC) → AAFE ±0.02, noise level
 - logP residual correction → AAFE ±0.02, noise level
@@ -42,6 +68,7 @@ Adaptive weight: base=0.45, other=0.00 (LOOCV 107/107, w_base stability 82%)
 - **CYP docking features (DiffDock NIM + Vina)** → DiffDock CYP3A4 1,114 drugs: CLint CV R² 0.190→0.196 (ΔR²=+0.005, noise). Vina: ΔR²=-0.026 (악화). Docking importance 0.2-0.4%, top 30에 0개. Binding affinity ≠ metabolic rate. 구조적으로 다시 시도 금지.
 - **Foundation model shootout (MoLFormer/ChemBERTa/Uni-Mol)** → frozen embedding + Ridge/MLP/XGBoost 전 조합 테스트. Morgan FP+XGB (R²=0.205)가 모든 조합을 압도. MoLFormer mean 0.184, ChemBERTa 0.170, Uni-Mol 0.083. 결합도 악화. CLint R²≈0.20은 representation이 아닌 target noise 한계.
 - **Direct CL/F 3rd track (IVIVE bypass)** → MMPK AUC에서 CL/F 역산 (N=1,014), Vd/F 역산 (N=940). CL/F XGB CV R²=0.232, Vd/F R²=0.332. Analytical 1-cpt Cmax로 3rd track 구성. 3-track LOOCV: w_clf=0.00 (base/other 모두). Standalone AAFE=3.133 (ML 2.336보다 열위). Meta AAFE Δ=-0.005 (noise). Oracle 1.788 (28/107 drugs에서 CL/F 최선)이나 고정 weight로 활용 불가. Benet 가설 (IVIVE bypass → 정확도 향상) 미검증. SMILES→CL/F도 CLint R²≈0.24과 동일한 representation ceiling. 인프라 유지, w_clf=0.00.
+- **ChEMBL CLint expansion (2026-03-27)** → ChEMBL 36 전량 추출: 539 unique compounds (534 net new). TDC Hep 978 + ChEMBL 517 = 1,910 compounds. Scaffold CV R² 0.279→0.333 (ΔR²=+0.054). 그러나 engine AAFE 3.416→3.515 (+0.099 악화), meta AAFE 2.277→2.316 (+0.038 악화). LOOCV w_base 0.45→0.25 (meta-learner가 engine 신뢰 감소). CLint R² 개선이 pipeline error cancellation을 파괴. 14번째 시도 실패. Revert 완료. 데이터는 data/chembl/ 및 data/training/clint_expanded_v2.csv에 보존.
 
 ### Engine-only ablation 결과
 - DrugBank enrichment: engine AAFE 3.074→2.945 (Δ=-0.129, 유의미), meta는 0.17 weight로 0.021만 전달
@@ -51,11 +78,12 @@ Adaptive weight: base=0.45, other=0.00 (LOOCV 107/107, w_base stability 82%)
 
 ### 확정된 진단 (최종, 2026-03-26, PoC 보강)
 - Engine 수식/구조/mechanism은 충분. Input quality (CLint R²=0.24)가 ceiling.
-- 13회 시도 결과: 개별 ADME 파라미터 개선(fup, logP, pKa, CLint, Kp method) 및 IVIVE bypass (direct CL/F)는 어느 것도 meta AAFE를 개선하지 못함.
+- 14회 시도 결과: 개별 ADME 파라미터 개선(fup, logP, pKa, CLint, Kp method), IVIVE bypass (direct CL/F), 및 ChEMBL data expansion은 어느 것도 meta AAFE를 개선하지 못함.
 - **Error cancellation이 시스템 전체에 고착화.** 현재 파이프라인은 Omega에서 물려받은 특정 오차 프로파일에 calibration되어 있음. 부분 교체로는 이 균형을 깰 수 없음.
 - ALL-ON 실험 (pKa+BZ+CLint 동시 교체): 악화 합산 (+0.077). 동시 개선도 해결 불가.
 - **Measured ADME PoC (Pattern C 확인)**: 12약물에서 measured fup+CLint → engine AAFE 2.33→1.98, 80% 개선. 아키텍처 건전. 일부 error cancellation 존재하나 지배적이지 않음.
 - **Direct CL/F (IVIVE bypass) 실험 (2026-03-27)**: MMPK AUC→CL/F 직접 예측 (R²=0.232) + analytical Cmax = 3rd track. LOOCV w_clf=0.00. IVIVE 우회해도 동일한 SMILES→clearance ceiling에 도달. 13번째 시도 실패.
+- **ChEMBL CLint expansion (2026-03-27)**: ChEMBL 36에서 539 unique compounds 추출 (534 net new). 1,910 compound training set으로 scaffold CV R² 0.279→0.333 (+0.054). 그러나 engine AAFE +0.099, meta AAFE +0.038 악화. homogeneous data expansion도 error cancellation 하에서 무효. 14번째 시도 실패.
 - **유일한 돌파 경로**: predict layer 전체를 새 데이터+새 모델로 일괄 교체 + meta-learner 재학습. 또는 TDM Bayesian update로 ceiling을 우회.
 - TDM Bayesian update가 현재 가장 실용적인 정확도 향상 경로 (CV 55% 감소 확인됨).
 
