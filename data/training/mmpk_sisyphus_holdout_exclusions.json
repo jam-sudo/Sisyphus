@@ -222,5 +222,33 @@
   "tenofovir disoproxil": {
     "smiles": "CC(C)OC(=O)OCOP(=O)(COC(C)Cn1cnc2c(N)ncnc21)OCOC(=O)OC(C)C",
     "match": "name"
+  },
+  "alprazolam": {
+    "smiles": "Cc1nnc2n1-c1ccc(Cl)cc1C(c1ccccc1)=NC2",
+    "match": "name"
+  },
+  "cabozantinib": {
+    "smiles": "COc1cc2nccc(Oc3ccc(NC(=O)C4(C(=O)Nc5ccc(F)cc5)CC4)cc3)c2cc1OC",
+    "match": "name"
+  },
+  "cimetidine": {
+    "smiles": "CN/C(=N/C#N)NCCSCc1nc[nH]c1C",
+    "match": "name"
+  },
+  "erythromycin": {
+    "smiles": "CC[C@H]1OC(=O)[C@H](C)[C@@H](O[C@H]2C[C@@](C)(OC)[C@@H](O)[C@H](C)O2)[C@H](C)[C@@H](O[C@@H]2O[C@H](C)C[C@H](N(C)C)[C@H]2O)[C@](C)(O)C[C@@H](C)C(=O)[C@H](C)[C@@H](O)[C@]1(C)O",
+    "match": "name"
+  },
+  "probenecid": {
+    "smiles": "CCCN(CCC)S(=O)(=O)c1ccc(C(=O)O)cc1",
+    "match": "name"
+  },
+  "ruxolitinib": {
+    "smiles": "N#CC[C@H](C1CCCC1)n1cc(-c2ncnc3[nH]ccc23)cn1",
+    "match": "name"
+  },
+  "triazolam": {
+    "smiles": "Cc1nnc2n1-c1ccc(Cl)cc1C(c1ccccc1Cl)=NC2",
+    "match": "name"
   }
 }
