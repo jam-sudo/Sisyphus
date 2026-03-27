@@ -1,0 +1,152 @@
+[
+  {
+    "drug_name": "atovaquone",
+    "dose_mg": 750,
+    "cmax_mg_L": 3.1,
+    "cmax_value_original": 3.1,
+    "cmax_unit_original": "µg/mL",
+    "source": "FDA label (Mepron), single 750mg dose fasted",
+    "notes": "µg/mL = mg/L. Fasted bioavailability ~23%",
+    "status": "uncertain"
+  },
+  {
+    "drug_name": "budesonide",
+    "dose_mg": 9,
+    "cmax_mg_L": 0.0015,
+    "cmax_value_original": 1.5,
+    "cmax_unit_original": "ng/mL",
+    "source": "FDA label (Entocort EC 9mg), single dose fasted",
+    "notes": "Entocort EC is enteric-coated. Low oral bioavailability ~10%.",
+    "status": "uncertain"
+  },
+  {
+    "drug_name": "etodolac",
+    "dose_mg": 200,
+    "cmax_mg_L": 15.9,
+    "cmax_value_original": 15.9,
+    "cmax_unit_original": "µg/mL",
+    "source": "FDA label (Lodine), single 200mg dose fasted, healthy volunteers",
+    "notes": "µg/mL = mg/L. Cmax 15.9 µg/mL at Tmax 1.2h. 100% bioavailability. Confirmed by web search.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "fruquintinib",
+    "dose_mg": 5,
+    "cmax_mg_L": 0.113,
+    "cmax_value_original": 113,
+    "cmax_unit_original": "ng/mL",
+    "source": "Phase I study, single 5mg oral dose fasted, healthy Chinese males (PMID 28730290)",
+    "notes": "Tmax 2h, t1/2 ~42h. Confirmed by web search.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "hydroxyzine",
+    "dose_mg": 25,
+    "cmax_mg_L": 0.030,
+    "cmax_value_original": 30,
+    "cmax_unit_original": "ng/mL",
+    "source": "Atarax product characteristics; single 25mg oral dose, healthy adults",
+    "notes": "Cmax ~30 ng/mL at Tmax ~2h. Confirmed by web search.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "leflunomide",
+    "dose_mg": 100,
+    "cmax_mg_L": 4.0,
+    "cmax_value_original": 4.0,
+    "cmax_unit_original": "µg/mL",
+    "source": "FDA label (Arava), single 100mg loading dose. Teriflunomide metabolite.",
+    "notes": "Active metabolite teriflunomide measured, not parent.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "lenacapavir",
+    "dose_mg": 927,
+    "cmax_mg_L": 0.0738,
+    "cmax_value_original": 73.8,
+    "cmax_unit_original": "ng/mL",
+    "source": "FDA label (Sunlenca), oral loading dose Day 1",
+    "notes": "t1/2 ~10-12 days. Oral loading followed by SC.",
+    "status": "uncertain"
+  },
+  {
+    "drug_name": "lopinavir",
+    "dose_mg": 400,
+    "cmax_mg_L": 9.8,
+    "cmax_value_original": 9.8,
+    "cmax_unit_original": "µg/mL",
+    "source": "FDA label (Kaletra), 400mg lopinavir + 100mg ritonavir",
+    "notes": "Co-administered with ritonavir as PK booster. Confirmed by web search.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "posaconazole",
+    "dose_mg": 300,
+    "cmax_mg_L": 0.675,
+    "cmax_value_original": 675,
+    "cmax_unit_original": "ng/mL",
+    "source": "Fang et al., Clin Drug Invest 2019; 300mg tablet single dose fasted",
+    "notes": "Tablet formulation. Gmean Cmax 674.5 ng/mL (CV 29.6%). Confirmed by web search.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "prasugrel",
+    "dose_mg": 60,
+    "cmax_mg_L": 0.448,
+    "cmax_value_original": 448,
+    "cmax_unit_original": "ng/mL",
+    "source": "FDA label (Effient), 60mg loading dose. Active metabolite R-138727.",
+    "notes": "Prodrug; active metabolite measured. Tmax ~30min.",
+    "status": "uncertain"
+  },
+  {
+    "drug_name": "quizartinib",
+    "dose_mg": 26.5,
+    "cmax_mg_L": 0.140,
+    "cmax_value_original": 140,
+    "cmax_unit_original": "ng/mL",
+    "source": "FDA label (Vanflyta), healthy adults Phase 1",
+    "notes": "FLT3 inhibitor for AML. Oral capsule.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "ramelteon",
+    "dose_mg": 8,
+    "cmax_mg_L": 0.0058,
+    "cmax_value_original": 5.8,
+    "cmax_unit_original": "ng/mL",
+    "source": "FDA label (Rozerem); 16mg gives Cmax 11.6 ng/mL in elderly; linear PK → 8mg ~5.8 ng/mL",
+    "notes": "Extensive first-pass, bioavailability 1.8%. High variability (CV ~100%). Dose-proportional estimate.",
+    "status": "uncertain"
+  },
+  {
+    "drug_name": "rivaroxaban",
+    "dose_mg": 10,
+    "cmax_mg_L": 0.125,
+    "cmax_value_original": 125,
+    "cmax_unit_original": "ng/mL",
+    "source": "Kubitza et al., CPDD 2013; FDA label (Xarelto), single 10mg dose fasted",
+    "notes": "Median Cmax 125 ng/mL. Bioavailability 80-100%. Confirmed by web search.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "selegiline",
+    "dose_mg": 10,
+    "cmax_mg_L": 0.002,
+    "cmax_value_original": 2.0,
+    "cmax_unit_original": "µg/L",
+    "source": "Clinical pharmacokinetics review; 10mg single oral dose, healthy adults",
+    "notes": "Very low Cmax (~2 µg/L = 0.002 mg/L) due to extensive first-pass. t1/2 ~9 min for parent.",
+    "status": "uncertain"
+  },
+  {
+    "drug_name": "sirolimus",
+    "dose_mg": 5,
+    "cmax_mg_L": 0.0361,
+    "cmax_value_original": 36.1,
+    "cmax_unit_original": "ng/mL",
+    "source": "FDA label (Rapamune), single 5mg oral dose, healthy adults",
+    "notes": "Whole blood concentration. Low bioavailability ~14%.",
+    "status": "uncertain"
+  }
+]

@@ -1,0 +1,382 @@
+[
+  {
+    "drug_name": "acamprosate",
+    "dose_mg": 666,
+    "cmax_mg_L": 0.18,
+    "cmax_value_original": 180,
+    "cmax_unit_original": "ng/mL",
+    "source": "Saivin et al., Clin Pharmacokinet 1998; FDA label (Campral)",
+    "notes": "Single 666mg dose (2x333mg tablets) in healthy volunteers. Delayed-release tablets. Cmax 162-212 ng/mL range across studies, 180 ng/mL mean used.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "alvimopan",
+    "dose_mg": 12,
+    "cmax_mg_L": 0.01098,
+    "cmax_value_original": 10.98,
+    "cmax_unit_original": "ng/mL",
+    "source": "FDA label (Entereg); Capto et al., Clin Pharmacol 2007",
+    "notes": "12mg oral capsule. Cmax ~10.98 ng/mL from multiple-dose study. Very low bioavailability (6%). Single dose data limited; value from BID dosing to Day 5.",
+    "status": "uncertain"
+  },
+  {
+    "drug_name": "atovaquone",
+    "dose_mg": 750,
+    "cmax_mg_L": 8.8,
+    "cmax_value_original": 8.8,
+    "cmax_unit_original": "mcg/mL",
+    "source": "FDA label (Mepron); single 750mg dose fasted",
+    "notes": "750mg oral suspension fasted healthy volunteers. Cmax 8.8 +/- 3.7 mcg/mL. Food greatly increases absorption (Cmax 15.1 with food). mcg/mL = mg/L.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "brincidofovir",
+    "dose_mg": 100,
+    "cmax_mg_L": 0.251,
+    "cmax_value_original": 251,
+    "cmax_unit_original": "ng/mL",
+    "source": "FDA label (Tembexa); PK study in healthy volunteers",
+    "notes": "100mg oral tablet. Cmax 251 ng/mL, AUCinf 1394 ng*h/mL. Oral bioavailability ~13%. Newer drug (FDA approved 2021 for smallpox).",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "budesonide",
+    "dose_mg": 9,
+    "cmax_mg_L": 0.0015,
+    "cmax_value_original": 1.5,
+    "cmax_unit_original": "ng/mL",
+    "source": "FDA label (Entocort EC); single 9mg dose fasted healthy volunteers",
+    "notes": "Entocort EC 9mg capsule (controlled ileal release, not true IR). Cmax 1.50 +/- 0.79 ng/mL fasted. Very low systemic bioavailability (~10%) due to high first-pass.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "carbinoxamine",
+    "dose_mg": 8,
+    "cmax_mg_L": 0.024,
+    "cmax_value_original": 24,
+    "cmax_unit_original": "ng/mL",
+    "source": "FDA BPCA review; Wendt 1995",
+    "notes": "8mg carbinoxamine maleate oral solution. Cmax ~24 ng/mL. Limited published PK data for single-dose IR.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "dalfampridine",
+    "dose_mg": 10,
+    "cmax_mg_L": 0.0427,
+    "cmax_value_original": 42.7,
+    "cmax_unit_original": "ng/mL",
+    "source": "FDA label (Ampyra); oral solution PK data",
+    "notes": "10mg oral solution (IR equivalent). Cmax 42.7 ng/mL at ~1.3h. Note: marketed as ER tablets (Cmax 17-22 ng/mL); IR solution value used for engine comparison.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "dapagliflozin",
+    "dose_mg": 10,
+    "cmax_mg_L": 0.165,
+    "cmax_value_original": 165,
+    "cmax_unit_original": "ng/mL",
+    "source": "Kasichayanula et al., Clin Pharmacokinet 2014; bioequivalence studies",
+    "notes": "10mg single dose fasted healthy volunteers. Cmax ~161-168 ng/mL across BE studies, midpoint 165 used. Oral bioavailability 78%.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "donepezil",
+    "dose_mg": 5,
+    "cmax_mg_L": 0.0077,
+    "cmax_value_original": 7.7,
+    "cmax_unit_original": "ng/mL",
+    "source": "Tiseo et al., Br J Clin Pharmacol 1998; FDA label (Aricept)",
+    "notes": "5mg single dose healthy volunteers. Cmax 7.7 +/- 1.2 ng/mL. Long half-life ~70h.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "etodolac",
+    "dose_mg": 200,
+    "cmax_mg_L": 15.9,
+    "cmax_value_original": 15.9,
+    "cmax_unit_original": "mcg/mL",
+    "source": "FDA label; etodolac 200mg capsule healthy volunteers",
+    "notes": "200mg single dose immediate-release capsule. Cmax 15.9 mcg/mL. >99% protein bound. Bioavailability ~100%.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "fruquintinib",
+    "dose_mg": 5,
+    "cmax_mg_L": 0.113,
+    "cmax_value_original": 113,
+    "cmax_unit_original": "ng/mL",
+    "source": "Phase I study in healthy Chinese volunteers; FDA label (Fruzaqla)",
+    "notes": "5mg single dose healthy volunteers. Cmax 113 ng/mL at Tmax ~2h. Linear PK 1-6mg. t1/2 ~42h.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "hydroxyzine",
+    "dose_mg": 25,
+    "cmax_mg_L": 0.03,
+    "cmax_value_original": 30,
+    "cmax_unit_original": "ng/mL",
+    "source": "Atarax product information (GSK); Simons et al., J Clin Pharmacol 1984",
+    "notes": "25mg single dose healthy adults. Cmax ~30 ng/mL at Tmax ~2h. Higher Cmax (~72.5 ng/mL) reported at 0.7 mg/kg (~50mg).",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "ketorolac",
+    "dose_mg": 10,
+    "cmax_mg_L": 0.8,
+    "cmax_value_original": 0.8,
+    "cmax_unit_original": "mcg/mL",
+    "source": "FDA label (Toradol); Jung et al., Biopharm Drug Dispos 1988",
+    "notes": "10mg oral tablet single dose. Cmax ~0.8 mcg/mL at Tmax ~0.9h. Oral bioavailability 80-100%.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "lamivudine",
+    "dose_mg": 150,
+    "cmax_mg_L": 1.4,
+    "cmax_value_original": 1.4,
+    "cmax_unit_original": "mcg/mL",
+    "source": "FDA label (Epivir); Moore et al., AAC 2012",
+    "notes": "150mg single dose. Geometric mean Cmax 1.40 mcg/mL. Rapidly absorbed, Tmax 0.5-1.5h. Bioavailability ~82%.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "leflunomide",
+    "dose_mg": 100,
+    "cmax_mg_L": 7.2,
+    "cmax_value_original": 7.2,
+    "cmax_unit_original": "mcg/mL",
+    "source": "Estimated from 10mg dose data (Cmax 0.72 mcg/mL) with linear dose scaling; Li et al., Clin Drug Invest 2019",
+    "notes": "Active metabolite teriflunomide measured. After leflunomide 10mg: Cmax 0.718 mcg/mL. Scaled x10 to 100mg loading dose assuming linear PK. Very long t1/2 (~2 weeks). Tmax 6-12h.",
+    "status": "uncertain"
+  },
+  {
+    "drug_name": "lenacapavir",
+    "dose_mg": 300,
+    "cmax_mg_L": 0.0234,
+    "cmax_value_original": 23.4,
+    "cmax_unit_original": "ng/mL",
+    "source": "Phase 1 PK study, healthy subjects with normal hepatic function; AAC 2024",
+    "notes": "300mg single oral dose healthy subjects. Geometric mean Cmax 23.4 ng/mL. Tmax ~4h. Very low oral bioavailability (6-10%). Long-acting drug primarily used SC.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "lopinavir",
+    "dose_mg": 400,
+    "cmax_mg_L": 9.8,
+    "cmax_value_original": 9.8,
+    "cmax_unit_original": "mcg/mL",
+    "source": "FDA label (Kaletra); co-administered with ritonavir 100mg",
+    "notes": "400mg lopinavir + 100mg ritonavir. Cmax 9.8 +/- 3.7 mcg/mL at steady state. Single-dose data without ritonavir not clinically available; lopinavir is never given alone. Value represents boosted formulation at steady state.",
+    "status": "uncertain"
+  },
+  {
+    "drug_name": "lorlatinib",
+    "dose_mg": 100,
+    "cmax_mg_L": 0.5013,
+    "cmax_value_original": 501.3,
+    "cmax_unit_original": "ng/mL",
+    "source": "Chen et al., CPT Pharmacometrics Syst Pharmacol 2021; bioavailability study in healthy participants",
+    "notes": "100mg single oral dose in healthy participants. Geometric mean Cmax 501.3 ng/mL (CV 38%). Absolute bioavailability 81%. Tmax ~1.2h.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "mercaptopurine",
+    "dose_mg": 50,
+    "cmax_mg_L": 0.069,
+    "cmax_value_original": 69,
+    "cmax_unit_original": "ng/mL",
+    "source": "FDA label (Purinethol/Purixan); single 50mg dose fasted healthy adults",
+    "notes": "50mg single dose fasted healthy adults. Mean Cmax 69 ng/mL. Another formulation reported 93 ng/mL. Tmax ~0.75h. t1/2 ~1.3h.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "nilotinib",
+    "dose_mg": 400,
+    "cmax_mg_L": 1.95,
+    "cmax_value_original": 1950,
+    "cmax_unit_original": "ng/mL",
+    "source": "Simulated fasted steady-state Cmax from population PK; bioequivalence data",
+    "notes": "Single-dose fasted Cmax in healthy volunteers not well-characterized in available literature. Using estimated value from popPK model (steady-state Cmax ~1950-2120 ng/mL for 400mg BID fasted). Single dose would be lower (~1000 ng/mL). Tmax ~3h.",
+    "status": "uncertain"
+  },
+  {
+    "drug_name": "paroxetine",
+    "dose_mg": 20,
+    "cmax_mg_L": 0.005,
+    "cmax_value_original": 5.0,
+    "cmax_unit_original": "ng/mL",
+    "source": "Estimated from CR 25mg data and dose-proportionality; FDA label (Paxil)",
+    "notes": "Single-dose IR 20mg healthy volunteers. Estimated Cmax ~5 ng/mL. Paroxetine exhibits nonlinear PK; steady-state Cmax 6-14x higher than single dose. CR 25mg single dose Cmax = 7.08 ng/mL. Food increases Cmax 29%.",
+    "status": "uncertain"
+  },
+  {
+    "drug_name": "penicillamine",
+    "dose_mg": 250,
+    "cmax_mg_L": 1.5,
+    "cmax_value_original": 1.5,
+    "cmax_unit_original": "mg/L",
+    "source": "Netter et al., Clin Pharmacokinet 1987; Bergstrom et al., J Rheumatol 1983",
+    "notes": "250mg single dose healthy volunteers. Cmax 1-2 mg/L (midpoint 1.5 used). Tmax 1-3h. Bioavailability 50-70%.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "pilocarpine",
+    "dose_mg": 5,
+    "cmax_mg_L": 0.015,
+    "cmax_value_original": 15,
+    "cmax_unit_original": "ng/mL",
+    "source": "FDA label (Salagen); multiple-dose PK study in healthy male volunteers",
+    "notes": "5mg oral tablet. Cmax 15 ng/mL from multiple-dose study (last 6h dose). Tmax ~1.25h. Fasted Cmax at 10mg was 59 ng/mL.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "ponatinib",
+    "dose_mg": 45,
+    "cmax_mg_L": 0.0547,
+    "cmax_value_original": 54.7,
+    "cmax_unit_original": "ng/mL",
+    "source": "Narasimhan et al., Cancer Chemother Pharmacol 2015; food effect study",
+    "notes": "45mg single dose fasted healthy subjects. Geometric mean Cmax 54.7 ng/mL. Tmax ~6h. t1/2 ~24h. No food effect.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "posaconazole",
+    "dose_mg": 400,
+    "cmax_mg_L": 0.151,
+    "cmax_value_original": 151,
+    "cmax_unit_original": "ng/mL",
+    "source": "Courtney et al., AAC 2004; single 400mg oral suspension fasted",
+    "notes": "400mg oral suspension single dose fasted healthy volunteers. Mean Cmax 151 ng/mL (CV 58%). Absorption highly pH- and food-dependent. Fed Cmax >4x fasted.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "prasugrel",
+    "dose_mg": 60,
+    "cmax_mg_L": 0.631,
+    "cmax_value_original": 631,
+    "cmax_unit_original": "ng/mL",
+    "source": "Liang et al., BMC Pharmacol Toxicol 2014; healthy Chinese subjects",
+    "notes": "Active metabolite R-138727 measured (parent is prodrug). 60mg loading dose. Cmax 631 ng/mL (CV 36%). Tmax 0.5h. t1/2 ~7.4h.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "progesterone",
+    "dose_mg": 100,
+    "cmax_mg_L": 0.0173,
+    "cmax_value_original": 17.3,
+    "cmax_unit_original": "ng/mL",
+    "source": "FDA label (Prometrium); postmenopausal women fasted",
+    "notes": "Micronized progesterone (Prometrium) 100mg capsule. FDA label reports Cmax 17.3 ng/mL. Endogenous progesterone levels confound measurement. Tmax ~3h. Food enhances absorption 2x.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "quinine",
+    "dose_mg": 600,
+    "cmax_mg_L": 5.4,
+    "cmax_value_original": 5.4,
+    "cmax_unit_original": "mg/L",
+    "source": "FDA label (Qualaquin); single 600mg dose healthy volunteers",
+    "notes": "600mg quinine sulfate single dose fasted healthy volunteers. Cmax 5.3-5.6 mg/L (mean 5.4). Tmax ~1.4-2.1h.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "quizartinib",
+    "dose_mg": 30,
+    "cmax_mg_L": 0.0993,
+    "cmax_value_original": 99.3,
+    "cmax_unit_original": "ng/mL",
+    "source": "Faucette et al., Clin Pharmacol Drug Dev 2020; food effect study",
+    "notes": "30mg single dose fasted healthy volunteers. Geometric mean Cmax 99.3 ng/mL (CV 25.5%). Tmax ~4h. Bioavailability 71%. t1/2 long (days).",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "ramelteon",
+    "dose_mg": 16,
+    "cmax_mg_L": 0.0116,
+    "cmax_value_original": 11.6,
+    "cmax_unit_original": "ng/mL",
+    "source": "FDA label (Rozerem); 16mg single dose in elderly subjects",
+    "notes": "16mg single dose (2x therapeutic dose). Mean Cmax 11.6 ng/mL (SD 13.8) in elderly. At 8mg in adults, Cmax would be ~5.8 ng/mL by linear scaling. Very high first-pass; bioavailability 1.8%. CV ~100%.",
+    "status": "uncertain"
+  },
+  {
+    "drug_name": "rifabutin",
+    "dose_mg": 300,
+    "cmax_mg_L": 0.375,
+    "cmax_value_original": 375,
+    "cmax_unit_original": "ng/mL",
+    "source": "FDA label (Mycobutin); single 300mg dose 9 healthy adults",
+    "notes": "300mg single dose 9 healthy adult volunteers. Mean Cmax 375 +/- 267 ng/mL (range 141-1033). High variability. Tmax 3.3h. Absorption >53%.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "rivaroxaban",
+    "dose_mg": 10,
+    "cmax_mg_L": 0.1432,
+    "cmax_value_original": 143.2,
+    "cmax_unit_original": "ng/mL",
+    "source": "Zhao et al., Br J Clin Pharmacol 2009; healthy Chinese subjects single 10mg fasted",
+    "notes": "10mg single dose fasted healthy subjects. Cmax 143.2 ng/mL (geometric mean). Tmax ~2h. 10mg dose shows dose-proportional PK. Bioavailability 80-100% for 10mg.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "selegiline",
+    "dose_mg": 10,
+    "cmax_mg_L": 0.001,
+    "cmax_value_original": 1.0,
+    "cmax_unit_original": "ng/mL",
+    "source": "FDA label (Eldepryl); Heinonen et al., Clin Pharmacol Ther 1997",
+    "notes": "10mg oral tablet (2x5mg). Parent drug Cmax ~1 ng/mL. Very low due to extensive first-pass (~10% bioavailability). Metabolites (methamphetamine, amphetamine) reach 4-20x higher levels.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "sirolimus",
+    "dose_mg": 5,
+    "cmax_mg_L": 0.024,
+    "cmax_value_original": 24,
+    "cmax_unit_original": "ng/mL",
+    "source": "Estimated from dose proportionality; Rapamune label; Brattstrom et al., Ther Drug Monit 2000",
+    "notes": "5mg single dose oral solution healthy volunteers. Dose-proportional PK confirmed. Estimated Cmax ~24 ng/mL from proportional scaling of available data. Whole blood measurement. t1/2 ~82h. Very high blood:plasma ratio (36:1).",
+    "status": "uncertain"
+  },
+  {
+    "drug_name": "ulipristal",
+    "dose_mg": 30,
+    "cmax_mg_L": 0.176,
+    "cmax_value_original": 176,
+    "cmax_unit_original": "ng/mL",
+    "source": "FDA label (ella); single 30mg dose fasted healthy female volunteers",
+    "notes": "30mg single dose fasted. Cmax 176 +/- 89 ng/mL at ~1h. t1/2 ~32h. Food decreases Cmax 40-45%. Selective progesterone receptor modulator for emergency contraception.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "upadacitinib",
+    "dose_mg": 15,
+    "cmax_mg_L": 0.026,
+    "cmax_value_original": 26.0,
+    "cmax_unit_original": "ng/mL",
+    "source": "Mohamed et al., Clin Pharmacokinet 2020; Phase I healthy volunteers ER formulation",
+    "notes": "15mg extended-release single dose fasted healthy volunteers. Mean Cmax 26.0 ng/mL (SD 9.7). ER formulation is marketed form. IR Cmax would be higher but 15mg IR not studied. Tmax 2-4h for ER. t1/2 ~6-15h.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "venlafaxine",
+    "dose_mg": 75,
+    "cmax_mg_L": 0.0355,
+    "cmax_value_original": 35.5,
+    "cmax_unit_original": "ng/mL",
+    "source": "Bioequivalence studies; FDA label (Effexor)",
+    "notes": "75mg single dose fasted healthy male volunteers. Cmax ~35.5-35.7 ng/mL (IR formulation). Bioavailability ~45%. t1/2 ~5h.",
+    "status": "confirmed"
+  },
+  {
+    "drug_name": "vonoprazan",
+    "dose_mg": 20,
+    "cmax_mg_L": 0.025,
+    "cmax_value_original": 25.0,
+    "cmax_unit_original": "ng/mL",
+    "source": "Sakurai et al., Clin Pharmacol Ther 2015; single 20mg dose Japanese healthy males",
+    "notes": "20mg single dose fasted healthy subjects. Cmax 25.0 +/- 5.6 ng/mL (Japanese), 23.0 +/- 6.4 ng/mL (UK). Using Japanese study value. Tmax ~1.5-2h. t1/2 ~7.7h. No significant food effect.",
+    "status": "confirmed"
+  }
+]
