@@ -1,0 +1,87 @@
+{
+  "phase0": {
+    "total_records": 11,
+    "total_unique_compounds": 10,
+    "hepatocyte_records": 5,
+    "hepatocyte_compounds": 5,
+    "microsome_records": 4,
+    "microsome_compounds": 4,
+    "tdc_overlap": 0,
+    "net_new_from_chembl": 10,
+    "sources": {
+      "source_distribution": [
+        {
+          "src_id": 71,
+          "source_name": "AI-driven Structure-enabled Antiviral Platform (ASAP)",
+          "n_records": 5,
+          "n_compounds": 5
+        },
+        {
+          "src_id": 23,
+          "source_name": "Open Source Malaria Screening",
+          "n_records": 4,
+          "n_compounds": 4
+        },
+        {
+          "src_id": 1,
+          "source_name": "Scientific Literature",
+          "n_records": 2,
+          "n_compounds": 1
+        }
+      ],
+      "assay_classification": [
+        {
+          "assay_class": "hepatocyte",
+          "n_records": 5,
+          "n_compounds": 5
+        },
+        {
+          "assay_class": "microsome",
+          "n_records": 4,
+          "n_compounds": 4
+        },
+        {
+          "assay_class": "unknown",
+          "n_records": 2,
+          "n_compounds": 1
+        }
+      ],
+      "unit_distribution": {
+        "uL/min/1E6 cells": 5,
+        "uL min-1 mg-1": 4,
+        "uL/(min.pmol)": 2
+      }
+    }
+  },
+  "phase0b": {
+    "n_multi_source_compounds": 0,
+    "cv_median": null,
+    "cv_75th": null,
+    "cv_90th": null,
+    "cv_gt_100pct_frac": null,
+    "az_src_ids": [],
+    "az_compounds": 0,
+    "non_az_compounds": 10,
+    "net_new_non_az": 10,
+    "top_docs": [
+      {
+        "doc_id": "CHEMBL5442163",
+        "n_compounds": 5,
+        "src_id": 71,
+        "source_name": "AI-driven Structure-enabled Antiviral Platform (ASAP)"
+      },
+      {
+        "doc_id": "CHEMBL2113921",
+        "n_compounds": 4,
+        "src_id": 23,
+        "source_name": "Open Source Malaria Screening"
+      },
+      {
+        "doc_id": "CHEMBL3525970",
+        "n_compounds": 1,
+        "src_id": 1,
+        "source_name": "Scientific Literature"
+      }
+    ]
+  }
+}
