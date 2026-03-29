@@ -69,6 +69,8 @@ Adaptive weight: base=0.45, other=0.00 (LOOCV 107/107, w_base stability 82%)
 - **Foundation model shootout (MoLFormer/ChemBERTa/Uni-Mol)** → frozen embedding + Ridge/MLP/XGBoost 전 조합 테스트. Morgan FP+XGB (R²=0.205)가 모든 조합을 압도. MoLFormer mean 0.184, ChemBERTa 0.170, Uni-Mol 0.083. 결합도 악화. CLint R²≈0.20은 representation이 아닌 target noise 한계.
 - **Direct CL/F 3rd track (IVIVE bypass)** → MMPK AUC에서 CL/F 역산 (N=1,014), Vd/F 역산 (N=940). CL/F XGB CV R²=0.232, Vd/F R²=0.332. Analytical 1-cpt Cmax로 3rd track 구성. 3-track LOOCV: w_clf=0.00 (base/other 모두). Standalone AAFE=3.133 (ML 2.336보다 열위). Meta AAFE Δ=-0.005 (noise). Oracle 1.788 (28/107 drugs에서 CL/F 최선)이나 고정 weight로 활용 불가. Benet 가설 (IVIVE bypass → 정확도 향상) 미검증. SMILES→CL/F도 CLint R²≈0.24과 동일한 representation ceiling. 인프라 유지, w_clf=0.00.
 - **ChEMBL CLint expansion (2026-03-27)** → ChEMBL 36 전량 추출: 539 unique compounds (534 net new). TDC Hep 978 + ChEMBL 517 = 1,910 compounds. Scaffold CV R² 0.279→0.333 (ΔR²=+0.054). 그러나 engine AAFE 3.416→3.515 (+0.099 악화), meta AAFE 2.277→2.316 (+0.038 악화). LOOCV w_base 0.45→0.25 (meta-learner가 engine 신뢰 감소). CLint R² 개선이 pipeline error cancellation을 파괴. 14번째 시도 실패. Revert 완료. 데이터는 data/chembl/ 및 data/training/clint_expanded_v2.csv에 보존.
+- **CLint 3-class classification (2026-03-29)** → Low/Med/High (10/50 cutoff), XGB classifier accuracy=53.5% (kappa=0.299, scaffold CV). Probability-weighted MC mixture로 engine 통합. Engine AAFE +0.108 악화, 그러나 Meta AAFE 2.277→2.255 (**Δ=-0.023 소폭 개선**). Coarser prediction이 error cancellation을 덜 파괴. 효과는 noise level에 근접. w_base=0.45 유지.
+- **BDE reactivity features (2026-03-29)** → ALFABET BDE 978 compounds 계산 성공. BDE_min vs log10(CLint): r=+0.033 (부호 반전, 무상관). CYP subset에서도 r=+0.043. **Gate failed (|r|<0.15)**. Phase 1E 미진행. Hepatocyte CLint는 all-enzyme이므로 C-H BDE (CYP kcat component만)로는 설명 불가. Km variance가 지배적.
 
 ### Engine-only ablation 결과
 - DrugBank enrichment: engine AAFE 3.074→2.945 (Δ=-0.129, 유의미), meta는 0.17 weight로 0.021만 전달
@@ -78,7 +80,7 @@ Adaptive weight: base=0.45, other=0.00 (LOOCV 107/107, w_base stability 82%)
 
 ### 확정된 진단 (최종, 2026-03-26, PoC 보강)
 - Engine 수식/구조/mechanism은 충분. Input quality (CLint R²=0.24)가 ceiling.
-- 14회 시도 결과: 개별 ADME 파라미터 개선(fup, logP, pKa, CLint, Kp method), IVIVE bypass (direct CL/F), 및 ChEMBL data expansion은 어느 것도 meta AAFE를 개선하지 못함.
+- 16회 시도 결과: 개별 ADME 파라미터 개선(fup, logP, pKa, CLint, Kp method), IVIVE bypass (direct CL/F), ChEMBL data expansion, 3-class classification, BDE reactivity features 어느 것도 meta AAFE를 의미있게 개선하지 못함. Classification Δ=-0.023이 유일한 양의 결과이나 noise level.
 - **Error cancellation이 시스템 전체에 고착화.** 현재 파이프라인은 Omega에서 물려받은 특정 오차 프로파일에 calibration되어 있음. 부분 교체로는 이 균형을 깰 수 없음.
 - ALL-ON 실험 (pKa+BZ+CLint 동시 교체): 악화 합산 (+0.077). 동시 개선도 해결 불가.
 - **Measured ADME PoC (Pattern C 확인)**: 12약물에서 measured fup+CLint → engine AAFE 2.33→1.98, 80% 개선. 아키텍처 건전. 일부 error cancellation 존재하나 지배적이지 않음.
