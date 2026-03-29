@@ -1,0 +1,34 @@
+{
+  "n_total": 978,
+  "n_bde_valid": 978,
+  "n_bde_failed": 0,
+  "redundancy": {
+    "r2_proxy": -0.005230015834659607,
+    "pattern_prevalence": {
+      "benzylic_CH": 0.5439672801635992,
+      "allylic_CH": 0.023517382413087935,
+      "alpha_heteroatom": 0.46932515337423314,
+      "tertiary_CH": 0.18098159509202455,
+      "aldehyde_CH": 0.003067484662576687
+    }
+  },
+  "correlation": {
+    "r_BDE_min_all": 0.033459320830185275,
+    "p_BDE_min_all": 0.29936345856532853,
+    "r_BDE_min_aliph": 0.016344412474736687,
+    "p_BDE_min_aliph": 0.6207132331823633,
+    "r_BDE_mean_all": 0.1349936685400046,
+    "p_BDE_mean_all": 2.6090333038919107e-05,
+    "r_BDE_mean_aliph": 0.022909632857040035,
+    "p_BDE_mean_aliph": 0.48790071906425486,
+    "r_N_vuln_90_all": -0.0996317933005959,
+    "p_N_vuln_90_all": 0.001954252234104821,
+    "r_N_vuln_90_aliph": -0.0996317933005959,
+    "p_N_vuln_90_aliph": 0.001954252234104821,
+    "r_BDE_min_cyp1": 0.0400037580030601,
+    "p_BDE_min_cyp1": 0.30591366477034354,
+    "r_BDE_min_cyp2": 0.04319237482739172,
+    "p_BDE_min_cyp2": 0.27374408719988114,
+    "gate_passed": false
+  }
+}
