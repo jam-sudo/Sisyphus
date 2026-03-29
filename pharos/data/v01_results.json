@@ -1,0 +1,9 @@
+{
+  "holdout": {
+    "n_drugs": 107,
+    "aafe": 2.898,
+    "pct_2fold": 44.9
+  },
+  "n_cmax": 1249,
+  "n_added_chembl": 175
+}

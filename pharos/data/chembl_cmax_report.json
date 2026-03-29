@@ -1,0 +1,25 @@
+{
+  "raw_records": 1769,
+  "raw_compounds": 508,
+  "screened_records": 1213,
+  "dedup_compounds": 297,
+  "overlap": {
+    "chembl_total": 321,
+    "mmpk_overlap": 136,
+    "holdout_overlap": 37,
+    "net_new": 183
+  },
+  "dose_stats": {
+    "median": 120.0,
+    "mean": 260.88821548821545,
+    "min": 0.1,
+    "max": 2800.0
+  },
+  "cmax_stats": {
+    "median": 0.6365999227499999,
+    "log10_range": [
+      -3.202040356262804,
+      2.570434539527452
+    ]
+  }
+}
