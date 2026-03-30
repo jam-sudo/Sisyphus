@@ -1,0 +1,52 @@
+{
+  "phase": "Phase 0 Pre-checks",
+  "date": "2026-03-30",
+  "decision": "ABORT — previous identical experiment (brentq root-finding) yielded R²=0.166, and Phase 0C confirms deconv CLint is 8x noisier than in vitro CLint",
+
+  "phase_0a": {
+    "previous_deconvolution": {
+      "method": "brentq root-finding (full ODE, fup/Peff/Kp fixed, CLint variable)",
+      "n_total": 1204,
+      "n_success": 607,
+      "success_rate": 0.504,
+      "cv_r2_deconv_clint": 0.166,
+      "baseline_r2_invitro_clint": 0.205,
+      "verdict": "Deconv CLint is LESS learnable than in vitro CLint"
+    },
+    "direct_clf_comparison": {
+      "method": "MMPK AUC → CL/F → SMILES prediction → analytical Cmax",
+      "clf_r2": 0.232,
+      "loocv_weight": 0.00,
+      "aafe": 3.133,
+      "verdict": "Meta-learner gave zero weight to CL/F track"
+    },
+    "conclusion": "Both prior experiments (same concept) failed"
+  },
+
+  "phase_0b": {
+    "engine_fold_error_systematicity": {
+      "n_holdout": 85,
+      "TPSA_r": -0.444,
+      "HBA_r": -0.370,
+      "MW_r": -0.300,
+      "HBD_r": -0.283,
+      "logP_r": 0.145,
+      "compound_type_anova_p": 0.013,
+      "base_mean_fe": 2.01,
+      "neutral_mean_fe": 0.73,
+      "acid_mean_fe": 0.69,
+      "gate": "PASS (TPSA |r|=0.444 > 0.15)"
+    },
+    "interpretation": "Engine error has structural pattern (polar molecules under-predicted, bases over-predicted). However, this signal exists in the engine's fold error — not necessarily transferable to CLint deconvolution."
+  },
+
+  "phase_0c": {
+    "deconv_vs_invitro_correlation": 0.288,
+    "variance_ratio_deconv_over_invitro": 7.742,
+    "interpretation": "Deconv CLint is 8x noisier than in vitro CLint and only weakly correlated (r=0.288). CLint absorbs errors from ALL parameters, inflating variance beyond what SMILES can predict."
+  },
+
+  "overall_assessment": "The proposed inverse PBPK is methodologically identical to the previous MMPK CLint deconvolution (brentq, same fixed parameters). That experiment yielded R²=0.166 < baseline 0.205. Phase 0B shows systematic engine error exists (TPSA, HBA, compound type), but Phase 0C shows this signal is destroyed when compressed into a single CLint variable (r=0.288, variance 8x). The systematic error pattern (polar under-prediction, base over-prediction) is better addressed by compound-type-specific model calibration or multi-parameter deconvolution, not single-variable CLint inversion.",
+
+  "actionable_finding": "Engine fold error correlates with TPSA (r=-0.44) and compound type (base vs non-base). This could inform meta-learner stratification or engine-specific bias correction, but NOT through CLint inversion."
+}
