@@ -1,0 +1,21 @@
+{
+  "n_drugs": 107,
+  "baseline_aafe": 2.2800475718028235,
+  "ml_only_aafe": 2.336333939401001,
+  "tpsa_3bin_aafe": 2.3208141943417835,
+  "tpsa_3bin_weights": {
+    "low": 0.2,
+    "mid": 0.0,
+    "high": 0.05
+  },
+  "type_tpsa_4bin_aafe": 2.276899614036227,
+  "type_tpsa_4bin_weights": {
+    "base_loTPSA": 0.4,
+    "base_hiTPSA": 0.5,
+    "other_loTPSA": 0.0,
+    "other_hiTPSA": 0.0
+  },
+  "logistic_insample_aafe": 2.2399084910624865,
+  "logistic_loocv_aafe": 2.2548273803380074,
+  "oracle_aafe": 1.9296022871437906
+}
