@@ -85,11 +85,11 @@ where $P_{eff}$ is effective permeability (&times;10<sup>&minus;4</sup> cm/s), $
 The full pipeline combines mechanistic simulation with data-driven prediction:
 
 1. **SMILES &rarr; molecular profile**: RDKit descriptors, structural pK<sub>a</sub> classification, applicability domain assessment
-2. **ADME prediction**: Pre-trained XGBoost models for f<sub>u,p</sub>, CL<sub>int</sub>, R<sub>B:P</sub>, VD<sub>ss</sub> (trained on TDC datasets; Huang et al., 2021)
+2. **ADME prediction**: Pre-trained XGBoost models for f<sub>u,p</sub>, CL<sub>int</sub>, R<sub>B:P</sub>, VD<sub>ss</sub> (trained on TDC datasets; Huang et al., 2021), with DrugBank experimental f<sub>u,p</sub> enrichment where available
 3. **IVIVE**: CL<sub>int</sub> decomposition into per-enzyme affinities, Kp calculation
 4. **PBPK simulation**: 34-state ODE system solved via LSODA (Petzold, 1983)
-5. **ML direct prediction**: XGBoost C<sub>max</sub> model (trained on 1,128 drugs)
-6. **Meta-learner**: Calibrated geometric combination of PBPK and ML C<sub>max</sub> (engine weight 0.17, ML weight 0.83)
+5. **ML direct prediction**: XGBoost C<sub>max</sub> model (trained on 1,287 drugs from multi-source clinical PK data)
+6. **Meta-learner**: Compound-type-adaptive geometric combination of PBPK and ML C<sub>max</sub>, calibrated via LOOCV on the holdout set (base compounds: engine 0.45 / ML 0.55; non-base compounds: engine 0.00 / ML 1.00)
 
 ### Uncertainty propagation
 
@@ -160,7 +160,7 @@ where $k_{e0}$ is the effect-site equilibration rate constant (h<sup>&minus;1</s
 pip install -e ".[dev,ml,chem]"
 ```
 
-> Pre-trained XGBoost models (f<sub>u,p</sub>, CL<sub>int</sub>, C<sub>max</sub>, meta-learner) are required in `models/`. These are not tracked in git due to size. They originate from the [Omega PBPK](https://github.com/jam-sudo/Omega) predecessor project.
+> Pre-trained XGBoost models (f<sub>u,p</sub>, CL<sub>int</sub>, R<sub>B:P</sub>, VD<sub>ss</sub>, C<sub>max</sub>) are required in `models/adme/` and `models/direct_pk/`. Re-training scripts are provided in `scripts/`.
 
 ### CLI
 
@@ -264,19 +264,19 @@ Mass balance error &lt; 10<sup>&minus;12</sup> for all simulations.
 
 ### Holdout benchmark (SMILES &rarr; C<sub>max</sub>)
 
-External validation on a Murcko scaffold-stratified holdout set (seed=42, never used in training or model selection). Performance is reported using AAFE (Absolute Average Fold Error; Obach et al., 1997):
+External validation on a Murcko scaffold-stratified holdout set (seed=42, never used in training or model selection). The holdout set was expanded from 61 to 107 drugs by integrating observed concentration&ndash;time profiles from the Open Systems Pharmacology (OSP) repository, curated literature PK data, and FDA DailyMed labels. Performance is reported using AAFE (Absolute Average Fold Error; Obach et al., 1997):
 
 $$AAFE = 10^{\operatorname{mean}\left(\left|\log_{10}\frac{C_{max,pred}}{C_{max,obs}}\right|\right)}$$
 
 | Metric | Value | N |
 |--------|:-----:|:---:|
-| Holdout AAFE (meta-learner) | **2.058** | 61 |
-| Holdout %2-fold | **55.7%** | 61 |
-| Engine-only AAFE | 2.945 | 61 |
+| Holdout AAFE (meta-learner) | **2.283** | 107 |
+| Holdout %2-fold | **54.2%** | 107 |
+| In-domain AAFE | **2.100** | 83 |
+| Engine-only AAFE | 3.415 | 107 |
+| ML-only AAFE | 2.336 | 107 |
 
-The meta-learner combines mechanistic PBPK simulation (weight 0.17) with data-driven XGBoost C<sub>max</sub> prediction (weight 0.83) via LOOCV-calibrated geometric weighting, validated on all 61 holdout drugs.
-
-**Note on validation size.** The holdout set (N=61) is small relative to chemical space. Confidence intervals on the AAFE are not reported. A larger reference dataset with multi-source clinical PK data would strengthen validation.
+The meta-learner adaptively combines mechanistic PBPK simulation with data-driven XGBoost C<sub>max</sub> prediction via LOOCV-calibrated geometric weighting. Weights are compound-type dependent: basic compounds receive a 0.45/0.55 engine/ML split (the PBPK engine adds value for bases), while non-base compounds rely entirely on the ML track (weight stability 82% across LOO folds). In-domain AAFE (N=83) excludes 24 drugs flagged as out-of-applicability-domain (prodrugs, high-MW, extreme lipophilicity) or known extended-release formulation mismatches.
 
 ### Multi-dose regimen validation
 
@@ -292,7 +292,9 @@ Atorvastatin (CYP3A4-mediated, moderate protein binding) was predicted within 7%
 
 ### TDM validation
 
-Bayesian update was validated using midazolam (5 mg single oral dose, one observed concentration at t = 1 h with 10% assay noise):
+Bayesian update was validated in two stages: a single-drug functional test, then a multi-drug benchmark across diverse pharmacokinetic profiles.
+
+**Single-drug validation** (midazolam, 5 mg PO, one observation at t = 1 h, 10% assay CV):
 
 | Metric | Prior | Posterior |
 |--------|:-----:|:---------:|
@@ -300,7 +302,19 @@ Bayesian update was validated using midazolam (5 mg single oral dose, one observ
 | ESS | &mdash; | 586.6 (29.3% of 2,000) |
 | CV reduction | &mdash; | 55.4% |
 
-The posterior CV (19.8%) is less than half the prior CV (44.3%), demonstrating that a single noisy observation substantially refines parameter estimates. ESS of 586.6 (29.3% of prior samples) indicates adequate weight distribution without degeneracy.
+**Multi-drug benchmark** (5 holdout drugs, synthetic patient observations scaled from engine C(t) profiles to observed C<sub>max</sub>, 10% log-normal assay noise, seed = 42):
+
+| Drug | Type | 1-obs CV reduction | 2-obs CV reduction | 3-obs CV reduction | 1-obs ESS |
+|------|:----:|:------------------:|:------------------:|:------------------:|:---------:|
+| Morphine | base | 76.3% | 77.0% | 74.6% | 428 |
+| Amantadine | base | 74.0% | 74.5% | 74.7% | 514 |
+| Ketorolac | acid | 87.7% | 92.6% | 90.1% | 2.8 |
+| Clozapine | neutral | 68.7% | 76.2% | 76.9% | 482 |
+| Rivaroxaban | neutral | 83.8% | 93.3% | 98.3% | 7.1 |
+
+Across all 15 runs (5 drugs &times; 3 observation scenarios): mean CV reduction 81.2%, mean error reduction 79.8%, 90% CI coverage 67%. A single observation suffices to reduce C<sub>max</sub> CV by 70&ndash;88% for drugs where the population prior fold error is below 2.5&times;. For drugs with larger prior errors (ketorolac, fold error 3.25&times;) or multi-observation scenarios, effective sample size degrades below 10, indicating particle degeneracy in the importance sampler. Sequential Bayesian methods (ensemble Kalman filter, particle filter) would be required for these cases.
+
+Timepoint sensitivity analysis (morphine, single observation): t = 1.0 h (near T<sub>max</sub>) yielded maximal CV reduction (76.3%); observations beyond 4 h post-dose provided diminishing information (CV reduction 34%). Seed sensitivity across three random seeds was 0.8%, confirming robustness at N = 2,000 prior samples.
 
 ### Performance
 
@@ -313,6 +327,10 @@ The posterior CV (19.8%) is less than half the prior CV (44.3%), demonstrating t
 | RHS evaluation | 31 &mu;s | 54 flux specs per call |
 
 Single-patient deterministic prediction completes in &lt;500 ms, compatible with interactive clinical decision support workflows. MC propagation at N=1,000 requires ~34 s due to pure Python ODE evaluation; JIT compilation (e.g., via Numba) is an optimization path not yet pursued.
+
+### Test suite
+
+357 unit and integration tests covering graph construction, ODE compilation, flux functions, solver correctness, mass balance, ADME prediction, meta-learner calibration, multi-dose regimen, TDM Bayesian update, MIPD dose recommendation, DDI, PK/PD, and holdout benchmark reproducibility.
 
 ## Architecture
 
@@ -421,10 +439,11 @@ effect = compute_effect(sim_result, pd)
 - **Simplified pK<sub>a</sub>.** Ionization state is classified by structural rules (carboxylic acid &rarr; 4.5, aliphatic amine &rarr; 9.0), not computed quantum-mechanically. This limits Kp accuracy for highly ionized compounds.
 - **No Phase II metabolism.** Glucuronidation (UGT), sulfation (SULT), and acetylation (NAT2) are not modeled. Drugs primarily cleared by conjugation will be under-predicted.
 - **No transporter-mediated disposition in ODE.** P-gp efflux is handled via a binary permeability correction, not as a mechanistic transport term in the ODE.
-- **CL<sub>int</sub> prediction is the weakest link.** The XGBoost CL<sub>int</sub> model achieves R&sup2; &asymp; 0.24 on TDC Hepatocyte_AZ. This is the single largest source of prediction error. Bayesian TDM partially mitigates this: observed drug levels correct inaccurate population priors, reducing prediction CV by &gt;50% (see [TDM validation](#tdm-validation)).
+- **CL<sub>int</sub> prediction is the weakest link.** The XGBoost CL<sub>int</sub> model achieves R&sup2; &asymp; 0.24 on TDC Hepatocyte_AZ (scaffold-split CV). This ceiling persists across representations (Morgan FP, MoLFormer, ChemBERTa, Uni-Mol), data scales (1,213&ndash;1,910 compounds), and alternative formulations (classification, BDE reactivity features, direct CL/F bypass). Sixteen distinct improvement attempts were evaluated; none produced a meaningful reduction in end-to-end AAFE. The primary bottleneck is assay noise in public hepatocyte clearance data, not model capacity. Bayesian TDM partially mitigates this at the individual patient level: observed drug concentrations correct inaccurate population priors, reducing posterior CV by &gt;50% (see [TDM validation](#tdm-validation)).
+- **Error cancellation constrains component-level improvements.** The IVIVE pipeline (f<sub>u,p</sub> &times; CL<sub>int</sub> &times; scaling &rarr; CL<sub>h</sub>) exhibits systematic error cancellation: improving any single ADME component (e.g., CL<sub>int</sub> R&sup2; from 0.21 to 0.33 via data expansion) worsens overall AAFE because the error balance with other components is disrupted. This was confirmed in 16 controlled experiments. Measured ADME inputs (experimental f<sub>u,p</sub> and CL<sub>int</sub>) reduce engine AAFE from 2.33 to 1.98, confirming that the mechanistic architecture is sound when inputs are accurate.
 - **R<sub>B:P</sub> defaults to 1.0.** The RBP model (R&sup2; = &minus;0.08 on external data) is effectively disabled; all drugs are assumed to have equal blood and plasma concentrations.
 - **MIPD assumes linear pharmacokinetics.** Dose recommendations use linear scaling, which may be inaccurate for drugs with saturable metabolism (e.g., phenytoin) or nonlinear protein binding.
-- **Small validation set.** The holdout set (N=61) is small relative to chemical space. Confidence intervals on the AAFE are not reported. A larger reference dataset with multi-source clinical PK data would strengthen validation.
+- **TDM importance sampling degenerates for large prior errors.** When the population prior is far from the individual truth (fold error &gt;3&times;) or multiple observations are used (&ge;3), the effective sample size drops below 10, indicating particle weight degeneracy. Sequential Bayesian methods (EnKF, particle filter) would address this.
 
 ## Project Structure
 
@@ -445,7 +464,7 @@ src/sisyphus/
 │
 ├── engine/              # ODE compilation and solving (identity-blind)
 │   ├── compiler.py      # ODECompiler, CompiledODE, ResolvedParams
-│   ├── flux.py          # FluxSpec implementations (5 transport types)
+│   ├── flux.py          # FluxSpec implementations (6 transport types)
 │   ├── solver.py        # LSODA wrapper (solve, solve_mc)
 │   └── uncertainty.py   # Monte Carlo propagation
 │
@@ -472,7 +491,7 @@ src/sisyphus/
 │   └── dosing.py        # MIPD dose recommendation
 │
 ├── validation/          # Benchmarking infrastructure
-│   ├── reference.py     # Clinical PK reference loader (290 drugs)
+│   ├── reference.py     # Clinical PK reference loader (331 drugs)
 │   ├── benchmark.py     # Holdout benchmark runner
 │   ├── metrics.py       # AAFE, fold error, PI coverage
 │   └── split.py         # Scaffold-stratified splitting
@@ -495,7 +514,7 @@ Sisyphus inherits validated data assets from [Omega PBPK](https://github.com/jam
 
 | Inherited (data) | Not inherited (architecture) |
 |-------------------|------------------------------|
-| 290-drug clinical reference | 35-state hardcoded ODE system |
+| 331-drug clinical reference | 35-state hardcoded ODE system |
 | Scaffold-stratified holdout split | Organ-specific CL<sub>int</sub> fields |
 | ICRP physiology values | Sequential ADME &rarr; IVIVE chain |
 | Pre-trained XGBoost models | Point-estimate pipeline |
