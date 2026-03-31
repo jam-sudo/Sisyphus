@@ -1,0 +1,88 @@
+{
+  "phase0": {
+    "clint": {
+      "model": "CLint",
+      "n": 978,
+      "baseline_r2": 0.2790310308599334,
+      "optuna_r2": 0.3118651607217391,
+      "delta_r2": 0.03283412986180567
+    },
+    "fup": {
+      "model": "fup",
+      "n": 1564,
+      "baseline_r2": 0.45437143180335315,
+      "optuna_r2": 0.4967953866270366,
+      "delta_r2": 0.04242395482368344
+    },
+    "vdss": {
+      "model": "VDss/t\u00bd",
+      "n": 584,
+      "baseline_r2": 0.2213843584789359,
+      "optuna_r2": 0.27833415209899404,
+      "delta_r2": 0.05694979362005814
+    }
+  },
+  "phase0_params": {
+    "clint": {
+      "max_depth": 8,
+      "n_estimators": 900,
+      "learning_rate": 0.011844379373588213,
+      "min_child_weight": 2,
+      "colsample_bytree": 0.4992198867011369,
+      "subsample": 0.7249050663600886,
+      "reg_alpha": 0.0008689172361849292,
+      "reg_lambda": 0.0001620508806818153,
+      "random_state": 42,
+      "n_jobs": 4,
+      "verbosity": 0
+    },
+    "fup": {
+      "max_depth": 7,
+      "n_estimators": 900,
+      "learning_rate": 0.021272004615496623,
+      "min_child_weight": 3,
+      "colsample_bytree": 0.5209703092500414,
+      "subsample": 0.6154590478101545,
+      "reg_alpha": 0.0007138343916345668,
+      "reg_lambda": 4.7092437895937795,
+      "random_state": 42,
+      "n_jobs": 4,
+      "verbosity": 0
+    },
+    "vdss": {
+      "max_depth": 8,
+      "n_estimators": 800,
+      "learning_rate": 0.0240057981473558,
+      "min_child_weight": 1,
+      "colsample_bytree": 0.5034717564272394,
+      "subsample": 0.8385807065130607,
+      "reg_alpha": 0.017085747662950887,
+      "reg_lambda": 0.02409832710193938,
+      "random_state": 42,
+      "n_jobs": 4,
+      "verbosity": 0
+    }
+  },
+  "benchmark": {
+    "baseline": {
+      "engine": 3.4157473278768773,
+      "ml": 2.336333939401001,
+      "meta": 2.2774140851831626,
+      "pct2": 53.271028037383175
+    },
+    "new_oldw": {
+      "engine": 3.580749356350462,
+      "ml": 2.336333939401001,
+      "meta": 2.3026732203729567,
+      "pct2": 53.271028037383175
+    },
+    "new_neww": {
+      "meta": 2.3007163248880897,
+      "w_base": 0.25,
+      "w_other": 0.0
+    },
+    "oracle": 1.9519025519043975,
+    "decision": "REVERT",
+    "meta_delta": 0.023302239704927175
+  }
+}
