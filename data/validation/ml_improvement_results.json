@@ -1,0 +1,28 @@
+{
+  "n_holdout": 107,
+  "ml_baseline_aafe": 2.336333939401001,
+  "ml_xgb_mordred_aafe": 2.8483290953129097,
+  "ml_lgb_mordred_aafe": 2.783911928154268,
+  "ml_ensemble_aafe": 2.7591113982665774,
+  "meta_baseline": 2.2800475718028235,
+  "meta_xgb_mord_oldw": 2.740071963658682,
+  "meta_ens_oldw": 2.6438501452022427,
+  "meta_best_neww": 2.634200851929429,
+  "best_wb": 0.55,
+  "best_wo": 0.05,
+  "delta": 0.35415328012660563,
+  "phase1_cv": {
+    "A_morgan": 3.75,
+    "B_mordred": 3.41,
+    "C_morgan_mordred": 3.36,
+    "D_sisyphus": 3.486,
+    "E_maccs": 3.552,
+    "C_optuna": 3.211
+  },
+  "phase2_cv": {
+    "xgb_morgan": 3.534,
+    "lgb_mordred": 3.334,
+    "rf_maccs": 3.495,
+    "weighted_avg": 3.24
+  }
+}
