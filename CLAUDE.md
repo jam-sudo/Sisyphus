@@ -78,7 +78,8 @@ Adaptive weight: base=0.45, other=0.00 (LOOCV 107/107, w_base stability 82%)
 - **ML Mordred features (2026-03-30)** → Mordred 1,613 descriptors + ensemble (XGB+LGB+Ridge). CV AAFE 3.410 < Morgan 3.750이나, Holdout AAFE 2.848 > Morgan 2.336 (역전). N≈1,100에서 dense features → CV overfit.
 - **Delta model / MOS (2026-03-31)** → log10(Cmax) = log10(Engine) + Delta(features). Delta variance 46% of Cmax variance (더 좁은 target). Holdout: Delta-only 3.528, Delta+ADME 8.450 (catastrophic overfit). Engine error가 non-systematic → ML correction 불가.
 - **k-NN read-across (2026-03-31)** → Morgan FP Tanimoto (median 0.464), k=20 similarity-weighted: AAFE 3.049. 3-way blend w_knn=0.00. r(ML,kNN)=0.690 (correlated errors). Oracle 3-track 1.689 (28/107 drugs에서 kNN 최선)이나 고정 weight 불가.
-- **Post-hoc meta-learner (2026-04-01)** → OOF Stacking (Ridge) + ACF (Analog Correction Factor) + Winsorized. 6 variants 테스트. **전부 baseline meta 2.277 이하 불가.** Stacking V1: 2.420 (OOF-Full gap r=0.81이 transfer 파괴), ACF k=5: 3.005 (이웃 fold error std=0.67, noisy), Winsorized cap=0.5: 2.300 (현재와 동일). Stacking+ACF 통합도 효과 없음. **현재 compound-type-adaptive geometric blend가 N=107 하에서 최적.** 23번째 negative result.
+- **Post-hoc meta-learner (2026-04-01)** → OOF Stacking (Ridge) + ACF (Analog Correction Factor) + Winsorized. 6 variants 테스트. **전부 baseline meta 2.277 이하 불가.** Stacking V1: 2.420 (OOF-Full gap r=0.81이 transfer 파괴), ACF k=5: 3.005 (이웃 fold error std=0.67, noisy), Winsorized cap=0.5: 2.300 (현재와 동일). Stacking+ACF 통합도 효과 없음. 23번째 negative result.
+- **10-method meta-learner tournament (2026-04-01)** → 5 PK-domain + 5 cross-domain 접근법 경쟁: Isotonic Engine Cal. (3.416→3.741 악화), ER-Proxy Routing (2.277 동률), Error Direction Clf (64.2% acc, +0.055), CLint-Stratified (+0.006), AAFE-Direct Optim (+0.082), Quantile XGB (+0.602), Local BMA (+0.081), Caruana Ensemble (+0.090), Disagree-Sigmoid (+0.014), Trimmed AAFE (+0.097). **10개 전부 error correlation r>0.986 with baseline.** Compound-type-adaptive geometric blend가 provably near-optimal. 24번째 negative result (누적 33 methods).
 
 ### Engine-only ablation 결과
 - DrugBank enrichment: engine AAFE 3.074→2.945 (Δ=-0.129, 유의미), meta는 0.17 weight로 0.021만 전달
@@ -88,13 +89,13 @@ Adaptive weight: base=0.45, other=0.00 (LOOCV 107/107, w_base stability 82%)
 
 ### 확정된 진단 (최종, 2026-03-26, PoC 보강)
 - Engine 수식/구조/mechanism은 충분. Input quality (CLint R²=0.24)가 ceiling.
-- 23회 시도 결과: 개별 ADME 개선, IVIVE bypass, data expansion, classification, BDE, Pharos E2E, descriptor upgrade, full replacement, ML Mordred, delta model/MOS, k-NN read-across, post-hoc stacking/ACF/Winsorized — 어느 것도 meta AAFE를 의미있게 개선하지 못함. Classification Δ=-0.023이 유일한 양의 결과이나 noise level.
+- 24회 시도 (누적 33 methods): 개별 ADME 개선, IVIVE bypass, data expansion, classification, BDE, Pharos E2E, descriptor upgrade, full replacement, ML Mordred, delta model/MOS, k-NN read-across, post-hoc stacking/ACF/Winsorized, 10-method tournament (isotonic/ER-routing/error-direction/CLint-stratified/AAFE-direct/quantile-XGB/local-BMA/Caruana/disagreement-sigmoid/trimmed-AAFE) — **모든 post-hoc combination의 error correlation r>0.986 with baseline.** 어느 것도 meta AAFE를 의미있게 개선하지 못함.
 - **Error cancellation이 시스템 전체에 고착화.** 현재 파이프라인은 Omega에서 물려받은 특정 오차 프로파일에 calibration되어 있음. 부분 교체로는 이 균형을 깰 수 없음.
 - ALL-ON 실험 (pKa+BZ+CLint 동시 교체): 악화 합산 (+0.077). 동시 개선도 해결 불가.
 - **Measured ADME PoC (Pattern C 확인)**: 12약물에서 measured fup+CLint → engine AAFE 2.33→1.98, 80% 개선. 아키텍처 건전. 일부 error cancellation 존재하나 지배적이지 않음.
 - **Direct CL/F (IVIVE bypass) 실험 (2026-03-27)**: MMPK AUC→CL/F 직접 예측 (R²=0.232) + analytical Cmax = 3rd track. LOOCV w_clf=0.00. IVIVE 우회해도 동일한 SMILES→clearance ceiling에 도달. 13번째 시도 실패.
 - **ChEMBL CLint expansion (2026-03-27)**: ChEMBL 36에서 539 unique compounds 추출 (534 net new). 1,910 compound training set으로 scaffold CV R² 0.279→0.333 (+0.054). 그러나 engine AAFE +0.099, meta AAFE +0.038 악화. homogeneous data expansion도 error cancellation 하에서 무효. 14번째 시도 실패.
-- **Post-hoc correction도 불가 (2026-04-01)**: OOF Stacking, ACF, Winsorized 3개 접근 + 6 variants 전부 baseline 열위. OOF-Full gap (r=0.81), noisy neighbor errors, 기존 disagreement penalty 최적성 확인. Meta-learner의 compound-type-adaptive geometric blend가 N=107에서 provably near-optimal.
+- **Post-hoc correction 전방위 불가 (2026-04-01)**: 2 experiments × 총 33 methods 테스트. OOF Stacking/ACF/Winsorized + 10-method tournament (isotonic/ER/error-direction/CLint/AAFE-direct/quantile/BMA/Caruana/sigmoid/trimmed). **모든 method의 holdout error가 baseline과 r>0.986 상관.** Engine+ML의 post-hoc 조합으로는 2.277을 돌파할 수 없음이 수학적으로 확인.
 - **유일한 돌파 경로**: predict layer 전체를 새 데이터+새 모델로 일괄 교체 + meta-learner 재학습. 또는 TDM Bayesian update로 ceiling을 우회.
 - TDM Bayesian update가 현재 가장 실용적인 정확도 향상 경로 (CV 55% 감소 확인됨).
 
