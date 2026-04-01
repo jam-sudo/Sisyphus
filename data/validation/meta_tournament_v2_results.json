@@ -1,0 +1,95 @@
+{
+  "baseline_meta_aafe": 2.2774140851831626,
+  "methods": [
+    {
+      "name": "P1  Physichem Ridge",
+      "aafe": 2.2795636611430883,
+      "aafe_base": 2.5656760897912436,
+      "aafe_nonbase": 2.1769336477080987,
+      "pct2fold": 53.271028037383175,
+      "delta": 0.002149575959925709,
+      "error_corr": 0.9988217899042687
+    },
+    {
+      "name": "P2  CL/F+ML meta",
+      "aafe": 2.336333939401001,
+      "aafe_base": 2.800949084204063,
+      "aafe_nonbase": 2.1769336477080987,
+      "pct2fold": 48.598130841121495,
+      "delta": 0.05891985421783863,
+      "error_corr": 0.9652333136230425
+    },
+    {
+      "name": "P3  NN Track Selector",
+      "aafe": 2.296555347315345,
+      "aafe_base": 2.6345412870060936,
+      "aafe_nonbase": 2.1769336477080987,
+      "pct2fold": 50.467289719626166,
+      "delta": 0.01914126213218248,
+      "error_corr": 0.98327742009838
+    },
+    {
+      "name": "P4  BCS-class Routing",
+      "aafe": 2.3326550080207515,
+      "aafe_base": 2.7852499134342645,
+      "aafe_nonbase": 2.1769336477080987,
+      "pct2fold": 49.532710280373834,
+      "delta": 0.05524092283758897,
+      "error_corr": 0.9870934937780376
+    },
+    {
+      "name": "P5  Dose-power Correct",
+      "aafe": 2.2803919533364247,
+      "aafe_base": 2.547675649871176,
+      "aafe_nonbase": 2.1840156469045264,
+      "pct2fold": 54.20560747663551,
+      "delta": 0.0029778681532621754,
+      "error_corr": 0.9953647930858677
+    },
+    {
+      "name": "O6  Multi-model Diverse",
+      "aafe": 2.9032044675021798,
+      "aafe_base": 3.3222704729055437,
+      "aafe_nonbase": 2.7546286905947244,
+      "pct2fold": 42.99065420560748,
+      "delta": 0.6257903823190172,
+      "error_corr": 0.8656548506650806
+    },
+    {
+      "name": "O7  Geometric Median 3T",
+      "aafe": 2.368796634510524,
+      "aafe_base": 2.942251183641099,
+      "aafe_nonbase": 2.1769336477080983,
+      "pct2fold": 50.467289719626166,
+      "delta": 0.09138254932736123,
+      "error_corr": 0.9739606474548888
+    },
+    {
+      "name": "O8  Minimax Subgroup",
+      "aafe": 2.411235927271299,
+      "aafe_base": 2.800949084204063,
+      "aafe_nonbase": 2.2745186801262833,
+      "pct2fold": 46.728971962616825,
+      "delta": 0.1338218420881363,
+      "error_corr": 0.9515215049004071
+    },
+    {
+      "name": "O9  Residual Boost",
+      "aafe": 2.279672885836738,
+      "aafe_base": 2.555577417898782,
+      "aafe_nonbase": 2.1804263752450734,
+      "pct2fold": 52.336448598130836,
+      "delta": 0.0022588006535753102,
+      "error_corr": 0.9979205233865605
+    },
+    {
+      "name": "O10 PI Width Routing",
+      "aafe": Infinity,
+      "aafe_base": Infinity,
+      "aafe_nonbase": Infinity,
+      "pct2fold": 0,
+      "delta": Infinity,
+      "error_corr": 0
+    }
+  ]
+}
