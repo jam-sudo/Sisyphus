@@ -1,0 +1,160 @@
+{
+  "baseline_ml_aafe": 2.336333939401001,
+  "baseline_meta_aafe": 2.2774140851831626,
+  "methods": [
+    {
+      "name": "M1  Isotonic Engine Cal.",
+      "aafe": 2.29135719133235,
+      "aafe_base": 2.6133343446342554,
+      "aafe_nonbase": 2.1769336477080987,
+      "pct2fold": 52.336448598130836,
+      "delta": 0.013943106149187479
+    },
+    {
+      "name": "M2  ER-Proxy Routing",
+      "aafe": 2.277096748659948,
+      "aafe_base": 2.555786844739148,
+      "aafe_nonbase": 2.1769336477080987,
+      "pct2fold": 53.271028037383175,
+      "delta": -0.00031733652321452865
+    },
+    {
+      "name": "M3  Error Direction Clf",
+      "aafe": 2.3319885071653,
+      "aafe_base": 2.7824125325581086,
+      "aafe_nonbase": 2.1769336477080987,
+      "pct2fold": 50.467289719626166,
+      "delta": 0.054574421982137356
+    },
+    {
+      "name": "M4  CLint-Stratified",
+      "aafe": 2.282983715231137,
+      "aafe_base": 2.5794317563329496,
+      "aafe_nonbase": 2.1769336477080987,
+      "pct2fold": 53.271028037383175,
+      "delta": 0.005569630047974616
+    },
+    {
+      "name": "M5  AAFE-Direct Optim",
+      "aafe": 2.3590659283819884,
+      "aafe_base": 2.577451307360787,
+      "aafe_nonbase": 2.279079140894992,
+      "pct2fold": 50.467289719626166,
+      "delta": 0.08165184319882579
+    },
+    {
+      "name": "M6  Quantile XGBoost",
+      "aafe": 2.879238535742574,
+      "aafe_base": 3.1591703257208352,
+      "aafe_nonbase": 2.7770144635425225,
+      "pct2fold": 43.925233644859816,
+      "delta": 0.6018244505594113
+    },
+    {
+      "name": "M7  Local BMA",
+      "aafe": 2.3581200604389783,
+      "aafe_base": 2.609040414415133,
+      "aafe_nonbase": 2.2670245020676623,
+      "pct2fold": 50.467289719626166,
+      "delta": 0.08070597525581569
+    },
+    {
+      "name": "M8  Caruana Ensemble",
+      "aafe": 2.3672341271254083,
+      "aafe_base": 2.5894555118827864,
+      "aafe_nonbase": 2.2859102304573375,
+      "pct2fold": 49.532710280373834,
+      "delta": 0.08982004194224569
+    },
+    {
+      "name": "M9  Disagree-Sigmoid",
+      "aafe": 2.291689306190814,
+      "aafe_base": 2.614685588673998,
+      "aafe_nonbase": 2.1769336477080987,
+      "pct2fold": 52.336448598130836,
+      "delta": 0.014275221007651329
+    },
+    {
+      "name": "M10 Trimmed AAFE",
+      "aafe": 2.374606688467297,
+      "aafe_base": 2.582508916886382,
+      "aafe_nonbase": 2.2982132930594203,
+      "pct2fold": 50.467289719626166,
+      "delta": 0.09719260328413437
+    }
+  ],
+  "leaderboard": [
+    {
+      "rank": 1,
+      "name": "M2  ER-Proxy Routing",
+      "aafe": 2.277096748659948,
+      "delta": -0.00031733652321452865
+    },
+    {
+      "rank": 2,
+      "name": "--- Baseline Meta",
+      "aafe": 2.2774140851831626,
+      "delta": 0.0
+    },
+    {
+      "rank": 3,
+      "name": "M4  CLint-Stratified",
+      "aafe": 2.282983715231137,
+      "delta": 0.005569630047974616
+    },
+    {
+      "rank": 4,
+      "name": "M1  Isotonic Engine Cal.",
+      "aafe": 2.29135719133235,
+      "delta": 0.013943106149187479
+    },
+    {
+      "rank": 5,
+      "name": "M9  Disagree-Sigmoid",
+      "aafe": 2.291689306190814,
+      "delta": 0.014275221007651329
+    },
+    {
+      "rank": 6,
+      "name": "M3  Error Direction Clf",
+      "aafe": 2.3319885071653,
+      "delta": 0.054574421982137356
+    },
+    {
+      "rank": 7,
+      "name": "--- Baseline ML",
+      "aafe": 2.336333939401001,
+      "delta": 0.05891985421783863
+    },
+    {
+      "rank": 8,
+      "name": "M7  Local BMA",
+      "aafe": 2.3581200604389783,
+      "delta": 0.08070597525581569
+    },
+    {
+      "rank": 9,
+      "name": "M5  AAFE-Direct Optim",
+      "aafe": 2.3590659283819884,
+      "delta": 0.08165184319882579
+    },
+    {
+      "rank": 10,
+      "name": "M8  Caruana Ensemble",
+      "aafe": 2.3672341271254083,
+      "delta": 0.08982004194224569
+    },
+    {
+      "rank": 11,
+      "name": "M10 Trimmed AAFE",
+      "aafe": 2.374606688467297,
+      "delta": 0.09719260328413437
+    },
+    {
+      "rank": 12,
+      "name": "M6  Quantile XGBoost",
+      "aafe": 2.879238535742574,
+      "delta": 0.6018244505594113
+    }
+  ]
+}
