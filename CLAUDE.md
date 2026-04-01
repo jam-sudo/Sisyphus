@@ -73,6 +73,13 @@ Adaptive weight: base=0.45, other=0.00 (LOOCV 107/107, w_base stability 82%)
 - **BDE reactivity features (2026-03-29)** → ALFABET BDE 978 compounds 계산 성공. BDE_min vs log10(CLint): r=+0.033 (부호 반전, 무상관). CYP subset에서도 r=+0.043. **Gate failed (|r|<0.15)**. Phase 1E 미진행. Hepatocyte CLint는 all-enzyme이므로 C-H BDE (CYP kcat component만)로는 설명 불가. Km variance가 지배적.
 - **Pharos v0 E2E prototype (2026-03-29)** → IVIVE bypass: GNN encoder + MoE(K=3) + 1-comp PK backbone. 3,551 compounds, 1,074 with Cmax. Best AAFE=3.006 (GNN+MoE), 모든 모델 Sisyphus ML-only (2.336)보다 열위. 465K params vs 1,074 samples (ratio 433:1). XGBoost가 ~300 effective params로 동일 데이터에서 승리. **Data scale이 architecture가 아닌 bottleneck.** GNN은 >>5,000 Cmax samples 필요. Branch: pharos-prototype.
 
+- **CLint descriptor upgrade (2026-03-30)** → Feature selection top-300 + Optuna: CLint scaffold CV R² 0.279→0.399 (+0.120). 그러나 holdout Meta AAFE +0.012 (error cancellation #17). Regularization이 아닌 data quality가 ceiling.
+- **Full predict replacement (2026-03-30)** → 모든 ADME 모델 동시 재최적화. CLint R²+0.033, fup R²+0.042, VDss R²+0.057. Engine AAFE +0.165, Meta AAFE +0.023 악화. 18번째 error cancellation. 부분 교체든 전체 교체든 현 파이프라인 하에서 불가.
+- **ML Mordred features (2026-03-30)** → Mordred 1,613 descriptors + ensemble (XGB+LGB+Ridge). CV AAFE 3.410 < Morgan 3.750이나, Holdout AAFE 2.848 > Morgan 2.336 (역전). N≈1,100에서 dense features → CV overfit.
+- **Delta model / MOS (2026-03-31)** → log10(Cmax) = log10(Engine) + Delta(features). Delta variance 46% of Cmax variance (더 좁은 target). Holdout: Delta-only 3.528, Delta+ADME 8.450 (catastrophic overfit). Engine error가 non-systematic → ML correction 불가.
+- **k-NN read-across (2026-03-31)** → Morgan FP Tanimoto (median 0.464), k=20 similarity-weighted: AAFE 3.049. 3-way blend w_knn=0.00. r(ML,kNN)=0.690 (correlated errors). Oracle 3-track 1.689 (28/107 drugs에서 kNN 최선)이나 고정 weight 불가.
+- **Post-hoc meta-learner (2026-04-01)** → OOF Stacking (Ridge) + ACF (Analog Correction Factor) + Winsorized. 6 variants 테스트. **전부 baseline meta 2.277 이하 불가.** Stacking V1: 2.420 (OOF-Full gap r=0.81이 transfer 파괴), ACF k=5: 3.005 (이웃 fold error std=0.67, noisy), Winsorized cap=0.5: 2.300 (현재와 동일). Stacking+ACF 통합도 효과 없음. **현재 compound-type-adaptive geometric blend가 N=107 하에서 최적.** 23번째 negative result.
+
 ### Engine-only ablation 결과
 - DrugBank enrichment: engine AAFE 3.074→2.945 (Δ=-0.129, 유의미), meta는 0.17 weight로 0.021만 전달
 - Meta-learner LOOCV (N=107): w_base=0.45, w_other=0.00 최적 (82% stable). Oracle=1.933.
@@ -81,12 +88,13 @@ Adaptive weight: base=0.45, other=0.00 (LOOCV 107/107, w_base stability 82%)
 
 ### 확정된 진단 (최종, 2026-03-26, PoC 보강)
 - Engine 수식/구조/mechanism은 충분. Input quality (CLint R²=0.24)가 ceiling.
-- 16회 시도 결과: 개별 ADME 파라미터 개선(fup, logP, pKa, CLint, Kp method), IVIVE bypass (direct CL/F), ChEMBL data expansion, 3-class classification, BDE reactivity features 어느 것도 meta AAFE를 의미있게 개선하지 못함. Classification Δ=-0.023이 유일한 양의 결과이나 noise level.
+- 23회 시도 결과: 개별 ADME 개선, IVIVE bypass, data expansion, classification, BDE, Pharos E2E, descriptor upgrade, full replacement, ML Mordred, delta model/MOS, k-NN read-across, post-hoc stacking/ACF/Winsorized — 어느 것도 meta AAFE를 의미있게 개선하지 못함. Classification Δ=-0.023이 유일한 양의 결과이나 noise level.
 - **Error cancellation이 시스템 전체에 고착화.** 현재 파이프라인은 Omega에서 물려받은 특정 오차 프로파일에 calibration되어 있음. 부분 교체로는 이 균형을 깰 수 없음.
 - ALL-ON 실험 (pKa+BZ+CLint 동시 교체): 악화 합산 (+0.077). 동시 개선도 해결 불가.
 - **Measured ADME PoC (Pattern C 확인)**: 12약물에서 measured fup+CLint → engine AAFE 2.33→1.98, 80% 개선. 아키텍처 건전. 일부 error cancellation 존재하나 지배적이지 않음.
 - **Direct CL/F (IVIVE bypass) 실험 (2026-03-27)**: MMPK AUC→CL/F 직접 예측 (R²=0.232) + analytical Cmax = 3rd track. LOOCV w_clf=0.00. IVIVE 우회해도 동일한 SMILES→clearance ceiling에 도달. 13번째 시도 실패.
 - **ChEMBL CLint expansion (2026-03-27)**: ChEMBL 36에서 539 unique compounds 추출 (534 net new). 1,910 compound training set으로 scaffold CV R² 0.279→0.333 (+0.054). 그러나 engine AAFE +0.099, meta AAFE +0.038 악화. homogeneous data expansion도 error cancellation 하에서 무효. 14번째 시도 실패.
+- **Post-hoc correction도 불가 (2026-04-01)**: OOF Stacking, ACF, Winsorized 3개 접근 + 6 variants 전부 baseline 열위. OOF-Full gap (r=0.81), noisy neighbor errors, 기존 disagreement penalty 최적성 확인. Meta-learner의 compound-type-adaptive geometric blend가 N=107에서 provably near-optimal.
 - **유일한 돌파 경로**: predict layer 전체를 새 데이터+새 모델로 일괄 교체 + meta-learner 재학습. 또는 TDM Bayesian update로 ceiling을 우회.
 - TDM Bayesian update가 현재 가장 실용적인 정확도 향상 경로 (CV 55% 감소 확인됨).
 
