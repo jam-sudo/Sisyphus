@@ -1,0 +1,38 @@
+{
+  "experiment_a": {
+    "Morgan_only (baseline)": {
+      "cv_aafe": 3.3026261228712297,
+      "holdout_aafe": 3.0302106970900433,
+      "r_ml": 0.8758217111798651,
+      "blend_aafe": 2.849033204261385
+    },
+    "3D_only": {
+      "cv_aafe": 4.4456111069710476,
+      "holdout_aafe": 3.871451751949281,
+      "r_ml": 0.6554622660430276,
+      "blend_aafe": 3.656638926297733
+    },
+    "Morgan+3D": {
+      "cv_aafe": 3.322379973321866,
+      "holdout_aafe": 2.9303828088046315,
+      "r_ml": 0.8641655591955215,
+      "blend_aafe": 2.817500034814168
+    },
+    "gate_pass": true,
+    "n_3d_features": 20,
+    "conformer_success_rate": 0.9980563654033042
+  },
+  "experiment_b": {
+    "gate_pass": false,
+    "reason": "insufficient CYP annotations",
+    "n_annotated": 551,
+    "n_3a4": 197
+  },
+  "experiment_c": {
+    "aafe_rr": 3.4157473278768773,
+    "aafe_pt": 3.415816269220498,
+    "aafe_avg": 3.4157817983747556,
+    "r_rr_pt": 0.9999998614234757,
+    "gate_pass": false
+  }
+}
