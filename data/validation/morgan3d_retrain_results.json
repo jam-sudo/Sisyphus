@@ -1,0 +1,87 @@
+{
+  "phase0": {
+    "n_train": 1029,
+    "n_holdout": 107,
+    "n_3d_feat": 20,
+    "conformer_success_train": 1027,
+    "conformer_fail_train": 2,
+    "conformer_success_holdout": 106,
+    "conformer_fail_holdout": 1
+  },
+  "phase1": {
+    "cv_morgan_aafe": 3.3026261228712297,
+    "cv_morgan_r2": 0.3567272103645778,
+    "cv_morgan_mae": 0.5188594117282368,
+    "cv_combined_same_aafe": 3.337117030671226,
+    "cv_combined_same_r2": 0.34267095714803897,
+    "cv_combined_tuned_aafe": 3.302088777607789,
+    "cv_combined_tuned_r2": 0.35372380232363254,
+    "cv_morgan_tuned_aafe": 3.2318148259733017,
+    "cv_morgan_tuned_r2": 0.37362702473518083,
+    "best_tuned_params": {
+      "max_depth": 4,
+      "n_estimators": 500,
+      "learning_rate": 0.05,
+      "min_child_weight": 3,
+      "subsample": 0.8,
+      "colsample_bytree": 0.5,
+      "reg_alpha": 0.5,
+      "reg_lambda": 3.0,
+      "random_state": 42
+    }
+  },
+  "phase2": {
+    "prod_ml_aafe": 2.336333939401001,
+    "prod_meta_aafe": 2.2774140851831626,
+    "morgan_retrain_aafe": 3.0302106970900433,
+    "morgan3d_same_aafe": 2.8567423652320767,
+    "morgan3d_same_base": 3.473717017883392,
+    "morgan3d_same_nonbase": 2.647183527252712,
+    "morgan3d_same_p2f": 41.1214953271028,
+    "morgan3d_same_r_ml": 0.8615777773688394,
+    "morgan3d_tuned_aafe": 2.9178244062603422,
+    "morgan3d_tuned_base": 3.670397512196637,
+    "morgan3d_tuned_nonbase": 2.668289447411304,
+    "morgan3d_tuned_p2f": 42.99065420560748,
+    "morgan3d_tuned_r_ml": 0.8666531524940457,
+    "meta_same_aafe": 2.7210851862447893,
+    "meta_same_w_base": 0.43,
+    "meta_same_w_nonbase": 0.11,
+    "meta_tuned_aafe": 2.7245673230261485,
+    "meta_tuned_w_base": 0.47000000000000003,
+    "meta_tuned_w_nonbase": 0.2,
+    "ml_gate_pass": false,
+    "meta_gate_pass": false
+  },
+  "phase3": {
+    "n_3d_in_top20": 3,
+    "n_3d_in_top30": 3,
+    "imp_share_3d_pct": 6.881026744842529,
+    "top5_3d_features": [
+      "whim_5",
+      "whim_6",
+      "whim_7",
+      "labuteASA",
+      "radius_gyration"
+    ],
+    "ablation_top5_aafe": 2.923820227318917,
+    "n_drugs_improved": 34,
+    "n_drugs_regressed": 73,
+    "error_correlation": 0.8615777773688394
+  },
+  "verdict": "NEGATIVE RESULT",
+  "phase2_n1128": {
+    "n_train": 1128,
+    "holdout_in_train": 96,
+    "morgan_only_retrain_aafe": 2.3405823671333335,
+    "morgan3d_same_params_aafe": 2.4016983523853788,
+    "production_ml_aafe": 2.336333939401001,
+    "delta_vs_production": 0.06536441298437756,
+    "delta_vs_morgan_only": 0.06111598525204531,
+    "meta_morgan3d_aafe": 2.370029072147626,
+    "meta_production_aafe": 2.2774140851831626,
+    "meta_delta": 0.09261498696446324,
+    "error_correlation": 0.951731409090062,
+    "note": "N=1128 matching production (no holdout exclusion, 96/107 holdout in train)"
+  }
+}
