@@ -1,0 +1,30 @@
+{
+  "experiment": "PLM 3rd Track Integration v2",
+  "date": "2026-04-02",
+  "n_overlap": 97,
+  "training_data": "v7_clean (3490 entries, holdout excluded)",
+  "cap_range": "[-0.750, 2.207]",
+  "standalone_aafe": {
+    "engine": 3.299,
+    "ml": 2.253,
+    "plm_v1": 3.723,
+    "plm_v2": 3.938,
+    "plm_v2_capped": 3.921
+  },
+  "error_correlations": {
+    "ml_plm_v1": 0.721,
+    "ml_plm_v2": 0.723,
+    "ml_plm_v2c": 0.722
+  },
+  "loocv_2way_aafe": 2.32,
+  "best_3way_config": null,
+  "best_3way_aafe": null,
+  "oracle_aafe": 1.765,
+  "oracle_wins": {
+    "engine": 31,
+    "ml": 45,
+    "plm_v2c": 21
+  },
+  "outliers_v1": 19,
+  "outliers_v2c": 15
+}
