@@ -1,0 +1,10 @@
+{
+  "mmpk_only_aafe": 2.406,
+  "mmpk_fda_new_aafe": 2.423,
+  "mmpk_fda_all_aafe": 2.412,
+  "n_mmpk": 1239,
+  "n_fda_new": 62,
+  "n_combined": 1301,
+  "improved_drugs": 46,
+  "worsened_drugs": 52
+}
