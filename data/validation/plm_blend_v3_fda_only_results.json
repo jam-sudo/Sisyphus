@@ -1,0 +1,30 @@
+{
+  "experiment": "PLM 3rd Track v3 (FDA-only)",
+  "date": "2026-04-03",
+  "fda_train_entries": 581,
+  "fda_train_drugs": 141,
+  "n_overlap": 97,
+  "standalone_aafe": {
+    "engine": 3.299,
+    "ml": 2.253,
+    "plm_v1_shared": 3.723,
+    "plm_v3_fda_only": 5.723
+  },
+  "error_correlations": {
+    "ml_plm_v1": 0.721,
+    "ml_plm_fda": 0.618
+  },
+  "loocv": {
+    "2way_aafe": 2.32,
+    "3way_plm_v1_aafe": 2.32,
+    "3way_plm_fda_aafe": 2.378,
+    "delta_fda": 0.058
+  },
+  "folds_plm_nonzero": 88,
+  "oracle_aafe": 1.744,
+  "oracle_wins": {
+    "engine": 29,
+    "ml": 50,
+    "plm_fda": 18
+  }
+}
