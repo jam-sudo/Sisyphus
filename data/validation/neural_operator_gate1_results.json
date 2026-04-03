@@ -1,0 +1,48 @@
+{
+  "experiment": "Neural Operator Gate 1",
+  "date": "2026-04-02",
+  "n_synthetic": 20000,
+  "n_valid": 20000,
+  "success_rate_pct": 100.0,
+  "generation_time_min": 33.9,
+  "ms_per_engine_run": 97.8,
+  "feature_dim": 12,
+  "target": "log10(Cmax_mg_per_L)",
+  "target_range": [
+    -5.305,
+    1.729
+  ],
+  "train_n": 16000,
+  "test_n": 4000,
+  "models": {
+    "MLP-small": {
+      "r2_train": 0.9991,
+      "r2_test": 0.9985,
+      "mae": 0.0388,
+      "rmse": 0.0491
+    },
+    "MLP-medium": {
+      "r2_train": 0.9993,
+      "r2_test": 0.9985,
+      "mae": 0.0374,
+      "rmse": 0.048
+    },
+    "MLP-large": {
+      "r2_train": 0.9992,
+      "r2_test": 0.9986,
+      "mae": 0.0378,
+      "rmse": 0.0479
+    },
+    "XGBoost": {
+      "r2_train": 0.9995,
+      "r2_test": 0.9982,
+      "mae": 0.0397,
+      "rmse": 0.0533
+    }
+  },
+  "best_model": "MLP-large",
+  "best_r2_test": 0.9986,
+  "best_mae_log10": 0.0378,
+  "fold_error_from_mae": 1.091,
+  "gate_result": "PASS"
+}

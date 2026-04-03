@@ -1,0 +1,26 @@
+{
+  "experiment": "Neural Operator Gate 2",
+  "date": "2026-04-02",
+  "device": "cuda",
+  "n_synthetic_pretrain": 10000,
+  "operator_r2": 0.9993,
+  "n_mmpk_drugs": 1239,
+  "n_folds": 5,
+  "cv_results": {
+    "e2e": {
+      "aafe": 3.544,
+      "pct_2fold": 35.7,
+      "rmse_log10": 0.7333,
+      "pearson_r": 0.806
+    },
+    "xgboost": {
+      "aafe": 3.369,
+      "pct_2fold": 39.3,
+      "rmse_log10": 0.7036,
+      "pearson_r": 0.82
+    }
+  },
+  "error_correlation_e2e_xgb": 0.867,
+  "delta_aafe": 0.176,
+  "gate_result": "FAIL"
+}
