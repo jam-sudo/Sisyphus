@@ -1,0 +1,25 @@
+{
+  "version": "v2",
+  "trained_on": "mmpk_clean.csv",
+  "trained_at": "2026-03-19T19:34:36.935771+00:00",
+  "n_drugs": 1128,
+  "n_features": 2057,
+  "cv_aafe": 1.6435,
+  "cv_rmse_log": 0.6486,
+  "cv_pct_2fold": 74.2,
+  "cv_pct_3fold": 92.3,
+  "target": "log(cmax_mg_L / dose_mg)",
+  "hyperparameters": {
+    "n_estimators": 200,
+    "max_depth": 4,
+    "learning_rate": 0.08,
+    "subsample": 0.8,
+    "colsample_bytree": 0.5,
+    "min_child_weight": 3,
+    "reg_alpha": 0.5,
+    "reg_lambda": 3.0,
+    "random_state": 42,
+    "verbosity": 0
+  },
+  "skipped_drugs": []
+}
