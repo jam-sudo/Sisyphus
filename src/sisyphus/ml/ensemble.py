@@ -22,16 +22,18 @@ from sisyphus.core import Distribution, PKEndpoints
 
 logger = logging.getLogger(__name__)
 
-# --- 3-track weights (to be updated by LOOCV optimization) ---
-# Base drugs: engine has mechanistic advantage (R&R Kp + CYP IVIVE)
-_W_ENGINE_BASE = 0.45
-_W_ML_BASE = 0.55
+# --- 3-track weights (LOOCV-optimized on N=107 clean predictions) ---
+# After fixing holdout leakage in ML Cmax/fup/peff/CLint models (2026-04-04),
+# CL/F track now contributes for non-base drugs (was masked by contamination).
+# Base drugs: engine mechanistic advantage strengthened (93.3% LOOCV stability)
+_W_ENGINE_BASE = 0.60
+_W_ML_BASE = 0.40
 _W_CLF_BASE = 0.00
 
-# Other drugs: ML dominates, engine adds no value
-_W_ENGINE_OTHER = 0.00
-_W_ML_OTHER = 1.00
-_W_CLF_OTHER = 0.00
+# Other drugs: 3-track blend (84.4% LOOCV stability)
+_W_ENGINE_OTHER = 0.35
+_W_ML_OTHER = 0.50
+_W_CLF_OTHER = 0.15
 
 # When engine and ML disagree by more than this factor (in log10 units),
 # reduce engine weight to prevent engine outliers from dominating.
