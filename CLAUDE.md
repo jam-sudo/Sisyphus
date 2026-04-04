@@ -1,11 +1,23 @@
 # CLAUDE.md — Sisyphus
 
-## Session State (마지막 업데이트: 2026-03-27)
+## Session State (마지막 업데이트: 2026-04-04, data leakage 수정버전)
 
-### Current Metrics (N=107)
+### Current Metrics (N=107) — CLEAN (leakage fixed 2026-04-04, commit 5e5a3d0)
+Engine AAFE: 3.421 | **Meta AAFE: 2.808** | ML AAFE: 3.057 | CL/F AAFE: 3.127
+In-domain AAFE: 2.735 (N=83, excluding 24 AD-flagged/ER drugs)
+Oracle AAFE: 2.076 (true ceiling)
+Adaptive weight: base=(0.60/0.40/0.00), other=(0.35/0.50/0.15) [93%/84% LOOCV stability]
+CL/F track resurrected: 15% for non-base drugs (orthogonal signal was masked by leakage)
+
+### Historical Metrics — CONTAMINATED (pre-2026-04-04, inflated by ML memorization)
 Engine AAFE: 3.415 | Meta AAFE: 2.283 | %2-fold: 54.2%
-In-domain AAFE: 2.100 (N=83, excluding 24 AD-flagged/ER drugs)
-Adaptive weight: base=0.45, other=0.00 (LOOCV 107/107, w_base stability 82%)
+In-domain AAFE: 2.100 | ML AAFE: 2.340
+Adaptive weight: base=0.45, other=0.00 (LOOCV, w_base stability 82%)
+- 76-100/107 holdout drugs leaked into ML training (trained pre-holdout expansion N=61→107)
+- Contamination scale (3-key match): cmax 100 leaks, clint 39, peff 32
+- Inflated headline AAFE by ~23% via memorization
+- Implication: "24 failed experiments" list was compared against inflated 2.28 baseline;
+  true baseline is ~2.81, so several rejected experiments may warrant re-evaluation
 
 ### Holdout Expansion (2026-03-26)
 - N=61 → N=107 (+46 drugs from OSP repos, FDA labels, curated literature)
