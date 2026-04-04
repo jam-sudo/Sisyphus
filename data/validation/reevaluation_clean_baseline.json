@@ -1,0 +1,92 @@
+{
+  "clean_baseline": {
+    "engine_aafe": 3.421,
+    "ml_aafe": 3.057,
+    "clf_aafe": 3.127,
+    "meta_aafe": 2.808,
+    "in_domain_aafe": 2.735,
+    "oracle": 2.076,
+    "weights": {
+      "base": [
+        0.6,
+        0.4,
+        0.0
+      ],
+      "other": [
+        0.35,
+        0.5,
+        0.15
+      ]
+    }
+  },
+  "re_evaluations": [
+    {
+      "id": 9,
+      "name": "Berezhkovskiy Kp",
+      "contaminated": {
+        "delta_engine": 0.021,
+        "delta_meta": 0.009
+      },
+      "clean": {
+        "delta_engine": 0.016,
+        "delta_meta": 0.006
+      },
+      "verdict": "SAME (noise both)"
+    },
+    {
+      "id": 8,
+      "name": "pKa XGBoost model",
+      "contaminated": {
+        "delta_engine": 0.005,
+        "delta_meta": 0.095
+      },
+      "clean": {
+        "delta_engine": 0.009,
+        "delta_meta": -0.007
+      },
+      "verdict": "REVERSED (was bad, now neutral)"
+    },
+    {
+      "id": 10,
+      "name": "pKa + Berezhkovskiy combined",
+      "contaminated": {
+        "delta_engine": 0.021,
+        "delta_meta": 0.077
+      },
+      "clean": {
+        "delta_engine": 0.02,
+        "delta_meta": -0.003
+      },
+      "verdict": "REVERSED (was bad, now neutral)"
+    },
+    {
+      "id": 11,
+      "name": "CLint expansion (TDC Hep+Mic+ChEMBL)",
+      "contaminated": {
+        "delta_engine": -0.015,
+        "delta_meta": 0.052
+      },
+      "clean": {
+        "delta_engine": -0.022,
+        "delta_meta": 0.034
+      },
+      "verdict": "STILL SLIGHTLY WORSE (less bad though)"
+    },
+    {
+      "id": "posthoc",
+      "name": "Post-hoc meta-learner (6 methods)",
+      "methods_tested": [
+        "median-of-3",
+        "trimmed mean",
+        "equal blend",
+        "winsorized @1log",
+        "disagr-sigmoid",
+        "LOO-AAFE-direct"
+      ],
+      "clean_baseline": 2.808,
+      "best_alternative": 2.812,
+      "verdict": "SAME (no method beats production weights)"
+    }
+  ],
+  "key_insight": "Experiments that touched pKa/compound_type classification had REVERSED verdicts on clean baseline. Contamination was masking mechanistic improvements. Post-hoc methods still cannot beat production LOOCV-optimized weights. CLint expansion still slightly worse (robust conclusion)."
+}
