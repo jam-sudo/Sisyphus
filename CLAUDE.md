@@ -19,6 +19,44 @@ Adaptive weight: base=0.45, other=0.00 (LOOCV, w_base stability 82%)
 - Implication: "24 failed experiments" list was compared against inflated 2.28 baseline;
   true baseline is ~2.81, so several rejected experiments may warrant re-evaluation
 
+### 24-실험 전면 재평가 (2026-04-04, data/validation/reevaluation_full.json)
+
+**확정 (empirical, 5 experiments)**:
+- #8 pKa XGBoost: +0.095 → -0.007 (REVERSED)
+- #9 Berezhkovskiy Kp: +0.009 → +0.006 (SAME, noise)
+- #10 pKa+BZ combined: +0.077 → -0.003 (REVERSED)
+- #11 CLint expansion Hep_AZ+Mic_AZ: +0.052 → +0.034 (STILL WORSE, less bad)
+- #15 Direct CL/F 3rd track: w=0.00 → **w=0.15 for non-base (RESURRECTED)** — leakage fix 자체의 핵심 효과
+- Post-hoc 6-method (stacking/ACF/winsor): 2.812 vs 2.808 clean (SAME, robust failure)
+
+**예측 재평가 (analytical, 19 experiments)**:
+
+Tier B (retest priority 1): 엔진 가중치 0.45→0.60(base)/0→0.35(non-base) 상승으로 flip 가능
+- #17 CLint 3-class classification: -0.023 → 예상 -0.040~-0.080 (AMPLIFIED)
+- #12 ALL-ON (pKa+BZ+CLint): +0.077 → 예상 -0.005~+0.025 (REVERSED/NEUTRAL)
+- #20 CLint descriptor R²+0.120: +0.012 → 방향 불확실, 엔진 0.60 weight로 재평가 필요
+- #21 Full predict replacement: +0.023 → 방향 불확실
+
+Tier C (ML track 대안, clean ML 3.057과 비교):
+- #19 Pharos v0 E2E (3.006 standalone) → clean ML 이김! 4-track meta 후보
+- #22 ML Mordred (2.848) → Morgan 오염됐으므로 재훈련 필요, 역전 가능
+- #24 k-NN read-across (3.049) → clean ML 과 경쟁력, r_error 재측정 필요
+
+Tier D (robust failures, 오염 무관):
+- #1 fup, #2 logP (noise), #4 UGT (mechanically broken), #5 E2E MLP (N=65),
+  #6 MMPK deconv (R²=0.17), #7 Transporter (no data), #13 docking (noise),
+  #14 Foundation models (ceiling), #16 ChEMBL CLint (+0.034 still),
+  #18 BDE (r=0.033), #23 Delta model (8.45 overfit)
+
+**Error cancellation 내러티브 재해석**:
+오염된 pipeline에서 ML memorization이 meta를 지배. Engine 개선이 "cancellation 파괴"로
+보였던 것은 ML이 메모라이즈한 정답으로 감추던 engine-path 오차가 드러난 것.
+Clean pipeline은 engine weight가 높아 mechanistic 개선이 더 많이 통과될 수 있음.
+단, 진짜 robust 실패(UGT, Delta model, MMPK deconv 등)는 여전히 실패.
+
+**Oracle headroom**: contaminated 0.21 logs → clean 0.73 logs (2.808→2.076)
+→ 구조적 개선 여지가 훨씬 큼. Post-hoc이 아닌 predict layer 재구축 필요.
+
 ### Holdout Expansion (2026-03-26)
 - N=61 → N=107 (+46 drugs from OSP repos, FDA labels, curated literature)
 - Sources: OSP observed C(t) profiles (8 new + 3 updated), curated PK (30 new + 7 updated), FDA DailyMed (0 net new, overlaps with curated)

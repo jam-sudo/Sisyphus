@@ -1,0 +1,273 @@
+{
+  "title": "Full re-evaluation of 24 failed experiments against clean baseline",
+  "date": "2026-04-04",
+  "methodology": "Analytical re-classification combining (a) existing 5-experiment empirical reeval from 75f8d86, (b) post-leakage experiment results (PLM, Chemprop, Phase12, Tournament V3), (c) mechanistic reasoning about how leakage distorted each experiment's delta measurement.",
+  "baselines": {
+    "contaminated": {
+      "engine_aafe": 3.415,
+      "ml_aafe": 2.340,
+      "clf_aafe": 3.134,
+      "meta_aafe": 2.283,
+      "weights_base": [0.45, 0.55, 0.00],
+      "weights_other": [0.00, 1.00, 0.00],
+      "note": "ML memorized 76-100/107 holdout drugs (trained pre-expansion N=61)"
+    },
+    "clean": {
+      "engine_aafe": 3.421,
+      "ml_aafe": 3.057,
+      "clf_aafe": 3.127,
+      "meta_aafe": 2.808,
+      "in_domain_aafe": 2.735,
+      "oracle_aafe": 2.076,
+      "weights_base": [0.60, 0.40, 0.00],
+      "weights_other": [0.35, 0.50, 0.15],
+      "note": "Engine weight up (0.45->0.60 base, 0->0.35 other); CL/F track resurrected 0->0.15 for non-base"
+    }
+  },
+  "leakage_distortion_model": {
+    "engine_only_changes": "Meta delta distortion: under contaminated, engine changes flowed through 0.45 weight (base) or 0 weight (other). Under clean, 0.60/0.35. Non-base engine improvements were INVISIBLE under contamination.",
+    "ml_only_changes": "Meta delta distortion: under contaminated, ML got 0.55/1.00 weight and memorized predictions, so ML replacement looked catastrophic relative to memorized ground-truth. Under clean, ML is 0.40/0.50 of an imperfect baseline.",
+    "clf_track": "Resurrected 0->0.15 weight for non-base under clean. Any CL/F-pathway experiment that was killed by w=0.00 is worth re-testing."
+  },
+
+  "tier_A_already_reevaluated": [
+    {
+      "id": 8, "name": "pKa XGBoost model (DrugBank 9,974)",
+      "contaminated_delta_meta": 0.095, "clean_delta_meta": -0.007,
+      "verdict": "REVERSED", "confidence": "HIGH", "source": "75f8d86 empirical"
+    },
+    {
+      "id": 9, "name": "Berezhkovskiy Kp correction",
+      "contaminated_delta_meta": 0.009, "clean_delta_meta": 0.006,
+      "verdict": "SAME (noise)", "confidence": "HIGH", "source": "75f8d86 empirical"
+    },
+    {
+      "id": 10, "name": "pKa + Berezhkovskiy combined",
+      "contaminated_delta_meta": 0.077, "clean_delta_meta": -0.003,
+      "verdict": "REVERSED", "confidence": "HIGH", "source": "75f8d86 empirical"
+    },
+    {
+      "id": 11, "name": "CLint expansion (TDC Hep_AZ + Mic_AZ 1,402)",
+      "contaminated_delta_meta": 0.052, "clean_delta_meta": 0.034,
+      "verdict": "STILL WORSE (less bad)", "confidence": "HIGH", "source": "75f8d86 empirical"
+    },
+    {
+      "id": "posthoc-v1", "name": "Post-hoc meta (stacking/ACF/winsor, 6 methods)",
+      "contaminated_delta_meta": 0.143, "clean_delta_meta": 0.004,
+      "verdict": "SAME (robust failure)", "confidence": "HIGH", "source": "75f8d86 empirical"
+    },
+    {
+      "id": 15, "name": "Direct CL/F 3rd track (IVIVE bypass)",
+      "contaminated_delta_meta": -0.005, "clean_delta_meta": "RESURRECTED",
+      "verdict": "RESURRECTED", "confidence": "HIGH",
+      "note": "Implicit: LOOCV under clean assigned w_clf=0.15 for non-base. Was w=0.00 under contamination because memorized ML dominated. This IS the biggest win from the fix.",
+      "source": "5e5a3d0 LOOCV re-run"
+    }
+  ],
+
+  "tier_B_high_priority_retest": [
+    {
+      "id": 12, "name": "ALL-ON (pKa + BZ + CLint expansion)",
+      "contaminated_delta_meta": 0.077,
+      "predicted_clean_delta": "-0.005 to +0.025",
+      "reasoning": "pKa component reversed (-0.007), BZ noise (+0.006), CLint expansion +0.034. Simple sum: +0.033. With interactions (pKa+BZ nonlinear): likely +0.00 to +0.03. Probably REVERSED/NEUTRAL.",
+      "priority": "HIGH", "retest_cost": "LOW (data exists)",
+      "verdict_prediction": "NEUTRAL_OR_SLIGHT_WORSE"
+    },
+    {
+      "id": 17, "name": "CLint 3-class classification",
+      "contaminated_delta_meta": -0.023,
+      "predicted_clean_delta": "-0.040 to -0.080",
+      "reasoning": "Was already improving under contamination (-0.023). Coarser CLint prediction flows through engine. Under clean, engine weight +0.15 for base / +0.35 for other, so improvement AMPLIFIES.",
+      "priority": "HIGH", "retest_cost": "LOW (model saved)",
+      "verdict_prediction": "AMPLIFIED_IMPROVEMENT"
+    },
+    {
+      "id": 20, "name": "CLint descriptor upgrade (R^2 +0.120)",
+      "contaminated_delta_meta": 0.012,
+      "predicted_clean_delta": "-0.040 to +0.020",
+      "reasoning": "Engine-only change. Under contaminated, engine at 0.45 weight couldn't leverage R^2 gain. Under clean, 0.60/0.35 weights may convert R^2 gain to meta improvement. Direction uncertain (could also be amplified worse).",
+      "priority": "HIGH", "retest_cost": "LOW",
+      "verdict_prediction": "POSSIBLY_REVERSED"
+    },
+    {
+      "id": 21, "name": "Full predict replacement (all ADME)",
+      "contaminated_delta_meta": 0.023,
+      "predicted_clean_delta": "-0.030 to +0.040",
+      "reasoning": "Multi-component engine change (CLint R^2 +0.033, fup R^2 +0.042, VDss R^2 +0.057). Under clean with engine at higher weight, net direction ambiguous. Needs empirical test.",
+      "priority": "HIGH", "retest_cost": "MEDIUM (models exist)",
+      "verdict_prediction": "DIRECTION_UNCERTAIN"
+    },
+    {
+      "id": 3, "name": "IVIVE chain ensemble (R&R/PT x WS/PT, 4 chains)",
+      "contaminated_delta_meta": "unknown_neg",
+      "predicted_clean_delta": "unknown",
+      "reasoning": "Engine structural change, likely weight-sensitive. Original: 'negative result' under contaminated weights. Worth retest.",
+      "priority": "MEDIUM", "retest_cost": "MEDIUM"
+    },
+    {
+      "id": "posthoc-10m", "name": "10-method meta-learner tournament",
+      "contaminated_delta_meta": "+0.006 to +0.602",
+      "predicted_clean_delta": "varies",
+      "reasoning": "All 10 methods tested against contaminated 2.277 baseline. Under clean 2.808, error profile differs (ML errors non-memorized). Some methods (ER-Routing, CLint-Stratified) may now provide value. Tournament V3 already tested P4 Substruct at delta=-0.015 (marginal).",
+      "priority": "MEDIUM", "retest_cost": "LOW (OOF exists)"
+    }
+  ],
+
+  "tier_C_ml_track_alternatives": [
+    {
+      "id": 19, "name": "Pharos v0 E2E (GNN+MoE)",
+      "standalone_aafe": 3.006,
+      "contaminated_baseline_ml": 2.336,
+      "clean_baseline_ml": 3.057,
+      "reasoning": "Pharos E2E now OUTPERFORMS clean ML by 0.05. As standalone track in 4-way meta, could contribute. Original conclusion 'data scale bottleneck (465K params vs 1074 samples)' still holds but the comparison baseline shifted.",
+      "priority": "HIGH", "retest_cost": "MEDIUM (branch pharos-prototype exists)",
+      "verdict_prediction": "COMPETITIVE_WITH_CLEAN_ML"
+    },
+    {
+      "id": 22, "name": "ML Mordred features (1,613 descriptors)",
+      "standalone_aafe": 2.848,
+      "contaminated_morgan_baseline": 2.336,
+      "clean_morgan_baseline": 3.057,
+      "reasoning": "Mordred likely ALSO trained on contaminated data (pre-leakage-fix). Relative comparison (Mordred > Morgan = worse) held on contaminated holdout. After retraining both with clean holdout exclusion: relative order COULD reverse if Mordred's overfit was less dependent on memorization. High-value retest.",
+      "priority": "HIGH", "retest_cost": "MEDIUM (retrain needed)",
+      "verdict_prediction": "UNCERTAIN_NEEDS_RETRAIN"
+    },
+    {
+      "id": 24, "name": "k-NN read-across (Morgan Tanimoto)",
+      "standalone_aafe": 3.049,
+      "clean_baseline_ml": 3.057,
+      "reasoning": "k-NN comparable to clean ML (3.049 vs 3.057). As 4th track in meta, orthogonality matters more than standalone. r(ML,kNN)=0.690 under contamination. Under clean ML that error correlation could drop, enabling k-NN weight. Original Oracle 1.689 suggested kNN wins 28/107 drugs.",
+      "priority": "MEDIUM", "retest_cost": "LOW (predictions exist)",
+      "verdict_prediction": "POSSIBLY_VALUABLE_AS_4TH_TRACK"
+    },
+    {
+      "id": 5, "name": "E2E differentiable MLP",
+      "standalone_aafe": 3.265,
+      "clean_baseline_ml": 3.057,
+      "reasoning": "Still worse than clean ML. N=65 training was hard limit.",
+      "verdict_prediction": "STILL_FAILS", "priority": "LOW"
+    }
+  ],
+
+  "tier_D_robust_failures_unchanged": [
+    {
+      "id": 1, "name": "fup retraining (DrugBank+TDC)", "contaminated_delta": 0.02,
+      "verdict_prediction": "SAME (noise)", "reasoning": "R^2 change was marginal; engine path only."
+    },
+    {
+      "id": 2, "name": "logP residual correction", "contaminated_delta": 0.02,
+      "verdict_prediction": "SAME (noise)"
+    },
+    {
+      "id": 4, "name": "UGT metabolism", "contaminated_delta_engine": 0.229,
+      "verdict_prediction": "AMPLIFIED_WORSE",
+      "reasoning": "Engine regression 2.861->3.090. Under clean, engine at 0.60 weight AMPLIFIES regression. Mechanistically broken (incorrect UGT parameterization)."
+    },
+    {
+      "id": 6, "name": "MMPK CLint deconvolution (R^2=0.166)",
+      "verdict_prediction": "SAME (data-level failure)",
+      "reasoning": "Training R^2 too low; unaffected by meta weights."
+    },
+    {
+      "id": 7, "name": "Transporter scaffolding (0 drugs activated)",
+      "verdict_prediction": "SAME (no data)",
+      "reasoning": "No kinetic data. Structural failure."
+    },
+    {
+      "id": 13, "name": "CYP docking features (DiffDock+Vina)",
+      "verdict_prediction": "SAME (feature-level noise)",
+      "reasoning": "DeltaR^2=+0.005 (DiffDock), -0.026 (Vina). Binding affinity != metabolic rate."
+    },
+    {
+      "id": 14, "name": "Foundation model shootout (MoLFormer/ChemBERTa/Uni-Mol)",
+      "verdict_prediction": "SAME (representation ceiling)",
+      "reasoning": "Frozen embeddings of pretrained LLMs lose to Morgan+XGB. Target noise is the ceiling, not representation."
+    },
+    {
+      "id": 18, "name": "BDE reactivity features",
+      "verdict_prediction": "SAME (correlation fail)",
+      "reasoning": "r(BDE_min, logCLint)=+0.033. All-enzyme CLint not explained by C-H BDE (CYP kcat only). Mechanistically ruled out."
+    },
+    {
+      "id": 23, "name": "Delta model / MOS",
+      "verdict_prediction": "SAME (architecturally broken)",
+      "reasoning": "Delta+ADME holdout AAFE=8.45 catastrophic overfit. Engine errors non-systematic."
+    },
+    {
+      "id": 16, "name": "ChEMBL CLint expansion (N=107)",
+      "verdict_prediction": "LIKELY_STILL_WORSE (partial)",
+      "reasoning": "Same pattern as Hep_AZ expansion (#11 clean delta +0.034). R^2 gain doesn't flow to meta."
+    }
+  ],
+
+  "tier_E_post_leakage_experiments": [
+    {
+      "name": "PLM v2 (protein language model blend)",
+      "date": "2026-04-02", "standalone_aafe": 3.938, "loocv_2way_aafe": 2.32,
+      "verdict": "Negative (r_error=0.72 with ML, not orthogonal enough)"
+    },
+    {
+      "name": "PLM v3 FDA-only",
+      "standalone_aafe": 5.723, "delta_vs_2way": 0.058,
+      "verdict": "Negative (too weak)"
+    },
+    {
+      "name": "FDA-augmented ML training",
+      "mmpk_only_aafe": 2.406, "mmpk_fda_all_aafe": 2.412,
+      "verdict": "Noise-level"
+    },
+    {
+      "name": "Phase 12 Track A (1-cpt analytical)",
+      "standalone_aafe": 2.908, "r_ml": 0.660,
+      "verdict": "Gate pass but not integrated"
+    },
+    {
+      "name": "Chemprop D-MPNN v2",
+      "standalone_aafe": 3.233, "r_ml": 0.706, "w_assigned": 0.0,
+      "verdict": "Orthogonal but weaker than ML, killed by LOOCV"
+    },
+    {
+      "name": "Tournament V3 P4 Substruct Correct",
+      "delta_vs_277": -0.015, "note": "Marginal improvement on contaminated baseline, unclear on clean"
+    }
+  ],
+
+  "summary_by_verdict": {
+    "RESURRECTED": ["#15 Direct CL/F"],
+    "REVERSED_NEUTRAL": ["#8 pKa", "#10 pKa+BZ"],
+    "PREDICTED_REVERSED_HIGH_CONF": ["#17 CLint classification", "#12 ALL-ON"],
+    "PREDICTED_REVERSED_MEDIUM_CONF": ["#20 CLint descriptor", "#3 IVIVE chain", "#21 Full replacement"],
+    "ML_TRACK_COMPETITIVE_NOW": ["#19 Pharos v0", "#22 Mordred (needs retrain)", "#24 k-NN"],
+    "ROBUST_FAILURES_UNCHANGED": ["#1 fup", "#2 logP", "#4 UGT", "#5 E2E MLP", "#6 MMPK", "#7 Transporter", "#9 BZ", "#11 CLint exp", "#13 docking", "#14 foundation models", "#16 ChEMBL CLint", "#18 BDE", "#23 delta model", "posthoc-6methods"]
+  },
+
+  "recommendations": {
+    "immediate_retest_priorities": [
+      {"rank": 1, "exp": "#17 CLint 3-class classification", "rationale": "Already showed -0.023; amplification expected under clean weights"},
+      {"rank": 2, "exp": "#19 Pharos v0 as 4th track", "rationale": "3.006 standalone beats clean ML 3.057"},
+      {"rank": 3, "exp": "#20 CLint descriptor upgrade", "rationale": "R^2 +0.120 with engine at 0.60 weight"},
+      {"rank": 4, "exp": "#22 ML Mordred (retrain clean)", "rationale": "Potential ML Cmax replacement"},
+      {"rank": 5, "exp": "#12 ALL-ON combo", "rationale": "Components individually near-neutral"},
+      {"rank": 6, "exp": "#21 Full predict replacement", "rationale": "Multi-ADME under new weights"},
+      {"rank": 7, "exp": "#24 k-NN as 4th track", "rationale": "Orthogonality may shift"}
+    ],
+    "do_not_retest": [
+      "#4 UGT (mechanistically broken)", "#5 E2E MLP (data scale)",
+      "#6 MMPK deconv (R^2 0.17)", "#7 Transporter (no data)",
+      "#13 CYP docking (ruled out)", "#14 Foundation models (ceiling)",
+      "#18 BDE (correlation fail)", "#23 Delta model (arch broken)"
+    ]
+  },
+
+  "broader_conclusions": {
+    "error_cancellation_narrative": "Partially artifactual. Under contaminated pipeline, ML memorization dominated meta output. Engine improvements appeared as 'error cancellation breaks' because they shifted engine-path errors that were being canceled by memorized ML. Under clean pipeline, engine weight is higher and more mechanistic improvements could persist. However: robust failures remain robust (CLint expansion, delta model, UGT, foundation models).",
+    "ceiling_status": "Clean meta AAFE 2.808, Oracle 2.076. True ceiling narrative (CLint R^2=0.24) unchanged, but headroom to Oracle is now 0.73 logs (was 0.21 under contamination). More room for improvement.",
+    "next_structural_opportunities": [
+      "Retest pKa+BZ+CLint individual sub-components under clean weights",
+      "Add Pharos E2E / k-NN as 4th tracks with LOOCV weight optimization",
+      "Retrain Mordred/foundation models with 3-key holdout exclusion",
+      "Re-run 10-method tournament against clean OOF predictions"
+    ]
+  }
+}
