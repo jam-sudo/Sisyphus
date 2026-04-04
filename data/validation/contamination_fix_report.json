@@ -1,0 +1,53 @@
+{
+  "retrained_at": "2026-04-04",
+  "models_retrained": [
+    "xgboost_cmax",
+    "xgboost_fup_v2",
+    "xgboost_peff",
+    "xgboost_clint"
+  ],
+  "contaminated": {
+    "engine_aafe": 3.415,
+    "ml_aafe": 2.34,
+    "clf_aafe": 3.134,
+    "meta_aafe": 2.28,
+    "meta_pct_2fold": 54.2,
+    "in_domain_meta_aafe": 2.097,
+    "weights": {
+      "base": [
+        0.45,
+        0.55,
+        0
+      ],
+      "other": [
+        0,
+        1,
+        0
+      ]
+    }
+  },
+  "clean": {
+    "engine_aafe": 3.4206784508100605,
+    "ml_aafe": 3.0570724937287688,
+    "clf_aafe": 3.1274986857059344,
+    "meta_aafe": 2.8078368605281367,
+    "meta_pct_2fold": 45.794392523364486,
+    "in_domain_meta_aafe": 2.735434666620213,
+    "weights": {
+      "base": [
+        0.6,
+        0.4,
+        0
+      ],
+      "other": [
+        0.35,
+        0.5,
+        0.15
+      ]
+    }
+  },
+  "leakage_inflation_pct": {
+    "ml_aafe": -23.456182187362593,
+    "meta_aafe": -18.798701162034536
+  }
+}
