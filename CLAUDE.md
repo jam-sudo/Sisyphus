@@ -57,6 +57,16 @@ Clean pipeline은 engine weight가 높아 mechanistic 개선이 더 많이 통�
 **Oracle headroom**: contaminated 0.21 logs → clean 0.73 logs (2.808→2.076)
 → 구조적 개선 여지가 훨씬 큼. Post-hoc이 아닌 predict layer 재구축 필요.
 
+**Empirical retest 2026-04-04 (clean baseline 2.844 reproduced)**:
+Post-hoc/tournament 재실행 결과 2개 method가 **FLIPPED**:
+- **O6 Rank Aggregation (Borda count)**: 2.791 (Δ=-0.053, r=0.983)
+  → 오염 baseline에서는 +0.307 실패. Clean ML의 분포가 넓어져 rank→value 매핑이 개선.
+- **k-NN read-across 3-way blend (w=0.40/0.35/0.25)**: 2.777 (Δ=-0.066)
+  → 오염 baseline에서는 w_knn=0.00 dead. Clean ML에서 25% weight로 3rd track 활성.
+  → CL/F track(오염에서 부활) 대신 k-NN이 3rd track 후보.
+여전히 fail: post-hoc stacking (+0.089), Tournament V1/V2 10-method (all fail).
+누적 43+ post-hoc methods 중 clean baseline에서 2개만 통과.
+
 ### Holdout Expansion (2026-03-26)
 - N=61 → N=107 (+46 drugs from OSP repos, FDA labels, curated literature)
 - Sources: OSP observed C(t) profiles (8 new + 3 updated), curated PK (30 new + 7 updated), FDA DailyMed (0 net new, overlaps with curated)

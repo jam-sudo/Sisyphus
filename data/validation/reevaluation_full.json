@@ -150,8 +150,63 @@
     }
   ],
 
-  "tier_D_robust_failures_unchanged": [
-    {
+  "empirical_retest_results_2026_04_04_clean": {
+    "clean_baseline_reproduced": {
+      "engine_aafe": 3.153,
+      "ml_aafe": 3.055,
+      "clf_aafe": 3.158,
+      "meta_aafe_production_weights": 2.832,
+      "meta_aafe_loocv_reopt": 2.805,
+      "meta_aafe_old_contam_weights": 2.903,
+      "note": "MC noise 0.03-0.04 logs vs commit 5e5a3d0 (reported 2.808)"
+    },
+    "posthoc_stacking_retest": {
+      "baseline": 2.844,
+      "best_method": "OOF Stacking V1",
+      "best_aafe": 2.933,
+      "delta": 0.089,
+      "verdict": "STILL FAILS (r=0.967 with meta)"
+    },
+    "tournament_v1_10methods_retest": {
+      "baseline": 2.844,
+      "best_method": "M6 Quantile XGBoost",
+      "best_aafe": 2.873,
+      "best_delta": 0.029,
+      "verdict": "ALL FAIL (noise level)"
+    },
+    "tournament_v2_10methods_retest": {
+      "baseline": 2.844,
+      "best_method": "P1 Physichem Ridge",
+      "best_aafe": 2.867,
+      "best_delta": 0.024,
+      "verdict": "ALL FAIL"
+    },
+    "tournament_v3_10methods_retest": {
+      "baseline": 2.844,
+      "winner": "O6 Rank Aggregation",
+      "winner_aafe": 2.791,
+      "winner_delta": -0.053,
+      "winner_r_with_baseline": 0.983,
+      "verdict": "FLIPPED FROM FAIL TO WIN",
+      "notes": "Borda rank aggregation (engine+ML) mapped to ML distribution. Under contam baseline gave +0.307 (fail). Under clean gives -0.053 (pass)."
+    },
+    "knn_readacross_retest": {
+      "standalone_aafe": 3.049,
+      "3way_blend_weights": [0.40, 0.35, 0.25],
+      "3way_blend_aafe": 2.777,
+      "delta": -0.066,
+      "verdict": "FLIPPED — GATE PASS",
+      "error_correlations": {"eng_ml": 0.713, "eng_knn": 0.721, "ml_knn": 0.819},
+      "oracle_3track": 1.879,
+      "notes": "Under contam baseline w_knn=0.00 (dead). Under clean ML, 25% weight delivers -0.066 improvement. New 3rd track candidate (kNN instead of CL/F)."
+    },
+    "new_winners_summary": [
+      {"name": "O6 Rank Aggregation", "delta": -0.053, "aafe": 2.791, "note": "Post-hoc, ordinal-based"},
+      {"name": "k-NN read-across 3-way blend", "delta": -0.066, "aafe": 2.777, "note": "3rd orthogonal track at w=0.25"}
+    ]
+  },
+
+  "tier_D_robust_failures_unchanged": [    {
       "id": 1, "name": "fup retraining (DrugBank+TDC)", "contaminated_delta": 0.02,
       "verdict_prediction": "SAME (noise)", "reasoning": "R^2 change was marginal; engine path only."
     },
