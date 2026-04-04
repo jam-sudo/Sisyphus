@@ -1,0 +1,64 @@
+{
+  "title": "Tier B/C empirical retests on clean baseline (2026-04-04)",
+  "clean_baseline_meta_aafe": 2.808,
+  "retests": [
+    {
+      "id": 12,
+      "name": "ALL-ON (pKa XGB + BZ Kp + Expanded CLint)",
+      "contaminated_delta": 0.077,
+      "predicted_clean_delta_range": [
+        -0.005,
+        0.025
+      ],
+      "empirical_clean_delta": 0.035,
+      "verdict": "STILL_WORSE",
+      "notes": "Less bad than contaminated, but outside predicted range. Sum of component deltas."
+    },
+    {
+      "id": 17,
+      "name": "CLint 3-class classification",
+      "contaminated_delta": -0.023,
+      "predicted_clean_delta_range": [
+        -0.08,
+        -0.04
+      ],
+      "empirical_clean_delta": 0.003,
+      "verdict": "NEUTRAL_NOT_AMPLIFIED",
+      "notes": "Was improvement under contam; becomes noise under clean. Prediction of amplification WRONG."
+    },
+    {
+      "id": 20,
+      "name": "CLint descriptor upgrade (top-300 + Optuna)",
+      "contaminated_delta": 0.012,
+      "predicted_clean_delta_range": [
+        -0.04,
+        0.02
+      ],
+      "empirical_clean_delta": 0.068,
+      "verdict": "WORSE_ON_CLEAN",
+      "notes": "CV R\u00b2 +0.120 but engine holdout AAFE WORSENED (3.421\u21923.582). CV/holdout gap."
+    },
+    {
+      "id": 24,
+      "name": "k-NN read-across as 4th track",
+      "contaminated_delta": "w_knn=0 (dead)",
+      "in_sample_clean_delta": -0.047,
+      "loocv_clean_delta": 0.163,
+      "verdict": "OVERFIT_FAIL",
+      "notes": "In-sample grid: -0.047 (seemed win). LOOCV: +0.163 (actual fail). k-NN as 4th track does NOT help under proper CV."
+    }
+  ],
+  "summary": {
+    "Tier_B_C_empirical_tested": 4,
+    "verdicts_after_retest": {
+      "still_worse": 2,
+      "neutral": 1,
+      "overfit_fail": 1
+    },
+    "predictions_vs_reality": {
+      "amplified_improvements_claimed": 1,
+      "amplified_improvements_confirmed": 0
+    },
+    "robust_conclusion": "All 4 empirically retested Tier B/C experiments FAIL under proper LOOCV on clean baseline. Predicted 'amplified improvements' did not materialize. #17 classifier's contaminated improvement was purely memorization artifact. #24 k-NN 4-track grid optimization was overfit; LOOCV reveals worse-than-baseline. The 2 confirmed reversals (#8 pKa, #10 pKa+BZ) remain the only Tier A wins."
+  }
+}
