@@ -1,0 +1,18 @@
+{
+  "experiment": "F% (bioavailability) predictor for VDss track correction",
+  "data": "498 drugs from DrugBank absorption text (445 after holdout exclusion, 442 after dedup)",
+  "model": "XGBoost on Morgan FP + 9 descriptors (2057 features)",
+  "target": "log10(F/100)",
+  "scaffold_cv_r2": -0.09,
+  "train_r2": 0.946,
+  "interpretation": "Bioavailability unlearnable from SMILES (R\u00b2 < 0)",
+  "integration_test": {
+    "holdout_vdss_only_alpha20": 2.695,
+    "holdout_vdss_times_F_alpha20": 2.726,
+    "delta_holdout": "+0.031 WORSE",
+    "prospective_vdss_only_alpha20": 2.361,
+    "prospective_vdss_times_F_alpha20": 2.334,
+    "delta_prospective": "-0.027 better"
+  },
+  "verdict": "NEGATIVE \u2014 F correction helps prospective kinases but hurts holdout more. Not integrated."
+}
