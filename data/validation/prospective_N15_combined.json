@@ -1,0 +1,72 @@
+{
+  "description": "Combined prospective validation N=15 (original N=10 + new N=5 kinase batch)",
+  "methodology": {
+    "original_N10": "2024-2025 FDA NMEs with single-dose or manually AR-corrected Cmax; 9 in-domain, 1 AD-flagged",
+    "new_N5": "2024-2025 FDA NMEs identified via openFDA API systematic extraction; all steady-state Cmax back-calculated to single-dose using FDA-reported accumulation ratios"
+  },
+  "aggregate_results": {
+    "N_total": 15,
+    "aafe_all": 2.478,
+    "pct_within_2fold_all": 0.47,
+    "original_N10_aafe": 1.959,
+    "original_N9_indomain_aafe": 1.675,
+    "new_N5_aafe": 3.968,
+    "gap_vs_holdout": "1.1x (was reported 1.6x on N=10 alone)"
+  },
+  "honest_finding": "Original N=10 cohort biased toward PK-easy drugs (short t1/2 or direct single-dose FDA data). Adding 5 kinase inhibitors requiring SS→single-dose back-calculation reveals Sisyphus prospective AAFE 2.478, much closer to holdout in-domain 2.74 than earlier N=10 suggested. The apparent prospective advantage was partly selection bias.",
+  "new_drug_predictions": {
+    "vorasidenib": {
+      "dose_mg": 40,
+      "obs_single_dose": 0.0302,
+      "meta_pred": 0.128,
+      "fold_error": 4.25,
+      "direction": "over-prediction",
+      "notes": "SS Cmax 133 ng/mL / AR 4.4 (AR_AUC, t1/2=10d). Very long t1/2 makes AR uncertain."
+    },
+    "pirtobrutinib": {
+      "dose_mg": 200,
+      "obs_single_dose": 3.99,
+      "meta_pred": 0.935,
+      "fold_error": 0.23,
+      "direction": "under-prediction",
+      "notes": "SS Cmax 6503 ng/mL / AR 1.63"
+    },
+    "pacritinib": {
+      "dose_mg": 200,
+      "obs_single_dose": 2.18,
+      "meta_pred": 0.372,
+      "fold_error": 0.17,
+      "direction": "under-prediction",
+      "notes": "SS Cmax 8.4 mg/L / AR 3.86 (from '386% accumulation')"
+    },
+    "crinecerfont": {
+      "dose_mg": 100,
+      "obs_single_dose": 1.44,
+      "meta_pred": 0.334,
+      "fold_error": 0.23,
+      "direction": "under-prediction",
+      "notes": "SS Cmax 4231 ng/mL / AR 2.94 (BID, t1/2~20h). Also EXTREME_LIPOPHILIC flag."
+    },
+    "revumenib": {
+      "dose_mg": 270,
+      "obs_single_dose": 1.172,
+      "meta_pred": 0.546,
+      "fold_error": 0.47,
+      "direction": "under-prediction",
+      "notes": "SS Cmax 2344 ng/mL (270mg BID, no CYP3A4 inh) / AR 2.0"
+    }
+  },
+  "scientific_interpretation": [
+    "4/5 new drugs: Sisyphus under-predicts by 2-6x (pirtobrutinib, pacritinib, crinecerfont, revumenib)",
+    "1/5: Sisyphus over-predicts by 4x (vorasidenib, very long t1/2 creates uncertainty in AR correction)",
+    "These 5 drugs are kinase inhibitors / protein-targeted drugs with moderate-to-high MW (400-640 Da)",
+    "Systematic under-prediction consistent with 2.283 baseline AAFE — engine+ML pipeline has ~2-3x random error envelope",
+    "The 1.68 in-domain prospective AAFE from N=10 was selection-biased; honest prospective AAFE closer to 2.5"
+  ],
+  "limitations": [
+    "AR correction introduces uncertainty (~20-50%) in observed value back-calculation",
+    "All 5 new drugs are SS-corrected, not true single-dose measurements",
+    "FDA label values are aggregate population means (CV% 32-73%)",
+    "Reference values for 2 drugs (vorasidenib, pacritinib) also warrant independent verification"
+  ]
+}
