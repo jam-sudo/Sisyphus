@@ -1,0 +1,84 @@
+{
+  "description": "Prospective N=15 with VDss analytical track enabled (alpha=0.20)",
+  "aafe_n15": 2.3587775383093055,
+  "pct_2fold": 0.5333333333333333,
+  "baseline_n15_aafe": 2.478,
+  "delta": -0.11922246169069473,
+  "per_drug": {
+    "resmetirom": {
+      "meta": 1.449,
+      "obs": 0.971,
+      "fold": 1.4922760041194645
+    },
+    "aficamten": {
+      "meta": 0.124,
+      "obs": 0.0705,
+      "fold": 1.7588652482269505
+    },
+    "elafibranor": {
+      "meta": 1.27,
+      "obs": 0.802,
+      "fold": 1.5835411471321694
+    },
+    "inavolisib": {
+      "meta": 0.034,
+      "obs": 0.035,
+      "fold": 0.9714285714285714
+    },
+    "danicopan": {
+      "meta": 0.303,
+      "obs": 0.27,
+      "fold": 1.122222222222222
+    },
+    "berotralstat": {
+      "meta": 0.342,
+      "obs": 0.032,
+      "fold": 10.6875
+    },
+    "vimseltinib": {
+      "meta": 0.215,
+      "obs": 0.283,
+      "fold": 0.7597173144876326
+    },
+    "gepotidacin": {
+      "meta": 2.583,
+      "obs": 3.0,
+      "fold": 0.8610000000000001
+    },
+    "taletrectinib": {
+      "meta": 2.277,
+      "obs": 0.24,
+      "fold": 9.4875
+    },
+    "suzetrigine": {
+      "meta": 0.678,
+      "obs": 0.62,
+      "fold": 1.0935483870967744
+    },
+    "vorasidenib": {
+      "meta": 0.128,
+      "obs": 0.0302,
+      "fold": 4.23841059602649
+    },
+    "pirtobrutinib": {
+      "meta": 1.089,
+      "obs": 3.99,
+      "fold": 0.27293233082706764
+    },
+    "pacritinib": {
+      "meta": 0.485,
+      "obs": 2.18,
+      "fold": 0.22247706422018346
+    },
+    "crinecerfont": {
+      "meta": 0.421,
+      "obs": 1.44,
+      "fold": 0.2923611111111111
+    },
+    "revumenib": {
+      "meta": 0.585,
+      "obs": 1.172,
+      "fold": 0.4991467576791809
+    }
+  }
+}

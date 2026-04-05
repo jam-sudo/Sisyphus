@@ -188,6 +188,17 @@ def predict(
         warnings_list.append(f"CL/F prediction failed: {e}")
         logger.warning("CL/F prediction failed: %s", e)
 
+    # ── Step 3b: VDss analytical Cmax = dose / (VDss_L_per_kg * 70 kg) ──
+    # LOOCV-validated: adds 4th track to meta-learner, Δ=-0.113 AAFE on holdout.
+    _BW_KG_VDSS = 70.0
+    try:
+        vdss_cmax_val: float | None = dose_mg / (adme.vdss.mean * _BW_KG_VDSS)
+        logger.info("VDss analytical: Cmax=%.4f mg/L (VDss=%.2f L/kg)",
+                    vdss_cmax_val, adme.vdss.mean)
+    except Exception as e:
+        vdss_cmax_val = None
+        logger.warning("VDss analytical failed: %s", e)
+
     # ── Step 4: Meta-learner ─────────────────────────────────────────────
     meta = MetaLearner()
     final_pk = meta.combine(
@@ -202,6 +213,7 @@ def predict(
         compound_type=profile.compound_type,
         pgp_flag="PGP_EFFLUX_RISK" in profile.ad_flags,
         clf_pk=clf_pk,
+        vdss_cmax=vdss_cmax_val,
     )
 
     # ── Determine method ─────────────────────────────────────────────────

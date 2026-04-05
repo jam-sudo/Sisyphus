@@ -35,6 +35,10 @@ _W_ENGINE_OTHER = 0.35
 _W_ML_OTHER = 0.50
 _W_CLF_OTHER = 0.15
 
+# VDss analytical track weight (LOOCV-validated: alpha=0.20, Δ=-0.113 AAFE on N=107 holdout)
+# Applied uniformly across compound types. Scales existing 3-track weights by (1-_W_VDSS).
+_W_VDSS = 0.20
+
 # When engine and ML disagree by more than this factor (in log10 units),
 # reduce engine weight to prevent engine outliers from dominating.
 _DISAGREEMENT_THRESHOLD_LOG10 = 1.0  # 10-fold disagreement
@@ -81,6 +85,7 @@ class MetaLearner:
         compound_type: str = "neutral",
         pgp_flag: bool = False,
         clf_pk: PKEndpoints | None = None,
+        vdss_cmax: float | None = None,
     ) -> PKEndpoints:
         """Produce combined PK endpoints from engine, ML, and CL/F results.
 
@@ -99,6 +104,7 @@ class MetaLearner:
             compound_type: One of "neutral", "acid", "base", "zwitterion".
             pgp_flag: Whether the compound is a P-gp substrate.
             clf_pk: PK endpoints from CL/F analytical track (may be None).
+            vdss_cmax: VDss-analytical Cmax (dose/(VDss*70)) in mg/L (may be None).
 
         Returns:
             Combined PKEndpoints with cv=0.3 on Cmax.
@@ -115,12 +121,18 @@ class MetaLearner:
 
         tracks: list[tuple[float, float]] = []  # (log_cmax, weight)
 
+        # Scale engine/ml/clf weights by (1-_W_VDSS) when VDss track is available
+        vdss_available = vdss_cmax is not None and vdss_cmax > 0
+        scale = (1.0 - _W_VDSS) if vdss_available else 1.0
+
         if cmax_pbpk is not None and cmax_pbpk > 0:
-            tracks.append((np.log10(max(cmax_pbpk, 1e-10)), w_eng_base))
+            tracks.append((np.log10(max(cmax_pbpk, 1e-10)), w_eng_base * scale))
         if cmax_ml is not None and cmax_ml > 0:
-            tracks.append((np.log10(max(cmax_ml, 1e-10)), w_ml_base))
+            tracks.append((np.log10(max(cmax_ml, 1e-10)), w_ml_base * scale))
         if cmax_clf is not None and cmax_clf > 0:
-            tracks.append((np.log10(max(cmax_clf, 1e-10)), w_clf_base))
+            tracks.append((np.log10(max(cmax_clf, 1e-10)), w_clf_base * scale))
+        if vdss_available:
+            tracks.append((np.log10(max(vdss_cmax, 1e-10)), _W_VDSS))
 
         if len(tracks) >= 2:
             # Apply disagreement penalty to engine track
