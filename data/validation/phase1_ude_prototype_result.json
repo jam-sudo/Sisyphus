@@ -1,0 +1,25 @@
+{
+  "phase": "Phase 1 UDE prototype",
+  "date": "2026-04-04",
+  "verdict": "FAIL (falsified pre-registered criterion)",
+  "pre_registered_criterion": "Holdout AAFE < 2.79 (delta < -0.15 from baseline 2.943)",
+  "baseline_reduced_pbpk_aafe": {
+    "train": 3.138,
+    "holdout": 2.943
+  },
+  "trained_ude_best_holdout": 2.943,
+  "delta_holdout": 0.0,
+  "verdict_reasoning": [
+    "Tiny NN (10 phys features) x 5 seeds: all best-epoch=0, no signal",
+    "Large NN (2048 Morgan FP): monotonic holdout degradation (overfit)",
+    "Residual predictability test: CV R2 NEGATIVE (-0.31 FP, -0.20 phys) on N=160",
+    "Conclusion: Cmax residual not learnable from molecular structure at this scale"
+  ],
+  "root_cause": "Target noise in clinical Cmax labels (study variability, population, formulation) creates residuals orthogonal to molecular structure. UDE architectural novelty (gradient through solver) cannot overcome an information-theoretic ceiling.",
+  "comparison": {
+    "post_hoc_methods_33": "r > 0.986 with baseline (math bound)",
+    "ude_phase_1": "CV R^2 on residual < 0 (info theory bound)",
+    "same_truth": "Information absent from inputs cannot be synthesized by architecture"
+  },
+  "recommendation": "Do not proceed to full JAX engine port. Phase 1 falsified."
+}
