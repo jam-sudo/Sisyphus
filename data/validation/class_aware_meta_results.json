@@ -1,0 +1,154 @@
+{
+  "holdout_sweep": {
+    "n_kinase_in_cohort": 12,
+    "n_kinase_in_domain": 5,
+    "configs": [
+      {
+        "config": "baseline (adaptive)",
+        "w_eng_kinase": null,
+        "w_ml_kinase": null,
+        "aafe_all": 2.8078368605281367,
+        "pct_2f_all": 0.45794392523364486,
+        "n_all": 107,
+        "aafe_id": 2.819981203436208,
+        "pct_2f_id": 0.4588235294117647,
+        "n_id": 85,
+        "aafe_kinase": 3.155084306911315,
+        "pct_2f_kinase": 0.4166666666666667,
+        "n_kinase": 12
+      },
+      {
+        "config": "kinase: 1.00/0.00 (engine only)",
+        "w_eng_kinase": 1.0,
+        "w_ml_kinase": 0.0,
+        "aafe_all": 2.9312852865753602,
+        "pct_2f_all": 0.4392523364485981,
+        "n_all": 107,
+        "aafe_id": 2.833307318029113,
+        "pct_2f_id": 0.4470588235294118,
+        "n_id": 85,
+        "aafe_kinase": 4.630519710997023,
+        "pct_2f_kinase": 0.25,
+        "n_kinase": 12
+      },
+      {
+        "config": "kinase: 0.80/0.20",
+        "w_eng_kinase": 0.8,
+        "w_ml_kinase": 0.2,
+        "aafe_all": 2.8651349969152884,
+        "pct_2f_all": 0.4392523364485981,
+        "n_all": 107,
+        "aafe_id": 2.825947122331933,
+        "pct_2f_id": 0.4470588235294118,
+        "n_id": 85,
+        "aafe_kinase": 3.777798875845302,
+        "pct_2f_kinase": 0.25,
+        "n_kinase": 12
+      },
+      {
+        "config": "kinase: 0.70/0.30",
+        "w_eng_kinase": 0.7,
+        "w_ml_kinase": 0.3,
+        "aafe_all": 2.8431573436576776,
+        "pct_2f_all": 0.45794392523364486,
+        "n_all": 107,
+        "aafe_id": 2.822274197543635,
+        "pct_2f_id": 0.4470588235294118,
+        "n_id": 85,
+        "aafe_kinase": 3.527116162366064,
+        "pct_2f_kinase": 0.4166666666666667,
+        "n_kinase": 12
+      },
+      {
+        "config": "kinase: 0.60/0.40",
+        "w_eng_kinase": 0.6,
+        "w_ml_kinase": 0.4,
+        "aafe_all": 2.8213482748623107,
+        "pct_2f_all": 0.4485981308411215,
+        "n_all": 107,
+        "aafe_id": 2.81860604650938,
+        "pct_2f_id": 0.4470588235294118,
+        "n_id": 85,
+        "aafe_kinase": 3.2930679561495384,
+        "pct_2f_kinase": 0.3333333333333333,
+        "n_kinase": 12
+      },
+      {
+        "config": "kinase: 0.50/0.50",
+        "w_eng_kinase": 0.5,
+        "w_ml_kinase": 0.5,
+        "aafe_all": 2.8032092442655885,
+        "pct_2f_all": 0.45794392523364486,
+        "n_all": 107,
+        "aafe_id": 2.8149426630246506,
+        "pct_2f_id": 0.4588235294117647,
+        "n_id": 85,
+        "aafe_kinase": 3.1090197112373805,
+        "pct_2f_kinase": 0.4166666666666667,
+        "n_kinase": 12
+      },
+      {
+        "config": "kinase: 0.35/0.65 (current 'other')",
+        "w_eng_kinase": 0.35,
+        "w_ml_kinase": 0.65,
+        "aafe_all": 2.7984869018960103,
+        "pct_2f_all": 0.4672897196261682,
+        "n_all": 107,
+        "aafe_id": 2.809456513400375,
+        "pct_2f_id": 0.4588235294117647,
+        "n_id": 85,
+        "aafe_kinase": 3.0626287302146302,
+        "pct_2f_kinase": 0.5,
+        "n_kinase": 12
+      }
+    ]
+  },
+  "prospective_sweep": [
+    {
+      "config": "baseline (adaptive)",
+      "aafe_all": 2.54626252719022,
+      "pct_2f_all": 0.4666666666666667,
+      "n_all": 15,
+      "aafe_kinase": 2.953304480564132,
+      "pct_2f_kinase": 0.3333333333333333,
+      "n_kinase": 6
+    },
+    {
+      "config": "kinase: 1.00/0.00 (engine)",
+      "aafe_all": 2.4639386693461303,
+      "pct_2f_all": 0.5333333333333333,
+      "n_all": 15,
+      "aafe_kinase": 2.72035142413493,
+      "pct_2f_kinase": 0.5,
+      "n_kinase": 6
+    },
+    {
+      "config": "kinase: 0.80/0.20",
+      "aafe_all": 2.502259796617376,
+      "pct_2f_all": 0.5333333333333333,
+      "n_all": 15,
+      "aafe_kinase": 2.8273610654366546,
+      "pct_2f_kinase": 0.5,
+      "n_kinase": 6
+    },
+    {
+      "config": "kinase: 0.70/0.30",
+      "aafe_all": 2.521643284469018,
+      "pct_2f_all": 0.5333333333333333,
+      "n_all": 15,
+      "aafe_kinase": 2.8824342140171693,
+      "pct_2f_kinase": 0.5,
+      "n_kinase": 6
+    },
+    {
+      "config": "kinase: 0.60/0.40",
+      "aafe_all": 2.5411769244358804,
+      "pct_2f_all": 0.4666666666666667,
+      "n_all": 15,
+      "aafe_kinase": 2.9385801126371653,
+      "pct_2f_kinase": 0.3333333333333333,
+      "n_kinase": 6
+    }
+  ],
+  "kinase_class_def": "MW > 450 AND 2.5 <= logP <= 5.5"
+}
