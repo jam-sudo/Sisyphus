@@ -1,0 +1,36 @@
+{
+  "contamination_audit": {
+    "mmpk_clean_leaks": [
+      "vadadustat",
+      "aprocitentan",
+      "seladelpar"
+    ],
+    "tdc_leaks": [],
+    "drugbank_fup_enrichment": "used for all 9 (same as holdout, apples-to-apples)",
+    "clinical_pk_leaks": []
+  },
+  "previous_claim_retracted": {
+    "claim": "N=7 in-domain Meta AAFE = 1.22",
+    "reason": "Included 2 drugs (aprocitentan, seladelpar) from ML training data"
+  },
+  "corrected_results": {
+    "truly_clean_all": {
+      "N": 6,
+      "meta_aafe": 1.736700245839921
+    },
+    "truly_clean_in_domain": {
+      "N": 5,
+      "meta_aafe": 1.2796829617639056
+    },
+    "holdout_in_domain_reference": {
+      "N": 83,
+      "meta_aafe": 2.74
+    },
+    "gap_factor": 2.1411553344612826
+  },
+  "caveats": [
+    "N=5 in-domain still small for statistical certainty",
+    "DrugBank fup (measured) used \u2014 same as holdout, not a differentiator",
+    "2/5 drugs (danicopan, inavolisib) have medium-confidence Cmax (SS/AR estimate)"
+  ]
+}
