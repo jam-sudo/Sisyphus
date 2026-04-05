@@ -1,0 +1,141 @@
+{
+  "inflation": 1.4,
+  "results": [
+    {
+      "drug": "morphine",
+      "scn": "1obs",
+      "covered": true,
+      "post_mean": 0.025604250926879037,
+      "obs": 0.01865,
+      "ci_lo": 0.017878217761905475,
+      "ci_hi": 0.03348476112360354
+    },
+    {
+      "drug": "morphine",
+      "scn": "2obs",
+      "covered": true,
+      "post_mean": 0.02723792943314522,
+      "obs": 0.01865,
+      "ci_lo": 0.018495535557599738,
+      "ci_hi": 0.03887629960693899
+    },
+    {
+      "drug": "morphine",
+      "scn": "3obs",
+      "covered": true,
+      "post_mean": 0.025928483715531872,
+      "obs": 0.01865,
+      "ci_lo": 0.01742665029552914,
+      "ci_hi": 0.03749893758904958
+    },
+    {
+      "drug": "amantadine",
+      "scn": "1obs",
+      "covered": true,
+      "post_mean": 0.23048250617996804,
+      "obs": 0.22,
+      "ci_lo": 0.15777980164638547,
+      "ci_hi": 0.3194006362293138
+    },
+    {
+      "drug": "amantadine",
+      "scn": "2obs",
+      "covered": true,
+      "post_mean": 0.2382593045677214,
+      "obs": 0.22,
+      "ci_lo": 0.15598935570124406,
+      "ci_hi": 0.3444614994480387
+    },
+    {
+      "drug": "amantadine",
+      "scn": "3obs",
+      "covered": true,
+      "post_mean": 0.22824974871902137,
+      "obs": 0.22,
+      "ci_lo": 0.14769306023139833,
+      "ci_hi": 0.3319121921621612
+    },
+    {
+      "drug": "ketorolac",
+      "scn": "1obs",
+      "covered": false,
+      "post_mean": 0.4340266928399894,
+      "obs": 0.8,
+      "ci_lo": 0.35954925756450246,
+      "ci_hi": 0.5089678331186318
+    },
+    {
+      "drug": "ketorolac",
+      "scn": "2obs",
+      "covered": false,
+      "post_mean": 0.4552739684729398,
+      "obs": 0.8,
+      "ci_lo": 0.3742832527565058,
+      "ci_hi": 0.5423717542909195
+    },
+    {
+      "drug": "ketorolac",
+      "scn": "3obs",
+      "covered": false,
+      "post_mean": 0.4538905973129139,
+      "obs": 0.8,
+      "ci_lo": 0.37122119692320193,
+      "ci_hi": 0.5488882084697647
+    },
+    {
+      "drug": "clozapine",
+      "scn": "1obs",
+      "covered": true,
+      "post_mean": 0.48634238889301,
+      "obs": 0.413,
+      "ci_lo": 0.36521459084856284,
+      "ci_hi": 0.628150121031573
+    },
+    {
+      "drug": "clozapine",
+      "scn": "2obs",
+      "covered": true,
+      "post_mean": 0.45461281279995747,
+      "obs": 0.413,
+      "ci_lo": 0.3567666181479113,
+      "ci_hi": 0.5722966243537448
+    },
+    {
+      "drug": "clozapine",
+      "scn": "3obs",
+      "covered": true,
+      "post_mean": 0.4669544779463075,
+      "obs": 0.413,
+      "ci_lo": 0.3746383586548905,
+      "ci_hi": 0.5636012230284189
+    },
+    {
+      "drug": "rivaroxaban",
+      "scn": "1obs",
+      "covered": false,
+      "post_mean": 0.09673834852907982,
+      "obs": 0.1432,
+      "ci_lo": 0.07184275004713597,
+      "ci_hi": 0.12261290205450555
+    },
+    {
+      "drug": "rivaroxaban",
+      "scn": "2obs",
+      "covered": false,
+      "post_mean": 0.09848836814613757,
+      "obs": 0.1432,
+      "ci_lo": 0.07020818125249263,
+      "ci_hi": 0.13597307850249252
+    },
+    {
+      "drug": "rivaroxaban",
+      "scn": "3obs",
+      "covered": false,
+      "post_mean": 0.09849209144751891,
+      "obs": 0.1432,
+      "ci_lo": 0.06845464171871499,
+      "ci_hi": 0.1361976320832334
+    }
+  ],
+  "coverage": 0.6
+}
