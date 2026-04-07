@@ -1,11 +1,13 @@
 # CLAUDE.md — Sisyphus
 
-## Session State (마지막 업데이트: 2026-03-27)
+## Session State (마지막 업데이트: 2026-04-07)
 
-### Current Metrics (N=107)
-Engine AAFE: 3.415 | Meta AAFE: 2.283 | %2-fold: 54.2%
-In-domain AAFE: 2.100 (N=83, excluding 24 AD-flagged/ER drugs)
-Adaptive weight: base=0.45, other=0.00 (LOOCV 107/107, w_base stability 82%)
+### Current Metrics (N=107, post-leakage-fix, clean)
+Engine AAFE: 3.421 | Meta AAFE: 2.812 | %2-fold: 47.7%
+In-domain AAFE: 2.591 (N=82, excluding 25 AD-flagged/ER/ref-quality drugs)
+Weights: base=(0.60/0.40/0.00), other=(0.35/0.50/0.15) (LOOCV-validated, 93%/84% stability)
+NOTE: Prior headline (2.283) was invalidated by holdout data leakage fix on 2026-04-04.
+      76-100 of 107 holdout drugs were in ML training data. See commit 5e5a3d0.
 
 ### Holdout Expansion (2026-03-26)
 - N=61 → N=107 (+46 drugs from OSP repos, FDA labels, curated literature)
