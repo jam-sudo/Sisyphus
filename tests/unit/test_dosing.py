@@ -225,3 +225,22 @@ class TestRecommendDose:
         )
 
         assert result.recommended_dose_mg <= 500.0
+
+    def test_enkf_method_returns_recommendation(self, midazolam_setup):
+        """recommend_dose with method='enkf' should return a valid DoseRecommendation."""
+        graph, compiled, drug = midazolam_setup
+        regimen = DosingRegimen.single_oral(5.0)
+
+        result = recommend_dose(
+            compiled, graph, drug, regimen,
+            observations=[Observation(time_h=1.0, concentration=0.02)],
+            target_css=0.05,
+            n_prior=100,
+            seed=42,
+            method="enkf",
+        )
+
+        assert isinstance(result, DoseRecommendation)
+        assert result.recommended_dose_mg > 0
+        assert result.posterior_css_current > 0
+        assert result.tdm_result.ess > 50  # EnKF preserves all samples

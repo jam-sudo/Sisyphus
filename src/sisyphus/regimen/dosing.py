@@ -28,6 +28,7 @@ from sisyphus.engine.compiler import CompiledODE
 from sisyphus.graph.body import BodyGraph
 from sisyphus.core import DrugOnGraph
 from sisyphus.regimen.tdm import Observation, TDMResult, bayesian_update
+from sisyphus.regimen.tdm_enkf import EnKFResult, enkf_update
 from sisyphus.regimen.types import DosingRegimen
 
 logger = logging.getLogger(__name__)
@@ -63,7 +64,7 @@ class DoseRecommendation:
         predicted_css_recommended: Predicted Css at recommended dose (mg/L).
         posterior_cv: Posterior CV of Cmax prediction.
         scaling_ratio: recommended_dose / current_dose.
-        tdm_result: Full TDMResult from the Bayesian update.
+        tdm_result: Full TDMResult or EnKFResult from the Bayesian update.
         method: Scaling method used.
     """
 
@@ -74,7 +75,7 @@ class DoseRecommendation:
     predicted_css_recommended: float
     posterior_cv: float
     scaling_ratio: float
-    tdm_result: TDMResult
+    tdm_result: TDMResult | EnKFResult
     method: str = "linear_scaling"
 
 
@@ -120,6 +121,7 @@ def recommend_dose(
     round_increment: float = DEFAULT_ROUND_INCREMENT,
     n_prior: int = 2000,
     seed: int = 42,
+    method: str = "is",
 ) -> DoseRecommendation:
     """Recommend an adjusted dose to achieve a target concentration.
 
@@ -141,6 +143,8 @@ def recommend_dose(
         round_increment: Round recommended dose to this increment (mg).
         n_prior: Number of prior MC samples for TDM.
         seed: RNG seed.
+        method: TDM method — ``"is"`` for importance sampling,
+            ``"enkf"`` for Ensemble Kalman Filter.
 
     Returns:
         DoseRecommendation with adjusted dose and predictions.
@@ -152,12 +156,20 @@ def recommend_dose(
         raise ValueError(f"target_css must be positive, got {target_css}")
 
     # Step 1: Bayesian update at current dose
-    tdm = bayesian_update(
-        compiled, graph, drug, regimen,
-        observations=observations,
-        n_prior=n_prior,
-        seed=seed,
-    )
+    if method == "enkf":
+        tdm = enkf_update(
+            compiled, graph, drug, regimen,
+            observations=observations,
+            n_ensemble=n_prior,
+            seed=seed,
+        )
+    else:
+        tdm = bayesian_update(
+            compiled, graph, drug, regimen,
+            observations=observations,
+            n_prior=n_prior,
+            seed=seed,
+        )
 
     posterior_css = tdm.posterior_cmax.mean
     if posterior_css <= 0:

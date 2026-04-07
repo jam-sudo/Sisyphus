@@ -49,6 +49,7 @@ def main() -> None:
     tdm_parser.add_argument("--doses", type=int, default=1, help="Number of doses administered (default: 1)")
     tdm_parser.add_argument("--route", default="oral", choices=["oral", "iv"])
     tdm_parser.add_argument("--n-samples", type=int, default=2000, help="Prior MC samples (default: 2000)")
+    tdm_parser.add_argument("--method", default="is", choices=["is", "enkf"], help="TDM method: is (importance sampling) or enkf (Ensemble Kalman Filter)")
     tdm_parser.add_argument("--verbose", "-v", action="store_true")
 
     # ddi command
@@ -81,6 +82,7 @@ def main() -> None:
     da_parser.add_argument("--doses", type=int, default=1, help="Number of doses administered")
     da_parser.add_argument("--route", default="oral", choices=["oral", "iv"])
     da_parser.add_argument("--n-samples", type=int, default=2000, help="Prior MC samples")
+    da_parser.add_argument("--method", default="is", choices=["is", "enkf"], help="TDM method: is (importance sampling) or enkf (Ensemble Kalman Filter)")
     da_parser.add_argument("--verbose", "-v", action="store_true")
 
     # benchmark command
@@ -225,7 +227,6 @@ def _run_tdm(args: argparse.Namespace) -> None:
         level=logging.DEBUG if args.verbose else logging.WARNING,
         format="%(levelname)s %(name)s: %(message)s",
     )
-    from sisyphus.regimen.tdm import bayesian_update
     from sisyphus.regimen.types import DosingRegimen
 
     graph, compiled, drug = _build_drug_and_graph(args.smiles, args.dose, args.route)
@@ -246,14 +247,29 @@ def _run_tdm(args: argparse.Namespace) -> None:
 
     observations = _parse_observations(args.obs)
 
-    result = bayesian_update(
-        compiled, graph, drug, regimen,
-        observations=observations,
-        n_prior=args.n_samples,
-        seed=42,
-    )
+    if args.method == "enkf":
+        from sisyphus.regimen.tdm_enkf import enkf_update
+
+        result = enkf_update(
+            compiled, graph, drug, regimen,
+            observations=observations,
+            n_ensemble=args.n_samples,
+            seed=42,
+        )
+        method_label = "EnKF"
+    else:
+        from sisyphus.regimen.tdm import bayesian_update
+
+        result = bayesian_update(
+            compiled, graph, drug, regimen,
+            observations=observations,
+            n_prior=args.n_samples,
+            seed=42,
+        )
+        method_label = "Importance Sampling"
 
     print(f"Drug: {drug.name}")
+    print(f"Method: {method_label}")
     print(f"Observations: {len(observations)}")
     for obs in observations:
         print(f"  t={obs.time_h:.1f}h: {obs.concentration:.4f} mg/L")
@@ -304,6 +320,7 @@ def _run_dose_adjust(args: argparse.Namespace) -> None:
         target_css=args.target_css,
         n_prior=args.n_samples,
         seed=42,
+        method=args.method,
     )
 
     print(f"Drug: {drug.name}")

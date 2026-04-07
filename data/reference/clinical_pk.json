@@ -18428,7 +18428,11 @@
       "pk_params": {
         "cmax_mg_L": 9.8
       },
-      "smiles": "Cc1cccc(C)c1OCC(=O)N[C@@H](Cc1ccccc1)[C@@H](O)C[C@H](Cc1ccccc1)NC(=O)[C@H](C(C)C)N1CCCNC1=O"
+      "smiles": "Cc1cccc(C)c1OCC(=O)N[C@@H](Cc1ccccc1)[C@@H](O)C[C@H](Cc1ccccc1)NC(=O)[C@H](C(C)C)N1CCCNC1=O",
+      "ref_quality_flags": [
+        "DDI_CONFOUNDER"
+      ],
+      "ref_quality_notes": "Cmax from Kaletra (lopinavir+ritonavir); ritonavir is strong CYP3A4 inhibitor boosting exposure ~25x"
     },
     "lorazepam": {
       "name": "lorazepam",
@@ -24803,7 +24807,11 @@
       "pk_params": {
         "cmax_mg_L": 0.631
       },
-      "smiles": "CC(=O)Oc1cc2c(s1)CCN(C(C(=O)C1CC1)c1ccccc1F)C2"
+      "smiles": "CC(=O)Oc1cc2c(s1)CCN(C(C(=O)C1CC1)c1ccccc1F)C2",
+      "ref_quality_flags": [
+        "ACTIVE_METABOLITE_REF"
+      ],
+      "ref_quality_notes": "Cmax=631 ng/mL is for active metabolite R-138727, not parent prasugrel (~1-2 ng/mL); Chinese population study"
     },
     "pravastatin": {
       "name": "pravastatin",
