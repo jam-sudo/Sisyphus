@@ -13,14 +13,17 @@ Types:
 
 from sisyphus.regimen.profile import ConcentrationProfile, SteadyStateMetrics
 from sisyphus.regimen.tdm import Observation, TDMResult, bayesian_update
+from sisyphus.regimen.tdm_enkf import EnKFResult, enkf_update
 from sisyphus.regimen.types import DosingEvent, DosingRegimen
 
 __all__ = [
     "ConcentrationProfile",
     "DosingEvent",
     "DosingRegimen",
+    "EnKFResult",
     "Observation",
     "SteadyStateMetrics",
     "TDMResult",
     "bayesian_update",
+    "enkf_update",
 ]
