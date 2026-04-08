@@ -1,5 +1,7 @@
 {
   "retrained_at": "2026-04-04",
+  "predictions_regenerated_at": "2026-04-08",
+  "figure2_regenerated_at": "2026-04-08",
   "models_retrained": [
     "xgboost_cmax",
     "xgboost_fup_v2",
@@ -10,44 +12,93 @@
     "engine_aafe": 3.415,
     "ml_aafe": 2.34,
     "clf_aafe": 3.134,
-    "meta_aafe": 2.28,
-    "meta_pct_2fold": 54.2,
+    "meta_aafe": 2.283,
+    "meta_pct_2fold": 53.3,
     "in_domain_meta_aafe": 2.097,
     "weights": {
-      "base": [
-        0.45,
-        0.55,
-        0
-      ],
-      "other": [
-        0,
-        1,
-        0
-      ]
-    }
+      "base": {"w_engine": 0.45, "w_ml": 0.55, "w_clf": 0.00},
+      "other": {"w_engine": 0.00, "w_ml": 1.00, "w_clf": 0.00}
+    },
+    "n_holdout_drugs_in_training": 76,
+    "holdout_predictions_file": "3track_holdout_predictions.json.contaminated.bak"
   },
   "clean": {
-    "engine_aafe": 3.4206784508100605,
-    "ml_aafe": 3.0570724937287688,
-    "clf_aafe": 3.1274986857059344,
-    "meta_aafe": 2.8078368605281367,
-    "meta_pct_2fold": 45.794392523364486,
-    "in_domain_meta_aafe": 2.735434666620213,
+    "engine_aafe": 3.421,
+    "ml_aafe": 3.057,
+    "clf_aafe": 3.127,
+    "meta_aafe": 2.808,
+    "meta_pct_2fold": 45.8,
+    "in_domain_meta_aafe": 2.735,
     "weights": {
-      "base": [
-        0.6,
-        0.4,
-        0
-      ],
-      "other": [
-        0.35,
-        0.5,
-        0.15
-      ]
-    }
+      "base": {"w_engine": 0.60, "w_ml": 0.40, "w_clf": 0.00},
+      "other": {"w_engine": 0.35, "w_ml": 0.50, "w_clf": 0.15}
+    },
+    "n_training_drugs_original": 1128,
+    "n_training_drugs_clean": 1028,
+    "n_holdout_drugs_excluded": 100,
+    "holdout_predictions_file": "3track_holdout_predictions.json"
   },
-  "leakage_inflation_pct": {
-    "ml_aafe": -23.456182187362593,
-    "meta_aafe": -18.798701162034536
+  "leakage_inflation": {
+    "ml_aafe_pct": -23.5,
+    "meta_aafe_pct": -18.8,
+    "meta_pct_2fold_delta": -7.5,
+    "explanation": "Contaminated ML saw 76/107 holdout drugs during training, inflating ML AAFE from 3.057 to 2.340 (23.5%). Meta-learner inherited this, inflating from 2.808 to 2.283 (18.8%). %2-fold inflated from 45.8% to 53.3% (+7.5pp)."
+  },
+  "remediation_steps": [
+    "2026-04-04: Identified 76 holdout drugs in ML training data via 3-key audit (SMILES, InChIKey14, name)",
+    "2026-04-04: Retrained xgboost_cmax, xgboost_fup_v2, xgboost_peff, xgboost_clint excluding all 107 holdout drugs",
+    "2026-04-04: Re-optimized meta-learner weights via LOOCV on clean predictions",
+    "2026-04-04: Saved contaminated models as .contaminated.bak",
+    "2026-04-08: Regenerated 3track_holdout_predictions.json with clean pipeline (107 drugs × 3 tracks)",
+    "2026-04-08: Regenerated Figure 2 scatter plot with clean AAFE=2.808 annotation",
+    "2026-04-08: Backed up contaminated predictions as .contaminated.bak"
+  ],
+  "artifacts_updated": {
+    "models": [
+      "models/direct_pk/xgboost_cmax.json",
+      "models/adme/xgboost_fup_v2.json",
+      "models/adme/xgboost_peff.json",
+      "models/adme/xgboost_clint.json",
+      "models/direct_pk/meta.json"
+    ],
+    "data": [
+      "data/training/3track_holdout_predictions.json"
+    ],
+    "figures": [
+      "docs/figures/figure2_scatter.png"
+    ],
+    "backups": [
+      "models/direct_pk/xgboost_cmax.json.contaminated.bak",
+      "models/adme/xgboost_fup_v2.json.contaminated.bak",
+      "models/adme/xgboost_peff.json.contaminated.bak",
+      "models/adme/xgboost_clint.json.contaminated.bak",
+      "data/training/3track_holdout_predictions.json.contaminated.bak"
+    ]
+  },
+  "per_track_comparison": {
+    "engine": {
+      "contaminated_aafe": 3.415,
+      "clean_aafe": 3.421,
+      "delta_pct": 0.2,
+      "note": "Engine uses ADME models (fup, peff, clint) which were retrained. Minimal change because engine is mechanistic — ADME predictions are just one input among many."
+    },
+    "ml": {
+      "contaminated_aafe": 2.340,
+      "clean_aafe": 3.057,
+      "delta_pct": 30.6,
+      "note": "ML track most affected. 76 holdout drugs leaked into training, allowing model to memorize their Cmax values directly."
+    },
+    "clf": {
+      "contaminated_aafe": 3.134,
+      "clean_aafe": 3.127,
+      "delta_pct": -0.2,
+      "note": "CL/F analytical model is parameter-free (no training), unaffected by contamination."
+    },
+    "meta": {
+      "contaminated_aafe": 2.283,
+      "clean_aafe": 2.808,
+      "delta_pct": 23.0,
+      "note": "Meta-learner inherited ML contamination. Clean weights also changed: base w_engine 0.45→0.60, non-base w_ml 1.00→0.50 (CL/F now contributes 0.15)."
+    }
   }
 }
