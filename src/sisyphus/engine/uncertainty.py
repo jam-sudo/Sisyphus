@@ -173,6 +173,7 @@ class UncertaintyEngine:
         seed: int = 42,
         t_span: tuple[float, float] = (0.0, 24.0),
         observation_node: str = "venous_blood",
+        backend: str = "scipy",
     ) -> MCResult:
         """Fast MC propagation -- returns aggregated PK only (no SimResults).
 
@@ -192,15 +193,41 @@ class UncertaintyEngine:
         Returns:
             MCResult with aggregated PKEndpoints and 90% PI.
         """
-        cmax_samples: list[float] = []
-        tmax_samples: list[float] = []
-        auc_samples: list[float] = []
-        n_failures = 0
-
         # Pre-compute initial conditions template (reused each iteration)
         y0_template = np.zeros(compiled.n_states)
         admin_idx = compiled.state_index[drug.administration_node]
         y0_template[admin_idx] = drug.dose_mg
+
+        # ── JAX backend: vmap over all samples in one JIT call ──
+        if backend == "jax":
+            from sisyphus.engine.solver_jax import solve_mc_jax
+
+            params_list = []
+            for i in range(n_samples):
+                rng = np.random.default_rng(seed + i)
+                realized_graph = graph.sample(rng)
+                realized_drug = drug.sample(rng)
+                params_list.append(ResolvedParams(realized_graph, realized_drug))
+
+            cmax_arr, tmax_arr, auc_arr, success_arr = solve_mc_jax(
+                compiled, params_list, y0_template, t_span, observation_node,
+            )
+
+            mask = (success_arr > 0.5) & (cmax_arr > 0)
+            cmax_arr = cmax_arr[mask]
+            tmax_arr = tmax_arr[mask]
+            auc_arr = auc_arr[mask]
+            n_ok = int(np.sum(mask))
+            n_failures = n_samples - n_ok
+
+            logger.info("MC-fast JAX: %d/%d successful", n_ok, n_samples)
+            return self._build_mc_result(cmax_arr, tmax_arr, auc_arr, n_ok, n_failures)
+
+        # ── SciPy backend: sequential loop (default) ──
+        cmax_samples: list[float] = []
+        tmax_samples: list[float] = []
+        auc_samples: list[float] = []
+        n_failures = 0
 
         for i in range(n_samples):
             rng = np.random.default_rng(seed + i)
@@ -237,8 +264,22 @@ class UncertaintyEngine:
             n_failures,
         )
 
+        cmax_arr = np.array(cmax_samples)
+        tmax_arr = np.array(tmax_samples)
+        auc_arr = np.array(auc_samples)
+
+        return self._build_mc_result(cmax_arr, tmax_arr, auc_arr, n_ok, n_failures)
+
+    @staticmethod
+    def _build_mc_result(
+        cmax_arr: np.ndarray,
+        tmax_arr: np.ndarray,
+        auc_arr: np.ndarray,
+        n_ok: int,
+        n_failures: int,
+    ) -> MCResult:
+        """Aggregate MC sample arrays into an MCResult."""
         if n_ok == 0:
-            # All failed -- return zero PKEndpoints
             return MCResult(
                 pk=PKEndpoints(
                     cmax=Distribution(0.0),
@@ -254,10 +295,6 @@ class UncertaintyEngine:
                 auc_samples=np.array([]),
             )
 
-        cmax_arr = np.array(cmax_samples)
-        tmax_arr = np.array(tmax_samples)
-        auc_arr = np.array(auc_samples)
-
         cmax_med = float(np.median(cmax_arr))
         tmax_med = float(np.median(tmax_arr))
         auc_med = float(np.median(auc_arr))
@@ -266,7 +303,6 @@ class UncertaintyEngine:
         auc_cv = float(np.std(auc_arr) / auc_med) if auc_med > 0 else 0.0
         tmax_cv = float(np.std(tmax_arr) / tmax_med) if tmax_med > 0 else 0.0
 
-        # 90% prediction interval (5th to 95th percentile)
         cmax_lo, cmax_hi = float(np.percentile(cmax_arr, 5)), float(np.percentile(cmax_arr, 95))
         auc_lo, auc_hi = float(np.percentile(auc_arr, 5)), float(np.percentile(auc_arr, 95))
 
