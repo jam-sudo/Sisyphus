@@ -1,0 +1,1123 @@
+[
+  {
+    "name": "abiraterone",
+    "cmax_obs": 0.073,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 1.5182347114106483,
+    "cmax_ml": 0.17464338440968988,
+    "cmax_clf": 0.3273139288823707,
+    "cmax_combined": 0.17464338440968988
+  },
+  {
+    "name": "acamprosate",
+    "cmax_obs": 0.18,
+    "compound_type": "acid",
+    "ad_flags": [],
+    "cmax_engine": 6.697830579887773,
+    "cmax_ml": 2.3614423650317558,
+    "cmax_clf": 6.400181477319506,
+    "cmax_combined": 2.3614423650317558
+  },
+  {
+    "name": "adefovir dipivoxil",
+    "cmax_obs": 0.0184,
+    "compound_type": "neutral",
+    "ad_flags": [
+      "PRODRUG"
+    ],
+    "cmax_engine": 0.012221038606794797,
+    "cmax_ml": 0.005871763418940053,
+    "cmax_clf": 0.029116410998285654,
+    "cmax_combined": 0.005871763418940053
+  },
+  {
+    "name": "alosetron",
+    "cmax_obs": 0.005,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.0046692813396328045,
+    "cmax_ml": 0.010980044861619522,
+    "cmax_clf": 0.004115633539355469,
+    "cmax_combined": 0.010980044861619522
+  },
+  {
+    "name": "alprazolam",
+    "cmax_obs": 0.014003,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.0037033869509266646,
+    "cmax_ml": 0.01095571045355409,
+    "cmax_clf": 0.008815134430358453,
+    "cmax_combined": 0.01095571045355409
+  },
+  {
+    "name": "alvimopan",
+    "cmax_obs": 0.01098,
+    "compound_type": "zwitterion",
+    "ad_flags": [
+      "PRODRUG"
+    ],
+    "cmax_engine": 0.009038471618174846,
+    "cmax_ml": 0.035842996552393556,
+    "cmax_clf": 0.03526526772657315,
+    "cmax_combined": 0.03584299655239356
+  },
+  {
+    "name": "amantadine",
+    "cmax_obs": 0.22,
+    "compound_type": "base",
+    "ad_flags": [],
+    "cmax_engine": 0.4759232274859435,
+    "cmax_ml": 0.35672112172127346,
+    "cmax_clf": 0.2184194778763348,
+    "cmax_combined": 0.4061369090491153
+  },
+  {
+    "name": "apixaban",
+    "cmax_obs": 0.126,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.011413682650788029,
+    "cmax_ml": 0.06822267568550291,
+    "cmax_clf": 0.025987154719843718,
+    "cmax_combined": 0.0682226756855029
+  },
+  {
+    "name": "atovaquone",
+    "cmax_obs": 8.8,
+    "compound_type": "acid",
+    "ad_flags": [
+      "EXTREME_LIPOPHILIC"
+    ],
+    "cmax_engine": 3.6261277315246128,
+    "cmax_ml": 3.393236480776873,
+    "cmax_clf": 2.154585555978193,
+    "cmax_combined": 3.3932364807768725
+  },
+  {
+    "name": "azacitidine",
+    "cmax_obs": 0.145,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.3914693074582189,
+    "cmax_ml": 0.5516778286371684,
+    "cmax_clf": 0.6872826501420957,
+    "cmax_combined": 0.5516778286371684
+  },
+  {
+    "name": "azithromycin",
+    "cmax_obs": 0.5,
+    "compound_type": "base",
+    "ad_flags": [
+      "HIGH_MW"
+    ],
+    "cmax_engine": 0.05893139328408204,
+    "cmax_ml": 2.1737358372987807,
+    "cmax_clf": 2.8338792608551477,
+    "cmax_combined": 0.6305214829465929
+  },
+  {
+    "name": "bexagliflozin",
+    "cmax_obs": 0.134,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.03371761382084406,
+    "cmax_ml": 0.1960591356886685,
+    "cmax_clf": 0.10581640506887999,
+    "cmax_combined": 0.19605913568866848
+  },
+  {
+    "name": "brincidofovir",
+    "cmax_obs": 0.251,
+    "compound_type": "acid",
+    "ad_flags": [],
+    "cmax_engine": 0.18428326878094056,
+    "cmax_ml": 0.13449967569865043,
+    "cmax_clf": 0.24814971903574556,
+    "cmax_combined": 0.13449967569865043
+  },
+  {
+    "name": "budesonide",
+    "cmax_obs": 0.0015,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.007548489681342511,
+    "cmax_ml": 0.013754368341014582,
+    "cmax_clf": 0.040441647470129315,
+    "cmax_combined": 0.013754368341014584
+  },
+  {
+    "name": "cabozantinib",
+    "cmax_obs": 9.8,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 3.726893945332794,
+    "cmax_ml": 2.434932821695705,
+    "cmax_clf": 0.5564235885519688,
+    "cmax_combined": 2.434932821695705
+  },
+  {
+    "name": "carbamazepine",
+    "cmax_obs": 1.0,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 1.0571932936047999,
+    "cmax_ml": 1.844785967598318,
+    "cmax_clf": 0.9896336897997928,
+    "cmax_combined": 1.8447859675983183
+  },
+  {
+    "name": "carbinoxamine",
+    "cmax_obs": 0.024,
+    "compound_type": "base",
+    "ad_flags": [],
+    "cmax_engine": 0.015044312173619762,
+    "cmax_ml": 0.036369442427721804,
+    "cmax_clf": 0.02496069997347124,
+    "cmax_combined": 0.024446838590873973
+  },
+  {
+    "name": "cetirizine",
+    "cmax_obs": 0.272125,
+    "compound_type": "acid",
+    "ad_flags": [],
+    "cmax_engine": 0.05624611728046707,
+    "cmax_ml": 0.15013286187460412,
+    "cmax_clf": 0.028248147595904632,
+    "cmax_combined": 0.1501328618746041
+  },
+  {
+    "name": "cimetidine",
+    "cmax_obs": 2.348425,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.46038371588366267,
+    "cmax_ml": 1.5902870851622477,
+    "cmax_clf": 0.9407190791984653,
+    "cmax_combined": 1.5902870851622477
+  },
+  {
+    "name": "ciprofloxacin",
+    "cmax_obs": 2.97,
+    "compound_type": "zwitterion",
+    "ad_flags": [],
+    "cmax_engine": 2.290899078060935,
+    "cmax_ml": 3.0055851770712727,
+    "cmax_clf": 1.4153009139434762,
+    "cmax_combined": 3.0055851770712727
+  },
+  {
+    "name": "clomipramine",
+    "cmax_obs": 0.092,
+    "compound_type": "base",
+    "ad_flags": [],
+    "cmax_engine": 0.35361035074033403,
+    "cmax_ml": 0.018697231975999366,
+    "cmax_clf": 0.01711761145212014,
+    "cmax_combined": 0.05894072143292372
+  },
+  {
+    "name": "clonidine",
+    "cmax_obs": 0.00040072,
+    "compound_type": "base",
+    "ad_flags": [],
+    "cmax_engine": 0.0005663338034927118,
+    "cmax_ml": 0.00014590826878860537,
+    "cmax_clf": 0.00010112894087155421,
+    "cmax_combined": 0.00026861271445442026
+  },
+  {
+    "name": "clopidogrel",
+    "cmax_obs": 0.3,
+    "compound_type": "base",
+    "ad_flags": [],
+    "cmax_engine": 0.5834602552244436,
+    "cmax_ml": 0.08611707121188292,
+    "cmax_clf": 0.4274222898782414,
+    "cmax_combined": 0.20370616049751047
+  },
+  {
+    "name": "clozapine",
+    "cmax_obs": 0.413,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.8754451133396585,
+    "cmax_ml": 0.09229562224419013,
+    "cmax_clf": 0.07977892048853509,
+    "cmax_combined": 0.09229562224419013
+  },
+  {
+    "name": "codeine",
+    "cmax_obs": 0.139,
+    "compound_type": "base",
+    "ad_flags": [],
+    "cmax_engine": 0.22103869034876908,
+    "cmax_ml": 0.1434396956059885,
+    "cmax_clf": 0.10296579867132191,
+    "cmax_combined": 0.17425244463265896
+  },
+  {
+    "name": "colchicine",
+    "cmax_obs": 0.0025,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.004722120754260997,
+    "cmax_ml": 0.002606486125910057,
+    "cmax_clf": 0.0030566041309666304,
+    "cmax_combined": 0.0026064861259100557
+  },
+  {
+    "name": "dalfampridine",
+    "cmax_obs": 0.0427,
+    "compound_type": "base",
+    "ad_flags": [],
+    "cmax_engine": 0.1036383342390807,
+    "cmax_ml": 0.0348700502944293,
+    "cmax_clf": 0.03494272193077471,
+    "cmax_combined": 0.05692894117166755
+  },
+  {
+    "name": "dapagliflozin",
+    "cmax_obs": 0.121809,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.009092896378124396,
+    "cmax_ml": 0.12738600910736553,
+    "cmax_clf": 0.09280112760569599,
+    "cmax_combined": 0.12738600910736553
+  },
+  {
+    "name": "darolutamide",
+    "cmax_obs": 4.79,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 1.2992882246081905,
+    "cmax_ml": 2.3134820478197633,
+    "cmax_clf": 2.7369836476161242,
+    "cmax_combined": 2.3134820478197633
+  },
+  {
+    "name": "darunavir ethanolate",
+    "cmax_obs": 1.2,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.10990277087411673,
+    "cmax_ml": 0.49300281340403485,
+    "cmax_clf": 0.23239313739287806,
+    "cmax_combined": 0.4930028134040349
+  },
+  {
+    "name": "dasatinib",
+    "cmax_obs": 0.0822,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.1860985756917138,
+    "cmax_ml": 0.3051383769722299,
+    "cmax_clf": 0.1354239516101445,
+    "cmax_combined": 0.3051383769722299
+  },
+  {
+    "name": "diclofenac",
+    "cmax_obs": 0.5,
+    "compound_type": "acid",
+    "ad_flags": [],
+    "cmax_engine": 0.5713320762318014,
+    "cmax_ml": 0.7248902482716705,
+    "cmax_clf": 0.37627974688816507,
+    "cmax_combined": 0.7248902482716705
+  },
+  {
+    "name": "digoxin",
+    "cmax_obs": 0.0015,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.00012962966173864497,
+    "cmax_ml": 0.0014098663756108077,
+    "cmax_clf": 0.0012611115199464913,
+    "cmax_combined": 0.0014098663756108075
+  },
+  {
+    "name": "donepezil",
+    "cmax_obs": 0.0077,
+    "compound_type": "base",
+    "ad_flags": [],
+    "cmax_engine": 0.012088471054312397,
+    "cmax_ml": 0.00561882975143292,
+    "cmax_clf": 0.00940123850731158,
+    "cmax_combined": 0.007931810850187782
+  },
+  {
+    "name": "erythromycin",
+    "cmax_obs": 1.7864,
+    "compound_type": "base",
+    "ad_flags": [
+      "HIGH_MW"
+    ],
+    "cmax_engine": 0.08567200984052549,
+    "cmax_ml": 2.8669179727623857,
+    "cmax_clf": 2.467544196898262,
+    "cmax_combined": 0.8413451753934867
+  },
+  {
+    "name": "etodolac",
+    "cmax_obs": 15.9,
+    "compound_type": "acid",
+    "ad_flags": [],
+    "cmax_engine": 3.7523324949990773,
+    "cmax_ml": 4.471528743341337,
+    "cmax_clf": 1.0571077683424512,
+    "cmax_combined": 4.471528743341337
+  },
+  {
+    "name": "famotidine",
+    "cmax_obs": 0.073,
+    "compound_type": "base",
+    "ad_flags": [],
+    "cmax_engine": 0.03589445900445623,
+    "cmax_ml": 0.05962375316709497,
+    "cmax_clf": 0.05264296885911115,
+    "cmax_combined": 0.04745073633198322
+  },
+  {
+    "name": "febuxostat",
+    "cmax_obs": 1.5,
+    "compound_type": "acid",
+    "ad_flags": [],
+    "cmax_engine": 1.6492723151504594,
+    "cmax_ml": 0.7930052254985225,
+    "cmax_clf": 0.39001608957381684,
+    "cmax_combined": 0.7930052254985225
+  },
+  {
+    "name": "fesoterodine",
+    "cmax_obs": 0.00189,
+    "compound_type": "base",
+    "ad_flags": [
+      "PRODRUG"
+    ],
+    "cmax_engine": 0.011237313965063674,
+    "cmax_ml": 0.007092873218928497,
+    "cmax_clf": 0.020967824133312104,
+    "cmax_combined": 0.008724696736972824
+  },
+  {
+    "name": "fluvoxamine",
+    "cmax_obs": 0.015,
+    "compound_type": "base",
+    "ad_flags": [],
+    "cmax_engine": 0.09100384886567534,
+    "cmax_ml": 0.048530292427277376,
+    "cmax_clf": 0.13180848633725673,
+    "cmax_combined": 0.0643997218748458
+  },
+  {
+    "name": "fruquintinib",
+    "cmax_obs": 0.113,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.03435538147345268,
+    "cmax_ml": 0.09944767612804174,
+    "cmax_clf": 0.02339683135978154,
+    "cmax_combined": 0.09944767612804171
+  },
+  {
+    "name": "glasdegib",
+    "cmax_obs": 1.252,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.4001796748128173,
+    "cmax_ml": 0.7995610809956049,
+    "cmax_clf": 0.36368795585736635,
+    "cmax_combined": 0.7995610809956049
+  },
+  {
+    "name": "hydroxyzine",
+    "cmax_obs": 0.03,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.06252354652767664,
+    "cmax_ml": 0.09093234439684651,
+    "cmax_clf": 0.031599508402483156,
+    "cmax_combined": 0.09093234439684654
+  },
+  {
+    "name": "indomethacin",
+    "cmax_obs": 1.54,
+    "compound_type": "acid",
+    "ad_flags": [],
+    "cmax_engine": 0.33169373165659227,
+    "cmax_ml": 1.1972949308424237,
+    "cmax_clf": 0.33927209308122436,
+    "cmax_combined": 1.1972949308424237
+  },
+  {
+    "name": "isosorbide mononitrate",
+    "cmax_obs": 1.242,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.2138052925782287,
+    "cmax_ml": 0.5243513014116257,
+    "cmax_clf": 0.8096004416471714,
+    "cmax_combined": 0.5243513014116257
+  },
+  {
+    "name": "itraconazole",
+    "cmax_obs": 0.5,
+    "compound_type": "base",
+    "ad_flags": [
+      "HIGH_MW",
+      "EXTREME_LIPOPHILIC",
+      "PGP_EFFLUX_RISK"
+    ],
+    "cmax_engine": 1.1544325987410096,
+    "cmax_ml": 0.20911183691023225,
+    "cmax_clf": 0.3134192540682009,
+    "cmax_combined": 0.4511013233926684
+  },
+  {
+    "name": "ketoconazole",
+    "cmax_obs": 3.0,
+    "compound_type": "base",
+    "ad_flags": [],
+    "cmax_engine": 1.2398925788313,
+    "cmax_ml": 0.7261018002441305,
+    "cmax_clf": 0.23092571990418084,
+    "cmax_combined": 0.9237861775980809
+  },
+  {
+    "name": "ketorolac",
+    "cmax_obs": 0.8,
+    "compound_type": "acid",
+    "ad_flags": [],
+    "cmax_engine": 0.24622852281600857,
+    "cmax_ml": 0.1842699048146278,
+    "cmax_clf": 0.09555768567571427,
+    "cmax_combined": 0.1842699048146278
+  },
+  {
+    "name": "lamivudine",
+    "cmax_obs": 1.4,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.5186233164513293,
+    "cmax_ml": 1.1593015408472571,
+    "cmax_clf": 1.211635303846128,
+    "cmax_combined": 1.1593015408472571
+  },
+  {
+    "name": "leflunomide",
+    "cmax_obs": 7.2,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 1.1839707824934653,
+    "cmax_ml": 1.5832567341746588,
+    "cmax_clf": 1.415059908308194,
+    "cmax_combined": 1.5832567341746588
+  },
+  {
+    "name": "lenacapavir",
+    "cmax_obs": 0.0234,
+    "compound_type": "acid",
+    "ad_flags": [
+      "HIGH_MW",
+      "EXTREME_LIPOPHILIC",
+      "PGP_EFFLUX_RISK"
+    ],
+    "cmax_engine": 1.151500548405599,
+    "cmax_ml": 0.08563798531734068,
+    "cmax_clf": 0.46774375274514546,
+    "cmax_combined": 0.08563798531734068
+  },
+  {
+    "name": "levocetirizine",
+    "cmax_obs": 0.45,
+    "compound_type": "acid",
+    "ad_flags": [],
+    "cmax_engine": 0.16873835183738228,
+    "cmax_ml": 0.4503985856238123,
+    "cmax_clf": 0.0847444427877139,
+    "cmax_combined": 0.4503985856238123
+  },
+  {
+    "name": "levofloxacin",
+    "cmax_obs": 6.2,
+    "compound_type": "acid",
+    "ad_flags": [],
+    "cmax_engine": 4.920133600232644,
+    "cmax_ml": 5.015155530659809,
+    "cmax_clf": 3.5788516484790796,
+    "cmax_combined": 5.015155530659808
+  },
+  {
+    "name": "lopinavir",
+    "cmax_obs": 9.8,
+    "compound_type": "neutral",
+    "ad_flags": [
+      "PGP_EFFLUX_RISK"
+    ],
+    "cmax_engine": 0.4671801881824893,
+    "cmax_ml": 0.37883938375231135,
+    "cmax_clf": 0.9068402485012279,
+    "cmax_combined": 0.37883938375231135
+  },
+  {
+    "name": "lorlatinib",
+    "cmax_obs": 0.5013,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.6899253522107734,
+    "cmax_ml": 0.6642038487258863,
+    "cmax_clf": 0.5929404699508829,
+    "cmax_combined": 0.6642038487258863
+  },
+  {
+    "name": "losartan",
+    "cmax_obs": 0.224,
+    "compound_type": "acid",
+    "ad_flags": [],
+    "cmax_engine": 0.1861843206677707,
+    "cmax_ml": 0.14014527989028888,
+    "cmax_clf": 0.15433625201319062,
+    "cmax_combined": 0.14014527989028885
+  },
+  {
+    "name": "mefenamic acid",
+    "cmax_obs": 2.173397,
+    "compound_type": "acid",
+    "ad_flags": [],
+    "cmax_engine": 3.809545549072054,
+    "cmax_ml": 5.300921527064774,
+    "cmax_clf": 4.931722385956637,
+    "cmax_combined": 5.300921527064774
+  },
+  {
+    "name": "mercaptopurine",
+    "cmax_obs": 0.069,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.1886186809025435,
+    "cmax_ml": 0.0931511834219295,
+    "cmax_clf": 0.49845519220533924,
+    "cmax_combined": 0.09315118342192949
+  },
+  {
+    "name": "methylphenidate",
+    "cmax_obs": 0.0091,
+    "compound_type": "base",
+    "ad_flags": [],
+    "cmax_engine": 0.13750039886978957,
+    "cmax_ml": 0.09218139335873517,
+    "cmax_clf": 0.22585404170779402,
+    "cmax_combined": 0.11035463501027262
+  },
+  {
+    "name": "metronidazole",
+    "cmax_obs": 13.0,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 2.8241317684055254,
+    "cmax_ml": 4.741772099432467,
+    "cmax_clf": 7.587896163999788,
+    "cmax_combined": 4.741772099432467
+  },
+  {
+    "name": "molnupiravir",
+    "cmax_obs": 2.33,
+    "compound_type": "neutral",
+    "ad_flags": [
+      "PRODRUG"
+    ],
+    "cmax_engine": 1.6743228635215577,
+    "cmax_ml": 0.9864640110640751,
+    "cmax_clf": 1.7745104978920208,
+    "cmax_combined": 0.9864640110640751
+  },
+  {
+    "name": "montelukast",
+    "cmax_obs": 0.35,
+    "compound_type": "acid",
+    "ad_flags": [
+      "EXTREME_LIPOPHILIC"
+    ],
+    "cmax_engine": 0.019035190392981564,
+    "cmax_ml": 0.07752839657454214,
+    "cmax_clf": 0.023972363269133212,
+    "cmax_combined": 0.07752839657454214
+  },
+  {
+    "name": "morphine",
+    "cmax_obs": 0.01865,
+    "compound_type": "base",
+    "ad_flags": [],
+    "cmax_engine": 0.037362231591099325,
+    "cmax_ml": 0.04909382018712479,
+    "cmax_clf": 0.03993839595108749,
+    "cmax_combined": 0.04341697073625701
+  },
+  {
+    "name": "moxifloxacin",
+    "cmax_obs": 4.1,
+    "compound_type": "zwitterion",
+    "ad_flags": [],
+    "cmax_engine": 0.4986146094384029,
+    "cmax_ml": 2.891363110907548,
+    "cmax_clf": 1.0734716683346945,
+    "cmax_combined": 2.891363110907548
+  },
+  {
+    "name": "nilotinib",
+    "cmax_obs": 1.95,
+    "compound_type": "neutral",
+    "ad_flags": [
+      "EXTREME_LIPOPHILIC"
+    ],
+    "cmax_engine": 1.197611755497416,
+    "cmax_ml": 1.1266046839849724,
+    "cmax_clf": 1.5187524588024395,
+    "cmax_combined": 1.1266046839849724
+  },
+  {
+    "name": "norethindrone",
+    "cmax_obs": 0.02619,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.028841070627267977,
+    "cmax_ml": 0.030543211857176084,
+    "cmax_clf": 0.026397083793413666,
+    "cmax_combined": 0.03054321185717608
+  },
+  {
+    "name": "oxybutynin",
+    "cmax_obs": 0.001,
+    "compound_type": "base",
+    "ad_flags": [],
+    "cmax_engine": 0.0069190290874609015,
+    "cmax_ml": 0.007935537539990625,
+    "cmax_clf": 0.016679777461714375,
+    "cmax_combined": 0.007460832898337837
+  },
+  {
+    "name": "paroxetine",
+    "cmax_obs": 0.005,
+    "compound_type": "base",
+    "ad_flags": [],
+    "cmax_engine": 0.18772178718348118,
+    "cmax_ml": 0.034231772469940754,
+    "cmax_clf": 0.04343842624824678,
+    "cmax_combined": 0.07362372195106748
+  },
+  {
+    "name": "penicillamine",
+    "cmax_obs": 1.5,
+    "compound_type": "zwitterion",
+    "ad_flags": [
+      "PRODRUG"
+    ],
+    "cmax_engine": 1.2587561642792209,
+    "cmax_ml": 2.699382877197524,
+    "cmax_clf": 1.5099473080365393,
+    "cmax_combined": 2.699382877197524
+  },
+  {
+    "name": "phenytoin",
+    "cmax_obs": 5.0,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 3.129569635750339,
+    "cmax_ml": 6.395929881739478,
+    "cmax_clf": 6.770857198219657,
+    "cmax_combined": 6.3959298817394785
+  },
+  {
+    "name": "pilocarpine",
+    "cmax_obs": 0.015,
+    "compound_type": "neutral",
+    "ad_flags": [
+      "PRODRUG"
+    ],
+    "cmax_engine": 0.025744552086404845,
+    "cmax_ml": 0.02685148781125833,
+    "cmax_clf": 0.051257040423208874,
+    "cmax_combined": 0.026851487811258328
+  },
+  {
+    "name": "pindolol",
+    "cmax_obs": 0.0331,
+    "compound_type": "base",
+    "ad_flags": [],
+    "cmax_engine": 0.008729137288217432,
+    "cmax_ml": 0.011571787021998634,
+    "cmax_clf": 0.006176154230965822,
+    "cmax_combined": 0.010193124606729888
+  },
+  {
+    "name": "pomalidomide",
+    "cmax_obs": 0.0531,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.020540998994698245,
+    "cmax_ml": 0.0518523923242986,
+    "cmax_clf": 0.02960154972140891,
+    "cmax_combined": 0.05185239232429861
+  },
+  {
+    "name": "ponatinib",
+    "cmax_obs": 0.0547,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.2332767388978479,
+    "cmax_ml": 0.06702601000862558,
+    "cmax_clf": 0.0557301657249828,
+    "cmax_combined": 0.06702601000862558
+  },
+  {
+    "name": "posaconazole",
+    "cmax_obs": 0.151,
+    "compound_type": "neutral",
+    "ad_flags": [
+      "HIGH_MW",
+      "PGP_EFFLUX_RISK"
+    ],
+    "cmax_engine": 3.646306586307388,
+    "cmax_ml": 0.726692115350588,
+    "cmax_clf": 0.5977678945517362,
+    "cmax_combined": 0.726692115350588
+  },
+  {
+    "name": "prasugrel",
+    "cmax_obs": 0.631,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.48999762673551067,
+    "cmax_ml": 0.05321240916473313,
+    "cmax_clf": 0.07443439102276828,
+    "cmax_combined": 0.05321240916473313
+  },
+  {
+    "name": "pravastatin",
+    "cmax_obs": 0.025,
+    "compound_type": "acid",
+    "ad_flags": [],
+    "cmax_engine": 0.027257269362300447,
+    "cmax_ml": 0.006679149632360925,
+    "cmax_clf": 0.038492493614984295,
+    "cmax_combined": 0.006679149632360926
+  },
+  {
+    "name": "probenecid",
+    "cmax_obs": 32.9,
+    "compound_type": "acid",
+    "ad_flags": [],
+    "cmax_engine": 3.185088446449309,
+    "cmax_ml": 9.12673395172575,
+    "cmax_clf": 6.1444443556996475,
+    "cmax_combined": 9.12673395172575
+  },
+  {
+    "name": "progesterone",
+    "cmax_obs": 0.0173,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.502088672758909,
+    "cmax_ml": 0.0356013303165305,
+    "cmax_clf": 0.09673195456491068,
+    "cmax_combined": 0.0356013303165305
+  },
+  {
+    "name": "quinine",
+    "cmax_obs": 5.4,
+    "compound_type": "base",
+    "ad_flags": [],
+    "cmax_engine": 1.4210265452965405,
+    "cmax_ml": 1.5516660545735592,
+    "cmax_clf": 1.1410152025726885,
+    "cmax_combined": 1.4914545674316833
+  },
+  {
+    "name": "quizartinib",
+    "cmax_obs": 0.0993,
+    "compound_type": "neutral",
+    "ad_flags": [
+      "PGP_EFFLUX_RISK"
+    ],
+    "cmax_engine": 0.13451548754883697,
+    "cmax_ml": 0.03272943396185793,
+    "cmax_clf": 0.03856818237055991,
+    "cmax_combined": 0.03272943396185793
+  },
+  {
+    "name": "ramelteon",
+    "cmax_obs": 0.0116,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.07243795385597421,
+    "cmax_ml": 0.019207155975995635,
+    "cmax_clf": 0.0631788156302523,
+    "cmax_combined": 0.019207155975995635
+  },
+  {
+    "name": "ranitidine",
+    "cmax_obs": 0.44,
+    "compound_type": "base",
+    "ad_flags": [],
+    "cmax_engine": 0.5308394945387962,
+    "cmax_ml": 0.917334185754997,
+    "cmax_clf": 0.6604867707107374,
+    "cmax_combined": 0.7171724869296217
+  },
+  {
+    "name": "ranolazine",
+    "cmax_obs": 2.6,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.42707552943386917,
+    "cmax_ml": 2.386328864929112,
+    "cmax_clf": 1.269327236334101,
+    "cmax_combined": 2.386328864929112
+  },
+  {
+    "name": "rifabutin",
+    "cmax_obs": 0.375,
+    "compound_type": "zwitterion",
+    "ad_flags": [
+      "HIGH_MW",
+      "PGP_EFFLUX_RISK"
+    ],
+    "cmax_engine": 0.19733609223634857,
+    "cmax_ml": 0.3768060732177036,
+    "cmax_clf": 1.543787715809439,
+    "cmax_combined": 0.3768060732177036
+  },
+  {
+    "name": "rivaroxaban",
+    "cmax_obs": 0.1432,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.06589114321857462,
+    "cmax_ml": 0.10225612499042516,
+    "cmax_clf": 0.04281331312774175,
+    "cmax_combined": 0.10225612499042516
+  },
+  {
+    "name": "ruxolitinib",
+    "cmax_obs": 0.064889,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.16690483170209597,
+    "cmax_ml": 0.06195153841193321,
+    "cmax_clf": 0.03893848457229834,
+    "cmax_combined": 0.061951538411933224
+  },
+  {
+    "name": "selegiline",
+    "cmax_obs": 0.001,
+    "compound_type": "base",
+    "ad_flags": [],
+    "cmax_engine": 0.03840538521543245,
+    "cmax_ml": 0.008893473335941161,
+    "cmax_clf": 0.012085835823946402,
+    "cmax_combined": 0.017177728351221406
+  },
+  {
+    "name": "sildenafil",
+    "cmax_obs": 0.27,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.0452941386254649,
+    "cmax_ml": 0.3084086904070192,
+    "cmax_clf": 0.09197232315882226,
+    "cmax_combined": 0.3084086904070192
+  },
+  {
+    "name": "sirolimus",
+    "cmax_obs": 0.024,
+    "compound_type": "neutral",
+    "ad_flags": [
+      "HIGH_MW",
+      "PGP_EFFLUX_RISK"
+    ],
+    "cmax_engine": 0.006527771629491133,
+    "cmax_ml": 0.01608473496389475,
+    "cmax_clf": 0.003634430228662332,
+    "cmax_combined": 0.01608473496389475
+  },
+  {
+    "name": "sonidegib",
+    "cmax_obs": 1.03,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.764357409095082,
+    "cmax_ml": 0.34917294758982004,
+    "cmax_clf": 0.22020933975204413,
+    "cmax_combined": 0.34917294758982004
+  },
+  {
+    "name": "sumatriptan",
+    "cmax_obs": 0.0165,
+    "compound_type": "base",
+    "ad_flags": [],
+    "cmax_engine": 0.06556485199515445,
+    "cmax_ml": 0.06001029318771423,
+    "cmax_clf": 0.08418261201905573,
+    "cmax_combined": 0.06244909514359326
+  },
+  {
+    "name": "tamoxifen",
+    "cmax_obs": 0.04,
+    "compound_type": "base",
+    "ad_flags": [
+      "EXTREME_LIPOPHILIC"
+    ],
+    "cmax_engine": 0.0972211643466355,
+    "cmax_ml": 0.033900625314164996,
+    "cmax_clf": 0.039218515958026966,
+    "cmax_combined": 0.05446363305893471
+  },
+  {
+    "name": "tamsulosin",
+    "cmax_obs": 0.0101,
+    "compound_type": "base",
+    "ad_flags": [],
+    "cmax_engine": 0.0031544148514839228,
+    "cmax_ml": 0.009747762808794174,
+    "cmax_clf": 0.0037357386451776524,
+    "cmax_combined": 0.005866933803533937
+  },
+  {
+    "name": "temozolomide",
+    "cmax_obs": 7.5,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 3.6286877706173843,
+    "cmax_ml": 5.460582500484817,
+    "cmax_clf": 4.053731006960901,
+    "cmax_combined": 5.460582500484818
+  },
+  {
+    "name": "tenofovir disoproxil",
+    "cmax_obs": 0.38,
+    "compound_type": "neutral",
+    "ad_flags": [
+      "PRODRUG"
+    ],
+    "cmax_engine": 0.15383548808602956,
+    "cmax_ml": 0.3517765895986133,
+    "cmax_clf": 0.7425322348648214,
+    "cmax_combined": 0.3517765895986133
+  },
+  {
+    "name": "trazodone",
+    "cmax_obs": 1.62,
+    "compound_type": "base",
+    "ad_flags": [],
+    "cmax_engine": 0.5279712882790986,
+    "cmax_ml": 0.48076984258769395,
+    "cmax_clf": 0.09041182441890702,
+    "cmax_combined": 0.501464400381194
+  },
+  {
+    "name": "triazolam",
+    "cmax_obs": 0.001483,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.0010924942207023102,
+    "cmax_ml": 0.0014342107101407411,
+    "cmax_clf": 0.0009766899343939877,
+    "cmax_combined": 0.0014342107101407407
+  },
+  {
+    "name": "ulipristal",
+    "cmax_obs": 0.176,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.08385999974995301,
+    "cmax_ml": 0.18007927774627197,
+    "cmax_clf": 0.07251872146990831,
+    "cmax_combined": 0.18007927774627197
+  },
+  {
+    "name": "upadacitinib",
+    "cmax_obs": 0.026,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.07971306422957171,
+    "cmax_ml": 0.10390984622007361,
+    "cmax_clf": 0.05464658858440653,
+    "cmax_combined": 0.10390984622007361
+  },
+  {
+    "name": "valacyclovir",
+    "cmax_obs": 4.03,
+    "compound_type": "neutral",
+    "ad_flags": [
+      "PRODRUG"
+    ],
+    "cmax_engine": 0.513404348570412,
+    "cmax_ml": 0.7603084022752523,
+    "cmax_clf": 2.986073159156958,
+    "cmax_combined": 0.7603084022752523
+  },
+  {
+    "name": "valganciclovir",
+    "cmax_obs": 5.8,
+    "compound_type": "neutral",
+    "ad_flags": [
+      "PRODRUG"
+    ],
+    "cmax_engine": 1.903875058201742,
+    "cmax_ml": 0.43663150031672215,
+    "cmax_clf": 2.2201574322907396,
+    "cmax_combined": 0.43663150031672215
+  },
+  {
+    "name": "venlafaxine",
+    "cmax_obs": 0.0355,
+    "compound_type": "base",
+    "ad_flags": [],
+    "cmax_engine": 0.10869486348230431,
+    "cmax_ml": 0.17062017438979438,
+    "cmax_clf": 0.18042263222739174,
+    "cmax_combined": 0.1392870593110686
+  },
+  {
+    "name": "vilazodone",
+    "cmax_obs": 0.156,
+    "compound_type": "base",
+    "ad_flags": [],
+    "cmax_engine": 0.3059488294364956,
+    "cmax_ml": 0.07840609064117199,
+    "cmax_clf": 0.0498685984585601,
+    "cmax_combined": 0.14468861128752936
+  },
+  {
+    "name": "vonoprazan",
+    "cmax_obs": 0.025,
+    "compound_type": "base",
+    "ad_flags": [],
+    "cmax_engine": 0.1409820265427447,
+    "cmax_ml": 0.08346269679684942,
+    "cmax_clf": 0.1732596012319835,
+    "cmax_combined": 0.10566824984054095
+  },
+  {
+    "name": "zolpidem",
+    "cmax_obs": 0.134,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 0.18228072301493875,
+    "cmax_ml": 0.09414088159390378,
+    "cmax_clf": 0.06249478417867993,
+    "cmax_combined": 0.0941408815939038
+  },
+  {
+    "name": "zonisamide",
+    "cmax_obs": 2.0,
+    "compound_type": "neutral",
+    "ad_flags": [],
+    "cmax_engine": 2.341720314195624,
+    "cmax_ml": 4.715936100453167,
+    "cmax_clf": 3.612056307600955,
+    "cmax_combined": 4.715936100453167
+  }
+]
