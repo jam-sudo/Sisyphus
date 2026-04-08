@@ -76,6 +76,28 @@ class JaxParams:
     node_transport_km: "jnp.ndarray"  # (n_nodes,) effective Km per node
 
 
+# Register JaxParams as a JAX pytree so it can be passed through jit/vmap.
+if JAX_AVAILABLE:
+    def _jaxparams_flatten(p):
+        children = (
+            p.node_volumes, p.node_kp, p.node_is_blood,
+            p.drug_fup, p.drug_rbp, p.drug_mw, p.drug_renal_cl,
+            p.drug_peff, p.drug_particle_radius,
+            p.edge_flow_rates, p.edge_transit_rates,
+            p.edge_ka_fractions, p.edge_ps_products,
+            p.node_clint_organ, p.node_total_inflow, p.node_ivive_scaling,
+            p.node_transport_vmax, p.node_transport_km,
+        )
+        return children, None
+
+    def _jaxparams_unflatten(aux, children):
+        return JaxParams(*children)
+
+    jax.tree_util.register_pytree_node(
+        JaxParams, _jaxparams_flatten, _jaxparams_unflatten,
+    )
+
+
 # ---------------------------------------------------------------------------
 # resolve_to_jax — conversion from ResolvedParams
 # ---------------------------------------------------------------------------
