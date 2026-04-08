@@ -175,8 +175,21 @@ def bayesian_update(
     n_prior: int = 2000,
     seed: int = 42,
     observation_node: str = "venous_blood",
+    method: str = "importance_sampling",
 ) -> TDMResult:
-    """Run Bayesian TDM update via importance sampling.
+    """Run Bayesian TDM update.
+
+    Args:
+        method: ``"importance_sampling"`` (default, original), ``"ibis"``
+            (sequential MC with resampling + MCMC rejuvenation), or
+            ``"enkf"`` (Ensemble Kalman Filter).
+
+    For ``"ibis"`` and ``"enkf"``, see :mod:`sisyphus.regimen.tdm_ibis`
+    and :mod:`sisyphus.regimen.tdm_enkf` respectively.
+
+    Original docstring follows.
+
+    Run Bayesian TDM update via importance sampling.
 
     Draws ``n_prior`` samples from the joint prior (drug + physiology
     distributions), simulates each, and reweights by the likelihood of
@@ -198,6 +211,40 @@ def bayesian_update(
     observations = tuple(observations)
     if not observations:
         raise ValueError("At least one observation is required")
+
+    # ── Dispatch to alternative methods ──
+    if method == "ibis":
+        from sisyphus.regimen.tdm_ibis import ibis_update, IBISResult
+
+        ibis_result = ibis_update(
+            compiled, graph, drug, regimen, observations,
+            n_particles=n_prior, seed=seed,
+            observation_node=observation_node,
+        )
+        # Convert IBISResult → TDMResult for API compatibility
+        return TDMResult(
+            prior_cmax=ibis_result.prior_cmax,
+            posterior_cmax=ibis_result.posterior_cmax,
+            prior_params=ibis_result.prior_params,
+            posterior_params=ibis_result.posterior_params,
+            n_prior=ibis_result.n_particles,
+            n_successful=ibis_result.n_successful,
+            ess=ibis_result.ess_history[-1] if ibis_result.ess_history else 0.0,
+            observations=ibis_result.observations,
+            weights=ibis_result.weights,
+            log_likelihoods=np.log(np.maximum(ibis_result.weights, 1e-300)),
+        )
+
+    if method == "enkf":
+        from sisyphus.regimen.tdm_enkf import enkf_update
+
+        return enkf_update(
+            compiled, graph, drug, regimen, observations,
+            n_prior=n_prior, seed=seed,
+            observation_node=observation_node,
+        )
+
+    # ── Default: importance sampling (original method) ──
 
     # Determine simulation window: cover all observation times + one interval
     max_obs_t = max(obs.time_h for obs in observations)
