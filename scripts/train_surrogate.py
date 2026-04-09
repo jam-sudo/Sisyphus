@@ -334,7 +334,7 @@ def main():
     # Ensemble validation
     from sisyphus.engine.surrogate import validate_surrogate
     result = validate_surrogate(
-        models, mean_x, std_x, X_test, 10**y_test * np.array([p["dose_mg"] for p in valid_params[n_train:]]),
+        models, mean_x, std_x, X_test, y_test,
     )
 
     result["per_member"] = metrics

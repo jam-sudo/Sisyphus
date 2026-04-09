@@ -209,10 +209,14 @@ def validate_surrogate(
     scaler_mean: np.ndarray,
     scaler_std: np.ndarray,
     engine_features: np.ndarray,
-    engine_cmax: np.ndarray,
+    engine_log_cd: np.ndarray,
     threshold: float = 0.20,
 ) -> dict:
     """Validate surrogate accuracy against engine ground truth.
+
+    Args:
+        engine_log_cd: Ground-truth log10(Cmax/dose) from engine (same
+            scale as surrogate output).
 
     Returns dict with coverage, max_error, r2, and pass/fail.
     """
@@ -220,10 +224,9 @@ def validate_surrogate(
         models, engine_features, scaler_mean, scaler_std,
     )
 
-    engine_log_cd = np.log10(np.maximum(engine_cmax, 1e-10))
-    valid = np.isfinite(pred_log_cd) & np.isfinite(engine_log_cd) & (engine_cmax > 0)
+    valid = np.isfinite(pred_log_cd) & np.isfinite(engine_log_cd)
     pred_v = pred_log_cd[valid]
-    true_v = engine_log_cd[valid]
+    true_v = np.asarray(engine_log_cd)[valid]
 
     # Fold error
     fold_err = 10**np.abs(pred_v - true_v)
