@@ -198,6 +198,39 @@ class UncertaintyEngine:
         admin_idx = compiled.state_index[drug.administration_node]
         y0_template[admin_idx] = drug.dose_mg
 
+        # ── Surrogate backend: MLP forward pass (no ODE) ──
+        if backend == "surrogate":
+            from sisyphus.engine.surrogate import (
+                load_surrogate_ensemble,
+                solve_surrogate_batch,
+            )
+
+            models = load_surrogate_ensemble()
+            scaler = np.load("models/surrogate/scaler.npz")
+
+            params_list = []
+            for i in range(n_samples):
+                rng = np.random.default_rng(seed + i)
+                realized_graph = graph.sample(rng)
+                realized_drug = drug.sample(rng)
+                params_list.append(ResolvedParams(realized_graph, realized_drug))
+
+            cmax_arr, uncertainty = solve_surrogate_batch(
+                models, params_list, scaler["mean"], scaler["std"],
+            )
+
+            mask = cmax_arr > 0
+            cmax_arr = cmax_arr[mask]
+            n_ok = int(np.sum(mask))
+            n_failures = n_samples - n_ok
+
+            # Surrogate doesn't produce tmax/auc — fill with zeros
+            tmax_arr = np.zeros(n_ok)
+            auc_arr = np.zeros(n_ok)
+
+            logger.info("MC-fast surrogate: %d/%d successful", n_ok, n_samples)
+            return self._build_mc_result(cmax_arr, tmax_arr, auc_arr, n_ok, n_failures)
+
         # ── JAX backend: vmap over all samples in one JIT call ──
         if backend == "jax":
             from sisyphus.engine.solver_jax import solve_mc_jax
