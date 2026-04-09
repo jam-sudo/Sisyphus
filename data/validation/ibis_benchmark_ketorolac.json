@@ -1,0 +1,32 @@
+{
+  "test_drug": "ketorolac",
+  "obs_cmax_mgL": 0.8,
+  "n_particles": 500,
+  "n_observations": 3,
+  "importance_sampling": {
+    "ess": 2.0,
+    "ess_pct": 0.4,
+    "prior_cmax": 0.138,
+    "posterior_cmax": 0.377,
+    "prior_cv": 0.454,
+    "posterior_cv": 0.145,
+    "cv_reduction_pct": 68.1,
+    "time_s": 58.5
+  },
+  "ibis": {
+    "ess": 103.2,
+    "ess_pct": 20.6,
+    "prior_cmax": 0.138,
+    "posterior_cmax": 0.506,
+    "prior_cv": 0.454,
+    "posterior_cv": 0.118,
+    "cv_reduction_pct": 74.1,
+    "time_s": 938.6
+  },
+  "comparison": {
+    "ess_improvement": "51.7x",
+    "cv_reduction_gain_pp": 6.0,
+    "speed_tradeoff": "16x slower (MCMC rejuvenation)",
+    "note": "IBIS posterior closer to observed (0.506 vs 0.377 vs obs 0.8)"
+  }
+}
