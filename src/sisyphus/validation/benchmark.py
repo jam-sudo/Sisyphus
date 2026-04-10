@@ -33,6 +33,31 @@ _KNOWN_ER_FORMULATIONS: frozenset[str] = frozenset(
     }
 )
 
+# ---------------------------------------------------------------------------
+# Reference data quality exclusions (data audit 2026-04-07).
+# These drugs have reference Cmax values that are not a fair comparison
+# for single-drug PBPK prediction.  Each has a documented scientific
+# rationale — these are NOT post-hoc removals of poorly-predicted drugs.
+#
+# lopinavir:  Reference Cmax (9.8 mg/L) is from Kaletra (lopinavir/ritonavir).
+#             Ritonavir is a strong CYP3A4 inhibitor that boosts lopinavir
+#             exposure ~25x.  Sisyphus predicts single-drug PK without DDI.
+#             Comparing DDI-boosted Cmax to unboosted prediction is unfair.
+#             Source: FDA label (Kaletra), NDA 021226.
+#
+# prasugrel:  Reference Cmax (0.631 mg/L = 631 ng/mL) is for the active
+#             metabolite R-138727, not the parent drug.  Parent prasugrel
+#             Cmax is ~1-2 ng/mL.  Sisyphus predicts parent compound PK.
+#             Additionally from Chinese population study (Liang et al. 2014).
+#             Source: Liang et al., BMC Pharmacol Toxicol 2014.
+# ---------------------------------------------------------------------------
+_REFERENCE_QUALITY_EXCLUSIONS: frozenset[str] = frozenset(
+    {
+        "lopinavir",   # DDI-boosted reference (ritonavir co-admin)
+        "prasugrel",   # Active metabolite Cmax, not parent drug
+    }
+)
+
 
 @dataclass(frozen=True)
 class BenchmarkResult:
@@ -160,6 +185,8 @@ def run_benchmark(
                 exclude_reason = "AD:" + ",".join(result.ad_flags)
             elif ref.name in _KNOWN_ER_FORMULATIONS:
                 exclude_reason = "ER_FORMULATION"
+            elif ref.name in _REFERENCE_QUALITY_EXCLUSIONS:
+                exclude_reason = "REF_QUALITY"
 
             if exclude_reason:
                 excluded.append((ref.name, exclude_reason))

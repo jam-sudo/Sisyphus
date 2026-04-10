@@ -1,0 +1,89 @@
+{
+  "drugs": [
+    {
+      "name": "vorasidenib",
+      "dose_mg": 40.0,
+      "obs": 0.0302,
+      "eng": 0.21065650000971828,
+      "ml": 0.105397752897684,
+      "meta": 0.1283768769832292,
+      "fold": 4.2508899663320925,
+      "conf": "high",
+      "ad_flags": [],
+      "curation_flags": [
+        "SS_CORRECTED_AR4.4",
+        "VERY_LONG_THALF"
+      ],
+      "notes": "Voranigo 40mg QD; FDA SS Cmax 133 ng/mL / AR_AUC 4.4 (t1/2=10d)"
+    },
+    {
+      "name": "pirtobrutinib",
+      "dose_mg": 200.0,
+      "obs": 3.99,
+      "eng": 0.7998765043743805,
+      "ml": 1.2139570408895104,
+      "meta": 0.9348250469156867,
+      "fold": 0.23429199170819215,
+      "conf": "high",
+      "ad_flags": [],
+      "curation_flags": [
+        "SS_CORRECTED_AR1.63"
+      ],
+      "notes": "Jaypirca 200mg QD; FDA SS Cmax 6503 ng/mL / AR 1.63 (t1/2=20h)"
+    },
+    {
+      "name": "pacritinib",
+      "dose_mg": 200.0,
+      "obs": 2.18,
+      "eng": 0.6542886634118211,
+      "ml": 0.15922497284258036,
+      "meta": 0.3717629543017185,
+      "fold": 0.17053346527601765,
+      "conf": "high",
+      "ad_flags": [],
+      "curation_flags": [
+        "SS_CORRECTED_AR3.86"
+      ],
+      "notes": "Vonjo 200mg BID; FDA SS Cmax 8.4 mg/L / AR 3.86 (accumulates 386%)"
+    },
+    {
+      "name": "crinecerfont",
+      "dose_mg": 100.0,
+      "obs": 1.44,
+      "eng": 0.7745261929253162,
+      "ml": 0.09485043722368139,
+      "meta": 0.3343777725845164,
+      "fold": 0.23220678651702528,
+      "conf": "low",
+      "ad_flags": [
+        "EXTREME_LIPOPHILIC"
+      ],
+      "curation_flags": [
+        "SS_CORRECTED_AR2.94"
+      ],
+      "notes": "Crenessity 100mg BID; FDA SS Cmax 4231 ng/mL / AR_Cmax 2.94 (t1/2~20h)"
+    },
+    {
+      "name": "revumenib",
+      "dose_mg": 270.0,
+      "obs": 1.172,
+      "eng": 0.7349110365500175,
+      "ml": 0.3493561438760698,
+      "meta": 0.5458184550151418,
+      "fold": 0.4657154053030221,
+      "conf": "high",
+      "ad_flags": [],
+      "curation_flags": [
+        "SS_CORRECTED_AR2.0"
+      ],
+      "notes": "Revuforj 270mg BID (no CYP3A4 inh); FDA SS Cmax 2344 ng/mL / AR 2.0"
+    }
+  ],
+  "summary": {
+    "N_total": 5,
+    "N_in_domain_clean": 0,
+    "aafe_all": 3.9681077631794945,
+    "aafe_in_domain_clean": null,
+    "pct_within_2fold": 0.0
+  }
+}

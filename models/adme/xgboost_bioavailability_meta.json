@@ -1,0 +1,7 @@
+{
+  "n_train": 442,
+  "scaffold_cv_r2": -0.09044302621195202,
+  "target": "log10(F/100) where F is in percent",
+  "source": "DrugBank absorption text regex parsing (holdout-excluded)",
+  "notes": "F ranges 1-100%, log_f \u2208 [-2, 0]"
+}

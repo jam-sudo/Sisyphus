@@ -1,0 +1,53 @@
+{
+  "manual": {
+    "resmetirom": {
+      "dose": 100,
+      "cmax": 0.971,
+      "source": "WuXi+FDA SS"
+    },
+    "vimseltinib": {
+      "dose": 30,
+      "cmax": 0.283,
+      "source": "FDA single-dose"
+    },
+    "inavolisib": {
+      "dose": 9,
+      "cmax": 0.035,
+      "source": "SS 0.069/AR 2"
+    },
+    "berotralstat": {
+      "dose": 150,
+      "cmax": 0.032,
+      "source": "SS 0.158/5"
+    },
+    "danicopan": {
+      "dose": 150,
+      "cmax": 0.27,
+      "source": "SS 0.535/2"
+    }
+  },
+  "fda_extracts": {
+    "resmetirom": {
+      "cmax_ss": 0.971,
+      "confirms": true
+    },
+    "vimseltinib": {
+      "cmax_single": 0.283,
+      "confirms": true,
+      "perfect_match": true
+    },
+    "inavolisib": {
+      "cmax_ss": 0.069,
+      "confirms_ar_estimate": true
+    },
+    "berotralstat": {
+      "cmax_ss": 0.158,
+      "confirms_ar_estimate": true
+    },
+    "danicopan": {
+      "cmax_ss": 0.665,
+      "small_discrepancy": 0.535
+    }
+  },
+  "verdict": "Manual curations consistent with FDA labels"
+}
