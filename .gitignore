@@ -8,6 +8,7 @@ build/
 
 # Models (large binary artifacts)
 models/**/*.json
+models/**/*.bak
 !models/**/.gitkeep
 
 # IDE
@@ -40,3 +41,9 @@ data/drugbank/
 # DrugBank raw XML
 full database.xml
 .gstack/
+
+# Transient logs
+logs/
+
+# Docking caches and derived structures (regenerable from scripts)
+data/docking/
