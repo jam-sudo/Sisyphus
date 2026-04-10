@@ -5,16 +5,19 @@
 Sisyphus는 SMILES + dose → Cmax를 예측하는 PBPK 플랫폼.
 인체를 그래프(장기=노드, 혈관/대사=엣지)로 모델링하고, ODE를 자동 유도합니다.
 
-### 현재 성능 (Clean, 2026-04-09)
+### 현재 성능 (Clean, 4-track, 2026-04-10 post-merge)
 ```
-Meta AAFE: 2.808 | %2-fold: 45.8% | %3-fold: 59.8% | N=107 holdout
-Engine:    3.421 | ML: 3.057 | Weights: base(0.60/0.40/0.00) other(0.35/0.50/0.15)
+Meta AAFE: 2.695 | %2-fold: 47.7% | %3-fold: 65.4% | N=107 holdout
+Engine:    3.421 | ML: 3.057   (weights: _W_VDSS=0.20, scales other 3 tracks by 0.80)
+Base adaptive: engine/ml/clf = 0.60/0.40/0.00,  Other: 0.35/0.50/0.15
 ```
+Post-merge 재측정치 (2026-04-10 `c0cab88`, `scripts/run_engine_benchmark.py`). Pre-VDss (3-track) headline이었던 2.808에서 −4.0% 개선, %2-fold +1.9pp, %3-fold +5.6pp.
+
 ⚠ 이전 AAFE 2.283은 **오염값** (76/107 holdout drugs가 ML training에 누출).
-2026-04-04에 수정 (commit `5e5a3d0`), clean models로 재학습. 모든 보고에 2.808 사용.
+2026-04-04에 수정 (commit `5e5a3d0`), clean models로 재학습. 2.283 숫자는 폐기.
 상세: `docs/holdout_contamination_audit.md`, `data/validation/contamination_fix_report.json`
 
-⚠ **Merge pending (2026-04-10)**: 이 파일은 `audit/holdout-leakage-fix`와 `feat/ude-diffrax` 통합 직후 작성됨. AAFE 2.808은 3-track 기준 (pre-VDss). VDss 4th track 활성화 후 재계산 예정 (예상 ~2.695). 재생성 완료 시 이 경고 제거.
+Prospective (feat 브랜치에서 측정, 병합 후 재검증 필요): N=15 2024-2025 FDA NME, overall AAFE 2.48, in-domain AAFE 1.68, holdout gap 1.1x. `data/validation/prospective_N15_combined.json`, `data/validation/prospective_N15_vdss_track.json`.
 
 ### 핵심 파일 맵
 
@@ -30,6 +33,10 @@ Engine:    3.421 | ML: 3.057 | Weights: base(0.60/0.40/0.00) other(0.35/0.50/0.1
 - `adme/xgboost_peff.json` — Peff predictor (clean)
 - `adme/xgboost_clint.json` — CLint predictor (clean, scaffold CV R²=0.35 / random CV R²=0.42)
 - `adme/xgboost_clint_v3_biogen.json` — CLint 확장 (random CV R²=0.55, Biogen 3K+ 추가, 이 레포에서 미사용 — error cancellation 때문. 다른 레포에서 사용 가능. ⚠ scaffold CV 미측정)
+- `adme/xgboost_vdss.json` — VDss predictor (production, 4th track의 base)
+- `adme/xgboost_vdss_v2.json` + `_meta.json` — VDss v2 실험 모델 (training/LOOCV 전용, production path 미사용)
+- `adme/xgboost_bioavailability.json` + `_meta.json` — F% predictor (훈련만, NEGATIVE 결과로 production 미사용)
+- `adme/xgboost_clearance_v1.json`, `adme/xgboost_thalf_v1.json` — post-VDss 음성 실험 모델 (기록용)
 - `surrogate/cmax_mlp_{0..4}.eqx` — Neural surrogate ensemble (R²=0.9995)
 
 **데이터 (data/):**
@@ -38,9 +45,16 @@ Engine:    3.421 | ML: 3.057 | Weights: base(0.60/0.40/0.00) other(0.35/0.50/0.1
 - `training/clint_expanded_v2.csv` — CLint 학습 (1,910 compounds)
 - `training/clint_merged_v3_biogen.csv` — CLint + Biogen (5,377 compounds)
 - `training/biogen_adme_full.json` — Biogen 원본 (3,511 drugs × 5 endpoints: HLM, PPB, sol, MDR1, RLM)
-- `training/3track_holdout_predictions.json` — Clean holdout predictions (107 drugs)
+- `training/vdss_v2_training.csv` — VDss v2 실험 학습셋 (917 compounds)
+- `training/bioavailability_v1.csv` — F% 훈련셋 (527 drugs, NEGATIVE 결과로 unused)
+- `training/3track_holdout_predictions.json` — Clean holdout predictions (pre-VDss 3-track 스냅샷. 4-track 결과는 `run_engine_benchmark.py` 재실행으로 획득, 저장된 JSON 없음 — 추후 규격화 필요)
 - `validation/contamination_fix_report.json` — 오염 전/후 비교
 - `validation/ibis_benchmark_ketorolac.json` — IBIS vs IS 벤치마크
+- `validation/phase3_enkf_benchmark.json` — EnKF vs IS TDM 벤치마크 (feat→merge)
+- `validation/prospective_N15_combined.json`, `prospective_N15_vdss_track.json`, `prospective_2024_approvals_v2.json`, `prospective_2024_2025_N10.json` — 2024-2025 FDA NME prospective 시리즈
+- `validation/vdss_analytical_track_results.json`, `vdss_track_loocv_results.json` — VDss 4th track LOOCV 검증
+- `validation/phase1_ude_prototype_result.json` — UDE 프로토타입 falsification 기록
+- `validation/post_vdss_negative_results.json`, `class_aware_meta_results.json`, `f_predictor_negative_result.json`, `kinase_underprediction_diagnosis.json` — 음성 결과 기록
 
 **엔진 코드 (src/sisyphus/engine/):**
 - `compiler.py` — ODE 컴파일러 (CompiledODE, ResolvedParams)
@@ -57,45 +71,54 @@ Engine:    3.421 | ML: 3.057 | Weights: base(0.60/0.40/0.00) other(0.35/0.50/0.1
 - `tdm_ibis.py` — IBIS (sequential MC + MCMC rejuvenation)
 - `tdm_enkf.py` — Ensemble Kalman Filter
 
-**벤치마크 스크립트:**
-- `scripts/run_engine_benchmark.py` — 107 holdout AAFE 측정
+**벤치마크 / 재현 스크립트:**
+- `scripts/run_engine_benchmark.py` — 107 holdout AAFE 측정 (engine/ml/meta)
 - `scripts/train_surrogate.py` — Neural surrogate 학습
+- `scripts/train_vdss_v2.py` + `scripts/vdss_track_full_loocv.py` + `scripts/vdss_track_loocv.py` + `scripts/test_vdss_analytical_track.py` — VDss 4th track 재현
+- `scripts/fda_cmax_extractor.py` — FDA label에서 Cmax 추출
+- `scripts/prospective_batch_validator.py` — 2024-2025 prospective NME 배치 검증
 
-### 절대 다시 시도하지 마라 (34회 실패 기록)
+### 절대 다시 시도하지 마라 (40+회 실패 기록)
 
-AAFE 2.808은 현 아키텍처의 **확정적 상한**. 다음은 전부 시도 후 실패:
+AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). 다음은 전부 시도 후 실패:
 
 1. **Post-hoc meta-learner 33종** — error correlation r>0.986 (수학적 한계)
 2. **CLint R² 개선** (14회) — 0.24→0.55까지 올려도 error cancellation으로 Cmax 악화
 3. **Foundation models** (MoLFormer, ChemBERTa, Uni-Mol) — Morgan FP+XGB 압도
 4. **Docking CLint** — ΔR²=+0.005 (noise)
-5. **UDE (gradient through ODE)** — FALSIFIED, residual CV R²<0
+5. **UDE (gradient through ODE)** — FALSIFIED, residual CV R²<0 (`phase1_ude_prototype_result.json`)
 6. **E2E Neural PK** (Pharos, MLP) — data scale 부족
 7. **Data expansion** (ChEMBL, DrugBank, Biogen) — error cancellation 파괴
 8. **개별 ADME 교체/전체 교체** — 18회 error cancellation
+9. **Class-aware kinase 가중치** — batch under-prediction 진단 후 시도, negative (`class_aware_meta_results.json`)
+10. **F% bioavailability predictor** — 527 drugs 훈련, negative (`f_predictor_negative_result.json`)
+11. **Direct CL/F + t½ predictor** — post-VDss 6회 추가 시도, 전부 negative (`post_vdss_negative_results.json`)
 
 **근본 원인**: Cmax 잔차가 분자 구조에서 예측 불가 (CV R²<0).
 남은 오차 = 실험 변동성 + formulation + 개인차. SMILES→Cmax 정보 채널 상한.
 
-**유일한 검증된 개선**: VDss analytical 4th track (2.808→2.695, -4%).
-feat/ude-diffrax 브랜치에만 존재, production 미반영.
+**검증된 production-grade 개선 (2026-04-10 merge)**:
+- **VDss analytical 4th track** (2.808→2.695, −4.0%): `_W_VDSS=0.20`이 3-track 가중치를 0.80으로 scale down, 자체 20% 기여.
+- **EnKF TDM** (particle degeneracy fix): IBIS와 상보적, EnKF는 Gaussian posterior에 강함.
+- **Neural surrogate** (R²=0.9995): 엔진 forward pass를 MLP로 대체해 MC 속도 향상.
+- **Prospective N=15 gap 1.1x**: in-domain AAFE 1.68, overall 2.48. Distribution shift 없음 확인.
 
 ### 브랜치 구조
 - `main` — 안정 release
-- `audit/holdout-leakage-fix` — **현재 작업 브랜치** (clean models + JAX + IBIS + surrogate)
-- `feat/ude-diffrax` — UDE 실험 + VDss track + 33 methods 전부 기록
+- `audit/holdout-leakage-fix` — **현재 작업 브랜치** (merged from feat/ude-diffrax on 2026-04-10)
+- `archive/ude-diffrax-2026-04-10` — feat/ude-diffrax 아카이브 태그 (merge 전 상태 보존)
 
-## Session State (마지막 업데이트: 2026-04-10, post-merge)
+## Session State (마지막 업데이트: 2026-04-10, post-merge consolidated)
 
-### Current Metrics (N=107, CLEAN, pre-VDss-rebench)
-Engine AAFE: 3.421 | Meta AAFE: 2.808 | %2-fold: 45.8%
-In-domain AAFE: 2.591 (N=82, excluding 25 AD-flagged/ER/ref-quality drugs) — feat 브랜치에서 측정
-Adaptive weight: base=0.60/0.40/0.00, other=0.35/0.50/0.15
+### Current Metrics (N=107, CLEAN, 4-track, post-merge)
+Engine AAFE: 3.421 | ML AAFE: 3.057 | **Meta AAFE: 2.695** | %2-fold: 47.7% | %3-fold: 65.4%
+In-domain AAFE: 2.591 (N=82, pre-VDss 기준 — VDss 포함 재측정 필요)
+Track weights: `_W_VDSS=0.20`; base adaptive engine/ml/clf = 0.60/0.40/0.00; other = 0.35/0.50/0.15 (pre-VDss). VDss 활성화 시 모든 3-track 가중치에 ×0.80.
 LOOCV stability: base 93%, other 84%.
 
 NOTE: Prior headline (2.283) was invalidated by holdout data leakage fix on 2026-04-04 (commit `5e5a3d0`). 76-100 of 107 holdout drugs were in ML training data.
 
-⚠ Post-merge rebench pending: VDss 4th track는 feat/ude-diffrax에서 -4% (2.808→2.695) 검증. 2026-04-10 merge로 production에 합류. 재벤치까지 2.808이 headline, 이후 4-track 값으로 업데이트.
+2026-04-10 branch consolidation (merge commit `c0cab88`): `audit/holdout-leakage-fix`와 `feat/ude-diffrax` 병합. VDss 4th track production 합류, EnKF TDM 추가, prospective validation 시리즈 통합. 재벤치 결과 위 메트릭대로 2.808→2.695 확정.
 
 ### Holdout Expansion (2026-03-26)
 - N=61 → N=107 (+46 drugs from OSP repos, FDA labels, curated literature)
@@ -170,6 +193,10 @@ NOTE: Prior headline (2.283) was invalidated by holdout data leakage fix on 2026
 - **k-NN read-across (2026-03-31)** → Morgan FP Tanimoto (median 0.464), k=20 similarity-weighted: AAFE 3.049. 3-way blend w_knn=0.00. r(ML,kNN)=0.690 (correlated errors). Oracle 3-track 1.689 (28/107 drugs에서 kNN 최선)이나 고정 weight 불가.
 - **Post-hoc meta-learner (2026-04-01)** → OOF Stacking (Ridge) + ACF (Analog Correction Factor) + Winsorized. 6 variants 테스트. **전부 baseline meta 2.277 이하 불가.** Stacking V1: 2.420 (OOF-Full gap r=0.81이 transfer 파괴), ACF k=5: 3.005 (이웃 fold error std=0.67, noisy), Winsorized cap=0.5: 2.300 (현재와 동일). Stacking+ACF 통합도 효과 없음. 23번째 negative result.
 - **10-method meta-learner tournament (2026-04-01)** → 5 PK-domain + 5 cross-domain 접근법 경쟁: Isotonic Engine Cal. (3.416→3.741 악화), ER-Proxy Routing (2.277 동률), Error Direction Clf (64.2% acc, +0.055), CLint-Stratified (+0.006), AAFE-Direct Optim (+0.082), Quantile XGB (+0.602), Local BMA (+0.081), Caruana Ensemble (+0.090), Disagree-Sigmoid (+0.014), Trimmed AAFE (+0.097). **10개 전부 error correlation r>0.986 with baseline.** Compound-type-adaptive geometric blend가 provably near-optimal. 24번째 negative result (누적 33 methods).
+- **Kinase batch under-prediction class-aware weights (feat 브랜치, 2026-04-07 이전)** → Kinase 진단 후 `scripts/class_aware_meta_benchmark.py`로 kinase class에 별도 가중치 스윕. Meta AAFE 2.277 동률, 1,765-cell weight cache 생성했지만 어느 조합도 baseline 이하로 내려가지 않음. `data/validation/class_aware_meta_results.json`.
+- **F% bioavailability predictor (feat 브랜치, 2026-04-07 이전)** → DrugBank 527 drugs로 XGB 훈련, `scripts/train_bioavailability.py`. Standalone 및 meta 통합 모두 negative. `data/validation/f_predictor_negative_result.json`. F%는 VDss 경로와 달리 error cancellation을 깨지 못함.
+- **Direct CL/half-life predictors (feat 브랜치, post-VDss 6회)** → `xgboost_clearance_v1.json` + `xgboost_thalf_v1.json` 포함, 6가지 조합 시도. 전부 negative, `data/validation/post_vdss_negative_results.json`. VDss 4th track이 성공한 것이 "IVIVE bypass" 때문이라는 해석은 반증됨 — 같은 원리의 CL/F·t½는 실패.
+- **UDE 프로토타입 공식 Phase 1 실험 (feat 브랜치)** → Diffrax 기반 gradient-through-solver residual learning, `data/validation/phase1_ude_prototype_result.json`에 falsification 기록. Residual이 분자 구조로부터 학습 가능하지 않음 (CV R²<0). Phase 2 (amortized SBI), Phase 3 (flow matching)는 미실행.
 
 ### Engine-only ablation 결과
 - DrugBank enrichment: engine AAFE 3.074→2.945 (Δ=-0.129, 유의미), meta는 0.17 weight로 0.021만 전달
@@ -188,6 +215,15 @@ NOTE: Prior headline (2.283) was invalidated by holdout data leakage fix on 2026
 - **Post-hoc correction 전방위 불가 (2026-04-01)**: 2 experiments × 총 33 methods 테스트. OOF Stacking/ACF/Winsorized + 10-method tournament (isotonic/ER/error-direction/CLint/AAFE-direct/quantile/BMA/Caruana/sigmoid/trimmed). **모든 method의 holdout error가 baseline과 r>0.986 상관.** Engine+ML의 post-hoc 조합으로는 2.277을 돌파할 수 없음이 수학적으로 확인.
 - **유일한 돌파 경로**: predict layer 전체를 새 데이터+새 모델로 일괄 교체 + meta-learner 재학습. 또는 TDM Bayesian update로 ceiling을 우회.
 - TDM Bayesian update가 현재 가장 실용적인 정확도 향상 경로 (CV 55% 감소 확인됨).
+
+### 2026-04-10 post-merge 업데이트 (진단 추가)
+- **VDss analytical 4th track 성공 (−4% AAFE 2.808→2.695)**: 원래 진단이었던 "부분 교체 불가"가 반증됨. VDss는 dose/(Vd·BW) 라는 analytical 1-compartment 근사를 20% weight로 추가한 것일 뿐, predict layer 전체 교체 없이 개선에 성공. 즉 **일부 track 추가**는 가능, 단 그 track이 기존 오차와 충분히 de-correlated인 경우에 한함.
+- **왜 CL/F·t½ 3rd/추가 track은 실패했는데 VDss는 성공했는가**: feat 브랜치의 post-VDss CL/t½ 실험 결과를 해석하면, CL·t½·Cmax는 hepatic clearance / CYP-dominant kinetics에 공통적으로 의존해 error가 상관됨. VDss는 tissue partitioning (lipophilicity + tissue binding) 기반이라 clearance-orthogonal 성분을 제공. 향후 track 추가 실험은 **"기존 track과 error가 얼마나 de-correlated인가"** 를 사전에 측정해야 함.
+- **Error cancellation 벽은 부분적으로 허물어졌음**: 34회 실패의 공통 원인은 "기존 track과 correlated error를 가진 추가 모델"이었음이 명확해짐. 새 track의 타당성 판단 기준이 생김.
+- **남은 실용적 경로 (우선순위)**:
+  1. TDM Bayesian update (IBIS + EnKF dual-method, 이미 구현 및 벤치마크 완료) — individual-level 정확도 향상이 production-ready.
+  2. 추가 orthogonal track 탐색 — renal clearance analytical, formulation-aware dissolution, tissue-specific partitioning. 단 사전에 error decorrelation 측정 필수.
+  3. Breakthrough path Phase 2 (amortized SBI / BayesFlow) — 데이터 스케일 필요, 미실행.
 
 ### 다음 할 것
 - [x] Phase 0: UGT revert, w_base=0.65 복원, MMPK migration
@@ -216,6 +252,16 @@ NOTE: Prior headline (2.283) was invalidated by holdout data leakage fix on 2026
 - [x] LOOCV 재실행: w_base=0.65→0.45 (N=107 최적). Meta AAFE 2.306→2.283. %2-fold 52.3→54.2%.
 - [x] Measured ADME PoC: 12약물 engine-only 비교. Pattern C 확인.
 - [x] Direct CL/F 3rd track: CL/F R²=0.232, Vd/F R²=0.332, LOOCV w_clf=0.00. Negative result. 인프라 유지.
+- [x] 2026-04-10: Branch consolidation — `audit/holdout-leakage-fix` + `feat/ude-diffrax` merge (commit `c0cab88`). VDss 4th track + EnKF TDM + neural surrogate + JAX backend 통합. Test suite 371/371 pass. Post-merge AAFE 2.695 확정.
+- [x] 2026-04-10: `tdm.py` 잠복 버그 수정 — `bayesian_update(method="enkf")` 호출 시 잘못된 kwarg (`n_prior=`→`n_ensemble=`) 및 `EnKFResult→TDMResult` 변환 누락. audit에서는 `tdm_enkf.py` 부재로 테스트된 적 없었음. merge가 이 dead code path를 깨우면서 노출되어 수정.
+- [ ] Post-merge follow-ups (우선순위 순):
+  - [ ] In-domain AAFE 재측정 (VDss 4-track 기준, pre-VDss 2.591 값 업데이트)
+  - [ ] `4track_holdout_predictions.json` 정식 저장 (현재 3-track 스냅샷만 있음)
+  - [ ] Prospective N=15 재측정 (4-track에서)
+  - [ ] CLI에 `--method ibis` 옵션 추가 (현재 `{is, enkf}`만 노출, tdm.py API는 ibis 지원)
+  - [ ] CLI EnKF dispatch를 `tdm.bayesian_update(method="enkf")` 경로로 통일 (현재 cli.py는 `enkf_update`를 직접 호출, API 일관성 부족)
+  - [ ] TDM 90% CI calibration (현재 67% coverage, ideal 90%)
+  - [ ] EnKF vs IBIS 벤치마크 재현 (merged 상태에서)
 
 ### Measured ADME Proof of Concept (2026-03-26)
 - N=12 holdout drugs, engine-only (no meta-learner), Tier 2 (measured fup + CLint)
