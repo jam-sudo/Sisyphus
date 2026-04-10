@@ -17,11 +17,29 @@ Current scope (POC):
     - Simulator: full scipy engine (not surrogate — OOD bug)
 """
 
+from sisyphus.sbi.multi_drug import (
+    DRUG_FEATURE_NAMES,
+    DrugSpec,
+    MultiDrugSimulator,
+    N_DRUG_FEATURES,
+    extract_drug_features,
+    load_drug_specs_from_json,
+    pack_observation,
+    stack_training_pairs,
+)
 from sisyphus.sbi.priors import build_box_prior
 from sisyphus.sbi.simulator import EngineSimulator, apply_theta_to_drug
 
 __all__ = [
+    "DRUG_FEATURE_NAMES",
+    "DrugSpec",
     "EngineSimulator",
+    "MultiDrugSimulator",
+    "N_DRUG_FEATURES",
     "apply_theta_to_drug",
     "build_box_prior",
+    "extract_drug_features",
+    "load_drug_specs_from_json",
+    "pack_observation",
+    "stack_training_pairs",
 ]
