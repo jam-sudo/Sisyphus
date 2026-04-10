@@ -26,8 +26,8 @@ Engine:    3.421 | ML: 3.057 | Weights: base(0.60/0.40/0.00) other(0.35/0.50/0.1
 - `direct_pk/meta.json` — meta-learner weights v3_clean
 - `adme/xgboost_fup_v2.json` — fup predictor (clean)
 - `adme/xgboost_peff.json` — Peff predictor (clean)
-- `adme/xgboost_clint.json` — CLint predictor (clean, R²=0.42)
-- `adme/xgboost_clint_v3_biogen.json` — CLint 확장 (R²=0.55, Biogen 3K+ 추가, 이 레포에서 미사용 — error cancellation 때문. 다른 레포에서 사용 가능)
+- `adme/xgboost_clint.json` — CLint predictor (clean, scaffold CV R²=0.35 / random CV R²=0.42)
+- `adme/xgboost_clint_v3_biogen.json` — CLint 확장 (random CV R²=0.55, Biogen 3K+ 추가, 이 레포에서 미사용 — error cancellation 때문. 다른 레포에서 사용 가능. ⚠ scaffold CV 미측정)
 - `surrogate/cmax_mlp_{0..4}.eqx` — Neural surrogate ensemble (R²=0.9995)
 
 **데이터 (data/):**
