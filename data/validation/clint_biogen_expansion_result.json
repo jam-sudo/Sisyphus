@@ -1,0 +1,27 @@
+{
+  "experiment": "CLint Biogen expansion",
+  "date": "2026-04-09",
+  "pre_registered": false,
+  "data": {
+    "baseline": {
+      "n": 1910,
+      "cv_r2": 0.4203,
+      "cv_rmse": 0.5046
+    },
+    "expanded": {
+      "n": 4961,
+      "cv_r2": 0.5543,
+      "cv_rmse": 1.1448
+    }
+  },
+  "holdout_impact": {
+    "baseline_engine_aafe": 3.421,
+    "expanded_engine_aafe": 3.982,
+    "baseline_meta_aafe": 2.808,
+    "expanded_meta_aafe": 2.925,
+    "verdict": "NEGATIVE \u2014 error cancellation"
+  },
+  "model_file": "models/adme/xgboost_clint_v3_biogen.json",
+  "training_data": "data/training/clint_merged_v3_biogen.csv",
+  "raw_biogen": "data/training/biogen_adme_full.json"
+}
