@@ -1,0 +1,8 @@
+{
+  "existing_clint": 1910,
+  "biogen_novel": 3051,
+  "total": 4961,
+  "expansion_pct": 159.7,
+  "holdout_excluded": 106,
+  "source": "Biogen/Fang ADME 3521 compounds, GitHub molecularinformatics/Computational-ADME"
+}
