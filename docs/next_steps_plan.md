@@ -44,6 +44,29 @@ SBI POC는 **완료되었고 kill-switch gate를 두 드럭(morphine, clozapine)
 
 ## Track A (권장 1순위): Multi-drug Conditional Amortizer
 
+### ✅ Pre-resolved Decisions (사용자 승인 완료, 2026-04-10)
+
+이 섹션의 모든 결정은 사용자가 사전에 승인했습니다. **새 세션에서 Track A 실행 시 이 값들을 사용하고 사용자에게 재질문하지 마세요.**
+
+| 결정 항목 | 확정 값 |
+|---|---|
+| Training drug set 출처 | `data/training/mmpk_expanded_v2.csv` |
+| Training drug set 크기 | 50 drugs |
+| Training drug 선정 방법 | holdout 제외 + 유효 SMILES 필터 + compound_type 계층화 랜덤, **seed=42** |
+| Per-drug theta samples | 1000 |
+| Total simulations | 50 × 1000 = 50,000 |
+| Compute strategy | `multiprocessing.Pool` 4 workers, 예상 1-2 hours |
+| Density estimator | NSF (hidden_features=64, num_transforms=8) |
+| Conditioning input | 12D ADME features (neural surrogate의 feature space와 동일) |
+| Kill-switch mini-run | 20 drugs × 5000 sims 먼저, 통과 시 full 50k |
+| **Holdout validation drugs** | **최소 10개 (사용자 명시)**. Anchors 5개 (기존 TDM benchmark): morphine, clozapine, amantadine, ketorolac, rivaroxaban. Diversity additions 5개 이상: 107-holdout에서 compound_type (neutral/acid/base/zwitter)과 clearance mechanism (CYP-dominant/renal-dominant/transporter-dominant) 다양성 기준으로 선택. **실제 선정은 에이전트가 107-holdout 리스트에서 다양성 원칙으로 뽑음** |
+| SBC per-drug 설정 | 300 calibration × 500 posterior samples |
+| IBIS 비교 범위 | 3-5 drugs (시간 제약, full tournament는 Track B) |
+| Paper timing | Track A 완료 후 재논의 — Track A 시작엔 무관 |
+| Surrogate OOD 버그 (Track D1) | Track A는 full scipy engine 사용이라 영향 없음. Track A 후 Track D로 이관. |
+
+**Gate 통과 기준 (SBC)**: 모든 holdout drugs에서 KS p > 0.01 AND coverage within 10pp of nominal at 50/80/90/95% levels. 부분 실패 시 diagnostic → training set 확대 또는 embedding 심화. 전면 실패 시 Track A 보류 + 사용자 report.
+
 ### 목표
 
 POC는 "drug 1개당 네트워크 1개" 구조였습니다. 실제 production에서는 "모든 드럭에 대해 하나의 네트워크가 즉시 응답"해야 합니다. 이는 conditional density estimation 문제입니다:
@@ -67,9 +90,9 @@ p(θ | x_obs, drug_features) — x_obs는 1D Cmax, drug_features는 12-64D 분�
 - observation `x` = concat([drug_features(12), log10_cmax(1)]) = 13D
 - 단, SBC와 포스테리어 의미론을 보존하려면 `drug_features`는 관측의 일부가 아니라 **fixed conditioning**으로 다뤄야 함. `sbi` 라이브러리는 이걸 embedding_net으로 처리.
 
-**훈련 데이터 설계**:
-- Training 드럭 세트: 50-100 drugs (NOT in holdout — from `data/training/mmpk_expanded_v2.csv`)
-- Per-drug theta 샘플 수: 500-1000
+**훈련 데이터 설계** (pre-resolved above):
+- Training 드럭 세트: **50 drugs** (NOT in holdout — from `data/training/mmpk_expanded_v2.csv`)
+- Per-drug theta 샘플 수: **1000**
 - 총 시뮬레이션: 50 × 1000 = **50,000 사이즈**
 - 단일 스레드 예상: 50,000 × 0.2s = 2.8시간
 - Multiprocessing 4 workers: ~45분 (I/O + worker startup 포함)
@@ -109,9 +132,11 @@ p(θ | x_obs, drug_features) — x_obs는 1D Cmax, drug_features는 12-64D 분�
    - NSF density estimator over (theta | embedded_context, x)
    - 산출: `models/sbi/multi_drug_posterior_nsf.pt`
 
-5. **SBC per-holdout-drug** (~30-60분)
+5. **SBC per-holdout-drug** (~45-90분)
    - `scripts/sbi_run_sbc_multi_drug.py`
-   - 5-10개 holdout 드럭 (morphine, clozapine, amantadine, caffeine, etc.) 각각에 대해 SBC
+   - **최소 10개 holdout 드럭** 각각에 대해 SBC
+   - Anchors (5): morphine, clozapine, amantadine, ketorolac, rivaroxaban
+   - Diversity additions (5+): 107-holdout에서 compound_type + clearance mechanism 기준으로 에이전트가 선택
    - 각 드럭에 대한 300 calibration × 500 posterior samples
    - Gate: 모든 드럭이 KS p > 0.01, coverage within 10pp
    - 산출: `data/validation/sbi_sbc_multi_drug.json`
@@ -320,13 +345,15 @@ Track A+B 완결 후. 장기 플레이.
 
 ---
 
-## 남은 질문 (Blockers / 결정 대기)
+## 남은 질문 — ✅ 전부 Resolved (2026-04-10)
 
-1. **Training drug set 선정 기준**: 50개 드럭을 어떻게 고를지. 계층화 vs 랜덤 vs "가장 학습에 도움 되는" 기준?
-2. **Compute budget**: 50k 시뮬레이션 = ~1시간 (multiprocessing) 또는 3시간 (단일). 사용자 승인?
-3. **Holdout validation drugs**: SBC 검증용 5-10개를 어떻게 고를지. 다양한 compound type + 다양한 CLint 범위?
-4. **Paper timing**: 논문 작성이 목표라면 Track F1 (prospective N=40) + F3 (negative results paper) + SBI methodology paper 세 편을 묶을 수도. 우선순위?
-5. **Surrogate OOD 버그**: "집 청소 페이즈"로 뒤로 미루는 것이 맞나, 아니면 A의 일부로 먼저 처리할까? Phase 2.0 자체가 full engine을 쓰므로 영향 없지만, Phase 2.1이 surrogate를 쓴다면 prereq.
+~~1. Training drug set 선정 기준~~ → **stratified random 50 drugs from mmpk_expanded_v2, seed=42**
+~~2. Compute budget~~ → **50k full run, multiprocessing 4 workers**
+~~3. Holdout validation drugs~~ → **최소 10개 (사용자 명시), anchors 5 + diversity 5+**
+~~4. Paper timing~~ → **Track A 완료 후 재논의, Track A 시작엔 무관**
+~~5. Surrogate OOD 버그~~ → **Track A는 full engine 사용이라 영향 없음, Track D1로 이관**
+
+모든 defaults가 위 "Pre-resolved Decisions" 테이블에 박혀 있습니다. 새 세션은 이 문서를 참조하고 바로 실행할 수 있습니다.
 
 ---
 
