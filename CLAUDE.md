@@ -1,11 +1,93 @@
 # CLAUDE.md — Sisyphus
 
-## Session State (마지막 업데이트: 2026-03-27)
+## Quick Start (다른 에이전트는 여기서 시작)
 
-### Current Metrics (N=107)
-Engine AAFE: 3.415 | Meta AAFE: 2.283 | %2-fold: 54.2%
-In-domain AAFE: 2.100 (N=83, excluding 24 AD-flagged/ER drugs)
-Adaptive weight: base=0.45, other=0.00 (LOOCV 107/107, w_base stability 82%)
+Sisyphus는 SMILES + dose → Cmax를 예측하는 PBPK 플랫폼.
+인체를 그래프(장기=노드, 혈관/대사=엣지)로 모델링하고, ODE를 자동 유도합니다.
+
+### 현재 성능 (Clean, 2026-04-09)
+```
+Meta AAFE: 2.808 | %2-fold: 45.8% | %3-fold: 59.8% | N=107 holdout
+Engine:    3.421 | ML: 3.057 | Weights: base(0.60/0.40/0.00) other(0.35/0.50/0.15)
+```
+⚠ 이전 AAFE 2.283은 **오염값** (76/107 holdout drugs가 ML training에 누출).
+2026-04-04에 수정, clean models로 재학습. 모든 보고에 2.808 사용.
+상세: `docs/holdout_contamination_audit.md`, `data/validation/contamination_fix_report.json`
+
+### 핵심 파일 맵
+
+**이해하려면 읽어야 할 파일:**
+- `DESIGN.md` — 아키텍처 설계 문서 (최우선)
+- `docs/breakthrough_path.md` — 정확도 ceiling 진단 + UDE 로드맵
+- `docs/holdout_contamination_audit.md` — 오염 발견/수정/영향 전체 기록
+
+**현재 모델 (models/):**
+- `direct_pk/xgboost_cmax.json` — ML Cmax (clean, N=1,028)
+- `direct_pk/meta.json` — meta-learner weights v3_clean
+- `adme/xgboost_fup_v2.json` — fup predictor (clean)
+- `adme/xgboost_peff.json` — Peff predictor (clean)
+- `adme/xgboost_clint.json` — CLint predictor (clean, R²=0.42)
+- `adme/xgboost_clint_v3_biogen.json` — CLint 확장 (R²=0.55, Biogen 3K+ 추가, 이 레포에서 미사용 — error cancellation 때문. 다른 레포에서 사용 가능)
+- `surrogate/cmax_mlp_{0..4}.eqx` — Neural surrogate ensemble (R²=0.9995)
+
+**데이터 (data/):**
+- `training/mmpk_expanded_full.csv` — Cmax 학습 (3,806 rows, 1,260 drugs)
+- `training/mmpk_expanded_v2.csv` — PLM 데이터 추가 버전 (3,918 rows, 1,372 drugs)
+- `training/clint_expanded_v2.csv` — CLint 학습 (1,910 compounds)
+- `training/clint_merged_v3_biogen.csv` — CLint + Biogen (5,377 compounds)
+- `training/biogen_adme_full.json` — Biogen 원본 (3,511 drugs × 5 endpoints: HLM, PPB, sol, MDR1, RLM)
+- `training/3track_holdout_predictions.json` — Clean holdout predictions (107 drugs)
+- `validation/contamination_fix_report.json` — 오염 전/후 비교
+- `validation/ibis_benchmark_ketorolac.json` — IBIS vs IS 벤치마크
+
+**엔진 코드 (src/sisyphus/engine/):**
+- `compiler.py` — ODE 컴파일러 (CompiledODE, ResolvedParams)
+- `flux.py` — 6개 flux 타입 (flow, clearance, transit, absorption, diffusion, active_transport)
+- `solver.py` — SciPy LSODA solver
+- `solver_jax.py` — JAX/Diffrax Kvaerno5 solver (vmap MC 지원)
+- `params_jax.py` — JAX-호환 flat parameter 구조체
+- `rhs_jax.py` — Pure-JAX ODE RHS (6 flux types 벡터화)
+- `uncertainty.py` — MC propagation (backend: scipy/jax/surrogate)
+- `surrogate.py` — Neural surrogate MLP (Equinox)
+
+**TDM (src/sisyphus/regimen/):**
+- `tdm.py` — Bayesian update API (method: importance_sampling/ibis/enkf)
+- `tdm_ibis.py` — IBIS (sequential MC + MCMC rejuvenation)
+- `tdm_enkf.py` — Ensemble Kalman Filter
+
+**벤치마크 스크립트:**
+- `scripts/run_engine_benchmark.py` — 107 holdout AAFE 측정
+- `scripts/train_surrogate.py` — Neural surrogate 학습
+
+### 절대 다시 시도하지 마라 (34회 실패 기록)
+
+AAFE 2.808은 현 아키텍처의 **확정적 상한**. 다음은 전부 시도 후 실패:
+
+1. **Post-hoc meta-learner 33종** — error correlation r>0.986 (수학적 한계)
+2. **CLint R² 개선** (14회) — 0.24→0.55까지 올려도 error cancellation으로 Cmax 악화
+3. **Foundation models** (MoLFormer, ChemBERTa, Uni-Mol) — Morgan FP+XGB 압도
+4. **Docking CLint** — ΔR²=+0.005 (noise)
+5. **UDE (gradient through ODE)** — FALSIFIED, residual CV R²<0
+6. **E2E Neural PK** (Pharos, MLP) — data scale 부족
+7. **Data expansion** (ChEMBL, DrugBank, Biogen) — error cancellation 파괴
+8. **개별 ADME 교체/전체 교체** — 18회 error cancellation
+
+**근본 원인**: Cmax 잔차가 분자 구조에서 예측 불가 (CV R²<0).
+남은 오차 = 실험 변동성 + formulation + 개인차. SMILES→Cmax 정보 채널 상한.
+
+**유일한 검증된 개선**: VDss analytical 4th track (2.808→2.695, -4%).
+feat/ude-diffrax 브랜치에만 존재, production 미반영.
+
+### 브랜치 구조
+- `main` — 안정 release
+- `audit/holdout-leakage-fix` — **현재 작업 브랜치** (clean models + JAX + IBIS + surrogate)
+- `feat/ude-diffrax` — UDE 실험 + VDss track + 33 methods 전부 기록
+
+## Session State (마지막 업데이트: 2026-04-09, clean)
+
+### Current Metrics (N=107, CLEAN)
+Engine AAFE: 3.421 | Meta AAFE: 2.808 | %2-fold: 45.8%
+Adaptive weight: base=0.60/0.40/0.00, other=0.35/0.50/0.15
 
 ### Holdout Expansion (2026-03-26)
 - N=61 → N=107 (+46 drugs from OSP repos, FDA labels, curated literature)
