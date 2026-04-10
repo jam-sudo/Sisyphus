@@ -124,27 +124,34 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 
 ## 🎯 다음 작업 (Active, 2026-04-10 이후)
 
-**Track A — Phase 2.0 Multi-drug Conditional SBI Amortizer**
+**Track A (Phase 2.0) — 부분 성공으로 완료**. Phase 2.0.5 또는 Track B 선택 대기.
 
-새 세션에서 사용자가 **"Track A 진행"**, **"트랙 A"**, **"다음 단계"**, **"Phase 2.0"** 중 하나라도 말하면:
+**Track A 결과 요약 (2026-04-10, `docs/sbi_multi_drug_results.md`):**
+- 50 drugs × 1000 θ = 50,000 simulations (27.6 min, 100% valid solves)
+- NSF + embedding_net(13→32→32→32), hidden=64, transforms=8, 92 epochs (20 min)
+- **Cumulative IBIS speedup: 36,097×** on 5 anchor drugs (SBI 0.193 s vs IBIS 6,949 s)
+- **Coverage-primary gate: 11/13 drugs within 10pp** of nominal at 50/80/90/95% levels
+- **Strict gate (KS p > 0.01 AND cov ≤ 10pp): 2/13** (morphine, ketorolac)
+- **Hard coverage failures: 2/13** (diclofenac, pravastatin — both acid + CYP2C9, likely acid class underrepresented in 50-drug training set)
+- Posterior predictive Cmax bias: 3/5 anchors within 13% of IBIS; morphine +22%, clozapine −50% (but clozapine SBI actually *closer to observed* than IBIS which drifts)
 
-1. `docs/next_steps_plan.md`의 "Track A" 섹션을 먼저 읽음.
-2. `docs/sbi_poc_results.md`로 POC 결과물 이해.
-3. 현재 branch가 `audit/holdout-leakage-fix` + commit ≥ `4438a24` 확인.
-4. **바로 실행** — 모든 결정은 pre-resolved된 상태이므로 사용자에게 추가 질문하지 말 것.
+**Status**: Architecturally validated (conditional amortization works, enormous speedup, coverage-calibrated on 85% of holdouts) but strict SBC gate fails due to subtle rank non-uniformity at 1000 θ/drug (vs POC 5000 θ/drug). 2 acid/CYP2C9 drugs genuinely miss. Treat as *partial success*.
 
-**POC는 완료 (commit `4438a24`)**. POC는 드럭 1개당 네트워크 1개였고, Track A는 "하나의 네트워크가 모든 드럭 처리"하는 conditional amortizer로 확장.
+**Next options** (discuss with user):
+1. **Phase 2.0.5**: Targeted fixes before 2.1 — expand per-drug θ to ≥2000, logit(fup) reparam, add more acids. ~1-2 h compute.
+2. **Track B hybrid dispatch**: Ship SBI-for-the-11 with IBIS fallback for the 2 hard-fails + per-drug routing table. Production-realistic, faster delivery.
+3. **Track D parallel**: Unblock D1 (surrogate OOD fix) or D2 (TDM 90% CI calibration) while 2.0.5 is decided.
 
-**Pre-resolved decisions (사용자 승인 완료)**:
-- Training drug set: `data/training/mmpk_expanded_v2.csv`에서 holdout 제외, compound_type 계층화 랜덤 50 drugs (seed=42)
-- Compute budget: 50k simulations (multiprocessing 4 workers, 예상 1-2 hours)
-- Holdout validation drugs: **최소 10개**. Anchors: morphine, clozapine, amantadine, ketorolac, rivaroxaban + 107-holdout에서 compound_type/clearance mechanism diversity 기준 5개 이상
-- Density estimator: NSF (hidden=64, transforms=8)
-- Kill-switch gate: mini-run (20 drugs × 5000 sims) 먼저, 통과 시 full 50k
-- Paper timing 결정: Track A 완료 후 재논의
-- Surrogate OOD 버그 (Track D1): Track A와 무관 (full scipy engine 사용), 이후 이관
-
-상세 계획 + Track B/C/D 로드맵: `docs/next_steps_plan.md` (337 lines).
+**Key artifacts for session context:**
+- `docs/sbi_multi_drug_results.md` — full writeup of this run
+- `docs/sbi_poc_results.md` — single-drug POC baseline (commit `4438a24`)
+- `docs/next_steps_plan.md` — Track B/C/D roadmap (still valid)
+- `data/validation/sbi_sbc_multi_drug.json` — per-drug SBC details
+- `data/validation/sbi_vs_ibis_multi_drug.json` — 5-drug IBIS comparison
+- `data/sbi/multi_drug_train.npz` — 50k training pairs
+- `models/sbi/multi_drug_nsf.pt` (+ `.aux.pt`) — trained amortizer (not committed, .gitignore)
+- `src/sisyphus/sbi/multi_drug.py` — MultiDrugSimulator, extract_drug_features, pack_observation
+- `tests/unit/test_sbi_multi_drug.py` — 10 passing tests
 
 ## Session State (마지막 업데이트: 2026-04-10, post-merge consolidated)
 
