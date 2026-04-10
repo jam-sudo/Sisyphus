@@ -1,0 +1,14 @@
+{
+  "n_train": 916,
+  "scaffold_cv_r2": 0.29051417816320485,
+  "train_r2": 0.9706926645985724,
+  "log_vdss_stats": {
+    "mean": 0.2231828298854502,
+    "std": 0.7523499720077463,
+    "min": -4.522878745280337,
+    "max": 3.370698092575577
+  },
+  "source": "DrugBank volume_of_distribution (holdout-excluded)",
+  "target": "log10(VDss) in L/kg",
+  "normalization": "70 kg assumed body weight for L\u2192L/kg conversion"
+}

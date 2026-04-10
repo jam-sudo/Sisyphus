@@ -238,10 +238,24 @@ def bayesian_update(
     if method == "enkf":
         from sisyphus.regimen.tdm_enkf import enkf_update
 
-        return enkf_update(
+        enkf_result = enkf_update(
             compiled, graph, drug, regimen, observations,
-            n_prior=n_prior, seed=seed,
+            n_ensemble=n_prior, seed=seed,
             observation_node=observation_node,
+        )
+        n_post = max(enkf_result.n_successful_post, 1)
+        uniform_weights = np.full(n_post, 1.0 / n_post)
+        return TDMResult(
+            prior_cmax=enkf_result.prior_cmax,
+            posterior_cmax=enkf_result.posterior_cmax,
+            prior_params=enkf_result.prior_params,
+            posterior_params=enkf_result.posterior_params,
+            n_prior=enkf_result.n_prior,
+            n_successful=enkf_result.n_successful,
+            ess=enkf_result.ess,
+            observations=enkf_result.observations,
+            weights=uniform_weights,
+            log_likelihoods=np.zeros(n_post),
         )
 
     # ── Default: importance sampling (original method) ──

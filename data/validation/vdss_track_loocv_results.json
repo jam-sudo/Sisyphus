@@ -1,0 +1,19 @@
+{
+  "baseline_holdout_aafe": 2.808,
+  "best_adaptive_4track_full": 2.6595516574269475,
+  "best_adaptive_4track_loocv": 2.890240764537969,
+  "best_base_weights": {
+    "eng": 0.5,
+    "ml": 0.4,
+    "vdss": 0.1,
+    "aafe": 3.167148222010272
+  },
+  "best_other_weights": {
+    "eng": 0.3,
+    "ml": 0.4,
+    "vdss": 0.3,
+    "aafe": 2.4845778100419578
+  },
+  "prospective_aafe": 2.5465257966828676,
+  "baseline_prospective_aafe": 2.546
+}
