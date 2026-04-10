@@ -51,6 +51,7 @@ def train_npe(
     validation_fraction: float = 0.15,
     stop_after_epochs: int = 20,
     seed: int = 42,
+    embedding_net_hidden: int | None = None,
 ) -> NPETrainingResult:
     """Train a Neural Posterior Estimator on (theta, x) pairs.
 
@@ -59,10 +60,17 @@ def train_npe(
         x:     (N, d_x) float32 array
         prior_low/high: bounds for BoxUniform prior (same as data generation)
         density_estimator: 'maf' (Masked Autoregressive Flow) or 'nsf'
+        embedding_net_hidden: if not None, prepend an MLP embedding net
+            (d_x → hidden → hidden → hidden) to the density estimator, so
+            the flow sees a learned compression of the observation instead
+            of the raw concatenation. Useful when ``x`` mixes semantically
+            different coordinates (e.g. log10(Cmax) concatenated with drug
+            features).
         ... sbi training hyperparameters
     """
     import torch
     from sbi.inference import SNPE
+    from sbi.neural_nets import posterior_nn
     from sbi.utils import BoxUniform
 
     torch.manual_seed(seed)
@@ -84,11 +92,36 @@ def train_npe(
         density_estimator,
     )
 
-    inference = SNPE(
-        prior=prior_torch,
-        density_estimator=density_estimator,
-        show_progress_bars=True,
-    )
+    if embedding_net_hidden is not None:
+        import torch.nn as nn
+        d_x = int(x_t.shape[1])
+        h = int(embedding_net_hidden)
+        embedding_net = nn.Sequential(
+            nn.Linear(d_x, h), nn.ReLU(),
+            nn.Linear(h, h), nn.ReLU(),
+            nn.Linear(h, h),
+        )
+        density_estimator_obj = posterior_nn(
+            model=density_estimator,
+            embedding_net=embedding_net,
+            hidden_features=hidden_features,
+            num_transforms=num_transforms,
+        )
+        logger.info(
+            "  using MLP embedding_net %d→%d→%d→%d",
+            d_x, h, h, h,
+        )
+        inference = SNPE(
+            prior=prior_torch,
+            density_estimator=density_estimator_obj,
+            show_progress_bars=True,
+        )
+    else:
+        inference = SNPE(
+            prior=prior_torch,
+            density_estimator=density_estimator,
+            show_progress_bars=True,
+        )
     inference.append_simulations(theta_t, x_t)
 
     density_net = inference.train(
