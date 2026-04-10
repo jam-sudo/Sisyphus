@@ -122,6 +122,30 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 - `audit/holdout-leakage-fix` — **현재 작업 브랜치** (merged from feat/ude-diffrax on 2026-04-10)
 - `archive/ude-diffrax-2026-04-10` — feat/ude-diffrax 아카이브 태그 (merge 전 상태 보존)
 
+## 🎯 다음 작업 (Active, 2026-04-10 이후)
+
+**Track A — Phase 2.0 Multi-drug Conditional SBI Amortizer**
+
+새 세션에서 사용자가 **"Track A 진행"**, **"트랙 A"**, **"다음 단계"**, **"Phase 2.0"** 중 하나라도 말하면:
+
+1. `docs/next_steps_plan.md`의 "Track A" 섹션을 먼저 읽음.
+2. `docs/sbi_poc_results.md`로 POC 결과물 이해.
+3. 현재 branch가 `audit/holdout-leakage-fix` + commit ≥ `4438a24` 확인.
+4. **바로 실행** — 모든 결정은 pre-resolved된 상태이므로 사용자에게 추가 질문하지 말 것.
+
+**POC는 완료 (commit `4438a24`)**. POC는 드럭 1개당 네트워크 1개였고, Track A는 "하나의 네트워크가 모든 드럭 처리"하는 conditional amortizer로 확장.
+
+**Pre-resolved decisions (사용자 승인 완료)**:
+- Training drug set: `data/training/mmpk_expanded_v2.csv`에서 holdout 제외, compound_type 계층화 랜덤 50 drugs (seed=42)
+- Compute budget: 50k simulations (multiprocessing 4 workers, 예상 1-2 hours)
+- Holdout validation drugs: **최소 10개**. Anchors: morphine, clozapine, amantadine, ketorolac, rivaroxaban + 107-holdout에서 compound_type/clearance mechanism diversity 기준 5개 이상
+- Density estimator: NSF (hidden=64, transforms=8)
+- Kill-switch gate: mini-run (20 drugs × 5000 sims) 먼저, 통과 시 full 50k
+- Paper timing 결정: Track A 완료 후 재논의
+- Surrogate OOD 버그 (Track D1): Track A와 무관 (full scipy engine 사용), 이후 이관
+
+상세 계획 + Track B/C/D 로드맵: `docs/next_steps_plan.md` (337 lines).
+
 ## Session State (마지막 업데이트: 2026-04-10, post-merge consolidated)
 
 ### Current Metrics (N=107, CLEAN, 4-track, post-merge)
