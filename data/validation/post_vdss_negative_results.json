@@ -1,0 +1,50 @@
+{
+  "session": "Post-VDss exploration: 7 additional meta-improvement attempts",
+  "baseline_post_vdss": {
+    "holdout": 2.695,
+    "in_domain": 2.596,
+    "prospective": 2.359
+  },
+  "attempts": [
+    {
+      "name": "A. CL + t_half analytical track",
+      "description": "Cmax = dose*ln(2)/(CL*thalf) as 5th track",
+      "cl_scaffold_r2": -0.013,
+      "thalf_scaffold_r2": 0.11,
+      "result": "beta=0.05 \u2192 holdout 2.705(+0.010), prosp 2.252(-0.109). Distribution-shift hack.",
+      "verdict": "NOT INTEGRATED \u2014 hurts holdout"
+    },
+    {
+      "name": "VDss \u00d7 exp(-ke \u00d7 tmax) correction",
+      "description": "Add t_half-based decay to VDss track",
+      "result": "holdout 2.695 \u2192 2.676 at tmax=3h. Marginal (~0.02).",
+      "verdict": "NOT INTEGRATED \u2014 too small to justify complexity"
+    },
+    {
+      "name": "D. MW-scaled ML target",
+      "description": "Predict log(Cmax \u00d7 sqrt(MW) / dose) \u2014 alt target",
+      "scaffold_r2": 0.199,
+      "result": "Standalone 3.023 vs v1 3.057. But r(v1,v2)=0.942 \u2014 redundant.",
+      "verdict": "NOT INTEGRATED \u2014 too correlated with v1"
+    },
+    {
+      "name": "F. Confidence-weighted meta",
+      "description": "Tanimoto similarity \u2192 boost engine for OOD drugs",
+      "result": "All configs worse by 0.015-0.044 on holdout",
+      "verdict": "NEGATIVE \u2014 median Tanimoto=1.00, not enough OOD"
+    },
+    {
+      "name": "G. Ridge stacked meta-learner",
+      "description": "Linear combination of log(engine/ml/vdss)",
+      "result": "Best Ridge \u03b1=10: LOOCV AAFE 2.765 (worse than 2.695 geometric blend)",
+      "verdict": "NEGATIVE \u2014 geometric blend near-optimal"
+    },
+    {
+      "name": "G. XGBoost stacked meta-learner",
+      "description": "Non-linear meta with 7 features",
+      "result": "LOOCV AAFE 3.620 (much worse, overfits on N=107)",
+      "verdict": "NEGATIVE \u2014 insufficient data for non-linear stacking"
+    }
+  ],
+  "conclusion": "VDss analytical track (2.808\u21922.695) remains best improvement. All 6 follow-up attempts failed to beat it. Geometric blend at alpha=0.20 appears near-optimal."
+}

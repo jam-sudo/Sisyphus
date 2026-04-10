@@ -1,0 +1,91 @@
+{
+  "title": "Kinase inhibitor under-prediction diagnosis (prospective N=5 batch)",
+  "date": "2026-04-05",
+  "question": "Why does Sisyphus under-predict 4/5 kinase inhibitors by 2-6x in the new prospective batch?",
+  "per_drug_breakdown": {
+    "vorasidenib": {
+      "dose_mg": 40, "obs": 0.0302,
+      "engine": 0.211, "ml": 0.105, "meta": 0.128,
+      "fold_engine": 6.98, "fold_ml": 3.49, "fold_meta": 4.25,
+      "direction": "OVER",
+      "ctype": "neutral",
+      "adme": {"fup": 0.030, "CLint": 27.1, "peff": 2.40, "VDss": 4.52, "logP": 3.70},
+      "hypothesis": "Very low absolute bioavailability (F=27% reported by FDA) not captured by engine; engine assumes high absorption from peff=2.40"
+    },
+    "pirtobrutinib": {
+      "dose_mg": 200, "obs": 3.99,
+      "engine": 0.800, "ml": 1.214, "meta": 0.935,
+      "fold_engine": 0.20, "fold_ml": 0.30, "fold_meta": 0.23,
+      "direction": "UNDER",
+      "ctype": "neutral",
+      "adme": {"fup": 0.040, "CLint": 11.4, "VDss": 1.43, "logP": 2.82},
+      "measured_CL_F_L_per_h": 2.05,
+      "hypothesis": "Unusually low actual clearance (CL/F=2.05 L/h, very slow). VDss predicted 100L vs reported 32L (3x over-predicted)"
+    },
+    "pacritinib": {
+      "dose_mg": 200, "obs": 2.18,
+      "engine": 0.654, "ml": 0.159, "meta": 0.372,
+      "fold_engine": 0.30, "fold_ml": 0.07, "fold_meta": 0.17,
+      "direction": "UNDER",
+      "ctype": "base",
+      "adme": {"fup": 0.012, "CLint": 17.3, "VDss": 2.03, "logP": 4.19},
+      "hypothesis": "ML particularly bad (14x off). High accumulation ratio (AR=3.86) implies long effective t1/2 not captured"
+    },
+    "crinecerfont": {
+      "dose_mg": 100, "obs": 1.44,
+      "engine": 0.775, "ml": 0.095, "meta": 0.334,
+      "fold_engine": 0.54, "fold_ml": 0.07, "fold_meta": 0.23,
+      "direction": "UNDER",
+      "ctype": "base",
+      "adme": {"fup": 0.001, "CLint": 30.6, "VDss": 1.35, "logP": 6.42},
+      "hypothesis": "EXTREME_LIPOPHILIC (logP=6.42) OOD for ML. Engine nearly 2-fold (best of batch). ML collapses to low value."
+    },
+    "revumenib": {
+      "dose_mg": 270, "obs": 1.17,
+      "engine": 0.735, "ml": 0.349, "meta": 0.546,
+      "fold_engine": 0.63, "fold_ml": 0.30, "fold_meta": 0.47,
+      "direction": "UNDER",
+      "ctype": "base",
+      "adme": {"fup": 0.10, "CLint": 14.5, "VDss": 5.00, "logP": 2.94},
+      "hypothesis": "Engine within 2-fold (1.6x). Mild case. VDss 5.0 L/kg predicted; actual likely lower."
+    }
+  },
+  "key_findings": {
+    "F1_engine_beats_meta_on_batch": {
+      "engine_AAFE": 3.21,
+      "meta_AAFE": 3.97,
+      "ml_AAFE": 6.03,
+      "finding": "Engine-only would be 19% better than Meta on this batch. ML drags Meta down."
+    },
+    "F2_drugs_are_right_tail_outliers": {
+      "training_kinase_log_cpd_mean": -2.508,
+      "batch_log_cpd": {"pacritinib": -1.96, "pirtobrutinib": -1.70, "crinecerfont": -1.84, "revumenib": -2.36, "vorasidenib": -3.13},
+      "finding": "3/5 drugs are at 67-81st percentile of kinase class (higher Cmax per dose than typical). ML predicts toward class mean, missing the tail."
+    },
+    "F3_ML_trained_kinases_are_fine": {
+      "ml_AAFE_on_10_training_kinases": 1.84,
+      "finding": "ML is NOT broken on kinase inhibitors generally. It's broken on these specific drugs which are tail cases."
+    },
+    "F4_VDss_overpredicted_for_some": {
+      "pirtobrutinib": {"predicted_VDss_L": 100, "actual_VDss_L": 32, "ratio": 3.1},
+      "finding": "VDss over-prediction contributes to Cmax under-prediction (more drug distributed → lower peak)"
+    },
+    "F5_vorasidenib_F_mismatch": {
+      "actual_F": 0.27,
+      "engine_assumed_F": "~1.0 (from peff=2.40)",
+      "finding": "4.25x over-prediction closely matches 3.7x F mismatch (1/0.27)"
+    }
+  },
+  "dominant_failure_modes": [
+    "Mode 1 (UNDER-prediction): ML Cmax model regresses toward training mean for OOD drugs with unusually low clearance. VDss may also be over-predicted for some.",
+    "Mode 2 (OVER-prediction): Engine assumes high absorption (peff-driven) for drugs with actual low bioavailability (F<30%)"
+  ],
+  "actionable_next_steps": [
+    "SHORT-TERM: Add AR-based uncertainty flag for prospective validation (drugs with known AR>3 have noisier reference values)",
+    "SHORT-TERM: Honest reporting — N=15 prospective AAFE 2.48 ≈ holdout 2.74 (no free lunch)",
+    "MEDIUM: VDss model retraining with kinase-inhibitor-enriched dataset (VDss data from DrugBank)",
+    "MEDIUM: Absolute bioavailability (F) predictor for engine calibration (peff → F correction)",
+    "LONG: Class-aware meta-learner (MW>450 + logP 3-5 → engine-weighted blend for kinase class)"
+  ],
+  "conclusion": "The prospective AAFE 2.48 is an HONEST performance metric. The under-prediction is not due to a single fixable bug but to the known CLint R²=0.24 ceiling + distribution shift for tail cases. The original N=10 AAFE 1.68 claim overstated Sisyphus's generalization."
+}

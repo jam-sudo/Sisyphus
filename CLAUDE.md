@@ -11,8 +11,10 @@ Meta AAFE: 2.808 | %2-fold: 45.8% | %3-fold: 59.8% | N=107 holdout
 Engine:    3.421 | ML: 3.057 | Weights: base(0.60/0.40/0.00) other(0.35/0.50/0.15)
 ```
 ⚠ 이전 AAFE 2.283은 **오염값** (76/107 holdout drugs가 ML training에 누출).
-2026-04-04에 수정, clean models로 재학습. 모든 보고에 2.808 사용.
+2026-04-04에 수정 (commit `5e5a3d0`), clean models로 재학습. 모든 보고에 2.808 사용.
 상세: `docs/holdout_contamination_audit.md`, `data/validation/contamination_fix_report.json`
+
+⚠ **Merge pending (2026-04-10)**: 이 파일은 `audit/holdout-leakage-fix`와 `feat/ude-diffrax` 통합 직후 작성됨. AAFE 2.808은 3-track 기준 (pre-VDss). VDss 4th track 활성화 후 재계산 예정 (예상 ~2.695). 재생성 완료 시 이 경고 제거.
 
 ### 핵심 파일 맵
 
@@ -83,11 +85,17 @@ feat/ude-diffrax 브랜치에만 존재, production 미반영.
 - `audit/holdout-leakage-fix` — **현재 작업 브랜치** (clean models + JAX + IBIS + surrogate)
 - `feat/ude-diffrax` — UDE 실험 + VDss track + 33 methods 전부 기록
 
-## Session State (마지막 업데이트: 2026-04-09, clean)
+## Session State (마지막 업데이트: 2026-04-10, post-merge)
 
-### Current Metrics (N=107, CLEAN)
+### Current Metrics (N=107, CLEAN, pre-VDss-rebench)
 Engine AAFE: 3.421 | Meta AAFE: 2.808 | %2-fold: 45.8%
+In-domain AAFE: 2.591 (N=82, excluding 25 AD-flagged/ER/ref-quality drugs) — feat 브랜치에서 측정
 Adaptive weight: base=0.60/0.40/0.00, other=0.35/0.50/0.15
+LOOCV stability: base 93%, other 84%.
+
+NOTE: Prior headline (2.283) was invalidated by holdout data leakage fix on 2026-04-04 (commit `5e5a3d0`). 76-100 of 107 holdout drugs were in ML training data.
+
+⚠ Post-merge rebench pending: VDss 4th track는 feat/ude-diffrax에서 -4% (2.808→2.695) 검증. 2026-04-10 merge로 production에 합류. 재벤치까지 2.808이 headline, 이후 4-track 값으로 업데이트.
 
 ### Holdout Expansion (2026-03-26)
 - N=61 → N=107 (+46 drugs from OSP repos, FDA labels, curated literature)
