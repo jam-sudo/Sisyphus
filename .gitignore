@@ -47,3 +47,6 @@ logs/
 
 # Docking caches and derived structures (regenerable from scripts)
 data/docking/
+
+# sbi library auto-generated training telemetry (regenerable, noisy)
+sbi-logs/
