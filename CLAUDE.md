@@ -71,12 +71,25 @@ Prospective (feat 브랜치에서 측정, 병합 후 재검증 필요): N=15 202
 - `tdm_ibis.py` — IBIS (sequential MC + MCMC rejuvenation)
 - `tdm_enkf.py` — Ensemble Kalman Filter
 
+**Amortized SBI (src/sisyphus/sbi/):** (2026-04-10 POC)
+- `priors.py` — BoxUniform prior over (log10_clint_shift, fup, log10_peff_shift)
+- `simulator.py` — `EngineSimulator` wraps scipy engine as SBI simulator + `apply_theta_to_drug`
+- `amortizer.py` — `train_npe`, `save_result`, `load_result` (sbi library SNPE/NSF)
+- `sbc.py` — `run_sbc` rigorous rank-based calibration check with KS test + coverage
+- POC results: morphine amortizer runs 2164x faster than IBIS (0.73s vs 1590s),
+  SBC passes (KS p=0.19/0.82/0.71, coverage within 7pp of nominal at all levels).
+  Details: `docs/sbi_poc_results.md`.
+
 **벤치마크 / 재현 스크립트:**
 - `scripts/run_engine_benchmark.py` — 107 holdout AAFE 측정 (engine/ml/meta)
 - `scripts/train_surrogate.py` — Neural surrogate 학습
 - `scripts/train_vdss_v2.py` + `scripts/vdss_track_full_loocv.py` + `scripts/vdss_track_loocv.py` + `scripts/test_vdss_analytical_track.py` — VDss 4th track 재현
 - `scripts/fda_cmax_extractor.py` — FDA label에서 Cmax 추출
 - `scripts/prospective_batch_validator.py` — 2024-2025 prospective NME 배치 검증
+- `scripts/sbi_generate_training_data.py` — Amortized SBI 훈련 데이터 생성 (drug-agnostic)
+- `scripts/sbi_train_amortizer.py` — NPE 훈련 (MAF or NSF)
+- `scripts/sbi_run_sbc.py` — SBC kill-switch gate
+- `scripts/sbi_compare_ibis.py` — real-data SBI vs IBIS 비교
 
 ### 절대 다시 시도하지 마라 (40+회 실패 기록)
 
@@ -102,6 +115,7 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 - **EnKF TDM** (particle degeneracy fix): IBIS와 상보적, EnKF는 Gaussian posterior에 강함.
 - **Neural surrogate** (R²=0.9995): 엔진 forward pass를 MLP로 대체해 MC 속도 향상.
 - **Prospective N=15 gap 1.1x**: in-domain AAFE 1.68, overall 2.48. Distribution shift 없음 확인.
+- **Amortized SBI POC (2026-04-10)**: NSF-based NPE on morphine runs TDM inference in 0.73s vs IBIS 1590s (**2164x speedup**), SBC kill-switch passes (KS p>0.19, coverage within 7pp of nominal). `docs/sbi_poc_results.md`.
 
 ### 브랜치 구조
 - `main` — 안정 release
