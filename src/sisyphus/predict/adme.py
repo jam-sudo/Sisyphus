@@ -231,7 +231,23 @@ def predict_adme(profile: MolecularProfile) -> ADMEProperties:
     features = compute_features(profile.smiles)
     features_2d = features.reshape(1, -1)
 
-    # fup: DrugBank measured → XGBoost fallback
+    # fup: DrugBank measured → XGBoost fallback on >5x disagreement
+    #
+    # 2026-04-11 tried inverting this — prefer DrugBank measured even when it
+    # disagrees by >5x with XGBoost (the "ketorolac fix" from the TDM D2
+    # writeup). Ran the 107-holdout benchmark and measured:
+    #    Engine AAFE: 3.421 → 3.726 (+0.306, major regression, matches the
+    #                 34+ prior error-cancellation failures in CLAUDE.md)
+    #    Meta AAFE:   2.695 → 2.728 (+0.033, noise level but wrong direction)
+    #    Ketorolac engine fold: 0.259x → 0.534x (directionally better but
+    #                 still well under truth 0.80 — TDM CI still doesn't cover
+    #                 even with floor=0.5, so the "fix" didn't actually achieve
+    #                 its coverage goal)
+    # Reverted. Ketorolac's failure is more than a fup mismatch — its CLint
+    # path also contributes. A partial fix (fup only) breaks error cancellation
+    # on 100+ other drugs for essentially zero coverage gain on ketorolac.
+    # Tracked as a known structural limitation; proper fix requires engine-
+    # level ADME improvement, not a post-predict override.
     from sisyphus.predict.drugbank import drugbank_lookup
     db = drugbank_lookup()
     db_fup = db.get_fup(profile.smiles)
