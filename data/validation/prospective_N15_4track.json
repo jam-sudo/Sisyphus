@@ -1,0 +1,195 @@
+{
+  "pipeline": "4-track (current production)",
+  "n_candidates": 15,
+  "n_valid": 15,
+  "n_in_domain": 13,
+  "aafe_all": 2.3612905214449462,
+  "aafe_in_domain": 2.0433598681308114,
+  "pct_within_2fold_all": 0.5333333333333333,
+  "drugs": [
+    {
+      "name": "resmetirom",
+      "smiles": "CC(C)c1cc(Oc2c(Cl)cc(-n3nc(C#N)c(=O)[nH]c3=O)cc2Cl)n[nH]c1=O",
+      "dose_mg": 100.0,
+      "obs_mg_L": 0.971,
+      "engine": 2.372025596913158,
+      "ml": 1.326015801495338,
+      "meta": 1.4490502059555976,
+      "fold_meta": 1.4923277095320264,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    {
+      "name": "aficamten",
+      "smiles": "CCc1nc(-c2ccc3c(c2)CC[C@H]3NC(=O)c2cnn(C)c2)no1",
+      "dose_mg": 20.0,
+      "obs_mg_L": 0.0705,
+      "engine": 0.1760385662004224,
+      "ml": 0.0863320085722217,
+      "meta": 0.12428702918488357,
+      "fold_meta": 1.7629365841827458,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    {
+      "name": "elafibranor",
+      "smiles": "CSc1ccc(C(=O)/C=C/c2cc(C)c(OC(C)(C)C(=O)O)c(C)c2)cc1",
+      "dose_mg": 120.0,
+      "obs_mg_L": 0.802,
+      "engine": 1.2832000294610606,
+      "ml": 1.9200861594276695,
+      "meta": 1.2704787836163192,
+      "fold_meta": 1.5841381341849365,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    {
+      "name": "inavolisib",
+      "smiles": "C[C@H](Nc1ccc2c(c1)OCCn1cc(N3C(=O)OC[C@H]3C(F)F)nc1-2)C(N)=O",
+      "dose_mg": 9.0,
+      "obs_mg_L": 0.035,
+      "engine": 0.008807804725751453,
+      "ml": 0.0692692064265914,
+      "meta": 0.033519452962765664,
+      "fold_meta": 1.0441697851954497,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    {
+      "name": "danicopan",
+      "smiles": "CC(=O)c1nn(CC(=O)N2C[C@H](F)C[C@H]2C(=O)Nc2cccc(Br)n2)c2ccc(-c3cnc(C)nc3)cc12",
+      "dose_mg": 150.0,
+      "obs_mg_L": 0.27,
+      "engine": 0.16902988997256801,
+      "ml": 0.2585138151716132,
+      "meta": 0.302684154918635,
+      "fold_meta": 1.121052425624574,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    {
+      "name": "berotralstat",
+      "smiles": "N#Cc1cccc([C@@H](NCC2CC2)c2ccc(F)c(NC(=O)c3cc(C(F)(F)F)nn3-c3cccc(CN)c3)c2)c1",
+      "dose_mg": 150.0,
+      "obs_mg_L": 0.032,
+      "engine": 0.2746109401865662,
+      "ml": 0.2300866042555239,
+      "meta": 0.3418432164355752,
+      "fold_meta": 10.682600513611725,
+      "in_applicability_domain": false,
+      "ad_flags": [
+        "PGP_EFFLUX_RISK"
+      ]
+    },
+    {
+      "name": "vimseltinib",
+      "smiles": "Cc1nc(-c2cnc(NC(C)C)n(C)c2=O)ccc1Oc1ccnc(-c2cnn(C)c2)c1",
+      "dose_mg": 30.0,
+      "obs_mg_L": 0.283,
+      "engine": 0.16373792839258192,
+      "ml": 0.2192949304077873,
+      "meta": 0.21488186229841127,
+      "fold_meta": 1.3170027333763121,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    {
+      "name": "gepotidacin",
+      "smiles": "O=c1ccc2ncc(=O)n3c2n1C[C@H]3CN1CCC(NCc2cc3c(cn2)OCCC3)CC1",
+      "dose_mg": 1500.0,
+      "obs_mg_L": 3.0,
+      "engine": 0.8819238133536239,
+      "ml": 3.2705755346416683,
+      "meta": 2.5826802499957933,
+      "fold_meta": 1.1615839785063933,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    {
+      "name": "taletrectinib",
+      "smiles": "C[C@@H](N)COc1ccc(-c2cnc3cc/c(=N/[C@H](C)c4cccc(F)c4)[nH]n23)cc1",
+      "dose_mg": 600.0,
+      "obs_mg_L": 0.24,
+      "engine": 2.4466657557616642,
+      "ml": 1.175878756802017,
+      "meta": 2.2773361966904906,
+      "fold_meta": 9.48890081954371,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    {
+      "name": "suzetrigine",
+      "smiles": "COc1c([C@H]2[C@H](C(=O)Nc3ccnc(C(N)=O)c3)O[C@@](C)(C(F)(F)F)[C@H]2C)ccc(F)c1F",
+      "dose_mg": 100.0,
+      "obs_mg_L": 0.62,
+      "engine": 0.5558269879580308,
+      "ml": 0.5450661871115923,
+      "meta": 0.6781152092025774,
+      "fold_meta": 1.0937342083912538,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    {
+      "name": "vorasidenib",
+      "smiles": "C[C@@H](Nc1nc(N[C@H](C)C(F)(F)F)nc(-c2cccc(Cl)n2)n1)C(F)(F)F",
+      "dose_mg": 40.0,
+      "obs_mg_L": 0.0302,
+      "engine": 0.21065650000971828,
+      "ml": 0.105397752897684,
+      "meta": 0.12796035108504908,
+      "fold_meta": 4.237097718047982,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    {
+      "name": "pirtobrutinib",
+      "smiles": "COc1ccc(F)cc1C(=O)NCc1ccc(-c2nn([C@@H](C)C(F)(F)F)c(N)c2C(N)=O)cc1",
+      "dose_mg": 200.0,
+      "obs_mg_L": 3.99,
+      "engine": 0.7998765043743805,
+      "ml": 1.2139570408895104,
+      "meta": 1.0888805236677677,
+      "fold_meta": 3.6643138648124114,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    {
+      "name": "pacritinib",
+      "smiles": "C1=C/COCc2cc(ccc2OCCN2CCCC2)Nc2nccc(n2)-c2cccc(c2)COC/1",
+      "dose_mg": 200.0,
+      "obs_mg_L": 2.18,
+      "engine": 0.6542886634118211,
+      "ml": 0.15922497284258036,
+      "meta": 0.48529443972861414,
+      "fold_meta": 4.4921182307777885,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    {
+      "name": "crinecerfont",
+      "smiles": "C#CCN(c1nc(-c2cc(C)c(OC)cc2Cl)c(C)s1)[C@@H](CC1CC1)c1ccc(C)c(F)c1",
+      "dose_mg": 100.0,
+      "obs_mg_L": 1.44,
+      "engine": 0.7745261929253162,
+      "ml": 0.09485043722368139,
+      "meta": 0.42099922538144074,
+      "fold_meta": 3.4204338468682622,
+      "in_applicability_domain": false,
+      "ad_flags": [
+        "EXTREME_LIPOPHILIC"
+      ]
+    },
+    {
+      "name": "revumenib",
+      "smiles": "CCN(C(=O)c1cc(F)ccc1Oc1cncnc1N1CC2(CCN(C[C@H]3CC[C@H](NS(=O)(=O)CC)CC3)CC2)C1)C(C)C",
+      "dose_mg": 270.0,
+      "obs_mg_L": 1.172,
+      "engine": 0.7349110365500175,
+      "ml": 0.3493561438760698,
+      "meta": 0.5848072406764726,
+      "fold_meta": 2.00407915374696,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    }
+  ]
+}
