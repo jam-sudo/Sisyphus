@@ -179,6 +179,7 @@ def bayesian_update(
     sbi_posterior_path: "str | None" = None,
     sbi_fallback: bool = True,
     sbi_use_surrogate: bool = False,
+    sbi_surrogate_std_threshold: float = 0.02,
     logp_hint: float | None = None,
 ) -> TDMResult:
     """Run Bayesian TDM update.
@@ -285,6 +286,7 @@ def bayesian_update(
                 observation_node=observation_node,
                 logp_hint=logp_hint,
                 use_surrogate=sbi_use_surrogate,
+                surrogate_ensemble_std_threshold=sbi_surrogate_std_threshold,
             )
         except FileNotFoundError as exc:
             if not sbi_fallback:
