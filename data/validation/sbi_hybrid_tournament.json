@@ -1,0 +1,52 @@
+{
+  "results": {
+    "morphine": {
+      "scipy_wall": 43.41952562332153,
+      "hybrid_wall": 15.716538429260254,
+      "scipy_bias": 29.335222235878618,
+      "hybrid_bias": 24.66029201446645,
+      "speedup": 2.7626646808234354,
+      "hybrid_post_cmax": 0.023249144460697993,
+      "scipy_post_cmax": 0.02412101894699136
+    },
+    "clozapine": {
+      "scipy_wall": 43.90202856063843,
+      "hybrid_wall": 20.720450401306152,
+      "scipy_bias": -7.940515263475241,
+      "hybrid_bias": -3.630618540740782,
+      "speedup": 2.118777715269692,
+      "hybrid_post_cmax": 0.39800554542674055,
+      "scipy_post_cmax": 0.38020567196184724
+    },
+    "amantadine": {
+      "scipy_wall": 43.718777656555176,
+      "hybrid_wall": 22.65007495880127,
+      "scipy_bias": -10.504587033110614,
+      "hybrid_bias": -4.207780878545183,
+      "speedup": 1.9301824711872364,
+      "hybrid_post_cmax": 0.2107428820672006,
+      "scipy_post_cmax": 0.19688990852715665
+    },
+    "ketorolac": {
+      "scipy_wall": 41.010414123535156,
+      "hybrid_wall": 9.39697003364563,
+      "scipy_bias": -47.90180324708446,
+      "hybrid_bias": -58.89806641360734,
+      "speedup": 4.364216761008956,
+      "hybrid_post_cmax": 0.3288154686911413,
+      "scipy_post_cmax": 0.41678557402332433
+    },
+    "rivaroxaban": {
+      "scipy_wall": 38.53327441215515,
+      "hybrid_wall": 15.60757565498352,
+      "scipy_bias": -15.383714989377237,
+      "hybrid_bias": -14.91219149213574,
+      "speedup": 2.468882756935503,
+      "hybrid_post_cmax": 0.12184574178326162,
+      "scipy_post_cmax": 0.12117052013521179
+    }
+  },
+  "total_scipy_s": 210.58402037620544,
+  "total_hybrid_s": 84.09160947799683,
+  "total_speedup": 2.504221546994011
+}

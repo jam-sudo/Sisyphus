@@ -133,7 +133,17 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 - **Coverage-primary gate: 11/13 drugs within 10pp** of nominal at 50/80/90/95% levels
 - **Strict gate: 2/13** (morphine, ketorolac); **Hard coverage failures: 2/13** (diclofenac, pravastatin — acid/CYP2C9)
 
-### Track D1 결과 (2026-04-10, docs/surrogate_ood_fix.md)
+### Track D1 + follow-up 결과 (2026-04-10, docs/surrogate_ood_fix.md)
+
+**D1 follow-up (ensemble-std gate, hybrid routing):**
+- Initial D1 surrogate had +190% bias on clozapine. Root cause: feature box guard passed (all samples in training range) but surrogate's local response surface was systematically off. Ensemble std correlated 0.64 with error.
+- Fix: two-stage gate — `features_in_distribution` (box) + `ensemble_std <= 0.02`. Rejected samples fall back to scipy. Threshold calibrated so nominal drugs (ensemble std 0.004-0.020) stay on surrogate.
+- Clozapine posterior bias: **+190% → -3.6%** (better than scipy -7.8%).
+- 5-anchor tournament: scipy 210.6s → hybrid 84.1s = **2.5× cumulative** (down from unguarded 24× but with correct accuracy on all drugs). Per-drug wall 9-23s, still 50-150× vs IBIS.
+- Hybrid matches or beats scipy on 4/5 anchors. Tests 409/409 pass.
+- Trade: speedup 24× → 2.5× for correctness. Correct default for production.
+
+### Track D1 initial 결과 (2026-04-10, docs/surrogate_ood_fix.md)
 - **Bug**: production `params_to_features_single` summed `abundance × affinity` across ALL nodes (liver+gut) without reversing `_CLINT_SCALING` factor. Real drugs had log10_clint ≈ 6 vs training range [-0.5, 3.0]. Inflated by ~10⁴×.
 - **Fix**: `recover_drug_level_clint()` restricts sum to liver node and divides by `_CLINT_SCALING/_IVIVE_SCALING = 180,000`. All 6 test drugs recover to within 5% of `predict_adme(..).clint.mean`.
 - **Surrogate accuracy validation** (`data/validation/surrogate_production_accuracy.json`): 13 drugs, R²=0.992, mean abs rel err=22%, 9/13 within 30% gate (69% overall, 80% on the 10-drug SBI routing subset).

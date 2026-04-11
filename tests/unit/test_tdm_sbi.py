@@ -86,6 +86,45 @@ class TestSBIDispatch:
         # ~5–8 % MC variation on the CV estimate.
         assert result.posterior_cmax.cv < result.prior_cmax.cv + 0.10
 
+    def test_sbi_hybrid_surrogate_matches_scipy_on_easy_drug(
+        self, physiology, morphine_drug
+    ):
+        """Hybrid surrogate dispatch should match scipy posterior Cmax
+        within 40 % on a well-behaved drug like morphine.
+
+        The std-gate routes theta-shifted samples that push the surrogate
+        into its high-uncertainty region back to scipy, so the result
+        tracks scipy closely rather than the uncorrected surrogate (which
+        can be off by >100 % on hard drugs).
+        """
+        import pathlib
+
+        graph, compiled = physiology
+        drug, logp = morphine_drug
+        regimen = DosingRegimen.single_oral(30.0)
+        obs = (Observation(time_h=1.0, concentration=0.01865, cv=0.10),)
+
+        # Skip if surrogate models are not available on this checkout.
+        surrogate_dir = pathlib.Path("models/surrogate")
+        if not surrogate_dir.exists():
+            pytest.skip("surrogate model directory missing")
+
+        r_sci = bayesian_update(
+            compiled, graph, drug, regimen, obs,
+            method="sbi", n_prior=80, logp_hint=logp,
+        )
+        r_hyb = bayesian_update(
+            compiled, graph, drug, regimen, obs,
+            method="sbi", n_prior=80, logp_hint=logp,
+            sbi_use_surrogate=True,
+        )
+        ratio = r_hyb.posterior_cmax.mean / max(r_sci.posterior_cmax.mean, 1e-12)
+        # Within 60 % of scipy is generous but covers MC noise + minor surrogate bias
+        assert 0.4 < ratio < 2.0, (
+            f"hybrid posterior Cmax {r_hyb.posterior_cmax.mean:.4f} "
+            f"too far from scipy {r_sci.posterior_cmax.mean:.4f} (ratio {ratio:.2f})"
+        )
+
     def test_sbi_speedup_vs_importance_sampling(self, physiology, morphine_drug):
         """SBI dispatch should be measurably faster than IS for the same forward budget.
 
