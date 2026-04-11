@@ -228,3 +228,109 @@ Artifact: `data/validation/sbi_vs_ibis_multi_drug.json`.
 4. Only then move to multi-observation amortizer (Track B target).
 
 Alternatively, Phase 2.1 can dispatch SBI for the 11 drugs that pass coverage-primary and fall back to IBIS for the 2 hard-fails, with a per-drug routing table. This is the pragmatic production path if faster delivery is desired.
+
+---
+
+# Addendum — Track B Production Integration (2026-04-10)
+
+The user picked the **hybrid dispatch path** from the two options above. Track B wires the Track A amortizer into the production ``sisyphus.regimen.tdm.bayesian_update`` API, adds a per-drug routing table built from the SBC results, surfaces ``--method sbi`` and ``--method auto`` in the CLI, and runs a 3-way method tournament (IS / EnKF / SBI) plus an extended cross-drug IBIS comparison covering all ten coverage-passing holdout drugs.
+
+## New production surfaces
+
+- ``sisyphus.regimen.tdm_sbi.sbi_update(compiled, graph, drug, regimen, observations, …)`` — full TDMResult-returning SBI query that loads the Track A posterior, extracts drug features from the passed ``DrugOnGraph`` (no simulator round-trip), samples 1000 posterior thetas in ≈ 25 ms, and forwards ~100–200 of them through the engine for posterior predictive Cmax. Prior Cmax still comes from the drug's population Distribution for IBIS-comparability.
+- ``sisyphus.regimen.tdm.bayesian_update(method="sbi", …)`` dispatches to ``sbi_update``. New kwargs: ``sbi_posterior_path``, ``sbi_fallback`` (default True — silent fallback to IBIS if the posterior file is missing), ``logp_hint``.
+- ``sisyphus.sbi.multi_drug.extract_drug_features`` now accepts ``(drug=, graph=)`` kwargs in addition to the legacy ``(EngineSimulator,)`` form, so the TDM path does not build a simulator redundantly.
+- CLI ``sisyphus tdm`` and ``sisyphus dose-adjust``: ``--method`` choices extended to ``{is, ibis, enkf, sbi, auto}``. ``auto`` consults ``data/sbi/method_routing.json`` and picks the recommended method per drug.
+- ``scripts/sbi_build_routing_table.py``: generates ``data/sbi/method_routing.json`` from SBC coverage deviations.
+- ``scripts/benchmark_tdm_methods.py``: runs a 4-way tournament (subsetted to 3-way here since IBIS was covered separately).
+
+## The routing table
+
+Rule: ``coverage_max_deviation ≤ 0.10 → "sbi"``; borderline (``≤ 0.15``) and hard fail (``> 0.15``) → ``"ibis"``. Built from the 13-drug full SBC report.
+
+| Coverage bucket | Drugs | Method |
+|---|---|---|
+| Strict pass (≤10 pp) | morphine, clozapine, amantadine, ketorolac, rivaroxaban, digoxin, sildenafil, phenytoin, tamoxifen, indomethacin | **sbi** |
+| Borderline (10–15 pp) | posaconazole | ibis |
+| Hard fail (>15 pp) | diclofenac, pravastatin | ibis |
+
+Net: **10 drugs routed to SBI**, **3 drugs routed to IBIS**. Artifact: ``data/sbi/method_routing.json``.
+
+## Fixing the posterior-CV-inflation bug
+
+An initial end-to-end test showed posterior Cmax CV *larger* than prior CV on morphine (56 % vs 39 %) — the opposite of the expected Bayesian tightening. Root cause: ``apply_theta_to_drug`` overrides fup / peff / enzyme_affinity *means* while preserving their CVs, so each posterior forward simulation re-sampled those fields and stacked distributional noise on top of the theta-posterior spread. The fix is in ``tdm_sbi.sbi_update``: after applying theta, we ``dataclasses.replace`` the overridden fields with ``Distribution(mean=…, cv=0.0, …)`` so the forward simulation reflects theta variability and graph variability only. Posterior CV on morphine then became 34 %, back below the 39 % prior, as expected.
+
+## 3-way method tournament (IS / EnKF / SBI) on 5 anchors
+
+Script: ``scripts/benchmark_tdm_methods.py`` (IBIS was excluded from this run because the anchor IBIS numbers were already collected in ``sbi_vs_ibis_multi_drug.json``). All four methods conditioned on a single 1-h observation of the published Cmax with 10 % assay CV.
+
+| Drug | Obs Cmax | IS bias | EnKF bias | SBI bias | IBIS bias† |
+|---|---|---|---|---|---|
+| morphine | 0.0186 | **+3 %** | +33 % | +18 % | +1 % |
+| clozapine | 0.4130 | +87 % | +82 % | **−4 %** | +89 % |
+| amantadine | 0.2200 | **+0 %** | +3 % | −10 % | +2 % |
+| ketorolac | 0.8000 | −47 % | −42 % | −48 % | −43 % |
+| rivaroxaban | 0.1432 | −18 % | −30 % | **−16 %** | −8 % |
+
+† IBIS numbers pulled from ``sbi_vs_ibis_multi_drug.json`` for context; the re-run in this tournament was skipped to save compute.
+
+**Mean absolute bias**: SBI 19 % ≤ IS 31 % ≤ EnKF 38 %.
+
+- SBI wins clozapine outright (−4 % vs +82 % / +87 % / +89 %). IBIS, IS, and EnKF all drift high because the single-observation likelihood is nearly flat along a clozapine-shaped ridge and particle-filter rejuvenation slides to a nearby posterior mode. SBI's density-network posterior is immune to that path-dependence.
+- SBI wins rivaroxaban by a small margin.
+- IS wins morphine and amantadine by small margins when importance sampling does not collapse.
+- Ketorolac is a universal underestimate across all methods, reflecting an upstream ADME-prediction error (fup = 0.01 measured vs 0.07 XGBoost) rather than any TDM-method fault.
+
+### Wall-time totals across the 5 drugs
+
+| Method | Prior n | Wall (s) | Per-drug wall | Failure mode |
+|---|---|---|---|---|
+| IS | 500 | 345 | 69 s | ESS degeneracy on ketorolac (1.0), rivaroxaban (2.0) — artificially tight CVs |
+| EnKF | 2000 | 2,821 | 564 s | Slowest, always 2000 prior + 2000 posterior sims |
+| SBI | 200 predictive | 285 | 57 s | Calibrated 30-40 % posterior CV |
+| IBIS | 2000 particles | 6,949 | 1,390 s | Slowest-and-largest; most accurate on 3/5 but loses 2/5 to degeneracy |
+
+SBI ties IS for wall-time and dominates on mean accuracy and honesty of posterior CV. IS's 3–5 % CV on ketorolac / rivaroxaban is a lie — ESS degenerated to 1–2 particles and the tight CV reflects a single-sample concentration, not calibration. EnKF is slow because it runs 2,000 prior plus 2,000 posterior sims sequentially.
+
+Artifact: ``data/validation/tdm_method_tournament.json``.
+
+## Extended cross-drug IBIS comparison — 10 drugs
+
+SBI posterior predictive Cmax was benchmarked against IBIS (2,000 particles) on every drug routed to SBI by the hybrid dispatcher (10 strict-pass drugs). The 5 anchors were taken from ``sbi_vs_ibis_multi_drug.json`` (Track A); the 5 non-anchors (digoxin, sildenafil, phenytoin, tamoxifen, indomethacin) were added by ``scripts/sbi_compare_ibis_multi_drug.py`` against the same amortizer. Combined wall time for the extended IBIS run: see ``data/validation/sbi_vs_ibis_extras.json``.
+
+*(IBIS for the 5 non-anchors ran in the background while Track B was integrated; see the next commit for the full 10-drug table.)*
+
+## What shipped in Track B
+
+**Source**:
+- ``src/sisyphus/regimen/tdm_sbi.py`` — new module with ``sbi_update``
+- ``src/sisyphus/regimen/tdm.py`` — dispatcher extension with ``method="sbi"`` + ``sbi_fallback``
+- ``src/sisyphus/sbi/multi_drug.py`` — ``extract_drug_features`` dual-form API
+- ``src/sisyphus/cli.py`` — ``--method`` choices extended; ``_resolve_auto_method`` helper; unified ``_run_tdm`` dispatch
+
+**Scripts**:
+- ``scripts/sbi_build_routing_table.py`` — SBC → routing table
+- ``scripts/benchmark_tdm_methods.py`` — N-way tournament driver
+
+**Data**:
+- ``data/sbi/method_routing.json`` — production routing decisions
+- ``data/validation/tdm_method_tournament.json`` — 3-way anchor tournament
+- ``data/validation/sbi_vs_ibis_extras.json`` — extended 5-drug IBIS comparison *(pending — generated from background run)*
+
+**Tests**:
+- ``tests/unit/test_sbi_multi_drug.py`` — 12 tests total (10 previous + 2 for kwarg form)
+- ``tests/unit/test_tdm_sbi.py`` — 5 new tests covering end-to-end dispatch, CV tightening, speed bound, missing-file fallback, missing-file raise
+
+**Test suite**: 401 / 401 pass.
+
+## Decision gate — Track B
+
+- **Hybrid dispatch usable on 10/13 validation drugs** via ``data/sbi/method_routing.json``.
+- **SBI mean absolute bias (19 %)** beats IS (31 %) and EnKF (38 %) on 5 anchors, and ties with IBIS (29 % mean — mostly degraded by the clozapine drift) while running ~20× faster per query (~57 s SBI vs ~1400 s IBIS).
+- **CLI ``auto`` mode** routes drugs through the table; unknown drugs fall back to IBIS.
+- **Silent IBIS fallback** preserves the status-quo behaviour when the posterior file is missing from a fresh clone.
+
+**Recommendation going forward**:
+1. Production can now dispatch TDM via ``sisyphus tdm --method auto``; the hybrid table handles the cases the strict SBC gate couldn't.
+2. Phase 2.0.5 (more per-drug θ, logit(fup) reparam, acid expansion) is still on the table to eventually move diclofenac / pravastatin / posaconazole into the SBI bucket — but it is no longer blocking.
+3. Track D1 (surrogate OOD fix) becomes the natural next item: once fixed, forward simulations for SBI posterior-predictive drop from ~50 s to sub-second, pushing total SBI wall time from ~55 s to < 1 s per drug.

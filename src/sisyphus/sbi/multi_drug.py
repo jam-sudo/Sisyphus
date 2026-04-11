@@ -26,11 +26,15 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Callable, Iterable
+from typing import TYPE_CHECKING, Callable, Iterable
 
 import numpy as np
 
 from sisyphus.sbi.simulator import EngineSimulator, apply_theta_to_drug
+
+if TYPE_CHECKING:
+    from sisyphus.core import DrugOnGraph
+    from sisyphus.graph.body import BodyGraph
 
 logger = logging.getLogger(__name__)
 
@@ -52,43 +56,68 @@ DRUG_FEATURE_NAMES: tuple[str, ...] = (
 N_DRUG_FEATURES = len(DRUG_FEATURE_NAMES)
 
 
-def extract_drug_features(sim: EngineSimulator, logp: float | None = None) -> np.ndarray:
+def extract_drug_features(
+    sim_or_drug=None,
+    logp: float | None = None,
+    *,
+    drug: "DrugOnGraph | None" = None,
+    graph: "BodyGraph | None" = None,
+) -> np.ndarray:
     """Compute a 12-D feature vector from a drug's nominal ADME profile.
 
-    The feature layout matches ``sisyphus.engine.surrogate.FEATURE_NAMES``
-    but with ``log10_clint`` derived from the *liver* node's enzyme
-    abundance × affinity product (so it is a stable, identity-based
-    hepatic-clearance proxy rather than the sum-over-all-nodes integer
-    used by the buggy ``params_to_features_single``).
+    Two calling conventions:
+
+    1. ``extract_drug_features(sim)`` — legacy form, where ``sim`` is an
+       :class:`EngineSimulator`. Pulls ``sim.nominal_drug`` and ``sim.graph``.
+    2. ``extract_drug_features(drug=drug, graph=graph)`` — preferred form
+       used by :func:`sisyphus.regimen.tdm.sbi_update` so no simulator
+       round-trip is needed.
+
+    The layout matches ``sisyphus.engine.surrogate.FEATURE_NAMES`` but with
+    ``log10_clint`` derived from the *liver* node's enzyme abundance ×
+    affinity product (hepatic-clearance proxy, not the buggy
+    sum-over-all-nodes used by ``params_to_features_single``).
 
     ``logp`` is not carried on ``DrugOnGraph``; pass it explicitly (e.g.
-    from ``compute_profile(smiles).logp``) when building the feature
-    vector so the default ``2.0`` sentinel is not silently substituted.
+    from ``compute_profile(smiles).logp``) so the default ``2.0`` sentinel
+    is not silently substituted.
 
     Returns a length-12 float64 array.
     """
-    drug = sim.nominal_drug
-    graph = sim.graph
+    if drug is None and graph is None:
+        if sim_or_drug is None:
+            raise ValueError(
+                "extract_drug_features requires either a simulator "
+                "positional arg or drug=/graph= keyword args"
+            )
+        sim = sim_or_drug  # legacy EngineSimulator form
+        drug_obj = sim.nominal_drug
+        graph_obj = sim.graph
+    else:
+        if drug is None or graph is None:
+            raise ValueError("drug= and graph= must both be provided together")
+        drug_obj = drug
+        graph_obj = graph
 
     # Hepatic CLint = Σ(enzyme_abundance_liver × enzyme_affinity) on liver node.
     clint_hepatic = 0.0
-    if "liver" in graph.nodes and graph.nodes["liver"].enzymes:
-        for tag, abundance in graph.nodes["liver"].enzymes.items():
-            aff = drug.enzyme_affinity.get(tag)
+    if "liver" in graph_obj.nodes and graph_obj.nodes["liver"].enzymes:
+        for tag, abundance in graph_obj.nodes["liver"].enzymes.items():
+            aff = drug_obj.enzyme_affinity.get(tag)
             if aff is None:
                 continue
             clint_hepatic += float(abundance.mean) * float(aff.mean)
     clint_hepatic = max(clint_hepatic, 1e-6)
 
-    fup = float(drug.fup.mean)
-    peff = float(drug.peff.mean)
-    sol = float(drug.solubility.mean) if drug.solubility is not None else 1.0
-    renal_cl = float(drug.renal_clearance.mean) if drug.renal_clearance is not None else 1e-6
-    dose = float(drug.dose_mg)
-    mw = float(drug.mw)
+    fup = float(drug_obj.fup.mean)
+    peff = float(drug_obj.peff.mean)
+    sol = float(drug_obj.solubility.mean) if drug_obj.solubility is not None else 1.0
+    renal_cl = float(drug_obj.renal_clearance.mean) if drug_obj.renal_clearance is not None else 1e-6
+    dose = float(drug_obj.dose_mg)
+    mw = float(drug_obj.mw)
     logp_val = float(logp) if logp is not None else 2.0
-    pka = getattr(drug, "pka", None)
-    ctype = getattr(drug, "compound_type", "neutral")
+    pka = getattr(drug_obj, "pka", None)
+    ctype = getattr(drug_obj, "compound_type", "neutral")
 
     feats = np.array(
         [
