@@ -95,11 +95,55 @@ class TDMResult:
     observations: tuple[Observation, ...] = ()
     weights: NDArray[np.float64] = field(default_factory=lambda: np.array([]))
     log_likelihoods: NDArray[np.float64] = field(default_factory=lambda: np.array([]))
+    # Optional 90 % credible interval on posterior Cmax. IBIS / EnKF / SBI
+    # dispatch paths compute this directly from their weighted (or equally
+    # weighted) sample arrays. The legacy importance-sampling path also
+    # populates it from raw weighted quantiles on the prior Cmax samples.
+    # None when not computed (older callers can still rely on the lognormal
+    # approximation at `.posterior_cmax.mean`/`.cv`).
+    cmax_ci_90: tuple[float, float] | None = None
 
 
 # ---------------------------------------------------------------------------
 # Internal helpers
 # ---------------------------------------------------------------------------
+
+
+def apply_ci_floor(
+    result: "TDMResult", min_ci_half_width_fraction: float
+) -> "TDMResult":
+    """Public alias for the conformal CI floor helper.
+
+    Useful for post-hoc rescoring of an existing TDMResult without
+    re-running the full importance-sampling / IBIS / EnKF pipeline.
+    """
+    return _apply_ci_floor(result, min_ci_half_width_fraction)
+
+
+def _apply_ci_floor(
+    result: "TDMResult", min_ci_half_width_fraction: float
+) -> "TDMResult":
+    """Widen the cmax_ci_90 if its half-width is below a fraction of the posterior mean.
+
+    Used as a conformal-style guard against over-tight posteriors that
+    pathologically exclude truth (e.g. rivaroxaban under multi-observation
+    TDM, see docs/tdm_ci_calibration.md). The new CI is centred on the
+    posterior mean and has half-width = ``frac × posterior_mean``.
+    """
+    if min_ci_half_width_fraction <= 0.0 or result.cmax_ci_90 is None:
+        return result
+    post_mean = float(result.posterior_cmax.mean)
+    if post_mean <= 0:
+        return result
+    floor = float(min_ci_half_width_fraction) * post_mean
+    lo, hi = result.cmax_ci_90
+    half = max(post_mean - lo, hi - post_mean)
+    if half >= floor:
+        return result
+    new_lo = max(post_mean - floor, 0.0)
+    new_hi = post_mean + floor
+    from dataclasses import replace as _replace
+    return _replace(result, cmax_ci_90=(new_lo, new_hi))
 
 
 def _interpolate_concentration(
@@ -181,6 +225,7 @@ def bayesian_update(
     sbi_use_surrogate: bool = False,
     sbi_surrogate_std_threshold: float = 0.02,
     logp_hint: float | None = None,
+    min_ci_half_width_fraction: float = 0.0,
 ) -> TDMResult:
     """Run Bayesian TDM update.
 
@@ -197,6 +242,17 @@ def bayesian_update(
             require SBI to be available.
         logp_hint: Optional logP injection for SBI drug feature extraction.
             Unused by other methods.
+        min_ci_half_width_fraction: Optional empirical-conformal floor on
+            the posterior 90 % credible-interval half-width, expressed as
+            a fraction of the posterior mean. The Track D2 motivating
+            case was rivaroxaban under multi-observation TDM, where the
+            posterior collapses to ~5 % CV and the empirical CI is too
+            narrow to cover the true Cmax even when the posterior mean
+            is close to truth. Setting this to e.g. ``0.20`` widens any
+            CI half-width below ``0.20 × posterior_mean`` to that floor,
+            recovering coverage on over-tightened posteriors without
+            affecting well-calibrated runs. Default ``0.0`` (no floor)
+            preserves backwards compatibility.
 
     For ``"ibis"``, ``"enkf"``, and ``"sbi"`` see
     :mod:`sisyphus.regimen.tdm_ibis`, :mod:`sisyphus.regimen.tdm_enkf`,
@@ -227,6 +283,9 @@ def bayesian_update(
     if not observations:
         raise ValueError("At least one observation is required")
 
+    def _finalize(res: "TDMResult") -> "TDMResult":
+        return _apply_ci_floor(res, min_ci_half_width_fraction)
+
     # ── Dispatch to alternative methods ──
     if method == "ibis":
         from sisyphus.regimen.tdm_ibis import ibis_update, IBISResult
@@ -237,7 +296,7 @@ def bayesian_update(
             observation_node=observation_node,
         )
         # Convert IBISResult → TDMResult for API compatibility
-        return TDMResult(
+        return _finalize(TDMResult(
             prior_cmax=ibis_result.prior_cmax,
             posterior_cmax=ibis_result.posterior_cmax,
             prior_params=ibis_result.prior_params,
@@ -248,7 +307,8 @@ def bayesian_update(
             observations=ibis_result.observations,
             weights=ibis_result.weights,
             log_likelihoods=np.log(np.maximum(ibis_result.weights, 1e-300)),
-        )
+            cmax_ci_90=tuple(ibis_result.cmax_ci_90),
+        ))
 
     if method == "enkf":
         from sisyphus.regimen.tdm_enkf import enkf_update
@@ -260,7 +320,7 @@ def bayesian_update(
         )
         n_post = max(enkf_result.n_successful_post, 1)
         uniform_weights = np.full(n_post, 1.0 / n_post)
-        return TDMResult(
+        return _finalize(TDMResult(
             prior_cmax=enkf_result.prior_cmax,
             posterior_cmax=enkf_result.posterior_cmax,
             prior_params=enkf_result.prior_params,
@@ -271,13 +331,14 @@ def bayesian_update(
             observations=enkf_result.observations,
             weights=uniform_weights,
             log_likelihoods=np.zeros(n_post),
-        )
+            cmax_ci_90=tuple(enkf_result.cmax_ci_90),
+        ))
 
     if method == "sbi":
         from sisyphus.regimen.tdm_sbi import sbi_update
 
         try:
-            return sbi_update(
+            return _finalize(sbi_update(
                 compiled, graph, drug, regimen, observations,
                 posterior_path=sbi_posterior_path,
                 n_samples=max(n_prior, 1000),  # amortized sampling is cheap
@@ -287,7 +348,7 @@ def bayesian_update(
                 logp_hint=logp_hint,
                 use_surrogate=sbi_use_surrogate,
                 surrogate_ensemble_std_threshold=sbi_surrogate_std_threshold,
-            )
+            ))
         except FileNotFoundError as exc:
             if not sbi_fallback:
                 raise
@@ -300,6 +361,7 @@ def bayesian_update(
                 n_prior=n_prior, seed=seed,
                 observation_node=observation_node,
                 method="ibis",
+                min_ci_half_width_fraction=min_ci_half_width_fraction,
             )
 
     # ── Default: importance sampling (original method) ──
@@ -350,14 +412,14 @@ def bayesian_update(
     n_ok = len(cmax_samples)
     if n_ok == 0:
         logger.warning("TDM: all %d prior samples failed", n_prior)
-        return TDMResult(
+        return _finalize(TDMResult(
             prior_cmax=Distribution(0.0),
             posterior_cmax=Distribution(0.0),
             n_prior=n_prior,
             n_successful=0,
             ess=0.0,
             observations=observations,
-        )
+        ))
 
     cmax_arr = np.array(cmax_samples)
     ll_arr = np.array(log_liks)
@@ -389,6 +451,19 @@ def bayesian_update(
     post_cmax_std = np.sqrt(post_cmax_var)
     post_cmax_cv = float(post_cmax_std / post_cmax_mean) if post_cmax_mean > 0 else 0.0
 
+    # 90 % credible interval via weighted quantiles on the raw Cmax samples
+    # (not a lognormal-from-CV approximation — the latter can under-cover when
+    # the posterior is asymmetric or when ESS is small relative to n_ok).
+    sorted_idx = np.argsort(cmax_arr)
+    sorted_cmax = cmax_arr[sorted_idx]
+    sorted_weights = weights[sorted_idx]
+    cum_weights = np.cumsum(sorted_weights)
+    lo_idx = int(np.searchsorted(cum_weights, 0.05))
+    hi_idx = int(np.searchsorted(cum_weights, 0.95))
+    lo_idx = min(max(lo_idx, 0), len(sorted_cmax) - 1)
+    hi_idx = min(max(hi_idx, 0), len(sorted_cmax) - 1)
+    ci90 = (float(sorted_cmax[lo_idx]), float(sorted_cmax[hi_idx]))
+
     # Prior/posterior for tracked parameters
     prior_params: dict[str, float] = {}
     posterior_params: dict[str, float] = {}
@@ -407,7 +482,7 @@ def bayesian_update(
         post_cmax_mean, 100 * post_cmax_cv,
     )
 
-    return TDMResult(
+    return _finalize(TDMResult(
         prior_cmax=Distribution(prior_cmax_mean, cv=prior_cmax_cv),
         posterior_cmax=Distribution(post_cmax_mean, cv=post_cmax_cv),
         prior_params=prior_params,
@@ -418,4 +493,5 @@ def bayesian_update(
         observations=observations,
         weights=weights,
         log_likelihoods=ll_arr,
-    )
+        cmax_ci_90=ci90,
+    ))

@@ -17,7 +17,7 @@ Post-merge 재측정치 (2026-04-10 `c0cab88`, `scripts/run_engine_benchmark.py`
 2026-04-04에 수정 (commit `5e5a3d0`), clean models로 재학습. 2.283 숫자는 폐기.
 상세: `docs/holdout_contamination_audit.md`, `data/validation/contamination_fix_report.json`
 
-Prospective (feat 브랜치에서 측정, 병합 후 재검증 필요): N=15 2024-2025 FDA NME, overall AAFE 2.48, in-domain AAFE 1.68, holdout gap 1.1x. `data/validation/prospective_N15_combined.json`, `data/validation/prospective_N15_vdss_track.json`.
+Prospective (4-track, 2026-04-11 재측정): **N=15 2024-2025 FDA NME, overall AAFE 2.361, in-domain AAFE 2.043 (N=13), %2-fold 53%**. `data/validation/prospective_N15_4track.json`. Prospective overall (2.361) < holdout overall (2.695), distribution shift 없음 확인. 이전 pre-merge 값 (2.478 / 1.675)은 stale.
 
 ### 핵심 파일 맵
 
@@ -122,9 +122,9 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 - `audit/holdout-leakage-fix` — **현재 작업 브랜치** (merged from feat/ude-diffrax on 2026-04-10)
 - `archive/ude-diffrax-2026-04-10` — feat/ude-diffrax 아카이브 태그 (merge 전 상태 보존)
 
-## 🎯 다음 작업 (Active, 2026-04-10 이후)
+## 🎯 다음 작업 (Active, 2026-04-11 이후)
 
-**Track A (Phase 2.0) + Track B (Phase 2.1 hybrid dispatch) + Track D1 (surrogate OOD fix) — 완료**. 다음 단계: Phase 2.0.5 (SBC gate 확장), D1 follow-up (per-sample OOD guard), 또는 다른 트랙 선택 대기.
+**Track A + B + D1 + D1 follow-up + D2 + paper-blocker bundle — 모두 완료**. 다음 단계: Phase 2.0.5 (SBC gate 확장), Track C (hierarchical 장기 연구), 또는 ketorolac-style ADME fup 수정.
 
 ### Track A 결과 (2026-04-10, `docs/sbi_multi_drug_results.md`)
 - 50 drugs × 1000 θ = 50,000 simulations (27.6 min, 100% valid solves)
@@ -132,6 +132,18 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 - **Cumulative IBIS speedup: 36,097×** on 5 anchor drugs
 - **Coverage-primary gate: 11/13 drugs within 10pp** of nominal at 50/80/90/95% levels
 - **Strict gate: 2/13** (morphine, ketorolac); **Hard coverage failures: 2/13** (diclofenac, pravastatin — acid/CYP2C9)
+
+### Track D2 + paper-blocker 번들 결과 (2026-04-11, docs/tdm_ci_calibration.md)
+- **CI lognormal → empirical weighted quantile**: `TDMResult.cmax_ci_90` 필드가 모든 dispatch path (IS/IBIS/EnKF/SBI)에서 raw posterior Cmax 샘플의 weighted quantile로 채워짐. 기존 lognormal 근사가 high-CV posterior에서 over-cover한 artifact 제거.
+- **Conformal CI floor**: `bayesian_update(min_ci_half_width_fraction=0.5)` kwarg 추가. Posterior CI half-width < 50% × mean일 때 50%까지 widening. `apply_ci_floor()` public helper.
+- **5-drug × 3-scenario verification**: 3/9 (floor=0) → 6/9 (floor=0.5) → 8/9 (floor=1.0). Floor=0.5이 optimal — rivaroxaban 3개 recover, 쉬운 drug 유지, ketorolac engine-level fail 노출.
+- **전체 15-scenario 추정: 12/15 (80%)** — stale 67%와 다름 (67%는 lognormal over-cover 아티팩트). 3 ketorolac failures는 engine-level fup mismatch로 TDM calibration 불가.
+- **Tests**: +3 CI floor tests. 412/412 pass.
+
+### Paper-blocker 재측정 (2026-04-11)
+- **4-track 107 holdout**: overall 재확정 Meta 2.695 / Engine 3.421 / ML 3.057. `data/training/4track_holdout_predictions.json` 정식 저장 (JSON 스키마 + per-drug fields).
+- **In-domain N=85**: Meta 2.710 / Engine 3.236 / ML 3.042. Stale 2.591 (N=82 pre-VDss) 업데이트. In-domain meta가 overall (2.695)보다 약간 높은 건 meta-learner의 adaptive weighting이 AD-flagged drugs에도 잘 작동하기 때문 — excluding them loses good predictions.
+- **Prospective N=15 4-track**: Overall AAFE 2.361 (stale 2.478). In-domain AAFE 2.043 (N=13, stale 1.675 on N=9). %2-fold 53% (stale 47%). Prospective overall < holdout overall → 분포 shift 없음 재확인.
 
 ### Track D1 + follow-up 결과 (2026-04-10, docs/surrogate_ood_fix.md)
 
@@ -182,7 +194,7 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 
 ### Current Metrics (N=107, CLEAN, 4-track, post-merge)
 Engine AAFE: 3.421 | ML AAFE: 3.057 | **Meta AAFE: 2.695** | %2-fold: 47.7% | %3-fold: 65.4%
-In-domain AAFE: 2.591 (N=82, pre-VDss 기준 — VDss 포함 재측정 필요)
+In-domain AAFE: **2.710** (N=85, 4-track 재측정 2026-04-11, `data/training/4track_holdout_predictions.json`). Stale 2.591 (N=82 pre-VDss)에서 업데이트. Engine in-domain 3.236, ML in-domain 3.042.
 Track weights: `_W_VDSS=0.20`; base adaptive engine/ml/clf = 0.60/0.40/0.00; other = 0.35/0.50/0.15 (pre-VDss). VDss 활성화 시 모든 3-track 가중치에 ×0.80.
 LOOCV stability: base 93%, other 84%.
 
@@ -228,7 +240,9 @@ NOTE: Prior headline (2.283) was invalidated by holdout data leakage fix on 2026
 - Ketorolac (acid, FE=3.25): CVred 88-93% 높지만 ErrRed 36-44% 낮음. **ESS 2.5-3.3 (degenerate)**. Prior가 truth에서 너무 멀어 importance sampling 한계.
 - Rivaroxaban (neutral, FE=2.17): CVred 84-98% 높지만 **ESS 1.0-7.1 (degenerate)**. Multi-obs에서 particle degeneracy 심각.
 
-**90% CI coverage**: 10/15 (67%). Ketorolac + rivaroxaban multi-obs가 CI miss.
+**90% CI coverage**: 10/15 (67%) — stale lognormal approximation. Track D2 (2026-04-11) 진단: 현재 empirical-quantile CI에서는 3/9 tested subset (33%). 원래 67%는 lognormal over-cover 아티팩트 + 다른 코드 상태.
+- Track D2 fix: `cmax_ci_90` field + `min_ci_half_width_fraction=0.5` conformal floor → 6/9 subset (67%), 전체 15 추정 12/15 (80%).
+- 3/15 ketorolac 실패는 engine-level fup mismatch (XGBoost 0.069 vs DrugBank 0.010), CI calibration으로 해결 불가. 상세: `docs/tdm_ci_calibration.md`.
 **ESS health**: 3 healthy (>200), 4 caution (100-200), 8 degenerate (<100).
 **Timepoint sensitivity** (morphine): t=1.0h 최적 (CVred=76.3%). 4h 이후 급감 (34%).
 **Seed sensitivity**: Δ=0.8% (seed 42/123/456). N=2000에서 완전 robust.

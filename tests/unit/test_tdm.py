@@ -14,6 +14,7 @@ from sisyphus.regimen.tdm import (
     TDMResult,
     _interpolate_concentration,
     _log_likelihood,
+    apply_ci_floor,
     bayesian_update,
 )
 from sisyphus.regimen.types import DosingRegimen
@@ -171,3 +172,93 @@ class TestBayesianUpdate:
         assert len(result.log_likelihoods) == result.n_successful
         assert result.prior_cmax.mean > 0
         assert result.posterior_cmax.mean > 0
+        # D2 addition: every dispatch path now populates cmax_ci_90 via the
+        # empirical weighted quantile, not the legacy lognormal approximation.
+        assert result.cmax_ci_90 is not None
+        lo, hi = result.cmax_ci_90
+        assert 0.0 < lo <= hi
+
+
+class TestCIFloor:
+    """Track D2 — conformal CI half-width floor for over-tight posteriors."""
+
+    def test_floor_widens_tight_ci(self, physiology):
+        graph, compiled = physiology
+        from sisyphus.predict.adme import predict_adme
+        from sisyphus.predict.chemistry import compute_profile
+        from sisyphus.predict.ivive import build_drug_on_graph
+
+        smiles = "CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O"  # morphine
+        profile = compute_profile(smiles)
+        adme = predict_adme(profile)
+        drug = build_drug_on_graph(profile, adme, 30.0, "oral")
+        regimen = DosingRegimen.single_oral(30.0)
+
+        # Baseline: no floor.
+        r0 = bayesian_update(
+            compiled, graph, drug, regimen,
+            observations=[Observation(time_h=1.0, concentration=0.02, cv=0.10)],
+            n_prior=60, seed=42, min_ci_half_width_fraction=0.0,
+        )
+        # With a 50 % floor applied post-hoc via apply_ci_floor.
+        r1 = apply_ci_floor(r0, 0.5)
+        assert r0.cmax_ci_90 is not None and r1.cmax_ci_90 is not None
+        lo0, hi0 = r0.cmax_ci_90
+        lo1, hi1 = r1.cmax_ci_90
+        post_mean = r0.posterior_cmax.mean
+        min_half = 0.5 * post_mean
+        # New CI must satisfy half-width ≥ 0.5 × mean (and be centred on mean).
+        assert (hi1 - lo1) >= 2 * min_half - 1e-9
+        assert abs((hi1 + lo1) / 2 - post_mean) < 1e-9
+        # Original CI must be narrower (or equal if already wide enough).
+        assert (hi0 - lo0) <= (hi1 - lo1) + 1e-9
+
+    def test_floor_no_op_when_already_wide(self, physiology):
+        """Wide CIs should be unchanged by a small floor."""
+        graph, compiled = physiology
+        from sisyphus.predict.adme import predict_adme
+        from sisyphus.predict.chemistry import compute_profile
+        from sisyphus.predict.ivive import build_drug_on_graph
+
+        smiles = "CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O"
+        profile = compute_profile(smiles)
+        adme = predict_adme(profile)
+        drug = build_drug_on_graph(profile, adme, 30.0, "oral")
+        regimen = DosingRegimen.single_oral(30.0)
+
+        r0 = bayesian_update(
+            compiled, graph, drug, regimen,
+            observations=[Observation(time_h=1.0, concentration=0.02, cv=0.10)],
+            n_prior=60, seed=42,
+        )
+        r1 = apply_ci_floor(r0, 0.001)  # absurdly small floor
+        assert r0.cmax_ci_90 == r1.cmax_ci_90
+
+    def test_floor_parameter_propagates_through_bayesian_update(self, physiology):
+        """min_ci_half_width_fraction kwarg should widen CI at the source."""
+        graph, compiled = physiology
+        from sisyphus.predict.adme import predict_adme
+        from sisyphus.predict.chemistry import compute_profile
+        from sisyphus.predict.ivive import build_drug_on_graph
+
+        smiles = "CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O"
+        profile = compute_profile(smiles)
+        adme = predict_adme(profile)
+        drug = build_drug_on_graph(profile, adme, 30.0, "oral")
+        regimen = DosingRegimen.single_oral(30.0)
+
+        r0 = bayesian_update(
+            compiled, graph, drug, regimen,
+            observations=[Observation(time_h=1.0, concentration=0.02, cv=0.10)],
+            n_prior=60, seed=42, min_ci_half_width_fraction=0.0,
+        )
+        r1 = bayesian_update(
+            compiled, graph, drug, regimen,
+            observations=[Observation(time_h=1.0, concentration=0.02, cv=0.10)],
+            n_prior=60, seed=42, min_ci_half_width_fraction=0.5,
+        )
+        assert r0.cmax_ci_90 is not None and r1.cmax_ci_90 is not None
+        hw0 = r0.cmax_ci_90[1] - r0.cmax_ci_90[0]
+        hw1 = r1.cmax_ci_90[1] - r1.cmax_ci_90[0]
+        # r1 must be at least as wide as r0 (floor only widens, never shrinks).
+        assert hw1 >= hw0 - 1e-9
