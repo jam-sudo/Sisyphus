@@ -124,7 +124,9 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 
 ## 🎯 다음 작업 (Active, 2026-04-11 이후)
 
-**Track A + B + D1 + D1 follow-up + D2 + paper-blocker bundle — 모두 완료**. 다음 단계: Phase 2.0.5 (SBC gate 확장), Track C (hierarchical 장기 연구), 또는 ketorolac-style ADME fup 수정.
+**Track A + B + D1 + D1 follow-up + D2 + paper-blocker bundle — 모두 완료**. ADME fup override 시도 후 revert (35번째 error cancellation 실패). 다음 단계: Phase 2.0.5 (SBC gate 확장) 또는 Track C (hierarchical 장기 연구).
+
+**Opt2 (Phase 2.0.5) + Opt3 (Track C hierarchical pediatric)은 이번 세션에서 시작하지 못함** — Opt1 benchmark + revert 후 context 제약으로 hand off. Next session에서 실행 가능 (모두 독립적).
 
 ### Track A 결과 (2026-04-10, `docs/sbi_multi_drug_results.md`)
 - 50 drugs × 1000 θ = 50,000 simulations (27.6 min, 100% valid solves)
@@ -281,6 +283,7 @@ NOTE: Prior headline (2.283) was invalidated by holdout data leakage fix on 2026
 - **F% bioavailability predictor (feat 브랜치, 2026-04-07 이전)** → DrugBank 527 drugs로 XGB 훈련, `scripts/train_bioavailability.py`. Standalone 및 meta 통합 모두 negative. `data/validation/f_predictor_negative_result.json`. F%는 VDss 경로와 달리 error cancellation을 깨지 못함.
 - **Direct CL/half-life predictors (feat 브랜치, post-VDss 6회)** → `xgboost_clearance_v1.json` + `xgboost_thalf_v1.json` 포함, 6가지 조합 시도. 전부 negative, `data/validation/post_vdss_negative_results.json`. VDss 4th track이 성공한 것이 "IVIVE bypass" 때문이라는 해석은 반증됨 — 같은 원리의 CL/F·t½는 실패.
 - **UDE 프로토타입 공식 Phase 1 실험 (feat 브랜치)** → Diffrax 기반 gradient-through-solver residual learning, `data/validation/phase1_ude_prototype_result.json`에 falsification 기록. Residual이 분자 구조로부터 학습 가능하지 않음 (CV R²<0). Phase 2 (amortized SBI), Phase 3 (flow matching)는 미실행.
+- **ADME fup override (2026-04-11)** → DrugBank measured fup을 XGBoost predict보다 항상 우선 (>5x disagree 시 기존엔 XGBoost fallback이었던 로직을 반대로). Principled하지만 empirically harmful: Engine AAFE 3.421→3.726 (+0.306, 34+ error cancellation 실패 패턴 재현), Meta AAFE 2.695→2.728 (+0.033, noise level). Ketorolac engine fold 0.259x→0.534x (방향은 개선) 그러나 여전히 truth 0.80에 도달 못 함 — TDM floor=0.5 적용 후 CI max ≈ 0.65 → 커버리지 목표 미달. Revert 완료. Ketorolac의 실제 실패 원인은 fup만이 아니라 CLint path도 포함, partial fix로는 해결 불가. 35번째 error cancellation 실패. `src/sisyphus/predict/adme.py` 주석에 사유 기록.
 
 ### Engine-only ablation 결과
 - DrugBank enrichment: engine AAFE 3.074→2.945 (Δ=-0.129, 유의미), meta는 0.17 weight로 0.021만 전달
