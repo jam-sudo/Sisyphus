@@ -49,7 +49,16 @@ def main() -> None:
     tdm_parser.add_argument("--doses", type=int, default=1, help="Number of doses administered (default: 1)")
     tdm_parser.add_argument("--route", default="oral", choices=["oral", "iv"])
     tdm_parser.add_argument("--n-samples", type=int, default=2000, help="Prior MC samples (default: 2000)")
-    tdm_parser.add_argument("--method", default="is", choices=["is", "enkf"], help="TDM method: is (importance sampling) or enkf (Ensemble Kalman Filter)")
+    tdm_parser.add_argument(
+        "--method",
+        default="is",
+        choices=["is", "ibis", "enkf", "sbi", "auto"],
+        help=(
+            "TDM method: is (importance sampling) | ibis (iterated batch IS) | "
+            "enkf (Ensemble Kalman Filter) | sbi (amortized SBI, Track A) | "
+            "auto (look up per-drug routing table data/sbi/method_routing.json)"
+        ),
+    )
     tdm_parser.add_argument("--verbose", "-v", action="store_true")
 
     # ddi command
@@ -82,7 +91,12 @@ def main() -> None:
     da_parser.add_argument("--doses", type=int, default=1, help="Number of doses administered")
     da_parser.add_argument("--route", default="oral", choices=["oral", "iv"])
     da_parser.add_argument("--n-samples", type=int, default=2000, help="Prior MC samples")
-    da_parser.add_argument("--method", default="is", choices=["is", "enkf"], help="TDM method: is (importance sampling) or enkf (Ensemble Kalman Filter)")
+    da_parser.add_argument(
+        "--method",
+        default="is",
+        choices=["is", "ibis", "enkf", "sbi", "auto"],
+        help="TDM method (same choices as tdm command)",
+    )
     da_parser.add_argument("--verbose", "-v", action="store_true")
 
     # benchmark command
@@ -206,6 +220,35 @@ def _run_simulate(args: argparse.Namespace) -> None:
         print(f"SS reached at dose:   {metrics.dose_to_steady_state}")
 
 
+_ROUTING_TABLE_PATH = Path("data/sbi/method_routing.json")
+
+
+def _resolve_auto_method(drug_name: str) -> str:
+    """Look up the per-drug routing table and return the recommended method.
+
+    Falls back to ``"ibis"`` when the table is missing or the drug is not
+    listed. Expects ``data/sbi/method_routing.json`` produced by
+    ``scripts/sbi_build_routing_table.py``.
+    """
+    import json
+
+    if not _ROUTING_TABLE_PATH.exists():
+        return "ibis"
+    try:
+        with open(_ROUTING_TABLE_PATH) as f:
+            table = json.load(f)
+    except Exception:
+        return "ibis"
+    mapping = table.get("routes", {})
+    # Case-insensitive lookup
+    lower = drug_name.lower().strip()
+    for key, method in mapping.items():
+        if key.lower().strip() == lower:
+            return method
+    default = table.get("default", "ibis")
+    return default
+
+
 def _parse_observations(obs_strings: list[str]):
     """Parse 'time:conc' strings into Observation objects."""
     from sisyphus.regimen.tdm import Observation
@@ -247,26 +290,39 @@ def _run_tdm(args: argparse.Namespace) -> None:
 
     observations = _parse_observations(args.obs)
 
-    if args.method == "enkf":
-        from sisyphus.regimen.tdm_enkf import enkf_update
+    # Map CLI choice to tdm.bayesian_update method string
+    cli_method = args.method
+    if cli_method == "auto":
+        resolved = _resolve_auto_method(drug.name)
+        print(f"[auto] routing {drug.name} → method={resolved}", file=sys.stderr)
+        cli_method = resolved
+    method_map = {
+        "is": ("importance_sampling", "Importance Sampling"),
+        "ibis": ("ibis", "IBIS (sequential MC + MCMC)"),
+        "enkf": ("enkf", "EnKF (Ensemble Kalman Filter)"),
+        "sbi": ("sbi", "Amortized SBI (multi-drug NSF)"),
+    }
+    tdm_method, method_label = method_map[cli_method]
 
-        result = enkf_update(
-            compiled, graph, drug, regimen,
-            observations=observations,
-            n_ensemble=args.n_samples,
-            seed=42,
-        )
-        method_label = "EnKF"
-    else:
-        from sisyphus.regimen.tdm import bayesian_update
+    from sisyphus.regimen.tdm import bayesian_update
 
-        result = bayesian_update(
-            compiled, graph, drug, regimen,
-            observations=observations,
-            n_prior=args.n_samples,
-            seed=42,
-        )
-        method_label = "Importance Sampling"
+    # Pass logp for SBI path (unused by others)
+    extra_kwargs = {}
+    if tdm_method == "sbi":
+        try:
+            from sisyphus.predict.chemistry import compute_profile
+            extra_kwargs["logp_hint"] = float(compute_profile(args.smiles).logp)
+        except Exception:
+            pass
+
+    result = bayesian_update(
+        compiled, graph, drug, regimen,
+        observations=observations,
+        n_prior=args.n_samples,
+        seed=42,
+        method=tdm_method,
+        **extra_kwargs,
+    )
 
     print(f"Drug: {drug.name}")
     print(f"Method: {method_label}")

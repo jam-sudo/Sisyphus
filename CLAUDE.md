@@ -124,34 +124,39 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 
 ## 🎯 다음 작업 (Active, 2026-04-10 이후)
 
-**Track A (Phase 2.0) — 부분 성공으로 완료**. Phase 2.0.5 또는 Track B 선택 대기.
+**Track A (Phase 2.0) + Track B (Phase 2.1 hybrid dispatch) — 완료**. 다음 단계: Phase 2.0.5 (SBC gate 확장) 또는 Track D1 (surrogate OOD 수정) 선택 대기.
 
-**Track A 결과 요약 (2026-04-10, `docs/sbi_multi_drug_results.md`):**
+### Track A 결과 (2026-04-10, `docs/sbi_multi_drug_results.md`)
 - 50 drugs × 1000 θ = 50,000 simulations (27.6 min, 100% valid solves)
 - NSF + embedding_net(13→32→32→32), hidden=64, transforms=8, 92 epochs (20 min)
-- **Cumulative IBIS speedup: 36,097×** on 5 anchor drugs (SBI 0.193 s vs IBIS 6,949 s)
+- **Cumulative IBIS speedup: 36,097×** on 5 anchor drugs
 - **Coverage-primary gate: 11/13 drugs within 10pp** of nominal at 50/80/90/95% levels
-- **Strict gate (KS p > 0.01 AND cov ≤ 10pp): 2/13** (morphine, ketorolac)
-- **Hard coverage failures: 2/13** (diclofenac, pravastatin — both acid + CYP2C9, likely acid class underrepresented in 50-drug training set)
-- Posterior predictive Cmax bias: 3/5 anchors within 13% of IBIS; morphine +22%, clozapine −50% (but clozapine SBI actually *closer to observed* than IBIS which drifts)
+- **Strict gate: 2/13** (morphine, ketorolac); **Hard coverage failures: 2/13** (diclofenac, pravastatin — acid/CYP2C9)
 
-**Status**: Architecturally validated (conditional amortization works, enormous speedup, coverage-calibrated on 85% of holdouts) but strict SBC gate fails due to subtle rank non-uniformity at 1000 θ/drug (vs POC 5000 θ/drug). 2 acid/CYP2C9 drugs genuinely miss. Treat as *partial success*.
+### Track B 결과 (2026-04-10, docs/sbi_multi_drug_results.md Addendum)
+- **SBI production API**: `tdm.bayesian_update(method="sbi")` + silent IBIS fallback
+- **Per-drug routing table**: `data/sbi/method_routing.json` — 10 SBI / 3 IBIS
+- **CLI**: `sisyphus tdm --method {is,ibis,enkf,sbi,auto}` 통합. `auto`는 라우팅 테이블 조회
+- **3-way tournament mean absolute bias**: SBI 19% < IS 31% < EnKF 38%. SBI는 특히 clozapine에서 −4% (IS/EnKF/IBIS는 +82~+89% drift)
+- **Wall time per drug**: SBI ~57s < IS ~69s ≪ EnKF ~564s ≪ IBIS ~1390s
+- **Posterior CV inflation bug fixed**: apply_theta_to_drug 후 override field들의 CV를 0으로 collapse해야 posterior CV가 prior CV 아래로 내려감 (morphine: before 56% > 39%, after 34% < 39%)
+- **Tests**: 401/401 pass (+5 SBI dispatch tests, +2 feature refactor tests)
 
-**Next options** (discuss with user):
-1. **Phase 2.0.5**: Targeted fixes before 2.1 — expand per-drug θ to ≥2000, logit(fup) reparam, add more acids. ~1-2 h compute.
-2. **Track B hybrid dispatch**: Ship SBI-for-the-11 with IBIS fallback for the 2 hard-fails + per-drug routing table. Production-realistic, faster delivery.
-3. **Track D parallel**: Unblock D1 (surrogate OOD fix) or D2 (TDM 90% CI calibration) while 2.0.5 is decided.
+### 다음 옵션 (decision pending)
+1. **Phase 2.0.5 (SBC gate expansion)**: 2000+ θ/drug 재생성 + logit(fup) reparam + acid training 확장 → diclofenac/pravastatin/posaconazole를 SBI bin으로 이동. ~2-3h 컴퓨트.
+2. **Track D1 (surrogate OOD fix)**: `params_to_features_single` 재작성 → surrogate를 다시 정확하게 만듦 → SBI posterior predictive 50s → <1s (engine forward 대체). 가장 큰 production 향상.
+3. **Track D2 (TDM 90% CI calibration)**: 기존 IBIS CI coverage 67%→90% 보정. 논문 작성 전 fix 필요.
+4. **Phase 2.2 (Track C)**: Hierarchical populations, active learning, inverse design. 장기.
 
-**Key artifacts for session context:**
-- `docs/sbi_multi_drug_results.md` — full writeup of this run
-- `docs/sbi_poc_results.md` — single-drug POC baseline (commit `4438a24`)
-- `docs/next_steps_plan.md` — Track B/C/D roadmap (still valid)
-- `data/validation/sbi_sbc_multi_drug.json` — per-drug SBC details
-- `data/validation/sbi_vs_ibis_multi_drug.json` — 5-drug IBIS comparison
-- `data/sbi/multi_drug_train.npz` — 50k training pairs
-- `models/sbi/multi_drug_nsf.pt` (+ `.aux.pt`) — trained amortizer (not committed, .gitignore)
-- `src/sisyphus/sbi/multi_drug.py` — MultiDrugSimulator, extract_drug_features, pack_observation
-- `tests/unit/test_sbi_multi_drug.py` — 10 passing tests
+### Key artifacts
+- `docs/sbi_multi_drug_results.md` — Track A 결과 + Track B Addendum
+- `src/sisyphus/regimen/tdm_sbi.py` — SBI dispatch
+- `src/sisyphus/regimen/tdm.py` — method="sbi" branch + fallback
+- `data/sbi/method_routing.json` — per-drug routing
+- `data/validation/tdm_method_tournament.json` — 3-way benchmark
+- `data/validation/sbi_vs_ibis_multi_drug.json` — 5-drug IBIS comparison (Track A)
+- `data/validation/sbi_vs_ibis_extras.json` — 5-drug IBIS extended (Track B)
+- `tests/unit/test_tdm_sbi.py` — 5 dispatch tests
 
 ## Session State (마지막 업데이트: 2026-04-10, post-merge consolidated)
 

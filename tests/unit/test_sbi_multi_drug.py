@@ -57,6 +57,23 @@ def test_extract_features_logp_override(morphine_sim):
     assert override_feats[idx] == 5.5
 
 
+def test_extract_features_kwarg_form(morphine_sim):
+    """The (drug=, graph=) kwarg form must agree with the legacy (sim,) form."""
+    sim = morphine_sim.simulators["morphine"]
+    legacy = extract_drug_features(sim, logp=1.23)
+    kw = extract_drug_features(drug=sim.nominal_drug, graph=sim.graph, logp=1.23)
+    np.testing.assert_array_equal(legacy, kw)
+
+
+def test_extract_features_kwarg_requires_both(morphine_sim):
+    """Passing drug= without graph= must raise, not silently ignore."""
+    sim = morphine_sim.simulators["morphine"]
+    with pytest.raises(ValueError):
+        extract_drug_features(drug=sim.nominal_drug)
+    with pytest.raises(ValueError):
+        extract_drug_features(graph=sim.graph)
+
+
 def test_simulate_single_determinism(morphine_sim):
     theta = np.array([0.0, 0.65, 0.0])
     a = morphine_sim.simulate_single("morphine", theta, seed=123)

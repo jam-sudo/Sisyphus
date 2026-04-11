@@ -176,16 +176,29 @@ def bayesian_update(
     seed: int = 42,
     observation_node: str = "venous_blood",
     method: str = "importance_sampling",
+    sbi_posterior_path: "str | None" = None,
+    sbi_fallback: bool = True,
+    logp_hint: float | None = None,
 ) -> TDMResult:
     """Run Bayesian TDM update.
 
     Args:
         method: ``"importance_sampling"`` (default, original), ``"ibis"``
-            (sequential MC with resampling + MCMC rejuvenation), or
-            ``"enkf"`` (Ensemble Kalman Filter).
+            (sequential MC with resampling + MCMC rejuvenation), ``"enkf"``
+            (Ensemble Kalman Filter), or ``"sbi"`` (amortized simulation-
+            based inference via the Track A multi-drug conditional NSF).
+        sbi_posterior_path: Path to the trained amortized posterior. If
+            None, defaults to ``models/sbi/multi_drug_nsf.pt``.
+        sbi_fallback: If ``True`` (default) and the SBI posterior file is
+            missing, fall back to ``ibis`` rather than raising. Set to
+            ``False`` to fail loudly in CI or production configs that
+            require SBI to be available.
+        logp_hint: Optional logP injection for SBI drug feature extraction.
+            Unused by other methods.
 
-    For ``"ibis"`` and ``"enkf"``, see :mod:`sisyphus.regimen.tdm_ibis`
-    and :mod:`sisyphus.regimen.tdm_enkf` respectively.
+    For ``"ibis"``, ``"enkf"``, and ``"sbi"`` see
+    :mod:`sisyphus.regimen.tdm_ibis`, :mod:`sisyphus.regimen.tdm_enkf`,
+    and :mod:`sisyphus.regimen.tdm_sbi` respectively.
 
     Original docstring follows.
 
@@ -257,6 +270,33 @@ def bayesian_update(
             weights=uniform_weights,
             log_likelihoods=np.zeros(n_post),
         )
+
+    if method == "sbi":
+        from sisyphus.regimen.tdm_sbi import sbi_update
+
+        try:
+            return sbi_update(
+                compiled, graph, drug, regimen, observations,
+                posterior_path=sbi_posterior_path,
+                n_samples=max(n_prior, 1000),  # amortized sampling is cheap
+                n_predictive_sims=min(n_prior, 200),  # bound the forward cost
+                seed=seed,
+                observation_node=observation_node,
+                logp_hint=logp_hint,
+            )
+        except FileNotFoundError as exc:
+            if not sbi_fallback:
+                raise
+            logger.warning(
+                "SBI posterior unavailable (%s), falling back to IBIS",
+                exc,
+            )
+            return bayesian_update(
+                compiled, graph, drug, regimen, observations,
+                n_prior=n_prior, seed=seed,
+                observation_node=observation_node,
+                method="ibis",
+            )
 
     # ── Default: importance sampling (original method) ──
 
