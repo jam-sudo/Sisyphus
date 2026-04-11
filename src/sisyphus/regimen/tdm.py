@@ -178,6 +178,7 @@ def bayesian_update(
     method: str = "importance_sampling",
     sbi_posterior_path: "str | None" = None,
     sbi_fallback: bool = True,
+    sbi_use_surrogate: bool = False,
     logp_hint: float | None = None,
 ) -> TDMResult:
     """Run Bayesian TDM update.
@@ -283,6 +284,7 @@ def bayesian_update(
                 seed=seed,
                 observation_node=observation_node,
                 logp_hint=logp_hint,
+                use_surrogate=sbi_use_surrogate,
             )
         except FileNotFoundError as exc:
             if not sbi_fallback:

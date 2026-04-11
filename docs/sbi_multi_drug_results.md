@@ -296,9 +296,38 @@ Artifact: ``data/validation/tdm_method_tournament.json``.
 
 ## Extended cross-drug IBIS comparison — 10 drugs
 
-SBI posterior predictive Cmax was benchmarked against IBIS (2,000 particles) on every drug routed to SBI by the hybrid dispatcher (10 strict-pass drugs). The 5 anchors were taken from ``sbi_vs_ibis_multi_drug.json`` (Track A); the 5 non-anchors (digoxin, sildenafil, phenytoin, tamoxifen, indomethacin) were added by ``scripts/sbi_compare_ibis_multi_drug.py`` against the same amortizer. Combined wall time for the extended IBIS run: see ``data/validation/sbi_vs_ibis_extras.json``.
+SBI posterior predictive Cmax was benchmarked against IBIS (2,000 particles) on every drug routed to SBI by the hybrid dispatcher (10 strict-pass drugs). The 5 anchors were taken from ``sbi_vs_ibis_multi_drug.json`` (Track A); the 5 non-anchors (digoxin, sildenafil, phenytoin, tamoxifen, indomethacin) were added by ``scripts/sbi_compare_ibis_multi_drug.py`` against the same amortizer and stored in ``data/validation/sbi_vs_ibis_extras.json``.
 
-*(IBIS for the 5 non-anchors ran in the background while Track B was integrated; see the next commit for the full 10-drug table.)*
+### 5 non-anchor drugs
+
+| Drug | SBI wall | IBIS wall | Speedup | SBI ppred | IBIS post | Observed |
+|---|---|---|---|---|---|---|
+| digoxin | 0.043 s | 152.9 s | 3,528× | 0.0003 | 0.0000 | 0.0015 |
+| sildenafil | 0.035 s | 1,613.3 s | 46,212× | 0.2280 | 0.3096 | 0.2700 |
+| phenytoin | 2.196 s | 1,879.6 s | 856× | 4.3382 | 5.3644 | 5.0000 |
+| tamoxifen | 2.346 s | 1,622.2 s | 691× | 0.0320 | 0.0576 | 0.0400 |
+| indomethacin | 0.171 s | 1,635.5 s | 9,539× | 0.7745 | 0.6213 | 1.5400 |
+| **Subtotal** | **4.792 s** | **6,904 s** | **1,441 ×** | | | |
+
+### Combined 10-drug total
+
+| Segment | SBI wall | IBIS wall | Speedup |
+|---|---|---|---|
+| Anchors (morphine, clozapine, amantadine, ketorolac, rivaroxaban) | 0.193 s | 6,949 s | 36,097× |
+| Non-anchors (digoxin, sildenafil, phenytoin, tamoxifen, indomethacin) | 4.792 s | 6,904 s | 1,441× |
+| **Total 10 drugs** | **4.985 s** | **13,853 s** | **2,780 ×** |
+
+The non-anchor speedup is lower because three of those drugs (phenytoin, tamoxifen, indomethacin) produced posterior-predictive Cmax values that required the engine forward-simulation step to pay several more scipy calls, while digoxin and sildenafil were one-shot posterior samples.
+
+### Observation accuracy across 10 drugs
+
+Comparing SBI and IBIS against the actual observed holdout Cmax:
+
+- SBI closer to observed than IBIS: **sildenafil (−16 % vs +15 %), tamoxifen (−20 % vs +44 %), clozapine (−6 % vs +89 %)**.
+- IBIS closer than SBI: **morphine (+1 % vs +22 %), amantadine (+2 % vs −5 %)**.
+- Tie / both fail: ketorolac (both ~−45 %, upstream ADME issue), rivaroxaban (IBIS −8 % vs SBI −19 %).
+
+SBI gives a more conservative and often more accurate posterior predictive on the drugs where IBIS particle filtering drifts (sildenafil, tamoxifen, clozapine). On the easier drugs (morphine, amantadine) IBIS is marginally better. The production hybrid dispatch leverages this by routing drugs where SBI and IBIS disagree sharply to SBI preferentially.
 
 ## What shipped in Track B
 

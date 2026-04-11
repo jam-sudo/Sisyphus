@@ -1,0 +1,57 @@
+{
+  "results": {
+    "morphine": {
+      "scipy_wall": 46.17608189582825,
+      "scipy_post_cmax": 0.024179560170205575,
+      "scipy_bias_pct": 29.649116194131768,
+      "surrogate_wall": 4.449045896530151,
+      "surrogate_post_cmax": 0.020743884796197685,
+      "surrogate_bias_pct": 11.22726432277579,
+      "speedup": 10.378872902129727,
+      "post_cmax_ratio": 0.8579099309572479
+    },
+    "clozapine": {
+      "scipy_wall": 46.088608503341675,
+      "scipy_post_cmax": 0.3809187707230677,
+      "scipy_bias_pct": -7.767852125165206,
+      "surrogate_wall": 3.2939658164978027,
+      "surrogate_post_cmax": 1.1590237166265926,
+      "surrogate_bias_pct": 180.63528247617256,
+      "speedup": 13.99182962752899,
+      "post_cmax_ratio": 3.042705704490515
+    },
+    "amantadine": {
+      "scipy_wall": 45.77310538291931,
+      "scipy_post_cmax": 0.21498512173837753,
+      "scipy_bias_pct": -2.2794901189193064,
+      "surrogate_wall": 0.5074610710144043,
+      "surrogate_post_cmax": 0.2500023932418461,
+      "surrogate_bias_pct": 13.637451473566403,
+      "speedup": 90.20023012094269,
+      "post_cmax_ratio": 1.1628823019021857
+    },
+    "ketorolac": {
+      "scipy_wall": 44.83728814125061,
+      "scipy_post_cmax": 0.3991388467024605,
+      "scipy_bias_pct": -50.107644162192436,
+      "surrogate_wall": 0.6749205589294434,
+      "surrogate_post_cmax": 0.2845608139668902,
+      "surrogate_bias_pct": -64.42989825413872,
+      "speedup": 66.43343064311355,
+      "post_cmax_ratio": 0.712936904833563
+    },
+    "rivaroxaban": {
+      "scipy_wall": 41.442110538482666,
+      "scipy_post_cmax": 0.12145886800290535,
+      "scipy_bias_pct": -15.18235474657447,
+      "surrogate_wall": 0.2971200942993164,
+      "surrogate_post_cmax": 0.12052278013268689,
+      "surrogate_bias_pct": -15.836047393375077,
+      "speedup": 139.47932614996486,
+      "post_cmax_ratio": 0.9922929639835267
+    }
+  },
+  "total_scipy_s": 224.3171944618225,
+  "total_surrogate_s": 9.222513437271118,
+  "total_speedup": 24.322783153157054
+}
