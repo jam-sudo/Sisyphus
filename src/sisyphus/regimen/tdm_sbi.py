@@ -65,6 +65,7 @@ def sbi_update(
     logp_hint: float | None = None,
     use_surrogate: bool = False,
     surrogate_model_dir: Path | str | None = None,
+    surrogate_ensemble_std_threshold: float = 0.02,
 ) -> "TDMResult":
     """Amortized SBI TDM update via the multi-drug conditional posterior.
 
@@ -174,6 +175,16 @@ def sbi_update(
     t_total = max(max_obs_t + 24.0, regimen.last_dose_time_h + 24.0)
 
     # ── Optional: load surrogate ensemble for fast forward sims ──
+    # D1 follow-up (2026-04-10): the nominal-feature OOD guard was not
+    # enough — when the amortizer posterior shifts a parameter (e.g.
+    # clozapine fup 0.03 → 0.6) individual per-sample features can land
+    # outside the training box even though the *nominal* drug is safe.
+    # The surrogate bundle is now always loaded when ``use_surrogate`` is
+    # requested, and the hybrid batch wrapper ``_hybrid_cmax_batch``
+    # routes each sample independently: in-distribution rows go through
+    # the vectorised surrogate call, out-of-distribution rows fall back
+    # to a scipy forward sim. This preserves most of the speedup on
+    # well-behaved drugs while restoring accuracy on the hard ones.
     surrogate_bundle: tuple | None = None
     if use_surrogate:
         try:
@@ -195,8 +206,9 @@ def sbi_update(
             s_mean = scaler["mean"]
             s_std = scaler["std"]
 
-            # OOD guard: if the nominal drug features are out of range the
-            # surrogate cannot be trusted for this drug — fall back.
+            # Cheap nominal-feature sanity check — if the *drug itself*
+            # is outside training bounds there is no point enabling the
+            # surrogate at all (the OOD rate will be 100 %).
             sample_params = ResolvedParams(
                 graph.sample(np.random.default_rng(seed)),
                 drug.sample(np.random.default_rng(seed)),
@@ -205,32 +217,23 @@ def sbi_update(
             ok, offenders = features_in_distribution(nominal_feats)
             if not ok:
                 logger.warning(
-                    "SBI TDM: surrogate OOD for this drug (%s), "
-                    "falling back to scipy forward sims",
+                    "SBI TDM: surrogate OOD for this drug at nominal (%s), "
+                    "falling back to pure scipy forward sims",
                     ", ".join(offenders[:3]),
                 )
             else:
-                surrogate_bundle = (s_models, s_mean, s_std,
-                                    params_to_features_single,
-                                    predict_surrogate_ensemble)
-                logger.info("SBI TDM: surrogate forward-sim enabled")
+                surrogate_bundle = (
+                    s_models, s_mean, s_std,
+                    params_to_features_single,
+                    predict_surrogate_ensemble,
+                    features_in_distribution,
+                )
+                logger.info("SBI TDM: surrogate forward-sim enabled (hybrid)")
         except Exception as exc:
             logger.warning(
                 "SBI TDM: surrogate load failed (%s), falling back to scipy",
                 exc,
             )
-
-    def _batch_surrogate_cmax(params_list: list) -> np.ndarray:
-        """Vectorized surrogate call — one JAX trace, one batch predict."""
-        if surrogate_bundle is None:
-            raise RuntimeError("surrogate_bundle unavailable")
-        s_models, s_mean, s_std, _p2f, _predict = surrogate_bundle
-        feats = np.stack([_p2f(p) for p in params_list])
-        doses = np.array([p.drug_param("dose_mg") for p in params_list])
-        mean_pred, _ = _predict(s_models, feats, s_mean, s_std)
-        cmax = 10 ** mean_pred * doses
-        cmax = np.where(np.isfinite(cmax) & (cmax > 0), cmax, np.nan)
-        return cmax
 
     def _scipy_cmax(params: ResolvedParams) -> float:
         """Scipy engine single-sample forward sim (fallback path)."""
@@ -248,12 +251,98 @@ def sbi_update(
         except Exception:
             return float("nan")
 
+    def _hybrid_cmax_batch(params_list: list, label: str = "") -> tuple[np.ndarray, int, int]:
+        """Per-sample hybrid routing for surrogate vs scipy.
+
+        Two-stage acceptance:
+
+        1. **Training-box guard** (``features_in_distribution``) — rejects
+           samples whose features fall outside the training parameter
+           ranges (log10_clint, fup, logp, etc.).
+        2. **Ensemble-std guard** — runs the surrogate ensemble on the
+           candidate rows and rejects any whose ensemble std exceeds
+           ``surrogate_ensemble_std_threshold`` (default 0.02). This
+           catches the subtle failure mode where features are technically
+           in the training box but the surrogate's local response surface
+           is poorly calibrated (see docs/surrogate_ood_fix.md — clozapine
+           under theta shift was the motivating case).
+
+        Rejected samples fall back to scipy forward sims for accuracy.
+        Accepted samples use the vectorised surrogate prediction.
+
+        Returns ``(cmax, n_surrogate, n_scipy)``.
+        """
+        if surrogate_bundle is None:
+            raise RuntimeError("surrogate_bundle unavailable")
+        (s_models, s_mean, s_std, _p2f, _predict, _in_dist) = surrogate_bundle
+
+        n = len(params_list)
+        cmax = np.full(n, np.nan, dtype=np.float64)
+        feats = np.stack([_p2f(p) for p in params_list])
+
+        # Stage 1: training-box OOD check.
+        box_mask = np.zeros(n, dtype=bool)
+        for i in range(n):
+            ok_i, _ = _in_dist(feats[i])
+            box_mask[i] = ok_i
+
+        # Stage 2: run the surrogate on box-accepted rows and filter
+        # by ensemble std.
+        candidate_mask = box_mask.copy()
+        if candidate_mask.any():
+            feats_cand = feats[candidate_mask]
+            doses_cand = np.array(
+                [params_list[i].drug_param("dose_mg")
+                 for i in np.where(candidate_mask)[0]]
+            )
+            mean_pred, std_pred = _predict(s_models, feats_cand, s_mean, s_std)
+            std_ok = std_pred <= surrogate_ensemble_std_threshold
+
+            # Build the final surrogate acceptance mask over all n rows.
+            cand_indices = np.where(candidate_mask)[0]
+            accept_indices = cand_indices[std_ok]
+            reject_std_indices = cand_indices[~std_ok]
+
+            # Write surrogate predictions for accepted rows.
+            if accept_indices.size > 0:
+                accept_pred = mean_pred[std_ok]
+                accept_doses = doses_cand[std_ok]
+                cmax_surrogate = 10 ** accept_pred * accept_doses
+                cmax_surrogate = np.where(
+                    np.isfinite(cmax_surrogate) & (cmax_surrogate > 0),
+                    cmax_surrogate,
+                    np.nan,
+                )
+                cmax[accept_indices] = cmax_surrogate
+
+            # Mark rejected rows (high std) for scipy fallback.
+            candidate_mask[reject_std_indices] = False
+
+        n_surrogate = int(candidate_mask.sum())
+        scipy_mask = ~candidate_mask
+        n_scipy = int(scipy_mask.sum())
+
+        if n_scipy > 0:
+            scipy_indices = np.where(scipy_mask)[0]
+            for idx in scipy_indices:
+                cmax[idx] = _scipy_cmax(params_list[idx])
+
+        if label:
+            n_box = int((~box_mask).sum())
+            n_std = n_scipy - n_box
+            logger.info(
+                "SBI TDM %s: %d surrogate + %d scipy (%d box-OOD, %d std-OOD)",
+                label, n_surrogate, n_scipy, n_box, n_std,
+            )
+        return cmax, n_surrogate, n_scipy
+
     # ── Prior Cmax (from drug Distribution prior, same as IS/IBIS) ──
     prior_cmax_list: list[float] = []
     prior_param_list: list[dict[str, float]] = []
     n_prior_fail = 0
+    prior_n_surrogate = prior_n_scipy = 0
     if surrogate_bundle is not None:
-        # Pre-realize all prior draws, then do one vectorized surrogate call.
+        # Pre-realize all prior draws, then hybrid-route per sample.
         all_prior_params = []
         all_prior_drugs = []
         for i in range(n_predictive_sims):
@@ -262,7 +351,9 @@ def sbi_update(
             realized_drug = drug.sample(rng)
             all_prior_params.append(ResolvedParams(realized_graph, realized_drug))
             all_prior_drugs.append(realized_drug)
-        cmax_arr = _batch_surrogate_cmax(all_prior_params)
+        cmax_arr, prior_n_surrogate, prior_n_scipy = _hybrid_cmax_batch(
+            all_prior_params, label="prior"
+        )
         for cmax, rd in zip(cmax_arr, all_prior_drugs):
             if not np.isfinite(cmax) or cmax <= 0:
                 n_prior_fail += 1
@@ -299,6 +390,7 @@ def sbi_update(
     post_cmax_list: list[float] = []
     post_param_list: list[dict[str, float]] = []
     n_post_fail = 0
+    post_n_surrogate = post_n_scipy = 0
     if surrogate_bundle is not None:
         all_post_params = []
         all_post_drugs = []
@@ -321,7 +413,9 @@ def sbi_update(
             realized_drug = overridden.sample(rng)
             all_post_params.append(ResolvedParams(realized_graph, realized_drug))
             all_post_drugs.append(realized_drug)
-        cmax_arr = _batch_surrogate_cmax(all_post_params)
+        cmax_arr, post_n_surrogate, post_n_scipy = _hybrid_cmax_batch(
+            all_post_params, label="posterior"
+        )
         for cmax, rd in zip(cmax_arr, all_post_drugs):
             if not np.isfinite(cmax) or cmax <= 0:
                 n_post_fail += 1
