@@ -183,21 +183,27 @@ def generate_scaled_observations(
     return observations, tmax
 
 
-def run_tdm(compiled, graph, drug, regimen, observations, seed=42):
-    """Run TDM Bayesian update and extract metrics."""
+def run_tdm(compiled, graph, drug, regimen, observations, seed=42, method="importance_sampling"):
+    """Run TDM Bayesian update and extract metrics.
+
+    Returns the TDMResult together with the 90 % credible interval on the
+    posterior Cmax. Prefers the ``TDMResult.cmax_ci_90`` field (empirical
+    quantile of the raw weighted samples, populated by every dispatch path
+    as of the D2 fix). Falls back to the legacy lognormal approximation
+    only if that field is missing — this preserves backwards compatibility
+    with older TDMResult instances loaded from JSON.
+    """
     result = bayesian_update(
         compiled, graph, drug, regimen,
         observations=observations,
         n_prior=N_PRIOR,
         seed=seed,
+        method=method,
     )
 
-    # 90% CI from weighted samples
-    if result.n_successful > 0 and len(result.weights) > 0:
-        # Reconstruct Cmax samples from the TDM internals
-        # We need to re-derive — use weighted percentiles
-        # Since we don't have raw samples in TDMResult, approximate from
-        # posterior mean and CV assuming lognormal
+    if result.cmax_ci_90 is not None:
+        ci90_lower, ci90_upper = result.cmax_ci_90
+    elif result.n_successful > 0:
         post_mean = result.posterior_cmax.mean
         post_cv = result.posterior_cmax.cv
         if post_mean > 0 and post_cv > 0:
@@ -229,9 +235,33 @@ def assess_ess(ess, n_prior=N_PRIOR):
 # ═══════════════════════════════════════════════════════════════════════════
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--method",
+        default="importance_sampling",
+        choices=["importance_sampling", "ibis", "enkf"],
+        help="TDM dispatch method used for the benchmark",
+    )
+    parser.add_argument(
+        "--out",
+        type=Path,
+        default=None,
+        help="Override default output JSON path",
+    )
+    args = parser.parse_args()
+    global OUTPUT_JSON
+    if args.out is not None:
+        OUTPUT_JSON = args.out
+    else:
+        tag = {"importance_sampling": "is", "ibis": "ibis", "enkf": "enkf"}[args.method]
+        OUTPUT_JSON = OUTPUT_DIR / f"tdm_benchmark_{tag}.json"
+
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
+    method = args.method
     all_results = []
+    print(f"TDM benchmark method: {method}  →  {OUTPUT_JSON.name}")
 
     print("=" * 85)
     print("  TDM BAYESIAN UPDATE BENCHMARK")
@@ -277,7 +307,7 @@ def main():
             if obs is None:
                 continue
 
-            tdm, ci90_lo, ci90_hi = run_tdm(compiled, graph, drug, regimen, obs, seed=BASE_SEED)
+            tdm, ci90_lo, ci90_hi = run_tdm(compiled, graph, drug, regimen, obs, seed=BASE_SEED, method=method)
 
             prior_cv = tdm.prior_cmax.cv * 100
             post_cv = tdm.posterior_cmax.cv * 100
@@ -340,7 +370,7 @@ def main():
         if obs is None:
             continue
 
-        tdm, ci90_lo, ci90_hi = run_tdm(compiled, graph, drug, regimen, obs, seed=BASE_SEED)
+        tdm, ci90_lo, ci90_hi = run_tdm(compiled, graph, drug, regimen, obs, seed=BASE_SEED, method=method)
 
         prior_cv = tdm.prior_cmax.cv * 100
         post_cv = tdm.posterior_cmax.cv * 100
@@ -397,7 +427,7 @@ def main():
         if obs is None:
             continue
 
-        tdm, ci90_lo, ci90_hi = run_tdm(compiled, graph, drug, regimen, obs, seed=seed)
+        tdm, ci90_lo, ci90_hi = run_tdm(compiled, graph, drug, regimen, obs, seed=seed, method=method)
 
         prior_cv = tdm.prior_cmax.cv * 100
         post_cv = tdm.posterior_cmax.cv * 100

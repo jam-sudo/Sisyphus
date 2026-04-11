@@ -23,6 +23,17 @@ logger = logging.getLogger(__name__)
 
 
 def main():
+    import argparse
+    import json
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--save-json",
+        type=Path,
+        default=None,
+        help="save per-drug predictions + aggregate metrics to JSON",
+    )
+    args = parser.parse_args()
+
     from sisyphus.pipeline.predict import predict
     from sisyphus.validation.metrics import aafe, pct_within_n_fold
     from sisyphus.validation.reference import load_reference
@@ -62,6 +73,8 @@ def main():
                 "eng_fold": eng_fold,
                 "ml_fold": ml_fold,
                 "meta_fold": meta_fold,
+                "in_ad": bool(getattr(result, "in_applicability_domain", True)),
+                "ad_flags": list(getattr(result, "ad_flags", [])),
             })
         except Exception as e:
             skipped += 1
@@ -120,6 +133,59 @@ def main():
     print(f"\nUnder-predictions (<1/3-fold): {len(under)} drugs")
     for r in sorted(under, key=lambda x: x["eng_fold"]):
         print(f"  {r['name']:<25s} {r['eng_fold']:.3f}x (={1/r['eng_fold']:.1f}x under)")
+
+    # In-domain subset — drugs where AD flags are empty.
+    in_dom = [r for r in rows if r.get("in_ad", True) and not r.get("ad_flags")]
+    print(f"\nIn-domain subset: N={len(in_dom)} (no AD flags)")
+    for label, getter in [
+        ("Engine", lambda r: r["eng"]),
+        ("ML", lambda r: r["ml"]),
+        ("Meta", lambda r: r["meta"]),
+    ]:
+        vals = [(getter(r), r["obs"]) for r in in_dom if getter(r) and getter(r) > 0]
+        if vals:
+            pp = np.array([v[0] for v in vals])
+            oo = np.array([v[1] for v in vals])
+            a = aafe(pp, oo)
+            p2 = pct_within_n_fold(pp, oo, 2.0)
+            p3 = pct_within_n_fold(pp, oo, 3.0)
+            print(f"  {label:<8s} AAFE={a:.3f}  %2-fold={p2:.1f}%  %3-fold={p3:.1f}%")
+
+    if args.save_json is not None:
+        # Build structured output for downstream analyses
+        def _aggregate(pred_list: list[dict], pred_key: str) -> dict:
+            vv = [(r[pred_key], r["obs"]) for r in pred_list if r[pred_key] and r[pred_key] > 0]
+            if not vv:
+                return {"n": 0}
+            pp = np.array([v[0] for v in vv])
+            oo = np.array([v[1] for v in vv])
+            return {
+                "n": len(vv),
+                "aafe": float(aafe(pp, oo)),
+                "pct_2fold": float(pct_within_n_fold(pp, oo, 2.0)),
+                "pct_3fold": float(pct_within_n_fold(pp, oo, 3.0)),
+            }
+
+        payload = {
+            "n_holdout": len(rows),
+            "n_skipped": skipped,
+            "overall": {
+                "engine": _aggregate(rows, "eng"),
+                "ml": _aggregate(rows, "ml"),
+                "meta": _aggregate(rows, "meta"),
+            },
+            "in_domain": {
+                "n": len(in_dom),
+                "engine": _aggregate(in_dom, "eng"),
+                "ml": _aggregate(in_dom, "ml"),
+                "meta": _aggregate(in_dom, "meta"),
+            },
+            "drugs": rows,
+        }
+        args.save_json.parent.mkdir(parents=True, exist_ok=True)
+        with open(args.save_json, "w") as f:
+            json.dump(payload, f, indent=2)
+        print(f"\nWrote {args.save_json}")
 
 
 if __name__ == "__main__":

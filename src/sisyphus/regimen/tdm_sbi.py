@@ -471,6 +471,12 @@ def sbi_update(
     post_mean = float(np.mean(post_arr))
     post_cv = float(np.std(post_arr) / post_mean) if post_mean > 0 else 0.0
 
+    # 90 % CI from empirical quantiles of the posterior predictive samples.
+    ci90 = (
+        float(np.quantile(post_arr, 0.05)),
+        float(np.quantile(post_arr, 0.95)),
+    )
+
     prior_params: dict[str, float] = {}
     posterior_params: dict[str, float] = {}
     if prior_param_list and post_param_list:
@@ -507,4 +513,5 @@ def sbi_update(
         observations=observations,
         weights=uniform_weights,
         log_likelihoods=np.zeros(n_post),
+        cmax_ci_90=ci90,
     )
