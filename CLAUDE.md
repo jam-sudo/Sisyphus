@@ -124,7 +124,7 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 
 ## 🎯 다음 작업 (Active, 2026-04-10 이후)
 
-**Track A (Phase 2.0) + Track B (Phase 2.1 hybrid dispatch) — 완료**. 다음 단계: Phase 2.0.5 (SBC gate 확장) 또는 Track D1 (surrogate OOD 수정) 선택 대기.
+**Track A (Phase 2.0) + Track B (Phase 2.1 hybrid dispatch) + Track D1 (surrogate OOD fix) — 완료**. 다음 단계: Phase 2.0.5 (SBC gate 확장), D1 follow-up (per-sample OOD guard), 또는 다른 트랙 선택 대기.
 
 ### Track A 결과 (2026-04-10, `docs/sbi_multi_drug_results.md`)
 - 50 drugs × 1000 θ = 50,000 simulations (27.6 min, 100% valid solves)
@@ -132,6 +132,16 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 - **Cumulative IBIS speedup: 36,097×** on 5 anchor drugs
 - **Coverage-primary gate: 11/13 drugs within 10pp** of nominal at 50/80/90/95% levels
 - **Strict gate: 2/13** (morphine, ketorolac); **Hard coverage failures: 2/13** (diclofenac, pravastatin — acid/CYP2C9)
+
+### Track D1 결과 (2026-04-10, docs/surrogate_ood_fix.md)
+- **Bug**: production `params_to_features_single` summed `abundance × affinity` across ALL nodes (liver+gut) without reversing `_CLINT_SCALING` factor. Real drugs had log10_clint ≈ 6 vs training range [-0.5, 3.0]. Inflated by ~10⁴×.
+- **Fix**: `recover_drug_level_clint()` restricts sum to liver node and divides by `_CLINT_SCALING/_IVIVE_SCALING = 180,000`. All 6 test drugs recover to within 5% of `predict_adme(..).clint.mean`.
+- **Surrogate accuracy validation** (`data/validation/surrogate_production_accuracy.json`): 13 drugs, R²=0.992, mean abs rel err=22%, 9/13 within 30% gate (69% overall, 80% on the 10-drug SBI routing subset).
+- **Opt-in surrogate integration**: `bayesian_update(method="sbi", sbi_use_surrogate=True)`. Batched JAX call (not per-sample). Default stays False for conservative scipy fallback.
+- **5-anchor SBI wall time**: scipy 224s → surrogate 9.2s = **24× cumulative**. Warm per-drug: amantadine 90×, ketorolac 66×, rivaroxaban 138×. Cold (morphine) 10× dominated by JAX JIT.
+- **vs IBIS**: surrogate warm ~0.3-0.7s/drug vs IBIS ~1390s = **~2000-4000× per-query speedup**. Sub-second TDM achieved on 4/5 anchors.
+- **Clozapine edge case**: posterior predictive +190% bias because fup posterior shifts features OOD at per-sample level. Follow-up: per-sample OOD guard with automatic scipy fallback.
+- **Tests**: +7 surrogate feature tests. 408/408 pass.
 
 ### Track B 결과 (2026-04-10, docs/sbi_multi_drug_results.md Addendum)
 - **SBI production API**: `tdm.bayesian_update(method="sbi")` + silent IBIS fallback

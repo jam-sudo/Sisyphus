@@ -79,10 +79,72 @@ class CmaxSurrogate(eqx.Module if _HAS_EQX else object):
         return self.layers[-1](x).squeeze(-1)
 
 
-def params_to_features_single(params: ResolvedParams) -> np.ndarray:
-    """Convert ResolvedParams to 12D feature vector for surrogate.
+# Unit-scaling constants from sisyphus.predict.ivive — kept local so the
+# surrogate module does not depend on the predict layer at import time.
+#
+# Training generated features with p["clint"] in µL/min/10⁶ cells
+# (scalar). The engine computes per-enzyme clearance as
+#     CL_enzyme = abundance × affinity × ivive_scaling
+# where `_decompose_clint` back-solves affinity from the input p["clint"] as
+#     affinity = (clint × _CLINT_SCALING × fm) / (abundance × _IVIVE_SCALING)
+# Inverting that expression and summing Σ fm = 1 over liver enzymes:
+#     p["clint"] = Σ (affinity × abundance × _IVIVE_SCALING) / _CLINT_SCALING
+#                ≈ Σ (affinity × abundance) / 180,000
+# _CLINT_SCALING = 10.8 L/h per (µL/min/10⁶ cells), _IVIVE_SCALING = 6e-5.
+_TRAINING_CLINT_SCALING = 10.8         # L/h per (µL/min/10⁶ cells)
+_TRAINING_IVIVE_SCALING = 6e-5         # L/h per (µL/min/pmol × pmol)
+_CLINT_RECOVERY_DIVISOR = _TRAINING_CLINT_SCALING / _TRAINING_IVIVE_SCALING  # 180,000
 
-    Extracts the same features used in Gate 1 training.
+# In-distribution training parameter log10 ranges (from
+# scripts/train_surrogate.py::PARAM_RANGES).  Used by the OOD guard so
+# callers can decide whether to trust a surrogate forward pass or fall
+# back to the full scipy engine.
+_TRAINING_PARAM_RANGES = {
+    "log10_clint": (-0.5, 3.0),
+    "fup": (0.005, 1.0),
+    "logp": (-1.0, 6.0),
+    "pka_or_7": (2.0, 12.0),
+    "mw_scaled": (0.30, 1.60),
+    "log10_dose": (-0.5, 3.0),
+    "log10_peff": (-1.0, 2.0),
+    "log10_sol": (-3.0, 2.0),
+    "log10_renal_cl": (-3.0, 2.0),
+}
+
+
+def recover_drug_level_clint(params: "ResolvedParams") -> float:
+    """Back-solve training-scale CLint (µL/min/10⁶ cells) from ResolvedParams.
+
+    Sums the *liver* node's (abundance × affinity) contributions and
+    inverts the ``_CLINT_SCALING`` / ``_IVIVE_SCALING`` factors used by
+    ``_decompose_clint`` so the result matches what ``p["clint"]`` was
+    during surrogate training.
+
+    Restricting to the liver node is essential: ``params_to_features`` in
+    the training script assumed a scalar hepatic CLint, not a whole-body
+    total. Summing gut + liver in production double-counts CYP3A4 and
+    pushes features orders of magnitude above the training range.
+    """
+    liver_products = 0.0
+    liver_enzymes = params.node_enzymes("liver")
+    if not liver_enzymes:
+        return 1e-6
+    for tag, abundance in liver_enzymes.items():
+        affinity = params.drug_enzyme_affinity(tag)
+        if affinity <= 0 or abundance <= 0:
+            continue
+        liver_products += abundance * affinity
+    return max(liver_products / _CLINT_RECOVERY_DIVISOR, 1e-6)
+
+
+def params_to_features_single(params: ResolvedParams) -> np.ndarray:
+    """Convert ResolvedParams to 12D feature vector for the surrogate.
+
+    The layout mirrors ``scripts/train_surrogate.py::params_to_features``
+    dimension-by-dimension. ``feature[0]`` is the back-solved hepatic
+    CLint in training units; this fixes the production OOD bug where
+    summing (abundance × affinity) over all nodes produced log10 values
+    near 6 while training was bounded at 3.
     """
     fup = params.drug_param("fup")
     peff = params.drug_param("peff")
@@ -90,36 +152,61 @@ def params_to_features_single(params: ResolvedParams) -> np.ndarray:
     mw = params.drug_mw()
     renal_cl = params.drug_param("renal_clearance")
 
-    # Total CLint from all enzyme nodes
-    clint_total = 0.0
-    for node_name in params._enzymes:
-        ivive = params.node_param(node_name, "ivive_scaling") if node_name in params._ivive_scaling else 0.0
-        for tag, abundance in params.node_enzymes(node_name).items():
-            affinity = params.drug_enzyme_affinity(tag)
-            if affinity > 0 and abundance > 0:
-                clint_total += abundance * affinity  # raw CLint (pre-IVIVE)
+    clint_recovered = recover_drug_level_clint(params)
 
-    # Compound type from Kp pattern (heuristic: base if adipose Kp > 10)
-    # Simplified: use drug's compound_type if available
-    compound_type = getattr(params._drug, 'compound_type', 'neutral')
-    pka = getattr(params._drug, 'pka', None)
+    compound_type = getattr(params._drug, "compound_type", "neutral")
+    pka = getattr(params._drug, "pka", None)
+    # logp is not stored on DrugOnGraph; keep training-script fallback 7.0? No —
+    # surrogate training used the actual logp sampled in [-1, 6]. At inference
+    # time we don't have it without re-running compute_profile, so fall back
+    # to 2.0 (near the log10_clint midpoint). The OOD guard in
+    # ``features_in_distribution`` flags this when callers care about
+    # trustability.
+    logp = getattr(params._drug, "logp", 2.0) if hasattr(params._drug, "logp") else 2.0
+
+    sol_obj = getattr(params._drug, "solubility", None)
+    sol_mean = float(sol_obj.mean) if sol_obj is not None else 1.0
 
     features = np.array([
-        np.log10(max(clint_total, 1e-6)),          # log10(CLint)
-        fup,                                         # fup
-        getattr(params._drug, 'logp', 2.0) if hasattr(params._drug, 'logp') else 2.0,  # logP
-        pka if pka is not None else 7.0,             # pKa or 7
-        1.0 if compound_type == "neutral" else 0.0,  # is_neutral
-        1.0 if compound_type == "acid" else 0.0,     # is_acid
-        1.0 if compound_type == "base" else 0.0,     # is_base
-        mw / 500.0,                                  # MW/500
-        np.log10(max(dose, 1e-6)),                   # log10(dose)
-        np.log10(max(peff, 1e-6)),                   # log10(Peff)
-        np.log10(max(getattr(params._drug, 'solubility', type('', (), {'mean': 1.0})).mean, 1e-10)),  # log10(sol)
-        np.log10(max(renal_cl, 1e-10)),              # log10(renal_cl)
+        np.log10(clint_recovered),                   # log10(CLint) — training units
+        fup,                                          # fup
+        logp,                                         # logP (fallback 2.0)
+        pka if pka is not None else 7.0,              # pKa or 7
+        1.0 if compound_type == "neutral" else 0.0,   # is_neutral
+        1.0 if compound_type == "acid" else 0.0,      # is_acid
+        1.0 if compound_type == "base" else 0.0,      # is_base
+        mw / 500.0,                                   # MW/500
+        np.log10(max(dose, 1e-6)),                    # log10(dose)
+        np.log10(max(peff, 1e-6)),                    # log10(Peff)
+        np.log10(max(sol_mean, 1e-10)),               # log10(sol)
+        np.log10(max(renal_cl, 1e-10)),               # log10(renal_cl) — training was log10(7.5*fup)
     ], dtype=np.float64)
 
     return features
+
+
+def features_in_distribution(
+    features: np.ndarray, slack: float = 0.2
+) -> tuple[bool, list[str]]:
+    """Check whether a feature vector is within the training distribution.
+
+    Returns ``(ok, offending_dim_names)``. ``slack`` is an absolute fraction
+    of each range added to both ends, so callers can accept slight OOD
+    without triggering fallbacks.
+    """
+    name_to_idx = {n: i for i, n in enumerate(FEATURE_NAMES)}
+    offenders: list[str] = []
+    for name, (lo, hi) in _TRAINING_PARAM_RANGES.items():
+        if name not in name_to_idx:
+            continue
+        idx = name_to_idx[name]
+        width = hi - lo
+        lo_slack = lo - slack * width
+        hi_slack = hi + slack * width
+        val = float(features[idx])
+        if val < lo_slack or val > hi_slack:
+            offenders.append(f"{name}={val:.3f} ∉ [{lo:.2f},{hi:.2f}]")
+    return (len(offenders) == 0, offenders)
 
 
 def load_surrogate_ensemble(

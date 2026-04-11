@@ -63,6 +63,8 @@ def sbi_update(
     seed: int = 42,
     observation_node: str = "venous_blood",
     logp_hint: float | None = None,
+    use_surrogate: bool = False,
+    surrogate_model_dir: Path | str | None = None,
 ) -> "TDMResult":
     """Amortized SBI TDM update via the multi-drug conditional posterior.
 
@@ -87,6 +89,15 @@ def sbi_update(
             Without this the feature extractor defaults to 2.0 (sentinel).
             When called from ``bayesian_update`` with a fully built drug,
             pass ``compute_profile(drug.smiles).logp`` if available.
+        use_surrogate: If ``True`` and the surrogate ensemble loads
+            successfully, replace the scipy forward simulations in the
+            prior and posterior-predictive loops with a vectorised
+            neural-network call. Drops wall time from ~50 s to sub-second
+            per drug at the cost of ~20 % mean absolute bias in Cmax
+            (see ``data/validation/surrogate_production_accuracy.json``).
+            Default ``False`` — conservative scipy engine fallback.
+        surrogate_model_dir: Override the default ``models/surrogate``
+            directory for the ensemble weights + scaler.
 
     Returns:
         TDMResult with prior/posterior Cmax distributions, parameter means,
@@ -162,35 +173,114 @@ def sbi_update(
     max_obs_t = max(obs.time_h for obs in observations)
     t_total = max(max_obs_t + 24.0, regimen.last_dose_time_h + 24.0)
 
-    # ── Prior Cmax (from drug Distribution prior, same as IS/IBIS) ──
-    prior_cmax_list: list[float] = []
-    prior_param_list: list[dict[str, float]] = []
-    n_prior_fail = 0
-    for i in range(n_predictive_sims):
-        rng = np.random.default_rng(seed + i)
-        realized_graph = graph.sample(rng)
-        realized_drug = drug.sample(rng)
-        params = ResolvedParams(realized_graph, realized_drug)
+    # ── Optional: load surrogate ensemble for fast forward sims ──
+    surrogate_bundle: tuple | None = None
+    if use_surrogate:
+        try:
+            from pathlib import Path as _Path
+
+            from sisyphus.engine.surrogate import (
+                features_in_distribution,
+                load_surrogate_ensemble,
+                params_to_features_single,
+                predict_surrogate_ensemble,
+            )
+
+            sdir = _Path(surrogate_model_dir) if surrogate_model_dir is not None \
+                else _Path("models/surrogate")
+            if not sdir.exists():
+                raise FileNotFoundError(f"surrogate dir {sdir} missing")
+            s_models = load_surrogate_ensemble(sdir, n_ensemble=5)
+            scaler = np.load(sdir / "scaler.npz")
+            s_mean = scaler["mean"]
+            s_std = scaler["std"]
+
+            # OOD guard: if the nominal drug features are out of range the
+            # surrogate cannot be trusted for this drug — fall back.
+            sample_params = ResolvedParams(
+                graph.sample(np.random.default_rng(seed)),
+                drug.sample(np.random.default_rng(seed)),
+            )
+            nominal_feats = params_to_features_single(sample_params)
+            ok, offenders = features_in_distribution(nominal_feats)
+            if not ok:
+                logger.warning(
+                    "SBI TDM: surrogate OOD for this drug (%s), "
+                    "falling back to scipy forward sims",
+                    ", ".join(offenders[:3]),
+                )
+            else:
+                surrogate_bundle = (s_models, s_mean, s_std,
+                                    params_to_features_single,
+                                    predict_surrogate_ensemble)
+                logger.info("SBI TDM: surrogate forward-sim enabled")
+        except Exception as exc:
+            logger.warning(
+                "SBI TDM: surrogate load failed (%s), falling back to scipy",
+                exc,
+            )
+
+    def _batch_surrogate_cmax(params_list: list) -> np.ndarray:
+        """Vectorized surrogate call — one JAX trace, one batch predict."""
+        if surrogate_bundle is None:
+            raise RuntimeError("surrogate_bundle unavailable")
+        s_models, s_mean, s_std, _p2f, _predict = surrogate_bundle
+        feats = np.stack([_p2f(p) for p in params_list])
+        doses = np.array([p.drug_param("dose_mg") for p in params_list])
+        mean_pred, _ = _predict(s_models, feats, s_mean, s_std)
+        cmax = 10 ** mean_pred * doses
+        cmax = np.where(np.isfinite(cmax) & (cmax > 0), cmax, np.nan)
+        return cmax
+
+    def _scipy_cmax(params: ResolvedParams) -> float:
+        """Scipy engine single-sample forward sim (fallback path)."""
         try:
             sim = solve_regimen(
                 compiled, params, regimen, t_total_h=t_total, dt_output=0.25
             )
             if not sim.solver_success:
+                return float("nan")
+            conc = sim.concentrations.get(observation_node)
+            if conc is None or len(conc) == 0:
+                return float("nan")
+            cmax = float(np.max(conc))
+            return cmax if cmax > 0 else float("nan")
+        except Exception:
+            return float("nan")
+
+    # ── Prior Cmax (from drug Distribution prior, same as IS/IBIS) ──
+    prior_cmax_list: list[float] = []
+    prior_param_list: list[dict[str, float]] = []
+    n_prior_fail = 0
+    if surrogate_bundle is not None:
+        # Pre-realize all prior draws, then do one vectorized surrogate call.
+        all_prior_params = []
+        all_prior_drugs = []
+        for i in range(n_predictive_sims):
+            rng = np.random.default_rng(seed + i)
+            realized_graph = graph.sample(rng)
+            realized_drug = drug.sample(rng)
+            all_prior_params.append(ResolvedParams(realized_graph, realized_drug))
+            all_prior_drugs.append(realized_drug)
+        cmax_arr = _batch_surrogate_cmax(all_prior_params)
+        for cmax, rd in zip(cmax_arr, all_prior_drugs):
+            if not np.isfinite(cmax) or cmax <= 0:
                 n_prior_fail += 1
                 continue
-        except Exception:
-            n_prior_fail += 1
-            continue
-        conc = sim.concentrations.get(observation_node)
-        if conc is None or len(conc) == 0:
-            n_prior_fail += 1
-            continue
-        cmax = float(np.max(conc))
-        if cmax <= 0:
-            n_prior_fail += 1
-            continue
-        prior_cmax_list.append(cmax)
-        prior_param_list.append(_extract_params(realized_drug))
+            prior_cmax_list.append(float(cmax))
+            prior_param_list.append(_extract_params(rd))
+    else:
+        for i in range(n_predictive_sims):
+            rng = np.random.default_rng(seed + i)
+            realized_graph = graph.sample(rng)
+            realized_drug = drug.sample(rng)
+            params = ResolvedParams(realized_graph, realized_drug)
+            cmax = _scipy_cmax(params)
+            if not np.isfinite(cmax) or cmax <= 0:
+                n_prior_fail += 1
+                continue
+            prior_cmax_list.append(cmax)
+            prior_param_list.append(_extract_params(realized_drug))
 
     # ── Posterior predictive Cmax (apply each sampled theta, simulate) ──
     # For each theta draw we *fix* the inferred ADME at the posterior mean
@@ -209,44 +299,60 @@ def sbi_update(
     post_cmax_list: list[float] = []
     post_param_list: list[dict[str, float]] = []
     n_post_fail = 0
-    for k, j in enumerate(idx):
-        theta_j = samples_np[j].astype(np.float64)
-        overridden = apply_theta_to_drug(drug, theta_j, nominal_peff)
-        overridden = dc_replace(
-            overridden,
-            fup=_Distribution(mean=overridden.fup.mean, cv=0.0,
-                              dist_type=overridden.fup.dist_type),
-            peff=_Distribution(mean=overridden.peff.mean, cv=0.0,
-                               dist_type=overridden.peff.dist_type),
-            enzyme_affinity={
-                tag: _Distribution(mean=d.mean, cv=0.0, dist_type=d.dist_type)
-                for tag, d in overridden.enzyme_affinity.items()
-            },
-        )
-        rng = np.random.default_rng(seed + 10000 + k)
-        realized_graph = graph.sample(rng)
-        realized_drug = overridden.sample(rng)
-        params = ResolvedParams(realized_graph, realized_drug)
-        try:
-            sim = solve_regimen(
-                compiled, params, regimen, t_total_h=t_total, dt_output=0.25
+    if surrogate_bundle is not None:
+        all_post_params = []
+        all_post_drugs = []
+        for k, j in enumerate(idx):
+            theta_j = samples_np[j].astype(np.float64)
+            overridden = apply_theta_to_drug(drug, theta_j, nominal_peff)
+            overridden = dc_replace(
+                overridden,
+                fup=_Distribution(mean=overridden.fup.mean, cv=0.0,
+                                  dist_type=overridden.fup.dist_type),
+                peff=_Distribution(mean=overridden.peff.mean, cv=0.0,
+                                   dist_type=overridden.peff.dist_type),
+                enzyme_affinity={
+                    tag: _Distribution(mean=d.mean, cv=0.0, dist_type=d.dist_type)
+                    for tag, d in overridden.enzyme_affinity.items()
+                },
             )
-            if not sim.solver_success:
+            rng = np.random.default_rng(seed + 10000 + k)
+            realized_graph = graph.sample(rng)
+            realized_drug = overridden.sample(rng)
+            all_post_params.append(ResolvedParams(realized_graph, realized_drug))
+            all_post_drugs.append(realized_drug)
+        cmax_arr = _batch_surrogate_cmax(all_post_params)
+        for cmax, rd in zip(cmax_arr, all_post_drugs):
+            if not np.isfinite(cmax) or cmax <= 0:
                 n_post_fail += 1
                 continue
-        except Exception:
-            n_post_fail += 1
-            continue
-        conc = sim.concentrations.get(observation_node)
-        if conc is None or len(conc) == 0:
-            n_post_fail += 1
-            continue
-        cmax = float(np.max(conc))
-        if cmax <= 0:
-            n_post_fail += 1
-            continue
-        post_cmax_list.append(cmax)
-        post_param_list.append(_extract_params(realized_drug))
+            post_cmax_list.append(float(cmax))
+            post_param_list.append(_extract_params(rd))
+    else:
+        for k, j in enumerate(idx):
+            theta_j = samples_np[j].astype(np.float64)
+            overridden = apply_theta_to_drug(drug, theta_j, nominal_peff)
+            overridden = dc_replace(
+                overridden,
+                fup=_Distribution(mean=overridden.fup.mean, cv=0.0,
+                                  dist_type=overridden.fup.dist_type),
+                peff=_Distribution(mean=overridden.peff.mean, cv=0.0,
+                                   dist_type=overridden.peff.dist_type),
+                enzyme_affinity={
+                    tag: _Distribution(mean=d.mean, cv=0.0, dist_type=d.dist_type)
+                    for tag, d in overridden.enzyme_affinity.items()
+                },
+            )
+            rng = np.random.default_rng(seed + 10000 + k)
+            realized_graph = graph.sample(rng)
+            realized_drug = overridden.sample(rng)
+            params = ResolvedParams(realized_graph, realized_drug)
+            cmax = _scipy_cmax(params)
+            if not np.isfinite(cmax) or cmax <= 0:
+                n_post_fail += 1
+                continue
+            post_cmax_list.append(float(cmax))
+            post_param_list.append(_extract_params(realized_drug))
 
     # ── Summarize ──
     if not prior_cmax_list or not post_cmax_list:
