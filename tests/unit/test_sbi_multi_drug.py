@@ -14,6 +14,7 @@ from sisyphus.sbi.multi_drug import (
     pack_observation,
     stack_training_pairs,
 )
+from sisyphus.sbi.priors import _logit
 
 
 MORPHINE_SMILES = "CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O"
@@ -75,14 +76,16 @@ def test_extract_features_kwarg_requires_both(morphine_sim):
 
 
 def test_simulate_single_determinism(morphine_sim):
-    theta = np.array([0.0, 0.65, 0.0])
+    # theta[1] is now logit(fup); logit(0.65) ≈ 0.619
+    theta = np.array([0.0, _logit(0.65), 0.0])
     a = morphine_sim.simulate_single("morphine", theta, seed=123)
     b = morphine_sim.simulate_single("morphine", theta, seed=123)
     assert a == b  # byte-for-byte reproducibility
 
 
 def test_simulate_batch_shape(morphine_sim):
-    thetas = np.array([[0.0, 0.65, 0.0], [0.5, 0.3, 0.2]])
+    # theta[1] is logit(fup)
+    thetas = np.array([[0.0, _logit(0.65), 0.0], [0.5, _logit(0.3), 0.2]])
     out = morphine_sim.simulate_batch_per_drug("morphine", thetas, seed=0)
     assert out.shape == (2, 1)
 

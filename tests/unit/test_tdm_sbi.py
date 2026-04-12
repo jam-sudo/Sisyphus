@@ -48,8 +48,31 @@ def morphine_drug(physiology):
     return drug, float(profile.logp)
 
 
-@pytest.mark.skipif(not POSTERIOR_PATH.exists(),
-                    reason="SBI multi-drug posterior not trained")
+def _posterior_prior_matches_current() -> bool:
+    """Check if saved posterior's prior bounds match the current logit(fup) prior."""
+    if not POSTERIOR_PATH.exists():
+        return False
+    try:
+        import torch
+        checkpoint = torch.load(POSTERIOR_PATH, weights_only=False, map_location="cpu")
+        if isinstance(checkpoint, dict) and "prior_low" in checkpoint:
+            saved_low_1 = float(checkpoint["prior_low"][1])
+            # Old parameterization had prior_low[1] ≈ 0.01 (absolute fup).
+            # New logit parameterization has prior_low[1] ≈ -4.595.
+            return saved_low_1 < -1.0  # logit space values are << 0
+    except Exception:
+        pass
+    return False
+
+
+@pytest.mark.skipif(
+    not POSTERIOR_PATH.exists(),
+    reason="SBI multi-drug posterior not trained",
+)
+@pytest.mark.skipif(
+    POSTERIOR_PATH.exists() and not _posterior_prior_matches_current(),
+    reason="Posterior trained with old fup parameterization (pre-logit); retrain needed",
+)
 class TestSBIDispatch:
     def test_sbi_update_runs_end_to_end(self, physiology, morphine_drug):
         graph, compiled = physiology
