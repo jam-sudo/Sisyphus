@@ -126,19 +126,24 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 
 **Track A + B + D1 + D1f + D2 + paper-blocker + Phase 2.0.5 + Track C1 — 모두 코드 완료**. ADME fup override 시도 후 revert (35번째 error cancellation 실패).
 
-### Phase 2.0.5 결과 (2026-04-12, commit `ccc15a0`)
+### Phase 2.0.5 결과 (2026-04-12, commit `ccc15a0` code + `43051ab` eval)
 - **logit(fup) reparameterization**: theta[1] ∈ [-4.595, +4.595] (logit space). `apply_theta_to_drug`에서 sigmoid 역변환. 저 fup acid/statin 약물의 prior coverage 향상.
-- **θ/drug 확장**: 1000 → 2000 (default in `sbi_generate_multi_drug_data.py`)
-- **Acid drug 5개 추가**: flurbiprofen, ketoprofen, bempedoic acid, fenofibric acid, teriflunomide. Acid 비율 20%→27%, 총 50→55 drugs.
-- ⚠ **모델 재훈련 필요**: `models/sbi/multi_drug_nsf.pt`는 old parameterization(absolute fup)으로 훈련됨. `load_result()`에 런타임 가드 추가하여 old 모델 사용 시 ValueError 발생. 데이터 생성 진행중.
-- **Tests**: 435 tests (431 pass, 4 skip — SBI dispatch tests pending model retrain)
+- **θ/drug 확장**: 1000 → 2000, **Acid drug 5개 추가** (20%→27%, 총 50→55 drugs)
+- **SBC 결과 — SBI routing 10/13 → 12/13**:
+  - diclofenac: cov_dev 0.247→**0.060** (IBIS→SBI 회수)
+  - posaconazole: 0.120→**0.073** (IBIS→SBI 회수)
+  - pravastatin: 0.273→0.223 (개선됐지만 여전히 IBIS — acid/OATP1B1 구조적 한계)
+- **모델 v2 production 배치**: `models/sbi/multi_drug_nsf.pt` = v2 (logit fup, 94 epochs, 2815s on 110k samples). v1은 `_v1.pt`로 백업.
+- **Runtime guard**: `amortizer.py:load_result()` 경고 + `tdm_sbi.py:sbi_update()` ValueError로 old model 차단.
+- **Tests**: 435 all pass (0 skip)
 
 ### Track C1 결과 (2026-04-12, commit `5db6674`, merged)
 - **HierarchicalMultiDrugSimulator**: per-(population, drug) EngineSimulator cache. Drug features는 항상 adult reference graph에서 추출 (population-independent).
 - **Population registry**: `data/sbi/populations.json` — adult (70 kg) + pediatric_5y (18 kg).
 - **Conditioning 확장**: 13D → 15D (+ 2D population one-hot). `pack_observation_hierarchical()` + `stack_training_pairs_hierarchical()`.
-- **18 new tests** in `tests/unit/test_sbi_hierarchical.py`. Pediatric simulator 정상 작동 확인.
-- **데이터 생성 진행중**: 2 pops × 55 drugs × 1000θ = 110k sims.
+- **학습 완료**: 75 epochs, 1871s. `models/sbi/hierarchical_nsf.pt` 저장.
+- **SBC**: 진행중 (2 pops × 5 anchor drugs × 300 calibration × 500 posterior).
+- **18 new tests** in `tests/unit/test_sbi_hierarchical.py`.
 
 ### Track A 결과 (2026-04-10, `docs/sbi_multi_drug_results.md`)
 - 50 drugs × 1000 θ = 50,000 simulations (27.6 min, 100% valid solves)
@@ -181,7 +186,7 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 
 ### Track B 결과 (2026-04-10, docs/sbi_multi_drug_results.md Addendum)
 - **SBI production API**: `tdm.bayesian_update(method="sbi")` + silent IBIS fallback
-- **Per-drug routing table**: `data/sbi/method_routing.json` — 10 SBI / 3 IBIS
+- **Per-drug routing table**: `data/sbi/method_routing.json` — **12 SBI / 1 IBIS** (Phase 2.0.5, was 10/3)
 - **CLI**: `sisyphus tdm --method {is,ibis,enkf,sbi,auto}` 통합. `auto`는 라우팅 테이블 조회
 - **3-way tournament mean absolute bias**: SBI 19% < IS 31% < EnKF 38%. SBI는 특히 clozapine에서 −4% (IS/EnKF/IBIS는 +82~+89% drift)
 - **Wall time per drug**: SBI ~57s < IS ~69s ≪ EnKF ~564s ≪ IBIS ~1390s
