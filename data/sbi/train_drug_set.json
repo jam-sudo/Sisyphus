@@ -2,12 +2,12 @@
   "source": "data/training/mmpk_expanded_v2.csv",
   "pool_size": 1272,
   "profiled_size": 1272,
-  "target_n": 50,
+  "target_n": 55,
   "seed": 42,
   "allocation": {
     "neutral": 21,
     "base": 16,
-    "acid": 10,
+    "acid": 15,
     "zwitterion": 3
   },
   "drugs": [
@@ -710,6 +710,77 @@
       "hba": 3,
       "rotatable_bonds": 0,
       "pka": 9.0
+    },
+    {
+      "name": "flurbiprofen",
+      "smiles": "CC(C(=O)O)c1ccc(-c2ccccc2)c(F)c1",
+      "dose_mg": 40.0,
+      "route": "oral",
+      "compound_type": "acid",
+      "mw": 244.265,
+      "logp": 4.16,
+      "tpsa": 37.3,
+      "hbd": 1,
+      "hba": 1,
+      "rotatable_bonds": 3,
+      "pka": 4.5
+    },
+    {
+      "name": "ketoprofen",
+      "smiles": "CC(C(=O)O)c1cccc(C(=O)c2ccccc2)c1",
+      "dose_mg": 50.0,
+      "route": "oral",
+      "compound_type": "acid",
+      "mw": 254.285,
+      "logp": 3.12,
+      "tpsa": 54.37,
+      "hbd": 1,
+      "hba": 2,
+      "rotatable_bonds": 4,
+      "pka": 3.88
+    },
+    {
+      "name": "bempedoic acid",
+      "smiles": "CC(C)(CCCCCC(O)CCCCCC(C)(C)C(=O)O)C(=O)O",
+      "dose_mg": 2.5,
+      "route": "oral",
+      "compound_type": "acid",
+      "mw": 344.492,
+      "logp": 4.191014695072177,
+      "tpsa": 94.83,
+      "hbd": 3,
+      "hba": 3,
+      "rotatable_bonds": 14,
+      "pka": 4.44
+    },
+    {
+      "name": "fenofibric acid",
+      "smiles": "CC(C)(Oc1ccc(C(=O)c2ccc(Cl)cc2)cc1)C(=O)O",
+      "dose_mg": 67.0,
+      "route": "oral",
+      "compound_type": "acid",
+      "mw": 318.756,
+      "logp": 2.483,
+      "tpsa": 63.6,
+      "hbd": 1,
+      "hba": 3,
+      "rotatable_bonds": 5,
+      "pka": 3.1
+    },
+    {
+      "name": "teriflunomide",
+      "smiles": "C/C(O)=C(\\C#N)C(=O)Nc1ccc(C(F)(F)F)cc1",
+      "dose_mg": 10.0,
+      "route": "oral",
+      "compound_type": "acid",
+      "mw": 270.21,
+      "logp": 3.469,
+      "tpsa": 73.12,
+      "hbd": 2,
+      "hba": 3,
+      "rotatable_bonds": 2,
+      "pka": 5.48
     }
-  ]
+  ],
+  "expansion_note": "Phase 2.0.5: added 5 acid drugs (flurbiprofen, ketoprofen, bempedoic acid, fenofibric acid, teriflunomide) to improve acid-space coverage for SBI calibration of diclofenac/pravastatin/posaconazole"
 }

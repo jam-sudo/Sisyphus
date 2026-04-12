@@ -1,17 +1,21 @@
 """Engine-backed simulator for SBI.
 
 Wraps the full scipy ODE engine as a simulator that maps
-    theta = (log10_clint_shift, fup, log10_peff_shift) → log10(Cmax)
+    theta = (log10_clint_shift, logit_fup, log10_peff_shift) → log10(Cmax)
 
 Usage::
 
     sim = EngineSimulator.for_drug(smiles="...", dose_mg=30.0, route="oral")
-    log10_cmax = sim.simulate_single(theta=np.array([0.0, 0.65, 0.0]), seed=0)
+    log10_cmax = sim.simulate_single(theta=np.array([0.0, 0.0, 0.0]), seed=0)
     batch = sim.simulate_batch(thetas, seed=42)  # (N, 1)
 
 The simulator is deterministic for a given (theta, seed) pair so SBI
 training is reproducible.  Distributional realization of the graph and
 drug uses the seed; theta then *overrides* the sampled ADME values.
+
+Phase 2.0.5: theta[1] is now logit(fup), not absolute fup. The
+``apply_theta_to_drug`` function applies sigmoid to recover the physical
+fup value.
 """
 
 from __future__ import annotations
@@ -48,7 +52,10 @@ def apply_theta_to_drug(
 
     theta[0] — log10(CLint_actual / CLint_nominal): multiply every
                enzyme_affinity.mean by 10**theta[0], keep CV.
-    theta[1] — fup: replace fup distribution mean, keep CV.
+    theta[1] — logit(fup): replace fup distribution mean by
+               sigmoid(theta[1]), keep CV. Phase 2.0.5: the prior
+               samples uniformly in logit space for better low-fup
+               coverage.
     theta[2] — log10(Peff_actual / Peff_nominal): replace Peff mean by
                10**theta[2] * nominal_peff, keep CV.
 
@@ -58,8 +65,10 @@ def apply_theta_to_drug(
     """
     from dataclasses import replace
 
+    from sisyphus.sbi.priors import _sigmoid
+
     clint_scale = float(10 ** theta[0])
-    fup_val = float(np.clip(theta[1], 1e-4, 1.0))
+    fup_val = float(np.clip(_sigmoid(theta[1]), 1e-4, 1.0))
     peff_val = float(10 ** theta[2]) * nominal_peff
 
     new_enzyme_affinity = {
