@@ -74,7 +74,7 @@ def main() -> None:
         }
 
     payload = {
-        "source": str(args.sbc.relative_to(ROOT)),
+        "source": str(args.sbc.resolve().relative_to(ROOT)),
         "policy": {
             "strict_coverage_ok": STRICT_COVERAGE_OK,
             "borderline_coverage": BORDERLINE_COVERAGE,
