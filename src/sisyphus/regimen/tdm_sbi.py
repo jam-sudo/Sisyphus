@@ -135,6 +135,13 @@ def sbi_update(
 
     logger.info("SBI TDM: loading posterior %s", ppath)
     result = load_result(ppath)
+    from sisyphus.sbi.priors import PRIOR_LOW
+    if len(result.prior_low) == len(PRIOR_LOW) and result.prior_low[1] > -1.0:
+        raise ValueError(
+            f"Posterior at {ppath} uses pre-Phase-2.0.5 absolute fup prior "
+            f"(prior_low[1]={result.prior_low[1]:.3f}, expected ~{PRIOR_LOW[1]:.3f}). "
+            f"Retrain the model before using SBI TDM inference."
+        )
     feat_mean = feat_std = None
     if aux_path.exists():
         aux = torch.load(aux_path, weights_only=False)

@@ -122,11 +122,23 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 - `audit/holdout-leakage-fix` — **현재 작업 브랜치** (merged from feat/ude-diffrax on 2026-04-10)
 - `archive/ude-diffrax-2026-04-10` — feat/ude-diffrax 아카이브 태그 (merge 전 상태 보존)
 
-## 🎯 다음 작업 (Active, 2026-04-11 이후)
+## 🎯 다음 작업 (Active, 2026-04-12 이후)
 
-**Track A + B + D1 + D1 follow-up + D2 + paper-blocker bundle — 모두 완료**. ADME fup override 시도 후 revert (35번째 error cancellation 실패). 다음 단계: Phase 2.0.5 (SBC gate 확장) 또는 Track C (hierarchical 장기 연구).
+**Track A + B + D1 + D1f + D2 + paper-blocker + Phase 2.0.5 + Track C1 — 모두 코드 완료**. ADME fup override 시도 후 revert (35번째 error cancellation 실패).
 
-**Opt2 (Phase 2.0.5) + Opt3 (Track C hierarchical pediatric)은 이번 세션에서 시작하지 못함** — Opt1 benchmark + revert 후 context 제약으로 hand off. Next session에서 실행 가능 (모두 독립적).
+### Phase 2.0.5 결과 (2026-04-12, commit `ccc15a0`)
+- **logit(fup) reparameterization**: theta[1] ∈ [-4.595, +4.595] (logit space). `apply_theta_to_drug`에서 sigmoid 역변환. 저 fup acid/statin 약물의 prior coverage 향상.
+- **θ/drug 확장**: 1000 → 2000 (default in `sbi_generate_multi_drug_data.py`)
+- **Acid drug 5개 추가**: flurbiprofen, ketoprofen, bempedoic acid, fenofibric acid, teriflunomide. Acid 비율 20%→27%, 총 50→55 drugs.
+- ⚠ **모델 재훈련 필요**: `models/sbi/multi_drug_nsf.pt`는 old parameterization(absolute fup)으로 훈련됨. `load_result()`에 런타임 가드 추가하여 old 모델 사용 시 ValueError 발생. 데이터 생성 진행중.
+- **Tests**: 435 tests (431 pass, 4 skip — SBI dispatch tests pending model retrain)
+
+### Track C1 결과 (2026-04-12, commit `5db6674`, merged)
+- **HierarchicalMultiDrugSimulator**: per-(population, drug) EngineSimulator cache. Drug features는 항상 adult reference graph에서 추출 (population-independent).
+- **Population registry**: `data/sbi/populations.json` — adult (70 kg) + pediatric_5y (18 kg).
+- **Conditioning 확장**: 13D → 15D (+ 2D population one-hot). `pack_observation_hierarchical()` + `stack_training_pairs_hierarchical()`.
+- **18 new tests** in `tests/unit/test_sbi_hierarchical.py`. Pediatric simulator 정상 작동 확인.
+- **데이터 생성 진행중**: 2 pops × 55 drugs × 1000θ = 110k sims.
 
 ### Track A 결과 (2026-04-10, `docs/sbi_multi_drug_results.md`)
 - 50 drugs × 1000 θ = 50,000 simulations (27.6 min, 100% valid solves)
@@ -140,7 +152,7 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 - **Conformal CI floor**: `bayesian_update(min_ci_half_width_fraction=0.5)` kwarg 추가. Posterior CI half-width < 50% × mean일 때 50%까지 widening. `apply_ci_floor()` public helper.
 - **5-drug × 3-scenario verification**: 3/9 (floor=0) → 6/9 (floor=0.5) → 8/9 (floor=1.0). Floor=0.5이 optimal — rivaroxaban 3개 recover, 쉬운 drug 유지, ketorolac engine-level fail 노출.
 - **전체 15-scenario 추정: 12/15 (80%)** — stale 67%와 다름 (67%는 lognormal over-cover 아티팩트). 3 ketorolac failures는 engine-level fup mismatch로 TDM calibration 불가.
-- **Tests**: +3 CI floor tests. 412/412 pass.
+- **Tests**: +3 CI floor tests.
 
 ### Paper-blocker 재측정 (2026-04-11)
 - **4-track 107 holdout**: overall 재확정 Meta 2.695 / Engine 3.421 / ML 3.057. `data/training/4track_holdout_predictions.json` 정식 저장 (JSON 스키마 + per-drug fields).
@@ -154,7 +166,7 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 - Fix: two-stage gate — `features_in_distribution` (box) + `ensemble_std <= 0.02`. Rejected samples fall back to scipy. Threshold calibrated so nominal drugs (ensemble std 0.004-0.020) stay on surrogate.
 - Clozapine posterior bias: **+190% → -3.6%** (better than scipy -7.8%).
 - 5-anchor tournament: scipy 210.6s → hybrid 84.1s = **2.5× cumulative** (down from unguarded 24× but with correct accuracy on all drugs). Per-drug wall 9-23s, still 50-150× vs IBIS.
-- Hybrid matches or beats scipy on 4/5 anchors. Tests 409/409 pass.
+- Hybrid matches or beats scipy on 4/5 anchors.
 - Trade: speedup 24× → 2.5× for correctness. Correct default for production.
 
 ### Track D1 initial 결과 (2026-04-10, docs/surrogate_ood_fix.md)
@@ -165,7 +177,7 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 - **5-anchor SBI wall time**: scipy 224s → surrogate 9.2s = **24× cumulative**. Warm per-drug: amantadine 90×, ketorolac 66×, rivaroxaban 138×. Cold (morphine) 10× dominated by JAX JIT.
 - **vs IBIS**: surrogate warm ~0.3-0.7s/drug vs IBIS ~1390s = **~2000-4000× per-query speedup**. Sub-second TDM achieved on 4/5 anchors.
 - **Clozapine edge case**: posterior predictive +190% bias because fup posterior shifts features OOD at per-sample level. Follow-up: per-sample OOD guard with automatic scipy fallback.
-- **Tests**: +7 surrogate feature tests. 408/408 pass.
+- **Tests**: +7 surrogate feature tests.
 
 ### Track B 결과 (2026-04-10, docs/sbi_multi_drug_results.md Addendum)
 - **SBI production API**: `tdm.bayesian_update(method="sbi")` + silent IBIS fallback
@@ -174,13 +186,7 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 - **3-way tournament mean absolute bias**: SBI 19% < IS 31% < EnKF 38%. SBI는 특히 clozapine에서 −4% (IS/EnKF/IBIS는 +82~+89% drift)
 - **Wall time per drug**: SBI ~57s < IS ~69s ≪ EnKF ~564s ≪ IBIS ~1390s
 - **Posterior CV inflation bug fixed**: apply_theta_to_drug 후 override field들의 CV를 0으로 collapse해야 posterior CV가 prior CV 아래로 내려감 (morphine: before 56% > 39%, after 34% < 39%)
-- **Tests**: 401/401 pass (+5 SBI dispatch tests, +2 feature refactor tests)
-
-### 다음 옵션 (decision pending)
-1. **Phase 2.0.5 (SBC gate expansion)**: 2000+ θ/drug 재생성 + logit(fup) reparam + acid training 확장 → diclofenac/pravastatin/posaconazole를 SBI bin으로 이동. ~2-3h 컴퓨트.
-2. **Track D1 (surrogate OOD fix)**: `params_to_features_single` 재작성 → surrogate를 다시 정확하게 만듦 → SBI posterior predictive 50s → <1s (engine forward 대체). 가장 큰 production 향상.
-3. **Track D2 (TDM 90% CI calibration)**: 기존 IBIS CI coverage 67%→90% 보정. 논문 작성 전 fix 필요.
-4. **Phase 2.2 (Track C)**: Hierarchical populations, active learning, inverse design. 장기.
+- **Tests**: +5 SBI dispatch tests, +2 feature refactor tests.
 
 ### Key artifacts
 - `docs/sbi_multi_drug_results.md` — Track A 결과 + Track B Addendum
@@ -192,7 +198,7 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 - `data/validation/sbi_vs_ibis_extras.json` — 5-drug IBIS extended (Track B)
 - `tests/unit/test_tdm_sbi.py` — 5 dispatch tests
 
-## Session State (마지막 업데이트: 2026-04-10, post-merge consolidated)
+## Session State (마지막 업데이트: 2026-04-12, Phase 2.0.5 + Track C1)
 
 ### Current Metrics (N=107, CLEAN, 4-track, post-merge)
 Engine AAFE: 3.421 | ML AAFE: 3.057 | **Meta AAFE: 2.695** | %2-fold: 47.7% | %3-fold: 65.4%
