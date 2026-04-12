@@ -20,12 +20,18 @@ Current scope (POC):
 from sisyphus.sbi.multi_drug import (
     DRUG_FEATURE_NAMES,
     DrugSpec,
+    HierarchicalMultiDrugSimulator,
     MultiDrugSimulator,
     N_DRUG_FEATURES,
+    PopulationSpec,
     extract_drug_features,
     load_drug_specs_from_json,
+    load_populations,
     pack_observation,
+    pack_observation_hierarchical,
+    population_onehot,
     stack_training_pairs,
+    stack_training_pairs_hierarchical,
 )
 from sisyphus.sbi.priors import build_box_prior
 from sisyphus.sbi.simulator import EngineSimulator, apply_theta_to_drug
@@ -34,12 +40,18 @@ __all__ = [
     "DRUG_FEATURE_NAMES",
     "DrugSpec",
     "EngineSimulator",
+    "HierarchicalMultiDrugSimulator",
     "MultiDrugSimulator",
     "N_DRUG_FEATURES",
+    "PopulationSpec",
     "apply_theta_to_drug",
     "build_box_prior",
     "extract_drug_features",
     "load_drug_specs_from_json",
+    "load_populations",
     "pack_observation",
+    "pack_observation_hierarchical",
+    "population_onehot",
     "stack_training_pairs",
+    "stack_training_pairs_hierarchical",
 ]

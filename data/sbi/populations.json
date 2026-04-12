@@ -1,0 +1,14 @@
+{
+  "populations": {
+    "adult": {
+      "physiology_yaml": "data/physiology/reference_man.yaml",
+      "body_weight_kg": 70.0,
+      "description": "ICRP Reference Man, 70 kg adult"
+    },
+    "pediatric_5y": {
+      "physiology_yaml": "data/physiology/pediatric_5y.yaml",
+      "body_weight_kg": 18.0,
+      "description": "5-year-old pediatric, 18 kg, Edginton/Hines ontogeny"
+    }
+  }
+}
