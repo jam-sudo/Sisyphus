@@ -1,4 +1,4 @@
-"""Multi-drug conditional SBI utilities (Phase 2.0, Track A).
+"""Multi-drug conditional SBI utilities (Phase 2.0, Track A + Track C1).
 
 Generalizes the single-drug POC (`sisyphus.sbi.simulator.EngineSimulator`)
 to the conditional setting where one amortizer serves all drugs:
@@ -19,10 +19,31 @@ the density estimator learns ``p(theta | x)`` where ``x`` is
 
 The feature layout intentionally matches the neural surrogate's 12D layout
 so downstream code (e.g. Track D1 surrogate fix) can share helpers.
+
+**Track C1 — Hierarchical populations (2026-04-12)**:
+
+Extends the multi-drug conditional amortizer to also condition on
+population class (adult vs pediatric). The observation vector becomes:
+
+    x = [log10(cmax), drug_features (12D), pop_onehot (N_pop D)]
+
+Drug features are always computed using the *adult reference* graph so they
+describe intrinsic drug properties, not population-specific PK.  Population
+differences (enzyme ontogeny, allometric volumes, cardiac output) are
+captured by the one-hot population conditioning vector.
+
+Key classes:
+    - ``HierarchicalMultiDrugSimulator`` — holds simulators for all
+      (population, drug) combinations.
+    - ``load_populations()`` — reads ``data/sbi/populations.json``.
+    - ``pack_observation_hierarchical()`` — appends pop one-hot to the
+      existing 13D observation vector.
+    - ``stack_training_pairs_hierarchical()`` — stacks per-drug per-pop data.
 """
 
 from __future__ import annotations
 
+import json
 import logging
 from dataclasses import dataclass
 from pathlib import Path
@@ -37,6 +58,9 @@ if TYPE_CHECKING:
     from sisyphus.graph.body import BodyGraph
 
 logger = logging.getLogger(__name__)
+
+_POPULATIONS_JSON = Path("data/sbi/populations.json")
+_ADULT_PHYSIOLOGY = Path("data/physiology/reference_man.yaml")
 
 
 DRUG_FEATURE_NAMES: tuple[str, ...] = (
@@ -54,6 +78,59 @@ DRUG_FEATURE_NAMES: tuple[str, ...] = (
     "log10_renal_cl",
 )
 N_DRUG_FEATURES = len(DRUG_FEATURE_NAMES)
+
+
+# ---------------------------------------------------------------------------
+# Population registry (Track C1)
+# ---------------------------------------------------------------------------
+
+@dataclass(frozen=True)
+class PopulationSpec:
+    """Descriptor for a population loaded from populations.json."""
+
+    name: str
+    physiology_yaml: Path
+    body_weight_kg: float
+    description: str = ""
+
+
+def load_populations(path: Path | None = None) -> dict[str, PopulationSpec]:
+    """Load population definitions from ``data/sbi/populations.json``.
+
+    Returns a dict mapping population name to ``PopulationSpec``.
+    """
+    if path is None:
+        path = _POPULATIONS_JSON
+    with open(path) as f:
+        data = json.load(f)
+    pops: dict[str, PopulationSpec] = {}
+    for name, info in data["populations"].items():
+        pops[name] = PopulationSpec(
+            name=name,
+            physiology_yaml=Path(info["physiology_yaml"]),
+            body_weight_kg=float(info["body_weight_kg"]),
+            description=str(info.get("description", "")),
+        )
+    return pops
+
+
+def population_onehot(
+    pop_name: str,
+    population_names: list[str],
+) -> np.ndarray:
+    """Return a one-hot vector for the given population.
+
+    Args:
+        pop_name: name of the population (e.g. ``"adult"``).
+        population_names: canonical ordered list of population names.
+
+    Returns:
+        float64 array of shape ``(len(population_names),)``.
+    """
+    vec = np.zeros(len(population_names), dtype=np.float64)
+    idx = population_names.index(pop_name)
+    vec[idx] = 1.0
+    return vec
 
 
 def extract_drug_features(
@@ -280,7 +357,6 @@ def pack_observation(log10_cmax: np.ndarray, drug_features: np.ndarray) -> np.nd
 
 def load_drug_specs_from_json(path: Path) -> list[DrugSpec]:
     """Load a list of DrugSpec from a train/validation set JSON file."""
-    import json
 
     with open(path) as f:
         data = json.load(f)
@@ -295,3 +371,242 @@ def load_drug_specs_from_json(path: Path) -> list[DrugSpec]:
             )
         )
     return specs
+
+
+# ---------------------------------------------------------------------------
+# Hierarchical multi-population simulator (Track C1)
+# ---------------------------------------------------------------------------
+
+@dataclass
+class HierarchicalMultiDrugSimulator:
+    """Hold per-(population, drug) EngineSimulators.
+
+    Drug features are always computed against the adult reference graph so
+    they remain population-independent.  The population difference is encoded
+    via a one-hot vector appended to the observation.
+
+    Build via ``HierarchicalMultiDrugSimulator.from_specs``.
+    """
+
+    # pop_name -> drug_name -> EngineSimulator
+    simulators: dict[str, dict[str, EngineSimulator]]
+    # drug_name -> 12D feature vector (population-independent, from adult graph)
+    drug_features: dict[str, np.ndarray]
+    # sorted population names — defines one-hot order
+    population_names: list[str]
+    # pop_name -> one-hot vector
+    pop_onehot: dict[str, np.ndarray]
+
+    @property
+    def n_populations(self) -> int:
+        return len(self.population_names)
+
+    @classmethod
+    def from_specs(
+        cls,
+        specs: Iterable[DrugSpec],
+        populations: dict[str, PopulationSpec] | None = None,
+        obs_sigma_log10: float = 0.0414,
+    ) -> "HierarchicalMultiDrugSimulator":
+        """Build simulators for every (population, drug) pair.
+
+        Drug features use the adult reference graph regardless of population.
+        """
+        from sisyphus.graph.builder import build_from_yaml
+        from sisyphus.predict.chemistry import compute_profile
+
+        if populations is None:
+            populations = load_populations()
+        pop_names = sorted(populations.keys())  # canonical order: ["adult", "pediatric_5y"]
+
+        pop_oh: dict[str, np.ndarray] = {}
+        for pn in pop_names:
+            pop_oh[pn] = population_onehot(pn, pop_names)
+
+        # Build the adult reference graph once for population-independent feature extraction
+        adult_graph = build_from_yaml(_ADULT_PHYSIOLOGY)
+
+        specs_list = list(specs)
+        sims: dict[str, dict[str, EngineSimulator]] = {pn: {} for pn in pop_names}
+        feats: dict[str, np.ndarray] = {}
+
+        for spec in specs_list:
+            logger.info("building hierarchical simulators for %s", spec.name)
+            profile = compute_profile(spec.smiles)
+
+            # Drug features from adult graph (population-independent)
+            # Build a single adult simulator to extract features
+            adult_sim = EngineSimulator.for_drug(
+                smiles=spec.smiles,
+                dose_mg=spec.dose_mg,
+                route=spec.route,
+                physiology_yaml=_ADULT_PHYSIOLOGY,
+                obs_sigma_log10=obs_sigma_log10,
+            )
+            feats[spec.name] = extract_drug_features(
+                adult_sim, logp=float(profile.logp)
+            )
+            sims["adult"][spec.name] = adult_sim
+
+            # Build simulators for non-adult populations
+            for pn in pop_names:
+                if pn == "adult":
+                    continue  # already built
+                pop_spec = populations[pn]
+                sim = EngineSimulator.for_drug(
+                    smiles=spec.smiles,
+                    dose_mg=spec.dose_mg,
+                    route=spec.route,
+                    physiology_yaml=pop_spec.physiology_yaml,
+                    obs_sigma_log10=obs_sigma_log10,
+                )
+                sims[pn][spec.name] = sim
+
+        return cls(
+            simulators=sims,
+            drug_features=feats,
+            population_names=pop_names,
+            pop_onehot=pop_oh,
+        )
+
+    def get_features(self, drug_name: str) -> np.ndarray:
+        """Return a copy of the population-independent 12D drug features."""
+        return self.drug_features[drug_name].copy()
+
+    def get_pop_onehot(self, pop_name: str) -> np.ndarray:
+        """Return a copy of the one-hot population vector."""
+        return self.pop_onehot[pop_name].copy()
+
+    @property
+    def drug_names(self) -> list[str]:
+        return sorted(self.drug_features.keys())
+
+    def simulate_single(
+        self,
+        pop_name: str,
+        drug_name: str,
+        theta: np.ndarray,
+        seed: int,
+    ) -> float:
+        """Simulate log10(Cmax) for one (population, drug, theta)."""
+        return self.simulators[pop_name][drug_name].simulate_single(theta, seed)
+
+    def simulate_batch_per_drug(
+        self,
+        pop_name: str,
+        drug_name: str,
+        thetas: np.ndarray,
+        seed: int = 0,
+        progress: Callable[[int], None] | None = None,
+    ) -> np.ndarray:
+        """Simulate a batch of thetas for one (population, drug)."""
+        return self.simulators[pop_name][drug_name].simulate_batch(
+            thetas, seed=seed, progress=progress
+        )
+
+
+def pack_observation_hierarchical(
+    log10_cmax: np.ndarray,
+    drug_features: np.ndarray,
+    pop_onehot: np.ndarray,
+) -> np.ndarray:
+    """Concatenate observation, drug features, and population one-hot.
+
+    The hierarchical conditional NPE conditions on:
+        x = [log10(cmax) (1D), drug_features (12D), pop_onehot (N_pop D)]
+
+    log10_cmax: (N, 1) or (N,)
+    drug_features: (N, d_feat) or (d_feat,) — broadcast if needed
+    pop_onehot: (N, n_pop) or (n_pop,) — broadcast if needed
+    Returns: (N, 1 + d_feat + n_pop)
+    """
+    lc = np.asarray(log10_cmax, dtype=np.float64)
+    if lc.ndim == 1:
+        lc = lc[:, None]
+    n = lc.shape[0]
+
+    df = np.asarray(drug_features, dtype=np.float64)
+    if df.ndim == 1:
+        df = np.tile(df[None, :], (n, 1))
+    if df.shape[0] != n:
+        raise ValueError(
+            f"shape mismatch: log10_cmax has {n} rows, drug_features has {df.shape[0]}"
+        )
+
+    ph = np.asarray(pop_onehot, dtype=np.float64)
+    if ph.ndim == 1:
+        ph = np.tile(ph[None, :], (n, 1))
+    if ph.shape[0] != n:
+        raise ValueError(
+            f"shape mismatch: log10_cmax has {n} rows, pop_onehot has {ph.shape[0]}"
+        )
+
+    return np.concatenate([lc, df, ph], axis=1)
+
+
+def stack_training_pairs_hierarchical(
+    theta_per_pop_drug: dict[str, dict[str, np.ndarray]],
+    logcmax_per_pop_drug: dict[str, dict[str, np.ndarray]],
+    features_per_drug: dict[str, np.ndarray],
+    pop_onehot_map: dict[str, np.ndarray],
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, list[str], list[str]]:
+    """Concatenate per-(population, drug) arrays into flat training data.
+
+    Args:
+        theta_per_pop_drug: pop_name -> drug_name -> (N, d_theta)
+        logcmax_per_pop_drug: pop_name -> drug_name -> (N, 1) or (N,)
+        features_per_drug: drug_name -> (d_feat,) — pop-independent
+        pop_onehot_map: pop_name -> (n_pop,)
+
+    Returns:
+        theta_all:    (N_total, d_theta)
+        x_all:        (N_total, 1)  — log10(cmax)
+        feat_all:     (N_total, d_feat) — drug features
+        pop_all:      (N_total, n_pop) — population one-hot
+        drug_names:   list of length N_total
+        pop_names:    list of length N_total
+    """
+    pop_sorted = sorted(theta_per_pop_drug.keys())
+    theta_parts: list[np.ndarray] = []
+    x_parts: list[np.ndarray] = []
+    feat_parts: list[np.ndarray] = []
+    pop_parts: list[np.ndarray] = []
+    row_drugs: list[str] = []
+    row_pops: list[str] = []
+
+    for pop in pop_sorted:
+        drug_dict = theta_per_pop_drug[pop]
+        drug_sorted = sorted(drug_dict.keys())
+        pop_vec = pop_onehot_map[pop]
+        for drug in drug_sorted:
+            theta_i = np.asarray(drug_dict[drug], dtype=np.float64)
+            x_i = np.asarray(logcmax_per_pop_drug[pop][drug], dtype=np.float64)
+            if x_i.ndim == 1:
+                x_i = x_i[:, None]
+            finite_mask = np.isfinite(x_i[:, 0])
+            n_valid = int(finite_mask.sum())
+            if n_valid == 0:
+                logger.warning(
+                    "pop=%s drug=%s has 0 finite sims, skipping", pop, drug
+                )
+                continue
+            theta_parts.append(theta_i[finite_mask])
+            x_parts.append(x_i[finite_mask])
+            feat_parts.append(
+                np.tile(features_per_drug[drug][None, :], (n_valid, 1))
+            )
+            pop_parts.append(np.tile(pop_vec[None, :], (n_valid, 1)))
+            row_drugs.extend([drug] * n_valid)
+            row_pops.extend([pop] * n_valid)
+
+    if not theta_parts:
+        raise RuntimeError("No finite simulations across any (population, drug)")
+
+    return (
+        np.concatenate(theta_parts, axis=0),
+        np.concatenate(x_parts, axis=0),
+        np.concatenate(feat_parts, axis=0),
+        np.concatenate(pop_parts, axis=0),
+        row_drugs,
+        row_pops,
+    )
