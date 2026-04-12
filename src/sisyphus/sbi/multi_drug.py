@@ -7,10 +7,10 @@ to the conditional setting where one amortizer serves all drugs:
 
 Here ``drug_features`` is a fixed 12-D summary of the nominal ADME profile
 (MW, logP, compound_type one-hot, nominal CLint magnitude, fup, ...), and
-``theta`` still has the POC semantics:
+``theta`` layout (Phase 2.0.5):
 
     theta[0] = log10(CLint_actual / CLint_nominal)
-    theta[1] = fup (absolute)
+    theta[1] = logit(fup)   (sigmoid inverse recovers physical fup)
     theta[2] = log10(Peff_actual / Peff_nominal)
 
 The drug features enter training as the context half of the observation,

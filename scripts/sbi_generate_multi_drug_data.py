@@ -74,7 +74,7 @@ def main() -> None:
     p.add_argument("--seed", type=int, default=42)
     p.add_argument("--mini-drugs", type=int, default=20)
     p.add_argument("--mini-theta-per-drug", type=int, default=500)
-    p.add_argument("--full-theta-per-drug", type=int, default=1000)
+    p.add_argument("--full-theta-per-drug", type=int, default=2000)
     p.add_argument("--out", type=Path, default=None)
     args = p.parse_args()
 
