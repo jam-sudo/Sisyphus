@@ -167,7 +167,7 @@ def save_result(result: NPETrainingResult, path: Path) -> None:
     torch.save(payload, path)
 
 
-def load_result(path: Path) -> NPETrainingResult:
+def load_result(path: Path, *, allow_legacy_fup: bool = False) -> NPETrainingResult:
     import torch
     from sbi.inference import SNPE
     from sbi.utils import BoxUniform
@@ -175,6 +175,16 @@ def load_result(path: Path) -> NPETrainingResult:
     payload = torch.load(path, weights_only=False)
     prior_low = np.asarray(payload["prior_low"], dtype=np.float64)
     prior_high = np.asarray(payload["prior_high"], dtype=np.float64)
+
+    # Phase 2.0.5 guard: warn if model may have been trained with absolute fup.
+    if len(prior_low) == 3 and prior_low[1] > -1.0 and not allow_legacy_fup:
+        logger.warning(
+            "Posterior at %s has prior_low[1]=%.3f (> -1.0). "
+            "If this is an SBI drug model, it was trained with pre-Phase-2.0.5 "
+            "absolute fup prior and will produce incorrect results. "
+            "Set allow_legacy_fup=True to suppress this warning.",
+            path, prior_low[1],
+        )
     prior_torch = BoxUniform(
         low=torch.as_tensor(prior_low, dtype=torch.float32),
         high=torch.as_tensor(prior_high, dtype=torch.float32),
