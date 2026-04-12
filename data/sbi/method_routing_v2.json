@@ -1,0 +1,161 @@
+{
+  "source": "data/validation/sbi_sbc_multi_drug_v2.json",
+  "policy": {
+    "strict_coverage_ok": 0.1,
+    "borderline_coverage": 0.15,
+    "description": "SBI for drugs with coverage deviation \u2264 10pp of nominal across all CI levels. IBIS fallback for borderline (\u226415pp) and hard fails (>15pp). KS p-values recorded for reference only \u2014 not used in gate."
+  },
+  "default": "ibis",
+  "summary": {
+    "sbi": 12,
+    "ibis": 1,
+    "total": 13
+  },
+  "routes": {
+    "morphine": "sbi",
+    "clozapine": "sbi",
+    "amantadine": "sbi",
+    "ketorolac": "sbi",
+    "rivaroxaban": "sbi",
+    "diclofenac": "sbi",
+    "digoxin": "sbi",
+    "pravastatin": "ibis",
+    "sildenafil": "sbi",
+    "phenytoin": "sbi",
+    "tamoxifen": "sbi",
+    "indomethacin": "sbi",
+    "posaconazole": "sbi"
+  },
+  "reasons": {
+    "morphine": {
+      "method": "sbi",
+      "reason": "coverage_strict_ok",
+      "coverage_max_deviation": 0.046666666666666634,
+      "ks_pvalues": [
+        0.7457548757616874,
+        0.1127264368115739,
+        0.2797134369686235
+      ]
+    },
+    "clozapine": {
+      "method": "sbi",
+      "reason": "coverage_strict_ok",
+      "coverage_max_deviation": 0.040000000000000036,
+      "ks_pvalues": [
+        0.6882854112801075,
+        0.0523981317313279,
+        0.2006788242351214
+      ]
+    },
+    "amantadine": {
+      "method": "sbi",
+      "reason": "coverage_strict_ok",
+      "coverage_max_deviation": 0.09666666666666668,
+      "ks_pvalues": [
+        0.00028993096107899366,
+        0.6882854112801049,
+        0.013499846979089377
+      ]
+    },
+    "ketorolac": {
+      "method": "sbi",
+      "reason": "coverage_strict_ok",
+      "coverage_max_deviation": 0.033333333333333326,
+      "ks_pvalues": [
+        0.5529406727754986,
+        0.3059616423945949,
+        0.9601721514299761
+      ]
+    },
+    "rivaroxaban": {
+      "method": "sbi",
+      "reason": "coverage_strict_ok",
+      "coverage_max_deviation": 0.043333333333333335,
+      "ks_pvalues": [
+        0.515603768019366,
+        0.0016773736468200665,
+        0.006320402188960987
+      ]
+    },
+    "diclofenac": {
+      "method": "sbi",
+      "reason": "coverage_strict_ok",
+      "coverage_max_deviation": 0.06000000000000005,
+      "ks_pvalues": [
+        0.004980808683020735,
+        0.00026291424780517004,
+        0.33387752369625145
+      ]
+    },
+    "digoxin": {
+      "method": "sbi",
+      "reason": "coverage_strict_ok",
+      "coverage_max_deviation": 0.04999999999999999,
+      "ks_pvalues": [
+        3.3604455991901254e-06,
+        0.012543658995391487,
+        0.018013881023330177
+      ]
+    },
+    "pravastatin": {
+      "method": "ibis",
+      "reason": "coverage_hard_fail",
+      "coverage_max_deviation": 0.22333333333333338,
+      "ks_pvalues": [
+        1.4593456964103156e-16,
+        1.3429546018174543e-14,
+        9.064375896203214e-25
+      ]
+    },
+    "sildenafil": {
+      "method": "sbi",
+      "reason": "coverage_strict_ok",
+      "coverage_max_deviation": 0.036666666666666625,
+      "ks_pvalues": [
+        0.4443952217759044,
+        0.006835297331298463,
+        0.04921374209054663
+      ]
+    },
+    "phenytoin": {
+      "method": "sbi",
+      "reason": "coverage_strict_ok",
+      "coverage_max_deviation": 0.033333333333333326,
+      "ks_pvalues": [
+        0.3634538603280886,
+        4.118499101849449e-05,
+        0.8006427070581559
+      ]
+    },
+    "tamoxifen": {
+      "method": "sbi",
+      "reason": "coverage_strict_ok",
+      "coverage_max_deviation": 0.040000000000000036,
+      "ks_pvalues": [
+        0.7644246707218343,
+        0.07111459832382494,
+        0.1400961946813788
+      ]
+    },
+    "indomethacin": {
+      "method": "sbi",
+      "reason": "coverage_strict_ok",
+      "coverage_max_deviation": 0.06000000000000005,
+      "ks_pvalues": [
+        0.29262940692750605,
+        0.27971343696862405,
+        0.6493610991928228
+      ]
+    },
+    "posaconazole": {
+      "method": "sbi",
+      "reason": "coverage_strict_ok",
+      "coverage_max_deviation": 0.07333333333333336,
+      "ks_pvalues": [
+        1.2646738809745818e-09,
+        5.352577841682048e-13,
+        5.939760539987367e-07
+      ]
+    }
+  }
+}
