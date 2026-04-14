@@ -140,12 +140,11 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 - **Runtime guard**: `amortizer.py:load_result()` 경고 + `tdm_sbi.py:sbi_update()` ValueError로 old model 차단.
 - **Tests**: 435 all pass (0 skip)
 
-### v3 OATP 확장 (2026-04-14, commit `54fad37`, 진행중)
-- **목적**: Pravastatin SBC 실패 해결 (OATP1B1 substrate 0개 → 5개 추가)
-- **추가 drugs**: atorvastatin, fluvastatin, pitavastatin, valsartan, bosentan (모두 acid, OATP1B1 substrate)
-- **Training set**: 55→60 drugs, acid 27%→33%
-- **파이프라인**: v3 datagen (60×2000θ=120k) → train → SBC → routing 백그라운드 실행중
-- **기대**: pravastatin cov_dev 0.223→≤0.10 이동 시 전체 SBI routing 12/13 또는 13/13
+### v3 OATP 확장 — NEGATIVE (2026-04-14, commit `5c0d864`)
+- **시도**: OATP1B1 substrate 5개 추가 (atorvastatin, fluvastatin, pitavastatin, valsartan, bosentan). 55→60 drugs.
+- **결과**: pravastatin 0.223→0.237 (악화), posaconazole 0.073→0.173 (대폭 악화, SBI→IBIS 후퇴). **SBI 12→11** (net negative).
+- **결론**: pravastatin 실패는 training data가 아닌 engine-level 문제 (OATP1B1 transporter 미모델링). Training set 확장은 다른 drug의 calibration을 희석시킴.
+- **Training set 55 drugs로 복원** (commit `fdda41c`). v2 model이 production 유지.
 
 ### Track C1 결과 (2026-04-12 code, 2026-04-14 2kθ eval 완료)
 - **HierarchicalMultiDrugSimulator**: per-(population, drug) EngineSimulator cache. Drug features는 항상 adult reference graph에서 추출 (population-independent).
@@ -305,7 +304,8 @@ NOTE: Prior headline (2.283) was invalidated by holdout data leakage fix on 2026
 - **F% bioavailability predictor (feat 브랜치, 2026-04-07 이전)** → DrugBank 527 drugs로 XGB 훈련, `scripts/train_bioavailability.py`. Standalone 및 meta 통합 모두 negative. `data/validation/f_predictor_negative_result.json`. F%는 VDss 경로와 달리 error cancellation을 깨지 못함.
 - **Direct CL/half-life predictors (feat 브랜치, post-VDss 6회)** → `xgboost_clearance_v1.json` + `xgboost_thalf_v1.json` 포함, 6가지 조합 시도. 전부 negative, `data/validation/post_vdss_negative_results.json`. VDss 4th track이 성공한 것이 "IVIVE bypass" 때문이라는 해석은 반증됨 — 같은 원리의 CL/F·t½는 실패.
 - **UDE 프로토타입 공식 Phase 1 실험 (feat 브랜치)** → Diffrax 기반 gradient-through-solver residual learning, `data/validation/phase1_ude_prototype_result.json`에 falsification 기록. Residual이 분자 구조로부터 학습 가능하지 않음 (CV R²<0). Phase 2 (amortized SBI), Phase 3 (flow matching)는 미실행.
-- **ADME fup override (2026-04-11)** → DrugBank measured fup을 XGBoost predict보다 항상 우선 (>5x disagree 시 기존엔 XGBoost fallback이었던 로직을 반대로). Principled하지만 empirically harmful: Engine AAFE 3.421→3.726 (+0.306, 34+ error cancellation 실패 패턴 재현), Meta AAFE 2.695→2.728 (+0.033, noise level). Ketorolac engine fold 0.259x→0.534x (방향은 개선) 그러나 여전히 truth 0.80에 도달 못 함 — TDM floor=0.5 적용 후 CI max ≈ 0.65 → 커버리지 목표 미달. Revert 완료. Ketorolac의 실제 실패 원인은 fup만이 아니라 CLint path도 포함, partial fix로는 해결 불가. 35번째 error cancellation 실패. `src/sisyphus/predict/adme.py` 주석에 사유 기록.
+- **ADME fup override (2026-04-11)** → DrugBank measured fup을 XGBoost predict보다 항상 우선 (>5x disagree 시 기존엔 XGBoost fallback이었던 로직을 반대로). Principled하지만 empirically harmful: Engine AAFE 3.421→3.726 (+0.306, 34+ error cancellation 실패 패턴 재현), Meta AAFE 2.695→2.728 (+0.033, noise level). Revert 완료. 35번째 error cancellation 실패.
+- **SBI v3 OATP training expansion (2026-04-14)** → Pravastatin SBC 실패(cov_dev=0.223) 해결 위해 OATP1B1 substrate 5개(atorvastatin, fluvastatin, pitavastatin, valsartan, bosentan) 추가. 55→60 drugs. 결과: pravastatin 0.223→0.237 (악화), posaconazole 0.073→0.173 (대폭 악화, SBI→IBIS 후퇴). SBI 12→11. Pravastatin 실패는 training data가 아닌 engine-level (OATP1B1 transporter 미모델링). Revert 완료. 36번째 실패.
 
 ### Engine-only ablation 결과
 - DrugBank enrichment: engine AAFE 3.074→2.945 (Δ=-0.129, 유의미), meta는 0.17 weight로 0.021만 전달
