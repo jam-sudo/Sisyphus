@@ -59,6 +59,12 @@ def main() -> None:
             "auto (look up per-drug routing table data/sbi/method_routing.json)"
         ),
     )
+    tdm_parser.add_argument(
+        "--population",
+        default=None,
+        help="Population class for hierarchical SBI (e.g. 'adult', 'pediatric_5y'). "
+             "Uses hierarchical posterior when set.",
+    )
     tdm_parser.add_argument("--verbose", "-v", action="store_true")
 
     # ddi command
@@ -314,6 +320,9 @@ def _run_tdm(args: argparse.Namespace) -> None:
             extra_kwargs["logp_hint"] = float(compute_profile(args.smiles).logp)
         except Exception:
             pass
+    pop = getattr(args, "population", None)
+    if pop:
+        extra_kwargs["population_class"] = pop
 
     result = bayesian_update(
         compiled, graph, drug, regimen,
