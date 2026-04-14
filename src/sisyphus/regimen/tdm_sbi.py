@@ -51,6 +51,9 @@ def _extract_params(drug: DrugOnGraph) -> dict[str, float]:
     return params
 
 
+_DEFAULT_HIERARCHICAL_POSTERIOR_PATH = Path("models/sbi/hierarchical_nsf_2k.pt")
+
+
 def sbi_update(
     compiled: CompiledODE,
     graph: BodyGraph,
@@ -66,6 +69,7 @@ def sbi_update(
     use_surrogate: bool = False,
     surrogate_model_dir: Path | str | None = None,
     surrogate_ensemble_std_threshold: float = 0.02,
+    population_class: str | None = None,
 ) -> "TDMResult":
     """Amortized SBI TDM update via the multi-drug conditional posterior.
 
@@ -99,6 +103,10 @@ def sbi_update(
             Default ``False`` — conservative scipy engine fallback.
         surrogate_model_dir: Override the default ``models/surrogate``
             directory for the ensemble weights + scaler.
+        population_class: If set (e.g. ``"adult"``, ``"pediatric_5y"``),
+            use the hierarchical posterior that conditions on population.
+            Loads ``models/sbi/hierarchical_nsf_2k.pt`` by default.
+            Requires the ``.aux.pt`` to contain ``population_order``.
 
     Returns:
         TDMResult with prior/posterior Cmax distributions, parameter means,
@@ -121,7 +129,12 @@ def sbi_update(
     if not observations:
         raise ValueError("At least one observation is required")
 
-    ppath = Path(posterior_path) if posterior_path is not None else _DEFAULT_POSTERIOR_PATH
+    if posterior_path is not None:
+        ppath = Path(posterior_path)
+    elif population_class is not None:
+        ppath = _DEFAULT_HIERARCHICAL_POSTERIOR_PATH
+    else:
+        ppath = _DEFAULT_POSTERIOR_PATH
     if not ppath.exists():
         raise FileNotFoundError(
             f"SBI posterior file not found: {ppath}. "
@@ -143,6 +156,7 @@ def sbi_update(
             f"Retrain the model before using SBI TDM inference."
         )
     feat_mean = feat_std = None
+    aux: dict = {}
     if aux_path.exists():
         aux = torch.load(aux_path, weights_only=False)
         feat_mean = np.asarray(aux["feat_mean"], dtype=np.float64)
@@ -158,11 +172,27 @@ def sbi_update(
     if feat_mean is not None:
         feats_used = (feats - feat_mean) / feat_std
 
-    # Packed observation: [log10(first_obs_concentration), drug_features]
-    # The POC and Track A amortizer both condition on a single observation.
+    # Packed observation: [log10(first_obs_concentration), drug_features, (pop_onehot)]
     obs0 = observations[0]
     log10_cmax_obs = float(np.log10(max(obs0.concentration, 1e-12)))
-    x_vec = np.concatenate([[log10_cmax_obs], feats_used]).astype(np.float32)
+    parts = [np.array([log10_cmax_obs]), feats_used]
+    if population_class is not None:
+        pop_order = aux.get("population_order") if aux_path.exists() else None
+        if pop_order is None:
+            raise ValueError(
+                f"population_class='{population_class}' requested but "
+                f"posterior aux file has no population_order"
+            )
+        pop_order = list(pop_order)
+        if population_class not in pop_order:
+            raise ValueError(
+                f"population_class='{population_class}' not in "
+                f"posterior population_order={pop_order}"
+            )
+        pop_oh = np.zeros(len(pop_order), dtype=np.float64)
+        pop_oh[pop_order.index(population_class)] = 1.0
+        parts.append(pop_oh)
+    x_vec = np.concatenate(parts).astype(np.float32)
     x_t = torch.as_tensor(x_vec[None, :], dtype=torch.float32)
 
     t0_sample = time.time()
