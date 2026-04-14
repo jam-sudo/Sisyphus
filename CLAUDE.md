@@ -129,11 +129,14 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 ### Phase 2.0.5 결과 (2026-04-12, commit `ccc15a0` code + `43051ab` eval)
 - **logit(fup) reparameterization**: theta[1] ∈ [-4.595, +4.595] (logit space). `apply_theta_to_drug`에서 sigmoid 역변환. 저 fup acid/statin 약물의 prior coverage 향상.
 - **θ/drug 확장**: 1000 → 2000, **Acid drug 5개 추가** (20%→27%, 총 50→55 drugs)
-- **SBC 결과 — SBI routing 10/13 → 12/13**:
+- **SBC 결과 — SBI routing 10/13 → 12/13 (SBC), production routing 11/1/1 (SBI/IS/IBIS)**:
   - diclofenac: cov_dev 0.247→**0.060** (IBIS→SBI 회수)
   - posaconazole: 0.120→**0.073** (IBIS→SBI 회수)
-  - pravastatin: 0.273→0.223 (개선됐지만 여전히 IBIS — acid/OATP1B1 구조적 한계)
+  - pravastatin: 0.273→0.223 (여전히 IBIS — OATP1B1 transporter OOD, 훈련셋에 substrate 0개)
+  - morphine: SBC pass(0.047) but TDM bias +52% → **IS override** (IS bias +3%). SBI posterior CV=47% vs IS CV=10%, posterior가 tighten 안 됨.
+- **Production routing**: SBI 11 / IS 1 (morphine) / IBIS 1 (pravastatin). `data/sbi/method_routing.json`.
 - **모델 v2 production 배치**: `models/sbi/multi_drug_nsf.pt` = v2 (logit fup, 94 epochs, 2815s on 110k samples). v1은 `_v1.pt`로 백업.
+- **TDM tournament v2 (IS vs SBI)**: SBI mean abs bias 23% (IS 31%). SBI가 clozapine(-6% vs +87%)과 rivaroxaban(+5% vs -18%)에서 우위. `data/validation/tdm_method_tournament_v2.json`.
 - **Runtime guard**: `amortizer.py:load_result()` 경고 + `tdm_sbi.py:sbi_update()` ValueError로 old model 차단.
 - **Tests**: 435 all pass (0 skip)
 
@@ -186,7 +189,7 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 
 ### Track B 결과 (2026-04-10, docs/sbi_multi_drug_results.md Addendum)
 - **SBI production API**: `tdm.bayesian_update(method="sbi")` + silent IBIS fallback
-- **Per-drug routing table**: `data/sbi/method_routing.json` — **12 SBI / 1 IBIS** (Phase 2.0.5, was 10/3)
+- **Per-drug routing table**: `data/sbi/method_routing.json` — **11 SBI / 1 IS / 1 IBIS** (Phase 2.0.5 + morphine IS override)
 - **CLI**: `sisyphus tdm --method {is,ibis,enkf,sbi,auto}` 통합. `auto`는 라우팅 테이블 조회
 - **3-way tournament mean absolute bias**: SBI 19% < IS 31% < EnKF 38%. SBI는 특히 clozapine에서 −4% (IS/EnKF/IBIS는 +82~+89% drift)
 - **Wall time per drug**: SBI ~57s < IS ~69s ≪ EnKF ~564s ≪ IBIS ~1390s
