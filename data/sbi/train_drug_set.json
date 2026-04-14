@@ -2,12 +2,12 @@
   "source": "data/training/mmpk_expanded_v2.csv",
   "pool_size": 1272,
   "profiled_size": 1272,
-  "target_n": 60,
+  "target_n": 55,
   "seed": 42,
   "allocation": {
     "neutral": 21,
-    "acid": 20,
     "base": 16,
+    "acid": 15,
     "zwitterion": 3
   },
   "drugs": [
@@ -780,76 +780,6 @@
       "hba": 3,
       "rotatable_bonds": 2,
       "pka": 5.48
-    },
-    {
-      "name": "atorvastatin",
-      "smiles": "CC(C)c1c(C(=O)Nc2ccccc2)c(-c2ccccc2)c(-c2ccc(F)cc2)n1CC[C@@H](O)C[C@@H](O)CC(=O)O",
-      "dose_mg": 20.0,
-      "route": "oral",
-      "compound_type": "acid",
-      "mw": 558.6500000000003,
-      "logp": 6.36,
-      "tpsa": 0,
-      "hbd": 0,
-      "hba": 0,
-      "rotatable_bonds": 0,
-      "pka": 4.31
-    },
-    {
-      "name": "fluvastatin",
-      "smiles": "CC(C)n1c(/C=C/C(O)CC(O)CC(=O)O)c(-c2ccc(F)cc2)c2ccccc21",
-      "dose_mg": 10.0,
-      "route": "oral",
-      "compound_type": "acid",
-      "mw": 411.473,
-      "logp": 4.5,
-      "tpsa": 0,
-      "hbd": 0,
-      "hba": 0,
-      "rotatable_bonds": 0,
-      "pka": 4.54
-    },
-    {
-      "name": "pitavastatin",
-      "smiles": "O=C(O)C[C@H](O)C[C@H](O)/C=C/c1c(C2CC2)nc2ccccc2c1-c1ccc(F)cc1",
-      "dose_mg": 1.0,
-      "route": "oral",
-      "compound_type": "acid",
-      "mw": 421.4680000000001,
-      "logp": 3.8111585741996796,
-      "tpsa": 0,
-      "hbd": 0,
-      "hba": 0,
-      "rotatable_bonds": 0,
-      "pka": 4.13
-    },
-    {
-      "name": "valsartan",
-      "smiles": "CCCCC(=O)N(Cc1ccc(-c2ccccc2-c2nn[nH]n2)cc1)[C@H](C(=O)O)C(C)C",
-      "dose_mg": 80.0,
-      "route": "oral",
-      "compound_type": "acid",
-      "mw": 435.52800000000013,
-      "logp": 1.499,
-      "tpsa": 0,
-      "hbd": 0,
-      "hba": 0,
-      "rotatable_bonds": 0,
-      "pka": 4.35
-    },
-    {
-      "name": "bosentan",
-      "smiles": "COc1ccccc1Oc1c(NS(=O)(=O)c2ccc(C(C)(C)C)cc2)nc(-c2ncccn2)nc1OCCO",
-      "dose_mg": 3.0,
-      "route": "oral",
-      "compound_type": "acid",
-      "mw": 551.6250000000002,
-      "logp": 3.7,
-      "tpsa": 0,
-      "hbd": 0,
-      "hba": 0,
-      "rotatable_bonds": 0,
-      "pka": 5.8
     }
   ],
   "expansion_note": "Phase 2.0.5: added 5 acid drugs (flurbiprofen, ketoprofen, bempedoic acid, fenofibric acid, teriflunomide) to improve acid-space coverage for SBI calibration of diclofenac/pravastatin/posaconazole"
