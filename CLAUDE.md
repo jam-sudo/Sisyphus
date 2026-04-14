@@ -128,7 +128,7 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 
 ### Phase 2.0.5 결과 (2026-04-12, commit `ccc15a0` code + `43051ab` eval)
 - **logit(fup) reparameterization**: theta[1] ∈ [-4.595, +4.595] (logit space). `apply_theta_to_drug`에서 sigmoid 역변환. 저 fup acid/statin 약물의 prior coverage 향상.
-- **θ/drug 확장**: 1000 → 2000, **Acid drug 5개 추가** (20%→27%, 총 50→55 drugs)
+- **θ/drug 확장**: 1000 → 2000, **Acid drug 5개 추가** (20%→27%, 총 50→55 drugs). 이후 v3에서 OATP substrate 5개 추가 (55→60, acid 27%→33%).
 - **SBC 결과 — SBI routing 10/13 → 12/13 (SBC), production routing 11/1/1 (SBI/IS/IBIS)**:
   - diclofenac: cov_dev 0.247→**0.060** (IBIS→SBI 회수)
   - posaconazole: 0.120→**0.073** (IBIS→SBI 회수)
@@ -140,12 +140,20 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 - **Runtime guard**: `amortizer.py:load_result()` 경고 + `tdm_sbi.py:sbi_update()` ValueError로 old model 차단.
 - **Tests**: 435 all pass (0 skip)
 
-### Track C1 결과 (2026-04-12, commit `5db6674`, merged)
+### v3 OATP 확장 (2026-04-14, commit `54fad37`, 진행중)
+- **목적**: Pravastatin SBC 실패 해결 (OATP1B1 substrate 0개 → 5개 추가)
+- **추가 drugs**: atorvastatin, fluvastatin, pitavastatin, valsartan, bosentan (모두 acid, OATP1B1 substrate)
+- **Training set**: 55→60 drugs, acid 27%→33%
+- **파이프라인**: v3 datagen (60×2000θ=120k) → train → SBC → routing 백그라운드 실행중
+- **기대**: pravastatin cov_dev 0.223→≤0.10 이동 시 전체 SBI routing 12/13 또는 13/13
+
+### Track C1 결과 (2026-04-12 code, 2026-04-14 2kθ eval 완료)
 - **HierarchicalMultiDrugSimulator**: per-(population, drug) EngineSimulator cache. Drug features는 항상 adult reference graph에서 추출 (population-independent).
 - **Population registry**: `data/sbi/populations.json` — adult (70 kg) + pediatric_5y (18 kg).
-- **Conditioning 확장**: 13D → 15D (+ 2D population one-hot). `pack_observation_hierarchical()` + `stack_training_pairs_hierarchical()`.
-- **학습 완료**: 75 epochs, 1871s. `models/sbi/hierarchical_nsf.pt` 저장.
-- **SBC**: 진행중 (2 pops × 5 anchor drugs × 300 calibration × 500 posterior).
+- **Conditioning 확장**: 13D → 15D (+ 2D population one-hot).
+- **학습**: 1kθ (75 epochs) → **2kθ (76 epochs, 220k samples)**. `models/sbi/hierarchical_nsf_2k.pt`.
+- **SBC 완료**: Coverage ≤10pp 22/26 (85%), KS+coverage gate **8/26** (1kθ 6/26에서 개선). 2kθ로 adult morphine(0.110→0.090) + sildenafil(0.110→0.067) 회수. Posaconazole(0.17/0.13) + pravastatin(0.14/0.14) 잔류 실패.
+- **Production 통합**: `bayesian_update(population_class="pediatric_5y")` + CLI `--population pediatric_5y`.
 - **18 new tests** in `tests/unit/test_sbi_hierarchical.py`.
 
 ### Track A 결과 (2026-04-10, `docs/sbi_multi_drug_results.md`)
@@ -206,7 +214,7 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 - `data/validation/sbi_vs_ibis_extras.json` — 5-drug IBIS extended (Track B)
 - `tests/unit/test_tdm_sbi.py` — 5 dispatch tests
 
-## Session State (마지막 업데이트: 2026-04-12, Phase 2.0.5 + Track C1)
+## Session State (마지막 업데이트: 2026-04-14, Phase 2.0.5 + Track C1 + v3 OATP)
 
 ### Current Metrics (N=107, CLEAN, 4-track, post-merge)
 Engine AAFE: 3.421 | ML AAFE: 3.057 | **Meta AAFE: 2.695** | %2-fold: 47.7% | %3-fold: 65.4%
