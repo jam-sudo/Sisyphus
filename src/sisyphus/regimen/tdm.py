@@ -226,6 +226,7 @@ def bayesian_update(
     sbi_surrogate_std_threshold: float = 0.02,
     logp_hint: float | None = None,
     min_ci_half_width_fraction: float = 0.0,
+    population_class: str | None = None,
 ) -> TDMResult:
     """Run Bayesian TDM update.
 
@@ -341,13 +342,14 @@ def bayesian_update(
             return _finalize(sbi_update(
                 compiled, graph, drug, regimen, observations,
                 posterior_path=sbi_posterior_path,
-                n_samples=max(n_prior, 1000),  # amortized sampling is cheap
-                n_predictive_sims=min(n_prior, 200),  # bound the forward cost
+                n_samples=max(n_prior, 1000),
+                n_predictive_sims=min(n_prior, 200),
                 seed=seed,
                 observation_node=observation_node,
                 logp_hint=logp_hint,
                 use_surrogate=sbi_use_surrogate,
                 surrogate_ensemble_std_threshold=sbi_surrogate_std_threshold,
+                population_class=population_class,
             ))
         except FileNotFoundError as exc:
             if not sbi_fallback:
