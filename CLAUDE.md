@@ -213,6 +213,11 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 - `data/validation/sbi_vs_ibis_extras.json` — 5-drug IBIS extended (Track B)
 - `tests/unit/test_tdm_sbi.py` — 5 dispatch tests
 
+## 새 기능 (2026-04-14 저녁 세션)
+- **CYP phenotype layer** (commit `21a92c9`): `sisyphus tdm --phenotype CYP2D6:PM` — CPIC activity score 스케일링 (PM 0.1×, IM 0.5×, EM 1×, UM 2×). `src/sisyphus/predict/phenotype.py`. 17 tests. DM PM 케이스 검증: posterior enzyme_affinity 4.89→6.48 (physiologically interpretable).
+- **Multi-obs SBI** (commit `d4e1633`): Track A 아모타이저는 first obs만 condition하지만, 추가 obs를 log-normal likelihood로 post-hoc importance reweighting. `_scipy_cmax_and_obs_conc()` helper + weighted posterior stats. 2-obs 테스트 ESS 감소 확인.
+- **MIPD dose_range auto-infer** (commit `ce9a924`): `DEFAULT_DOSE_MIN=25mg` 하드코딩 제거. current_dose 기반 0.1×~10× 자동. DM 30mg PM → 12mg 정확히 권장 (기존 25mg clamp).
+
 ## Session State (마지막 업데이트: 2026-04-14, Phase 2.0.5 + Track C1 + v3 OATP)
 
 ### Current Metrics (N=107, CLEAN, 4-track, post-merge)
