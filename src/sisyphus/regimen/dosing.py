@@ -117,8 +117,8 @@ def recommend_dose(
     regimen: DosingRegimen,
     observations: list[Observation] | tuple[Observation, ...],
     target_css: float,
-    dose_range: tuple[float, float] = (DEFAULT_DOSE_MIN, DEFAULT_DOSE_MAX),
-    round_increment: float = DEFAULT_ROUND_INCREMENT,
+    dose_range: tuple[float, float] | None = None,
+    round_increment: float | None = None,
     n_prior: int = 2000,
     seed: int = 42,
     method: str = "is",
@@ -154,6 +154,21 @@ def recommend_dose(
     """
     if target_css <= 0:
         raise ValueError(f"target_css must be positive, got {target_css}")
+
+    # Auto-infer dose range from current dose if not provided. Drugs span
+    # 4 orders of magnitude in typical dose (digoxin 0.125mg ↔ metformin 1000mg),
+    # so a fixed floor doesn't work. Default: 0.1× to 10× of current dose,
+    # with a sensible rounding increment based on magnitude.
+    current_dose_for_bounds = float(drug.dose_mg)
+    if dose_range is None:
+        dose_range = (
+            max(0.1, current_dose_for_bounds * 0.1),
+            current_dose_for_bounds * 10.0,
+        )
+    if round_increment is None:
+        # Adaptive increment: 10% of current dose, rounded to power of 10
+        magnitude = 10 ** int(np.floor(np.log10(max(current_dose_for_bounds, 0.1))))
+        round_increment = max(0.1, magnitude * 0.1)
 
     # Step 1: Bayesian update at current dose
     if method == "enkf":

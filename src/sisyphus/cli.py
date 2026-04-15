@@ -103,6 +103,9 @@ def main() -> None:
         choices=["is", "ibis", "enkf", "sbi", "auto"],
         help="TDM method (same choices as tdm command)",
     )
+    da_parser.add_argument("--dose-min", type=float, default=None, help="Minimum allowed dose (mg). Default: 0.1× current dose.")
+    da_parser.add_argument("--dose-max", type=float, default=None, help="Maximum allowed dose (mg). Default: 10× current dose.")
+    da_parser.add_argument("--round-increment", type=float, default=None, help="Dose rounding increment (mg). Default: 10% of current dose magnitude.")
     da_parser.add_argument("--verbose", "-v", action="store_true")
 
     # benchmark command
@@ -379,10 +382,19 @@ def _run_dose_adjust(args: argparse.Namespace) -> None:
 
     observations = _parse_observations(args.obs)
 
+    dose_range = None
+    if args.dose_min is not None or args.dose_max is not None:
+        dose_range = (
+            args.dose_min if args.dose_min is not None else 0.1,
+            args.dose_max if args.dose_max is not None else args.dose * 10,
+        )
+
     result = recommend_dose(
         compiled, graph, drug, regimen,
         observations=observations,
         target_css=args.target_css,
+        dose_range=dose_range,
+        round_increment=args.round_increment,
         n_prior=args.n_samples,
         seed=42,
         method=args.method,
