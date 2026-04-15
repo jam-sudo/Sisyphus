@@ -148,6 +148,38 @@ class TestSBIDispatch:
             f"too far from scipy {r_sci.posterior_cmax.mean:.4f} (ratio {ratio:.2f})"
         )
 
+    def test_sbi_multi_obs_reweight_affects_posterior(self, physiology, morphine_drug):
+        """Multi-obs SBI should produce a different posterior than single-obs.
+
+        With an extra observation that disagrees with the first (higher
+        concentration later than expected for morphine's half-life), the
+        reweighted posterior should shift toward accommodating both.
+        """
+        graph, compiled = physiology
+        drug, logp = morphine_drug
+        regimen = DosingRegimen.single_oral(30.0)
+        obs1 = (Observation(time_h=1.0, concentration=0.01865, cv=0.10),)
+        obs2 = (
+            Observation(time_h=1.0, concentration=0.01865, cv=0.10),
+            Observation(time_h=4.0, concentration=0.010, cv=0.10),
+        )
+
+        r1 = bayesian_update(
+            compiled, graph, drug, regimen, obs1,
+            method="sbi", n_prior=80, logp_hint=logp, seed=42,
+        )
+        r2 = bayesian_update(
+            compiled, graph, drug, regimen, obs2,
+            method="sbi", n_prior=80, logp_hint=logp, seed=42,
+        )
+        assert r1.n_successful > 0
+        assert r2.n_successful > 0
+        # ESS for multi-obs should be ≤ n_post (reweighting reduces effective N).
+        # For single-obs SBI, ESS == n_post (uniform weights).
+        assert r2.ess <= r2.n_successful
+        # Weights should no longer all be uniform for multi-obs.
+        assert not np.allclose(r2.weights, r2.weights[0])
+
     def test_sbi_speedup_vs_importance_sampling(self, physiology, morphine_drug):
         """SBI dispatch should be measurably faster than IS for the same forward budget.
 

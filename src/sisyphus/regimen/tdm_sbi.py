@@ -129,6 +129,14 @@ def sbi_update(
     if not observations:
         raise ValueError("At least one observation is required")
 
+    # Track A amortizer conditions on the first observation only. Additional
+    # observations are used as a post-hoc importance-reweighting likelihood:
+    # each theta sample from the amortizer is re-weighted by the probability
+    # of producing the non-first observations under the engine forward sim.
+    # See _multi_obs_reweight below for implementation. Single-obs path is
+    # unchanged.
+    _extra_obs = observations[1:]
+
     if posterior_path is not None:
         ppath = Path(posterior_path)
     elif population_class is not None:
@@ -222,6 +230,14 @@ def sbi_update(
     # the vectorised surrogate call, out-of-distribution rows fall back
     # to a scipy forward sim. This preserves most of the speedup on
     # well-behaved drugs while restoring accuracy on the hard ones.
+    if _extra_obs and use_surrogate:
+        logger.warning(
+            "SBI TDM: multi-obs reweighting is not yet supported under the "
+            "surrogate path. Falling back to scipy forward sims for accurate "
+            "multi-observation conditioning."
+        )
+        use_surrogate = False
+
     surrogate_bundle: tuple | None = None
     if use_surrogate:
         try:
@@ -287,6 +303,33 @@ def sbi_update(
             return cmax if cmax > 0 else float("nan")
         except Exception:
             return float("nan")
+
+    def _scipy_cmax_and_obs_conc(params: ResolvedParams) -> tuple[float, np.ndarray]:
+        """Return (cmax, conc_at_obs_times) for multi-obs reweighting.
+
+        conc_at_obs_times has one entry per observation, including the first.
+        Used to compute the importance weight for observations beyond the
+        first when multi-obs reweighting is enabled.
+        """
+        try:
+            sim = solve_regimen(
+                compiled, params, regimen, t_total_h=t_total, dt_output=0.25
+            )
+            if not sim.solver_success:
+                return float("nan"), np.full(len(observations), np.nan)
+            conc = sim.concentrations.get(observation_node)
+            if conc is None or len(conc) == 0:
+                return float("nan"), np.full(len(observations), np.nan)
+            cmax = float(np.max(conc))
+            if cmax <= 0:
+                return float("nan"), np.full(len(observations), np.nan)
+            t_axis = sim.time_h
+            obs_conc = np.array(
+                [float(np.interp(o.time_h, t_axis, conc)) for o in observations]
+            )
+            return cmax, obs_conc
+        except Exception:
+            return float("nan"), np.full(len(observations), np.nan)
 
     def _hybrid_cmax_batch(params_list: list, label: str = "") -> tuple[np.ndarray, int, int]:
         """Per-sample hybrid routing for surrogate vs scipy.
@@ -460,6 +503,7 @@ def sbi_update(
             post_cmax_list.append(float(cmax))
             post_param_list.append(_extract_params(rd))
     else:
+        post_log_weights: list[float] = []
         for k, j in enumerate(idx):
             theta_j = samples_np[j].astype(np.float64)
             overridden = apply_theta_to_drug(drug, theta_j, nominal_peff)
@@ -478,12 +522,30 @@ def sbi_update(
             realized_graph = graph.sample(rng)
             realized_drug = overridden.sample(rng)
             params = ResolvedParams(realized_graph, realized_drug)
-            cmax = _scipy_cmax(params)
+            cmax, obs_conc = _scipy_cmax_and_obs_conc(params)
             if not np.isfinite(cmax) or cmax <= 0:
                 n_post_fail += 1
                 continue
             post_cmax_list.append(float(cmax))
             post_param_list.append(_extract_params(realized_drug))
+
+            # Multi-obs reweighting: importance weight for observations
+            # beyond the first. Log-likelihood under log-normal assay noise
+            # (matches the IS path's observation model).
+            if _extra_obs:
+                log_w = 0.0
+                for oi, obs in enumerate(observations[1:], start=1):
+                    pred = obs_conc[oi]
+                    if not np.isfinite(pred) or pred <= 0:
+                        log_w = -np.inf
+                        break
+                    sigma = max(obs.cv, 1e-3)
+                    log_w += -0.5 * (
+                        (np.log(obs.concentration) - np.log(pred)) / sigma
+                    ) ** 2
+                post_log_weights.append(float(log_w))
+            else:
+                post_log_weights.append(0.0)
 
     # ── Summarize ──
     if not prior_cmax_list or not post_cmax_list:
@@ -503,16 +565,59 @@ def sbi_update(
 
     prior_arr = np.array(prior_cmax_list)
     post_arr = np.array(post_cmax_list)
+
+    # Compute posterior weights. Without multi-obs reweighting, weights are
+    # uniform (NPE gives exact samples conditioned on first obs). With extra
+    # observations, we log-normalize the likelihood weights via log-sum-exp.
+    n_post = len(post_cmax_list)
+    multi_obs_used = False
+    if _extra_obs and surrogate_bundle is None and 'post_log_weights' in dir() and post_log_weights:
+        lw = np.array(post_log_weights[:n_post])
+        finite_mask = np.isfinite(lw)
+        if finite_mask.sum() > 0:
+            lw_max = lw[finite_mask].max()
+            w = np.where(finite_mask, np.exp(lw - lw_max), 0.0)
+            w_sum = w.sum()
+            if w_sum > 0:
+                weights = w / w_sum
+                multi_obs_used = True
+            else:
+                weights = np.full(n_post, 1.0 / n_post)
+        else:
+            weights = np.full(n_post, 1.0 / n_post)
+    else:
+        weights = np.full(n_post, 1.0 / n_post)
+
+    if multi_obs_used:
+        post_mean = float(np.sum(weights * post_arr))
+        post_var = float(np.sum(weights * (post_arr - post_mean) ** 2))
+        post_cv = float(np.sqrt(max(post_var, 0)) / post_mean) if post_mean > 0 else 0.0
+        # Weighted quantile for CI
+        order = np.argsort(post_arr)
+        sorted_vals = post_arr[order]
+        sorted_w = weights[order]
+        cum = np.cumsum(sorted_w)
+        ci_lo = float(sorted_vals[np.searchsorted(cum, 0.05)])
+        ci_hi_idx = int(np.searchsorted(cum, 0.95))
+        ci_hi_idx = min(ci_hi_idx, len(sorted_vals) - 1)
+        ci_hi = float(sorted_vals[ci_hi_idx])
+        ci90 = (ci_lo, ci_hi)
+        ess = float(1.0 / np.sum(weights ** 2))
+        logger.info(
+            "SBI TDM: multi-obs reweighting applied (%d extra obs), ESS=%.1f/%d",
+            len(_extra_obs), ess, n_post,
+        )
+    else:
+        post_mean = float(np.mean(post_arr))
+        post_cv = float(np.std(post_arr) / post_mean) if post_mean > 0 else 0.0
+        ci90 = (
+            float(np.quantile(post_arr, 0.05)),
+            float(np.quantile(post_arr, 0.95)),
+        )
+        ess = float(n_post)
+
     prior_mean = float(np.mean(prior_arr))
     prior_cv = float(np.std(prior_arr) / prior_mean) if prior_mean > 0 else 0.0
-    post_mean = float(np.mean(post_arr))
-    post_cv = float(np.std(post_arr) / post_mean) if post_mean > 0 else 0.0
-
-    # 90 % CI from empirical quantiles of the posterior predictive samples.
-    ci90 = (
-        float(np.quantile(post_arr, 0.05)),
-        float(np.quantile(post_arr, 0.95)),
-    )
 
     prior_params: dict[str, float] = {}
     posterior_params: dict[str, float] = {}
@@ -520,11 +625,15 @@ def sbi_update(
         keys = set(prior_param_list[0].keys())
         for key in keys:
             prior_params[key] = float(np.mean([p[key] for p in prior_param_list]))
-            posterior_params[key] = float(np.mean([p[key] for p in post_param_list]))
-
-    # Uniform weights on posterior predictive samples (NPE gives exact samples).
-    n_post = len(post_cmax_list)
-    uniform_weights = np.full(n_post, 1.0 / n_post)
+            # Use weighted mean when multi-obs reweighting is active
+            if multi_obs_used:
+                posterior_params[key] = float(
+                    np.sum(weights * np.array([p[key] for p in post_param_list]))
+                )
+            else:
+                posterior_params[key] = float(
+                    np.mean([p[key] for p in post_param_list])
+                )
 
     total_time = time.time() - t0_total
     logger.info(
@@ -546,9 +655,9 @@ def sbi_update(
         posterior_params=posterior_params,
         n_prior=len(prior_cmax_list),
         n_successful=n_post,
-        ess=float(n_post),
+        ess=ess,
         observations=observations,
-        weights=uniform_weights,
+        weights=weights,
         log_likelihoods=np.zeros(n_post),
         cmax_ci_90=ci90,
     )
