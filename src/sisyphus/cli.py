@@ -65,6 +65,13 @@ def main() -> None:
         help="Population class for hierarchical SBI (e.g. 'adult', 'pediatric_5y'). "
              "Uses hierarchical posterior when set.",
     )
+    tdm_parser.add_argument(
+        "--phenotype",
+        default=None,
+        help="CYP phenotype spec, e.g. 'CYP2D6:PM' or '2D6:PM,2C9:IM'. "
+             "Scales hepatic enzyme abundance by CPIC activity score "
+             "(PM 0.1×, IM 0.5×, EM/NM 1×, RM 1.5×, UM 2×).",
+    )
     tdm_parser.add_argument("--verbose", "-v", action="store_true")
 
     # ddi command
@@ -103,6 +110,7 @@ def main() -> None:
         choices=["is", "ibis", "enkf", "sbi", "auto"],
         help="TDM method (same choices as tdm command)",
     )
+    da_parser.add_argument("--phenotype", default=None, help="CYP phenotype spec (e.g. 'CYP2D6:PM'). See tdm --phenotype.")
     da_parser.add_argument("--dose-min", type=float, default=None, help="Minimum allowed dose (mg). Default: 0.1× current dose.")
     da_parser.add_argument("--dose-max", type=float, default=None, help="Maximum allowed dose (mg). Default: 10× current dose.")
     da_parser.add_argument("--round-increment", type=float, default=None, help="Dose rounding increment (mg). Default: 10% of current dose magnitude.")
@@ -161,8 +169,35 @@ def _run_predict(args: argparse.Namespace) -> None:
         print(f"Warnings: {result.warnings}")
 
 
-def _build_drug_and_graph(smiles: str, dose_mg: float, route: str = "oral"):
-    """Shared helper: SMILES → (graph, compiled, drug)."""
+def _apply_phenotype(graph, phenotype_spec: str | None):
+    """Apply CYP phenotype scaling to the graph's liver enzymes.
+
+    Must be called *after* the drug has been built from the reference graph,
+    so that drug.enzyme_affinity stays calibrated against reference CLint and
+    the engine's runtime product (node.enzymes × affinity) reflects the
+    phenotype multiplier.
+    """
+    if not phenotype_spec:
+        return graph
+    from sisyphus.predict.phenotype import apply_phenotype_to_graph, parse_phenotype_spec
+    phenotypes = parse_phenotype_spec(phenotype_spec)
+    return apply_phenotype_to_graph(graph, phenotypes, node="liver")
+
+
+def _build_drug_and_graph(
+    smiles: str,
+    dose_mg: float,
+    route: str = "oral",
+    phenotype_spec: str | None = None,
+):
+    """Shared helper: SMILES → (graph, compiled, drug).
+
+    If ``phenotype_spec`` is given (e.g. ``"CYP2D6:PM"``), the graph's
+    liver enzyme abundances are scaled AFTER drug.enzyme_affinity has
+    been calibrated against the reference graph. Compile is run on the
+    reference graph (topology unchanged) since ResolvedParams reads the
+    final enzyme values at runtime.
+    """
     import numpy as np
 
     import sisyphus.engine.flux  # noqa: F401
@@ -186,6 +221,14 @@ def _build_drug_and_graph(smiles: str, dose_mg: float, route: str = "oral"):
         }
 
     drug = build_drug_on_graph(profile, adme, dose_mg, route, liver_enzymes=liver_enzymes)
+
+    # Apply CYP phenotype AFTER drug build — drug.enzyme_affinity was
+    # calibrated against the reference (unscaled) enzymes, so the engine's
+    # runtime product (node.enzymes × affinity) will now reflect the
+    # phenotype multiplier exactly once.
+    if phenotype_spec:
+        graph = _apply_phenotype(graph, phenotype_spec)
+
     return graph, compiled, drug
 
 
@@ -281,7 +324,12 @@ def _run_tdm(args: argparse.Namespace) -> None:
     )
     from sisyphus.regimen.types import DosingRegimen
 
-    graph, compiled, drug = _build_drug_and_graph(args.smiles, args.dose, args.route)
+    graph, compiled, drug = _build_drug_and_graph(
+        args.smiles, args.dose, args.route,
+        phenotype_spec=getattr(args, "phenotype", None),
+    )
+    if getattr(args, "phenotype", None):
+        print(f"[phenotype] applied {args.phenotype}", file=sys.stderr)
 
     if args.doses == 1:
         if args.route == "oral":
@@ -364,7 +412,12 @@ def _run_dose_adjust(args: argparse.Namespace) -> None:
     from sisyphus.regimen.dosing import recommend_dose
     from sisyphus.regimen.types import DosingRegimen
 
-    graph, compiled, drug = _build_drug_and_graph(args.smiles, args.dose, args.route)
+    graph, compiled, drug = _build_drug_and_graph(
+        args.smiles, args.dose, args.route,
+        phenotype_spec=getattr(args, "phenotype", None),
+    )
+    if getattr(args, "phenotype", None):
+        print(f"[phenotype] applied {args.phenotype}", file=sys.stderr)
 
     if args.doses == 1:
         if args.route == "oral":
