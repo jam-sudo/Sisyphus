@@ -15,7 +15,7 @@ import logging
 
 import numpy as np
 
-from sisyphus.core import Distribution, DrugOnGraph, TissueComposition
+from sisyphus.core import Distribution, DrugOnGraph, TissueComposition, TransporterKinetics
 from sisyphus.predict.adme import ADMEProperties
 from sisyphus.predict.chemistry import MolecularProfile
 
@@ -556,6 +556,7 @@ def build_drug_on_graph(
     route: str = "oral",
     liver_enzymes: dict[str, float] | None = None,
     kp_method: str = "rodgers_rowland",
+    transporter_kinetics: dict[str, TransporterKinetics] | None = None,
 ) -> DrugOnGraph:
     """Construct a DrugOnGraph from predicted properties.
 
@@ -638,6 +639,7 @@ def build_drug_on_graph(
         enzyme_affinity=enzyme_affinity,
         renal_clearance=renal_cl,
         particle_radius_um=particle_radius,
+        transporter_kinetics=transporter_kinetics or {},
     )
 
     logger.info(
