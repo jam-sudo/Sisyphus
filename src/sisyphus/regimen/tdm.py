@@ -227,6 +227,8 @@ def bayesian_update(
     logp_hint: float | None = None,
     min_ci_half_width_fraction: float = 0.0,
     population_class: str | None = None,
+    body_weight_kg: float | None = None,
+    age_years: float | None = None,
 ) -> TDMResult:
     """Run Bayesian TDM update.
 
@@ -350,6 +352,8 @@ def bayesian_update(
                 use_surrogate=sbi_use_surrogate,
                 surrogate_ensemble_std_threshold=sbi_surrogate_std_threshold,
                 population_class=population_class,
+                body_weight_kg=body_weight_kg,
+                age_years=age_years,
             ))
         except FileNotFoundError as exc:
             if not sbi_fallback:
