@@ -146,6 +146,17 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 - **결론**: pravastatin 실패는 training data가 아닌 engine-level 문제 (OATP1B1 transporter 미모델링). Training set 확장은 다른 drug의 calibration을 희석시킴.
 - **Training set 55 drugs로 복원** (commit `fdda41c`). v2 model이 production 유지.
 
+### Phase 1 OATP1B1 결과 (2026-04-15, branch `feat/oatp1b1-pravastatin`)
+- **ActiveTransportEdge scaffolding 완성**: YAML parser (`builder.py` — node `transporters:` + `active_transport` edge type) + `flux.py`/`rhs_jax.py` target-side IVIVE 버그 수정 + `build_drug_on_graph(transporter_kinetics=...)` kwarg + `data/transporters/oatp1b1.json` drug DB + `predict/transporter_db.py` loader.
+- **Liver OATP1B1 abundance**: `1.0e11` — hepatocellularity proxy, pravastatin 40mg Cmax 0.039 vs observed 0.045 (ratio 0.86). 1.5e11에서 steep nonlinearity (0.010, 과도 extraction). 14% gap은 Jmax CV=30% prior에 within.
+- **Calibration 비선형성 발견**: abundance 1.0e11→1.5e11에서 Cmax 0.039→0.010 (74% drop for 50% abundance increase). 간의 hepatic extraction saturation. 선형 외삽 불가, grid search 필수.
+- **Non-pravastatin 영향 0**: 12 routing drugs TDM output 변동 없음 (morphine, clozapine 등 — `transporter_kinetics` 비어있어 MM 경로 비활성). 7 SBI dispatch tests 통과.
+- **107 holdout regression**: Meta AAFE 2.695 정확히 유지 (변동 0).
+- **Tests**: 기존 422 + 12 new unit = 434. Integration 2개 추가. All pass.
+- **Pravastatin SBC**: 미실행 (수동 ~40min). IBIS routing 유지 상태에서 engine prior predictive Cmax가 0.039→0.045 방향으로 이동 확인. 추후 SBC 실행으로 cov_dev < 0.10 검증 필요.
+- **Design spec**: `docs/superpowers/specs/2026-04-15-oatp1b1-hepatic-uptake-design.md`
+- **Plan**: `docs/superpowers/plans/2026-04-15-oatp1b1-pravastatin.md`
+
 ### Track C1 결과 (2026-04-12 code, 2026-04-14 2kθ eval 완료)
 - **HierarchicalMultiDrugSimulator**: per-(population, drug) EngineSimulator cache. Drug features는 항상 adult reference graph에서 추출 (population-independent).
 - **Population registry**: `data/sbi/populations.json` — adult (70 kg) + pediatric_5y (18 kg).
@@ -218,7 +229,7 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 - **Multi-obs SBI** (commit `d4e1633`): Track A 아모타이저는 first obs만 condition하지만, 추가 obs를 log-normal likelihood로 post-hoc importance reweighting. `_scipy_cmax_and_obs_conc()` helper + weighted posterior stats. 2-obs 테스트 ESS 감소 확인.
 - **MIPD dose_range auto-infer** (commit `ce9a924`): `DEFAULT_DOSE_MIN=25mg` 하드코딩 제거. current_dose 기반 0.1×~10× 자동. DM 30mg PM → 12mg 정확히 권장 (기존 25mg clamp).
 
-## Session State (마지막 업데이트: 2026-04-14, Phase 2.0.5 + Track C1 + v3 OATP)
+## Session State (마지막 업데이트: 2026-04-15, Phase 2.0.5 + Track C1 + v3 OATP + Phase 1 OATP1B1)
 
 ### Current Metrics (N=107, CLEAN, 4-track, post-merge)
 Engine AAFE: 3.421 | ML AAFE: 3.057 | **Meta AAFE: 2.695** | %2-fold: 47.7% | %3-fold: 65.4%
