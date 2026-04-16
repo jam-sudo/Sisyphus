@@ -380,9 +380,9 @@ def make_jax_rhs(
         if has_transport:
             mw = params.drug_mw
             v_src_t = params.node_volumes[_transport_src]
-            vmax = params.node_transport_vmax[_transport_src]
-            km = params.node_transport_km[_transport_src]
-            ivive_t = params.node_ivive_scaling[_transport_src]
+            vmax = params.node_transport_vmax[_transport_tgt]
+            km = params.node_transport_km[_transport_tgt]
+            ivive_t = params.node_ivive_scaling[_transport_tgt]
 
             # Concentration in uM
             c_mg_l = jnp.where(v_src_t > 0.0, y[_transport_src] / v_src_t, 0.0)
