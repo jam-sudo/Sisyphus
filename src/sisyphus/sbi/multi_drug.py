@@ -610,3 +610,91 @@ def stack_training_pairs_hierarchical(
         row_drugs,
         row_pops,
     )
+
+
+# ---------------------------------------------------------------------------
+# Continuous hierarchical (P4) — (body_weight, age) conditioning
+# ---------------------------------------------------------------------------
+
+
+def pack_observation_continuous(
+    log10_cmax: np.ndarray,
+    drug_features: np.ndarray,
+    log_bw_norm: float | np.ndarray,
+    log_age_norm: float | np.ndarray,
+) -> np.ndarray:
+    """Pack 15D observation for continuous hierarchical NPE.
+
+    Layout: [log10_cmax(1), drug_features(12), log_bw_norm(1), log_age_norm(1)]
+    """
+    lc = np.asarray(log10_cmax, dtype=np.float64)
+    if lc.ndim == 1:
+        lc = lc[:, None]
+    n = lc.shape[0]
+
+    df = np.asarray(drug_features, dtype=np.float64)
+    if df.ndim == 1:
+        df = np.tile(df[None, :], (n, 1))
+
+    bw = np.broadcast_to(np.asarray(log_bw_norm, dtype=np.float64), (n,))[:, None]
+    ag = np.broadcast_to(np.asarray(log_age_norm, dtype=np.float64), (n,))[:, None]
+
+    return np.concatenate([lc, df, bw, ag], axis=1)
+
+
+def stack_training_pairs_continuous(
+    theta_per_drug: dict[str, np.ndarray],
+    logcmax_per_drug: dict[str, np.ndarray],
+    features_per_drug: dict[str, np.ndarray],
+    bw_per_drug: dict[str, np.ndarray],
+    age_per_drug: dict[str, np.ndarray],
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, list[str]]:
+    """Stack per-drug arrays into flat training data for continuous hierarchical.
+
+    Returns:
+        theta_all:  (N, 3)
+        x_all:      (N, 1) — log10(cmax)
+        feat_all:   (N, 12)
+        bw_all:     (N,) — body_weight_kg
+        age_all:    (N,) — age_years
+        names:      list[str] of length N
+    """
+    names_sorted = sorted(theta_per_drug.keys())
+    theta_parts: list[np.ndarray] = []
+    x_parts: list[np.ndarray] = []
+    feat_parts: list[np.ndarray] = []
+    bw_parts: list[np.ndarray] = []
+    age_parts: list[np.ndarray] = []
+    row_names: list[str] = []
+
+    for name in names_sorted:
+        theta_i = np.asarray(theta_per_drug[name], dtype=np.float64)
+        x_i = np.asarray(logcmax_per_drug[name], dtype=np.float64)
+        if x_i.ndim == 1:
+            x_i = x_i[:, None]
+        bw_i = np.asarray(bw_per_drug[name], dtype=np.float64)
+        age_i = np.asarray(age_per_drug[name], dtype=np.float64)
+
+        finite_mask = np.isfinite(x_i[:, 0])
+        n_valid = int(finite_mask.sum())
+        if n_valid == 0:
+            continue
+
+        theta_parts.append(theta_i[finite_mask])
+        x_parts.append(x_i[finite_mask])
+        feat_parts.append(np.tile(features_per_drug[name][None, :], (n_valid, 1)))
+        bw_parts.append(bw_i[finite_mask])
+        age_parts.append(age_i[finite_mask])
+        row_names.extend([name] * n_valid)
+
+    if not theta_parts:
+        raise RuntimeError("No finite simulations across any drug")
+
+    return (
+        np.concatenate(theta_parts, axis=0),
+        np.concatenate(x_parts, axis=0),
+        np.concatenate(feat_parts, axis=0),
+        np.concatenate(bw_parts, axis=0),
+        np.concatenate(age_parts, axis=0),
+        row_names,
+    )
