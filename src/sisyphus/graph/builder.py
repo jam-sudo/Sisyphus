@@ -204,6 +204,12 @@ def _build_node(spec: dict[str, Any]) -> Node:
     for tag, val in spec.get("enzymes", {}).items():
         enzymes[tag] = _parse_distribution(val)
 
+    # Transporters: optional dict of transporter tag -> abundance.
+    # Mirrors the enzymes parser. Supports bare scalars and {mean, cv} dicts.
+    transporters: dict[str, Distribution] = {}
+    for tag, val in spec.get("transporters", {}).items():
+        transporters[tag] = _parse_distribution(val)
+
     # IVIVE scaling: optional float, default 0.0.
     ivive_scaling = float(spec.get("ivive_scaling", 0.0))
 
@@ -218,6 +224,7 @@ def _build_node(spec: dict[str, Any]) -> Node:
         volume=volume,
         composition=composition,
         enzymes=enzymes,
+        transporters=transporters,
         ivive_scaling=ivive_scaling,
         lookup_name=lookup_name,
     )
