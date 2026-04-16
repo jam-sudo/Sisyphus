@@ -467,7 +467,7 @@ class ActiveTransportFluxSpec(FluxSpec):
             return
 
         total_rate = 0.0
-        node_transporters = params.node_transporters(self.source_name)
+        node_transporters = params.node_transporters(self.target_name)
 
         for tag, abundance in node_transporters.items():
             jmax = params.drug_transporter_jmax(tag)
@@ -486,7 +486,7 @@ class ActiveTransportFluxSpec(FluxSpec):
         # Convert from µM·volume/time units back to mg/time
         # rate is in arbitrary units scaled by abundance, jmax, and concentration
         # The IVIVE scaling factor handles unit conversion
-        ivive = params.node_param(self.source_name, "ivive_scaling")
+        ivive = params.node_param(self.target_name, "ivive_scaling")
         mass_rate = total_rate * ivive
 
         dydt[self.source_idx] -= mass_rate
