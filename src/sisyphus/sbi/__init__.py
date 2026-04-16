@@ -33,13 +33,21 @@ from sisyphus.sbi.multi_drug import (
     stack_training_pairs,
     stack_training_pairs_hierarchical,
 )
+from sisyphus.sbi.physiology_generator import (
+    ENZYME_PARAMS,
+    enzyme_factor,
+    generate_physiology,
+)
 from sisyphus.sbi.priors import build_box_prior
 from sisyphus.sbi.simulator import EngineSimulator, apply_theta_to_drug
 
 __all__ = [
     "DRUG_FEATURE_NAMES",
     "DrugSpec",
+    "ENZYME_PARAMS",
     "EngineSimulator",
+    "enzyme_factor",
+    "generate_physiology",
     "HierarchicalMultiDrugSimulator",
     "MultiDrugSimulator",
     "N_DRUG_FEATURES",
