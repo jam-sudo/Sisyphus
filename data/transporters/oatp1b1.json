@@ -1,0 +1,13 @@
+{
+  "transporter": "OATP1B1",
+  "source_primary": "Varma 2014 JPET",
+  "source_crosscheck": "Watanabe 2011 DMD",
+  "notes": "Phase 1: pravastatin only. Jmax from Varma 2014 Table 2 hepatocyte uptake. Km from same. CVs widened to absorb inter-study variability and calibration bias in liver.transporters.OATP1B1.",
+  "drugs": {
+    "pravastatin": {
+      "jmax_pmol_per_min_per_mg": {"mean": 228.0, "cv": 0.30},
+      "km_uM": {"mean": 13.6, "cv": 0.25},
+      "source": "Varma 2014 JPET Table 2"
+    }
+  }
+}
