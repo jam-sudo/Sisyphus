@@ -157,6 +157,14 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 - **Design spec**: `docs/superpowers/specs/2026-04-15-oatp1b1-hepatic-uptake-design.md`
 - **Plan**: `docs/superpowers/plans/2026-04-15-oatp1b1-pravastatin.md`
 
+### P4 Continuous Hierarchical Infrastructure (2026-04-16, branch `feat/continuous-hierarchical`)
+- **Physiology generator**: `src/sisyphus/sbi/physiology_generator.py` — `generate_physiology(BW, age)` builds BodyGraph for any patient 0.5-85y, 5-120kg. Hines 2008 enzyme ontogeny (exponential maturation) + Wynne 1989 aging decline + allometric volume/flow scaling.
+- **Conditioning**: 15D = [log10_cmax(1), drug_features(12), log_bw_norm(1), log_age_norm(1)]. Replaces C1 one-hot for the continuous model.
+- **API**: `bayesian_update(body_weight_kg=X, age_years=Y)` + CLI `--body-weight X --age Y`.
+- **Training scripts**: `scripts/sbi_generate_continuous_data.py` (data gen) + `scripts/sbi_train_continuous_hierarchical.py` (NPE training).
+- **Model**: not yet trained. Requires ~14h data generation + ~30min NPE training.
+- **Tests**: +14 new (10 generator + 4 packing/stacking). 448 total.
+
 ### Track C1 결과 (2026-04-12 code, 2026-04-14 2kθ eval 완료)
 - **HierarchicalMultiDrugSimulator**: per-(population, drug) EngineSimulator cache. Drug features는 항상 adult reference graph에서 추출 (population-independent).
 - **Population registry**: `data/sbi/populations.json` — adult (70 kg) + pediatric_5y (18 kg).
@@ -229,7 +237,7 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 - **Multi-obs SBI** (commit `d4e1633`): Track A 아모타이저는 first obs만 condition하지만, 추가 obs를 log-normal likelihood로 post-hoc importance reweighting. `_scipy_cmax_and_obs_conc()` helper + weighted posterior stats. 2-obs 테스트 ESS 감소 확인.
 - **MIPD dose_range auto-infer** (commit `ce9a924`): `DEFAULT_DOSE_MIN=25mg` 하드코딩 제거. current_dose 기반 0.1×~10× 자동. DM 30mg PM → 12mg 정확히 권장 (기존 25mg clamp).
 
-## Session State (마지막 업데이트: 2026-04-15, Phase 2.0.5 + Track C1 + v3 OATP + Phase 1 OATP1B1)
+## Session State (마지막 업데이트: 2026-04-16, Phase 2.0.5 + Track C1 + v3 OATP + Phase 1 OATP1B1 + P4 Continuous Hierarchical)
 
 ### Current Metrics (N=107, CLEAN, 4-track, post-merge)
 Engine AAFE: 3.421 | ML AAFE: 3.057 | **Meta AAFE: 2.695** | %2-fold: 47.7% | %3-fold: 65.4%
