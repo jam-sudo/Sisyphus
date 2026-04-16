@@ -157,3 +157,51 @@ def test_active_transport_scipy_jax_parity():
     dydt_jax = np.asarray(rhs_jax_fn(0.0, jnp.asarray(y), jax_params))
 
     np.testing.assert_allclose(dydt_jax, dydt_scipy, rtol=1e-6, atol=1e-9)
+
+
+def test_active_transport_mass_conservation():
+    """Sum of source + target dydt contributions from active transport is zero."""
+    graph = _minimal_uptake_graph()
+    drug_with = _drug_with_oatp()
+    drug_without = _drug_no_transport()
+
+    compiled = ODECompiler().compile(graph)
+    rhs_with = compiled.make_rhs(ResolvedParams(graph, drug_with))
+    rhs_without = compiled.make_rhs(ResolvedParams(graph, drug_without))
+
+    y = np.zeros(compiled.n_states)
+    y[compiled.state_index["src_blood"]] = 5.0
+
+    dydt_with = rhs_with(0.0, y)
+    dydt_without = rhs_without(0.0, y)
+    diff = dydt_with - dydt_without
+
+    # Only src_blood and tgt_organ should differ, by equal and opposite amounts.
+    total = diff.sum()
+    assert abs(total) < 1e-12, f"mass not conserved, residual {total}"
+
+
+def test_active_transport_linear_regime_scales_with_c():
+    """C << Km: rate ∝ C. Doubling substrate doubles the active transport rate."""
+    graph = _minimal_uptake_graph()
+    drug = _drug_with_oatp(jmax=228.0, km=50.0)
+
+    compiled = ODECompiler().compile(graph)
+    rhs = compiled.make_rhs(ResolvedParams(graph, drug))
+
+    drug_flow_only = _drug_no_transport()
+    rhs_flow_only = compiled.make_rhs(ResolvedParams(graph, drug_flow_only))
+
+    src_idx = compiled.state_index["src_blood"]
+
+    def transport_rate(amount_mg: float) -> float:
+        y = np.zeros(compiled.n_states)
+        y[src_idx] = amount_mg
+        return float(rhs_flow_only(0.0, y)[src_idx] - rhs(0.0, y)[src_idx])
+
+    # 0.01 mg → C ~ 0.01 / 1.0 L / 424 g/mol * 1000 ~ 0.024 uM << Km=50
+    r1 = transport_rate(0.01)
+    r2 = transport_rate(0.02)
+
+    assert r1 > 0, "expected positive active transport rate at low C"
+    assert abs(r2 / r1 - 2.0) < 0.02, f"expected linear scaling, got r2/r1 = {r2/r1:.4f}"
