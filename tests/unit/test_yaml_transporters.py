@@ -100,7 +100,7 @@ edges:
   - {source: arterial_blood, target: liver, type: flow, flow_fraction: 0.5}
   - {source: arterial_blood, target: portal_vein, type: flow, flow_fraction: 0.5}
   - {source: portal_vein, target: liver, type: flow}
-  - {source: liver, target: venous_blood, type: flow}
+  - {source: liver, target: venous_blood, type: flow, flow_fraction: 1.0}
   - {source: venous_blood, target: arterial_blood, type: flow, flow_fraction: 1.0}
   - {source: portal_vein, target: liver, type: active_transport}
   - {source: arterial_blood, target: liver, type: active_transport}

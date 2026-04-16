@@ -19,6 +19,7 @@ from sisyphus.core import Distribution
 from sisyphus.graph.body import BodyGraph
 from sisyphus.graph.types import (
     AbsorptionEdge,
+    ActiveTransportEdge,
     ClearanceEdge,
     DiffusionEdge,
     FlowEdge,
@@ -128,6 +129,13 @@ def build_from_yaml(path: Path) -> BodyGraph:
                 source=edge_spec["source"],
                 target=edge_spec["target"],
                 model=edge_spec.get("model", "well_stirred"),
+            )
+            graph.add_edge(edge)
+
+        elif edge_type == "active_transport":
+            edge = ActiveTransportEdge(
+                source=edge_spec["source"],
+                target=edge_spec["target"],
             )
             graph.add_edge(edge)
 
