@@ -65,6 +65,10 @@ def main() -> None:
         help="Population class for hierarchical SBI (e.g. 'adult', 'pediatric_5y'). "
              "Uses hierarchical posterior when set.",
     )
+    tdm_parser.add_argument("--body-weight", type=float, default=None,
+                            help="Patient body weight in kg (continuous hierarchical)")
+    tdm_parser.add_argument("--age", type=float, default=None,
+                            help="Patient age in years (continuous hierarchical)")
     tdm_parser.add_argument(
         "--phenotype",
         default=None,
@@ -374,6 +378,11 @@ def _run_tdm(args: argparse.Namespace) -> None:
     pop = getattr(args, "population", None)
     if pop:
         extra_kwargs["population_class"] = pop
+    bw = getattr(args, "body_weight", None)
+    age_val = getattr(args, "age", None)
+    if bw is not None and age_val is not None:
+        extra_kwargs["body_weight_kg"] = bw
+        extra_kwargs["age_years"] = age_val
 
     result = bayesian_update(
         compiled, graph, drug, regimen,
