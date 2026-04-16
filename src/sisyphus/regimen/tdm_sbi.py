@@ -52,6 +52,7 @@ def _extract_params(drug: DrugOnGraph) -> dict[str, float]:
 
 
 _DEFAULT_HIERARCHICAL_POSTERIOR_PATH = Path("models/sbi/hierarchical_nsf_2k.pt")
+_DEFAULT_CONTINUOUS_POSTERIOR_PATH = Path("models/sbi/continuous_hierarchical_nsf.pt")
 
 
 def sbi_update(
@@ -70,6 +71,8 @@ def sbi_update(
     surrogate_model_dir: Path | str | None = None,
     surrogate_ensemble_std_threshold: float = 0.02,
     population_class: str | None = None,
+    body_weight_kg: float | None = None,
+    age_years: float | None = None,
 ) -> "TDMResult":
     """Amortized SBI TDM update via the multi-drug conditional posterior.
 
@@ -139,6 +142,8 @@ def sbi_update(
 
     if posterior_path is not None:
         ppath = Path(posterior_path)
+    elif body_weight_kg is not None and age_years is not None:
+        ppath = _DEFAULT_CONTINUOUS_POSTERIOR_PATH
     elif population_class is not None:
         ppath = _DEFAULT_HIERARCHICAL_POSTERIOR_PATH
     else:
@@ -180,11 +185,21 @@ def sbi_update(
     if feat_mean is not None:
         feats_used = (feats - feat_mean) / feat_std
 
-    # Packed observation: [log10(first_obs_concentration), drug_features, (pop_onehot)]
+    # Packed observation: [log10(first_obs_concentration), drug_features, (pop_onehot or bw/age)]
     obs0 = observations[0]
     log10_cmax_obs = float(np.log10(max(obs0.concentration, 1e-12)))
-    parts = [np.array([log10_cmax_obs]), feats_used]
-    if population_class is not None:
+
+    if body_weight_kg is not None and age_years is not None:
+        log_bw_norm = float(np.log10(body_weight_kg / 70.0))
+        log_age_norm = float(np.log10(max(age_years, 0.5)))
+        if feat_mean is not None and len(feat_mean) == 14:
+            feats_ext = np.concatenate([feats, [log_bw_norm, log_age_norm]])
+            feats_ext_std = (feats_ext - feat_mean) / feat_std
+            parts = [np.array([log10_cmax_obs]), feats_ext_std]
+        else:
+            parts = [np.array([log10_cmax_obs]), feats_used,
+                     np.array([log_bw_norm, log_age_norm])]
+    elif population_class is not None:
         pop_order = aux.get("population_order") if aux_path.exists() else None
         if pop_order is None:
             raise ValueError(
@@ -199,7 +214,9 @@ def sbi_update(
             )
         pop_oh = np.zeros(len(pop_order), dtype=np.float64)
         pop_oh[pop_order.index(population_class)] = 1.0
-        parts.append(pop_oh)
+        parts = [np.array([log10_cmax_obs]), feats_used, pop_oh]
+    else:
+        parts = [np.array([log10_cmax_obs]), feats_used]
     x_vec = np.concatenate(parts).astype(np.float32)
     x_t = torch.as_tensor(x_vec[None, :], dtype=torch.float32)
 
