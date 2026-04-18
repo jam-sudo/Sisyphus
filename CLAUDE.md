@@ -387,14 +387,14 @@ NOTE: Prior headline (2.283) was invalidated by holdout data leakage fix on 2026
 - [x] Direct CL/F 3rd track: CL/F R²=0.232, Vd/F R²=0.332, LOOCV w_clf=0.00. Negative result. 인프라 유지.
 - [x] 2026-04-10: Branch consolidation — `audit/holdout-leakage-fix` + `feat/ude-diffrax` merge (commit `c0cab88`). VDss 4th track + EnKF TDM + neural surrogate + JAX backend 통합. Test suite 371/371 pass. Post-merge AAFE 2.695 확정.
 - [x] 2026-04-10: `tdm.py` 잠복 버그 수정 — `bayesian_update(method="enkf")` 호출 시 잘못된 kwarg (`n_prior=`→`n_ensemble=`) 및 `EnKFResult→TDMResult` 변환 누락. audit에서는 `tdm_enkf.py` 부재로 테스트된 적 없었음. merge가 이 dead code path를 깨우면서 노출되어 수정.
-- [ ] Post-merge follow-ups (우선순위 순):
-  - [ ] In-domain AAFE 재측정 (VDss 4-track 기준, pre-VDss 2.591 값 업데이트)
-  - [ ] `4track_holdout_predictions.json` 정식 저장 (현재 3-track 스냅샷만 있음)
-  - [ ] Prospective N=15 재측정 (4-track에서)
-  - [ ] CLI에 `--method ibis` 옵션 추가 (현재 `{is, enkf}`만 노출, tdm.py API는 ibis 지원)
-  - [ ] CLI EnKF dispatch를 `tdm.bayesian_update(method="enkf")` 경로로 통일 (현재 cli.py는 `enkf_update`를 직접 호출, API 일관성 부족)
-  - [ ] TDM 90% CI calibration (현재 67% coverage, ideal 90%)
-  - [ ] EnKF vs IBIS 벤치마크 재현 (merged 상태에서)
+- [x] Post-merge follow-ups:
+  - [x] In-domain AAFE 재측정 (2026-04-11: Meta 2.710 / Engine 3.236 / ML 3.042 on N=85)
+  - [x] `4track_holdout_predictions.json` 정식 저장 (2026-04-11)
+  - [x] Prospective N=15 재측정 (2026-04-11: overall AAFE 2.361, in-domain 2.043)
+  - [x] CLI에 `--method ibis` (이미 line 55 `choices=["is","ibis","enkf","sbi","auto"]`)
+  - [x] CLI EnKF dispatch를 `tdm.bayesian_update(method="enkf")` 경로로 통일 (cli.py 366 method_map)
+  - [x] TDM 90% CI calibration (Track D2 2026-04-11: 12/15 ≈80% with conformal floor 0.5)
+  - [ ] EnKF vs IBIS 벤치마크 재현 (merged 상태에서) — 미실행
 
 ### Measured ADME Proof of Concept (2026-03-26)
 - N=12 holdout drugs, engine-only (no meta-learner), Tier 2 (measured fup + CLint)
