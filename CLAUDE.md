@@ -237,6 +237,11 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 - **Multi-obs SBI** (commit `d4e1633`): Track A 아모타이저는 first obs만 condition하지만, 추가 obs를 log-normal likelihood로 post-hoc importance reweighting. `_scipy_cmax_and_obs_conc()` helper + weighted posterior stats. 2-obs 테스트 ESS 감소 확인.
 - **MIPD dose_range auto-infer** (commit `ce9a924`): `DEFAULT_DOSE_MIN=25mg` 하드코딩 제거. current_dose 기반 0.1×~10× 자동. DM 30mg PM → 12mg 정확히 권장 (기존 25mg clamp).
 
+## P7 Ketorolac AD flag (2026-04-19)
+- **결정**: P7 close as documented structural limitation (2026-04-11 engine-level fup override 재시도 불가, +0.306 regression 확정).
+- **Option 2 구현**: `pipeline/predict.py`에 `HIGH_ACID_LOW_FUP` AD flag 추가 — pKa<5 AND DrugBank measured fup<0.02인 약물에 정보 경고. Ketorolac, ibuprofen 플래그. Morphine/base 약물 미플래그. Engine 수치 미변경.
+- **Decision package**: `docs/superpowers/specs/2026-04-19-p7-ketorolac-decision.md`
+
 ## P6 SBI likelihood reweighting (2026-04-19)
 - **구현**: `bayesian_update(method="sbi", sbi_reweight=True)` — opt-in flag. NPE posterior 샘플을 log-normal likelihood로 importance-reweight (NPE를 proposal로 쓰는 IS와 수학적으로 등가). `tdm_sbi.py:555` + `tdm.py:227`. Default `False` (기존 production 경로 보존).
 - **5-drug tournament** (`data/validation/tdm_method_tournament_sbi_reweight.json`, OFF→ON bias):
