@@ -226,8 +226,27 @@ def predict(
     else:
         method = "none"
 
+    # ── P7: acid-low-fup flag (ketorolac-class) ──────────────────────────
+    # Highly protein-bound acids (pKa<5, DrugBank measured fup<0.02) are a
+    # documented engine structural limitation — 2026-04-11 fup-override
+    # attempt regressed engine AAFE by 0.306 across 107-holdout. Flag
+    # informationally only. Uses DrugBank measured fup (not XGBoost-predicted)
+    # because the XGBoost model systematically overpredicts fup on this class.
+    extra_flags = list(profile.ad_flags)
+    pka_val = getattr(profile, "pka", None)
+    if pka_val is not None and pka_val < 5.0:
+        try:
+            from sisyphus.predict.drugbank import drugbank_lookup
+            _db_fup = drugbank_lookup().get_fup(profile.smiles)
+        except Exception:
+            _db_fup = None
+        if (_db_fup is not None and _db_fup < 0.02
+                and "HIGH_ACID_LOW_FUP" not in extra_flags):
+            extra_flags.append("HIGH_ACID_LOW_FUP")
+    in_ad = len(extra_flags) == 0
+
     # ── Confidence ────────────────────────────────────────────────────────
-    if not profile.in_ad:
+    if not in_ad:
         confidence = "low"
     elif engine_pk and engine_pk.cmax.mean > 0:
         confidence = "high"
@@ -245,8 +264,8 @@ def predict(
         ml_pk=ml_pk,
         clf_pk=clf_pk,
         confidence=confidence,
-        in_applicability_domain=profile.in_ad,
-        ad_flags=profile.ad_flags,
+        in_applicability_domain=in_ad,
+        ad_flags=tuple(extra_flags),
         warnings=tuple(warnings_list),
         cmax_90ci=cmax_90ci,
     )
