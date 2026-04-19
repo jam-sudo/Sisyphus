@@ -63,7 +63,8 @@ def _build(drug_meta: dict):
     return graph, compiled, drug, regimen, float(profile.logp)
 
 
-def _run_one(method: str, compiled, graph, drug, regimen, observations, logp):
+def _run_one(method: str, compiled, graph, drug, regimen, observations, logp,
+             sbi_reweight: bool = False):
     from sisyphus.regimen.tdm import bayesian_update
 
     name_map = {
@@ -76,6 +77,7 @@ def _run_one(method: str, compiled, graph, drug, regimen, observations, logp):
     kwargs = {}
     if tdm_method == "sbi":
         kwargs["logp_hint"] = logp
+        kwargs["sbi_reweight"] = sbi_reweight
     # Scale n_prior by method cost: SBI and IS can afford more, IBIS/EnKF
     # default at 2000 particles. Keep the same prior budget for all so wall
     # time is apples-to-apples.
@@ -119,6 +121,8 @@ def main() -> None:
                    help="comma-separated subset of is,ibis,enkf,sbi")
     p.add_argument("--out", type=Path, required=True)
     p.add_argument("--t-obs-h", type=float, default=1.0)
+    p.add_argument("--sbi-reweight", action="store_true",
+                   help="Enable SBI posterior likelihood reweighting (P6 Option 2)")
     args = p.parse_args()
 
     methods = [m.strip() for m in args.methods.split(",") if m.strip()]
@@ -167,7 +171,8 @@ def main() -> None:
         drug_results = []
         for method in methods:
             log.info("  running %s...", method)
-            res = _run_one(method, compiled, graph, drug, regimen, observations, logp)
+            res = _run_one(method, compiled, graph, drug, regimen, observations, logp,
+                           sbi_reweight=args.sbi_reweight)
             if res.get("ok"):
                 bias = (res["posterior_cmax_mean"] - cmax_obs) / cmax_obs * 100
                 res["bias_pct_vs_obs"] = float(bias)

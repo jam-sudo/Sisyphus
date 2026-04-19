@@ -1,0 +1,137 @@
+{
+  "validation_set": "/home/jam/Sisyphus/data/sbi/validation_drug_set.json",
+  "methods": [
+    "sbi"
+  ],
+  "t_obs_h": 1.0,
+  "drugs": [
+    {
+      "name": "morphine",
+      "dose_mg": 30.0,
+      "observed_cmax_mg_l": 0.01865,
+      "results": [
+        {
+          "method": "sbi",
+          "wall_seconds": 42.50549864768982,
+          "prior_cmax_mean": 0.042079246639264746,
+          "prior_cmax_cv": 0.40820212196581457,
+          "posterior_cmax_mean": 0.019034226454655117,
+          "posterior_cmax_cv": 0.0975922731726916,
+          "ess": 57.735459034732436,
+          "n_successful": 200,
+          "n_prior": 200,
+          "posterior_params": {
+            "total_enzyme_affinity": 3.1690368198868732,
+            "fup": 0.687561819418771,
+            "peff": 2.047224136389968
+          },
+          "ok": true,
+          "bias_pct_vs_obs": 2.0601954673196627
+        }
+      ]
+    },
+    {
+      "name": "clozapine",
+      "dose_mg": 75.0,
+      "observed_cmax_mg_l": 0.413,
+      "results": [
+        {
+          "method": "sbi",
+          "wall_seconds": 42.91391134262085,
+          "prior_cmax_mean": 0.6789919325175048,
+          "prior_cmax_cv": 0.26403240864839905,
+          "posterior_cmax_mean": 0.48565109322319555,
+          "posterior_cmax_cv": 0.17142896733421262,
+          "ess": 34.931497540150914,
+          "n_successful": 200,
+          "n_prior": 200,
+          "posterior_params": {
+            "total_enzyme_affinity": 0.6990393770610819,
+            "fup": 0.4164179576649426,
+            "peff": 10.035080913673854
+          },
+          "ok": true,
+          "bias_pct_vs_obs": 17.59106373442992
+        }
+      ]
+    },
+    {
+      "name": "amantadine",
+      "dose_mg": 100.0,
+      "observed_cmax_mg_l": 0.22,
+      "results": [
+        {
+          "method": "sbi",
+          "wall_seconds": 44.059972524642944,
+          "prior_cmax_mean": 0.23230822678594193,
+          "prior_cmax_cv": 0.3942233940114098,
+          "posterior_cmax_mean": 0.22787904926872884,
+          "posterior_cmax_cv": 0.13882134514016553,
+          "ess": 36.74818491925473,
+          "n_successful": 200,
+          "n_prior": 200,
+          "posterior_params": {
+            "total_enzyme_affinity": 6.370074077825954,
+            "fup": 0.6633549892581577,
+            "peff": 9.565782065962289
+          },
+          "ok": true,
+          "bias_pct_vs_obs": 3.5813860312403833
+        }
+      ]
+    },
+    {
+      "name": "ketorolac",
+      "dose_mg": 10.0,
+      "observed_cmax_mg_l": 0.8,
+      "results": [
+        {
+          "method": "sbi",
+          "wall_seconds": 41.99224019050598,
+          "prior_cmax_mean": 0.1339219654815888,
+          "prior_cmax_cv": 0.4503190315602665,
+          "posterior_cmax_mean": 0.6525800735310819,
+          "posterior_cmax_cv": 0.03565281249886319,
+          "ess": 19.254081681168728,
+          "n_successful": 200,
+          "n_prior": 200,
+          "posterior_params": {
+            "total_enzyme_affinity": 0.22164279968197764,
+            "fup": 0.013964893398020754,
+            "peff": 14.85671388022556
+          },
+          "ok": true,
+          "bias_pct_vs_obs": -18.427490808614763
+        }
+      ]
+    },
+    {
+      "name": "rivaroxaban",
+      "dose_mg": 10.0,
+      "observed_cmax_mg_l": 0.1432,
+      "results": [
+        {
+          "method": "sbi",
+          "wall_seconds": 39.02237391471863,
+          "prior_cmax_mean": 0.03767859402006343,
+          "prior_cmax_cv": 0.47541967819268227,
+          "posterior_cmax_mean": 0.2011832646100372,
+          "posterior_cmax_cv": 0.12016512448252792,
+          "ess": 35.41786177146376,
+          "n_successful": 200,
+          "n_prior": 200,
+          "posterior_params": {
+            "total_enzyme_affinity": 0.14957897044361987,
+            "fup": 0.027351391783172627,
+            "peff": 8.123457657269958
+          },
+          "ok": true,
+          "bias_pct_vs_obs": 40.491106571255024
+        }
+      ]
+    }
+  ],
+  "per_method_totals": {
+    "sbi": 210.49399662017822
+  }
+}
