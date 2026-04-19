@@ -1,0 +1,40 @@
+{
+  "drugs": {
+    "morphine": {
+      "observed_cmax": 0.01865,
+      "sbi_reweight_off": {
+        "posterior_cmax_mean": 0.020700142804557765,
+        "posterior_cmax_cv": 0.4574453058327843,
+        "bias_pct": 10.992722812642173,
+        "ess": 200.0,
+        "wall_s": 46.93483567237854
+      },
+      "sbi_reweight_on": {
+        "posterior_cmax_mean": 0.019006122258997397,
+        "posterior_cmax_cv": 0.10490779028969366,
+        "bias_pct": 1.909502729208562,
+        "ess": 55.88069743731299,
+        "wall_s": 41.189818143844604
+      },
+      "bias_delta_pp": -9.083220083433611
+    },
+    "clozapine": {
+      "observed_cmax": 0.413,
+      "sbi_reweight_off": {
+        "posterior_cmax_mean": 0.4663559845160279,
+        "posterior_cmax_cv": 0.38556803450902166,
+        "bias_pct": 12.919124580152037,
+        "ess": 200.0,
+        "wall_s": 43.895962715148926
+      },
+      "sbi_reweight_on": {
+        "posterior_cmax_mean": 0.4665198736424544,
+        "posterior_cmax_cv": 0.1294198259469486,
+        "bias_pct": 12.958807177349737,
+        "ess": 81.05486229856658,
+        "wall_s": 44.03977656364441
+      },
+      "bias_delta_pp": 0.03968259719770162
+    }
+  }
+}

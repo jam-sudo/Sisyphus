@@ -237,6 +237,14 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 - **Multi-obs SBI** (commit `d4e1633`): Track A 아모타이저는 first obs만 condition하지만, 추가 obs를 log-normal likelihood로 post-hoc importance reweighting. `_scipy_cmax_and_obs_conc()` helper + weighted posterior stats. 2-obs 테스트 ESS 감소 확인.
 - **MIPD dose_range auto-infer** (commit `ce9a924`): `DEFAULT_DOSE_MIN=25mg` 하드코딩 제거. current_dose 기반 0.1×~10× 자동. DM 30mg PM → 12mg 정확히 권장 (기존 25mg clamp).
 
+## P6 SBI likelihood reweighting (2026-04-19)
+- **구현**: `bayesian_update(method="sbi", sbi_reweight=True)` — opt-in flag. NPE posterior 샘플을 log-normal likelihood로 importance-reweight (NPE를 proposal로 쓰는 IS와 수학적으로 등가). `tdm_sbi.py:555` + `tdm.py:227`. Default `False` (기존 production 경로 보존).
+- **검증** (`data/validation/sbi_reweight_verification.json`, N=200 predictive sims, single 1h obs):
+  - Morphine (non-identifiable theta): bias **+11% → +2%**, CV **45.7% → 10.5%**, ESS 56/200 healthy. IS-level 정확도 달성.
+  - Clozapine (tight posterior regression check): bias +12.9% → +13.0% (Δ=0pp), CV 38.6% → 12.9%, ESS 81/200.
+- **Decision package**: `docs/superpowers/specs/2026-04-19-p6-morphine-fix-decision.md` (4 옵션 비교, Option 2 채택).
+- **Production routing 미변경**: 현 `method_routing.json` 유지 (morphine→IS). Default flip / IS override 은퇴는 full 5-drug tournament 재측정 후 결정.
+
 ## Session State (마지막 업데이트: 2026-04-16, Phase 2.0.5 + Track C1 + v3 OATP + Phase 1 OATP1B1 + P4 Continuous Hierarchical)
 
 ### Current Metrics (N=107, CLEAN, 4-track, post-merge)
