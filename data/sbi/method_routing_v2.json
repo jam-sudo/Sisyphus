@@ -9,7 +9,12 @@
   "summary": {
     "sbi": 12,
     "ibis": 1,
-    "total": 13
+    "total": 13,
+    "is": 0,
+    "sbi_reweight_drugs": 1
+  },
+  "sbi_reweight": {
+    "morphine": true
   },
   "routes": {
     "morphine": "sbi",
@@ -35,7 +40,12 @@
         0.7457548757616874,
         0.1127264368115739,
         0.2797134369686235
-      ]
+      ],
+      "tdm_bias_override": {
+        "sbi_bias_pct": 52.3,
+        "is_bias_pct": 3.1,
+        "reason": "SBI posterior does not tighten for morphine (CV=47% vs IS CV=10%). IS preferred."
+      }
     },
     "clozapine": {
       "method": "sbi",
