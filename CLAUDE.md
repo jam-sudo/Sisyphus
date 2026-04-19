@@ -248,7 +248,7 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
   - Mean |bias|: 23.0% → 16.4% (전체 29% 개선)
   - CV 전 drug 1/2~1/4로 tighten — posterior가 single-obs likelihood로 과도하게 집중
 - **해석**: reweighting은 |bias|≥20% 약물에서 효과적, |bias|<10% 약물에서 회귀. N=200 single-obs의 stochastic 오차가 likelihood로 증폭됨. Bias-variance tradeoff.
-- **Production 결정**: Default `sbi_reweight=False` 유지. `method_routing.json` 미변경. Per-drug reweight routing (morphine만 reweight enable)은 향후 작업.
+- **Production 결정**: Default `sbi_reweight=False` 유지. Per-drug routing 추가 — `method_routing.json`에 `sbi_reweight: {"morphine": true}` 필드, morphine route `is` → `sbi`. CLI auto 경로가 `[auto] routing morphine → method=sbi +reweight` 로그 출력. Production 구성: **12 SBI / 0 IS / 1 IBIS** (IS override 은퇴). 7 SBI dispatch tests pass.
 - **Decision package**: `docs/superpowers/specs/2026-04-19-p6-morphine-fix-decision.md`
 
 ## Session State (마지막 업데이트: 2026-04-16, Phase 2.0.5 + Track C1 + v3 OATP + Phase 1 OATP1B1 + P4 Continuous Hierarchical)

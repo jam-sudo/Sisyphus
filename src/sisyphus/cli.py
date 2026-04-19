@@ -279,30 +279,38 @@ def _run_simulate(args: argparse.Namespace) -> None:
 _ROUTING_TABLE_PATH = Path("data/sbi/method_routing.json")
 
 
-def _resolve_auto_method(drug_name: str) -> str:
-    """Look up the per-drug routing table and return the recommended method.
+def _resolve_auto_method(drug_name: str) -> tuple[str, bool]:
+    """Look up the per-drug routing table and return (method, sbi_reweight).
 
-    Falls back to ``"ibis"`` when the table is missing or the drug is not
-    listed. Expects ``data/sbi/method_routing.json`` produced by
-    ``scripts/sbi_build_routing_table.py``.
+    Falls back to ``("ibis", False)`` when the table is missing or the drug
+    is not listed. Expects ``data/sbi/method_routing.json`` produced by
+    ``scripts/sbi_build_routing_table.py``. The optional top-level
+    ``sbi_reweight`` map in that file selects drugs that should use SBI
+    likelihood reweighting (P6 Option 2).
     """
     import json
 
     if not _ROUTING_TABLE_PATH.exists():
-        return "ibis"
+        return "ibis", False
     try:
         with open(_ROUTING_TABLE_PATH) as f:
             table = json.load(f)
     except Exception:
-        return "ibis"
+        return "ibis", False
     mapping = table.get("routes", {})
-    # Case-insensitive lookup
+    reweight_map = table.get("sbi_reweight", {})
     lower = drug_name.lower().strip()
-    for key, method in mapping.items():
+    method = table.get("default", "ibis")
+    for key, m in mapping.items():
         if key.lower().strip() == lower:
-            return method
-    default = table.get("default", "ibis")
-    return default
+            method = m
+            break
+    reweight = False
+    for key, flag in reweight_map.items():
+        if key.lower().strip() == lower:
+            reweight = bool(flag)
+            break
+    return method, reweight
 
 
 def _parse_observations(obs_strings: list[str]):
@@ -353,9 +361,12 @@ def _run_tdm(args: argparse.Namespace) -> None:
 
     # Map CLI choice to tdm.bayesian_update method string
     cli_method = args.method
+    auto_reweight = False
     if cli_method == "auto":
-        resolved = _resolve_auto_method(drug.name)
-        print(f"[auto] routing {drug.name} → method={resolved}", file=sys.stderr)
+        resolved, auto_reweight = _resolve_auto_method(drug.name)
+        suffix = " +reweight" if auto_reweight else ""
+        print(f"[auto] routing {drug.name} → method={resolved}{suffix}",
+              file=sys.stderr)
         cli_method = resolved
     method_map = {
         "is": ("importance_sampling", "Importance Sampling"),
@@ -375,6 +386,8 @@ def _run_tdm(args: argparse.Namespace) -> None:
             extra_kwargs["logp_hint"] = float(compute_profile(args.smiles).logp)
         except Exception:
             pass
+        if auto_reweight:
+            extra_kwargs["sbi_reweight"] = True
     pop = getattr(args, "population", None)
     if pop:
         extra_kwargs["population_class"] = pop
