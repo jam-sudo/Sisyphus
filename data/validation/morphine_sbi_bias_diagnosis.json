@@ -1,0 +1,55 @@
+{
+  "task": "P6 Morphine SBI TDM bias investigation",
+  "date": "2026-04-17",
+  "status": "diagnosis_complete_fix_pending_user_approval",
+  "observed_behavior": {
+    "drug": "morphine",
+    "dose_mg": 30.0,
+    "observed_cmax_mg_l": 0.01865,
+    "sbc_pass": true,
+    "sbc_cov_dev": 0.047
+  },
+  "method_comparison": {
+    "is": {
+      "posterior_cmax": 0.0192,
+      "posterior_cv": 0.099,
+      "bias_pct_vs_obs": 3.1,
+      "ess": 30,
+      "n_total": 500,
+      "posterior_params": {"fup": 0.70, "peff": 1.99, "total_enzyme_affinity": 1.08}
+    },
+    "sbi": {
+      "posterior_cmax": 0.0284,
+      "posterior_cv": 0.472,
+      "bias_pct_vs_obs": 52.3,
+      "ess": 200,
+      "n_total": 200,
+      "posterior_params": {"fup": 0.69, "peff": 2.57, "total_enzyme_affinity": 2.60}
+    }
+  },
+  "root_cause": "Parameter non-identifiability: IS and SBI find DIFFERENT posterior modes in theta-space that both plausibly explain the observation. IS locks onto low-CL/low-abs mode (peff=1.99, enzyme_aff=1.08); SBI spans high-CL/high-abs mode (peff=2.57, enzyme_aff=2.60). SBC passes because marginal theta coverage is correct; individual-patient identifiability is not guaranteed by SBC.",
+  "bias_mechanism": "SBI posterior is wide (CV 47% vs prior 41%, barely tightened). Forward-simulating a wide theta distribution produces a lognormal-like Cmax distribution. Mean of such a distribution is biased upward relative to observation (and relative to median). This is a point-estimator choice issue, not a coverage issue.",
+  "code_location": "src/sisyphus/regimen/tdm_sbi.py:628 — `post_mean = float(np.mean(post_arr))`. Posterior point estimate uses arithmetic mean; median would be less biased for skewed distributions.",
+  "proposed_fixes_pending_approval": [
+    {
+      "name": "median point estimate",
+      "change": "Return posterior_cmax.mean = np.median(post_arr) instead of mean, OR add posterior_cmax_median field",
+      "risk": "Affects all 11 SBI-routed drugs; needs re-running TDM tournament; may change routing decisions",
+      "estimated_impact": "Morphine bias should drop from +52% to <20% (posterior median ≈ 0.021 based on CV 47% skew)"
+    },
+    {
+      "name": "likelihood reweighting on SBI posterior",
+      "change": "After SBI draws N samples, apply physical Gaussian likelihood to re-weight. Same mechanism as IS but using SBI proposals instead of prior.",
+      "risk": "Loses SBI amortization speed advantage partially; needs new test coverage",
+      "estimated_impact": "Morphine bias should approach IS bias (+3%) at 2-5x wall-time increase"
+    },
+    {
+      "name": "keep current IS override",
+      "change": "No code change; production routes morphine→IS via method_routing.json",
+      "risk": "None; current production state",
+      "estimated_impact": "Status quo"
+    }
+  ],
+  "recommendation": "Option 3 (status quo) is safest. IS override working correctly. Median fix (Option 1) is principled and low-code-risk but requires validation across all SBI drugs. Reweighting (Option 2) defeats amortization purpose for this case.",
+  "production_status": "morphine routes to IS in data/sbi/method_routing.json (v2), no regression"
+}

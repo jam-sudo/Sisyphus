@@ -1,0 +1,47 @@
+{
+  "task": "P5 Posaconazole stability diagnosis",
+  "date": "2026-04-17",
+  "status": "diagnosis_only_no_fix_warranted",
+  "trajectory": {
+    "v1": {"cov_dev": 0.120, "route": "ibis", "reason": "coverage_borderline"},
+    "v2": {"cov_dev": 0.073, "route": "sbi", "reason": "coverage_strict_ok (current production)"},
+    "v3": {"cov_dev": 0.173, "route": "ibis", "reason": "coverage_hard_fail (REVERTED)"}
+  },
+  "is_in_training": false,
+  "role": "OOD validation drug only",
+  "drug_features": {
+    "mw": 700.791,
+    "logp": 5.5,
+    "tpsa": 115.7,
+    "hbd": 1,
+    "hba": 12,
+    "compound_type": "neutral",
+    "clearance_mechanism": "ugt_transporter"
+  },
+  "z_scores_vs_v2_training_dist": {
+    "log10_clint": 0.18,
+    "fup_logit": -0.78,
+    "logp": 2.07,
+    "mw_log": 1.27,
+    "tpsa_log": 2.42,
+    "_ood_axes": ["logp", "tpsa_log"]
+  },
+  "nearest_v2_neighbors_zdist": {
+    "telcagepant": 2.52,
+    "lenvatinib": 2.83,
+    "tadalafil": 2.92,
+    "noscapine": 3.12,
+    "linerixibat": 3.40
+  },
+  "v3_added_drugs_zdist_to_posaconazole": {
+    "atorvastatin": 3.53,
+    "bosentan": 4.01,
+    "fluvastatin": 4.47,
+    "pitavastatin": 4.58,
+    "valsartan": 5.29
+  },
+  "root_cause": "v3 added 5 OATP drugs are all FARTHER from posaconazole than existing nearest neighbors. NPE capacity allocated to new acid/OATP modes reduces calibration coverage in the already-OOD lipophilic-polar region where posaconazole lives. This is a capacity-reallocation regression, not a data-coverage improvement.",
+  "lesson_learned": "Training expansion benefits in-domain drugs and can HURT already-OOD drugs if the added drugs are not closer in feature space. Pravastatin showed similar pattern (failed in v2, worsened in v3 — OATP drugs did not help it either).",
+  "recommended_action": "NO CHANGE to production. v2 model (cov_dev 0.073) correctly routes posaconazole to SBI. If future training expansion is attempted, add structurally-similar high-logP/high-TPSA antifungals (itraconazole, voriconazole, ravuconazole) rather than unrelated drugs.",
+  "production_status": "v2 model active, posaconazole→SBI route stable"
+}
