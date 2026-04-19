@@ -73,6 +73,7 @@ def sbi_update(
     population_class: str | None = None,
     body_weight_kg: float | None = None,
     age_years: float | None = None,
+    sbi_reweight: bool = False,
 ) -> "TDMResult":
     """Amortized SBI TDM update via the multi-drug conditional posterior.
 
@@ -546,12 +547,15 @@ def sbi_update(
             post_cmax_list.append(float(cmax))
             post_param_list.append(_extract_params(realized_drug))
 
-            # Multi-obs reweighting: importance weight for observations
-            # beyond the first. Log-likelihood under log-normal assay noise
-            # (matches the IS path's observation model).
-            if _extra_obs:
+            # Reweighting: importance weights under log-normal assay noise
+            # (matches IS observation model). ``sbi_reweight`` extends this
+            # to the first observation too — turning SBI into an IS with
+            # NPE as the proposal distribution. Used to mitigate wide
+            # posteriors from non-identifiable theta-space (e.g. morphine).
+            if _extra_obs or sbi_reweight:
                 log_w = 0.0
-                for oi, obs in enumerate(observations[1:], start=1):
+                start_idx = 0 if sbi_reweight else 1
+                for oi, obs in enumerate(observations[start_idx:], start=start_idx):
                     pred = obs_conc[oi]
                     if not np.isfinite(pred) or pred <= 0:
                         log_w = -np.inf
@@ -588,7 +592,7 @@ def sbi_update(
     # observations, we log-normalize the likelihood weights via log-sum-exp.
     n_post = len(post_cmax_list)
     multi_obs_used = False
-    if _extra_obs and surrogate_bundle is None and 'post_log_weights' in dir() and post_log_weights:
+    if (_extra_obs or sbi_reweight) and surrogate_bundle is None and 'post_log_weights' in dir() and post_log_weights:
         lw = np.array(post_log_weights[:n_post])
         finite_mask = np.isfinite(lw)
         if finite_mask.sum() > 0:
