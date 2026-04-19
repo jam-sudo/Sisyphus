@@ -394,7 +394,7 @@ NOTE: Prior headline (2.283) was invalidated by holdout data leakage fix on 2026
   - [x] CLI에 `--method ibis` (이미 line 55 `choices=["is","ibis","enkf","sbi","auto"]`)
   - [x] CLI EnKF dispatch를 `tdm.bayesian_update(method="enkf")` 경로로 통일 (cli.py 366 method_map)
   - [x] TDM 90% CI calibration (Track D2 2026-04-11: 12/15 ≈80% with conformal floor 0.5)
-  - [ ] EnKF vs IBIS 벤치마크 재현 (merged 상태에서) — 미실행
+  - [x] EnKF vs IBIS 벤치마크 재현 (2026-04-18: morphine 1-obs smoke. IBIS bias +1%/CV 10%/1226s, EnKF bias +33%/CV 20%/408s. EnKF vs pre-merge phase3: bias 34.5%→32.8% (−1.7pp noise), path stable. `data/validation/enkf_vs_ibis_postmerge.json`)
 
 ### Measured ADME Proof of Concept (2026-03-26)
 - N=12 holdout drugs, engine-only (no meta-learner), Tier 2 (measured fup + CLint)
