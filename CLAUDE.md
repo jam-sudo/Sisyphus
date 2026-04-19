@@ -239,11 +239,17 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 
 ## P6 SBI likelihood reweighting (2026-04-19)
 - **구현**: `bayesian_update(method="sbi", sbi_reweight=True)` — opt-in flag. NPE posterior 샘플을 log-normal likelihood로 importance-reweight (NPE를 proposal로 쓰는 IS와 수학적으로 등가). `tdm_sbi.py:555` + `tdm.py:227`. Default `False` (기존 production 경로 보존).
-- **검증** (`data/validation/sbi_reweight_verification.json`, N=200 predictive sims, single 1h obs):
-  - Morphine (non-identifiable theta): bias **+11% → +2%**, CV **45.7% → 10.5%**, ESS 56/200 healthy. IS-level 정확도 달성.
-  - Clozapine (tight posterior regression check): bias +12.9% → +13.0% (Δ=0pp), CV 38.6% → 12.9%, ESS 81/200.
-- **Decision package**: `docs/superpowers/specs/2026-04-19-p6-morphine-fix-decision.md` (4 옵션 비교, Option 2 채택).
-- **Production routing 미변경**: 현 `method_routing.json` 유지 (morphine→IS). Default flip / IS override 은퇴는 full 5-drug tournament 재측정 후 결정.
+- **5-drug tournament** (`data/validation/tdm_method_tournament_sbi_reweight.json`, OFF→ON bias):
+  - morphine: +52.3% → **+2.1%** (IS-level) ✅
+  - amantadine: -20.2% → **+3.6%** ✅
+  - ketorolac: -31.3% → -18.4% (개선, engine-level floor 잔류) ✅
+  - clozapine: -6.1% → +17.6% (회귀 — tight posterior 과집중) ⚠
+  - rivaroxaban: +4.9% → +40.5% (회귀 — 동일 원인) ⚠
+  - Mean |bias|: 23.0% → 16.4% (전체 29% 개선)
+  - CV 전 drug 1/2~1/4로 tighten — posterior가 single-obs likelihood로 과도하게 집중
+- **해석**: reweighting은 |bias|≥20% 약물에서 효과적, |bias|<10% 약물에서 회귀. N=200 single-obs의 stochastic 오차가 likelihood로 증폭됨. Bias-variance tradeoff.
+- **Production 결정**: Default `sbi_reweight=False` 유지. `method_routing.json` 미변경. Per-drug reweight routing (morphine만 reweight enable)은 향후 작업.
+- **Decision package**: `docs/superpowers/specs/2026-04-19-p6-morphine-fix-decision.md`
 
 ## Session State (마지막 업데이트: 2026-04-16, Phase 2.0.5 + Track C1 + v3 OATP + Phase 1 OATP1B1 + P4 Continuous Hierarchical)
 
