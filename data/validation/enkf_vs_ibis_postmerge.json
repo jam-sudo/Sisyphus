@@ -1,0 +1,57 @@
+{
+  "validation_set": "/home/jam/Sisyphus/data/sbi/validation_drug_set.json",
+  "methods": [
+    "ibis",
+    "enkf"
+  ],
+  "t_obs_h": 1.0,
+  "drugs": [
+    {
+      "name": "morphine",
+      "dose_mg": 30.0,
+      "observed_cmax_mg_l": 0.01865,
+      "results": [
+        {
+          "method": "ibis",
+          "wall_seconds": 1226.3662745952606,
+          "prior_cmax_mean": 0.04176195946530808,
+          "prior_cmax_cv": 0.41761657132006036,
+          "posterior_cmax_mean": 0.018836544560899848,
+          "posterior_cmax_cv": 0.09502737221519665,
+          "ess": 133.5670811088855,
+          "n_successful": 2000,
+          "n_prior": 2000,
+          "posterior_params": {
+            "fup": 0.6953787532311583,
+            "peff": 1.8845695147069208,
+            "total_enzyme_affinity": 1.1499231478156233
+          },
+          "ok": true,
+          "bias_pct_vs_obs": 1.0002389324388616
+        },
+        {
+          "method": "enkf",
+          "wall_seconds": 407.6111500263214,
+          "prior_cmax_mean": 0.04176195946530808,
+          "prior_cmax_cv": 0.41761657132006036,
+          "posterior_cmax_mean": 0.024774379479211732,
+          "posterior_cmax_cv": 0.19723162450918189,
+          "ess": 2000.0,
+          "n_successful": 2000,
+          "n_prior": 2000,
+          "posterior_params": {
+            "total_enzyme_affinity": 1.1817408383317716,
+            "fup": 0.7155104760242162,
+            "peff": 2.1992698839107208
+          },
+          "ok": true,
+          "bias_pct_vs_obs": 32.83849586708703
+        }
+      ]
+    }
+  ],
+  "per_method_totals": {
+    "ibis": 1226.3662745952606,
+    "enkf": 407.6111500263214
+  }
+}
