@@ -224,6 +224,7 @@ def bayesian_update(
     sbi_fallback: bool = True,
     sbi_use_surrogate: bool = False,
     sbi_surrogate_std_threshold: float = 0.02,
+    sbi_reweight: bool = False,
     logp_hint: float | None = None,
     min_ci_half_width_fraction: float = 0.0,
     population_class: str | None = None,
@@ -354,6 +355,7 @@ def bayesian_update(
                 population_class=population_class,
                 body_weight_kg=body_weight_kg,
                 age_years=age_years,
+                sbi_reweight=sbi_reweight,
             ))
         except FileNotFoundError as exc:
             if not sbi_fallback:
