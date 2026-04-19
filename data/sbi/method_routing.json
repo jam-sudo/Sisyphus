@@ -7,13 +7,17 @@
   },
   "default": "ibis",
   "summary": {
-    "sbi": 11,
+    "sbi": 12,
     "ibis": 1,
     "total": 13,
-    "is": 1
+    "is": 0,
+    "sbi_reweight_drugs": 1
+  },
+  "sbi_reweight": {
+    "morphine": true
   },
   "routes": {
-    "morphine": "is",
+    "morphine": "sbi",
     "clozapine": "sbi",
     "amantadine": "sbi",
     "ketorolac": "sbi",
