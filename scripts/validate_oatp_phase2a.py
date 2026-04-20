@@ -47,7 +47,7 @@ _STATINS = {
 }
 
 
-def _simulate_cmax(graph, drug, t_end: float = 24.0) -> float:
+def _simulate_cmax(graph, drug, t_end: float = 8.0) -> float:
     rng = np.random.default_rng(42)
     realized_graph = graph.sample(rng)
     realized_drug = drug.sample(rng)

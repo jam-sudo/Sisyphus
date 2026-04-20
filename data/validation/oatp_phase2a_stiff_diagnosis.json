@@ -1,0 +1,77 @@
+{
+  "phase": "OATP Phase 2A stiff-ODE diagnosis",
+  "date": "2026-04-20",
+  "summary": "4/5 statins fail engine Cmax validation due to stiff MM kinetics at saturated abundance. Pravastatin is the only statin that solves. Neither LSODA (scipy) nor Kvaerno5 (JAX/diffrax) converges in reasonable time for the other four.",
+  "setup": {
+    "liver_oatp1b1_abundance": 1.0e11,
+    "abundance_source": "Phase 1 pravastatin calibration (2026-04-15)",
+    "solver_settings_tried": [
+      {"backend": "scipy.LSODA", "rtol": 1e-8, "atol": 1e-10, "t_end_h": [24, 8, 6, 2, 1, 0.5]},
+      {"backend": "diffrax.Kvaerno5", "rtol": 1e-8, "atol": 1e-10, "max_steps": 16384, "t_end_h": 6},
+      {"backend": "diffrax.Kvaerno5", "rtol": 1e-6, "atol": 1e-8, "max_steps": 65536, "t_end_h": 6}
+    ]
+  },
+  "per_drug_results": [
+    {
+      "drug": "pravastatin",
+      "jmax_pmol_s_per_1e11": 228.0,
+      "km_uM": 13.6,
+      "scipy_off_cmax": 0.0761,
+      "scipy_on_cmax": 0.0385,
+      "scipy_on_wall_s": 0.1,
+      "oatp_ratio": 0.506,
+      "status": "PASS — OFF/ON both converge"
+    },
+    {
+      "drug": "rosuvastatin",
+      "jmax_pmol_s_per_1e11": 170.0,
+      "km_uM": 6.5,
+      "scipy_off_cmax": 0.2210,
+      "jax_off_cmax": 0.2836,
+      "jax_off_wall_s": 12.0,
+      "jax_on_t_end_0p5h": "FAIL wall=169s",
+      "jax_on_t_end_6h_loose_tol": "TIMEOUT >180s",
+      "status": "STIFF — ON mode fails on both backends"
+    },
+    {
+      "drug": "atorvastatin",
+      "jmax_pmol_s_per_1e11": 250.0,
+      "km_uM": 12.4,
+      "scipy_off_cmax": 0.0293,
+      "scipy_on_t_end_1h": "TIMEOUT >30s",
+      "status": "STIFF — ON mode times out"
+    },
+    {
+      "drug": "pitavastatin",
+      "jmax_pmol_s_per_1e11": 550.0,
+      "km_uM": 4.5,
+      "scipy_off_cmax": 0.0044,
+      "scipy_on_t_end_1h": "TIMEOUT >30s",
+      "status": "STIFF — highest Jmax/lowest Cmax, most aggressive"
+    },
+    {
+      "drug": "fluvastatin",
+      "jmax_pmol_s_per_1e11": 190.0,
+      "km_uM": 2.5,
+      "scipy_off_cmax": 0.0342,
+      "scipy_on_t_end_1h": "TIMEOUT >30s",
+      "status": "STIFF — lowest Km of set"
+    }
+  ],
+  "root_cause_hypothesis": "At abundance = 1.0e11 (pravastatin-calibrated), the effective uptake rate k_eff = (Jmax / Km) × abundance = 1e11 × (170/6.5) ≈ 2.6e12 pmol/s per uM for rosuvastatin. This is several orders of magnitude faster than hepatic blood flow (87 L/h ≈ 3.6e-5 * avogadro-like factor), creating a stiff ratio > 1e6. Pravastatin's higher Km (13.6) pushes it into the capacity-limited regime where the numerator is essentially Jmax (constant) rather than nonlinear, avoiding the stiffness.",
+  "remediation_path": {
+    "short_term": "None — switching solvers does not resolve; both LSODA and Kvaerno5 stall.",
+    "long_term": [
+      "Option A: recalibrate liver.OATP1B1 abundance downward (try 1e9 or 1e10) so 4/5 statins operate in the non-saturated regime. This matches Phase 2B finding that clinical SLCO1B1 AUC effects require non-saturated regime.",
+      "Option B: introduce a per-drug effective abundance scaling based on known hepatic uptake CL, so each statin lands in its own non-saturated regime.",
+      "Option C: implement flow-limited extraction approximation for saturated-regime drugs — bypass MM kinetics at high Jmax/abundance with analytical well-stirred extraction."
+    ],
+    "recommendation": "Option A. Phase 2B already surfaces that abundance 1e11 is flow-limited. A coordinated re-calibration unlocks both Phase 2A (directional fold error reduction) and Phase 2B (SLCO1B1 phenotype directional Cmax response)."
+  },
+  "conclusion": "Phase 2A engine validation is BLOCKED on abundance re-calibration, not on solver choice. Solver switch (scipy → JAX Kvaerno5) does not close the gap. Per-drug probe (this diagnosis) replaces the prior 'LSODA stall' hypothesis — the stall is physical (stiff ODE), not numerical-transient.",
+  "artifacts": {
+    "probe_script": "scripts/probe_oatp_phase2a_per_drug.py",
+    "validation_script": "scripts/validate_oatp_phase2a.py",
+    "transporter_data": "data/transporters/oatp1b1.json"
+  }
+}
