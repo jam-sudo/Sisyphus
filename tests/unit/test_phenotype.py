@@ -9,6 +9,7 @@ import pytest
 from sisyphus.graph.builder import build_from_yaml
 from sisyphus.predict.phenotype import (
     PHENOTYPE_SCALES,
+    TRANSPORTER_ALIASES,
     apply_phenotype_to_graph,
     parse_phenotype_spec,
 )
@@ -134,3 +135,82 @@ def test_nm_em_equivalent():
     g_nm = apply_phenotype_to_graph(g, {"CYP2D6": "NM"})
     g_em = apply_phenotype_to_graph(g, {"CYP2D6": "EM"})
     assert g_nm.nodes["liver"].enzymes["CYP2D6"].mean == g_em.nodes["liver"].enzymes["CYP2D6"].mean
+
+
+# ---------------------------------------------------------------------------
+# Transporter phenotype (SLCO1B1 → OATP1B1)
+# ---------------------------------------------------------------------------
+
+
+def test_parse_slco1b1():
+    assert parse_phenotype_spec("SLCO1B1:PM") == {"SLCO1B1": "PM"}
+
+
+def test_parse_mixed_cyp_and_transporter():
+    out = parse_phenotype_spec("CYP2D6:PM,SLCO1B1:IM")
+    assert out == {"CYP2D6": "PM", "SLCO1B1": "IM"}
+
+
+def test_transporter_alias_mapping():
+    assert TRANSPORTER_ALIASES["SLCO1B1"] == "OATP1B1"
+
+
+def test_apply_slco1b1_scales_oatp1b1():
+    g = build_from_yaml(_PHYS)
+    original = g.nodes["liver"].transporters["OATP1B1"].mean
+    g2 = apply_phenotype_to_graph(g, {"SLCO1B1": "PM"})
+    new = g2.nodes["liver"].transporters["OATP1B1"].mean
+    assert new == pytest.approx(original * 0.10, rel=1e-6)
+
+
+def test_apply_slco1b1_preserves_cv():
+    g = build_from_yaml(_PHYS)
+    original_cv = g.nodes["liver"].transporters["OATP1B1"].cv
+    g2 = apply_phenotype_to_graph(g, {"SLCO1B1": "IM"})
+    assert g2.nodes["liver"].transporters["OATP1B1"].cv == original_cv
+
+
+def test_apply_slco1b1_does_not_touch_enzymes():
+    g = build_from_yaml(_PHYS)
+    d6_before = g.nodes["liver"].enzymes["CYP2D6"].mean
+    g2 = apply_phenotype_to_graph(g, {"SLCO1B1": "PM"})
+    assert g2.nodes["liver"].enzymes["CYP2D6"].mean == d6_before
+
+
+def test_apply_cyp_does_not_touch_transporters():
+    g = build_from_yaml(_PHYS)
+    oatp_before = g.nodes["liver"].transporters["OATP1B1"].mean
+    g2 = apply_phenotype_to_graph(g, {"CYP2D6": "PM"})
+    assert g2.nodes["liver"].transporters["OATP1B1"].mean == oatp_before
+
+
+def test_apply_mixed_phenotypes():
+    g = build_from_yaml(_PHYS)
+    d6_before = g.nodes["liver"].enzymes["CYP2D6"].mean
+    oatp_before = g.nodes["liver"].transporters["OATP1B1"].mean
+    g2 = apply_phenotype_to_graph(g, {"CYP2D6": "PM", "SLCO1B1": "IM"})
+    assert g2.nodes["liver"].enzymes["CYP2D6"].mean == pytest.approx(d6_before * 0.10)
+    assert g2.nodes["liver"].transporters["OATP1B1"].mean == pytest.approx(oatp_before * 0.50)
+
+
+def test_apply_unknown_transporter_warns(caplog):
+    g = build_from_yaml(_PHYS)
+    with caplog.at_level("WARNING"):
+        # ABCB1 not aliased and not in enzyme dict — should be treated as
+        # an unknown enzyme tag and warn.
+        _ = apply_phenotype_to_graph(g, {"ABCB1": "PM"})
+    assert any("not found" in r.message for r in caplog.records)
+
+
+def test_apply_slco1b1_does_not_mutate_input_graph():
+    g = build_from_yaml(_PHYS)
+    original = g.nodes["liver"].transporters["OATP1B1"].mean
+    _ = apply_phenotype_to_graph(g, {"SLCO1B1": "PM"})
+    assert g.nodes["liver"].transporters["OATP1B1"].mean == original
+
+
+def test_slco1b1_um_scales_up():
+    g = build_from_yaml(_PHYS)
+    original = g.nodes["liver"].transporters["OATP1B1"].mean
+    g2 = apply_phenotype_to_graph(g, {"SLCO1B1": "UM"})
+    assert g2.nodes["liver"].transporters["OATP1B1"].mean == pytest.approx(original * 2.0)

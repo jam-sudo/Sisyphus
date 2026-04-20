@@ -157,6 +157,12 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 - **Design spec**: `docs/superpowers/specs/2026-04-15-oatp1b1-hepatic-uptake-design.md`
 - **Plan**: `docs/superpowers/plans/2026-04-15-oatp1b1-pravastatin.md`
 
+### OATP Phase 2B — SLCO1B1 pharmacogenomic phenotype layer (2026-04-20)
+- **`predict/phenotype.py` 확장**: 기존 CYP 스케일링에 transporter 추가. `TRANSPORTER_ALIASES = {"SLCO1B1": "OATP1B1"}` (gene→protein). `apply_phenotype_to_graph`가 enzyme 또는 transporter abundance를 CPIC activity score로 스케일 (PM 0.10×, IM 0.50×, EM 1.00×, UM 2.00×). `parse_phenotype_spec`는 `SLCO1B1:PM` 및 mixed `CYP2D6:PM,SLCO1B1:IM` 파싱.
+- **Unit tests**: +11 (SLCO1B1 파싱, 스케일, CV 보존, enzyme/transporter 격리, UM 증가, 입력 graph 불변). 28 기존 + 11 신규 = 39 phenotype tests all pass.
+- **Engine saturation 한계 발견**: liver.OATP1B1 abundance 1.0e11 (pravastatin Phase 1 calibration)에서 MM uptake가 flow-limited 포화 regime 동작. Abundance scale [0.1×, 2×] (PM, IM, UM) 전체에서 pravastatin Cmax 무변동. Clinical SLCO1B1 AUC +60-100% (Niemi 2006)는 non-saturated engine 재보정 필요 (abundance prior 낮추기). Integration test는 graph-level scaling과 engine end-to-end 실행만 검증, directional Cmax gate는 유예.
+- **107 holdout 무영향**: phenotype는 CLI/TDM 경로 전용, pipeline/predict.py 미사용.
+
 ### OATP Phase 2A — Statin data expansion (2026-04-20, data-only, validation deferred)
 - **`data/transporters/oatp1b1.json` 확장**: 1 drug (pravastatin) → 5 drugs. Rosuvastatin/atorvastatin/pitavastatin/fluvastatin Km은 Niemi 2009 review range midpoint. Jmax는 clinical hepatic uptake CL ratio vs pravastatin로 스케일 (Hirano 2006, Maeda 2011, Li 2018). CV widened to 0.40 (Jmax) / 0.35 (Km)로 inter-study variability 흡수. liver.transporters.OATP1B1 abundance constant (1.0e11, pravastatin-calibrated)은 residual bias 흡수, Bayesian update (`drug.transporter_kinetics`)가 per-patient refine.
 - **107 holdout 영향 0**: `pipeline/predict.py`는 `load_oatp1b1_kinetics` 호출하지 않음 — TDM 경로 전용. Meta AAFE 2.695 무변동 보장.
