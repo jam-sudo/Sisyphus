@@ -157,6 +157,12 @@ AAFE 2.695는 현 아키텍처의 **확정적 상한** (4-track, post-merge). �
 - **Design spec**: `docs/superpowers/specs/2026-04-15-oatp1b1-hepatic-uptake-design.md`
 - **Plan**: `docs/superpowers/plans/2026-04-15-oatp1b1-pravastatin.md`
 
+### OATP Phase 2A — Statin data expansion (2026-04-20, data-only, validation deferred)
+- **`data/transporters/oatp1b1.json` 확장**: 1 drug (pravastatin) → 5 drugs. Rosuvastatin/atorvastatin/pitavastatin/fluvastatin Km은 Niemi 2009 review range midpoint. Jmax는 clinical hepatic uptake CL ratio vs pravastatin로 스케일 (Hirano 2006, Maeda 2011, Li 2018). CV widened to 0.40 (Jmax) / 0.35 (Km)로 inter-study variability 흡수. liver.transporters.OATP1B1 abundance constant (1.0e11, pravastatin-calibrated)은 residual bias 흡수, Bayesian update (`drug.transporter_kinetics`)가 per-patient refine.
+- **107 holdout 영향 0**: `pipeline/predict.py`는 `load_oatp1b1_kinetics` 호출하지 않음 — TDM 경로 전용. Meta AAFE 2.695 무변동 보장.
+- **Engine Cmax validation 미완**: `scripts/validate_oatp_phase2a.py` 작성했으나 5 drugs × 24h sim이 LSODA stiff ODE로 41분 후 stall. 다음 세션에서 t_end 단축 (6h) 또는 JAX Kvaerno5 solver로 재시도 필요.
+- **Tests**: 기존 5 `test_transporter_db.py` unit tests 새 4 drugs 로딩 통과.
+
 ### P4 Continuous Hierarchical Infrastructure (2026-04-16, branch `feat/continuous-hierarchical`)
 - **Physiology generator**: `src/sisyphus/sbi/physiology_generator.py` — `generate_physiology(BW, age)` builds BodyGraph for any patient 0.5-85y, 5-120kg. Hines 2008 enzyme ontogeny (exponential maturation) + Wynne 1989 aging decline + allometric volume/flow scaling.
 - **Conditioning**: 15D = [log10_cmax(1), drug_features(12), log_bw_norm(1), log_age_norm(1)]. Replaces C1 one-hot for the continuous model.

@@ -1,13 +1,33 @@
 {
   "transporter": "OATP1B1",
-  "source_primary": "Varma 2014 JPET",
-  "source_crosscheck": "Watanabe 2011 DMD",
-  "notes": "Phase 1: pravastatin only. Jmax from Varma 2014 Table 2 hepatocyte uptake. Km from same. CVs widened to absorb inter-study variability and calibration bias in liver.transporters.OATP1B1.",
+  "source_primary": "Varma 2014 JPET (pravastatin); Niemi 2009 review Km compilation (others)",
+  "source_crosscheck": "Hirano 2004 DMD, Kameyama 2005 Pharmacogenetics Genomics, Kopplow 2005, Ho 2006 Gastro, Simonson 2004",
+  "notes": "Phase 2A: pravastatin Jmax/Km verbatim from Varma 2014 Table 2. Rosuvastatin/atorvastatin/pitavastatin/fluvastatin Km values are midpoints of the ranges reported in the Niemi 2009 OATP review (primary sources cited per drug). Jmax values are literature-consistent estimates scaled from reported in vitro CLuptake ratios vs pravastatin (Hirano 2006, Maeda 2011, Li 2018 reviews) because primary Jmax values vary widely across HEK293-OATP1B1 vs hepatocyte systems. CVs widened to 0.40 (Jmax) / 0.35 (Km) to absorb this inter-study variability; the liver.transporters.OATP1B1 abundance constant (1.0e11, calibrated on pravastatin in Phase 1) absorbs residual bias, and the Bayesian update over drug.transporter_kinetics refines per-patient.",
   "drugs": {
     "pravastatin": {
       "jmax_pmol_per_min_per_mg": {"mean": 228.0, "cv": 0.30},
       "km_uM": {"mean": 13.6, "cv": 0.25},
       "source": "Varma 2014 JPET Table 2"
+    },
+    "rosuvastatin": {
+      "jmax_pmol_per_min_per_mg": {"mean": 170.0, "cv": 0.40},
+      "km_uM": {"mean": 6.5, "cv": 0.35},
+      "source": "Km: Niemi 2009 review (Simonson 2004, Ho 2006; range 4.0-7.3 μM). Jmax: scaled from rosuvastatin/pravastatin clinical hepatic uptake CL ratio ≈ 1.2 (Ho 2006 Gastro)."
+    },
+    "atorvastatin": {
+      "jmax_pmol_per_min_per_mg": {"mean": 250.0, "cv": 0.40},
+      "km_uM": {"mean": 12.4, "cv": 0.30},
+      "source": "Km: Kameyama 2005 (via Niemi 2009 review). Jmax: scaled from atorvastatin/pravastatin OATP1B1-specific uptake CL ratio ≈ 1.5 (Hirano 2006 review, excluding CYP3A4 contribution)."
+    },
+    "pitavastatin": {
+      "jmax_pmol_per_min_per_mg": {"mean": 550.0, "cv": 0.40},
+      "km_uM": {"mean": 4.5, "cv": 0.35},
+      "source": "Km: Niemi 2009 review (Hirano 2004, Deng 2008; range 3.0-6.7 μM midpoint). Jmax: scaled from pitavastatin/pravastatin clinical hepatic uptake CL ratio ≈ 2.5 (Hirano 2004 DMD)."
+    },
+    "fluvastatin": {
+      "jmax_pmol_per_min_per_mg": {"mean": 190.0, "cv": 0.40},
+      "km_uM": {"mean": 2.5, "cv": 0.35},
+      "source": "Km: Niemi 2009 review (Kopplow 2005, Noe 2007; range 1.4-3.5 μM midpoint). Jmax: scaled from fluvastatin/pravastatin OATP1B1-specific uptake CL ratio ≈ 1.3 (Kopplow 2005, excluding CYP2C9 contribution)."
     }
   }
 }
