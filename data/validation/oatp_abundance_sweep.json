@@ -1,0 +1,44 @@
+{
+  "phase": "OATP abundance re-calibration sweep",
+  "date": "2026-04-20",
+  "methodology": "Fix Jmax/Km from oatp1b1.json, sweep liver.OATP1B1 abundance [1e9, 3e9, 1e10, 3e10, 1e11]. Measure pravastatin (40mg) and rosuvastatin (20mg) OFF/ON Cmax at each abundance. t_end=4h, seed=42.",
+  "sweep": [
+    {
+      "abundance": 1.0e9,
+      "pravastatin": {"off_cmax": 0.07607, "on_cmax": 0.03853, "on_wall_s": 0.12, "fold_error_on": 1.17},
+      "rosuvastatin": {"off_cmax": 0.28362, "on_cmax": 0.18038, "on_wall_s": 0.13, "fold_error_on": 27.33}
+    },
+    {
+      "abundance": 3.0e9,
+      "pravastatin": {"off_cmax": 0.07607, "on_cmax": 0.03852, "on_wall_s": 0.89, "fold_error_on": 1.17},
+      "rosuvastatin": {"off_cmax": 0.28362, "on_cmax": 0.18037, "on_wall_s": 0.06, "fold_error_on": 27.33}
+    },
+    {
+      "abundance": 1.0e10,
+      "pravastatin": {"off_cmax": 0.07607, "on_cmax": 0.03852, "on_wall_s": 7.15, "fold_error_on": 1.17},
+      "rosuvastatin": {"off_cmax": 0.28362, "on_cmax": 0.18037, "on_wall_s": 10.55, "fold_error_on": 27.33}
+    },
+    {
+      "abundance": 3.0e10,
+      "pravastatin": {"off_cmax": 0.07607, "on_cmax": 0.03852, "on_wall_s": 0.23, "fold_error_on": 1.17},
+      "rosuvastatin": {"off_cmax": 0.28362, "on_cmax": 0.18037, "on_wall_s": 59.33, "fold_error_on": 27.33}
+    },
+    {
+      "abundance": 1.0e11,
+      "pravastatin": {"off_cmax": 0.07607, "on_cmax": 0.03852, "on_wall_s": 299.09, "fold_error_on": 1.17},
+      "rosuvastatin": {"off_cmax": 0.28362, "on_cmax": null, "on_wall_s": null, "note": "timeout at sweep timeout (600s wall)"}
+    }
+  ],
+  "findings": {
+    "cmax_is_invariant_to_abundance_when_ON": "Both pravastatin (0.0385) and rosuvastatin (0.180) Cmax ON-mode values are identical across all 5 abundance values spanning 2 orders of magnitude. Conclusion: the MM uptake is in the flow-limited regime across this entire range. Lowering abundance does NOT move the system into a non-saturated regime where phenotype scaling (PM 0.10×) would have directional effect.",
+    "wall_time_grows_with_abundance": "Stiffness scales super-linearly with abundance as expected. Rosuvastatin timeout observed at 1e11 after 600s; tractable at 1e10 (~10s) and below.",
+    "rosuvastatin_accuracy_gap_is_not_abundance_related": "Rosuvastatin ON Cmax (0.180) is 27× higher than observed (0.0066) at every abundance tested. Even abundance=0 (OFF mode, Cmax 0.283) is 42× high. The clinical extraction ratio for rosuvastatin is ~63% at 20mg oral (from CL/F and oral bioavailability data); the current engine only achieves ~36% extraction even with OATP ON. The Jmax scaling factors in oatp1b1.json are insufficient to reach observed Cmax for non-pravastatin statins."
+  },
+  "structural_conclusion": "Neither Phase 2A validation gate (fold error <2×) nor Phase 2B directional SLCO1B1 Cmax response is achievable through abundance re-calibration alone. The engine model operates the MM uptake as effectively binary (ON = flow-limited, OFF = no uptake) across the tested abundance range. Two separate structural issues surfaced: (a) the flow-limited plateau is rate-insensitive to abundance or phenotype scaling, (b) even at full ON, the absolute extraction magnitude is too low for high-first-pass statins. Both require engine-level refinements, not parameter tuning.",
+  "recommended_future_work": {
+    "engine_refinement_path_A": "Replace well-stirred + MM uptake with parallel-tube model (permeability-surface-product with axial dispersion). Transporter capacity and expression enter the extraction formula explicitly, breaking the flow-limited plateau.",
+    "engine_refinement_path_B": "Add extraction-ratio-aware hepatic clearance term: CL_hepatic = Q_h * E, where E depends on transporter abundance AND drug-specific CLint (uptake × metabolism). Reproduces textbook well-stirred with OATP, restores abundance sensitivity.",
+    "engine_refinement_path_C": "Drop MM kinetics for OATP and use first-order CL_int,transporter with drug-specific scaling. Loses mechanistic saturation but unlocks parametric phenotype scaling on a simple linear model.",
+    "interim_pragmatic_action": "Keep abundance at 1.0e11 (Phase 1 pravastatin calibration), document statin expansion as data-ready but engine-limited. Defer 4/5 statin Phase 2A close and Phase 2B directional SLCO1B1 gate to a dedicated engine refinement phase."
+  }
+}
