@@ -477,9 +477,17 @@ class ActiveTransportFluxSpec(FluxSpec):
         C_µM = (A / V) * 1000 / MW        # mg/L → µM
         rate = abundance × Jmax × C_µM / (Km + C_µM)
 
-    Direction is source → target (edge direction):
-    - Gut efflux: gut_wall → lumen (P-gp: tissue → lumen, reduces Fg)
-    - Hepatic uptake: blood → liver (OATP: increases clearance)
+    Direction is source → target (edge direction). Intended use cases:
+    - Gut efflux (P-gp, BCRP at gut_wall → lumen): reduces Fg.
+    - Renal secretion (OAT/OCT at proximal tubule → urine): increases CL_renal.
+    - BBB efflux (P-gp at brain vascular → brain tissue).
+
+    **Hepatic OATP uptake is NOT handled here anymore.** Since the
+    2026-04-20 ECM migration, hepatic active uptake is folded into
+    ``ClearanceFluxSpec(model="extended")`` (QSSA-closed hepatocyte).
+    No YAML currently instantiates ``ActiveTransportFluxSpec`` in the
+    reference physiology; the class is retained for future
+    non-hepatic-uptake applications.
 
     Identity-blind: engine matches tags, never inspects names.
 
