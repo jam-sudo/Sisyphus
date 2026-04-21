@@ -1,36 +1,68 @@
 {
-  "description": "Pre-registered IV clinical observations for ECM generalization test. Committed 2026-04-21. DO NOT MODIFY after engine run — see spec docs/superpowers/specs/2026-04-21-ecm-generalization-test-design.md §Freeze Contract.",
+  "description": "Pre-registered IV clinical observations for ECM generalization test. Supersedes commit ee24164 (invalid back-calculated values). DO NOT MODIFY after engine run — see spec docs/superpowers/specs/2026-04-21-ecm-generalization-test-design.md §Freeze Contract.",
   "spec_commit": "9115e63",
+  "primary_source_search_log": "2026-04-21. Attempted PMC, EuropePMC REST API, DOI direct, Google Scholar, Semantic Scholar, ResearchGate, FABAD bioavailability PDF, EMA EPAR, FDA clinical pharmacology reviews, PBPK modeling papers, review articles (Dingemanse 2004 Clin Pharmacokinet, Kalliokoski 2009 BJP, Niemi 2011 Pharmacol Rev). Flesch 1997 full text obtained via Greek university repository (http://jupiter.chem.uoa.gr). Weber 1996 and Hatorp 1998 are subscription-only with no open-access version found after exhaustive search.",
   "drugs": {
     "bosentan": {
-      "dose_mg": 250.0,
-      "observed_cmax_mg_l": 13.9,
-      "observed_cmax_cv": 0.35,
-      "patient_n": 6,
-      "administration": "iv_bolus",
-      "smiles": "COc1ccccc1Oc1nc(Nc2ncccn2)nc(-c2ccc(C(C)(C)C)cc2)c1S(=O)(=O)Nc1ccc(OC)cc1",
-      "source": "Weber 1996 Clin Pharmacol Ther 60:124-137; PMID 8823230; DOI 10.1016/S0009-9236(96)90127-7. Single ascending IV dose study (10/50/250/500/750 mg), n=6 active per dose level. 250 mg dose: Vss=18L (SmPC), CL=8.2 L/h (SmPC); Cmax back-calculated as dose/Vss = 250/18 = 13.9 mg/L (bolus approximation). SmPC source: Bosentan 62.5 mg Film-coated Tablets SmPC (medicines.org.uk/emc/product/820/smpc).",
-      "notes": "Cmax is back-calculated from Vss=18L (SmPC) as dose/Vss; no primary Cmax table accessible. This value is a pharmacokinetic estimate, not a directly read table value. Plan envelope (0.5-3.0 mg/L) is inconsistent with reported Vss/CL for 250 mg dose — envelope corrected to (8.0, 20.0) in test file. Bosentan exhibits non-linear PK (saturable OATP1B1 hepatic uptake); CL decreases from ~20 L/h at 10 mg to ~8.2 L/h at 250 mg (Weber 1996). For bolus C0=dose/Vss; actual Cmax may be slightly lower with infusion but no infusion duration reported in primary source. CV widened to 0.35 per spec."
+      "status": "BLOCKED",
+      "blocked_reason": "Primary source (Weber C et al. Clin Pharmacol Ther 1996;60:124-137, PMID 8823230) is paywalled with no open-access version. EMA EPAR, SmPC, and all review articles report only CL (~8.5 L/h) and Vss (~18 L) for the 250 mg IV dose — not Cmax. Back-calculation of Cmax from Vss or Vc would violate spec §Literature Data Extraction Protocol. No review article tabulates bosentan IV Cmax from Weber 1996 in an accessible table.",
+      "sources_attempted": [
+        "PubMed PMID 8823230 (abstract only, no Cmax)",
+        "Europe PMC REST API (isOpenAccess: N, subscription only)",
+        "DOI 10.1016/S0009-9236(96)90127-7 (403 Forbidden)",
+        "EMA Tracleer EPAR scientific discussion PDF (CL and Vss only, no Cmax)",
+        "EC Community Register bosentan PDF (no IV Cmax table)",
+        "Dingemanse 2004 Clin Pharmacokinet 43:1089 (paywalled, abstract only)",
+        "PMC1874330 open access (oral 62.5 mg only, no IV Cmax)",
+        "FDA NDA 209279 clinical pharmacology review (404 Not Found)",
+        "Bosentan PBPK papers (Huang 2025 CPT, Yoshida 2018 DMD) — paywalled or no IV Cmax table in accessible content",
+        "Google Scholar, ResearchGate, Semantic Scholar — no PDF found"
+      ],
+      "plan_envelope_mg_l": [0.5, 3.0],
+      "notes": "Envelope restored to plan original (0.5-3.0 mg/L). The 8-20 mg/L envelope from commit ee24164 was derived from Vss and was not primary-source-justified. Drug BLOCKED per spec §Execution Constraints: no substitute value permitted."
     },
     "valsartan": {
+      "status": "VERIFIED",
       "dose_mg": 20.0,
-      "observed_cmax_mg_l": 1.18,
-      "observed_cmax_cv": 0.35,
+      "observed_cmax_mg_l": 4.02,
+      "observed_cmax_sd_mg_l": 0.43,
+      "observed_cmax_cv": 0.107,
       "patient_n": 12,
-      "administration": "iv_infusion_30min",
+      "administration": "iv_bolus",
+      "infusion_duration_note": "IV bolus injection, volume 10 mL delivered in approximately 30 seconds (Flesch 1997, Materials and Methods, Study 1 and Study 2).",
       "smiles": "CCCCC(=O)N([C@@H](C(C)C)C(=O)O)Cc1ccc(-c2ccccc2-c2nnn[nH]2)cc1",
-      "source": "Flesch G, Muller P, Lloyd P. Absolute bioavailability and pharmacokinetics of valsartan, an angiotensin II receptor antagonist, in man. Eur J Clin Pharmacol 1997;52:115-120. PMID 9174680; DOI 10.1007/s002280050259. 20 mg IV dose used for absolute bioavailability determination vs oral 80 mg. Cmax back-calculated: Vss=16.9 L, CL=2.2 L/h reported in abstract; for 20 mg IV near-bolus or short infusion: Cmax = dose/Vss = 20/16.9 = 1.18 mg/L.",
-      "notes": "Cmax back-calculated from published Vss=16.9 L (no Cmax table in abstract or accessible full text). Infusion duration not specified in abstract; 30 min assumed based on standard practice for bioavailability IV studies. The value 4.02 mg/L appearing in one web search result was not verified and appears inconsistent with reported Vss. Patient N=12 assumed from typical crossover design (confirmed by Hatorp 2002 review describing similar valsartan studies). CV=0.35 per spec conservative direction."
+      "source": "Flesch G, Müller P, Lloyd P. Absolute bioavailability and pharmacokinetics of valsartan, an angiotensin II receptor antagonist, in man. Eur J Clin Pharmacol 1997;52:115-120. PMID 9174680; DOI 10.1007/s002280050259. Table 1 (page 117): individual and mean pharmacokinetic parameters after 20 mg valsartan IV bolus in 12 healthy male volunteers. Mean Cmax = 4.02 mg/L (SD 0.43). Full text PDF obtained from http://jupiter.chem.uoa.gr/thanost/papers/papers8/EurJClinPharmacol_52(1997)115.pdf",
+      "source_table": "Table 1, page 117",
+      "individual_cmax_mg_l": [3.42, 4.66, 4.43, 3.77, 3.93, 3.61, 4.03, 4.57, 4.09, 4.40, 3.41, 3.91],
+      "notes": "Primary source verified. Table 1 reports individual Cmax for each of 12 subjects. Mean 4.02, SD 0.43, CV=10.7% (calculated from SD/mean). This is a direct table read from the full-text PDF of the primary paper. Administration was iv bolus (10 mL volume injected in ~30 s, see Methods). The pilot study (Study 1, n=3 per dose level) gave AUC dose-proportional from 5-10 mg with a tendency to disproportionate increase at 20 mg; the main study (Study 2) used 20 mg IV bolus + 80 mg oral capsule or solution in 12 subjects crossover. The observed CV (10.7%) is lower than the spec's default 0.35; using the observed CV which reflects actual inter-subject variability."
     },
     "repaglinide": {
-      "dose_mg": 2.0,
-      "observed_cmax_mg_l": 0.056,
-      "observed_cmax_cv": 0.40,
-      "patient_n": 12,
-      "administration": "iv_infusion_15min",
-      "smiles": "CCOc1ccc(CC(=O)N[C@@H](CC(C)C)c2ccccc2N2CCCCC2C)cc1C(=O)O",
-      "source": "van Heiningen PNM et al. Bioavailability of repaglinide administered orally or intravenously in healthy male volunteers. Clin Pharmacol Ther 1999;65:191 (PMID 9877000). IV 2 mg infusion over 15 min, n=12 healthy males. Confirmed in Hatorp V. Clinical pharmacokinetics and pharmacodynamics of repaglinide. Clin Pharmacokinet 2002;41:471-483 (PMID 12083976; DOI 10.2165/00003088-200241070-00002). CL=38 L/h, Vss=31 L (FDA label / Hatorp 2002). Cmax estimated: rate=2mg/0.25h=8 mg/h; Cmax=(8/38)*(1-exp(-1.226*0.25))=0.056 mg/L.",
-      "notes": "Cmax is estimated from published PK parameters (CL=38 L/h, Vss=31 L, k=1.226/h) for 15-min infusion. Formula: Cmax=(R/CL)*(1-exp(-k*t_inf)) where R=8mg/h, k=CL/Vss. Primary paper (PMID 9877000) abstract does not report Cmax numerically. Value is within plan envelope (0.020-0.080 mg/L). CV=0.40 per spec (widened from typical CV~0.30 in healthy-subject PK studies, per spec conservative direction). Note: repaglinide absolute bioavailability=56-62.5% per FDA label, confirming substantial IV first-pass extraction consistent with hepatic uptake via OATP1B1."
+      "status": "BLOCKED",
+      "blocked_reason": "Primary source (Hatorp V, Oliver S, Su CAPF. Int J Clin Pharmacol Ther 1998;36:636-641, PMID 9877000) is paywalled with no open-access version. Abstract confirms 2 mg IV infusion over 15 min, n=12, absolute bioavailability 62.5%, but does not report IV Cmax numerically. Hatorp 2002 review (PMID 12083976) abstract also does not report IV Cmax. FDA label (Prandin) and all other accessible sources only report Vss=31 L and CL=38 L/h for IV dosing — not Cmax. Back-calculation from these parameters would violate spec §Literature Data Extraction Protocol.",
+      "sources_attempted": [
+        "PubMed PMID 9877000 (abstract only; confirms 2 mg IV/15 min, n=12, F=62.5%, but no IV Cmax value)",
+        "Europe PMC REST API (isOpenAccess: N)",
+        "PubMed PMID 12083976 Hatorp 2002 review (abstract only, no IV Cmax)",
+        "FDA Prandin label (DailyMed) — Vss and CL only",
+        "Van Heiningen 1999 PMID 9877000 (same paper, confirms 15 min infusion but no IV Cmax)",
+        "PMC6885506 PBPK paper (IV data in supplementary ESM only, ESM not accessible)",
+        "Link.springer.com PBPK OATP1B1 PDF (ESM inaccessible via WebFetch)",
+        "Google Scholar, ResearchGate, Semantic Scholar — no PDF found with IV Cmax"
+      ],
+      "known_iv_parameters": {
+        "vss_l": 31,
+        "cl_l_per_h": 38,
+        "infusion_duration_min": 15,
+        "dose_mg": 2,
+        "n": 12,
+        "absolute_bioavailability_pct": 62.5,
+        "source": "Hatorp 1998 PMID 9877000 (abstract) + FDA Prandin label"
+      },
+      "notes": "Drug BLOCKED per spec §Execution Constraints. Repaglinide IV Cmax not accessible from any open source. The plan envelope (0.020-0.080 mg/L) is retained here for reference but no observed_cmax_mg_l is populated — spec forbids substituting a derived value."
     }
-  }
+  },
+  "n_verified": 1,
+  "n_blocked": 2,
+  "outcome_status": "DONE_WITH_CONCERNS",
+  "outcome_note": "1/3 drugs verified from primary source (valsartan, Table 1 Flesch 1997). 2/3 drugs BLOCKED (bosentan and repaglinide primary sources paywalled with no IV Cmax in any accessible review or regulatory document). Test proceeds with N_effective=1. Per spec §Execution Constraints, no substitute values are populated. Per spec, N_effective < 3 is an acceptable outcome."
 }
