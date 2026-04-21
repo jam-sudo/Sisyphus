@@ -10,9 +10,11 @@ import pytest
 _DATA_FILE = Path(__file__).resolve().parents[2] / "data" / "validation" / "oatp_generalization_drugs.json"
 
 _EXPECTED_DRUGS = {"bosentan", "valsartan", "repaglinide"}
+_VERIFIED_DRUGS = {"valsartan"}
+_BLOCKED_DRUGS = {"bosentan", "repaglinide"}
 
 _CMAX_ENVELOPES = {
-    "bosentan": (8.0, 20.0),   # plan had (0.5, 3.0) but 250mg IV dose/Vss=250/18=13.9mg/L; corrected
+    "bosentan": (0.5, 3.0),   # plan original per spec 9115e63; ee24164 correction (8-20) was invalid
     "valsartan": (0.3, 6.0),
     "repaglinide": (0.020, 0.080),
 }
@@ -37,7 +39,37 @@ def test_top_level_schema():
     assert set(data["drugs"].keys()) == _EXPECTED_DRUGS
 
 
-@pytest.mark.parametrize("drug", sorted(_EXPECTED_DRUGS))
+def test_top_level_status_fields():
+    data = _load()
+    assert "n_verified" in data, "top-level n_verified missing"
+    assert "n_blocked" in data, "top-level n_blocked missing"
+    assert "outcome_status" in data, "top-level outcome_status missing"
+
+
+def test_n_verified_and_n_blocked():
+    data = _load()
+    assert data["n_verified"] == 1, f"expected n_verified=1, got {data['n_verified']}"
+    assert data["n_blocked"] == 2, f"expected n_blocked=2, got {data['n_blocked']}"
+
+
+def test_each_drug_has_status():
+    data = _load()
+    for drug, entry in data["drugs"].items():
+        assert "status" in entry, f"{drug} missing 'status' field"
+        assert entry["status"] in ("VERIFIED", "BLOCKED"), (
+            f"{drug} status must be VERIFIED or BLOCKED, got {entry['status']!r}"
+        )
+
+
+def test_blocked_drugs_have_reason():
+    data = _load()
+    for drug in _BLOCKED_DRUGS:
+        entry = data["drugs"][drug]
+        assert entry.get("status") == "BLOCKED", f"{drug} expected BLOCKED status"
+        assert entry.get("blocked_reason"), f"{drug} missing non-empty blocked_reason"
+
+
+@pytest.mark.parametrize("drug", sorted(_VERIFIED_DRUGS))
 def test_per_drug_required_fields(drug: str):
     data = _load()
     entry = data["drugs"][drug]
@@ -45,7 +77,7 @@ def test_per_drug_required_fields(drug: str):
         assert field in entry, f"{drug} missing field {field}"
 
 
-@pytest.mark.parametrize("drug", sorted(_EXPECTED_DRUGS))
+@pytest.mark.parametrize("drug", sorted(_VERIFIED_DRUGS))
 def test_dose_within_envelope(drug: str):
     data = _load()
     dose = float(data["drugs"][drug]["dose_mg"])
@@ -53,7 +85,7 @@ def test_dose_within_envelope(drug: str):
     assert lo <= dose <= hi, f"{drug} dose {dose} outside envelope [{lo}, {hi}]"
 
 
-@pytest.mark.parametrize("drug", sorted(_EXPECTED_DRUGS))
+@pytest.mark.parametrize("drug", sorted(_VERIFIED_DRUGS))
 def test_cmax_within_envelope(drug: str):
     data = _load()
     cmax = float(data["drugs"][drug]["observed_cmax_mg_l"])
@@ -61,14 +93,14 @@ def test_cmax_within_envelope(drug: str):
     assert lo <= cmax <= hi, f"{drug} cmax {cmax} outside envelope [{lo}, {hi}]"
 
 
-@pytest.mark.parametrize("drug", sorted(_EXPECTED_DRUGS))
+@pytest.mark.parametrize("drug", sorted(_VERIFIED_DRUGS))
 def test_administration_is_iv(drug: str):
     data = _load()
     admin = data["drugs"][drug]["administration"]
     assert admin.startswith("iv_"), f"{drug} admin {admin!r} must be iv_bolus or iv_infusion_Xmin"
 
 
-@pytest.mark.parametrize("drug", sorted(_EXPECTED_DRUGS))
+@pytest.mark.parametrize("drug", sorted(_VERIFIED_DRUGS))
 def test_source_has_doi(drug: str):
     data = _load()
     src = data["drugs"][drug]["source"]
