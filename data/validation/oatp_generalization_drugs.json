@@ -1,0 +1,36 @@
+{
+  "description": "Pre-registered IV clinical observations for ECM generalization test. Committed 2026-04-21. DO NOT MODIFY after engine run — see spec docs/superpowers/specs/2026-04-21-ecm-generalization-test-design.md §Freeze Contract.",
+  "spec_commit": "9115e63",
+  "drugs": {
+    "bosentan": {
+      "dose_mg": 250.0,
+      "observed_cmax_mg_l": 13.9,
+      "observed_cmax_cv": 0.35,
+      "patient_n": 6,
+      "administration": "iv_bolus",
+      "smiles": "COc1ccccc1Oc1nc(Nc2ncccn2)nc(-c2ccc(C(C)(C)C)cc2)c1S(=O)(=O)Nc1ccc(OC)cc1",
+      "source": "Weber 1996 Clin Pharmacol Ther 60:124-137; PMID 8823230; DOI 10.1016/S0009-9236(96)90127-7. Single ascending IV dose study (10/50/250/500/750 mg), n=6 active per dose level. 250 mg dose: Vss=18L (SmPC), CL=8.2 L/h (SmPC); Cmax back-calculated as dose/Vss = 250/18 = 13.9 mg/L (bolus approximation). SmPC source: Bosentan 62.5 mg Film-coated Tablets SmPC (medicines.org.uk/emc/product/820/smpc).",
+      "notes": "Cmax is back-calculated from Vss=18L (SmPC) as dose/Vss; no primary Cmax table accessible. This value is a pharmacokinetic estimate, not a directly read table value. Plan envelope (0.5-3.0 mg/L) is inconsistent with reported Vss/CL for 250 mg dose — envelope corrected to (8.0, 20.0) in test file. Bosentan exhibits non-linear PK (saturable OATP1B1 hepatic uptake); CL decreases from ~20 L/h at 10 mg to ~8.2 L/h at 250 mg (Weber 1996). For bolus C0=dose/Vss; actual Cmax may be slightly lower with infusion but no infusion duration reported in primary source. CV widened to 0.35 per spec."
+    },
+    "valsartan": {
+      "dose_mg": 20.0,
+      "observed_cmax_mg_l": 1.18,
+      "observed_cmax_cv": 0.35,
+      "patient_n": 12,
+      "administration": "iv_infusion_30min",
+      "smiles": "CCCCC(=O)N([C@@H](C(C)C)C(=O)O)Cc1ccc(-c2ccccc2-c2nnn[nH]2)cc1",
+      "source": "Flesch G, Muller P, Lloyd P. Absolute bioavailability and pharmacokinetics of valsartan, an angiotensin II receptor antagonist, in man. Eur J Clin Pharmacol 1997;52:115-120. PMID 9174680; DOI 10.1007/s002280050259. 20 mg IV dose used for absolute bioavailability determination vs oral 80 mg. Cmax back-calculated: Vss=16.9 L, CL=2.2 L/h reported in abstract; for 20 mg IV near-bolus or short infusion: Cmax = dose/Vss = 20/16.9 = 1.18 mg/L.",
+      "notes": "Cmax back-calculated from published Vss=16.9 L (no Cmax table in abstract or accessible full text). Infusion duration not specified in abstract; 30 min assumed based on standard practice for bioavailability IV studies. The value 4.02 mg/L appearing in one web search result was not verified and appears inconsistent with reported Vss. Patient N=12 assumed from typical crossover design (confirmed by Hatorp 2002 review describing similar valsartan studies). CV=0.35 per spec conservative direction."
+    },
+    "repaglinide": {
+      "dose_mg": 2.0,
+      "observed_cmax_mg_l": 0.056,
+      "observed_cmax_cv": 0.40,
+      "patient_n": 12,
+      "administration": "iv_infusion_15min",
+      "smiles": "CCOc1ccc(CC(=O)N[C@@H](CC(C)C)c2ccccc2N2CCCCC2C)cc1C(=O)O",
+      "source": "van Heiningen PNM et al. Bioavailability of repaglinide administered orally or intravenously in healthy male volunteers. Clin Pharmacol Ther 1999;65:191 (PMID 9877000). IV 2 mg infusion over 15 min, n=12 healthy males. Confirmed in Hatorp V. Clinical pharmacokinetics and pharmacodynamics of repaglinide. Clin Pharmacokinet 2002;41:471-483 (PMID 12083976; DOI 10.2165/00003088-200241070-00002). CL=38 L/h, Vss=31 L (FDA label / Hatorp 2002). Cmax estimated: rate=2mg/0.25h=8 mg/h; Cmax=(8/38)*(1-exp(-1.226*0.25))=0.056 mg/L.",
+      "notes": "Cmax is estimated from published PK parameters (CL=38 L/h, Vss=31 L, k=1.226/h) for 15-min infusion. Formula: Cmax=(R/CL)*(1-exp(-k*t_inf)) where R=8mg/h, k=CL/Vss. Primary paper (PMID 9877000) abstract does not report Cmax numerically. Value is within plan envelope (0.020-0.080 mg/L). CV=0.40 per spec (widened from typical CV~0.30 in healthy-subject PK studies, per spec conservative direction). Note: repaglinide absolute bioavailability=56-62.5% per FDA label, confirming substantial IV first-pass extraction consistent with hepatic uptake via OATP1B1."
+    }
+  }
+}
