@@ -86,3 +86,109 @@ def test_load_hepatic_ecm_params_case_insensitive():
     p_upper = load_hepatic_ecm_params("PRAVASTATIN")
     assert p_lower is not None and p_upper is not None
     assert p_lower["ps_passive"].mean == p_upper["ps_passive"].mean
+
+
+import json as _json
+import pathlib as _pathlib
+
+import pytest as _pytest
+
+# Pre-registration envelopes per spec 9115e63 / plan Task 2.
+# Actual status (VERIFIED vs BLOCKED) determined by literature extraction 2026-04-21.
+_GENERALIZATION_DRUGS_EXPECTED = {
+    "bosentan": {"km_range_uM": (40.0, 50.0), "jmax_range": (40.0, 80.0)},
+    "valsartan": {"km_range_uM": (1.0, 1.8), "jmax_range": (30.0, 80.0)},
+    "repaglinide": {"km_range_uM": (0.3, 0.5), "jmax_range": (20.0, 50.0)},
+}
+
+# Literature extraction outcome 2026-04-21:
+# Jmax paywalled for all three drugs in their respective primary sources
+# (Treiber 2007 DMD, Yamashiro 2006 DMD, Niemi 2005 CPT). Km verified for
+# bosentan (44 µM) and valsartan (1.39 µM) via secondary sources; repaglinide
+# Km not reported in any accessible source. All three placed in blocked_drugs.
+_VERIFIED_KINETICS_DRUGS: set[str] = set()  # empty — all three Jmax are blocked
+_BLOCKED_KINETICS_DRUGS: set[str] = {"bosentan", "valsartan", "repaglinide"}
+
+_OATP1B1_FILE = (
+    _pathlib.Path(__file__).resolve().parents[2]
+    / "data" / "transporters" / "oatp1b1.json"
+)
+
+
+def _load_oatp1b1_json() -> dict:
+    with _OATP1B1_FILE.open() as f:
+        return _json.load(f)
+
+
+# ── Tests for VERIFIED kinetics drugs (empty set — all blocked) ──────────────
+# The parametrize over an empty set produces 0 test cases (harmless; acts as
+# a placeholder so that when future drugs are verified, the test structure works).
+
+@_pytest.mark.parametrize("drug", sorted(_VERIFIED_KINETICS_DRUGS))
+def test_generalization_drug_has_entry(drug: str):
+    kinetics = load_oatp1b1_kinetics(drug)
+    assert kinetics is not None, f"{drug} missing from oatp1b1.json drugs key"
+    assert "OATP1B1" in kinetics
+
+
+@_pytest.mark.parametrize("drug", sorted(_VERIFIED_KINETICS_DRUGS))
+def test_generalization_drug_km_in_envelope(drug: str):
+    kinetics = load_oatp1b1_kinetics(drug)
+    km = kinetics["OATP1B1"].km.mean
+    lo, hi = _GENERALIZATION_DRUGS_EXPECTED[drug]["km_range_uM"]
+    assert lo <= km <= hi, f"{drug} Km {km} outside [{lo}, {hi}] uM"
+
+
+@_pytest.mark.parametrize("drug", sorted(_VERIFIED_KINETICS_DRUGS))
+def test_generalization_drug_jmax_in_envelope(drug: str):
+    kinetics = load_oatp1b1_kinetics(drug)
+    jmax = kinetics["OATP1B1"].jmax.mean
+    lo, hi = _GENERALIZATION_DRUGS_EXPECTED[drug]["jmax_range"]
+    assert lo <= jmax <= hi, f"{drug} Jmax {jmax} outside [{lo}, {hi}] pmol/min/mg"
+
+
+@_pytest.mark.parametrize("drug", sorted(_VERIFIED_KINETICS_DRUGS))
+def test_generalization_drug_cv_widened(drug: str):
+    kinetics = load_oatp1b1_kinetics(drug)
+    assert kinetics["OATP1B1"].jmax.cv >= 0.30, f"{drug} Jmax CV must be >= 0.30"
+    assert kinetics["OATP1B1"].km.cv >= 0.25, f"{drug} Km CV must be >= 0.25"
+
+
+# ── Tests for BLOCKED drugs ───────────────────────────────────────────────────
+
+@_pytest.mark.parametrize("drug", sorted(_BLOCKED_KINETICS_DRUGS))
+def test_blocked_drug_returns_none_from_loader(drug: str):
+    """Blocked drugs are absent from 'drugs' key → loader returns None."""
+    kinetics = load_oatp1b1_kinetics(drug)
+    assert kinetics is None, (
+        f"{drug} should return None (it is in blocked_drugs, not drugs). "
+        f"If Jmax was verified and the entry was promoted to drugs, update "
+        f"_VERIFIED_KINETICS_DRUGS and remove from _BLOCKED_KINETICS_DRUGS."
+    )
+
+
+@_pytest.mark.parametrize("drug", sorted(_BLOCKED_KINETICS_DRUGS))
+def test_blocked_drug_documented_in_json(drug: str):
+    """Blocked drugs must appear in 'blocked_drugs' key with status and reason."""
+    data = _load_oatp1b1_json()
+    assert "blocked_drugs" in data, "oatp1b1.json missing 'blocked_drugs' top-level key"
+    assert drug in data["blocked_drugs"], f"{drug} missing from blocked_drugs"
+    entry = data["blocked_drugs"][drug]
+    assert entry.get("status") == "BLOCKED", f"{drug} blocked_drugs entry missing status=BLOCKED"
+    assert "blocked_reason" in entry, f"{drug} missing blocked_reason"
+    assert "sources_attempted" in entry, f"{drug} missing sources_attempted"
+    assert len(entry["sources_attempted"]) >= 3, (
+        f"{drug} sources_attempted must list >= 3 sources tried"
+    )
+
+
+@_pytest.mark.parametrize("drug", sorted(_BLOCKED_KINETICS_DRUGS))
+def test_blocked_drug_plan_envelope_recorded(drug: str):
+    """Blocked drugs must record the pre-registered plan envelope for auditability."""
+    data = _load_oatp1b1_json()
+    entry = data["blocked_drugs"][drug]
+    assert "plan_expected_envelope" in entry, f"{drug} missing plan_expected_envelope"
+    env = entry["plan_expected_envelope"]
+    assert "km_range_uM" in env and "jmax_range" in env, (
+        f"{drug} plan_expected_envelope must contain km_range_uM and jmax_range"
+    )
