@@ -36,38 +36,37 @@ if model == "extended":
     ...
 ```
 
-This flux reads (all accessors already exist in `ResolvedParams` unless marked **NEW**):
-- `params.node_transporters(target)` → `{tag: abundance}` for all transporters at target node (identity-blind iteration)
-- `params.node_enzymes(target)` → `{tag: abundance}` for all enzymes at target node
+This flux reads (all accessors already exist in `ResolvedParams` unless marked **NEW**). The existing clearance edge has `source=liver, target=metabolized_hepatic` (the sink); all node-level data (transporters, enzymes, volume, Kp, ivive) is read from `self.source_name` — same convention as the existing `well_stirred` model.
+
+- `params.node_transporters(source)` → `{tag: abundance}` for all transporters at the source node
+- `params.node_enzymes(source)` → `{tag: abundance}` for all enzymes at the source node
 - `params.drug_enzyme_affinity(tag)` → per-enzyme drug CLint
 - `params.drug_transporter_jmax(tag)`, `params.drug_transporter_km(tag)` → MM kinetics
 - `params.drug_param("fup")` → existing; **extended** to also resolve `"ps_passive"`, `"ps_eff"`, `"cl_int_bile"`
-- `params.total_inflow(source)` → Q_h aggregated from FlowEdges
-- `params.get_node_param(target, "ivive_scaling")` → existing per-node scaling factor
+- `params.total_inflow(source)` → Q_h aggregated from FlowEdges into liver (arterial + portal)
+- `params.node_param(source, "ivive_scaling")`, `params.node_param(source, "volume")` → existing per-node accessors
+- `params.drug_kp(source)`, `params.drug_param("rbp")` → for `c_out` computation
 
 **No string matching on organ names.** The flux receives `source` and `target` as arbitrary strings.
 
-### 1.2 YAML: remove redundant `active_transport` edges
+### 1.2 YAML: remove redundant `active_transport` edges, switch liver clearance to `extended`
 
-In `data/physiology/reference_man.yaml`, replace:
+In `data/physiology/reference_man.yaml`:
 
+**Remove** these two lines (currently add a parallel stiff MM injection on top of well-stirred metabolism):
 ```yaml
-edges:
   - {source: portal_vein,    target: liver, type: active_transport}
   - {source: arterial_blood, target: liver, type: active_transport}
-  - {source: arterial_blood, target: liver, type: clearance, model: well_stirred}
 ```
 
-with:
-
+**Change** the hepatic clearance edge model from `well_stirred` to `extended`:
 ```yaml
-edges:
-  - {source: arterial_blood, target: liver, type: clearance, model: extended}
+  - {source: liver, target: metabolized_hepatic, type: clearance, model: extended}
 ```
 
-The `arterial_blood` source is conventional; the flux internally uses `total_inflow(source)` which already aggregates portal + arterial contributions via graph-level flow balance.
+`source=liver` is unchanged. The ECM flux queries transporters + enzymes at `source` (the hepatocyte node), and `total_inflow(source)` already aggregates Q_arterial (0.065×CO) + Q_portal (0.19×CO) = 0.255×CO ≈ 100 L/h via existing graph flow balance.
 
-**`ActiveTransportFluxSpec` is retained** in `flux.py` for future use (e.g., renal active secretion, BBB transporters) but no physiology YAML currently instantiates it.
+**`ActiveTransportFluxSpec` is retained** in `flux.py` for future use (e.g., renal active secretion, BBB transporters) but no physiology YAML currently instantiates it after this change.
 
 ### 1.3 DrugOnGraph: three new fields
 
@@ -181,43 +180,50 @@ CL_h  =  ───────────────────────�
 ### 2.2 Engine formula (exactly what `flux.py` computes)
 
 ```python
-ivive = params.get_node_param(target, "ivive_scaling")
+elif self.model == "extended":
+    src = self.source_name
+    ivive = params.node_param(src, "ivive_scaling")
 
-# PS_active from transporters at target node (identity-blind iteration)
-PS_active = 0.0
-for tag, abundance in params.node_transporters(target).items():
-    jmax = params.drug_transporter_jmax(tag)
-    km   = params.drug_transporter_km(tag)
-    if jmax <= 0 or km <= 0:
-        continue
-    PS_active += abundance * jmax / km
-PS_active *= ivive
+    # PS_active from transporters at the source (hepatocyte) node
+    PS_active = 0.0
+    for tag, abundance in params.node_transporters(src).items():
+        jmax = params.drug_transporter_jmax(tag)
+        km   = params.drug_transporter_km(tag)
+        if jmax <= 0 or km <= 0 or abundance <= 0:
+            continue
+        PS_active += abundance * jmax / km
+    PS_active *= ivive
 
-# Drug-level permeabilities (bare floats; no f_up multiplication here)
-PS_passive  = params.drug_param("ps_passive")
-PS_eff      = params.drug_param("ps_eff")
-CL_int_bile = params.drug_param("cl_int_bile")
+    # Drug-level permeabilities (bare floats; no f_up multiplication here)
+    PS_passive  = params.drug_param("ps_passive")
+    PS_eff      = params.drug_param("ps_eff")
+    CL_int_bile = params.drug_param("cl_int_bile")
 
-PS_inf   = PS_active + PS_passive
+    PS_inf = PS_active + PS_passive
 
-# Metabolism — inlined per existing well_stirred pattern (identity-blind)
-CL_int_metab = 0.0
-for tag, abundance in params.node_enzymes(target).items():
-    affinity = params.drug_enzyme_affinity(tag)
-    if affinity > 0:
-        CL_int_metab += abundance * affinity * ivive
-CL_int_h = CL_int_metab + CL_int_bile
+    # Metabolism — inlined from existing well_stirred pattern (identity-blind)
+    CL_int_metab = 0.0
+    for tag, abundance in params.node_enzymes(src).items():
+        affinity = params.drug_enzyme_affinity(tag)
+        if affinity > 0 and abundance > 0:
+            CL_int_metab += abundance * affinity * ivive
+    CL_int_h = CL_int_metab + CL_int_bile
 
-# ECM closure
-Q_h   = params.total_inflow(source)
-f_up  = params.drug_param("fup")
-num   = Q_h * f_up * PS_inf * CL_int_h
-den   = Q_h * (PS_eff + CL_int_h) + f_up * PS_inf * CL_int_h
-CL_h  = num / den if den > 0 else 0.0
+    # ECM closure
+    Q_h  = params.total_inflow(src)
+    f_up = params.drug_param("fup")
+    num  = Q_h * f_up * PS_inf * CL_int_h
+    den  = Q_h * (PS_eff + CL_int_h) + f_up * PS_inf * CL_int_h
+    if den < 1e-12:
+        return
+    clh = num / den
 
-# Same downstream as well_stirred
-c_out = y[source_idx] * rbp / (v_source * kp_source)
-rate  = CL_h * c_out
+    # Concentration leaving the organ (same as well_stirred)
+    v   = params.node_param(src, "volume")
+    kp  = params.drug_kp(src)
+    rbp = params.drug_param("rbp")
+    c_out = y[self.source_idx] * rbp / (v * kp) if v > 0 else 0.0
+    rate = clh * c_out
 ```
 
 **`f_up` appears exactly once in the numerator.** (Earlier draft with `PS_active = f_up × Σ ...` was corrected — see change log.)
@@ -285,14 +291,14 @@ Existing `data/transporters/oatp1b1.json` (Jmax/Km for 5 statins) is **retained 
 
 ### 3.4 Pravastatin re-calibration under ECM
 
-Current: `liver.OATP1B1` abundance = `1.0e11`, Jmax=228 pmol/s, Km=13.6 µM → PS_active ≈ 0.06 L/h. Watanabe 2009 reports PS_inf ≈ 0.5-2 L/h (10-30× gap — a fit compensation for the missing biliary branch and the flow-limited plateau).
+Current: `liver.OATP1B1` abundance `1.0e11` is an engine-calibrated constant (not a pure pmol count) tuned in Phase 1 under MM-uptake + well-stirred metabolism with no biliary branch. Under ECM the dynamics change (add passive, add efflux, add CL_int_bile ≈ 45 L/h for pravastatin), so the abundance re-calibrates empirically.
 
-**Calibration strategy (Option II, chosen):** scale abundance ×20-30 to ~2e12 so PS_active lands in Watanabe 2009 range. This retains the existing MM machinery (Jmax/Km/abundance structure) and the CPIC phenotype scaling hook via `apply_phenotype_to_graph` (abundance scaling = activity scaling). Alternatives considered:
+**Calibration strategy (Option II, chosen):** sweep abundance over a logarithmic grid and pick the value that meets the Cmax fold-error gate on pravastatin while keeping PS_active within the Watanabe 2009 literature range (0.5-2 L/h). This retains the existing MM machinery (Jmax/Km/abundance structure) and the CPIC phenotype scaling hook via `apply_phenotype_to_graph` (abundance scaling = activity scaling). Alternatives considered:
 
-- **Option I** (re-curate Jmax/Km): disturbs oatp1b1.json which is already literature-grounded; rejected.
+- **Option I** (re-curate Jmax/Km): disturbs `oatp1b1.json` which is already literature-grounded; rejected.
 - **Option III** (drop MM, store PS_active directly): loses per-transporter decomposition and the phenotype scaling hook; rejected.
 
-Calibration target: pravastatin 40 mg oral, observed Cmax 0.045 mg/L. Fold-error gate 0.7-1.3 in plan phase.
+**Calibration target:** pravastatin 40 mg oral, observed Cmax 0.045 mg/L. Fold-error gate 0.7-1.3. Seed abundance from the sweep is expected in the `[1e11, 1e13]` range; the exact value falls out of the plan-phase script `scripts/calibrate_oatp_abundance_ecm.py`.
 
 ---
 
@@ -430,6 +436,9 @@ Target: **460 pass, 0 skip** after ECM lands.
 | 10 | Self-review: Section 2.2 inlined `CL_int_metab` loop | no `organ_clint` accessor exists; matches existing `well_stirred` pattern |
 | 11 | Self-review: Section 2.1 ref fixed (Section 5.3 → 2.4) | linear-regime justification lives in 2.4, not in Phase 2A gate |
 | 12 | Self-review: added `jmax <= 0` rejection in PS_active loop | defensive against zero-kinetics drug-transporter pairs |
+| 13 | Plan-phase fix: `target` → `source` for node accessors in Sections 1.1 and 2.2 | existing clearance edge has source=liver, target=metabolized_hepatic (sink); transporters/enzymes live at liver = source |
+| 14 | Plan-phase fix: Section 1.2 YAML edit corrected | only the `model:` attribute changes on the liver→sink edge; source=liver retained; active_transport edges removed |
+| 15 | Plan-phase fix: abundance re-calibration reframed as empirical sweep | abundance is an engine-calibrated scalar, not a linearly-convertible pmol count; sweep script produces final value |
 
 ---
 
