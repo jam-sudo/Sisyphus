@@ -1,0 +1,81 @@
+{
+  "phase": "OATP ECM abundance calibration (pravastatin)",
+  "sweep": [
+    {
+      "abundance": 10000.0,
+      "cmax_mg_L": 0.14007904069234994,
+      "observed_cmax_mg_L": 0.045,
+      "fold_error": 3.11286757094111,
+      "ps_active_L_per_h_linear_est": 10.058823529411766,
+      "wall_s": 0.10617399215698242
+    },
+    {
+      "abundance": 100000.0,
+      "cmax_mg_L": 0.09018342762415024,
+      "observed_cmax_mg_L": 0.045,
+      "fold_error": 2.004076169425561,
+      "ps_active_L_per_h_linear_est": 100.58823529411765,
+      "wall_s": 0.10255956649780273
+    },
+    {
+      "abundance": 300000.0,
+      "cmax_mg_L": 0.05708930256986854,
+      "observed_cmax_mg_L": 0.045,
+      "fold_error": 1.268651168219301,
+      "ps_active_L_per_h_linear_est": 301.7647058823529,
+      "wall_s": 0.10505509376525879
+    },
+    {
+      "abundance": 500000.0,
+      "cmax_mg_L": 0.045577669820701446,
+      "observed_cmax_mg_L": 0.045,
+      "fold_error": 1.0128371071266988,
+      "ps_active_L_per_h_linear_est": 502.94117647058823,
+      "wall_s": 0.10689711570739746
+    },
+    {
+      "abundance": 700000.0,
+      "cmax_mg_L": 0.03975192237297458,
+      "observed_cmax_mg_L": 0.045,
+      "fold_error": 1.1320207253824117,
+      "ps_active_L_per_h_linear_est": 704.1176470588235,
+      "wall_s": 0.11762452125549316
+    },
+    {
+      "abundance": 1000000.0,
+      "cmax_mg_L": 0.03492550750964648,
+      "observed_cmax_mg_L": 0.045,
+      "fold_error": 1.288456581126872,
+      "ps_active_L_per_h_linear_est": 1005.8823529411765,
+      "wall_s": 0.10212373733520508
+    },
+    {
+      "abundance": 3000000.0,
+      "cmax_mg_L": 0.026557339984777467,
+      "observed_cmax_mg_L": 0.045,
+      "fold_error": 1.6944468092735858,
+      "ps_active_L_per_h_linear_est": 3017.6470588235293,
+      "wall_s": 0.08772611618041992
+    },
+    {
+      "abundance": 10000000.0,
+      "cmax_mg_L": 0.02334722195915557,
+      "observed_cmax_mg_L": 0.045,
+      "fold_error": 1.927424174007706,
+      "ps_active_L_per_h_linear_est": 10058.823529411766,
+      "wall_s": 0.09123992919921875
+    },
+    {
+      "abundance": 100000000.0,
+      "cmax_mg_L": 0.022065412816263258,
+      "observed_cmax_mg_L": 0.045,
+      "fold_error": 2.039390804727336,
+      "ps_active_L_per_h_linear_est": 100588.23529411765,
+      "wall_s": 0.10277080535888672
+    }
+  ],
+  "recommended_abundance": 500000.0,
+  "recommended_fold_error": 1.0128371071266988,
+  "recommended_ps_active": 502.94117647058823,
+  "ps_active_in_literature_range": false
+}
