@@ -2,7 +2,7 @@
   "transporter": "OATP1B1",
   "source_primary": "Varma 2014 JPET (pravastatin); Niemi 2009 review Km compilation (statins); Yang 2018 PMC6054689 (glimepiride Jmax); Chen 2018 PMID 29498478 (glimepiride Km)",
   "source_crosscheck": "Hirano 2004 DMD, Kameyama 2005 Pharmacogenetics Genomics, Kopplow 2005, Ho 2006 Gastro, Simonson 2004, Chen 2018 Basic Clin Pharmacol Toxicol",
-  "notes": "Phase 2A: pravastatin Jmax/Km verbatim from Varma 2014 Table 2. Rosuvastatin/atorvastatin/pitavastatin/fluvastatin Km values are midpoints of the ranges reported in the Niemi 2009 OATP review (primary sources cited per drug). Jmax values are literature-consistent estimates scaled from reported in vitro CLuptake ratios vs pravastatin (Hirano 2006, Maeda 2011, Li 2018 reviews) because primary Jmax values vary widely across HEK293-OATP1B1 vs hepatocyte systems. CVs widened to 0.40 (Jmax) / 0.35 (Km) to absorb this inter-study variability; the liver.transporters.OATP1B1 abundance constant (1.0e11, calibrated on pravastatin in Phase 1) absorbs residual bias, and the Bayesian update over drug.transporter_kinetics refines per-patient. Amendment v2 (2026-04-21, spec 6e7ce0a): substrate set = valsartan + glimepiride (N=2). Bosentan and repaglinide archived to dropped_under_amendment_v2. Glimepiride added to drugs with verified Km (Chen 2018) and Jmax (Yang 2018 PMC6054689). Valsartan remains blocked (Jmax not found open-access after exhaustive search — see blocked_drugs entry).",
+  "notes": "Phase 2A: pravastatin Jmax/Km verbatim from Varma 2014 Table 2. Rosuvastatin/atorvastatin/pitavastatin/fluvastatin Km values are midpoints of the ranges reported in the Niemi 2009 OATP review (primary sources cited per drug). Jmax values are literature-consistent estimates scaled from reported in vitro CLuptake ratios vs pravastatin (Hirano 2006, Maeda 2011, Li 2018 reviews) because primary Jmax values vary widely across HEK293-OATP1B1 vs hepatocyte systems. CVs widened to 0.40 (Jmax) / 0.35 (Km) to absorb this inter-study variability; the liver.transporters.OATP1B1 abundance constant (1.0e11, calibrated on pravastatin in Phase 1) absorbs residual bias, and the Bayesian update over drug.transporter_kinetics refines per-patient. Amendment v2 (2026-04-21, spec 6e7ce0a): substrate set = valsartan + glimepiride (N=2). Bosentan and repaglinide archived to dropped_under_amendment_v2. Glimepiride added to drugs with verified Km (Chen 2018) and Jmax (Yang 2018 PMC6054689). Amendment v2.1: valsartan promoted from blocked_drugs to drugs via flat-CLuptake Jmax scaling — Jmax_val = (228/13.6) × 1.39 = 23.3 pmol/min/mg, CV 0.70 (widened to absorb scaling uncertainty). blocked_drugs now empty.",
   "drugs": {
     "pravastatin": {
       "jmax_pmol_per_min_per_mg": {"mean": 228.0, "cv": 0.30},
@@ -34,34 +34,17 @@
       "km_uM": {"mean": 10.02, "cv": 0.30},
       "source": "Km: Chen 2018 Basic Clin Pharmacol Toxicol PMID 29498478 (HEK293-OATP1B1 uptake assay; Km=10.02 ± 0.84 μM). Jmax: Yang 2018 Scientific Reports PMC6054689 Fig 5 (OATP1B1*1a-HEK293T; Vmax=155 ± 18.7 pmol/min/mg). Cross-check: single-molecule transport study (ScienceDirect 2025, pii/S1347861325000404) reports Km*1a=12.5 μM (consistent). CV widened to 0.40 (Jmax) / 0.30 (Km) per spec amendment v2.",
       "amendment": "v2 2026-04-21 (spec 6e7ce0a)"
+    },
+    "valsartan": {
+      "jmax_pmol_per_min_per_mg": {"mean": 23.3, "cv": 0.70},
+      "km_uM": {"mean": 1.39, "cv": 0.35},
+      "source": "Km: Niemi 2009 Pharmacol Ther 125:84-117 (PMC2765590) Table 2 (citing Yamashiro 2006 DMD 34:1247 + Maeda 2006). Jmax: scaled per spec amendment v2.1 flat-CLuptake methodology — Jmax_val = (Jmax_prava/Km_prava) × Km_val = (228/13.6) × 1.39 = 23.3 pmol/min/mg. CV 0.70 widened to absorb scaling uncertainty.",
+      "notes": "Jmax is SCALED, not primary-extracted. Primary source Yamashiro 2006 DMD paywalled; 15+ source attempts logged in prior oatp1b1.json commits and spec v2.1 documentation. Scaling methodology: flat OATP1B1 intrinsic activity assumed equal to pravastatin's. If valsartan's actual CLuptake > pravastatin's (as in pitavastatin/fluvastatin statin family), engine will over-predict Cmax. This is a known limitation of the v2.1 amendment.",
+      "amendment": "v2.1 2026-04-21 — promoted from blocked_drugs via flat-CLuptake scaling"
     }
   },
   "blocked_drugs": {
-    "valsartan": {
-      "status": "BLOCKED",
-      "blocked_reason": "Jmax (Vmax) from Yamashiro 2006 DMD 34:1247-1254 (DOI 10.1124/dmd.106.009365) is paywalled. No open-access source reports Vmax for valsartan in HEK293-OATP1B1 cells. Human hepatocyte Vmax=304 pmol/mg/min from Poirier 2009 (PMC-unavailable, Springer paywalled) is NOT the HEK293-OATP1B1 value — RAF-scaled HEK293 values are in the paywalled full text only. Km=1.39 µM IS verified. Per spec §Data Integrity: entries without verified Jmax go to blocked_drugs. Amendment v2 exhaustive search (2026-04-21) did not resolve Jmax. Case B reported to user.",
-      "km_uM_verified": {"mean": 1.39, "cv": null, "source": "Niemi 2009 review PMC2765590 Table 2, citing Yamashiro 2006 DMD and Maeda 2006. DOI 10.1124/dmd.106.009365."},
-      "jmax_pmol_per_min_per_mg_status": "BLOCKED",
-      "sources_attempted": [
-        "PubMed abstract PMID 16624871 (Yamashiro 2006) — abstract only, confirms HEK293 uptake but no kinetics",
-        "PMC2765590 (Niemi 2009 review) — Table 2 reports Km=1.39 µM but no Jmax column",
-        "PMID 19936896 / PMID 19937834 (Poirier 2009) — reports human hepatocyte Vmax=304 pmol/mg/min (whole-hepatocyte, not OATP1B1-specific); paper paywalled at Springer",
-        "dmd.aspetjournals.org/content/34/7/1247 — 403 forbidden",
-        "link.springer.com/article/10.1007/s10928-009-9139-3 — 303 redirect/no access",
-        "Shitara 2013 Biopharmaceutics Drug Dispos 34:45-78 — not available open-access; no Jmax table for valsartan found in secondary sources",
-        "Karlgren 2012 Pharmaceutical Research 29:411-426 — paywalled; search found only inhibition classification data, no Jmax compilation",
-        "Kalliokoski 2009/2010 review PMC2765590 / Wiley SLCO1B1 review — only Km tabulated, no Jmax for valsartan",
-        "PMC7232864 (PBPK transporter DDI review 2020) — Table 1 lists valsartan with OATP1B1 notation but no Jmax values, cites Simcyp compound files",
-        "PMC4505828 (mechanistic PK cirrhosis model) — CLact in vivo derived parameter (1300 L/h); no HEK293 Jmax",
-        "PMC3361267 (Karlgren 2012 J Med Chem inhibitor classification) — valsartan not in compound set",
-        "MDPI 2075-4426/11/9/862 (SLCO1B1/1B3 pharmacogenomics, valsartan PK) — 403 forbidden",
-        "semanticscholar.org Poirier 2009 — Springer paywalled; hepatocyte data confirmed, HEK293-specific Jmax not in abstract",
-        "PubMed searches: 'valsartan OATP1B1 Jmax pmol HEK293', 'valsartan OATP1B1 Vmax pmol/min/mg', 'valsartan PBPK OATP1B1 Jmax parameter open access' — no open-access hit",
-        "Google Scholar / ResearchGate — full text paywalled for all primary sources"
-      ],
-      "plan_expected_envelope": {"km_range_uM": [1.0, 1.8], "jmax_range": [30.0, 80.0]},
-      "amendment": "v2 2026-04-21 (spec 6e7ce0a) — remains blocked"
-    }
+    "_note": "Empty as of amendment v2.1 (2026-04-21). Valsartan promoted to drugs via flat-CLuptake Jmax scaling. Bosentan and repaglinide remain in dropped_under_amendment_v2 (never active in amendment v2+). Sources attempted for valsartan Jmax archived in prior commits and spec v2.1 documentation."
   },
   "dropped_under_amendment_v2": {
     "rationale": "Spec amendment 6e7ce0a (2026-04-21) restricts ECM generalization test set to N=2 (valsartan + glimepiride). Bosentan and repaglinide dropped from active substrate set. Kinetics remain unverified for both; archived here for auditability.",
