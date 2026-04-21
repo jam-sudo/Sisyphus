@@ -169,7 +169,14 @@ class FlowFluxSpec(FluxSpec):
 
 @register_flux("clearance")
 class ClearanceFluxSpec(FluxSpec):
-    """Enzyme-mediated clearance (well-stirred) or renal filtration (GFR).
+    """Hepatic / renal clearance flux. Four models supported:
+
+    - ``well_stirred``  — classical WS with organ-level CLint (default)
+    - ``parallel_tube`` — PT exponential extraction approximation
+    - ``gfr_filtration`` — renal filtration (``CL_renal × C_plasma``)
+    - ``extended``      — ECM: QSSA-closed hepatocyte with active + passive
+      uptake, passive efflux, metabolism, biliary clearance. See
+      ``docs/superpowers/specs/2026-04-20-oatp-ecm-hepatic-clearance-design.md``.
 
     Well-stirred model::
 
