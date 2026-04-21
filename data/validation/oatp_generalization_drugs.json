@@ -1,26 +1,14 @@
 {
-  "description": "Pre-registered IV clinical observations for ECM generalization test. Supersedes commit ee24164 (invalid back-calculated values). DO NOT MODIFY after engine run — see spec docs/superpowers/specs/2026-04-21-ecm-generalization-test-design.md §Freeze Contract.",
-  "spec_commit": "9115e63",
-  "primary_source_search_log": "2026-04-21. Attempted PMC, EuropePMC REST API, DOI direct, Google Scholar, Semantic Scholar, ResearchGate, FABAD bioavailability PDF, EMA EPAR, FDA clinical pharmacology reviews, PBPK modeling papers, review articles (Dingemanse 2004 Clin Pharmacokinet, Kalliokoski 2009 BJP, Niemi 2011 Pharmacol Rev). Flesch 1997 full text obtained via Greek university repository (http://jupiter.chem.uoa.gr). Weber 1996 and Hatorp 1998 are subscription-only with no open-access version found after exhaustive search.",
+  "description": "Pre-registered IV clinical observations for ECM generalization test. Supersedes commit 5f79d34 (v1, N=1 verified / N=2 blocked). Under v2 amendment (spec commit 6e7ce0a), bosentan and repaglinide formally dropped; glimepiride added as second verified substrate. DO NOT MODIFY after engine run — see spec docs/superpowers/specs/2026-04-21-ecm-generalization-test-design.md §Freeze Contract.",
+  "spec_commit": "6e7ce0a",
+  "supersedes": "5f79d34",
+  "primary_source_search_log": "2026-04-21. Original v1 search: Attempted PMC, EuropePMC REST API, DOI direct, Google Scholar, Semantic Scholar, ResearchGate, FABAD bioavailability PDF, EMA EPAR, FDA clinical pharmacology reviews, PBPK modeling papers, review articles (Dingemanse 2004 Clin Pharmacokinet, Kalliokoski 2009 BJP, Niemi 2011 Pharmacol Rev). Flesch 1997 full text obtained via Greek university repository (http://jupiter.chem.uoa.gr). Weber 1996 and Hatorp 1998 are subscription-only with no open-access version found after exhaustive search. v2 amendment survey (2026-04-21): PMC searched for glimepiride IV pharmacokinetics. Huang 2018 (OATP1B1 PBPK review, DOI 10.1007/s40262-018-0695-5) cites glimepiride as OATP1B1 substrate but does not tabulate IV Cmax. Badian M et al. 1994 Drug Metab Drug Interact 13:69-85 (PMID 8902432) identified as primary IV PK paper. Primary paper is paywalled; IV Cmax value 243 ng/mL obtained from open-access systematic review PMC11768776 Table 3 (which cites Badian 1994 as reference 63). Review-with-table path accepted per spec §Verification requirement.",
+  "dropped_under_amendment_v2": {
+    "drugs": ["bosentan", "repaglinide"],
+    "reason": "Both drugs BLOCKED under v1 spec (primary IV Cmax sources paywalled; no open-access review tabulates the value; back-calculation forbidden per spec §Literature Data Extraction Protocol). Spec amendment v2 (commit 6e7ce0a) formally drops these drugs from the substrate set rather than carrying them as BLOCKED entries. Their full search logs are preserved in the git history of commit 5f79d34.",
+    "git_history_ref": "5f79d34"
+  },
   "drugs": {
-    "bosentan": {
-      "status": "BLOCKED",
-      "blocked_reason": "Primary source (Weber C et al. Clin Pharmacol Ther 1996;60:124-137, PMID 8823230) is paywalled with no open-access version. EMA EPAR, SmPC, and all review articles report only CL (~8.5 L/h) and Vss (~18 L) for the 250 mg IV dose — not Cmax. Back-calculation of Cmax from Vss or Vc would violate spec §Literature Data Extraction Protocol. No review article tabulates bosentan IV Cmax from Weber 1996 in an accessible table.",
-      "sources_attempted": [
-        "PubMed PMID 8823230 (abstract only, no Cmax)",
-        "Europe PMC REST API (isOpenAccess: N, subscription only)",
-        "DOI 10.1016/S0009-9236(96)90127-7 (403 Forbidden)",
-        "EMA Tracleer EPAR scientific discussion PDF (CL and Vss only, no Cmax)",
-        "EC Community Register bosentan PDF (no IV Cmax table)",
-        "Dingemanse 2004 Clin Pharmacokinet 43:1089 (paywalled, abstract only)",
-        "PMC1874330 open access (oral 62.5 mg only, no IV Cmax)",
-        "FDA NDA 209279 clinical pharmacology review (404 Not Found)",
-        "Bosentan PBPK papers (Huang 2025 CPT, Yoshida 2018 DMD) — paywalled or no IV Cmax table in accessible content",
-        "Google Scholar, ResearchGate, Semantic Scholar — no PDF found"
-      ],
-      "plan_envelope_mg_l": [0.5, 3.0],
-      "notes": "Envelope restored to plan original (0.5-3.0 mg/L). The 8-20 mg/L envelope from commit ee24164 was derived from Vss and was not primary-source-justified. Drug BLOCKED per spec §Execution Constraints: no substitute value permitted."
-    },
     "valsartan": {
       "status": "VERIFIED",
       "dose_mg": 20.0,
@@ -36,33 +24,22 @@
       "individual_cmax_mg_l": [3.42, 4.66, 4.43, 3.77, 3.93, 3.61, 4.03, 4.57, 4.09, 4.40, 3.41, 3.91],
       "notes": "Primary source verified. Table 1 reports individual Cmax for each of 12 subjects. Mean 4.02, SD 0.43, CV=10.7% (calculated from SD/mean). This is a direct table read from the full-text PDF of the primary paper. Administration was iv bolus (10 mL volume injected in ~30 s, see Methods). The pilot study (Study 1, n=3 per dose level) gave AUC dose-proportional from 5-10 mg with a tendency to disproportionate increase at 20 mg; the main study (Study 2) used 20 mg IV bolus + 80 mg oral capsule or solution in 12 subjects crossover. The observed CV (10.7%) is lower than the spec's default 0.35; using the observed CV which reflects actual inter-subject variability."
     },
-    "repaglinide": {
-      "status": "BLOCKED",
-      "blocked_reason": "Primary source (Hatorp V, Oliver S, Su CAPF. Int J Clin Pharmacol Ther 1998;36:636-641, PMID 9877000) is paywalled with no open-access version. Abstract confirms 2 mg IV infusion over 15 min, n=12, absolute bioavailability 62.5%, but does not report IV Cmax numerically. Hatorp 2002 review (PMID 12083976) abstract also does not report IV Cmax. FDA label (Prandin) and all other accessible sources only report Vss=31 L and CL=38 L/h for IV dosing — not Cmax. Back-calculation from these parameters would violate spec §Literature Data Extraction Protocol.",
-      "sources_attempted": [
-        "PubMed PMID 9877000 (abstract only; confirms 2 mg IV/15 min, n=12, F=62.5%, but no IV Cmax value)",
-        "Europe PMC REST API (isOpenAccess: N)",
-        "PubMed PMID 12083976 Hatorp 2002 review (abstract only, no IV Cmax)",
-        "FDA Prandin label (DailyMed) — Vss and CL only",
-        "Van Heiningen 1999 PMID 9877000 (same paper, confirms 15 min infusion but no IV Cmax)",
-        "PMC6885506 PBPK paper (IV data in supplementary ESM only, ESM not accessible)",
-        "Link.springer.com PBPK OATP1B1 PDF (ESM inaccessible via WebFetch)",
-        "Google Scholar, ResearchGate, Semantic Scholar — no PDF found with IV Cmax"
-      ],
-      "known_iv_parameters": {
-        "vss_l": 31,
-        "cl_l_per_h": 38,
-        "infusion_duration_min": 15,
-        "dose_mg": 2,
-        "n": 12,
-        "absolute_bioavailability_pct": 62.5,
-        "source": "Hatorp 1998 PMID 9877000 (abstract) + FDA Prandin label"
-      },
-      "notes": "Drug BLOCKED per spec §Execution Constraints. Repaglinide IV Cmax not accessible from any open source. The plan envelope (0.020-0.080 mg/L) is retained here for reference but no observed_cmax_mg_l is populated — spec forbids substituting a derived value."
+    "glimepiride": {
+      "status": "VERIFIED",
+      "dose_mg": 1.0,
+      "observed_cmax_mg_l": 0.243,
+      "observed_cmax_sd_mg_l": 0.033,
+      "observed_cmax_cv": 0.136,
+      "patient_n": 12,
+      "administration": "iv_bolus",
+      "smiles": "CCC1=C(C)CN(C(=O)NCCc2ccc(S(=O)(=O)NC(=O)NC3CCC(C)CC3)cc2)C1=O",
+      "source": "Badian M et al. 1994 Drug Metab Drug Interact 13:69-85 (PMID 8902432). 1 mg IV single dose in healthy volunteers (N=12). Cmax = 243 ± 33 ng/mL (= 0.243 ± 0.033 mg/L). Primary paper paywalled; Cmax value cited in open-access systematic review PMC11768776 Table 3 (citing reference 63 = Badian 1994).",
+      "source_table": "PMC11768776 Table 3; original Badian 1994 Table [paywalled]",
+      "notes": "IV Cmax accessible via systematic review (PMC11768776); primary paper paywalled. Values used are the systematic review's tabulation of Badian 1994 data. Individual subject values not available from review. CV computed from SD/mean = 33/243 = 0.136. SMILES is the RDKit canonical form of PubChem CID 3476 (C24H34N4O5S, MW 490.63). The SMILES provided in the spec task was incorrect (C24H35N5O4S, a different compound); corrected to PubChem canonical during Task 1 execution."
     }
   },
-  "n_verified": 1,
-  "n_blocked": 2,
-  "outcome_status": "DONE_WITH_CONCERNS",
-  "outcome_note": "1/3 drugs verified from primary source (valsartan, Table 1 Flesch 1997). 2/3 drugs BLOCKED (bosentan and repaglinide primary sources paywalled with no IV Cmax in any accessible review or regulatory document). Test proceeds with N_effective=1. Per spec §Execution Constraints, no substitute values are populated. Per spec, N_effective < 3 is an acceptable outcome."
+  "n_verified": 2,
+  "n_blocked": 0,
+  "outcome_status": "DONE",
+  "outcome_note": "2/2 drugs verified under v2 amendment substrate set. Valsartan: primary source verified from full-text PDF (Flesch 1997 Table 1). Glimepiride: IV Cmax verified via review-with-table path (PMC11768776 Table 3 citing Badian 1994), accepted per spec §Verification requirement when primary paper is paywalled and review tabulates the value. N_effective=2. Both drugs ready for engine run."
 }
