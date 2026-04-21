@@ -22,6 +22,31 @@ from sisyphus.graph.types import (
     TransitEdge,
 )
 
+
+# ---------------------------------------------------------------------------
+# ECM Fields Test
+# ---------------------------------------------------------------------------
+
+
+def test_drug_on_graph_has_ecm_fields():
+    """DrugOnGraph should have ps_passive, ps_eff, cl_int_bile with WS-limit defaults."""
+    drug = DrugOnGraph(
+        name="t", smiles="C", dose_mg=100.0, route="iv",
+        administration_node="venous_blood",
+        mw=100.0, pka=None, compound_type="neutral",
+        fup=Distribution(0.5), rbp=Distribution(1.0),
+        kp_method="provided", kp_overrides={},
+        peff=Distribution(1.0), solubility=Distribution(10.0),
+        enzyme_affinity={}, renal_clearance=Distribution(0.0),
+    )
+    assert drug.ps_passive.mean == 1e6
+    assert drug.ps_eff.mean == 1e6
+    assert drug.cl_int_bile.mean == 0.0
+    assert drug.ps_passive.cv == 0.0
+    assert drug.ps_eff.cv == 0.0
+    assert drug.cl_int_bile.cv == 0.0
+
+
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
