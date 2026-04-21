@@ -60,3 +60,29 @@ def test_build_drug_on_graph_without_transporter_is_empty():
     adme = predict_adme(profile)
     drug = build_drug_on_graph(profile, adme, dose_mg=10.0, route="oral")
     assert drug.transporter_kinetics == {}
+
+
+def test_load_hepatic_ecm_params_pravastatin():
+    """load_hepatic_ecm_params returns PS/biliary Distributions for curated drugs."""
+    from sisyphus.predict.transporter_db import load_hepatic_ecm_params
+    params = load_hepatic_ecm_params("pravastatin")
+    assert params is not None
+    assert "ps_passive" in params
+    assert "ps_eff" in params
+    assert "cl_int_bile" in params
+    assert 0.0 < params["ps_passive"].mean < 100.0
+    assert 0.0 < params["ps_eff"].mean < 100.0
+    assert params["cl_int_bile"].mean >= 0.0
+
+
+def test_load_hepatic_ecm_params_unknown_drug_returns_none():
+    from sisyphus.predict.transporter_db import load_hepatic_ecm_params
+    assert load_hepatic_ecm_params("unknowndrug_xyz") is None
+
+
+def test_load_hepatic_ecm_params_case_insensitive():
+    from sisyphus.predict.transporter_db import load_hepatic_ecm_params
+    p_lower = load_hepatic_ecm_params("pravastatin")
+    p_upper = load_hepatic_ecm_params("PRAVASTATIN")
+    assert p_lower is not None and p_upper is not None
+    assert p_lower["ps_passive"].mean == p_upper["ps_passive"].mean
