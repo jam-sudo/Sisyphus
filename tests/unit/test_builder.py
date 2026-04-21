@@ -56,6 +56,26 @@ class TestBuilder:
         g = build_from_yaml(Path("data/physiology/reference_man.yaml"))
         assert "CYP3A4" in g.nodes["gut_wall"].enzymes
 
+    def test_reference_man_liver_uses_extended_clearance(self):
+        """Liver clearance edge should be model=extended after ECM migration."""
+        from sisyphus.graph.types import ClearanceEdge
+
+        g = build_from_yaml(Path("data/physiology/reference_man.yaml"))
+        liver_clearance = [
+            e for e in g.edges
+            if isinstance(e, ClearanceEdge) and e.source == "liver"
+        ]
+        assert len(liver_clearance) == 1
+        assert liver_clearance[0].model == "extended"
+
+    def test_reference_man_has_no_active_transport_edges(self):
+        """active_transport edges removed; ECM flux replaces MM uptake."""
+        from sisyphus.graph.types import ActiveTransportEdge
+
+        g = build_from_yaml(Path("data/physiology/reference_man.yaml"))
+        at_edges = [e for e in g.edges if isinstance(e, ActiveTransportEdge)]
+        assert len(at_edges) == 0
+
 
 class TestCompoundLoader:
     def test_load_midazolam(self):

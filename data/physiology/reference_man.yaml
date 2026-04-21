@@ -58,7 +58,7 @@ nodes:
       CYP2C9: 6480000       # 96 * 45 * 1500
       CYP2E1: 3307500       # 49 * 45 * 1500
     transporters:
-      OATP1B1: 1.0e11       # calibrated: pravastatin 40mg Cmax 0.039 vs obs 0.045 (ratio 0.86)
+      OATP1B1: 5.0e5        # ECM-calibrated: pravastatin 40mg Cmax 0.0456 vs obs 0.045 (FE 1.013)
     ivive_scaling: 0.00006   # 60/1e6: converts uL/min -> L/h (MPPGL * organ_wt already in abundance)
 
   - name: spleen
@@ -234,10 +234,6 @@ edges:
   # Portal vein → liver
   - {source: portal_vein, target: liver, type: flow, flow_fraction: 0.19}
 
-  # OATP1B1 sinusoidal uptake (portal + arterial)
-  - {source: portal_vein, target: liver, type: active_transport}
-  - {source: arterial_blood, target: liver, type: active_transport}
-
   # Thymus
   - {source: arterial_blood, target: thymus, type: flow, flow_fraction: 0.002}
   - {source: thymus, target: venous_blood, type: flow}
@@ -292,6 +288,6 @@ edges:
   - {source: colon_lumen, target: gut_wall, type: absorption, ka_fraction: 0.05}
 
   # ── Clearance ────────────────────────────
-  - {source: liver, target: metabolized_hepatic, type: clearance, model: well_stirred}
+  - {source: liver, target: metabolized_hepatic, type: clearance, model: extended}
   - {source: gut_wall, target: metabolized_gut, type: clearance, model: well_stirred}
   - {source: kidney, target: excreted_renal, type: clearance, model: gfr_filtration}

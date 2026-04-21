@@ -132,7 +132,10 @@ class ClearanceEdge(Edge):
 
     ``model`` selects the mathematical formulation:
         - ``"well_stirred"`` — hepatic well-stirred model
+        - ``"parallel_tube"`` — parallel-tube extraction
         - ``"gfr_filtration"`` — glomerular filtration (renal)
+        - ``"extended"`` — Extended Clearance Model (ECM): active + passive
+          uptake, passive efflux, metabolism, biliary clearance via QSSA.
     """
 
     edge_type: str = field(default="clearance", init=False)
