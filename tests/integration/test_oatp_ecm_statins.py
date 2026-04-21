@@ -171,24 +171,42 @@ def _simulate_cmax(drug_name: str) -> tuple[float, float]:
 _STATIN_NAMES = list(_STATIN_CASES.keys())
 
 
+def _xfail_reason(name: str) -> str | None:
+    """Return the xfail reason for *name*, or None if the drug should run strict."""
+    if name in _KNOWN_PEFF_FAILS:
+        return (
+            f"{name}: FE gate fails due to Peff over-prediction (absorption "
+            "model limitation, not ECM regression). Root-cause documented in "
+            "test module docstring."
+        )
+    return None
+
+
+_PARAMS = [
+    pytest.param(
+        name,
+        marks=(
+            [pytest.mark.xfail(reason=_xfail_reason(name), strict=False)]
+            if name in _KNOWN_PEFF_FAILS else []
+        ),
+    )
+    for name in _STATIN_NAMES
+]
+
+
 @pytest.mark.slow
-@pytest.mark.parametrize("name", _STATIN_NAMES)
+@pytest.mark.parametrize("name", _PARAMS)
 def test_statin_cmax_under_ecm(name: str) -> None:
-    """Simulate *name* under ECM; assert wall < 5 s and FE < gate."""
+    """Simulate *name* under ECM; assert wall < 5 s and FE < gate.
+
+    Uses the ``@pytest.mark.xfail(strict=False)`` decorator for drugs in
+    ``_KNOWN_PEFF_FAILS`` so the test body runs fully (the wall gate is
+    exercised for every statin) and an improvement that flips the drug to
+    passing promotes it to ``XPASS`` automatically.
+    """
     info = _STATIN_CASES[name]
     obs = info["cmax_obs"]
     gate = _FE_GATE[name]
-
-    # Mark expected failures before running so pytest captures them correctly.
-    is_known_fail = name in _KNOWN_PEFF_FAILS
-    if is_known_fail:
-        pytest.xfail(
-            reason=(
-                f"{name}: FE gate fails due to Peff over-prediction (absorption "
-                f"model limitation, not ECM regression). Root-cause documented in "
-                f"test module docstring."
-            )
-        )
 
     cmax, wall_s = _simulate_cmax(name)
 
