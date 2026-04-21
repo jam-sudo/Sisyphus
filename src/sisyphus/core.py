@@ -184,11 +184,12 @@ class DrugOnGraph:
     # Empty dict = no active transport (default for drugs without measured kinetics).
     transporter_kinetics: dict[str, TransporterKinetics] = field(default_factory=dict)
 
-    # Extended Clearance Model (ECM) — closed-form hepatocyte QSSA
+    # Extended Clearance Model (ECM) — closed-form hepatocyte QSSA.
     # Defaults drive ECM → well-stirred degenerate limit (<0.01% deviation).
-    # OATP substrates override via data/transporters/hepatic_ecm.json.
+    # Future OATP substrates override via data/transporters/hepatic_ecm.json
+    # (file added in a later task).
     ps_passive: Distribution = field(default_factory=lambda: Distribution(1e6, cv=0.0))
-    ps_eff:     Distribution = field(default_factory=lambda: Distribution(1e6, cv=0.0))
+    ps_eff: Distribution = field(default_factory=lambda: Distribution(1e6, cv=0.0))
     cl_int_bile: Distribution = field(default_factory=lambda: Distribution(0.0, cv=0.0))
 
     # Permeability-surface area overrides for perm-limited organs
