@@ -9,20 +9,18 @@ import pytest
 
 _DATA_FILE = Path(__file__).resolve().parents[2] / "data" / "validation" / "oatp_generalization_drugs.json"
 
-_EXPECTED_DRUGS = {"bosentan", "valsartan", "repaglinide"}
-_VERIFIED_DRUGS = {"valsartan"}
-_BLOCKED_DRUGS = {"bosentan", "repaglinide"}
+_EXPECTED_DRUGS = {"valsartan", "glimepiride"}
+_VERIFIED_DRUGS = {"valsartan", "glimepiride"}
+_BLOCKED_DRUGS: set[str] = set()
 
 _CMAX_ENVELOPES = {
-    "bosentan": (0.5, 3.0),   # plan original per spec 9115e63; ee24164 correction (8-20) was invalid
     "valsartan": (0.3, 6.0),
-    "repaglinide": (0.020, 0.080),
+    "glimepiride": (0.20, 0.30),  # observed 0.243 mg/L (Badian 1994 via PMC11768776 Table 3)
 }
 
 _DOSE_ENVELOPES = {
-    "bosentan": (100.0, 250.0),
     "valsartan": (20.0, 160.0),
-    "repaglinide": (2.0, 2.0),
+    "glimepiride": (1.0, 1.0),
 }
 
 
@@ -48,8 +46,8 @@ def test_top_level_status_fields():
 
 def test_n_verified_and_n_blocked():
     data = _load()
-    assert data["n_verified"] == 1, f"expected n_verified=1, got {data['n_verified']}"
-    assert data["n_blocked"] == 2, f"expected n_blocked=2, got {data['n_blocked']}"
+    assert data["n_verified"] == 2, f"expected n_verified=2, got {data['n_verified']}"
+    assert data["n_blocked"] == 0, f"expected n_blocked=0, got {data['n_blocked']}"
 
 
 def test_each_drug_has_status():
@@ -61,6 +59,7 @@ def test_each_drug_has_status():
         )
 
 
+@pytest.mark.skipif(not _BLOCKED_DRUGS, reason="no blocked drugs in v2 substrate set")
 def test_blocked_drugs_have_reason():
     data = _load()
     for drug in _BLOCKED_DRUGS:
@@ -101,10 +100,12 @@ def test_administration_is_iv(drug: str):
 
 
 @pytest.mark.parametrize("drug", sorted(_VERIFIED_DRUGS))
-def test_source_has_doi(drug: str):
+def test_source_has_doi_or_pmid(drug: str):
     data = _load()
     src = data["drugs"][drug]["source"]
-    assert "doi" in src.lower() or "10." in src, f"{drug} source missing DOI: {src!r}"
+    has_doi = "doi" in src.lower() or "10." in src
+    has_pmid = "pmid" in src.lower() or "pmc" in src.lower()
+    assert has_doi or has_pmid, f"{drug} source missing DOI or PMID: {src!r}"
 
 
 def test_valsartan_individual_values_consistency():
@@ -122,3 +123,31 @@ def test_valsartan_individual_values_consistency():
     assert len(individuals) == entry["patient_n"]
     assert abs(statistics.mean(individuals) - entry["observed_cmax_mg_l"]) < 0.01
     assert abs(statistics.stdev(individuals) - entry["observed_cmax_sd_mg_l"]) < 0.02
+
+
+def test_glimepiride_smiles_formula():
+    """Glimepiride SMILES must parse to C24H34N4O5S (PubChem CID 3476)."""
+    try:
+        from rdkit import Chem
+        from rdkit.Chem import rdMolDescriptors
+    except ImportError:
+        pytest.skip("rdkit not installed")
+
+    data = _load()
+    smiles = data["drugs"]["glimepiride"]["smiles"]
+    mol = Chem.MolFromSmiles(smiles)
+    assert mol is not None, f"glimepiride SMILES failed to parse: {smiles!r}"
+    formula = rdMolDescriptors.CalcMolFormula(mol)
+    assert formula == "C24H34N4O5S", f"glimepiride formula {formula!r} != expected C24H34N4O5S"
+
+
+def test_dropped_drugs_archived():
+    """Dropped drugs from amendment v2 must be listed in dropped_under_amendment_v2."""
+    data = _load()
+    assert "dropped_under_amendment_v2" in data, "top-level dropped_under_amendment_v2 key missing"
+    dropped = data["dropped_under_amendment_v2"]
+    assert isinstance(dropped, dict), "dropped_under_amendment_v2 must be a dict with drugs and reason"
+    assert "drugs" in dropped, "dropped_under_amendment_v2 must have a 'drugs' list"
+    assert "bosentan" in dropped["drugs"], "bosentan must be in dropped_under_amendment_v2"
+    assert "repaglinide" in dropped["drugs"], "repaglinide must be in dropped_under_amendment_v2"
+    assert "reason" in dropped, "dropped_under_amendment_v2 must have a 'reason' field"
