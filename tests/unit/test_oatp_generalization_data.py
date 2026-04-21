@@ -105,3 +105,20 @@ def test_source_has_doi(drug: str):
     data = _load()
     src = data["drugs"][drug]["source"]
     assert "doi" in src.lower() or "10." in src, f"{drug} source missing DOI: {src!r}"
+
+
+def test_valsartan_individual_values_consistency():
+    """Individual subject values must reproduce reported mean, SD, and N.
+
+    Catches transcription errors in observed_cmax_mg_l — the value the engine run
+    compares against.
+    """
+    import statistics
+
+    data = _load()
+    entry = data["drugs"]["valsartan"]
+    individuals = entry["individual_cmax_mg_l"]
+
+    assert len(individuals) == entry["patient_n"]
+    assert abs(statistics.mean(individuals) - entry["observed_cmax_mg_l"]) < 0.01
+    assert abs(statistics.stdev(individuals) - entry["observed_cmax_sd_mg_l"]) < 0.02
