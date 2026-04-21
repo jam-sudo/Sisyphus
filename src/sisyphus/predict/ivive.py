@@ -557,6 +557,7 @@ def build_drug_on_graph(
     liver_enzymes: dict[str, float] | None = None,
     kp_method: str = "rodgers_rowland",
     transporter_kinetics: dict[str, TransporterKinetics] | None = None,
+    hepatic_ecm_params: dict[str, Distribution] | None = None,
 ) -> DrugOnGraph:
     """Construct a DrugOnGraph from predicted properties.
 
@@ -621,6 +622,15 @@ def build_drug_on_graph(
     # Truncate name for display (SMILES can be long)
     name = profile.smiles[:40] if len(profile.smiles) > 40 else profile.smiles
 
+    # ECM override: only populate fields that are supplied; others fall back to
+    # DrugOnGraph defaults (PS_passive = PS_eff = 1e6 L/h, CL_int_bile = 0 L/h),
+    # which make the ECM flux reduce to well-stirred for non-OATP drugs.
+    ecm_kwargs: dict[str, Distribution] = {}
+    if hepatic_ecm_params is not None:
+        for key in ("ps_passive", "ps_eff", "cl_int_bile"):
+            if key in hepatic_ecm_params:
+                ecm_kwargs[key] = hepatic_ecm_params[key]
+
     drug = DrugOnGraph(
         name=name,
         smiles=profile.smiles,
@@ -640,6 +650,7 @@ def build_drug_on_graph(
         renal_clearance=renal_cl,
         particle_radius_um=particle_radius,
         transporter_kinetics=transporter_kinetics or {},
+        **ecm_kwargs,
     )
 
     logger.info(
