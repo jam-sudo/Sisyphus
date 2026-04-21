@@ -93,21 +93,28 @@ import pathlib as _pathlib
 
 import pytest as _pytest
 
-# Pre-registration envelopes per spec 9115e63 / plan Task 2.
-# Actual status (VERIFIED vs BLOCKED) determined by literature extraction 2026-04-21.
+# Pre-registration envelopes per spec amendment v2 (6e7ce0a), 2026-04-21.
+# Substrate set: valsartan + glimepiride (N=2).
+# Bosentan and repaglinide dropped from test set; archived in
+# dropped_under_amendment_v2 key of oatp1b1.json.
 _GENERALIZATION_DRUGS_EXPECTED = {
-    "bosentan": {"km_range_uM": (40.0, 50.0), "jmax_range": (40.0, 80.0)},
+    # valsartan: Km verified (Niemi 2009 PMC2765590 Table 2 citing Yamashiro 2006).
+    # Jmax not found in any open-access source (searched Shitara 2013, Karlgren 2012,
+    # Kalliokoski 2010, Maeda 2006, Poirier 2009, PBPK reviews, PMC). Case B: BLOCKED.
     "valsartan": {"km_range_uM": (1.0, 1.8), "jmax_range": (30.0, 80.0)},
-    "repaglinide": {"km_range_uM": (0.3, 0.5), "jmax_range": (20.0, 50.0)},
+    # glimepiride: Km 10.02 µM (Chen 2018 PMID 29498478, HEK293-OATP1B1);
+    # Jmax 155 pmol/min/mg (Yang 2018 PMC6054689 Fig 5, OATP1B1*1a HEK293T).
+    "glimepiride": {"km_range_uM": (8.0, 13.0), "jmax_range": (120.0, 200.0)},
 }
 
-# Literature extraction outcome 2026-04-21:
-# Jmax paywalled for all three drugs in their respective primary sources
-# (Treiber 2007 DMD, Yamashiro 2006 DMD, Niemi 2005 CPT). Km verified for
-# bosentan (44 µM) and valsartan (1.39 µM) via secondary sources; repaglinide
-# Km not reported in any accessible source. All three placed in blocked_drugs.
-_VERIFIED_KINETICS_DRUGS: set[str] = set()  # empty — all three Jmax are blocked
-_BLOCKED_KINETICS_DRUGS: set[str] = {"bosentan", "valsartan", "repaglinide"}
+# Literature extraction outcome 2026-04-21 (amendment v2):
+# glimepiride: Km=10.02 µM (Chen 2018 PMID 29498478), Jmax=155 pmol/min/mg
+#   (Yang 2018 PMC6054689 Fig 5, OATP1B1*1a). VERIFIED.
+# valsartan: Km=1.39 µM VERIFIED (Niemi 2009 PMC2765590). Jmax BLOCKED — paywalled
+#   in Yamashiro 2006 DMD (DOI 10.1124/dmd.106.009365); not found in any open-access
+#   secondary source after exhaustive search. Remains in blocked_drugs. Case B.
+_VERIFIED_KINETICS_DRUGS: set[str] = {"glimepiride"}
+_BLOCKED_KINETICS_DRUGS: set[str] = {"valsartan"}
 
 _OATP1B1_FILE = (
     _pathlib.Path(__file__).resolve().parents[2]
