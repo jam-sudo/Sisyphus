@@ -179,3 +179,32 @@ class TestResolvedParams:
         params = ResolvedParams(g, drug)
         assert params.global_param("cardiac_output") == 390.0
         assert params.global_param("nonexistent") == 0.0
+
+    def test_drug_param_resolves_ecm_fields(self):
+        """drug_param('ps_passive'/'ps_eff'/'cl_int_bile') returns the mean values."""
+        g = make_two_node_graph()
+        drug = DrugOnGraph(
+            name="t",
+            smiles="C",
+            dose_mg=1.0,
+            route="iv",
+            administration_node="a",
+            mw=100.0,
+            pka=None,
+            compound_type="neutral",
+            fup=Distribution(0.5),
+            rbp=Distribution(1.0),
+            kp_method="provided",
+            kp_overrides={},
+            peff=Distribution(1.0),
+            solubility=Distribution(10.0),
+            enzyme_affinity={},
+            renal_clearance=Distribution(0.0),
+            ps_passive=Distribution(0.8, cv=0.4),
+            ps_eff=Distribution(0.8, cv=0.4),
+            cl_int_bile=Distribution(45.0, cv=0.5),
+        )
+        params = ResolvedParams(g, drug)
+        assert params.drug_param("ps_passive") == 0.8
+        assert params.drug_param("ps_eff") == 0.8
+        assert params.drug_param("cl_int_bile") == 45.0

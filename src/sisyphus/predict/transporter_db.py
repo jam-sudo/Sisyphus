@@ -44,3 +44,39 @@ def load_oatp1b1_kinetics(drug_name: str) -> dict[str, TransporterKinetics] | No
             km=Distribution(mean=float(km_spec["mean"]), cv=float(km_spec["cv"])),
         )
     }
+
+
+_HEPATIC_ECM_FILE = _DATA_ROOT / "hepatic_ecm.json"
+
+
+@functools.lru_cache(maxsize=1)
+def _load_hepatic_ecm_table() -> dict[str, dict]:
+    if not _HEPATIC_ECM_FILE.exists():
+        return {}
+    with _HEPATIC_ECM_FILE.open() as f:
+        data = json.load(f)
+    return {k.lower(): v for k, v in data.get("drugs", {}).items()}
+
+
+def load_hepatic_ecm_params(drug_name: str) -> dict[str, Distribution] | None:
+    """Return ``{'ps_passive': Distribution, 'ps_eff': Distribution, 'cl_int_bile': Distribution}``
+    for *drug_name*, or ``None`` if the drug has no entry. Case-insensitive.
+    """
+    table = _load_hepatic_ecm_table()
+    entry = table.get(drug_name.lower())
+    if entry is None:
+        return None
+    return {
+        "ps_passive": Distribution(
+            mean=float(entry["ps_passive_L_per_h"]["mean"]),
+            cv=float(entry["ps_passive_L_per_h"]["cv"]),
+        ),
+        "ps_eff": Distribution(
+            mean=float(entry["ps_eff_L_per_h"]["mean"]),
+            cv=float(entry["ps_eff_L_per_h"]["cv"]),
+        ),
+        "cl_int_bile": Distribution(
+            mean=float(entry["cl_int_bile_L_per_h"]["mean"]),
+            cv=float(entry["cl_int_bile_L_per_h"]["cv"]),
+        ),
+    }

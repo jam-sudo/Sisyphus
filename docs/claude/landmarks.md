@@ -112,6 +112,7 @@ Top-level [CLAUDE.md](../../CLAUDE.md) is for orientation. This file is the file
 - **TDM CI**: `docs/tdm_ci_calibration.md` (Track D2).
 - **Surrogate OOD**: `docs/surrogate_ood_fix.md` (Track D1 + follow-up).
 - **Holdout contamination**: `docs/holdout_contamination_audit.md` + `data/validation/contamination_fix_report.json`.
+- **OATP ECM**: `scripts/calibrate_oatp_abundance_ecm.py`, `data/validation/oatp_ecm_abundance_calibration.json`, `data/transporters/hepatic_ecm.json`.
 
 ## Design specs and plans (recent)
 
