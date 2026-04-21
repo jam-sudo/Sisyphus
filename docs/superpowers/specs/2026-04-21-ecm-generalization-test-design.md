@@ -341,3 +341,43 @@ The N=2 test still distinguishes the four primary outcomes, just with reduced di
 ### Amendment commit
 
 The amendment is committed as a single commit on `main` before any engine execution. Post-amendment engine runs (Task 6) operate under this amended spec.
+
+---
+
+### Amendment v2.1 (2026-04-21) — Valsartan Jmax scaling methodology
+
+**Status:** Pre-engine-run clarification. No engine run has occurred. This sub-amendment specifies the scaling methodology for valsartan OATP1B1 Jmax, which could not be obtained from any open-source primary paper or review after 15+ source attempts.
+
+**Problem:** Valsartan OATP1B1 Vmax/Jmax not tabulated in any accessible source. Yamashiro 2006 DMD (primary) and all reviews (Niemi 2009, Kalliokoski 2010, Shitara 2013, Karlgren 2012, Kunze 2014) are paywalled, tabulate Km only, or use hepatocyte-basis values that cannot be mixed with HEK293-OATP1B1 basis without scaling.
+
+**Options considered:**
+- (B1) Drop valsartan, run test with N=1 (glimepiride only). Rejected: loses ARB scaffold, weakens decorrelation signal.
+- (B2a) Clinical hepatic CL ratio scaling (valsartan hepatic CL / pravastatin hepatic CL): Jmax ≈ 349 pmol/min/mg. Rejected: valsartan hepatic CL is biliary-efflux-limited, not uptake-limited, so it under-represents OATP1B1 capacity.
+- **(B2b) Flat in-vitro CLuptake assumption** (adopted): assume valsartan's OATP1B1 per-unit intrinsic activity equals pravastatin's. Compute Jmax_valsartan = (Jmax_pravastatin / Km_pravastatin) × Km_valsartan = (228 / 13.6) × 1.39 ≈ **23 pmol/min/mg**.
+
+**Methodology declared for pre-registration:**
+
+For any substrate in this test with Km verified but Jmax blocked, compute:
+
+```
+Jmax_substrate = (Jmax_pravastatin / Km_pravastatin) × Km_substrate
+```
+
+Using frozen pravastatin reference values from `data/transporters/oatp1b1.json` (Jmax 228, Km 13.6).
+
+**Rationale for flat-CLuptake methodology:**
+1. Uses ONLY values already committed in oatp1b1.json (no new clinical parameters introduced, minimal parameter-choice freedom).
+2. Physiologically conservative: assumes per-molecule intrinsic activity of OATP1B1 is similar across OATP1B1 substrates. This is defensible as a baseline; actual CLuptake ratios across substrates span 1× to 7× (observed in 4 non-pravastatin statins in oatp1b1.json), so a flat assumption is at the low-center of the observed range.
+3. CV widened to **0.70** (vs statin precedent 0.40) to absorb scaling uncertainty.
+4. Methodology committed BEFORE engine run (this amendment file is itself the pre-registration artifact).
+
+**Valsartan specific value:**
+- Jmax: 23 pmol/min/mg, CV 0.70 (scaled from pravastatin per flat-CLuptake methodology above)
+- Km: 1.39 µM, CV 0.35 (verified primary via Niemi 2009 review Table 2, citing Yamashiro 2006)
+
+**Known limitation:**
+If valsartan's actual OATP1B1 CLuptake differs materially from pravastatin's (e.g., ratio 2-5× higher as seen in pitavastatin/fluvastatin), the Jmax 23 will under-predict active uptake → engine Cmax in valsartan may be over-predicted (less uptake = more drug in central compartment = higher Cmax). A Mode B (systematic over-prediction) outcome for valsartan would be partially attributable to this scaling choice, not purely to ECM. This caveat is recorded here and must be reported alongside any Mode B/C outcome.
+
+**Alternative scaling was NOT chosen** — the clinical CL ratio (Jmax ≈ 349) would bias the opposite direction (under-predict Cmax) but with the same fundamental uncertainty. Cherry-picking defense is stronger with the simpler, conservative methodology.
+
+**If in a future session valsartan primary Jmax becomes accessible** (institutional access, new review publication, etc.), this scaling amendment can be reverted, a new engine run executed under the corrected Jmax, and both results reported. The current run's outcome is contingent on this scaling.
