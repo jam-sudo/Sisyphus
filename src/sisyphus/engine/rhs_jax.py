@@ -129,6 +129,20 @@ def make_jax_rhs(
             elif spec.model == "gfr_filtration":
                 cl_gfr_src.append(spec.source_idx)
                 cl_gfr_tgt.append(spec.target_idx)
+            elif spec.model == "extended":
+                # ECM (2026-04-20 migration) is not yet vectorised for JAX.
+                # The scipy backend handles it correctly; fail loudly here so
+                # experiments with backend="jax" do not silently zero hepatic
+                # clearance for OATP substrates.
+                raise NotImplementedError(
+                    "ClearanceFluxSpec model='extended' (ECM) is not yet "
+                    "implemented in the JAX RHS. Use backend='scipy' (default) "
+                    "or add a vmap-safe ECM branch to rhs_jax.py."
+                )
+            else:
+                raise NotImplementedError(
+                    f"ClearanceFluxSpec model={spec.model!r} not supported in JAX RHS."
+                )
 
         elif isinstance(spec, TransitFluxSpec):
             transit_src.append(spec.source_idx)
