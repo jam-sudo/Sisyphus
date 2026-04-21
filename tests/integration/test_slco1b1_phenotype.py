@@ -22,7 +22,8 @@ from sisyphus.predict.chemistry import compute_profile
 from sisyphus.predict.ivive import build_drug_on_graph
 from sisyphus.predict.phenotype import apply_phenotype_to_graph
 from sisyphus.predict.transporter_db import (
-    load_hepatic_ecm_params, load_oatp1b1_kinetics,
+    load_hepatic_ecm_params,
+    load_oatp1b1_kinetics,
 )
 
 _PHYS = pathlib.Path("data/physiology/reference_man.yaml")
