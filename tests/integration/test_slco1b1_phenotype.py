@@ -21,7 +21,9 @@ from sisyphus.predict.adme import predict_adme
 from sisyphus.predict.chemistry import compute_profile
 from sisyphus.predict.ivive import build_drug_on_graph
 from sisyphus.predict.phenotype import apply_phenotype_to_graph
-from sisyphus.predict.transporter_db import load_oatp1b1_kinetics
+from sisyphus.predict.transporter_db import (
+    load_hepatic_ecm_params, load_oatp1b1_kinetics,
+)
 
 _PHYS = pathlib.Path("data/physiology/reference_man.yaml")
 _PRAVASTATIN = (
@@ -51,15 +53,10 @@ def test_slco1b1_phenotype_runs_and_graph_scales():
     """Engine runs end-to-end with SLCO1B1 phenotype applied; graph-level
     scaling is verified.
 
-    Note on engine response: in the current calibration (liver.OATP1B1
-    abundance = 1.0e11, pravastatin-tuned Phase 1), the MM uptake is
-    operating near the jmax-saturated regime. Scaling OATP1B1 abundance
-    over the [0.1×, 2×] range (PM, IM, UM) leaves Cmax essentially
-    unchanged — clinical SLCO1B1 effects (AUC +60-100% in PM per Niemi
-    2006) require a non-saturated engine regime and will need Phase 1
-    re-calibration (lower abundance prior) before this integration can
-    gate on a directional Cmax change. Unit tests already verify the
-    graph-level abundance scaling independent of engine dynamics.
+    Post 2026-04-20 ECM migration, hepatic uptake is no longer flow-limited
+    (abundance 5.0e5 under ECM vs 1.0e11 under the old MM-uptake model).
+    PM (0.1× abundance) now produces clinically meaningful Cmax increase.
+    See ``test_slco1b1_pm_increases_pravastatin_cmax`` for the directional gate.
     """
     g_em = build_from_yaml(_PHYS)
     g_pm = apply_phenotype_to_graph(g_em, {"SLCO1B1": "PM"})
@@ -95,4 +92,37 @@ def test_slco1b1_em_is_noop_on_transporter():
     g_em_applied = apply_phenotype_to_graph(g_em, {"SLCO1B1": "EM"})
     assert g_em_applied.nodes["liver"].transporters["OATP1B1"].mean == (
         g_em.nodes["liver"].transporters["OATP1B1"].mean
+    )
+
+
+@pytest.mark.slow
+def test_slco1b1_pm_increases_pravastatin_cmax():
+    """PM phenotype → pravastatin Cmax ≥ 1.3× EM (Niemi 2006 directional).
+
+    Under ECM (post 2026-04-20), OATP1B1 is no longer flow-limited —
+    scaling abundance 0.1× (PM) moves PS_active from ≈503 L/h to ≈50 L/h,
+    producing measurable Cmax change. Clinical AUC +60-100% in PM
+    translates to ~1.3-1.5× Cmax.
+    """
+    graph = build_from_yaml(_PHYS)
+    profile = compute_profile(_PRAVASTATIN)
+    adme = predict_adme(profile)
+    liver_enzymes = {
+        tag: d.mean for tag, d in graph.nodes["liver"].enzymes.items()
+    }
+    drug = build_drug_on_graph(
+        profile, adme, dose_mg=40.0, route="oral",
+        liver_enzymes=liver_enzymes,
+        transporter_kinetics=load_oatp1b1_kinetics("pravastatin"),
+        hepatic_ecm_params=load_hepatic_ecm_params("pravastatin"),
+    )
+    graph_em = apply_phenotype_to_graph(graph, {"SLCO1B1": "EM"})
+    graph_pm = apply_phenotype_to_graph(graph, {"SLCO1B1": "PM"})
+
+    cmax_em = _cmax(graph_em, drug)
+    cmax_pm = _cmax(graph_pm, drug)
+    ratio = cmax_pm / cmax_em
+    assert ratio >= 1.3, (
+        f"SLCO1B1 PM gate failed: PM/EM = {ratio:.2f} < 1.3. "
+        f"EM Cmax={cmax_em:.4f}, PM Cmax={cmax_pm:.4f}"
     )
