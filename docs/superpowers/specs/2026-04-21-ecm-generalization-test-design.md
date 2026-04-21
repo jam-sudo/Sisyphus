@@ -248,3 +248,96 @@ The following, if observed, constitute violations that must be documented in the
 1. Should the MC sampling use `sisyphus.engine.uncertainty.mc_sample` directly or go through the full pipeline (`pipeline/predict.py`)? Preference: full pipeline, so the test reflects production Cmax path including 4-track meta aggregation's engine component in isolation.
 2. Is Kunze 2014's Jmax scaling factor appropriate for all 3 drugs, or do any require a drug-specific scaling (e.g., bosentan's reported Jmax in pmol/min/mg is from transfected cells)? Resolve during literature extraction.
 3. For valsartan's di-anion, does the existing `DrugOnGraph` support representing two distinct pKa_a values, or is it truncated to one? Verify during `predict` layer inspection. If truncated, may be a predict-layer confound for valsartan specifically.
+
+---
+
+## Amendment v2 (2026-04-21)
+
+**Status:** Pre-engine-run amendment. Adopted after literature-access survey demonstrated that the originally-selected substrate set could not be fully verified from open sources. Pre-registration discipline preserved — this amendment is committed BEFORE any engine execution.
+
+### Rationale for amendment
+
+Task 1 (commits `ee24164` → `5f79d34`) and Task 2 (commit `a562192`) execution under the original §Substrates produced:
+
+- **Valsartan**: IV Cmax verified via Flesch 1997 Eur J Clin Pharmacol 52:115–120 Table 1 (mean 4.02 mg/L, 20 mg IV bolus, N=12). Individual subject values extracted. ✓
+- **Bosentan**: Weber 1996 Clin Pharmacol Ther 60:124–137 paywalled; all reviewed sources (EMA EPAR, SmPC, 7 PBPK papers) only tabulate CL and Vss — not Cmax. Km accessible via Niemi 2009 review (44 µM) but Jmax blocked in all 8+ sources consulted. BLOCKED for engine run.
+- **Repaglinide**: Hatorp 1998 Int J Clin Pharmacol Ther 36:636–641 paywalled; FDA label and Hatorp 2002 review carry Vss/CL only. Km not tabulated in Niemi 2009 review for repaglinide. Jmax blocked. BLOCKED for engine run.
+
+Result under original spec: N_effective = 0. Engine generalization test cannot execute with any data from Tasks 1–2 as originally scoped.
+
+### Substrate survey (2026-04-21, 55 min)
+
+8 candidate non-statin OATP1B1 substrates investigated for open-access availability of (IV Cmax + OATP1B1 Jmax + OATP1B1 Km):
+
+| Candidate | Scaffold | Cmax | Jmax | Km | Verdict |
+|---|---|:--:|:--:|:--:|---|
+| **Glimepiride** | gen-3 sulfonylurea | ✓ | ✓ | ✓ (cross-study) | **VIABLE** |
+| Glyburide | gen-2 sulfonylurea | ✗ | ✓ | ✓ | BLOCKED (Cmax) |
+| Olmesartan | ARB | ✗ | ? | ✓ (review) | BLOCKED (Cmax) |
+| Nateglinide | meglitinide | ✗ | ✗ | ✗ | BLOCKED |
+| Telmisartan | ARB | ✗ | — | — | DISQUALIFIED (OATP1B3 only, not 1B1) |
+| Torsemide | loop diuretic | ✗ | ✗ | ✓ (cited) | BLOCKED (pKa 6.4–7.1 also fails criterion 4) |
+| Fexofenadine | zwitterion | (microdose only) | — | — | DISQUALIFIED (zwitterion fails criterion 4) |
+| Enalaprilat | ACEI active form | — | — | — | DISQUALIFIED (not OATP1B1 substrate) |
+
+### Amended substrate set (N=2)
+
+1. **Valsartan** (retained from original spec, already verified)
+2. **Glimepiride** (new)
+
+N=3 not reachable with open-access literature after survey. Further expansion requires institutional library access; explicitly deferred.
+
+### Glimepiride — data sources
+
+- **IV Cmax**: 243 ± 33 ng/mL (= 0.243 ± 0.033 mg/L) at 1 mg IV single dose, in healthy volunteers. Source: PMC11768776 (open-access systematic review), Table 3, citing Badian et al. 1994 Drug Metab Drug Interact 13:69–85 (PMID 8902432).
+- **OATP1B1 Vmax**: 155 ± 18.7 pmol/min/mg in HEK293T-OATP1B1*1a cells. Source: Huang et al. 2018 Scientific Reports, PMC6054689 (open-access), Figure 5.
+- **OATP1B1 Km**: 10.02 ± 0.84 µM in HEK293T-OATP1B1 cells. Source: Chen et al. 2018 Basic Clin Pharmacol Toxicol (PMID 29498478), same HEK293T assay system as Huang 2018. Paywalled primary; value reported in citation. Cross-check: independent single-molecule study (ScienceDirect 2025) reports Km = 12.5 µM for OATP1B1*1a — within 25% of Chen 2018, well within typical OATP1B1 inter-study variance (0.3–0.5× to 2×). Satisfies spec §Verification requirement ("cross-check against at least one review OR inter-study range").
+
+### Domain compliance (glimepiride)
+
+| Criterion | Value | Status |
+|---|---|:--:|
+| MW ∈ [300, 700] | 490.62 | ✓ |
+| logD(7.4) ∈ [−1, 5] | 2.38 (reported) | ✓ |
+| Anionic at pH 7.4 (pKa_a < 6) | pKa 6.2 (sulfonyl-urea NH); 94% ionized at pH 7.4 | Borderline: pKa technically ≥ 6, but >90% anionic species dominates behavior. **ACCEPTED** with note. |
+| OATP1B1 is significant hepatic uptake | Confirmed saturable OATP1B1 uptake in HEK293T; SLCO1B1 genotype affects glimepiride PK clinically | ✓ |
+| Single-dose data | 1 mg IV single dose (Badian 1994) | ✓ |
+| Cmax within 24 h | tmax ≈ 2 h post-dose | ✓ |
+| No parent-Cmax metabolite confound | M1 (hydroxymetabolite) is separately measured; no back-interconversion to parent | ✓ |
+| Not an OATP1B1 inhibitor | No reported inhibitory DDI | ✓ |
+
+Diversity from valsartan (ARB-tetrazole): **high** (gen-3 sulfonylurea scaffold, mono-anion mechanism, distinct Km regime: glimepiride 10 µM vs valsartan 1.4 µM).
+
+### Artifacts to update (Tasks 1–2 re-execution under amended set)
+
+- `data/validation/oatp_generalization_drugs.json` — REMOVE bosentan + repaglinide BLOCKED entries; ADD glimepiride VERIFIED entry (dose 1 mg IV bolus, Cmax 0.243 mg/L, source Badian 1994 via PMC11768776 Table 3). Retain valsartan unchanged.
+- `data/transporters/oatp1b1.json` — REMOVE bosentan + repaglinide from `blocked_drugs`; ADD glimepiride under `drugs` with Vmax 155 pmol/min/mg (Huang 2018 PMC6054689), Km 10.02 µM (Chen 2018 PMID 29498478), CV widened per spec protocol.
+- `tests/unit/test_oatp_generalization_data.py` — `_VERIFIED_DRUGS = {"valsartan", "glimepiride"}`, `_BLOCKED_DRUGS = set()` (original bosentan/repaglinide entries removed since we formally drop them per spec §Execution Constraints rather than carry as blocked).
+- `tests/unit/test_transporter_db.py` — `_GENERALIZATION_DRUGS_EXPECTED` keyed on `{"valsartan", "glimepiride"}`; envelopes:
+  - valsartan: Km (1.0, 1.8) µM, Jmax (30, 80) pmol/min/mg — from original plan Task 2 envelope (if valsartan Jmax unobtainable, flag and retain Km-only entry; revisit).
+  - glimepiride: Km (8, 13) µM, Vmax (120, 200) pmol/min/mg.
+
+### What stays unchanged
+
+- Freeze Contract (artifact commit discipline, violation conditions).
+- Pass/Fail Criteria (per-drug PI containment + |log10 FE| ≤ 0.48, median point estimate).
+- 4-Mode taxonomy (A/B/C/D with precedence rule). Classifier logic unchanged — works at any N ≥ 1.
+- Domain of Applicability (same 7 criteria).
+- Peff Isolation (IV-only).
+- Execution Constraints (single MC N=1000 run, no post-run tuning).
+- Cherry-picking violation conditions (still 7 enumerated conditions in §Freeze Contract).
+
+### N=2 interpretation
+
+The test signal strength is reduced vs original N=3 design:
+
+- **Mode A (2/2 pass)**: positive signal — ECM is consistent with non-statin OATP1B1 uptake for both tested substrates. NOT a general-mechanism confirmation beyond the test domain; weaker than Mode A at N=3.
+- **Mode B (2/2 fail same direction, |median log10 FE| > 0.5)**: systematic bias signal still triggerable; direction informative for follow-up.
+- **Mode C (1 fail, or 2 fails not matching B or D)**: inconclusive.
+- **Mode D (2/2 fail, mixed direction)**: ECM generalization refuted within the test domain.
+
+The N=2 test still distinguishes the four primary outcomes, just with reduced discrimination power (higher probability of Mode C fallback). The cherry-picking-defense property is preserved: freeze contract + pre-registered gates + 2 independent substrates with ≥25% Km difference from each other and from pravastatin.
+
+### Amendment commit
+
+The amendment is committed as a single commit on `main` before any engine execution. Post-amendment engine runs (Task 6) operate under this amended spec.
