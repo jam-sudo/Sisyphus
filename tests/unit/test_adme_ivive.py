@@ -239,3 +239,37 @@ class TestBerezhkovskiyCorrection:
         from sisyphus.predict.ivive import _apply_bz_correction
 
         assert _apply_bz_correction(1.0, 0.5) == 1.0
+
+
+# ═══════════════════════════════════════════════════════════════════
+#  ECM parameters
+# ═══════════════════════════════════════════════════════════════════
+
+
+class TestECMParameters:
+    def test_build_drug_on_graph_applies_hepatic_ecm_params(self):
+        """When hepatic_ecm_params kwarg is provided, ECM fields override defaults."""
+        from sisyphus.predict.adme import predict_adme
+        from sisyphus.predict.ivive import build_drug_on_graph
+
+        profile = compute_profile("CCO")
+        adme = predict_adme(profile)
+
+        # Without kwarg → defaults
+        drug_default = build_drug_on_graph(profile, adme, dose_mg=100.0, route="iv")
+        assert drug_default.ps_passive.mean == 1e6
+        assert drug_default.cl_int_bile.mean == 0.0
+
+        # With kwarg → overridden
+        custom = {
+            "ps_passive": Distribution(0.8, cv=0.4),
+            "ps_eff": Distribution(0.8, cv=0.4),
+            "cl_int_bile": Distribution(45.0, cv=0.5),
+        }
+        drug_custom = build_drug_on_graph(
+            profile, adme, dose_mg=100.0, route="iv",
+            hepatic_ecm_params=custom,
+        )
+        assert drug_custom.ps_passive.mean == 0.8
+        assert drug_custom.ps_eff.mean == 0.8
+        assert drug_custom.cl_int_bile.mean == 45.0
