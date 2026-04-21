@@ -1,0 +1,37 @@
+{
+  "transporter_model": "Extended Clearance Model (ECM)",
+  "sources_primary": "Watanabe 2009 JPET; Varma 2014 JPET; Kunze 2014 DMD; Maeda 2011 CPT; Yabe 2011 DMD; Jones 2012 DMD; Hirano 2006 JPET; Lindahl 2004 EJPS",
+  "notes": "Per-drug PS_passive (passive sinusoidal uptake L/h), PS_eff (passive sinusoidal efflux L/h), CL_int_bile (biliary intrinsic clearance L/h). Values are seed literature midpoints; final values refined by scripts/calibrate_oatp_abundance_ecm.py + tests/integration/test_oatp_ecm_statins.py FE gate. CV 0.40 on PS (inter-study variability); CV 0.50 on CL_int_bile (sparser biliary data).",
+  "drugs": {
+    "pravastatin": {
+      "ps_passive_L_per_h": {"mean": 0.8, "cv": 0.40},
+      "ps_eff_L_per_h":     {"mean": 0.8, "cv": 0.40},
+      "cl_int_bile_L_per_h":{"mean": 45.0, "cv": 0.50},
+      "source": "Watanabe 2009 PS_inf midpoint 0.5-2 L/h; Yabe 2011 biliary clearance"
+    },
+    "rosuvastatin": {
+      "ps_passive_L_per_h": {"mean": 1.5, "cv": 0.40},
+      "ps_eff_L_per_h":     {"mean": 1.5, "cv": 0.40},
+      "cl_int_bile_L_per_h":{"mean": 90.0, "cv": 0.50},
+      "source": "Jones 2012 PBPK fit; Bergman 2006 hepatic uptake"
+    },
+    "atorvastatin": {
+      "ps_passive_L_per_h": {"mean": 3.0, "cv": 0.40},
+      "ps_eff_L_per_h":     {"mean": 3.0, "cv": 0.40},
+      "cl_int_bile_L_per_h":{"mean": 30.0, "cv": 0.50},
+      "source": "Kunze 2014 OATP1B1 DDI prediction; Jamei 2014 PBPK DDI"
+    },
+    "pitavastatin": {
+      "ps_passive_L_per_h": {"mean": 2.5, "cv": 0.40},
+      "ps_eff_L_per_h":     {"mean": 2.5, "cv": 0.40},
+      "cl_int_bile_L_per_h":{"mean": 60.0, "cv": 0.50},
+      "source": "Hirano 2006 pitavastatin OATP; Li 2018 hepatic uptake kinetics"
+    },
+    "fluvastatin": {
+      "ps_passive_L_per_h": {"mean": 5.0, "cv": 0.40},
+      "ps_eff_L_per_h":     {"mean": 5.0, "cv": 0.40},
+      "cl_int_bile_L_per_h":{"mean": 20.0, "cv": 0.50},
+      "source": "Lindahl 2004 fluvastatin permeability; Varma 2014 ECCS class"
+    }
+  }
+}

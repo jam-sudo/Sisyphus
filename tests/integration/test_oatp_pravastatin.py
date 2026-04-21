@@ -20,7 +20,10 @@ from sisyphus.graph.builder import build_from_yaml
 from sisyphus.predict.adme import predict_adme
 from sisyphus.predict.chemistry import compute_profile
 from sisyphus.predict.ivive import build_drug_on_graph
-from sisyphus.predict.transporter_db import load_oatp1b1_kinetics
+from sisyphus.predict.transporter_db import (
+    load_hepatic_ecm_params,
+    load_oatp1b1_kinetics,
+)
 
 _PHYS = pathlib.Path("data/physiology/reference_man.yaml")
 _PRAVASTATIN = (
@@ -53,8 +56,16 @@ def _simulate_cmax(drug, graph, t_end: float = 24.0) -> float:
 
 @pytest.mark.slow
 def test_pravastatin_cmax_moves_with_oatp():
-    """Engine Cmax for pravastatin decreases (more hepatic extraction) when
-    OATP1B1 uptake is active vs off."""
+    """Engine Cmax for pravastatin decreases when OATP1B1 kinetics AND
+    ECM parameters (biliary clearance + sinusoidal PS) are active vs off.
+
+    Under ECM (post 2026-04-20), OATP kinetics alone do not change Cmax
+    because the PS_passive/PS_eff defaults (1e6 L/h) collapse the model
+    to well-stirred algebraically. Meaningful hepatic extraction reduction
+    requires supplying ``hepatic_ecm_params`` (pravastatin: PS_passive=0.8,
+    PS_eff=0.8, CL_int_bile=45). In the "on" arm both are loaded; in the
+    "off" arm both are None → default well-stirred path.
+    """
     graph = build_from_yaml(_PHYS)
     profile = compute_profile(_PRAVASTATIN)
     adme = predict_adme(profile)
@@ -66,11 +77,13 @@ def test_pravastatin_cmax_moves_with_oatp():
         profile, adme, dose_mg=40.0, route="oral",
         liver_enzymes=liver_enzymes,
         transporter_kinetics=None,
+        hepatic_ecm_params=None,
     )
     drug_on = build_drug_on_graph(
         profile, adme, dose_mg=40.0, route="oral",
         liver_enzymes=liver_enzymes,
         transporter_kinetics=load_oatp1b1_kinetics("pravastatin"),
+        hepatic_ecm_params=load_hepatic_ecm_params("pravastatin"),
     )
 
     cmax_off = _simulate_cmax(drug_off, graph)
@@ -81,7 +94,7 @@ def test_pravastatin_cmax_moves_with_oatp():
 
     ratio = cmax_on / cmax_off
     assert ratio < 0.95, (
-        f"expected OATP1B1 uptake to reduce Cmax meaningfully, "
+        f"expected OATP1B1 uptake + ECM params to reduce Cmax meaningfully, "
         f"got cmax_off={cmax_off:.4f}, cmax_on={cmax_on:.4f}, ratio={ratio:.3f}"
     )
 

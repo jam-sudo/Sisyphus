@@ -169,7 +169,14 @@ class FlowFluxSpec(FluxSpec):
 
 @register_flux("clearance")
 class ClearanceFluxSpec(FluxSpec):
-    """Enzyme-mediated clearance (well-stirred) or renal filtration (GFR).
+    """Hepatic / renal clearance flux. Four models supported:
+
+    - ``well_stirred``  — classical WS with organ-level CLint (default)
+    - ``parallel_tube`` — PT exponential extraction approximation
+    - ``gfr_filtration`` — renal filtration (``CL_renal × C_plasma``)
+    - ``extended``      — ECM: QSSA-closed hepatocyte with active + passive
+      uptake, passive efflux, metabolism, biliary clearance. See
+      ``docs/superpowers/specs/2026-04-20-oatp-ecm-hepatic-clearance-design.md``.
 
     Well-stirred model::
 
@@ -280,6 +287,52 @@ class ClearanceFluxSpec(FluxSpec):
             rbp = params.drug_param("rbp")
             c_plasma = y[self.source_idx] * rbp / (v * kp) if v > 0 else 0.0
             rate = renal_cl * c_plasma
+
+        elif self.model == "extended":
+            # Extended Clearance Model (ECM) — QSSA-closed hepatocyte.
+            # See docs/superpowers/specs/2026-04-20-oatp-ecm-hepatic-clearance-design.md
+            src = self.source_name
+            ivive = params.node_param(src, "ivive_scaling")
+
+            # PS_active from transporters at the source (identity-blind iteration)
+            ps_active = 0.0
+            for tag, abundance in params.node_transporters(src).items():
+                jmax = params.drug_transporter_jmax(tag)
+                km = params.drug_transporter_km(tag)
+                if jmax <= 0 or km <= 0 or abundance <= 0:
+                    continue
+                ps_active += abundance * jmax / km
+            ps_active *= ivive
+
+            ps_passive = params.drug_param("ps_passive")
+            ps_eff = params.drug_param("ps_eff")
+            cl_int_bile = params.drug_param("cl_int_bile")
+
+            ps_inf = ps_active + ps_passive
+
+            # Metabolism — same pattern as well_stirred (organ-blind)
+            cl_int_metab = 0.0
+            for tag, abundance in params.node_enzymes(src).items():
+                affinity = params.drug_enzyme_affinity(tag)
+                if affinity > 0 and abundance > 0:
+                    cl_int_metab += abundance * affinity * ivive
+            cl_int_h = cl_int_metab + cl_int_bile
+
+            fup = params.drug_param("fup")
+            q = params.total_inflow(src)
+
+            num = q * fup * ps_inf * cl_int_h
+            den = q * (ps_eff + cl_int_h) + fup * ps_inf * cl_int_h
+            if den < 1e-12:
+                return
+            clh = num / den
+
+            v = params.node_param(src, "volume")
+            kp = params.drug_kp(src)
+            rbp = params.drug_param("rbp")
+            c_out = y[self.source_idx] * rbp / (v * kp) if v > 0 else 0.0
+            rate = clh * c_out
+
         else:
             return
 
@@ -424,9 +477,17 @@ class ActiveTransportFluxSpec(FluxSpec):
         C_µM = (A / V) * 1000 / MW        # mg/L → µM
         rate = abundance × Jmax × C_µM / (Km + C_µM)
 
-    Direction is source → target (edge direction):
-    - Gut efflux: gut_wall → lumen (P-gp: tissue → lumen, reduces Fg)
-    - Hepatic uptake: blood → liver (OATP: increases clearance)
+    Direction is source → target (edge direction). Intended use cases:
+    - Gut efflux (P-gp, BCRP at gut_wall → lumen): reduces Fg.
+    - Renal secretion (OAT/OCT at proximal tubule → urine): increases CL_renal.
+    - BBB efflux (P-gp at brain vascular → brain tissue).
+
+    **Hepatic OATP uptake is NOT handled here anymore.** Since the
+    2026-04-20 ECM migration, hepatic active uptake is folded into
+    ``ClearanceFluxSpec(model="extended")`` (QSSA-closed hepatocyte).
+    No YAML currently instantiates ``ActiveTransportFluxSpec`` in the
+    reference physiology; the class is retained for future
+    non-hepatic-uptake applications.
 
     Identity-blind: engine matches tags, never inspects names.
 

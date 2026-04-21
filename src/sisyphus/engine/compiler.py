@@ -101,6 +101,12 @@ class ResolvedParams:
             return self._drug.peff.mean
         if param == "particle_radius_um":
             return self._drug.particle_radius_um
+        if param == "ps_passive":
+            return self._drug.ps_passive.mean
+        if param == "ps_eff":
+            return self._drug.ps_eff.mean
+        if param == "cl_int_bile":
+            return self._drug.cl_int_bile.mean
         raise KeyError(f"Unknown drug param: {param}")
 
     def drug_kp(self, node_name: str) -> float:
