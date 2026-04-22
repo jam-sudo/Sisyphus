@@ -1,6 +1,6 @@
 {
   "description": "N50 secondary permanent holdout, cycle 2026Q2. Per docs/superpowers/specs/2026-04-22-n50-secondary-holdout-design.md. Never-touch for weight tuning, routing, or meta-learner feedback. One-time measurement per release cycle, then retired. Seed batch only — curation continues in subsequent sessions toward n_target=50.",
-  "spec_commit": "<set by commit hook — to be filled at commit time>",
+  "spec_commit": "da0f080",
   "cycle_id": "2026Q2",
   "curation_date": "2026-04-22",
   "curation_status": "SEED (3 / 50)",
