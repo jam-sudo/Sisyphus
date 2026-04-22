@@ -8,16 +8,18 @@ Sisyphus: SMILES + dose → Cmax PBPK platform. Body modeled as a typed directed
 
 ## Current Performance
 
-4-track, post-merge 2026-04-10, N=107 holdout via `scripts/run_engine_benchmark.py` → `data/training/4track_holdout_predictions.json`.
+4-track, post-merge 2026-04-10, N=107 holdout via `scripts/run_engine_benchmark.py` → `data/training/4track_holdout_predictions.json`. 95% CIs bootstrap (10k resamples) computed 2026-04-22 per `docs/claude/cherry_picking_process_v1.md` §3.
 
-| Track | AAFE | %2-fold | %3-fold | N |
-|---|---|---|---|---|
-| **Meta (production)** | **2.695** | 47.7 | 65.4 | 107 |
-| Engine only | 3.421 | — | — | 107 |
-| ML only | 3.057 | — | — | 107 |
-| In-domain Meta | 2.710 | — | — | 85 |
-| Prospective overall | 2.361 | 53 | — | 15 (FDA NME 2024-25) |
-| Prospective in-domain | 2.043 | — | — | 13 |
+| Track | AAFE | 95% CI | %2-fold | %3-fold | N |
+|---|---|---|---|---|---|
+| **Meta (production)** | **2.695** | [2.30, 3.20] | 47.7 | 65.4 | 107 |
+| Engine only | 3.421 | [2.88, 4.06] | — | — | 107 |
+| ML only | 3.057 | [2.59, 3.63] | — | — | 107 |
+| In-domain Meta | 2.710 | [2.27, 3.28] | — | — | 85 |
+| Prospective overall | 2.361 | — | 53 | — | 15 (FDA NME 2024-25) |
+| Prospective in-domain | 2.043 | — | — | — | 13 |
+
+**Cherry-picking caveat:** Meta CI upper bound (3.20) overlaps audit's retrospective-contamination estimate (2.85–3.10, per `docs/claude/cherry_picking_audit_2026-04-22.md`). Headline is a point estimate — true-generalization AAFE is underpowered at N=107 × 47 config decisions. Secondary holdout N50 planned to resolve.
 
 **Track weights:** `_W_VDSS=0.20`; base adaptive engine/ml/clf = 0.60/0.40/0.00; other = 0.35/0.50/0.15. VDss activation scales the other 3 tracks by ×0.80.
 
