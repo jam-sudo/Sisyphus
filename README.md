@@ -31,7 +31,7 @@ The body is represented as a 34-compartment directed multi-graph comprising bloo
                       ┌─────────────────────────────────────────────┐
                       │                                             │
    ┌──────┐    ┌──────┴───┐                                   ┌─────┴────┐
-   │ lung │───►│ arterial │─► brain ─────────────────────────►│ venous   │
+   │ lung │───►│ arterial │─► brain ─────────────────────────►│  venous  │
    └──┬───┘    │  blood   │─► heart ─────────────────────────►│  blood   │
       │        │          │─► kidney ────────────────────────►│          │
       │        │          │                                   │          │
