@@ -12,6 +12,55 @@ Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the *
 
 ## 2026-04 (current session)
 
+### ECM generalization test, N=2, Mode C with diagnostic findings (2026-04-21)
+
+**Spec:** `docs/superpowers/specs/2026-04-21-ecm-generalization-test-design.md`
+  - v1 `9115e63` + v2 amendment `6e7ce0a` (substrate swap) + v2.1 `0d78c38` (valsartan Jmax scaling)
+
+**Plan:** `docs/superpowers/plans/2026-04-21-ecm-generalization-test.md` (commit `3c85fe4`)
+
+**Result:** `data/validation/oatp_generalization_result.json` (commit `4fb6d38`)
+
+**Formal outcome:** Mode C (inconclusive)
+
+**Per drug:**
+- Glimepiride: 1 mg IV bolus. Obs 0.243 mg/L; point 0.270; PI [0.270, 0.270] (degenerate); log10 FE +0.046 (FE 1.11×). passed=False due to PI containment.
+- Valsartan: 20 mg IV bolus. Obs 4.020 mg/L; point 5.405; PI [5.405, 5.405] (degenerate); log10 FE +0.129 (FE 1.35×). passed=False due to PI containment.
+
+**Substantive signal:**
+Both point estimates within 1.5× of observed — well inside the 3× clinical-error gate. If PI were non-degenerate and contained observed, outcome would have been Mode A (confirmed generalization within tested domain). Suggestive-positive for ECM mechanism but NOT formally confirmed.
+
+**Why PI is zero-width (root cause):**
+MC Cmax for IV bolus in Sisyphus = `dose / V_venous_blood` (deterministic t=0 instantaneous value, 3.7 L ± 0.0). Distributional CVs downstream (Jmax, Km, fup, Kp, ps_*) never reach Cmax because max-over-time selects t=0. All 1000 samples produce identical output.
+
+**Secondary gap:**
+`data/transporters/hepatic_ecm.json` lacks entries for valsartan + glimepiride → `ps_passive/ps_eff/cl_int_bile` fell to defaults (1e6 L/h for ps_*, 0 for bile). Not the cause of zero-PI but a data completeness gap worth closing.
+
+**Predict-layer confound flag (per spec §Peff Isolation):**
+- Valsartan fup_predicted = 0.009 vs clinical ~0.05 (5.6× off). Per spec, this is logged but not counted as ECM failure. Possible contributor to the 1.35× over-estimation.
+- Glimepiride fup_predicted = 0.005 vs clinical ~0.003-0.005 (within 2×). OK.
+
+**Pre-registration integrity:**
+Single run at N=1000, seed 42. No post-run parameter adjustment. All spec/plan amendments (v2, v2.1) pre-dated the engine execution. Substrate swap (bosentan/repaglinide → glimepiride) was documented under v2 amendment BEFORE any engine run, driven by data-access limits not expected outcome.
+
+**Commits:**
+- Spec v1: 9115e63; v2: 6e7ce0a; v2.1: 0d78c38
+- Plan: 3c85fe4
+- Task 1 (obs data): ee24164 → 5f79d34 → 675478c → 5e67376 → 6ddab5f
+- Task 2 (kinetics): a562192 → 2115313 → b36f899
+- Task 3 (classifier): 807f4aa
+- Task 4 (script): 50b1ced
+- Task 5 (integration test): 44d8e90
+- Task 6 (result): 4fb6d38
+
+**Follow-up recommended (separate task, not this session):**
+1. Design a v3 engine methodology for IV-Cmax observation that matches clinical semantics (non-t=0 or different node).
+2. Populate `hepatic_ecm.json` for non-statin OATP1B1 substrates.
+3. Improve fup XGBoost for valsartan-class high-fup-bound drugs.
+4. Pursue institutional library access for bosentan/repaglinide primary sources to re-enable N=3 test.
+
+---
+
 ### OATP ECM hepatic clearance — IMPLEMENTED (2026-04-21, branch `feat/oatp-ecm`)
 
 - **Spec**: `docs/superpowers/specs/2026-04-20-oatp-ecm-hepatic-clearance-design.md`
