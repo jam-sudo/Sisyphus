@@ -28,21 +28,21 @@ t½: 2.07 h
 The body is represented as a 34-compartment directed multi-graph comprising blood pools (arterial, venous, portal vein), perfusion-limited organs (11), permeability-limited organs (4, each split into vascular and extravascular sub-compartments), GI lumen segments (8, compartmental absorption and transit model; Yu &amp; Amidon, 1999), and mass-balance sinks (4). Physiological parameters follow the ICRP Reference Man (ICRP, 2002). Tissue compositions for partition coefficient estimation are taken from Rodgers &amp; Rowland (2005). CYP enzyme abundances follow Shimada et al. (1994).
 
 ```
-                      ┌────────────────────────────────────────────┐
-                      │                                            │
-   ┌──────┐    ┌──────┴───┐                                  ┌─────┴────┐
-   │ lung │───►│ arterial ├─► brain ─────────────────────────┤  venous  │
-   └──┬───┘    │  blood   ├─► heart ─────────────────────────┤  blood   │
-      │        │          ├─► kidney ────────────────────────┤          │
-      │        │          │                                  │          │
-      │        │          ├─► gut wall ──┐                   │          │
-      │        │          ├─► spleen  ───┼─► liver ──────────┤          │
-      │        │          ├─► pancreas ──┘   (portal,CYP450) │          │
-      │        │          │                                  │          │
-      │        │          ├─► muscle, adipose, skin, bone ───┤          │
-      │        └──────────┘                                  └─────┬────┘
-      │                                                            │
-      └────────────────────────────────────────────────────────────┘
+                      ┌─────────────────────────────────────────────┐
+                      │                                             │
+   ┌──────┐    ┌──────┴───┐                                   ┌─────┴────┐
+   │ lung │───►│ arterial │─► brain ─────────────────────────►│  venous  │
+   └──┬───┘    │  blood   │─► heart ─────────────────────────►│  blood   │
+      │        │          │─► kidney ────────────────────────►│          │
+      │        │          │                                   │          │
+      │        │          │─► gut wall ──┐                    │          │
+      │        │          │─► spleen  ───┼─► liver ──────────►│          │
+      │        │          │─► pancreas ──┘   (portal,CYP450)  │          │
+      │        │          │                                   │          │
+      │        │          │─► muscle, adipose, skin, bone ───►│          │
+      │        └──────────┘                                   └─────┬────┘
+      │                                                             │
+      └─────────────────────────────────────────────────────────────┘
 
    stomach ──► duodenum ──► jejunum ──► ileum ──► colon ──► fecal excretion
                   │            │          │
