@@ -8,7 +8,7 @@
 
 Sisyphus is a physiologically based pharmacokinetic (PBPK) platform that represents the human body as a typed directed multi-graph, derives ordinary differential equation (ODE) systems from graph topology, and propagates parameter uncertainty natively through Monte Carlo sampling.
 
-The platform accepts a SMILES string and dosing regimen as input and produces PK endpoints (C<sub>max</sub>, T<sub>max</sub>, AUC, t<sub>1/2</sub>) with 90% prediction intervals. Beyond single-dose prediction, Sisyphus supports multi-dose regimen simulation with steady-state detection, Bayesian therapeutic drug monitoring (TDM) via importance sampling, model-informed precision dosing (MIPD), drug-drug interaction (DDI) modeling, and PK/PD effect estimation.
+The platform accepts a SMILES string and dosing regimen as input and produces PK endpoints (C<sub>max</sub>, T<sub>max</sub>, AUC, t<sub>1/2</sub>) with 90% prediction intervals. Beyond single-dose prediction, Sisyphus supports multi-dose regimen simulation with steady-state detection, Bayesian therapeutic drug monitoring (TDM) via dispatched simulation-based / importance / iterative Bayesian methods, model-informed precision dosing (MIPD), drug-drug interaction (DDI) modeling, and PK/PD effect estimation. OATP1B1-mediated hepatic uptake is modeled via an extended clearance model (ECM) with closed-form QSSA hepatocyte kinetics.
 
 ```
 $ sisyphus predict --smiles "Cn1c(=O)c2c(ncn2C)n(C)c1=O" --dose 100
@@ -16,9 +16,9 @@ $ sisyphus predict --smiles "Cn1c(=O)c2c(ncn2C)n(C)c1=O" --dose 100
 Drug: Cn1c(=O)c2c(ncn2C)n(C)c1=O
 Method: hybrid
 Confidence: high
-Cmax: 1.5247 mg/L
-Tmax: 0.96 h
-t½: 4.32 h
+Cmax: 1.1792 mg/L
+Tmax: 0.63 h
+t½: 2.07 h
 ```
 
 ## Methodology
@@ -58,13 +58,17 @@ The ODE system is derived automatically from graph topology. Each edge type disp
 
 $$\frac{dA_i}{dt} = Q_i \cdot C_{in} - Q_i \cdot \frac{A_i \cdot R_{B:P}}{V_i \cdot K_{p,i}}$$
 
-**Well-stirred hepatic clearance** (ClearanceFluxSpec):
+**Hepatic clearance — Extended Clearance Model (ECM, default)** (ClearanceFluxSpec, `model="extended"`):
+
+$$CL_{h} = \frac{PS_{inf} + J_{max} \cdot f_u / (K_m + f_u \cdot C_u)}{PS_{eff} + PS_{inf} + J_{max} \cdot f_u / (K_m + f_u \cdot C_u)} \cdot CL_{int,h}$$
+
+where $PS_{inf}$ is passive sinusoidal influx, $PS_{eff}$ is efflux, $J_{max}/K_m$ are active uptake (OATP1B1, …) Michaelis–Menten parameters, and $CL_{int,h}$ is metabolic intrinsic clearance. The hepatocyte free-drug concentration $C_{u,hep}$ is solved in closed form via quasi-steady-state approximation (QSSA). For drugs without active transporter kinetics, the model reduces to the classical well-stirred form:
 
 $$CL_{int,organ} = \sum_j \left( E_j \cdot k_j \right) \cdot S_{IVIVE}$$
 
 $$CL_{organ} = \frac{Q \cdot f_u \cdot CL_{int,organ}}{Q + f_u \cdot CL_{int,organ}}$$
 
-where $E_j$ is the enzyme abundance (total pmol in organ), $k_j$ is the per-enzyme intrinsic clearance (&mu;L/min/pmol), and $S_{IVIVE}$ converts units (60/10<sup>6</sup>, &mu;L/min &rarr; L/h). This formulation is **enzyme-level**: clearance at any organ is computed from its local enzyme profile, not from organ identity (Houston, 1994; Yang et al., 2007).
+where $E_j$ is the enzyme abundance (total pmol in organ), $k_j$ is the per-enzyme intrinsic clearance (&mu;L/min/pmol), and $S_{IVIVE}$ converts units (60/10<sup>6</sup>, &mu;L/min &rarr; L/h). This formulation is **enzyme-level**: clearance at any organ is computed from its local enzyme profile, not from organ identity (Houston, 1994; Yang et al., 2007; Shitara et al., 2013 for ECM).
 
 **Permeability-limited distribution** (DiffusionFluxSpec):
 
@@ -89,7 +93,9 @@ The full pipeline combines mechanistic simulation with data-driven prediction:
 3. **IVIVE**: CL<sub>int</sub> decomposition into per-enzyme affinities, Kp calculation
 4. **PBPK simulation**: 34-state ODE system solved via LSODA (Petzold, 1983)
 5. **ML direct prediction**: XGBoost C<sub>max</sub> model (trained on 1,128 drugs from multi-source clinical PK data)
-6. **Meta-learner**: Compound-type-adaptive geometric combination of PBPK and ML C<sub>max</sub>, calibrated via LOOCV on the holdout set (base compounds: engine 0.45 / ML 0.55; non-base compounds: engine 0.00 / ML 1.00)
+6. **CL/F analytical track**: closed-form 1-compartment C<sub>max</sub> estimate using XGBoost CL/F + V<sub>d</sub> predictions and k<sub>a</sub> from Engine T<sub>max</sub> / Peff. Decorrelates with Engine+ML residuals via different input channels.
+7. **VDss analytical track**: 1-compartment C<sub>max</sub> using XGBoost VDss (volume-of-distribution-at-steady-state) predictor. Conditional activation based on applicability. Added 2026-04 as the orthogonal fourth track.
+8. **Meta-learner**: Compound-type-adaptive geometric blend of all four tracks via LOOCV-calibrated weights. Base compounds: engine 0.60 / ML 0.40 / CLF 0.00; non-base: engine 0.35 / ML 0.50 / CLF 0.15. VDss track weight 0.20 when activated; other weights scaled by ×0.80 so the four-track sum remains unity.
 
 ### Uncertainty propagation
 
@@ -103,16 +109,13 @@ Steady-state detection applies a trough variation criterion (&lt;5%) across the 
 
 ### Therapeutic drug monitoring
 
-Given observed plasma concentrations from a patient, Sisyphus refines population-level parameter distributions into individual posteriors via importance sampling:
+Given observed plasma concentrations, Sisyphus refines population-level parameter distributions into individual posteriors using a **dispatched Bayesian router** (`data/sbi/method_routing.json`) that selects one of three methods per drug:
 
-1. Draw $N$ samples from prior parameter distributions (physiology and drug).
-2. For each sample, simulate the administered regimen and interpolate predicted concentration at each observation time.
-3. Compute per-sample likelihood assuming normally distributed assay error: $L_i = \prod_k \phi\left(C_{obs,k} \mid C_{pred,k}^{(i)},\ \sigma_{assay}\right)$
-4. Importance weights $w_i \propto L_i$, normalized so $\sum w_i = 1$.
-5. Effective sample size $ESS = 1 / \sum w_i^2$ monitors weight degeneracy.
-6. Weighted statistics yield posterior distributions for all PK parameters.
+- **SBI (Simulation-Based Inference, default, 12/13 production drugs).** Amortized neural posterior estimation (Normalizing Spline Flow) conditioned on (simulator output, patient observation); the per-drug posterior is pre-trained offline. Inference is a single forward pass (milliseconds). Used when the Simulation-Based Calibration (SBC) gate passes on the offline validation profile.
+- **IBIS (Iterative Bayesian Importance Sampling, 1/13 production drugs).** Used as fallback when SBC fails for a drug (e.g. pravastatin OATP1B1 issues pre-ECM); closed-loop iteration prevents weight degeneracy.
+- **IS (classical Importance Sampling, 0/13 production drugs post-routing).** Retained for legacy compatibility; used only for compounds where SBI training data is insufficient AND IBIS has not been validated.
 
-This mechanism bypasses the CL<sub>int</sub> prediction ceiling (R&sup2; &asymp; 0.24): observed drug levels directly correct inaccurate population priors, reducing posterior CV by &gt;50% in validation (see [TDM validation](#tdm-validation)).
+Effective sample size (ESS = $1/\sum w_i^2$) is monitored for importance-based methods. Morphine routes SBI with a likelihood reweighting kernel (P6, 2026-04-19) to compensate for hierarchical variance deficiency. All three methods share a unified output contract: per-PK-parameter posterior Distribution. This mechanism bypasses the CL<sub>int</sub> prediction ceiling (R&sup2; &asymp; 0.24): observed drug levels directly correct inaccurate population priors, reducing posterior CV by &gt;50% in validation (see [TDM validation](#tdm-validation)).
 
 ### Model-informed precision dosing
 
@@ -199,7 +202,7 @@ from sisyphus.pipeline.predict import predict
 
 result = predict("Cn1c(=O)c2c(ncn2C)n(C)c1=O", dose_mg=100.0)
 
-print(result.pk.cmax.mean)    # 1.52 mg/L
+print(result.pk.cmax.mean)    # 1.18 mg/L
 print(result.method)          # "hybrid"
 print(result.confidence)      # "high"
 ```
@@ -242,8 +245,8 @@ from sisyphus.engine.uncertainty import UncertaintyEngine
 ue = UncertaintyEngine()
 mc = ue.propagate_fast(compiled, graph, drug, n_samples=1000)
 
-print(mc.pk.cmax)                # Distribution(mean=1.76, cv=0.19)
-print(mc.cmax_90ci)              # (1.28, 2.35) mg/L
+print(mc.pk.cmax)                # Distribution(mean≈1.18, cv≈0.3)
+print(mc.cmax_90ci)              # (0.57, 1.59) mg/L
 print(len(mc.cmax_samples))      # 1000 individual realizations
 ```
 
@@ -264,19 +267,29 @@ Mass balance error &lt; 10<sup>&minus;12</sup> for all simulations.
 
 ### Holdout benchmark (SMILES &rarr; C<sub>max</sub>)
 
-External validation on a Murcko scaffold-stratified holdout set (seed=42, never used in training or model selection). The holdout set was expanded from 61 to 107 drugs by integrating observed concentration&ndash;time profiles from the Open Systems Pharmacology (OSP) repository, curated literature PK data, and FDA DailyMed labels. Performance is reported using AAFE (Absolute Average Fold Error; Obach et al., 1997):
+External validation on a Murcko scaffold-stratified holdout set (N=107, seed=42, never used in training or model selection). The holdout set integrates observed concentration&ndash;time profiles from the Open Systems Pharmacology (OSP) repository, curated literature PK data, and FDA DailyMed labels. Performance is reported using AAFE (Absolute Average Fold Error; Obach et al., 1997) with bootstrap 95% confidence intervals (10,000 resamples on |log<sub>10</sub>(fold error)|):
 
 $$AAFE = 10^{\operatorname{mean}\left(\left|\log_{10}\frac{C_{max,pred}}{C_{max,obs}}\right|\right)}$$
 
-| Metric | Value | N |
-|--------|:-----:|:---:|
-| Holdout AAFE (meta-learner) | **2.283** | 107 |
-| Holdout %2-fold | **54.2%** | 107 |
-| In-domain AAFE | **2.100** | 83 |
-| Engine-only AAFE | 3.415 | 107 |
-| ML-only AAFE | 2.336 | 107 |
+| Track | AAFE | 95% CI | %2-fold | %3-fold | N |
+|---|:-:|:-:|:-:|:-:|:-:|
+| **Meta-learner (production)** | **2.695** | [2.30, 3.20] | 47.7% | 65.4% | 107 |
+| Engine only | 3.421 | [2.88, 4.06] | — | — | 107 |
+| ML only | 3.057 | [2.59, 3.63] | — | — | 107 |
+| Meta, in-domain | 2.710 | [2.27, 3.28] | — | — | 85 |
 
-The meta-learner adaptively combines mechanistic PBPK simulation with data-driven XGBoost C<sub>max</sub> prediction via LOOCV-calibrated geometric weighting. Weights are compound-type dependent: basic compounds receive a 0.45/0.55 engine/ML split (the PBPK engine adds value for bases), while non-base compounds rely entirely on the ML track (weight stability 82% across LOO folds). In-domain AAFE (N=83) excludes 24 drugs flagged as out-of-applicability-domain (prodrugs, high-MW, extreme lipophilicity) or known extended-release formulation mismatches.
+The 4-track meta-learner combines mechanistic PBPK (Engine), data-driven XGBoost C<sub>max</sub> (ML), a closed-form CL/F analytical (CLF), and a conditional VDss analytical track. Weights are compound-type-adaptive and LOOCV-calibrated: base compounds blend Engine 0.60 / ML 0.40; other compounds use Engine 0.35 / ML 0.50 / CLF 0.15, with VDss 0.20 added when applicability criteria are satisfied (and the remaining tracks re-scaled by ×0.80 so the total is 1.0). In-domain AAFE (N=85) excludes 22 drugs flagged as out-of-applicability-domain (prodrugs, high-MW, extreme lipophilicity, extended-release formulation mismatch).
+
+**Prospective validation** (FDA NMEs approved 2024–2025, curated 2026-04, never used in training or tuning):
+
+| Slice | AAFE | 95% CI | %2-fold | N |
+|---|:-:|:-:|:-:|:-:|
+| All | 2.361 | [1.65, 3.50] | 53% | 15 |
+| In-domain | 2.043 | [1.46, 2.98] | — | 13 |
+
+Prospective AAFE is below retrospective (2.361 &lt; 2.695), the opposite direction from classical over-fitting. However, N=15 is underpowered; CI spans 1.65–3.50.
+
+**Cherry-picking caveat.** The 107-holdout has been used for ~47 configuration feedback cycles (track weights, routing, meta-learner variants). A quantitative audit (`docs/claude/cherry_picking_audit_2026-04-22.md`) scores aggregate risk 4.65/10 (moderate). The Meta CI upper bound (3.20) overlaps the audit's retrospective-contamination estimate (2.85–3.10), meaning the point estimate cannot statistically reject the null hypothesis that tuning inflated AAFE. A secondary permanent holdout (N50) is planned per `docs/claude/cherry_picking_process_v1.md`.
 
 ### Multi-dose regimen validation
 
@@ -292,7 +305,7 @@ Atorvastatin (CYP3A4-mediated, moderate protein binding) was predicted within 7%
 
 ### TDM validation
 
-Bayesian update was validated in two stages: a single-drug functional test, then a multi-drug benchmark across diverse pharmacokinetic profiles.
+Bayesian update was validated in two stages: a single-drug functional test, then a multi-drug benchmark across diverse pharmacokinetic profiles. The tables below report the **Importance Sampling** baseline (legacy); production now uses a dispatched SBI/IS/IBIS router (`data/sbi/method_routing.json`) with 12/13 production drugs routing to SBI after SBC-gate validation. SBI provides millisecond-scale inference with equivalent or better CV reduction; detailed SBC + per-drug coverage reports are tracked separately.
 
 **Single-drug validation** (midazolam, 5 mg PO, one observation at t = 1 h, 10% assay CV):
 
@@ -330,7 +343,7 @@ Single-patient deterministic prediction completes in &lt;500 ms, compatible with
 
 ### Test suite
 
-357 unit and integration tests covering graph construction, ODE compilation, flux functions, solver correctness, mass balance, ADME prediction, meta-learner calibration, multi-dose regimen, TDM Bayesian update, MIPD dose recommendation, DDI, PK/PD, and holdout benchmark reproducibility.
+**569 passing / 4 skipped / 2 xfailed** (575 collected, full sweep 2026-04-22) covering graph construction, ODE compilation, flux functions (including ECM + V3 windowed IV-Cmax), solver correctness, mass balance, ADME prediction, meta-learner calibration, multi-dose regimen, TDM Bayesian update via SBI/IBIS/IS dispatch, MIPD dose recommendation, DDI, PK/PD, applicability-domain detection, and holdout benchmark reproducibility. The 2 xfailed tests are rosuvastatin and atorvastatin Peff over-prediction (predict-layer issue, not engine) — will auto-green when the Peff model improves for high-MW polar acids.
 
 ## Architecture
 
@@ -362,11 +375,12 @@ SMILES + dose
 | Layer | Responsibility | Depends on |
 |-------|---------------|------------|
 | `graph/` | BodyGraph, node/edge types, YAML builder | `core` |
-| `engine/` | ODE compiler, flux registry, solver, MC | `core`, `graph` |
-| `predict/` | SMILES &rarr; chemistry &rarr; ADME &rarr; DrugOnGraph | `core` |
-| `ml/` | XGBoost C<sub>max</sub>, meta-learner | `core` |
-| `pk/` | SimResult &rarr; PKEndpoints | `core` |
-| `regimen/` | Multi-dose solver, TDM Bayesian update, MIPD | `core`, `engine`, `graph` |
+| `engine/` | ODE compiler, flux registry (including ECM), solver, MC | `core`, `graph` |
+| `predict/` | SMILES &rarr; chemistry &rarr; ADME &rarr; DrugOnGraph + transporter DB | `core` |
+| `ml/` | XGBoost C<sub>max</sub>, CL/F, VDss predictors, 4-track meta-learner | `core` |
+| `pk/` | SimResult &rarr; PKEndpoints (route-aware) | `core` |
+| `regimen/` | Multi-dose solver, TDM method dispatch (SBI/IS/IBIS), MIPD | `core`, `engine`, `graph`, `sbi` |
+| `sbi/` | Simulation-based inference training + amortized posterior | `core`, `engine` |
 | `pipeline/` | Orchestrator wiring all layers | all layers |
 | `ddi.py` | Drug-drug interactions (competitive inhibition, E<sub>max</sub> induction) | `core`, `graph` |
 | `pkpd.py` | PK/PD effect modeling (effect compartment, sigmoid E<sub>max</sub>) | `core` |
@@ -438,9 +452,11 @@ effect = compute_effect(sim_result, pd)
 - **No prodrug metabolism.** C<sub>max</sub> is predicted for the parent compound. Prodrugs (e.g., valacyclovir, fesoterodine) are flagged as out-of-applicability-domain.
 - **Simplified pK<sub>a</sub>.** Ionization state is classified by structural rules (carboxylic acid &rarr; 4.5, aliphatic amine &rarr; 9.0), not computed quantum-mechanically. This limits Kp accuracy for highly ionized compounds.
 - **No Phase II metabolism.** Glucuronidation (UGT), sulfation (SULT), and acetylation (NAT2) are not modeled. Drugs primarily cleared by conjugation will be under-predicted.
-- **No transporter-mediated disposition in ODE.** P-gp efflux is handled via a binary permeability correction, not as a mechanistic transport term in the ODE.
-- **CL<sub>int</sub> prediction is the weakest link.** The XGBoost CL<sub>int</sub> model achieves R&sup2; &asymp; 0.24 on TDC Hepatocyte_AZ (scaffold-split CV). This ceiling persists across molecular representations (Morgan FP, MACCS keys, atom-pair FP, MoLFormer, ChemBERTa, Uni-Mol, Chemprop D-MPNN), model architectures (XGBoost, Random Forest, Ridge, GNN), data scales (978&ndash;1,910 compounds), and alternative formulations (classification, BDE reactivity features, direct CL/F bypass, AUC decomposition). Twenty-seven controlled experiments evaluating more than 60 distinct approaches were conducted; none produced a meaningful reduction in holdout AAFE. The primary bottleneck is assay noise in public hepatocyte clearance data, not model capacity or molecular representation. Bayesian TDM partially mitigates this at the individual patient level: observed drug concentrations correct inaccurate population priors, reducing posterior CV by &gt;50% (see [TDM validation](#tdm-validation)).
+- **Transporter-mediated disposition: OATP1B1 only.** Hepatic uptake by OATP1B1 is modeled mechanistically via the ECM (closed-form QSSA hepatocyte flux) with per-drug kinetic parameters in `data/transporters/oatp1b1.json`. Other hepatic transporters (OATP1B3, NTCP, BSEP), intestinal transporters (P-gp, BCRP), and renal transporters (OAT1/3, MATE1/2-K) are not mechanistically modeled. P-gp efflux at the gut wall is approximated via a binary permeability correction.
+- **CL<sub>int</sub> prediction is the weakest link.** The XGBoost CL<sub>int</sub> model achieves R&sup2; &asymp; 0.24 on TDC Hepatocyte_AZ (scaffold-split CV). This ceiling persists across molecular representations (Morgan FP, MACCS keys, atom-pair FP, MoLFormer, ChemBERTa, Uni-Mol, Chemprop D-MPNN), model architectures (XGBoost, Random Forest, Ridge, GNN), data scales (978&ndash;1,910 compounds), and alternative formulations (classification, BDE reactivity features, direct CL/F bypass, AUC decomposition). The authoritative failed-experiment list (`docs/claude/dead-ends.md`) enumerates **33 distinct approaches** across 11 categories, none of which produced a meaningful reduction in holdout AAFE. The primary bottleneck is assay noise in public hepatocyte clearance data, not model capacity or molecular representation. Bayesian TDM partially mitigates this at the individual patient level: observed drug concentrations correct inaccurate population priors, reducing posterior CV by &gt;50% (see [TDM validation](#tdm-validation)).
 - **Error cancellation constrains component-level improvements.** The IVIVE pipeline (f<sub>u,p</sub> &times; CL<sub>int</sub> &times; scaling &rarr; CL<sub>h</sub>) exhibits systematic error cancellation: improving any single ADME component (e.g., CL<sub>int</sub> R&sup2; from 0.21 to 0.33 via data expansion) worsens overall AAFE because the error balance with other components is disrupted. Simultaneous replacement of all ADME models also failed to improve AAFE (+0.023), and post-hoc meta-learner optimization across more than 60 blending strategies (stacking, analog correction, rank aggregation, Bayesian model averaging, ensemble selection, isotonic/LOWESS calibration, substructure correction, disagreement routing, and others) confirmed that all such combinations produce holdout errors correlated at r &gt; 0.95 with the baseline meta-learner. The current compound-type-adaptive geometric blend is provably near-optimal at this sample size. Measured ADME inputs (experimental f<sub>u,p</sub> and CL<sub>int</sub>) reduce engine AAFE from 2.33 to 1.98, confirming that the mechanistic architecture is sound when inputs are accurate.
+- **IV-Cmax observation convention.** For intravenous bolus dosing, engine Cmax is extracted as the maximum concentration over `t ≥ 5 min` (windowed max), not the instantaneous `dose / V_venous` spike at `t = 0`. This matches the clinical first-draw convention and is route-conditional; oral drugs use full-interval max (V2-compatible). The 107-drug holdout set is entirely oral, so this methodology has zero impact on the headline AAFE. See `docs/superpowers/specs/2026-04-22-iv-cmax-observation-design.md`.
+- **ECM (Extended Clearance Model) generalization unverified for non-statins.** ECM is validated on 5 statins (3/5 pass 3-fold gate: pravastatin, pitavastatin, fluvastatin; rosuvastatin/atorvastatin xfail due to Peff over-prediction). A pre-registered generalization test on valsartan + glimepiride (2026-04-22, N=2) returned Mode C with systematic 2.5× underprediction under V3 methodology. The fup override hypothesis was ruled out (DE-33); candidates remain for Jmax calibration, Vss/Kp over-distribution, and ECM architectural limits for Km &gt; 1 µM substrates. Users should not rely on ECM accuracy for non-statin OATP1B1 substrates without independent verification.
 - **R<sub>B:P</sub> defaults to 1.0.** The RBP model (R&sup2; = &minus;0.08 on external data) is effectively disabled; all drugs are assumed to have equal blood and plasma concentrations.
 - **MIPD assumes linear pharmacokinetics.** Dose recommendations use linear scaling, which may be inaccurate for drugs with saturable metabolism (e.g., phenytoin) or nonlinear protein binding.
 - **TDM importance sampling degenerates for large prior errors.** When the population prior is far from the individual truth (fold error &gt;3&times;) or multiple observations are used (&ge;3), the effective sample size drops below 10, indicating particle weight degeneracy. Sequential Bayesian methods (EnKF, particle filter) would address this.
@@ -471,15 +487,20 @@ src/sisyphus/
 ├── predict/             # SMILES → drug parameterization
 │   ├── chemistry.py     # Molecular profiling, pKa, AD assessment
 │   ├── adme.py          # XGBoost ADME property prediction
-│   └── ivive.py         # In vitro → in vivo extrapolation, Kp
+│   ├── ivive.py         # In vitro → in vivo extrapolation, Kp
+│   ├── drugbank.py      # DrugBank experimental enrichment (fup, logP)
+│   ├── phenotype.py     # Pharmacogenomic phenotype (e.g., SLCO1B1)
+│   └── transporter_db.py # OATP1B1 + hepatic ECM kinetic parameters
 │
 ├── ml/                  # Data-driven PK prediction
 │   ├── features.py      # Feature vector construction
 │   ├── models.py        # XGBoost Cmax predictor
-│   └── ensemble.py      # Meta-learner (PBPK + ML combination)
+│   ├── clf_predictor.py # CL/F analytical track
+│   ├── vdss_predictor.py# VDss analytical track
+│   └── ensemble.py      # 4-track meta-learner
 │
 ├── pk/                  # PK endpoint extraction
-│   ├── endpoints.py     # SimResult → PKEndpoints
+│   ├── endpoints.py     # SimResult → PKEndpoints (route-aware t_min_h)
 │   ├── nca.py           # Non-compartmental analysis (AUC, t½)
 │   └── analytical.py    # Closed-form 1-cpt and 2-cpt solutions
 │
@@ -487,17 +508,27 @@ src/sisyphus/
 │   ├── types.py         # DosingEvent, DosingRegimen (frozen dataclasses)
 │   ├── solver.py        # Event-driven multi-dose solver
 │   ├── profile.py       # Steady-state detection, Css metrics
-│   ├── tdm.py           # Bayesian TDM via importance sampling
+│   ├── tdm.py           # Bayesian TDM dispatcher (SBI/IS/IBIS routing)
+│   ├── tdm_sbi.py       # SBI (neural posterior) TDM method
+│   ├── tdm_ibis.py      # Iterative Bayesian Importance Sampling
+│   ├── tdm_enkf.py      # Ensemble Kalman filter (sequential alternative)
 │   └── dosing.py        # MIPD dose recommendation
+│
+├── sbi/                 # Amortized neural posterior estimation
+│   ├── simulator.py     # Forward model for SBI training
+│   ├── amortizer.py     # Neural posterior trainer (NSF)
+│   ├── hierarchical.py  # Multi-drug + continuous-covariate extensions
+│   └── sbc.py           # Simulation-Based Calibration gate
 │
 ├── validation/          # Benchmarking infrastructure
 │   ├── reference.py     # Clinical PK reference loader (331 drugs)
 │   ├── benchmark.py     # Holdout benchmark runner
 │   ├── metrics.py       # AAFE, fold error, PI coverage
-│   └── split.py         # Scaffold-stratified splitting
+│   ├── split.py         # Scaffold-stratified splitting
+│   └── oatp_generalization.py  # ECM substrate generalization classifier
 │
 └── pipeline/            # End-to-end orchestration
-    ├── predict.py       # SMILES → PredictionResult
+    ├── predict.py       # SMILES → PredictionResult (route-conditional V3)
     └── config.py        # Pipeline configuration
 
 data/
