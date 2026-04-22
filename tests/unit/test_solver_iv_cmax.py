@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 
 from sisyphus.engine.compiler import ODECompiler, ResolvedParams
-from sisyphus.engine.solver import _IV_CMAX_DELAY_H, solve
+from sisyphus.engine.solver import _IV_CMAX_DELAY_H, solve, solve_mc
 from sisyphus.graph.builder import build_from_yaml
 from sisyphus.predict.adme import predict_adme
 from sisyphus.predict.chemistry import compute_profile
@@ -45,9 +45,6 @@ def test_solve_t_min_h_zero_is_backward_compatible():
     result_default = solve(compiled, params, y0, t_span=(0.0, 24.0))
     result_zero = solve(compiled, params, y0, t_span=(0.0, 24.0), t_min_h=0.0)
     np.testing.assert_allclose(result_default.time_h, result_zero.time_h)
-
-
-from sisyphus.engine.solver import solve_mc
 
 
 def test_solve_mc_iv_cmax_excludes_t0_spike():
