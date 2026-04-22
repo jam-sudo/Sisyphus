@@ -174,6 +174,7 @@ class UncertaintyEngine:
         t_span: tuple[float, float] = (0.0, 24.0),
         observation_node: str = "venous_blood",
         backend: str = "scipy",
+        t_min_h: float = 0.0,
     ) -> MCResult:
         """Fast MC propagation -- returns aggregated PK only (no SimResults).
 
@@ -189,6 +190,12 @@ class UncertaintyEngine:
             seed: Base RNG seed (sample i uses seed + i).
             t_span: Integration interval (t_start, t_end) in hours.
             observation_node: Node to extract PK from.
+            t_min_h: Minimum observation time in hours.  When > 0, skips the
+                t=0 IV-bolus spike for Cmax extraction.  scipy backend only —
+                JAX and surrogate backends ignore this parameter.  Default 0.0
+                (V2-compatible).
+            backend: Solver backend to use (``"scipy"``, ``"jax"``, or
+                ``"surrogate"``).
 
         Returns:
             MCResult with aggregated PKEndpoints and 90% PI.
@@ -277,6 +284,7 @@ class UncertaintyEngine:
                     y0_template,
                     t_span,
                     observation_node,
+                    t_min_h=t_min_h,
                 )
                 if success and cmax > 0:
                     cmax_samples.append(cmax)
