@@ -35,6 +35,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 import sisyphus.engine.flux  # noqa: F401,E402 -- register flux specs
 from sisyphus.engine.compiler import ODECompiler  # noqa: E402
+from sisyphus.engine.solver import _IV_CMAX_DELAY_H  # noqa: E402
 from sisyphus.engine.uncertainty import UncertaintyEngine  # noqa: E402
 from sisyphus.graph.builder import build_from_yaml  # noqa: E402
 from sisyphus.predict.adme import predict_adme  # noqa: E402
@@ -51,7 +52,7 @@ from sisyphus.validation.oatp_generalization import (  # noqa: E402
 
 _PHYS = ROOT / "data" / "physiology" / "reference_man.yaml"
 _OBS_FILE = ROOT / "data" / "validation" / "oatp_generalization_drugs.json"
-_OUT = ROOT / "data" / "validation" / "oatp_generalization_result.json"
+_OUT = ROOT / "data" / "validation" / "oatp_generalization_result_v3.json"
 
 # Frozen per spec §Execution Constraints. SMOKE mode for Task 4 Step 2 only
 # (writes to .smoke.json, not the pre-registered result path).
@@ -93,6 +94,7 @@ def _run_one(name: str, entry: dict, graph, liver_enzymes: dict) -> dict:
         seed=42,
         t_span=(0.0, 24.0),
         observation_node="venous_blood",
+        t_min_h=_IV_CMAX_DELAY_H,
     )
     elapsed = time.time() - t0
 
@@ -151,7 +153,7 @@ def main() -> None:
     if _IS_SMOKE:
         print(f"=== SMOKE MODE: N={_MC_N_SAMPLES} samples (NOT the pre-registered run) ===")
     else:
-        print(f"=== ECM generalization test: N={_MC_N_SAMPLES} samples ===")
+        print(f"=== ECM generalization test (V3 IV-Cmax): N={_MC_N_SAMPLES} samples ===")
 
     drug_results = []
     outcomes = []
@@ -187,6 +189,10 @@ def main() -> None:
         "spec_commit": "0d78c38",
         "spec_commit_chain": ["9115e63", "6e7ce0a", "0d78c38"],
         "amendment": "v2/v2.1 — substrate set = valsartan + glimepiride (N=2)",
+        "methodology": "V3 IV-Cmax (windowed max at t >= 5 min)",
+        "methodology_spec": "docs/superpowers/specs/2026-04-22-iv-cmax-observation-design.md",
+        "methodology_commit_chain": ["4630b0b", "9bc2e3d", "2742df8", "6ed22e7", "3f86e2e", "ed3207f", "4e10ad2"],
+        "v2_result_path": "data/validation/oatp_generalization_result.v2.json",
         "mc_n_samples": _MC_N_SAMPLES,
         "drugs": drug_results,
         "aggregate_mode": mode.value,
