@@ -12,6 +12,11 @@ from scipy.integrate import solve_ivp
 from sisyphus.core import SimResult
 from sisyphus.engine.compiler import CompiledODE, ResolvedParams
 
+# Clinical first-draw convention for IV bolus Cmax (5 min post-injection).
+# Used by route-aware Cmax extraction to skip the deterministic t=0 spike
+# (see docs/superpowers/specs/2026-04-22-iv-cmax-observation-design.md §5).
+_IV_CMAX_DELAY_H = 5.0 / 60.0
+
 
 def solve(
     compiled: CompiledODE,
@@ -19,6 +24,7 @@ def solve(
     y0: np.ndarray,
     t_span: tuple[float, float],
     t_eval: np.ndarray | None = None,
+    t_min_h: float = 0.0,
 ) -> SimResult:
     """Solve the ODE system for a single parameter realization.
 
@@ -36,7 +42,12 @@ def solve(
     rhs = compiled.make_rhs(params)
 
     if t_eval is None:
-        t_eval = np.linspace(t_span[0], t_span[1], 500)
+        if t_min_h > 0.0:
+            t_eval = np.unique(
+                np.concatenate([[0.0, t_min_h], np.linspace(t_min_h, t_span[1], 498)])
+            )
+        else:
+            t_eval = np.linspace(t_span[0], t_span[1], 500)
 
     sol = solve_ivp(
         rhs,
