@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-04-21
+last_updated: 2026-04-22
 parent: ../../CLAUDE.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -12,7 +12,48 @@ Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the *
 
 ## 2026-04 (current session)
 
+### V3 IV-Cmax methodology + ECM re-run + fup confound rule-out (2026-04-22)
+
+**Infrastructure shipped (7 commits, `4630b0b..4e10ad2`):**
+Route-aware `t_min_h = _IV_CMAX_DELAY_H (5/60 h) if route=="iv" else 0.0` threaded through `solve()`, `solve_mc()`, `compute_endpoints()`, `propagate_fast()` (scipy backend), pipeline. Oral (107 holdout + production) byte-identical to V2 — pinned by `tests/integration/test_v3_oral_regression.py`. 562 pass / 4 skip / 2 xfail, zero new failures.
+
+- Design spec: `docs/superpowers/specs/2026-04-22-iv-cmax-observation-design.md` (`d88183a`)
+- Plan: `docs/superpowers/plans/2026-04-22-v3-iv-cmax-observation.md` (`de6292b`)
+- Impl chain: `4630b0b` (solve anchor) → `9bc2e3d` (solve_mc windowed) → `2742df8` (compute_endpoints) → `6ed22e7` (propagate_fast) → `3f86e2e` (pipeline route-cond) → `ed3207f` (oral regression) → `4e10ad2` (propagate caveat)
+
+**ECM generalization re-run under V3 (`7aa49ae`, `data/validation/oatp_generalization_result_v3.json`):**
+Formal Mode C. **Direction flipped from V2:** V2 appeared to over-predict 1.1–1.35× but that was the t=0 artifact. V3 with windowed Cmax shows **systematic underprediction 2.5×** on both drugs.
+
+| Drug | Observed | V2 (artifact) | V3 (real) | V3 PI | V3 log10 FE |
+|---|---|---|---|---|---|
+| glimepiride | 0.243 | 0.270 (1.11×) | 0.095 | [0.087, 0.101] | **−0.409** |
+| valsartan | 4.02 | 5.405 (1.35×) | 1.940 | [1.80, 2.06] | **−0.316** |
+
+Median |log10 FE| = 0.363 < 0.5 Mode B gate → formally Mode C, but same-direction underprediction is substantively suggestive of systematic ECM over-clearance for non-statin OATP1B1 substrates. V2's apparent "near-pass" was a methodology illusion; V2 result preserved as `.v2.json`.
+
+**Diagnostic (`5ff72eb`, `data/validation/v3_fup_override_diagnosis.json`):**
+fup override (valsartan predicted 0.009 → clinical 0.050, 5.6× increase) gave Cmax 0.97× — essentially no change. Glimepiride predicted fup already matches clinical (0.005). **Predict-layer fup confound RULED OUT as cause of V3 underprediction.**
+
+**Remaining candidates for V3 underprediction (not investigated this session):**
+1. ECM Jmax values too high for valsartan/glimepiride (valsartan Jmax flat-CLuptake-scaled from pravastatin under v2.1; glimepiride from literature Huang 2018)
+2. Vss/Kp over-distribution (tissue holds too much drug → too little in blood at 5 min)
+3. ECM architecture limit for Km > 1 µM range (pravastatin Km ≈ 13.6, glimepiride 10.0, valsartan 1.39 — three-order-of-magnitude sweep within tested substrates)
+
+**Pre-registration integrity maintained:**
+V3 methodology spec written + committed (`d88183a`) BEFORE engine re-run (`7aa49ae`). Single MC run. Fup diagnostic explicitly marked exploratory (`"note": "NOT a pre-registered run"`). No post-run parameter adjustment.
+
+**How to apply:**
+- "Does ECM generalize to non-statin OATP1B1?" → **No, current calibration underpredicts by 2.5× on both valsartan and glimepiride.** Mode C but substantively borderline systematic.
+- "Is this ECM architecture failure?" → Unknown. fup ruled out. Jmax calibration vs architecture vs Vss remains unseparated.
+- "Cherry-picking?" → No. V3 spec pre-committed, direction of failure was unforeseen (we expected near-pass; got underpredict).
+- "Re-run with fix?" → Only after another pre-registered spec amendment targeting specific root cause (Jmax recalibration would need independent substrate set to avoid overfitting).
+
+---
+
 ### ECM generalization test, N=2, Mode C with diagnostic findings (2026-04-21)
+
+**SUPERSEDED by V3 run (2026-04-22) above.** Original V2 result preserved as `data/validation/oatp_generalization_result.v2.json`. Kept here for historical context only.
+
 
 **Spec:** `docs/superpowers/specs/2026-04-21-ecm-generalization-test-design.md`
   - v1 `9115e63` + v2 amendment `6e7ce0a` (substrate swap) + v2.1 `0d78c38` (valsartan Jmax scaling)
