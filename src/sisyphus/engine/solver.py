@@ -35,6 +35,11 @@ def solve(
         t_span: Integration interval ``(t_start, t_end)`` in hours.
         t_eval: Optional time points for output.  If ``None``, 500
             evenly-spaced points are used.
+        t_min_h: Minimum observation time in hours.  When > 0 and
+            ``t_eval`` is ``None``, injects ``t_min_h`` as a guaranteed
+            anchor in ``t_eval`` so windowed Cmax extraction always has
+            a sample at this boundary.  Default ``0.0`` (V2-compatible).
+            Ignored when ``t_eval`` is supplied explicitly.
 
     Returns:
         A SimResult with concentration and amount time series.
@@ -43,8 +48,10 @@ def solve(
 
     if t_eval is None:
         if t_min_h > 0.0:
-            t_eval = np.unique(
-                np.concatenate([[0.0, t_min_h], np.linspace(t_min_h, t_span[1], 498)])
+            # linspace starts exactly at t_min_h (IEEE 754 exact), so the
+            # anchor is guaranteed without needing a separate prepended copy.
+            t_eval = np.concatenate(
+                [[0.0], np.linspace(t_min_h, t_span[1], 499)]
             )
         else:
             t_eval = np.linspace(t_span[0], t_span[1], 500)
