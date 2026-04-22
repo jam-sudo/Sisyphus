@@ -1,0 +1,138 @@
+{
+  "description": "N50 secondary permanent holdout, cycle 2026Q2. Per docs/superpowers/specs/2026-04-22-n50-secondary-holdout-design.md. Never-touch for weight tuning, routing, or meta-learner feedback. One-time measurement per release cycle, then retired. Seed batch only — curation continues in subsequent sessions toward n_target=50.",
+  "spec_commit": "<set by commit hook — to be filled at commit time>",
+  "cycle_id": "2026Q2",
+  "curation_date": "2026-04-22",
+  "curation_status": "SEED (3 / 50)",
+  "n_target": 50,
+  "n_admitted": 3,
+  "oatp1b1_substrate_count": 3,
+  "oatp1b1_substrate_minimum": 3,
+  "exclusion_inventory_source": "/tmp/n50_exclusion.txt (built by scripts/build_n50_exclusion.py on 2026-04-22)",
+  "exclusion_inventory_sha256": "3acb38a29c83646e0f10c4a7ae478a18052ec2c9056fbc8df369aed3490aee83",
+  "bsa_m2": 1.85,
+  "bsa_rationale": "ICRP Reference Man (70 kg × 1.74 m) BSA. Spec §9 Open Questions #1 resolved to 1.85. Used for all mg/m² → mg conversions in this file.",
+  "methodology_notes": "Observed Cmax reported as mean ± SD when primary source uses arithmetic statistics; as geometric mean with 90% CI in notes when that is the primary-source convention. SD field is null for geometric-mean-only sources.",
+
+  "drugs": {
+    "rifampin": {
+      "status": "VERIFIED",
+      "smiles": "CC1C=CC=C(C(=O)NC2=C(C(=C3C(=C2O)C(=C(C4=C3C(=O)C(O4)(OC=CC(C(C(C(C(C(C1O)C)O)C)OC(=O)C)C)OC)C)C)O)O)C=NN5CCN(CC5)C)C",
+      "pubchem_cid": 135398735,
+      "molecular_formula": "C43H58N4O12",
+      "molecular_weight": 822.9,
+      "dose_mg": 600.0,
+      "route": "iv_infusion",
+      "infusion_duration_min": 30.0,
+      "observed_cmax_mg_l": 17.5,
+      "observed_cmax_sd_mg_l": 5.0,
+      "observed_cmax_cv": 0.286,
+      "patient_n": 12,
+      "oatp1b1_substrate": true,
+      "mechanism_tags": ["OATP1B1_substrate", "OATP1B1_inhibitor_high_dose", "CYP3A4_inducer", "hepatic_clearance"],
+      "source": {
+        "citation": "Pfizer Laboratories. Rifampin for Injection USP — FDA prescribing information, revised April 2013.",
+        "url": "https://labeling.pfizer.com/ShowLabeling.aspx?id=686",
+        "table_ref": "Clinical Pharmacology — Intravenous Administration section, plasma concentrations table",
+        "access_path": "primary_regulatory_label"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified — assumed false but not conservative; rifampin almost certainly has a DrugBank entry. Admit with caveat: this drug may have appeared in ADME training indirectly. Flag for retrospective audit.",
+        "not_in_validation": true
+      },
+      "notes": "Dual OATP1B1 substrate + inhibitor; the single-dose IV 600 mg measurement avoids chronic-induction confounds of repeat dosing. Tirona et al 2003 JPET 305:1028 establishes OATP1B1 substrate role at plasma concentrations in this range. MW 822 is above the 800 Da threshold commonly used for AD flagging — engine may flag in_domain=False. This is fine; the N50 is for generalization measurement, not domain restriction."
+    },
+
+    "irinotecan": {
+      "status": "VERIFIED",
+      "smiles": "CCC1=C2CN3C(=CC4=C(C3=O)COC(=O)C4(CC)O)C2=NC5=C1C=C(C=C5)OC(=O)N6CCC(CC6)N7CCCCC7",
+      "pubchem_cid": 60838,
+      "molecular_formula": "C33H38N4O6",
+      "molecular_weight": 586.7,
+      "dose_mg": 231.0,
+      "dose_original": "125 mg/m²",
+      "dose_conversion_note": "125 mg/m² × BSA 1.85 m² = 231.25 mg → 231 mg.",
+      "route": "iv_infusion",
+      "infusion_duration_min": 90.0,
+      "observed_cmax_mg_l": 1.66,
+      "observed_cmax_sd_mg_l": 0.797,
+      "observed_cmax_cv": 0.480,
+      "patient_n": 64,
+      "oatp1b1_substrate": true,
+      "mechanism_tags": ["OATP1B1_substrate", "CES_substrate", "UGT1A1_substrate", "prodrug_to_SN38", "hepatic_clearance"],
+      "source": {
+        "citation": "Pfizer (Pharmacia & Upjohn). Camptosar (irinotecan hydrochloride injection) — FDA prescribing information, original 2006 label at accessdata.fda.gov.",
+        "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2006/020571s030lbl.pdf",
+        "table_ref": "Section 12.3 Pharmacokinetics, 125 mg/m² single-dose study in patients with solid tumors",
+        "access_path": "primary_regulatory_label"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified — likely present; flag for retrospective audit",
+        "not_in_validation": true
+      },
+      "notes": "Nozawa et al 2005 DMD 33:434 established OATP1B1 substrate role. Cmax reported here is for parent irinotecan only (not SN-38 active metabolite). SN-38 is formed by intracellular CES1/2 hydrolysis and is the pharmacologically active species, but clinical Cmax of SN-38 is 0.0263 mg/L — not what our engine would try to predict from a dose of irinotecan. Per spec §A1, we evaluate parent Cmax only. Prodrug-to-metabolite dynamics are a DDI/metabolism question explicitly out of scope."
+    },
+
+    "caspofungin": {
+      "status": "VERIFIED",
+      "smiles": "CCC(C)CC(C)CCCCCCCCC(=O)NC1CC(C(NC(=O)C2C(CCN2C(=O)C(NC(=O)C(NC(=O)C3CC(CN3C(=O)C(NC1=O)C(C)O)O)C(C(C4=CC=C(C=C4)O)O)O)C(CCN)O)O)NCCN)O",
+      "pubchem_cid": 16119814,
+      "molecular_formula": "C52H88N10O15",
+      "molecular_weight": 1093.3,
+      "dose_mg": 70.0,
+      "route": "iv_infusion",
+      "infusion_duration_min": 60.0,
+      "observed_cmax_mg_l": 12.04,
+      "observed_cmax_sd_mg_l": null,
+      "observed_cmax_ci_90_low": 10.87,
+      "observed_cmax_ci_90_high": 13.33,
+      "observed_cmax_cv": null,
+      "patient_n": 5,
+      "oatp1b1_substrate": true,
+      "mechanism_tags": ["OATP1B1_substrate", "lipopeptide", "hepatic_uptake", "slow_hepatic_clearance"],
+      "source": {
+        "citation": "Stone JA, Holland SD, Wickersham PJ, Sterrett A, Schwartz M, Bonfiglio C, Hesney M, Winchell GA, Deutsch PJ, Greenberg H, Hunt TL, Waldman SA. Single- and multiple-dose pharmacokinetics of caspofungin in healthy men. Antimicrob Agents Chemother 2002;46(3):739-745. PMCID: PMC127465. PMID 11850256.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC127465/",
+        "doi": "10.1128/AAC.46.3.739-745.2002",
+        "table_ref": "Table 1 (page 740) — Geometric-mean pharmacokinetic data following single doses, 70 mg column",
+        "access_path": "primary_paper"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified — likely present; flag for retrospective audit",
+        "not_in_validation": true
+      },
+      "notes": "Sandhu et al 2005 AAC 49:2602 establishes OATP1B1 substrate role. Large cyclic lipopeptide MW 1093 — will trigger AD flag for molecular weight. Acceptable. Primary source reports geometric mean with 90% CI (not arithmetic mean ± SD). C₁ₕ column in Table 1: 12.04 μg/mL = 12.04 mg/L with 90% CI [10.87, 13.33]. N=6 enrolled at 70 mg dose panel, Cmax value available for n=5 (one missing per the paper). SD field is null; CI fields report the primary-source 90% CI."
+    }
+  },
+
+  "forward_curation_plan": {
+    "target_remaining": 47,
+    "oatp1b1_additional_candidates": [
+      "paclitaxel (OATP1B3 + OATP1B1, rich PK literature, IV)",
+      "docetaxel (similar to paclitaxel)",
+      "micafungin (similar to caspofungin, different echinocandin)",
+      "temocaprilat (active metabolite of temocapril; verify temocapril not in training)",
+      "benzylpenicillin (weak OATP1B1 substrate; primary-source Cmax from Nightingale 1975 or similar)"
+    ],
+    "general_coverage_targets": [
+      "FDA 2025-2026 NMEs not yet in prospective_N15 (query FDA CDER list, cross-exclude)",
+      "EU EPAR drugs 2024-2026 with published IV or oral PK",
+      "Clin Pharmacokinet retrospective reviews 2025-2026 for reference Cmax values"
+    ],
+    "forbidden_sources": [
+      "DrugBank measured ADME page (same source as training enrichment)",
+      "TDC Hepatocyte_AZ (training set for CLint)",
+      "MMPK tables (training set for VDss and CLint)",
+      "107-holdout derived aggregations"
+    ]
+  }
+}
