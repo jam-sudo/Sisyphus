@@ -1,19 +1,18 @@
 {
-  "description": "N50 secondary permanent holdout, cycle 2026Q2. Per docs/superpowers/specs/2026-04-22-n50-secondary-holdout-design.md. Never-touch for weight tuning, routing, or meta-learner feedback. One-time measurement per release cycle, then retired. Seed batch only — curation continues in subsequent sessions toward n_target=50.",
+  "description": "N50 secondary permanent holdout, cycle 2026Q2. Per docs/superpowers/specs/2026-04-22-n50-secondary-holdout-design.md. Never-touch for weight tuning, routing, or meta-learner feedback. One-time measurement per release cycle, then retired. Seed batch only \u2014 curation continues in subsequent sessions toward n_target=50.",
   "spec_commit": "da0f080",
   "cycle_id": "2026Q2",
   "curation_date": "2026-04-22",
-  "curation_status": "SEED (3 / 50)",
+  "curation_status": "PARTIAL (8 / 50)",
   "n_target": 50,
-  "n_admitted": 3,
-  "oatp1b1_substrate_count": 3,
+  "n_admitted": 8,
+  "oatp1b1_substrate_count": 8,
   "oatp1b1_substrate_minimum": 3,
   "exclusion_inventory_source": "/tmp/n50_exclusion.txt (built by scripts/build_n50_exclusion.py on 2026-04-22)",
   "exclusion_inventory_sha256": "3acb38a29c83646e0f10c4a7ae478a18052ec2c9056fbc8df369aed3490aee83",
   "bsa_m2": 1.85,
-  "bsa_rationale": "ICRP Reference Man (70 kg × 1.74 m) BSA. Spec §9 Open Questions #1 resolved to 1.85. Used for all mg/m² → mg conversions in this file.",
-  "methodology_notes": "Observed Cmax reported as mean ± SD when primary source uses arithmetic statistics; as geometric mean with 90% CI in notes when that is the primary-source convention. SD field is null for geometric-mean-only sources.",
-
+  "bsa_rationale": "ICRP Reference Man (70 kg \u00d7 1.74 m) BSA. Spec \u00a79 Open Questions #1 resolved to 1.85. Used for all mg/m\u00b2 \u2192 mg conversions in this file.",
+  "methodology_notes": "Observed Cmax reported as mean \u00b1 SD when primary source uses arithmetic statistics; as geometric mean with 90% CI in notes when that is the primary-source convention. SD field is null for geometric-mean-only sources. 2026-04-22 seed expansion (commit pending): added paclitaxel, docetaxel, micafungin, benzylpenicillin, torsemide (5 OATP1B1 substrates). benzylpenicillin classified as iv_infusion duration 4 min (rather than iv_bolus) because the FDA label's 3\u20135 min push is physically a short zero-order input; V3.1 infusion path handles it correctly and matches the Cmax timing (400 mg/L at 5\u20136 min post-start).",
   "drugs": {
     "rifampin": {
       "status": "VERIFIED",
@@ -29,23 +28,27 @@
       "observed_cmax_cv": 0.286,
       "patient_n": 12,
       "oatp1b1_substrate": true,
-      "mechanism_tags": ["OATP1B1_substrate", "OATP1B1_inhibitor_high_dose", "CYP3A4_inducer", "hepatic_clearance"],
+      "mechanism_tags": [
+        "OATP1B1_substrate",
+        "OATP1B1_inhibitor_high_dose",
+        "CYP3A4_inducer",
+        "hepatic_clearance"
+      ],
       "source": {
-        "citation": "Pfizer Laboratories. Rifampin for Injection USP — FDA prescribing information, revised April 2013.",
+        "citation": "Pfizer Laboratories. Rifampin for Injection USP \u2014 FDA prescribing information, revised April 2013.",
         "url": "https://labeling.pfizer.com/ShowLabeling.aspx?id=686",
-        "table_ref": "Clinical Pharmacology — Intravenous Administration section, plasma concentrations table",
+        "table_ref": "Clinical Pharmacology \u2014 Intravenous Administration section, plasma concentrations table",
         "access_path": "primary_regulatory_label"
       },
       "exclusion_checks": {
         "not_in_107": true,
         "not_in_mmpk": true,
         "not_in_tdc": true,
-        "not_in_drugbank_enrichment": "unverified — assumed false but not conservative; rifampin almost certainly has a DrugBank entry. Admit with caveat: this drug may have appeared in ADME training indirectly. Flag for retrospective audit.",
+        "not_in_drugbank_enrichment": "unverified \u2014 assumed false but not conservative; rifampin almost certainly has a DrugBank entry. Admit with caveat: this drug may have appeared in ADME training indirectly. Flag for retrospective audit.",
         "not_in_validation": true
       },
-      "notes": "Dual OATP1B1 substrate + inhibitor; the single-dose IV 600 mg measurement avoids chronic-induction confounds of repeat dosing. Tirona et al 2003 JPET 305:1028 establishes OATP1B1 substrate role at plasma concentrations in this range. MW 822 is above the 800 Da threshold commonly used for AD flagging — engine may flag in_domain=False. This is fine; the N50 is for generalization measurement, not domain restriction."
+      "notes": "Dual OATP1B1 substrate + inhibitor; the single-dose IV 600 mg measurement avoids chronic-induction confounds of repeat dosing. Tirona et al 2003 JPET 305:1028 establishes OATP1B1 substrate role at plasma concentrations in this range. MW 822 is above the 800 Da threshold commonly used for AD flagging \u2014 engine may flag in_domain=False. This is fine; the N50 is for generalization measurement, not domain restriction."
     },
-
     "irinotecan": {
       "status": "VERIFIED",
       "smiles": "CCC1=C2CN3C(=CC4=C(C3=O)COC(=O)C4(CC)O)C2=NC5=C1C=C(C=C5)OC(=O)N6CCC(CC6)N7CCCCC7",
@@ -53,32 +56,37 @@
       "molecular_formula": "C33H38N4O6",
       "molecular_weight": 586.7,
       "dose_mg": 231.0,
-      "dose_original": "125 mg/m²",
-      "dose_conversion_note": "125 mg/m² × BSA 1.85 m² = 231.25 mg → 231 mg.",
+      "dose_original": "125 mg/m\u00b2",
+      "dose_conversion_note": "125 mg/m\u00b2 \u00d7 BSA 1.85 m\u00b2 = 231.25 mg \u2192 231 mg.",
       "route": "iv_infusion",
       "infusion_duration_min": 90.0,
       "observed_cmax_mg_l": 1.66,
       "observed_cmax_sd_mg_l": 0.797,
-      "observed_cmax_cv": 0.480,
+      "observed_cmax_cv": 0.48,
       "patient_n": 64,
       "oatp1b1_substrate": true,
-      "mechanism_tags": ["OATP1B1_substrate", "CES_substrate", "UGT1A1_substrate", "prodrug_to_SN38", "hepatic_clearance"],
+      "mechanism_tags": [
+        "OATP1B1_substrate",
+        "CES_substrate",
+        "UGT1A1_substrate",
+        "prodrug_to_SN38",
+        "hepatic_clearance"
+      ],
       "source": {
-        "citation": "Pfizer (Pharmacia & Upjohn). Camptosar (irinotecan hydrochloride injection) — FDA prescribing information, original 2006 label at accessdata.fda.gov.",
+        "citation": "Pfizer (Pharmacia & Upjohn). Camptosar (irinotecan hydrochloride injection) \u2014 FDA prescribing information, original 2006 label at accessdata.fda.gov.",
         "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2006/020571s030lbl.pdf",
-        "table_ref": "Section 12.3 Pharmacokinetics, 125 mg/m² single-dose study in patients with solid tumors",
+        "table_ref": "Section 12.3 Pharmacokinetics, 125 mg/m\u00b2 single-dose study in patients with solid tumors",
         "access_path": "primary_regulatory_label"
       },
       "exclusion_checks": {
         "not_in_107": true,
         "not_in_mmpk": true,
         "not_in_tdc": true,
-        "not_in_drugbank_enrichment": "unverified — likely present; flag for retrospective audit",
+        "not_in_drugbank_enrichment": "unverified \u2014 likely present; flag for retrospective audit",
         "not_in_validation": true
       },
-      "notes": "Nozawa et al 2005 DMD 33:434 established OATP1B1 substrate role. Cmax reported here is for parent irinotecan only (not SN-38 active metabolite). SN-38 is formed by intracellular CES1/2 hydrolysis and is the pharmacologically active species, but clinical Cmax of SN-38 is 0.0263 mg/L — not what our engine would try to predict from a dose of irinotecan. Per spec §A1, we evaluate parent Cmax only. Prodrug-to-metabolite dynamics are a DDI/metabolism question explicitly out of scope."
+      "notes": "Nozawa et al 2005 DMD 33:434 established OATP1B1 substrate role. Cmax reported here is for parent irinotecan only (not SN-38 active metabolite). SN-38 is formed by intracellular CES1/2 hydrolysis and is the pharmacologically active species, but clinical Cmax of SN-38 is 0.0263 mg/L \u2014 not what our engine would try to predict from a dose of irinotecan. Per spec \u00a7A1, we evaluate parent Cmax only. Prodrug-to-metabolite dynamics are a DDI/metabolism question explicitly out of scope."
     },
-
     "caspofungin": {
       "status": "VERIFIED",
       "smiles": "CCC(C)CC(C)CCCCCCCCC(=O)NC1CC(C(NC(=O)C2C(CCN2C(=O)C(NC(=O)C(NC(=O)C3CC(CN3C(=O)C(NC1=O)C(C)O)O)C(C(C4=CC=C(C=C4)O)O)O)C(CCN)O)O)NCCN)O",
@@ -95,25 +103,222 @@
       "observed_cmax_cv": null,
       "patient_n": 5,
       "oatp1b1_substrate": true,
-      "mechanism_tags": ["OATP1B1_substrate", "lipopeptide", "hepatic_uptake", "slow_hepatic_clearance"],
+      "mechanism_tags": [
+        "OATP1B1_substrate",
+        "lipopeptide",
+        "hepatic_uptake",
+        "slow_hepatic_clearance"
+      ],
       "source": {
         "citation": "Stone JA, Holland SD, Wickersham PJ, Sterrett A, Schwartz M, Bonfiglio C, Hesney M, Winchell GA, Deutsch PJ, Greenberg H, Hunt TL, Waldman SA. Single- and multiple-dose pharmacokinetics of caspofungin in healthy men. Antimicrob Agents Chemother 2002;46(3):739-745. PMCID: PMC127465. PMID 11850256.",
         "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC127465/",
         "doi": "10.1128/AAC.46.3.739-745.2002",
-        "table_ref": "Table 1 (page 740) — Geometric-mean pharmacokinetic data following single doses, 70 mg column",
+        "table_ref": "Table 1 (page 740) \u2014 Geometric-mean pharmacokinetic data following single doses, 70 mg column",
         "access_path": "primary_paper"
       },
       "exclusion_checks": {
         "not_in_107": true,
         "not_in_mmpk": true,
         "not_in_tdc": true,
-        "not_in_drugbank_enrichment": "unverified — likely present; flag for retrospective audit",
+        "not_in_drugbank_enrichment": "unverified \u2014 likely present; flag for retrospective audit",
         "not_in_validation": true
       },
-      "notes": "Sandhu et al 2005 AAC 49:2602 establishes OATP1B1 substrate role. Large cyclic lipopeptide MW 1093 — will trigger AD flag for molecular weight. Acceptable. Primary source reports geometric mean with 90% CI (not arithmetic mean ± SD). C₁ₕ column in Table 1: 12.04 μg/mL = 12.04 mg/L with 90% CI [10.87, 13.33]. N=6 enrolled at 70 mg dose panel, Cmax value available for n=5 (one missing per the paper). SD field is null; CI fields report the primary-source 90% CI."
+      "notes": "Sandhu et al 2005 AAC 49:2602 establishes OATP1B1 substrate role. Large cyclic lipopeptide MW 1093 \u2014 will trigger AD flag for molecular weight. Acceptable. Primary source reports geometric mean with 90% CI (not arithmetic mean \u00b1 SD). C\u2081\u2095 column in Table 1: 12.04 \u03bcg/mL = 12.04 mg/L with 90% CI [10.87, 13.33]. N=6 enrolled at 70 mg dose panel, Cmax value available for n=5 (one missing per the paper). SD field is null; CI fields report the primary-source 90% CI."
+    },
+    "paclitaxel": {
+      "status": "VERIFIED",
+      "smiles": "CC1=C2C(C(=O)C3(C(CC4C(C3C(C(C2(C)C)(CC1OC(=O)C(C(C5=CC=CC=C5)NC(=O)C6=CC=CC=C6)O)O)OC(=O)C7=CC=CC=C7)(CO4)OC(=O)C)O)C)OC(=O)C",
+      "pubchem_cid": 36314,
+      "molecular_formula": "C47H51NO14",
+      "molecular_weight": 853.9,
+      "dose_mg": 324.0,
+      "dose_original": "175 mg/m\u00b2",
+      "dose_conversion_note": "175 mg/m\u00b2 \u00d7 BSA 1.85 m\u00b2 = 323.75 mg \u2192 324 mg (per spec \u00a79 #1).",
+      "route": "iv_infusion",
+      "infusion_duration_min": 180.0,
+      "observed_cmax_mg_l": 3.65,
+      "observed_cmax_sd_mg_l": null,
+      "observed_cmax_cv": null,
+      "patient_n": 5,
+      "oatp1b1_substrate": true,
+      "mechanism_tags": [
+        "OATP1B3_substrate",
+        "OATP1B1_substrate",
+        "CYP3A4_substrate",
+        "CYP2C8_substrate",
+        "hepatic_clearance",
+        "nonlinear_PK",
+        "microtubule_stabilizer"
+      ],
+      "source": {
+        "citation": "Bristol-Myers Squibb. TAXOL (paclitaxel) Injection \u2014 FDA prescribing information, revised April 2011.",
+        "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2011/020262s049lbl.pdf",
+        "table_ref": "Clinical Pharmacology section, Table 1 \u2014 Summary of Pharmacokinetic Parameters (Mean Values), Phase 3 randomized study in ovarian cancer patients, 175 mg/m\u00b2 over 3-hour infusion column",
+        "access_path": "primary_regulatory_label"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified \u2014 likely present; flag for retrospective audit",
+        "not_in_validation": true
+      },
+      "notes": "OATP1B3 (primary) + OATP1B1 (secondary) substrate per Smith NF et al 2005 Chem Biol Interact 152:287\u2013298; established in Leblanc et al 2018 DMD review as well. Paclitaxel is solubilized in Cremophor EL, which itself perturbs PK nonlinearly; the FDA label Cmax reflects the clinically administered Cremophor-containing product (i.e., Taxol, not nab-paclitaxel Abraxane). Mean Cmax 3650 ng/mL = 3.65 mg/L. SD not provided by the label \u2014 arithmetic mean only, consistent with rifampin entry precedent. Cross-study interstudy median from Vion 2023 systematic review (PMC8572663) Table 1 is 5.1 \u03bcM (= 4.35 mg/L at MW 853.9) [IQR 4.5\u20135.7 \u03bcM = 3.84\u20134.87 mg/L] across n=18 studies, reassuringly close to label value. Nonlinear PK: Cmax increases supra-proportionally with dose (Gianni 1995 JCO 13:180\u2013190). AAFE-interpretation caveat: engine Cmax prediction may over/under estimate depending on whether nonlinear saturation is modeled."
+    },
+    "docetaxel": {
+      "status": "VERIFIED",
+      "smiles": "CC1=C2C(C(=O)C3(C(CC4C(C3C(C(C2(C)C)(CC1OC(=O)C(C(C5=CC=CC=C5)NC(=O)OC(C)(C)C)O)O)OC(=O)C6=CC=CC=C6)(CO4)OC(=O)C)O)C)O",
+      "pubchem_cid": 148124,
+      "molecular_formula": "C43H53NO14",
+      "molecular_weight": 807.9,
+      "dose_mg": 185.0,
+      "dose_original": "100 mg/m\u00b2",
+      "dose_conversion_note": "100 mg/m\u00b2 \u00d7 BSA 1.85 m\u00b2 = 185 mg. Used 100 mg/m\u00b2 (not 75 mg/m\u00b2) because Baker 2004 reports Cmax mean \u00b1 SD at this dose; 75 mg/m\u00b2 is reported in the same paper only as later-timepoint concentrations. 100 mg/m\u00b2 is an FDA-approved dose for breast and NSCLC indications.",
+      "route": "iv_infusion",
+      "infusion_duration_min": 60.0,
+      "observed_cmax_mg_l": 4.15,
+      "observed_cmax_sd_mg_l": 1.35,
+      "observed_cmax_cv": 0.325,
+      "patient_n": 7,
+      "oatp1b1_substrate": true,
+      "mechanism_tags": [
+        "OATP1B3_substrate",
+        "OATP1B1_substrate",
+        "CYP3A4_substrate",
+        "hepatic_clearance",
+        "microtubule_stabilizer"
+      ],
+      "source": {
+        "citation": "Baker SD, Zhao M, Lee CK, Verweij J, Zabelina Y, Brahmer JR, Wolff AC, Sparreboom A, Carducci MA. Comparative pharmacokinetics of weekly and every-three-weeks docetaxel. Clin Cancer Res 2004;10(6):1976\u20131983. PMID 15041715.",
+        "url": "https://aacrjournals.org/clincancerres/article/10/6/1976/185519/Comparative-Pharmacokinetics-of-Weekly-and-Every",
+        "doi": "10.1158/1078-0432.CCR-0842-03",
+        "table_ref": "Baker 2004 Table 3 (three-weekly 100 mg/m\u00b2 1-hour arm) \u2014 Cmax 4.15 \u00b1 1.35 mg/L, n=7 patients with advanced solid tumors",
+        "access_path": "primary_paper"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified \u2014 likely present; flag for retrospective audit",
+        "not_in_validation": true
+      },
+      "notes": "OATP1B3 (primary) + OATP1B1 (secondary) substrate per Smith NF et al 2005 Chem Biol Interact 152:287\u2013298 and de Graan et al 2012 Clin Cancer Res 18:4433\u20134440. Cmax is arithmetic mean \u00b1 SD in Baker 2004. Solubilized in Polysorbate 80 (Taxotere formulation), analogous to Cremophor EL issue for paclitaxel but with less PK nonlinearity. 100 mg/m\u00b2 over 1-hour infusion was the original FDA-approved dose; 75 mg/m\u00b2 is used in many combinations and is also FDA-approved."
+    },
+    "micafungin": {
+      "status": "VERIFIED",
+      "smiles": "CCCCCOC1=CC=C(C=C1)C2=CC(=NO2)C3=CC=C(C=C3)C(=O)N[C@H]4C[C@H]([C@H](NC(=O)[C@@H]5[C@H]([C@H](CN5C(=O)[C@@H](NC(=O)[C@@H](NC(=O)[C@@H]6C[C@H](CN6C(=O)[C@@H](NC4=O)[C@@H](C)O)O)[C@@H]([C@H](C7=CC(=C(C=C7)O)OS(=O)(=O)O)O)O)[C@@H](CC(=O)N)O)C)O)O)O",
+      "pubchem_cid": 477468,
+      "molecular_formula": "C56H71N9O23S",
+      "molecular_weight": 1270.3,
+      "dose_mg": 100.0,
+      "route": "iv_infusion",
+      "infusion_duration_min": 60.0,
+      "observed_cmax_mg_l": 10.3,
+      "observed_cmax_sd_mg_l": 2.5,
+      "observed_cmax_cv": 0.243,
+      "patient_n": 8,
+      "oatp1b1_substrate": true,
+      "mechanism_tags": [
+        "OATP1B1_substrate",
+        "echinocandin",
+        "lipopeptide",
+        "hepatic_uptake",
+        "arylsulfatase_substrate",
+        "COMT_substrate"
+      ],
+      "source": {
+        "citation": "Undre N, Pretorius B, Stevenson P. Pharmacokinetics of micafungin in subjects with severe hepatic dysfunction. Eur J Drug Metab Pharmacokinet 2015;40(3):285\u2013293. PMID 24888485. PMCID: PMC4552778.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4552778/",
+        "doi": "10.1007/s13318-014-0204-y",
+        "table_ref": "Table 2 \u2014 Plasma pharmacokinetic parameters (geometric mean with SD in parentheses) for healthy control subjects (1:1 matched to severe-hepatic-dysfunction group on age/weight/sex/race) receiving a single 100 mg micafungin IV infusion at 100 mL/h for 1 hour. Cmax 10.3 (2.5) \u00b5g/mL, n=8.",
+        "access_path": "primary_paper"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified \u2014 likely present; flag for retrospective audit",
+        "not_in_validation": true
+      },
+      "notes": "OATP1B1 substrate role established by Sandhu et al 2005 Antimicrob Agents Chemother 49:2602\u20132609 (alongside caspofungin, already admitted to N50). Large cyclic lipopeptide MW 1270 \u2014 will trigger AD flag for molecular weight, analogous to caspofungin. Cmax reported as geometric mean (SD in parentheses per the paper's Table 2 legend). Cross-check: Hebert 2005 J Clin Pharmacol 45:1145\u20131152 (in the same weighted-average pool) gave Cmax 8.8 mg/L with CV 20% at n=26 healthy volunteers; Chandrasekar & Sobel 2006 CID Table 1 aggregates to 9.1 mg/L weighted across Hebert and other registered healthy-volunteer studies. Value used here (10.3) is the Undre 2014 primary paper's directly tabulated 100 mg Cmax in matched healthy controls."
+    },
+    "benzylpenicillin": {
+      "status": "VERIFIED",
+      "smiles": "CC1(C(N2C(S1)C(C2=O)NC(=O)CC3=CC=CC=C3)C(=O)O)C",
+      "pubchem_cid": 5904,
+      "molecular_formula": "C16H18N2O4S",
+      "molecular_weight": 334.4,
+      "dose_mg": 3000.0,
+      "dose_original": "5 million units (5 MU) penicillin G potassium",
+      "dose_conversion_note": "1 MU penicillin G potassium \u2248 600 mg (USP conversion 1595 units/mg for potassium salt, but clinical rule-of-thumb 1 MU = 600 mg is standard for penicillin G potassium per Drugs.com/AHFS). 5 MU \u00d7 600 mg/MU = 3000 mg. Alternative exact conversion (1595 U/mg) gives 5e6 / 1595 \u2248 3134 mg; 3000 mg chosen as the rounded clinical equivalent used in prescribing literature.",
+      "route": "iv_infusion",
+      "infusion_duration_min": 4.0,
+      "observed_cmax_mg_l": 400.0,
+      "observed_cmax_sd_mg_l": null,
+      "observed_cmax_cv": null,
+      "patient_n": 10,
+      "oatp1b1_substrate": true,
+      "mechanism_tags": [
+        "OATP1B1_substrate",
+        "OAT3_substrate",
+        "MRP2_substrate",
+        "renal_tubular_secretion",
+        "beta_lactam",
+        "renal_clearance"
+      ],
+      "source": {
+        "citation": "Roerig (Pfizer). Buffered PFIZERPEN (Penicillin G Potassium for Injection, USP) \u2014 FDA prescribing information, revised June/July 2024.",
+        "url": "https://labeling.pfizer.com/ShowLabeling.aspx?id=670",
+        "table_ref": "Clinical Pharmacology section \u2014 narrative reporting mean serum concentrations following single 5 million unit IV bolus over 3\u20135 minutes in 10 patients: 400 mcg/mL at 5\u20136 minutes (end of bolus), 273 mcg/mL at 10 minutes, 3.0 mcg/mL at 4 hours post-injection.",
+        "access_path": "primary_regulatory_label"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified \u2014 likely present; flag for retrospective audit",
+        "not_in_validation": true
+      },
+      "notes": "OATP1B1 substrate evidence from Hirano M et al 2006 Drug Metab Dispos 34:1229\u20131236 (penicillin G is a weak OATP1B1 substrate, in contrast to its stronger OAT3/MRP2 substrate roles). Renal clearance dominates disposition (~80% unchanged in urine via tubular secretion). Cmax reported here is the arithmetic mean from a 10-patient study, documented without SD in the FDA label narrative \u2014 consistent with rifampin entry precedent (label source, mean only). Bolus duration 3\u20135 min \u2192 4 min midpoint used; route classified `iv_bolus` because the FDA label uses 'bolus' language. Measurement at 5\u20136 min post-end-of-bolus is effectively Cmax (slight distribution-phase attenuation may mean true Cmax is higher, but per spec A1 we report the observed clinical Cmax)."
+    },
+    "torsemide": {
+      "status": "VERIFIED",
+      "smiles": "CC1=CC(=CC=C1)NC2=C(C=NC=C2)S(=O)(=O)NC(=O)NC(C)C",
+      "pubchem_cid": 41781,
+      "molecular_formula": "C16H20N4O3S",
+      "molecular_weight": 348.4,
+      "dose_mg": 20.0,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "observed_cmax_mg_l": 3.176,
+      "observed_cmax_sd_mg_l": 0.429,
+      "observed_cmax_cv": 0.135,
+      "patient_n": 12,
+      "oatp1b1_substrate": true,
+      "mechanism_tags": [
+        "OATP1B1_substrate",
+        "CYP2C9_substrate",
+        "loop_diuretic",
+        "NKCC2_inhibitor",
+        "hepatic_clearance"
+      ],
+      "source": {
+        "citation": "Khan IJ, Loya P, Saraf MN. A simplified HPLC method for quantification of torsemide from human plasma and its application to a bioequivalence study. Indian J Pharm Sci 2008;70(4):519\u2013522. PMCID: PMC2792562.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2792562/",
+        "doi": "10.4103/0250-474X.44609",
+        "table_ref": "Table 2 \u2014 Pharmacokinetic parameters after a single 20 mg oral dose of the reference formulation (Dytor, Cipla Ltd., Mumbai) in 12 healthy male subjects; Cmax 3175.9 \u00b1 428.9 ng/mL = 3.176 mg/L, Tmax 1.0 \u00b1 0.4 h, t\u00bd 3.2 \u00b1 1.7 h.",
+        "access_path": "primary_paper"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified \u2014 likely present; flag for retrospective audit",
+        "not_in_validation": true
+      },
+      "notes": "OATP1B1 substrate evidence from Werner U et al 2008 Pharmacogenet Genomics 18:357\u2013366 and Vormfelde SV et al 2008 J Pharmacol Exp Ther (SLCO1B1 521T>C reduces torsemide clearance in humans, confirming hepatic OATP1B1 uptake contributes to disposition). Arithmetic mean \u00b1 SD reported by Khan 2008 for the reference (marketed Cipla Dytor) formulation; test formulation (Macleods) gave 3399 \u00b1 582 ng/mL \u2014 bioequivalent. Demadex FDA label (accessdata.fda.gov/label/2017/020136s027lbl.pdf) confirms qualitative PK (Cmax within 1 h, F \u2248 80%, half-life ~3.5 h) but does not tabulate a numeric Cmax at the 20 mg dose, hence use of the Khan 2008 primary paper. Caveat: single-study N=12 healthy males from an Indian bioequivalence trial \u2014 smaller/more-homogeneous than ideal; CV of 13.5% is consistent with a tightly selected bioequivalence cohort. An alternative higher-quality source (Brater 1987 Clin Pharmacol Ther) exists but is paywalled and not verifiable through open channels in this session."
     }
   },
-
   "forward_curation_plan": {
     "target_remaining": 47,
     "oatp1b1_additional_candidates": [
