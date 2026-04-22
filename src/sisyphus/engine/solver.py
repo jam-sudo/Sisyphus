@@ -109,12 +109,13 @@ def solve_mc(
     y0: np.ndarray,
     t_span: tuple[float, float],
     observation_node: str = "venous_blood",
+    t_min_h: float = 0.0,
 ) -> tuple[float, float, float, bool]:
     """Fast MC solve -- returns only (cmax, tmax, auc, success).
 
     Optimized for Monte Carlo sampling:
     - rtol=1e-4, atol=1e-6 (sufficient for Cmax/AUC accuracy across N samples)
-    - No t_eval (solver chooses its own adaptive grid)
+    - No t_eval by default (solver chooses its own adaptive grid)
     - Returns scalars, not full SimResult (avoids dict/array allocation)
 
     Args:
@@ -123,17 +124,29 @@ def solve_mc(
         y0: Initial state vector (amounts in mg).
         t_span: Integration interval ``(t_start, t_end)`` in hours.
         observation_node: Node to extract PK from (default: venous_blood).
+        t_min_h: Minimum observation time in hours.  When > 0, injects
+            ``t_min_h`` as a guaranteed anchor in ``t_eval`` and extracts
+            Cmax/Tmax only from the window ``t >= t_min_h``.  AUC remains
+            full-interval.  Default ``0.0`` (V2-compatible).
 
     Returns:
         Tuple of (cmax, tmax, auc, success).
     """
     rhs = compiled.make_rhs(params)
 
+    if t_min_h > 0.0:
+        # Same construction as solve(), but coarser grid (100 vs 500 points)
+        # because MC is speed-critical.
+        t_eval = np.concatenate([[0.0], np.linspace(t_min_h, t_span[1], 99)])
+    else:
+        t_eval = None  # adaptive grid (V2 behavior)
+
     sol = solve_ivp(
         rhs,
         t_span,
         y0,
         method="LSODA",
+        t_eval=t_eval,
         rtol=1e-4,
         atol=1e-6,
     )
@@ -155,8 +168,18 @@ def solve_mc(
     else:
         conc = sol.y[obs_idx]
 
-    cmax = float(np.max(conc))
-    tmax = float(sol.t[np.argmax(conc)])
+    if t_min_h > 0.0:
+        mask = sol.t >= t_min_h
+        if not np.any(mask):
+            return 0.0, 0.0, 0.0, False
+        conc_window = conc[mask]
+        t_window = sol.t[mask]
+        cmax = float(np.max(conc_window))
+        tmax = float(t_window[np.argmax(conc_window)])
+    else:
+        cmax = float(np.max(conc))
+        tmax = float(sol.t[np.argmax(conc)])
+
     _trapz = getattr(np, "trapezoid", np.trapz)  # numpy 2.0+ vs 1.x
     auc = float(_trapz(conc, sol.t))
 
