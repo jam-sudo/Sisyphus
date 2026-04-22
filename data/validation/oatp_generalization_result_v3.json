@@ -1,0 +1,69 @@
+{
+  "spec": "docs/superpowers/specs/2026-04-21-ecm-generalization-test-design.md",
+  "spec_commit": "0d78c38",
+  "spec_commit_chain": [
+    "9115e63",
+    "6e7ce0a",
+    "0d78c38"
+  ],
+  "amendment": "v2/v2.1 \u2014 substrate set = valsartan + glimepiride (N=2)",
+  "methodology": "V3 IV-Cmax (windowed max at t >= 5 min)",
+  "methodology_spec": "docs/superpowers/specs/2026-04-22-iv-cmax-observation-design.md",
+  "methodology_commit_chain": [
+    "4630b0b",
+    "9bc2e3d",
+    "2742df8",
+    "6ed22e7",
+    "3f86e2e",
+    "ed3207f",
+    "4e10ad2"
+  ],
+  "v2_result_path": "data/validation/oatp_generalization_result.v2.json",
+  "mc_n_samples": 1000,
+  "drugs": [
+    {
+      "drug": "glimepiride",
+      "dose_mg": 1.0,
+      "observed_cmax_mg_l": 0.243,
+      "point_estimate_cmax_mg_l": 0.09482532098463019,
+      "pi_90_low_mg_l": 0.08742171278559183,
+      "pi_90_high_mg_l": 0.10094405691644473,
+      "log10_fe": -0.4086819521299673,
+      "passed": false,
+      "wall_seconds": 26.447211980819702,
+      "mc_n_samples": 1000,
+      "mc_n_failures": 0,
+      "predict_layer_confound_diagnostics": {
+        "fup_predicted": 0.005,
+        "rbp_predicted": 1.0,
+        "notes": "Flag drugs where fup/rbp >3x off published value \u2014 predict-layer confound. Manual check required. kp_liver not reported here (built inside ivive, not in ADMEProperties)."
+      }
+    },
+    {
+      "drug": "valsartan",
+      "dose_mg": 20.0,
+      "observed_cmax_mg_l": 4.02,
+      "point_estimate_cmax_mg_l": 1.9400211390609385,
+      "pi_90_low_mg_l": 1.795616164601164,
+      "pi_90_high_mg_l": 2.057317047586137,
+      "log10_fe": -0.3164195909235734,
+      "passed": false,
+      "wall_seconds": 27.786447763442993,
+      "mc_n_samples": 1000,
+      "mc_n_failures": 0,
+      "predict_layer_confound_diagnostics": {
+        "fup_predicted": 0.008979418285608408,
+        "rbp_predicted": 1.0,
+        "notes": "Flag drugs where fup/rbp >3x off published value \u2014 predict-layer confound. Manual check required. kp_liver not reported here (built inside ivive, not in ADMEProperties)."
+      }
+    }
+  ],
+  "aggregate_mode": "C",
+  "mode_descriptions": {
+    "A": "All-pass. ECM is confirmed as a general mechanism within domain.",
+    "B": "Systematic bias. Same-direction failures with |median log10 FE| > 0.5.",
+    "C": "Inconclusive. Fallback for patterns not matching A/B/D.",
+    "D": "All-fail mixed. ECM = statin-specialized; architecture review required."
+  },
+  "notes": "Single run per spec \u00a7Execution Constraints. No post-run parameter adjustment."
+}
