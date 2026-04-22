@@ -7,6 +7,7 @@ import pytest
 
 from sisyphus.engine.compiler import ODECompiler, ResolvedParams
 from sisyphus.engine.solver import _IV_CMAX_DELAY_H, solve, solve_mc
+from sisyphus.engine.uncertainty import UncertaintyEngine
 from sisyphus.graph.builder import build_from_yaml
 from sisyphus.predict.adme import predict_adme
 from sisyphus.predict.chemistry import compute_profile
@@ -76,3 +77,28 @@ def test_solve_mc_t_min_h_zero_is_backward_compatible():
     assert cmax_default == pytest.approx(cmax_zero, rel=1e-6)
     assert tmax_default == pytest.approx(tmax_zero, rel=1e-6)
     assert auc_default == pytest.approx(auc_zero, rel=1e-6)
+
+
+def test_propagate_fast_t_min_h_matches_solve_mc():
+    """propagate_fast with t_min_h must produce non-degenerate, decreased Cmax
+    median vs the V2 (t_min_h=0) path for an IV bolus."""
+    compiled, params, y0 = _setup("iv")
+    graph = build_from_yaml(_PHYS)
+    profile = compute_profile("CCCCC(=O)N([C@@H](C(C)C)C(=O)O)Cc1ccc(-c2ccccc2-c2nnn[nH]2)cc1")
+    adme = predict_adme(profile)
+    drug = build_drug_on_graph(profile, adme, dose_mg=20.0, route="iv")
+
+    ue = UncertaintyEngine()
+    mc_v2 = ue.propagate_fast(
+        compiled=compiled, graph=graph, drug=drug,
+        n_samples=50, seed=42, t_span=(0.0, 24.0),
+    )
+    mc_v3 = ue.propagate_fast(
+        compiled=compiled, graph=graph, drug=drug,
+        n_samples=50, seed=42, t_span=(0.0, 24.0),
+        t_min_h=_IV_CMAX_DELAY_H,
+    )
+    # V3 must yield strictly smaller median and non-degenerate PI (low < high).
+    assert mc_v3.pk.cmax.mean < mc_v2.pk.cmax.mean
+    low_v3, high_v3 = mc_v3.cmax_90ci
+    assert high_v3 > low_v3  # non-degenerate
