@@ -381,3 +381,27 @@ If valsartan's actual OATP1B1 CLuptake differs materially from pravastatin's (e.
 **Alternative scaling was NOT chosen** — the clinical CL ratio (Jmax ≈ 349) would bias the opposite direction (under-predict Cmax) but with the same fundamental uncertainty. Cherry-picking defense is stronger with the simpler, conservative methodology.
 
 **If in a future session valsartan primary Jmax becomes accessible** (institutional access, new review publication, etc.), this scaling amendment can be reverted, a new engine run executed under the corrected Jmax, and both results reported. The current run's outcome is contingent on this scaling.
+
+---
+
+### Amendment v2.2 (2026-04-22) — Mode B clause (ii) magnitude-gate clarification
+
+**Status:** Post-run clarification. Identified by independent review after Task 6 completed; does not affect the N=2 run outcome (already Mode C). Documented for future N=3 correctness.
+
+**Problem:** The v1 Mode B definition above has two clauses:
+- (i) 2/3 fail, same direction, |median log10 FE| > 0.5
+- (ii) 3/3 fail with same-sign log10 FE
+
+Clause (ii) as originally written has **no magnitude requirement**. The classifier (`src/sisyphus/validation/oatp_generalization.py:88-96`, commit `807f4aa`) applies the magnitude gate (> 0.5) to ALL n_fail ≥ 2 same-direction cases, including the 3/3 case. This matches the v2 N=2 Interpretation (which restated Mode B at N=2 with magnitude requirement) but diverges from the v1 clause (ii) text.
+
+**Edge case that would misfire without clarification:** N=3 with all three failing in same direction, all with |log10 FE| ∈ (0.48, 0.50] — e.g., a barely-failing near-threshold bias. v1 clause (ii) would label this Mode B (systematic); classifier returns Mode C (inconclusive).
+
+**Clarification (binding for all future runs):**
+
+Mode B requires |median log10 FE among failures| > 0.5 in ALL cases (both 2-of-N and N-of-N same-direction failures). The v1 clause (ii) parenthetical "(which also triggers Mode D but Mode B takes precedence for classification when direction is consistent)" was intended to establish precedence over Mode D for unanimous-direction cases, NOT to waive the magnitude requirement.
+
+**Rationale:** A unanimous-direction but small-magnitude failure (|log10 FE| near the 0.48 pass gate) is more consistent with near-threshold noise than with a systematic ECM bias. Requiring magnitude > 0.5 means Mode B triggers only when the bias is meaningful. This also aligns with the classifier's current implementation and the v2 N=2 restatement, eliminating internal inconsistency across spec sections.
+
+**Impact on N=2 run (`4fb6d38`):** none. Mode C already reported; classifier behavior was correct under v2 amendment's explicit N=2 interpretation. This amendment clarifies the v1 text without changing the Task 6 outcome.
+
+**Impact on future N=3 runs:** classifier behavior unchanged; v1 clause (ii) text now matches implementation. No code change required.

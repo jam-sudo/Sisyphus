@@ -131,9 +131,11 @@ def _load_oatp1b1_json() -> dict:
         return _json.load(f)
 
 
-# ── Tests for VERIFIED kinetics drugs (empty set — all blocked) ──────────────
-# The parametrize over an empty set produces 0 test cases (harmless; acts as
-# a placeholder so that when future drugs are verified, the test structure works).
+# ── Tests for VERIFIED kinetics drugs (v2/v2.1: glimepiride + valsartan) ─────
+# Parametrizes over _VERIFIED_KINETICS_DRUGS = {"glimepiride", "valsartan"}
+# (8 test cases = 4 functions × 2 drugs). Glimepiride promoted under v2
+# (both Jmax + Km from primary/cross-study sources). Valsartan promoted under
+# v2.1 (Km primary-verified, Jmax via flat-CLuptake scaling).
 
 @_pytest.mark.parametrize("drug", sorted(_VERIFIED_KINETICS_DRUGS))
 def test_generalization_drug_has_entry(drug: str):
