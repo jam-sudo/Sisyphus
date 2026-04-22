@@ -22,7 +22,11 @@ _PHYSIOLOGY_DIR = Path(__file__).resolve().parent.parent.parent.parent / "data" 
 
 
 def predict(
-    smiles: str, dose_mg: float, route: str = "oral", n_mc_samples: int = 0
+    smiles: str,
+    dose_mg: float,
+    route: str = "oral",
+    n_mc_samples: int = 0,
+    infusion_duration_min: float | None = None,
 ) -> PredictionResult:
     """End-to-end prediction: SMILES -> PredictionResult.
 
@@ -40,13 +44,33 @@ def predict(
         n_mc_samples: Number of Monte Carlo samples for uncertainty
             propagation.  When > 0, runs MC and computes 90% PI
             for Cmax.  0 (default) skips MC for speed.
+        infusion_duration_min: IV infusion duration in minutes. Only valid
+            for route='iv'. When > 0.5, routes the deterministic simulation
+            through ``regimen.solver`` (zero-order input) instead of the
+            bolus y0 shortcut. ``None`` or <= 0.5 falls back to V3 bolus.
+            MC for infusion is V3.1 Phase 2 scope and is skipped with a
+            warning in Phase 1. See
+            docs/superpowers/specs/2026-04-22-v3.1-iv-infusion-design.md.
 
     Returns:
         PredictionResult with combined PK endpoints and uncertainty.
 
     Raises:
-        ValueError: If the SMILES string is invalid.
+        ValueError: If the SMILES string is invalid, or if
+            ``infusion_duration_min`` is set for a non-IV route, or if
+            ``infusion_duration_min`` is negative.
     """
+    if infusion_duration_min is not None:
+        if route != "iv":
+            raise ValueError(
+                f"infusion_duration_min={infusion_duration_min!r} requires "
+                f"route='iv', got route={route!r}"
+            )
+        if infusion_duration_min < 0:
+            raise ValueError(
+                f"infusion_duration_min must be non-negative, "
+                f"got {infusion_duration_min}"
+            )
     # Import sub-layers here to avoid circular imports and to register flux specs.
     import sisyphus.engine.flux  # noqa: F401 -- register flux specs
     from sisyphus.engine.compiler import ODECompiler, ResolvedParams
@@ -93,10 +117,20 @@ def predict(
         pass  # DrugBank tagging is advisory, never blocks pipeline
 
     # ── Step 2: Engine (PBPK simulation) ─────────────────────────────────
-    # Route-conditional Cmax window: IV bolus skips t=0 spike (V3).
-    # Defined before try-block so it is accessible in the MC step (Step 2b).
+    # Route-conditional Cmax window and simulation path.
+    # IV bolus skips t=0 spike (V3); IV infusion routes through
+    # regimen.solver for a physically correct zero-order input (V3.1).
     # For non-IV routes t_min_h=0.0 is a no-op (V2-compatible).
-    t_min_h = _IV_CMAX_DELAY_H if route == "iv" else 0.0
+    is_infusion = (
+        route == "iv"
+        and infusion_duration_min is not None
+        and infusion_duration_min > 0.5
+    )
+    if is_infusion:
+        infusion_duration_h = infusion_duration_min / 60.0
+        t_min_h = infusion_duration_h + _IV_CMAX_DELAY_H
+    else:
+        t_min_h = _IV_CMAX_DELAY_H if route == "iv" else 0.0
 
     engine_pk: PKEndpoints | None = None
     try:
@@ -119,11 +153,19 @@ def predict(
         realized_drug = drug.sample(rng)
         params = ResolvedParams(realized_graph, realized_drug)
 
-        y0 = np.zeros(compiled.n_states)
-        admin_idx = compiled.state_index[drug.administration_node]
-        y0[admin_idx] = drug.dose_mg
+        if is_infusion:
+            from sisyphus.regimen.solver import solve_regimen
+            from sisyphus.regimen.types import DosingRegimen
+            regimen = DosingRegimen.single_iv(
+                dose_mg=drug.dose_mg, duration_h=infusion_duration_h
+            )
+            sim_result = solve_regimen(compiled, params, regimen, t_total_h=24.0)
+        else:
+            y0 = np.zeros(compiled.n_states)
+            admin_idx = compiled.state_index[drug.administration_node]
+            y0[admin_idx] = drug.dose_mg
+            sim_result = solve(compiled, params, y0, t_span=(0, 24), t_min_h=t_min_h)
 
-        sim_result = solve(compiled, params, y0, t_span=(0, 24), t_min_h=t_min_h)
         if sim_result.solver_success:
             engine_pk = compute_endpoints(sim_result, t_min_h=t_min_h)
             logger.info(
@@ -140,23 +182,29 @@ def predict(
         logger.warning("Engine simulation failed: %s", e)
 
     # ── Step 2b: MC uncertainty propagation ────────────────────────────
+    # MC via regimen.solver is V3.1 Phase 2 scope. In Phase 1 we skip MC
+    # for infusion rather than emit a misleading bolus-centered 90% PI.
     if n_mc_samples > 0 and compiled is not None and graph is not None:
-        try:
-            ue = UncertaintyEngine()
-            mc = ue.propagate_fast(
-                compiled, graph, drug, n_samples=n_mc_samples, t_min_h=t_min_h
-            )
-            if mc.n_samples > 0:
-                cmax_90ci = mc.cmax_90ci
-                logger.info(
-                    "MC propagation: %d samples, Cmax 90%% PI = (%.4f, %.4f)",
-                    mc.n_samples,
-                    cmax_90ci[0],
-                    cmax_90ci[1],
+        if is_infusion:
+            warnings_list.append("MC skipped for IV infusion (V3.1 Phase 2 scope)")
+            logger.info("Skipping MC propagation for IV infusion (Phase 2 feature)")
+        else:
+            try:
+                ue = UncertaintyEngine()
+                mc = ue.propagate_fast(
+                    compiled, graph, drug, n_samples=n_mc_samples, t_min_h=t_min_h
                 )
-        except Exception as e:
-            warnings_list.append(f"MC propagation failed: {e}")
-            logger.warning("MC propagation failed: %s", e)
+                if mc.n_samples > 0:
+                    cmax_90ci = mc.cmax_90ci
+                    logger.info(
+                        "MC propagation: %d samples, Cmax 90%% PI = (%.4f, %.4f)",
+                        mc.n_samples,
+                        cmax_90ci[0],
+                        cmax_90ci[1],
+                    )
+            except Exception as e:
+                warnings_list.append(f"MC propagation failed: {e}")
+                logger.warning("MC propagation failed: %s", e)
 
     # ── Step 3: ML direct Cmax ───────────────────────────────────────────
     ml_pk: PKEndpoints | None = None
