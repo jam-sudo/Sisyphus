@@ -1,0 +1,54 @@
+{
+  "drugs": {
+    "valsartan": {
+      "observed_cmax_mg_l": 4.02,
+      "clinical_fup_literature": 0.05,
+      "baseline_predicted_fup": {
+        "fup_used": 0.008979418285608408,
+        "fup_predicted": 0.008979418285608408,
+        "point_cmax_mg_l": 1.9375070475495844,
+        "pi_90_low": 1.7963084967908234,
+        "pi_90_high": 2.0645856478832045,
+        "log10_fe": -0.3169827621867266,
+        "n_mc": 500
+      },
+      "override_clinical_fup": {
+        "fup_used": 0.05,
+        "fup_predicted": 0.008979418285608408,
+        "point_cmax_mg_l": 1.8774281117513296,
+        "pi_90_low": 1.7417450903306972,
+        "pi_90_high": 2.006081781850612,
+        "log10_fe": -0.33066273657866935,
+        "n_mc": 500
+      },
+      "delta_cmax_ratio": 0.9689916297985919,
+      "delta_log10_fe": -0.01367997439194274
+    },
+    "glimepiride": {
+      "observed_cmax_mg_l": 0.243,
+      "clinical_fup_literature": 0.005,
+      "baseline_predicted_fup": {
+        "fup_used": 0.005,
+        "fup_predicted": 0.005,
+        "point_cmax_mg_l": 0.09457984389337332,
+        "pi_90_low": 0.08751154259886193,
+        "pi_90_high": 0.10117446440164787,
+        "log10_fe": -0.4098076807332683,
+        "n_mc": 500
+      },
+      "override_clinical_fup": {
+        "fup_used": 0.005,
+        "fup_predicted": 0.005,
+        "point_cmax_mg_l": 0.09460626408290553,
+        "pi_90_low": 0.08751248680346799,
+        "pi_90_high": 0.10114044791428828,
+        "log10_fe": -0.40968638067881913,
+        "n_mc": 500
+      },
+      "delta_cmax_ratio": 1.0002793427060632,
+      "delta_log10_fe": 0.00012130005444915826
+    }
+  },
+  "n_mc": 500,
+  "note": "Exploratory fup override diagnostic \u2014 NOT a pre-registered run"
+}
