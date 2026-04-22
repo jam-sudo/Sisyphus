@@ -184,7 +184,8 @@ def main() -> None:
 
     report = {
         "spec": "docs/superpowers/specs/2026-04-21-ecm-generalization-test-design.md",
-        "spec_commit": "6e7ce0a",
+        "spec_commit": "0d78c38",
+        "spec_commit_chain": ["9115e63", "6e7ce0a", "0d78c38"],
         "amendment": "v2/v2.1 — substrate set = valsartan + glimepiride (N=2)",
         "mc_n_samples": _MC_N_SAMPLES,
         "drugs": drug_results,
