@@ -123,6 +123,14 @@ class UncertaintyEngine:
 
         Returns:
             UncertaintyResult with raw SimResult samples.
+
+        Note:
+            For IV bolus drugs, the returned SimResults contain the
+            deterministic t=0 concentration spike (``dose / V_venous``).
+            Callers applying ``compute_endpoints()`` to these results
+            must pass ``t_min_h=_IV_CMAX_DELAY_H`` for V3-correct Cmax
+            extraction.  ``propagate_fast()`` is recommended for new
+            production code — it threads ``t_min_h`` automatically.
         """
         results: list[SimResult] = []
         n_failures = 0
