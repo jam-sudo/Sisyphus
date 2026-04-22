@@ -50,7 +50,7 @@ def predict(
     # Import sub-layers here to avoid circular imports and to register flux specs.
     import sisyphus.engine.flux  # noqa: F401 -- register flux specs
     from sisyphus.engine.compiler import ODECompiler, ResolvedParams
-    from sisyphus.engine.solver import solve
+    from sisyphus.engine.solver import _IV_CMAX_DELAY_H, solve
     from sisyphus.engine.uncertainty import UncertaintyEngine
     from sisyphus.graph.builder import build_from_yaml
     from sisyphus.ml.ensemble import MetaLearner
@@ -93,6 +93,11 @@ def predict(
         pass  # DrugBank tagging is advisory, never blocks pipeline
 
     # ── Step 2: Engine (PBPK simulation) ─────────────────────────────────
+    # Route-conditional Cmax window: IV bolus skips t=0 spike (V3).
+    # Defined before try-block so it is accessible in the MC step (Step 2b).
+    # For non-IV routes t_min_h=0.0 is a no-op (V2-compatible).
+    t_min_h = _IV_CMAX_DELAY_H if route == "iv" else 0.0
+
     engine_pk: PKEndpoints | None = None
     try:
         graph = build_from_yaml(_PHYSIOLOGY_DIR / "reference_man.yaml")
@@ -118,9 +123,9 @@ def predict(
         admin_idx = compiled.state_index[drug.administration_node]
         y0[admin_idx] = drug.dose_mg
 
-        sim_result = solve(compiled, params, y0, t_span=(0, 24))
+        sim_result = solve(compiled, params, y0, t_span=(0, 24), t_min_h=t_min_h)
         if sim_result.solver_success:
-            engine_pk = compute_endpoints(sim_result)
+            engine_pk = compute_endpoints(sim_result, t_min_h=t_min_h)
             logger.info(
                 "Engine PK: Cmax=%.4f mg/L, Tmax=%.2f h, AUC=%.4f mg*h/L",
                 engine_pk.cmax.mean,
@@ -138,7 +143,9 @@ def predict(
     if n_mc_samples > 0 and compiled is not None and graph is not None:
         try:
             ue = UncertaintyEngine()
-            mc = ue.propagate_fast(compiled, graph, drug, n_samples=n_mc_samples)
+            mc = ue.propagate_fast(
+                compiled, graph, drug, n_samples=n_mc_samples, t_min_h=t_min_h
+            )
             if mc.n_samples > 0:
                 cmax_90ci = mc.cmax_90ci
                 logger.info(
