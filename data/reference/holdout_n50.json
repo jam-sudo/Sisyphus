@@ -3,16 +3,16 @@
   "spec_commit": "da0f080",
   "cycle_id": "2026Q2",
   "curation_date": "2026-04-22",
-  "curation_status": "PARTIAL (8 / 50)",
+  "curation_status": "PARTIAL (13 / 50)",
   "n_target": 50,
-  "n_admitted": 8,
+  "n_admitted": 13,
   "oatp1b1_substrate_count": 8,
   "oatp1b1_substrate_minimum": 3,
   "exclusion_inventory_source": "/tmp/n50_exclusion.txt (built by scripts/build_n50_exclusion.py on 2026-04-22)",
   "exclusion_inventory_sha256": "3acb38a29c83646e0f10c4a7ae478a18052ec2c9056fbc8df369aed3490aee83",
   "bsa_m2": 1.85,
   "bsa_rationale": "ICRP Reference Man (70 kg \u00d7 1.74 m) BSA. Spec \u00a79 Open Questions #1 resolved to 1.85. Used for all mg/m\u00b2 \u2192 mg conversions in this file.",
-  "methodology_notes": "Observed Cmax reported as mean \u00b1 SD when primary source uses arithmetic statistics; as geometric mean with 90% CI in notes when that is the primary-source convention. SD field is null for geometric-mean-only sources. 2026-04-22 seed expansion (commit pending): added paclitaxel, docetaxel, micafungin, benzylpenicillin, torsemide (5 OATP1B1 substrates). benzylpenicillin classified as iv_infusion duration 4 min (rather than iv_bolus) because the FDA label's 3\u20135 min push is physically a short zero-order input; V3.1 infusion path handles it correctly and matches the Cmax timing (400 mg/L at 5\u20136 min post-start).",
+  "methodology_notes": "Observed Cmax reported as mean \u00b1 SD when primary source uses arithmetic statistics; as geometric mean with 90% CI in notes when that is the primary-source convention. SD field is null for geometric-mean-only sources. 2026-04-22 seed expansion (commit pending): added paclitaxel, docetaxel, micafungin, benzylpenicillin, torsemide (5 OATP1B1 substrates). benzylpenicillin classified as iv_infusion duration 4 min (rather than iv_bolus) because the FDA label's 3-5 min push is physically a short zero-order input; V3.1 infusion path handles it correctly and matches the Cmax timing (400 mg/L at 5-6 min post-start). 2026-04-22 second expansion (this session): added vimseltinib, nerandomilast, balcinrenone, tolebrutinib, zibotentan (5 non-OATP1B1 oral drugs). Cmax in nmol/L converted to mg/L using MW from PubChem: nerandomilast MW=449.0 g/mol (710 nmol/L x 449.0/1000 = 0.3188 mg/L); balcinrenone MW=399.4 g/mol (4602 nmol/L x 399.4/1000 = 1.838 mg/L).",
   "drugs": {
     "rifampin": {
       "status": "VERIFIED",
@@ -316,7 +316,186 @@
         "not_in_drugbank_enrichment": "unverified \u2014 likely present; flag for retrospective audit",
         "not_in_validation": true
       },
-      "notes": "OATP1B1 substrate evidence from Werner U et al 2008 Pharmacogenet Genomics 18:357\u2013366 and Vormfelde SV et al 2008 J Pharmacol Exp Ther (SLCO1B1 521T>C reduces torsemide clearance in humans, confirming hepatic OATP1B1 uptake contributes to disposition). Arithmetic mean \u00b1 SD reported by Khan 2008 for the reference (marketed Cipla Dytor) formulation; test formulation (Macleods) gave 3399 \u00b1 582 ng/mL \u2014 bioequivalent. Demadex FDA label (accessdata.fda.gov/label/2017/020136s027lbl.pdf) confirms qualitative PK (Cmax within 1 h, F \u2248 80%, half-life ~3.5 h) but does not tabulate a numeric Cmax at the 20 mg dose, hence use of the Khan 2008 primary paper. Caveat: single-study N=12 healthy males from an Indian bioequivalence trial \u2014 smaller/more-homogeneous than ideal; CV of 13.5% is consistent with a tightly selected bioequivalence cohort. An alternative higher-quality source (Brater 1987 Clin Pharmacol Ther) exists but is paywalled and not verifiable through open channels in this session."
+      "notes": "OATP1B1 substrate evidence from Werner U et al 2008 Pharmacogenet Genomics 18:357-366 and Vormfelde SV et al 2008 J Pharmacol Exp Ther (SLCO1B1 521T>C reduces torsemide clearance in humans, confirming hepatic OATP1B1 uptake contributes to disposition). Arithmetic mean +/- SD reported by Khan 2008 for the reference (marketed Cipla Dytor) formulation; test formulation (Macleods) gave 3399 +/- 582 ng/mL -- bioequivalent. Demadex FDA label (accessdata.fda.gov/label/2017/020136s027lbl.pdf) confirms qualitative PK (Cmax within 1 h, F approx 80%, half-life ~3.5 h) but does not tabulate a numeric Cmax at the 20 mg dose, hence use of the Khan 2008 primary paper. Caveat: single-study N=12 healthy males from an Indian bioequivalence trial -- smaller/more-homogeneous than ideal; CV of 13.5% is consistent with a tightly selected bioequivalence cohort. An alternative higher-quality source (Brater 1987 Clin Pharmacol Ther) exists but is paywalled and not verifiable through open channels in this session."
+    },
+    "vimseltinib": {
+      "status": "VERIFIED",
+      "smiles": "CC1=C(C=CC(=N1)C2=CN=C(N(C2=O)C)NC(C)C)OC3=CC(=NC=C3)C4=CN(N=C4)C",
+      "pubchem_cid": 86267612,
+      "molecular_formula": "C23H25N7O2",
+      "molecular_weight": 431.5,
+      "dose_mg": 30.0,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "observed_cmax_mg_l": 0.283,
+      "observed_cmax_sd_mg_l": null,
+      "observed_cmax_cv": 0.36,
+      "patient_n": null,
+      "oatp1b1_substrate": false,
+      "mechanism_tags": [
+        "CSF1R_inhibitor",
+        "CYP_non_substrate",
+        "P-gp_substrate",
+        "P-gp_inhibitor",
+        "BCRP_inhibitor",
+        "OCT2_inhibitor"
+      ],
+      "source": {
+        "citation": "Deciphera Pharmaceuticals. ROMVIMZA (vimseltinib) capsules -- FDA prescribing information, approved March 2025.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=f73c7a62-9601-4df0-810f-100f515d79ea",
+        "table_ref": "Section 12.3 Pharmacokinetics -- Cmax 283 ng/mL (CV 36%) after single 30 mg oral dose; Tmax 1 h (0.5-4 h). Vimseltinib is not a substrate of OATP1B1, OATP1B3, OAT1, OAT3, OCT2, MATE1, MATE2-K, BCRP, or BSEP (Section 12.3 In Vitro Studies).",
+        "access_path": "primary_regulatory_label"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified -- recent 2025 NME, unlikely to appear in training ADME sources",
+        "not_in_validation": true
+      },
+      "notes": "FDA NME approved March 2025 for symptomatic TGCT. CSF1R inhibitor. Oral twice-weekly. Cmax 283 ng/mL = 0.283 mg/L from FDA label Section 12.3; population includes TGCT patients and volunteers from clinical program; popPK-derived. CV 36% is from the label (no separate SD reported). Label confirms not an OATP1B1 substrate. Patient_n not specified in label for the single-dose summary statistic -- derived from combined clinical pharmacology analysis. Exclusion check: grep -iwx 'vimseltinib' /tmp/n50_exclusion.txt returned no match."
+    },
+    "nerandomilast": {
+      "status": "VERIFIED",
+      "smiles": "C1CC(C1)(CO)NC2=NC(=NC3=C2S(=O)CC3)N4CCC(CC4)C5=NC=C(C=N5)Cl",
+      "pubchem_cid": 166177189,
+      "molecular_formula": "C20H25ClN6O2S",
+      "molecular_weight": 449.0,
+      "dose_mg": 36.0,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "observed_cmax_mg_l": 0.3188,
+      "observed_cmax_sd_mg_l": null,
+      "observed_cmax_cv": 0.207,
+      "patient_n": 6,
+      "oatp1b1_substrate": false,
+      "mechanism_tags": [
+        "PDE4B_inhibitor",
+        "hepatic_clearance"
+      ],
+      "source": {
+        "citation": "Maher TM et al. Phase I studies of BI 1015550, a preferential phosphodiesterase 4B inhibitor, in healthy males and patients with idiopathic pulmonary fibrosis. ERJ Open Res. 2022 Nov;8(4):00181-2022. PMCID: PMC9589333.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9589333/",
+        "doi": "10.1183/23120541.00181-2022",
+        "table_ref": "Table 2 -- SAD cohort, 36 mg single oral dose fasted, n=6 healthy males; geometric mean Cmax 710 nmol/L (gCV 20.7%); converted: 710 x 449.0 / 1000 = 0.3188 mg/L.",
+        "access_path": "primary_paper"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified -- 2025 NME, unlikely in training ADME sources",
+        "not_in_validation": true
+      },
+      "notes": "FDA NME approved January 2025 (Jascayd) for IPF and PPF. PDE4B preferential inhibitor. n=6 is at the minimum threshold; the phase I trial total enrolled 42 subjects (randomised 36 mg, 48 mg SAD + 6 mg, 12 mg MAD); each SAD cohort had n=6 healthy males. Geometric mean Cmax 710 nmol/L with gCV 20.7% at 36 mg (the lower of two single-dose cohorts; 48 mg gave 955 nmol/L, gCV 15.5%). Chose 36 mg as it is closer to the approved therapeutic dose range. OATP1B1 substrate status not explicitly stated in the PMC paper; classified false based on absence from known OATP1B1 substrate tables and PDE inhibitor class characteristics. Exclusion check: grep -iwx 'nerandomilast' /tmp/n50_exclusion.txt returned no match."
+    },
+    "balcinrenone": {
+      "status": "VERIFIED",
+      "smiles": "CNC(=O)CC1COC2=C(N1C(=O)C3=CC4=C(C=C3)OCC(=O)N4)C=CC(=C2)F",
+      "pubchem_cid": 118599727,
+      "molecular_formula": "C20H18FN3O5",
+      "molecular_weight": 399.4,
+      "dose_mg": 150.0,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "observed_cmax_mg_l": 1.838,
+      "observed_cmax_sd_mg_l": null,
+      "observed_cmax_cv": 0.262,
+      "patient_n": 9,
+      "oatp1b1_substrate": false,
+      "mechanism_tags": [
+        "mineralocorticoid_receptor_modulator",
+        "nonsteroidal_MR_antagonist",
+        "renal_elimination",
+        "P-gp_substrate",
+        "OAT3_substrate"
+      ],
+      "source": {
+        "citation": "Baranova EV et al. Pharmacokinetics of AZD9977 (balcinrenone), a nonsteroidal mineralocorticoid receptor modulator, in subjects with renal impairment: an open-label, phase I study. Clin Pharmacol Drug Dev. 2025 Apr. PMCID: PMC12199126.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12199126/",
+        "table_ref": "Table 2 -- matched healthy control cohort (n=9, normal renal function, eGFR >= 90 mL/min), single 150 mg oral dose; geometric mean Cmax 4602 nmol/L (gCV 26.2%); converted: 4602 x 399.4 / 1000 = 1.838 mg/L.",
+        "access_path": "primary_paper"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified -- investigational AZ compound, unlikely in training ADME sources",
+        "not_in_validation": true
+      },
+      "notes": "AstraZeneca MR modulator (AZD9977), Phase IIb for CKD with HF. Not FDA approved; included as non-NME drug with 2025 primary PK publication (PMC12199126 published 2025). Matched healthy controls are subjects with no clinically significant renal or hepatic disease. Paper reports P-glycoprotein and OAT3 contribute to active renal elimination; no OATP1B1 involvement described. The renal impairment study explicitly recruited a matched control cohort (eGFR >= 90) as the reference pharmacokinetic group -- these are the healthy subjects used here. Geometric mean conversion: 4602 nmol/L x 399.4 g/mol / 1000 = 1.838 mg/L. Exclusion check: grep -iwx 'balcinrenone' /tmp/n50_exclusion.txt returned no match."
+    },
+    "tolebrutinib": {
+      "status": "VERIFIED",
+      "smiles": "C=CC(=O)N1CCCC(C1)N2C3=C(C(=NC=C3)N)N(C2=O)C4=CC=C(C=C4)OC5=CC=CC=C5",
+      "pubchem_cid": 124111565,
+      "molecular_formula": "C26H25N5O3",
+      "molecular_weight": 455.5,
+      "dose_mg": 120.0,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "observed_cmax_mg_l": 0.04550,
+      "observed_cmax_sd_mg_l": 0.02940,
+      "observed_cmax_cv": 0.647,
+      "patient_n": 12,
+      "oatp1b1_substrate": false,
+      "mechanism_tags": [
+        "BTK_inhibitor",
+        "covalent_BTK",
+        "CNS_penetrant",
+        "CYP3A4_substrate",
+        "hepatic_clearance"
+      ],
+      "source": {
+        "citation": "Montalban X et al. A phase I trial assessing the safety, pharmacokinetics, cerebrospinal fluid penetrance, and food effect of BTK inhibitor tolebrutinib in healthy volunteers. Clin Pharmacol Drug Dev. 2024;13(2):161-172. PMCID: PMC10847620.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10847620/",
+        "doi": "10.1002/cpdd.1357",
+        "table_ref": "Table 3 -- 120 mg fasted cohort (n=12 healthy adult volunteers); arithmetic mean Cmax 45.5 +/- 29.4 ng/mL; CV = 29.4/45.5 = 64.7%. Converted: 45.5 ng/mL = 0.04550 mg/L; SD = 0.02940 mg/L.",
+        "access_path": "primary_paper"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified -- investigational MS compound receiving FDA CRL Dec 2025, unlikely in training ADME sources",
+        "not_in_validation": true
+      },
+      "notes": "Sanofi BTK inhibitor for MS. Received FDA CRL December 2025 (not approved); included as non-NME drug with 2024 primary HV PK publication meeting 2024/2025+ criterion per spec. CV 64.7% is high but within acceptable range for CNS-penetrant covalent BTK inhibitor (rapid and extensive metabolism, short t1/2 ~2-5 h, active metabolite M2 has different PK). OATP1B1 substrate status not mentioned in the PMC paper or the mass balance study (PMC10480245); classified false based on absence from known OATP1B1 substrate lists and CYP3A4-dominant metabolism profile. Fasted condition chosen (lower food effect variability for reporting). Exclusion check: grep -iwx 'tolebrutinib' /tmp/n50_exclusion.txt returned no match."
+    },
+    "zibotentan": {
+      "status": "VERIFIED",
+      "smiles": "CC1=CN=C(C(=N1)OC)NS(=O)(=O)C2=C(N=CC=C2)C3=CC=C(C=C3)C4=NN=CO4",
+      "pubchem_cid": 9910224,
+      "molecular_formula": "C19H16N6O4S",
+      "molecular_weight": 424.4,
+      "dose_mg": 5.0,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "observed_cmax_mg_l": 0.261,
+      "observed_cmax_sd_mg_l": null,
+      "observed_cmax_cv": 0.335,
+      "patient_n": 11,
+      "oatp1b1_substrate": false,
+      "mechanism_tags": [
+        "endothelin_A_receptor_antagonist",
+        "renal_elimination",
+        "CYP3A4_substrate"
+      ],
+      "source": {
+        "citation": "Tsamandouras N et al. Pharmacokinetics and tolerability of zibotentan in patients with concurrent moderate renal and moderate hepatic impairment. Clin Pharmacokinet. 2024;63(1):95-108. PMCID: PMC10684621.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10684621/",
+        "doi": "10.1007/s40262-023-01306-7",
+        "table_ref": "Table 2 -- healthy matched control cohort (n=11; eGFR >= 90 mL/min, no clinically significant liver or kidney disease, matched on age +/-10 yr, sex, BMI +/-20%); single 5 mg oral dose; geometric mean Cmax 261.3 ng/mL (gCV 33.52%).",
+        "access_path": "primary_paper"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified -- AZ-revived compound for CKD/diabetic nephropathy, prior prostate cancer failures, unlikely in current training ADME sources",
+        "not_in_validation": true
+      },
+      "notes": "AstraZeneca endothelin A receptor antagonist (ZD4054). Originally developed for prostate cancer (Phase III failure 2012); revived by AZ for CKD and diabetic nephropathy (Phase II ongoing 2024-2026). Included as non-NME drug with 2024 primary HV PK publication. Healthy matched controls in the renal/hepatic impairment study constitute the healthy volunteer reference group (standard PK study design). No OATP1B1 substrate data found in any published source; classified false. Predominantly renally eliminated (~58% unchanged in urine); CYP3A4 is the major metabolic pathway per earlier xenobiotic studies (Xenobiotica 2011). Geometric mean Cmax 261.3 ng/mL = 0.261 mg/L at 5 mg oral dose. The earlier hepatic/renal impairment study (PMC3070638) also provides healthy control Cmax of ~550 ng/mL at 10 mg -- consistent with dose-proportional PK. Used 2024 paper as the primary source as it is more recent. Exclusion check: grep -iwx 'zibotentan' /tmp/n50_exclusion.txt returned no match."
     }
   },
   "forward_curation_plan": {
