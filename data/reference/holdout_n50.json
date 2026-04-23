@@ -3,16 +3,16 @@
   "spec_commit": "da0f080",
   "cycle_id": "2026Q2",
   "curation_date": "2026-04-22",
-  "curation_status": "PARTIAL (26 / 50)",
+  "curation_status": "PARTIAL (30 / 50)",
   "n_target": 50,
-  "n_admitted": 26,
+  "n_admitted": 30,
   "oatp1b1_substrate_count": 8,
   "oatp1b1_substrate_minimum": 3,
   "exclusion_inventory_source": "/tmp/n50_exclusion.txt (built by scripts/build_n50_exclusion.py on 2026-04-22)",
   "exclusion_inventory_sha256": "3acb38a29c83646e0f10c4a7ae478a18052ec2c9056fbc8df369aed3490aee83",
   "bsa_m2": 1.85,
   "bsa_rationale": "ICRP Reference Man (70 kg \u00d7 1.74 m) BSA. Spec \u00a79 Open Questions #1 resolved to 1.85. Used for all mg/m\u00b2 \u2192 mg conversions in this file.",
-  "methodology_notes": "Observed Cmax reported as mean \u00b1 SD when primary source uses arithmetic statistics; as geometric mean with 90% CI in notes when that is the primary-source convention. SD field is null for geometric-mean-only sources. 2026-04-22 seed expansion (commit pending): added paclitaxel, docetaxel, micafungin, benzylpenicillin, torsemide (5 OATP1B1 substrates). benzylpenicillin classified as iv_infusion duration 4 min (rather than iv_bolus) because the FDA label's 3-5 min push is physically a short zero-order input; V3.1 infusion path handles it correctly and matches the Cmax timing (400 mg/L at 5-6 min post-start). 2026-04-22 second expansion: added vimseltinib, nerandomilast, balcinrenone, tolebrutinib, zibotentan (5 non-OATP1B1 oral drugs). Cmax in nmol/L converted to mg/L using MW from PubChem: nerandomilast MW=449.0 g/mol (710 nmol/L x 449.0/1000 = 0.3188 mg/L); balcinrenone MW=399.4 g/mol (4602 nmol/L x 399.4/1000 = 1.838 mg/L). 2026-04-23 third expansion: added sulopenem, ensitrelvir, elafibranor, obicetrapib, mirdametinib (5 non-OATP1B1 oral drugs, mechanism-diverse: penem antibiotic + OAT3 substrate, oral 3CL antiviral, dual PPAR agonist, CETP inhibitor, MEK1/2 inhibitor). All Cmax values cross-validated against DailyMed (FDA labels) or PMC primary papers. Sulopenem/ensitrelvir doses reported as labeled-salt mass; Cmax is for active species. Mirdametinib dose 4 mg maps to BSA 1.85 m\u00b2 via GOMEKLI Table 1 (\u22651.50 m\u00b2 band), Cmax is steady-state per label Table 6. 2026-04-23 fourth expansion (18\u219222): added cefiderocol (IV, renal-cleared siderophore cephalosporin), eravacycline (IV, biliary-excretion fluorocycline), ampreloxetine (oral, CNS-BBB NRI, CYP1A2-primary), sepiapterin (oral, BH4 prodrug low-parent-Cmax regime). All 4 HV single-dose Phase 1 primary papers; PubChem InChIKey match with stereochemistry confirmed. Xanomeline candidate dropped from this chunk \u2014 FDA Integrated Review URL 404, Cobenfy DailyMed label has only steady-state Cmax. 2026-04-23 fifth expansion (22\u219226): added ulotaront (oral, TAAR1/5-HT1A agonist first-in-class antipsychotic + CYP2D6 fm=0.53), oliceridine (IV bolus, G-protein-biased mu-opioid + CYP3A4/CYP2D6), pitolisant (oral, H3 inverse agonist + CYP2D6-dominant), remdesivir (IV, phosphoramidate nucleotide prodrug + CES1/CYP3A4; 2020 NME). Fills CYP2D6-dominant metabolism class (previously empty) with 3 mechanistically-distinct drugs, opioid class (previously empty) with 1 drug, and adds 2020-era IV NME. All 4 single-dose HV PMC open-access; InChIKey full match incl. stereo for all (no SMILES substitution needed). Xanomeline re-attempt remains deferred.",
+  "methodology_notes": "Observed Cmax reported as mean \u00b1 SD when primary source uses arithmetic statistics; as geometric mean with 90% CI in notes when that is the primary-source convention. SD field is null for geometric-mean-only sources. 2026-04-22 seed expansion (commit pending): added paclitaxel, docetaxel, micafungin, benzylpenicillin, torsemide (5 OATP1B1 substrates). benzylpenicillin classified as iv_infusion duration 4 min (rather than iv_bolus) because the FDA label's 3-5 min push is physically a short zero-order input; V3.1 infusion path handles it correctly and matches the Cmax timing (400 mg/L at 5-6 min post-start). 2026-04-22 second expansion: added vimseltinib, nerandomilast, balcinrenone, tolebrutinib, zibotentan (5 non-OATP1B1 oral drugs). Cmax in nmol/L converted to mg/L using MW from PubChem: nerandomilast MW=449.0 g/mol (710 nmol/L x 449.0/1000 = 0.3188 mg/L); balcinrenone MW=399.4 g/mol (4602 nmol/L x 399.4/1000 = 1.838 mg/L). 2026-04-23 third expansion: added sulopenem, ensitrelvir, elafibranor, obicetrapib, mirdametinib (5 non-OATP1B1 oral drugs, mechanism-diverse: penem antibiotic + OAT3 substrate, oral 3CL antiviral, dual PPAR agonist, CETP inhibitor, MEK1/2 inhibitor). All Cmax values cross-validated against DailyMed (FDA labels) or PMC primary papers. Sulopenem/ensitrelvir doses reported as labeled-salt mass; Cmax is for active species. Mirdametinib dose 4 mg maps to BSA 1.85 m\u00b2 via GOMEKLI Table 1 (\u22651.50 m\u00b2 band), Cmax is steady-state per label Table 6. 2026-04-23 fourth expansion (18\u219222): added cefiderocol (IV, renal-cleared siderophore cephalosporin), eravacycline (IV, biliary-excretion fluorocycline), ampreloxetine (oral, CNS-BBB NRI, CYP1A2-primary), sepiapterin (oral, BH4 prodrug low-parent-Cmax regime). All 4 HV single-dose Phase 1 primary papers; PubChem InChIKey match with stereochemistry confirmed. Xanomeline candidate dropped from this chunk \u2014 FDA Integrated Review URL 404, Cobenfy DailyMed label has only steady-state Cmax. 2026-04-23 fifth expansion (22\u219226): added ulotaront (oral, TAAR1/5-HT1A agonist first-in-class antipsychotic + CYP2D6 fm=0.53), oliceridine (IV bolus, G-protein-biased mu-opioid + CYP3A4/CYP2D6), pitolisant (oral, H3 inverse agonist + CYP2D6-dominant), remdesivir (IV, phosphoramidate nucleotide prodrug + CES1/CYP3A4; 2020 NME). Fills CYP2D6-dominant metabolism class (previously empty) with 3 mechanistically-distinct drugs, opioid class (previously empty) with 1 drug, and adds 2020-era IV NME. All 4 single-dose HV PMC open-access; InChIKey full match incl. stereo for all (no SMILES substitution needed). Xanomeline re-attempt remains deferred. 2026-04-23 sixth expansion (26\u219230): added asundexian (oral FXIa inhibitor, CES1-primary metabolism; BAY 2433334 Phase 1 Day 1 data from Kubitza 2022 JTH), orforglipron (oral non-peptide GLP-1 agonist, MW 883 > 800 AD threshold; Yamada 2024 food-effect SAD fasted 3 mg), lorundrostat (oral aldosterone synthase CYP11B2 inhibitor; Shimizu 2024 CTS FIH-SAD 100 mg arm N=6), fexuprazan (oral PCAB + multi-CYP substrate; Kim 2023 Pharmaceuticals bioequivalence single-dose 40 mg reference arm). Fills CES1-primary metabolism, oral peptide-mimetic, aldosterone synthase, and PCAB classes (all previously empty). Asundexian Day 1 row used (Table 4) -- paper is MAD but Day 1 is true first-dose measurement. Fexuprazan is South-Korea-approved 2022 (pre-2024 era) but mechanism-unique. All 4 InChIKey full match incl. stereo against PubChem; URLs verified HTTP 200; table_refs verified verbatim via PMC WebFetch.",
   "drugs": {
     "rifampin": {
       "status": "VERIFIED",
@@ -1028,10 +1028,162 @@
         "not_in_validation": true
       },
       "notes": "Fills 2020-era IV NME slot with novel phosphoramidate chemistry (only N50 drug with chiral P). Parent remdesivir is a prodrug rapidly hydrolyzed by CES1 (plasma) + CYP3A4 (hepatic) to GS-704277 (alanyl), then dephosphorylated to GS-441524 (nucleoside); intracellular triphosphate GS-443902 is the active species. Per precedent (irinotecan parent, sepiapterin parent), N50 evaluates parent Cmax; metabolite modeling out-of-scope. 200 mg Day 1 IV 30-min infusion is the labeled loading dose. Geometric mean Cmax 4380 ng/mL = 4.38 mg/L, CV 23.5%; SD null (geometric convention). Era caveat: 2020 NME (not strict 2024-2026). SMILES cross-validated against PubChem CID 121304016 (InChIKey full match RWWYLEGWBNMMLJ-YSOARWBDSA-N including chiral P and four chiral C centers). URL verified (HTTP 200)."
+    },
+    "asundexian": {
+      "status": "VERIFIED",
+      "smiles": "CC[C@@H](C(=O)NC1=CC(=C(C=C1)C(=O)N)F)N2C=C(C(=CC2=O)C3=C(C=CC(=C3)Cl)N4C=C(N=N4)C(F)(F)F)OC",
+      "pubchem_cid": 135206011,
+      "molecular_formula": "C26H21ClF4N6O4",
+      "molecular_weight": 592.9,
+      "dose_mg": 50.0,
+      "dose_original": "50 mg once-daily oral tablet, Day 1 of a multiple-dose Phase 1 cohort (Day 1 is the true first-dose single-dose measurement reported separately from steady-state Day 12).",
+      "route": "oral",
+      "infusion_duration_min": null,
+      "observed_cmax_mg_l": 0.675,
+      "observed_cmax_sd_mg_l": null,
+      "observed_cmax_cv": 0.257,
+      "patient_n": 9,
+      "oatp1b1_substrate": false,
+      "mechanism_tags": [
+        "FXIa_inhibitor",
+        "CES1_substrate_primary",
+        "CYP3A4_substrate_minor",
+        "P-gp_substrate",
+        "anticoagulant_non_DOAC"
+      ],
+      "source": {
+        "citation": "Kubitza D, Heckmann M, Distler J, Koechel A, Schwers S, Kanefendt F. Pharmacokinetics, pharmacodynamics and safety of BAY 2433334, a novel activated factor XI inhibitor, in healthy volunteers: A randomized phase 1 multiple-dose study. J Thromb Haemost. 2022;20(3):684-694. PMCID: PMC9311154.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9311154/",
+        "doi": "10.1111/jth.15607",
+        "table_ref": "Table 4 -- Day 1 (single-dose) PK parameters reported separately from Day 12 steady-state (Table 5). 50 mg OD cohort, healthy men at a German centre, N=9: Cmax 675 \u00b5g/L (geometric mean), geometric CV 25.7%. Verified verbatim via PMC WebFetch 2026-04-23 (Day 1 vs Day 12 split confirmed).",
+        "access_path": "primary_paper"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified -- Bayer anticoagulant in development (OCEANIC-AF terminated 2023 for non-inferiority failure vs apixaban; OCEANIC-STROKE ongoing). Aliases checked: asundexian, BAY-2433334, BAY2433334 -- 0 exclusion hits.",
+        "not_in_validation": true
+      },
+      "notes": "Fills previously-empty CES1-primary metabolism class (fm_CES1 ~47%) in N50. FXIa inhibitor mechanism is orthogonal to existing anticoagulant-adjacent drugs. 50 mg is the middle therapeutic Phase 3 dose (range 25/50/100 mg OD tested). Geometric mean 675 \u00b5g/L = 0.675 mg/L; gCV 25.7% recorded as observed_cmax_cv; SD null per geometric convention. Era caveat: Phase 3 terminated for AF indication; stroke-prevention trial ongoing. Admit on exclusion-clean + mechanism-value path. SMILES cross-validated against PubChem CID 135206011 (InChIKey full match XYWIPYBIIRTJMM-IBGZPJMESA-N with R-stereochemistry at alpha-carbon). URL verified (HTTP 200)."
+    },
+    "orforglipron": {
+      "status": "VERIFIED",
+      "smiles": "C[C@H]1C[C@]1(C2=NOC(=O)N2)N3C4=C(C=C(C=C4)[C@H]5CCOC(C5)(C)C)C=C3C(=O)N6CCC7=NN(C(=C7[C@@H]6C)N8C=CN(C8=O)C9=C(C1=C(C=C9)N(N=C1)C)F)C1=CC(=C(C(=C1)C)F)C",
+      "pubchem_cid": 137319706,
+      "molecular_formula": "C48H48F2N10O5",
+      "molecular_weight": 883.0,
+      "dose_mg": 3.0,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "observed_cmax_mg_l": 0.0134,
+      "observed_cmax_sd_mg_l": null,
+      "observed_cmax_cv": 0.44,
+      "patient_n": 11,
+      "oatp1b1_substrate": false,
+      "mechanism_tags": [
+        "GLP1_receptor_agonist_nonpeptide",
+        "CYP3A_primary_metabolism",
+        "high_molecular_weight",
+        "oral_peptide_mimetic",
+        "obesity_T2D"
+      ],
+      "source": {
+        "citation": "Yamada H, Yokota N, Cui X, Mather KJ. Effect of Food Consumption on the Pharmacokinetics, Safety, and Tolerability of Once-Daily Orally Administered Orforglipron (LY3502970), a Non-peptide GLP-1 Receptor Agonist. Diabetes Ther. 2024;15(3):843-854. PMCID: PMC10951152.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10951152/",
+        "doi": "10.1007/s13300-024-01554-1",
+        "table_ref": "Table 2 -- 'Pharmacokinetic parameters after oral administration of orforglipron in the fasted and fed states' (Study A, Part C, single-dose crossover, healthy adults aged 18-65). 3 mg fasted arm, N=11: Cmax 13.4 (44.0) ng/mL [geometric mean (CV%)], Tmax median 8.0 h (range 4.0-24.0). Verified verbatim via PMC WebFetch 2026-04-23.",
+        "access_path": "primary_paper"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified -- Eli Lilly Phase 3 readouts 2025-2026 (ACHIEVE-1, ATTAIN-1/2); NDA anticipated. Aliases checked: orforglipron, LY3502970 -- 0 exclusion hits.",
+        "not_in_validation": true
+      },
+      "notes": "Fills oral-peptide-mimetic / high-MW class. MW 883 > 800 Da AD threshold -- engine may flag in_domain=False; this is expected for generalization measurement (spec \u00a75 explicitly allows AD-out-of-domain drugs). First oral non-peptide GLP-1 agonist in pivotal Phase 3 (2025-2026). Tmax 8 h is unusually late for an oral drug, stresses the engine's GI transit / slow-absorption modeling. Geometric mean 13.4 ng/mL = 0.0134 mg/L; gCV 44%; SD null. CYP3A-primary metabolism per Yamada 2024 \u00a73. oatp1b1_substrate=false (not characterized as OATP substrate in any public source). SMILES cross-validated against PubChem CID 137319706 (InChIKey full match USUWIEBBBWHKNI-KHIFEHGGSA-N with 4 stereocenters). URL verified (HTTP 200)."
+    },
+    "lorundrostat": {
+      "status": "VERIFIED",
+      "smiles": "CC1=CC=C(C=C1)C2=CN=NC(=N2)N3CCN(CC3)CC(=O)NC4CCC(CC4)NC(=O)C",
+      "pubchem_cid": 126567187,
+      "molecular_formula": "C24H33N7O2",
+      "molecular_weight": 451.6,
+      "dose_mg": 100.0,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "observed_cmax_mg_l": 1.211,
+      "observed_cmax_sd_mg_l": 0.2483,
+      "observed_cmax_cv": 0.205,
+      "patient_n": 6,
+      "oatp1b1_substrate": false,
+      "mechanism_tags": [
+        "CYP11B2_inhibitor",
+        "aldosterone_synthase_inhibitor",
+        "cardiorenal",
+        "resistant_hypertension_therapy",
+        "rapid_oral_absorption"
+      ],
+      "source": {
+        "citation": "Shimizu T, Kumar S, Kincaid DM, Duan Y, Weinberger MJ, Freeman MW. First-in-human study evaluating safety, pharmacokinetics, and pharmacodynamics of lorundrostat, a novel and highly selective aldosterone synthase inhibitor. Clin Transl Sci. 2024;17(8):e70000. PMCID: PMC11329366.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11329366/",
+        "doi": "10.1111/cts.70000",
+        "table_ref": "Table 3 -- 'Summary statistics for plasma PK parameters'; Part 1 SAD 100 mg arm, healthy male Caucasian participants aged 18-55, N=6: Cmax 1211.0 (248.3) ng/mL [arithmetic mean (SD)], Tmax median 1.5 h (range 0.5-3.0). Verified verbatim via PMC WebFetch 2026-04-23.",
+        "access_path": "primary_paper"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified -- Mineralys Therapeutics Phase 3 for resistant hypertension (NDA expected 2025-2026). Aliases checked: lorundrostat, MLS-101, MLS101 -- 0 exclusion hits.",
+        "not_in_validation": true
+      },
+      "notes": "Fills previously-empty aldosterone-synthase / CYP11B2-inhibitor cardiorenal class. First-in-human SAD provides arithmetic mean + SD exactly matching the N50 reference schema. CV 20.5% indicates tight absorption. 100 mg is the Phase 2/3 therapeutic dose. SMILES has no defined stereocenters (achiral ring-substitution pattern). SMILES cross-validated against PubChem CID 126567187 (InChIKey full match YHGVDZULVMINCJ-UHFFFAOYSA-N). Era meets spec (2024 primary paper). URL verified (HTTP 200)."
+    },
+    "fexuprazan": {
+      "status": "VERIFIED",
+      "smiles": "CNCC1=CN(C(=C1OC)C2=C(C=C(C=C2)F)F)S(=O)(=O)C3=CC=CC(=C3)F",
+      "pubchem_cid": 122662112,
+      "molecular_formula": "C19H17F3N2O3S",
+      "molecular_weight": 410.4,
+      "dose_mg": 40.0,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "observed_cmax_mg_l": 0.03387,
+      "observed_cmax_sd_mg_l": 0.01504,
+      "observed_cmax_cv": 0.4441,
+      "patient_n": 23,
+      "oatp1b1_substrate": false,
+      "mechanism_tags": [
+        "PCAB_potassium_competitive_acid_blocker",
+        "gastric_acid_suppression",
+        "CYP3A4_substrate_primary",
+        "CYP2B6_substrate",
+        "CYP2D6_substrate",
+        "CYP2C19_substrate",
+        "multi_CYP_metabolism",
+        "hepatic_elimination_dominant"
+      ],
+      "source": {
+        "citation": "Kim SE, Lee H, Jeong M, Lee K, Kim Y, Kim J, Yim DS, Choi S. A Comparative Pharmacokinetic Study of Fexuprazan 10 mg: Demonstrating Bioequivalence with the Reference Formulation and Evaluating Steady State. Pharmaceuticals. 2023;16(8):1141. PMCID: PMC10458111.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10458111/",
+        "doi": "10.3390/ph16081141",
+        "table_ref": "Part 2 single-dose 2-sequence 2-period crossover, reference arm 1 x fexuprazan 40 mg tablet, healthy volunteers, N=23: Cmax 33.87 (15.04) ng/mL [arithmetic mean (SD)], Tmax median 3.00 h (range 2.00-6.00). Verified verbatim via PMC WebFetch 2026-04-23 (Part 2 is single-dose crossover, not steady-state).",
+        "access_path": "primary_paper"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified -- South Korea-approved 2022 (Fexuclue, Daewoong); not FDA-approved. Aliases checked: fexuprazan, DWP14012, Fexuclue -- 0 exclusion hits.",
+        "not_in_validation": true
+      },
+      "notes": "Fills previously-empty PCAB (potassium-competitive acid blocker) class + multi-CYP-substrate profile (CYP3A4 primary + CYP2B6/2D6/2C19 contributions). Kim 2023 Part 2 is single-dose crossover (explicitly NOT steady-state per paper methods), making this a clean N=23 primary-source single-dose Cmax. Arithmetic mean (SD) convention. Era caveat: South Korea approval 2022, not FDA NME -- admit on exclusion-clean + mechanism-value path. SMILES cross-validated against PubChem CID 122662112 (InChIKey full match OUNXGNDVWVPCOL-UHFFFAOYSA-N; no stereocenters). URL verified (HTTP 200)."
     }
   },
   "forward_curation_plan": {
-    "target_remaining": 24,
+    "target_remaining": 20,
     "oatp1b1_additional_candidates": [
       "paclitaxel (OATP1B3 + OATP1B1, rich PK literature, IV)",
       "docetaxel (similar to paclitaxel)",
