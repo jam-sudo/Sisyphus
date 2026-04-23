@@ -34,6 +34,23 @@ Milestones that are **done** and no longer represent active work. Kept for archa
 - **CYP phenotype layer (2026-04-14)** — `sisyphus tdm --phenotype CYP2D6:PM` with CPIC activity scaling. 17 tests.
 - **Multi-obs SBI (2026-04-14)** — log-normal likelihood post-hoc importance reweighting.
 
+## P4.5 — Correlated Physiology Prior Infrastructure (2026-04-22)
+
+Shipped: `Distribution.correlation_group` field, `sisyphus.physiology` package with
+`CorrelationSpec` + `sample_correlated` + `assert_sampled`, `generate_physiology(rng=)`
+opt-in, `reference_man.yaml` liver node migrated with Achour 2021 CVs.
+
+Gates A-E passed. SBC demonstration intentionally deferred to P4.5a (requires
+amortizer retraining with sampled physiology).
+
+Meta AAFE 2.6946 (±0.001 of 2.695 headline — Gate A invariant).
+OATP1B1 sampled independently per Achour 2021 empirical r<0.3 threshold.
+
+Files: spec `2026-04-22-achour-abundance-correlation-design.md`,
+plan `2026-04-22-achour-abundance-correlation.md`,
+`data/physiology/achour2021_liver_abundance.csv`,
+`data/physiology/achour2021_correlation.json`.
+
 ## CLI surface (shipped)
 
 `sisyphus {predict, simulate, tdm, ddi, dose-adjust, benchmark}`.
