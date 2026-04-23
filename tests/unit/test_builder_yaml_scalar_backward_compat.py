@@ -32,14 +32,28 @@ def test_every_physiology_yaml_loads_without_error() -> None:
 
 
 def test_scalar_enzyme_values_parse_to_none_group() -> None:
-    """Any YAML node with bare-scalar enzyme entries yields Distribution
-    with correlation_group=None (no silent group assignment)."""
+    """Any YAML node with bare-scalar enzyme or transporter entries yields
+    Distribution with correlation_group=None (no silent group assignment).
+
+    Task 9 migrates reference_man.yaml liver enzymes + OATP1B1 to dict
+    syntax with correlation_group; that task will restrict this test's
+    scope (e.g., exclude nodes covered by the migration, or narrow to
+    the pediatric/non-migrated YAMLs). Today, pre-migration, every entry
+    in every physiology YAML is a bare scalar, so ``is None`` is strict
+    and correct.
+    """
     for p in _yaml_paths():
         graph = build_from_yaml(p)
         for name, node in graph.nodes.items():
             for tag, dist in node.enzymes.items():
-                # Either the YAML explicitly sets a group (dict syntax) or
-                # it's None. Bare scalars always produce None.
-                assert dist.correlation_group is None or isinstance(
-                    dist.correlation_group, str
-                ), f"{p.name}:{name}:{tag} has bad correlation_group type"
+                assert dist.correlation_group is None, (
+                    f"{p.name}:{name}:enzyme:{tag} should have "
+                    f"correlation_group=None (pre-Task-9), got "
+                    f"{dist.correlation_group!r}"
+                )
+            for tag, dist in node.transporters.items():
+                assert dist.correlation_group is None, (
+                    f"{p.name}:{name}:transporter:{tag} should have "
+                    f"correlation_group=None (pre-Task-9), got "
+                    f"{dist.correlation_group!r}"
+                )
