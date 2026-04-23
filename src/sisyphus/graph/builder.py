@@ -244,11 +244,16 @@ def _parse_distribution(raw: Any) -> Distribution:
     Supports formats:
     - ``{mean: 390, cv: 0.10}`` -> ``Distribution(mean=390, cv=0.10)``
     - ``{mean: 390}`` -> ``Distribution(mean=390, cv=0.0)``
+    - ``{mean: 390, cv: 0.10, correlation_group: "liver_achour2021"}``
+        -> ``Distribution(mean=390, cv=0.10, correlation_group="liver_achour2021")``
     - bare float/int -> ``Distribution(mean=value, cv=0.0)``
     """
     if isinstance(raw, dict):
         mean = float(raw["mean"])
         cv = float(raw.get("cv", 0.0))
-        return Distribution(mean=mean, cv=cv)
+        correlation_group = raw.get("correlation_group")
+        if correlation_group is not None:
+            correlation_group = str(correlation_group)
+        return Distribution(mean=mean, cv=cv, correlation_group=correlation_group)
     # bare numeric value
     return Distribution(mean=float(raw), cv=0.0)
