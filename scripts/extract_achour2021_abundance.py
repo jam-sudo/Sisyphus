@@ -39,6 +39,7 @@ import pathlib
 
 import numpy as np
 from scipy.linalg import eigh
+from scipy.stats import norm
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 CSV_OUT = ROOT / "data" / "physiology" / "achour2021_liver_abundance.csv"
@@ -124,12 +125,10 @@ def _hartigan_dip_approx(sorted_values: np.ndarray) -> float:
     log-transformed values. Values closer to 0 ⇒ more unimodal.
     Not a formal Hartigan dip test; this is a cheap audit signal per spec §3.2.
     """
-    from scipy.stats import norm
-
     log_vals = np.log(sorted_values)
     mu = log_vals.mean()
     sigma = log_vals.std(ddof=1)
-    if sigma <= 0:
+    if not (sigma > 0):  # handles NaN (n≤1) and zero-variance cases
         return 0.0
     ecdf = (np.arange(1, len(log_vals) + 1)) / len(log_vals)
     fitted = norm.cdf(log_vals, loc=mu, scale=sigma)
@@ -138,7 +137,7 @@ def _hartigan_dip_approx(sorted_values: np.ndarray) -> float:
 
 def _compute_and_write_json() -> None:
     cols, mat = _load_raw()
-    n_donors, n_cols = mat.shape
+    n_donors = mat.shape[0]
 
     # CYP-only subset (exclude OATP1B1 from completeness requirement)
     cyp_idx = [cols.index(t) for t in ("CYP3A4", "CYP2D6", "CYP1A2", "CYP2C9", "CYP2E1")]
@@ -157,9 +156,7 @@ def _compute_and_write_json() -> None:
     log_oatp = np.log(oatp_mat_complete)
     # 6x6 log-correlation matrix on the 6-way complete subset
     log_corr_6 = np.corrcoef(log_oatp, rowvar=False)
-    oatp_row = log_corr_6[oatp_idx, :]
-    cyp_corrs = np.array([oatp_row[i] for i in cyp_idx])
-    mean_r_oatp = float(cyp_corrs.mean())
+    mean_r_oatp = float(log_corr_6[oatp_idx, cyp_idx].mean())
 
     if abs(mean_r_oatp) >= OATP_INCLUSION_THRESHOLD:
         members = ("CYP3A4", "CYP2D6", "CYP1A2", "CYP2C9", "CYP2E1", "OATP1B1")
@@ -233,6 +230,7 @@ def _compute_and_write_json() -> None:
 
     with JSON_OUT.open("w") as f:
         json.dump(payload, f, indent=2)
+        f.write("\n")
     print(f"Wrote {JSON_OUT} ({decision}, N_complete={payload['n_donors_complete']})")
 
 
