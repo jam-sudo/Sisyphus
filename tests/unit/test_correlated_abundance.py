@@ -107,3 +107,76 @@ class TestRegistry:
         got = get("liver_achour2021")
         assert got is not None
         assert len(got.members) >= 5
+
+
+from sisyphus.physiology.correlation_registry import sample_correlated
+
+
+class TestSampleCorrelated:
+    """Gates B and C: marginal CV + joint correlation fidelity."""
+
+    def test_marginals_match_cv_independent(self) -> None:
+        """With identity correlation, each marginal matches its own lognormal CV."""
+        rng = np.random.default_rng(42)
+        means = np.array([100.0, 50.0, 10.0])
+        cvs = np.array([0.5, 0.3, 0.1])
+        log_corr = np.eye(3)
+        samples = np.array(
+            [sample_correlated(means, cvs, log_corr, rng) for _ in range(10_000)]
+        )
+        emp_mean = samples.mean(axis=0)
+        emp_cv = samples.std(axis=0, ddof=1) / emp_mean
+        # Gate B tolerances: ±1% mean, ±5% relative CV
+        assert np.allclose(emp_mean, means, rtol=0.02)
+        for ec, c in zip(emp_cv, cvs):
+            assert abs(ec - c) / c < 0.05
+
+    def test_recovers_log_corr_matrix(self) -> None:
+        """Empirical log-space correlation matches the input matrix (Gate C)."""
+        rng = np.random.default_rng(1234)
+        means = np.array([100.0, 50.0, 10.0])
+        cvs = np.array([0.5, 0.5, 0.5])
+        target = np.array(
+            [[1.0, 0.6, 0.3],
+             [0.6, 1.0, 0.2],
+             [0.3, 0.2, 1.0]]
+        )
+        samples = np.array(
+            [sample_correlated(means, cvs, target, rng) for _ in range(20_000)]
+        )
+        emp_log_corr = np.corrcoef(np.log(samples), rowvar=False)
+        # Gate C tolerance: ±0.05 off-diagonal
+        assert np.allclose(emp_log_corr, target, atol=0.05)
+
+    def test_all_samples_positive(self) -> None:
+        rng = np.random.default_rng(7)
+        means = np.array([100.0, 50.0])
+        cvs = np.array([1.0, 0.8])
+        log_corr = np.array([[1.0, 0.7], [0.7, 1.0]])
+        for _ in range(1000):
+            s = sample_correlated(means, cvs, log_corr, rng)
+            assert (s > 0).all()
+
+    def test_degenerate_identity_matches_independent(self) -> None:
+        """log_corr=I produces samples with ~zero empirical cross-correlation."""
+        rng = np.random.default_rng(99)
+        means = np.array([100.0, 100.0])
+        cvs = np.array([0.5, 0.5])
+        samples = np.array(
+            [sample_correlated(means, cvs, np.eye(2), rng) for _ in range(10_000)]
+        )
+        emp_corr = np.corrcoef(np.log(samples), rowvar=False)[0, 1]
+        assert abs(emp_corr) < 0.05
+
+    def test_healthy_proxy_gate_Bprime(self) -> None:
+        """Gate B': 0.5× CV configuration still reproduces marginals."""
+        rng = np.random.default_rng(2026)
+        means = np.array([100.0, 50.0])
+        cvs = np.array([0.763, 0.484]) * 0.5  # healthy proxy
+        log_corr = np.eye(2)
+        samples = np.array(
+            [sample_correlated(means, cvs, log_corr, rng) for _ in range(10_000)]
+        )
+        emp_cv = samples.std(axis=0, ddof=1) / samples.mean(axis=0)
+        for ec, c in zip(emp_cv, cvs):
+            assert abs(ec - c) / c < 0.05

@@ -74,3 +74,47 @@ def load_from_json(path: pathlib.Path) -> None:
     cvs = np.asarray(data["cv"], dtype=float)
     matrix = np.asarray(data["log_corr_matrix"], dtype=float)
     register(name, CorrelationSpec(members=members, log_corr_matrix=matrix, cvs=cvs))
+
+
+def sample_correlated(
+    means: np.ndarray,
+    cvs: np.ndarray,
+    log_corr: np.ndarray,
+    rng: np.random.Generator,
+) -> np.ndarray:
+    """Draw one sample of N correlated lognormal variates.
+
+    For each i:  log(X_i) ~ Normal(mu_i, sigma_i)  where
+        sigma_i^2 = log(1 + cv_i^2)
+        mu_i     = log(mean_i) - sigma_i^2 / 2
+
+    Joint structure: corr(log X_i, log X_j) = log_corr[i,j].
+
+    The mean and CV of X_i on the raw scale reproduce ``means[i]``/``cvs[i]``
+    exactly in expectation (subject to finite-sample noise in any empirical
+    check).
+
+    Args:
+        means: shape (N,), strictly positive.
+        cvs: shape (N,), non-negative.
+        log_corr: shape (N, N), symmetric PSD with unit diagonal.
+        rng: numpy random Generator.
+
+    Returns:
+        A numpy array of shape (N,) with one draw for each variable.
+    """
+    means = np.asarray(means, dtype=float)
+    cvs = np.asarray(cvs, dtype=float)
+    log_corr = np.asarray(log_corr, dtype=float)
+
+    if (means <= 0).any():
+        raise ValueError("sample_correlated requires strictly positive means")
+    if (cvs < 0).any():
+        raise ValueError("sample_correlated requires non-negative cvs")
+
+    sigmas = np.sqrt(np.log1p(cvs ** 2))
+    mus = np.log(means) - 0.5 * sigmas ** 2
+
+    cov = log_corr * np.outer(sigmas, sigmas)
+    z = rng.multivariate_normal(mean=np.zeros(len(means)), cov=cov)
+    return np.exp(mus + z)
