@@ -1,0 +1,73 @@
+{
+  "name": "liver_achour2021",
+  "source": "Achour 2021 CPT Table S7, PMC7839483 (CC BY-NC 4.0)",
+  "cohort_note": "27/29 donors are cancer patients; 2 are non-cancer liver disease. No public healthy-liver cohort for direct CV comparison; cancer-bias sensitivity Gate D is addressed by supporting a parallel 0.5\u00d7 CV healthy-proxy configuration.",
+  "n_donors_total": 29,
+  "n_donors_complete_cyp_only": 20,
+  "n_donors_complete_cyp_oatp1b1": 18,
+  "n_donors_complete": 20,
+  "members": [
+    "CYP3A4",
+    "CYP2D6",
+    "CYP1A2",
+    "CYP2C9",
+    "CYP2E1"
+  ],
+  "cv": [
+    0.7662870335120816,
+    1.1852113789796432,
+    0.5331532521891399,
+    0.7172710536694583,
+    0.4417261818513487
+  ],
+  "log_corr_matrix": [
+    [
+      1.0,
+      0.5048063278385375,
+      0.6346648512735461,
+      0.3554309576929305,
+      0.49572635935086484
+    ],
+    [
+      0.5048063278385375,
+      1.0,
+      0.5680543046871466,
+      0.5755587791911375,
+      0.35026651387534635
+    ],
+    [
+      0.6346648512735461,
+      0.5680543046871466,
+      1.0,
+      0.2820160680742778,
+      0.7413841485104791
+    ],
+    [
+      0.3554309576929305,
+      0.5755587791911375,
+      0.2820160680742778,
+      0.9999999999999998,
+      0.15049392702817915
+    ],
+    [
+      0.49572635935086484,
+      0.35026651387534635,
+      0.7413841485104791,
+      0.15049392702817915,
+      1.0
+    ]
+  ],
+  "oatp1b1_inclusion": {
+    "decision": "independent",
+    "mean_r_OATP_to_CYPs": 0.23442056133885142,
+    "threshold": 0.3
+  },
+  "cyp2d6_bimodality": {
+    "dip_statistic": 0.12979601575580346,
+    "lognormal_fit_warning": false,
+    "description": "Max-distance between empirical log-CDF and fitted lognormal. Higher values indicate worse lognormal fit; CYP2D6 is clinically bimodal, so dip > 0.2 is expected and flagged."
+  },
+  "psd_projection_applied": false,
+  "psd_projection_shift": 0.0,
+  "csv_sha256": "6993bb52c51877cc659234424600a6110440e30735972b8ce94c4a98932c71a1"
+}
