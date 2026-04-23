@@ -180,3 +180,58 @@ class TestSampleCorrelated:
         emp_cv = samples.std(axis=0, ddof=1) / samples.mean(axis=0)
         for ec, c in zip(emp_cv, cvs):
             assert abs(ec - c) / c < 0.05
+
+
+from sisyphus.graph.body import BodyGraph
+from sisyphus.graph.types import Node, TissueComposition
+from sisyphus.physiology.correlation_registry import assert_sampled
+
+
+def _minimal_graph_with_grouped_liver() -> BodyGraph:
+    """Build a tiny BodyGraph with a liver node whose enzymes belong to a group."""
+    g = BodyGraph()
+    g.global_params = {"cardiac_output": Distribution(390.0, cv=0.0)}
+    g.nodes["liver"] = Node(
+        name="liver",
+        node_type="organ",
+        volume=Distribution(1.8, cv=0.0),
+        composition=TissueComposition(fn=0.035, fp=0.025, fw=0.75, pH=7.0),
+        enzymes={
+            "CYP3A4": Distribution(100.0, cv=0.7, correlation_group="liver_achour2021")
+        },
+        transporters={},
+        ivive_scaling=6e-5,
+        lookup_name="liver",
+    )
+    return g
+
+
+class TestAssertSampled:
+    def test_passes_on_ungrouped_graph(self) -> None:
+        g = BodyGraph()
+        g.global_params = {"cardiac_output": Distribution(390.0)}
+        g.nodes["venous_blood"] = Node(
+            name="venous_blood",
+            node_type="blood_pool",
+            volume=Distribution(5.3),
+            composition=None,
+            enzymes={},
+            transporters={},
+            ivive_scaling=0.0,
+            lookup_name="venous_blood",
+        )
+        # No correlation_group anywhere, so assert_sampled succeeds trivially.
+        assert_sampled(g)
+
+    def test_fails_when_group_not_collapsed(self) -> None:
+        g = _minimal_graph_with_grouped_liver()
+        with pytest.raises(AssertionError, match="correlation_group"):
+            assert_sampled(g)
+
+    def test_passes_after_manual_collapse(self) -> None:
+        g = _minimal_graph_with_grouped_liver()
+        # Simulate what _resample_correlated_abundances will do in Task 8:
+        # replace grouped Distribution with a sampled, cv=0, group=None variant.
+        node = g.nodes["liver"]
+        node.enzymes["CYP3A4"] = Distribution(95.3, cv=0.0, correlation_group=None)
+        assert_sampled(g)
