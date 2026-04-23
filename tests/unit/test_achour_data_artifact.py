@@ -6,9 +6,12 @@ CC BY-NC 4.0. Extraction via scripts/extract_achour2021_abundance.py.
 from __future__ import annotations
 
 import csv
+import hashlib
+import json
 import math
 import pathlib
 
+import numpy as np
 import pytest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
@@ -93,11 +96,6 @@ def test_column_stats_match_s7_reported(target: str) -> None:
         f"{target}: %CV {cv_pct:.2f} vs reported {rep['cv_pct']} (>2% drift)"
     )
 
-
-import hashlib
-import json
-
-import numpy as np
 
 JSON_PATH = ROOT / "data" / "physiology" / "achour2021_correlation.json"
 
