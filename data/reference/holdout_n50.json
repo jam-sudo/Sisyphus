@@ -3,16 +3,16 @@
   "spec_commit": "da0f080",
   "cycle_id": "2026Q2",
   "curation_date": "2026-04-22",
-  "curation_status": "PARTIAL (13 / 50)",
+  "curation_status": "PARTIAL (18 / 50)",
   "n_target": 50,
-  "n_admitted": 13,
+  "n_admitted": 18,
   "oatp1b1_substrate_count": 8,
   "oatp1b1_substrate_minimum": 3,
   "exclusion_inventory_source": "/tmp/n50_exclusion.txt (built by scripts/build_n50_exclusion.py on 2026-04-22)",
   "exclusion_inventory_sha256": "3acb38a29c83646e0f10c4a7ae478a18052ec2c9056fbc8df369aed3490aee83",
   "bsa_m2": 1.85,
   "bsa_rationale": "ICRP Reference Man (70 kg \u00d7 1.74 m) BSA. Spec \u00a79 Open Questions #1 resolved to 1.85. Used for all mg/m\u00b2 \u2192 mg conversions in this file.",
-  "methodology_notes": "Observed Cmax reported as mean \u00b1 SD when primary source uses arithmetic statistics; as geometric mean with 90% CI in notes when that is the primary-source convention. SD field is null for geometric-mean-only sources. 2026-04-22 seed expansion (commit pending): added paclitaxel, docetaxel, micafungin, benzylpenicillin, torsemide (5 OATP1B1 substrates). benzylpenicillin classified as iv_infusion duration 4 min (rather than iv_bolus) because the FDA label's 3-5 min push is physically a short zero-order input; V3.1 infusion path handles it correctly and matches the Cmax timing (400 mg/L at 5-6 min post-start). 2026-04-22 second expansion (this session): added vimseltinib, nerandomilast, balcinrenone, tolebrutinib, zibotentan (5 non-OATP1B1 oral drugs). Cmax in nmol/L converted to mg/L using MW from PubChem: nerandomilast MW=449.0 g/mol (710 nmol/L x 449.0/1000 = 0.3188 mg/L); balcinrenone MW=399.4 g/mol (4602 nmol/L x 399.4/1000 = 1.838 mg/L).",
+  "methodology_notes": "Observed Cmax reported as mean \u00b1 SD when primary source uses arithmetic statistics; as geometric mean with 90% CI in notes when that is the primary-source convention. SD field is null for geometric-mean-only sources. 2026-04-22 seed expansion (commit pending): added paclitaxel, docetaxel, micafungin, benzylpenicillin, torsemide (5 OATP1B1 substrates). benzylpenicillin classified as iv_infusion duration 4 min (rather than iv_bolus) because the FDA label's 3-5 min push is physically a short zero-order input; V3.1 infusion path handles it correctly and matches the Cmax timing (400 mg/L at 5-6 min post-start). 2026-04-22 second expansion: added vimseltinib, nerandomilast, balcinrenone, tolebrutinib, zibotentan (5 non-OATP1B1 oral drugs). Cmax in nmol/L converted to mg/L using MW from PubChem: nerandomilast MW=449.0 g/mol (710 nmol/L x 449.0/1000 = 0.3188 mg/L); balcinrenone MW=399.4 g/mol (4602 nmol/L x 399.4/1000 = 1.838 mg/L). 2026-04-23 third expansion: added sulopenem, ensitrelvir, elafibranor, obicetrapib, mirdametinib (5 non-OATP1B1 oral drugs, mechanism-diverse: penem antibiotic + OAT3 substrate, oral 3CL antiviral, dual PPAR agonist, CETP inhibitor, MEK1/2 inhibitor). All Cmax values cross-validated against DailyMed (FDA labels) or PMC primary papers. Sulopenem/ensitrelvir doses reported as labeled-salt mass; Cmax is for active species. Mirdametinib dose 4 mg maps to BSA 1.85 m\u00b2 via GOMEKLI Table 1 (\u22651.50 m\u00b2 band), Cmax is steady-state per label Table 6.",
   "drugs": {
     "rifampin": {
       "status": "VERIFIED",
@@ -496,10 +496,226 @@
         "not_in_validation": true
       },
       "notes": "AstraZeneca endothelin A receptor antagonist (ZD4054). Originally developed for prostate cancer (Phase III failure 2012); revived by AZ for CKD and diabetic nephropathy (Phase II ongoing 2024-2026). Included as non-NME drug with 2024 primary HV PK publication. Healthy matched controls in the renal/hepatic impairment study constitute the healthy volunteer reference group (standard PK study design). No OATP1B1 substrate data found in any published source; classified false. Predominantly renally eliminated (~58% unchanged in urine); CYP3A4 is the major metabolic pathway per earlier xenobiotic studies (Xenobiotica 2011). Geometric mean Cmax 261.3 ng/mL = 0.261 mg/L at 5 mg oral dose. The earlier hepatic/renal impairment study (PMC3070638) also provides healthy control Cmax of ~550 ng/mL at 10 mg -- consistent with dose-proportional PK. Used 2024 paper as the primary source as it is more recent. Exclusion check: grep -iwx 'zibotentan' /tmp/n50_exclusion.txt returned no match."
+    },
+    "sulopenem": {
+      "status": "VERIFIED",
+      "smiles": "C[C@H]([C@@H]1[C@@H]2N(C1=O)C(=C(S2)S[C@H]3CC[S@@](=O)C3)C(=O)O)O",
+      "pubchem_cid": 9950244,
+      "molecular_formula": "C12H15NO5S3",
+      "molecular_weight": 349.46,
+      "dose_mg": 500.0,
+      "dose_original": "500 mg sulopenem etzadroxil (prodrug) co-formulated with 500 mg probenecid (ORLYNVAH fixed-dose combination).",
+      "dose_conversion_note": "Dose reported as 500 mg prodrug (sulopenem etzadroxil) per FDA label; active species is sulopenem (rapidly hydrolyzed pre-systemically). Cmax measured on active sulopenem. Probenecid co-administration boosts Cmax via OAT3 inhibition at renal tubule; engine must treat this as DDI or will underpredict.",
+      "route": "oral",
+      "infusion_duration_min": null,
+      "observed_cmax_mg_l": 1.84,
+      "observed_cmax_sd_mg_l": null,
+      "observed_cmax_cv": 0.391,
+      "patient_n": 12,
+      "oatp1b1_substrate": false,
+      "mechanism_tags": [
+        "penem_antibacterial",
+        "beta_lactam",
+        "PBP_inhibitor",
+        "OAT3_substrate",
+        "renal_tubular_secretion",
+        "probenecid_boosted",
+        "renal_clearance",
+        "anti_infective"
+      ],
+      "source": {
+        "citation": "Iterum Therapeutics US Ltd. ORLYNVAH (sulopenem etzadroxil and probenecid) tablets -- FDA prescribing information, revised Feb 2026. NDA 213972. DailyMed SPL v6 setid 24c451c0-4cfb-37f3-e063-6394a90a895e.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=24c451c0-4cfb-37f3-e063-6394a90a895e",
+        "doi": null,
+        "table_ref": "Section 12.3 Pharmacokinetics, Table 3 -- fasted sulopenem Cmax 1.84 (39.1) \u00b5g/mL [mean (CV%)] after single oral ORLYNVAH (500 mg sulopenem etzadroxil + 500 mg probenecid) in healthy subjects. Quote confirmed via DailyMed 2026-04-23: 'Sulopenem is a substrate of OAT3 and does not inhibit BCRP, P-gp, BSEP, MATE1, MATE2K, OAT1, OAT3, OATP1B1, OATP1B3, OCT1, or OCT2.' N not tabulated in label Table 3; N=12 from underlying Dunne 2018 OFID 5:S428 crossover HV study feeding the Table 3 estimates.",
+        "access_path": "fda_label_dailymed"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified -- 2024 NME; active sulopenem has DrugBank entry DB06357 but the marketed oral etzadroxil prodrug (DB16335) is post-training-cutoff for most sources. Flag for retrospective audit.",
+        "not_in_validation": true
+      },
+      "notes": "FDA NME approved 25 Oct 2024 for uncomplicated UTI (Orlynvah); first oral penem in ~30 years and first oral probenecid-boosted beta-lactam. Label explicitly states sulopenem is an OAT3 substrate + does not inhibit OATP1B1/B3 -- confirms zero overlap with the 8 OATP1B1 substrates in the N50 seed. Renal elimination 40.8% (3.1% unchanged) + fecal 44.3% (26.9% unchanged). SD not tabulated in label; observed_cmax_sd_mg_l=null with CV recorded. SMILES + CID + formula + MW cross-validated against PubChem (InChIKey match including stereochemistry). URL verified at DailyMed 2026-04-23 (HTTP 200). Exclusion grep returned 0 hits against /tmp/n50_exclusion.txt sha256 3acb38a..."
+    },
+    "ensitrelvir": {
+      "status": "VERIFIED",
+      "smiles": "CN1C=C2C=C(C(=CC2=N1)Cl)NC3=NC(=O)N(C(=O)N3CC4=CC(=C(C=C4F)F)F)CC5=NN(C=N5)C",
+      "pubchem_cid": 162533924,
+      "molecular_formula": "C22H17ClF3N9O2",
+      "molecular_weight": 531.89,
+      "dose_mg": 250.0,
+      "dose_original": "Ensitrelvir fumaric acid 250 mg (salt form); marketed in Japan as Xocova.",
+      "dose_conversion_note": "Primary paper (Shimizu 2022) reports doses as ensitrelvir fumaric acid. 250 mg fumaric acid = approx 212 mg ensitrelvir free base (MW ratio 0.848), but dose/Cmax pair is reported in salt-mass convention; using 250 mg to match primary source. Single-dose 250 mg sits within dose-linear range (20-2000 mg SAD) and avoids steady-state CYP3A autoinhibition that complicates therapeutic-dose Cmax prediction.",
+      "route": "oral",
+      "infusion_duration_min": null,
+      "observed_cmax_mg_l": 15.2,
+      "observed_cmax_sd_mg_l": null,
+      "observed_cmax_cv": 0.236,
+      "patient_n": 8,
+      "oatp1b1_substrate": false,
+      "mechanism_tags": [
+        "3CL_protease_inhibitor",
+        "SARS_CoV2",
+        "antiviral",
+        "anti_infective",
+        "CYP3A4_substrate",
+        "CYP3A4_inhibitor_time_dependent",
+        "hepatic_clearance",
+        "long_half_life"
+      ],
+      "source": {
+        "citation": "Shimizu R, Sonoyama T, Fukuhara T, Kuwata A, Matsuo Y, Kubota R. Safety, Tolerability, and Pharmacokinetics of the Novel Antiviral Agent Ensitrelvir Fumaric Acid, a SARS-CoV-2 3CL Protease Inhibitor, in Healthy Adults. Antimicrob Agents Chemother. 2022 Oct;66(10):e00632-22. PMCID: PMC9578392. PMID 36094202.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9578392/",
+        "doi": "10.1128/aac.00632-22",
+        "table_ref": "Table 1 -- Part 1 SAD cohort C (250 mg), healthy Japanese adult male volunteers fasted, single oral dose of ensitrelvir fumaric acid 250 mg; geometric mean Cmax 15.2 \u00b5g/mL (geometric CV 23.6%), N=8, Tmax median 2.50 h (range 1.00-12.00). Confirmed verbatim via PMC WebFetch 2026-04-23.",
+        "access_path": "primary_paper"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified -- Japan emergency-approved Nov 2022, FDA review pending; likely absent from pre-2023 training ADME sources. Flag for retrospective audit.",
+        "not_in_validation": true
+      },
+      "notes": "Shionogi's S-217622 (Xocova), Japan's once-daily oral 3CL protease inhibitor for COVID-19. Very long half-life 42-48 h drives load/maintenance design. Single-dose 250 mg Cmax 15.2 mg/L is high per mg (high oral F%, low Vd). SD not reported (paper uses geometric mean + CV only); observed_cmax_sd_mg_l=null. Metabolism primarily CYP3A4 with time-dependent autoinhibition; OATP1B1 substrate status not characterized in Shimizu 2022 or popPK follow-up (PMID 38594506) -- classified false. SMILES + CID + formula + MW cross-validated against PubChem (InChIKey match). URL verified 2026-04-23 (HTTP 200). Exclusion grep clean."
+    },
+    "elafibranor": {
+      "status": "VERIFIED",
+      "smiles": "CC1=CC(=CC(=C1OC(C)(C)C(=O)O)C)/C=C/C(=O)C2=CC=C(C=C2)SC",
+      "pubchem_cid": 9864881,
+      "molecular_formula": "C22H24O4S",
+      "molecular_weight": 384.5,
+      "dose_mg": 80.0,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "observed_cmax_mg_l": 0.802,
+      "observed_cmax_sd_mg_l": 0.443,
+      "observed_cmax_cv": 0.552,
+      "patient_n": 108,
+      "oatp1b1_substrate": false,
+      "mechanism_tags": [
+        "PPAR_alpha_agonist",
+        "PPAR_delta_agonist",
+        "dual_PPAR_agonist",
+        "bile_acid_synthesis_inhibitor",
+        "CYP2J2_substrate",
+        "UGT1A3_substrate",
+        "UGT1A4_substrate",
+        "UGT2B7_substrate",
+        "active_metabolite_GFT1007",
+        "hepatobiliary_clearance",
+        "metabolic_PBC"
+      ],
+      "source": {
+        "citation": "Ipsen Biopharmaceuticals Inc / GENFIT. IQIRVO (elafibranor) tablets -- FDA prescribing information, Initial U.S. Approval 2024 (issued June 2024). NDA 218860. DailyMed SPL v3 setid d78aa14f-6ec1-4b1d-a4ae-e48658137a25.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d78aa14f-6ec1-4b1d-a4ae-e48658137a25",
+        "doi": null,
+        "table_ref": "Section 12.3 Pharmacokinetics, Table 5 -- 'Elafibranor and GFT1007 Systemic Exposures at Steady State in Patients with PBC Following 80 mg Once Daily'. Elafibranor Cmax,ss 802 (443) ng/mL [Mean (SD)], AUC0-24 3758 (1749) ng\u00b7h/mL. Verified verbatim via DailyMed WebFetch 2026-04-23, which also quoted: 'Neither elafibranor nor GFT1007 is a substrate of P-gp, OATP1B1, OATP1B3, OAT1, OAT3 and OCT2' and 'Elafibranor was also metabolized by CYP2J2, and uridine diphosphate (UDP)-glucuronosyltransferase (UGT) isoforms, UGT1A3, UGT1A4, and UGT2B7.'",
+        "access_path": "fda_label_dailymed"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified -- 2024 PBC NME; DrugBank DB05187 pre-2024 entry was NASH-focused and would not have contained the FDA PK data. Flag for retrospective audit.",
+        "not_in_validation": true
+      },
+      "notes": "FDA NME approved 10 Jun 2024 (accelerated approval) for primary biliary cholangitis. First-in-class dual PPAR-alpha/delta agonist approved for PBC. Steady-state Cmax from ELATIVE Phase 3 (NCT04526665) 80 mg QD Day 15 in PBC patients (N=108 active arm; sub-N for PK analysis not separately tabulated but CV 55% is consistent with popPK estimate from the full cohort). Patient cohort (not HV) -- acceptable per spec with condition flagged. Label explicitly states NOT an OATP1B1 substrate -- confirmed via DailyMed. Metabolized by CYP2J2 + UGT1A3/1A4/2B7 (rare UGT enzyme coverage in the N50 set). Active metabolite GFT1007 has 3.2x parent AUC but spec A1 evaluates parent Cmax only. SMILES + CID + formula + MW cross-validated against PubChem (InChIKey match with E-stereochemistry). URL verified 2026-04-23 (HTTP 200). Exclusion grep clean."
+    },
+    "obicetrapib": {
+      "status": "VERIFIED",
+      "smiles": "CC[C@@H]1C[C@@H](C2=C(N1C(=O)OCC)C=CC(=C2)C(F)(F)F)N(CC3=CC(=CC(=C3)C(F)(F)F)C(F)(F)F)C4=NC=C(C=N4)OCCCC(=O)O",
+      "pubchem_cid": 11498596,
+      "molecular_formula": "C32H31F9N4O5",
+      "molecular_weight": 722.6,
+      "dose_mg": 10.0,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "observed_cmax_mg_l": 0.251,
+      "observed_cmax_sd_mg_l": 0.0577,
+      "observed_cmax_cv": 0.23,
+      "patient_n": 6,
+      "oatp1b1_substrate": false,
+      "mechanism_tags": [
+        "CETP_inhibitor",
+        "lipid_metabolism",
+        "HDL_raising",
+        "cardiometabolic",
+        "CYP3A4_substrate",
+        "CYP2C8_substrate",
+        "CYP2C9_substrate",
+        "CYP2C19_substrate",
+        "minimal_metabolism",
+        "fecal_excretion_unchanged",
+        "long_half_life"
+      ],
+      "source": {
+        "citation": "Nicholls SJ, Nelson AJ, Kastelein JJP, Ditmarsch M, Kling D, Nambi V, Pattathil N, Kempen HJ, Thomson D, Davidson M, Wright R. Obicetrapib exhibits favorable physiochemical and pharmacokinetic properties compared to previous cholesteryl ester transfer protein inhibitors: An integrated summary of results from non-human primate studies and clinical trials. Pharmacol Res Perspect. 2024 Oct 18;12(6):e70010. PMCID: PMC11489133. PMID 39425271.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11489133/",
+        "doi": "10.1002/prp2.70010",
+        "table_ref": "Table 2 -- Study 1 SAD cohort, healthy male volunteers, fasted, single oral dose obicetrapib 10 mg. Row: N=6, Cmax 251 ng/mL (geometric CV 23%), Tmax median 3 h (range 2-5), t1/2 124 h (20% CV), AUC0-24 3580 ng\u00b7h/mL (21% CV). Verified verbatim via PMC WebFetch 2026-04-23.",
+        "access_path": "primary_paper"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified -- investigational CETP inhibitor (NewAmsterdam Pharma); DrugBank DB14890 minimal 2020-era entry would not include 2024 PK. Phase 3 BROADWAY readout 2024. Flag for retrospective audit.",
+        "not_in_validation": true
+      },
+      "notes": "Obicetrapib (TA-8995, DEZ-001) 4th-generation CETP inhibitor in pivotal Phase 3. Not yet FDA-approved but meets spec via 2024 open-access primary PK paper (Wiley CC-BY-4.0, Nicholls 2024 Pharmacol Res Perspect). SD derived from geometric CV: 251 x 0.23 = 57.7 ng/mL = 0.0577 mg/L (note: arithmetic SD and geometric CV are strictly not identical but at CV 23% the approximation error is <5%). Clearance profile is orthogonal to everything else in the N50 seed: per companion Lepor 2025 DDI paper, obicetrapib is 'not extensively metabolized' with 63.8% fecal (mostly unchanged) + 15.4% urinary -- tests the engine's low-extraction / biliary-efflux path. Lepor 2025 also states obicetrapib is 'not a substrate of either efflux or uptake transporters' -- classified oatp1b1_substrate=false on that basis. Half-life 124 h is the longest in the N50 seed. MW 722 triggers engine AD flag; acceptable per spec. N=6 at minimum threshold; HV fasted. SMILES + CID + formula + MW cross-validated against PubChem (InChIKey match with S,S-stereochemistry). URL verified 2026-04-23 (HTTP 200). Exclusion grep clean."
+    },
+    "mirdametinib": {
+      "status": "VERIFIED",
+      "smiles": "C1=CC(=C(C=C1I)F)NC2=C(C=CC(=C2F)F)C(=O)NOC[C@@H](CO)O",
+      "pubchem_cid": 9826528,
+      "molecular_formula": "C16H14F3IN2O4",
+      "molecular_weight": 482.2,
+      "dose_mg": 4.0,
+      "dose_original": "2 mg/m\u00b2 BID (capsule banded by BSA). For adult BSA \u22651.50 m\u00b2 (Sisyphus BSA 1.85 m\u00b2 band): 4 mg BID. Band-dose not linear mg/m\u00b2.",
+      "dose_conversion_note": "Sisyphus BSA 1.85 m\u00b2 -> GOMEKLI label Table 1 >=1.50 m\u00b2 band -> 4 mg capsule BID. 2 mg/m\u00b2 x 1.85 m\u00b2 = 3.7 mg theoretical; label discretizes to 4 mg. Reporting 4 mg per label banded-dose convention. Cmax in label Table 6 is steady-state at 2 mg/m\u00b2 BID in adult patients; accumulation ratio 1.1-1.9 implies single-dose Cmax would be ~100-170 ng/mL. Reporting ss-Cmax per label primary source (spec A1 evaluates observed at clinical regimen).",
+      "route": "oral",
+      "infusion_duration_min": null,
+      "observed_cmax_mg_l": 0.188,
+      "observed_cmax_sd_mg_l": 0.0978,
+      "observed_cmax_cv": 0.52,
+      "patient_n": 58,
+      "oatp1b1_substrate": false,
+      "mechanism_tags": [
+        "MEK1_inhibitor",
+        "MEK2_inhibitor",
+        "MAPK_pathway_inhibitor",
+        "kinase_inhibitor",
+        "BCRP_substrate",
+        "P-gp_substrate",
+        "UGT1A6_substrate",
+        "UGT2B7_substrate",
+        "CES_substrate",
+        "oncology",
+        "NF1_plexiform_neurofibromas",
+        "glucuronidation_clearance"
+      ],
+      "source": {
+        "citation": "SpringWorks Therapeutics Inc. GOMEKLI (mirdametinib) capsules and tablets for oral suspension -- FDA prescribing information, Initial U.S. Approval 2025 (issued Feb 2025, revised Nov 2025). NDA 219379/219389. DailyMed SPL v5 setid 4c41bf90-5fa7-4935-a95c-e047ea6bbf8e.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=4c41bf90-5fa7-4935-a95c-e047ea6bbf8e",
+        "doi": null,
+        "table_ref": "Section 12.3 Pharmacokinetics, Table 6 -- steady-state Cmax [mean (%CV)] 188 (52%) ng/mL in adult patients (>=18y); Tmax capsule median 1.1 h (range 0-4); terminal t1/2 28 h (12% CV). Adult N=58 from ReNeu Phase 2b (NCT03962543) Section 14.1 Table 7. Verified verbatim via DailyMed WebFetch 2026-04-23, which also confirmed: 'Mirdametinib is a substrate of BCRP and P-gp transporters' and 'Metabolism involves glucuronidation and oxidation via UGT (primarily UGT1A6 and UGT2B7) and CES enzymes.'",
+        "access_path": "fda_label_dailymed"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified -- 2025 NME; DrugBank has older development-code PD-0325901 entry with minimal PK. Feb 2025 label data is post-training-cutoff. Flag for retrospective audit.",
+        "not_in_validation": true
+      },
+      "notes": "FDA NME approved 11 Feb 2025 for adult and pediatric (>=2y) NF1-associated plexiform neurofibromas. Mirdametinib (PD-0325901) is an allosteric MEK1/2 inhibitor. Cmax is steady-state (not single-dose); single-dose equivalent via accumulation ratio 1.1-1.9 would be ~100-170 ng/mL. Reporting ss per label convention; engine must handle steady-state or use single-dose approximation. Patient cohort (not HV) noted. Label explicitly states NOT an OATP1B1 substrate (only BCRP + P-gp), confirmed via DailyMed. Glucuronidation-dominant metabolism (UGT1A6 + UGT2B7) + CES contribution is a rare enzyme combination in the N50 and tests UGT coverage. SD from CV: 188 x 0.52 = 97.8 ng/mL = 0.0978 mg/L. SMILES + CID + formula + MW cross-validated against PubChem (InChIKey match with R-stereochemistry). URL verified 2026-04-23 (HTTP 200). Exclusion grep clean."
     }
   },
   "forward_curation_plan": {
-    "target_remaining": 47,
+    "target_remaining": 32,
     "oatp1b1_additional_candidates": [
       "paclitaxel (OATP1B3 + OATP1B1, rich PK literature, IV)",
       "docetaxel (similar to paclitaxel)",
