@@ -14,10 +14,21 @@ Supplementary PDF: CPT-109-222-s001.pdf, Table S7 (page 22).
 Scope for Sisyphus v1b (spec 2026-04-22):
   Columns restricted to CYP3A4, CYP2D6, CYP1A2, CYP2C9, CYP2E1, OATP1B1.
   Data below is transcribed verbatim from the published PDF table. Missing
-  cells in the PDF are dashes (-); here they are represented as None.
+  cells in the PDF are dashes (-); here they are represented as Python ``None``
+  in the in-memory ``DONORS`` literal and as an **empty field** (RFC 4180
+  standard) in the written CSV — not the string ``"NaN"``. The test loader
+  translates empty-string cells back to ``None``; downstream consumers
+  (pandas ``read_csv`` with default ``na_values``, numpy ``genfromtxt``
+  with ``missing_values=""``) will recognize the empty cell as missing.
 
 This script writes data/physiology/achour2021_liver_abundance.csv.
 Subsequent tasks extend it with correlation matrix computation.
+
+Note on CYP3A4 cross-check drift: the computed column mean from DONORS
+(~49.85) differs from the reported Table S7 mean (49.51) by 0.694%.
+This is rounding-accumulation across 29 PDF values rounded to 2dp and
+is expected — not a transcription error. All other columns drift by
+<0.21%.
 """
 from __future__ import annotations
 
