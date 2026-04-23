@@ -31,29 +31,47 @@ def test_every_physiology_yaml_loads_without_error() -> None:
         assert len(graph.nodes) > 0
 
 
-def test_scalar_enzyme_values_parse_to_none_group() -> None:
-    """Any YAML node with bare-scalar enzyme or transporter entries yields
-    Distribution with correlation_group=None (no silent group assignment).
+# Post-Task-9: reference_man.yaml liver has correlation_group on 5 CYPs.
+# Every other (node, enzyme/transporter) pair must still be un-grouped.
+MIGRATED_GROUPED = {
+    # yaml_file_name: {(node_name, 'enzymes'|'transporters', tag), ...}
+    "reference_man.yaml": {
+        ("liver", "enzymes", "CYP3A4"),
+        ("liver", "enzymes", "CYP2D6"),
+        ("liver", "enzymes", "CYP1A2"),
+        ("liver", "enzymes", "CYP2C9"),
+        ("liver", "enzymes", "CYP2E1"),
+    },
+}
 
-    Task 9 migrates reference_man.yaml liver enzymes + OATP1B1 to dict
-    syntax with correlation_group; that task will restrict this test's
-    scope (e.g., exclude nodes covered by the migration, or narrow to
-    the pediatric/non-migrated YAMLs). Today, pre-migration, every entry
-    in every physiology YAML is a bare scalar, so ``is None`` is strict
-    and correct.
+
+def test_scalar_enzyme_values_parse_to_none_group() -> None:
+    """Bare-scalar entries → Distribution with correlation_group=None.
+    Explicitly-migrated entries (Task 9 reference_man.yaml liver enzymes)
+    are allowed to have a string correlation_group; everything else must
+    be None. OATP1B1 on liver in reference_man.yaml is independent (Task 4
+    empirical decision), so it's NOT in MIGRATED_GROUPED.
     """
     for p in _yaml_paths():
         graph = build_from_yaml(p)
+        allowed_groups = MIGRATED_GROUPED.get(p.name, set())
         for name, node in graph.nodes.items():
             for tag, dist in node.enzymes.items():
-                assert dist.correlation_group is None, (
-                    f"{p.name}:{name}:enzyme:{tag} should have "
-                    f"correlation_group=None (pre-Task-9), got "
-                    f"{dist.correlation_group!r}"
-                )
+                if (name, "enzymes", tag) in allowed_groups:
+                    assert isinstance(dist.correlation_group, str), (
+                        f"{p.name}:{name}:enzyme:{tag} expected migrated "
+                        f"(non-None correlation_group), got None"
+                    )
+                else:
+                    assert dist.correlation_group is None, (
+                        f"{p.name}:{name}:enzyme:{tag} should have "
+                        f"correlation_group=None, got {dist.correlation_group!r}"
+                    )
             for tag, dist in node.transporters.items():
-                assert dist.correlation_group is None, (
-                    f"{p.name}:{name}:transporter:{tag} should have "
-                    f"correlation_group=None (pre-Task-9), got "
-                    f"{dist.correlation_group!r}"
-                )
+                if (name, "transporters", tag) in allowed_groups:
+                    assert isinstance(dist.correlation_group, str)
+                else:
+                    assert dist.correlation_group is None, (
+                        f"{p.name}:{name}:transporter:{tag} should have "
+                        f"correlation_group=None, got {dist.correlation_group!r}"
+                    )
