@@ -10,6 +10,37 @@ Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the *
 
 ---
 
+## 2026-04-22 — Achour 2021 Correlated Physiology Prior (P4.5 infrastructure)
+
+Spec: `docs/superpowers/specs/2026-04-22-achour-abundance-correlation-design.md`
+Plan: `docs/superpowers/plans/2026-04-22-achour-abundance-correlation.md`
+Branch: feat/achour-correlated-abundance (merged commit TBD).
+
+**Outcome:** Infrastructure landed. `Distribution` gains optional `correlation_group`
+field; new `sisyphus.physiology.correlation_registry` provides multivariate-lognormal
+sampling; `generate_physiology(rng=)` opt-in; `reference_man.yaml` liver node
+migrated to Achour 2021 CVs with OATP1B1 independent (mean_r=0.234 < 0.3
+threshold, empirical Achour Table S7 inclusion rule).
+
+**Gates passed:**
+- A — deterministic mean-path: Meta AAFE 2.6946 (within ±0.001 of headline 2.695)
+- B/B' — marginal CV fidelity ±5% (original Achour CVs + 0.5× healthy-proxy)
+- C/C' — joint log-corr fidelity ±0.05 on 10-20k sampler draws
+- D — cancer-bias sensitivity machinery (0.5× healthy-proxy supported)
+- E — CSV SHA256 provenance recorded in JSON artifact
+
+**Non-outcome:** SBC improvement is explicit Non-Goal (§1 spec). Downstream
+P4.5a spec will retrain the SBI amortizer with physiology sampling and
+re-measure SBC on the 52-cell grid.
+
+**Data artifacts:**
+- `data/physiology/achour2021_liver_abundance.csv` — 29 donors × 6 targets
+- `data/physiology/achour2021_correlation.json` — 5×5 log-correlation matrix for CYP3A4/2D6/1A2/2C9/2E1
+
+**Source:** Achour 2021 CPT 109:222-232 (PMC7839483, CC BY-NC 4.0).
+
+---
+
 ## 2026-04 (current session)
 
 ### V3 IV-Cmax methodology + ECM re-run + fup confound rule-out (2026-04-22)
