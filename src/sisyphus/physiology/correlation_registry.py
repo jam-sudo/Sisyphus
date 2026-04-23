@@ -76,6 +76,36 @@ def load_from_json(path: pathlib.Path) -> None:
     register(name, CorrelationSpec(members=members, log_corr_matrix=matrix, cvs=cvs))
 
 
+def assert_sampled(graph) -> None:  # type: BodyGraph; avoid circular import at module scope
+    """Fail loudly if any Distribution in the graph still carries a
+    non-None correlation_group (i.e., sampling was intended but forgotten).
+
+    The contract: ``_resample_correlated_abundances`` replaces every grouped
+    Distribution with a collapsed ``Distribution(mean=sampled, cv=0,
+    correlation_group=None)``. If this check fails after a call path that
+    should have sampled, an ``rng=`` argument was omitted.
+
+    Raises:
+        AssertionError: if any node has a Distribution with
+            ``correlation_group is not None``.
+    """
+    for node_name, node in graph.nodes.items():
+        for tag, dist in node.enzymes.items():
+            if dist.correlation_group is not None:
+                raise AssertionError(
+                    f"Node {node_name!r} enzyme {tag!r} still has "
+                    f"correlation_group={dist.correlation_group!r}. "
+                    f"Caller forgot to pass rng= to generate_physiology?"
+                )
+        for tag, dist in node.transporters.items():
+            if dist.correlation_group is not None:
+                raise AssertionError(
+                    f"Node {node_name!r} transporter {tag!r} still has "
+                    f"correlation_group={dist.correlation_group!r}. "
+                    f"Caller forgot to pass rng= to generate_physiology?"
+                )
+
+
 def sample_correlated(
     means: np.ndarray,
     cvs: np.ndarray,
