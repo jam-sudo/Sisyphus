@@ -41,6 +41,7 @@ class Distribution:
     mean: float
     cv: float = 0.0
     dist_type: str = "lognormal"
+    correlation_group: str | None = None
 
     _VALID_DIST_TYPES = frozenset({"lognormal", "normal", "uniform"})
 
