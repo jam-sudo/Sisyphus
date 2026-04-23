@@ -92,3 +92,85 @@ def test_column_stats_match_s7_reported(target: str) -> None:
     assert abs(cv_pct - rep["cv_pct"]) / rep["cv_pct"] < 0.02, (
         f"{target}: %CV {cv_pct:.2f} vs reported {rep['cv_pct']} (>2% drift)"
     )
+
+
+import hashlib
+import json
+
+import numpy as np
+
+JSON_PATH = ROOT / "data" / "physiology" / "achour2021_correlation.json"
+
+
+def _load_json() -> dict:
+    with JSON_PATH.open() as f:
+        return json.load(f)
+
+
+def test_json_exists() -> None:
+    assert JSON_PATH.exists()
+
+
+def test_json_name_and_members() -> None:
+    j = _load_json()
+    assert j["name"] == "liver_achour2021"
+    assert set(j["members"]).issubset({"CYP3A4", "CYP2D6", "CYP1A2", "CYP2C9", "CYP2E1", "OATP1B1"})
+    assert set(j["members"]).issuperset({"CYP3A4", "CYP2D6", "CYP1A2", "CYP2C9", "CYP2E1"})
+
+
+def test_json_n_donors_complete_meets_gate() -> None:
+    j = _load_json()
+    assert j["n_donors_complete"] >= 15, (
+        f"N_complete {j['n_donors_complete']} < 15 merge gate (spec §3.2)"
+    )
+
+
+def test_json_cv_vector_matches_members() -> None:
+    j = _load_json()
+    assert len(j["cv"]) == len(j["members"])
+    for v in j["cv"]:
+        assert 0 < v < 2.0
+
+
+def test_json_log_corr_matrix_square_symmetric_diag_one() -> None:
+    j = _load_json()
+    M = np.array(j["log_corr_matrix"])
+    N = len(j["members"])
+    assert M.shape == (N, N)
+    # Diagonal exactly 1
+    assert np.allclose(np.diag(M), 1.0, atol=1e-12)
+    # Symmetric
+    assert np.allclose(M, M.T, atol=1e-12)
+
+
+def test_json_log_corr_matrix_psd() -> None:
+    j = _load_json()
+    M = np.array(j["log_corr_matrix"])
+    eigvals = np.linalg.eigvalsh(M)
+    assert eigvals.min() >= -1e-9, f"Not PSD: min eig {eigvals.min()}"
+
+
+def test_json_oatp1b1_inclusion_decision_recorded() -> None:
+    j = _load_json()
+    decision = j["oatp1b1_inclusion"]["decision"]
+    assert decision in {"joined", "independent"}
+    r = j["oatp1b1_inclusion"]["mean_r_OATP_to_CYPs"]
+    assert -1.0 <= r <= 1.0
+
+
+def test_json_cyp2d6_bimodality_recorded() -> None:
+    j = _load_json()
+    assert "cyp2d6_bimodality" in j
+    assert "dip_statistic" in j["cyp2d6_bimodality"]
+
+
+def test_json_csv_checksum_matches() -> None:
+    """Data-artifact provenance: JSON's recorded CSV checksum matches the
+    committed CSV (Gate E)."""
+    j = _load_json()
+    expected = j["csv_sha256"]
+    actual = hashlib.sha256(CSV_PATH.read_bytes()).hexdigest()
+    assert actual == expected, (
+        f"CSV checksum mismatch. JSON has {expected}, CSV hashes to {actual}. "
+        "Re-run scripts/extract_achour2021_abundance.py to regenerate."
+    )
