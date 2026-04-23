@@ -259,13 +259,17 @@ def generate_physiology(
                 ef = enzyme_factor(
                     age_years, body_weight_kg, params["t_half"], params["decline_frac"]
                 )
-                new_enzymes[tag] = Distribution(enz.mean * ef, cv=enz.cv)
+                new_enzymes[tag] = Distribution(
+                    enz.mean * ef, cv=enz.cv, correlation_group=enz.correlation_group
+                )
             else:
                 # No ontogeny data for this enzyme tag — BW-scale only
-                new_enzymes[tag] = Distribution(enz.mean * bw_ratio, cv=enz.cv)
+                new_enzymes[tag] = Distribution(
+                    enz.mean * bw_ratio, cv=enz.cv, correlation_group=enz.correlation_group
+                )
 
         new_transporters: dict[str, Distribution] = {
-            tag: Distribution(tr.mean * bw_ratio, cv=tr.cv)
+            tag: Distribution(tr.mean * bw_ratio, cv=tr.cv, correlation_group=tr.correlation_group)
             for tag, tr in node.transporters.items()
         }
 
