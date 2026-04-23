@@ -3,16 +3,16 @@
   "spec_commit": "da0f080",
   "cycle_id": "2026Q2",
   "curation_date": "2026-04-22",
-  "curation_status": "PARTIAL (18 / 50)",
+  "curation_status": "PARTIAL (22 / 50)",
   "n_target": 50,
-  "n_admitted": 18,
+  "n_admitted": 22,
   "oatp1b1_substrate_count": 8,
   "oatp1b1_substrate_minimum": 3,
   "exclusion_inventory_source": "/tmp/n50_exclusion.txt (built by scripts/build_n50_exclusion.py on 2026-04-22)",
   "exclusion_inventory_sha256": "3acb38a29c83646e0f10c4a7ae478a18052ec2c9056fbc8df369aed3490aee83",
   "bsa_m2": 1.85,
   "bsa_rationale": "ICRP Reference Man (70 kg \u00d7 1.74 m) BSA. Spec \u00a79 Open Questions #1 resolved to 1.85. Used for all mg/m\u00b2 \u2192 mg conversions in this file.",
-  "methodology_notes": "Observed Cmax reported as mean \u00b1 SD when primary source uses arithmetic statistics; as geometric mean with 90% CI in notes when that is the primary-source convention. SD field is null for geometric-mean-only sources. 2026-04-22 seed expansion (commit pending): added paclitaxel, docetaxel, micafungin, benzylpenicillin, torsemide (5 OATP1B1 substrates). benzylpenicillin classified as iv_infusion duration 4 min (rather than iv_bolus) because the FDA label's 3-5 min push is physically a short zero-order input; V3.1 infusion path handles it correctly and matches the Cmax timing (400 mg/L at 5-6 min post-start). 2026-04-22 second expansion: added vimseltinib, nerandomilast, balcinrenone, tolebrutinib, zibotentan (5 non-OATP1B1 oral drugs). Cmax in nmol/L converted to mg/L using MW from PubChem: nerandomilast MW=449.0 g/mol (710 nmol/L x 449.0/1000 = 0.3188 mg/L); balcinrenone MW=399.4 g/mol (4602 nmol/L x 399.4/1000 = 1.838 mg/L). 2026-04-23 third expansion: added sulopenem, ensitrelvir, elafibranor, obicetrapib, mirdametinib (5 non-OATP1B1 oral drugs, mechanism-diverse: penem antibiotic + OAT3 substrate, oral 3CL antiviral, dual PPAR agonist, CETP inhibitor, MEK1/2 inhibitor). All Cmax values cross-validated against DailyMed (FDA labels) or PMC primary papers. Sulopenem/ensitrelvir doses reported as labeled-salt mass; Cmax is for active species. Mirdametinib dose 4 mg maps to BSA 1.85 m\u00b2 via GOMEKLI Table 1 (\u22651.50 m\u00b2 band), Cmax is steady-state per label Table 6.",
+  "methodology_notes": "Observed Cmax reported as mean \u00b1 SD when primary source uses arithmetic statistics; as geometric mean with 90% CI in notes when that is the primary-source convention. SD field is null for geometric-mean-only sources. 2026-04-22 seed expansion (commit pending): added paclitaxel, docetaxel, micafungin, benzylpenicillin, torsemide (5 OATP1B1 substrates). benzylpenicillin classified as iv_infusion duration 4 min (rather than iv_bolus) because the FDA label's 3-5 min push is physically a short zero-order input; V3.1 infusion path handles it correctly and matches the Cmax timing (400 mg/L at 5-6 min post-start). 2026-04-22 second expansion: added vimseltinib, nerandomilast, balcinrenone, tolebrutinib, zibotentan (5 non-OATP1B1 oral drugs). Cmax in nmol/L converted to mg/L using MW from PubChem: nerandomilast MW=449.0 g/mol (710 nmol/L x 449.0/1000 = 0.3188 mg/L); balcinrenone MW=399.4 g/mol (4602 nmol/L x 399.4/1000 = 1.838 mg/L). 2026-04-23 third expansion: added sulopenem, ensitrelvir, elafibranor, obicetrapib, mirdametinib (5 non-OATP1B1 oral drugs, mechanism-diverse: penem antibiotic + OAT3 substrate, oral 3CL antiviral, dual PPAR agonist, CETP inhibitor, MEK1/2 inhibitor). All Cmax values cross-validated against DailyMed (FDA labels) or PMC primary papers. Sulopenem/ensitrelvir doses reported as labeled-salt mass; Cmax is for active species. Mirdametinib dose 4 mg maps to BSA 1.85 m\u00b2 via GOMEKLI Table 1 (\u22651.50 m\u00b2 band), Cmax is steady-state per label Table 6. 2026-04-23 fourth expansion (18\u219222): added cefiderocol (IV, renal-cleared siderophore cephalosporin), eravacycline (IV, biliary-excretion fluorocycline), ampreloxetine (oral, CNS-BBB NRI, CYP1A2-primary), sepiapterin (oral, BH4 prodrug low-parent-Cmax regime). All 4 HV single-dose Phase 1 primary papers; PubChem InChIKey match with stereochemistry confirmed. Xanomeline candidate dropped from this chunk \u2014 FDA Integrated Review URL 404, Cobenfy DailyMed label has only steady-state Cmax.",
   "drugs": {
     "rifampin": {
       "status": "VERIFIED",
@@ -712,10 +712,170 @@
         "not_in_validation": true
       },
       "notes": "FDA NME approved 11 Feb 2025 for adult and pediatric (>=2y) NF1-associated plexiform neurofibromas. Mirdametinib (PD-0325901) is an allosteric MEK1/2 inhibitor. Cmax is steady-state (not single-dose); single-dose equivalent via accumulation ratio 1.1-1.9 would be ~100-170 ng/mL. Reporting ss per label convention; engine must handle steady-state or use single-dose approximation. Patient cohort (not HV) noted. Label explicitly states NOT an OATP1B1 substrate (only BCRP + P-gp), confirmed via DailyMed. Glucuronidation-dominant metabolism (UGT1A6 + UGT2B7) + CES contribution is a rare enzyme combination in the N50 and tests UGT coverage. SD from CV: 188 x 0.52 = 97.8 ng/mL = 0.0978 mg/L. SMILES + CID + formula + MW cross-validated against PubChem (InChIKey match with R-stereochemistry). URL verified 2026-04-23 (HTTP 200). Exclusion grep clean."
+    },
+    "cefiderocol": {
+      "status": "VERIFIED",
+      "smiles": "CC(C)(C(=O)O)O/N=C(\\C1=CSC(=N1)N)/C(=O)N[C@H]2[C@@H]3N(C2=O)C(=C(CS3)C[N+]4(CCCC4)CCNC(=O)C5=C(C(=C(C=C5)O)O)Cl)C(=O)[O-]",
+      "pubchem_cid": 77843966,
+      "molecular_formula": "C30H34ClN7O10S2",
+      "molecular_weight": 752.2,
+      "dose_mg": 2000.0,
+      "dose_original": "2000 mg IV 60-min infusion (Phase 1 SAD cohort, NOT label q8h clinical regimen which uses 2000 mg over 3 h).",
+      "dose_conversion_note": "Primary paper (Saisho 2018) uses 60-min IV infusion; label cUTI/HABP/VABP uses 3-h infusion. Shorter infusion yields higher Cmax; engine must match 60-min infusion to reproduce 156 \u00b5g/mL.",
+      "route": "iv_infusion",
+      "infusion_duration_min": 60.0,
+      "observed_cmax_mg_l": 156.0,
+      "observed_cmax_sd_mg_l": null,
+      "observed_cmax_cv": 0.079,
+      "patient_n": 6,
+      "oatp1b1_substrate": false,
+      "mechanism_tags": [
+        "siderophore_cephalosporin",
+        "beta_lactam",
+        "PBP_inhibitor",
+        "renal_clearance",
+        "iron_siderophore_bacterial_uptake",
+        "anti_infective"
+      ],
+      "source": {
+        "citation": "Saisho Y, Katsube T, White S, Fukase H, Shimada J. Pharmacokinetics, safety, and tolerability of cefiderocol, a novel siderophore cephalosporin for Gram-negative bacteria, in healthy subjects. Antimicrob Agents Chemother. 2018;62(3):e02163-17. PMCID: PMC5826143.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5826143/",
+        "doi": "10.1128/AAC.02163-17",
+        "table_ref": "Table 5 -- 'PK parameters for cefiderocol following single intravenous infusions of 100 to 2,000 mg'; 2000 mg 60-min IV infusion row, N=6 active: Cmax 156 (7.9%) \u00b5g/mL [geometric mean (geometric CV%)]; t1/2,z 2.74 h; Tmax median 1.0 h (range 1.0-1.0). Confirmed verbatim via PMC WebFetch 2026-04-23.",
+        "access_path": "primary_paper"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified -- 2019 FDA NME (Fetroja); flag for retrospective audit",
+        "not_in_validation": true
+      },
+      "notes": "Era caveat: FDA approved 2019 (not 2024-2026); admitted under the 'primary-source open-access + exclusion-clean' path rather than strict NME era. Exclusion-grep clean against /tmp/n50_exclusion.txt sha 3acb38a..., so contamination-free. Mechanism value: fills IV renal-cleared antibacterial + iron-siderophore bacterial uptake (completely novel transport route for N50). Host-side PK is cephalosporin-like; 83% renal excretion unchanged. Cmax reported as geometric mean with CV (not arithmetic); observed_cmax_sd_mg_l=null, cv=0.079 (7.9% geometric CV). MW 752 near engine AD threshold 800. SMILES + CID + formula + MW cross-validated against PubChem (InChIKey full match DBPPRLRVDVJOCL-FQRUVTKNSA-N). URL verified 2026-04-23 (HTTP 200). Zwitterionic, 58% plasma protein bound. Not an OATP1B1 substrate per label and Saisho 2018 (no hepatic uptake characterized)."
+    },
+    "eravacycline": {
+      "status": "VERIFIED",
+      "smiles": "CN(C)[C@H]1[C@@H]2C[C@@H]3CC4=C(C=C(C(=C4C(=C3C(=O)[C@@]2(C(=C(C1=O)C(=O)N)O)O)O)O)NC(=O)CN5CCCC5)F",
+      "pubchem_cid": 54726192,
+      "molecular_formula": "C27H31FN4O8",
+      "molecular_weight": 558.56,
+      "dose_mg": 70.0,
+      "dose_original": "1.0 mg/kg IV (body-weight banded); labeled clinical dose.",
+      "dose_conversion_note": "Sisyphus reference-man 70 kg x 1.0 mg/kg = 70 mg. SAD paper (Newman 2018) tabulates 1.0 mg/kg cohort as the second-from-highest (doses 0.1-3.0 mg/kg tested). 70 mg matches the approved Xerava 1 mg/kg q12h regimen.",
+      "route": "iv_infusion",
+      "infusion_duration_min": 30.0,
+      "observed_cmax_mg_l": 1.888,
+      "observed_cmax_sd_mg_l": null,
+      "observed_cmax_cv": 0.278,
+      "patient_n": 6,
+      "oatp1b1_substrate": false,
+      "mechanism_tags": [
+        "fluorocycline",
+        "tetracycline_class",
+        "ribosome_30S_inhibitor",
+        "biliary_excretion",
+        "hepatic_clearance",
+        "CYP3A4_substrate",
+        "FMO_substrate",
+        "anti_infective"
+      ],
+      "source": {
+        "citation": "Newman JV, Zhou J, Izmailyan S, Tsai L. Randomized, double-blind, placebo-controlled studies of the safety and pharmacokinetics of single and multiple ascending doses of eravacycline. Antimicrob Agents Chemother. 2018;62(11):e01174-18. PMCID: PMC6201080.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6201080/",
+        "doi": "10.1128/AAC.01174-18",
+        "table_ref": "Table 2 -- 'PK parameters after single ascending i.v. doses of eravacycline'; 1.0 mg/kg 30-min IV infusion row, N=6 active: AUC0-inf 5511.1 (21.3%) ng\u00b7h/mL, Cmax 1888.3 (27.8%) ng/mL, Tmax median 0.5 h (range 0.5-0.7), t1/2 20.2 (28.0%) h [mean (CV%)]. Confirmed verbatim via PMC WebFetch 2026-04-23. Whole-study N=56 single-dose HV.",
+        "access_path": "primary_paper"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified -- 2018 FDA NME (Xerava); flag for retrospective audit",
+        "not_in_validation": true
+      },
+      "notes": "Era caveat: FDA approved 2018 (not 2024-2026). Admitted via exclusion-clean path. Mechanism value: fills IV biliary-excretion mechanism (34% fecal parent-drug, 20% urine parent-drug per mass-balance paper PMC6395926); fluorocycline with CYP3A4 + FMO metabolism extends the enzyme ontology beyond existing N50 drugs. Cmax reported as arithmetic mean + CV (not SD); observed_cmax_sd_mg_l=null. Dose-proportional across SAD 0.1-3 mg/kg. Protein binding 79-90% (concentration-dependent). SMILES replaced from research-agent output to PubChem canonical isomeric SMILES (InChIKey AKLMFDDQCHURPW-ISIOAQNYSA-N) -- agent's SMILES gave a different InChIKey (stereochemistry error); corrected 2026-04-23. URL verified (HTTP 200). Label confirms NOT an OATP1B1 substrate."
+    },
+    "ampreloxetine": {
+      "status": "VERIFIED",
+      "smiles": "C1CNCCC1C2=CC=CC=C2COC3=C(C=C(C=C3F)F)F",
+      "pubchem_cid": 46189893,
+      "molecular_formula": "C18H18F3NO",
+      "molecular_weight": 321.3,
+      "dose_mg": 8.0,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "observed_cmax_mg_l": 0.00502,
+      "observed_cmax_sd_mg_l": 0.0014,
+      "observed_cmax_cv": 0.279,
+      "patient_n": 6,
+      "oatp1b1_substrate": false,
+      "mechanism_tags": [
+        "NET_inhibitor",
+        "norepinephrine_reuptake_inhibitor",
+        "CNS_BBB_permeable",
+        "CYP1A2_substrate",
+        "neurogenic_orthostatic_hypotension",
+        "selective_aminergic_reuptake"
+      ],
+      "source": {
+        "citation": "Bourdet DL, Tsuruda PR, Obedencio GP, Smith JAM. Pharmacokinetics of ampreloxetine, a norepinephrine reuptake inhibitor, in healthy subjects and adults with attention-deficit/hyperactivity disorder or fibromyalgia pain. Clin Pharmacokinet. 2021;60(1):121-131. PMCID: PMC7808980.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7808980/",
+        "doi": "10.1007/s40262-020-00918-7",
+        "table_ref": "Table 1 -- 'Summary of mean (standard deviation [SD]) plasma pharmacokinetic parameters for ampreloxetine: single-ascending dose study'; 8 mg oral single-dose fasted row, N=6 active: Cmax 5.02 (1.4) ng/mL [mean (SD)], Tmax median 12 h, t1/2 34.5 (12.8) h. Phase I double-blind randomized placebo-controlled SAD in healthy male+female volunteers. Confirmed verbatim via PMC WebFetch 2026-04-23.",
+        "access_path": "primary_paper"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified -- non-NME (Phase 3 NOH primary endpoint failure 2021 per Theravance); flag for retrospective audit",
+        "not_in_validation": true
+      },
+      "notes": "Era caveat: 2021 primary paper (not 2024-2026 strictly); admitted under exclusion-clean + mechanism-value path. Never FDA-approved (Phase 3 neurogenic orthostatic hypotension endpoint failure 2021), but well-characterized HV PK. Fills CNS-penetrant + CYP1A2-primary metabolism gap (no CYP1A2-dominant drug in existing N50). Selective NET inhibitor (no CYP2D6 involvement per popPK analysis); sex and smoking are CYP1A2-consistent covariates. Long half-life ~34 h; late Tmax 12 h stresses engine GI transit / slow-absorption model. Arithmetic mean (SD) convention; cv derived as 1.4/5.02 = 0.279. URL verified (HTTP 200). SMILES + CID + formula + MW cross-validated against PubChem (InChIKey full match TZIALEBTHQWNAO-UHFFFAOYSA-N; no stereocenter)."
+    },
+    "sepiapterin": {
+      "status": "VERIFIED",
+      "smiles": "C[C@@H](C(=O)C1=NC2=C(NC1)N=C(NC2=O)N)O",
+      "pubchem_cid": 135398579,
+      "molecular_formula": "C9H11N5O3",
+      "molecular_weight": 237.22,
+      "dose_mg": 4200.0,
+      "dose_original": "60 mg/kg oral sachet (fed), Cohort 3 Phase 1.",
+      "dose_conversion_note": "Dose banded per mg/kg in Gao 2024 Cohort 3 (non-Japanese, fed). Sisyphus reference-man 70 kg x 60 mg/kg = 4200 mg. Sepiapterin is a prodrug rapidly reduced by AKR1 enzymes in enterocytes + liver to tetrahydrobiopterin (BH4); circulating parent is <1% of BH4 AUC. observed_cmax_mg_l below is for PARENT sepiapterin (not BH4).",
+      "route": "oral",
+      "infusion_duration_min": null,
+      "observed_cmax_mg_l": 0.0024,
+      "observed_cmax_sd_mg_l": 0.001,
+      "observed_cmax_cv": 0.417,
+      "patient_n": 6,
+      "oatp1b1_substrate": false,
+      "mechanism_tags": [
+        "BH4_prodrug",
+        "phenylketonuria_therapy",
+        "GI_AKR1_reduction",
+        "hepatic_first_pass",
+        "low_oral_bioavailability_parent",
+        "orphan_drug"
+      ],
+      "source": {
+        "citation": "Gao Y, Shi H, Lin CJ, Rosen O, Smith N, Wang X. A Phase 1 study to assess the pharmacokinetics, food effect, safety, and tolerability of sepiapterin in healthy Japanese and non-Japanese participants. Pharmaceuticals (Basel). 2024;17(11):1411. PMCID: PMC11597218.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11597218/",
+        "doi": "10.3390/ph17111411",
+        "table_ref": "Table 3 -- 'Mean (SD) of BH4 and sepiapterin PK parameters in non-Japanese and Japanese participants'; Cohort 3 60 mg/kg fed non-Japanese single-dose row, N=6: sepiapterin Cmax 2.4 (1) ng/mL, Tmax median 2 h (range 1.0-4.0). BH4 Cmax 403 (81) ng/mL same cohort. Confirmed verbatim via PMC WebFetch 2026-04-23.",
+        "access_path": "primary_paper"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified -- 2025 PKU NME (Sephience EMA, PTC-923 FDA pending); aliases checked include PTC-923, CNSA-001, Sephience, Javygtor, all 0 exclusion hits. Flag for retrospective audit.",
+        "not_in_validation": true
+      },
+      "notes": "Era meets spec (2024 primary paper + 2025 EMA approval). Fills prodrug-kinetics + very-low-parent-Cmax regime (<0.01 mg/L parent; BH4 active metabolite is 170x higher). Engine caveat: modeling parent Cmax is inherently difficult without a prodrug-conversion route; this drug is a stress test for pre-systemic clearance estimation. AAFE against parent will reflect engine's inability to model AKR1-mediated prodrug reduction. Observed_cmax_sd_mg_l=0.001 from Table 3 '(1)' SD convention (consistent with BH4 row where (81) is clearly SD not CV). SMILES replaced from research-agent output to PubChem canonical isomeric SMILES (InChIKey VPVOXUSPXFPWBN-VKHMYHEASA-N with correct R-stereochemistry at the chiral C) -- agent's SMILES had stereo mismatch; corrected 2026-04-23. URL verified (HTTP 200)."
     }
   },
   "forward_curation_plan": {
-    "target_remaining": 32,
+    "target_remaining": 28,
     "oatp1b1_additional_candidates": [
       "paclitaxel (OATP1B3 + OATP1B1, rich PK literature, IV)",
       "docetaxel (similar to paclitaxel)",
