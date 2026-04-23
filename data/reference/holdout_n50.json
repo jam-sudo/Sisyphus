@@ -3,16 +3,16 @@
   "spec_commit": "da0f080",
   "cycle_id": "2026Q2",
   "curation_date": "2026-04-22",
-  "curation_status": "PARTIAL (22 / 50)",
+  "curation_status": "PARTIAL (26 / 50)",
   "n_target": 50,
-  "n_admitted": 22,
+  "n_admitted": 26,
   "oatp1b1_substrate_count": 8,
   "oatp1b1_substrate_minimum": 3,
   "exclusion_inventory_source": "/tmp/n50_exclusion.txt (built by scripts/build_n50_exclusion.py on 2026-04-22)",
   "exclusion_inventory_sha256": "3acb38a29c83646e0f10c4a7ae478a18052ec2c9056fbc8df369aed3490aee83",
   "bsa_m2": 1.85,
   "bsa_rationale": "ICRP Reference Man (70 kg \u00d7 1.74 m) BSA. Spec \u00a79 Open Questions #1 resolved to 1.85. Used for all mg/m\u00b2 \u2192 mg conversions in this file.",
-  "methodology_notes": "Observed Cmax reported as mean \u00b1 SD when primary source uses arithmetic statistics; as geometric mean with 90% CI in notes when that is the primary-source convention. SD field is null for geometric-mean-only sources. 2026-04-22 seed expansion (commit pending): added paclitaxel, docetaxel, micafungin, benzylpenicillin, torsemide (5 OATP1B1 substrates). benzylpenicillin classified as iv_infusion duration 4 min (rather than iv_bolus) because the FDA label's 3-5 min push is physically a short zero-order input; V3.1 infusion path handles it correctly and matches the Cmax timing (400 mg/L at 5-6 min post-start). 2026-04-22 second expansion: added vimseltinib, nerandomilast, balcinrenone, tolebrutinib, zibotentan (5 non-OATP1B1 oral drugs). Cmax in nmol/L converted to mg/L using MW from PubChem: nerandomilast MW=449.0 g/mol (710 nmol/L x 449.0/1000 = 0.3188 mg/L); balcinrenone MW=399.4 g/mol (4602 nmol/L x 399.4/1000 = 1.838 mg/L). 2026-04-23 third expansion: added sulopenem, ensitrelvir, elafibranor, obicetrapib, mirdametinib (5 non-OATP1B1 oral drugs, mechanism-diverse: penem antibiotic + OAT3 substrate, oral 3CL antiviral, dual PPAR agonist, CETP inhibitor, MEK1/2 inhibitor). All Cmax values cross-validated against DailyMed (FDA labels) or PMC primary papers. Sulopenem/ensitrelvir doses reported as labeled-salt mass; Cmax is for active species. Mirdametinib dose 4 mg maps to BSA 1.85 m\u00b2 via GOMEKLI Table 1 (\u22651.50 m\u00b2 band), Cmax is steady-state per label Table 6. 2026-04-23 fourth expansion (18\u219222): added cefiderocol (IV, renal-cleared siderophore cephalosporin), eravacycline (IV, biliary-excretion fluorocycline), ampreloxetine (oral, CNS-BBB NRI, CYP1A2-primary), sepiapterin (oral, BH4 prodrug low-parent-Cmax regime). All 4 HV single-dose Phase 1 primary papers; PubChem InChIKey match with stereochemistry confirmed. Xanomeline candidate dropped from this chunk \u2014 FDA Integrated Review URL 404, Cobenfy DailyMed label has only steady-state Cmax.",
+  "methodology_notes": "Observed Cmax reported as mean \u00b1 SD when primary source uses arithmetic statistics; as geometric mean with 90% CI in notes when that is the primary-source convention. SD field is null for geometric-mean-only sources. 2026-04-22 seed expansion (commit pending): added paclitaxel, docetaxel, micafungin, benzylpenicillin, torsemide (5 OATP1B1 substrates). benzylpenicillin classified as iv_infusion duration 4 min (rather than iv_bolus) because the FDA label's 3-5 min push is physically a short zero-order input; V3.1 infusion path handles it correctly and matches the Cmax timing (400 mg/L at 5-6 min post-start). 2026-04-22 second expansion: added vimseltinib, nerandomilast, balcinrenone, tolebrutinib, zibotentan (5 non-OATP1B1 oral drugs). Cmax in nmol/L converted to mg/L using MW from PubChem: nerandomilast MW=449.0 g/mol (710 nmol/L x 449.0/1000 = 0.3188 mg/L); balcinrenone MW=399.4 g/mol (4602 nmol/L x 399.4/1000 = 1.838 mg/L). 2026-04-23 third expansion: added sulopenem, ensitrelvir, elafibranor, obicetrapib, mirdametinib (5 non-OATP1B1 oral drugs, mechanism-diverse: penem antibiotic + OAT3 substrate, oral 3CL antiviral, dual PPAR agonist, CETP inhibitor, MEK1/2 inhibitor). All Cmax values cross-validated against DailyMed (FDA labels) or PMC primary papers. Sulopenem/ensitrelvir doses reported as labeled-salt mass; Cmax is for active species. Mirdametinib dose 4 mg maps to BSA 1.85 m\u00b2 via GOMEKLI Table 1 (\u22651.50 m\u00b2 band), Cmax is steady-state per label Table 6. 2026-04-23 fourth expansion (18\u219222): added cefiderocol (IV, renal-cleared siderophore cephalosporin), eravacycline (IV, biliary-excretion fluorocycline), ampreloxetine (oral, CNS-BBB NRI, CYP1A2-primary), sepiapterin (oral, BH4 prodrug low-parent-Cmax regime). All 4 HV single-dose Phase 1 primary papers; PubChem InChIKey match with stereochemistry confirmed. Xanomeline candidate dropped from this chunk \u2014 FDA Integrated Review URL 404, Cobenfy DailyMed label has only steady-state Cmax. 2026-04-23 fifth expansion (22\u219226): added ulotaront (oral, TAAR1/5-HT1A agonist first-in-class antipsychotic + CYP2D6 fm=0.53), oliceridine (IV bolus, G-protein-biased mu-opioid + CYP3A4/CYP2D6), pitolisant (oral, H3 inverse agonist + CYP2D6-dominant), remdesivir (IV, phosphoramidate nucleotide prodrug + CES1/CYP3A4; 2020 NME). Fills CYP2D6-dominant metabolism class (previously empty) with 3 mechanistically-distinct drugs, opioid class (previously empty) with 1 drug, and adds 2020-era IV NME. All 4 single-dose HV PMC open-access; InChIKey full match incl. stereo for all (no SMILES substitution needed). Xanomeline re-attempt remains deferred.",
   "drugs": {
     "rifampin": {
       "status": "VERIFIED",
@@ -872,10 +872,166 @@
         "not_in_validation": true
       },
       "notes": "Era meets spec (2024 primary paper + 2025 EMA approval). Fills prodrug-kinetics + very-low-parent-Cmax regime (<0.01 mg/L parent; BH4 active metabolite is 170x higher). Engine caveat: modeling parent Cmax is inherently difficult without a prodrug-conversion route; this drug is a stress test for pre-systemic clearance estimation. AAFE against parent will reflect engine's inability to model AKR1-mediated prodrug reduction. Observed_cmax_sd_mg_l=0.001 from Table 3 '(1)' SD convention (consistent with BH4 row where (81) is clearly SD not CV). SMILES replaced from research-agent output to PubChem canonical isomeric SMILES (InChIKey VPVOXUSPXFPWBN-VKHMYHEASA-N with correct R-stereochemistry at the chiral C) -- agent's SMILES had stereo mismatch; corrected 2026-04-23. URL verified (HTTP 200)."
+    },
+    "ulotaront": {
+      "status": "VERIFIED",
+      "smiles": "CNC[C@H]1C2=C(CCO1)C=CS2",
+      "pubchem_cid": 89532783,
+      "molecular_formula": "C9H13NOS",
+      "molecular_weight": 183.27,
+      "dose_mg": 25.0,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "observed_cmax_mg_l": 0.0879,
+      "observed_cmax_sd_mg_l": null,
+      "observed_cmax_cv": 0.216,
+      "patient_n": 24,
+      "oatp1b1_substrate": false,
+      "mechanism_tags": [
+        "TAAR1_agonist",
+        "5-HT1A_agonist",
+        "CYP2D6_substrate",
+        "CYP2D6_dominant_metabolism",
+        "antipsychotic_first_in_class",
+        "CNS_penetrant"
+      ],
+      "source": {
+        "citation": "Tsai M, Chen L, Galluppi GR, Peng Y, Hopkins SC, Koblan KS. A Phase I, Open-Label, Fixed Sequence Study to Investigate the Effect of Cytochrome P450 2D6 Inhibition on the Pharmacokinetics of Ulotaront in Healthy Subjects. Clin Pharmacokinet. 2023;62(12):1749-1762. PMCID: PMC10684410. PMID 37882999.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10684410/",
+        "doi": "10.1007/s40262-023-01317-4",
+        "table_ref": "Table 1 -- 'Plasma pharmacokinetic parameters of ulotaront'; reference arm '25 mg ulotaront alone (reference) [N = 24]', Cmax [ng/mL] 87.9 (21.6) [geometric mean (CV%)], Tmax median 2.00 h (range 1.00-4.00). Day 1 baseline before paroxetine co-administration; all 24 subjects are CYP2D6 normal metabolizers. Verified verbatim via PMC WebFetch 2026-04-23.",
+        "access_path": "primary_paper"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified -- ulotaront (SEP-363856) not FDA-approved (Sumitomo DIAMOND Phase 3 schizophrenia trial negative 2023); still in development for other indications 2024-2026. Aliases checked: ulotaront, SEP-363856 -- 0 exclusion hits.",
+        "not_in_validation": true
+      },
+      "notes": "Fills TWO previously-empty N50 classes: (1) CYP2D6-dominant metabolism (fm_CYP2D6 = 0.53 per Tsai 2023 Section 3.3); (2) antipsychotic / novel CNS mass-action target (first-in-class TAAR1 agonist). Observed_cmax_mg_l = 87.9 ng/mL = 0.0879 mg/L. SD null because paper reports geometric mean with geometric CV only. Era caveat: compound unlikely to reach FDA approval for schizophrenia (Phase 3 failure 2023) but PK profile is robustly measured; admit on exclusion-clean + mechanism-value path. SMILES cross-validated against PubChem CID 89532783 (InChIKey full match ABDDQTDRAHXHOC-QMMMGPOBSA-N with R-stereochemistry at the benzylic C). URL verified (HTTP 200). Exclusion grep clean."
+    },
+    "oliceridine": {
+      "status": "VERIFIED",
+      "smiles": "COC1=C(SC=C1)CNCC[C@]2(CCOC3(C2)CCCC3)C4=CC=CC=N4",
+      "pubchem_cid": 66553195,
+      "molecular_formula": "C22H30N2O2S",
+      "molecular_weight": 386.55,
+      "dose_mg": 1.0,
+      "dose_original": "1 mg IV bolus over 2 minutes (renal-study HV control arm); labeled clinical loading dose 1.5 mg IV per Olinvyk label.",
+      "route": "iv_infusion",
+      "infusion_duration_min": 2.0,
+      "observed_cmax_mg_l": 0.00897,
+      "observed_cmax_sd_mg_l": 0.00195,
+      "observed_cmax_cv": 0.217,
+      "patient_n": 8,
+      "oatp1b1_substrate": false,
+      "mechanism_tags": [
+        "mu_opioid_receptor_agonist",
+        "G_protein_biased_agonist",
+        "CYP3A4_substrate",
+        "CYP2D6_substrate",
+        "analgesic",
+        "2020_FDA_NME"
+      ],
+      "source": {
+        "citation": "Nafziger AN, Arscott KA, Cochrane K, Skobieranda F, Burt DA, Fossler MJ. The Influence of Renal or Hepatic Impairment on the Pharmacokinetics, Safety, and Tolerability of Oliceridine. Clin Pharmacol Drug Dev. 2020;9(5):639-650. PMCID: PMC7383509. PMID 31697049.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7383509/",
+        "doi": "10.1002/cpdd.750",
+        "table_ref": "Table 2 -- healthy control arm of the renal study, single 1 mg IV oliceridine over 2 min, N=8: Cmax 8.97 (1.95) ng/mL arithmetic mean (SD); geometric mean 8.79 (22.4%) (CV%); Tmax median 0.25 h (range 0.25-0.25); AUC0-t 18.0 (3.14) ng\u00b7h/mL. Verified verbatim via PMC WebFetch 2026-04-23.",
+        "access_path": "primary_paper"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified -- 2020 FDA NME (Olinvyk, Trevena). Aliases checked: oliceridine, Olinvyk, TRV-130, TRV130 -- 0 exclusion hits.",
+        "not_in_validation": true
+      },
+      "notes": "Fills previously-empty opioid / mu-agonist class. First G-protein-biased mu-opioid FDA-approved (Jul 2020). HV control arm of a renal-impairment Phase 1 (non-pristine-HV but clinically healthy adults per enrollment criteria). Arithmetic mean 8.97 ng/mL = 0.00897 mg/L; SD 1.95 ng/mL = 0.00195 mg/L. Tmax 0.25 h = end-of-2-min-infusion peak. CYP3A4 + CYP2D6 dual substrate per FDA label. Era caveat: 2020 NME (not strict 2024-2026). SMILES cross-validated against PubChem CID 66553195 (InChIKey full match DMNOVGJWPASQDL-OAQYLSRUSA-N with [C@] at spirocyclic quaternary carbon). URL verified (HTTP 200)."
+    },
+    "pitolisant": {
+      "status": "VERIFIED",
+      "smiles": "C1CCN(CC1)CCCOCCCC2=CC=C(C=C2)Cl",
+      "pubchem_cid": 9948102,
+      "molecular_formula": "C17H26ClNO",
+      "molecular_weight": 295.85,
+      "dose_mg": 35.6,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "observed_cmax_mg_l": 0.0545,
+      "observed_cmax_sd_mg_l": 0.0277,
+      "observed_cmax_cv": 0.508,
+      "patient_n": 40,
+      "oatp1b1_substrate": false,
+      "mechanism_tags": [
+        "H3_receptor_inverse_agonist",
+        "CYP2D6_dominant_metabolism",
+        "CYP3A4_secondary",
+        "CNS_penetrant",
+        "wake_promoting",
+        "narcolepsy_cataplexy_therapy",
+        "2019_FDA_NME"
+      ],
+      "source": {
+        "citation": "Setnik B, McDonnell M, Mills C, Scart-Gres C, Robert P, Dayno JM, Schwartz JC. Evaluation of the abuse potential of pitolisant, a selective H3-receptor antagonist/inverse agonist, for the treatment of adult patients with narcolepsy with or without cataplexy. Sleep. 2020;43(4):zsz252. PMCID: PMC7157189. PMID 31626696.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7157189/",
+        "doi": "10.1093/sleep/zsz252",
+        "table_ref": "Pharmacokinetic parameters subsection of Results: 'Mean (standard deviation [SD]) Cmax for pitolisant 35.6 mg was 54.5 (27.7) ng/mL and mean (SD) AUC0-last was 501.2 (308.4) ng-hr/mL'; median Tmax 3.0 h; N=40 in the PK analysis population (single oral 35.6 mg dose during treatment phase). Verified verbatim via PMC WebFetch 2026-04-23.",
+        "access_path": "primary_paper"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified -- 2019 FDA NME (Wakix, Harmony Biosciences). Aliases checked: pitolisant, Wakix, BF2.649 -- 0 exclusion hits.",
+        "not_in_validation": true
+      },
+      "notes": "Fills CYP2D6-dominant class further (fm_CYP2D6 approx 0.70 per Wakix DailyMed: Cmax 2.7x higher in CYP2D6 PMs vs NMs). Different mechanism than ulotaront (H3 inverse agonist vs TAAR1 agonist) -- stresses engine CYP2D6 prediction along independent pharmacophore axes. Population caveat: Setnik 2019 Sleep study enrolled 40 'nondependent recreational stimulant users' (healthy otherwise) for abuse-potential assessment -- slightly higher-variance than pristine HV; hence CV 50.8% vs typical 20-30%. Arithmetic mean (SD) convention. Era caveat: 2019 NME + 2020 primary paper (not strict 2024-2026). SMILES cross-validated against PubChem CID 9948102 (InChIKey full match NNACHAUCXXVJSP-UHFFFAOYSA-N; no stereocenters). URL verified (HTTP 200)."
+    },
+    "remdesivir": {
+      "status": "VERIFIED",
+      "smiles": "CCC(CC)COC(=O)[C@H](C)N[P@](=O)(OC[C@@H]1[C@H]([C@H]([C@](O1)(C#N)C2=CC=C3N2N=CN=C3N)O)O)OC4=CC=CC=C4",
+      "pubchem_cid": 121304016,
+      "molecular_formula": "C27H35N6O8P",
+      "molecular_weight": 602.58,
+      "dose_mg": 200.0,
+      "dose_original": "200 mg IV infusion over 30 min (Day 1 loading dose per FDA-approved dosing scheme; maintenance is 100 mg QD).",
+      "route": "iv_infusion",
+      "infusion_duration_min": 30.0,
+      "observed_cmax_mg_l": 4.38,
+      "observed_cmax_sd_mg_l": null,
+      "observed_cmax_cv": 0.235,
+      "patient_n": 28,
+      "oatp1b1_substrate": false,
+      "mechanism_tags": [
+        "phosphoramidate_prodrug",
+        "nucleotide_analog",
+        "RdRp_inhibitor",
+        "CES1_substrate",
+        "CYP3A4_substrate",
+        "antiviral_SARS_CoV2",
+        "2020_FDA_NME"
+      ],
+      "source": {
+        "citation": "Humeniuk R, Mathias A, Kirby BJ, Lutz JD, Cao H, Osinusi A, Babusis D, Porter D, Wei X, Ling J, Reddy YS, German P. Pharmacokinetic, Pharmacodynamic, and Drug-Interaction Profile of Remdesivir, a SARS-CoV-2 Replication Inhibitor. Clin Pharmacokinet. 2021;60(5):569-583. PMCID: PMC8007387. PMID 33782830.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8007387/",
+        "doi": "10.1007/s40262-021-00984-5",
+        "table_ref": "Table 3 -- 'Pharmacokinetic parameters of RDV and its metabolites following single or multiple doses of RDV in healthy participants'; Single RDV 200 mg Day 1 IV 30-min infusion column, N=28: parent remdesivir Cmax 4380 (23.5%) ng/mL [geometric mean (%CV)], Tmax median 0.67 h (quartiles 0.25, 0.68), AUC0-24 2860 (18.6%) h\u00b7ng/mL. Healthy participants per 'randomized, blinded, placebo-controlled, phase I study in healthy participants' methods. Verified verbatim via PMC WebFetch 2026-04-23.",
+        "access_path": "primary_paper"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified -- 2020 FDA NME (Veklury, Gilead). Aliases checked: remdesivir, Veklury, GS-5734 -- 0 exclusion hits.",
+        "not_in_validation": true
+      },
+      "notes": "Fills 2020-era IV NME slot with novel phosphoramidate chemistry (only N50 drug with chiral P). Parent remdesivir is a prodrug rapidly hydrolyzed by CES1 (plasma) + CYP3A4 (hepatic) to GS-704277 (alanyl), then dephosphorylated to GS-441524 (nucleoside); intracellular triphosphate GS-443902 is the active species. Per precedent (irinotecan parent, sepiapterin parent), N50 evaluates parent Cmax; metabolite modeling out-of-scope. 200 mg Day 1 IV 30-min infusion is the labeled loading dose. Geometric mean Cmax 4380 ng/mL = 4.38 mg/L, CV 23.5%; SD null (geometric convention). Era caveat: 2020 NME (not strict 2024-2026). SMILES cross-validated against PubChem CID 121304016 (InChIKey full match RWWYLEGWBNMMLJ-YSOARWBDSA-N including chiral P and four chiral C centers). URL verified (HTTP 200)."
     }
   },
   "forward_curation_plan": {
-    "target_remaining": 28,
+    "target_remaining": 24,
     "oatp1b1_additional_candidates": [
       "paclitaxel (OATP1B3 + OATP1B1, rich PK literature, IV)",
       "docetaxel (similar to paclitaxel)",
