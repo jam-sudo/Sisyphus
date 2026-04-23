@@ -50,6 +50,14 @@ def test_csv_has_29_donor_rows() -> None:
     assert len(rows) == 29
 
 
+def test_csv_donor_ids_are_unique() -> None:
+    """Guard against a transcription mistake that duplicates one donor and
+    drops another — row count alone wouldn't catch this."""
+    rows = _load_csv()
+    ids = [r["donor_id"] for r in rows]
+    assert len(set(ids)) == 29, f"Duplicate donor ids: {ids}"
+
+
 def test_csv_columns_match_expected() -> None:
     with CSV_PATH.open() as f:
         header = f.readline().strip().split(",")
