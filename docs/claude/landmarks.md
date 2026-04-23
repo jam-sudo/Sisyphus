@@ -63,8 +63,14 @@ Top-level [CLAUDE.md](../../CLAUDE.md) is for orientation. This file is the file
 **Transporters / physiology / SBI:**
 - `transporters/oatp1b1.json` — 5 statin Jmax/Km (Phase 2A).
 - `physiology/reference_man.yaml` — 34-node whole-body PBPK graph.
+- `physiology/achour2021_liver_abundance.csv` — 29-donor × 6-target liver abundance (Achour 2021 Table S7, CC BY-NC).
+- `physiology/achour2021_correlation.json` — log-space correlation matrix + CVs for correlation_group "liver_achour2021".
 - `sbi/populations.json` — Track C1 population registry.
 - `sbi/method_routing.json` — per-drug TDM method routing (production).
+
+## Physiology (`src/sisyphus/physiology/`)
+
+- `correlation_registry.py` — CorrelationSpec, sample_correlated, assert_sampled, load_from_json.
 
 ## Engine (`src/sisyphus/engine/`)
 
@@ -105,6 +111,7 @@ Top-level [CLAUDE.md](../../CLAUDE.md) is for orientation. This file is the file
 - `scripts/sbi_compare_ibis.py` — real-data SBI vs IBIS.
 - `scripts/sbi_generate_continuous_data.py` + `sbi_train_continuous_hierarchical.py` — P4 continuous data gen + training.
 - `scripts/probe_oatp_phase2a_per_drug.py`, `sweep_oatp_abundance.py`, `validate_oatp_phase2a.py` — OATP Phase 2A diagnostics.
+- `scripts/extract_achour2021_abundance.py` — regenerates CSV + JSON from embedded PDF transcription.
 
 ## Canonical artifact cross-references (per-topic)
 

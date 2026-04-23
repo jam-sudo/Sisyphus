@@ -36,11 +36,16 @@ class Distribution:
         cv: Coefficient of variation (σ / μ).  0.0 means deterministic.
         dist_type: Distribution family — ``"lognormal"`` (default),
             ``"normal"``, or ``"uniform"``.
+        correlation_group: Optional group tag for joint multivariate sampling.
+            Distributions sharing a group label are sampled together by
+            ``sisyphus.physiology.correlation_registry.sample_correlated``.
+            ``None`` (default) means independent sampling.
     """
 
     mean: float
     cv: float = 0.0
     dist_type: str = "lognormal"
+    correlation_group: str | None = None
 
     _VALID_DIST_TYPES = frozenset({"lognormal", "normal", "uniform"})
 
