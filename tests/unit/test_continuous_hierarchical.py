@@ -5,7 +5,9 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from sisyphus.sbi.multi_drug import (
+pytest.importorskip("torch")
+
+from sisyphus.sbi.multi_drug import (  # noqa: E402
     pack_observation_continuous,
     stack_training_pairs_continuous,
 )

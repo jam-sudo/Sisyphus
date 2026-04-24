@@ -12,7 +12,9 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from sisyphus.sbi.multi_drug import (
+pytest.importorskip("torch")
+
+from sisyphus.sbi.multi_drug import (  # noqa: E402
     DRUG_FEATURE_NAMES,
     DrugSpec,
     HierarchicalMultiDrugSimulator,

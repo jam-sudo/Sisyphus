@@ -14,7 +14,7 @@ import pytest
 
 import sisyphus.engine.flux  # noqa: F401 — register flux specs
 from sisyphus.core import Distribution, DrugOnGraph, SimResult
-from sisyphus.engine.compiler import ODECompiler, ResolvedParams
+from sisyphus.engine.compiler import CompiledODE, ODECompiler, ResolvedParams
 from sisyphus.engine.solver import solve
 from sisyphus.graph.body import BodyGraph
 from sisyphus.graph.types import ClearanceEdge, FlowEdge, Node

@@ -2,6 +2,8 @@
 
 **Graph-based whole-body PBPK simulation with native uncertainty propagation**
 
+[![CI](https://github.com/jam-sudo/Sisyphus/actions/workflows/ci.yml/badge.svg)](https://github.com/jam-sudo/Sisyphus/actions/workflows/ci.yml)
+
 [Methodology](#methodology) &middot; [Quickstart](#quickstart) &middot; [Validation](#validation) &middot; [Architecture](#architecture) &middot; [Limitations](#limitations)
 
 ---
