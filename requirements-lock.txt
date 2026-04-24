@@ -3,7 +3,7 @@ iniconfig==2.3.0
 joblib==1.5.3
 lightgbm==4.6.0
 numpy==2.2.6
-nvidia-nccl-cu12==2.30.4
+nvidia-nccl-cu12==2.30.4 ; platform_system == "Linux"
 packaging==26.1
 pillow==12.2.0
 pluggy==1.6.0

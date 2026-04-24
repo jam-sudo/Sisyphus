@@ -19,6 +19,16 @@ pip install -e '.[ml,chem,dev]'
 
 Transitive versions float within `pyproject.toml` constraints. Useful for local experimentation; not recommended for reproducing benchmark numbers.
 
+### Optional: SBI (Simulation-Based Inference)
+
+SBI training + TDM dispatching requires torch + sbi + nflows. These are NOT in `requirements-lock.txt` (would add ~1 GB to CI install). Install the `[sbi]` extra separately if you need to run SBI features:
+
+```bash
+pip install -e '.[sbi]'
+```
+
+Without the `[sbi]` extra, `pytest.importorskip("torch")` cleanly skips SBI test modules. Non-SBI code paths (engine, ML, pipeline, TDM non-SBI methods) work without torch.
+
 ## Regenerating `requirements-lock.txt`
 
 Run from repository root:
@@ -56,3 +66,11 @@ If `pip install rdkit` fails on a non-standard platform:
 ## Numpy 2.x
 
 Lockfile pins `numpy==2.2.6`. Sisyphus is compatible with numpy 2.x (no deprecated `np.bool`/`np.int`/`np.float` usage). If future code needs numpy 1.x behavior, pin `numpy<2` in `pyproject.toml` and regenerate the lockfile.
+
+## Platform markers
+
+`requirements-lock.txt` is generated on Linux. Some entries are Linux-only:
+
+- `nvidia-nccl-cu12` (xgboost GPU dep): marked `; platform_system == "Linux"`. Skipped on macOS/Windows installs.
+
+If you regenerate the lockfile on a different platform, verify markers are preserved by the pip version you use. Plain `pip freeze` drops markers; if you need cross-platform guarantees use `pip-compile` (pip-tools) or `uv pip compile` instead.
