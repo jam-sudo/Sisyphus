@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 
 import numpy as np
 
-from sisyphus.validation.metrics import aafe, pct_within_n_fold
+from sisyphus.validation.metrics import aafe, pct_within_n_fold, pi_coverage
 from sisyphus.validation.reference import load_reference
 
 logger = logging.getLogger(__name__)
@@ -71,7 +71,14 @@ class BenchmarkResult:
         aafe_in_domain: AAFE for in-domain drugs only.
         pct_2fold_in_domain: %2-fold for in-domain drugs only.
         excluded_drugs: List of (name, reason) for excluded drugs.
-        pi_coverage_90: 90% prediction interval coverage (None if not computed).
+        pi_coverage_90: Parameter-uncertainty interval coverage, 0-1 fraction
+            of drugs whose observed Cmax falls inside the predicted 90% PI.
+            ``None`` unless ``compute_pi=True`` was passed to
+            :func:`run_benchmark`.  NOTE: this is propagated parameter
+            uncertainty only; residual structural error is not calibrated,
+            so this is not an empirically-calibrated predictive interval.
+        n_pi_computed: Count of drugs that contributed a non-None
+            ``cmax_90ci`` when ``compute_pi=True``.  ``None`` otherwise.
     """
 
     n_drugs: int
@@ -82,6 +89,7 @@ class BenchmarkResult:
     pct_2fold_in_domain: float
     excluded_drugs: list[tuple[str, str]] = field(default_factory=list)
     pi_coverage_90: float | None = None
+    n_pi_computed: int | None = None
     aafe_gold: float | None = None
     aafe_silver: float | None = None
     n_gold: int = 0
@@ -102,6 +110,8 @@ class BenchmarkResult:
 def run_benchmark(
     holdout_only: bool = True,
     max_drugs: int | None = None,
+    compute_pi: bool = False,
+    n_mc_samples: int = 1000,
 ) -> BenchmarkResult:
     """Run predictions on reference drugs and compute acceptance metrics.
 
@@ -113,9 +123,18 @@ def run_benchmark(
     Args:
         holdout_only: If True, restrict to holdout drugs only.
         max_drugs: Maximum number of drugs to evaluate (for quick testing).
+        compute_pi: If True, enables Monte Carlo uncertainty propagation per
+            drug and computes empirical 90% PI coverage.  Default False keeps
+            the benchmark fast (no MC); in that case ``pi_coverage_90`` and
+            ``n_pi_computed`` remain ``None``.  The resulting interval
+            reflects propagated parameter uncertainty only — not an
+            empirically-calibrated predictive interval.
+        n_mc_samples: Number of Monte Carlo samples per drug when
+            ``compute_pi=True`` (default 1000).  Ignored otherwise.
 
     Returns:
-        BenchmarkResult with full and in-domain AAFE, %2-fold.
+        BenchmarkResult with full and in-domain AAFE, %2-fold, and
+        optionally PI coverage.
     """
     from sisyphus.pipeline.predict import predict
 
@@ -142,13 +161,19 @@ def run_benchmark(
     ml_observed: list[float] = []
     clf_predicted: list[float] = []
     clf_observed: list[float] = []
+    # PI coverage (compute_pi=True only): paired (obs, lower, upper) triplets
+    pi_obs: list[float] = []
+    pi_lower: list[float] = []
+    pi_upper: list[float] = []
 
     excluded: list[tuple[str, str]] = []
     skipped = 0
 
+    predict_kwargs = {"n_mc_samples": n_mc_samples} if compute_pi else {}
+
     for i, ref in enumerate(refs):
         try:
-            result = predict(ref.smiles, ref.dose_mg, ref.route)
+            result = predict(ref.smiles, ref.dose_mg, ref.route, **predict_kwargs)
             cmax_pred = result.pk.cmax.mean
             if cmax_pred <= 0:
                 skipped += 1
@@ -157,6 +182,16 @@ def run_benchmark(
 
             all_predicted.append(cmax_pred)
             all_observed.append(ref.cmax_obs)
+
+            # PI coverage collection (only when compute_pi=True and MC succeeded)
+            if compute_pi and result.cmax_90ci is not None:
+                lo, hi = result.cmax_90ci
+                # Skip degenerate intervals (e.g. MC fell back to zero tuple on
+                # upstream failure); only paired non-collapsed bounds count.
+                if hi > lo:
+                    pi_obs.append(ref.cmax_obs)
+                    pi_lower.append(lo)
+                    pi_upper.append(hi)
 
             is_gold = any("drugbank:" in w for w in result.warnings)
             if is_gold:
@@ -275,6 +310,28 @@ def run_benchmark(
         clf_aafe_val or float("inf"),
     )
 
+    # PI coverage (empty unless compute_pi=True)
+    pi_coverage_val: float | None = None
+    pi_n: int | None = None
+    if compute_pi:
+        pi_n = len(pi_obs)
+        if pi_n > 0:
+            pi_coverage_val = pi_coverage(
+                np.array(pi_obs), np.array(pi_lower), np.array(pi_upper)
+            )
+            logger.info(
+                "90%% PI coverage: %.1f%% over %d drugs "
+                "(parameter uncertainty only; not empirically-calibrated "
+                "predictive interval — residual structural error not added)",
+                pi_coverage_val * 100,
+                pi_n,
+            )
+        else:
+            logger.warning(
+                "compute_pi=True but no drug produced a non-degenerate "
+                "Cmax 90%% PI; coverage not computed"
+            )
+
     return BenchmarkResult(
         n_drugs=len(all_predicted),
         aafe=result_aafe,
@@ -283,7 +340,8 @@ def run_benchmark(
         aafe_in_domain=id_aafe,
         pct_2fold_in_domain=id_pct2,
         excluded_drugs=excluded,
-        pi_coverage_90=None,
+        pi_coverage_90=pi_coverage_val,
+        n_pi_computed=pi_n,
         aafe_gold=aafe_gold_val,
         aafe_silver=aafe_silver_val,
         n_gold=len(gold_predicted),

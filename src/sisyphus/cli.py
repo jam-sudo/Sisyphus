@@ -124,6 +124,21 @@ def main() -> None:
     bench_parser = subparsers.add_parser("benchmark", help="Run holdout benchmark")
     bench_parser.add_argument("--holdout", action="store_true", help="Run on holdout set only")
     bench_parser.add_argument("--max-drugs", type=int, default=None, help="Limit number of drugs")
+    bench_parser.add_argument(
+        "--compute-pi",
+        action="store_true",
+        help=(
+            "Enable Monte Carlo uncertainty propagation per drug and report "
+            "empirical 90%% PI coverage. Much slower; parameter-uncertainty "
+            "interval only (not empirically calibrated)."
+        ),
+    )
+    bench_parser.add_argument(
+        "--n-mc-samples",
+        type=int,
+        default=1000,
+        help="MC samples per drug when --compute-pi is set (default 1000).",
+    )
     bench_parser.add_argument("--verbose", "-v", action="store_true")
 
     args = parser.parse_args()
@@ -567,14 +582,20 @@ def _run_benchmark(args: argparse.Namespace) -> None:
     )
     from sisyphus.validation.benchmark import run_benchmark
 
-    result = run_benchmark(holdout_only=args.holdout, max_drugs=args.max_drugs)
+    result = run_benchmark(
+        holdout_only=args.holdout,
+        max_drugs=args.max_drugs,
+        compute_pi=args.compute_pi,
+        n_mc_samples=args.n_mc_samples,
+    )
 
     print("\nBenchmark Results:")
     print(f"  Drugs evaluated: {result.n_drugs}")
     print(f"  AAFE: {result.aafe:.3f}")
     print(f"  %2-fold: {result.pct_2fold:.1f}%")
     if result.pi_coverage_90 is not None:
-        print(f"  90% PI coverage: {result.pi_coverage_90:.1%}")
+        print(f"  90% PI coverage: {result.pi_coverage_90:.1%} (n={result.n_pi_computed})")
+        print("    (parameter uncertainty only; not empirically calibrated)")
 
 
 if __name__ == "__main__":
