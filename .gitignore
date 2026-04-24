@@ -53,3 +53,6 @@ data/docking/
 
 # sbi library auto-generated training telemetry (regenerable, noisy)
 sbi-logs/
+
+# Agent/session-local config (per-machine, not repo-wide)
+.claude/
