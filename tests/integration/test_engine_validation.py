@@ -59,7 +59,10 @@ _CMAX_DRUGS = [
     pytest.param(
         "propranolol",
         marks=pytest.mark.xfail(
-            reason="pre-existing ~16% Cmax drift vs Omega; investigation separate — see docs/claude/propranolol_cmax_drift.md",
+            reason=(
+                "pre-existing ~16% Cmax drift vs Omega; "
+                "see docs/claude/propranolol_cmax_drift.md"
+            ),
             strict=False,
         ),
     ),
