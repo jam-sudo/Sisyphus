@@ -35,4 +35,29 @@ class TestHoldoutBenchmark:
         assert isinstance(result.n_drugs, int)
         assert isinstance(result.aafe, float)
         assert isinstance(result.pct_2fold, float)
-        assert result.pi_coverage_90 is None  # Not yet implemented
+        # Default run (compute_pi=False): PI coverage not computed.
+        assert result.pi_coverage_90 is None
+        assert result.n_pi_computed is None
+
+    @pytest.mark.slow
+    def test_pi_coverage_wired_when_compute_pi_true(self) -> None:
+        """compute_pi=True should populate pi_coverage_90 as a float in [0, 1]."""
+        # Small n_mc_samples + max_drugs keeps runtime low; we only verify the
+        # wiring, not statistical validity of the interval.
+        result = run_benchmark(
+            holdout_only=True,
+            max_drugs=3,
+            compute_pi=True,
+            n_mc_samples=50,
+        )
+        # Every evaluated drug should have produced an interval (MC enabled,
+        # no infusion cases in the first 3 holdout drugs).
+        assert result.n_pi_computed is not None
+        assert result.n_pi_computed >= 1, (
+            f"Expected >=1 drug with PI, got {result.n_pi_computed}"
+        )
+        assert result.pi_coverage_90 is not None
+        assert isinstance(result.pi_coverage_90, float)
+        assert 0.0 <= result.pi_coverage_90 <= 1.0, (
+            f"Coverage out of [0, 1]: {result.pi_coverage_90}"
+        )
