@@ -29,6 +29,11 @@ dev = [
     "pytest>=7.0",
     "ruff>=0.4",
 ]
+sbi = [
+    "torch>=2.0",
+    "sbi>=0.22",
+    "nflows>=0.14",
+]
 
 [project.scripts]
 sisyphus = "sisyphus.cli:main"

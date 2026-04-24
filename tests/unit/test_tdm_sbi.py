@@ -7,11 +7,13 @@ import pathlib
 import numpy as np
 import pytest
 
-import sisyphus.engine.flux  # noqa: F401
-from sisyphus.engine.compiler import ODECompiler
-from sisyphus.graph.builder import build_from_yaml
-from sisyphus.regimen.tdm import Observation, TDMResult, bayesian_update
-from sisyphus.regimen.types import DosingRegimen
+pytest.importorskip("torch")
+
+import sisyphus.engine.flux  # noqa: F401, E402
+from sisyphus.engine.compiler import ODECompiler  # noqa: E402
+from sisyphus.graph.builder import build_from_yaml  # noqa: E402
+from sisyphus.regimen.tdm import Observation, TDMResult, bayesian_update  # noqa: E402
+from sisyphus.regimen.types import DosingRegimen  # noqa: E402
 
 POSTERIOR_PATH = pathlib.Path("models/sbi/multi_drug_nsf.pt")
 MORPHINE_SMILES = "CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O"
