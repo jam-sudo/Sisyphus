@@ -478,7 +478,7 @@ src/sisyphus/
 │   ├── types.py         # Node, Edge type hierarchy (frozen dataclasses)
 │   ├── body.py          # BodyGraph (add/remove/validate/sample)
 │   ├── builder.py       # YAML → BodyGraph with flow conservation check
-│   └── presets.py       # reference_man(), reference_woman()
+│   └── presets.py       # reference_man() (reference_woman YAML not shipped)
 │
 ├── engine/              # ODE compilation and solving (identity-blind)
 │   ├── compiler.py      # ODECompiler, CompiledODE, ResolvedParams
@@ -498,8 +498,8 @@ src/sisyphus/
 │   ├── features.py      # Feature vector construction
 │   ├── models.py        # XGBoost Cmax predictor
 │   ├── clf_predictor.py # CL/F analytical track
-│   ├── vdss_predictor.py# VDss analytical track
-│   └── ensemble.py      # 4-track meta-learner
+│   ├── registry.py      # Model manifest + feature-schema hash (H2)
+│   └── ensemble.py      # 4-track meta-learner (_W_VDSS=0.20)
 │
 ├── pk/                  # PK endpoint extraction
 │   ├── endpoints.py     # SimResult → PKEndpoints (route-aware t_min_h)
@@ -517,16 +517,17 @@ src/sisyphus/
 │   └── dosing.py        # MIPD dose recommendation
 │
 ├── sbi/                 # Amortized neural posterior estimation
+│   ├── priors.py        # Drug/physiology prior distributions
 │   ├── simulator.py     # Forward model for SBI training
 │   ├── amortizer.py     # Neural posterior trainer (NSF)
-│   ├── hierarchical.py  # Multi-drug + continuous-covariate extensions
+│   ├── multi_drug.py    # Multi-drug amortizer + continuous (bw, age)
+│   ├── physiology_generator.py  # Achour correlated physiology sampler
 │   └── sbc.py           # Simulation-Based Calibration gate
 │
 ├── validation/          # Benchmarking infrastructure
 │   ├── reference.py     # Clinical PK reference loader (331 drugs)
-│   ├── benchmark.py     # Holdout benchmark runner
+│   ├── benchmark.py     # Holdout benchmark runner (--compute-pi from H3)
 │   ├── metrics.py       # AAFE, fold error, PI coverage
-│   ├── split.py         # Scaffold-stratified splitting
 │   └── oatp_generalization.py  # ECM substrate generalization classifier
 │
 └── pipeline/            # End-to-end orchestration
