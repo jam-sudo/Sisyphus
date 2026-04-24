@@ -1,0 +1,25 @@
+{
+  "version": "v1",
+  "target": "basic pKa",
+  "trained_on": {
+    "dataset_path": "ChEMBL pKa (basic subset)",
+    "sha256": "unknown_legacy"
+  },
+  "feature_schema": {
+    "name": "compute_features_v1",
+    "n_features": 2057,
+    "sha256": "dd014cd8e7df59980ac05cdf494dad42f015da8013c5b347ded92e25a804497b",
+    "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, NumHeavyAtoms). See src/sisyphus/descriptors.py::compute_features."
+  },
+  "trained_at": "unknown_legacy",
+  "n_drugs_original": null,
+  "n_drugs_excluded": null,
+  "holdout_version": "unknown_legacy",
+  "holdout_metric": {
+    "name": "test_r2",
+    "value": 0.79,
+    "mae": 1.6
+  },
+  "hyperparameters": {},
+  "retrained_reason": "Companion to xgboost_pka_acidic; same training provenance"
+}

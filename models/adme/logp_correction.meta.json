@@ -1,0 +1,24 @@
+{
+  "version": "v1",
+  "target": "logP residual correction (additive on Crippen logP)",
+  "trained_on": {
+    "dataset_path": "DrugBank logP (holdout-excluded)",
+    "sha256": "unknown_legacy"
+  },
+  "feature_schema": {
+    "name": "logp_corr_6",
+    "n_features": 6,
+    "sha256": "fdf88196a6c9a56c565b8aae6d2b2ee372b56263b401a1caf073cb140bed8114",
+    "description": "[logp, mw, tpsa, hbd, hba, rotatable_bonds] float64, shape (1, 6). Used only by logp_correction.json (Crippen residual learning). See src/sisyphus/predict/chemistry.py::compute_profile."
+  },
+  "trained_at": "unknown_legacy",
+  "n_drugs_original": null,
+  "n_drugs_excluded": null,
+  "holdout_version": "unknown_legacy",
+  "holdout_metric": {
+    "name": "scaffold_cv_r2",
+    "value": null
+  },
+  "hyperparameters": {},
+  "retrained_reason": "Residual learning atop Crippen logP; applied only when DrugBank logp is absent"
+}
