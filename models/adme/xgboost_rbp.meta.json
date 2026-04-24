@@ -1,0 +1,24 @@
+{
+  "version": "v1",
+  "target": "blood/plasma ratio (raw output, clipped to [0.1, 3.0])",
+  "trained_on": {
+    "dataset_path": "TDC BTPR (N=50)",
+    "sha256": "unknown_legacy"
+  },
+  "feature_schema": {
+    "name": "compute_features_v1",
+    "n_features": 2057,
+    "sha256": "b41dddd78533661b8f4aed86bdb7c5f55d15ed3cd2ad20b39e9100557eda631e",
+    "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, NumHeavyAtoms). See src/sisyphus/descriptors.py::compute_features."
+  },
+  "trained_at": "unknown_legacy",
+  "n_drugs_original": 50,
+  "n_drugs_excluded": null,
+  "holdout_version": "unknown_legacy",
+  "holdout_metric": {
+    "name": "scaffold_cv_r2",
+    "value": -0.08
+  },
+  "hyperparameters": {},
+  "retrained_reason": "Small/noisy dataset; R^2 < 0. Pipeline defaults to RBP=1.0 when prediction falls outside [0.1, 3.0]. See adme.py:138 warning."
+}
