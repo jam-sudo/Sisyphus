@@ -27,6 +27,8 @@ Sisyphus: SMILES + dose → Cmax PBPK platform. Body modeled as a typed directed
 
 **Contamination note:** AAFE 2.283 from before 2026-04-04 is **invalid** (76-100/107 holdout drugs leaked into ML training; fixed in commit `5e5a3d0`). Detail: [diagnosis.md](docs/claude/diagnosis.md) §3 + `docs/holdout_contamination_audit.md`.
 
+**Prediction-interval coverage (empirical, diagnostic):** **29.9% at nominal 90%** (full N=107 holdout, 1000 MC samples, 2026-04-24, `data/validation/holdout_pi_coverage_2026-04-24.json`). PI is parameter-uncertainty only — it captures ~1/3 of the observed residual spread (true width ~3× the MC interval). The remaining ~60pp is structural error (IVIVE scaling, DE-33 OATP underprediction, CLint target-noise). **H3 PI is diagnostic, not calibrated** — do not quote this as a user-facing interval without empirical recalibration.
+
 ## Accuracy Ceiling (steering)
 
 ⚠ **Before proposing any accuracy improvement**, read [docs/claude/dead-ends.md](docs/claude/dead-ends.md) — 32 enumerated attempts (post-hoc meta-learners, CLint R² gains, ADME replacements, foundation models, docking, UDE, E2E Neural PK, etc.) have produced noise or regression.
