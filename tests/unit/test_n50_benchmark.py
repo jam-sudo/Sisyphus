@@ -209,8 +209,9 @@ def test_run_passes_infusion_duration(n50_module, monkeypatch):
             }
         }
     }
-    sys.modules["sisyphus.pipeline.predict"] = type(sys)("stub")
-    sys.modules["sisyphus.pipeline.predict"].predict = spy_predict
+    stub = type(sys)("stub")
+    stub.predict = spy_predict
+    monkeypatch.setitem(sys.modules, "sisyphus.pipeline.predict", stub)
     n50_module.run(payload)
     assert captured == {"route": "iv", "infusion_duration_min": 30.0}
 
