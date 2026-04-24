@@ -24,9 +24,16 @@ def reference_man() -> BodyGraph:
 
 
 def reference_woman() -> BodyGraph:
-    """ICRP Reference Woman (58 kg, 30 y, healthy).
+    """ICRP Reference Woman (58 kg, 30 y, healthy) — NOT SHIPPED.
 
-    Loads ``data/physiology/reference_woman.yaml`` and returns a
-    validated BodyGraph.
+    The ``data/physiology/reference_woman.yaml`` asset has not been
+    produced yet. Use ``reference_man()`` and override body_weight_kg
+    via the continuous-hierarchical TDM path for female physiology
+    until a validated Reference Woman YAML lands.
     """
-    return build_from_yaml(_PHYSIOLOGY_DIR / "reference_woman.yaml")
+    raise NotImplementedError(
+        "reference_woman() requires data/physiology/reference_woman.yaml "
+        "which is not shipped. Use reference_man() + body_weight override "
+        "via the continuous-hierarchical path (see src/sisyphus/regimen/"
+        "tdm_sbi.py)."
+    )
