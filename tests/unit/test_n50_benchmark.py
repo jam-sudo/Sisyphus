@@ -154,8 +154,9 @@ def test_run_evaluates_verified_only(n50_module, monkeypatch):
         }
     }
     fake = _mock_predict_factory({"A": 2.0})
-    monkeypatch.setitem(sys.modules, "sisyphus.pipeline.predict", type(sys)("stub"))
-    sys.modules["sisyphus.pipeline.predict"].predict = fake
+    stub = type(sys)("stub")
+    stub.predict = fake
+    monkeypatch.setitem(sys.modules, "sisyphus.pipeline.predict", stub)
     results = n50_module.run(payload)
     assert set(results["per_drug"].keys()) == {"drugA"}
     assert len(results["skipped"]) == 2
@@ -177,8 +178,9 @@ def test_run_oatp_subset_separation(n50_module, monkeypatch):
         }
     }
     fake = _mock_predict_factory({"O1": 2.0, "X": 0.5})
-    sys.modules["sisyphus.pipeline.predict"] = type(sys)("stub")
-    sys.modules["sisyphus.pipeline.predict"].predict = fake
+    stub = type(sys)("stub")
+    stub.predict = fake
+    monkeypatch.setitem(sys.modules, "sisyphus.pipeline.predict", stub)
     results = n50_module.run(payload)
     assert results["overall"]["n"] == 2
     assert results["oatp1b1_subset"]["n"] == 1
