@@ -1,0 +1,24 @@
+{
+  "date": "2026-04-24",
+  "source": "python3 -m sisyphus.cli benchmark --holdout --compute-pi --n-mc-samples 1000",
+  "commit": "c52b62f",
+  "wall_time_s": 3933,
+  "n_drugs": 107,
+  "n_mc_samples": 1000,
+  "aafe": 2.719,
+  "pct_2fold": 0.467,
+  "pi_coverage_90": 0.299,
+  "n_pi_computed": 107,
+  "caveat": "Parameter uncertainty only; not empirically calibrated. 90% nominal PI captures only ~30% of observed residuals, consistent with dominant structural error (IVIVE scaling, DE-33 OATP substrates, feature-extraction noise).",
+  "comparison": {
+    "claude_md_headline_aafe": 2.695,
+    "claude_md_headline_pct_2fold": 0.477,
+    "aafe_delta": 0.024,
+    "aafe_delta_pct": 0.9,
+    "note": "AAFE delta within MC-noise envelope (MC-propagated vs deterministic-mean headline)."
+  },
+  "interpretation": {
+    "pi_too_narrow_factor": 3.01,
+    "rationale": "29.9% coverage at 90% nominal ⇒ true residual spread is ~3× the parameter-uncertainty interval. Residual width not captured: model misspecification + structural ECM/IVIVE error + target noise (CLint R² ceiling)."
+  }
+}
