@@ -10,6 +10,9 @@ build/
 models/**/*.json
 models/**/*.bak
 !models/**/.gitkeep
+# Allow model manifests (small, authoritative provenance — see
+# docs/science/model_manifest_schema.md)
+!models/**/*.meta.json
 
 # IDE
 .vscode/
