@@ -1,0 +1,618 @@
+{
+  "cycle_id": "2026Q2",
+  "run_timestamp_utc": "2026-04-24T02:34:03.017012+00:00",
+  "git_commit_at_run": "02ed8e862585799cc2a34e106eef0d0c990dbc8a",
+  "spec_commit": "da0f080",
+  "exclusion_inventory_sha256": "3acb38a29c83646e0f10c4a7ae478a18052ec2c9056fbc8df369aed3490aee83",
+  "n_admitted": 50,
+  "per_drug": {
+    "rifampin": {
+      "observed_mg_l": 17.5,
+      "meta_pred_mg_l": 4.951847649433323,
+      "engine_pred_mg_l": 11.282320812081931,
+      "ml_pred_mg_l": 2.7104881298129904,
+      "meta_fold": 0.2829627228247613,
+      "route": "iv",
+      "infusion_duration_min": 30.0,
+      "in_applicability_domain": false,
+      "ad_flags": [
+        "HIGH_MW"
+      ]
+    },
+    "irinotecan": {
+      "observed_mg_l": 1.66,
+      "meta_pred_mg_l": 1.0679136695682931,
+      "engine_pred_mg_l": 1.6719383826714207,
+      "ml_pred_mg_l": 0.5176875740780036,
+      "meta_fold": 0.6433214876917429,
+      "route": "iv",
+      "infusion_duration_min": 90.0,
+      "in_applicability_domain": false,
+      "ad_flags": [
+        "PGP_EFFLUX_RISK"
+      ]
+    },
+    "caspofungin": {
+      "observed_mg_l": 12.04,
+      "meta_pred_mg_l": 0.5557905498866134,
+      "engine_pred_mg_l": 2.24457900683642,
+      "ml_pred_mg_l": 0.03920303369366888,
+      "meta_fold": 0.046162005804536,
+      "route": "iv",
+      "infusion_duration_min": 60.0,
+      "in_applicability_domain": false,
+      "ad_flags": [
+        "HIGH_MW"
+      ]
+    },
+    "paclitaxel": {
+      "observed_mg_l": 3.65,
+      "meta_pred_mg_l": 0.35563226523432967,
+      "engine_pred_mg_l": 1.522058843458057,
+      "ml_pred_mg_l": 0.07713417556864863,
+      "meta_fold": 0.09743349732447389,
+      "route": "iv",
+      "infusion_duration_min": 180.0,
+      "in_applicability_domain": false,
+      "ad_flags": [
+        "HIGH_MW",
+        "PRODRUG"
+      ]
+    },
+    "docetaxel": {
+      "observed_mg_l": 4.15,
+      "meta_pred_mg_l": 0.2509595912969558,
+      "engine_pred_mg_l": 2.967446473603194,
+      "ml_pred_mg_l": 0.047492196868678456,
+      "meta_fold": 0.06047219067396524,
+      "route": "iv",
+      "infusion_duration_min": 60.0,
+      "in_applicability_domain": false,
+      "ad_flags": [
+        "HIGH_MW",
+        "PRODRUG"
+      ]
+    },
+    "micafungin": {
+      "observed_mg_l": 10.3,
+      "meta_pred_mg_l": 0.4437580656765346,
+      "engine_pred_mg_l": 8.192811095071331,
+      "ml_pred_mg_l": 0.0620712241203524,
+      "meta_fold": 0.043083307347236366,
+      "route": "iv",
+      "infusion_duration_min": 60.0,
+      "in_applicability_domain": false,
+      "ad_flags": [
+        "HIGH_MW",
+        "HIGH_ACID_LOW_FUP"
+      ]
+    },
+    "benzylpenicillin": {
+      "observed_mg_l": 400.0,
+      "meta_pred_mg_l": 57.69008644579078,
+      "engine_pred_mg_l": 95.81175997062712,
+      "ml_pred_mg_l": 43.58846096668556,
+      "meta_fold": 0.14422521611447695,
+      "route": "iv",
+      "infusion_duration_min": 4.0,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "torsemide": {
+      "observed_mg_l": 3.176,
+      "meta_pred_mg_l": 0.3979797322492592,
+      "engine_pred_mg_l": 0.07407230291650868,
+      "ml_pred_mg_l": 1.3183818243287504,
+      "meta_fold": 0.12530847992734861,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "vimseltinib": {
+      "observed_mg_l": 0.283,
+      "meta_pred_mg_l": 0.14953273285701874,
+      "engine_pred_mg_l": 0.0769308191350415,
+      "ml_pred_mg_l": 0.2192949304077873,
+      "meta_fold": 0.5283842150424691,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "nerandomilast": {
+      "observed_mg_l": 0.3188,
+      "meta_pred_mg_l": 0.11889398619553021,
+      "engine_pred_mg_l": 0.028790357657928832,
+      "ml_pred_mg_l": 0.19703633422656316,
+      "meta_fold": 0.3729422402620145,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "balcinrenone": {
+      "observed_mg_l": 1.838,
+      "meta_pred_mg_l": 0.7754397773494666,
+      "engine_pred_mg_l": 0.3096560983043605,
+      "ml_pred_mg_l": 0.7506270512557185,
+      "meta_fold": 0.42189324121298505,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "tolebrutinib": {
+      "observed_mg_l": 0.0455,
+      "meta_pred_mg_l": 0.2220645769836467,
+      "engine_pred_mg_l": 0.03798633037152621,
+      "ml_pred_mg_l": 0.6504510097595023,
+      "meta_fold": 4.8805401534867405,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "zibotentan": {
+      "observed_mg_l": 0.261,
+      "meta_pred_mg_l": 0.08194965070677575,
+      "engine_pred_mg_l": 0.03262856329293842,
+      "ml_pred_mg_l": 0.12106446247638464,
+      "meta_fold": 0.31398333604128636,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "sulopenem": {
+      "observed_mg_l": 1.84,
+      "meta_pred_mg_l": 2.6014710281445743,
+      "engine_pred_mg_l": 0.4373074178651794,
+      "ml_pred_mg_l": 3.603640017255544,
+      "meta_fold": 1.413842950078573,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "ensitrelvir": {
+      "observed_mg_l": 15.2,
+      "meta_pred_mg_l": 0.6278860556520964,
+      "engine_pred_mg_l": 0.2539143206331513,
+      "ml_pred_mg_l": 0.9357283147479997,
+      "meta_fold": 0.04130829313500635,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "elafibranor": {
+      "observed_mg_l": 0.802,
+      "meta_pred_mg_l": 0.7077233593523853,
+      "engine_pred_mg_l": 0.43688107980733354,
+      "ml_pred_mg_l": 1.2800574396184463,
+      "meta_fold": 0.882448078992999,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": false,
+      "ad_flags": [
+        "HIGH_ACID_LOW_FUP"
+      ]
+    },
+    "obicetrapib": {
+      "observed_mg_l": 0.251,
+      "meta_pred_mg_l": 0.0816467861286424,
+      "engine_pred_mg_l": 0.05313471387172182,
+      "ml_pred_mg_l": 0.0829165245620761,
+      "meta_fold": 0.32528600051251955,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": false,
+      "ad_flags": [
+        "HIGH_MW",
+        "PGP_EFFLUX_RISK",
+        "PRODRUG"
+      ]
+    },
+    "mirdametinib": {
+      "observed_mg_l": 0.188,
+      "meta_pred_mg_l": 0.014717836770804231,
+      "engine_pred_mg_l": 0.004711007932592366,
+      "ml_pred_mg_l": 0.022363433193785875,
+      "meta_fold": 0.07828636580215016,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "cefiderocol": {
+      "observed_mg_l": 156.0,
+      "meta_pred_mg_l": 15.266011955919618,
+      "engine_pred_mg_l": 31.08261710672355,
+      "ml_pred_mg_l": 2.948838981006018,
+      "meta_fold": 0.09785905099948473,
+      "route": "iv",
+      "infusion_duration_min": 60.0,
+      "in_applicability_domain": false,
+      "ad_flags": [
+        "HIGH_MW"
+      ]
+    },
+    "eravacycline": {
+      "observed_mg_l": 1.888,
+      "meta_pred_mg_l": 0.23463172354645623,
+      "engine_pred_mg_l": 2.1494726437590703,
+      "ml_pred_mg_l": 0.060650523143730206,
+      "meta_fold": 0.12427527730214843,
+      "route": "iv",
+      "infusion_duration_min": 30.0,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "ampreloxetine": {
+      "observed_mg_l": 0.00502,
+      "meta_pred_mg_l": 0.01283656427864326,
+      "engine_pred_mg_l": 0.017640216068176572,
+      "ml_pred_mg_l": 0.009758283526129835,
+      "meta_fold": 2.5570845176580197,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "sepiapterin": {
+      "observed_mg_l": 0.0024,
+      "meta_pred_mg_l": 11.847279125540728,
+      "engine_pred_mg_l": 3.559059635585796,
+      "ml_pred_mg_l": 8.813936629949733,
+      "meta_fold": 4936.366302308637,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "ulotaront": {
+      "observed_mg_l": 0.0879,
+      "meta_pred_mg_l": 0.06312275158728259,
+      "engine_pred_mg_l": 0.032874695855486,
+      "ml_pred_mg_l": 0.09236944580957888,
+      "meta_fold": 0.7181200408109509,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "oliceridine": {
+      "observed_mg_l": 0.00897,
+      "meta_pred_mg_l": 0.003783992224077762,
+      "engine_pred_mg_l": 0.016445332423007154,
+      "ml_pred_mg_l": 0.0005532678304802737,
+      "meta_fold": 0.42184974627399796,
+      "route": "iv",
+      "infusion_duration_min": 2.0,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "pitolisant": {
+      "observed_mg_l": 0.0545,
+      "meta_pred_mg_l": 0.03487697896036282,
+      "engine_pred_mg_l": 0.0702568121284007,
+      "ml_pred_mg_l": 0.009105930761496793,
+      "meta_fold": 0.6399445680800517,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "remdesivir": {
+      "observed_mg_l": 4.38,
+      "meta_pred_mg_l": 0.9270086019240511,
+      "engine_pred_mg_l": 5.946217457017348,
+      "ml_pred_mg_l": 0.1812690858233323,
+      "meta_fold": 0.21164579952603907,
+      "route": "iv",
+      "infusion_duration_min": 30.0,
+      "in_applicability_domain": false,
+      "ad_flags": [
+        "PRODRUG"
+      ]
+    },
+    "asundexian": {
+      "observed_mg_l": 0.675,
+      "meta_pred_mg_l": 0.08509022150667175,
+      "engine_pred_mg_l": 0.0368597982283947,
+      "ml_pred_mg_l": 0.06626809476441801,
+      "meta_fold": 0.12605958741729148,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "orforglipron": {
+      "observed_mg_l": 0.0134,
+      "meta_pred_mg_l": 0.009654116902111725,
+      "engine_pred_mg_l": 0.007857931982713196,
+      "ml_pred_mg_l": 0.008204685241083427,
+      "meta_fold": 0.7204564852322183,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": false,
+      "ad_flags": [
+        "HIGH_MW",
+        "EXTREME_LIPOPHILIC",
+        "PGP_EFFLUX_RISK"
+      ]
+    },
+    "lorundrostat": {
+      "observed_mg_l": 1.211,
+      "meta_pred_mg_l": 0.20272591305135101,
+      "engine_pred_mg_l": 0.06233749862836097,
+      "ml_pred_mg_l": 0.3016813440604618,
+      "meta_fold": 0.16740372671457557,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "fexuprazan": {
+      "observed_mg_l": 0.03387,
+      "meta_pred_mg_l": 0.26248370442235774,
+      "engine_pred_mg_l": 0.08551355940238997,
+      "ml_pred_mg_l": 0.634339946209225,
+      "meta_fold": 7.749740313621428,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "lurbinectedin": {
+      "observed_mg_l": 0.107,
+      "meta_pred_mg_l": 0.01870336387226257,
+      "engine_pred_mg_l": 0.12863754791260043,
+      "ml_pred_mg_l": 0.006878151369374608,
+      "meta_fold": 0.1747977931987156,
+      "route": "iv",
+      "infusion_duration_min": 60.0,
+      "in_applicability_domain": false,
+      "ad_flags": [
+        "HIGH_MW",
+        "PRODRUG"
+      ]
+    },
+    "dotinurad": {
+      "observed_mg_l": 0.365,
+      "meta_pred_mg_l": 0.04897305673249468,
+      "engine_pred_mg_l": 0.04138701825174682,
+      "ml_pred_mg_l": 0.04710787013198543,
+      "meta_fold": 0.1341727581712183,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "belinostat": {
+      "observed_mg_l": 48.87,
+      "meta_pred_mg_l": 58.60212786468011,
+      "engine_pred_mg_l": 71.71419642760821,
+      "ml_pred_mg_l": 55.196564421358666,
+      "meta_fold": 1.1991431934659322,
+      "route": "iv",
+      "infusion_duration_min": 30.0,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "esaxerenone": {
+      "observed_mg_l": 0.0649,
+      "meta_pred_mg_l": 0.02145481908150879,
+      "engine_pred_mg_l": 0.006291279857268468,
+      "ml_pred_mg_l": 0.02328192377276462,
+      "meta_fold": 0.33058272852864085,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "keverprazan": {
+      "observed_mg_l": 0.0288,
+      "meta_pred_mg_l": 0.09897896744820073,
+      "engine_pred_mg_l": 0.05437527353094611,
+      "ml_pred_mg_l": 0.1621800726500405,
+      "meta_fold": 3.4367697030625255,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "molidustat": {
+      "observed_mg_l": 0.559,
+      "meta_pred_mg_l": 0.43416868803340103,
+      "engine_pred_mg_l": 0.3075300180873248,
+      "ml_pred_mg_l": 0.41220674186614986,
+      "meta_fold": 0.7766881717949928,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "levosimendan": {
+      "observed_mg_l": 0.2561,
+      "meta_pred_mg_l": 0.04491180052033487,
+      "engine_pred_mg_l": 0.1666614848441049,
+      "ml_pred_mg_l": 0.022219516216782788,
+      "meta_fold": 0.1753682175725688,
+      "route": "iv",
+      "infusion_duration_min": 10.0,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "omecamtiv_mecarbil": {
+      "observed_mg_l": 0.262,
+      "meta_pred_mg_l": 0.10482995190863732,
+      "engine_pred_mg_l": 0.05239269499310743,
+      "ml_pred_mg_l": 0.14115970544608708,
+      "meta_fold": 0.4001143202619745,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "tebipenem_pivoxil": {
+      "observed_mg_l": 4.006,
+      "meta_pred_mg_l": 0.39387157403646456,
+      "engine_pred_mg_l": 0.0842499286636027,
+      "ml_pred_mg_l": 0.3086090325018839,
+      "meta_fold": 0.09832041288978147,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "fostamatinib": {
+      "observed_mg_l": 0.605,
+      "meta_pred_mg_l": 0.16473860156982273,
+      "engine_pred_mg_l": 0.03009596451794506,
+      "ml_pred_mg_l": 0.21443443426596065,
+      "meta_fold": 0.27229520920631856,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": false,
+      "ad_flags": [
+        "HIGH_ACID_LOW_FUP"
+      ]
+    },
+    "peramivir": {
+      "observed_mg_l": 44.113,
+      "meta_pred_mg_l": 4.189708091614438,
+      "engine_pred_mg_l": 7.338262064669923,
+      "ml_pred_mg_l": 2.531479472993626,
+      "meta_fold": 0.09497672095786816,
+      "route": "iv",
+      "infusion_duration_min": 30.0,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "ceftolozane": {
+      "observed_mg_l": 42.6,
+      "meta_pred_mg_l": 4.178284879176424,
+      "engine_pred_mg_l": 6.062499084630737,
+      "ml_pred_mg_l": 1.0449283790224002,
+      "meta_fold": 0.0980818046755029,
+      "route": "iv",
+      "infusion_duration_min": 60.0,
+      "in_applicability_domain": false,
+      "ad_flags": [
+        "PRODRUG"
+      ]
+    },
+    "chiglitazar": {
+      "observed_mg_l": 1.62,
+      "meta_pred_mg_l": 0.2439963011194403,
+      "engine_pred_mg_l": 0.11769217161179371,
+      "ml_pred_mg_l": 0.30327144048769544,
+      "meta_fold": 0.15061500069101252,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": false,
+      "ad_flags": [
+        "EXTREME_LIPOPHILIC",
+        "PRODRUG"
+      ]
+    },
+    "prusogliptin": {
+      "observed_mg_l": 0.239,
+      "meta_pred_mg_l": 0.5034216806888797,
+      "engine_pred_mg_l": 0.1568937629214248,
+      "ml_pred_mg_l": 0.987441477670542,
+      "meta_fold": 2.106366864807028,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "cetagliptin": {
+      "observed_mg_l": 0.219,
+      "meta_pred_mg_l": 0.4414809415840532,
+      "engine_pred_mg_l": 0.3118942520194574,
+      "ml_pred_mg_l": 0.4711222459273273,
+      "meta_fold": 2.0158947104294667,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "olverembatinib": {
+      "observed_mg_l": 0.005019,
+      "meta_pred_mg_l": 0.05020558307943303,
+      "engine_pred_mg_l": 0.036606620549791365,
+      "ml_pred_mg_l": 0.042521636523128,
+      "meta_fold": 10.003104817579802,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "furmonertinib": {
+      "observed_mg_l": 0.0175,
+      "meta_pred_mg_l": 0.18379679229236237,
+      "engine_pred_mg_l": 0.13276359874269236,
+      "ml_pred_mg_l": 0.1014684363034211,
+      "meta_fold": 10.50267384527785,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": false,
+      "ad_flags": [
+        "PGP_EFFLUX_RISK"
+      ]
+    },
+    "ecopipam": {
+      "observed_mg_l": 0.082,
+      "meta_pred_mg_l": 0.3093262567605689,
+      "engine_pred_mg_l": 0.5243652481801354,
+      "ml_pred_mg_l": 0.16432120802770908,
+      "meta_fold": 3.772271423909377,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "pamiparib": {
+      "observed_mg_l": 2.3025,
+      "meta_pred_mg_l": 0.1653868630733231,
+      "engine_pred_mg_l": 0.10951321007138212,
+      "ml_pred_mg_l": 0.12864251243002003,
+      "meta_fold": 0.07182925649221415,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    },
+    "tinengotinib": {
+      "observed_mg_l": 0.0633,
+      "meta_pred_mg_l": 0.03633521148932137,
+      "engine_pred_mg_l": 0.027884070629548747,
+      "ml_pred_mg_l": 0.035199727926030655,
+      "meta_fold": 0.5740159792941765,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "in_applicability_domain": true,
+      "ad_flags": []
+    }
+  },
+  "overall": {
+    "aafe": 5.24905789194162,
+    "ci_95_low": 3.7881347364247167,
+    "ci_95_high": 7.770346894711183,
+    "n": 50,
+    "pct_2fold": 20.0,
+    "pct_3fold": 34.0
+  },
+  "oatp1b1_subset": {
+    "aafe": 8.447834937763611,
+    "ci_95_low": 4.520585539949492,
+    "ci_95_high": 14.857333319664347,
+    "n": 8,
+    "pct_2fold": 12.5,
+    "pct_3fold": 12.5
+  },
+  "skipped": []
+}

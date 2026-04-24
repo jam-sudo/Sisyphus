@@ -5,8 +5,10 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from sisyphus.sbi.priors import build_box_prior, N_THETA, THETA_NAMES, _logit, _sigmoid
-from sisyphus.sbi.simulator import EngineSimulator, apply_theta_to_drug
+pytest.importorskip("torch")
+
+from sisyphus.sbi.priors import build_box_prior, N_THETA, THETA_NAMES, _logit, _sigmoid  # noqa: E402
+from sisyphus.sbi.simulator import EngineSimulator, apply_theta_to_drug  # noqa: E402
 
 # Small, well-characterized drug for fast tests (morphine, holdout member).
 MORPHINE_SMILES = "CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O"

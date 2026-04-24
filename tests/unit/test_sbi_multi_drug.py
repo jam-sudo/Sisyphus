@@ -5,7 +5,9 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from sisyphus.sbi.multi_drug import (
+pytest.importorskip("torch")
+
+from sisyphus.sbi.multi_drug import (  # noqa: E402
     DRUG_FEATURE_NAMES,
     DrugSpec,
     MultiDrugSimulator,
@@ -14,7 +16,7 @@ from sisyphus.sbi.multi_drug import (
     pack_observation,
     stack_training_pairs,
 )
-from sisyphus.sbi.priors import _logit
+from sisyphus.sbi.priors import _logit  # noqa: E402
 
 
 MORPHINE_SMILES = "CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O"
