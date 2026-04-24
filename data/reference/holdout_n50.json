@@ -3,16 +3,16 @@
   "spec_commit": "da0f080",
   "cycle_id": "2026Q2",
   "curation_date": "2026-04-22",
-  "curation_status": "PARTIAL (30 / 50)",
+  "curation_status": "PARTIAL (33 / 50)",
   "n_target": 50,
-  "n_admitted": 30,
+  "n_admitted": 33,
   "oatp1b1_substrate_count": 8,
   "oatp1b1_substrate_minimum": 3,
   "exclusion_inventory_source": "/tmp/n50_exclusion.txt (built by scripts/build_n50_exclusion.py on 2026-04-22)",
   "exclusion_inventory_sha256": "3acb38a29c83646e0f10c4a7ae478a18052ec2c9056fbc8df369aed3490aee83",
   "bsa_m2": 1.85,
   "bsa_rationale": "ICRP Reference Man (70 kg \u00d7 1.74 m) BSA. Spec \u00a79 Open Questions #1 resolved to 1.85. Used for all mg/m\u00b2 \u2192 mg conversions in this file.",
-  "methodology_notes": "Observed Cmax reported as mean \u00b1 SD when primary source uses arithmetic statistics; as geometric mean with 90% CI in notes when that is the primary-source convention. SD field is null for geometric-mean-only sources. 2026-04-22 seed expansion (commit pending): added paclitaxel, docetaxel, micafungin, benzylpenicillin, torsemide (5 OATP1B1 substrates). benzylpenicillin classified as iv_infusion duration 4 min (rather than iv_bolus) because the FDA label's 3-5 min push is physically a short zero-order input; V3.1 infusion path handles it correctly and matches the Cmax timing (400 mg/L at 5-6 min post-start). 2026-04-22 second expansion: added vimseltinib, nerandomilast, balcinrenone, tolebrutinib, zibotentan (5 non-OATP1B1 oral drugs). Cmax in nmol/L converted to mg/L using MW from PubChem: nerandomilast MW=449.0 g/mol (710 nmol/L x 449.0/1000 = 0.3188 mg/L); balcinrenone MW=399.4 g/mol (4602 nmol/L x 399.4/1000 = 1.838 mg/L). 2026-04-23 third expansion: added sulopenem, ensitrelvir, elafibranor, obicetrapib, mirdametinib (5 non-OATP1B1 oral drugs, mechanism-diverse: penem antibiotic + OAT3 substrate, oral 3CL antiviral, dual PPAR agonist, CETP inhibitor, MEK1/2 inhibitor). All Cmax values cross-validated against DailyMed (FDA labels) or PMC primary papers. Sulopenem/ensitrelvir doses reported as labeled-salt mass; Cmax is for active species. Mirdametinib dose 4 mg maps to BSA 1.85 m\u00b2 via GOMEKLI Table 1 (\u22651.50 m\u00b2 band), Cmax is steady-state per label Table 6. 2026-04-23 fourth expansion (18\u219222): added cefiderocol (IV, renal-cleared siderophore cephalosporin), eravacycline (IV, biliary-excretion fluorocycline), ampreloxetine (oral, CNS-BBB NRI, CYP1A2-primary), sepiapterin (oral, BH4 prodrug low-parent-Cmax regime). All 4 HV single-dose Phase 1 primary papers; PubChem InChIKey match with stereochemistry confirmed. Xanomeline candidate dropped from this chunk \u2014 FDA Integrated Review URL 404, Cobenfy DailyMed label has only steady-state Cmax. 2026-04-23 fifth expansion (22\u219226): added ulotaront (oral, TAAR1/5-HT1A agonist first-in-class antipsychotic + CYP2D6 fm=0.53), oliceridine (IV bolus, G-protein-biased mu-opioid + CYP3A4/CYP2D6), pitolisant (oral, H3 inverse agonist + CYP2D6-dominant), remdesivir (IV, phosphoramidate nucleotide prodrug + CES1/CYP3A4; 2020 NME). Fills CYP2D6-dominant metabolism class (previously empty) with 3 mechanistically-distinct drugs, opioid class (previously empty) with 1 drug, and adds 2020-era IV NME. All 4 single-dose HV PMC open-access; InChIKey full match incl. stereo for all (no SMILES substitution needed). Xanomeline re-attempt remains deferred. 2026-04-23 sixth expansion (26\u219230): added asundexian (oral FXIa inhibitor, CES1-primary metabolism; BAY 2433334 Phase 1 Day 1 data from Kubitza 2022 JTH), orforglipron (oral non-peptide GLP-1 agonist, MW 883 > 800 AD threshold; Yamada 2024 food-effect SAD fasted 3 mg), lorundrostat (oral aldosterone synthase CYP11B2 inhibitor; Shimizu 2024 CTS FIH-SAD 100 mg arm N=6), fexuprazan (oral PCAB + multi-CYP substrate; Kim 2023 Pharmaceuticals bioequivalence single-dose 40 mg reference arm). Fills CES1-primary metabolism, oral peptide-mimetic, aldosterone synthase, and PCAB classes (all previously empty). Asundexian Day 1 row used (Table 4) -- paper is MAD but Day 1 is true first-dose measurement. Fexuprazan is South-Korea-approved 2022 (pre-2024 era) but mechanism-unique. All 4 InChIKey full match incl. stereo against PubChem; URLs verified HTTP 200; table_refs verified verbatim via PMC WebFetch.",
+  "methodology_notes": "Observed Cmax reported as mean \u00b1 SD when primary source uses arithmetic statistics; as geometric mean with 90% CI in notes when that is the primary-source convention. SD field is null for geometric-mean-only sources. 2026-04-22 seed expansion (commit pending): added paclitaxel, docetaxel, micafungin, benzylpenicillin, torsemide (5 OATP1B1 substrates). benzylpenicillin classified as iv_infusion duration 4 min (rather than iv_bolus) because the FDA label's 3-5 min push is physically a short zero-order input; V3.1 infusion path handles it correctly and matches the Cmax timing (400 mg/L at 5-6 min post-start). 2026-04-22 second expansion: added vimseltinib, nerandomilast, balcinrenone, tolebrutinib, zibotentan (5 non-OATP1B1 oral drugs). Cmax in nmol/L converted to mg/L using MW from PubChem: nerandomilast MW=449.0 g/mol (710 nmol/L x 449.0/1000 = 0.3188 mg/L); balcinrenone MW=399.4 g/mol (4602 nmol/L x 399.4/1000 = 1.838 mg/L). 2026-04-23 third expansion: added sulopenem, ensitrelvir, elafibranor, obicetrapib, mirdametinib (5 non-OATP1B1 oral drugs, mechanism-diverse: penem antibiotic + OAT3 substrate, oral 3CL antiviral, dual PPAR agonist, CETP inhibitor, MEK1/2 inhibitor). All Cmax values cross-validated against DailyMed (FDA labels) or PMC primary papers. Sulopenem/ensitrelvir doses reported as labeled-salt mass; Cmax is for active species. Mirdametinib dose 4 mg maps to BSA 1.85 m\u00b2 via GOMEKLI Table 1 (\u22651.50 m\u00b2 band), Cmax is steady-state per label Table 6. 2026-04-23 fourth expansion (18\u219222): added cefiderocol (IV, renal-cleared siderophore cephalosporin), eravacycline (IV, biliary-excretion fluorocycline), ampreloxetine (oral, CNS-BBB NRI, CYP1A2-primary), sepiapterin (oral, BH4 prodrug low-parent-Cmax regime). All 4 HV single-dose Phase 1 primary papers; PubChem InChIKey match with stereochemistry confirmed. Xanomeline candidate dropped from this chunk \u2014 FDA Integrated Review URL 404, Cobenfy DailyMed label has only steady-state Cmax. 2026-04-23 fifth expansion (22\u219226): added ulotaront (oral, TAAR1/5-HT1A agonist first-in-class antipsychotic + CYP2D6 fm=0.53), oliceridine (IV bolus, G-protein-biased mu-opioid + CYP3A4/CYP2D6), pitolisant (oral, H3 inverse agonist + CYP2D6-dominant), remdesivir (IV, phosphoramidate nucleotide prodrug + CES1/CYP3A4; 2020 NME). Fills CYP2D6-dominant metabolism class (previously empty) with 3 mechanistically-distinct drugs, opioid class (previously empty) with 1 drug, and adds 2020-era IV NME. All 4 single-dose HV PMC open-access; InChIKey full match incl. stereo for all (no SMILES substitution needed). Xanomeline re-attempt remains deferred. 2026-04-23 sixth expansion (26\u219230): added asundexian (oral FXIa inhibitor, CES1-primary metabolism; BAY 2433334 Phase 1 Day 1 data from Kubitza 2022 JTH), orforglipron (oral non-peptide GLP-1 agonist, MW 883 > 800 AD threshold; Yamada 2024 food-effect SAD fasted 3 mg), lorundrostat (oral aldosterone synthase CYP11B2 inhibitor; Shimizu 2024 CTS FIH-SAD 100 mg arm N=6), fexuprazan (oral PCAB + multi-CYP substrate; Kim 2023 Pharmaceuticals bioequivalence single-dose 40 mg reference arm). Fills CES1-primary metabolism, oral peptide-mimetic, aldosterone synthase, and PCAB classes (all previously empty). Asundexian Day 1 row used (Table 4) -- paper is MAD but Day 1 is true first-dose measurement. Fexuprazan is South-Korea-approved 2022 (pre-2024 era) but mechanism-unique. All 4 InChIKey full match incl. stereo against PubChem; URLs verified HTTP 200; table_refs verified verbatim via PMC WebFetch. 2026-04-23 seventh expansion (30\u219233): added lurbinectedin (IV 2020 NME Zepzelca, DNA minor-groove binder + CYP3A4 + 99% PPB; confirmed NOT OATP1B1 substrate per label), dotinurad (oral 2020 Japan / 2024 China URAT1 inhibitor, multi-UGT substrate 1A1/1A3/1A9/2B7; Liu 2025 China HV SAD), belinostat (IV 2014 NME Beleodaq, UGT1A1-dominant fm~80-90% HDAC inhibitor; Wang 2013 PLOS One HCC patients Day-1 1200 mg/m\u00b2). Fills UGT1A1-class (previously empty) with 2 mechanistically-distinct drugs (dotinurad multi-UGT / belinostat UGT1A1-dominant) + high-PPB class (lurbinectedin) + IV rebalance (12/18 \u2192 14/19). Belinostat dose is supratherapeutic (1200 vs labeled 1000 mg/m\u00b2) -- only N=6 single-dose cohort; linear PK allows 1000/1200 back-scaling at scoring time.",
   "drugs": {
     "rifampin": {
       "status": "VERIFIED",
@@ -1180,10 +1180,135 @@
         "not_in_validation": true
       },
       "notes": "Fills previously-empty PCAB (potassium-competitive acid blocker) class + multi-CYP-substrate profile (CYP3A4 primary + CYP2B6/2D6/2C19 contributions). Kim 2023 Part 2 is single-dose crossover (explicitly NOT steady-state per paper methods), making this a clean N=23 primary-source single-dose Cmax. Arithmetic mean (SD) convention. Era caveat: South Korea approval 2022, not FDA NME -- admit on exclusion-clean + mechanism-value path. SMILES cross-validated against PubChem CID 122662112 (InChIKey full match OUNXGNDVWVPCOL-UHFFFAOYSA-N; no stereocenters). URL verified (HTTP 200)."
+    },
+    "lurbinectedin": {
+      "status": "VERIFIED",
+      "smiles": "CC1=CC2=C([C@@H]3[C@@H]4[C@H]5C6=C(C(=C7C(=C6[C@@H](N4[C@H]([C@H](C2)N3C)O)COC(=O)[C@@]8(CS5)C9=C(CCN8)C2=C(N9)C=CC(=C2)OC)OCO7)C)OC(=O)C)C(=C1OC)O",
+      "pubchem_cid": 57327016,
+      "molecular_formula": "C41H44N4O10S",
+      "molecular_weight": 784.87,
+      "dose_mg": 5.92,
+      "dose_original": "3.2 mg/m\u00b2 IV 60-min infusion (FDA-approved Zepzelca dose for metastatic SCLC).",
+      "dose_conversion_note": "3.2 mg/m\u00b2 x BSA 1.85 m\u00b2 = 5.92 mg per spec \u00a79 #1.",
+      "route": "iv_infusion",
+      "infusion_duration_min": 60.0,
+      "observed_cmax_mg_l": 0.107,
+      "observed_cmax_sd_mg_l": null,
+      "observed_cmax_cv": 0.79,
+      "patient_n": 105,
+      "oatp1b1_substrate": false,
+      "mechanism_tags": [
+        "DNA_minor_groove_binder",
+        "alkylator",
+        "CYP3A4_substrate",
+        "P-gp_substrate",
+        "high_plasma_protein_binding_99pct",
+        "oncology_SCLC",
+        "2020_FDA_NME"
+      ],
+      "source": {
+        "citation": "Jazz Pharmaceuticals. ZEPZELCA (lurbinectedin) for injection -- FDA prescribing information. Initial U.S. Approval 2020. DailyMed SPL setid 632bb50c-3bcb-4c85-9056-fc33410550ae.",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=632bb50c-3bcb-4c85-9056-fc33410550ae",
+        "doi": null,
+        "table_ref": "Section 12.3 Pharmacokinetics -- 'Following the approved recommended dosage, geometric mean (%CV) of plasma Cmax and AUC0-inf, were 107 \u00b5g/L (79%) and 551 \u00b5g\u00b7h/L (94%), respectively.' Source cohort is Study B-005 pivotal SCLC efficacy trial (PM1183-B-005-14, NCT02454972, N=105 patients, 3.2 mg/m\u00b2 IV 60-min every 3 weeks). Section 12.3 transporter statement: 'Lurbinectedin is a substrate of MDR1, but is not a substrate of OATP1B1, OATP1B3, OCT1, or MATE1.' Verified verbatim via DailyMed WebFetch 2026-04-23.",
+        "access_path": "fda_label_dailymed"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified -- 2020 FDA NME (PharmaMar / Jazz). DrugBank DB12807 exists. Aliases checked: lurbinectedin, Zepzelca, PM01183, PM1183 -- 0 exclusion hits.",
+        "not_in_validation": true
+      },
+      "notes": "Fills high-PPB (~99%) + CYP3A-dominant + confirmed-non-OATP1B1-substrate + IV-rebalance slots. Label explicitly says NOT an OATP1B1 substrate (lurbinectedin IS however an OATP1B1 inhibitor -- inhibitor status does not affect substrate classification for observed-Cmax fitting). Cancer-patient cohort (SCLC) consistent with paclitaxel/docetaxel/irinotecan/caspofungin precedents. Geometric mean 107 \u00b5g/L = 0.107 mg/L; gCV 79% recorded; SD null (geometric convention). MW 785 near AD threshold. Era caveat: 2020 NME. SMILES cross-validated against PubChem CID 57327016 (InChIKey full match YDDMIZRDDREKEP-HWTBNCOESA-N with 7 stereocenters). URL verified (HTTP 200)."
+    },
+    "dotinurad": {
+      "status": "VERIFIED",
+      "smiles": "C1N(C2=CC=CC=C2S1(=O)=O)C(=O)C3=CC(=C(C(=C3)Cl)O)Cl",
+      "pubchem_cid": 51349053,
+      "molecular_formula": "C14H9Cl2NO4S",
+      "molecular_weight": 358.19,
+      "dose_mg": 4.0,
+      "route": "oral",
+      "infusion_duration_min": null,
+      "observed_cmax_mg_l": 0.365,
+      "observed_cmax_sd_mg_l": 0.0352,
+      "observed_cmax_cv": 0.096,
+      "patient_n": 10,
+      "oatp1b1_substrate": false,
+      "mechanism_tags": [
+        "URAT1_inhibitor",
+        "uricosuric",
+        "UGT1A1_substrate",
+        "UGT1A3_substrate",
+        "UGT1A9_substrate",
+        "UGT2B7_substrate",
+        "SULT_substrate",
+        "multi_UGT_metabolism",
+        "renal_urate_handling"
+      ],
+      "source": {
+        "citation": "Liu Y, Chen Q, Sun H, et al. A Single- and Multiple-Dose Study to Characterize the Pharmacokinetics and Safety of Dotinurad in Healthy Chinese Adults. Clin Drug Investig. 2025 Oct 19;45(12):957-966. PMCID: PMC12669303.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12669303/",
+        "doi": "10.1007/s40261-025-01496-x",
+        "table_ref": "Table 2 -- 'Pharmacokinetic parameters after a single dose of dotinurad (pharmacokinetic analysis set)'; Cohort B 4 mg dose, healthy nonsmoking Chinese adults aged 18-45 fasted, N=10: Cmax 365 (35.2) ng/mL [arithmetic mean (SD)], Tmax median 3.00 h (range 2.00-4.00). Verified verbatim via PMC WebFetch 2026-04-23.",
+        "access_path": "primary_paper"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified -- 2020 Japan PMDA approval (Urece); 2024 China NMPA approval. DrugBank DB15377 exists. Aliases checked: dotinurad, FYU-981 -- 0 exclusion hits.",
+        "not_in_validation": true
+      },
+      "notes": "Fills previously-empty UGT1A1-involved multi-UGT oral metabolism class (glucuronidation by UGT1A1 + UGT1A3 + UGT1A9 + UGT2B7 plus SULT sulfation per Uchida 2021 DMD 49:1016). 4 mg is the clinical maintenance dose in China. Low CV 9.6% reflects tight absorption. SMILES cross-validated against PubChem CID 51349053 (InChIKey full match VOFLAIHEELWYGO-UHFFFAOYSA-N; no stereocenters). Era caveat: 2020 Japan / 2024 China NME, not FDA-approved -- admit on mechanism-value path. URL verified (HTTP 200)."
+    },
+    "belinostat": {
+      "status": "VERIFIED",
+      "smiles": "C1=CC=C(C=C1)NS(=O)(=O)C2=CC=CC(=C2)/C=C/C(=O)NO",
+      "pubchem_cid": 6918638,
+      "molecular_formula": "C15H14N2O4S",
+      "molecular_weight": 318.35,
+      "dose_mg": 2220.0,
+      "dose_original": "1200 mg/m\u00b2 IV 30-min infusion (Wang 2013 Phase I dose-finding in HCC patients; supratherapeutic -- approved Beleodaq dose is 1000 mg/m\u00b2).",
+      "dose_conversion_note": "1200 mg/m\u00b2 x BSA 1.85 m\u00b2 = 2220 mg per spec \u00a79 #1. This is the only N\u22656 single-dose cohort in Wang 2013 primary paper. Belinostat exhibits linear PK per label Section 12.3, so scoring can apply a 1000/1200 = 0.833x linear back-scale if single-dose labeled-regimen Cmax is desired. Reporting the supratherapeutic cohort directly per spec (observed Cmax at primary-source dose).",
+      "route": "iv_infusion",
+      "infusion_duration_min": 30.0,
+      "observed_cmax_mg_l": 48.87,
+      "observed_cmax_sd_mg_l": 16.04,
+      "observed_cmax_cv": 0.328,
+      "patient_n": 6,
+      "oatp1b1_substrate": false,
+      "mechanism_tags": [
+        "HDAC_pan_inhibitor",
+        "UGT1A1_substrate_dominant",
+        "CYP2A6_substrate_minor",
+        "CYP2C9_substrate_minor",
+        "CYP3A4_substrate_minor",
+        "P-gp_substrate",
+        "high_hepatic_extraction",
+        "oncology_PTCL",
+        "2014_FDA_NME"
+      ],
+      "source": {
+        "citation": "Wang LZ, Ramirez J, Yeo W, Chan MY, Thuya WL, Lau JY, Wan SC, Wong AL, Zee YK, Lim R, Lee SC, Ho PC, Lee HS, Chan A, Ansher S, Ratain MJ, Goh BC. Glucuronidation by UGT1A1 Is the Dominant Pathway of the Metabolic Disposition of Belinostat in Liver Cancer Patients. PLoS One. 2013 Jan 30;8(1):e54522. PMCID: PMC3559838.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3559838/",
+        "doi": "10.1371/journal.pone.0054522",
+        "table_ref": "Table 1 -- 'Pharmacokinetic parameters for belinostat after 30 min i.v. infusion in Phase I trial'; 1200 mg/m\u00b2 cohort, N=6 HCC (hepatocellular carcinoma) patients, Day-1 single-dose: Cmax 153.5 \u00b1 50.4 \u00b5mol/L (arithmetic mean \u00b1 SD), AUC0-24h 112.6 \u00b1 37.1 h\u00b7\u00b5mol/L, CL 54.6 \u00b1 15.8 L/h, t1/2 4.14 \u00b1 0.42 h, Vz 304.9 \u00b1 185.6 L. Converted to mg/L: 153.5 \u00b5mol/L \u00d7 318.35 g/mol / 1000 = 48.87 mg/L; SD 16.04 mg/L. Verified verbatim via PMC WebFetch 2026-04-23.",
+        "access_path": "primary_paper"
+      },
+      "exclusion_checks": {
+        "not_in_107": true,
+        "not_in_mmpk": true,
+        "not_in_tdc": true,
+        "not_in_drugbank_enrichment": "unverified -- 2014 FDA NME Beleodaq for PTCL. DrugBank DB05015 exists. Aliases checked: belinostat, Beleodaq, PXD101, PXD-101 -- 0 exclusion hits.",
+        "not_in_validation": true
+      },
+      "notes": "Fills previously-empty UGT1A1-dominant hepatic clearance class (fm_UGT1A1 ~80-90% per Wang 2013). High-extraction flow-limited CL 1240 mL/min approximates hepatic blood flow. Patient cohort (HCC, Wang 2013) consistent with paclitaxel/irinotecan/docetaxel precedents. PPB 92.9-95.8% per label (not >99%, so not a fit for that class, but UGT1A1-dominance is the unique contribution). OATP1B1 substrate status: label \u00a712.3 transporter list shows only P-gp (substrate); no open-access evidence for OATP1B1 substrate role -- classified false. Era caveat: 2014 NME (strongly pre-2024) + dose supratherapeutic -- admitted on UGT1A1-class-mechanism-value path. SMILES cross-validated against PubChem CID 6918638 (InChIKey full match NCNRHFGMJRPRSK-MDZDMXLPSA-N with E-cinnamoyl geometry). URL verified (HTTP 200)."
     }
   },
   "forward_curation_plan": {
-    "target_remaining": 20,
+    "target_remaining": 17,
     "oatp1b1_additional_candidates": [
       "paclitaxel (OATP1B3 + OATP1B1, rich PK literature, IV)",
       "docetaxel (similar to paclitaxel)",
