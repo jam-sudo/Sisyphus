@@ -8,7 +8,7 @@
   "feature_schema": {
     "name": "compute_features_v1",
     "n_features": 2057,
-    "sha256": "dd014cd8e7df59980ac05cdf494dad42f015da8013c5b347ded92e25a804497b",
+    "sha256": "b41dddd78533661b8f4aed86bdb7c5f55d15ed3cd2ad20b39e9100557eda631e",
     "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, NumHeavyAtoms). See src/sisyphus/descriptors.py::compute_features."
   },
   "trained_at": "unknown_legacy",

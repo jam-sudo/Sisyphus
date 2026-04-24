@@ -59,14 +59,16 @@ sha256 = hashlib.sha256(features.tobytes()).hexdigest()
 
 **Why hash?** `n_features: 2057` alone does not catch changes in feature ORDER or IDENTITY. Swapping Morgan radius from 2 → 3 keeps the count but changes the bits. Adding a new RDKit descriptor also often keeps the same count by replacing another. Hashing the byte-representation of the feature vector on a canonical input catches all such drifts.
 
-**Canonical inputs** currently used:
+**Canonical inputs** currently used (hashes computed under the `requirements-lock.txt` environment — rdkit 2026.3.1, numpy 2.2.6):
 
 | Feature pipeline | Canonical SMILES | Canonical hash |
 |---|---|---|
-| `compute_features_v1` (2048 Morgan r=2 + 9 RDKit descriptors, 2057 total, float64) | `CN1C=NC2=C1C(=O)N(C(=O)N2C)C` (caffeine) | `dd014cd8e7df59980ac05cdf494dad42f015da8013c5b347ded92e25a804497b` |
-| `logp_corr_6` (logp + mw + tpsa + hbd + hba + rot. bonds, 6 total, float64, shape (1, 6)) | same | `fdf88196a6c9a56c565b8aae6d2b2ee372b56263b401a1caf073cb140bed8114` |
+| `compute_features_v1` (2048 Morgan r=2 + 9 RDKit descriptors, 2057 total, float64) | `CN1C=NC2=C1C(=O)N(C(=O)N2C)C` (caffeine) | `b41dddd78533661b8f4aed86bdb7c5f55d15ed3cd2ad20b39e9100557eda631e` |
+| `logp_corr_6` (logp + mw + tpsa + hbd + hba + rot. bonds, 6 total, float64, shape (1, 6)) | same | `a8da0c08b6425b5d5967e38d60fe0130119ad66282a1fac2016bcbf3e9ab0e6d` |
 
 A manifest whose `feature_schema.sha256` does not match the hash computed at load time emits a warning (the loaded model may produce garbage if the feature extractor has evolved).
+
+**Environment coupling**: the canonical hashes are stable within the pinned RDKit + numpy versions. Because Morgan fingerprint bits and some `Descriptors.*` outputs can change across RDKit versions, the manifests ship hashes computed under the lockfile env — that is the environment CI and fresh installs both use. When upgrading RDKit, recompute the canonical hashes in a fresh venv, update this table, and regenerate the manifests.
 
 ## Registry behavior
 
