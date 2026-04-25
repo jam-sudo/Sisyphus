@@ -156,3 +156,39 @@ class ActiveTransportEdge(Edge):
     """
 
     edge_type: str = field(default="active_transport", init=False)
+
+
+@dataclass(frozen=True)
+class ProdrugActivationEdge(Edge):
+    """Mass transfer: parent drug → active metabolite at conversion site.
+
+    Distinct from clearance (which removes mass to sink) and flow (which
+    conserves mass within same species). The flux differs in source vs
+    target units: source loses mg of parent; target gains mg of active
+    (scaled by MW ratio × yield).
+
+    1st-order in parent amount: rate = conversion_rate × A_parent[source].
+    Active mass produced = rate × (mw_active/mw_parent) × conversion_yield.
+
+    Identity-blind: engine matches by edge_type, not source/target name.
+    """
+
+    edge_type: str = field(default="prodrug_activation", init=False)
+    conversion_rate: Distribution = field(default_factory=lambda: Distribution(0.0))
+    conversion_yield: Distribution = field(default_factory=lambda: Distribution(1.0))
+    mw_parent: float = 0.0
+    mw_active: float = 0.0
+
+
+@dataclass(frozen=True)
+class OneCompartmentEliminationEdge(Edge):
+    """Aggregate 1st-order elimination from a 1-compartment plasma node.
+
+    Used for active metabolite clearance where literature reports total
+    plasma CL (not enzyme-level decomposition). Rate = (CL/Vd) × A_source.
+    Mass accumulates at target sink node for mass-balance audit.
+    """
+
+    edge_type: str = field(default="one_compartment_elimination", init=False)
+    cl_per_h: Distribution = field(default_factory=lambda: Distribution(0.0))
+    vd_l: Distribution = field(default_factory=lambda: Distribution(1.0))
