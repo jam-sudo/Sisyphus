@@ -15,7 +15,7 @@ from typing import Any
 
 import yaml
 
-from sisyphus.core import Distribution
+from sisyphus.core import Distribution, DrugOnGraph
 from sisyphus.graph.body import BodyGraph
 from sisyphus.graph.types import (
     AbsorptionEdge,
@@ -24,6 +24,8 @@ from sisyphus.graph.types import (
     DiffusionEdge,
     FlowEdge,
     Node,
+    OneCompartmentEliminationEdge,
+    ProdrugActivationEdge,
     TissueComposition,
     TransitEdge,
 )
@@ -257,3 +259,95 @@ def _parse_distribution(raw: Any) -> Distribution:
         return Distribution(mean=mean, cv=cv, correlation_group=correlation_group)
     # bare numeric value
     return Distribution(mean=float(raw), cv=0.0)
+
+
+# ---------------------------------------------------------------------------
+# Active species augmentation — prodrug activation routing
+# ---------------------------------------------------------------------------
+
+ACTIVE_SUFFIX = "_active"
+"""Suffix appended to observation_node to name the active species plasma node."""
+
+_DEFAULT_ACTIVE_SINK = "metabolized_gut"
+"""Existing sink node where active-species mass accumulates for audit.
+
+Reusing an existing sink avoids introducing a new node per prodrug;
+mass-balance auditing remains valid since the sink is still a real
+node in the state vector.
+"""
+
+
+def augment_for_active_species(
+    graph: BodyGraph,
+    drug: DrugOnGraph,
+    observation_node: str = "venous_blood",
+) -> BodyGraph:
+    """Augment graph with active-species 1-compartment plasma + 2 new edges.
+
+    No-op when ``drug.active_metabolite is None``.
+
+    Adds:
+    - 1 ``Node`` for active plasma (named ``observation_node + ACTIVE_SUFFIX``,
+      ``node_type="blood_pool"``, volume=Vd_L)
+    - 1 ``ProdrugActivationEdge`` from ``conversion_site`` → active plasma
+    - 1 ``OneCompartmentEliminationEdge`` from active plasma → existing sink
+
+    Mutates ``graph`` in place and returns it for chaining convenience.
+
+    Raises:
+        ValueError: ``conversion_site`` not in ``graph.nodes``.
+        ValueError: active plasma node name already exists (collision).
+        ValueError: default sink node not present in graph.
+    """
+    if drug.active_metabolite is None:
+        return graph
+    am = drug.active_metabolite
+
+    if am.conversion_site not in graph.nodes:
+        raise ValueError(
+            f"conversion_site={am.conversion_site!r} not in graph nodes "
+            f"{sorted(graph.nodes.keys())}"
+        )
+
+    active_node_name = observation_node + ACTIVE_SUFFIX
+    if active_node_name in graph.nodes:
+        raise ValueError(
+            f"active node name collision: {active_node_name!r} "
+            "already exists in graph"
+        )
+
+    if _DEFAULT_ACTIVE_SINK not in graph.nodes:
+        raise ValueError(
+            f"sink node {_DEFAULT_ACTIVE_SINK!r} required for active "
+            "elimination but not found in graph"
+        )
+
+    # Active plasma compartment (blood_pool: Kp=1, no flow conservation).
+    active_node = Node(
+        name=active_node_name,
+        node_type="blood_pool",
+        volume=am.Vd_L,
+    )
+    graph.add_node(active_node)
+
+    # Conversion edge: parent at conversion_site → active plasma.
+    activation_edge = ProdrugActivationEdge(
+        source=am.conversion_site,
+        target=active_node_name,
+        conversion_rate=am.conversion_rate_per_h,
+        conversion_yield=am.conversion_yield_fraction,
+        mw_parent=drug.mw,
+        mw_active=am.mw,
+    )
+    graph.add_edge(activation_edge)
+
+    # Elimination edge: active plasma → existing sink.
+    elimination_edge = OneCompartmentEliminationEdge(
+        source=active_node_name,
+        target=_DEFAULT_ACTIVE_SINK,
+        cl_per_h=am.CL_per_h,
+        vd_l=am.Vd_L,
+    )
+    graph.add_edge(elimination_edge)
+
+    return graph
