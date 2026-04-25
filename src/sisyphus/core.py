@@ -135,6 +135,46 @@ class TransporterKinetics:
 
 
 # ---------------------------------------------------------------------------
+# ActiveMetabolite — prodrug activation routing
+# ---------------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class ActiveMetabolite:
+    """Active species produced by in vivo conversion of a parent prodrug.
+
+    One-compartment plasma disposition: aggregate ``CL_per_h`` and ``Vd_L``
+    represent the active's apparent clearance and volume of distribution.
+    No enzyme-level decomposition (out of scope; see
+    docs/superpowers/specs/2026-04-24-prodrug-activation-design.md §2).
+
+    The conversion edge connects ``conversion_site`` (a parent-graph node)
+    to the active's plasma compartment. Conversion is 1st-order in parent
+    amount with optional yield fraction < 1.
+
+    Attributes:
+        name: Identifier for the active species (e.g. ``"BH4"``).
+        mw: Molecular weight (g/mol).
+        fup: Fraction unbound in plasma (Distribution).
+        CL_per_h: Aggregate plasma clearance, L/h (Distribution).
+        Vd_L: Apparent volume of distribution, L (Distribution).
+        conversion_rate_per_h: First-order conversion rate constant, 1/h.
+        conversion_site: Name of parent-graph node where conversion occurs.
+        conversion_yield_fraction: Fractional molar conversion (default 1.0
+            = stoichiometric).
+    """
+
+    name: str
+    mw: float
+    fup: Distribution
+    CL_per_h: Distribution
+    Vd_L: Distribution
+    conversion_rate_per_h: Distribution
+    conversion_site: str
+    conversion_yield_fraction: Distribution
+
+
+# ---------------------------------------------------------------------------
 # DrugOnGraph — predict → engine contract
 # ---------------------------------------------------------------------------
 
