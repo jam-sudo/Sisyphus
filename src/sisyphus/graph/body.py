@@ -20,6 +20,8 @@ from sisyphus.graph.types import (
     Edge,
     FlowEdge,
     Node,
+    OneCompartmentEliminationEdge,
+    ProdrugActivationEdge,
     TransitEdge,
 )
 
@@ -172,6 +174,18 @@ class BodyGraph:
                 new_edge = dataclasses.replace(
                     edge,
                     ka_fraction=Distribution(edge.ka_fraction.sample(rng), cv=0.0),
+                )
+            elif isinstance(edge, ProdrugActivationEdge):
+                new_edge = dataclasses.replace(
+                    edge,
+                    conversion_rate=Distribution(edge.conversion_rate.sample(rng), cv=0.0),
+                    conversion_yield=Distribution(edge.conversion_yield.sample(rng), cv=0.0),
+                )
+            elif isinstance(edge, OneCompartmentEliminationEdge):
+                new_edge = dataclasses.replace(
+                    edge,
+                    cl_per_h=Distribution(edge.cl_per_h.sample(rng), cv=0.0),
+                    vd_l=Distribution(edge.vd_l.sample(rng), cv=0.0),
                 )
             else:
                 # ClearanceEdge and unknown edge types have no Distribution fields.
