@@ -578,6 +578,16 @@ def build_drug_on_graph(
     Returns:
         A fully parameterized DrugOnGraph ready for the engine.
     """
+    from sisyphus.predict.registry import lookup_active_metabolite
+
+    # Prodrug activation routing: SMILES → ActiveMetabolite via registry.
+    registry_result = lookup_active_metabolite(profile.smiles)
+    if registry_result is not None:
+        active_metabolite, observation_species = registry_result
+    else:
+        active_metabolite = None
+        observation_species = "parent"
+
     # Use graph-supplied abundances when available, fall back to hardcoded defaults.
     abundances = liver_enzymes if liver_enzymes is not None else _LIVER_ENZYME_ABUNDANCE
 
@@ -650,6 +660,8 @@ def build_drug_on_graph(
         renal_clearance=renal_cl,
         particle_radius_um=particle_radius,
         transporter_kinetics=transporter_kinetics or {},
+        active_metabolite=active_metabolite,
+        observation_species=observation_species,
         **ecm_kwargs,
     )
 
