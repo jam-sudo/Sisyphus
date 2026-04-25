@@ -246,6 +246,22 @@ class DrugOnGraph:
     # Permeability-surface area overrides for perm-limited organs
     ps_overrides: dict[str, Distribution] = field(default_factory=dict)
 
+    # Prodrug activation — see ActiveMetabolite + spec
+    # docs/superpowers/specs/2026-04-24-prodrug-activation-design.md
+    active_metabolite: ActiveMetabolite | None = None
+    observation_species: str = "parent"  # "parent" | "active"
+
+    def __post_init__(self) -> None:
+        if self.observation_species not in ("parent", "active"):
+            raise ValueError(
+                f"observation_species must be 'parent' or 'active', "
+                f"got {self.observation_species!r}"
+            )
+        if self.observation_species == "active" and self.active_metabolite is None:
+            raise ValueError(
+                "observation_species='active' requires active_metabolite config"
+            )
+
     def sample(self, rng: np.random.Generator) -> DrugOnGraph:
         """Sample all Distributions to produce a realized (point-value) copy.
 
@@ -286,6 +302,20 @@ class DrugOnGraph:
             ps_overrides={
                 k: Distribution(mean=v.sample(rng), cv=0.0) for k, v in self.ps_overrides.items()
             },
+            active_metabolite=ActiveMetabolite(
+                name=self.active_metabolite.name,
+                mw=self.active_metabolite.mw,
+                fup=Distribution(mean=self.active_metabolite.fup.sample(rng), cv=0.0),
+                CL_per_h=Distribution(mean=self.active_metabolite.CL_per_h.sample(rng), cv=0.0),
+                Vd_L=Distribution(mean=self.active_metabolite.Vd_L.sample(rng), cv=0.0),
+                conversion_rate_per_h=Distribution(
+                    mean=self.active_metabolite.conversion_rate_per_h.sample(rng), cv=0.0),
+                conversion_site=self.active_metabolite.conversion_site,
+                conversion_yield_fraction=Distribution(
+                    mean=self.active_metabolite.conversion_yield_fraction.sample(rng),
+                    cv=0.0),
+            ) if self.active_metabolite is not None else None,
+            observation_species=self.observation_species,
         )
 
 
