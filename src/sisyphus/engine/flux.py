@@ -608,3 +608,41 @@ class ProdrugActivationFluxSpec(FluxSpec):
         flux_active = flux_parent * self.mw_ratio * y_frac
         dydt[self.source_idx] -= flux_parent
         dydt[self.target_idx] += flux_active
+
+
+@register_flux("one_compartment_elimination")
+class OneCompartmentEliminationFluxSpec(FluxSpec):
+    """Aggregate 1st-order elimination: rate = (CL/Vd) × A_source.
+
+    Mass-conserving: source loses mass; target (sink-type node) gains
+    it for mass-balance audit. Used for active metabolite clearance
+    where literature reports plasma CL and Vd directly (no enzyme
+    decomposition).
+    """
+
+    @classmethod
+    def from_edge(
+        cls, edge_id: int, edge, state_index: dict[str, int]
+    ) -> OneCompartmentEliminationFluxSpec:
+        return cls(
+            edge_id,
+            state_index[edge.source],
+            state_index[edge.target],
+            edge.source,
+            edge.target,
+        )
+
+    def apply(
+        self,
+        t: float,
+        y: np.ndarray,
+        dydt: np.ndarray,
+        params: ResolvedParams,
+    ) -> None:
+        cl = params.edge_param(self.edge_id, "cl_per_h")
+        vd = params.edge_param(self.edge_id, "vd_l")
+        if vd <= 0:
+            return
+        rate = (cl / vd) * y[self.source_idx]
+        dydt[self.source_idx] -= rate
+        dydt[self.target_idx] += rate
