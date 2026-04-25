@@ -142,3 +142,17 @@ def test_lookup_missing_required_field_raises(tmp_path):
     })
     with pytest.raises(ValueError, match="missing field"):
         lookup_active_metabolite("CCO", registry_path=p)
+
+
+def test_actual_registry_loads_4_entries():
+    """Verify the production registry contains 4 valid entries."""
+    from sisyphus.predict.registry import _DEFAULT_REGISTRY_PATH
+    import json
+    with _DEFAULT_REGISTRY_PATH.open() as f:
+        registry = json.load(f)
+    # Filter out comment-style keys (those starting with _)
+    entries = {k: v for k, v in registry.items() if not k.startswith("_")}
+    assert len(entries) == 4, f"Expected 4 prodrug entries, got {len(entries)}"
+    expected_names = {"BH4", "GS-441524", "tebipenem", "R406"}
+    actual_names = {v["name"] for v in entries.values()}
+    assert actual_names == expected_names
