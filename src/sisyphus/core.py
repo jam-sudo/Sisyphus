@@ -6,6 +6,8 @@ Every layer may import from here. No layer-specific logic belongs here.
 Types defined:
     Distribution       — parameter value with uncertainty (the atomic unit)
     TissueComposition  — tissue fractions for Kp calculation
+    TransporterKinetics — Michaelis-Menten parameters for active transport
+    ActiveMetabolite   — one-compartment active metabolite for prodrug routing
     DrugOnGraph        — drug properties mapped to graph (predict → engine)
     SimResult          — raw ODE solution (engine → pk)
     PKEndpoints        — pharmacokinetic endpoints (pk → pipeline)
@@ -154,14 +156,16 @@ class ActiveMetabolite:
 
     Attributes:
         name: Identifier for the active species (e.g. ``"BH4"``).
-        mw: Molecular weight (g/mol).
+        mw: Molecular weight (g/mol). Bare float (deterministic; consistent
+            with ``DrugOnGraph.mw`` precedent — Invariant 2 exception).
         fup: Fraction unbound in plasma (Distribution).
         CL_per_h: Aggregate plasma clearance, L/h (Distribution).
         Vd_L: Apparent volume of distribution, L (Distribution).
-        conversion_rate_per_h: First-order conversion rate constant, 1/h.
+        conversion_rate_per_h: First-order conversion rate constant, 1/h
+            (Distribution).
         conversion_site: Name of parent-graph node where conversion occurs.
-        conversion_yield_fraction: Fractional molar conversion (default 1.0
-            = stoichiometric).
+        conversion_yield_fraction: Fractional molar conversion (Distribution,
+            default 1.0 = stoichiometric).
     """
 
     name: str
@@ -171,7 +175,9 @@ class ActiveMetabolite:
     Vd_L: Distribution
     conversion_rate_per_h: Distribution
     conversion_site: str
-    conversion_yield_fraction: Distribution
+    conversion_yield_fraction: Distribution = field(
+        default_factory=lambda: Distribution(1.0, cv=0.0)
+    )
 
 
 # ---------------------------------------------------------------------------
