@@ -191,7 +191,7 @@ sisyphus ddi --smiles "c1ccc2c(c1)C(=NC(=O)N2)c1ccccc1F" \
 sisyphus dose-adjust --smiles "c1ccc2c(c1)C(=NC(=O)N2)c1ccccc1F" \
     --dose 5 --obs "1.0:0.015" --target-css 0.02
 
-# Holdout benchmark
+# Holdout benchmark (add --compute-pi for empirical 90% PI coverage; diagnostic only)
 sisyphus benchmark --holdout
 ```
 
@@ -345,7 +345,9 @@ Single-patient deterministic prediction completes in &lt;500 ms, compatible with
 
 ### Test suite
 
-**569 passing / 4 skipped / 2 xfailed** (575 collected, full sweep 2026-04-22) covering graph construction, ODE compilation, flux functions (including ECM + V3 windowed IV-Cmax), solver correctness, mass balance, ADME prediction, meta-learner calibration, multi-dose regimen, TDM Bayesian update via SBI/IBIS/IS dispatch, MIPD dose recommendation, DDI, PK/PD, applicability-domain detection, and holdout benchmark reproducibility. The 2 xfailed tests are rosuvastatin and atorvastatin Peff over-prediction (predict-layer issue, not engine) — will auto-green when the Peff model improves for high-MW polar acids.
+**736 passed / 9 failed / 15 skipped / 3 xfailed** (763 collected, full sweep 2026-04-27, post prodrug-activation merge, 9 min 24 s) covering graph construction, ODE compilation, flux functions (including ECM + V3 windowed IV-Cmax + ProdrugActivation + OneCompartmentElimination), solver correctness, mass balance (incl. two-species analytical 2C cascade), ADME prediction, meta-learner calibration, multi-dose regimen, TDM Bayesian update via SBI/IBIS/IS dispatch, MIPD dose recommendation, DDI, PK/PD, applicability-domain detection, prodrug-activation registry + pipeline integration, and holdout benchmark reproducibility. Persistent xfails: rosuvastatin and atorvastatin Peff over-prediction (predict-layer issue, not engine) — will auto-green when the Peff model improves for high-MW polar acids.
+
+**Known failing tests (9):** 4 are the prodrug v1 3-fold clinical validation gate (sepiapterin, remdesivir, tebipenem-pivoxil, fostamatinib) documented in [Limitations](#limitations); 4 are ECM/OATP statin tests (`test_ecm_holdout_spot_check_10_drugs`, `test_statin_cmax_under_ecm[pravastatin]`, `test_statin_cmax_under_ecm[fluvastatin]`, `test_pravastatin_cmax_moves_with_oatp`) tied to DE-33 (V3 OATP under-prediction not yet resolved); 1 is an SBI posterior CV assertion (`test_sbi_posterior_tighter_than_prior_cv`) under audit. None of the 9 failures regress the headline AAFE 2.695 (re-run via `scripts/run_engine_benchmark.py`).
 
 ## Architecture
 
@@ -451,7 +453,7 @@ effect = compute_effect(sim_result, pd)
 ## Limitations
 
 - **Small-molecule oral PK only.** Biologics (antibodies, ADCs), parenteral formulations beyond SC, and non-oral routes (inhalation, topical) are not validated.
-- **No prodrug metabolism.** C<sub>max</sub> is predicted for the parent compound. Prodrugs (e.g., valacyclovir, fesoterodine) are flagged as out-of-applicability-domain.
+- **Prodrug activation: v1 infrastructure shipped, validation gate fails.** A first-order prodrug-activation routing layer was merged on 2026-04-26 (commit `af9d2be`): `ActiveMetabolite` dataclass, `ProdrugActivationEdge` + `OneCompartmentEliminationEdge` graph types, two new flux specs, a SMILES-keyed registry (`data/sbi/prodrug_activation_registry.json`, 4 N50 evidence drugs: sepiapterin, remdesivir, tebipenem-pivoxil, fostamatinib), and pipeline integration via `augment_for_active_species`. Synthetic mass-balance regression passes; the 4-drug 3-fold clinical validation gate **fails** (sepiapterin 5356&times;, tebipenem-pivoxil 8.63&times;, fostamatinib 4.78&times;, remdesivir 4.45&times;) because gut-wall flow-through residence time (~64 s) is too short for the chosen first-order conversion-rate constants. A v2 spec (enzyme-abundance Michaelis–Menten kinetics, reusing the CYP3A4 well-stirred pattern) is planned to replace `conversion_rate_per_h` with `enzyme_affinity_for_conversion`. Until v2 lands, prodrugs are produced through the registry path but should not be relied on for clinical Cmax; uncovered prodrugs continue to be flagged out-of-applicability-domain. Detailed status: `CHANGELOG.md` &sect; Unreleased.
 - **Simplified pK<sub>a</sub>.** Ionization state is classified by structural rules (carboxylic acid &rarr; 4.5, aliphatic amine &rarr; 9.0), not computed quantum-mechanically. This limits Kp accuracy for highly ionized compounds.
 - **No Phase II metabolism.** Glucuronidation (UGT), sulfation (SULT), and acetylation (NAT2) are not modeled. Drugs primarily cleared by conjugation will be under-predicted.
 - **Transporter-mediated disposition: OATP1B1 only.** Hepatic uptake by OATP1B1 is modeled mechanistically via the ECM (closed-form QSSA hepatocyte flux) with per-drug kinetic parameters in `data/transporters/oatp1b1.json`. Other hepatic transporters (OATP1B3, NTCP, BSEP), intestinal transporters (P-gp, BCRP), and renal transporters (OAT1/3, MATE1/2-K) are not mechanistically modeled. P-gp efflux at the gut wall is approximated via a binary permeability correction.
@@ -460,6 +462,7 @@ effect = compute_effect(sim_result, pd)
 - **IV-Cmax observation convention.** For intravenous bolus dosing, engine Cmax is extracted as the maximum concentration over `t ≥ 5 min` (windowed max), not the instantaneous `dose / V_venous` spike at `t = 0`. This matches the clinical first-draw convention and is route-conditional; oral drugs use full-interval max (V2-compatible). The 107-drug holdout set is entirely oral, so this methodology has zero impact on the headline AAFE. See `docs/superpowers/specs/2026-04-22-iv-cmax-observation-design.md`.
 - **ECM (Extended Clearance Model) generalization unverified for non-statins.** ECM is validated on 5 statins (3/5 pass 3-fold gate: pravastatin, pitavastatin, fluvastatin; rosuvastatin/atorvastatin xfail due to Peff over-prediction). A pre-registered generalization test on valsartan + glimepiride (2026-04-22, N=2) returned Mode C with systematic 2.5× underprediction under V3 methodology. The fup override hypothesis was ruled out (DE-33); candidates remain for Jmax calibration, Vss/Kp over-distribution, and ECM architectural limits for Km &gt; 1 µM substrates. Users should not rely on ECM accuracy for non-statin OATP1B1 substrates without independent verification.
 - **R<sub>B:P</sub> defaults to 1.0.** The RBP model (R&sup2; = &minus;0.08 on external data) is effectively disabled; all drugs are assumed to have equal blood and plasma concentrations.
+- **90% prediction interval is uncalibrated.** The first empirical coverage measurement (2026-04-24, full N=107 holdout, 1,000 MC samples; `data/validation/holdout_pi_coverage_2026-04-24.json`) yielded **29.9%** at the nominal 90% level. The MC interval reflects only parameter-uncertainty propagation and captures roughly one third of the observed residual spread &mdash; the remaining ~60 percentage points are structural error (IVIVE scaling assumptions, DE-33 OATP underprediction, CL<sub>int</sub> assay noise). The 90% PI is therefore exposed as a **diagnostic** quantity and must not be quoted as a clinically calibrated interval without empirical recalibration.
 - **MIPD assumes linear pharmacokinetics.** Dose recommendations use linear scaling, which may be inaccurate for drugs with saturable metabolism (e.g., phenytoin) or nonlinear protein binding.
 - **TDM importance sampling degenerates for large prior errors.** When the population prior is far from the individual truth (fold error &gt;3&times;) or multiple observations are used (&ge;3), the effective sample size drops below 10, indicating particle weight degeneracy. Sequential Bayesian methods (EnKF, particle filter) would address this.
 
@@ -482,8 +485,12 @@ src/sisyphus/
 │
 ├── engine/              # ODE compilation and solving (identity-blind)
 │   ├── compiler.py      # ODECompiler, CompiledODE, ResolvedParams
-│   ├── flux.py          # FluxSpec implementations (6 transport types)
+│   ├── flux.py          # FluxSpec implementations (8 transport types,
+│   │                    #   incl. ECM ActiveTransport, ProdrugActivation,
+│   │                    #   OneCompartmentElimination)
+│   ├── result.py        # SimResult dataclass
 │   ├── solver.py        # LSODA wrapper (solve, solve_mc)
+│   ├── surrogate.py     # Optional surrogate solver (experimental)
 │   └── uncertainty.py   # Monte Carlo propagation
 │
 ├── predict/             # SMILES → drug parameterization
@@ -492,6 +499,7 @@ src/sisyphus/
 │   ├── ivive.py         # In vitro → in vivo extrapolation, Kp
 │   ├── drugbank.py      # DrugBank experimental enrichment (fup, logP)
 │   ├── phenotype.py     # Pharmacogenomic phenotype (e.g., SLCO1B1)
+│   ├── registry.py      # Prodrug activation registry (SMILES-keyed)
 │   └── transporter_db.py # OATP1B1 + hepatic ECM kinetic parameters
 │
 ├── ml/                  # Data-driven PK prediction
@@ -580,10 +588,14 @@ Key empirical findings from Omega that informed Sisyphus:
 If you use Sisyphus in your research, please cite:
 
 ```
-Yoon, J. M. (2026). Sisyphus (v1.0.0): Graph-based whole-body PBPK
+Yoon, J. M. (2026). Sisyphus (0.1.0): Graph-based whole-body PBPK
 simulation with native uncertainty propagation.
 https://github.com/jam-sudo/Sisyphus
 ```
+
+> The git tag `v1.0.0` (commit `67b7064`) records an earlier feature-branch
+> milestone that has been superseded by the current `main` line under a
+> more conservative measurement regime. See `CHANGELOG.md` for details.
 
 ## Requirements
 
