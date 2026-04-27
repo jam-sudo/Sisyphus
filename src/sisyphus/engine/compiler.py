@@ -24,6 +24,8 @@ from sisyphus.graph.types import (
     ClearanceEdge,
     DiffusionEdge,
     FlowEdge,
+    OneCompartmentEliminationEdge,
+    ProdrugActivationEdge,
     TransitEdge,
 )
 
@@ -203,6 +205,12 @@ class ResolvedParams:
                 params["model"] = edge.model  # type: ignore[assignment]
             elif isinstance(edge, ActiveTransportEdge):
                 pass  # No static params — kinetics come from drug at runtime
+            elif isinstance(edge, ProdrugActivationEdge):
+                params["conversion_rate"] = edge.conversion_rate.mean
+                params["conversion_yield"] = edge.conversion_yield.mean
+            elif isinstance(edge, OneCompartmentEliminationEdge):
+                params["cl_per_h"] = edge.cl_per_h.mean
+                params["vd_l"] = edge.vd_l.mean
             edge_params[i] = params
         return edge_params
 

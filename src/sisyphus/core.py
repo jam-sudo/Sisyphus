@@ -6,6 +6,8 @@ Every layer may import from here. No layer-specific logic belongs here.
 Types defined:
     Distribution       — parameter value with uncertainty (the atomic unit)
     TissueComposition  — tissue fractions for Kp calculation
+    TransporterKinetics — Michaelis-Menten parameters for active transport
+    ActiveMetabolite   — one-compartment active metabolite for prodrug routing
     DrugOnGraph        — drug properties mapped to graph (predict → engine)
     SimResult          — raw ODE solution (engine → pk)
     PKEndpoints        — pharmacokinetic endpoints (pk → pipeline)
@@ -135,6 +137,50 @@ class TransporterKinetics:
 
 
 # ---------------------------------------------------------------------------
+# ActiveMetabolite — prodrug activation routing
+# ---------------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class ActiveMetabolite:
+    """Active species produced by in vivo conversion of a parent prodrug.
+
+    One-compartment plasma disposition: aggregate ``CL_per_h`` and ``Vd_L``
+    represent the active's apparent clearance and volume of distribution.
+    No enzyme-level decomposition (out of scope; see
+    docs/superpowers/specs/2026-04-24-prodrug-activation-design.md §2).
+
+    The conversion edge connects ``conversion_site`` (a parent-graph node)
+    to the active's plasma compartment. Conversion is 1st-order in parent
+    amount with optional yield fraction < 1.
+
+    Attributes:
+        name: Identifier for the active species (e.g. ``"BH4"``).
+        mw: Molecular weight (g/mol). Bare float (deterministic; consistent
+            with ``DrugOnGraph.mw`` precedent — Invariant 2 exception).
+        fup: Fraction unbound in plasma (Distribution).
+        CL_per_h: Aggregate plasma clearance, L/h (Distribution).
+        Vd_L: Apparent volume of distribution, L (Distribution).
+        conversion_rate_per_h: First-order conversion rate constant, 1/h
+            (Distribution).
+        conversion_site: Name of parent-graph node where conversion occurs.
+        conversion_yield_fraction: Fractional molar conversion (Distribution,
+            default 1.0 = stoichiometric).
+    """
+
+    name: str
+    mw: float
+    fup: Distribution
+    CL_per_h: Distribution
+    Vd_L: Distribution
+    conversion_rate_per_h: Distribution
+    conversion_site: str
+    conversion_yield_fraction: Distribution = field(
+        default_factory=lambda: Distribution(1.0, cv=0.0)
+    )
+
+
+# ---------------------------------------------------------------------------
 # DrugOnGraph — predict → engine contract
 # ---------------------------------------------------------------------------
 
@@ -200,6 +246,22 @@ class DrugOnGraph:
     # Permeability-surface area overrides for perm-limited organs
     ps_overrides: dict[str, Distribution] = field(default_factory=dict)
 
+    # Prodrug activation — see ActiveMetabolite + spec
+    # docs/superpowers/specs/2026-04-24-prodrug-activation-design.md
+    active_metabolite: ActiveMetabolite | None = None
+    observation_species: str = "parent"  # "parent" | "active"
+
+    def __post_init__(self) -> None:
+        if self.observation_species not in ("parent", "active"):
+            raise ValueError(
+                f"observation_species must be 'parent' or 'active', "
+                f"got {self.observation_species!r}"
+            )
+        if self.observation_species == "active" and self.active_metabolite is None:
+            raise ValueError(
+                "observation_species='active' requires active_metabolite config"
+            )
+
     def sample(self, rng: np.random.Generator) -> DrugOnGraph:
         """Sample all Distributions to produce a realized (point-value) copy.
 
@@ -240,6 +302,20 @@ class DrugOnGraph:
             ps_overrides={
                 k: Distribution(mean=v.sample(rng), cv=0.0) for k, v in self.ps_overrides.items()
             },
+            active_metabolite=ActiveMetabolite(
+                name=self.active_metabolite.name,
+                mw=self.active_metabolite.mw,
+                fup=Distribution(mean=self.active_metabolite.fup.sample(rng), cv=0.0),
+                CL_per_h=Distribution(mean=self.active_metabolite.CL_per_h.sample(rng), cv=0.0),
+                Vd_L=Distribution(mean=self.active_metabolite.Vd_L.sample(rng), cv=0.0),
+                conversion_rate_per_h=Distribution(
+                    mean=self.active_metabolite.conversion_rate_per_h.sample(rng), cv=0.0),
+                conversion_site=self.active_metabolite.conversion_site,
+                conversion_yield_fraction=Distribution(
+                    mean=self.active_metabolite.conversion_yield_fraction.sample(rng),
+                    cv=0.0),
+            ) if self.active_metabolite is not None else None,
+            observation_species=self.observation_species,
         )
 
 

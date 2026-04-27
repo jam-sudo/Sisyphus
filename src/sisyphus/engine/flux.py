@@ -552,3 +552,97 @@ class ActiveTransportFluxSpec(FluxSpec):
 
         dydt[self.source_idx] -= mass_rate
         dydt[self.target_idx] += mass_rate
+
+
+@register_flux("prodrug_activation")
+class ProdrugActivationFluxSpec(FluxSpec):
+    """Mass transfer: parent (mg) → active (mg) with MW × yield scaling.
+
+    Asymmetric flux: source loses mg of parent; target gains mg of active.
+    The MW ratio is captured at compile time (deterministic). Conversion
+    rate and yield are resampled per MC iteration via edge_param.
+
+    Distinct from clearance (which removes mass to a sink with no
+    species change) and flow (which conserves mg within same species).
+    """
+
+    def __init__(
+        self,
+        edge_id: int,
+        source_idx: int,
+        target_idx: int,
+        source_name: str,
+        target_name: str,
+        mw_ratio: float,
+    ) -> None:
+        super().__init__(edge_id, source_idx, target_idx, source_name, target_name)
+        self.mw_ratio = mw_ratio
+
+    @classmethod
+    def from_edge(
+        cls, edge_id: int, edge, state_index: dict[str, int]
+    ) -> ProdrugActivationFluxSpec:
+        if edge.mw_parent <= 0:
+            raise ValueError(
+                f"ProdrugActivationEdge mw_parent must be positive, got {edge.mw_parent}"
+            )
+        return cls(
+            edge_id=edge_id,
+            source_idx=state_index[edge.source],
+            target_idx=state_index[edge.target],
+            source_name=edge.source,
+            target_name=edge.target,
+            mw_ratio=edge.mw_active / edge.mw_parent,
+        )
+
+    def apply(
+        self,
+        t: float,
+        y: np.ndarray,
+        dydt: np.ndarray,
+        params: ResolvedParams,
+    ) -> None:
+        k = params.edge_param(self.edge_id, "conversion_rate")
+        y_frac = params.edge_param(self.edge_id, "conversion_yield")
+        flux_parent = k * y[self.source_idx]
+        flux_active = flux_parent * self.mw_ratio * y_frac
+        dydt[self.source_idx] -= flux_parent
+        dydt[self.target_idx] += flux_active
+
+
+@register_flux("one_compartment_elimination")
+class OneCompartmentEliminationFluxSpec(FluxSpec):
+    """Aggregate 1st-order elimination: rate = (CL/Vd) × A_source.
+
+    Mass-conserving: source loses mass; target (sink-type node) gains
+    it for mass-balance audit. Used for active metabolite clearance
+    where literature reports plasma CL and Vd directly (no enzyme
+    decomposition).
+    """
+
+    @classmethod
+    def from_edge(
+        cls, edge_id: int, edge, state_index: dict[str, int]
+    ) -> OneCompartmentEliminationFluxSpec:
+        return cls(
+            edge_id,
+            state_index[edge.source],
+            state_index[edge.target],
+            edge.source,
+            edge.target,
+        )
+
+    def apply(
+        self,
+        t: float,
+        y: np.ndarray,
+        dydt: np.ndarray,
+        params: ResolvedParams,
+    ) -> None:
+        cl = params.edge_param(self.edge_id, "cl_per_h")
+        vd = params.edge_param(self.edge_id, "vd_l")
+        if vd <= 0:
+            return
+        rate = (cl / vd) * y[self.source_idx]
+        dydt[self.source_idx] -= rate
+        dydt[self.target_idx] += rate
