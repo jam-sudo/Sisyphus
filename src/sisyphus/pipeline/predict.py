@@ -12,9 +12,58 @@ from pathlib import Path
 
 import numpy as np
 
-from sisyphus.core import Distribution, PKEndpoints, PredictionResult
+from sisyphus.core import Distribution, DrugOnGraph, PKEndpoints, PredictionResult
 
 logger = logging.getLogger(__name__)
+
+
+def _resolve_observation_node(drug: DrugOnGraph, base_node: str = "venous_blood") -> str:
+    """Resolve which graph node to read PK from, accounting for active species.
+
+    Returns ``base_node + ACTIVE_SUFFIX`` if the drug has an active metabolite
+    AND ``observation_species == "active"``; otherwise returns ``base_node``.
+    """
+    from sisyphus.graph.builder import ACTIVE_SUFFIX
+    if drug.active_metabolite is not None and drug.observation_species == "active":
+        return base_node + ACTIVE_SUFFIX
+    return base_node
+
+
+def _adjust_ad_for_prodrug(
+    drug: DrugOnGraph, ad_flags: list[str]
+) -> tuple[bool, list[str]]:
+    """Adjust applicability-domain interpretation for prodrugs.
+
+    - PRODRUG flag + active_metabolite present -> in_domain=True (PRODRUG removed),
+      warn "routed via activation".
+    - PRODRUG flag + no active_metabolite -> in_domain=False (existing behavior).
+    - No PRODRUG flag + active_metabolite present -> in_domain=True (other flags
+      may still flip it), warn "non-structural activation".
+    - Otherwise -> flags drive in_domain (any flag -> False).
+
+    Returns ``(in_applicability_domain, warnings_list)``.
+    """
+    warnings: list[str] = []
+    flags_for_domain = list(ad_flags)
+    has_prodrug = "PRODRUG" in ad_flags
+    has_active = drug.active_metabolite is not None
+
+    if has_prodrug and has_active:
+        site = drug.active_metabolite.conversion_site
+        warnings.append(
+            f"Prodrug {drug.name!r} routed via activation to "
+            f"{drug.active_metabolite.name!r} at {site}."
+        )
+        flags_for_domain = [f for f in ad_flags if f != "PRODRUG"]
+    elif has_active and not has_prodrug:
+        warnings.append(
+            f"Active metabolite declared for {drug.name!r} without "
+            "structural prodrug motif; registry override applied."
+        )
+
+    in_domain = len(flags_for_domain) == 0
+    return in_domain, warnings
+
 
 # Resolve physiology YAML relative to repository root.
 # src/sisyphus/pipeline/predict.py -> ../../../../data/physiology
@@ -144,6 +193,9 @@ def predict(
             }
             drug = build_drug_on_graph(profile, adme, dose_mg, route, liver_enzymes=liver_enzymes)
 
+        from sisyphus.graph.builder import augment_for_active_species
+        graph = augment_for_active_species(graph, drug)
+
         compiler = ODECompiler()
         compiled = compiler.compile(graph)
 
@@ -167,7 +219,8 @@ def predict(
             sim_result = solve(compiled, params, y0, t_span=(0, 24), t_min_h=t_min_h)
 
         if sim_result.solver_success:
-            engine_pk = compute_endpoints(sim_result, t_min_h=t_min_h)
+            _obs_node = _resolve_observation_node(drug)
+            engine_pk = compute_endpoints(sim_result, observation_node=_obs_node, t_min_h=t_min_h)
             logger.info(
                 "Engine PK: Cmax=%.4f mg/L, Tmax=%.2f h, AUC=%.4f mg*h/L",
                 engine_pk.cmax.mean,
@@ -298,7 +351,8 @@ def predict(
         if (_db_fup is not None and _db_fup < 0.02
                 and "HIGH_ACID_LOW_FUP" not in extra_flags):
             extra_flags.append("HIGH_ACID_LOW_FUP")
-    in_ad = len(extra_flags) == 0
+    in_ad, prodrug_warnings = _adjust_ad_for_prodrug(drug, extra_flags)
+    warnings_list = list(warnings_list) + prodrug_warnings
 
     # ── Confidence ────────────────────────────────────────────────────────
     if not in_ad:

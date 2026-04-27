@@ -1,0 +1,110 @@
+{
+  "C[C@H](O)C(=O)C1=Nc2c(nc(N)[nH]c2=O)NC1": {
+    "name": "BH4",
+    "mw": 241.25,
+    "fup": {
+      "mean": 0.23,
+      "cv": 0.3
+    },
+    "CL_per_h": {
+      "mean": 40.0,
+      "cv": 0.35
+    },
+    "Vd_L": {
+      "mean": 150.0,
+      "cv": 0.3
+    },
+    "conversion_rate_per_h": {
+      "mean": 12.0,
+      "cv": 0.4
+    },
+    "conversion_site": "gut_wall",
+    "conversion_yield_fraction": {
+      "mean": 0.85,
+      "cv": 0.1
+    },
+    "observation_species": "parent",
+    "_citation": "Gao 2024 PMC11597218 (sepiapterin oral PK + BH4 metabolite Cmax 403 ng/mL @ 60 mg/kg fed Cohort 3)"
+  },
+  "CCC(CC)COC(=O)[C@H](C)N[P@](=O)(OC[C@H]1O[C@@](C#N)(c2ccc3c(N)ncnn23)[C@H](O)[C@@H]1O)Oc1ccccc1": {
+    "name": "GS-441524",
+    "mw": 291.27,
+    "fup": {
+      "mean": 0.5,
+      "cv": 0.3
+    },
+    "CL_per_h": {
+      "mean": 10.0,
+      "cv": 0.3
+    },
+    "Vd_L": {
+      "mean": 35.0,
+      "cv": 0.3
+    },
+    "conversion_rate_per_h": {
+      "mean": 1.5,
+      "cv": 0.4
+    },
+    "conversion_site": "venous_blood",
+    "conversion_yield_fraction": {
+      "mean": 0.9,
+      "cv": 0.1
+    },
+    "observation_species": "parent",
+    "_citation": "Humeniuk 2020 PMC8007387 (parent remdesivir + GS-441524 PK; CES1 plasma hydrolysis t\u00bd ~30 min)"
+  },
+  "C[C@@H](O)[C@H]1C(=O)N2C(C(=O)OCOC(=O)C(C)(C)C)=C(SC3CN(C4=NCCS4)C3)[C@H](C)[C@H]12": {
+    "name": "tebipenem",
+    "mw": 384.45,
+    "fup": {
+      "mean": 0.5,
+      "cv": 0.3
+    },
+    "CL_per_h": {
+      "mean": 17.0,
+      "cv": 0.3
+    },
+    "Vd_L": {
+      "mean": 50.0,
+      "cv": 0.3
+    },
+    "conversion_rate_per_h": {
+      "mean": 30.0,
+      "cv": 0.3
+    },
+    "conversion_site": "gut_wall",
+    "conversion_yield_fraction": {
+      "mean": 0.95,
+      "cv": 0.05
+    },
+    "observation_species": "active",
+    "_citation": "Eckburg 2019 PMC6709501 (tebipenem Cmax 4006 ng/mL @ 300 mg PO fasted; intestinal esterase hydrolysis very fast)"
+  },
+  "COc1cc(Nc2ncc(F)c(Nc3ccc4c(n3)N(COP(=O)(O)O)C(=O)C(C)(C)O4)n2)cc(OC)c1OC": {
+    "name": "R406",
+    "mw": 470.45,
+    "fup": {
+      "mean": 0.02,
+      "cv": 0.3
+    },
+    "CL_per_h": {
+      "mean": 28.0,
+      "cv": 0.35
+    },
+    "Vd_L": {
+      "mean": 250.0,
+      "cv": 0.3
+    },
+    "conversion_rate_per_h": {
+      "mean": 4.0,
+      "cv": 0.4
+    },
+    "conversion_site": "gut_wall",
+    "conversion_yield_fraction": {
+      "mean": 0.7,
+      "cv": 0.15
+    },
+    "observation_species": "active",
+    "_citation": "Baluom 2013 PMC3703230 (R406 Cmax 605 ng/mL @ 75 mg PO fostamatinib fasted; parent undetectable in plasma)"
+  }
+}
