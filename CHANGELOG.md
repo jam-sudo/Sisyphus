@@ -13,6 +13,41 @@ track `pyproject.toml`.
 ## [Unreleased]
 
 ### Added
+- **Prodrug activation routing infrastructure** (branch `feat/prodrug-activation`,
+  commits `0db67a8`..`a2ad03e`, 17 commits, 2026-04-25/26):
+  - `ActiveMetabolite` dataclass (`core.py`) + `DrugOnGraph.active_metabolite`
+    + `observation_species` fields with `__post_init__` validation.
+  - 2 new edge types (`graph/types.py`): `ProdrugActivationEdge` (asymmetric
+    parent→active mass transfer with MW × yield scaling) and
+    `OneCompartmentEliminationEdge` (aggregate 1st-order CL/Vd elimination).
+  - 2 new FluxSpecs (`engine/flux.py`): registered via `@register_flux`,
+    asymmetric mass transfer + 1-compartment elimination.
+  - `ResolvedParams._build_edge_params` additive branches for the new types
+    (existing logic untouched).
+  - `BodyGraph.sample()` resampling branches for new edge types.
+  - `graph/builder.py::augment_for_active_species` — adds 1 plasma node +
+    2 edges per prodrug (no-op when `active_metabolite=None`).
+  - `predict/registry.py` — SMILES-keyed registry loader with RDKit
+    canonicalization + JSON validation.
+  - `data/sbi/prodrug_activation_registry.json` — 4 N50 evidence drugs:
+    sepiapterin→BH4, remdesivir→GS-441524, tebipenem_pivoxil→tebipenem,
+    fostamatinib→R406.
+  - `pipeline/predict.py` integration — augmentation hook before compile,
+    `_resolve_observation_node` + `_adjust_ad_for_prodrug` helpers.
+  - 50+ new tests across unit/integration/regression categories.
+- **Validation gate failure (KNOWN LIMITATION, 2026-04-26)**: 4-drug 3-fold
+  validation gate (`tests/integration/test_prodrug_pipeline_smoke.py`) FAILS
+  with current 1st-order conversion architecture. Fold-errors:
+  sepiapterin 5356×, tebipenem_pivoxil 8.63×, fostamatinib 4.78×,
+  remdesivir 4.45×. Diagnosis: gut_wall flow-through residence time is
+  ~64s; first-order `conversion_rate_per_h=12` converts only ~19% per pass,
+  insufficient for fast first-pass conversion. Architecture works correctly
+  for synthetic mass-balance test (commit `f8e8d16`) but the 1st-order
+  rate-constant model cannot match clinical reality without literature-
+  inconsistent values. **Successor spec planned**: enzyme-abundance MM
+  kinetics (reuse CYP3A4 well-stirred pattern) replacing
+  `conversion_rate_per_h` with `enzyme_affinity_for_conversion: dict[str,
+  Distribution]`. Infrastructure preserved (12/15 tasks reusable).
 - **H1-H5 hardening infrastructure** (PRs #3-#6, 2026-04-23):
   - H5 GitHub Actions CI (`.github/workflows/ci.yml`): Python 3.10 ubuntu,
     unit + integration + benchmark smoke, ruff advisory.
