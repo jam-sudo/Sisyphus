@@ -251,6 +251,11 @@ class DrugOnGraph:
     active_metabolite: ActiveMetabolite | None = None
     observation_species: str = "parent"  # "parent" | "active"
 
+    # v2 prodrug activation — drug-side enzyme affinity for conversion
+    # (separate from enzyme_affinity which is for elimination).
+    # See docs/superpowers/specs/2026-04-27-prodrug-activation-v2-design.md §3.2.
+    enzyme_affinity_for_conversion: dict[str, Distribution] = field(default_factory=dict)
+
     def __post_init__(self) -> None:
         if self.observation_species not in ("parent", "active"):
             raise ValueError(
@@ -260,6 +265,11 @@ class DrugOnGraph:
         if self.observation_species == "active" and self.active_metabolite is None:
             raise ValueError(
                 "observation_species='active' requires active_metabolite config"
+            )
+        if self.enzyme_affinity_for_conversion and self.active_metabolite is None:
+            raise ValueError(
+                "enzyme_affinity_for_conversion is non-empty but active_metabolite is None; "
+                "set active_metabolite or empty the dict"
             )
 
     def sample(self, rng: np.random.Generator) -> DrugOnGraph:
@@ -288,6 +298,10 @@ class DrugOnGraph:
             solubility=Distribution(mean=self.solubility.sample(rng), cv=0.0),
             enzyme_affinity={
                 k: Distribution(mean=v.sample(rng), cv=0.0) for k, v in self.enzyme_affinity.items()
+            },
+            enzyme_affinity_for_conversion={
+                k: Distribution(mean=v.sample(rng), cv=0.0)
+                for k, v in self.enzyme_affinity_for_conversion.items()
             },
             transporter_kinetics={
                 k: TransporterKinetics(
