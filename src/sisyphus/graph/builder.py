@@ -282,20 +282,28 @@ def augment_for_active_species(
     drug: DrugOnGraph,
     observation_node: str = "venous_blood",
 ) -> BodyGraph:
-    """Augment graph with active-species 1-compartment plasma + 2 new edges.
+    """Augment graph with active-species 1-compartment plasma + multi-site
+    activation edges + 1C elimination.
 
-    No-op when ``drug.active_metabolite is None``.
+    v2 (2026-04-27): multi-site discovery. Augmentation iterates physiology
+    nodes and creates one ProdrugActivationEdge per node where the drug's
+    declared enzyme tags intersect that node's enzyme abundance dict.
 
     Adds:
     - 1 ``Node`` for active plasma (named ``observation_node + ACTIVE_SUFFIX``,
-      ``node_type="blood_pool"``, volume=Vd_L)
-    - 1 ``ProdrugActivationEdge`` from ``conversion_site`` → active plasma
-    - 1 ``OneCompartmentEliminationEdge`` from active plasma → existing sink
+      ``node_type="blood_pool"``, volume=Vd_L).
+    - N ``ProdrugActivationEdge`` instances (one per discovered conversion site).
+    - 1 ``OneCompartmentEliminationEdge`` from active plasma → existing sink.
+
+    No-op when ``drug.active_metabolite is None``.
 
     Mutates ``graph`` in place and returns it for chaining convenience.
 
     Raises:
-        ValueError: ``conversion_site`` not in ``graph.nodes``.
+        ValueError: ``enzyme_affinity_for_conversion`` empty when
+            ``active_metabolite`` set (defensive — registry loader normally catches).
+        ValueError: no node in physiology has any of the drug's declared
+            enzyme tags.
         ValueError: active plasma node name already exists (collision).
         ValueError: default sink node not present in graph.
     """
@@ -303,17 +311,18 @@ def augment_for_active_species(
         return graph
     am = drug.active_metabolite
 
-    if am.conversion_site not in graph.nodes:
+    affinities = drug.enzyme_affinity_for_conversion
+    enzyme_tags = frozenset(affinities.keys())
+    if not enzyme_tags:
         raise ValueError(
-            f"conversion_site={am.conversion_site!r} not in graph nodes "
-            f"{sorted(graph.nodes.keys())}"
+            "active_metabolite present but enzyme_affinity_for_conversion is empty; "
+            "v2 requires drug to declare conversion enzymes"
         )
 
     active_node_name = observation_node + ACTIVE_SUFFIX
     if active_node_name in graph.nodes:
         raise ValueError(
-            f"active node name collision: {active_node_name!r} "
-            "already exists in graph"
+            f"active node name collision: {active_node_name!r} already exists in graph"
         )
 
     if _DEFAULT_ACTIVE_SINK not in graph.nodes:
@@ -330,18 +339,35 @@ def augment_for_active_species(
     )
     graph.add_node(active_node)
 
-    # Conversion edge: parent at conversion_site → active plasma.
-    activation_edge = ProdrugActivationEdge(
-        source=am.conversion_site,
-        target=active_node_name,
-        conversion_rate=am.conversion_rate_per_h,
-        conversion_yield=am.conversion_yield_fraction,
-        mw_parent=drug.mw,
-        mw_active=am.mw,
-    )
-    graph.add_edge(activation_edge)
+    # Multi-site discovery: any physiology node with non-empty intersection
+    # against drug's declared enzyme tags.
+    conversion_sites = [
+        node_name
+        for node_name, node in graph.nodes.items()
+        if node.enzymes and (enzyme_tags & set(node.enzymes.keys()))
+    ]
 
-    # Elimination edge: active plasma → existing sink.
+    if not conversion_sites:
+        raise ValueError(
+            f"No conversion site for drug {drug.name!r}: declared enzyme_tags="
+            f"{sorted(enzyme_tags)} but no node in physiology has any of these. "
+            f"Available enzymes by node: "
+            f"{ {n: sorted(node.enzymes.keys()) for n, node in graph.nodes.items() if node.enzymes} }"
+        )
+
+    # One ProdrugActivationEdge per site
+    for site in conversion_sites:
+        activation_edge = ProdrugActivationEdge(
+            source=site,
+            target=active_node_name,
+            enzyme_tags=enzyme_tags,
+            conversion_yield=am.conversion_yield_fraction,
+            mw_parent=drug.mw,
+            mw_active=am.mw,
+        )
+        graph.add_edge(activation_edge)
+
+    # 1C elimination from active to sink (UNCHANGED from v1)
     elimination_edge = OneCompartmentEliminationEdge(
         source=active_node_name,
         target=_DEFAULT_ACTIVE_SINK,
