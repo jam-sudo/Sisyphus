@@ -2,109 +2,65 @@
   "C[C@H](O)C(=O)C1=Nc2c(nc(N)[nH]c2=O)NC1": {
     "name": "BH4",
     "mw": 241.25,
-    "fup": {
-      "mean": 0.23,
-      "cv": 0.3
-    },
-    "CL_per_h": {
-      "mean": 40.0,
-      "cv": 0.35
-    },
-    "Vd_L": {
-      "mean": 150.0,
-      "cv": 0.3
-    },
-    "conversion_rate_per_h": {
-      "mean": 12.0,
-      "cv": 0.4
-    },
-    "conversion_site": "gut_wall",
-    "conversion_yield_fraction": {
-      "mean": 0.85,
-      "cv": 0.1
-    },
+    "fup": {"mean": 0.23, "cv": 0.3},
+    "CL_per_h": {"mean": 40.0, "cv": 0.35},
+    "Vd_L": {"mean": 150.0, "cv": 0.3},
+    "conversion_yield_fraction": {"mean": 0.85, "cv": 0.1},
+    "yield_source": "class_extrapolated",
     "observation_species": "parent",
-    "_citation": "Gao 2024 PMC11597218 (sepiapterin oral PK + BH4 metabolite Cmax 403 ng/mL @ 60 mg/kg fed Cohort 3)"
+    "enzyme_affinity_for_conversion": {
+      "SPR": {"mean": 3.82, "cv": 1.0, "citation": "Werner 1999 Biochem J + Park 2008 J Biol Chem (kcat 97/min, Km 25.4 µM); Wu 2020 PMC7520308 review"}
+    },
+    "affinity_source": "class_extrapolated",
+    "_clinical_citation": "Gao 2024 PMC11597218 (sepiapterin oral PK + BH4 metabolite Cmax 0.0024 mg/L)",
+    "_v1_to_v2_note": "v1 conversion_rate_per_h=12 replaced by SPR enzyme-abundance × affinity. CL/Vd retained from v1 (D1 deferred to v3 per spec re-review)."
   },
   "CCC(CC)COC(=O)[C@H](C)N[P@](=O)(OC[C@H]1O[C@@](C#N)(c2ccc3c(N)ncnn23)[C@H](O)[C@@H]1O)Oc1ccccc1": {
     "name": "GS-441524",
     "mw": 291.27,
-    "fup": {
-      "mean": 0.5,
-      "cv": 0.3
-    },
-    "CL_per_h": {
-      "mean": 10.0,
-      "cv": 0.3
-    },
-    "Vd_L": {
-      "mean": 35.0,
-      "cv": 0.3
-    },
-    "conversion_rate_per_h": {
-      "mean": 1.5,
-      "cv": 0.4
-    },
-    "conversion_site": "venous_blood",
-    "conversion_yield_fraction": {
-      "mean": 0.9,
-      "cv": 0.1
-    },
+    "fup": {"mean": 0.5, "cv": 0.3},
+    "CL_per_h": {"mean": 10.0, "cv": 0.3},
+    "Vd_L": {"mean": 35.0, "cv": 0.3},
+    "conversion_yield_fraction": {"mean": 0.9, "cv": 0.1},
+    "yield_source": "literature",
     "observation_species": "parent",
-    "_citation": "Humeniuk 2020 PMC8007387 (parent remdesivir + GS-441524 PK; CES1 plasma hydrolysis t\u00bd ~30 min)"
+    "enzyme_affinity_for_conversion": {
+      "CES1": {"mean": 0.012, "cv": 0.7, "citation": "Shen 2021 PMC8370248 (hCES1A hydrolytic rate 6.1e-2 nmol/min/mg) + Yan 2021 (Km ~3 µM); CES1 abundance Boberg 2017 PMC5267516"}
+    },
+    "affinity_source": "literature",
+    "_clinical_citation": "Humeniuk 2020 PMC8007387 (parent remdesivir + GS-441524 PK)",
+    "_v1_to_v2_note": "v1 conversion_rate_per_h=1.5 replaced by CES1 enzyme-abundance × affinity (tier 1)."
   },
   "C[C@@H](O)[C@H]1C(=O)N2C(C(=O)OCOC(=O)C(C)(C)C)=C(SC3CN(C4=NCCS4)C3)[C@H](C)[C@H]12": {
     "name": "tebipenem",
     "mw": 384.45,
-    "fup": {
-      "mean": 0.5,
-      "cv": 0.3
-    },
-    "CL_per_h": {
-      "mean": 17.0,
-      "cv": 0.3
-    },
-    "Vd_L": {
-      "mean": 50.0,
-      "cv": 0.3
-    },
-    "conversion_rate_per_h": {
-      "mean": 30.0,
-      "cv": 0.3
-    },
-    "conversion_site": "gut_wall",
-    "conversion_yield_fraction": {
-      "mean": 0.95,
-      "cv": 0.05
-    },
+    "fup": {"mean": 0.5, "cv": 0.3},
+    "CL_per_h": {"mean": 17.0, "cv": 0.3},
+    "Vd_L": {"mean": 50.0, "cv": 0.3},
+    "conversion_yield_fraction": {"mean": 0.95, "cv": 0.05},
+    "yield_source": "literature",
     "observation_species": "active",
-    "_citation": "Eckburg 2019 PMC6709501 (tebipenem Cmax 4006 ng/mL @ 300 mg PO fasted; intestinal esterase hydrolysis very fast)"
+    "enzyme_affinity_for_conversion": {
+      "CES2": {"mean": 1.0, "cv": 1.5, "citation": "Class-extrapolated from selexipag (CES2 substrate, PMC11151177); Imai 2006 intestinal CES review; pivalate ester rapid hydrolysis (Cotroneo 2022 PMC10112213)"}
+    },
+    "affinity_source": "class_extrapolated",
+    "_clinical_citation": "Eckburg 2019 PMC6709501 (tebipenem Cmax 4.01 mg/L @ 300 mg PO fasted)",
+    "_v1_to_v2_note": "v1 conversion_rate_per_h=30 replaced by CES2 enzyme-abundance × affinity (class-extrapolated)."
   },
   "COc1cc(Nc2ncc(F)c(Nc3ccc4c(n3)N(COP(=O)(O)O)C(=O)C(C)(C)O4)n2)cc(OC)c1OC": {
     "name": "R406",
     "mw": 470.45,
-    "fup": {
-      "mean": 0.02,
-      "cv": 0.3
-    },
-    "CL_per_h": {
-      "mean": 28.0,
-      "cv": 0.35
-    },
-    "Vd_L": {
-      "mean": 250.0,
-      "cv": 0.3
-    },
-    "conversion_rate_per_h": {
-      "mean": 4.0,
-      "cv": 0.4
-    },
-    "conversion_site": "gut_wall",
-    "conversion_yield_fraction": {
-      "mean": 0.7,
-      "cv": 0.15
-    },
+    "fup": {"mean": 0.02, "cv": 0.3},
+    "CL_per_h": {"mean": 28.0, "cv": 0.35},
+    "Vd_L": {"mean": 250.0, "cv": 0.3},
+    "conversion_yield_fraction": {"mean": 0.9, "cv": 0.1},
+    "yield_source": "class_extrapolated",
     "observation_species": "active",
-    "_citation": "Baluom 2013 PMC3703230 (R406 Cmax 605 ng/mL @ 75 mg PO fostamatinib fasted; parent undetectable in plasma)"
+    "enzyme_affinity_for_conversion": {
+      "ALPI": {"mean": 12.0, "cv": 1.5, "citation": "Class-extrapolated from IAP phosphate-monoester kinetics (Harroun 2023 Chem Methods, ~600/min ÷ ~50 µM); ALPI abundance Al-Majdoub 2020 PMC8048492"}
+    },
+    "affinity_source": "class_extrapolated",
+    "_clinical_citation": "Baluom 2013 PMC3703230 (R406 Cmax 0.61 mg/L @ 75 mg PO fostamatinib fasted)",
+    "_v1_to_v2_note": "v1 conversion_rate_per_h=4 replaced by ALPI enzyme-abundance × affinity. Yield raised 0.7 → 0.9 (D2: pure hydrolysis, absorption losses captured upstream by parent peff/F)."
   }
 }
