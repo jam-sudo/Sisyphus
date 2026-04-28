@@ -35,19 +35,91 @@ track `pyproject.toml`.
   - `pipeline/predict.py` integration — augmentation hook before compile,
     `_resolve_observation_node` + `_adjust_ad_for_prodrug` helpers.
   - 50+ new tests across unit/integration/regression categories.
-- **Validation gate failure (KNOWN LIMITATION, 2026-04-26)**: 4-drug 3-fold
-  validation gate (`tests/integration/test_prodrug_pipeline_smoke.py`) FAILS
-  with current 1st-order conversion architecture. Fold-errors:
-  sepiapterin 5356×, tebipenem_pivoxil 8.63×, fostamatinib 4.78×,
-  remdesivir 4.45×. Diagnosis: gut_wall flow-through residence time is
-  ~64s; first-order `conversion_rate_per_h=12` converts only ~19% per pass,
-  insufficient for fast first-pass conversion. Architecture works correctly
-  for synthetic mass-balance test (commit `f8e8d16`) but the 1st-order
-  rate-constant model cannot match clinical reality without literature-
-  inconsistent values. **Successor spec planned**: enzyme-abundance MM
-  kinetics (reuse CYP3A4 well-stirred pattern) replacing
-  `conversion_rate_per_h` with `enzyme_affinity_for_conversion: dict[str,
-  Distribution]`. Infrastructure preserved (12/15 tasks reusable).
+- **Prodrug activation v2 — enzyme-abundance mechanistic** (branch
+  `feat/prodrug-activation-v2`, 2026-04-27/28): replaces v1's kinetic
+  1st-order conversion (`rate = k × A_parent`) with well-stirred extraction
+  at flow-through nodes (mirrors existing CYP3A4 elimination pattern).
+  Drug declares `enzyme_affinity_for_conversion: dict[str, Distribution]`;
+  augmentation discovers conversion sites by enzyme intersection with
+  physiology. Affinity values sourced from in-vitro literature or
+  substrate-class kinetics (no clinical fit; tier 3 / "infrastructure_only"
+  rejected by registry loader per spec §3.3 mechanistic-A promise).
+
+  **Architectural changes** (additive to engine; identity-blind preserved):
+  - `ProdrugActivationEdge.conversion_rate: Distribution` removed; replaced
+    by `enzyme_tags: frozenset[str]` (compile-time set).
+  - `ProdrugActivationFluxSpec.apply()` rewritten as well-stirred extraction
+    parallel to `ClearanceFluxSpec(model="well_stirred")`, destination
+    redirected to active species pool with MW × yield scaling.
+  - `DrugOnGraph.enzyme_affinity_for_conversion: dict[str, Distribution]`
+    new additive field (`__post_init__` enforces non-empty + active_metabolite
+    pairing).
+  - `ResolvedParams.drug_enzyme_affinity_for_conversion(tag) -> float` new
+    method (parallel to `drug_enzyme_affinity` for elimination).
+  - `augment_for_active_species` rewritten: multi-site discovery via
+    `enzyme_tags ∩ node.enzymes`; one ProdrugActivationEdge per site.
+  - `lookup_active_metabolite` returns 3-tuple `(am, obs, affinities)`;
+    schema requires `affinity_source` + `yield_source` enums.
+
+  **Physiology YAML additions**: SPR (1e5 liver, 3e3 gut, 3e4 kidney, all
+  CV~1.0–1.2 class-estimated), CES1 (8e7 liver, CV 0.47, Boberg 2017),
+  CES2 (8.4e6 liver, 3e6 gut, CV 0.6), ALPI (2.3e4 gut, CV 0.9,
+  Al-Majdoub 2020). All independent lognormal (no Achour matrix entry).
+
+  **v1-vs-v2 fold-error comparison** (deterministic Cmax at registered
+  doses; per-drug parametrized 3-fold gate per spec §6.1):
+
+  | Drug              | v1 fold-error | v2 fold-error | Δ          |
+  |-------------------|---------------|---------------|------------|
+  | sepiapterin       | 5356×         | 4692×         | -12%       |
+  | remdesivir        | 4.45×         | 4.43×         | ~unchanged |
+  | tebipenem_pivoxil | 8.63×         | 9.02×         | +5%        |
+  | fostamatinib      | 4.78×         | 4.51×         | -6%        |
+
+  All four drugs fail the 3-fold validation gate (xfail with documented
+  reasons). This is **expected per spec §3.3 mechanistic-A promise**:
+  affinity values are NOT refit to clinical data. Failure is informative,
+  not project-failing.
+
+  **Disposition decisions** (from brainstorming review, 2026-04-28):
+  - **D1 (deferred to v3)**: v1 active species CL/Vd values retained
+    unchanged. T1 literature (`docs/superpowers/specs/2026-04-27-prodrug-v2-task1-literature.md`
+    §4) found inconsistencies for BH4, GS-441524, R406 (1.5–50× literature
+    deviation). Deferred to preserve clean architectural attribution
+    (v2 = conversion math + affinity sourcing only). v3 task to update
+    active CL/Vd from popPK literature with 1C-vs-2C reduction analysis.
+  - **D2 (applied)**: fostamatinib `conversion_yield_fraction` 0.7 → 0.9.
+    v1 conflated hydrolysis stoichiometry with bioavailability; v2 yield
+    is pure hydrolysis (absorption losses captured by parent peff
+    upstream).
+  - **D3 (kept)**: sepiapterin retained in v2 registry. Tier 2
+    (SPR abundance class-estimated, T1 caution flag). Removing would
+    weaken architecture stress test (Eg ≈ 99.99% case).
+
+  **Validation tests added**:
+  - Mass balance well-stirred (flow-loop synthetic) — `tests/integration/test_prodrug_v2_mass_balance.py`.
+  - Per-prodrug pipeline smoke (4 drugs end-to-end) — `tests/integration/test_prodrug_v2_pipeline_smoke.py`.
+  - DDI smoke (halving CES1 → 0.53× remdesivir active Cmax) — `tests/integration/test_prodrug_v2_ddi_smoke.py`.
+  - Identity-blind random tag rename invariance — `tests/regression/test_prodrug_v2_identity_blind.py`.
+  - 107-holdout numerical invariance verified (no leak from new enzymes).
+  - Per-prodrug Cmax ±5% snapshots — `tests/regression/test_prodrug_v2_snapshot.py`.
+  - Per-drug parametrized 3-fold validation gate — `tests/regression/test_prodrug_v2_validation_gate.py`.
+
+  **Reuse from v1**: 60% (9/15 components unchanged: ActiveMetabolite,
+  OneCompartmentEliminationEdge, observation_routing, AD adjustment,
+  pipeline integration shape, holdout regression, ACTIVE_SUFFIX/sink
+  constants, DrugOnGraph 19 existing fields, edge_id sampling pattern).
+  Changed: 6 (edge struct, flux body, registry schema, registry loader,
+  augmentation, mass balance test). New: 3 (physiology entries, drug
+  field, ResolvedParams method).
+
+  v1 known-limitation note (now superseded) covered the kinetic
+  1st-order architecture's inability to capture fast first-pass
+  extraction — diagnosed root cause was gut_wall residence ~64s.
+  v2 well-stirred resolves this architectural limitation; remaining
+  prediction errors trace to literature-input quality (per T1 caution
+  flags), addressable in v3 via CL/Vd updates and tighter SPR/CES2/ALPI
+  abundance measurements.
 - **H1-H5 hardening infrastructure** (PRs #3-#6, 2026-04-23):
   - H5 GitHub Actions CI (`.github/workflows/ci.yml`): Python 3.10 ubuntu,
     unit + integration + benchmark smoke, ruff advisory.
