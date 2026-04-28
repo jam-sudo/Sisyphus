@@ -556,14 +556,18 @@ class ActiveTransportFluxSpec(FluxSpec):
 
 @register_flux("prodrug_activation")
 class ProdrugActivationFluxSpec(FluxSpec):
-    """Mass transfer: parent (mg) → active (mg) with MW × yield scaling.
+    """Mass transfer via well-stirred enzyme catalysis: parent → active.
 
-    Asymmetric flux: source loses mg of parent; target gains mg of active.
-    The MW ratio is captured at compile time (deterministic). Conversion
-    rate and yield are resampled per MC iteration via edge_param.
+    v2 (2026-04-27): well-stirred extraction at flow-through nodes.
+    Mirrors ClearanceFluxSpec(model="well_stirred") math but routes flux
+    to the active species pool (not a sink), with MW × yield scaling.
 
-    Distinct from clearance (which removes mass to a sink with no
-    species change) and flow (which conserves mg within same species).
+    CLint_node = Σ_tag (abundance[tag] × affinity_for_conversion[tag]) × ivive
+    CL_organ   = (Q × fup × CLint) / (Q + fup × CLint)
+    rate_parent = CL_organ × c_unbound_at_node
+    rate_active = rate_parent × (mw_active/mw_parent) × conversion_yield
+
+    Identity-blind: engine iterates enzyme_tags only.
     """
 
     def __init__(
@@ -573,9 +577,11 @@ class ProdrugActivationFluxSpec(FluxSpec):
         target_idx: int,
         source_name: str,
         target_name: str,
+        enzyme_tags: frozenset[str],
         mw_ratio: float,
     ) -> None:
         super().__init__(edge_id, source_idx, target_idx, source_name, target_name)
+        self.enzyme_tags = enzyme_tags
         self.mw_ratio = mw_ratio
 
     @classmethod
@@ -592,6 +598,7 @@ class ProdrugActivationFluxSpec(FluxSpec):
             target_idx=state_index[edge.target],
             source_name=edge.source,
             target_name=edge.target,
+            enzyme_tags=edge.enzyme_tags,
             mw_ratio=edge.mw_active / edge.mw_parent,
         )
 
@@ -602,12 +609,38 @@ class ProdrugActivationFluxSpec(FluxSpec):
         dydt: np.ndarray,
         params: ResolvedParams,
     ) -> None:
-        k = params.edge_param(self.edge_id, "conversion_rate")
+        # Compute per-node CLint from enzyme abundance × drug affinity × ivive
+        clint_organ = 0.0
+        ivive = params.node_param(self.source_name, "ivive_scaling")
+        node_enzymes = params.node_enzymes(self.source_name)
+        for tag in self.enzyme_tags:
+            abundance = node_enzymes.get(tag, 0.0)
+            affinity = params.drug_enzyme_affinity_for_conversion(tag)
+            if affinity > 0 and abundance > 0:
+                clint_organ += abundance * affinity * ivive
+
+        if clint_organ <= 0:
+            return  # No catalysis at this node for this drug
+
+        fup = params.drug_param("fup")
+        q = params.total_inflow(self.source_name)
+        denom = q + fup * clint_organ
+        if denom < 1e-12:
+            return
+        cl_organ = (q * fup * clint_organ) / denom
+
+        # Concentration leaving the source compartment (well-stirred)
+        v = params.node_param(self.source_name, "volume")
+        kp = params.drug_kp(self.source_name)
+        rbp = params.drug_param("rbp")
+        c_out = y[self.source_idx] * rbp / (v * kp) if v > 0 else 0.0
+
+        rate_parent = cl_organ * c_out
         y_frac = params.edge_param(self.edge_id, "conversion_yield")
-        flux_parent = k * y[self.source_idx]
-        flux_active = flux_parent * self.mw_ratio * y_frac
-        dydt[self.source_idx] -= flux_parent
-        dydt[self.target_idx] += flux_active
+        rate_active = rate_parent * self.mw_ratio * y_frac
+
+        dydt[self.source_idx] -= rate_parent
+        dydt[self.target_idx] += rate_active
 
 
 @register_flux("one_compartment_elimination")
