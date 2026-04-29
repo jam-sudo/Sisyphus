@@ -11,7 +11,9 @@
 
 v2 produced architecturally correct prodrug activation infrastructure (well-stirred extraction, identity-blind multi-site discovery, mass balance verified, DDI-free) but did not move 4-drug 3-fold validation gate. v1 → v2 fold-error change marginal because v2 retained v1 active species CL/Vd values (D1 deferred per attribution rationale) and physiology enzyme abundances remained class-extrapolated.
 
-**v3 closes the input-data quality gap that v2 explicitly deferred.** Each T1 caution flag receives a per-item acceptance gate decision (literature_applied / interpretation_resolved / ceiling_accepted). Architecture from v2 is unchanged.
+**v3 explicitly resolves the T1 caution flags that v2 deferred.** Each flag receives a per-item acceptance gate decision (literature_applied / interpretation_resolved / ceiling_accepted). Architecture from v2 is unchanged.
+
+**Closure of caution flags ≠ closure of data-quality gap.** Realistic distribution across the 6 items is mixed (some literature_applied, some ceiling_accepted): primary literature for SPR proteomic, CES2/tebipenem direct in vitro, and F_sapropterin may not exist. v3 success is measured by *resolution discipline* (every flag has documented disposition), not by uniform value updates. Items closing as `ceiling_accepted` are valid outcomes — they demarcate the data-quality frontier for v4 work.
 
 ## 2. Success Criterion
 
@@ -49,7 +51,7 @@ The following are NOT v3 work; they are v4 candidates or separate projects:
 - Affinity refresh for non-T1-flagged drug-enzyme pairs (sepiapterin-SPR affinity, fostamatinib-ALPI affinity, etc.)
 - New prodrug drug registry additions (4 drugs only; new drugs are v4+)
 - 1-comp → 2-comp active species elimination model change (architectural)
-- SBI model retraining (12 SBI drugs — staleness handled in §6, separate follow-up)
+- SBI model retraining (12 SBI drugs — staleness risk in §7 R9; intersection check in §8.2; retrain is separate follow-up)
 - PI coverage recalibration (29.9% baseline structural error dominated)
 - Meta-learner gate evaluation (Engine gate is sole acceptance gate)
 - DDI clinical scenarios beyond v2 smoke test (v4)
@@ -76,6 +78,8 @@ Opportunistic in-scope expansion (e.g., refreshing CES1 abundance because data i
 - If parallel 1-comp and 2-comp sources: geometric mean of point estimates; CV via §4.2 max() rule
 
 **Non-canonical sources** (Gap 3 closure): primary source must be peer-reviewed journal article OR FDA/EMA review document OR bioRxiv preprint. Conference abstracts and dissertations alone are not primary; if a preprint is later published, use the published version.
+
+**Active-species F decoupling for oral popPK** (Gap 5 closure): when literature reports active-species V/F (apparent Vd from oral dosing), F must be sourced from primary literature to recover central V. If F primary citation is not found, the V/F value cannot be used (F substitution from estimates or geometric means is rejected — would be ad-hoc). Item-level fallback: see §5.1 for BH4 specific procedure.
 
 ### 4.2 CV Doctrine
 
@@ -161,10 +165,10 @@ Source exhaustiveness (§4.3) and documentation template (§4.4) apply identical
 - **Sub-decisions**:
   - F_sapropterin: literature primary citation required
   - 2-comp model selection: Vss vs Vc
-- **Sub-decision fallback chain** (Gap 5 closure):
-  1. Primary F citation found → use directly
-  2. Primary F not found → **strict downgrade to `ceiling_accepted`**, retain v1 Vd=150, document "F primary uncertain, ceiling reached"
-  3. F geometric mean over reported ranges OR CV inflation: **rejected** (ad-hoc, violates Q4 doctrine)
+- **Sub-decision fallback chain** (per §4.1 Gap 5):
+  1. Primary F citation found → divide V/F by F → central V; disposition = `interpretation_resolved`
+  2. Primary F not found → **strict downgrade to `ceiling_accepted`**. Retain v1 Vd=150 as least-bad placeholder, with explicit acknowledgment that v1 value is **known incorrect** (T1 flagged 1.5-50× off literature) but cannot be replaced without F primary. Ceiling rationale must document: (a) literature V/F value found (if any) + citation, (b) F primary not located, (c) uncertainty bound (V is somewhere in [150 L, V/F] until F resolved), (d) v1 retained as placeholder NOT as endorsed value.
+  3. F geometric mean over reported ranges OR CV inflation: **rejected** (ad-hoc, violates §4.2 Q4 doctrine)
 - **Expected disposition**: `interpretation_resolved` (if F primary found) OR `ceiling_accepted` (if F primary not found)
 
 ### 5.2 Item 2 — GS-441524 active CL/Vd (remdesivir)
@@ -230,29 +234,37 @@ Source exhaustiveness (§4.3) and documentation template (§4.4) apply identical
 
 **Logic**:
 ```
-CHANGED_ENZYMES = set of enzymes with v3 abundance/affinity changes
-                 (e.g., {"SPR", "CES2"} per items 5-6 if literature_applied; empty if D1-only)
+# Two distinct change dimensions (do NOT conflate):
+CHANGED_ENZYME_ABUNDANCES = enzymes whose physiology yaml abundance changed (cross-drug effect)
+                          = {"SPR"} if Item 5 literature_applied; {} otherwise
+                          (Item 6 affinity is drug-side, NOT physiology-side, so does NOT enter this set)
 
-D1_AFFECTED_DRUGS = set of prodrug drugs whose active species CL/Vd changed
-                   (subset of {sepiapterin, remdesivir, fostamatinib, tebipenem_pivoxil})
+DRUG_SPECIFIC_CHANGES = drugs whose drug-side registry entry changed (drug-isolated effect)
+                       = subset of {sepiapterin, remdesivir, fostamatinib, tebipenem_pivoxil}
+                         union'd from:
+                         - Items 1-4 (D1 active species CL/Vd changes; drug-specific)
+                         - Item 6 (tebipenem CES2 affinity change in registry; drug-specific)
 
 for drug in 107_holdout:
     drug_graph = load deterministic point-estimate (cv=0)
     enzymes_used = drug_graph.enzyme_affinity ∪ drug_graph.enzyme_affinity_for_conversion
-    if enzymes_used ∩ CHANGED_ENZYMES OR drug.name in D1_AFFECTED_DRUGS:
+    if enzymes_used ∩ CHANGED_ENZYME_ABUNDANCES OR drug.name in DRUG_SPECIFIC_CHANGES:
         expected_changed.append(drug)
     else:
         expected_unchanged.append(drug)
 
-# For each unchanged drug:
-assert Cmax_v3(drug, deterministic) == Cmax_pre_v3(drug, deterministic)
+# For each unchanged drug, verify byte-identical AND finite:
+for drug in expected_unchanged:
+    cmax_v3 = predict(drug, deterministic)
+    assert math.isfinite(cmax_v3), f"v3 produced non-finite Cmax for {drug}"
+    assert cmax_v3 == cmax_pre_v3[drug]
 ```
 
 **Notes**:
 - Deterministic point-estimate (cv=0) eliminates MC non-determinism for byte-identical comparison
 - `@pytest.mark.slow`: excluded from default CI; run on prodrug-label PR or nightly
-- D1 changes are drug-side (active species elimination edges) and are captured by `D1_AFFECTED_DRUGS` not by `CHANGED_ENZYMES` — both dimensions enumerated explicitly to avoid false alarms
-- If `CHANGED_ENZYMES = ∅` AND `D1_AFFECTED_DRUGS = ∅` (all-ceiling scenario), audit asserts byte-identical for all 107 holdout drugs (sanity)
+- **Two-dimension separation rationale**: physiology abundance changes affect any drug using that enzyme (cross-drug); drug-side changes affect only that drug (isolated). Conflating into one set produces false alarms when Item 6 changes tebipenem's CES2 affinity but no other CES2-using drug is affected.
+- If `CHANGED_ENZYME_ABUNDANCES = ∅` AND `DRUG_SPECIFIC_CHANGES = ∅` (all-ceiling scenario), audit asserts byte-identical for all 107 holdout drugs (sanity)
 
 #### `tests/integration/test_prodrug_v3_registry_schema.py`
 
@@ -260,12 +272,17 @@ assert Cmax_v3(drug, deterministic) == Cmax_pre_v3(drug, deterministic)
 
 **Assertions per entry**:
 - Required fields present: `citation`, `doctrine_path`, `disposition_state`, `source_dbs_searched`, `n_candidates_reviewed`
-- `citation` matches strict format regex: `"<Author> <Year> doi:<DOI>"` OR `null` (for ceiling_accepted)
+- `citation`: non-empty string when `disposition_state ∈ {literature_applied, interpretation_resolved}`; may be `null` only when `disposition_state == ceiling_accepted`
+- `citation` recommended format: `"<Author> [et al.] <Year>"`, with optional `doi` field (DOI not required — FDA/EMA review docs and some primary sources lack DOIs)
 - `disposition_state` ∈ `{literature_applied, interpretation_resolved, ceiling_accepted}`
 - IF `disposition_state == ceiling_accepted`: `ceiling_rationale` field non-empty
 - IF `disposition_state == interpretation_resolved`: `interpretation_decision` field non-empty
+- `source_dbs_searched`: list of strings from §4.3 corpus
+- `n_candidates_reviewed`: integer ≥ 1
 
 This is structural validation, not value comparison — avoids tautology.
+
+**Ceiling-rationale dual-location requirement**: when `disposition_state == ceiling_accepted`, the rationale must appear in BOTH (a) the registry JSON entry's `ceiling_rationale` field (machine-readable, validated by this test) AND (b) the v3 literature deliverable (§9.3) per the §4.4 documentation template (human-readable, audit trail). Schema test verifies (a); reviewer cross-checks (b).
 
 ### 6.3 Benchmark Protocol
 
@@ -295,7 +312,10 @@ CLAUDE.md top metrics table reconciled against new predictions JSON (per CLAUDE.
 Run gate test on v3 implementation.
 
 For each of 4 prodrug drugs:
-    IF v3 fold-error ≤ 3.0:
+    IF v3 prediction non-finite (NaN, inf):
+        ⚠ HARD FAILURE — block PR, debug (v3 broke prediction)
+
+    ELIF v3 fold-error ≤ 3.0:
         Remove @pytest.mark.xfail decorator
         Update reason comment: "v3 <disposition> → passes 3-fold"
 
@@ -329,7 +349,7 @@ Per CLAUDE.md §self-maintenance: top metrics table updated only after `4track_h
 | R6 | All 6 items ceiling_accepted | Low | No code PR; docs-only outcome | §7.2 contingency flow |
 | R7 | v2 PR #7 architectural changes during review | Low | v3 base shifts | §8 precondition: v3 implementation starts only after v2 merge |
 | R8 | Doctrine inconsistency across items | Medium | Schema test passes but values incoherent | Per-item doctrine path explicit (§5); reviewer cross-check |
-| R9 | SBI priors stale post-v3 (12 SBI drugs) | High (if prodrugs in SBI set) | TDM routing accuracy | Out-of-scope (separate retrain follow-up); §8 precondition: enumerate prodrug-SBI intersection; PR body warning if non-empty |
+| R9 | SBI priors stale post-v3 (12 SBI drugs) | **Low** (resolved §8.2 check 2026-04-29: prodrug-SBI intersection empty) | TDM routing accuracy (no direct effect) | §8.2 check confirmed; SBI retrain still recommended as separate follow-up but not v3-blocking |
 | R10 | Headline AAFE marginally worse | Low (4/107 drugs only) | Narrative concern | Acceptable; §7.3 sanity bound |
 
 ### 7.2 Contingency Flows
@@ -342,9 +362,12 @@ Per CLAUDE.md §self-maintenance: top metrics table updated only after `4track_h
 
 **All-items-ceiling scenario**:
 - No code PR created (no value changes to merge)
-- Documentation: `docs/claude/diagnosis.md` updated with "T1 ceiling reached, v4 hypothesis required" entry; v3 design spec (this file) and v3 literature deliverable retained as historical record
+- Documentation commit path (single small docs PR to main):
+  - v3 literature deliverable file (`docs/superpowers/specs/2026-04-29-prodrug-v3-literature.md`) committed to main
+  - `docs/claude/diagnosis.md` updated with "T1 ceiling reached, v4 hypothesis required" entry
+  - This v3 design spec (already on main as `06dc331`) retained as historical record; no further changes
 - v2 PR #7 unchanged; mechanistic-A consistency preserved
-- v4 follow-up requires new hypothesis (active uptake, 2-comp active, etc.)
+- v4 follow-up requires new hypothesis (active uptake, 2-comp active, alternative source corpora, etc.)
 
 ### 7.3 R10 AAFE Sensitivity Sanity Bound
 
@@ -367,16 +390,13 @@ After v2 merge:
 
 ### 8.2 SBI Routing Intersection Check
 
-Before v3 implementation, confirm prodrug-SBI intersection:
+**Resolved 2026-04-29 during spec authoring.** `data/sbi/method_routing.json` `routes` field enumerates 12 SBI-routed drugs and 1 IBIS-routed:
+- SBI: morphine, clozapine, amantadine, ketorolac, rivaroxaban, diclofenac, digoxin, sildenafil, phenytoin, tamoxifen, indomethacin, posaconazole
+- IBIS: pravastatin
 
-```bash
-jq '.[] | select(.method == "SBI")' data/sbi/method_routing.json | grep -E "sepiapterin|remdesivir|fostamatinib|tebipenem"
-```
+**Prodrug-SBI intersection: ∅** (none of {sepiapterin, remdesivir, fostamatinib, tebipenem_pivoxil} are SBI-routed). R9 likelihood is **Low**; SBI staleness warning in PR body is **not required**. SBI retrain remains recommended as separate follow-up project but does not block v3.
 
-- IF intersection non-empty: PR body must include explicit SBI staleness warning per affected drug
-- IF intersection empty: SBI not directly affected; warning unnecessary
-
-This determines R9 severity.
+This check should be re-confirmed at v3 implementation start in case `method_routing.json` changes between this spec and implementation.
 
 ## 9. Deliverables
 
