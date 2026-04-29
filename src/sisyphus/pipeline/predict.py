@@ -76,6 +76,8 @@ def predict(
     route: str = "oral",
     n_mc_samples: int = 0,
     infusion_duration_min: float | None = None,
+    *,
+    phenotypes: dict[str, str] | None = None,
 ) -> PredictionResult:
     """End-to-end prediction: SMILES -> PredictionResult.
 
@@ -100,6 +102,17 @@ def predict(
             MC for infusion is V3.1 Phase 2 scope and is skipped with a
             warning in Phase 1. See
             docs/superpowers/specs/2026-04-22-v3.1-iv-infusion-design.md.
+        phenotypes: Optional CPIC phenotype assignments mapping enzyme or
+            transporter gene tag (e.g., ``"CYP2D6"``, ``"SLCO1B1"``) to
+            phenotype label (``"PM"``/``"IM"``/``"EM"``/``"NM"``/``"UM"``/
+            ``"RM"``). When provided, the body graph's enzyme and
+            transporter abundances at the liver node are scaled by the
+            corresponding CPIC activity multipliers before simulation.
+            Liver-sourced enzyme abundances passed to IVIVE inherit the
+            scaling, so CLint and downstream PK endpoints are
+            phenotype-conditional. ``None`` (default) is the
+            average-patient prediction. See
+            ``sisyphus.predict.phenotype.PHENOTYPE_SCALES``.
 
     Returns:
         PredictionResult with combined PK endpoints and uncertainty.
@@ -184,6 +197,12 @@ def predict(
     engine_pk: PKEndpoints | None = None
     try:
         graph = build_from_yaml(_PHYSIOLOGY_DIR / "reference_man.yaml")
+
+        # Apply CPIC phenotype scaling before reading enzyme abundances so
+        # that IVIVE-rebuilt CLint inherits the scaling.
+        if phenotypes:
+            from sisyphus.predict.phenotype import apply_phenotype_to_graph
+            graph = apply_phenotype_to_graph(graph, phenotypes)
 
         # Pass enzyme abundances from the graph to IVIVE (fix DRY violation).
         # Rebuild DrugOnGraph with graph-sourced enzyme abundances.
