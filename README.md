@@ -275,12 +275,12 @@ $$AAFE = 10^{\operatorname{mean}\left(\left|\log_{10}\frac{C_{max,pred}}{C_{max,
 
 | Track | AAFE | 95% CI | %2-fold | %3-fold | N |
 |---|:-:|:-:|:-:|:-:|:-:|
-| **Meta-learner (production)** | **2.695** | [2.30, 3.20] | 47.7% | 65.4% | 107 |
-| Engine only | 3.421 | [2.88, 4.06] | — | — | 107 |
-| ML only | 3.057 | [2.59, 3.63] | — | — | 107 |
-| Meta, in-domain | 2.710 | [2.27, 3.28] | — | — | 85 |
+| **Meta-learner (production)** | **2.702** | [2.33, 3.19] | 46.7% | 62.6% | 107 |
+| Engine only | 3.572 | [3.38, 4.93] | — | — | 107 |
+| ML only | 3.057 | [2.59, 3.62] | — | — | 107 |
+| Meta, in-domain | 2.730 | [2.32, 3.30] | — | — | 80 |
 
-The 4-track meta-learner combines mechanistic PBPK (Engine), data-driven XGBoost C<sub>max</sub> (ML), a closed-form CL/F analytical (CLF), and a conditional VDss analytical track. Weights are compound-type-adaptive and LOOCV-calibrated: base compounds blend Engine 0.60 / ML 0.40; other compounds use Engine 0.35 / ML 0.50 / CLF 0.15, with VDss 0.20 added when applicability criteria are satisfied (and the remaining tracks re-scaled by ×0.80 so the total is 1.0). In-domain AAFE (N=85) excludes 22 drugs flagged as out-of-applicability-domain (prodrugs, high-MW, extreme lipophilicity, extended-release formulation mismatch).
+The 4-track meta-learner combines mechanistic PBPK (Engine), data-driven XGBoost C<sub>max</sub> (ML), a closed-form CL/F analytical (CLF), and a conditional VDss analytical track. Weights are compound-type-adaptive and LOOCV-calibrated: base compounds blend Engine 0.60 / ML 0.40; other compounds use Engine 0.35 / ML 0.50 / CLF 0.15, with VDss 0.20 added when applicability criteria are satisfied (and the remaining tracks re-scaled by ×0.80 so the total is 1.0). In-domain AAFE (N=80) excludes 27 drugs flagged as out-of-applicability-domain (prodrugs, high-MW, extreme lipophilicity, extended-release formulation mismatch).
 
 **Prospective validation** (FDA NMEs approved 2024–2025, curated 2026-04, never used in training or tuning):
 
@@ -289,9 +289,9 @@ The 4-track meta-learner combines mechanistic PBPK (Engine), data-driven XGBoost
 | All | 2.361 | [1.65, 3.50] | 53% | 15 |
 | In-domain | 2.043 | [1.46, 2.98] | — | 13 |
 
-Prospective AAFE is below retrospective (2.361 &lt; 2.695), the opposite direction from classical over-fitting. However, N=15 is underpowered; CI spans 1.65–3.50.
+Prospective AAFE is below retrospective (2.361 &lt; 2.702), the opposite direction from classical over-fitting. However, N=15 is underpowered; CI spans 1.65–3.50.
 
-**Cherry-picking caveat.** The 107-holdout has been used for ~47 configuration feedback cycles (track weights, routing, meta-learner variants). A quantitative audit (`docs/claude/cherry_picking_audit_2026-04-22.md`) scores aggregate risk 4.65/10 (moderate). The Meta CI upper bound (3.20) overlaps the audit's retrospective-contamination estimate (2.85–3.10), meaning the point estimate cannot statistically reject the null hypothesis that tuning inflated AAFE. A secondary permanent holdout (N50) is planned per `docs/claude/cherry_picking_process_v1.md`.
+**Cherry-picking caveat.** The 107-holdout has been used for ~47 configuration feedback cycles (track weights, routing, meta-learner variants). A quantitative audit (`docs/claude/cherry_picking_audit_2026-04-22.md`) scores aggregate risk 4.65/10 (moderate). The Meta CI upper bound (3.19) overlaps the audit's retrospective-contamination estimate (2.85–3.10), meaning the point estimate cannot statistically reject the null hypothesis that tuning inflated AAFE. A secondary permanent holdout (N50) is planned per `docs/claude/cherry_picking_process_v1.md`.
 
 ### Multi-dose regimen validation
 
@@ -347,7 +347,7 @@ Single-patient deterministic prediction completes in &lt;500 ms, compatible with
 
 **736 passed / 9 failed / 15 skipped / 3 xfailed** (763 collected, full sweep 2026-04-27, post prodrug-activation merge, 9 min 24 s) covering graph construction, ODE compilation, flux functions (including ECM + V3 windowed IV-Cmax + ProdrugActivation + OneCompartmentElimination), solver correctness, mass balance (incl. two-species analytical 2C cascade), ADME prediction, meta-learner calibration, multi-dose regimen, TDM Bayesian update via SBI/IBIS/IS dispatch, MIPD dose recommendation, DDI, PK/PD, applicability-domain detection, prodrug-activation registry + pipeline integration, and holdout benchmark reproducibility. Persistent xfails: rosuvastatin and atorvastatin Peff over-prediction (predict-layer issue, not engine) — will auto-green when the Peff model improves for high-MW polar acids.
 
-**Known failing tests (9):** 4 are the prodrug v1 3-fold clinical validation gate (sepiapterin, remdesivir, tebipenem-pivoxil, fostamatinib) documented in [Limitations](#limitations); 4 are ECM/OATP statin tests (`test_ecm_holdout_spot_check_10_drugs`, `test_statin_cmax_under_ecm[pravastatin]`, `test_statin_cmax_under_ecm[fluvastatin]`, `test_pravastatin_cmax_moves_with_oatp`) tied to DE-33 (V3 OATP under-prediction not yet resolved); 1 is an SBI posterior CV assertion (`test_sbi_posterior_tighter_than_prior_cv`) under audit. None of the 9 failures regress the headline AAFE 2.695 (re-run via `scripts/run_engine_benchmark.py`).
+**Known failing tests (9):** 4 are the prodrug 3-fold clinical validation gate (sepiapterin, remdesivir, tebipenem-pivoxil, fostamatinib) documented in [Limitations](#limitations); 4 are ECM/OATP statin tests (`test_ecm_holdout_spot_check_10_drugs`, `test_statin_cmax_under_ecm[pravastatin]`, `test_statin_cmax_under_ecm[fluvastatin]`, `test_pravastatin_cmax_moves_with_oatp`) tied to DE-33 (V3 OATP under-prediction not yet resolved); 1 is an SBI posterior CV assertion (`test_sbi_posterior_tighter_than_prior_cv`) under audit. None of the 9 failures regress the headline AAFE 2.702 (re-run via `scripts/run_engine_benchmark.py`).
 
 ## Architecture
 
@@ -453,7 +453,7 @@ effect = compute_effect(sim_result, pd)
 ## Limitations
 
 - **Small-molecule oral PK only.** Biologics (antibodies, ADCs), parenteral formulations beyond SC, and non-oral routes (inhalation, topical) are not validated.
-- **Prodrug activation: v1 infrastructure shipped, validation gate fails.** A first-order prodrug-activation routing layer was merged on 2026-04-26 (commit `af9d2be`): `ActiveMetabolite` dataclass, `ProdrugActivationEdge` + `OneCompartmentEliminationEdge` graph types, two new flux specs, a SMILES-keyed registry (`data/sbi/prodrug_activation_registry.json`, 4 N50 evidence drugs: sepiapterin, remdesivir, tebipenem-pivoxil, fostamatinib), and pipeline integration via `augment_for_active_species`. Synthetic mass-balance regression passes; the 4-drug 3-fold clinical validation gate **fails** (sepiapterin 5356&times;, tebipenem-pivoxil 8.63&times;, fostamatinib 4.78&times;, remdesivir 4.45&times;) because gut-wall flow-through residence time (~64 s) is too short for the chosen first-order conversion-rate constants. A v2 spec (enzyme-abundance Michaelis–Menten kinetics, reusing the CYP3A4 well-stirred pattern) is planned to replace `conversion_rate_per_h` with `enzyme_affinity_for_conversion`. Until v2 lands, prodrugs are produced through the registry path but should not be relied on for clinical Cmax; uncovered prodrugs continue to be flagged out-of-applicability-domain. Detailed status: `CHANGELOG.md` &sect; Unreleased.
+- **Prodrug activation: v2 infrastructure shipped, validation gate fails.** Two iterations have been merged: v1 (2026-04-26, first-order conversion `rate = k × A_parent`) and v2 (PR #7, 2026-04-30, well-stirred enzyme-abundance extraction parallel to the CYP3A4 elimination pattern). v2 replaces `conversion_rate_per_h` with `enzyme_affinity_for_conversion: dict[str, Distribution]` and adds SPR/CES1/CES2/ALPI enzyme abundances at liver/gut_wall/kidney; multi-site activation is discovered by enzyme-tag intersection at compile time. The shared 4-drug 3-fold clinical validation gate **still fails under v2** (sepiapterin 4692&times;, tebipenem-pivoxil 9.02&times;, fostamatinib 4.51&times;, remdesivir 4.43&times;) — failures now trace to literature-input quality (active-species CL/Vd, SPR/CES2/ALPI abundance class-estimates) rather than the v1 first-order architectural limit. Prodrugs continue to be flagged out-of-applicability-domain pending the v3 input-data refresh. Detailed status: `CHANGELOG.md` &sect; Unreleased.
 - **Simplified pK<sub>a</sub>.** Ionization state is classified by structural rules (carboxylic acid &rarr; 4.5, aliphatic amine &rarr; 9.0), not computed quantum-mechanically. This limits Kp accuracy for highly ionized compounds.
 - **No Phase II metabolism.** Glucuronidation (UGT), sulfation (SULT), and acetylation (NAT2) are not modeled. Drugs primarily cleared by conjugation will be under-predicted.
 - **Transporter-mediated disposition: OATP1B1 only.** Hepatic uptake by OATP1B1 is modeled mechanistically via the ECM (closed-form QSSA hepatocyte flux) with per-drug kinetic parameters in `data/transporters/oatp1b1.json`. Other hepatic transporters (OATP1B3, NTCP, BSEP), intestinal transporters (P-gp, BCRP), and renal transporters (OAT1/3, MATE1/2-K) are not mechanistically modeled. P-gp efflux at the gut wall is approximated via a binary permeability correction.
