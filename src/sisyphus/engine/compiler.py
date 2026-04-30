@@ -121,6 +121,18 @@ class ResolvedParams:
             return self._drug.enzyme_affinity[tag].mean
         return 0.0
 
+    def drug_enzyme_affinity_for_conversion(self, tag: str) -> float:
+        """Return the drug's intrinsic clearance per unit enzyme for *tag*,
+        for ACTIVATION (parent → active species).
+
+        Distinct from drug_enzyme_affinity which is for ELIMINATION.
+        Returns 0.0 for tags absent from the dict (graceful, mirrors
+        drug_enzyme_affinity).
+        """
+        if tag in self._drug.enzyme_affinity_for_conversion:
+            return self._drug.enzyme_affinity_for_conversion[tag].mean
+        return 0.0
+
     def node_transporters(self, node_name: str) -> dict[str, float]:
         """Return ``{transporter_tag: abundance}`` for a node."""
         return self._transporters.get(node_name, {})
@@ -206,7 +218,8 @@ class ResolvedParams:
             elif isinstance(edge, ActiveTransportEdge):
                 pass  # No static params — kinetics come from drug at runtime
             elif isinstance(edge, ProdrugActivationEdge):
-                params["conversion_rate"] = edge.conversion_rate.mean
+                # v2: enzyme_tags baked into FluxSpec at compile time;
+                # conversion_yield is the only resampled per-MC parameter here.
                 params["conversion_yield"] = edge.conversion_yield.mean
             elif isinstance(edge, OneCompartmentEliminationEdge):
                 params["cl_per_h"] = edge.cl_per_h.mean

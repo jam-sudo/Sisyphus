@@ -176,9 +176,10 @@ class BodyGraph:
                     ka_fraction=Distribution(edge.ka_fraction.sample(rng), cv=0.0),
                 )
             elif isinstance(edge, ProdrugActivationEdge):
+                # v2: enzyme_tags is a frozenset (compile-time constant, no resampling);
+                # conversion_yield is the only Distribution to resample.
                 new_edge = dataclasses.replace(
                     edge,
-                    conversion_rate=Distribution(edge.conversion_rate.sample(rng), cv=0.0),
                     conversion_yield=Distribution(edge.conversion_yield.sample(rng), cv=0.0),
                 )
             elif isinstance(edge, OneCompartmentEliminationEdge):
