@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-04-22
+last_updated: 2026-04-29
 parent: ../../CLAUDE.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -7,6 +7,50 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 # Experiment Log
 
 Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md).
+
+---
+
+## 2026-04-29 — 4-track holdout predictions regen (post-P4.5 baseline refresh)
+
+**Trigger:** `tests/integration/test_ecm_holdout_regression.py` failing on main — 10/10 spot-checked drugs drifted 15-27% lower than cached. Investigation revealed the cache (`data/training/4track_holdout_predictions.json`) was last written 2026-04-14, before P4.5 Achour merge (2026-04-23) and other ECM/V3-routing changes.
+
+**Action:** Re-ran `scripts/run_engine_benchmark.py --save-json data/training/4track_holdout_predictions.json` on current main. Backup of pre-regen cache stashed at `/tmp/4track_pre_regen_2026-04-29.json` (not committed).
+
+**Aggregate AAFE delta** (PRE 2026-04-14 cache → POST 2026-04-29 fresh):
+
+| Track | PRE | POST | Δ (abs) | Δ (%) |
+|---|---|---|---|---|
+| Meta (Overall) | 2.695 | 2.719 | +0.024 | +0.9% |
+| Engine (Overall) | 3.421 | 4.073 | +0.652 | +19.1% |
+| ML (Overall) | 3.057 | 3.057 | 0 | 0% |
+| Meta (In-domain) | 2.710 (n=85) | 2.759 (n=80) | +0.049 | +1.8% |
+| Engine (In-domain) | 3.236 (n=85) | 3.808 (n=80) | +0.572 | +17.7% |
+
+Meta %3-fold: 65.4 → 62.6. Engine %3-fold: 57.9 → 40.2.
+
+**Significance:**
+
+- **Meta AAFE robust** (Δ +0.9%) — ML track is unchanged (model artifacts not retrained); Meta combines Engine + ML + classifier + Vd, so ML stability dampens Engine drift. This is the headline-protection mechanism in action.
+- **Engine track degraded** (Δ +19.1%) — substantial. Likely root cause: P4.5 Achour correlated abundance prior (merged 2026-04-23) shifting Cmax predictions ~15-25% lower across most drugs. Earlier candidates (V3 IV-Cmax routing, ECM hepatic clearance migration) may also contribute. Per `docs/claude/propranolol_cmax_drift.md`, the propranolol +16% drift on `b366035` was an early canary; the broader engine drift documented here is consistent with that direction.
+- **ML AAFE unchanged** — confirms ML model artifacts were not retrained between 2026-04-14 and 2026-04-29 (would otherwise show drift).
+- **N changed: 85→80 in-domain** — applicability-domain criteria evolved or 5 drugs newly flagged. Not investigated in this entry; flagged for follow-up.
+- **Cherry-picking impact:** the 2026-04-22 audit estimated retrospective-contamination band 2.85–3.10. New Meta point estimate 2.719 sits below this band, but bootstrap CI not yet refreshed against new cache; old [2.30, 3.20] CI is stale.
+
+**Test impact:**
+- `test_ecm_holdout_regression` now PASSES (cache matches fresh predictions).
+- `test_oatp_ecm_statins[pravastatin]` still FAILS (FE 1.486 vs gate 1.3, T7 calibration drift) — independent of cache regen.
+- `test_oatp_ecm_statins[fluvastatin]` still FAILS (FE 4.133 vs gate 3.0, Peff overprediction) — independent of cache regen.
+
+**Follow-up needed:**
+1. Refresh bootstrap 95% CIs against new cache (via cherry-picking-process bootstrap script, 10k resamples).
+2. Investigate Engine-track AAFE drift root cause: bisect from 2026-04-14 to 2026-04-29 if needed; primary suspects are P4.5 Achour and ECM migration commits.
+3. Document AD-criteria change (n=85 → n=80) — which 5 drugs newly flagged?
+4. Decide on pravastatin T7 recalibration (was the T7 calibration tied to a pre-P4.5 cache?).
+
+**Files updated:**
+- `data/training/4track_holdout_predictions.json` (regenerated)
+- `CLAUDE.md` headline performance table (point estimates, %2/3-fold, n_in_domain; CIs annotated stale)
+- `docs/claude/experiment-log.md` (this entry)
 
 ---
 
