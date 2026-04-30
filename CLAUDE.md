@@ -8,18 +8,27 @@ Sisyphus: SMILES + dose → Cmax PBPK platform. Body modeled as a typed directed
 
 ## Current Performance
 
-4-track, post-merge 2026-04-10, N=107 holdout via `scripts/run_engine_benchmark.py` → `data/training/4track_holdout_predictions.json`. 95% CIs bootstrap (10k resamples) computed 2026-04-22 per `docs/claude/cherry_picking_process_v1.md` §3.
+4-track, regenerated **2026-04-29**, N=107 holdout via `scripts/run_engine_benchmark.py` → `data/training/4track_holdout_predictions.json`. 95% CIs bootstrap (10k resamples) computed 2026-04-22 against PRE-regen cache; **CIs are stale post-2026-04-29 regen** — to be refreshed.
 
-| Track | AAFE | 95% CI | %2-fold | %3-fold | N |
+| Track | AAFE | 95% CI (stale) | %2-fold | %3-fold | N |
 |---|---|---|---|---|---|
-| **Meta (production)** | **2.695** | [2.30, 3.20] | 47.7 | 65.4 | 107 |
-| Engine only | 3.421 | [2.88, 4.06] | — | — | 107 |
+| **Meta (production)** | **2.719** | [2.30, 3.20]† | 46.7 | 62.6 | 107 |
+| Engine only | 4.073 | [2.88, 4.06]† | — | — | 107 |
 | ML only | 3.057 | [2.59, 3.63] | — | — | 107 |
-| In-domain Meta | 2.710 | [2.27, 3.28] | — | — | 85 |
+| In-domain Meta | 2.759 | [2.27, 3.28]† | — | — | 80‡ |
 | Prospective overall | 2.361 | — | 53 | — | 15 (FDA NME 2024-25) |
 | Prospective in-domain | 2.043 | — | — | — | 13 |
 
-**Cherry-picking caveat:** Meta CI upper bound (3.20) overlaps audit's retrospective-contamination estimate (2.85–3.10, per `docs/claude/cherry_picking_audit_2026-04-22.md`). Headline is a point estimate — true-generalization AAFE is underpowered at N=107 × 47 config decisions. Secondary holdout N50 planned to resolve.
+† CIs computed 2026-04-22 against pre-regen cache; current point estimates differ — refresh pending.
+‡ In-domain N changed 85→80 between 2026-04-14 and 2026-04-29 regens (AD criteria evolved or 5 drugs newly flagged). Investigate if relevant.
+
+**2026-04-29 regen notes** (per `docs/claude/experiment-log.md`):
+- Meta AAFE drift +0.024 (2.695 → 2.719, +0.9%) — headline narrative robust due to ML-track stability.
+- Engine AAFE drift +0.652 (3.421 → 4.073, **+19.1%**) — substantial degradation since 2026-04-14 cache. Likely root cause: P4.5 Achour merge (2026-04-23) and earlier ECM/V3-routing changes shifting Cmax predictions ~15-25% lower (verified by `test_ecm_holdout_regression` spot check before regen).
+- ML AAFE unchanged (3.057) — ML model artifacts have not been retrained since 2026-04-14.
+- 4-track Meta combination absorbs Engine drift via ML stability; Meta resilience is by design but warrants Engine-track investigation.
+
+**Cherry-picking caveat:** Meta CI upper bound (3.20, stale) overlapped audit's retrospective-contamination estimate (2.85–3.10, per `docs/claude/cherry_picking_audit_2026-04-22.md`). Headline is a point estimate — true-generalization AAFE is underpowered at N=107 × 47 config decisions. The 2026-04-29 regen does not change this caveat; CI refresh will revise the upper bound.
 
 **Track weights:** `_W_VDSS=0.20`; base adaptive engine/ml/clf = 0.60/0.40/0.00; other = 0.35/0.50/0.15. VDss activation scales the other 3 tracks by ×0.80.
 
