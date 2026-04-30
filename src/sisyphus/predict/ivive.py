@@ -583,10 +583,11 @@ def build_drug_on_graph(
     # Prodrug activation routing: SMILES → ActiveMetabolite via registry.
     registry_result = lookup_active_metabolite(profile.smiles)
     if registry_result is not None:
-        active_metabolite, observation_species = registry_result
+        active_metabolite, observation_species, conv_affinities = registry_result
     else:
         active_metabolite = None
         observation_species = "parent"
+        conv_affinities = {}
 
     # Use graph-supplied abundances when available, fall back to hardcoded defaults.
     abundances = liver_enzymes if liver_enzymes is not None else _LIVER_ENZYME_ABUNDANCE
@@ -662,6 +663,7 @@ def build_drug_on_graph(
         transporter_kinetics=transporter_kinetics or {},
         active_metabolite=active_metabolite,
         observation_species=observation_species,
+        enzyme_affinity_for_conversion=conv_affinities,
         **ecm_kwargs,
     )
 
