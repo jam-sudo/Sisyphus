@@ -8,24 +8,27 @@ Sisyphus: SMILES + dose → Cmax PBPK platform. Body modeled as a typed directed
 
 ## Current Performance
 
-4-track, regenerated **2026-04-29**, N=107 holdout via `scripts/run_engine_benchmark.py` → `data/training/4track_holdout_predictions.json`. 95% CIs bootstrap (10k resamples, seed=20260422) refreshed against post-regen cache 2026-04-29.
+4-track, regenerated **2026-04-30** (post v2 prodrug merge), N=107 holdout via `scripts/run_engine_benchmark.py` → `data/training/4track_holdout_predictions.json`. 95% CIs bootstrap (10k resamples, seed=20260422) refreshed against v2 baseline cache. CI artifact: `data/validation/4track_ci_2026-04-30.json`.
 
 | Track | AAFE | 95% CI | %2-fold | %3-fold | N |
 |---|---|---|---|---|---|
-| **Meta (production)** | **2.719** | [2.33, 3.19] | 46.7 | 62.6 | 107 |
-| Engine only | 4.073 | [3.38, 4.93] | 34.6 | 40.2 | 107 |
+| **Meta (production)** | **2.702** | [2.31, 3.18] | 46.7 | 62.6 | 107 |
+| Engine only | 3.572 | [3.00, 4.28] | 32.7 | 53.3 | 107 |
 | ML only | 3.057 | [2.59, 3.62] | 42.1 | 57.0 | 107 |
-| In-domain Meta | 2.759 | [2.32, 3.30] | 46.3 | 61.3 | 80† |
+| In-domain Meta | 2.730 | [2.28, 3.30] | 47.5 | 61.3 | 80† |
 | Prospective overall | 2.361 | — | 53 | — | 15 (FDA NME 2024-25) |
 | Prospective in-domain | 2.043 | — | — | — | 13 |
 
-† In-domain N changed 85→80 between 2026-04-14 and 2026-04-29 regens (AD criteria evolved or 5 drugs newly flagged). Investigation queued.
+† In-domain N changed 85→80 between 2026-04-14 and 2026-04-29 regens (AD criteria evolved or 5 drugs newly flagged). Investigation queued. N=80 stable across 2026-04-29 → 2026-04-30 regens.
 
-**2026-04-29 regen notes** (per `docs/claude/experiment-log.md`):
-- **Meta AAFE statistically unchanged** — point estimate +0.9% (2.695 → 2.719); CI [2.33, 3.19] vs previous [2.30, 3.20] within bootstrap noise (Δ ≤ 0.03 either bound). Headline narrative robust due to ML-track stability.
-- **Engine AAFE materially degraded** — point estimate +19.1% (3.421 → 4.073); CI shifted [2.88, 4.06] → [3.38, 4.93], both bounds up. Likely root cause: P4.5 Achour merge (2026-04-23) and earlier ECM/V3-routing changes shifting Cmax predictions ~15-25% lower (verified by `test_ecm_holdout_regression` spot check before regen). Engine drift root-cause bisect queued as follow-up.
-- **ML AAFE invariant** — point estimate 3.057 (Δ=0); CI [2.59, 3.62] vs [2.59, 3.63] (statistically identical). Confirms ML model artifacts not retrained between 2026-04-14 and 2026-04-29 regens.
-- 4-track Meta combination absorbs Engine drift via ML stability; Meta resilience is by design but warrants Engine-track investigation.
+**2026-04-30 regen notes** (per `docs/claude/experiment-log.md`):
+- **Meta AAFE statistically unchanged** — point estimate -0.6% (2.719 → 2.702); CI [2.31, 3.18] vs previous [2.33, 3.19] effectively identical. Headline narrative preserved.
+- **Engine AAFE materially improved** — point estimate -12.3% (4.073 → 3.572); CI shifted [3.38, 4.93] → [3.00, 4.28], both bounds down. Confounded source: (1) v2 well_stirred extraction model for prodrug activation (replaces v1 kinetic 1st-order; remdesivir/fostamatinib/tebipenem/sepiapterin) + (2) RNG-order shift on remaining 103 non-prodrug drugs from new SPR/CES1/CES2/ALPI distributions. Disentanglement deferred (ablation needed).
+- **ML AAFE invariant** — point estimate 3.057 (Δ=0); CI [2.59, 3.62] (bit-identical). Confirms ML model artifacts not retrained.
+- **spec §6.1 invariance violation noted**: v2 promised "107-holdout invariance" but BodyGraph.sample(rng) RNG-order coupling makes any cv>0 enzyme addition shift downstream samples. Spec assumption was wrong; real invariance requires per-node independent RNG seeding or deterministic mean-only realization. Both deferred to hardening backlog.
+
+**2026-04-29 regen notes** (prior cycle, per `docs/claude/experiment-log.md`):
+- 4-track cache regen post-P4.5 Achour merge (commits 516249b + ce5feba). Meta 2.695→2.719 (+0.9%, statistically indistinguishable), Engine 3.421→4.073 (+19.1% material drift then, now reversed by v2), ML invariant. v2 changes obscured the original Engine drift signal — root-cause bisect now needs to disentangle pre-v2 P4.5/ECM contributions.
 
 **Cherry-picking caveat:** Meta CI upper bound (3.19) overlaps audit's retrospective-contamination estimate (2.85–3.10, per `docs/claude/cherry_picking_audit_2026-04-22.md`). Headline is a point estimate — true-generalization AAFE is underpowered at N=107 × 47 config decisions. Post-regen CI refresh did not move the upper bound materially; the caveat is unchanged.
 

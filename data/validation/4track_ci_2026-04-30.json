@@ -1,0 +1,29 @@
+{
+  "computed_at": "2026-04-30",
+  "source_cache": "data/training/4track_holdout_predictions.json",
+  "source_cache_regen_commit": "6528ba8",
+  "method": "bootstrap on abs(log10(fold))",
+  "n_bootstrap": 10000,
+  "seed": 20260422,
+  "overall": {
+    "n": 107,
+    "engine": {"aafe": 3.572, "ci_95_low": 3.00, "ci_95_high": 4.28, "pct_2fold": 32.7, "pct_3fold": 53.3},
+    "ml": {"aafe": 3.057, "ci_95_low": 2.59, "ci_95_high": 3.62, "pct_2fold": 42.1, "pct_3fold": 57.0},
+    "meta": {"aafe": 2.702, "ci_95_low": 2.31, "ci_95_high": 3.18, "pct_2fold": 46.7, "pct_3fold": 62.6}
+  },
+  "in_domain": {
+    "n": 80,
+    "engine": {"aafe": 3.449, "ci_95_low": 2.87, "ci_95_high": 4.17, "pct_2fold": 32.5, "pct_3fold": 53.8},
+    "ml": {"aafe": 3.043, "ci_95_low": 2.52, "ci_95_high": 3.72, "pct_2fold": 43.8, "pct_3fold": 57.5},
+    "meta": {"aafe": 2.730, "ci_95_low": 2.28, "ci_95_high": 3.30, "pct_2fold": 47.5, "pct_3fold": 61.3}
+  },
+  "delta_vs_main_2026-04-29": {
+    "meta_aafe": "-0.017 (-0.6%)",
+    "engine_aafe": "-0.501 (-12.3%)",
+    "ml_aafe": "0 (invariant)",
+    "in_domain_meta_aafe": "-0.029 (-1.1%)",
+    "meta_ci": "[2.33, 3.19] -> [2.31, 3.18] (effectively identical)",
+    "engine_ci": "[3.38, 4.93] -> [3.00, 4.28] (both bounds shifted down)",
+    "ml_ci": "[2.59, 3.62] -> [2.59, 3.62] (bit-identical, ML invariant)"
+  }
+}
