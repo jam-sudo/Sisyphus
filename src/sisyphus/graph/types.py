@@ -160,21 +160,21 @@ class ActiveTransportEdge(Edge):
 
 @dataclass(frozen=True)
 class ProdrugActivationEdge(Edge):
-    """Mass transfer: parent drug → active metabolite at conversion site.
+    """Mass transfer: parent drug → active metabolite via enzyme catalysis.
 
-    Distinct from clearance (which removes mass to sink) and flow (which
-    conserves mass within same species). The flux differs in source vs
-    target units: source loses mg of parent; target gains mg of active
-    (scaled by MW ratio × yield).
+    v2 (2026-04-27): conversion is well-stirred extraction at flow-through
+    nodes (replaces v1's kinetic 1st-order). Drug declares which enzymes
+    catalyze the conversion via ``enzyme_tags``; engine computes CLint from
+    node enzyme abundance × drug.enzyme_affinity_for_conversion[tag].
 
-    1st-order in parent amount: rate = conversion_rate × A_parent[source].
-    Active mass produced = rate × (mw_active/mw_parent) × conversion_yield.
+    Mass routing: source loses parent (mg); target gains active (mg)
+    scaled by mw_active/mw_parent × conversion_yield.
 
-    Identity-blind: engine matches by edge_type, not source/target name.
+    Identity-blind: engine matches by edge_type and tag strings only.
     """
 
     edge_type: str = field(default="prodrug_activation", init=False)
-    conversion_rate: Distribution = field(default_factory=lambda: Distribution(0.0))
+    enzyme_tags: frozenset[str] = field(default_factory=frozenset)
     conversion_yield: Distribution = field(default_factory=lambda: Distribution(1.0))
     mw_parent: float = 0.0
     mw_active: float = 0.0

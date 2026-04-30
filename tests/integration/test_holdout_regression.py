@@ -28,12 +28,17 @@ def _aafe(preds: list[dict]) -> float:
     not HOLDOUT_JSON.exists(),
     reason=f"{HOLDOUT_JSON.name} not present — regeneration required",
 )
-def test_cached_holdout_aafe_is_2p695() -> None:
-    """Cached predictions file: Meta AAFE is the headline 2.695 (±0.001).
+def test_cached_holdout_aafe_is_2p702() -> None:
+    """Cached predictions file: Meta AAFE is the headline 2.702 (±0.001).
+
+    Baseline updated 2026-04-30 with prodrug v2 enzyme-abundance architecture
+    (PR #7) — engine RNG-order shift from new SPR/CES1/CES2/ALPI distributions
+    moved Meta from 2.719 (main 2026-04-29) to 2.702. Statistically
+    indistinguishable (within bootstrap CI).
 
     If this fails, the holdout prediction cache has been regenerated with a
-    behavior change. That should be blocked by Gate A — investigate which
-    code path started reading non-mean Distribution attributes."""
+    behavior change. Investigate which code path started reading non-mean
+    Distribution attributes or which enzyme abundance was added/changed."""
     with HOLDOUT_JSON.open() as f:
         data = json.load(f)
     # Primary path: use pre-computed AAFE stored in the file
@@ -45,4 +50,4 @@ def test_cached_holdout_aafe_is_2p695() -> None:
         if isinstance(data, dict) and "drugs" in data:
             preds = data["drugs"]
         aafe = _aafe(preds)
-    assert abs(aafe - 2.695) < 0.001, f"AAFE drifted: {aafe:.4f}"
+    assert abs(aafe - 2.702) < 0.001, f"AAFE drifted: {aafe:.4f}"
