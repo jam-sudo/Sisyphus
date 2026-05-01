@@ -199,10 +199,14 @@ def predict(
         compiler = ODECompiler()
         compiled = compiler.compile(graph)
 
-        # Single deterministic run (seed=42)
-        rng = np.random.default_rng(42)
-        realized_graph = graph.sample(rng)
-        realized_drug = drug.sample(rng)
+        # Deterministic mean-only realization (RNG-independent).
+        # Hardening: replaced graph.sample(rng=42) → realize_means() to
+        # eliminate seed-dependent RNG-order coupling. Adding a new
+        # Distribution to physiology YAML no longer shifts realized values
+        # for unrelated drugs. Restores 2026-04-14 baseline (Engine 3.421,
+        # Meta 2.695) by removing the lognormal-stochastic artifact.
+        realized_graph = graph.realize_means()
+        realized_drug = drug.realize_means()
         params = ResolvedParams(realized_graph, realized_drug)
 
         if is_infusion:
