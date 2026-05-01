@@ -10,6 +10,65 @@ Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the *
 
 ---
 
+## 2026-05-01 — Hardening: mean-only deterministic realization (RNG-order coupling resolved)
+
+**Branch**: `feat/hardening-mean-only`
+**Trigger**: Engine drift bisect from 2026-04-29 entry — investigation revealed +19.1% Engine drift was NOT real model degradation but RNG-order coupling.
+
+**Root cause**: `predict()` with `n_mc_samples=0` (deterministic default) used `graph.sample(rng=np.random.default_rng(42))`, which:
+- Iterates `Distribution.sample(rng)` over all enzyme/transporter dicts in YAML order
+- For cv>0 distributions, calls `rng.lognormal(...)` consuming RNG state
+- Adding new cv>0 distributions (Achour CV migration `2924f50`, v2 prodrug enzymes, v3 metadata) shifts subsequent draws
+
+The sample(rng=42) realized values were treated as "deterministic" but were actually a single specific lognormal draw at each position — vulnerable to ANY upstream YAML change.
+
+**Fix**: Add `BodyGraph.realize_means()` and `DrugOnGraph.realize_means()` methods that use `dist.mean` directly instead of `dist.sample(rng)`. predict() and test_engine_validation now use these. ~120 lines.
+
+**Headline AAFE delta** (v2 baseline 2026-04-30 → Hardening 2026-05-01):
+
+| Track | v2 baseline | Hardening | Δ (%) | Note |
+|---|---|---|---|---|
+| Meta (Overall) | 2.702 | **2.695** | -0.3% | **Restored to pre-Achour 2026-04-14 value** |
+| Engine (Overall) | 3.572 | 3.757 | +5.2% | Was seed-favorable at 3.572; mean-only is canonical |
+| ML (Overall) | 3.057 | 3.057 | 0% | Invariant |
+| In-domain Meta | 2.730 | 2.732 | +0.07% | Within CI noise |
+
+**Bisect interpretation** (resolves 2026-04-29 follow-up):
+- Pre-Achour 2026-04-14 cache: Engine 3.421, Meta 2.695 (cv=0 effective for liver enzymes)
+- Post-Achour 2026-04-29: Engine 4.073, Meta 2.719 (cv>0 with seed=42)
+- v2 2026-04-30: Engine 3.572, Meta 2.702 (more cv>0 with seed=42, RNG-shifted)
+- v3 2026-05-01: same as v2 (registry-invariant for non-prodrug)
+- Hardening 2026-05-01: **Engine 3.757, Meta 2.695** (canonical mean-only)
+
+The Meta value 2.695 from Hardening EXACTLY matches the pre-Achour 2026-04-14 value, confirming the Engine "drift" narrative was entirely RNG-order artifact. Engine track value 3.421 from yesterday's manual cv=0 zeroing was a partial-zeroing artifact (cardiac_output and other globals not zeroed); 3.757 is the truly canonical mean-only value.
+
+**Test impact**:
+- `test_engine_validation`: midazolam/caffeine/warfarin pass within 5%; **propranolol (~16% drift xfail) flipped to PASS** — same RNG mechanism resolved
+- `test_holdout_regression`: pin 2.702 → 2.695
+- `test_prodrug_v2_snapshot`: re-pinned to mean-only Cmax (sepiapterin 11.40→11.30, remdesivir 0.987→0.984, tebipenem_pivoxil 0.443→0.521 +17%, fostamatinib 0.135→0.126 -7%)
+- `test_prodrug_v3_enzyme_leak_audit`: pre_baseline regenerated against Hardening canonical; 107/107 byte-identical going forward
+- 4 prodrug 3-fold gates: still 4 xfail (extraction-step rate-limits remain dominant)
+
+**Architectural significance**:
+- True deterministic mean-only is the correct semantic for "deterministic ODE Cmax" — matches the test docstrings
+- spec §6.1 v2 invariance promise now actually holds: adding YAML enzymes can't shift unrelated drugs
+- Future enzyme additions (v4 candidates) won't break test_engine_validation pinned targets
+
+**Files**:
+- `src/sisyphus/graph/body.py`: + `BodyGraph.realize_means()` (~50 lines)
+- `src/sisyphus/core.py`: + `DrugOnGraph.realize_means()` (~50 lines)
+- `src/sisyphus/pipeline/predict.py`: deterministic path uses realize_means
+- `tests/integration/test_engine_validation.py`: uses realize_means; propranolol xfail removed
+- Re-pinned: `test_holdout_regression.py` (2.702→2.695), `test_prodrug_v2_snapshot.py` (4 drugs)
+- Cache: `data/training/4track_holdout_predictions.json` regenerated
+- CI: `data/validation/4track_ci_2026-05-01.json` (10k bootstrap, seed=20260422)
+- Headline: CLAUDE.md + README.md updated
+
+**Follow-ups**:
+- (none open from this work; this CLOSES the engine drift investigation queued from 2026-04-29)
+
+---
+
 ## 2026-05-01 — Prodrug Activation v3 (input-data refresh, all-disposition)
 
 **Branch**: `feat/prodrug-activation-v3` (gated on v2 PR #7 merge per spec §8.1, satisfied 2026-04-30 by `78d12e3`).

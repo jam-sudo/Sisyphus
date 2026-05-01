@@ -275,10 +275,10 @@ $$AAFE = 10^{\operatorname{mean}\left(\left|\log_{10}\frac{C_{max,pred}}{C_{max,
 
 | Track | AAFE | 95% CI | %2-fold | %3-fold | N |
 |---|:-:|:-:|:-:|:-:|:-:|
-| **Meta-learner (production)** | **2.702** | [2.31, 3.18] | 46.7% | 62.6% | 107 |
-| Engine only | 3.572 | [3.00, 4.28] | 32.7% | 53.3% | 107 |
+| **Meta-learner (production)** | **2.695** | [2.31, 3.16] | 46.7% | 63.6% | 107 |
+| Engine only | 3.757 | [3.13, 4.52] | 32.7% | 43.9% | 107 |
 | ML only | 3.057 | [2.59, 3.62] | 42.1% | 57.0% | 107 |
-| Meta, in-domain | 2.730 | [2.28, 3.30] | 47.5% | 61.3% | 80 |
+| Meta, in-domain | 2.732 | [2.29, 3.27] | 46.2% | 62.5% | 80 |
 
 The 4-track meta-learner combines mechanistic PBPK (Engine), data-driven XGBoost C<sub>max</sub> (ML), a closed-form CL/F analytical (CLF), and a conditional VDss analytical track. Weights are compound-type-adaptive and LOOCV-calibrated: base compounds blend Engine 0.60 / ML 0.40; other compounds use Engine 0.35 / ML 0.50 / CLF 0.15, with VDss 0.20 added when applicability criteria are satisfied (and the remaining tracks re-scaled by ×0.80 so the total is 1.0). In-domain AAFE (N=80) excludes 27 drugs flagged as out-of-applicability-domain (prodrugs, high-MW, extreme lipophilicity, extended-release formulation mismatch).
 
@@ -291,7 +291,7 @@ The 4-track meta-learner combines mechanistic PBPK (Engine), data-driven XGBoost
 
 Prospective AAFE is below retrospective (2.361 &lt; 2.702), the opposite direction from classical over-fitting. However, N=15 is underpowered; CI spans 1.65–3.50.
 
-**Cherry-picking caveat.** The 107-holdout has been used for ~47 configuration feedback cycles (track weights, routing, meta-learner variants). A quantitative audit (`docs/claude/cherry_picking_audit_2026-04-22.md`) scores aggregate risk 4.65/10 (moderate). The Meta CI upper bound (3.18) overlaps the audit's retrospective-contamination estimate (2.85–3.10), meaning the point estimate cannot statistically reject the null hypothesis that tuning inflated AAFE. A secondary permanent holdout (N50) is planned per `docs/claude/cherry_picking_process_v1.md`.
+**Cherry-picking caveat.** The 107-holdout has been used for ~47 configuration feedback cycles (track weights, routing, meta-learner variants). A quantitative audit (`docs/claude/cherry_picking_audit_2026-04-22.md`) scores aggregate risk 4.65/10 (moderate). The Meta CI upper bound (3.16) overlaps the audit's retrospective-contamination estimate (2.85–3.10), meaning the point estimate cannot statistically reject the null hypothesis that tuning inflated AAFE. A secondary permanent holdout (N50) is planned per `docs/claude/cherry_picking_process_v1.md`.
 
 ### Multi-dose regimen validation
 
