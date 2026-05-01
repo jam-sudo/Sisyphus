@@ -1,29 +1,46 @@
-"""v2 validation gate (per-drug parametrized 3-fold).
+"""v2/v3 validation gate (per-drug parametrized 3-fold).
 
 Per spec section 6.1: failing-drug parametrize cases are marked xfail with
 documented reason. Affinity values NOT adjusted to make tests pass --
 mechanistic-A core promise.
 
-Current empirical fold-errors (2026-04-26, b2cb921 + T2-T11 v2 architecture):
-  - sepiapterin       4692x  (pred 11.26 mg/L vs obs 0.0024 mg/L)
-                      SPR class-extrapolated affinity; v2 design lacks
-                      first-pass intestinal extraction adequate to deplete
-                      4200 mg dose pre-systemic. (T1 section 7 caveat.)
-  - remdesivir        4.43x  (pred 0.989 mg/L vs obs 4.38 mg/L)
-                      CES1 abundance only at liver per T9; lacks systemic
-                      esterase tissue distribution. Underprediction expected.
-  - tebipenem_pivoxil 9.02x  (pred 0.445 mg/L vs obs 4.01 mg/L)
-                      ALPI/CES intestinal hydrolysis affinity class-extrapolated;
-                      activation rate too low to recover full conversion yield.
-  - fostamatinib      4.51x  (pred 0.135 mg/L vs obs 0.61 mg/L)
-                      ALPI activation step + R406 fup/CL active metabolite values
-                      class-extrapolated; underprediction within expected
-                      v2 mechanistic-only error band (~5x).
+v3 update (2026-05-01, prodrug-v3 dispositions per
+docs/superpowers/specs/2026-04-29-prodrug-v3-literature.md):
+4 of 4 drugs remain xfail. v3 brought 2 literature-applied registry
+updates (Items 2 + 3); fold errors essentially unchanged because
+conversion-step extraction efficiency (well-stirred E ~1 at high CLint)
+dominates over active-compartment CL/Vd disposition.
+
+Current empirical fold-errors (2026-05-01, v3 dispositions applied):
+  - sepiapterin       4748x  (pred 11.40 mg/L vs obs 0.0024 mg/L)
+                      Item 1 ceiling_accepted (F_sapropterin not located in
+                      primary literature; FDA/EMA explicit). v1 Vd=150
+                      retained as known-wrong placeholder. SPR class-
+                      extrapolated affinity unchanged from v2; conversion
+                      saturation at 4200 mg dose dominates.
+  - remdesivir        4.44x  (pred 0.987 mg/L vs obs 4.38 mg/L)
+                      Item 2 literature_applied — GS-441524 active
+                      CL=17.4 L/h, V=535 L (Tamura 2023 + Leegwater 2022
+                      geomean). observation_species=parent → active
+                      CL/V update doesn't shift parent Cmax. CES1 abundance
+                      only at liver still lacks systemic esterase distribution.
+  - tebipenem_pivoxil 9.05x  (pred 0.443 mg/L vs obs 4.01 mg/L)
+                      Item 4 + Item 6 ceiling_accepted (F_tebipenem absolute
+                      not located; CES2/tebipenem in vitro Vmax/Km not
+                      located). v2 placeholder Vd=50, CL=17 retained;
+                      class-extrapolated CES2 affinity retained.
+  - fostamatinib      4.50x  (pred 0.136 mg/L vs obs 0.61 mg/L)
+                      Item 3 literature_applied — R406 active CL=15.7 L/h,
+                      Vss=256 L (Matsukane 2022 IV microdose). Active
+                      compartment ke (CL/V) reduced ~44%; Cmax shift
+                      marginal because conversion-step (ALPI extraction)
+                      remains rate-limiting.
 
 These are NOT relaxed by tuning affinities. Resolution requires:
-  (a) literature-grade kinetic data per enzyme/drug, or
-  (b) v3 introducing additional mechanistic terms (e.g. esterase extra-hepatic
-      tissue abundance, intestinal-loss kinetics) -- spec scope.
+  (a) literature-grade in vitro kinetic data per enzyme/drug (Items 5-6
+      ceiling: not yet located in literature), or
+  (b) extra mechanistic terms beyond v3 scope (e.g., extra-hepatic esterase
+      abundance, intestinal-loss kinetics, BH4 first-pass depletion).
 """
 from __future__ import annotations
 
@@ -56,22 +73,27 @@ _DOSE_ROUTE = {
 
 _KNOWN_FAILURES = {
     "sepiapterin":
-        "v2 mechanistic-A: 4692x overpredict; SPR class-extrapolated, no "
-        "first-pass intestinal extraction term sufficient to deplete 4200 mg "
-        "dose pre-systemic (T1 section 7 caveat). Resolution: v3 mechanistic "
-        "terms or literature-grade SPR kinetics.",
+        "v3 4748x overpredict (Item 1 ceiling_accepted — F_sapropterin not "
+        "located in primary literature, v1 Vd=150 placeholder retained). "
+        "SPR class-extrapolated affinity; 4200 mg dose pre-systemic conversion "
+        "saturation dominates. Resolution: literature-grade BH4 IV F primary "
+        "study or extra-hepatic SPR proteomic abundance.",
     "remdesivir":
-        "v2 mechanistic-A: 4.43x underpredict; CES1 abundance set only at liver "
-        "(T9), lacks systemic esterase distribution. Resolution: extra-hepatic "
-        "esterase abundance in physiology + literature-grade CES1/CES2 affinity.",
+        "v3 4.44x underpredict (Item 2 literature_applied — active CL=17.4, "
+        "V=535 from Tamura 2023 + Leegwater 2022 geomean). Parent observation "
+        "→ active CL/V update doesn't shift parent Cmax. CES1 abundance only "
+        "at liver lacks systemic esterase distribution. Resolution: extra-hepatic "
+        "esterase abundance in physiology.",
     "tebipenem_pivoxil":
-        "v2 mechanistic-A: 9.02x underpredict; ALPI/CES intestinal hydrolysis "
-        "affinity class-extrapolated. Resolution: literature-grade ALPI kinetics "
-        "or v3 enzyme-specific intestinal flux terms.",
+        "v3 9.05x underpredict (Item 4 + Item 6 stacked ceiling — F_tebipenem "
+        "absolute not located, CES2/tebipenem in vitro Vmax/Km not located). "
+        "Class-extrapolated CES2 affinity retained. Resolution: literature-grade "
+        "in vitro CES2/tebipenem-pivoxil kinetic data.",
     "fostamatinib":
-        "v2 mechanistic-A: 4.51x underpredict; ALPI activation + R406 active-"
-        "metabolite Cl/Vd/fup all class-extrapolated. Resolution: literature-"
-        "grade R406 disposition data + ALPI affinity refinement.",
+        "v3 4.50x underpredict (Item 3 literature_applied — R406 active CL=15.7, "
+        "Vss=256 from Matsukane 2022 IV microdose). Active ke reduced ~44%; "
+        "Cmax shift marginal because ALPI extraction remains rate-limiting. "
+        "Resolution: literature-grade in vitro ALPI/fostamatinib kinetics.",
 }
 
 

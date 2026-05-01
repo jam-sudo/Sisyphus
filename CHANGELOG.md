@@ -12,6 +12,34 @@ track `pyproject.toml`.
 
 ## [Unreleased]
 
+### v3 — Prodrug Activation Input-Data Quality Refresh (2026-05-01, branch `feat/prodrug-activation-v3`)
+
+Resolution of T1 caution flags deferred from v2. Architecture unchanged
+(pure data-quality refresh per spec §3.3 mechanistic-A doctrine).
+
+**Items resolved**:
+- Item 1 (BH4 CL/Vd, sepiapterin): **ceiling_accepted** (F_sapropterin not located in primary literature; FDA Kuvan + EMA EPAR explicit "absolute bioavailability not known")
+- Item 2 (GS-441524 CL/Vd, remdesivir): **literature_applied** (Tamura 2023 + Leegwater 2022 popPK geomean: CL=17.4 L/h, V=535 L)
+- Item 3 (R406 CL/Vd, fostamatinib): **literature_applied** (Matsukane 2022 IV microdose review: CL=15.7 L/h, Vss=256 L)
+- Item 4 (tebipenem CL/Vd): **ceiling_accepted** (F_tebipenem absolute not located; Eckburg V/F=46.2 surrogate rejected per §4.1 Gap 5)
+- Item 5 (SPR primary proteomic abundance): **ceiling_accepted** (no quantitative MS-based human SPR pmol/mg located; HPA + Wu 2020 review animal-only)
+- Item 6 (CES2/tebipenem direct CLint): **ceiling_accepted** (no in vitro tebipenem-pivoxil/CES2 Vmax/Km located; Gupta 2023 generic intestinal esterases)
+
+**v1→v2→v3 fold-error progression** (per `docs/superpowers/specs/2026-04-29-prodrug-v3-literature.md`):
+
+| Drug | v1 | v2 | v3 | gate |
+|---|---|---|---|---|
+| sepiapterin | 5356× over | 4692× over | 4748× over | xfail (Item 1 ceiling) |
+| remdesivir | 4.45× under | 4.43× under | 4.44× under | xfail (Item 2 lit_applied; parent obs not active) |
+| fostamatinib | 4.78× under | 4.51× under | 4.50× under | xfail (Item 3 lit_applied; extraction rate-limited) |
+| tebipenem_pivoxil | 8.63× under | 9.02× under | 9.05× under | xfail (Items 4+6 ceiling) |
+
+**Headline AAFE delta**: zero shift (4 prodrugs not in 107-holdout). Meta 2.702, Engine 3.572, ML 3.057 unchanged from v2 baseline. Verified by §6.2 enzyme-leak audit (107/107 byte-identical).
+
+Per spec §3.3 mechanistic-A promise, gate-fail with mechanistic-A-compliant values is acceptable outcome (informative not failing). v4 candidates require new mechanistic terms beyond data refresh: extra-hepatic esterase distribution, BH4 first-pass depletion, in vitro CES2/tebipenem kinetics.
+
+References: `docs/superpowers/specs/2026-04-29-prodrug-activation-v3-design.md` + `docs/superpowers/specs/2026-04-29-prodrug-v3-literature.md` + plan `docs/superpowers/plans/2026-04-29-prodrug-activation-v3.md`.
+
 ### Added
 - **Prodrug activation routing infrastructure** (branch `feat/prodrug-activation`,
   commits `0db67a8`..`a2ad03e`, 17 commits, 2026-04-25/26):
