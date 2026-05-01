@@ -200,6 +200,83 @@ class BodyGraph:
 
         return g2
 
+    def realize_means(self) -> BodyGraph:
+        """Deterministic realization using means (RNG-independent).
+
+        Returns a new ``BodyGraph`` where every Distribution is replaced
+        by ``Distribution(mean=mean, cv=0.0)`` — using the existing mean
+        directly, NOT a stochastic sample. Used by the deterministic
+        prediction path (``n_mc_samples=0``) to eliminate seed-dependent
+        RNG-order coupling.
+
+        Mirrors :meth:`sample` but skips RNG entirely: adding a new
+        Distribution to physiology YAML cannot shift downstream realized
+        values for non-related drugs.
+        """
+        g2 = BodyGraph()
+
+        # Realize nodes.
+        for name, node in self.nodes.items():
+            mean_volume = Distribution(node.volume.mean, cv=0.0)
+            mean_enzymes = {
+                tag: Distribution(dist.mean, cv=0.0) for tag, dist in node.enzymes.items()
+            }
+            mean_transporters = {
+                tag: Distribution(dist.mean, cv=0.0)
+                for tag, dist in node.transporters.items()
+            }
+            new_node = dataclasses.replace(
+                node,
+                volume=mean_volume,
+                enzymes=mean_enzymes,
+                transporters=mean_transporters,
+            )
+            g2.nodes[name] = new_node
+
+        # Realize edges.
+        for edge in self.edges:
+            if isinstance(edge, FlowEdge):
+                new_edge = dataclasses.replace(
+                    edge,
+                    flow_rate=Distribution(edge.flow_rate.mean, cv=0.0),
+                )
+            elif isinstance(edge, DiffusionEdge):
+                new_edge = dataclasses.replace(
+                    edge,
+                    ps_product=Distribution(edge.ps_product.mean, cv=0.0),
+                )
+            elif isinstance(edge, TransitEdge):
+                new_edge = dataclasses.replace(
+                    edge,
+                    transit_rate=Distribution(edge.transit_rate.mean, cv=0.0),
+                )
+            elif isinstance(edge, AbsorptionEdge):
+                new_edge = dataclasses.replace(
+                    edge,
+                    ka_fraction=Distribution(edge.ka_fraction.mean, cv=0.0),
+                )
+            elif isinstance(edge, ProdrugActivationEdge):
+                new_edge = dataclasses.replace(
+                    edge,
+                    conversion_yield=Distribution(edge.conversion_yield.mean, cv=0.0),
+                )
+            elif isinstance(edge, OneCompartmentEliminationEdge):
+                new_edge = dataclasses.replace(
+                    edge,
+                    cl_per_h=Distribution(edge.cl_per_h.mean, cv=0.0),
+                    vd_l=Distribution(edge.vd_l.mean, cv=0.0),
+                )
+            else:
+                new_edge = edge
+            g2.edges.append(new_edge)
+
+        # Realize global_params.
+        g2.global_params = {
+            key: Distribution(dist.mean, cv=0.0) for key, dist in self.global_params.items()
+        }
+
+        return g2
+
     # -- Introspection -----------------------------------------------------
 
     def node_names(self) -> list[str]:
