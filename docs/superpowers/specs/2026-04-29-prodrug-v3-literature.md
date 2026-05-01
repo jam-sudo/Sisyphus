@@ -274,3 +274,37 @@
 - Gupta 2023 *AAC* (tebipenem ADME mass balance) — DOI 10.1128/aac.01509-22 — https://pmc.ncbi.nlm.nih.gov/articles/PMC10112213/
 - Wu 2020 *J Cell Mol Med* (SPR review) — DOI 10.1111/jcmm.15608 — https://pmc.ncbi.nlm.nih.gov/articles/PMC7520308/
 - Human Protein Atlas — SPR — https://www.proteinatlas.org/ENSG00000116096-SPR/tissue
+
+---
+
+## Summary Table — Item × Disposition (Final)
+
+| # | Item | Disposition | Citation | v2 → v3 Δ |
+|---|---|---|---|---|
+| 1 | BH4 CL/Vd (sepiapterin) | ceiling_accepted | Feillet 2008 + FDA Kuvan + EMA EPAR | no change (v1 placeholder retained) |
+| 2 | GS-441524 CL/Vd (remdesivir) | literature_applied | Tamura 2023 + Leegwater 2022 (geomean) | CL 10→17.4 (cv 0.3→0.49); V 35→535 (cv 0.3→0.79) |
+| 3 | R406 CL/Vd (fostamatinib) | literature_applied | Matsukane 2022 (IV microdose) | CL 28→15.7 (cv 0.35→0.30); V 250→256 (cv 0.3→0.36) |
+| 4 | tebipenem CL/Vd | ceiling_accepted | Eckburg 2019 (V/F surrogate rejected) | no change (v1 placeholder retained) |
+| 5 | SPR primary proteomic abundance | ceiling_accepted | HPA + Wu 2020 review (animal-only) | no change (v2 class-estimated retained: liver 1e5, gut 3e3, kidney 3e4) |
+| 6 | CES2/tebipenem direct CLint | ceiling_accepted | Gupta 2023 (generic intestinal esterases) | no change (v2 class-extrapolated retained) |
+
+**Net code-change**: 2 registry entries updated (remdesivir, fostamatinib). 4 items contribute documentation-only `v3_metadata` blocks without numeric changes. Physiology YAML unchanged.
+
+## Per-prodrug Cmax fold-error progression
+
+| Drug | v1 | v2 | v3 | gate (3-fold)? |
+|---|---|---|---|---|
+| sepiapterin | 5356× over | 4692× over | 4748× over | xfail (Item 1 ceiling) |
+| remdesivir | 4.45× under | 4.43× under | 4.44× under | xfail (Item 2 lit_applied; parent obs not affected) |
+| fostamatinib | 4.78× under | 4.51× under | 4.50× under | xfail (Item 3 lit_applied; extraction rate-limited) |
+| tebipenem_pivoxil | 8.63× under | 9.02× under | 9.05× under | xfail (Items 4+6 ceiling) |
+
+All 4 prodrugs remain xfail post-v3. Per spec §3.3 mechanistic-A doctrine, gate-fail with mechanistic-A-compliant values is acceptable outcome; v4 candidates require new mechanistic terms beyond data refresh (extra-hepatic esterase distribution, BH4 first-pass depletion model, in vitro CES2/tebipenem kinetics, etc.).
+
+## SBI-prodrug intersection re-check
+
+Re-confirmed at v3 implementation (Task 1 Step 3): intersection ∅ (none of {sepiapterin, remdesivir, fostamatinib, tebipenem_pivoxil} in `data/sbi/method_routing.json`). SBI staleness warning not required.
+
+## 107-holdout invariance
+
+Per §6.2 enzyme-leak audit (`tests/regression/test_prodrug_v3_enzyme_leak_audit.py`): 107/107 holdout drugs are byte-identical Cmax pre-v3 vs post-v3 (verified 2026-05-01). DRUG_SPECIFIC_CHANGES = {remdesivir, fostamatinib} but neither is in the 107-holdout set, so v3 has zero cross-drug effect. Headline AAFE bit-identical to v2 baseline (Meta 2.702, Engine 3.572, ML 3.057).
