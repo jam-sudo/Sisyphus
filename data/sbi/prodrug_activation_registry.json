@@ -13,14 +13,22 @@
     },
     "affinity_source": "class_extrapolated",
     "_clinical_citation": "Gao 2024 PMC11597218 (sepiapterin oral PK + BH4 metabolite Cmax 0.0024 mg/L)",
-    "_v1_to_v2_note": "v1 conversion_rate_per_h=12 replaced by SPR enzyme-abundance × affinity. CL/Vd retained from v1 (D1 deferred to v3 per spec re-review)."
+    "_v1_to_v2_note": "v1 conversion_rate_per_h=12 replaced by SPR enzyme-abundance × affinity. CL/Vd retained from v1 (D1 deferred to v3 per spec re-review).",
+    "v3_metadata": {
+      "citation": "Feillet 2008 Clin Pharmacokinet 47:817-825 (DOI 10.2165/0003088-200847120-00006); FDA Kuvan label rev 2014/2020; EMA Kuvan EPAR",
+      "doctrine_path": "§4.1 oral V/F division attempted; §4.1 Gap 5 strict (F primary required); §5.1 fallback step 2 (F primary NOT located)",
+      "disposition_state": "ceiling_accepted",
+      "source_dbs_searched": ["PubMed", "GoogleScholar", "FDA", "EMA", "DrugBank"],
+      "n_candidates_reviewed": 6,
+      "ceiling_rationale": "F_sapropterin not located in primary literature. FDA Kuvan label and EMA EPAR both explicitly state 'Absolute bioavailability is not known'. Feillet 2008 V/F=8350 L/70kg + CL/F=2100 L/h/70kg cannot be converted to central V or CL without F. v1 Vd=150 L retained as least-bad placeholder NOT endorsed value; T1 caution 1.5-50× off literature acknowledged. Uncertainty bound: V ∈ [150, 8350] = 56× span. F substitution from estimates, CV inflation, and animal-data cross-species substitution all REJECTED per §4.1 Gap 5 + §4.2 Q4."
+    }
   },
   "CCC(CC)COC(=O)[C@H](C)N[P@](=O)(OC[C@H]1O[C@@](C#N)(c2ccc3c(N)ncnn23)[C@H](O)[C@@H]1O)Oc1ccccc1": {
     "name": "GS-441524",
     "mw": 291.27,
     "fup": {"mean": 0.5, "cv": 0.3},
-    "CL_per_h": {"mean": 10.0, "cv": 0.3},
-    "Vd_L": {"mean": 35.0, "cv": 0.3},
+    "CL_per_h": {"mean": 17.4, "cv": 0.49},
+    "Vd_L": {"mean": 535.0, "cv": 0.79},
     "conversion_yield_fraction": {"mean": 0.9, "cv": 0.1},
     "yield_source": "literature",
     "observation_species": "parent",
@@ -29,7 +37,15 @@
     },
     "affinity_source": "literature",
     "_clinical_citation": "Humeniuk 2020 PMC8007387 (parent remdesivir + GS-441524 PK)",
-    "_v1_to_v2_note": "v1 conversion_rate_per_h=1.5 replaced by CES1 enzyme-abundance × affinity (tier 1)."
+    "_v1_to_v2_note": "v1 conversion_rate_per_h=1.5 replaced by CES1 enzyme-abundance × affinity (tier 1).",
+    "_v2_to_v3_note": "Vd_L 35→535, CL_per_h 10→17.4 (CV 0.3→0.49 for CL, 0.3→0.79 for V) per geomean of Tamura 2023 + Leegwater 2022 IV-remdesivir popPK.",
+    "v3_metadata": {
+      "citation": "Tamura R 2023 CPT PSP 12:513-521 (DOI 10.1002/psp4.12936; CL=11.0 L/h, V=271 L) + Leegwater E 2022 AAC 66:e00254-22 (DOI 10.1128/aac.00254-22; CL=27.6 L/h, V=1060 L); Sukeishi 2022 (DOI 10.1002/psp4.12736) eligible same-entity but not numerically incorporated",
+      "doctrine_path": "§4.1 IV human popPK geometric mean across 2 quantified 1-comp models; §4.2 max(BSV=0.474, inter-study GSD=0.49) for CL → 0.49; max(BSV=0.581, inter-study GSD=0.79) for V → 0.79",
+      "disposition_state": "literature_applied",
+      "source_dbs_searched": ["PubMed", "GoogleScholar"],
+      "n_candidates_reviewed": 7
+    }
   },
   "C[C@@H](O)[C@H]1C(=O)N2C(C(=O)OCOC(=O)C(C)(C)C)=C(SC3CN(C4=NCCS4)C3)[C@H](C)[C@H]12": {
     "name": "tebipenem",
@@ -45,14 +61,22 @@
     },
     "affinity_source": "class_extrapolated",
     "_clinical_citation": "Eckburg 2019 PMC6709501 (tebipenem Cmax 4.01 mg/L @ 300 mg PO fasted)",
-    "_v1_to_v2_note": "v1 conversion_rate_per_h=30 replaced by CES2 enzyme-abundance × affinity (class-extrapolated)."
+    "_v1_to_v2_note": "v1 conversion_rate_per_h=30 replaced by CES2 enzyme-abundance × affinity (class-extrapolated).",
+    "v3_metadata": {
+      "citation": "Eckburg 2019 PMC6709501 (V/F=46.2 L, CL/F=39.1 L/h oral); Cotroneo 2022 PMC10112213; FDA tebipenem label",
+      "doctrine_path": "§4.1 V/F division attempted; §4.1 Gap 5 strict (F primary required); §5.1 fallback step 2 (F primary NOT located)",
+      "disposition_state": "ceiling_accepted",
+      "source_dbs_searched": ["PubMed", "GoogleScholar", "FDA"],
+      "n_candidates_reviewed": 6,
+      "ceiling_rationale": "F_tebipenem absolute not located in primary literature. Eckburg 2019 reports V/F=46.2 L and CL/F=39.1 L/h oral but the cited 50-60% bracket is urinary-recovery surrogate, NOT IV-comparator F. Per §4.1 Gap 5, V/F substitution rejected without F primary. v1 Vd=50, CL=17 retained as least-bad placeholder; v1 CL note inconsistency with Eckburg CL/F by ~2.3× (implicit F~0.43 division — ad-hoc, not endorsed). Animal F (mouse/rat/dog/monkey) and bacterial enzyme surrogates REJECTED per §4.1 Gap 1 (same-entity) and §4.1 Gap 4 (eukaryotic-only)."
+    }
   },
   "COc1cc(Nc2ncc(F)c(Nc3ccc4c(n3)N(COP(=O)(O)O)C(=O)C(C)(C)O4)n2)cc(OC)c1OC": {
     "name": "R406",
     "mw": 470.45,
     "fup": {"mean": 0.02, "cv": 0.3},
-    "CL_per_h": {"mean": 28.0, "cv": 0.35},
-    "Vd_L": {"mean": 250.0, "cv": 0.3},
+    "CL_per_h": {"mean": 15.7, "cv": 0.30},
+    "Vd_L": {"mean": 256.0, "cv": 0.36},
     "conversion_yield_fraction": {"mean": 0.9, "cv": 0.1},
     "yield_source": "class_extrapolated",
     "observation_species": "active",
@@ -61,6 +85,14 @@
     },
     "affinity_source": "class_extrapolated",
     "_clinical_citation": "Baluom 2013 PMC3703230 (R406 Cmax 0.61 mg/L @ 75 mg PO fostamatinib fasted)",
-    "_v1_to_v2_note": "v1 conversion_rate_per_h=4 replaced by ALPI enzyme-abundance × affinity. Yield raised 0.7 → 0.9 (D2: pure hydrolysis, absorption losses captured upstream by parent peff/F)."
+    "_v1_to_v2_note": "v1 conversion_rate_per_h=4 replaced by ALPI enzyme-abundance × affinity. Yield raised 0.7 → 0.9 (D2: pure hydrolysis, absorption losses captured upstream by parent peff/F).",
+    "_v2_to_v3_note": "Vd_L 250→256, CL_per_h 28→15.7 (CV 0.3→0.36 for V from SD; class default 0.30 for CL) per Matsukane 2022 IV microdose review.",
+    "v3_metadata": {
+      "citation": "Matsukane R 2022 Clin Pharmacokinet 61:955-972 (DOI 10.1007/s40262-022-01135-0; PMC9250994). Reports R406 IV microdose: t1/2=15.3 h, CL=15.7 L/h, Vss=256±92 L. Traces to Rigel-conducted clinical study + Baluom 2013 BJCP oral arm",
+      "doctrine_path": "§4.1 IV microdose direct R406 administration (no F division needed); §4.2 BSV from Vss SD (92/256=0.36) for V; class default 0.30 for CL (BSV not in extract)",
+      "disposition_state": "literature_applied",
+      "source_dbs_searched": ["PubMed", "GoogleScholar"],
+      "n_candidates_reviewed": 5
+    }
   }
 }
