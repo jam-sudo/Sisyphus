@@ -10,6 +10,55 @@ Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the *
 
 ---
 
+## 2026-05-01 — Prodrug Activation v3 (input-data refresh, all-disposition)
+
+**Branch**: `feat/prodrug-activation-v3` (gated on v2 PR #7 merge per spec §8.1, satisfied 2026-04-30 by `78d12e3`).
+**Spec**: `docs/superpowers/specs/2026-04-29-prodrug-activation-v3-design.md`
+**Plan**: `docs/superpowers/plans/2026-04-29-prodrug-activation-v3.md` (19 tasks across 5 phases — all complete)
+**Literature deliverable**: `docs/superpowers/specs/2026-04-29-prodrug-v3-literature.md`
+
+**Per-item dispositions** (mechanistic-A doctrine compliant per spec §3.3):
+
+| # | Item | Disposition | Citation primary | Code change |
+|---|---|---|---|---|
+| 1 | BH4 CL/Vd (sepiapterin) | ceiling_accepted | Feillet 2008 + FDA Kuvan + EMA EPAR (F not known) | v3_metadata only |
+| 2 | GS-441524 CL/Vd (remdesivir) | literature_applied | Tamura 2023 + Leegwater 2022 (popPK geomean) | CL 10→17.4, V 35→535 |
+| 3 | R406 CL/Vd (fostamatinib) | literature_applied | Matsukane 2022 (IV microdose review) | CL 28→15.7, V 250→256 |
+| 4 | tebipenem CL/Vd | ceiling_accepted | Eckburg 2019 (V/F surrogate rejected) | v3_metadata only |
+| 5 | SPR proteomic abundance | ceiling_accepted | HPA + Wu 2020 (animal-only) | v3_metadata only |
+| 6 | CES2/tebipenem CLint | ceiling_accepted | Gupta 2023 (no isoform attribution) | v3_metadata only |
+
+**Outcome**:
+- 4-drug 3-fold gate: 0 pass / 0 ceiling-with-improvement / 4 ceiling-no-improvement (drift 0.2-1.2%, all stay xfail)
+- Items resolved: 2 literature_applied + 4 ceiling_accepted = 6/6 dispositioned
+- 107-holdout AAFE bit-identical (4 prodrugs absent from holdout); §6.2 leak audit PASSES 107/107
+- Headline metrics unchanged from v2 baseline: Meta 2.702, Engine 3.572, ML 3.057
+
+**Significance**:
+v3 closes the input-data quality pillar of the prodrug saga (v1→v2→v3) with rigorous mechanistic-A discipline. 4 items closed as ceiling because primary literature truly does not exist (F_sapropterin, F_tebipenem, human SPR proteomic, in vitro CES2/tebipenem). 2 items advanced via popPK geomean. Empirical Cmax fold-errors barely shifted because:
+1. observation_species=parent for remdesivir → active CL/V update doesn't move parent Cmax
+2. fostamatinib extraction rate-limits (well-stirred E~1 at high CLint) → active CL change has marginal Cmax effect
+3. Items 1, 4, 5, 6 unchanged values
+
+This is the canonical mechanistic-A outcome: "we know the literature gap exists; we documented it; we did not fudge to pass". v4 candidates require new mechanistic terms (extra-hepatic esterase, BH4 first-pass depletion, etc.) — beyond data refresh.
+
+**Test impact**:
+- `test_prodrug_v3_registry_schema` — 8/8 PASS (TDD red→green)
+- `test_prodrug_v3_enzyme_leak_audit` — PASS (107/107 byte-identical)
+- `test_prodrug_v2_validation_gate` — 4 xfail (reasons updated with v3 disposition references)
+- `test_prodrug_v2_snapshot` — 4 PASS (re-pinned to v3 deterministic Cmax values)
+- `test_prodrug_v2_pipeline_smoke` — 4 PASS (functional-only refactor per §6.1)
+- `test_prodrug_v2_ddi_smoke` — PASS at v2 tolerance (no widening needed)
+
+**Files**:
+- Registry: `data/sbi/prodrug_activation_registry.json` (4 entries with v3_metadata; 2 with value updates)
+- Tests: `tests/integration/test_prodrug_v3_registry_schema.py` (NEW), `tests/regression/test_prodrug_v3_enzyme_leak_audit.py` (NEW)
+- Baseline capture: `scripts/capture_prodrug_v3_baseline.py` + `tests/regression/data/prodrug_v3_pre_baseline.json`
+- Updated: validation_gate, snapshot, pipeline_smoke (xfail reasons + functional-only)
+- Docs: literature deliverable summary tables; CLAUDE.md v3 note; CHANGELOG v3 entry
+
+---
+
 ## 2026-04-30 — Prodrug v2 PR #7 — RNG-order discovery + cache regen
 
 **Trigger:** v2 PR (`feat/prodrug-activation-v2`) CI failure on `test_engine_validation::test_cmax_within_5pct[midazolam, caffeine, warfarin]` — Cmax shifted 6-19% above Omega targets.
