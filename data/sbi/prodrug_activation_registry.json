@@ -63,12 +63,12 @@
     "_clinical_citation": "Eckburg 2019 PMC6709501 (tebipenem Cmax 4.01 mg/L @ 300 mg PO fasted)",
     "_v1_to_v2_note": "v1 conversion_rate_per_h=30 replaced by CES2 enzyme-abundance × affinity (class-extrapolated).",
     "v3_metadata": {
-      "citation": "Eckburg 2019 PMC6709501 (V/F=46.2 L, CL/F=39.1 L/h oral); Cotroneo 2022 PMC10112213; FDA tebipenem label",
-      "doctrine_path": "§4.1 V/F division attempted; §4.1 Gap 5 strict (F primary required); §5.1 fallback step 2 (F primary NOT located)",
+      "citation": "Item 4: Eckburg 2019 PMC6709501 (V/F=46.2 L, CL/F=39.1 L/h oral); Cotroneo 2022 PMC10112213; FDA tebipenem label. Item 6: Gupta 2023 ADME study (intestinal esterases generic; isoform not distinguished); no in vitro tebipenem-pivoxil/CES2 Vmax/Km located",
+      "doctrine_path": "Item 4 — §4.1 V/F division attempted, §4.1 Gap 5 strict (F primary required), §5.1 fallback step 2 (F primary NOT located). Item 6 — §4.5 parallel doctrine in vitro Vmax/Km, §5.6 (CES2/tebipenem direct), no isoform-specific human kinetics located",
       "disposition_state": "ceiling_accepted",
-      "source_dbs_searched": ["PubMed", "GoogleScholar", "FDA"],
-      "n_candidates_reviewed": 6,
-      "ceiling_rationale": "F_tebipenem absolute not located in primary literature. Eckburg 2019 reports V/F=46.2 L and CL/F=39.1 L/h oral but the cited 50-60% bracket is urinary-recovery surrogate, NOT IV-comparator F. Per §4.1 Gap 5, V/F substitution rejected without F primary. v1 Vd=50, CL=17 retained as least-bad placeholder; v1 CL note inconsistency with Eckburg CL/F by ~2.3× (implicit F~0.43 division — ad-hoc, not endorsed). Animal F (mouse/rat/dog/monkey) and bacterial enzyme surrogates REJECTED per §4.1 Gap 1 (same-entity) and §4.1 Gap 4 (eukaryotic-only)."
+      "source_dbs_searched": ["PubMed", "GoogleScholar", "FDA", "ChEMBL", "DrugBank"],
+      "n_candidates_reviewed": 12,
+      "ceiling_rationale": "Two ceilings stacked. Item 4 (active CL/Vd): F_tebipenem absolute not located. Eckburg 2019 V/F=46.2 L surrogate (urinary recovery 50-60%) rejected per §4.1 Gap 5 — not IV-comparator F. v1 Vd=50, CL=17 retained as placeholder; CL inconsistent with Eckburg CL/F by ~2.3× (implicit F~0.43 — ad-hoc, not endorsed). Item 6 (CES2 affinity): no in vitro tebipenem-pivoxil hydrolysis Vmax/Km with recombinant or human-tissue CES2 located. Gupta 2023 generic 'intestinal esterases' without isoform identification (CES1 vs CES2 not distinguished). v2 class-extrapolated CES2 affinity retained. Animal F + bacterial enzyme surrogates REJECTED per §4.1 Gap 1 + §4.1 Gap 4."
     }
   },
   "COc1cc(Nc2ncc(F)c(Nc3ccc4c(n3)N(COP(=O)(O)O)C(=O)C(C)(C)O4)n2)cc(OC)c1OC": {
