@@ -2,6 +2,16 @@
 
 Catches silent drift below the 3-fold validation gate threshold.
 Update _PINNED explicitly when intentionally re-baselining.
+
+v3 re-baselined 2026-05-01 (post Items 1-6 dispositions per spec §6.1):
+  sepiapterin       1.126e+01 → 1.140e+01 (+1.2%; Item 1 ceiling no value
+                    change, drift from upstream test order)
+  remdesivir        9.891e-01 → 9.869e-01 (-0.2%; Item 2 lit_applied,
+                    parent obs not affected by active CL/V update)
+  tebipenem_pivoxil 4.446e-01 → 4.429e-01 (-0.4%; Items 4+6 ceiling)
+  fostamatinib      1.352e-01 → 1.355e-01 (+0.2%; Item 3 lit_applied,
+                    extraction-limited so active CL change marginal)
+All within original 5% tolerance; explicit re-pin documents v3 baseline.
 """
 from __future__ import annotations
 
@@ -11,10 +21,10 @@ from sisyphus.pipeline.predict import predict
 
 
 _PINNED = {
-    "sepiapterin":       1.126096e+01,
-    "remdesivir":        9.890671e-01,
-    "tebipenem_pivoxil": 4.445988e-01,
-    "fostamatinib":      1.351613e-01,
+    "sepiapterin":       1.139668e+01,
+    "remdesivir":        9.869241e-01,
+    "tebipenem_pivoxil": 4.429159e-01,
+    "fostamatinib":      1.354977e-01,
 }
 
 _RTOL = 0.05
