@@ -34,10 +34,12 @@ def run_drug(drug_name: str):
     compiler = ODECompiler()
     compiled = compiler.compile(graph)
 
-    # Use deterministic (cv=0) values -- no MC sampling for validation
-    rng = np.random.default_rng(42)
-    realized_graph = graph.sample(rng)
-    realized_drug = drug.sample(rng)
+    # Deterministic mean-only realization (Hardening 2026-05-01).
+    # Replaced graph.sample(rng=42) with realize_means() so this test is
+    # truly deterministic — adding a new Distribution to physiology YAML
+    # does not shift realized values for unrelated drugs.
+    realized_graph = graph.realize_means()
+    realized_drug = drug.realize_means()
     params = ResolvedParams(realized_graph, realized_drug)
 
     # Initial conditions: dose in administration node
@@ -56,16 +58,7 @@ _CMAX_DRUGS = [
     "midazolam",
     "caffeine",
     "warfarin",
-    pytest.param(
-        "propranolol",
-        marks=pytest.mark.xfail(
-            reason=(
-                "pre-existing ~16% Cmax drift vs Omega; "
-                "see docs/claude/propranolol_cmax_drift.md"
-            ),
-            strict=False,
-        ),
-    ),
+    "propranolol",  # was xfail (~16% drift) — passes post-Hardening (RNG artifact resolved)
 ]
 
 
