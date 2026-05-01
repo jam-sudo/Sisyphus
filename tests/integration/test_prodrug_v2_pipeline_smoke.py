@@ -1,5 +1,13 @@
-"""End-to-end smoke: each registered v2 prodrug runs without error."""
+"""Functional smoke test for prodrug pipeline (each registered v2 prodrug).
+
+Verifies: pipeline executes without crash, returns valid PredictionResult,
+Cmax is positive and finite. Numerical regression assertions live in
+tests/regression/test_prodrug_v2_snapshot.py per spec §6.1 (pipeline_smoke
+refactored to functional-only post-v3 to avoid registry-update tautology).
+"""
 from __future__ import annotations
+
+import math
 
 import pytest
 
@@ -21,6 +29,14 @@ from sisyphus.pipeline.predict import predict
      75.0, "oral"),
 ])
 def test_pipeline_runs_for_each_prodrug(drug_name, smiles, dose_mg, route):
+    """Functional-only: pipeline executes, returns valid result.
+
+    Numerical regression handled by test_prodrug_v2_snapshot.py per spec §6.1.
+    """
     result = predict(smiles, dose_mg=dose_mg, route=route, n_mc_samples=0)
     assert result is not None
-    assert result.pk.cmax.mean > 0, f"{drug_name} Cmax should be positive"
+    assert result.pk is not None, f"{drug_name}: PredictionResult.pk is None"
+    assert result.pk.cmax is not None, f"{drug_name}: Cmax distribution is None"
+    cmax = result.pk.cmax.mean
+    assert cmax > 0, f"{drug_name} Cmax should be positive, got {cmax}"
+    assert math.isfinite(cmax), f"{drug_name} Cmax must be finite, got {cmax}"

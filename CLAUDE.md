@@ -8,7 +8,7 @@ Sisyphus: SMILES + dose → Cmax PBPK platform. Body modeled as a typed directed
 
 ## Current Performance
 
-4-track, regenerated **2026-04-30** (post v2 prodrug merge), N=107 holdout via `scripts/run_engine_benchmark.py` → `data/training/4track_holdout_predictions.json`. 95% CIs bootstrap (10k resamples, seed=20260422) refreshed against v2 baseline cache. CI artifact: `data/validation/4track_ci_2026-04-30.json`.
+4-track, regenerated **2026-04-30** (post v2 prodrug merge); v3 prodrug input-data refresh applied **2026-05-01** with bit-identical 107-holdout output (4 prodrugs not in holdout). N=107 holdout via `scripts/run_engine_benchmark.py` → `data/training/4track_holdout_predictions.json`. 95% CIs bootstrap (10k resamples, seed=20260422) refreshed against v2 baseline cache (still canonical post-v3). CI artifact: `data/validation/4track_ci_2026-04-30.json`.
 
 | Track | AAFE | 95% CI | %2-fold | %3-fold | N |
 |---|---|---|---|---|---|
@@ -20,6 +20,11 @@ Sisyphus: SMILES + dose → Cmax PBPK platform. Body modeled as a typed directed
 | Prospective in-domain | 2.043 | — | — | — | 13 |
 
 † In-domain N changed 85→80 between 2026-04-14 and 2026-04-29 regens (AD criteria evolved or 5 drugs newly flagged). Investigation queued. N=80 stable across 2026-04-29 → 2026-04-30 regens.
+
+**2026-05-01 v3 prodrug input-data refresh** (per `docs/claude/experiment-log.md`):
+- 6 items dispositioned per spec §3.3 mechanistic-A doctrine: 2 literature_applied (remdesivir CL/V Tamura+Leegwater geomean; fostamatinib CL/V Matsukane IV microdose); 4 ceiling_accepted (BH4/tebipenem F primary not located; SPR proteomic + CES2/tebipenem in vitro Vmax/Km not located).
+- 107-holdout AAFE bit-identical to v2 baseline: prodrug 4 drugs (sepiapterin/remdesivir/tebipenem_pivoxil/fostamatinib) absent from holdout → registry value updates have zero cross-drug effect (verified by §6.2 enzyme-leak audit, all 107 byte-identical).
+- 4 prodrug 3-fold gates remain xfail per spec §6.4 (fold-error drift 0.2-1.2%; both ceiling-retained drugs and lit_applied drugs unchanged within tolerance — extraction-step rate-limits dominate over active CL/V disposition).
 
 **2026-04-30 regen notes** (per `docs/claude/experiment-log.md`):
 - **Meta AAFE statistically unchanged** — point estimate -0.6% (2.719 → 2.702); CI [2.31, 3.18] vs previous [2.33, 3.19] effectively identical. Headline narrative preserved.
