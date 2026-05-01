@@ -332,6 +332,69 @@ class DrugOnGraph:
             observation_species=self.observation_species,
         )
 
+    def realize_means(self) -> DrugOnGraph:
+        """Deterministic realization using means (RNG-independent).
+
+        Returns a new ``DrugOnGraph`` where every Distribution field is
+        replaced by ``Distribution(mean=mean, cv=0.0)`` — using existing
+        means directly, NOT stochastic samples. Used by the deterministic
+        prediction path (``n_mc_samples=0``) to eliminate seed-dependent
+        RNG-order coupling.
+        """
+        return DrugOnGraph(
+            name=self.name,
+            smiles=self.smiles,
+            dose_mg=self.dose_mg,
+            route=self.route,
+            administration_node=self.administration_node,
+            mw=self.mw,
+            pka=self.pka,
+            compound_type=self.compound_type,
+            particle_radius_um=self.particle_radius_um,
+            fup=Distribution(mean=self.fup.mean, cv=0.0),
+            rbp=Distribution(mean=self.rbp.mean, cv=0.0),
+            kp_method=self.kp_method,
+            kp_overrides={
+                k: Distribution(mean=v.mean, cv=0.0) for k, v in self.kp_overrides.items()
+            },
+            peff=Distribution(mean=self.peff.mean, cv=0.0),
+            solubility=Distribution(mean=self.solubility.mean, cv=0.0),
+            enzyme_affinity={
+                k: Distribution(mean=v.mean, cv=0.0) for k, v in self.enzyme_affinity.items()
+            },
+            enzyme_affinity_for_conversion={
+                k: Distribution(mean=v.mean, cv=0.0)
+                for k, v in self.enzyme_affinity_for_conversion.items()
+            },
+            transporter_kinetics={
+                k: TransporterKinetics(
+                    jmax=Distribution(mean=v.jmax.mean, cv=0.0),
+                    km=Distribution(mean=v.km.mean, cv=0.0),
+                ) for k, v in self.transporter_kinetics.items()
+            },
+            renal_clearance=Distribution(mean=self.renal_clearance.mean, cv=0.0),
+            ps_passive=Distribution(mean=self.ps_passive.mean, cv=0.0),
+            ps_eff=Distribution(mean=self.ps_eff.mean, cv=0.0),
+            cl_int_bile=Distribution(mean=self.cl_int_bile.mean, cv=0.0),
+            ps_overrides={
+                k: Distribution(mean=v.mean, cv=0.0) for k, v in self.ps_overrides.items()
+            },
+            active_metabolite=ActiveMetabolite(
+                name=self.active_metabolite.name,
+                mw=self.active_metabolite.mw,
+                fup=Distribution(mean=self.active_metabolite.fup.mean, cv=0.0),
+                CL_per_h=Distribution(mean=self.active_metabolite.CL_per_h.mean, cv=0.0),
+                Vd_L=Distribution(mean=self.active_metabolite.Vd_L.mean, cv=0.0),
+                conversion_rate_per_h=Distribution(
+                    mean=self.active_metabolite.conversion_rate_per_h.mean, cv=0.0),
+                conversion_site=self.active_metabolite.conversion_site,
+                conversion_yield_fraction=Distribution(
+                    mean=self.active_metabolite.conversion_yield_fraction.mean,
+                    cv=0.0),
+            ) if self.active_metabolite is not None else None,
+            observation_species=self.observation_species,
+        )
+
 
 # ---------------------------------------------------------------------------
 # SimResult — engine → pk contract
