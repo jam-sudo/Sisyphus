@@ -608,7 +608,7 @@ Solubility: 대부분 정성적 ("insoluble") — 정량 heuristic 대체 불가
 - `predict/ivive.py` — `_get_fm_fractions()` substrate_enzymes parameter 추가
 - `pipeline/predict.py` — DrugBank warning tags 추가 (§5.5)
 - `validation/benchmark.py` — gold/silver 분리 보고
-- `Sisyphus_Design_v4.md` — §3.2 predict 의존성 업데이트
+- `DESIGN.md` — §3.2 predict 의존성 업데이트
 
 ### Not modified
 - `engine/` — 전체 디렉토리 변경 없음

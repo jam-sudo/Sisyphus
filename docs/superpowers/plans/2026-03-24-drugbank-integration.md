@@ -1114,7 +1114,7 @@ git commit -m "test: add regression test verifying pipeline without DrugBank dat
 ### Task 10: Design Spec Update
 
 **Files:**
-- Modify: `Sisyphus_Design_v4.md`
+- Modify: `DESIGN.md`
 
 - [ ] **Step 1: Update §3.2 predict layer dependency**
 
@@ -1130,6 +1130,6 @@ To:
 - [ ] **Step 2: Commit**
 
 ```bash
-git add Sisyphus_Design_v4.md
+git add DESIGN.md
 git commit -m "docs: update design spec — predict layer depends on reference data lookup"
 ```
