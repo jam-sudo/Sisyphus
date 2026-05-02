@@ -8,7 +8,7 @@ charter: Authoritative list of failed Sisyphus experiments. Read before proposin
 
 Every experiment here was run, reverted, and documented. **Before proposing any accuracy improvement, open this file and search for the approach.** New track proposals must first pass the error-decorrelation gate described in [diagnosis.md §4](./diagnosis.md).
 
-**Canonical count:** 34 enumerated experiments below. Narrative references in commit messages or prose (e.g. "#35 error cancellation", "14번째 시도", "누적 33 methods") use **informal** numbering that counts early exploration attempts separately; those narrative numbers are **not authoritative** and do not match the table count below. When in doubt, cite the table entry (`DE-NN`).
+**Canonical count:** 35 enumerated experiments below. Narrative references in commit messages or prose (e.g. "#35 error cancellation", "14번째 시도", "누적 33 methods") use **informal** numbering that counts early exploration attempts separately; those narrative numbers are **not authoritative** and do not match the table count below. When in doubt, cite the table entry (`DE-NN`).
 
 ## 1. Theme summary (11 categories)
 
@@ -134,7 +134,18 @@ To fix pravastatin SBC (cov_dev 0.223), OATP1B1 substrates added: atorvastatin, 
 Valsartan fup predicted 0.009 vs DrugBank/clinical 0.050. Hypothesized this 5.6× deficit drove V3 Cmax underprediction (FE 0.48× on valsartan, 0.39× on glimepiride under V3 windowed IV-Cmax). Override: Cmax changed by 0.97× — essentially unchanged. Glimepiride predicted fup already matches clinical. **fup RULED OUT as cause of V3 OATP non-statin underprediction.** `scripts/diagnose_v3_underpredict.py`, result `5ff72eb`. Candidates remaining (not tested): Jmax calibration, Vss/Kp over-distribution, ECM architecture limit outside statin Km range. Do not re-test fup override for this class.
 
 ### DE-34 — 3D conformer descriptors for ML Cmax (2026-04-01)
-20 RDKit 3D descriptors (asphericity, NPR1/2, PMI1/2/3, WHIM, etc.) on ETKDG-generated conformers (99.8% success on 1029 training molecules). Morgan+3D ML AAFE 2.930 vs Morgan-only 3.030 (Δ=-0.100, first gate PASS); but meta blend 2.818 vs production meta 2.277 (then) / 2.695 (4-track now) — orthogonality (r=0.655 with Morgan-only ML) was real but insufficient to clear the ensemble's already-tight error cancellation. Branch `feature/3d-cyp-multidist` Experiment A (commit `5c2737b`); see archive tag `archive/3d-cyp-multidist-2026-04-01`. Telltale if it returns: "asphericity / NPR / PMI / WHIM / 3D shape descriptors / conformer features" added to ML feature set.
+20 RDKit 3D descriptors (asphericity, NPR1/2, PMI1/2/3, WHIM, etc.) on ETKDG-generated conformers (99.8% success). Two evaluations, both falsified:
+- **N=1029 holdout-excluded** (`feature/3d-cyp-multidist` Experiment A): Morgan+3D ML AAFE 2.930 vs Morgan-only 3.030 (Δ=-0.100, first gate PASS); meta blend 2.818 vs production-then meta 2.277. Orthogonality r=0.655 with Morgan, insufficient to clear ensemble error cancellation. Archive tag `archive/3d-cyp-multidist-2026-04-01`.
+- **N=1128 production-scale retest** (`feature/morgan3d-retrain` Phase 12c, 2026-04-01, 324 hyperparameter configs): Morgan+3D ML AAFE 2.402 vs Morgan-only 2.341 (Δ=+0.061, **WORSE**); meta 2.370 vs production 2.277 (Δ=+0.093). Error correlation r=0.952 — at production training scale, the 3D features lose their pseudo-orthogonality. 3D feature share = 6.9% importance, only 3 in top-20 (whim_5/6/7). Archive tag `archive/morgan3d-retrain-2026-04-01`.
+
+The two evaluations together rule out "but it might work at production scale" as an escape: the orthogonality observed at N=1029 was a small-data artifact, not a feature-engineering signal. Telltale if it returns: "asphericity / NPR / PMI / WHIM / 3D shape descriptors / conformer features" added to ML feature set.
+
+### DE-35 — Differentiable engine surrogate for E2E SMILES→Cmax (2026-04-02)
+Distinct from DE-30 (UDE / gradient-through-solver): pre-train an MLP operator to mimic the engine, then fine-tune SMILES→Encoder→Operator→Cmax end-to-end with frozen operator. Two-gate evaluation:
+- **Gate 1 — operator approximation: PASS.** MLP (128, 64) on 20K synthetic ADME→Cmax pairs, R²=0.9985, fold error 1.09×. Top features: dose 62%, Peff 24%, CLint 7%. Engine is perfectly approximable as a pure function of physiological inputs.
+- **Gate 2 — E2E fine-tuning: FAIL.** Scaffold-CV AAFE 3.544 vs XGBoost 3.369 (+5.2% worse). Error correlation r(E2E, XGB)=0.867 — somewhat orthogonal, but E2E too inaccurate to contribute. The 12-D latent bottleneck through the physics operator over-constrains the model at N=1,239 training samples.
+
+Mechanism: the operator captures engine physics perfectly, but the engine's systematic bias (AAFE 3.42) transfers through unchanged — fine-tuning with N=1,239 cannot correct it via the encoder. Same SMILES information ceiling as DE-05/DE-17/DE-30 reached from a different architectural angle. Branch `feature/neural-operator-surrogate` (commit `b85b18d`); archive tag `archive/neural-operator-surrogate-2026-04-02`. Telltale if it returns: "differentiable surrogate / amortized engine / pre-trained operator + encoder fine-tuning" with N < 5K Cmax training data.
 
 ---
 
