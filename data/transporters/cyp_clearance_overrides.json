@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "description": "Per-drug metabolic-CLint scale factors for substrates whose XGBoost-predicted hepatocyte CLint is dominated by transporter uptake (OATP1B1, etc.) rather than intracellular CYP/UGT metabolism. When the ECM transporter path is active in the engine, the metabolic_fraction here scales the CYP/UGT enzyme_affinities derived from XGBoost CLint, preventing double-counting. Default for any drug not listed: 1.0 (no scaling).",
+  "rationale": "In vitro hepatocyte CLint integrates uptake + intracellular metabolism. For drugs that are predominantly transporter substrates with negligible intracellular metabolism (e.g. pravastatin), the entire XGBoost CLint reflects the OATP1B1 contribution; explicitly modeling that path via the engine's ECM machinery while also keeping the CYP-allocated affinities counts the same clearance twice. metabolic_fraction = 0 zeroes the metabolic path entirely; intermediate values (e.g. 0.7 for atorvastatin's mixed CYP3A4 + OATP1B1 mechanism) await per-drug literature curation in v0.3.",
+  "schema": {
+    "drug": "Lowercase common name (informational).",
+    "smiles": "Canonical SMILES (RDKit). Lookup matches by InChIKey to be robust to SMILES variants.",
+    "inchikey": "RDKit InChIKey (primary lookup key).",
+    "metabolic_fraction": "Float in [0, 1]. Multiplied into per-enzyme affinities by _decompose_clint when ECM transporter path is active. Default 1.0 = no scaling = current behavior.",
+    "literature": "References supporting the chosen fraction.",
+    "notes": "Free-form rationale."
+  },
+  "overrides": [
+    {
+      "drug": "pravastatin",
+      "smiles": "CC[C@@H](C)C(=O)O[C@@H]1C[C@@H](O)C=C2[C@@H](CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H](C)CC[C@@H]21",
+      "inchikey": "GOSGZXISMCZCDW-LYANWTNHSA-N",
+      "metabolic_fraction": 0.0,
+      "literature": [
+        "Hatorp 2002: pravastatin hepatic uptake is OATP1B1/2-mediated; minimal CYP3A4/2C9 contribution.",
+        "Niemi 2009 OATP review: pravastatin Km on OATP1B1 13.6 uM (Varma 2014); CYP-mediated metabolism minor.",
+        "Watanabe 2009: PS_inf 0.5-2.0 L/h literature range absorbs all hepatic clearance for pravastatin."
+      ],
+      "notes": "Pravastatin is the canonical OATP1B1-only substrate. Its XGBoost CLint already approximates total in vivo hepatic CL via uptake; adding the ECM OATP1B1 path on top double-counts. Setting metabolic_fraction=0 routes 100% of hepatic clearance through ECM, which the engine then scales via abundance × Jmax/Km × IVIVE."
+    }
+  ]
+}
