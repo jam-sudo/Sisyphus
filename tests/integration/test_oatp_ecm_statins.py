@@ -124,16 +124,20 @@ _FE_GATE: dict[str, float] = {
 # regression.  xfail strict=False: test runs, assertion is expected to fail; if
 # it unexpectedly passes (Peff model improved) the test turns green automatically.
 #
-# 2026-05-01 Hardening update: switched _simulate_cmax to realize_means(). This
-# invalidated the seed=42-calibrated T7 abundance for pravastatin (FE drifted
-# 1.486 → 1.823 under mean-only realization). Until T7 is recalibrated against
-# realize_means(), pravastatin is xfailed with strict=False.
-# fluvastatin moved to xfail too — pre-existing under-prediction (FE 4.79
-# under Hardening; opposite direction from rosuvastatin/atorvastatin over-
-# prediction). Root cause unknown but separate from Peff or ECM (Cmax
-# under-predicted ~5×; possibly OATP1B1 over-uptake or absorption under-
-# estimation specific to fluvastatin).
-_KNOWN_PEFF_FAILS = {"rosuvastatin", "atorvastatin", "fluvastatin", "pravastatin"}
+# 2026-05-02 #12 reconciliation: pravastatin promoted out of xfail. The
+# Hardening drift (FE 1.486 → 1.823) was a downstream symptom of the
+# XGBoost-CYP / ECM-OATP1B1 double-counting now resolved by the
+# metabolic_fraction=0 registry entry. At the unchanged abundance 5.0e5,
+# pravastatin Cmax is 0.0422 mg/L vs FDA 0.045 mg/L (FE 1.066, gate 1.3).
+# Calibration script (scripts/calibrate_oatp_abundance_ecm.py) confirms
+# 5.0e5 remains optimal; full sweep in
+# data/validation/oatp_ecm_abundance_calibration.json.
+#
+# fluvastatin stays xfail — pre-existing under-prediction (FE 4.79; opposite
+# direction from rosuvastatin/atorvastatin over-prediction). Tracked in
+# issue #21 as a separate problem (possibly OATP1B1 over-uptake on
+# fluvastatin specifically, or non-OATP1B1 hepatic transport).
+_KNOWN_PEFF_FAILS = {"rosuvastatin", "atorvastatin", "fluvastatin"}
 
 
 def _simulate_cmax(drug_name: str) -> tuple[float, float]:
