@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-04-22
+last_updated: 2026-05-02
 parent: ../../CLAUDE.md
 charter: Authoritative list of failed Sisyphus experiments. Read before proposing any accuracy improvement.
 ---
@@ -8,7 +8,7 @@ charter: Authoritative list of failed Sisyphus experiments. Read before proposin
 
 Every experiment here was run, reverted, and documented. **Before proposing any accuracy improvement, open this file and search for the approach.** New track proposals must first pass the error-decorrelation gate described in [diagnosis.md §4](./diagnosis.md).
 
-**Canonical count:** 33 enumerated experiments below. Narrative references in commit messages or prose (e.g. "#35 error cancellation", "14번째 시도", "누적 33 methods") use **informal** numbering that counts early exploration attempts separately; those narrative numbers are **not authoritative** and do not match the table count below. When in doubt, cite the table entry (`DE-NN`).
+**Canonical count:** 34 enumerated experiments below. Narrative references in commit messages or prose (e.g. "#35 error cancellation", "14번째 시도", "누적 33 methods") use **informal** numbering that counts early exploration attempts separately; those narrative numbers are **not authoritative** and do not match the table count below. When in doubt, cite the table entry (`DE-NN`).
 
 ## 1. Theme summary (11 categories)
 
@@ -132,6 +132,9 @@ To fix pravastatin SBC (cov_dev 0.223), OATP1B1 substrates added: atorvastatin, 
 
 ### DE-33 — ECM fup override for V3 OATP underprediction (2026-04-22)
 Valsartan fup predicted 0.009 vs DrugBank/clinical 0.050. Hypothesized this 5.6× deficit drove V3 Cmax underprediction (FE 0.48× on valsartan, 0.39× on glimepiride under V3 windowed IV-Cmax). Override: Cmax changed by 0.97× — essentially unchanged. Glimepiride predicted fup already matches clinical. **fup RULED OUT as cause of V3 OATP non-statin underprediction.** `scripts/diagnose_v3_underpredict.py`, result `5ff72eb`. Candidates remaining (not tested): Jmax calibration, Vss/Kp over-distribution, ECM architecture limit outside statin Km range. Do not re-test fup override for this class.
+
+### DE-34 — 3D conformer descriptors for ML Cmax (2026-04-01)
+20 RDKit 3D descriptors (asphericity, NPR1/2, PMI1/2/3, WHIM, etc.) on ETKDG-generated conformers (99.8% success on 1029 training molecules). Morgan+3D ML AAFE 2.930 vs Morgan-only 3.030 (Δ=-0.100, first gate PASS); but meta blend 2.818 vs production meta 2.277 (then) / 2.695 (4-track now) — orthogonality (r=0.655 with Morgan-only ML) was real but insufficient to clear the ensemble's already-tight error cancellation. Branch `feature/3d-cyp-multidist` Experiment A (commit `5c2737b`); see archive tag `archive/3d-cyp-multidist-2026-04-01`. Telltale if it returns: "asphericity / NPR / PMI / WHIM / 3D shape descriptors / conformer features" added to ML feature set.
 
 ---
 
