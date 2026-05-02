@@ -1,9 +1,25 @@
-"""Integration tests for OATP1B1 hepatic uptake.
+"""Integration tests for OATP1B1 hepatic uptake (post-#12 reconciliation).
+
+The pre-#12 invariant ``cmax_on/cmax_off < 0.95`` is mathematically
+incompatible with the post-reconciliation model: with the metabolic
+path zeroed for pravastatin (registry entry, see issue #12), the
+"off" arm (no transporter_kinetics, no ECM) has *no* hepatic
+clearance for pravastatin and Cmax goes very high; the "on" arm has
+ECM-only clearance. The two cannot be ordered in a way that
+preserves the original test's intent.
+
+Replacement (#13 B1): verify the phenotype path. Under SLCO1B1 PM
+(OATP1B1 activity x 0.10), pravastatin systemic Cmax must be HIGHER
+than under SLCO1B1 EM (x 1.00), because reduced hepatic uptake leaves
+more drug in venous blood. This is the canonical clinical observation
+that motivated SLCO1B1 PGx in the first place.
 
 Depends on:
 - data/physiology/reference_man.yaml having liver.transporters.OATP1B1
 - data/transporters/oatp1b1.json with pravastatin entry
-- predict/ivive.py supporting transporter_kinetics kwarg
+- data/transporters/cyp_clearance_overrides.json with pravastatin entry
+- predict/ivive.py supporting transporter_kinetics + metabolic_fraction
+- predict/phenotype.py for SLCO1B1 -> OATP1B1 abundance scaling
 """
 
 from __future__ import annotations
@@ -20,6 +36,7 @@ from sisyphus.graph.builder import build_from_yaml
 from sisyphus.predict.adme import predict_adme
 from sisyphus.predict.chemistry import compute_profile
 from sisyphus.predict.ivive import build_drug_on_graph
+from sisyphus.predict.phenotype import apply_phenotype_to_graph
 from sisyphus.predict.transporter_db import (
     load_hepatic_ecm_params,
     load_oatp1b1_kinetics,
@@ -33,10 +50,14 @@ _PRAVASTATIN = (
 
 
 def _simulate_cmax(drug, graph, t_end: float = 24.0) -> float:
-    """Run a deterministic ODE solve and return venous_blood Cmax."""
-    rng = np.random.default_rng(42)
-    realized_graph = graph.sample(rng)
-    realized_drug = drug.sample(rng)
+    """Run a deterministic ODE solve and return venous_blood Cmax.
+
+    Uses ``realize_means()`` (post-Hardening canonical deterministic path)
+    to be consistent with ``test_oatp_ecm_statins`` and the production
+    ``predict()`` default.
+    """
+    realized_graph = graph.realize_means()
+    realized_drug = drug.realize_means()
 
     compiler = ODECompiler()
     compiled = compiler.compile(realized_graph)
@@ -54,54 +75,61 @@ def _simulate_cmax(drug, graph, t_end: float = 24.0) -> float:
     return float(np.max(result.concentrations["venous_blood"]))
 
 
-@pytest.mark.slow
-def test_pravastatin_cmax_moves_with_oatp():
-    """Engine Cmax for pravastatin decreases when OATP1B1 kinetics AND
-    ECM parameters (biliary clearance + sinusoidal PS) are active vs off.
-
-    Under ECM (post 2026-04-20), OATP kinetics alone do not change Cmax
-    because the PS_passive/PS_eff defaults (1e6 L/h) collapse the model
-    to well-stirred algebraically. Meaningful hepatic extraction reduction
-    requires supplying ``hepatic_ecm_params`` (pravastatin: PS_passive=0.8,
-    PS_eff=0.8, CL_int_bile=45). In the "on" arm both are loaded; in the
-    "off" arm both are None → default well-stirred path.
-    """
-    graph = build_from_yaml(_PHYS)
+def _build_pravastatin(graph):
     profile = compute_profile(_PRAVASTATIN)
     adme = predict_adme(profile)
     liver_enzymes = {
         tag: dist.mean for tag, dist in graph.nodes["liver"].enzymes.items()
     }
-
-    drug_off = build_drug_on_graph(
-        profile, adme, dose_mg=40.0, route="oral",
-        liver_enzymes=liver_enzymes,
-        transporter_kinetics=None,
-        hepatic_ecm_params=None,
-    )
-    drug_on = build_drug_on_graph(
+    return build_drug_on_graph(
         profile, adme, dose_mg=40.0, route="oral",
         liver_enzymes=liver_enzymes,
         transporter_kinetics=load_oatp1b1_kinetics("pravastatin"),
         hepatic_ecm_params=load_hepatic_ecm_params("pravastatin"),
     )
 
-    cmax_off = _simulate_cmax(drug_off, graph)
-    cmax_on = _simulate_cmax(drug_on, graph)
 
-    print(f"\npravastatin: cmax_off={cmax_off:.4f}, cmax_on={cmax_on:.4f}, "
-          f"ratio={cmax_on / cmax_off:.3f}")
+@pytest.mark.slow
+def test_pravastatin_pm_higher_cmax_than_em():
+    """SLCO1B1 PM reduces hepatic OATP1B1 uptake -> higher systemic Cmax.
 
-    ratio = cmax_on / cmax_off
-    assert ratio < 0.95, (
-        f"expected OATP1B1 uptake + ECM params to reduce Cmax meaningfully, "
-        f"got cmax_off={cmax_off:.4f}, cmax_on={cmax_on:.4f}, ratio={ratio:.3f}"
+    Replaces the pre-#12 cmax_on/cmax_off invariant. Verifies that the
+    PGx integration path is wired end-to-end through the engine: the
+    apply_phenotype_to_graph hook scales the OATP1B1 abundance, the
+    engine's ECM machinery sees the scaled abundance via PS_active, and
+    the drop in hepatic uptake lifts Cmax.
+    """
+    graph_em = build_from_yaml(_PHYS)
+    graph_pm = apply_phenotype_to_graph(graph_em, {"SLCO1B1": "PM"})
+
+    drug_em = _build_pravastatin(graph_em)
+    drug_pm = _build_pravastatin(graph_pm)
+
+    cmax_em = _simulate_cmax(drug_em, graph_em)
+    cmax_pm = _simulate_cmax(drug_pm, graph_pm)
+
+    print(
+        f"\npravastatin SLCO1B1: cmax_em={cmax_em:.4f}, cmax_pm={cmax_pm:.4f}, "
+        f"ratio={cmax_pm / cmax_em:.3f}"
+    )
+
+    assert cmax_pm > cmax_em, (
+        "expected SLCO1B1 PM to raise pravastatin Cmax (less hepatic uptake), "
+        f"got cmax_em={cmax_em:.4f}, cmax_pm={cmax_pm:.4f}"
+    )
+    # Lower bound: PM must produce a meaningful uplift, not just numerical
+    # noise. CPIC PM activity = 0.10x EM, so we expect at least ~10%
+    # higher Cmax. Tighter clinical observation is ~2-3x but depends on
+    # absolute abundance calibration (#14).
+    assert cmax_pm / cmax_em > 1.10, (
+        "expected at least 10% Cmax increase under PM, "
+        f"got ratio {cmax_pm / cmax_em:.3f}"
     )
 
 
 @pytest.mark.slow
 def test_non_oatp_drug_unaffected_by_oatp_wiring():
-    """Morphine (no OATP1B1 substrate) → transporter_kinetics empty → MM inactive."""
+    """Morphine (no OATP1B1 substrate) -> transporter_kinetics empty -> MM inactive."""
     graph = build_from_yaml(_PHYS)
     morphine_smiles = "CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O"
     profile = compute_profile(morphine_smiles)
@@ -117,9 +145,8 @@ def test_non_oatp_drug_unaffected_by_oatp_wiring():
     )
     assert drug.transporter_kinetics == {}, "morphine should not have OATP kinetics"
 
-    rng = np.random.default_rng(42)
-    realized_graph = graph.sample(rng)
-    realized_drug = drug.sample(rng)
+    realized_graph = graph.realize_means()
+    realized_drug = drug.realize_means()
 
     compiler = ODECompiler()
     compiled = compiler.compile(realized_graph)
