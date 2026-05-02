@@ -78,6 +78,7 @@ def predict(
     infusion_duration_min: float | None = None,
     *,
     phenotypes: dict[str, str] | None = None,
+    kp_method: str = "rodgers_rowland",
 ) -> PredictionResult:
     """End-to-end prediction: SMILES -> PredictionResult.
 
@@ -113,6 +114,16 @@ def predict(
             phenotype-conditional. ``None`` (default) is the
             average-patient prediction. See
             ``sisyphus.predict.phenotype.PHENOTYPE_SCALES``.
+        kp_method: Tissue partition coefficient (Kp) calculation method.
+            One of ``"rodgers_rowland"`` (default, suitable for most
+            small-molecule drugs), ``"berezhkovskiy"`` (alternative
+            ionization handling, differs from Rodgers-Rowland mainly for
+            bases and zwitterions), or ``"provided"`` (use values
+            supplied via ``DrugOnGraph.kp_overrides`` instead of
+            computing). Forwarded to ``build_drug_on_graph``; the prior
+            implementation hard-coded the default and made the per-drug
+            field unreachable through the public API (hardening backlog
+            B3, 2026-05-02).
 
     Returns:
         PredictionResult with combined PK endpoints and uncertainty.
@@ -154,7 +165,7 @@ def predict(
     # ── Step 1: Chemistry + ADME ─────────────────────────────────────────
     profile = compute_profile(smiles)
     adme = predict_adme(profile)
-    drug = build_drug_on_graph(profile, adme, dose_mg, route)
+    drug = build_drug_on_graph(profile, adme, dose_mg, route, kp_method=kp_method)
 
     # ── DrugBank enrichment tags ──────────────────────────────────────
     # NOTE: fup tag checks data availability + sanity range but does NOT
@@ -210,7 +221,11 @@ def predict(
             liver_enzymes: dict[str, float] = {
                 tag: dist.mean for tag, dist in graph.nodes["liver"].enzymes.items()
             }
-            drug = build_drug_on_graph(profile, adme, dose_mg, route, liver_enzymes=liver_enzymes)
+            drug = build_drug_on_graph(
+                profile, adme, dose_mg, route,
+                liver_enzymes=liver_enzymes,
+                kp_method=kp_method,
+            )
 
         from sisyphus.graph.builder import augment_for_active_species
         graph = augment_for_active_species(graph, drug)
