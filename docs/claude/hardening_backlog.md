@@ -198,7 +198,7 @@ Total ~11-14 hours if no deviations. Each can ship independently; no item blocks
   - PI calibration logic (H3 follow-up) is added directly to `predict.py`
 - `B2` `merge_overlay()` implementation (no caller found in repo)
 - `C5` endpoint provenance (real inconsistency, but no downstream TDM/MIPD bug reported)
-- `B3` pipeline-level `kp_method` selection. `core.DrugOnGraph.kp_method` is a per-drug field declared in the architecture, but `pipeline.predict.predict()` calls `build_drug_on_graph(profile, adme, dose_mg, route)` without forwarding `kp_method`, so the function default `"rodgers_rowland"` always wins. Effect: Berezhkovskiy / Provided options are unreachable through the public API regardless of any per-drug configuration. Discovered by `feature/3d-cyp-multidist` Experiment C (2026-04-01, archive tag `archive/3d-cyp-multidist-2026-04-01`); self-assessed "small effect" (≤30/107 bases on holdout differ between RR and Berezhkovskiy). Reconsider when any trigger fires: a per-drug Berezhkovskiy override is requested, a Cmax regression is traced to base/zwitterion Kp, or the contract violation surfaces in code review.
+- ~~`B3` pipeline-level `kp_method` selection.~~ **Resolved 2026-05-02** — `pipeline.predict.predict()` now accepts a `kp_method=` keyword-only kwarg (default `"rodgers_rowland"`, preserves prior behavior bit-for-bit) and forwards it to both `build_drug_on_graph` call sites. Berezhkovskiy / Provided options are now reachable through the public API. 5 unit tests in `tests/unit/test_pipeline_kp_method.py` lock the wiring contract. Originally discovered by `feature/3d-cyp-multidist` Experiment C (archive tag `archive/3d-cyp-multidist-2026-04-01`).
 
 ---
 
