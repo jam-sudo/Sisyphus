@@ -19,7 +19,7 @@ Sisyphus: SMILES + dose → Cmax PBPK platform. Body modeled as a typed directed
 | Prospective overall | 2.361 | — | 53 | — | 15 (FDA NME 2024-25) |
 | Prospective in-domain | 2.043 | — | — | — | 13 |
 
-† In-domain N changed 85→80 between 2026-04-14 and 2026-04-29 regens (AD criteria evolved or 5 drugs newly flagged). Investigation queued. N=80 stable across 2026-04-29 → 2026-04-30 regens.
+† In-domain N changed 85→80 between 2026-04-14 and 2026-04-29 regens. **Resolved 2026-05-01**: commit `c87155f` (2026-04-19, P7 Option 2) introduced `HIGH_ACID_LOW_FUP` AD flag for highly protein-bound acids (pKa<5 + DrugBank fup<0.02). The 5 newly-flagged drugs (brincidofovir, diclofenac, etodolac, febuxostat, ketorolac) are all NSAIDs/acidic-low-fup ketorolac-class — intentional flag addition for known engine structural limitation, not a regression. N=80 stable since 2026-04-29.
 
 **2026-05-01 Hardening: mean-only deterministic realization** (per `docs/claude/experiment-log.md`):
 - predict() with n_mc_samples=0 (default) now uses `BodyGraph.realize_means()` instead of `graph.sample(rng=42)`. Eliminates seed-dependent RNG-order coupling; adding cv>0 distributions to physiology YAML no longer shifts realized values for unrelated drugs.
