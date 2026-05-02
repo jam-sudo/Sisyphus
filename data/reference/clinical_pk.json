@@ -24817,6 +24817,7 @@
       "name": "pravastatin",
       "tier": "silver",
       "source": "FDA Pravachol label, 20mg fasted healthy volunteers single dose",
+      "smiles_corrected_2026-05-02": "Connectivity error in original SMILES (extra ring double bond, InChIKey block 1 TUZYXOIXSAXUGO) replaced with PubChem CID 54687 canonical (block 1 GOSGZXISMCZCDW). Issue #25.",
       "dose_mg": 20.0,
       "route": "oral",
       "pk_params": {
@@ -24930,7 +24931,7 @@
           0.031273
         ]
       },
-      "smiles": "CCC(C)C(=O)OC1CC(C=C2C1C(C(C=C2)C)CCC(CC(CC(=O)O)O)O)O"
+      "smiles": "CC[C@@H](C)C(=O)O[C@@H]1C[C@@H](O)C=C2[C@@H](CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H](C)CC[C@@H]21"
     },
     "prednisolone": {
       "name": "prednisolone",
