@@ -156,6 +156,11 @@ def predict(
     from sisyphus.predict.adme import predict_adme
     from sisyphus.predict.chemistry import compute_profile
     from sisyphus.predict.ivive import build_drug_on_graph
+    from sisyphus.predict.transporter_db import (
+        find_oatp1b1_substrate_name,
+        load_hepatic_ecm_params,
+        load_oatp1b1_kinetics,
+    )
 
     warnings_list: list[str] = []
     cmax_90ci: tuple[float, float] | None = None
@@ -165,7 +170,31 @@ def predict(
     # ── Step 1: Chemistry + ADME ─────────────────────────────────────────
     profile = compute_profile(smiles)
     adme = predict_adme(profile)
-    drug = build_drug_on_graph(profile, adme, dose_mg, route, kp_method=kp_method)
+
+    # Auto-detect OATP1B1 substrate via canonical InChIKey lookup. Both
+    # transporter kinetics and hepatic ECM parameters are loaded only when
+    # the drug appears in BOTH registries (statins currently:
+    # pravastatin/rosuvastatin/atorvastatin/pitavastatin/fluvastatin).
+    # For drugs registered as OATP1B1 substrates without ECM params (e.g.
+    # glimepiride, valsartan), kinetics are loaded but ECM stays off — the
+    # ECM machinery requires both to function correctly.
+    auto_oatp_kinetics = None
+    auto_ecm_params = None
+    substrate_name = find_oatp1b1_substrate_name(profile.smiles)
+    if substrate_name is not None:
+        kin = load_oatp1b1_kinetics(substrate_name)
+        ecm = load_hepatic_ecm_params(substrate_name)
+        if kin is not None and ecm is not None:
+            auto_oatp_kinetics = kin
+            auto_ecm_params = ecm
+            warnings_list.append(f"oatp1b1:auto_ecm:{substrate_name}")
+
+    drug = build_drug_on_graph(
+        profile, adme, dose_mg, route,
+        kp_method=kp_method,
+        transporter_kinetics=auto_oatp_kinetics,
+        hepatic_ecm_params=auto_ecm_params,
+    )
 
     # ── DrugBank enrichment tags ──────────────────────────────────────
     # NOTE: fup tag checks data availability + sanity range but does NOT
@@ -225,6 +254,8 @@ def predict(
                 profile, adme, dose_mg, route,
                 liver_enzymes=liver_enzymes,
                 kp_method=kp_method,
+                transporter_kinetics=auto_oatp_kinetics,
+                hepatic_ecm_params=auto_ecm_params,
             )
 
         from sisyphus.graph.builder import augment_for_active_species
