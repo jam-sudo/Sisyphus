@@ -26,6 +26,46 @@ def _load_oatp1b1_table() -> dict[str, dict]:
     return {k.lower(): v for k, v in data.get("drugs", {}).items()}
 
 
+@functools.lru_cache(maxsize=1)
+def _load_oatp1b1_inchikey_index() -> dict[str, str]:
+    """InChIKey-connectivity-block -> drug_name mapping for SMILES-based
+    substrate detection.
+
+    Keys are the first 14 characters of the InChIKey (the connectivity
+    block, stereo-independent). This makes the lookup robust to SMILES
+    sources that strip stereochemistry annotations (e.g. some reference
+    datasets). False positives across the 7 currently-registered
+    substrates are not a concern because all have distinct
+    connectivity.
+    """
+    table = _load_oatp1b1_table()
+    return {
+        entry["inchikey"][:14]: name
+        for name, entry in table.items()
+        if "inchikey" in entry
+    }
+
+
+def find_oatp1b1_substrate_name(smiles: str) -> str | None:
+    """Return the registered OATP1B1 substrate's drug name for *smiles*, or None.
+
+    Lookup is via the InChIKey connectivity block (first 14 chars), so
+    SMILES variants of the same molecule resolve regardless of whether
+    stereochemistry is fully annotated in the input. Returns None if
+    RDKit is unavailable, the SMILES is invalid, or the molecule is
+    not a registered OATP1B1 substrate.
+    """
+    try:
+        from rdkit import Chem
+    except ImportError:
+        return None
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        return None
+    ikey = Chem.MolToInchiKey(mol)
+    return _load_oatp1b1_inchikey_index().get(ikey[:14])
+
+
 def load_oatp1b1_kinetics(drug_name: str) -> dict[str, TransporterKinetics] | None:
     """Return ``{'OATP1B1': TransporterKinetics}`` for *drug_name*, or None.
 

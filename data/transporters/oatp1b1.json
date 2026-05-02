@@ -2,45 +2,101 @@
   "transporter": "OATP1B1",
   "source_primary": "Varma 2014 JPET (pravastatin); Niemi 2009 review Km compilation (statins); Yang 2018 PMC6054689 (glimepiride Jmax); Chen 2018 PMID 29498478 (glimepiride Km)",
   "source_crosscheck": "Hirano 2004 DMD, Kameyama 2005 Pharmacogenetics Genomics, Kopplow 2005, Ho 2006 Gastro, Simonson 2004, Chen 2018 Basic Clin Pharmacol Toxicol",
-  "notes": "Phase 2A: pravastatin Jmax/Km verbatim from Varma 2014 Table 2. Rosuvastatin/atorvastatin/pitavastatin/fluvastatin Km values are midpoints of the ranges reported in the Niemi 2009 OATP review (primary sources cited per drug). Jmax values are literature-consistent estimates scaled from reported in vitro CLuptake ratios vs pravastatin (Hirano 2006, Maeda 2011, Li 2018 reviews) because primary Jmax values vary widely across HEK293-OATP1B1 vs hepatocyte systems. CVs widened to 0.40 (Jmax) / 0.35 (Km) to absorb this inter-study variability; the liver.transporters.OATP1B1 abundance constant (1.0e11, calibrated on pravastatin in Phase 1) absorbs residual bias, and the Bayesian update over drug.transporter_kinetics refines per-patient. Amendment v2 (2026-04-21, spec 6e7ce0a): substrate set = valsartan + glimepiride (N=2). Bosentan and repaglinide archived to dropped_under_amendment_v2. Glimepiride added to drugs with verified Km (Chen 2018) and Jmax (Yang 2018 PMC6054689). Amendment v2.1: valsartan promoted from blocked_drugs to drugs via flat-CLuptake Jmax scaling — Jmax_val = (228/13.6) × 1.39 = 23.3 pmol/min/mg, CV 0.70 (widened to absorb scaling uncertainty). blocked_drugs now empty.",
+  "notes": "Phase 2A: pravastatin Jmax/Km verbatim from Varma 2014 Table 2. Rosuvastatin/atorvastatin/pitavastatin/fluvastatin Km values are midpoints of the ranges reported in the Niemi 2009 OATP review (primary sources cited per drug). Jmax values are literature-consistent estimates scaled from reported in vitro CLuptake ratios vs pravastatin (Hirano 2006, Maeda 2011, Li 2018 reviews) because primary Jmax values vary widely across HEK293-OATP1B1 vs hepatocyte systems. CVs widened to 0.40 (Jmax) / 0.35 (Km) to absorb this inter-study variability; the liver.transporters.OATP1B1 abundance constant (1.0e11, calibrated on pravastatin in Phase 1) absorbs residual bias, and the Bayesian update over drug.transporter_kinetics refines per-patient. Amendment v2 (2026-04-21, spec 6e7ce0a): substrate set = valsartan + glimepiride (N=2). Bosentan and repaglinide archived to dropped_under_amendment_v2. Glimepiride added to drugs with verified Km (Chen 2018) and Jmax (Yang 2018 PMC6054689). Amendment v2.1: valsartan promoted from blocked_drugs to drugs via flat-CLuptake Jmax scaling \u2014 Jmax_val = (228/13.6) \u00d7 1.39 = 23.3 pmol/min/mg, CV 0.70 (widened to absorb scaling uncertainty). blocked_drugs now empty.",
   "drugs": {
     "pravastatin": {
-      "jmax_pmol_per_min_per_mg": {"mean": 228.0, "cv": 0.30},
-      "km_uM": {"mean": 13.6, "cv": 0.25},
-      "source": "Varma 2014 JPET Table 2"
+      "jmax_pmol_per_min_per_mg": {
+        "mean": 228.0,
+        "cv": 0.3
+      },
+      "km_uM": {
+        "mean": 13.6,
+        "cv": 0.25
+      },
+      "source": "Varma 2014 JPET Table 2",
+      "smiles": "CC[C@@H](C)C(=O)O[C@@H]1C[C@@H](O)C=C2[C@@H](CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H](C)CC[C@@H]21",
+      "inchikey": "GOSGZXISMCZCDW-LYANWTNHSA-N"
     },
     "rosuvastatin": {
-      "jmax_pmol_per_min_per_mg": {"mean": 170.0, "cv": 0.40},
-      "km_uM": {"mean": 6.5, "cv": 0.35},
-      "source": "Km: Niemi 2009 review (Simonson 2004, Ho 2006; range 4.0-7.3 μM). Jmax: scaled from rosuvastatin/pravastatin clinical hepatic uptake CL ratio ≈ 1.2 (Ho 2006 Gastro)."
+      "jmax_pmol_per_min_per_mg": {
+        "mean": 170.0,
+        "cv": 0.4
+      },
+      "km_uM": {
+        "mean": 6.5,
+        "cv": 0.35
+      },
+      "source": "Km: Niemi 2009 review (Simonson 2004, Ho 2006; range 4.0-7.3 \u03bcM). Jmax: scaled from rosuvastatin/pravastatin clinical hepatic uptake CL ratio \u2248 1.2 (Ho 2006 Gastro).",
+      "smiles": "CC(C)c1nc(N(C)S(C)(=O)=O)nc(-c2ccc(F)cc2)c1/C=C/[C@@H](O)C[C@@H](O)CC(=O)O",
+      "inchikey": "BPRHUIZQVSMCRT-VEUZHWNKSA-N"
     },
     "atorvastatin": {
-      "jmax_pmol_per_min_per_mg": {"mean": 250.0, "cv": 0.40},
-      "km_uM": {"mean": 12.4, "cv": 0.30},
-      "source": "Km: Kameyama 2005 (via Niemi 2009 review). Jmax: scaled from atorvastatin/pravastatin OATP1B1-specific uptake CL ratio ≈ 1.5 (Hirano 2006 review, excluding CYP3A4 contribution)."
+      "jmax_pmol_per_min_per_mg": {
+        "mean": 250.0,
+        "cv": 0.4
+      },
+      "km_uM": {
+        "mean": 12.4,
+        "cv": 0.3
+      },
+      "source": "Km: Kameyama 2005 (via Niemi 2009 review). Jmax: scaled from atorvastatin/pravastatin OATP1B1-specific uptake CL ratio \u2248 1.5 (Hirano 2006 review, excluding CYP3A4 contribution).",
+      "smiles": "CC(C)c1c(C(=O)Nc2ccccc2)c(-c2ccccc2)c(-c2ccc(F)cc2)n1CC[C@@H](O)C[C@@H](O)CC(=O)O",
+      "inchikey": "XUKUURHRXDUEBC-KAYWLYCHSA-N"
     },
     "pitavastatin": {
-      "jmax_pmol_per_min_per_mg": {"mean": 550.0, "cv": 0.40},
-      "km_uM": {"mean": 4.5, "cv": 0.35},
-      "source": "Km: Niemi 2009 review (Hirano 2004, Deng 2008; range 3.0-6.7 μM midpoint). Jmax: scaled from pitavastatin/pravastatin clinical hepatic uptake CL ratio ≈ 2.5 (Hirano 2004 DMD)."
+      "jmax_pmol_per_min_per_mg": {
+        "mean": 550.0,
+        "cv": 0.4
+      },
+      "km_uM": {
+        "mean": 4.5,
+        "cv": 0.35
+      },
+      "source": "Km: Niemi 2009 review (Hirano 2004, Deng 2008; range 3.0-6.7 \u03bcM midpoint). Jmax: scaled from pitavastatin/pravastatin clinical hepatic uptake CL ratio \u2248 2.5 (Hirano 2004 DMD).",
+      "smiles": "O=C(O)C[C@H](O)C[C@H](O)/C=C/c1c(C2CC2)nc2ccccc2c1-c1ccc(F)cc1",
+      "inchikey": "VGYFMXBACGZSIL-MCBHFWOFSA-N"
     },
     "fluvastatin": {
-      "jmax_pmol_per_min_per_mg": {"mean": 190.0, "cv": 0.40},
-      "km_uM": {"mean": 2.5, "cv": 0.35},
-      "source": "Km: Niemi 2009 review (Kopplow 2005, Noe 2007; range 1.4-3.5 μM midpoint). Jmax: scaled from fluvastatin/pravastatin OATP1B1-specific uptake CL ratio ≈ 1.3 (Kopplow 2005, excluding CYP2C9 contribution)."
+      "jmax_pmol_per_min_per_mg": {
+        "mean": 190.0,
+        "cv": 0.4
+      },
+      "km_uM": {
+        "mean": 2.5,
+        "cv": 0.35
+      },
+      "source": "Km: Niemi 2009 review (Kopplow 2005, Noe 2007; range 1.4-3.5 \u03bcM midpoint). Jmax: scaled from fluvastatin/pravastatin OATP1B1-specific uptake CL ratio \u2248 1.3 (Kopplow 2005, excluding CYP2C9 contribution).",
+      "smiles": "CC(C)n1c(/C=C/[C@H](O)C[C@H](O)CC(=O)O)c(-c2ccc(F)cc2)c2ccccc21",
+      "inchikey": "FJLGEFLZQAZZCD-JUFISIKESA-N"
     },
     "glimepiride": {
-      "jmax_pmol_per_min_per_mg": {"mean": 155.0, "cv": 0.40},
-      "km_uM": {"mean": 10.02, "cv": 0.30},
-      "source": "Km: Chen 2018 Basic Clin Pharmacol Toxicol PMID 29498478 (HEK293-OATP1B1 uptake assay; Km=10.02 ± 0.84 μM). Jmax: Yang 2018 Scientific Reports PMC6054689 Fig 5 (OATP1B1*1a-HEK293T; Vmax=155 ± 18.7 pmol/min/mg). Cross-check: single-molecule transport study (ScienceDirect 2025, pii/S1347861325000404) reports Km*1a=12.5 μM (consistent). CV widened to 0.40 (Jmax) / 0.30 (Km) per spec amendment v2.",
-      "amendment": "v2 2026-04-21 (spec 6e7ce0a)"
+      "jmax_pmol_per_min_per_mg": {
+        "mean": 155.0,
+        "cv": 0.4
+      },
+      "km_uM": {
+        "mean": 10.02,
+        "cv": 0.3
+      },
+      "source": "Km: Chen 2018 Basic Clin Pharmacol Toxicol PMID 29498478 (HEK293-OATP1B1 uptake assay; Km=10.02 \u00b1 0.84 \u03bcM). Jmax: Yang 2018 Scientific Reports PMC6054689 Fig 5 (OATP1B1*1a-HEK293T; Vmax=155 \u00b1 18.7 pmol/min/mg). Cross-check: single-molecule transport study (ScienceDirect 2025, pii/S1347861325000404) reports Km*1a=12.5 \u03bcM (consistent). CV widened to 0.40 (Jmax) / 0.30 (Km) per spec amendment v2.",
+      "amendment": "v2 2026-04-21 (spec 6e7ce0a)",
+      "smiles": "CCC1=C(C)CN(C(=O)NCCc2ccc(S(=O)(=O)NC(=O)NC3CCC(C)CC3)cc2)C1=O",
+      "inchikey": "WIGIZIANZCJQQY-UHFFFAOYSA-N"
     },
     "valsartan": {
-      "jmax_pmol_per_min_per_mg": {"mean": 23.3, "cv": 0.70},
-      "km_uM": {"mean": 1.39, "cv": 0.35},
-      "source": "Km: Niemi 2009 Pharmacol Ther 125:84-117 (PMC2765590) Table 2 (citing Yamashiro 2006 DMD 34:1247 + Maeda 2006). Jmax: scaled per spec amendment v2.1 flat-CLuptake methodology — Jmax_val = (Jmax_prava/Km_prava) × Km_val = (228/13.6) × 1.39 = 23.3 pmol/min/mg. CV 0.70 widened to absorb scaling uncertainty.",
+      "jmax_pmol_per_min_per_mg": {
+        "mean": 23.3,
+        "cv": 0.7
+      },
+      "km_uM": {
+        "mean": 1.39,
+        "cv": 0.35
+      },
+      "source": "Km: Niemi 2009 Pharmacol Ther 125:84-117 (PMC2765590) Table 2 (citing Yamashiro 2006 DMD 34:1247 + Maeda 2006). Jmax: scaled per spec amendment v2.1 flat-CLuptake methodology \u2014 Jmax_val = (Jmax_prava/Km_prava) \u00d7 Km_val = (228/13.6) \u00d7 1.39 = 23.3 pmol/min/mg. CV 0.70 widened to absorb scaling uncertainty.",
       "notes": "Jmax is SCALED, not primary-extracted. Primary source Yamashiro 2006 DMD paywalled; 15+ source attempts logged in prior oatp1b1.json commits and spec v2.1 documentation. Scaling methodology: flat OATP1B1 intrinsic activity assumed equal to pravastatin's. If valsartan's actual CLuptake > pravastatin's (as in pitavastatin/fluvastatin statin family), engine will over-predict Cmax. This is a known limitation of the v2.1 amendment.",
-      "amendment": "v2.1 2026-04-21 — promoted from blocked_drugs via flat-CLuptake scaling"
+      "amendment": "v2.1 2026-04-21 \u2014 promoted from blocked_drugs via flat-CLuptake scaling",
+      "smiles": "CCCCC(=O)N(Cc1ccc(-c2ccccc2-c2nnn[nH]2)cc1)[C@H](C(=O)O)C(C)C",
+      "inchikey": "ACWBQPMHZXGDFX-QFIPXVFZSA-N"
     }
   },
   "blocked_drugs": {
@@ -50,20 +106,33 @@
     "rationale": "Spec amendment 6e7ce0a (2026-04-21) restricts ECM generalization test set to N=2 (valsartan + glimepiride). Bosentan and repaglinide dropped from active substrate set. Kinetics remain unverified for both; archived here for auditability.",
     "bosentan": {
       "status": "BLOCKED",
-      "blocked_reason": "Jmax (Vmax) from Treiber 2007 DMD 35:1400-1407 is paywalled (DOI 10.1124/dmd.107.015230). No open-access secondary source compiles Vmax for bosentan OATP1B1. Km=44 µM is verified via PMC3632236 which quotes Treiber 2007 verbatim.",
-      "km_uM_verified": {"mean": 44.0, "cv": null, "source": "Treiber 2007 DMD 35:1400-1407 Table 2, confirmed via Molina et al. 2013 PMC3632236 (explicit quote). DOI 10.1124/dmd.107.015230."},
+      "blocked_reason": "Jmax (Vmax) from Treiber 2007 DMD 35:1400-1407 is paywalled (DOI 10.1124/dmd.107.015230). No open-access secondary source compiles Vmax for bosentan OATP1B1. Km=44 \u00b5M is verified via PMC3632236 which quotes Treiber 2007 verbatim.",
+      "km_uM_verified": {
+        "mean": 44.0,
+        "cv": null,
+        "source": "Treiber 2007 DMD 35:1400-1407 Table 2, confirmed via Molina et al. 2013 PMC3632236 (explicit quote). DOI 10.1124/dmd.107.015230."
+      },
       "jmax_pmol_per_min_per_mg_status": "BLOCKED",
       "sources_attempted": [
-        "PubMed abstract PMID 17496208 — abstract only, no kinetic data",
-        "PMC3632236 — cites Km=44 µM but does not report Vmax",
-        "PMC2765590 (Niemi 2009 review) — Table 2 reports Km only, no Jmax column",
-        "PMC3907537 — reports IC50, not Vmax",
-        "PMC3264873 — no bosentan kinetics",
-        "dmd.aspetjournals.org/content/35/8/1400 — 403 forbidden",
-        "Semantic Scholar PDF link — page empty",
-        "Google Scholar, ResearchGate — full text paywalled"
+        "PubMed abstract PMID 17496208 \u2014 abstract only, no kinetic data",
+        "PMC3632236 \u2014 cites Km=44 \u00b5M but does not report Vmax",
+        "PMC2765590 (Niemi 2009 review) \u2014 Table 2 reports Km only, no Jmax column",
+        "PMC3907537 \u2014 reports IC50, not Vmax",
+        "PMC3264873 \u2014 no bosentan kinetics",
+        "dmd.aspetjournals.org/content/35/8/1400 \u2014 403 forbidden",
+        "Semantic Scholar PDF link \u2014 page empty",
+        "Google Scholar, ResearchGate \u2014 full text paywalled"
       ],
-      "plan_expected_envelope": {"km_range_uM": [40.0, 50.0], "jmax_range": [40.0, 80.0]},
+      "plan_expected_envelope": {
+        "km_range_uM": [
+          40.0,
+          50.0
+        ],
+        "jmax_range": [
+          40.0,
+          80.0
+        ]
+      },
       "dropped": "amendment v2 2026-04-21"
     },
     "repaglinide": {
@@ -72,15 +141,24 @@
       "km_uM_verified": null,
       "jmax_pmol_per_min_per_mg_status": "BLOCKED",
       "sources_attempted": [
-        "PubMed abstract PMID 15961978 (Niemi 2005) — abstract only, in vivo PK study, no cell-line kinetics",
-        "PMC2765590 (Niemi 2009 review) — Table 2: repaglinide Km listed as '–' (not reported)",
-        "PMID 23307347 (mechanistic modeling) — abstract, cites OATP1B1 active uptake but no Km",
-        "Link Springer s11095-014-1333-3 — 303 redirect/no access",
-        "PMC3857053 — repaglinide cited as substrate, no kinetics table",
-        "Wiley ascpt.onlinelibrary.wiley.com/doi/abs/10.1016/j.clpt.2005.01.018 — paywalled",
-        "Google Scholar, ResearchGate — full text paywalled"
+        "PubMed abstract PMID 15961978 (Niemi 2005) \u2014 abstract only, in vivo PK study, no cell-line kinetics",
+        "PMC2765590 (Niemi 2009 review) \u2014 Table 2: repaglinide Km listed as '\u2013' (not reported)",
+        "PMID 23307347 (mechanistic modeling) \u2014 abstract, cites OATP1B1 active uptake but no Km",
+        "Link Springer s11095-014-1333-3 \u2014 303 redirect/no access",
+        "PMC3857053 \u2014 repaglinide cited as substrate, no kinetics table",
+        "Wiley ascpt.onlinelibrary.wiley.com/doi/abs/10.1016/j.clpt.2005.01.018 \u2014 paywalled",
+        "Google Scholar, ResearchGate \u2014 full text paywalled"
       ],
-      "plan_expected_envelope": {"km_range_uM": [0.3, 0.5], "jmax_range": [20.0, 50.0]},
+      "plan_expected_envelope": {
+        "km_range_uM": [
+          0.3,
+          0.5
+        ],
+        "jmax_range": [
+          20.0,
+          50.0
+        ]
+      },
       "dropped": "amendment v2 2026-04-21"
     }
   }
