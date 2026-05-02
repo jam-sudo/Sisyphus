@@ -56,3 +56,6 @@ sbi-logs/
 
 # Agent/session-local config (per-machine, not repo-wide)
 .claude/
+
+# Local-only Claude Code context (per-user agent memory; untracked by user request 2026-05-02)
+CLAUDE.md
