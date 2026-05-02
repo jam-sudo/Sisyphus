@@ -72,8 +72,7 @@ Sisyphus/
 ├── docs/                       # Documentation
 ├── pyproject.toml              # Build config, dependencies, ruff/pytest settings
 ├── CLAUDE.md                   # AI coding assistant instructions
-├── DESIGN.md                   # Design spec placeholder
-├── Sisyphus_Design_v4.md       # Full design specification
+├── DESIGN.md                   # Full design specification (authoritative)
 └── README.md                   # Project readme
 ```
 
