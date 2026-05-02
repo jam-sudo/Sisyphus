@@ -10,6 +10,53 @@ Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the *
 
 ---
 
+## 2026-05-02 PM — clinical_pk.json digoxin SMILES correction (broader audit follow-up)
+
+**Branch**: `data/clinical-pk-digoxin-smiles-fix`
+**Trigger**: Audit script comparing clinical_pk.json SMILES vs DrugBank `inchikey_14` across 107 holdout drugs (motivated by pravastatin discovery in #25). The audit flagged 3 candidates; 1 was a script false-positive (norethindrone DrugBank-name mismatch with DB14678 enanthate ester), 1 was already-fixed (pravastatin), and 1 was real: digoxin.
+
+**Diagnosis**: clinical_pk.json carried a SMILES for "digoxin" that resolved to formula C30H48O16 (MW 664.70) — a sugar polymer with **no steroid aglycone**, just 4 sugar rings and a butenolide. Real digoxin (PubChem CID 2724385) is C41H64O14 (MW 780.95) — a cardiac glycoside with the digoxigenin steroid aglycone + 3 digitoxose sugars. Connectivity-level mismatch (InChIKey block 1 `NYNHXAUTBGPYHF` vs canonical `LTMHDMANZUZIPE`).
+
+DrugBank's stored `canonical_smiles` for DB00390 is *also* wrong — it parses to `HZJGATJTJCKOLT` block 1, formula C40H62O11. DrugBank's own `inchikey_14` column says `LTMHDMANZUZIPE` (correct), so DrugBank has internally inconsistent records. PubChem CID 2724385 is the authoritative source.
+
+**Fix**: Replace clinical_pk.json digoxin SMILES with PubChem-canonical (full stereochemistry, RDKit-canonicalized for storage). One-line data change.
+
+**Concrete metric movements** (107-holdout, regenerated):
+
+| Track | Pre (post-#27) | **Post** | Δ |
+|---|---|---|---|
+| **Meta** | 2.6852 | **2.6785** | -0.0066 (-0.25%) |
+| Engine | 3.7326 | 3.7907 | +0.0581 (+1.56%) |
+| ML | 3.0110 | 3.0121 | +0.0011 (~0) |
+| In-domain N | 80 | **79** | digoxin → out-of-AD |
+| In-domain Meta | 2.7186 | 2.7333 | +0.0147 |
+
+**digoxin individual entry**:
+- engine fold 0.051 → 0.010 (engine prediction near-zero either way; corrected molecule pushes it more polar)
+- ML fold 3.732 → 3.885 (Morgan FP changes; ML over-predicts digoxin in both cases)
+- meta fold 1.776 → 1.363 (closer to obs after fix; **meta blend compensates**)
+- ad_flags `[]` → `["HIGH_MW"]` (correct: real digoxin MW 780 triggers the threshold; wrong-molecule MW 664 was below)
+
+**Honest interpretation**:
+- The wrong sugar-polymer SMILES had been masking digoxin's true engine prediction. Correcting reveals the engine produces near-zero Cmax for digoxin — expected, because digoxin's PK is dominated by gut P-gp efflux + tissue redistribution, neither of which the engine models.
+- Engine track *worsens* (+1.56%) because the previous "good" engine fold was a coincidence of wrong-molecule chemistry. The corrected number reflects reality.
+- Meta track *improves* (-0.25%) because the meta-learner blend leans on ML's prediction (which over-predicts) to partially cancel the engine's near-zero (under-prediction). The two errors cancel more cleanly with the correct molecule.
+- In-domain N = 79: digoxin is genuinely outside AD (high-MW, complex glycoside, P-gp dominant) — the prior in_ad=True was an artifact of wrong-molecule MW. The new flag firing is the correct behavior.
+
+**95% bootstrap CIs** (regenerated, 10k resamples, seed=20260422; artifact `data/validation/4track_ci_2026-05-02.json` overwritten with PM values):
+
+- Meta: [2.30, 3.14]
+- Engine: [3.14, 4.61] (CI widened on the high side — single drug's contribution to engine variability increased)
+- ML: [2.56, 3.57]
+
+All point estimates within prior CIs — statistical narrative preserved.
+
+**Audit completion**: The clinical_pk.json broader scan is complete for the 107-holdout subset. 1 of 107 drugs (digoxin) had a real connectivity error beyond pravastatin's. The audit script flagged 3 candidates; the false-positive rate was 1/3 (norethindrone, due to name-matching ambiguity with the enanthate ester DrugBank entry). The remaining 104 holdout drugs match DrugBank's `inchikey_14` block-1 cleanly. Atorvastatin's stereo-stripped reference SMILES (block 1 matches but stereo block differs) is a non-issue — Morgan FP and engine chemistry are stereo-insensitive at the relevant levels.
+
+DrugBank's own data quality issues (DB00175 pravastatin and DB00390 digoxin both have wrong `canonical_smiles` despite correct `inchikey_14`) are out of scope for this repo. Worth flagging upstream if Sisyphus's authors interact with the DrugBank maintainers.
+
+---
+
 ## 2026-05-02 — clinical_pk.json pravastatin SMILES correction unlocks #9 auto-ECM (#25)
 
 **Branch**: `data/clinical-pk-pravastatin-smiles-fix`

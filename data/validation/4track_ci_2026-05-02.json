@@ -1,56 +1,56 @@
 {
-  "computed_at": "2026-05-02",
+  "computed_at": "2026-05-02-pm",
   "source_cache": "data/training/4track_holdout_predictions.json",
-  "context": "post-#25 corrected pravastatin SMILES (clinical_pk.json connectivity error fix). #9 OATP1B1 ECM auto-load now triggers for pravastatin via the corrected canonical SMILES.",
+  "context": "post-digoxin SMILES correction (clinical_pk.json had wrong molecule \u2014 sugar polymer without steroid aglycone; replaced with PubChem CID 2724385 canonical). digoxin moves out of in-domain (HIGH_MW AD flag fires on MW 780.95 corrected molecule).",
   "method": "bootstrap on abs(log10(fold))",
   "n_bootstrap": 10000,
   "seed": 20260422,
   "overall": {
     "n": 107,
     "engine": {
-      "aafe": 3.733,
-      "ci_95_low": 3.11,
-      "ci_95_high": 4.5,
+      "aafe": 3.791,
+      "ci_95_low": 3.14,
+      "ci_95_high": 4.61,
       "pct_2fold": 33.6,
       "pct_3fold": 43.9
     },
     "ml": {
-      "aafe": 3.011,
+      "aafe": 3.012,
       "ci_95_low": 2.56,
-      "ci_95_high": 3.56,
+      "ci_95_high": 3.57,
       "pct_2fold": 43.0,
       "pct_3fold": 57.9
     },
     "meta": {
-      "aafe": 2.685,
-      "ci_95_low": 2.31,
-      "ci_95_high": 3.15,
+      "aafe": 2.679,
+      "ci_95_low": 2.3,
+      "ci_95_high": 3.14,
       "pct_2fold": 46.7,
       "pct_3fold": 63.6
     }
   },
   "in_domain": {
-    "n": 80,
+    "n": 79,
     "engine": {
-      "aafe": 3.542,
-      "ci_95_low": 2.92,
-      "ci_95_high": 4.32,
-      "pct_2fold": 35.0,
-      "pct_3fold": 46.2
+      "aafe": 3.466,
+      "ci_95_low": 2.86,
+      "ci_95_high": 4.22,
+      "pct_2fold": 35.4,
+      "pct_3fold": 46.8
     },
     "ml": {
-      "aafe": 2.982,
-      "ci_95_low": 2.47,
-      "ci_95_high": 3.64,
-      "pct_2fold": 45.0,
-      "pct_3fold": 58.8
+      "aafe": 2.973,
+      "ci_95_low": 2.45,
+      "ci_95_high": 3.65,
+      "pct_2fold": 45.6,
+      "pct_3fold": 59.5
     },
     "meta": {
-      "aafe": 2.719,
+      "aafe": 2.733,
       "ci_95_low": 2.28,
-      "ci_95_high": 3.26,
-      "pct_2fold": 46.2,
-      "pct_3fold": 62.5
+      "ci_95_high": 3.31,
+      "pct_2fold": 45.6,
+      "pct_3fold": 62.0
     }
   }
 }
