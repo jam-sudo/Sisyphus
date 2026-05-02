@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-04-30
+last_updated: 2026-05-02
 parent: ../../CLAUDE.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -7,6 +7,37 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 # Experiment Log
 
 Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md).
+
+---
+
+## 2026-05-02 — OATP1B1/ECM reconciliation: XGBoost-CYP / ECM-OATP double-counting resolved (#12-#14)
+
+**Branch**: `feat/oatp1b1-ecm-reconciliation`
+**Trigger**: GenoADME Tier 1 PARTIAL on pravastatin; `test_oatp_ecm_statins[pravastatin]` xfail under post-Hardening realize_means() (FE drifted 1.486 → 1.823); GitHub issues #12 (#8a) / #13 (#8b) / #14 (#8c) sequencing the fix.
+
+**Root cause**: `build_drug_on_graph(profile, adme, ..., transporter_kinetics, hepatic_ecm_params)` always decomposed XGBoost hepatocyte CLint into per-enzyme affinities AND, separately, applied the OATP1B1 ECM clearance when transporter+ECM kwargs were supplied. The two clearances added at the simulation layer. For uptake-dominated substrates (canonical: pravastatin, ~85% OATP1B1), in vitro hepatocyte CLint already integrates the OATP1B1 contribution, so this counted the same clearance twice.
+
+**Fix**: Per-drug `metabolic_fraction` registry that scales the metabolic-path enzyme_affinities derived from XGBoost CLint. When the engine's ECM machinery is active for a drug whose hepatocyte CLint is uptake-dominated, the registry routes the entire hepatic clearance through the ECM transporter path without double-counting. Default 1.0 (no scaling) for the 106 unregistered holdout drugs.
+
+- `data/transporters/cyp_clearance_overrides.json` — registry seeded with pravastatin metabolic_fraction=0.0 (canonical OATP1B1-only).
+- `src/sisyphus/predict/cyp_clearance_overrides.py` — InChIKey-keyed loader.
+- `src/sisyphus/predict/ivive.py` — `_decompose_clint(metabolic_fraction=)` + `build_drug_on_graph` SMILES lookup.
+- 9 unit tests covering loader (canonical/variant/unregistered/invalid SMILES) and decompose path (default/zero/half/cv-invariance).
+
+**Test invariant redesign (#13)**: The pre-#12 `cmax_on/cmax_off < 0.95` invariant in `test_oatp_pravastatin` is mathematically incompatible with the post-fix model — with metabolic_fraction=0, the "off" arm has no hepatic clearance for pravastatin and Cmax goes very high. Replaced with SLCO1B1 EM/PM phenotype check: PM (OATP1B1 × 0.10) must raise Cmax vs EM. Empirical: `cmax_em=0.0422`, `cmax_pm=0.1280`, ratio=3.034 (clinical literature: ~2-3× AUC under PM).
+
+**Abundance recalibration (#14)**: `scripts/calibrate_oatp_abundance_ecm.py` post-#12 still recommends the existing `liver.transporters.OATP1B1.mean = 5.0e5` (FE 1.058 vs FDA pravastatin 0.045 mg/L). The Hardening-era T7 drift was a downstream symptom of the double-counting, not an abundance miscalibration. PS_active 502 L/h remains outside the Watanabe 2009 literature range [0.5, 2.0] — separate ECM IVIVE-scaling concern (DE-33 adjacent), not a #12 deliverable.
+
+**Concrete metric changes**:
+- `test_oatp_ecm_statins[pravastatin]`: xfail (FE 1.486-1.823) → **PASS** (FE 1.066, gate 1.3). Promoted out of `_KNOWN_PEFF_FAILS`.
+- pravastatin engine Cmax under ECM (40 mg PO): 0.0303 → 0.0422 mg/L; under SLCO1B1 PM: 0.128 mg/L.
+- pitavastatin: PASS (already, retained).
+- rosuvastatin/atorvastatin: xfail unchanged (Peff over-prediction, separate root cause).
+- fluvastatin: xfail unchanged (under-prediction, opposite direction; tracked in new issue #21).
+
+**Headline invariance**: `pipeline.predict.predict()` does not activate ECM/transporter machinery by default — `build_drug_on_graph` is called without `transporter_kinetics` or `hepatic_ecm_params`. The 107-holdout benchmark predicts via the default path, so the metabolic_fraction registry has zero effect on production AAFE. **4track artifact bit-identical pre-vs-post #12** (Meta 2.6947, Engine 3.7575, ML 3.0571). The fix is targeted at ECM-active code paths (GenoADME Tier 1, PGx-aware predictions, calibration script, integration tests).
+
+**Aftermath**: Issue #21 (fluvastatin under-prediction) opened to track the opposite-direction failure. The metabolic_fraction registry is extensible to (B)-flavor per-drug fractions in v0.3 (atorvastatin ~0.7 CYP3A4, rosuvastatin ~0.15 CYP, etc.) by adding entries; no further code changes required.
 
 ---
 
