@@ -224,6 +224,7 @@ def _decompose_clint(
     enzyme_abundances: dict[str, float] | None = None,
     substrate_enzymes: set[str] | None = None,
     ugt_enzymes: set[str] | None = None,
+    metabolic_fraction: float = 1.0,
 ) -> dict[str, Distribution]:
     """Decompose total hepatic CLint into per-enzyme affinities.
 
@@ -248,6 +249,13 @@ def _decompose_clint(
         ugt_enzymes: DrugBank UGT substrate annotations (Sisyphus
             UGT tags, e.g. ``{"UGT2B7", "UGT1A1"}``).  If provided,
             UGT fraction is allocated per annotation pattern.
+        metabolic_fraction: Scale factor in [0, 1] applied to all per-enzyme
+            affinities. Default 1.0 = no scaling (XGBoost CLint allocated in
+            full to the metabolic path). Used by drugs whose XGBoost
+            hepatocyte CLint is dominated by transporter uptake (e.g.
+            pravastatin) so the engine's ECM transporter path provides the
+            hepatic clearance without the metabolic path double-counting.
+            See ``predict/cyp_clearance_overrides.py``.
 
     Returns:
         Dict mapping enzyme tag -> CLint per pmol enzyme (uL/min/pmol)
@@ -265,8 +273,9 @@ def _decompose_clint(
         # affinity such that: abundance * affinity * ivive_scaling = CLint_hepatic * fm
         # affinity = (CLint_hepatic * fm) / (abundance * ivive_scaling)
         affinity = (clint_hepatic_l_per_h * fraction) / (abundance * _IVIVE_SCALING)
+        scaled_affinity = max(affinity, 0.0) * metabolic_fraction
         # Carry CLint's CV through to affinity
-        enzyme_affinity[enzyme] = Distribution(mean=max(affinity, 0.0), cv=clint.cv)
+        enzyme_affinity[enzyme] = Distribution(mean=scaled_affinity, cv=clint.cv)
 
     logger.debug(
         "CLint decomposition: %.1f uL/min/10^6 cells -> %.1f L/h hepatic, compound_type=%s, fm=%s",
@@ -601,12 +610,19 @@ def build_drug_on_graph(
     # degradation (2.861→3.090). UGT code retained but inactive.
     ugt_enzymes = None
 
+    # OATP1B1-substrate metabolic_fraction override: when ECM provides the
+    # hepatic transporter path for drugs whose hepatocyte CLint is uptake-
+    # dominated, scale the metabolic affinities to avoid double-counting.
+    from sisyphus.predict.cyp_clearance_overrides import lookup_metabolic_fraction
+    metabolic_fraction = lookup_metabolic_fraction(profile.smiles)
+
     # Decompose CLint to per-enzyme affinities (CYP + UGT)
     enzyme_affinity = _decompose_clint(
         adme.clint, profile.compound_type, profile.pka,
         enzyme_abundances=abundances,
         substrate_enzymes=substrate_enzymes,
         ugt_enzymes=ugt_enzymes,
+        metabolic_fraction=metabolic_fraction,
     )
 
     # Compute Kp for each tissue using selected method
