@@ -1,0 +1,56 @@
+{
+  "computed_at": "2026-05-02",
+  "source_cache": "data/training/4track_holdout_predictions.json",
+  "context": "post-#25 corrected pravastatin SMILES (clinical_pk.json connectivity error fix). #9 OATP1B1 ECM auto-load now triggers for pravastatin via the corrected canonical SMILES.",
+  "method": "bootstrap on abs(log10(fold))",
+  "n_bootstrap": 10000,
+  "seed": 20260422,
+  "overall": {
+    "n": 107,
+    "engine": {
+      "aafe": 3.733,
+      "ci_95_low": 3.11,
+      "ci_95_high": 4.5,
+      "pct_2fold": 33.6,
+      "pct_3fold": 43.9
+    },
+    "ml": {
+      "aafe": 3.011,
+      "ci_95_low": 2.56,
+      "ci_95_high": 3.56,
+      "pct_2fold": 43.0,
+      "pct_3fold": 57.9
+    },
+    "meta": {
+      "aafe": 2.685,
+      "ci_95_low": 2.31,
+      "ci_95_high": 3.15,
+      "pct_2fold": 46.7,
+      "pct_3fold": 63.6
+    }
+  },
+  "in_domain": {
+    "n": 80,
+    "engine": {
+      "aafe": 3.542,
+      "ci_95_low": 2.92,
+      "ci_95_high": 4.32,
+      "pct_2fold": 35.0,
+      "pct_3fold": 46.2
+    },
+    "ml": {
+      "aafe": 2.982,
+      "ci_95_low": 2.47,
+      "ci_95_high": 3.64,
+      "pct_2fold": 45.0,
+      "pct_3fold": 58.8
+    },
+    "meta": {
+      "aafe": 2.719,
+      "ci_95_low": 2.28,
+      "ci_95_high": 3.26,
+      "pct_2fold": 46.2,
+      "pct_3fold": 62.5
+    }
+  }
+}

@@ -10,6 +10,63 @@ Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the *
 
 ---
 
+## 2026-05-02 — clinical_pk.json pravastatin SMILES correction unlocks #9 auto-ECM (#25)
+
+**Branch**: `data/clinical-pk-pravastatin-smiles-fix`
+**Trigger**: Discovered during issue #9 (auto-load OATP1B1 ECM): the InChIKey-based substrate lookup in `pipeline.predict.predict()` could not match `clinical_pk.json`'s pravastatin to the registry because the reference SMILES carried a different molecule connectivity (extra ring double bond — InChIKey block 1 `TUZYXOIXSAXUGO` vs PubChem CID 54687 `GOSGZXISMCZCDW`).
+
+**Fix**: Replace `data/reference/clinical_pk.json` pravastatin entry's SMILES with PubChem-canonical (full stereochemistry preserved). One-line data change; no code change.
+
+**Concrete metric movements** (post-fix benchmark, 4-track regenerated):
+
+| Track | Pre | Post | Δ |
+|---|---|---|---|
+| Meta | 2.6947 | **2.6852** | -0.0096 (-0.36%) |
+| Engine | 3.7575 | **3.7326** | -0.0249 (-0.66%) |
+| ML | 3.0571 | **3.0110** | -0.0461 (-1.51%) |
+| In-domain Meta | 2.7316 | **2.7186** | -0.0130 |
+| In-domain Engine | 3.5734 | **3.5419** | -0.0315 |
+| In-domain ML | 3.0430 | **2.9818** | -0.0612 |
+
+Pravastatin individual entry: engine fold 0.415 → 0.844 (under 2.4× → under 1.18×), ML fold 0.129 → 0.654, **Meta fold 0.546 → 1.252 (passes 2-fold gate from the over-prediction side)**. ML moves materially because the corrected SMILES produces different Morgan FP than the wrong-connectivity input.
+
+**95% bootstrap CIs** (10k resamples, seed=20260422, regenerated artifact `data/validation/4track_ci_2026-05-02.json`):
+
+- Meta: [2.31, 3.15] (was [2.31, 3.16])
+- Engine: [3.11, 4.50] (was [3.13, 4.52])
+- ML: [2.56, 3.56] (was [2.59, 3.62])
+
+All CIs effectively unchanged — the point-estimate movement is within bootstrap noise. Headline narrative "Meta ~2.7, Engine ~3.7, ML ~3.0" preserved with each estimate slightly improved.
+
+**Why the fix works**: The original reference SMILES was structurally wrong (saturated decalin replaced by a more-unsaturated tetrahydronaphthalenone) — not just a stereo-stripped variant. RDKit faithfully canonicalized this wrong molecule and the entire downstream chemistry (logP, Kp, ADME XGBoost predictions, Morgan fingerprints) used wrong-molecule properties. Replacing with PubChem-canonical:
+
+1. Produces correct Morgan fingerprints → ML prediction shifts
+2. Produces correct logP/Kp → engine ADME shifts
+3. InChIKey now matches OATP1B1 substrate registry → PR #9's auto-ECM activates → engine routes hepatic clearance through the ECM transporter path with `metabolic_fraction=0` (PR #22)
+
+The three changes compound: the holdout benchmark sees pravastatin's predict() flow change from "wrong-molecule chemistry + no ECM + XGBoost CYP path" to "correct-molecule chemistry + ECM-only hepatic clearance via OATP1B1".
+
+**Issue #8 status**: pravastatin's holdout fold now 1.25 (passes 2-fold gate). The motivating GenoADME population AUC validation needs separate confirmation in that repo, but the Sisyphus-side underprediction tracked in #8 is essentially closed by the chain #22 → #9 → #25.
+
+**Aftermath / follow-ups**:
+- Other reference SMILES in `clinical_pk.json` may carry similar quality issues. Audit deferred.
+- atorvastatin's reference SMILES is stereo-stripped (block 1 matches but full InChIKey differs); not in 107-holdout so unaffected, but worth fixing in the same audit pass.
+
+---
+
+## 2026-05-02 — OATP1B1/ECM auto-load on predict() (#9)
+
+**Branch**: `feat/predict-auto-ecm`
+**Trigger**: PR #22 closed the architectural double-counting but only helped manual ECM callers. `pipeline.predict.predict()` did not activate ECM by default, so the metabolic_fraction registry had zero effect on the production benchmark. Issue #9 tracked this gap.
+
+**Fix**: Auto-detect registered OATP1B1 substrates by canonical InChIKey (connectivity block) in `predict()`, then load both `transporter_kinetics` + `hepatic_ecm_params` from existing registries. Auto-load gated on BOTH registries having the drug; warning tag `oatp1b1:auto_ecm:<name>` on the result for audit.
+
+**Headline impact at merge**: bit-identical (issue #25 SMILES error in the holdout reference for pravastatin prevented the lookup from matching). After #25 fix shipped, the auto-load path becomes active for pravastatin and contributes to the metric movements above.
+
+**Why InChIKey block 1 matching**: SMILES sources sometimes strip stereochemistry annotations. Matching on the full InChIKey would miss those variants; matching on the connectivity block (first 14 chars) tolerates stereo differences. False positives across the 7 currently-registered substrates not a concern (all distinct connectivity).
+
+---
+
 ## 2026-05-02 — OATP1B1/ECM reconciliation: XGBoost-CYP / ECM-OATP double-counting resolved (#12-#14)
 
 **Branch**: `feat/oatp1b1-ecm-reconciliation`
