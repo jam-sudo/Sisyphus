@@ -275,12 +275,12 @@ $$AAFE = 10^{\operatorname{mean}\left(\left|\log_{10}\frac{C_{max,pred}}{C_{max,
 
 | Track | AAFE | 95% CI | %2-fold | %3-fold | N |
 |---|:-:|:-:|:-:|:-:|:-:|
-| **Meta-learner (production)** | **2.685** | [2.31, 3.15] | 46.7% | 63.6% | 107 |
-| Engine only | 3.733 | [3.11, 4.50] | 33.6% | 43.9% | 107 |
-| ML only | 3.011 | [2.56, 3.56] | 43.0% | 57.9% | 107 |
-| Meta, in-domain | 2.719 | [2.28, 3.26] | 46.2% | 62.5% | 80 |
+| **Meta-learner (production)** | **2.679** | [2.30, 3.14] | 46.7% | 63.6% | 107 |
+| Engine only | 3.791 | [3.14, 4.61] | 33.6% | 43.9% | 107 |
+| ML only | 3.012 | [2.56, 3.57] | 43.0% | 57.9% | 107 |
+| Meta, in-domain | 2.733 | [2.28, 3.31] | 45.6% | 62.0% | 79 |
 
-The 4-track meta-learner combines mechanistic PBPK (Engine), data-driven XGBoost C<sub>max</sub> (ML), a closed-form CL/F analytical (CLF), and a conditional VDss analytical track. Weights are compound-type-adaptive and LOOCV-calibrated: base compounds blend Engine 0.60 / ML 0.40; other compounds use Engine 0.35 / ML 0.50 / CLF 0.15, with VDss 0.20 added when applicability criteria are satisfied (and the remaining tracks re-scaled by ×0.80 so the total is 1.0). In-domain AAFE (N=80) excludes 27 drugs flagged as out-of-applicability-domain (prodrugs, high-MW, extreme lipophilicity, extended-release formulation mismatch).
+The 4-track meta-learner combines mechanistic PBPK (Engine), data-driven XGBoost C<sub>max</sub> (ML), a closed-form CL/F analytical (CLF), and a conditional VDss analytical track. Weights are compound-type-adaptive and LOOCV-calibrated: base compounds blend Engine 0.60 / ML 0.40; other compounds use Engine 0.35 / ML 0.50 / CLF 0.15, with VDss 0.20 added when applicability criteria are satisfied (and the remaining tracks re-scaled by ×0.80 so the total is 1.0). In-domain AAFE (N=79) excludes 28 drugs flagged as out-of-applicability-domain (prodrugs, high-MW, extreme lipophilicity, extended-release formulation mismatch).
 
 **Prospective validation** (FDA NMEs approved 2024–2025, curated 2026-04, never used in training or tuning):
 
@@ -289,9 +289,9 @@ The 4-track meta-learner combines mechanistic PBPK (Engine), data-driven XGBoost
 | All | 2.361 | [1.65, 3.50] | 53% | 15 |
 | In-domain | 2.043 | [1.46, 2.98] | — | 13 |
 
-Prospective AAFE is below retrospective (2.361 &lt; 2.685), the opposite direction from classical over-fitting. However, N=15 is underpowered; CI spans 1.65–3.50.
+Prospective AAFE is below retrospective (2.361 &lt; 2.679), the opposite direction from classical over-fitting. However, N=15 is underpowered; CI spans 1.65–3.50.
 
-**Cherry-picking caveat.** The 107-holdout has been used for ~47 configuration feedback cycles (track weights, routing, meta-learner variants). A quantitative audit (`docs/claude/cherry_picking_audit_2026-04-22.md`) scores aggregate risk 4.65/10 (moderate). The Meta CI upper bound (3.15) overlaps the audit's retrospective-contamination estimate (2.85–3.10), meaning the point estimate cannot statistically reject the null hypothesis that tuning inflated AAFE. A secondary permanent holdout (N50) is planned per `docs/claude/cherry_picking_process_v1.md`.
+**Cherry-picking caveat.** The 107-holdout has been used for ~47 configuration feedback cycles (track weights, routing, meta-learner variants). A quantitative audit (`docs/claude/cherry_picking_audit_2026-04-22.md`) scores aggregate risk 4.65/10 (moderate). The Meta CI upper bound (3.14) overlaps the audit's retrospective-contamination estimate (2.85–3.10), meaning the point estimate cannot statistically reject the null hypothesis that tuning inflated AAFE. A secondary permanent holdout (N50) is planned per `docs/claude/cherry_picking_process_v1.md`.
 
 ### Multi-dose regimen validation
 
@@ -349,7 +349,7 @@ Single-patient deterministic prediction completes in &lt;500 ms, compatible with
 
 **Persistent xfails (7):** 3 statin Cmax tests under ECM (rosuvastatin, atorvastatin Peff over-prediction; fluvastatin under-prediction FE 4.79 tracked as issue #21 — separate from Peff group, possibly OATP1B1 over-uptake or non-OATP1B1 hepatic transport); 4 prodrug 3-fold clinical validation gates (sepiapterin, remdesivir, tebipenem-pivoxil, fostamatinib) per spec &sect; 3.3 mechanistic-A doctrine — extraction-step rate-limits dominate active CL/V disposition, and gate-fail under mechanistic-A-compliant values is informative not project-failing.
 
-**Known failing tests (2):** `test_cached_holdout_aafe_is_2p695` holds the pre-#27 cached headline AAFE 2.695; the post-regen value is 2.685 and the test will refresh on the next snapshot. `test_prodrug_v3_enzyme_leak_audit` is the v3 enzyme-leak regression check (per `docs/superpowers/specs/2026-04-29-prodrug-activation-v3-design.md`) under audit. The OATP/ECM pravastatin tests previously listed here are now passing after PR #22 (`metabolic_fraction` registry zeroes XGBoost-CYP enzyme\_affinities for uptake-dominated substrates when ECM is active; pravastatin FE 1.486–1.823 → 1.066 at unchanged abundance 5.0e5). Neither failure regresses the headline AAFE 2.685 (re-run via `scripts/run_engine_benchmark.py`).
+**Known failing tests (2):** `test_cached_holdout_aafe_is_2p695` holds the pre-#27 cached headline AAFE 2.695; the post-regen value is 2.679 and the test will refresh on the next snapshot. `test_prodrug_v3_enzyme_leak_audit` is the v3 enzyme-leak regression check (per `docs/superpowers/specs/2026-04-29-prodrug-activation-v3-design.md`) under audit. The OATP/ECM pravastatin tests previously listed here are now passing after PR #22 (`metabolic_fraction` registry zeroes XGBoost-CYP enzyme\_affinities for uptake-dominated substrates when ECM is active; pravastatin FE 1.486–1.823 → 1.066 at unchanged abundance 5.0e5). Neither failure regresses the headline AAFE 2.679 (re-run via `scripts/run_engine_benchmark.py`).
 
 ## Architecture
 
