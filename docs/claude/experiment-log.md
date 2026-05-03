@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-02
+last_updated: 2026-05-03
 parent: ../../CLAUDE.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -7,6 +7,63 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 # Experiment Log
 
 Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md).
+
+---
+
+## 2026-05-03 — v0.3 ECM auto-activation gating
+
+**Branch**: `feat/ecm-auto-activation` (PR pending)
+**Spec**: `docs/superpowers/specs/2026-05-03-ecm-auto-activation-design.md`
+**Plan**: `docs/superpowers/plans/2026-05-03-ecm-auto-activation.md`
+
+### What shipped
+
+`pipeline.predict.predict()` ECM auto-activation (originally PR #9 / `ae5b599`) is now gated on a new `ecm_applicable: bool` flag in `data/transporters/oatp1b1.json`. Initial seed list flagged `true`: pravastatin only.
+
+Three-layer registry pattern (no engine code changes):
+1. `oatp1b1.json` schema extension (`ecm_applicable: bool` per drug, default false).
+2. New `is_oatp_ecm_applicable(smiles)`, `load_oatp1b1_kinetics_for_smiles(smiles)`, `load_hepatic_ecm_params_for_smiles(smiles)` helpers in `src/sisyphus/predict/transporter_db.py` (mirrors PR #22 `lookup_metabolic_fraction` pattern; full InChIKey matching per spec §1.2).
+3. `predict()` checks the flag, conditionally loads kinetics/ECM, passes to `build_drug_on_graph`. The `phenotypes=` parameter (already shipped pre-v0.3 in commit `060dba5`) inherits the gating: PGx scaling only affects drugs whose ECM path is wired.
+
+Schema regression test (`tests/regression/test_oatp_registry_schema.py`) gates:
+- Seed list pinned to `{"pravastatin"}` (catches silent flag flips)
+- Registered InChIKey matches RDKit-canonicalization of SMILES
+- Every `ecm_applicable=true` drug has paired `metabolic_fraction` entry in `cyp_clearance_overrides.json` AND that entry has the `metabolic_fraction` field present (prevents pitavastatin-class double-counting bug)
+
+### Triple-counting bug fix
+
+PR #9's pre-v0.3 wiring used `find_oatp1b1_substrate_name` (block-1 InChIKey) and activated ECM for every drug present in BOTH `oatp1b1.json` AND `hepatic_ecm.json` (all 5 statins). Drugs without paired `metabolic_fraction` entries had XGBoost-CYP enzyme affinities running at full strength PLUS OATP1B1 saturable PLUS ECM passive — triple-counting hepatic clearance. Empirical:
+
+| drug | pre-v0.3 (buggy) | post-v0.3 (gated) |
+|---|---|---|
+| pravastatin | FE 1.07 (correct, mf=0 set) | FE 1.07 (unchanged) |
+| pitavastatin | FE 2.12 (under, no mf entry) | FE 0.45 (no-ECM canonical) |
+| fluvastatin | FE 4.79 (under, CYP-dominant) | FE 1.54 (no-ECM canonical) |
+| rosuvastatin | FE TBD (similar bug) | back to no-ECM |
+| atorvastatin | FE TBD (similar bug) | back to no-ECM |
+
+### 107-holdout impact
+
+**AAFE invariant**: Meta 2.679, Engine 3.791, ML 3.012, In-domain Meta 2.733 — all bit-identical to the 2026-05-02 baseline. Only pravastatin is in the holdout among affected drugs, and pravastatin's predicted Cmax was already correct under PR #9 (auto-ECM was right for pravastatin specifically because it had `metabolic_fraction=0` from PR #22). The fix improves production behavior on 4 non-holdout statins and any future caller passing those SMILES to `predict()`.
+
+CI artifact: `data/validation/4track_ci_2026-05-03_v0.3.json` (10k bootstrap, seed=20260422; bit-identical to 2026-05-02).
+
+### Side fixes shipped in this PR
+
+- `tests/regression/data/prodrug_v3_pre_baseline.json` rebaselined for **pravastatin** (0.01364 → 0.03130; PR #9 auto-ECM never updated this) and **digoxin** (0.00266 → 0.00204; PR #28 SMILES correction never updated this). Both pre-existing failures from prior PRs that didn't refresh the leak audit baseline.
+- `tests/integration/test_holdout_regression.py` pin updated 2.695 → 2.679 (also stale from before the 2026-05-02 SMILES-fix regen).
+
+### Open follow-ups
+
+- Pitavastatin `metabolic_fraction` curation (~0.15-0.25 estimate; UGT1A3/2B7 + minor CYP2C9; needs primary literature). Promotion to `ecm_applicable=true` queued.
+- Rosuvastatin / atorvastatin: blocked on Peff over-prediction xfail (separate engine work) AND `metabolic_fraction` curation.
+- `data/sbi/method_routing.json` reassessment via `scripts/route_sbi.py` re-run. Not auto-affected by Task 5 (offline-determined); follow-up.
+- v0.3.x optional: PredictionResult metadata fields (`ecm_activated: bool`, `phenotypes_applied: dict`) for GenoADME debugging.
+
+### Closes
+
+- (No issues directly closed; v0.3 is a forward-looking model improvement.)
+- Unblocks GenoADME PGx-aware predictions on the gated path (only flagged substrates auto-activate).
 
 ---
 
