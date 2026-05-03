@@ -40,3 +40,41 @@ def test_invalid_smiles_returns_false():
 def test_empty_smiles_returns_false():
     """Empty SMILES → False (no exception)."""
     assert is_oatp_ecm_applicable("") is False
+
+
+from sisyphus.predict.transporter_db import (
+    load_oatp1b1_kinetics_for_smiles,
+    load_hepatic_ecm_params_for_smiles,
+)
+
+
+def test_load_oatp1b1_kinetics_for_smiles_pravastatin():
+    """SMILES-keyed loader returns the same kinetics as the name-keyed one."""
+    kin = load_oatp1b1_kinetics_for_smiles(_PRAVA_SMILES)
+    assert kin is not None
+    assert "OATP1B1" in kin
+    assert kin["OATP1B1"].jmax.mean == 228.0
+    assert kin["OATP1B1"].km.mean == 13.6
+
+
+def test_load_oatp1b1_kinetics_for_smiles_unknown_returns_none():
+    """Unregistered SMILES → None (caller falls through to no-ECM path)."""
+    assert load_oatp1b1_kinetics_for_smiles(_MIDAZOLAM_SMILES) is None
+
+
+def test_load_hepatic_ecm_params_for_smiles_pravastatin():
+    """SMILES-keyed ECM loader returns the registered params."""
+    ecm = load_hepatic_ecm_params_for_smiles(_PRAVA_SMILES)
+    assert ecm is not None
+    assert ecm["ps_passive"].mean == 0.8
+    assert ecm["ps_eff"].mean == 0.8
+    assert ecm["cl_int_bile"].mean == 45.0
+
+
+def test_load_hepatic_ecm_params_for_smiles_unknown_returns_none():
+    assert load_hepatic_ecm_params_for_smiles(_MIDAZOLAM_SMILES) is None
+
+
+def test_load_for_invalid_smiles_returns_none():
+    assert load_oatp1b1_kinetics_for_smiles("not_smiles") is None
+    assert load_hepatic_ecm_params_for_smiles("not_smiles") is None
