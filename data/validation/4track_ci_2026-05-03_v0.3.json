@@ -1,0 +1,42 @@
+{
+  "computed_at": "2026-05-03-v0.3",
+  "source_cache": "data/training/4track_holdout_predictions.json",
+  "context": "v0.3 ECM auto-activation: predict() now gates ECM on ecm_applicable=true (Task 5). Only pravastatin auto-activates; pita/fluva/rosu/atorva fall through to no-ECM path, eliminating triple-counting bug from PR #9. NOTE: pitavastatin, fluvastatin, rosuvastatin, atorvastatin are NOT in the 107-drug holdout, so AAFE is bit-identical to 4track_ci_2026-05-02.json. The fix corrects production behavior but has no holdout footprint.",
+  "method": "bootstrap on abs(log10(fold))",
+  "n_bootstrap": 10000,
+  "seed": 20260422,
+  "overall": {
+    "n": 107,
+    "engine": {
+      "aafe": 3.791,
+      "ci_95_low": 3.14,
+      "ci_95_high": 4.61,
+      "pct_2fold": 33.6,
+      "pct_3fold": 43.9
+    },
+    "ml": {
+      "aafe": 3.012,
+      "ci_95_low": 2.56,
+      "ci_95_high": 3.57,
+      "pct_2fold": 43.0,
+      "pct_3fold": 57.9
+    },
+    "meta": {
+      "aafe": 2.679,
+      "ci_95_low": 2.3,
+      "ci_95_high": 3.14,
+      "pct_2fold": 46.7,
+      "pct_3fold": 63.6
+    }
+  },
+  "in_domain": {
+    "n": 79,
+    "meta": {
+      "aafe": 2.733,
+      "ci_95_low": 2.28,
+      "ci_95_high": 3.31,
+      "pct_2fold": 45.6,
+      "pct_3fold": 62.0
+    }
+  }
+}
