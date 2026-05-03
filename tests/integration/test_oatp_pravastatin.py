@@ -20,6 +20,18 @@ Depends on:
 - data/transporters/cyp_clearance_overrides.json with pravastatin entry
 - predict/ivive.py supporting transporter_kinetics + metabolic_fraction
 - predict/phenotype.py for SLCO1B1 -> OATP1B1 abundance scaling
+
+Reference choice (issue #8 closure 2026-05-03):
+    Pravastatin has two commonly cited Cmax references at 40 mg single oral:
+        FDA Pravachol label: 0.045 mg/L (large regulatory cohort)
+        Niemi 2006 EM N=6 : 0.075 mg/L (small SLCO1B1 521TT cohort)
+    These are 1.67x apart and cannot both be satisfied by a single calibration.
+    Sisyphus is anchored on FDA via scripts/calibrate_oatp_abundance_ecm.py
+    (issue #14 confirms 5.0e5 OATP1B1 abundance optimum). test_oatp_ecm_statins
+    [pravastatin] passes at FE 1.066 vs FDA. Niemi 2006 EM/PM RATIO (~2.6x)
+    is reproduced directionally by this test; absolute population magnitudes
+    are not anchored against Niemi means. GenoADME Tier 1 should anchor on
+    FDA Cmax 0.045 mg/L for population mean and retain Niemi as a ratio check.
 """
 
 from __future__ import annotations
