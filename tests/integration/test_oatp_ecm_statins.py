@@ -133,10 +133,18 @@ _FE_GATE: dict[str, float] = {
 # 5.0e5 remains optimal; full sweep in
 # data/validation/oatp_ecm_abundance_calibration.json.
 #
-# fluvastatin stays xfail — pre-existing under-prediction (FE 4.79; opposite
-# direction from rosuvastatin/atorvastatin over-prediction). Tracked in
-# issue #21 as a separate problem (possibly OATP1B1 over-uptake on
-# fluvastatin specifically, or non-OATP1B1 hepatic transport).
+# fluvastatin stays xfail — issue #21 closure (2026-05-03): NOT a Sisyphus
+# defect. Niemi 2009 review establishes fluvastatin as CYP2C9-dominant
+# (~75% CYP2C9, ~5% CYP3A4, minor OATP1B1) with minimal SLCO1B1 PGx effect
+# clinically (PM/EM ~ 1.0x, in contrast to pravastatin/rosuvastatin/
+# pitavastatin where PM ~ 2-3x EM). i.e. OATP1B1 is NOT rate-limiting for
+# fluvastatin. Forcing ECM activation in this test on top of XGBoost-CYP
+# triple-counts hepatic clearance (CYP + OATP1B1 saturable + ECM passive),
+# yielding FE 4.79. Without ECM activation (the production predict() default
+# path), fluvastatin FE drops to 1.54 vs FDA 0.090 mg/L — within typical
+# engine track range. The xfail is intentional: this gate validates ECM for
+# OATP-rate-limited statins, and fluvastatin's failure is the correct
+# signal that ECM is not applicable to it.
 _KNOWN_PEFF_FAILS = {"rosuvastatin", "atorvastatin", "fluvastatin"}
 
 
