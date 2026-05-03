@@ -28,14 +28,18 @@ def _aafe(preds: list[dict]) -> float:
     not HOLDOUT_JSON.exists(),
     reason=f"{HOLDOUT_JSON.name} not present — regeneration required",
 )
-def test_cached_holdout_aafe_is_2p695() -> None:
-    """Cached predictions file: Meta AAFE is the headline 2.695 (±0.001).
+def test_cached_holdout_aafe_is_2p679() -> None:
+    """Cached predictions file: Meta AAFE is the headline 2.679 (±0.001).
 
-    Baseline updated 2026-05-01 by Hardening — predict() deterministic path
-    uses BodyGraph.realize_means() instead of graph.sample(rng=42), eliminating
-    seed-dependent RNG-order coupling. This restores the pre-Achour 2026-04-14
-    canonical Meta AAFE (2.695) — the prior 2.702 / 2.719 were RNG-order
-    artifacts of seed=42 lognormal realization, not real model drift.
+    Baseline updated 2026-05-03 (v0.3 ECM auto-activation regen) — cache
+    regenerated post-Task 5 ECM gating. Meta AAFE 2.679 reflects the
+    2026-05-02 digoxin+pravastatin SMILES correction baseline. The prior pin
+    of 2.695 was stale (Hardening-era pin not updated after the SMILES-fix
+    regen in commits 193573a/7042a96).
+
+    pitavastatin/fluvastatin/rosuvastatin/atorvastatin are not in the
+    107-drug holdout, so the ECM gating fix (Task 5) has no holdout AAFE
+    footprint — AAFE is bit-identical to the 2026-05-02 cache.
 
     If this fails, the holdout prediction cache has been regenerated with a
     behavior change. Investigate."""
@@ -50,4 +54,4 @@ def test_cached_holdout_aafe_is_2p695() -> None:
         if isinstance(data, dict) and "drugs" in data:
             preds = data["drugs"]
         aafe = _aafe(preds)
-    assert abs(aafe - 2.695) < 0.001, f"AAFE drifted: {aafe:.4f}"
+    assert abs(aafe - 2.679) < 0.001, f"AAFE drifted: {aafe:.4f}"
