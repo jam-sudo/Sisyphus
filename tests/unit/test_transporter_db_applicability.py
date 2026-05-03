@@ -17,9 +17,6 @@ _FLUVA_SMILES = (
 _MIDAZOLAM_SMILES = "Clc1ccc2c(c1)C(=NCc1nccn1C)c1ccccc1N2"
 
 
-@pytest.mark.xfail(
-    reason="oatp1b1.json pravastatin entry not yet flagged ecm_applicable=true; Task 2 sets it"
-)
 def test_pravastatin_is_applicable():
     """Pravastatin is the canonical OATP-rate-limited substrate (Niemi 2009 PM/EM ~2.6x)."""
     assert is_oatp_ecm_applicable(_PRAVA_SMILES) is True
