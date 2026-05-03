@@ -171,3 +171,33 @@ def test_non_oatp_drug_unaffected_by_oatp_wiring():
     result = solve(compiled, params, y0, t_span=(0, 24.0))
     assert result.solver_success
     assert np.max(result.concentrations["venous_blood"]) > 0
+
+
+@pytest.mark.slow
+def test_predict_auto_ecm_matches_manual():
+    """predict() auto-activates ECM and matches the manual build_drug_on_graph Cmax.
+
+    Gates the v0.3 wiring: any future drift between the production predict()
+    auto-ECM path and the direct build_drug_on_graph manual path surfaces
+    here as a 1%-tolerance failure, not a silent divergence. Both paths
+    should produce identical Cmax under deterministic mean-only realization.
+    """
+    from sisyphus.pipeline.predict import predict as pipeline_predict
+
+    graph_em = build_from_yaml(_PHYS)
+    drug_em = _build_pravastatin(graph_em)
+    cmax_manual = _simulate_cmax(drug_em, graph_em)
+
+    result = pipeline_predict(_PRAVASTATIN, dose_mg=40.0, route="oral")
+    cmax_predict = result.engine_pk.cmax.mean
+
+    # Both paths must produce the same Cmax modulo MC noise (n_mc_samples=0
+    # means deterministic; tolerance allows for any minor solver/integration
+    # difference but rejects any meaningful divergence).
+    rel_err = abs(cmax_predict - cmax_manual) / cmax_manual
+    assert rel_err < 0.01, (
+        f"predict() vs manual ECM build drift: predict={cmax_predict:.5f}, "
+        f"manual={cmax_manual:.5f}, rel_err={rel_err:.4f} (>1% tol). The "
+        f"two paths should match exactly. Likely causes: predict() loaded "
+        f"different kinetics/ECM params, or auto-activation gate misfired."
+    )
