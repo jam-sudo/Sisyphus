@@ -86,6 +86,44 @@ def load_oatp1b1_kinetics(drug_name: str) -> dict[str, TransporterKinetics] | No
     }
 
 
+@functools.lru_cache(maxsize=1)
+def _load_oatp_applicability_index() -> dict[str, bool]:
+    """InChIKey → ecm_applicable flag, indexed once.
+
+    Returns empty dict if registry missing (inherited from
+    _load_oatp1b1_table fallback). Drugs whose entries omit the field
+    are treated as False.
+    """
+    table = _load_oatp1b1_table()
+    return {
+        entry["inchikey"]: bool(entry.get("ecm_applicable", False))
+        for entry in table.values()
+        if "inchikey" in entry
+    }
+
+
+def is_oatp_ecm_applicable(smiles: str) -> bool:
+    """Return True if SMILES's InChIKey is registered with ecm_applicable=true.
+
+    Mirrors cyp_clearance_overrides.lookup_metabolic_fraction (PR #22) for
+    the parallel ecm_applicable lookup. Uses RDKit-canonical InChIKey to
+    be robust against SMILES annotation differences. Returns False on any
+    error (RDKit unavailable, invalid SMILES, InChIKey not registered, or
+    registered with explicit false).
+    """
+    if not smiles:
+        return False
+    try:
+        from rdkit import Chem
+    except ImportError:
+        return False
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        return False
+    ikey = Chem.MolToInchiKey(mol)
+    return _load_oatp_applicability_index().get(ikey, False)
+
+
 _HEPATIC_ECM_FILE = _DATA_ROOT / "hepatic_ecm.json"
 
 
