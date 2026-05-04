@@ -158,8 +158,9 @@ def predict(
     from sisyphus.predict.ivive import build_drug_on_graph
     from sisyphus.predict.transporter_db import (
         find_oatp1b1_substrate_name,
-        load_hepatic_ecm_params,
-        load_oatp1b1_kinetics,
+        is_oatp_ecm_applicable,
+        load_hepatic_ecm_params_for_smiles,
+        load_oatp1b1_kinetics_for_smiles,
     )
 
     warnings_list: list[str] = []
@@ -171,23 +172,32 @@ def predict(
     profile = compute_profile(smiles)
     adme = predict_adme(profile)
 
-    # Auto-detect OATP1B1 substrate via canonical InChIKey lookup. Both
-    # transporter kinetics and hepatic ECM parameters are loaded only when
-    # the drug appears in BOTH registries (statins currently:
-    # pravastatin/rosuvastatin/atorvastatin/pitavastatin/fluvastatin).
-    # For drugs registered as OATP1B1 substrates without ECM params (e.g.
-    # glimepiride, valsartan), kinetics are loaded but ECM stays off — the
-    # ECM machinery requires both to function correctly.
+    # Auto-activate ECM (OATP1B1 saturable + ECM passive + biliary CL_int)
+    # ONLY for drugs flagged ecm_applicable=true in oatp1b1.json. The flag
+    # gates against the empirically-documented triple-counting bug: drugs
+    # like fluvastatin (CYP2C9-dominant) and pitavastatin (no
+    # metabolic_fraction entry) shipped to predict() WITHOUT this gate
+    # would have XGBoost-CYP enzyme affinities running at full strength
+    # plus OATP1B1 saturable plus ECM passive — triple-counting hepatic
+    # clearance.
+    #
+    # The gate uses full InChIKey matching (spec §1.2). The cyp_clearance
+    # _overrides registry is checked downstream by ivive.build_drug_on_graph
+    # for the metabolic_fraction scaling (PR #22 mechanism).
     auto_oatp_kinetics = None
     auto_ecm_params = None
-    substrate_name = find_oatp1b1_substrate_name(profile.smiles)
-    if substrate_name is not None:
-        kin = load_oatp1b1_kinetics(substrate_name)
-        ecm = load_hepatic_ecm_params(substrate_name)
-        if kin is not None and ecm is not None:
-            auto_oatp_kinetics = kin
-            auto_ecm_params = ecm
+    if is_oatp_ecm_applicable(profile.smiles):
+        auto_oatp_kinetics = load_oatp1b1_kinetics_for_smiles(profile.smiles)
+        auto_ecm_params = load_hepatic_ecm_params_for_smiles(profile.smiles)
+        if auto_oatp_kinetics is not None and auto_ecm_params is not None:
+            substrate_name = find_oatp1b1_substrate_name(profile.smiles) or "unknown"
             warnings_list.append(f"oatp1b1:auto_ecm:{substrate_name}")
+        else:
+            # Flag set but registry data missing — log and disable ECM. This
+            # should be caught by the schema regression test, but defend at
+            # runtime too.
+            auto_oatp_kinetics = None
+            auto_ecm_params = None
 
     drug = build_drug_on_graph(
         profile, adme, dose_mg, route,
