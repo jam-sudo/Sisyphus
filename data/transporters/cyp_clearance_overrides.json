@@ -21,7 +21,19 @@
         "Niemi 2009 OATP review: pravastatin Km on OATP1B1 13.6 uM (Varma 2014); CYP-mediated metabolism minor.",
         "Watanabe 2009: PS_inf 0.5-2.0 L/h literature range absorbs all hepatic clearance for pravastatin."
       ],
-      "notes": "Pravastatin is the canonical OATP1B1-only substrate. Its XGBoost CLint already approximates total in vivo hepatic CL via uptake; adding the ECM OATP1B1 path on top double-counts. Setting metabolic_fraction=0 routes 100% of hepatic clearance through ECM, which the engine then scales via abundance × Jmax/Km × IVIVE."
+      "notes": "Pravastatin is the canonical OATP1B1-only substrate. Its XGBoost CLint already approximates total in vivo hepatic CL via uptake; adding the ECM OATP1B1 path on top double-counts. Setting metabolic_fraction=0 routes 100% of hepatic clearance through ECM, which the engine then scales via abundance \u00d7 Jmax/Km \u00d7 IVIVE."
+    },
+    {
+      "drug": "pitavastatin",
+      "smiles": "O=C(O)C[C@H](O)C[C@H](O)/C=C/c1c(C2CC2)nc2ccccc2c1-c1ccc(F)cc1",
+      "inchikey": "VGYFMXBACGZSIL-MCBHFWOFSA-N",
+      "metabolic_fraction": 0.0,
+      "literature": [
+        "Niemi 2009 OATP review: pitavastatin SLCO1B1 PM/EM Cmax ratio ~3x \u2014 among the most OATP-rate-limited statins clinically (Hirano 2004 DMD; Deng 2008).",
+        "Hirano 2004 DMD 32:1162-7: pitavastatin OATP1B1 hepatic uptake CL ratio ~2.5x pravastatin in vitro.",
+        "Fujino 2004 J Pharm Sci 93:1019-26: ~80% biliary excretion (parent + glucuronide); minor CYP2C9 4-OH metabolism (~5-10%); UGT1A3/2B7 lactonization is reversible via paraoxonase. Intracellular metabolism not rate-limiting."
+      ],
+      "notes": "Pitavastatin parallels pravastatin: OATP1B1 hepatic uptake is rate-limiting (Niemi 2009 PM/EM ~3x); intracellular CYP2C9 + UGT1A3/2B7 paths are downstream of uptake and thus not rate-limiting at the whole-organ level. Setting metabolic_fraction=0 routes all hepatic CL through ECM (OATP1B1 saturable + ECM passive + biliary CL_int). EMPIRICAL NOTE: setting mf=0 vs mf=1.0 changes pitavastatin Cmax by <2% (sweep 2026-05-04), so the metabolic_fraction value is mechanistically chosen rather than empirically tuned. The residual ~2x under-prediction (Cmax 0.00168 vs FDA 0.0035) reflects Jmax/PS calibration uncertainty (Hirano 2004 scaled-from-pravastatin estimate carries 2x literature range), not metabolic_fraction error. v0.3.x parameter recalibration tracked separately."
     }
   ]
 }

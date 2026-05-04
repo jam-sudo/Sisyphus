@@ -55,7 +55,8 @@
       },
       "source": "Km: Niemi 2009 review (Hirano 2004, Deng 2008; range 3.0-6.7 \u03bcM midpoint). Jmax: scaled from pitavastatin/pravastatin clinical hepatic uptake CL ratio \u2248 2.5 (Hirano 2004 DMD).",
       "smiles": "O=C(O)C[C@H](O)C[C@H](O)/C=C/c1c(C2CC2)nc2ccccc2c1-c1ccc(F)cc1",
-      "inchikey": "VGYFMXBACGZSIL-MCBHFWOFSA-N"
+      "inchikey": "VGYFMXBACGZSIL-MCBHFWOFSA-N",
+      "ecm_applicable": true
     },
     "fluvastatin": {
       "jmax_pmol_per_min_per_mg": {

@@ -69,23 +69,33 @@ def test_fluvastatin_no_auto_ecm():
 
 
 @pytest.mark.slow
-def test_pitavastatin_no_auto_ecm():
-    """predict(pitavastatin) does NOT auto-activate ECM (no metabolic_fraction entry).
+def test_pitavastatin_auto_ecm_activates():
+    """predict(pitavastatin) auto-activates ECM under v0.3.1 promotion.
 
-    The schema regression test gates this at registry level; this test gates it
-    at predict() runtime. Two layers of defense.
+    Pitavastatin was promoted to ecm_applicable=true on 2026-05-04 with
+    metabolic_fraction=0 (parallel pravastatin justification: Niemi 2009
+    PM/EM ~3x; OATP1B1 hepatic uptake is rate-limiting).
+
+    EMPIRICAL NOTE: pitavastatin Cmax under auto-ECM is 0.00168 mg/L (FE
+    2.08x under FDA Livalo 0.0035). The under-prediction reflects
+    Jmax/PS calibration uncertainty (Hirano 2004 scaled-from-pravastatin
+    estimate carries ~2x literature range), NOT metabolic_fraction error
+    (sweep mf=[0,1] showed <2% Cmax variation). Mechanistic correctness
+    (OATP-rate-limited path active) is the v0.3.1 gain; absolute Cmax
+    accuracy improvement is deferred to per-drug Jmax/PS curation.
     """
     result = predict(_PITA_SMILES, dose_mg=2.0, route="oral", n_mc_samples=0)
     assert result.engine_pk is not None
     cmax = result.engine_pk.cmax.mean
-    assert not any("oatp1b1:auto_ecm" in w for w in result.warnings), (
-        f"pitavastatin should NOT auto-activate ECM, but got warnings: {result.warnings}"
+    assert any("oatp1b1:auto_ecm:pitavastatin" in w for w in result.warnings), (
+        f"expected oatp1b1:auto_ecm:pitavastatin warning, got: {result.warnings}"
     )
-    expected = 0.00777
+    expected = 0.00168
     rel_err = abs(cmax - expected) / expected
     assert rel_err < 0.05, (
-        f"pitavastatin Cmax drifted: actual={cmax:.5f}, expected={expected:.5f} "
-        f"(no-ECM path post-gating). Gate may be leaking."
+        f"pitavastatin auto-ECM Cmax drift: actual={cmax:.5f}, expected={expected:.5f}, "
+        f"rel_err={rel_err:.3f} (5% tol). Auto-activation may be misfiring "
+        f"or Jmax/PS/mf parameters drifted."
     )
 
 

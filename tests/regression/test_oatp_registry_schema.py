@@ -29,7 +29,9 @@ _OVERRIDES_PATH = _REPO_ROOT / "data" / "transporters" / "cyp_clearance_override
 
 # Pin the v0.3 seed list. If a drug is added/removed here, this test
 # must fail loud so the spec change requires an explicit decision.
-_EXPECTED_ECM_APPLICABLE = frozenset({"pravastatin"})
+# 2026-05-04 (v0.3.1): pitavastatin promoted with metabolic_fraction=0
+# (Niemi 2009 PM/EM ~3x, OATP-rate-limited, parallel pravastatin justification).
+_EXPECTED_ECM_APPLICABLE = frozenset({"pravastatin", "pitavastatin"})
 
 
 def _load_oatp() -> dict:

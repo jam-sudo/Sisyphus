@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-03
+last_updated: 2026-05-04
 parent: ../../CLAUDE.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -7,6 +7,49 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 # Experiment Log
 
 Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md).
+
+---
+
+## 2026-05-04 — v0.3.1 pitavastatin ecm_applicable promotion
+
+**Branch**: `feat/pitavastatin-ecm-applicable` (PR pending)
+**Spawn**: v0.3 (PR #29) follow-up — initial seed list was pravastatin only; pitavastatin promotion was deferred pending `metabolic_fraction` curation.
+
+### What shipped
+
+Pitavastatin promoted to `ecm_applicable=true` in `data/transporters/oatp1b1.json`. Paired entry added to `data/transporters/cyp_clearance_overrides.json` with `metabolic_fraction=0` (parallel pravastatin justification: Niemi 2009 PM/EM ~3x makes pitavastatin among the most OATP-rate-limited statins clinically; intracellular CYP2C9 + UGT1A3/2B7 paths are downstream of the rate-limiting uptake step). Schema regression test seed list updated to `frozenset({"pravastatin", "pitavastatin"})`.
+
+### Empirical observation: metabolic_fraction is mechanistic, not empirical
+
+Sweep across `mf ∈ [0.0, 0.05, 0.10, 0.15, 0.25, 0.50, 1.0]` (2026-05-04, on `feat/pitavastatin-ecm-applicable`): pitavastatin Cmax varies from 0.00168 → 0.00165 mg/L (1.8% relative variation). The triple-counting hypothesis from PR #22 / PR #29 narrative does NOT apply meaningfully to pitavastatin — `mf` is a near-irrelevant knob for this drug.
+
+This **revises the v0.3 PR #29 narrative** retroactively: the pre-v0.3 (buggy auto-ECM) → post-v0.3 (no-ECM) flip on pitavastatin (FE 2.12 under → FE 0.45 over) was NOT a magnitude improvement; both directions show ~2x absolute fold-error. The actual root cause is OATP1B1 Jmax / ECM passive PS calibration (Hirano 2004 scaled-from-pravastatin estimate carries ~2x literature range), not metabolic_fraction.
+
+### Numbers
+
+| metric | post-v0.3 (Task 5 gating, no auto-ECM) | post-v0.3.1 (auto-ECM activated, mf=0) |
+|---|---|---|
+| pita predict() Cmax (2 mg) | 0.00777 mg/L | 0.00168 mg/L |
+| FE vs FDA Livalo 0.0035 | 2.22x over | 2.08x under |
+
+107-holdout AAFE invariant: pitavastatin is not in the 107-holdout, so Meta 2.679 / Engine 3.791 / ML 3.012 / In-domain Meta 2.733 are unchanged. No cache regen.
+
+### Test impact
+
+- `tests/regression/test_oatp_registry_schema.py`: `_EXPECTED_ECM_APPLICABLE` updated to include pitavastatin; all 3 schema gates green.
+- `tests/integration/test_predict_auto_ecm.py`: `test_pitavastatin_no_auto_ecm` replaced with `test_pitavastatin_auto_ecm_activates` (asserts warning tag present, Cmax matches 0.00168 ± 5%).
+- `tests/integration/test_oatp_ecm_statins.py::test_statin_cmax_under_ecm[pitavastatin]`: unchanged (manual-build path was already ECM-active; FE 2.12 within 3-fold gate).
+- 23 passed / 3 xfailed across the OATP + predict_auto_ecm suite.
+
+### Open follow-ups (deferred)
+
+- Pitavastatin Jmax/PS recalibration: Hirano 2004 scaled-from-pravastatin assumption needs primary verification. ~0.5-1d work, or could be combined with rosuvastatin/atorvastatin promotion (also blocked on Peff over-prediction).
+- DE-33 Vss/Kp engine-layer recalibration: same root-cause class as pita's Jmax/PS uncertainty. Larger scope.
+
+### Closes
+
+- (No issue directly closed; this is a v0.3 follow-up commit.)
+- Expands ECM auto-activation seed list 1 → 2 drugs.
 
 ---
 
