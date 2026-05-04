@@ -15,7 +15,8 @@
       },
       "source": "Varma 2014 JPET Table 2",
       "smiles": "CC[C@@H](C)C(=O)O[C@@H]1C[C@@H](O)C=C2[C@@H](CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H](C)CC[C@@H]21",
-      "inchikey": "GOSGZXISMCZCDW-LYANWTNHSA-N"
+      "inchikey": "GOSGZXISMCZCDW-LYANWTNHSA-N",
+      "ecm_applicable": true
     },
     "rosuvastatin": {
       "jmax_pmol_per_min_per_mg": {
