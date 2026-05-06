@@ -153,17 +153,23 @@ def _get_fm_fractions(
     compound_type: str,
     substrate_enzymes: set[str] | None = None,
     ugt_enzymes: set[str] | None = None,
+    non_cyp_fractions: dict[str, float] | None = None,
 ) -> dict[str, float]:
-    """Get fraction metabolized by each enzyme (CYP + UGT), adjusted for compound type.
+    """Get fraction metabolized by each enzyme (CYP + UGT + non-CYP), adjusted for compound type.
 
     If substrate_enzymes is provided (from DrugBank annotations), known substrates
     are given equal weight and non-substrates are floored at _NON_SUBSTRATE_FLOOR.
 
     UGT enzymes are handled via annotation pattern:
-    - UGT only (no CYP annotation): UGT gets 0.90 of total fm (UGT dominant)
-    - CYP + UGT both annotated: UGT gets 0.30 of total fm (CYP primary)
-    Rationale: if DrugBank annotates CYP substrates, CYP is measured pathway.
-    Default 0.30 is conservative; sensitivity test confirmed monotonic improvement.
+    - UGT only (no CYP annotation): UGT gets 0.90 of total fm
+    - CYP + UGT both annotated: UGT gets 0.30 of total fm
+
+    non_cyp_fractions (NAT2, UGT1A1 from per-gene registries — issue #10):
+    - Each value validated to [0, 1]; raises ValueError otherwise.
+    - Sum normalized to <= 1.0 (re-normalize if > 1.0; caller's
+      non_cyp_substrates.get_non_cyp_fractions also normalizes upstream).
+    - Remaining (1 - non_cyp_total) goes to existing CYP+UGT allocation.
+    - Resulting fm dict is _normalize_fm-ed for round-off safety.
 
     Args:
         compound_type: One of "neutral", "acid", "base", "zwitterion".
@@ -171,10 +177,11 @@ def _get_fm_fractions(
             If None or empty, compound-type defaults are used.
         ugt_enzymes: Set of UGT tags for which this drug is a known substrate
             (from DrugBank). If None or empty, UGT is not included.
+        non_cyp_fractions: {"NAT2": fm, "UGT1A1": fm} from per-gene registries.
+            When None or empty, behavior is identical to previous signature.
 
     Returns:
-        Dict mapping enzyme tag -> fraction metabolized.
-        Fractions sum to 1.0.
+        Dict mapping enzyme tag -> fraction metabolized. Sums to 1.0.
     """
     if compound_type in _FM_ADJUSTMENTS:
         fm = dict(_FM_ADJUSTMENTS[compound_type])
@@ -196,29 +203,42 @@ def _get_fm_fractions(
                     fm[enzyme] = _NON_SUBSTRATE_FLOOR
             cyp_fm = _normalize_fm(fm)
 
-    if not ugt_enzymes:
+    if ugt_enzymes:
+        has_cyp = bool(substrate_enzymes)
+        if not has_cyp:
+            ugt_fraction = 0.90
+        else:
+            ugt_fraction = 0.30
+
+        cyp_fraction = 1.0 - ugt_fraction
+        result: dict[str, float] = {}
+        for tag, frac in cyp_fm.items():
+            result[tag] = frac * cyp_fraction
+        n_ugt = len(ugt_enzymes)
+        for tag in ugt_enzymes:
+            result[tag] = ugt_fraction / n_ugt
+        cyp_fm = _normalize_fm(result)
+
+    if not non_cyp_fractions:
         return cyp_fm
 
-    # Determine UGT fraction based on annotation pattern
-    has_cyp = bool(substrate_enzymes)
-    if not has_cyp:
-        # UGT only → UGT dominant
-        ugt_fraction = 0.90
-    else:
-        # CYP + UGT → CYP primary, UGT secondary
-        ugt_fraction = 0.30
+    for gene, frac in non_cyp_fractions.items():
+        if not (0.0 <= frac <= 1.0):
+            raise ValueError(
+                f"non_cyp_fractions[{gene!r}]={frac} not in [0, 1]"
+            )
 
-    cyp_fraction = 1.0 - ugt_fraction
+    non_cyp_total = sum(non_cyp_fractions.values())
+    if non_cyp_total > 1.0:
+        non_cyp_fractions = {k: v / non_cyp_total for k, v in non_cyp_fractions.items()}
+        non_cyp_total = 1.0
 
-    result: dict[str, float] = {}
-    for tag, frac in cyp_fm.items():
-        result[tag] = frac * cyp_fraction
+    cyp_residual = max(1.0 - non_cyp_total, 0.0)
+    out: dict[str, float] = {tag: frac * cyp_residual for tag, frac in cyp_fm.items()}
+    for gene, frac in non_cyp_fractions.items():
+        out[gene] = frac
 
-    n_ugt = len(ugt_enzymes)
-    for tag in ugt_enzymes:
-        result[tag] = ugt_fraction / n_ugt
-
-    return _normalize_fm(result)
+    return _normalize_fm(out)
 
 
 def _decompose_clint(
