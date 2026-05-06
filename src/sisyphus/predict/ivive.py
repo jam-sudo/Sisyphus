@@ -249,6 +249,7 @@ def _decompose_clint(
     substrate_enzymes: set[str] | None = None,
     ugt_enzymes: set[str] | None = None,
     metabolic_fraction: float = 1.0,
+    non_cyp_fractions: dict[str, float] | None = None,
 ) -> dict[str, Distribution]:
     """Decompose total hepatic CLint into per-enzyme affinities.
 
@@ -285,7 +286,12 @@ def _decompose_clint(
         Dict mapping enzyme tag -> CLint per pmol enzyme (uL/min/pmol)
         as Distributions.
     """
-    fm = _get_fm_fractions(compound_type, substrate_enzymes, ugt_enzymes)
+    fm = _get_fm_fractions(
+        compound_type,
+        substrate_enzymes=substrate_enzymes,
+        ugt_enzymes=ugt_enzymes,
+        non_cyp_fractions=non_cyp_fractions,
+    )
     abundances = enzyme_abundances if enzyme_abundances is not None else _LIVER_ENZYME_ABUNDANCE
 
     # Scale CLint from cellular basis to whole-liver L/h
@@ -591,6 +597,7 @@ def build_drug_on_graph(
     kp_method: str = "rodgers_rowland",
     transporter_kinetics: dict[str, TransporterKinetics] | None = None,
     hepatic_ecm_params: dict[str, Distribution] | None = None,
+    non_cyp_fractions: dict[str, float] | None = None,
 ) -> DrugOnGraph:
     """Construct a DrugOnGraph from predicted properties.
 
@@ -640,13 +647,14 @@ def build_drug_on_graph(
     from sisyphus.predict.cyp_clearance_overrides import lookup_metabolic_fraction
     metabolic_fraction = lookup_metabolic_fraction(profile.smiles)
 
-    # Decompose CLint to per-enzyme affinities (CYP + UGT)
+    # Decompose CLint to per-enzyme affinities (CYP + UGT + non-CYP)
     enzyme_affinity = _decompose_clint(
         adme.clint, profile.compound_type, profile.pka,
         enzyme_abundances=abundances,
         substrate_enzymes=substrate_enzymes,
         ugt_enzymes=ugt_enzymes,
         metabolic_fraction=metabolic_fraction,
+        non_cyp_fractions=non_cyp_fractions,
     )
 
     # Compute Kp for each tissue using selected method
