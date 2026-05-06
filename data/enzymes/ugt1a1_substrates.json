@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "description": "Substrates of hepatic UGT1A1 with explicit metabolic_fraction. The current build_drug_on_graph hardcodes ugt_enzymes=None (UGT path disabled per ivive.py:611 sensitivity result), so this registry is the only path that creates a non-zero enzyme_affinity[UGT1A1] for listed drugs.",
+  "rationale": "Without registry entry, drug has no UGT1A1 enzyme_affinity. Initial seed: 3 GenoADME deferred-pair candidates that are parent-PK (not prodrug-metabolite). irinotecan/UGT1A1 is deferred to issue #11.",
+  "schema": "see nat2_substrates.json",
+  "substrates": [
+    {
+      "drug": "raltegravir",
+      "smiles": "Cc1nnc(C(C)(C)NC(=O)c2nc(C(=O)NCc3cccc(F)c3)c(O)c(=O)n2C)o1",
+      "inchikey": "BYYRNXYVYVTCGU-UHFFFAOYSA-N",
+      "metabolic_fraction": 0.70,
+      "literature": ["Iwamoto 2008 Clin Pharmacol Ther 83:293-9"],
+      "notes": "~70% UGT1A1 glucuronidation, ~30% renal/other. UGT1A1*28 carriers ~40% AUC increase."
+    },
+    {
+      "drug": "atazanavir",
+      "smiles": "COC(=O)N[C@H](C(=O)N[C@H](Cc1ccc(/C=N/Nc2ccc(C(=O)OC)cc2)cc1)C(=O)NC(C)(C)C)c1ccccc1",
+      "inchikey": "ODKLONQRQWKJLH-FEBBOJHXSA-N",
+      "metabolic_fraction": 0.40,
+      "literature": ["Lankisch 2006 Pharmacogenet Genomics 16:495-501"],
+      "notes": "Atazanavir is a UGT1A1 INHIBITOR but is itself partially glucuronidated. Mixed CYP3A4 (primary) + UGT1A1 (~40%) metabolism."
+    },
+    {
+      "drug": "dolutegravir",
+      "smiles": "C[C@H]1CCO[C@H]2[C@@H](CO)N(Cc3ccc(F)cc3F)C(=O)c3cc(O)n(C)c3C(=O)N12",
+      "inchikey": "OSIHJHSCAIZJLP-KAJFERSBSA-N",
+      "metabolic_fraction": 0.50,
+      "literature": ["Reese 2013 J Acquir Immune Defic Syndr 64:e35-6"],
+      "notes": "~50% UGT1A1, ~30% CYP3A4, ~20% UGT1A9 (Reese 2013). UGT1A1*28 effect modest (~30% AUC increase)."
+    }
+  ]
+}
