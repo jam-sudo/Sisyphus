@@ -57,6 +57,10 @@ _LIVER_ENZYME_ABUNDANCE: dict[str, float] = {
     "UGT1A1": 1_215_000.0,  # 18 * 45 * 1500
     "UGT1A4": 675_000.0,    # 10 * 45 * 1500
     "UGT1A9": 1_012_500.0,  # 15 * 45 * 1500
+    # Phase II non-CYP for issue #10 phenotype propagation (v0.3.2).
+    # NAT2 cytosolic; abundance is calibration-arbitrary at mean (back-solved
+    # such that abundance × affinity × ivive_scaling = NAT2 fm × CLint_hepatic).
+    "NAT2": 1.0e7,
 }
 
 # ---------------------------------------------------------------------------
