@@ -162,6 +162,7 @@ def predict(
         load_hepatic_ecm_params_for_smiles,
         load_oatp1b1_kinetics_for_smiles,
     )
+    from sisyphus.predict.non_cyp_substrates import get_non_cyp_fractions
 
     warnings_list: list[str] = []
     cmax_90ci: tuple[float, float] | None = None
@@ -199,11 +200,16 @@ def predict(
             auto_oatp_kinetics = None
             auto_ecm_params = None
 
+    # Per-gene non-CYP fm registry lookup (NAT2 / UGT1A1).
+    # Empty dict for non-substrates is a no-op downstream.
+    non_cyp_fractions = get_non_cyp_fractions(profile.smiles)
+
     drug = build_drug_on_graph(
         profile, adme, dose_mg, route,
         kp_method=kp_method,
         transporter_kinetics=auto_oatp_kinetics,
         hepatic_ecm_params=auto_ecm_params,
+        non_cyp_fractions=non_cyp_fractions,
     )
 
     # ── DrugBank enrichment tags ──────────────────────────────────────
@@ -281,6 +287,7 @@ def predict(
                 kp_method=kp_method,
                 transporter_kinetics=auto_oatp_kinetics,
                 hepatic_ecm_params=auto_ecm_params,
+                non_cyp_fractions=non_cyp_fractions,
             )
 
         from sisyphus.graph.builder import augment_for_active_species
