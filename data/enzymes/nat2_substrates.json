@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "description": "Substrates of hepatic cytosolic NAT2 (N-acetyltransferase 2). Used by predict() to allocate metabolic_fraction of XGBoost CLint to NAT2; the residual is split among CYPs per compound_type defaults. NAT2 phenotype scaling propagates into Cmax via abundance × enzyme_affinity multiplication in the engine, predicated on the back-solve cancellation fix in pipeline/predict.py (v0.3.2 Task 2).",
+  "rationale": "Without registry entry, drug has no NAT2 enzyme_affinity → phenotype scaling is a no-op. This registry is the curation surface for which drugs trigger the NAT2 path.",
+  "schema": {
+    "drug": "Lowercase common name (informational)",
+    "smiles": "Canonical RDKit SMILES",
+    "inchikey": "RDKit-derived InChIKey (primary lookup key, full 27-char)",
+    "metabolic_fraction": "float in [0, 1]. Fraction of total hepatic CL allocated to NAT2.",
+    "literature": "Refs supporting fm choice",
+    "notes": "Free-form rationale"
+  },
+  "substrates": [
+    {
+      "drug": "isoniazid",
+      "smiles": "NNC(=O)c1ccncc1",
+      "inchikey": "QRXWMOHMRWLFEY-UHFFFAOYSA-N",
+      "metabolic_fraction": 0.90,
+      "literature": [
+        "Weber 1983 Drug Metab Rev 14:1163-1205",
+        "Ellard 1976 Br J Clin Pharmacol 3:541-7",
+        "Peloquin 1999 Chest 115:12-8"
+      ],
+      "notes": "Canonical NAT2 substrate. Slow acetylator t1/2 ~3h, rapid acetylator t1/2 ~1h (Ellard 1976). Cmax PM/EM ~1.3-1.5x at 300 mg PO (Peloquin 1999). Minor CYP2E1 contribution to hepatotoxic metabolite hydrazine, not rate-limiting at the whole-organ CL level."
+    },
+    {
+      "drug": "hydralazine",
+      "smiles": "NNc1nncc2ccccc12",
+      "inchikey": "RPTUSVTUFVMDQK-UHFFFAOYSA-N",
+      "metabolic_fraction": 0.50,
+      "literature": [
+        "Reece 1981 Eur J Clin Pharmacol 19:79-85",
+        "Reidenberg 1973 Clin Pharmacol Ther 14:970-7"
+      ],
+      "notes": "NAT2 ~50%, CYP3A4/2C9 ~50%. Mixed pathway."
+    },
+    {
+      "drug": "procainamide",
+      "smiles": "CCN(CC)CCNC(=O)c1ccc(N)cc1",
+      "inchikey": "REQCZEXYDRLIBE-UHFFFAOYSA-N",
+      "metabolic_fraction": 0.50,
+      "literature": [
+        "Drayer 1977 Clin Pharmacol Ther 22:14-22",
+        "Reidenberg 1972 N Engl J Med 286:419-25"
+      ],
+      "notes": "NAT2 -> N-acetylprocainamide ~50%; renal ~50% (parent + metabolite). PM/EM acetylator distinction primarily affects N-acetyl metabolite ratio."
+    }
+  ]
+}
