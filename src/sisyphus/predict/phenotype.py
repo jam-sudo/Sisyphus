@@ -98,6 +98,7 @@ def apply_phenotype_to_graph(
     graph: BodyGraph,
     phenotypes: dict[str, str],
     node: str = "liver",
+    phenotype_scale_overrides: dict[str, float] | None = None,
 ) -> BodyGraph:
     """Return a new BodyGraph with enzyme/transporter abundances scaled.
 
@@ -108,6 +109,13 @@ def apply_phenotype_to_graph(
             (``SLCO1B1``, aliased to graph transporter ``OATP1B1``).
         node: Which node to scale. Default "liver". Enzymes and
             transporters are both sourced from ``graph.nodes[node]``.
+        phenotype_scale_overrides: Optional ``{gene: effective_scale}`` dict.
+            When provided AND a gene matches a key in ``phenotypes``, the
+            override value replaces ``PHENOTYPE_SCALES[phenotype]`` for that
+            gene's effect on the matched node's enzyme/transporter abundance.
+            Values are caller-supplied and caller-justified — Sisyphus does
+            not endorse specific values. Negative values raise ValueError.
+            Default ``None`` preserves current behavior.
 
     Returns:
         New BodyGraph with scaled Distribution for matched enzymes /
@@ -130,6 +138,17 @@ def apply_phenotype_to_graph(
 
     for tag, phenotype in phenotypes.items():
         scale = PHENOTYPE_SCALES[phenotype]
+        if phenotype_scale_overrides is not None and tag in phenotype_scale_overrides:
+            override_scale = phenotype_scale_overrides[tag]
+            if override_scale < 0:
+                raise ValueError(
+                    f"phenotype_scale_overrides[{tag!r}]={override_scale} is negative"
+                )
+            logger.info(
+                "phenotype: override %s default scale %.3f -> %.3f",
+                tag, scale, override_scale,
+            )
+            scale = override_scale
         transporter_tag = TRANSPORTER_ALIASES.get(tag)
         if transporter_tag is not None:
             if transporter_tag not in target_transporters:
@@ -153,6 +172,14 @@ def apply_phenotype_to_graph(
                 dist_type=old.dist_type,
             )
             applied.append(f"{tag}:{phenotype}({scale}×)")
+
+    if phenotype_scale_overrides:
+        unused_overrides = sorted(set(phenotype_scale_overrides) - set(phenotypes))
+        if unused_overrides:
+            logger.info(
+                "phenotype: overrides for %s not in phenotypes dict, ignored",
+                unused_overrides,
+            )
 
     if unknown:
         available = sorted(list(target_enzymes) + [f"(transporter){t}" for t in target_transporters])

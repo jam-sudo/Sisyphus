@@ -10,6 +10,63 @@ Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the *
 
 ---
 
+## 2026-05-07 — v0.3.3 phenotype_scale_overrides API hook
+
+**Branch**: `feat/phenotype-scale-overrides` (PR pending)
+**Spec**: `docs/superpowers/specs/2026-05-07-phenotype-scale-overrides-design.md` (commit `8dd6cf7`)
+**Closes**: issue #31 (capability request from GenoADME — per-substrate effective phenotype scale injection)
+
+### What shipped
+
+`apply_phenotype_to_graph()` and `predict()` now accept a `phenotype_scale_overrides: dict[str, float] | None = None` keyword. When provided AND a gene matches a key in `phenotypes`, the override value replaces `PHENOTYPE_SCALES[phenotype]` for that gene's effect on the matched node's enzyme/transporter abundance. Negative values raise ValueError; no upper bound on positive values (caller responsibility).
+
+Signature shape: flat `{gene: scale}` dict — substrate dimension implicit in per-call SMILES, phenotype dimension implicit in per-call `phenotypes` argument. Mechanically equivalent to GenoADME's originally-proposed 3-level `{gene: {phenotype: {substrate: scale}}}`, simpler. Counter-proposal posted on issue #31 comment, awaiting GenoADME ack but proceeding (signature is small implementation detail).
+
+Sisyphus ships **no calibration tables**. Caller (GenoADME's case) is responsible for resolving `(SMILES, gene, phenotype) → override scale` from their own meta-analysis tables, and passing the resolved scale via `phenotype_scale_overrides` per call.
+
+### Empirical example (pravastatin SLCO1B1)
+
+| call | OATP1B1 abundance scaling | Cmax (mg/L) | PM/EM ratio |
+|---|---|---|---|
+| `phenotypes={"SLCO1B1": "EM"}` | 1.00× | 0.04218 | 1.000 (baseline) |
+| `phenotypes={"SLCO1B1": "PM"}`, no override | 0.10× (CPIC) | 0.12800 | 3.034 |
+| `phenotypes={"SLCO1B1": "PM"}, phenotype_scale_overrides={"SLCO1B1": 0.30}` | 0.30× | 0.07310 | **1.73** (compressed) |
+
+Override compresses toward EM as specified. GenoADME can dial in any scale to match their meta-analysis target (e.g., Niemi 2006 men-stratum AUC ratio 3.32 central).
+
+### 4-task subagent-driven execution
+
+Tasks 1-4 (`291d74f` → `740da17`):
+1. 7 failing unit tests (TDD target — TypeError on unknown kwarg)
+2. `phenotype.py` extension: signature kwarg + override branch in scale-lookup loop + unused-key logger.info — 7/7 + 35/35 existing PASS
+3. `pipeline/predict.py` forward: signature + docstring + apply_phenotype_to_graph forwarding — spot-check ordering EM < Override < Default confirmed
+4. Integration test (pravastatin compression + None/{} backward-compat) — 2/2 PASS, 849 full-suite PASS, Meta 2.679 holdout invariant
+
+### 107-holdout impact
+
+Bit-identical (Meta 2.679 pin holds). Production benchmark uses default `phenotype_scale_overrides=None`. The override only changes behavior when the caller explicitly passes it.
+
+### Architecture invariants preserved
+
+- Engine: 0 line changes (override only changes abundance scaling at apply_phenotype_to_graph time)
+- Distribution-everywhere: scaled Distribution flows downstream identically (Invariant #2)
+- No drug-specific branches in code: substrate-keyed override registry lives in caller, not Sisyphus (Invariant #6)
+- v0.3.2 back-solve cancellation fix preserved — override applies BEFORE the snapshot semantics
+
+### Open follow-ups
+
+- GenoADME applies their meta-analysis-derived overrides and re-computes 1000G PM/EM AUC ratio against Niemi 2006 men-stratum central 3.32 (downstream task, not Sisyphus)
+- Multi-node overrides (gut_wall enzyme phenotype scaling) — not requested, separate concern
+- If GenoADME pushes back on flat signature, revise to 3-level dict (small spec change, not blocking merge)
+
+### How to apply
+
+- "What does v0.3.3 do?" → adds `phenotype_scale_overrides` kwarg to `apply_phenotype_to_graph` and `predict()`. Caller injects per-gene effective scale to override CPIC defaults.
+- "Did headline AAFE change?" → No. 107-holdout invariant. Production `predict()` calls without overrides are unaffected.
+- "Should Sisyphus ship calibration tables?" → No, by design. Caller curates substrate→override mappings. Sisyphus stays opinion-free on substrate-specific empirical claims.
+
+---
+
 ## 2026-05-06 — v0.3.2 NAT2 + UGT1A1 phenotype propagation + back-solve cancellation fix
 
 **Branch**: `feat/nat2-ugt1a1-phenotype` (PR pending)
