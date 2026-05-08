@@ -506,6 +506,7 @@ src/sisyphus/
 │   ├── phenotype.py     # Pharmacogenomic phenotype (e.g., SLCO1B1)
 │   ├── registry.py      # Prodrug activation registry (SMILES-keyed)
 │   ├── cyp_clearance_overrides.py # metabolic_fraction registry (OATP1B1 substrates, ECM)
+│   ├── non_cyp_substrates.py # NAT2 / UGT1A1 substrate-class registry (SMILES-keyed)
 │   └── transporter_db.py # OATP1B1 + hepatic ECM kinetic parameters
 │
 ├── ml/                  # Data-driven PK prediction
