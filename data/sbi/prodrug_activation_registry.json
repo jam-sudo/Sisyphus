@@ -94,5 +94,30 @@
       "source_dbs_searched": ["PubMed", "GoogleScholar"],
       "n_candidates_reviewed": 5
     }
+  },
+  "CCC(C)(C)C(=O)O[C@H]1C[C@H](C)C=C2C=C[C@H](C)[C@H](CC[C@@H]3C[C@@H](O)CC(=O)O3)[C@H]21": {
+    "name": "simvastatin",
+    "mw": 418.57,
+    "fup": {"mean": 0.05, "cv": 0.30},
+    "CL_per_h": {"mean": 52.0, "cv": 0.40},
+    "Vd_L": {"mean": 110.0, "cv": 0.40},
+    "conversion_yield_fraction": {"mean": 0.30, "cv": 0.30},
+    "yield_source": "literature",
+    "observation_species": "active",
+    "enzyme_affinity_for_conversion": {
+      "CES1": {"mean": 0.020, "cv": 0.7, "citation": "Vree 2003 Eur J Drug Metab Pharmacokinet 28:103-9 (simvastatin lactone hydrolysis to acid by CES1, hepatic microsomes); CES1 abundance Boberg 2017 PMC5267516"}
+    },
+    "affinity_source": "literature",
+    "_clinical_citation": "Najib 2003 Clin Drug Investig 23:507-14 (simvastatin acid PK 40 mg PO Cmax ~3-7 ng/mL); Mauro 1993 Clin Pharmacokinet 24:195-202 (simvastatin acid disposition)",
+    "_v3_origin_note": "v0.3.4 addition (issue #11). simvastatin acid is the OATP1B1 substrate + active HMG-CoA reductase inhibitor; lactone is pro-form. CES1 hydrolyzes lactone to acid (Vree 2003).",
+    "v3_metadata": {
+      "citation": "Najib 2003 Clin Drug Investig 23:507-14 (simvastatin 40 mg oral disposition CL/F+V/F estimable but F-absolute not located); Mauro 1993 Clin Pharmacokinet 24:195-202",
+      "doctrine_path": "§4.1 oral V/F division attempted; §4.1 Gap 5 strict (F primary required); §5.1 fallback step 2 (F primary NOT located). Existing literature uses simvastatin lactone PO + acid Cmax; absolute F of acid form not measured (no IV simvastatin acid human study).",
+      "disposition_state": "ceiling_accepted",
+      "source_dbs_searched": ["PubMed", "GoogleScholar", "FDA", "DrugBank"],
+      "n_candidates_reviewed": 8,
+      "ceiling_rationale": "F_simvastatin_acid not located in primary literature. Najib 2003 reports CL/F=580 L/h/70kg + V/F=8000 L/70kg but no IV form to derive F. simvastatin lactone bioavailability ~5% reported (Mauro 1993), but lactone-acid interconversion makes CL/F + V/F translation to acid CL/V ambiguous. Placeholder values CL=52 L/h, V=110 L are class-extrapolated from atorvastatin acid (Lennernas 2003 Clin Pharmacokinet) with 0.40 CV inflation acknowledging 5-50x literature uncertainty span. Animal F + cross-species substitution REJECTED per §4.1 Gap 1.",
+      "interpretation_decision": null
+    }
   }
 }
