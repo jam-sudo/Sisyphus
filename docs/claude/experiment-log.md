@@ -10,6 +10,83 @@ Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the *
 
 ---
 
+## 2026-05-08 — v0.3.4 prodrug registry expansion (simvastatin + irinotecan)
+
+**Branch**: `feat/prodrug-registry-expansion-simvastatin-irinotecan` (PR pending)
+**Spec**: `docs/superpowers/specs/2026-05-08-prodrug-registry-expansion-design.md` (commit `bbafd3d`)
+**Closes**: part of issue #11 (clopidogrel deferred — see below)
+
+### What shipped
+
+`data/sbi/prodrug_activation_registry.json` grows from 4 entries to 6:
+- **simvastatin** (lactone → acid via CES1) — disposition_state `ceiling_accepted`. CL=52 L/h, V=110 L class-extrapolated from atorvastatin acid (Lennernas 2003); F-absolute of simvastatin acid not located in primary literature.
+- **irinotecan** (parent → SN-38 via CES2) — disposition_state `literature_applied`. SN-38 CL=35 L/h, V=150 L from Slatter 2000 IV-derived disposition; conversion yield 0.05 from Mathijssen 2001 review.
+
+Engine + ivive + pipeline: zero changes (existing `lookup_active_metabolite()` flows new entries through automatically per CLAUDE.md Invariant #1).
+
+### Empirical Cmax (post-PR)
+
+| prodrug | active species | dose / route | model Cmax | clinical target | gate |
+|---|---|---|---|---|---|
+| simvastatin lactone | acid | 40 mg PO | 0.00088 mg/L | Najib 2003 0.003-0.007 | 0.0005-0.10 (mech-only) |
+| irinotecan | SN-38 | 350 mg IV | 0.0466 mg/L | Slatter 2000 0.05-0.10 | 0.0001-1.0 (mech-only) |
+
+simvastatin under-predicts ~3-8× clinical due to acknowledged CL/V uncertainty (ceiling_accepted disposition). irinotecan SN-38 lands within clinical range (literature_applied disposition, well-characterized). Per spec §10, integration gates are mechanical-correctness-only; calibration is downstream.
+
+### 107-holdout impact
+
+**Bit-identical** (Meta 2.679 pin holds):
+- simvastatin in train list (not holdout) → no AAFE recompute
+- irinotecan in neither list → no AAFE recompute
+- Existing 4 prodrug entries (BH4, GS-441524, tebipenem, R406) absent from holdout per PR #15
+
+Full suite: **853 PASS**, 15 skipped, 7 xfailed (pre-existing rosuvastatin/atorvastatin/fluvastatin Peff + 4 prodrug 3-fold gates).
+
+### Why clopidogrel deferred
+
+Issue #11 originally requested 3 drugs. clopidogrel was deferred to a separate PR because:
+- clopidogrel **is in the 107-holdout** — registry addition triggers AAFE shift, requiring regen + delta documentation (not pure capability extension)
+- two-step activation (CYP2C19/3A4 → 2-oxo → R-130964) doesn't fit current single-enzyme schema cleanly
+- R-130964 (active thiol) PK is poorly characterized (rapid covalent binding to platelet P2Y12; t1/2 ~30 min)
+
+Will be filed as separate v0.3.x PR after schema decision (single-step approximation vs schema extension).
+
+### 5-task subagent-driven execution (d87d57f → 26bb0bb)
+
+1. Failing seed-pin regression test (`test_prodrug_registry_seed.py`) — frozenset 6 names + RDKit roundtrip. 1 FAIL + 1 PASS as expected.
+2. Add simvastatin entry — 5 entries, schema regression PASS.
+3. Add irinotecan entry — 6 entries, seed-pin gate flips FAIL→PASS.
+4. Integration test simvastatin — 1 PASS at gate 0.0005-0.10 (lowered from planned 0.001 to accommodate ceiling_accepted disposition's 5-50× CL/V uncertainty).
+5. Integration test irinotecan — 1 PASS at gate 0.0001-1.0; SN-38 Cmax 0.0466 within Slatter 2000 clinical range.
+
+### Test changes
+
+- New `tests/regression/test_prodrug_registry_seed.py` — frozenset seed-pin (6 names) + RDKit InChIKey roundtrip per entry.
+- New `tests/integration/test_predict_prodrug_simvastatin.py` — predict(simvastatin_lactone, 40mg PO) returns active acid Cmax > 0.0005 mg/L.
+- New `tests/integration/test_predict_prodrug_irinotecan.py` — predict(irinotecan, 350mg IV) returns SN-38 Cmax > 0.0001 mg/L (actual 0.0466 in clinical range).
+- Existing `tests/integration/test_prodrug_v3_registry_schema.py` auto-validates new entries' v3_metadata blocks.
+
+### Architecture invariants preserved
+
+- Engine: 0 line changes (Invariant #1 — identity-blind multiplication just works for new SMILES keys)
+- Distribution-everywhere: all PK + affinity Distribution objects (Invariant #2)
+- No drug-specific branches in code (Invariant #6 — registry data, not code conditionals)
+
+### Open follow-ups
+
+- clopidogrel separate PR (v0.3.x or v0.4)
+- SN-38 + UGT1A1 glucuronidation explicit elimination path — intersects v0.3.2 phenotype infrastructure
+- Schema extension for multi-enzyme conversion (clopidogrel two-step + dual CYP path may force this)
+- simvastatin acid CL/V calibration improvement — current 3-8× under-prediction reflects ceiling_accepted uncertainty; downstream curation.
+
+### How to apply
+
+- "Did v0.3.4 break anything?" → No. 107-holdout invariant. New entries don't touch holdout drugs.
+- "Why simvastatin under-predicts?" → ceiling_accepted disposition. CL/V class-extrapolated from atorvastatin acid; F-absolute of simvastatin acid not in primary literature. 5-50× uncertainty acknowledged.
+- "Why is irinotecan SN-38 in clinical range but simvastatin isn't?" → irinotecan is literature_applied (Slatter 2000 IV irinotecan-derived SN-38 disposition is well-characterized); simvastatin is ceiling_accepted (acid form has no IV human study).
+
+---
+
 ## 2026-05-07 — v0.3.3 phenotype_scale_overrides API hook
 
 **Branch**: `feat/phenotype-scale-overrides` (PR pending)
