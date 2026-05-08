@@ -78,6 +78,7 @@ def predict(
     infusion_duration_min: float | None = None,
     *,
     phenotypes: dict[str, str] | None = None,
+    phenotype_scale_overrides: dict[str, float] | None = None,
     kp_method: str = "rodgers_rowland",
 ) -> PredictionResult:
     """End-to-end prediction: SMILES -> PredictionResult.
@@ -114,6 +115,11 @@ def predict(
             phenotype-conditional. ``None`` (default) is the
             average-patient prediction. See
             ``sisyphus.predict.phenotype.PHENOTYPE_SCALES``.
+        phenotype_scale_overrides: Optional ``{gene: effective_scale}`` dict
+            forwarded to ``apply_phenotype_to_graph``. When provided and a
+            gene matches a key in ``phenotypes``, the override replaces the
+            CPIC default scale for that gene. Values are caller-supplied
+            and caller-justified — Sisyphus does not endorse specific values.
         kp_method: Tissue partition coefficient (Kp) calculation method.
             One of ``"rodgers_rowland"`` (default, suitable for most
             small-molecule drugs), ``"berezhkovskiy"`` (alternative
@@ -274,7 +280,10 @@ def predict(
         # liver_enzymes_pre) carries the unscaled baseline.
         if phenotypes:
             from sisyphus.predict.phenotype import apply_phenotype_to_graph
-            graph = apply_phenotype_to_graph(graph, phenotypes)
+            graph = apply_phenotype_to_graph(
+                graph, phenotypes,
+                phenotype_scale_overrides=phenotype_scale_overrides,
+            )
 
         # Rebuild drug with PRE-phenotype abundances. Phenotype's effect on
         # the graph remains (scaled abundances flow into engine multiplication);
