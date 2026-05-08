@@ -162,6 +162,7 @@ def predict(
         load_hepatic_ecm_params_for_smiles,
         load_oatp1b1_kinetics_for_smiles,
     )
+    from sisyphus.predict.non_cyp_substrates import get_non_cyp_fractions
 
     warnings_list: list[str] = []
     cmax_90ci: tuple[float, float] | None = None
@@ -199,11 +200,16 @@ def predict(
             auto_oatp_kinetics = None
             auto_ecm_params = None
 
+    # Per-gene non-CYP fm registry lookup (NAT2 / UGT1A1).
+    # Empty dict for non-substrates is a no-op downstream.
+    non_cyp_fractions = get_non_cyp_fractions(profile.smiles)
+
     drug = build_drug_on_graph(
         profile, adme, dose_mg, route,
         kp_method=kp_method,
         transporter_kinetics=auto_oatp_kinetics,
         hepatic_ecm_params=auto_ecm_params,
+        non_cyp_fractions=non_cyp_fractions,
     )
 
     # ── DrugBank enrichment tags ──────────────────────────────────────
@@ -248,24 +254,40 @@ def predict(
     try:
         graph = build_from_yaml(_PHYSIOLOGY_DIR / "reference_man.yaml")
 
-        # Apply CPIC phenotype scaling before reading enzyme abundances so
-        # that IVIVE-rebuilt CLint inherits the scaling.
+        # CRITICAL (v0.3.2): snapshot pre-phenotype liver enzyme abundances.
+        # `_decompose_clint` back-solves enzyme affinity from abundance, so
+        # passing scaled abundances would cause phenotype scaling to cancel
+        # out at engine multiplication time (the bug that silently nulled
+        # all CYP/UGT/NAT phenotype effects pre-v0.3.2; SLCO1B1 escaped
+        # only because OATP1B1 uses saturable MM kinetics, not back-solve).
+        # We snapshot BEFORE phenotype application so affinity is computed
+        # from the unscaled baseline; phenotype then propagates through the
+        # engine as scaled_abundance × pre_affinity = scale × original_rate.
+        liver_enzymes_pre: dict[str, float] | None = None
+        if "liver" in graph.nodes and graph.nodes["liver"].enzymes:
+            liver_enzymes_pre = {
+                tag: dist.mean for tag, dist in graph.nodes["liver"].enzymes.items()
+            }
+
+        # Apply CPIC phenotype scaling AFTER snapshot. Engine reads scaled
+        # abundances from the graph; affinity (computed below from
+        # liver_enzymes_pre) carries the unscaled baseline.
         if phenotypes:
             from sisyphus.predict.phenotype import apply_phenotype_to_graph
             graph = apply_phenotype_to_graph(graph, phenotypes)
 
-        # Pass enzyme abundances from the graph to IVIVE (fix DRY violation).
-        # Rebuild DrugOnGraph with graph-sourced enzyme abundances.
-        if "liver" in graph.nodes and graph.nodes["liver"].enzymes:
-            liver_enzymes: dict[str, float] = {
-                tag: dist.mean for tag, dist in graph.nodes["liver"].enzymes.items()
-            }
+        # Rebuild drug with PRE-phenotype abundances. Phenotype's effect on
+        # the graph remains (scaled abundances flow into engine multiplication);
+        # affinity is back-solved from unscaled abundances so the multiplication
+        # propagates the scaling rather than cancelling it.
+        if liver_enzymes_pre is not None:
             drug = build_drug_on_graph(
                 profile, adme, dose_mg, route,
-                liver_enzymes=liver_enzymes,
+                liver_enzymes=liver_enzymes_pre,
                 kp_method=kp_method,
                 transporter_kinetics=auto_oatp_kinetics,
                 hepatic_ecm_params=auto_ecm_params,
+                non_cyp_fractions=non_cyp_fractions,
             )
 
         from sisyphus.graph.builder import augment_for_active_species

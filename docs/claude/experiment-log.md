@@ -10,6 +10,88 @@ Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the *
 
 ---
 
+## 2026-05-06 — v0.3.2 NAT2 + UGT1A1 phenotype propagation + back-solve cancellation fix
+
+**Branch**: `feat/nat2-ugt1a1-phenotype` (PR pending)
+**Spec**: `docs/superpowers/specs/2026-05-04-nat2-ugt1a1-phenotype-design.md` (v3, commit `9af6c30`)
+**Plan**: `docs/superpowers/plans/2026-05-04-nat2-ugt1a1-phenotype.md` (commit `c1d94b3`)
+**Closes**: issue #10 (NAT2 + UGT1A1 PHENOTYPE_SCALES infrastructure)
+
+### What shipped (12 task commits, b7cd2af → 82076c6)
+
+1. **CRITICAL: pipeline back-solve cancellation fix** (`657a9a4`). `pipeline.predict.predict()` now snapshots `liver.enzymes` BEFORE `apply_phenotype_to_graph` and passes pre-phenotype values to `build_drug_on_graph`. The IVIVE `_decompose_clint` back-solves enzyme affinity from abundance, so passing scaled abundances caused phenotype scaling to **cancel out exactly** at engine multiplication time (the bug that silently nulled all CYP/UGT/NAT phenotype effects pre-v0.3.2). SLCO1B1 escaped only because OATP1B1 uses saturable Michaelis-Menten kinetics, not affinity back-solve.
+
+   - **Pre-fix**: `caffeine + CYP1A2:PM/EM = 1.0000` (exactly cancelled), `warfarin + CYP2C9:PM/EM = 1.0000`, `pravastatin + SLCO1B1:PM/EM = 3.034` (transporter path bypassed).
+   - **Post-fix**: phenotype propagates through engine as `scaled_abundance × pre_affinity = scale × original_rate`. Empirical regression gates: tizanidine + CYP1A2:PM/EM **1.518**, irbesartan + CYP2C9:PM/EM **1.251**, pravastatin + SLCO1B1:PM/EM **~3.0** (unchanged).
+
+2. **NAT2 + UGT1A1 substrate registries** (`2f8571d`, `a0fa1a0`):
+   - `data/enzymes/nat2_substrates.json` — isoniazid (mf=0.90, Weber 1983 / Ellard 1976), hydralazine (mf=0.50), procainamide (mf=0.50). All InChIKeys round-trip via RDKit.
+   - `data/enzymes/ugt1a1_substrates.json` — raltegravir (mf=0.70, Iwamoto 2008), atazanavir (mf=0.40, Lankisch 2006), dolutegravir (mf=0.50, Reese 2013). RDKit-derived InChIKeys (raltegravir's ikey diverges from a PubChem reference due to oxadiazole tautomer encoding; round-trip invariant holds).
+
+3. **`non_cyp_substrates.py` loader module** (`679eecc`) — mirrors `transporter_db.py` (PR #29) pattern: lru_cache JSON loaders, full RDKit InChIKey matching only, file-anchored paths. Public API: `lookup_nat2_substrate(smiles)`, `lookup_ugt1a1_substrate(smiles)`, `get_non_cyp_fractions(smiles)`. Re-normalizes when sum > 1.0.
+
+4. **Physiology** (`529c756`):
+   - `data/physiology/reference_man.yaml` `liver.enzymes` — appended `NAT2: {mean: 1.0e7, cv: 0.6}` and `UGT1A1: {mean: 1.215e6, cv: 0.5}` (independent lognormal, no Achour 2021 matrix entry).
+   - `src/sisyphus/predict/ivive.py` `_LIVER_ENZYME_ABUNDANCE` — added `"NAT2": 1.0e7`. UGT1A1 already present at `1_215_000.0` (= 1.215e6).
+
+5. **IVIVE extension** (`57df86e`, `107c21f`):
+   - `_get_fm_fractions` accepts `non_cyp_fractions: dict[str, float] | None` parameter. Validates each value in [0, 1], re-normalizes when sum > 1.0, allocates non-CYP first then scales CYP+UGT residual by `(1 - non_cyp_total)`. Backward-compat preserved.
+   - `_decompose_clint` and `build_drug_on_graph` forward the new kwarg through. Default `None` → existing behavior.
+
+6. **Pipeline wiring** (`4c950fc`) — `pipeline.predict.predict()` calls `get_non_cyp_fractions(profile.smiles)` once after auto-ECM gating, forwards to BOTH `build_drug_on_graph` invocations (initial + post-phenotype rebuild from Task 2).
+
+7. **Schema regression** (`d90eba5`) — `tests/regression/test_non_cyp_registry_schema.py` with 8 gates: seed pinned (NAT2/UGT1A1 frozensets), InChIKey-SMILES roundtrip × 2, fm in [0, 1] × 2, YAML enzymes present, holdout-disjoint cross-cutting check.
+
+8. **Integration tests** (`d209b72`, `82076c6`):
+   - `test_phenotype_nat2.py` — isoniazid NAT2:PM/EM = **1.4776** (gate > 1.3), metoprolol silent-zero invariant `rel_err = 0.0` exactly.
+   - `test_phenotype_ugt1a1.py` — raltegravir UGT1A1:PM/EM = **1.419** (gate > 1.2). SMILES read from registry.
+
+### Probe drug deviation from spec (Task 2, `657a9a4`)
+
+The plan's CYP propagation regression test originally used **caffeine** (CYP1A2) and **warfarin** (CYP2C9) as probe drugs with gates 1.5× and 1.2×. Empirical reality:
+
+- caffeine has 5 DrugBank CYP annotations → `_get_fm_fractions` allocates fm CYP1A2 = 0.20 (1/5 equal split), not the spec's assumed ~0.80. Post-fix Cmax shift only ~1.06× — gate 1.5× was unreachable.
+- warfarin has 3 CYP annotations → CYP2C9 fm ≈ 0.30 (vs literature ~0.65-0.92 for the S-enantiomer). Post-fix shift ~1.02×, gate 1.2× unreachable.
+
+Implementer (Task 2 subagent) replaced with **tizanidine** (CYP1A2-only DrugBank annotation, fm=0.833 → 1.52× ratio) and **irbesartan** (CYP2C9-only, fm=0.833 → 1.25× ratio). Spec reviewer verified empirically and confirmed the deviation is justified — the original gates were structurally unachievable given the model's DrugBank-driven equal-fm allocation.
+
+The replacement preserves regression intent (decisively distinguishes pre-fix 1.000 from post-fix > 1) with cleaner single-CYP probe drugs. Spec §11 acceptance criteria still mention caffeine/warfarin as historical record; the actual gates in `tests/integration/test_phenotype_cyp_propagation.py` use tizanidine/irbesartan/pravastatin.
+
+### 107-holdout impact
+
+**Bit-identical** — Meta 2.679 pin holds. `tests/integration/test_holdout_regression.py` PASS post-merge. The benchmark uses `phenotypes=None` default; the back-solve fix only changes behavior when phenotypes are explicitly passed (which was previously broken for non-SLCO1B1 anyway). Registry seed 0/107 holdout drugs (enforced by schema gate).
+
+### Test results (final, on `82076c6`)
+
+`tests/{unit,regression,integration}` full suite: **840 PASSED**, 15 skipped, 7 xfailed. Xfails are pre-existing (rosuvastatin/atorvastatin/fluvastatin Peff over-prediction issues, separate from #10).
+
+### Architecture invariants preserved
+
+- Engine: 0 line changes. Identity-blind multiplication still works for new tags (CLAUDE.md Invariant #1).
+- Distribution-everywhere: NAT2/UGT1A1 abundances are Distribution with cv > 0 (Invariant #2).
+- No drug-specific branches: registry data is per-drug, but code path is generic (Invariant #6).
+- Hardening `realize_means()` deterministic path: untouched. Adding NAT2/UGT1A1 to YAML at end of liver.enzymes block minimizes RNG-order disruption for any seed=42 MC sampling.
+
+### Latent bugs flagged (not in scope for this PR)
+
+- `pipeline/predict.py` line 202 builds `drug` initially, then unconditionally overwrites it at the post-phenotype rebuild (now line ~284). The initial build is dead code in normal flow; only matters as a fallback if `liver_enzymes_pre is None` (degenerate test setup). Pre-existing pre-Task-2; out of scope. Cleanup candidate for future.
+
+### Open follow-ups
+
+- CPIC SA/RA → PM/EM CLI alias for NAT2 ("Slow Acetylator" vs "Poor Metabolizer" semantics). Deferred — docstring documents mapping.
+- irinotecan/UGT1A1 prodrug-metabolite (issue #11). Parent CES2-driven; UGT1A1 effect is on SN-38. Belongs in prodrug-metabolite phenotype work.
+- `_get_fm_fractions` UGT path (`ugt_enzymes`) is hardcoded to `None` in `build_drug_on_graph:611` per a pre-existing sensitivity result. Re-enabling UGT2B7/UGT1A4/UGT1A9 paths requires separate sensitivity rerun. Out of scope.
+- atorvastatin / rosuvastatin per-drug fm curation — Peff xfail unrelated.
+- v0.3.x optional: PredictionResult.phenotypes_applied metadata field for GenoADME debugging.
+
+### How to apply
+
+- "What does v0.3.2 do?" → fixes the silent-zero CYP/UGT/NAT phenotype bug AND adds NAT2/UGT1A1 substrate infrastructure. SLCO1B1 path was already working; everything else now works too.
+- "Did headline AAFE change?" → No. 107-holdout invariant. Production `predict()` calls without `phenotypes=` default to None and are unaffected.
+- "How do I add a NAT2 / UGT1A1 substrate?" → Update the relevant `data/enzymes/*.json` registry; update `_EXPECTED_*` frozenset in `tests/regression/test_non_cyp_registry_schema.py`; verify holdout-disjoint gate; consider holdout regen if drug is in 107.
+
+---
+
 ## 2026-05-04 — v0.3.1 pitavastatin ecm_applicable promotion
 
 **Branch**: `feat/pitavastatin-ecm-applicable` (PR pending)

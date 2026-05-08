@@ -57,6 +57,10 @@ _LIVER_ENZYME_ABUNDANCE: dict[str, float] = {
     "UGT1A1": 1_215_000.0,  # 18 * 45 * 1500
     "UGT1A4": 675_000.0,    # 10 * 45 * 1500
     "UGT1A9": 1_012_500.0,  # 15 * 45 * 1500
+    # Phase II non-CYP for issue #10 phenotype propagation (v0.3.2).
+    # NAT2 cytosolic; abundance is calibration-arbitrary at mean (back-solved
+    # such that abundance × affinity × ivive_scaling = NAT2 fm × CLint_hepatic).
+    "NAT2": 1.0e7,
 }
 
 # ---------------------------------------------------------------------------
@@ -149,17 +153,23 @@ def _get_fm_fractions(
     compound_type: str,
     substrate_enzymes: set[str] | None = None,
     ugt_enzymes: set[str] | None = None,
+    non_cyp_fractions: dict[str, float] | None = None,
 ) -> dict[str, float]:
-    """Get fraction metabolized by each enzyme (CYP + UGT), adjusted for compound type.
+    """Get fraction metabolized by each enzyme (CYP + UGT + non-CYP), adjusted for compound type.
 
     If substrate_enzymes is provided (from DrugBank annotations), known substrates
     are given equal weight and non-substrates are floored at _NON_SUBSTRATE_FLOOR.
 
     UGT enzymes are handled via annotation pattern:
-    - UGT only (no CYP annotation): UGT gets 0.90 of total fm (UGT dominant)
-    - CYP + UGT both annotated: UGT gets 0.30 of total fm (CYP primary)
-    Rationale: if DrugBank annotates CYP substrates, CYP is measured pathway.
-    Default 0.30 is conservative; sensitivity test confirmed monotonic improvement.
+    - UGT only (no CYP annotation): UGT gets 0.90 of total fm
+    - CYP + UGT both annotated: UGT gets 0.30 of total fm
+
+    non_cyp_fractions (NAT2, UGT1A1 from per-gene registries — issue #10):
+    - Each value validated to [0, 1]; raises ValueError otherwise.
+    - Sum normalized to <= 1.0 (re-normalize if > 1.0; caller's
+      non_cyp_substrates.get_non_cyp_fractions also normalizes upstream).
+    - Remaining (1 - non_cyp_total) goes to existing CYP+UGT allocation.
+    - Resulting fm dict is _normalize_fm-ed for round-off safety.
 
     Args:
         compound_type: One of "neutral", "acid", "base", "zwitterion".
@@ -167,10 +177,11 @@ def _get_fm_fractions(
             If None or empty, compound-type defaults are used.
         ugt_enzymes: Set of UGT tags for which this drug is a known substrate
             (from DrugBank). If None or empty, UGT is not included.
+        non_cyp_fractions: {"NAT2": fm, "UGT1A1": fm} from per-gene registries.
+            When None or empty, behavior is identical to previous signature.
 
     Returns:
-        Dict mapping enzyme tag -> fraction metabolized.
-        Fractions sum to 1.0.
+        Dict mapping enzyme tag -> fraction metabolized. Sums to 1.0.
     """
     if compound_type in _FM_ADJUSTMENTS:
         fm = dict(_FM_ADJUSTMENTS[compound_type])
@@ -192,29 +203,42 @@ def _get_fm_fractions(
                     fm[enzyme] = _NON_SUBSTRATE_FLOOR
             cyp_fm = _normalize_fm(fm)
 
-    if not ugt_enzymes:
+    if ugt_enzymes:
+        has_cyp = bool(substrate_enzymes)
+        if not has_cyp:
+            ugt_fraction = 0.90
+        else:
+            ugt_fraction = 0.30
+
+        cyp_fraction = 1.0 - ugt_fraction
+        result: dict[str, float] = {}
+        for tag, frac in cyp_fm.items():
+            result[tag] = frac * cyp_fraction
+        n_ugt = len(ugt_enzymes)
+        for tag in ugt_enzymes:
+            result[tag] = ugt_fraction / n_ugt
+        cyp_fm = _normalize_fm(result)
+
+    if not non_cyp_fractions:
         return cyp_fm
 
-    # Determine UGT fraction based on annotation pattern
-    has_cyp = bool(substrate_enzymes)
-    if not has_cyp:
-        # UGT only → UGT dominant
-        ugt_fraction = 0.90
-    else:
-        # CYP + UGT → CYP primary, UGT secondary
-        ugt_fraction = 0.30
+    for gene, frac in non_cyp_fractions.items():
+        if not (0.0 <= frac <= 1.0):
+            raise ValueError(
+                f"non_cyp_fractions[{gene!r}]={frac} not in [0, 1]"
+            )
 
-    cyp_fraction = 1.0 - ugt_fraction
+    non_cyp_total = sum(non_cyp_fractions.values())
+    if non_cyp_total > 1.0:
+        non_cyp_fractions = {k: v / non_cyp_total for k, v in non_cyp_fractions.items()}
+        non_cyp_total = 1.0
 
-    result: dict[str, float] = {}
-    for tag, frac in cyp_fm.items():
-        result[tag] = frac * cyp_fraction
+    cyp_residual = max(1.0 - non_cyp_total, 0.0)
+    out: dict[str, float] = {tag: frac * cyp_residual for tag, frac in cyp_fm.items()}
+    for gene, frac in non_cyp_fractions.items():
+        out[gene] = frac
 
-    n_ugt = len(ugt_enzymes)
-    for tag in ugt_enzymes:
-        result[tag] = ugt_fraction / n_ugt
-
-    return _normalize_fm(result)
+    return _normalize_fm(out)
 
 
 def _decompose_clint(
@@ -225,6 +249,7 @@ def _decompose_clint(
     substrate_enzymes: set[str] | None = None,
     ugt_enzymes: set[str] | None = None,
     metabolic_fraction: float = 1.0,
+    non_cyp_fractions: dict[str, float] | None = None,
 ) -> dict[str, Distribution]:
     """Decompose total hepatic CLint into per-enzyme affinities.
 
@@ -261,7 +286,12 @@ def _decompose_clint(
         Dict mapping enzyme tag -> CLint per pmol enzyme (uL/min/pmol)
         as Distributions.
     """
-    fm = _get_fm_fractions(compound_type, substrate_enzymes, ugt_enzymes)
+    fm = _get_fm_fractions(
+        compound_type,
+        substrate_enzymes=substrate_enzymes,
+        ugt_enzymes=ugt_enzymes,
+        non_cyp_fractions=non_cyp_fractions,
+    )
     abundances = enzyme_abundances if enzyme_abundances is not None else _LIVER_ENZYME_ABUNDANCE
 
     # Scale CLint from cellular basis to whole-liver L/h
@@ -567,6 +597,7 @@ def build_drug_on_graph(
     kp_method: str = "rodgers_rowland",
     transporter_kinetics: dict[str, TransporterKinetics] | None = None,
     hepatic_ecm_params: dict[str, Distribution] | None = None,
+    non_cyp_fractions: dict[str, float] | None = None,
 ) -> DrugOnGraph:
     """Construct a DrugOnGraph from predicted properties.
 
@@ -616,13 +647,14 @@ def build_drug_on_graph(
     from sisyphus.predict.cyp_clearance_overrides import lookup_metabolic_fraction
     metabolic_fraction = lookup_metabolic_fraction(profile.smiles)
 
-    # Decompose CLint to per-enzyme affinities (CYP + UGT)
+    # Decompose CLint to per-enzyme affinities (CYP + UGT + non-CYP)
     enzyme_affinity = _decompose_clint(
         adme.clint, profile.compound_type, profile.pka,
         enzyme_abundances=abundances,
         substrate_enzymes=substrate_enzymes,
         ugt_enzymes=ugt_enzymes,
         metabolic_fraction=metabolic_fraction,
+        non_cyp_fractions=non_cyp_fractions,
     )
 
     # Compute Kp for each tissue using selected method
