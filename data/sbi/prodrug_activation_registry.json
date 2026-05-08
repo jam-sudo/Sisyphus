@@ -119,5 +119,28 @@
       "ceiling_rationale": "F_simvastatin_acid not located in primary literature. Najib 2003 reports CL/F=580 L/h/70kg + V/F=8000 L/70kg but no IV form to derive F. simvastatin lactone bioavailability ~5% reported (Mauro 1993), but lactone-acid interconversion makes CL/F + V/F translation to acid CL/V ambiguous. Placeholder values CL=52 L/h, V=110 L are class-extrapolated from atorvastatin acid (Lennernas 2003 Clin Pharmacokinet) with 0.40 CV inflation acknowledging 5-50x literature uncertainty span. Animal F + cross-species substitution REJECTED per §4.1 Gap 1.",
       "interpretation_decision": null
     }
+  },
+  "CCc1c2c(nc3cc(OC(=O)N4CCC(N5CCCCC5)CC4)ccc13)-c1cc3c(c(=O)n1C2)COC(=O)C3(O)CC": {
+    "name": "irinotecan",
+    "mw": 586.69,
+    "fup": {"mean": 0.05, "cv": 0.30},
+    "CL_per_h": {"mean": 35.0, "cv": 0.40},
+    "Vd_L": {"mean": 150.0, "cv": 0.45},
+    "conversion_yield_fraction": {"mean": 0.05, "cv": 0.40},
+    "yield_source": "literature",
+    "observation_species": "active",
+    "enzyme_affinity_for_conversion": {
+      "CES2": {"mean": 0.50, "cv": 0.7, "citation": "Humerickhouse 2000 Cancer Res 60:1189-92 (irinotecan hydrolysis Vmax/Km in human hepatic + intestinal carboxylesterases; CES2 5x more active vs CES1 in vitro); CES2 abundance Al-Majdoub 2020 PMC8048492"}
+    },
+    "affinity_source": "literature",
+    "_clinical_citation": "Slatter 2000 J Clin Pharmacol 40:482-92 (SN-38 disposition post IV irinotecan); Mathijssen 2001 Clin Cancer Res 7:2182-94 (irinotecan + SN-38 PK review)",
+    "_v3_origin_note": "v0.3.4 addition (issue #11). SN-38 is active topoisomerase I inhibitor; irinotecan is pro-form. CES1+CES2 hydrolyze irinotecan to SN-38 (Humerickhouse 2000); CES2 5x more active in vitro; in vivo bioactivation predominantly intestinal+hepatic CES2 (Mathijssen 2001). UGT1A1 glucuronidates SN-38 to SN-38G (separate elimination path; covered by issue #10 / v0.3.2 phenotype propagation infrastructure).",
+    "v3_metadata": {
+      "citation": "Slatter 2000 J Clin Pharmacol 40:482-92 (SN-38 IV irinotecan-derived disposition: SN-38 CL ~30-45 L/h, Vd ~100-200 L); Mathijssen 2001 Clin Cancer Res 7:2182-94 (irinotecan + SN-38 PK comprehensive review, conversion yield 4-8%)",
+      "doctrine_path": "§4.1 IV irinotecan -> SN-38 metabolite-disposition method (Slatter 2000 metabolite half-life back-calculation); §4.2 inter-study CV from Slatter+Mathijssen geomean range (CL 30-45 L/h -> SD/mean ~0.4); SN-38 conversion yield from urinary recovery 4-8% (Mathijssen 2001 review)",
+      "disposition_state": "literature_applied",
+      "source_dbs_searched": ["PubMed", "GoogleScholar", "FDA"],
+      "n_candidates_reviewed": 9
+    }
   }
 }
