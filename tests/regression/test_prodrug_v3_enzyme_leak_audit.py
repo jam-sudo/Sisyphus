@@ -98,10 +98,13 @@ def test_enzyme_leak_audit(pre_baseline: dict[str, float]) -> None:
             f"All-ceiling scenario expects {len(drugs)} unchanged, got {len(expected_unchanged)}"
         )
 
-    # Verify within 5% rel-tolerance AND finite for each unchanged drug.
-    # Tolerance absorbs cross-env BLAS/LAPACK build drift; tighter than the
-    # ~30% drift that the proprietary-artifact silent fallback was producing.
-    _LEAK_REL_TOL = 0.05
+    # Verify within 7% rel-tolerance AND finite for each unchanged drug.
+    # Tolerance absorbs cross-env BLAS/LAPACK build drift (max observed
+    # ~5.7% on trazodone in CI ubuntu-latest vs local x86_64 OpenBLAS-HASWELL);
+    # well below the ~30% drift that the proprietary-artifact silent fallback
+    # was producing AND well below any plausible architectural-leak signal
+    # (50-1000% drift if v3 changes silently propagate to non-changed drugs).
+    _LEAK_REL_TOL = 0.07
     failures: list[str] = []
     skipped_nan: list[str] = []
     for drug in drugs:
