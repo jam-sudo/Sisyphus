@@ -2,10 +2,22 @@
 
 **Version:** 0.2.0-draft
 **Author:** Jae Min Yoon
-**Date:** 2026-03-22
-**Status:** Draft
+**Date (original):** 2026-03-22
+**Status:** **Architectural rationale only — superseded by `README.md` §Methodology for current implementation details.**
 **Language policy:** 본문 한국어, 코드·타입·용어 영어
 **Predecessor:** [Omega PBPK](https://github.com/jam-sudo/Omega) — 35-state ODE 기반 whole-body PBPK. Sisyphus의 설계 결정 상당수는 Omega 개발 과정에서 확인된 구조적 한계에 기반한다. Omega repo의 `CLAUDE.md`에 31개 settled decisions이 기록되어 있다.
+
+> **Note (2026-05-08):** This document captures the original design rationale (Phase 0–1 era). Substantial architectural additions have shipped since the original date and are *not* reflected here:
+>
+> - Extended Clearance Model (ECM) with closed-form QSSA hepatocyte kinetics + auto-activation gating (PR #9, #20, #22, #29, #30)
+> - Prodrug activation v1 → v2 → v3 (PR #6, #7, #15, #34) — `ProdrugActivation` flux + registry
+> - NAT2/UGT1A1 phenotype propagation + back-solve cancellation fix (PR #32, v0.3.2)
+> - `phenotype_scale_overrides` API hook (PR #33, v0.3.3)
+> - 4-track meta-learner with VDss orthogonal track (`_W_VDSS=0.20`)
+> - Method dispatch SBI / IBIS / IS for TDM (P6, 2026-04-19)
+> - Mean-only deterministic realization (Hardening, 2026-05-01)
+>
+> For the **current** mathematical model, ODE forms, prediction pipeline, applicability-domain rules, and validation status, refer to `README.md` §Methodology and §Validation. For **architectural rationale and invariants** (graph-as-body, distribution-native, identity-blind engine), this document remains canonical. For **chronological experiment history**, see `docs/claude/experiment-log.md`.
 
 ---
 
