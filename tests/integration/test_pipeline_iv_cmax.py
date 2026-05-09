@@ -6,11 +6,7 @@ Oral drugs: behavior unchanged from V2 (regression guard).
 
 from __future__ import annotations
 
-import numpy as np
-import pytest
-
 from sisyphus.pipeline.predict import predict
-
 
 # SMILES + doses chosen to avoid network / DB access. Valsartan 20 mg IV
 # (ECM generalization test substrate). Atorvastatin 20 mg oral (in holdout,

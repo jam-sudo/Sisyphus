@@ -134,7 +134,7 @@ class TestHoldoutExclusion:
     def test_inchikey_prefix_matches_same_compound(self):
         """Same compound generates the same 14-char InChIKey prefix."""
         from rdkit import Chem
-        from rdkit.Chem.inchi import MolToInchi, InchiToInchiKey
+        from rdkit.Chem.inchi import InchiToInchiKey, MolToInchi
 
         smi = "CC(C)NCC(O)c1ccc(O)c(O)c1"  # isoproterenol
         mol = Chem.MolFromSmiles(smi)
@@ -152,7 +152,7 @@ class TestHoldoutExclusion:
         needed to catch salt forms whose Drug_ID contains the INN.
         """
         from rdkit import Chem
-        from rdkit.Chem.inchi import MolToInchi, InchiToInchiKey
+        from rdkit.Chem.inchi import InchiToInchiKey, MolToInchi
 
         base = Chem.MolFromSmiles("CC(C)NCC(O)c1ccc(O)c(O)c1")
         salt = Chem.MolFromSmiles("CC(C)NCC(O)c1ccc(O)c(O)c1.Cl")

@@ -11,7 +11,7 @@ import numpy as np
 import pytest
 from scipy.integrate import solve_ivp
 
-from sisyphus.core import ActiveMetabolite, Distribution
+from sisyphus.core import Distribution
 from sisyphus.engine.compiler import ODECompiler, ResolvedParams
 from sisyphus.graph.body import BodyGraph
 from sisyphus.graph.types import (

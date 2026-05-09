@@ -48,9 +48,9 @@ class JaxParams:
     """
 
     # -- Per-node arrays (indexed by state_index order) ---------------------
-    node_volumes: "jnp.ndarray"  # (n_nodes,)
-    node_kp: "jnp.ndarray"  # (n_nodes,)
-    node_is_blood: "jnp.ndarray"  # (n_nodes,) 1.0 if blood_pool, else 0.0
+    node_volumes: jnp.ndarray  # (n_nodes,)
+    node_kp: jnp.ndarray  # (n_nodes,)
+    node_is_blood: jnp.ndarray  # (n_nodes,) 1.0 if blood_pool, else 0.0
 
     # -- Scalar drug properties ---------------------------------------------
     drug_fup: float
@@ -61,19 +61,19 @@ class JaxParams:
     drug_particle_radius: float
 
     # -- Per-edge arrays (indexed by edge_id) -------------------------------
-    edge_flow_rates: "jnp.ndarray"  # (n_edges,)
-    edge_transit_rates: "jnp.ndarray"  # (n_edges,)
-    edge_ka_fractions: "jnp.ndarray"  # (n_edges,)
-    edge_ps_products: "jnp.ndarray"  # (n_edges,)
+    edge_flow_rates: jnp.ndarray  # (n_edges,)
+    edge_transit_rates: jnp.ndarray  # (n_edges,)
+    edge_ka_fractions: jnp.ndarray  # (n_edges,)
+    edge_ps_products: jnp.ndarray  # (n_edges,)
 
     # -- Pre-computed per-node clearance ------------------------------------
-    node_clint_organ: "jnp.ndarray"  # (n_nodes,) total CLint for well-stirred/PT
-    node_total_inflow: "jnp.ndarray"  # (n_nodes,) sum of flow inflows (L/h)
-    node_ivive_scaling: "jnp.ndarray"  # (n_nodes,)
+    node_clint_organ: jnp.ndarray  # (n_nodes,) total CLint for well-stirred/PT
+    node_total_inflow: jnp.ndarray  # (n_nodes,) sum of flow inflows (L/h)
+    node_ivive_scaling: jnp.ndarray  # (n_nodes,)
 
     # -- Pre-computed per-node active transport -----------------------------
-    node_transport_vmax: "jnp.ndarray"  # (n_nodes,) sum(abundance * jmax)
-    node_transport_km: "jnp.ndarray"  # (n_nodes,) effective Km per node
+    node_transport_vmax: jnp.ndarray  # (n_nodes,) sum(abundance * jmax)
+    node_transport_km: jnp.ndarray  # (n_nodes,) effective Km per node
 
 
 # Register JaxParams as a JAX pytree so it can be passed through jit/vmap.
@@ -124,8 +124,8 @@ def resolve_to_jax(compiled: CompiledODE, params: ResolvedParams) -> JaxParams:
             "JAX is not installed. Install with: pip install jax jaxlib"
         )
 
-    n_nodes = compiled.n_states
-    n_edges = len(compiled.flux_specs)
+    n_nodes = compiled.n_states  # noqa: F841
+    n_edges = len(compiled.flux_specs)  # noqa: F841
 
     # -- Build the sorted node name list (same order as state_index) --------
     # state_index was built from sorted(graph.nodes.keys())

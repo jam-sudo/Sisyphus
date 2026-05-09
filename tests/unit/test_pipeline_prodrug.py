@@ -1,8 +1,6 @@
 """Tests for pipeline-level prodrug routing helpers."""
 from __future__ import annotations
 
-import pytest
-
 from sisyphus.core import ActiveMetabolite, Distribution
 
 

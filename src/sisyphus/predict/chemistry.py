@@ -378,7 +378,7 @@ def compute_profile(smiles: str) -> MolecularProfile:
         logp = db_logp  # experimental overrides Crippen
 
     # logP correction (residual learning) — only for Crippen, not experimental
-    _LOGP_CORR_PATH = Path(__file__).resolve().parent.parent.parent.parent / "models" / "adme" / "logp_correction.json"
+    _LOGP_CORR_PATH = Path(__file__).resolve().parent.parent.parent.parent / "models" / "adme" / "logp_correction.json"  # noqa: E501
     if db_logp is None and _LOGP_CORR_PATH.exists():
         try:
             import xgboost as xgb
@@ -387,7 +387,7 @@ def compute_profile(smiles: str) -> MolecularProfile:
                 m.load_model(str(_LOGP_CORR_PATH))
                 compute_profile._logp_model = m  # type: ignore[attr-defined]
             import numpy as np
-            corr_features = np.array([[logp, mw, tpsa, float(hbd), float(hba), float(rotatable_bonds)]])
+            corr_features = np.array([[logp, mw, tpsa, float(hbd), float(hba), float(rotatable_bonds)]])  # noqa: E501
             correction = float(compute_profile._logp_model.predict(corr_features)[0])  # type: ignore[attr-defined]
             logp = logp + correction
         except Exception as e:

@@ -81,8 +81,8 @@ def test_non_cyp_fractions_negative_raises():
 
 def test_build_drug_on_graph_non_cyp_default_none_unchanged(monkeypatch):
     """build_drug_on_graph default kwarg path unchanged for non-NAT2/UGT1A1 drug."""
-    from sisyphus.predict.chemistry import compute_profile
     from sisyphus.predict.adme import predict_adme
+    from sisyphus.predict.chemistry import compute_profile
     from sisyphus.predict.ivive import build_drug_on_graph
 
     smiles = "Cn1c(=O)c2c(ncn2C)n(C)c1=O"  # caffeine
@@ -97,8 +97,8 @@ def test_build_drug_on_graph_non_cyp_default_none_unchanged(monkeypatch):
         profile, adme, dose_mg=100.0, route="oral", non_cyp_fractions={},
     )
     # Same enzyme_affinity dict regardless of None vs {} vs unset
-    assert set(drug_default.enzyme_affinity.keys()) == set(drug_explicit_none.enzyme_affinity.keys())
-    assert set(drug_default.enzyme_affinity.keys()) == set(drug_explicit_empty.enzyme_affinity.keys())
+    assert set(drug_default.enzyme_affinity.keys()) == set(drug_explicit_none.enzyme_affinity.keys())  # noqa: E501
+    assert set(drug_default.enzyme_affinity.keys()) == set(drug_explicit_empty.enzyme_affinity.keys())  # noqa: E501
     for tag in drug_default.enzyme_affinity:
         assert drug_default.enzyme_affinity[tag].mean == pytest.approx(
             drug_explicit_none.enzyme_affinity[tag].mean
@@ -107,8 +107,8 @@ def test_build_drug_on_graph_non_cyp_default_none_unchanged(monkeypatch):
 
 def test_build_drug_on_graph_isoniazid_with_non_cyp_fractions():
     """Isoniazid + non_cyp_fractions={'NAT2': 0.9} produces non-zero NAT2 affinity."""
-    from sisyphus.predict.chemistry import compute_profile
     from sisyphus.predict.adme import predict_adme
+    from sisyphus.predict.chemistry import compute_profile
     from sisyphus.predict.ivive import build_drug_on_graph
 
     smiles = "NNC(=O)c1ccncc1"  # isoniazid

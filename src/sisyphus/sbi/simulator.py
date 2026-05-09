@@ -21,9 +21,9 @@ fup value.
 from __future__ import annotations
 
 import logging
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Callable
 
 import numpy as np
 import torch
@@ -110,7 +110,7 @@ class EngineSimulator:
         route: str = "oral",
         physiology_yaml: Path = _DEFAULT_PHYSIOLOGY,
         obs_sigma_log10: float = _DEFAULT_OBS_SIGMA_LOG10,
-    ) -> "EngineSimulator":
+    ) -> EngineSimulator:
         """Construct a simulator for a specific drug from SMILES + dose."""
         import sisyphus.engine.flux  # noqa: F401 — register flux specs
         from sisyphus.predict.adme import predict_adme

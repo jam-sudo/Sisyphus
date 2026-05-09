@@ -12,7 +12,6 @@ import pytest
 
 from sisyphus.pipeline.predict import predict
 
-
 _PRAVASTATIN = (
     "CC[C@@H](C)C(=O)O[C@@H]1C[C@H](C=C2[C@@H]1CC[C@H]"
     "([C@@H]2CC[C@H](C[C@H](CC(=O)O)O)O)C)O"
@@ -35,7 +34,7 @@ def test_pravastatin_slco1b1_pm_override_compresses_toward_em():
         phenotypes={"SLCO1B1": "PM"},
         phenotype_scale_overrides={"SLCO1B1": 0.30},
     )
-    assert em.engine_pk is not None and default_pm.engine_pk is not None and override_pm.engine_pk is not None
+    assert em.engine_pk is not None and default_pm.engine_pk is not None and override_pm.engine_pk is not None  # noqa: E501
 
     em_cmax = em.engine_pk.cmax.mean
     default_pm_cmax = default_pm.engine_pk.cmax.mean

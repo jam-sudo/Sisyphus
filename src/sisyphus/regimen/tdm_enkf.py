@@ -30,7 +30,7 @@ from dataclasses import dataclass, field, replace
 import numpy as np
 from numpy.typing import NDArray
 
-from sisyphus.core import Distribution, DrugOnGraph, SimResult
+from sisyphus.core import Distribution, DrugOnGraph
 from sisyphus.engine.compiler import CompiledODE, ResolvedParams
 from sisyphus.graph.body import BodyGraph
 from sisyphus.regimen.solver import solve_regimen

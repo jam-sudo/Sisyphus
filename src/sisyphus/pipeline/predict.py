@@ -162,13 +162,13 @@ def predict(
     from sisyphus.predict.adme import predict_adme
     from sisyphus.predict.chemistry import compute_profile
     from sisyphus.predict.ivive import build_drug_on_graph
+    from sisyphus.predict.non_cyp_substrates import get_non_cyp_fractions
     from sisyphus.predict.transporter_db import (
         find_oatp1b1_substrate_name,
         is_oatp_ecm_applicable,
         load_hepatic_ecm_params_for_smiles,
         load_oatp1b1_kinetics_for_smiles,
     )
-    from sisyphus.predict.non_cyp_substrates import get_non_cyp_fractions
 
     warnings_list: list[str] = []
     cmax_90ci: tuple[float, float] | None = None

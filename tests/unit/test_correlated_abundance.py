@@ -10,8 +10,8 @@ import pytest
 from sisyphus.core import Distribution
 from sisyphus.graph.builder import _parse_distribution
 from sisyphus.physiology.correlation_registry import (
-    CorrelationSpec,
     _REGISTRY,
+    CorrelationSpec,
     get,
     load_from_json,
     register,
@@ -102,14 +102,14 @@ class TestRegistry:
     def test_load_real_achour_file_populates_registry(self) -> None:
         """The committed data/physiology/achour2021_correlation.json loads
         and registers under its declared name."""
-        p = pathlib.Path(__file__).resolve().parents[2] / "data" / "physiology" / "achour2021_correlation.json"
+        p = pathlib.Path(__file__).resolve().parents[2] / "data" / "physiology" / "achour2021_correlation.json"  # noqa: E501
         load_from_json(p)
         got = get("liver_achour2021")
         assert got is not None
         assert len(got.members) >= 5
 
 
-from sisyphus.physiology.correlation_registry import sample_correlated
+from sisyphus.physiology.correlation_registry import sample_correlated  # noqa: E402
 
 
 class TestSampleCorrelated:
@@ -182,9 +182,9 @@ class TestSampleCorrelated:
             assert abs(ec - c) / c < 0.05
 
 
-from sisyphus.graph.body import BodyGraph
-from sisyphus.graph.types import Node, TissueComposition
-from sisyphus.physiology.correlation_registry import assert_sampled
+from sisyphus.graph.body import BodyGraph  # noqa: E402
+from sisyphus.graph.types import Node, TissueComposition  # noqa: E402
+from sisyphus.physiology.correlation_registry import assert_sampled  # noqa: E402
 
 
 def _minimal_graph_with_grouped_liver() -> BodyGraph:

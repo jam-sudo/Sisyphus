@@ -1,5 +1,6 @@
 """Tests for DrugBank lookup module."""
 import pytest
+
 from sisyphus.predict.drugbank import DrugBankConfig, DrugBankLookup
 
 

@@ -9,7 +9,6 @@ import pathlib
 
 from rdkit import Chem
 
-
 _REPO_ROOT = pathlib.Path(__file__).resolve().parents[2]
 _NAT2_PATH = _REPO_ROOT / "data" / "enzymes" / "nat2_substrates.json"
 _UGT1A1_PATH = _REPO_ROOT / "data" / "enzymes" / "ugt1a1_substrates.json"

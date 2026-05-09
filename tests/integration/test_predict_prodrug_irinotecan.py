@@ -18,7 +18,6 @@ import pytest
 
 from sisyphus.pipeline.predict import predict
 
-
 _IRINOTECAN = (
     "CCc1c2c(nc3cc(OC(=O)N4CCC(N5CCCCC5)CC4)ccc13)"
     "-c1cc3c(c(=O)n1C2)COC(=O)C3(O)CC"

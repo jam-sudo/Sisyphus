@@ -19,7 +19,6 @@ from sisyphus.core import Distribution
 from sisyphus.predict.cyp_clearance_overrides import lookup_metabolic_fraction
 from sisyphus.predict.ivive import _decompose_clint
 
-
 _PRAVASTATIN_CANONICAL = (
     "CC[C@@H](C)C(=O)O[C@@H]1C[C@@H](O)C=C2[C@@H]"
     "(CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H](C)CC[C@@H]21"

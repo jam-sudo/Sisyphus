@@ -182,7 +182,7 @@ def apply_phenotype_to_graph(
             )
 
     if unknown:
-        available = sorted(list(target_enzymes) + [f"(transporter){t}" for t in target_transporters])
+        available = sorted(list(target_enzymes) + [f"(transporter){t}" for t in target_transporters])  # noqa: E501
         logger.warning(
             "phenotype: tags %s not found in %s (available: %s)",
             unknown, node, available,

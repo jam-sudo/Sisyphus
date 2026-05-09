@@ -18,7 +18,6 @@ import pytest
 from sisyphus.core import PredictionResult
 from sisyphus.pipeline.predict import predict
 
-
 _CAFFEINE = "Cn1c(=O)c2c(ncn2C)n(C)c1=O"
 
 

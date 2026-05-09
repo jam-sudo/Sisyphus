@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-_DATA_FILE = Path(__file__).resolve().parents[2] / "data" / "validation" / "oatp_generalization_drugs.json"
+_DATA_FILE = Path(__file__).resolve().parents[2] / "data" / "validation" / "oatp_generalization_drugs.json"  # noqa: E501
 
 _EXPECTED_DRUGS = {"valsartan", "glimepiride"}
 _VERIFIED_DRUGS = {"valsartan", "glimepiride"}
@@ -146,7 +146,7 @@ def test_dropped_drugs_archived():
     data = _load()
     assert "dropped_under_amendment_v2" in data, "top-level dropped_under_amendment_v2 key missing"
     dropped = data["dropped_under_amendment_v2"]
-    assert isinstance(dropped, dict), "dropped_under_amendment_v2 must be a dict with drugs and reason"
+    assert isinstance(dropped, dict), "dropped_under_amendment_v2 must be a dict with drugs and reason"  # noqa: E501
     assert "drugs" in dropped, "dropped_under_amendment_v2 must have a 'drugs' list"
     assert "bosentan" in dropped["drugs"], "bosentan must be in dropped_under_amendment_v2"
     assert "repaglinide" in dropped["drugs"], "repaglinide must be in dropped_under_amendment_v2"

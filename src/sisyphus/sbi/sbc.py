@@ -48,7 +48,7 @@ class SBCResult:
 
     def summary_str(self) -> str:
         lines = [
-            f"SBC summary (n_calibration={self.n_calibration}, n_posterior={self.n_posterior_samples}):",
+            f"SBC summary (n_calibration={self.n_calibration}, n_posterior={self.n_posterior_samples}):",  # noqa: E501
             "  KS test p-values (want > 0.01 for uniformity):",
         ]
         for i, p in enumerate(self.ks_pvalues):
@@ -82,7 +82,7 @@ def run_sbc(
     """
     import torch
 
-    rng = np.random.default_rng(seed)
+    rng = np.random.default_rng(seed)  # noqa: F841
     thetas_true = prior_sample_fn(n_calibration)  # (N, d_theta)
     d_theta = thetas_true.shape[1]
 

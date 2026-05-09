@@ -9,15 +9,14 @@ pytest.importorskip("torch")
 
 from sisyphus.sbi.multi_drug import (  # noqa: E402
     DRUG_FEATURE_NAMES,
+    N_DRUG_FEATURES,
     DrugSpec,
     MultiDrugSimulator,
-    N_DRUG_FEATURES,
     extract_drug_features,
     pack_observation,
     stack_training_pairs,
 )
 from sisyphus.sbi.priors import _logit  # noqa: E402
-
 
 MORPHINE_SMILES = "CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O"
 MORPHINE_DOSE_MG = 30.0

@@ -9,7 +9,6 @@ from sisyphus.predict.non_cyp_substrates import (
     lookup_ugt1a1_substrate,
 )
 
-
 _ISONIAZID = "NNC(=O)c1ccncc1"
 _HYDRALAZINE = "NNc1nncc2ccccc12"
 _METOPROLOL = "COCCc1ccc(OCC(O)CNC(C)C)cc1"

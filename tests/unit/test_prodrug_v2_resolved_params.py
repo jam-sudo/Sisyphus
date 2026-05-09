@@ -3,15 +3,14 @@ from __future__ import annotations
 
 import pytest
 
-from sisyphus.core import ActiveMetabolite, Distribution
+from sisyphus.core import Distribution
 from sisyphus.engine.compiler import ResolvedParams
 from sisyphus.graph.body import BodyGraph
 from sisyphus.graph.types import (
     Node,
-    OneCompartmentEliminationEdge,
     ProdrugActivationEdge,
 )
-from tests.unit.test_prodrug_v2_drug import _minimal_drug, _minimal_active
+from tests.unit.test_prodrug_v2_drug import _minimal_active, _minimal_drug
 
 
 def _minimal_graph() -> BodyGraph:

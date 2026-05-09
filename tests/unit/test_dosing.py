@@ -21,7 +21,6 @@ from sisyphus.predict.adme import predict_adme
 from sisyphus.predict.chemistry import compute_profile
 from sisyphus.predict.ivive import build_drug_on_graph
 from sisyphus.regimen.dosing import (
-    DEFAULT_DOSE_MAX,
     DEFAULT_DOSE_MIN,
     DoseRecommendation,
     _round_dose,
@@ -160,7 +159,7 @@ class TestRecommendDose:
         )
 
         # The actual ratio may differ due to rounding, but direction should be correct
-        expected_ratio = 0.05 / result.posterior_css_current
+        expected_ratio = 0.05 / result.posterior_css_current  # noqa: F841
         assert result.scaling_ratio > 0
 
     def test_posterior_cv_present(self, midazolam_setup):

@@ -23,7 +23,6 @@ import pytest
 
 from sisyphus.pipeline.predict import predict
 
-
 # CYP1A2 probe: tizanidine (DrugBank: CYP1A2 only)
 _TIZANIDINE_SMILES = "C1CN=C(N1)NC2=C(C=CC3=NSN=C32)Cl"
 

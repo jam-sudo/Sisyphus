@@ -88,10 +88,10 @@ def test_load_hepatic_ecm_params_case_insensitive():
     assert p_lower["ps_passive"].mean == p_upper["ps_passive"].mean
 
 
-import json as _json
-import pathlib as _pathlib
+import json as _json  # noqa: E402
+import pathlib as _pathlib  # noqa: E402
 
-import pytest as _pytest
+import pytest as _pytest  # noqa: E402
 
 # Pre-registration envelopes per spec amendment v2 (6e7ce0a), 2026-04-21.
 # Substrate set: valsartan + glimepiride (N=2).
@@ -169,7 +169,7 @@ def test_generalization_drug_cv_widened(drug: str):
     min_jmax_cv = 0.60 if drug == "valsartan" else 0.30
     assert kinetics["OATP1B1"].jmax.cv >= min_jmax_cv, (
         f"{drug} Jmax CV must be >= {min_jmax_cv} "
-        f"({'scaled Jmax — v2.1 uncertainty widening' if drug == 'valsartan' else 'standard floor'})"
+        f"({'scaled Jmax — v2.1 uncertainty widening' if drug == 'valsartan' else 'standard floor'})"  # noqa: E501
     )
     assert kinetics["OATP1B1"].km.cv >= 0.25, f"{drug} Km CV must be >= 0.25"
 
