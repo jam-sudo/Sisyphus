@@ -215,7 +215,7 @@ class UncertaintyEngine:
 
         # ── Surrogate backend: MLP forward pass (no ODE) ──
         if backend == "surrogate":
-            from sisyphus.engine.surrogate import (
+            from sisyphus.ml.surrogate import (
                 load_surrogate_ensemble,
                 solve_surrogate_batch,
             )

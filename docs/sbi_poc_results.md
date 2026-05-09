@@ -23,7 +23,7 @@ The full scipy LSODA engine is wrapped as an SBI simulator in `src/sisyphus/sbi/
 
 θ is applied to a nominal `DrugOnGraph` by scaling every per-enzyme `enzyme_affinity` mean by 10^θ[0], replacing `fup.mean` with θ[1], and scaling `peff.mean` by 10^θ[2]. Gaussian assay noise (σ = log10(1.10) ≈ 0.0414) is added to log10(Cmax) to mimic bioanalytical variability. Solver ~194 ms/sample.
 
-The neural surrogate (`src/sisyphus/engine/surrogate.py`) was considered as a fast alternative but is currently out-of-distribution for most production drugs — its feature extractor (`params_to_features_single`) sums enzyme abundance × affinity across nodes, whereas the training script uses drug-level `p["clint"]` scalars. This latent integration bug is tracked separately and does not affect this POC.
+The neural surrogate (`src/sisyphus/ml/surrogate.py`) was considered as a fast alternative but is currently out-of-distribution for most production drugs — its feature extractor (`params_to_features_single`) sums enzyme abundance × affinity across nodes, whereas the training script uses drug-level `p["clint"]` scalars. This latent integration bug is tracked separately and does not affect this POC.
 
 ### Prior
 `BoxUniform(low, high)` from the `sbi` library, sampled independently per dimension.

@@ -76,7 +76,7 @@ def _engine_cmax(compiled, graph, drug) -> float:
 def _surrogate_cmax(compiled, graph, drug, models, scaler_mean, scaler_std) -> tuple[float, float]:
     """Run surrogate ensemble for a single drug, return (cmax_mean, ensemble_std)."""
     from sisyphus.engine.compiler import ResolvedParams
-    from sisyphus.engine.surrogate import (
+    from sisyphus.ml.surrogate import (
         features_in_distribution,
         params_to_features_single,
         predict_surrogate_ensemble,
@@ -114,7 +114,7 @@ def main() -> None:
                    help="minimum fraction of drugs passing gate-within-pct")
     args = p.parse_args()
 
-    from sisyphus.engine.surrogate import load_surrogate_ensemble
+    from sisyphus.ml.surrogate import load_surrogate_ensemble
 
     log.info("Loading surrogate ensemble (%d models)", args.n_ensemble)
     models = load_surrogate_ensemble(args.model_dir, n_ensemble=args.n_ensemble)

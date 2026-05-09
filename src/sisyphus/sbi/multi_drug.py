@@ -150,7 +150,7 @@ def extract_drug_features(
        used by :func:`sisyphus.regimen.tdm.sbi_update` so no simulator
        round-trip is needed.
 
-    The layout matches ``sisyphus.engine.surrogate.FEATURE_NAMES`` but with
+    The layout matches ``sisyphus.ml.surrogate.FEATURE_NAMES`` but with
     ``log10_clint`` derived from the *liver* node's enzyme abundance ×
     affinity product (hepatic-clearance proxy, not the buggy
     sum-over-all-nodes used by ``params_to_features_single``).

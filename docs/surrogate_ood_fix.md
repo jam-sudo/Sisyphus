@@ -40,7 +40,7 @@ scalar* that produced those affinities.
 
 ### Production (broken) feature extraction
 
-`src/sisyphus/engine/surrogate.py::params_to_features_single` tried to
+`src/sisyphus/ml/surrogate.py::params_to_features_single` tried to
 reverse the process by summing the product:
 
 ```python
@@ -67,7 +67,7 @@ anything it ever learned from.
 
 ## Fix
 
-Two new functions in `src/sisyphus/engine/surrogate.py`:
+Two new functions in `src/sisyphus/ml/surrogate.py`:
 
 ```python
 def recover_drug_level_clint(params: ResolvedParams) -> float:
@@ -223,7 +223,7 @@ Sub-second TDM was the Track D1 target. Achieved on 4 / 5 anchors.
 ## Files produced
 
 **Source changes:**
-- `src/sisyphus/engine/surrogate.py` — new `recover_drug_level_clint`,
+- `src/sisyphus/ml/surrogate.py` — new `recover_drug_level_clint`,
   new `features_in_distribution`, rewritten `params_to_features_single`.
 - `src/sisyphus/regimen/tdm_sbi.py` — `use_surrogate` / `surrogate_model_dir`
   kwargs on `sbi_update`, batched surrogate forward-sim code paths for
