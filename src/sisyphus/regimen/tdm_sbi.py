@@ -261,7 +261,7 @@ def sbi_update(
         try:
             from pathlib import Path as _Path
 
-            from sisyphus.engine.surrogate import (
+            from sisyphus.ml.surrogate import (
                 features_in_distribution,
                 load_surrogate_ensemble,
                 params_to_features_single,

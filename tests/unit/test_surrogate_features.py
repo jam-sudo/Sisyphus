@@ -9,7 +9,7 @@ import pytest
 
 import sisyphus.engine.flux  # noqa: F401
 from sisyphus.engine.compiler import ODECompiler, ResolvedParams
-from sisyphus.engine.surrogate import (
+from sisyphus.ml.surrogate import (
     FEATURE_NAMES,
     features_in_distribution,
     params_to_features_single,
