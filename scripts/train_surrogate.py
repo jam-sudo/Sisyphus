@@ -166,7 +166,7 @@ def train_ensemble(X_train, y_train, X_test, y_test, n_ensemble=5, n_epochs=500)
     import jax.numpy as jnp
     import equinox as eqx
     import optax
-    from sisyphus.engine.surrogate import CmaxSurrogate
+    from sisyphus.ml.surrogate import CmaxSurrogate
 
     # Standardize features
     mean_x = np.mean(X_train, axis=0)
@@ -332,7 +332,7 @@ def main():
     log.info("Saved: %s/scaler.npz", model_dir)
 
     # Ensemble validation
-    from sisyphus.engine.surrogate import validate_surrogate
+    from sisyphus.ml.surrogate import validate_surrogate
     result = validate_surrogate(
         models, mean_x, std_x, X_test, y_test,
     )

@@ -258,7 +258,7 @@ Track A+B 완결 후. 장기 플레이.
 - **해결 방법 A**: `params_to_features_single`을 재작성해서 training과 동일한 drug-level clint 반환
 - **해결 방법 B**: `train_surrogate.py`를 재작성해서 production feature 분포에 맞춰 재훈련
 - 방법 A가 적절 (훈련 데이터는 보존 가치). 재작성 후 기존 MC propagation 파이프라인에서 accuracy gate 재검증.
-- 산출: `src/sisyphus/engine/surrogate.py` 수정 + 해당 부분 retest + surrogate accuracy 재보고서
+- 산출: `src/sisyphus/ml/surrogate.py` 수정 + 해당 부분 retest + surrogate accuracy 재보고서
 
 ### D2: TDM 90% CI calibration fix
 
