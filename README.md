@@ -501,7 +501,6 @@ src/sisyphus/
 │   ├── rhs_jax.py       # JAX right-hand side (experimental)
 │   ├── solver.py        # LSODA wrapper (solve, solve_mc)
 │   ├── solver_jax.py    # JAX solver (experimental)
-│   ├── surrogate.py     # Optional surrogate solver (experimental)
 │   └── uncertainty.py   # Monte Carlo propagation
 │
 ├── predict/             # SMILES → drug parameterization
@@ -520,6 +519,7 @@ src/sisyphus/
 │   ├── models.py        # XGBoost Cmax predictor
 │   ├── clf_predictor.py # CL/F analytical track
 │   ├── registry.py      # Model manifest + feature-schema hash (H2)
+│   ├── surrogate.py     # Optional ML surrogate solver (experimental; relocated from engine/ in PR #39)
 │   └── ensemble.py      # 4-track meta-learner (_W_VDSS=0.20)
 │
 ├── pk/                  # PK endpoint extraction
