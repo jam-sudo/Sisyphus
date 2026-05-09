@@ -105,8 +105,8 @@ class TestInflation:
         graph, compiled, drug = _build_pipeline(smi, 30.0)
         regimen = DosingRegimen.single_oral(30.0)
         obs = (_synthetic_observation(compiled, graph, drug, regimen, 0.01865, 1.0),)
-        r1 = enkf_update(compiled, graph, drug, regimen, obs, n_ensemble=100, seed=42, inflation=1.0)
-        r2 = enkf_update(compiled, graph, drug, regimen, obs, n_ensemble=100, seed=42, inflation=1.5)
+        r1 = enkf_update(compiled, graph, drug, regimen, obs, n_ensemble=100, seed=42, inflation=1.0)  # noqa: E501
+        r2 = enkf_update(compiled, graph, drug, regimen, obs, n_ensemble=100, seed=42, inflation=1.5)  # noqa: E501
         w1 = r1.cmax_ci_90[1] - r1.cmax_ci_90[0]
         w2 = r2.cmax_ci_90[1] - r2.cmax_ci_90[0]
         assert w2 > w1, f"inflation=1.5 should widen CI; got w1={w1:.4f}, w2={w2:.4f}"

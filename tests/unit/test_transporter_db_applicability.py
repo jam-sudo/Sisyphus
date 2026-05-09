@@ -1,10 +1,7 @@
 """Unit tests for OATP ECM applicability lookup."""
 from __future__ import annotations
 
-import pytest
-
 from sisyphus.predict.transporter_db import is_oatp_ecm_applicable
-
 
 _PRAVA_SMILES = (
     "CC[C@@H](C)C(=O)O[C@@H]1C[C@H](C=C2[C@@H]1CC[C@H]"
@@ -42,9 +39,9 @@ def test_empty_smiles_returns_false():
     assert is_oatp_ecm_applicable("") is False
 
 
-from sisyphus.predict.transporter_db import (
-    load_oatp1b1_kinetics_for_smiles,
+from sisyphus.predict.transporter_db import (  # noqa: E402
     load_hepatic_ecm_params_for_smiles,
+    load_oatp1b1_kinetics_for_smiles,
 )
 
 

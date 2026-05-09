@@ -15,13 +15,11 @@ import pytest
 pytest.importorskip("torch")
 
 from sisyphus.sbi.multi_drug import (  # noqa: E402
-    DRUG_FEATURE_NAMES,
+    N_DRUG_FEATURES,
     DrugSpec,
     HierarchicalMultiDrugSimulator,
     MultiDrugSimulator,
-    N_DRUG_FEATURES,
     PopulationSpec,
-    extract_drug_features,
     load_populations,
     pack_observation_hierarchical,
     population_onehot,
@@ -237,7 +235,7 @@ def test_stack_training_pairs_hierarchical_shape():
     """Stacked hierarchical training data has correct shapes."""
     n_theta = 3
     d_theta = 3
-    pop_names = ["adult", "pediatric_5y"]
+    pop_names = ["adult", "pediatric_5y"]  # noqa: F841
     pop_oh = {
         "adult": np.array([1.0, 0.0]),
         "pediatric_5y": np.array([0.0, 1.0]),

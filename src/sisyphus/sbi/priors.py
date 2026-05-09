@@ -16,6 +16,7 @@ from dataclasses import dataclass
 import numpy as np
 import torch
 
+
 # --- logit / sigmoid helpers ---
 def _logit(p: float) -> float:
     """log(p / (1 - p)), clipped to avoid ±inf."""
@@ -56,7 +57,7 @@ class PriorSpec:
     def n_dim(self) -> int:
         return len(self.low)
 
-    def as_torch(self) -> "torch.distributions.Distribution":
+    def as_torch(self) -> torch.distributions.Distribution:
         from sbi.utils import BoxUniform
 
         return BoxUniform(

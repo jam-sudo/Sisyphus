@@ -23,10 +23,9 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from sisyphus.core import Distribution
+from sisyphus.core import DrugOnGraph
 from sisyphus.engine.compiler import CompiledODE
 from sisyphus.graph.body import BodyGraph
-from sisyphus.core import DrugOnGraph
 from sisyphus.regimen.tdm import Observation, TDMResult, bayesian_update
 from sisyphus.regimen.tdm_enkf import EnKFResult, enkf_update
 from sisyphus.regimen.types import DosingRegimen

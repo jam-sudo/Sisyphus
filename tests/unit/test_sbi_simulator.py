@@ -7,7 +7,13 @@ import pytest
 
 pytest.importorskip("torch")
 
-from sisyphus.sbi.priors import build_box_prior, N_THETA, THETA_NAMES, _logit, _sigmoid  # noqa: E402
+from sisyphus.sbi.priors import (  # noqa: E402
+    N_THETA,
+    THETA_NAMES,
+    _logit,
+    _sigmoid,
+    build_box_prior,
+)
 from sisyphus.sbi.simulator import EngineSimulator, apply_theta_to_drug  # noqa: E402
 
 # Small, well-characterized drug for fast tests (morphine, holdout member).

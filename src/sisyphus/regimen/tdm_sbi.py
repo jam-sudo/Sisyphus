@@ -60,7 +60,7 @@ def sbi_update(
     graph: BodyGraph,
     drug: DrugOnGraph,
     regimen: DosingRegimen,
-    observations: tuple["Observation", ...] | list["Observation"],
+    observations: tuple[Observation, ...] | list[Observation],
     posterior_path: Path | str | None = None,
     n_samples: int = 5000,
     n_predictive_sims: int = 100,
@@ -74,7 +74,7 @@ def sbi_update(
     body_weight_kg: float | None = None,
     age_years: float | None = None,
     sbi_reweight: bool = False,
-) -> "TDMResult":
+) -> TDMResult:
     """Amortized SBI TDM update via the multi-drug conditional posterior.
 
     Args:
@@ -592,7 +592,7 @@ def sbi_update(
     # observations, we log-normalize the likelihood weights via log-sum-exp.
     n_post = len(post_cmax_list)
     multi_obs_used = False
-    if (_extra_obs or sbi_reweight) and surrogate_bundle is None and 'post_log_weights' in dir() and post_log_weights:
+    if (_extra_obs or sbi_reweight) and surrogate_bundle is None and 'post_log_weights' in dir() and post_log_weights:  # noqa: E501
         lw = np.array(post_log_weights[:n_post])
         finite_mask = np.isfinite(lw)
         if finite_mask.sum() > 0:

@@ -15,10 +15,7 @@ from __future__ import annotations
 
 from unittest.mock import patch
 
-import pytest
-
 from sisyphus.predict.transporter_db import find_oatp1b1_substrate_name
-
 
 _PRAVASTATIN_CANONICAL = (
     "CC[C@@H](C)C(=O)O[C@@H]1C[C@@H](O)C=C2[C@@H]"

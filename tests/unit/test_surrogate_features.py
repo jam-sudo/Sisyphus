@@ -9,14 +9,13 @@ import pytest
 
 import sisyphus.engine.flux  # noqa: F401
 from sisyphus.engine.compiler import ODECompiler, ResolvedParams
+from sisyphus.graph.builder import build_from_yaml
 from sisyphus.ml.surrogate import (
     FEATURE_NAMES,
     features_in_distribution,
     params_to_features_single,
     recover_drug_level_clint,
 )
-from sisyphus.graph.builder import build_from_yaml
-
 
 DRUGS = (
     # (name, smiles, dose_mg, expected_clint_approx_within_20pct)

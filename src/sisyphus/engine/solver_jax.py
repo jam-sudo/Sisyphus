@@ -31,23 +31,22 @@ jax.config.update("jax_enable_x64", True)
 
 import jax.numpy as jnp  # noqa: E402
 import numpy as np  # noqa: E402
-from diffrax import (
-    Dopri5,
+from diffrax import (  # noqa: E402
+    RESULTS,
     Kvaerno3,
     Kvaerno5,
     ODETerm,
     PIDController,
     RecursiveCheckpointAdjoint,
-    RESULTS,
     SaveAt,
     Tsit5,
     diffeqsolve,
 )
 
-from sisyphus.core import SimResult
-from sisyphus.engine.compiler import CompiledODE, ResolvedParams
-from sisyphus.engine.params_jax import JaxParams, resolve_to_jax
-from sisyphus.engine.rhs_jax import make_jax_rhs
+from sisyphus.core import SimResult  # noqa: E402
+from sisyphus.engine.compiler import CompiledODE, ResolvedParams  # noqa: E402
+from sisyphus.engine.params_jax import JaxParams, resolve_to_jax  # noqa: E402
+from sisyphus.engine.rhs_jax import make_jax_rhs  # noqa: E402
 
 logger = logging.getLogger(__name__)
 

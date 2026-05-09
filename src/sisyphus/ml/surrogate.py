@@ -24,14 +24,14 @@ logger = logging.getLogger(__name__)
 try:
     import jax
     jax.config.update("jax_enable_x64", True)
-    import jax.numpy as jnp
     import equinox as eqx
+    import jax.numpy as jnp
     _HAS_EQX = True
 except ImportError:
     _HAS_EQX = False
 
 if TYPE_CHECKING:
-    from sisyphus.engine.compiler import CompiledODE, ResolvedParams
+    from sisyphus.engine.compiler import ResolvedParams
 
 
 # Feature order (must match training exactly):
@@ -112,7 +112,7 @@ _TRAINING_PARAM_RANGES = {
 }
 
 
-def recover_drug_level_clint(params: "ResolvedParams") -> float:
+def recover_drug_level_clint(params: ResolvedParams) -> float:
     """Back-solve training-scale CLint (µL/min/10⁶ cells) from ResolvedParams.
 
     Sums the *liver* node's (abundance × affinity) contributions and
@@ -179,7 +179,7 @@ def params_to_features_single(params: ResolvedParams) -> np.ndarray:
         np.log10(max(dose, 1e-6)),                    # log10(dose)
         np.log10(max(peff, 1e-6)),                    # log10(Peff)
         np.log10(max(sol_mean, 1e-10)),               # log10(sol)
-        np.log10(max(renal_cl, 1e-10)),               # log10(renal_cl) — training was log10(7.5*fup)
+        np.log10(max(renal_cl, 1e-10)),               # log10(renal_cl) — training was log10(7.5*fup)  # noqa: E501
     ], dtype=np.float64)
 
     return features

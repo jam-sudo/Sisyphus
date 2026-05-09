@@ -19,7 +19,6 @@ import pytest
 
 from sisyphus.pipeline.predict import predict
 
-
 _PRAVA_SMILES = (
     "CC[C@@H](C)C(=O)O[C@@H]1C[C@H](C=C2[C@@H]1CC[C@H]"
     "([C@@H]2CC[C@H](C[C@H](CC(=O)O)O)O)C)O"

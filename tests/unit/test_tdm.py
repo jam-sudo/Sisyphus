@@ -4,21 +4,16 @@ import numpy as np
 import pytest
 
 import sisyphus.engine.flux  # noqa: F401
-from sisyphus.core import Distribution, DrugOnGraph
 from sisyphus.engine.compiler import ODECompiler, ResolvedParams
-from sisyphus.graph.body import BodyGraph
 from sisyphus.graph.builder import build_from_yaml
-from sisyphus.graph.types import FlowEdge, Node
 from sisyphus.regimen.tdm import (
     Observation,
     TDMResult,
-    _interpolate_concentration,
     _log_likelihood,
     apply_ci_floor,
     bayesian_update,
 )
 from sisyphus.regimen.types import DosingRegimen
-
 
 # ---------------------------------------------------------------------------
 # Fixtures
@@ -28,7 +23,7 @@ from sisyphus.regimen.types import DosingRegimen
 def physiology():
     """Load reference_man graph and compile ODE."""
     import pathlib
-    yaml_path = pathlib.Path(__file__).resolve().parent.parent.parent / "data" / "physiology" / "reference_man.yaml"
+    yaml_path = pathlib.Path(__file__).resolve().parent.parent.parent / "data" / "physiology" / "reference_man.yaml"  # noqa: E501
     graph = build_from_yaml(yaml_path)
     compiled = ODECompiler().compile(graph)
     return graph, compiled

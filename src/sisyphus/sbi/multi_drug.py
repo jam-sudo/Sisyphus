@@ -45,13 +45,14 @@ from __future__ import annotations
 
 import json
 import logging
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import TYPE_CHECKING, Callable, Iterable
+from typing import TYPE_CHECKING
 
 import numpy as np
 
-from sisyphus.sbi.simulator import EngineSimulator, apply_theta_to_drug
+from sisyphus.sbi.simulator import EngineSimulator
 
 if TYPE_CHECKING:
     from sisyphus.core import DrugOnGraph
@@ -137,8 +138,8 @@ def extract_drug_features(
     sim_or_drug=None,
     logp: float | None = None,
     *,
-    drug: "DrugOnGraph | None" = None,
-    graph: "BodyGraph | None" = None,
+    drug: DrugOnGraph | None = None,
+    graph: BodyGraph | None = None,
 ) -> np.ndarray:
     """Compute a 12-D feature vector from a drug's nominal ADME profile.
 
@@ -189,7 +190,7 @@ def extract_drug_features(
     fup = float(drug_obj.fup.mean)
     peff = float(drug_obj.peff.mean)
     sol = float(drug_obj.solubility.mean) if drug_obj.solubility is not None else 1.0
-    renal_cl = float(drug_obj.renal_clearance.mean) if drug_obj.renal_clearance is not None else 1e-6
+    renal_cl = float(drug_obj.renal_clearance.mean) if drug_obj.renal_clearance is not None else 1e-6  # noqa: E501
     dose = float(drug_obj.dose_mg)
     mw = float(drug_obj.mw)
     logp_val = float(logp) if logp is not None else 2.0
@@ -244,7 +245,7 @@ class MultiDrugSimulator:
         cls,
         specs: Iterable[DrugSpec],
         obs_sigma_log10: float = 0.0414,
-    ) -> "MultiDrugSimulator":
+    ) -> MultiDrugSimulator:
         from sisyphus.predict.chemistry import compute_profile
 
         sims: dict[str, EngineSimulator] = {}
@@ -263,7 +264,7 @@ class MultiDrugSimulator:
         return cls(simulators=sims, features=feats)
 
     @classmethod
-    def for_single(cls, spec: DrugSpec, obs_sigma_log10: float = 0.0414) -> "MultiDrugSimulator":
+    def for_single(cls, spec: DrugSpec, obs_sigma_log10: float = 0.0414) -> MultiDrugSimulator:
         return cls.from_specs([spec], obs_sigma_log10=obs_sigma_log10)
 
     @property
@@ -407,7 +408,7 @@ class HierarchicalMultiDrugSimulator:
         specs: Iterable[DrugSpec],
         populations: dict[str, PopulationSpec] | None = None,
         obs_sigma_log10: float = 0.0414,
-    ) -> "HierarchicalMultiDrugSimulator":
+    ) -> HierarchicalMultiDrugSimulator:
         """Build simulators for every (population, drug) pair.
 
         Drug features use the adult reference graph regardless of population.
@@ -424,7 +425,7 @@ class HierarchicalMultiDrugSimulator:
             pop_oh[pn] = population_onehot(pn, pop_names)
 
         # Build the adult reference graph once for population-independent feature extraction
-        adult_graph = build_from_yaml(_ADULT_PHYSIOLOGY)
+        adult_graph = build_from_yaml(_ADULT_PHYSIOLOGY)  # noqa: F841
 
         specs_list = list(specs)
         sims: dict[str, dict[str, EngineSimulator]] = {pn: {} for pn in pop_names}

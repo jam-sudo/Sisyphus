@@ -32,7 +32,6 @@ from sisyphus.regimen.types import (
     DosingRegimen,
 )
 
-
 # ---------------------------------------------------------------------------
 # Fixtures: minimal graph with clearance (drug disappears, enabling
 # accumulation testing)

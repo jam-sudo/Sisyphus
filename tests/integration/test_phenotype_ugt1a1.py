@@ -11,7 +11,8 @@ from sisyphus.pipeline.predict import predict
 # Raltegravir canonical SMILES — Task 4 derived from PubChem CID 54671008.
 # This test reads the SMILES from the registry to stay in sync with Task 4.
 def _raltegravir_smiles() -> str:
-    import json, pathlib
+    import json
+    import pathlib
     repo_root = pathlib.Path(__file__).resolve().parents[2]
     data = json.loads((repo_root / "data" / "enzymes" / "ugt1a1_substrates.json").read_text())
     for s in data["substrates"]:
@@ -27,14 +28,15 @@ def test_parse_ugt1a1_pm():
 
 
 def test_apply_ugt1a1_pm_no_warning(caplog):
-    from sisyphus.predict.phenotype import apply_phenotype_to_graph
-    from sisyphus.graph.builder import build_from_yaml
     import pathlib
+
+    from sisyphus.graph.builder import build_from_yaml
+    from sisyphus.predict.phenotype import apply_phenotype_to_graph
 
     caplog.set_level(logging.WARNING)
     g = build_from_yaml(pathlib.Path("data/physiology/reference_man.yaml"))
     _ = apply_phenotype_to_graph(g, {"UGT1A1": "PM"})
-    warnings_about_ugt = [r for r in caplog.records if "UGT1A1" in r.getMessage() and "not found" in r.getMessage()]
+    warnings_about_ugt = [r for r in caplog.records if "UGT1A1" in r.getMessage() and "not found" in r.getMessage()]  # noqa: E501
     assert not warnings_about_ugt
 
 

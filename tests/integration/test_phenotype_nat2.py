@@ -5,7 +5,7 @@ Tests:
 - apply_phenotype_to_graph(graph, {"NAT2": "PM"}) warns nothing
 - predict(isoniazid, phenotypes={"NAT2": "PM"}) > predict(isoniazid).cmax * 1.3
 - predict(metoprolol, phenotypes={"NAT2": "PM"}) ~= predict(metoprolol).cmax (no NAT2 affinity → silent zero)
-"""
+"""  # noqa: E501
 from __future__ import annotations
 
 import logging
@@ -13,7 +13,6 @@ import logging
 import pytest
 
 from sisyphus.pipeline.predict import predict
-
 
 _ISONIAZID = "NNC(=O)c1ccncc1"
 _METOPROLOL = "COCCc1ccc(OCC(O)CNC(C)C)cc1"
@@ -26,14 +25,15 @@ def test_parse_nat2_pm():
 
 
 def test_apply_nat2_pm_no_warning(caplog):
-    from sisyphus.predict.phenotype import apply_phenotype_to_graph
-    from sisyphus.graph.builder import build_from_yaml
     import pathlib
+
+    from sisyphus.graph.builder import build_from_yaml
+    from sisyphus.predict.phenotype import apply_phenotype_to_graph
 
     caplog.set_level(logging.WARNING)
     g = build_from_yaml(pathlib.Path("data/physiology/reference_man.yaml"))
     _ = apply_phenotype_to_graph(g, {"NAT2": "PM"})
-    warnings_about_nat2 = [r for r in caplog.records if "NAT2" in r.getMessage() and "not found" in r.getMessage()]
+    warnings_about_nat2 = [r for r in caplog.records if "NAT2" in r.getMessage() and "not found" in r.getMessage()]  # noqa: E501
     assert not warnings_about_nat2, (
         f"apply_phenotype_to_graph emitted 'tag not found' for NAT2: {warnings_about_nat2}"
     )

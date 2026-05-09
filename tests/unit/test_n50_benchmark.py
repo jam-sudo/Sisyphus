@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import importlib.util
 import json
-import math
 import pathlib
 import subprocess
 import sys
@@ -195,11 +194,11 @@ def test_run_passes_infusion_duration(n50_module, monkeypatch):
     def spy_predict(*, smiles, dose_mg, route, infusion_duration_min=None):
         captured["route"] = route
         captured["infusion_duration_min"] = infusion_duration_min
-        class FD: mean = 1.0
-        class FP: cmax = FD()
+        class FD: mean = 1.0  # noqa: E701
+        class FP: cmax = FD()  # noqa: E701
         class FR:
-            pk = FP(); engine_pk = FP(); ml_pk = FP()
-            in_applicability_domain = True; ad_flags = ()
+            pk = FP(); engine_pk = FP(); ml_pk = FP()  # noqa: E702
+            in_applicability_domain = True; ad_flags = ()  # noqa: E702
         return FR()
 
     payload = {

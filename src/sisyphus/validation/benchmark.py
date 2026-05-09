@@ -301,7 +301,7 @@ def run_benchmark(
     clf_pct2_val = pct_within_n_fold(clf_p, clf_o) if len(clf_p) >= 3 else None
 
     logger.info(
-        "Engine-only: %d drugs, AAFE=%.3f | ML-only: %d drugs, AAFE=%.3f | CL/F-only: %d drugs, AAFE=%.3f",
+        "Engine-only: %d drugs, AAFE=%.3f | ML-only: %d drugs, AAFE=%.3f | CL/F-only: %d drugs, AAFE=%.3f",  # noqa: E501
         len(engine_predicted),
         engine_aafe_val or float("inf"),
         len(ml_predicted),

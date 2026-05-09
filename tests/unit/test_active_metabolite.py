@@ -32,9 +32,9 @@ def test_active_metabolite_is_frozen(bh4_active):
         bh4_active.name = "different"  # type: ignore[misc]
 
 
-import numpy as np
+import numpy as np  # noqa: E402
 
-from sisyphus.core import DrugOnGraph
+from sisyphus.core import DrugOnGraph  # noqa: E402
 
 
 def _minimal_drug(active=None, obs_species="parent"):

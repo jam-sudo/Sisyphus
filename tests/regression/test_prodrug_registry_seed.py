@@ -18,7 +18,6 @@ import pathlib
 
 from rdkit import Chem
 
-
 _REPO_ROOT = pathlib.Path(__file__).resolve().parents[2]
 _REGISTRY_PATH = _REPO_ROOT / "data" / "sbi" / "prodrug_activation_registry.json"
 

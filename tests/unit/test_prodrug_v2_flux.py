@@ -4,7 +4,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from sisyphus.core import ActiveMetabolite, Distribution
+from sisyphus.core import Distribution
 from sisyphus.engine.compiler import ResolvedParams
 from sisyphus.engine.flux import ProdrugActivationFluxSpec
 from sisyphus.graph.body import BodyGraph
@@ -36,7 +36,7 @@ def _build_flow_graph(
         infusion_source --[FlowEdge Q]--> conversion_node --[FlowEdge Q]--> exit_sink
                                             └--[ProdrugActivationEdge]--> active_pool
                                                                             └--[1C elim]--> elim_sink
-    """
+    """  # noqa: E501
     g = BodyGraph()
     g.add_node(Node(name="infusion_source", node_type="blood_pool", volume=Distribution(1.0)))
     g.add_node(Node(
@@ -83,7 +83,7 @@ def test_flux_well_stirred_rate_matches_formula():
     params = ResolvedParams(g, drug)
 
     edge_id = next(i for i, e in enumerate(g.edges) if isinstance(e, ProdrugActivationEdge))
-    flux_spec = ProdrugActivationFluxSpec.from_edge(edge_id, g.edges[edge_id], _build_state_index(g))
+    flux_spec = ProdrugActivationFluxSpec.from_edge(edge_id, g.edges[edge_id], _build_state_index(g))  # noqa: E501
 
     state_idx = _build_state_index(g)
     y = np.zeros(len(state_idx))
@@ -109,7 +109,7 @@ def test_flux_zero_when_clint_zero():
     params = ResolvedParams(g, drug)
 
     edge_id = next(i for i, e in enumerate(g.edges) if isinstance(e, ProdrugActivationEdge))
-    flux_spec = ProdrugActivationFluxSpec.from_edge(edge_id, g.edges[edge_id], _build_state_index(g))
+    flux_spec = ProdrugActivationFluxSpec.from_edge(edge_id, g.edges[edge_id], _build_state_index(g))  # noqa: E501
 
     state_idx = _build_state_index(g)
     y = np.zeros(len(state_idx))
@@ -144,7 +144,7 @@ def test_flux_mw_ratio_scales_active_mass():
     params = ResolvedParams(g, drug)
 
     edge_id = next(i for i, e in enumerate(g.edges) if isinstance(e, ProdrugActivationEdge))
-    flux_spec = ProdrugActivationFluxSpec.from_edge(edge_id, g.edges[edge_id], _build_state_index(g))
+    flux_spec = ProdrugActivationFluxSpec.from_edge(edge_id, g.edges[edge_id], _build_state_index(g))  # noqa: E501
 
     state_idx = _build_state_index(g)
     y = np.zeros(len(state_idx))
