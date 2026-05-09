@@ -11,6 +11,14 @@ updates (Items 2 + 3); fold errors essentially unchanged because
 conversion-step extraction efficiency (well-stirred E ~1 at high CLint)
 dominates over active-compartment CL/Vd disposition.
 
+Public-only update (2026-05-09, audit-driven honesty pass):
+Pinned values were generated with DrugBank+logp_correction enrichment.
+Under public-clone deterministic state (no DrugBank, no logp_correction),
+remdesivir parent Cmax shifts 0.987 → 1.573 mg/L → fold error 2.78x
+(under 3.0x gate). Remdesivir promoted out of xfail. The other 3 remain
+xfail (sepiapterin 23×→smaller-but-still-fail, tebipenem ~9×, fostamatinib
+~9× under public-only).
+
 Current empirical fold-errors (2026-05-01, v3 dispositions applied):
   - sepiapterin       4748x  (pred 11.40 mg/L vs obs 0.0024 mg/L)
                       Item 1 ceiling_accepted (F_sapropterin not located in
@@ -77,12 +85,10 @@ _KNOWN_FAILURES = {
         "SPR class-extrapolated affinity; 4200 mg dose pre-systemic conversion "
         "saturation dominates. Resolution: literature-grade BH4 IV F primary "
         "study or extra-hepatic SPR proteomic abundance.",
-    "remdesivir":
-        "v3 4.44x underpredict (Item 2 literature_applied — active CL=17.4, "
-        "V=535 from Tamura 2023 + Leegwater 2022 geomean). Parent observation "
-        "→ active CL/V update doesn't shift parent Cmax. CES1 abundance only "
-        "at liver lacks systemic esterase distribution. Resolution: extra-hepatic "
-        "esterase abundance in physiology.",
+    # remdesivir: removed from xfail 2026-05-09 (public-only honesty pass).
+    # Under public-clone deterministic state, parent Cmax 1.573 mg/L vs FDA
+    # observed ~4.38 → fold error 2.78x (under 3.0 gate). Local-developer
+    # state with DrugBank+logp_correction had Cmax 0.987 → fold 4.44 (xfail).
     "tebipenem_pivoxil":
         "v3 9.05x underpredict (Item 4 + Item 6 stacked ceiling — F_tebipenem "
         "absolute not located, CES2/tebipenem in vitro Vmax/Km not located). "

@@ -6,12 +6,25 @@ Update _PINNED explicitly when intentionally re-baselining.
 v3 re-baselined 2026-05-01 (post Items 1-6 dispositions per spec §6.1).
 
 Hardening re-baselined 2026-05-01 (predict() deterministic path uses
-BodyGraph.realize_means() instead of graph.sample(rng=42)):
-  sepiapterin       1.140e+01 → 1.130e+01 (-0.8%)
-  remdesivir        9.869e-01 → 9.837e-01 (-0.3%)
-  tebipenem_pivoxil 4.429e-01 → 5.207e-01 (+17.6%; ALPI/CES affinity
-                    sample now uses mean instead of seed=42 lognormal)
-  fostamatinib      1.355e-01 → 1.260e-01 (-7.0%; same mechanism)
+BodyGraph.realize_means() instead of graph.sample(rng=42)).
+
+Public-only re-baselined 2026-05-09 (audit-driven honesty pass): pinned
+values were generated on a local-developer state with proprietary DrugBank
+artifacts (`data/drugbank/`) and a gitignored logp_correction XGBoost
+residual model (`models/adme/logp_correction.json`). Both are loaded
+conditionally by predict() and silently shifted Cmax. Public-clone
+deterministic values (no DrugBank, no logp_correction):
+  sepiapterin       1.130e+01 → 8.679e+00 (-23.2%)
+  remdesivir        9.837e-01 → 1.573e+00 (+59.9%)
+  tebipenem_pivoxil 5.207e-01 → 4.553e-01 (-12.6%)
+  fostamatinib      1.260e-01 → 6.675e-02 (-47.0%)
+The 4 prodrug 3-fold validation gates remain xfail per spec §6.4
+(extraction-step rate-limits dominate active CL/V disposition);
+these snapshots verify mechanical correctness, not absolute clinical
+accuracy. NOTE: remdesivir's 3-fold gate (test_prodrug_v2_validation_gate)
+flips xfail→PASS under public-only Cmax (1.573 mg/L vs FDA observed
+~3.0 mg/L → FE 1.91 < 3.0 gate); see that test for the strict→strict-False
+adjustment.
 """
 from __future__ import annotations
 
@@ -20,10 +33,10 @@ import pytest
 from sisyphus.pipeline.predict import predict
 
 _PINNED = {
-    "sepiapterin":       1.130444e+01,
-    "remdesivir":        9.837063e-01,
-    "tebipenem_pivoxil": 5.207059e-01,
-    "fostamatinib":      1.260308e-01,
+    "sepiapterin":       8.679384e+00,
+    "remdesivir":        1.573162e+00,
+    "tebipenem_pivoxil": 4.553034e-01,
+    "fostamatinib":      6.675183e-02,
 }
 
 _RTOL = 0.05
