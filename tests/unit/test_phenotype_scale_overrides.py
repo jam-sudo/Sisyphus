@@ -88,7 +88,7 @@ def test_override_for_gene_not_in_phenotypes_logs_info(caplog):
         g.nodes["liver"].enzymes["CYP2C9"].mean
     )
     # logger.info note about ignored override
-    info_records = [r for r in caplog.records if r.levelno == logging.INFO and "ignored" in r.getMessage()]
+    info_records = [r for r in caplog.records if r.levelno == logging.INFO and "ignored" in r.getMessage()]  # noqa: E501
     assert info_records, "expected logger.info about ignored override key"
 
 

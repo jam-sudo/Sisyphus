@@ -31,7 +31,7 @@ def main() -> None:
     # simulate command (multi-dose)
     sim_parser = subparsers.add_parser("simulate", help="Multi-dose regimen simulation")
     sim_parser.add_argument("--smiles", required=True, help="SMILES string")
-    sim_parser.add_argument("--dose", type=float, required=True, help="Dose per administration (mg)")
+    sim_parser.add_argument("--dose", type=float, required=True, help="Dose per administration (mg)")  # noqa: E501
     sim_parser.add_argument("--interval", type=float, required=True, help="Dosing interval (hours)")
     sim_parser.add_argument("--doses", type=int, required=True, help="Number of doses")
     sim_parser.add_argument("--route", default="oral", choices=["oral", "iv"])
@@ -45,10 +45,10 @@ def main() -> None:
         "--obs", required=True, nargs="+",
         help="Observations as time_h:conc_mg_L pairs (e.g. '1.0:0.015' '6.0:0.008')",
     )
-    tdm_parser.add_argument("--interval", type=float, default=None, help="Dosing interval (h), for multi-dose regimens")
-    tdm_parser.add_argument("--doses", type=int, default=1, help="Number of doses administered (default: 1)")
+    tdm_parser.add_argument("--interval", type=float, default=None, help="Dosing interval (h), for multi-dose regimens")  # noqa: E501
+    tdm_parser.add_argument("--doses", type=int, default=1, help="Number of doses administered (default: 1)")  # noqa: E501
     tdm_parser.add_argument("--route", default="oral", choices=["oral", "iv"])
-    tdm_parser.add_argument("--n-samples", type=int, default=2000, help="Prior MC samples (default: 2000)")
+    tdm_parser.add_argument("--n-samples", type=int, default=2000, help="Prior MC samples (default: 2000)")  # noqa: E501
     tdm_parser.add_argument(
         "--method",
         default="is",
@@ -114,10 +114,10 @@ def main() -> None:
         choices=["is", "ibis", "enkf", "sbi", "auto"],
         help="TDM method (same choices as tdm command)",
     )
-    da_parser.add_argument("--phenotype", default=None, help="CYP phenotype spec (e.g. 'CYP2D6:PM'). See tdm --phenotype.")
-    da_parser.add_argument("--dose-min", type=float, default=None, help="Minimum allowed dose (mg). Default: 0.1× current dose.")
-    da_parser.add_argument("--dose-max", type=float, default=None, help="Maximum allowed dose (mg). Default: 10× current dose.")
-    da_parser.add_argument("--round-increment", type=float, default=None, help="Dose rounding increment (mg). Default: 10% of current dose magnitude.")
+    da_parser.add_argument("--phenotype", default=None, help="CYP phenotype spec (e.g. 'CYP2D6:PM'). See tdm --phenotype.")  # noqa: E501
+    da_parser.add_argument("--dose-min", type=float, default=None, help="Minimum allowed dose (mg). Default: 0.1× current dose.")  # noqa: E501
+    da_parser.add_argument("--dose-max", type=float, default=None, help="Maximum allowed dose (mg). Default: 10× current dose.")  # noqa: E501
+    da_parser.add_argument("--round-increment", type=float, default=None, help="Dose rounding increment (mg). Default: 10% of current dose magnitude.")  # noqa: E501
     da_parser.add_argument("--verbose", "-v", action="store_true")
 
     # benchmark command
@@ -217,7 +217,6 @@ def _build_drug_and_graph(
     reference graph (topology unchanged) since ResolvedParams reads the
     final enzyme values at runtime.
     """
-    import numpy as np
 
     import sisyphus.engine.flux  # noqa: F401
     from sisyphus.engine.compiler import ODECompiler
@@ -431,12 +430,12 @@ def _run_tdm(args: argparse.Namespace) -> None:
     print()
     print(f"{'':30s} {'Prior':>12s} {'Posterior':>12s}")
     print("-" * 54)
-    print(f"{'Cmax (mg/L)':<30s} {result.prior_cmax.mean:>12.4f} {result.posterior_cmax.mean:>12.4f}")
+    print(f"{'Cmax (mg/L)':<30s} {result.prior_cmax.mean:>12.4f} {result.posterior_cmax.mean:>12.4f}")  # noqa: E501
     print(f"{'Cmax CV':<30s} {result.prior_cmax.cv:>11.1%} {result.posterior_cmax.cv:>11.1%}")
     for key in result.prior_params:
         print(f"{key:<30s} {result.prior_params[key]:>12.4f} {result.posterior_params[key]:>12.4f}")
 
-    cv_red = (1.0 - result.posterior_cmax.cv / result.prior_cmax.cv) * 100 if result.prior_cmax.cv > 0 else 0.0
+    cv_red = (1.0 - result.posterior_cmax.cv / result.prior_cmax.cv) * 100 if result.prior_cmax.cv > 0 else 0.0  # noqa: E501
     print(f"\nCV reduction: {cv_red:.1f}%")
 
 
@@ -494,7 +493,7 @@ def _run_dose_adjust(args: argparse.Namespace) -> None:
     print(f"Current dose:     {result.current_dose_mg:.0f} mg")
     print(f"Target Css:       {result.target_css:.4f} mg/L")
     print()
-    print(f"Posterior Css (current dose): {result.posterior_css_current:.4f} mg/L (CV {result.posterior_cv:.1%})")
+    print(f"Posterior Css (current dose): {result.posterior_css_current:.4f} mg/L (CV {result.posterior_cv:.1%})")  # noqa: E501
     print(f"Scaling ratio:               {result.scaling_ratio:.2f}x")
     print()
     print(f"  Recommended dose:  {result.recommended_dose_mg:.0f} mg")
@@ -567,11 +566,11 @@ def _run_ddi(args: argparse.Namespace) -> None:
     print()
     print(f"{'':20s} {'Alone':>12s} {'With DDI':>12s} {'Ratio':>8s}")
     print("-" * 52)
-    print(f"{'Cmax (mg/L)':<20s} {base_pk.cmax.mean:>12.4f} {ddi_pk.cmax.mean:>12.4f} {cmax_ratio:>8.2f}")
-    print(f"{'AUC (mg*h/L)':<20s} {base_pk.auc_0t.mean:>12.4f} {ddi_pk.auc_0t.mean:>12.4f} {auc_ratio:>8.2f}")
+    print(f"{'Cmax (mg/L)':<20s} {base_pk.cmax.mean:>12.4f} {ddi_pk.cmax.mean:>12.4f} {cmax_ratio:>8.2f}")  # noqa: E501
+    print(f"{'AUC (mg*h/L)':<20s} {base_pk.auc_0t.mean:>12.4f} {ddi_pk.auc_0t.mean:>12.4f} {auc_ratio:>8.2f}")  # noqa: E501
     if base_pk.t_half and ddi_pk.t_half:
         thalf_ratio = ddi_pk.t_half.mean / base_pk.t_half.mean if base_pk.t_half.mean > 0 else 0.0
-        print(f"{'t½ (h)':<20s} {base_pk.t_half.mean:>12.2f} {ddi_pk.t_half.mean:>12.2f} {thalf_ratio:>8.2f}")
+        print(f"{'t½ (h)':<20s} {base_pk.t_half.mean:>12.2f} {ddi_pk.t_half.mean:>12.2f} {thalf_ratio:>8.2f}")  # noqa: E501
 
 
 def _run_benchmark(args: argparse.Namespace) -> None:

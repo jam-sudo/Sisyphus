@@ -5,7 +5,6 @@ TDD: Tests written first; run RED before implementation, GREEN after.
 
 from __future__ import annotations
 
-import math
 from pathlib import Path
 
 import pytest
@@ -98,7 +97,7 @@ class TestEnzymeFactor:
         assert ef_3a4 < ef_3a4_adult * 0.5, "CYP3A4 pediatric should be < 50% of adult"
         assert ef_2d6 < ef_2d6_adult * 0.5, "CYP2D6 pediatric should be < 50% of adult"
 
-        # Pediatric YAML uses 0.5 and 0.7 ontogeny (ratio 0.714); model should give similar ratio direction
+        # Pediatric YAML uses 0.5 and 0.7 ontogeny (ratio 0.714); model should give similar ratio direction  # noqa: E501
         # (CYP2D6 matures faster than CYP3A4 due to lower t_half=1.4 vs 2.0)
         assert ef_2d6 > ef_3a4 * 0.8, (
             f"CYP2D6 should not be much less than CYP3A4 at age 5: "

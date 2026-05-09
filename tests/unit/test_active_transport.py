@@ -138,9 +138,10 @@ def test_active_transport_uses_target_ivive_and_transporters():
 def test_active_transport_scipy_jax_parity():
     """SciPy and JAX backends produce the same dydt for an active-transport edge."""
     pytest.importorskip("jax")
+    import jax.numpy as jnp
+
     from sisyphus.engine.params_jax import resolve_to_jax
     from sisyphus.engine.rhs_jax import make_jax_rhs
-    import jax.numpy as jnp
 
     graph = _minimal_uptake_graph()
     drug = _drug_with_oatp()

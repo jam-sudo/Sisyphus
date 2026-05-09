@@ -3,9 +3,9 @@ from __future__ import annotations
 
 import pytest
 
-from sisyphus.core import ActiveMetabolite, Distribution
+from sisyphus.core import Distribution
 from sisyphus.graph.body import BodyGraph
-from sisyphus.graph.builder import ACTIVE_SUFFIX, augment_for_active_species
+from sisyphus.graph.builder import augment_for_active_species
 from sisyphus.graph.types import (
     Node,
     OneCompartmentEliminationEdge,

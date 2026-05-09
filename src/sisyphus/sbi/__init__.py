@@ -19,10 +19,10 @@ Current scope (POC):
 
 from sisyphus.sbi.multi_drug import (
     DRUG_FEATURE_NAMES,
+    N_DRUG_FEATURES,
     DrugSpec,
     HierarchicalMultiDrugSimulator,
     MultiDrugSimulator,
-    N_DRUG_FEATURES,
     PopulationSpec,
     extract_drug_features,
     load_drug_specs_from_json,

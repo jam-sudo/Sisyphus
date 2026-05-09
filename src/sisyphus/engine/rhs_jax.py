@@ -16,7 +16,8 @@ installed (the rest of the engine still works with SciPy).
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable
+from collections.abc import Callable
+from typing import TYPE_CHECKING
 
 try:
     import jax
@@ -49,14 +50,13 @@ from sisyphus.engine.flux import (
     TransitFluxSpec,
 )
 
-
 # ---------------------------------------------------------------------------
 # make_jax_rhs — the public API
 # ---------------------------------------------------------------------------
 
 
 def make_jax_rhs(
-    compiled: "CompiledODE",
+    compiled: CompiledODE,
 ) -> Callable:
     """Build a pure-JAX RHS from compiled ODE topology.
 
@@ -202,7 +202,7 @@ def make_jax_rhs(
 
     # -- The RHS function ---------------------------------------------------
 
-    def rhs(t: float, y: "jnp.ndarray", params: "JaxParams") -> "jnp.ndarray":
+    def rhs(t: float, y: jnp.ndarray, params: JaxParams) -> jnp.ndarray:
         """Pure-JAX ODE right-hand side.
 
         All operations use ``jnp`` -- no Python control flow on data,

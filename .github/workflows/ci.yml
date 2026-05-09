@@ -24,8 +24,8 @@ jobs:
           pip install -r requirements-lock.txt
           pip install -e . --no-deps
 
-      - name: Ruff (advisory — non-gating this cycle)
-        run: ruff check src tests --exit-zero
+      - name: Ruff (gating; pre-existing violations baselined via inline noqa)
+        run: ruff check src tests
 
       - name: Unit tests
         run: pytest tests/unit -v --tb=short

@@ -18,7 +18,7 @@ _PHYS = "data/physiology/reference_man.yaml"
 
 def _setup(route: str = "iv"):
     graph = build_from_yaml(_PHYS)
-    profile = compute_profile("CCCCC(=O)N([C@@H](C(C)C)C(=O)O)Cc1ccc(-c2ccccc2-c2nnn[nH]2)cc1")  # valsartan
+    profile = compute_profile("CCCCC(=O)N([C@@H](C(C)C)C(=O)O)Cc1ccc(-c2ccccc2-c2nnn[nH]2)cc1")  # valsartan  # noqa: E501
     adme = predict_adme(profile)
     drug = build_drug_on_graph(profile, adme, dose_mg=20.0, route=route)
     compiler = ODECompiler()

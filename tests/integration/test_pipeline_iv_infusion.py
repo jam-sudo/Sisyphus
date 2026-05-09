@@ -14,7 +14,6 @@ import pytest
 
 from sisyphus.pipeline.predict import predict
 
-
 # Reuse substrate from test_pipeline_iv_cmax.py: valsartan is a small-molecule
 # drug whose ADME pipeline is fast and stable; it also appears in the ECM
 # generalization set. We do NOT need rifampin-specific behavior here — any IV

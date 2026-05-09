@@ -16,7 +16,7 @@ pytest.importorskip("sbi")
 pytest.importorskip("torch")
 
 from sisyphus.sbi.amortizer import load_result, save_result, train_npe  # noqa: E402
-from sisyphus.sbi.priors import PriorSpec, build_box_prior  # noqa: E402
+from sisyphus.sbi.priors import build_box_prior  # noqa: E402
 from sisyphus.sbi.sbc import run_sbc  # noqa: E402
 
 

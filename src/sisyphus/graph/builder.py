@@ -352,7 +352,7 @@ def augment_for_active_species(
             f"No conversion site for drug {drug.name!r}: declared enzyme_tags="
             f"{sorted(enzyme_tags)} but no node in physiology has any of these. "
             f"Available enzymes by node: "
-            f"{ {n: sorted(node.enzymes.keys()) for n, node in graph.nodes.items() if node.enzymes} }"
+            f"{ {n: sorted(node.enzymes.keys()) for n, node in graph.nodes.items() if node.enzymes} }"  # noqa: E501
         )
 
     # One ProdrugActivationEdge per site

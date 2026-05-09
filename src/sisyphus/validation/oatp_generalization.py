@@ -13,7 +13,6 @@ import math
 from dataclasses import dataclass
 from enum import Enum
 
-
 _FE_GATE_LOG10 = 0.48  # |log10 FE| <= 0.48 iff FE <= 3.02
 _MODE_B_MAGNITUDE = 0.5  # |median log10 FE of failures| > 0.5 for Mode B
 

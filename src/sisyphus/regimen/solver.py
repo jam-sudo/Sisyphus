@@ -23,7 +23,7 @@ import numpy as np
 from sisyphus.core import SimResult
 from sisyphus.engine.compiler import CompiledODE, ResolvedParams
 from sisyphus.engine.solver import solve
-from sisyphus.regimen.types import DosingEvent, DosingRegimen, INFUSION_STEP_H
+from sisyphus.regimen.types import INFUSION_STEP_H, DosingEvent, DosingRegimen
 
 logger = logging.getLogger(__name__)
 
@@ -313,7 +313,7 @@ def solve_regimen(
 
     valid = cumulative_dose > 0
     if np.any(valid):
-        full_mbe = float(np.max(np.abs(total[valid] - cumulative_dose[valid]) / cumulative_dose[valid]))
+        full_mbe = float(np.max(np.abs(total[valid] - cumulative_dose[valid]) / cumulative_dose[valid]))  # noqa: E501
     else:
         full_mbe = 0.0
 

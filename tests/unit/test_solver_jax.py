@@ -27,7 +27,6 @@ import jax.numpy as jnp  # noqa: E402
 from sisyphus.engine.solver_jax import solve as solve_jax  # noqa: E402
 from sisyphus.engine.solver_jax import solve_jax_pure  # noqa: E402
 
-
 # ---------------------------------------------------------------------------
 # Phase 0b: pure-JAX RHS + gradient verification on 2-compartment model
 # ---------------------------------------------------------------------------
@@ -124,7 +123,7 @@ class TestJAXSolverMatchesSciPy:
         from sisyphus.engine.compiler import ODECompiler
         from sisyphus.graph.builder import build_from_yaml
 
-        physiology = Path(__file__).resolve().parent.parent.parent / "data" / "physiology" / "reference_man.yaml"
+        physiology = Path(__file__).resolve().parent.parent.parent / "data" / "physiology" / "reference_man.yaml"  # noqa: E501
         graph = build_from_yaml(physiology)
         compiler = ODECompiler()
         compiled = compiler.compile(graph)

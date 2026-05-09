@@ -13,6 +13,8 @@ from pathlib import Path
 import numpy as np
 from scipy.integrate import solve_ivp
 
+# Register flux specs.
+import sisyphus.engine.flux  # noqa: F401
 from sisyphus.core import Distribution
 from sisyphus.engine.compiler import ODECompiler, ResolvedParams
 from sisyphus.graph.body import BodyGraph
@@ -21,9 +23,6 @@ from sisyphus.predict.adme import predict_adme
 from sisyphus.predict.chemistry import compute_profile
 from sisyphus.predict.ivive import build_drug_on_graph
 
-# Register flux specs.
-import sisyphus.engine.flux  # noqa: F401
-
 REMDESIVIR_SMILES = (
     "CCC(CC)COC(=O)[C@H](C)N[P@](=O)"
     "(OC[C@H]1O[C@@](C#N)(c2ccc3c(N)ncnn23)[C@H](O)[C@@H]1O)Oc1ccccc1"
@@ -31,7 +30,7 @@ REMDESIVIR_SMILES = (
 
 
 def _scaled_ces1_graph(scale: float) -> BodyGraph:
-    yaml_path = Path(__file__).resolve().parent.parent.parent / "data" / "physiology" / "reference_man.yaml"
+    yaml_path = Path(__file__).resolve().parent.parent.parent / "data" / "physiology" / "reference_man.yaml"  # noqa: E501
     g = build_from_yaml(yaml_path)
     if scale != 1.0:
         for node_name, node in list(g.nodes.items()):

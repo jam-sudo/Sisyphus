@@ -21,7 +21,6 @@ import pathlib
 
 from rdkit import Chem
 
-
 _REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent.parent
 _OATP1B1_PATH = _REPO_ROOT / "data" / "transporters" / "oatp1b1.json"
 _OVERRIDES_PATH = _REPO_ROOT / "data" / "transporters" / "cyp_clearance_overrides.json"

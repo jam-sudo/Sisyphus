@@ -110,8 +110,8 @@ class TDMResult:
 
 
 def apply_ci_floor(
-    result: "TDMResult", min_ci_half_width_fraction: float
-) -> "TDMResult":
+    result: TDMResult, min_ci_half_width_fraction: float
+) -> TDMResult:
     """Public alias for the conformal CI floor helper.
 
     Useful for post-hoc rescoring of an existing TDMResult without
@@ -121,8 +121,8 @@ def apply_ci_floor(
 
 
 def _apply_ci_floor(
-    result: "TDMResult", min_ci_half_width_fraction: float
-) -> "TDMResult":
+    result: TDMResult, min_ci_half_width_fraction: float
+) -> TDMResult:
     """Widen the cmax_ci_90 if its half-width is below a fraction of the posterior mean.
 
     Used as a conformal-style guard against over-tight posteriors that
@@ -220,7 +220,7 @@ def bayesian_update(
     seed: int = 42,
     observation_node: str = "venous_blood",
     method: str = "importance_sampling",
-    sbi_posterior_path: "str | None" = None,
+    sbi_posterior_path: str | None = None,
     sbi_fallback: bool = True,
     sbi_use_surrogate: bool = False,
     sbi_surrogate_std_threshold: float = 0.02,
@@ -287,12 +287,12 @@ def bayesian_update(
     if not observations:
         raise ValueError("At least one observation is required")
 
-    def _finalize(res: "TDMResult") -> "TDMResult":
+    def _finalize(res: TDMResult) -> TDMResult:
         return _apply_ci_floor(res, min_ci_half_width_fraction)
 
     # ── Dispatch to alternative methods ──
     if method == "ibis":
-        from sisyphus.regimen.tdm_ibis import ibis_update, IBISResult
+        from sisyphus.regimen.tdm_ibis import ibis_update
 
         ibis_result = ibis_update(
             compiled, graph, drug, regimen, observations,
