@@ -62,15 +62,21 @@ $$\frac{dA_i}{dt} = Q_i \cdot C_{in} - Q_i \cdot \frac{A_i \cdot R_{B:P}}{V_i \c
 
 **Hepatic clearance — Extended Clearance Model (ECM, default)** (ClearanceFluxSpec, `model="extended"`):
 
-$$CL_{h} = \frac{PS_{inf} + J_{max} \cdot f_u / (K_m + f_u \cdot C_u)}{PS_{eff} + PS_{inf} + J_{max} \cdot f_u / (K_m + f_u \cdot C_u)} \cdot CL_{int,h}$$
+The QSSA-derived effective intrinsic clearance, with $PS_{inf,total} = PS_{inf} + J_{max} \cdot f_u / (K_m + f_u \cdot C_{u,hep})$:
 
-where $PS_{inf}$ is passive sinusoidal influx, $PS_{eff}$ is efflux, $J_{max}/K_m$ are active uptake (OATP1B1, …) Michaelis–Menten parameters, and $CL_{int,h}$ is metabolic intrinsic clearance. The hepatocyte free-drug concentration $C_{u,hep}$ is solved in closed form via quasi-steady-state approximation (QSSA). For drugs without active transporter kinetics, the model reduces to the classical well-stirred form:
+$$CL_{int,eff} = \frac{PS_{inf,total} \cdot CL_{int,h}}{PS_{eff} + CL_{int,h}}$$
+
+is embedded in the well-stirred form:
+
+$$CL_{h} = \frac{Q \cdot f_u \cdot CL_{int,eff}}{Q + f_u \cdot CL_{int,eff}}$$
+
+where $PS_{inf}$ is passive sinusoidal influx, $PS_{eff}$ is sinusoidal efflux, $J_{max}/K_m$ are active uptake (OATP1B1, …) Michaelis–Menten parameters, and $CL_{int,h}$ is the sum of metabolic + biliary intrinsic clearance. Derivation: hepatocyte mass balance $PS_{inf,total} \cdot C_{u,blood} = (PS_{eff} + CL_{int,h}) \cdot C_{u,hep}$ at steady state (QSSA). For drugs without active transporter kinetics, the model reduces to the classical well-stirred form:
 
 $$CL_{int,organ} = \sum_j \left( E_j \cdot k_j \right) \cdot S_{IVIVE}$$
 
 $$CL_{organ} = \frac{Q \cdot f_u \cdot CL_{int,organ}}{Q + f_u \cdot CL_{int,organ}}$$
 
-where $E_j$ is the enzyme abundance (total pmol in organ), $k_j$ is the per-enzyme intrinsic clearance (&mu;L/min/pmol), and $S_{IVIVE}$ converts units (60/10<sup>6</sup>, &mu;L/min &rarr; L/h). This formulation is **enzyme-level**: clearance at any organ is computed from its local enzyme profile, not from organ identity (Houston, 1994; Yang et al., 2007; Shitara et al., 2013 for ECM).
+where $E_j$ is the enzyme abundance (total pmol in organ), $k_j$ is the per-enzyme intrinsic clearance (&mu;L/min/pmol), and $S_{IVIVE}$ converts units (60/10<sup>6</sup>, &mu;L/min &rarr; L/h). This formulation is **enzyme-level**: clearance at any organ is computed from its local enzyme profile, not from organ identity (Houston, 1994; Yang et al., 2007; Shitara et al., 2013 / Yoshikado et al., 2017 for the ECM/QSSA hepatocyte form implemented here).
 
 **Permeability-limited distribution** (DiffusionFluxSpec):
 
@@ -554,7 +560,7 @@ data/
 ├── compounds/           # Curated compound configurations
 └── reference/           # Clinical PK reference data, holdout split
 
-models/                  # Pre-trained XGBoost models (not in git)
+models/                  # Pre-trained XGBoost models (committed; ~37MB)
 ```
 
 ## Predecessor
