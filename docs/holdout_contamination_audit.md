@@ -40,6 +40,7 @@ The contaminated meta-learner learned to trust ML almost exclusively (especially
 | 2026-04-08 | Regenerated `3track_holdout_predictions.json` with full clean pipeline |
 | 2026-04-08 | Regenerated Figure 2 scatter plot (AAFE 2.808, %2-fold 45.8%) |
 | 2026-04-08 | Contaminated predictions saved as `.contaminated.bak` |
+| 2026-05-08 | All `.contaminated.bak` and `.pre_biogen.bak` files relocated to `archive/contaminated/` (mirrors original directory structure) for repo hygiene; content unchanged |
 
 ### Corrected Headline Numbers
 
@@ -61,7 +62,10 @@ All paper-facing metrics must use clean values:
 | `models/direct_pk/meta.json` | Clean weights v3 (2026-04-04) |
 | `data/training/3track_holdout_predictions.json` | Clean (regenerated 2026-04-08) |
 | `docs/figures/figure2_scatter.png` | Clean (regenerated 2026-04-08) |
-| All `.contaminated.bak` files | Preserved for audit trail |
+| `archive/contaminated/models/adme/*.contaminated.bak` (4 files) | Preserved for audit trail (relocated 2026-05-08) |
+| `archive/contaminated/models/adme/xgboost_clint.json.pre_biogen.bak` | Preserved for audit trail (relocated 2026-05-08) |
+| `archive/contaminated/models/direct_pk/*.contaminated.bak` (2 files) | Preserved for audit trail (relocated 2026-05-08) |
+| `archive/contaminated/data/training/3track_holdout_predictions.json.contaminated.bak` | Preserved for audit trail (relocated 2026-05-08) |
 
 ---
 
