@@ -9,19 +9,38 @@ uses saturable Michaelis-Menten kinetics (no back-solve).
 These tests fail on pre-fix main and pass after the pipeline/predict.py
 back-solve cancellation fix.
 
-Drug selection rationale:
+Drug selection rationale (assumes DrugBank fm enrichment):
 - Tizanidine: DrugBank annotates CYP1A2 ONLY → fm_CYP1A2 = 1.0, moderate CLint
   → PM drops CYP1A2 abundance 10×, total hepatic CLint ~10× lower → Cmax ~1.5×.
 - Irbesartan: DrugBank annotates CYP2C9 ONLY → fm_CYP2C9 = 1.0, moderate CLint
-  → PM drops CYP2C9 abundance 10×, total hepatic CLint ~10× lower → Cmax ~1.2×.
-- Caffeine/warfarin avoided: DrugBank annotates 3–5 CYP enzymes (equal fm each),
-  diluting the single-enzyme PM effect to < 1.1×.
+  → PM drops CYP2C9 abundance 10×, total hepatic CLint ~10× lower → Cmax ~1.25×.
+
+DrugBank dependency: these tests rely on DrugBank's per-drug fm fractions for
+CYP-specific allocation. Without DrugBank artifacts (`data/drugbank/`),
+fm fractions are XGBoost-CLint allocated across all annotated CYPs uniformly —
+which dilutes single-CYP phenotype effects to ~1.01x ratios (mathematically
+correct but mechanistically inert). DrugBank CSVs require an academic license
+and are not committed; tests skip on public-clone state when the dir is absent.
+The architectural correctness of the back-solve fix is verified separately at
+the engine layer (see `tests/unit/test_phenotype.py`).
 """
 from __future__ import annotations
 
 import pytest
 
 from sisyphus.pipeline.predict import predict
+from sisyphus.predict.drugbank import _DEFAULT_DATA_DIR as _DRUGBANK_DIR
+
+_drugbank_present = (_DRUGBANK_DIR / "drugs.csv").exists()
+_skip_no_drugbank = pytest.mark.skipif(
+    not _drugbank_present,
+    reason=(
+        "DrugBank artifacts not present (academic license required). "
+        "Pipeline-level CYP phenotype propagation requires DrugBank fm enrichment "
+        "for measurable single-CYP PM/EM ratios; engine-level architectural "
+        "correctness verified in tests/unit/test_phenotype.py."
+    ),
+)
 
 # CYP1A2 probe: tizanidine (DrugBank: CYP1A2 only)
 _TIZANIDINE_SMILES = "C1CN=C(N1)NC2=C(C=CC3=NSN=C32)Cl"
@@ -36,6 +55,7 @@ _PRAVASTATIN_SMILES = (
 )
 
 
+@_skip_no_drugbank
 @pytest.mark.slow
 def test_tizanidine_cyp1a2_pm_propagates():
     """CYP1A2:PM should drop tizanidine clearance, raising Cmax > 1.2× EM.
@@ -56,6 +76,7 @@ def test_tizanidine_cyp1a2_pm_propagates():
     )
 
 
+@_skip_no_drugbank
 @pytest.mark.slow
 def test_irbesartan_cyp2c9_pm_propagates():
     """CYP2C9:PM should drop irbesartan clearance, raising Cmax > 1.1× EM.

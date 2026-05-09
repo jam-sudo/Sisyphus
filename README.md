@@ -279,14 +279,16 @@ External validation on a Murcko scaffold-stratified holdout set (N=107, seed=42,
 
 $$AAFE = 10^{\operatorname{mean}\left(\left|\log_{10}\frac{C_{max,pred}}{C_{max,obs}}\right|\right)}$$
 
-| Track | AAFE | 95% CI | %2-fold | %3-fold | N |
-|---|:-:|:-:|:-:|:-:|:-:|
-| **Meta-learner (production)** | **2.679** | [2.30, 3.14] | 46.7% | 63.6% | 107 |
-| Engine only | 3.791 | [3.14, 4.61] | 33.6% | 43.9% | 107 |
-| ML only | 3.012 | [2.56, 3.57] | 43.0% | 57.9% | 107 |
-| Meta, in-domain | 2.733 | [2.28, 3.31] | 45.6% | 62.0% | 79 |
+| Track | AAFE | %2-fold | %3-fold | N |
+|---|:-:|:-:|:-:|:-:|
+| **Meta-learner (production)** | **2.751** | 44.9% | 64.5% | 107 |
+| Engine only | 4.008 | 29.0% | 45.8% | 107 |
+| ML only | 3.012 | 43.0% | 57.9% | 107 |
+| Meta, in-domain | 2.837 | 42.0% | 61.7% | 81 |
 
-The 4-track meta-learner combines mechanistic PBPK (Engine), data-driven XGBoost C<sub>max</sub> (ML), a closed-form CL/F analytical (CLF), and a conditional VDss analytical track. Weights are compound-type-adaptive and LOOCV-calibrated: base compounds blend Engine 0.60 / ML 0.40; other compounds use Engine 0.35 / ML 0.50 / CLF 0.15, with VDss 0.20 added when applicability criteria are satisfied (and the remaining tracks re-scaled by ×0.80 so the total is 1.0). In-domain AAFE (N=79) excludes 28 drugs flagged as out-of-applicability-domain (prodrugs, high-MW, extreme lipophilicity, extended-release formulation mismatch).
+> **Reproducibility note (2026-05-09 audit-driven update).** These numbers reflect a **public-clone deterministic state**: a fresh `git clone` followed by `pip install -r requirements-lock.txt` reproduces them bit-for-bit. The previous cache (Meta 2.679, In-domain 2.733) was generated on a local-developer environment that conditionally loaded two artifacts not present in this repository: a proprietary DrugBank export (`data/drugbank/`, academic license required, gitignored) and a residual-correction logP XGBoost model (`models/adme/logp_correction.json`, gitignored). Both shifted Cmax predictions silently for the drugs they covered. Removing the silent shift moves Meta AAFE from 2.679 → 2.751 (+2.7%). 95% confidence intervals on the new headline are pending re-bootstrap; the headline point estimate is what fresh clones will see. Bootstrap CIs and prospective slice will be refreshed in a follow-up commit.
+
+The 4-track meta-learner combines mechanistic PBPK (Engine), data-driven XGBoost C<sub>max</sub> (ML), a closed-form CL/F analytical (CLF), and a conditional VDss analytical track. Weights are compound-type-adaptive and LOOCV-calibrated: base compounds blend Engine 0.60 / ML 0.40; other compounds use Engine 0.35 / ML 0.50 / CLF 0.15, with VDss 0.20 added when applicability criteria are satisfied (and the remaining tracks re-scaled by ×0.80 so the total is 1.0). In-domain AAFE (N=81) excludes 26 drugs flagged as out-of-applicability-domain (prodrugs, high-MW, extreme lipophilicity, extended-release formulation mismatch). The in-domain N shifted 79→81 vs the previous cache because the logp residual correction had pushed two drugs across the high-lipophilicity AD threshold.
 
 **Prospective validation** (FDA NMEs approved 2024–2025, curated 2026-04, never used in training or tuning):
 
@@ -295,9 +297,9 @@ The 4-track meta-learner combines mechanistic PBPK (Engine), data-driven XGBoost
 | All | 2.361 | [1.65, 3.50] | 53% | 15 |
 | In-domain | 2.043 | [1.46, 2.98] | — | 13 |
 
-Prospective AAFE is below retrospective (2.361 &lt; 2.679), the opposite direction from classical over-fitting. However, N=15 is underpowered; CI spans 1.65–3.50.
+Prospective AAFE is below retrospective (2.361 &lt; 2.751), the opposite direction from classical over-fitting. However, N=15 is underpowered; CI spans 1.65–3.50. The 2.361 prospective number was computed on the local-developer state with DrugBank+logp_correction and is pending refresh under public-clone state in a follow-up commit (expected delta is small; only ~3 of 15 prospective drugs have DrugBank records).
 
-**Cherry-picking caveat.** The 107-holdout has been used for ~47 configuration feedback cycles (track weights, routing, meta-learner variants). A quantitative audit (`docs/claude/cherry_picking_audit_2026-04-22.md`) scores aggregate risk 4.65/10 (moderate). The Meta CI upper bound (3.14) overlaps the audit's retrospective-contamination estimate (2.85–3.10), meaning the point estimate cannot statistically reject the null hypothesis that tuning inflated AAFE. A secondary permanent holdout (N50) is planned per `docs/claude/cherry_picking_process_v1.md`.
+**Cherry-picking caveat.** The 107-holdout has been used for ~47 configuration feedback cycles (track weights, routing, meta-learner variants). A quantitative audit (`docs/claude/cherry_picking_audit_2026-04-22.md`) scores aggregate risk 4.65/10 (moderate). The retrospective-contamination estimate (2.85–3.10 from the audit) brackets the new public-clone Meta point estimate 2.751, meaning the point estimate cannot statistically reject the null hypothesis that tuning inflated AAFE. A secondary permanent holdout (N50) is planned per `docs/claude/cherry_picking_process_v1.md`.
 
 ### Multi-dose regimen validation
 
@@ -355,7 +357,7 @@ Single-patient deterministic prediction completes in &lt;500 ms, compatible with
 
 **Persistent xfails (7):** 3 statin Cmax tests under ECM (rosuvastatin, atorvastatin Peff over-prediction; fluvastatin under-prediction FE 4.79 in the ECM-forced gate / FE 1.54 in the production no-ECM `predict()` path — issue #21 closed post-PR #29 as not-ECM-applicable per Niemi 2009 CYP2C9-dominance; the gate failure is the intended signal that ECM should not be activated for fluvastatin); 4 prodrug 3-fold clinical validation gates (sepiapterin, remdesivir, tebipenem-pivoxil, fostamatinib) per spec &sect; 3.3 mechanistic-A doctrine — extraction-step rate-limits dominate active CL/V disposition, and gate-fail under mechanistic-A-compliant values is informative not project-failing.
 
-**Known failing test (1):** `test_irinotecan_returns_active_sn38_cmax` — SN-38 active-species C<sub>max</sub> 9.71 mg/L vs gate &lt; 1.0 mg/L. Irinotecan was added to the prodrug-activation registry in v0.3.4 (PR #34) as a partial implementation of issue #11; the active-species routing currently over-predicts (likely double-routing or conversion-yield calibration error) and the test enforces a guard. Tracked as work-in-progress under #11. The previously listed failures (cached-AAFE assertion, v3 enzyme-leak audit) have since been resolved — the cached test was refreshed to 2.679 and the v3 leak audit now passes. Neither historical nor current failure regresses the headline AAFE 2.679 (re-run via `scripts/run_engine_benchmark.py`).
+**Known failing test (1):** `test_irinotecan_returns_active_sn38_cmax` — SN-38 active-species C<sub>max</sub> 9.71 mg/L vs gate &lt; 1.0 mg/L. Irinotecan was added to the prodrug-activation registry in v0.3.4 (PR #34) as a partial implementation of issue #11; the active-species routing currently over-predicts (likely double-routing or conversion-yield calibration error) and the test enforces a guard. Tracked as work-in-progress under #11. The previously listed failures (cached-AAFE assertion, v3 enzyme-leak audit) have since been resolved — the cached test was refreshed to 2.751 (public-clone state) and the v3 leak audit now passes. Neither historical nor current failure regresses the headline AAFE 2.751 (re-run via `scripts/run_engine_benchmark.py`).
 
 ## Architecture
 
