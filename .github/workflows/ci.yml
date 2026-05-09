@@ -30,8 +30,11 @@ jobs:
       - name: Unit tests
         run: pytest tests/unit -v --tb=short
 
-      - name: Engine validation integration
-        run: pytest tests/integration/test_engine_validation.py -v --tb=short
+      - name: Integration tests (full)
+        run: pytest tests/integration -v --tb=short
+
+      - name: Regression tests (registry pinning, holdout invariance, prodrug gates)
+        run: pytest tests/regression -v --tb=short
 
       - name: Benchmark smoke (N≤10 holdout drugs, slow marker)
         run: pytest tests/benchmark/test_holdout.py -v --tb=short
