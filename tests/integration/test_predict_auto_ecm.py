@@ -7,10 +7,20 @@ the empirically-documented triple-counting bug for CYP-dominant or
 otherwise-not-OATP-rate-limited drugs (fluvastatin, pitavastatin,
 rosuvastatin, atorvastatin).
 
-Reference Cmax values (40 mg/2 mg oral, realize_means(), post-Hardening):
-- pravastatin auto-ECM (mf=0): 0.0422 mg/L (FDA 0.045, FE 1.066)
-- pitavastatin no-ECM:         0.00777 mg/L
-- fluvastatin no-ECM:          0.0583 mg/L
+Reference Cmax values (40 mg/2 mg oral, realize_means(), post-Hardening,
+**public-clone deterministic** — no DrugBank or logp_correction enrichment):
+- pravastatin auto-ECM (mf=0): 0.0294 mg/L (FDA 0.045, FE 1.531 public-only;
+                                            with DrugBank+logp_correction
+                                            local-developer Cmax was 0.0422 / FE 1.066)
+- pitavastatin auto-ECM:        0.00116 mg/L (FDA 0.0035, FE 3.012 public-only;
+                                              local-developer was 0.00168 / FE 2.08)
+- fluvastatin no-ECM:           0.0539 mg/L
+
+These tests verify mechanical correctness (auto-activation fires correctly,
+warnings emitted, no-ECM path doesn't leak) rather than absolute clinical
+Cmax accuracy. The public-only Cmax values reflect what `predict()` returns
+on a fresh clone without proprietary DrugBank artifacts. Headline AAFE in
+README §Validation reflects the same public-clone-deterministic state.
 """
 from __future__ import annotations
 
@@ -42,7 +52,7 @@ def test_pravastatin_auto_ecm_activates():
     assert any("oatp1b1:auto_ecm:pravastatin" in w for w in result.warnings), (
         f"expected oatp1b1:auto_ecm:pravastatin warning, got: {result.warnings}"
     )
-    expected = 0.0422
+    expected = 0.0294  # public-clone deterministic; with DrugBank+logp_corr was 0.0422
     rel_err = abs(cmax - expected) / expected
     assert rel_err < 0.05, (
         f"pravastatin auto-ECM Cmax drift: actual={cmax:.4f}, expected={expected:.4f}, "
@@ -59,7 +69,7 @@ def test_fluvastatin_no_auto_ecm():
     assert not any("oatp1b1:auto_ecm" in w for w in result.warnings), (
         f"fluvastatin should NOT auto-activate ECM, but got warnings: {result.warnings}"
     )
-    expected = 0.0583
+    expected = 0.0539  # public-clone deterministic; with DrugBank+logp_corr was 0.0583
     rel_err = abs(cmax - expected) / expected
     assert rel_err < 0.05, (
         f"fluvastatin Cmax shifted unexpectedly: actual={cmax:.4f}, "
@@ -75,13 +85,16 @@ def test_pitavastatin_auto_ecm_activates():
     metabolic_fraction=0 (parallel pravastatin justification: Niemi 2009
     PM/EM ~3x; OATP1B1 hepatic uptake is rate-limiting).
 
-    EMPIRICAL NOTE: pitavastatin Cmax under auto-ECM is 0.00168 mg/L (FE
-    2.08x under FDA Livalo 0.0035). The under-prediction reflects
+    EMPIRICAL NOTE: pitavastatin Cmax under auto-ECM is 0.00116 mg/L
+    (FE 3.012x under FDA Livalo 0.0035) on a public-clone deterministic
+    state. With DrugBank+logp_correction enrichment local-developer Cmax
+    was 0.00168 (FE 2.08). The under-prediction reflects a combination of
     Jmax/PS calibration uncertainty (Hirano 2004 scaled-from-pravastatin
-    estimate carries ~2x literature range), NOT metabolic_fraction error
-    (sweep mf=[0,1] showed <2% Cmax variation). Mechanistic correctness
-    (OATP-rate-limited path active) is the v0.3.1 gain; absolute Cmax
-    accuracy improvement is deferred to per-drug Jmax/PS curation.
+    estimate carries ~2x literature range) AND public-only Crippen logP /
+    XGBoost-allocated CYP fm fractions. Mechanistic correctness (OATP-rate-
+    limited path active) is the v0.3.1 gain; absolute Cmax accuracy
+    improvement is deferred to per-drug Jmax/PS curation + DrugBank-
+    independent fm allocation work.
     """
     result = predict(_PITA_SMILES, dose_mg=2.0, route="oral", n_mc_samples=0)
     assert result.engine_pk is not None
@@ -89,7 +102,7 @@ def test_pitavastatin_auto_ecm_activates():
     assert any("oatp1b1:auto_ecm:pitavastatin" in w for w in result.warnings), (
         f"expected oatp1b1:auto_ecm:pitavastatin warning, got: {result.warnings}"
     )
-    expected = 0.00168
+    expected = 0.00116  # public-clone deterministic; with DrugBank+logp_corr was 0.00168
     rel_err = abs(cmax - expected) / expected
     assert rel_err < 0.05, (
         f"pitavastatin auto-ECM Cmax drift: actual={cmax:.5f}, expected={expected:.5f}, "
