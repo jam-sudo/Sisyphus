@@ -77,3 +77,27 @@ graph     ←  (nothing)                  (BodyGraph types, YAML builder)
 3. **If the experiment failed**, also add to `docs/claude/dead-ends.md` with the next `DE-NN` id.
 4. **If the experiment reshapes ceiling analysis**, update `docs/claude/diagnosis.md` directly.
 5. **If a new file/model/script shipped**, add it to `docs/claude/landmarks.md`.
+
+## Artifact gates — do not introduce silent fallbacks
+
+**Lesson from the 2026-05-09 audit cycle.** Two gitignored artifacts silently augmented prediction accuracy for ~4 weeks, anchoring a headline AAFE (2.679) that no public clone could reproduce. The current headline 2.751 is the *honest* public-clone deterministic value, and CI is anchored to that state.
+
+When adding any new data file or model artifact that `predict()` (or any downstream code) loads conditionally via `Path.exists()`:
+
+- **Default to mandatory**: if the artifact materially shifts predictions, commit it. If it cannot be committed (size, license), make the loader **fail loudly** at import or first use rather than silently fall back.
+- **If a conditional fallback is genuinely warranted** (e.g., DrugBank with academic license), the loader must `logger.warning(...)` once at activation, and the README `§Validation` must document which headline value reflects which artifact set.
+- **Test fixtures that pin numerical values to a specific artifact state** must `pytest.skipif` on the absence of that artifact, with an actionable reason message (see `tests/regression/test_prodrug_v3_enzyme_leak_audit.py` for the pattern).
+- **Cross-environment numerical drift** between local dev and CI on the SAME committed inputs is typically ~0.1–3% (BLAS/CPU-SIMD build differences). Pin tests at 5–7% rel-tolerance for cross-env determinism; below that risks flake, above that misses real architectural-leak signal.
+
+Known artifact gates that flip headline numbers if added/removed:
+
+| Artifact | Path | Status | Effect on Meta AAFE |
+|---|---|---|---|
+| DrugBank CSVs | `data/drugbank/` | gitignored (academic license) | -2.7% AAFE when present |
+| logP residual model | `models/adme/logp_correction.json` | gitignored (locally trained) | contributes to the same -2.7% |
+
+If you find yourself benefiting from one of these locally, do not let your local quality leak into the published headline; the headline must match what a fresh clone sees.
+
+## Branch protection
+
+`main` is protected (`required_status_checks: [test]`, `strict: true`, no force-push, no deletion). All changes land via PR with passing CI. `gh pr merge --auto` will queue but only land after the test job passes — do not rely on auto-merge as a tactic for landing failing changes.
