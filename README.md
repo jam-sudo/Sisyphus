@@ -279,14 +279,14 @@ External validation on a Murcko scaffold-stratified holdout set (N=107, seed=42,
 
 $$AAFE = 10^{\operatorname{mean}\left(\left|\log_{10}\frac{C_{max,pred}}{C_{max,obs}}\right|\right)}$$
 
-| Track | AAFE | %2-fold | %3-fold | N |
-|---|:-:|:-:|:-:|:-:|
-| **Meta-learner (production)** | **2.751** | 44.9% | 64.5% | 107 |
-| Engine only | 4.008 | 29.0% | 45.8% | 107 |
-| ML only | 3.012 | 43.0% | 57.9% | 107 |
-| Meta, in-domain | 2.837 | 42.0% | 61.7% | 81 |
+| Track | AAFE | 95% CI | %2-fold | %3-fold | N |
+|---|:-:|:-:|:-:|:-:|:-:|
+| **Meta-learner (production)** | **2.751** | [2.35, 3.23] | 44.9% | 64.5% | 107 |
+| Engine only | 4.008 | [3.36, 4.83] | 29.0% | 45.8% | 107 |
+| ML only | 3.012 | [2.56, 3.57] | 43.0% | 57.9% | 107 |
+| Meta, in-domain | 2.837 | [2.37, 3.41] | 42.0% | 61.7% | 81 |
 
-> **Reproducibility note (2026-05-09 audit-driven update).** These numbers reflect a **public-clone deterministic state**: a fresh `git clone` followed by `pip install -r requirements-lock.txt` reproduces them bit-for-bit. The previous cache (Meta 2.679, In-domain 2.733) was generated on a local-developer environment that conditionally loaded two artifacts not present in this repository: a proprietary DrugBank export (`data/drugbank/`, academic license required, gitignored) and a residual-correction logP XGBoost model (`models/adme/logp_correction.json`, gitignored). Both shifted Cmax predictions silently for the drugs they covered. Removing the silent shift moves Meta AAFE from 2.679 → 2.751 (+2.7%). 95% confidence intervals on the new headline are pending re-bootstrap; the headline point estimate is what fresh clones will see. Bootstrap CIs and prospective slice will be refreshed in a follow-up commit.
+> **Reproducibility note (2026-05-09 audit-driven update).** These numbers reflect a **public-clone deterministic state**: a fresh `git clone` followed by `pip install -r requirements-lock.txt` reproduces them bit-for-bit. The previous cache (Meta 2.679 [2.30, 3.14], In-domain 2.733) was generated on a local-developer environment that conditionally loaded two artifacts not present in this repository: a proprietary DrugBank export (`data/drugbank/`, academic license required, gitignored) and a residual-correction logP XGBoost model (`models/adme/logp_correction.json`, gitignored). Both shifted Cmax predictions silently for the drugs they covered. Removing the silent shift moves Meta AAFE from 2.679 → 2.751 (+2.7%). Bootstrap 95% CIs (10,000 resamples on |log<sub>10</sub>(fold)|, seed=20260422, computed 2026-05-12) are above; the new Meta CI [2.35, 3.23] overlaps the previous [2.30, 3.14], confirming the +2.7% shift is within sampling uncertainty. Prospective slice (15 NMEs) refresh is deferred to a follow-up commit (small expected delta; only ~3 of 15 drugs have DrugBank records). Artifact: `data/validation/4track_ci_2026-05-12_v0.4.json`.
 
 The 4-track meta-learner combines mechanistic PBPK (Engine), data-driven XGBoost C<sub>max</sub> (ML), a closed-form CL/F analytical (CLF), and a conditional VDss analytical track. Weights are compound-type-adaptive and LOOCV-calibrated: base compounds blend Engine 0.60 / ML 0.40; other compounds use Engine 0.35 / ML 0.50 / CLF 0.15, with VDss 0.20 added when applicability criteria are satisfied (and the remaining tracks re-scaled by ×0.80 so the total is 1.0). In-domain AAFE (N=81) excludes 26 drugs flagged as out-of-applicability-domain (prodrugs, high-MW, extreme lipophilicity, extended-release formulation mismatch). The in-domain N shifted 79→81 vs the previous cache because the logp residual correction had pushed two drugs across the high-lipophilicity AD threshold.
 
