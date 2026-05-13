@@ -77,13 +77,26 @@ class DrugBankLookup:
         if self._loaded:
             return
         self._loaded = True
+        if not (self._data_dir / "drugs.csv").exists():
+            # Public-clone state — DrugBank not present. Silent until queried,
+            # then this single message announces the fallback at first use.
+            logger.info(
+                "DrugBank not present at %s — running in public-clone deterministic "
+                "state. fup/pKa/logP enrichments will not apply. See AGENTS.md "
+                "§\"Artifact gates\" for the headline AAFE footprint (~+2.7%% when "
+                "absent vs present).",
+                self._data_dir,
+            )
+            return
         self._load_drugs()
         self._load_enzymes()
         self._load_pk_data()
         self._load_experimental()
         logger.info(
-            "DrugBank loaded: %d SMILES, %d InChIKey, %d enzyme, %d fup, %d pka, %d logp",
-            len(self._smiles_to_id), len(self._inchikey14_to_id),
+            "DrugBank loaded from %s — enriching %d SMILES, %d InChIKey, %d enzyme, "
+            "%d fup, %d pka, %d logp. Predictions will differ from public-clone "
+            "state; see AGENTS.md §\"Artifact gates\".",
+            self._data_dir, len(self._smiles_to_id), len(self._inchikey14_to_id),
             len(self._enzyme_substrates), len(self._fup), len(self._pka), len(self._logp),
         )
 

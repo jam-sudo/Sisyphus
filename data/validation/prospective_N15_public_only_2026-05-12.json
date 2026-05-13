@@ -1,0 +1,237 @@
+{
+  "context": "public-clone deterministic prospective N=15 (post 2026-05-09 audit honesty regen). DrugBank+logp_correction hidden.",
+  "n": 15,
+  "drugs": [
+    {
+      "name": "resmetirom",
+      "smiles": "CC(C)c1cc(Oc2c(Cl)cc(-n3nc(C#N)c(=O)[nH]c3=O)cc2Cl)n[nH]c1=O",
+      "dose_mg": 100.0,
+      "obs": 0.971,
+      "meta": 0.994350622342596,
+      "engine": 0.685764166644399,
+      "ml": 1.326015801495338,
+      "meta_fold": 1.0240480147709536,
+      "engine_fold": 1.41593866700753,
+      "ml_fold": 1.3656187451033348,
+      "in_ad": true,
+      "ad_flags": []
+    },
+    {
+      "name": "aficamten",
+      "smiles": "CCc1nc(-c2ccc3c(c2)CC[C@H]3NC(=O)c2cnn(C)c2)no1",
+      "dose_mg": 20.0,
+      "obs": 0.0705,
+      "meta": 0.10861425285305454,
+      "engine": 0.10890320127482567,
+      "ml": 0.0863320085722217,
+      "meta_fold": 1.5406277000433268,
+      "engine_fold": 1.5447262592173856,
+      "ml_fold": 1.224567497478322,
+      "in_ad": true,
+      "ad_flags": []
+    },
+    {
+      "name": "elafibranor",
+      "smiles": "CSc1ccc(C(=O)/C=C/c2cc(C)c(OC(C)(C)C(=O)O)c(C)c2)cc1",
+      "dose_mg": 120.0,
+      "obs": 0.802,
+      "meta": 0.9023937605249769,
+      "engine": 0.36379167297561926,
+      "ml": 1.9200861594276695,
+      "meta_fold": 1.1251792525249087,
+      "engine_fold": 2.204558431588259,
+      "ml_fold": 2.3941223933013336,
+      "in_ad": true,
+      "ad_flags": []
+    },
+    {
+      "name": "inavolisib",
+      "smiles": "C[C@H](Nc1ccc2c(c1)OCCn1cc(N3C(=O)OC[C@H]3C(F)F)nc1-2)C(N)=O",
+      "dose_mg": 9.0,
+      "obs": 0.035,
+      "meta": 0.02073832966226786,
+      "engine": 0.006186936586727796,
+      "ml": 0.0692692064265914,
+      "meta_fold": 1.6876961920265157,
+      "engine_fold": 5.65708077161837,
+      "ml_fold": 1.979120183616897,
+      "in_ad": true,
+      "ad_flags": []
+    },
+    {
+      "name": "danicopan",
+      "smiles": "CC(=O)c1nn(CC(=O)N2C[C@H](F)C[C@H]2C(=O)Nc2cccc(Br)n2)c2ccc(-c3cnc(C)nc3)cc12",
+      "dose_mg": 150.0,
+      "obs": 0.27,
+      "meta": 0.27363820963034313,
+      "engine": 0.11820927467187724,
+      "ml": 0.2585138151716132,
+      "meta_fold": 1.0134748504827522,
+      "engine_fold": 2.284084736578075,
+      "ml_fold": 1.0444316092769037,
+      "in_ad": false,
+      "ad_flags": [
+        "PGP_EFFLUX_RISK"
+      ]
+    },
+    {
+      "name": "berotralstat",
+      "smiles": "N#Cc1cccc([C@@H](NCC2CC2)c2ccc(F)c(NC(=O)c3cc(C(F)(F)F)nn3-c3cccc(CN)c3)c2)c1",
+      "dose_mg": 150.0,
+      "obs": 0.032,
+      "meta": 0.2531466844518896,
+      "engine": 0.14687137583325546,
+      "ml": 0.2300866042555239,
+      "meta_fold": 7.91083388912155,
+      "engine_fold": 4.589730494789233,
+      "ml_fold": 7.190206382985122,
+      "in_ad": false,
+      "ad_flags": [
+        "EXTREME_LIPOPHILIC",
+        "PGP_EFFLUX_RISK"
+      ]
+    },
+    {
+      "name": "vimseltinib",
+      "smiles": "Cc1nc(-c2cnc(NC(C)C)n(C)c2=O)ccc1Oc1ccnc(-c2cnn(C)c2)c1",
+      "dose_mg": 30.0,
+      "obs": 0.283,
+      "meta": 0.1633082274223967,
+      "engine": 0.09243432234171518,
+      "ml": 0.2192949304077873,
+      "meta_fold": 1.7329194276784385,
+      "engine_fold": 3.0616333070933694,
+      "ml_fold": 1.2904995089204783,
+      "in_ad": true,
+      "ad_flags": []
+    },
+    {
+      "name": "gepotidacin",
+      "smiles": "O=c1ccc2ncc(=O)n3c2n1C[C@H]3CN1CCC(NCc2cc3c(cn2)OCCC3)CC1",
+      "dose_mg": 1500.0,
+      "obs": 3.0,
+      "meta": 2.2759045510687432,
+      "engine": 0.677675042893719,
+      "ml": 3.2705755346416683,
+      "meta_fold": 1.3181572129601078,
+      "engine_fold": 4.426900520328731,
+      "ml_fold": 1.090191844880556,
+      "in_ad": true,
+      "ad_flags": []
+    },
+    {
+      "name": "taletrectinib",
+      "smiles": "C[C@@H](N)COc1ccc(-c2cnc3cc/c(=N/[C@H](C)c4cccc(F)c4)[nH]n23)cc1",
+      "dose_mg": 600.0,
+      "obs": 0.24,
+      "meta": 1.807220202913107,
+      "engine": 1.5113828329569645,
+      "ml": 1.175878756802017,
+      "meta_fold": 7.530084178804613,
+      "engine_fold": 6.297428470654019,
+      "ml_fold": 4.899494820008404,
+      "in_ad": true,
+      "ad_flags": []
+    },
+    {
+      "name": "suzetrigine",
+      "smiles": "COc1c([C@H]2[C@H](C(=O)Nc3ccnc(C(N)=O)c3)O[C@@](C)(C(F)(F)F)[C@H]2C)ccc(F)c1F",
+      "dose_mg": 100.0,
+      "obs": 0.62,
+      "meta": 0.5550920908170385,
+      "engine": 0.267851600569591,
+      "ml": 0.5450661871115923,
+      "meta_fold": 1.1169317852960645,
+      "engine_fold": 2.3147145609044686,
+      "ml_fold": 1.1374765389236416,
+      "in_ad": true,
+      "ad_flags": []
+    },
+    {
+      "name": "vorasidenib",
+      "smiles": "C[C@@H](Nc1nc(N[C@H](C)C(F)(F)F)nc(-c2cccc(Cl)n2)n1)C(F)(F)F",
+      "dose_mg": 40.0,
+      "obs": 0.0302,
+      "meta": 0.11813455743730715,
+      "engine": 0.12396582514785422,
+      "ml": 0.105397752897684,
+      "meta_fold": 3.911740312493614,
+      "engine_fold": 4.104828647279941,
+      "ml_fold": 3.4899918178041056,
+      "in_ad": true,
+      "ad_flags": []
+    },
+    {
+      "name": "pirtobrutinib",
+      "smiles": "COc1ccc(F)cc1C(=O)NCc1ccc(-c2nn([C@@H](C)C(F)(F)F)c(N)c2C(N)=O)cc1",
+      "dose_mg": 200.0,
+      "obs": 3.99,
+      "meta": 0.8244138152159616,
+      "engine": 0.43988805513949053,
+      "ml": 1.2139570408895104,
+      "meta_fold": 4.839802446729728,
+      "engine_fold": 9.070489533376287,
+      "ml_fold": 3.286771990775211,
+      "in_ad": true,
+      "ad_flags": []
+    },
+    {
+      "name": "pacritinib",
+      "smiles": "C1=C/COCc2cc(ccc2OCCN2CCCC2)Nc2nccc(n2)-c2cccc(c2)COC/1",
+      "dose_mg": 200.0,
+      "obs": 2.18,
+      "meta": 0.4058485777901111,
+      "engine": 0.4508340550402963,
+      "ml": 0.15922497284258036,
+      "meta_fold": 5.371461474302395,
+      "engine_fold": 4.835482092862635,
+      "ml_fold": 13.691319653452117,
+      "in_ad": true,
+      "ad_flags": []
+    },
+    {
+      "name": "crinecerfont",
+      "smiles": "C#CCN(c1nc(-c2cc(C)c(OC)cc2Cl)c(C)s1)[C@@H](CC1CC1)c1ccc(C)c(F)c1",
+      "dose_mg": 100.0,
+      "obs": 1.44,
+      "meta": 0.3386506391905536,
+      "engine": 0.49215269243992005,
+      "ml": 0.09485043722368139,
+      "meta_fold": 4.252169738825544,
+      "engine_fold": 2.9259212072192193,
+      "ml_fold": 15.181796121868313,
+      "in_ad": false,
+      "ad_flags": [
+        "EXTREME_LIPOPHILIC"
+      ]
+    },
+    {
+      "name": "revumenib",
+      "smiles": "CCN(C(=O)c1cc(F)ccc1Oc1cncnc1N1CC2(CCN(C[C@H]3CC[C@H](NS(=O)(=O)CC)CC3)CC2)C1)C(C)C",
+      "dose_mg": 270.0,
+      "obs": 1.172,
+      "meta": 0.4584620697582649,
+      "engine": 0.44259550387011326,
+      "ml": 0.3493561438760698,
+      "meta_fold": 2.556372876425666,
+      "engine_fold": 2.6480160547314147,
+      "ml_fold": 3.354742776230533,
+      "in_ad": false,
+      "ad_flags": [
+        "PGP_EFFLUX_RISK"
+      ]
+    }
+  ],
+  "overall": {
+    "meta_aafe": 2.401657547448248,
+    "engine_aafe": 3.3607647826976694,
+    "ml_aafe": 2.7423858026665147,
+    "pct_2fold": 53.333333333333336,
+    "pct_3fold": 60.0
+  },
+  "in_domain": {
+    "n": 11,
+    "meta_aafe": 2.2003438935779767,
+    "pct_2fold": 63.63636363636363
+  }
+}

@@ -377,7 +377,10 @@ def compute_profile(smiles: str) -> MolecularProfile:
     if db_logp is not None:
         logp = db_logp  # experimental overrides Crippen
 
-    # logP correction (residual learning) — only for Crippen, not experimental
+    # logP correction (residual learning) — only for Crippen, not experimental.
+    # NOTE: this model is gitignored (`models/adme/logp_correction.json`). When
+    # present locally it shifts headline AAFE by ~+2.7% (favourably); CI/public
+    # clones run without it. See AGENTS.md §"Artifact gates".
     _LOGP_CORR_PATH = Path(__file__).resolve().parent.parent.parent.parent / "models" / "adme" / "logp_correction.json"  # noqa: E501
     if db_logp is None and _LOGP_CORR_PATH.exists():
         try:
@@ -386,6 +389,11 @@ def compute_profile(smiles: str) -> MolecularProfile:
                 m = xgb.XGBRegressor()
                 m.load_model(str(_LOGP_CORR_PATH))
                 compute_profile._logp_model = m  # type: ignore[attr-defined]
+                logger.info(
+                    "logp_correction: enriched (gitignored artifact present at %s); "
+                    "predictions will differ from public-clone state by O(1-5%%)",
+                    _LOGP_CORR_PATH,
+                )
             import numpy as np
             corr_features = np.array([[logp, mw, tpsa, float(hbd), float(hba), float(rotatable_bonds)]])  # noqa: E501
             correction = float(compute_profile._logp_model.predict(corr_features)[0])  # type: ignore[attr-defined]
