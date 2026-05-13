@@ -69,6 +69,7 @@ graph     ←  (nothing)                  (BodyGraph types, YAML builder)
 | `docs/claude/diagnosis.md` | Accuracy ceiling analysis (target-noise floor + error cancellation) |
 | `docs/claude/landmarks.md` | File / model / data / script inventory |
 | `docs/claude/phase-completion.md` | Shipped phases and tracks |
+| `docs/claude/backlog.md` | Deferred work items with effort/value/risk tags. Promote to spec cycle / Issue / dead-ends / experiment-log when disposition decided. |
 
 ## Update order after an experiment
 
