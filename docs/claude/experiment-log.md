@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-04
+last_updated: 2026-05-13
 parent: ../../CLAUDE.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -7,6 +7,35 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 # Experiment Log
 
 Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md).
+
+---
+
+## 2026-05-13 — UGT path sensitivity re-measurement (DE-36 refresh of DE-04)
+
+**Motivation:** the prior comment in `src/sisyphus/predict/ivive.py` ("UGT fm redistribution disabled — sensitivity test showed engine AAFE degradation 2.861 → 3.090") referenced an unrecorded measurement run pre-v0.3.2 + pre-public-only-headline + pre-ECM-auto-activation. Current pipeline is materially different (Engine baseline 3.791 not 2.861); the prior negative could be stale. Phase 1 = read-only sensitivity to decide between spec cycle (positive) vs DE-NN refresh (negative or neutral).
+
+**Method:** toggled `ugt_enzymes = db.get_ugt_enzymes(profile.smiles)` (vs current `None`) at `ivive.py:642`. Ran `scripts/run_engine_benchmark.py` under DrugBank-present + logp_correction-present (local-developer state); the toggle is a no-op under public-only state because DrugBank is the UGT data source.
+
+**Result:**
+
+| Slice | Track | A (UGT=None) | B (UGT enabled) | Δ |
+|---|---|---|---|---|
+| Overall N=107 | Engine | 3.791 | 3.762 | −0.029 |
+| | ML | 3.012 | 3.012 | 0 |
+| | **Meta** | **2.679** | **2.679** | **+0.0002** |
+| In-domain N=79 | Engine | 3.466 | 3.440 | −0.026 |
+| | Meta | 2.733 | 2.734 | +0.0005 |
+
+Per-drug Engine FE shifts (≥2% log10): 11 improved (dapagliflozin 15.8→13.7, etodolac 8.4→7.0, ketorolac 7.1→5.8, metronidazole 10.6→9.8, glasdegib 4.0→3.2 — UGT-substrate NSAIDs and gliflozins that were under-predicting), 5 worsened (codeine 2.0→2.4, morphine 1.9→2.1, losartan 2.2→2.5 — over-predicting drugs now over-predict more).
+
+**Interpretation:**
+1. The prior conclusion ("UGT path harmful, Engine −0.229 degraded") does **not** generalize to today's pipeline. Today UGT path is mildly Engine-positive.
+2. The +0.0002 Meta delta is the error-cancellation signature documented in `dead-ends.md` DE-08~DE-18: the 4-track meta-learner absorbs single-track improvements via weight redistribution. UGT activation gains nothing at the Meta level.
+3. Under public-only state (no DrugBank), UGT toggle has zero effect because there's no UGT data source. To realize the Engine improvement publicly would require a curated literature registry like the existing `data/enzymes/{nat2,ugt1a1}_substrates.json` (separate cycle).
+
+**Disposition:** not activated in production this cycle. Logged as `DE-36` in `dead-ends.md` with the refreshed measurement; the original comment in `ivive.py` is now a 14-line summary pointing at DE-36. DE-04 (the original entry) retained for historical record with a cross-reference to DE-36.
+
+**Code:** branch `investigate/ugt-path-sensitivity` (PR pending) carries only the documentation + comment update; the toggle was reverted.
 
 ---
 
