@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-02
+last_updated: 2026-05-13
 parent: ../../CLAUDE.md
 charter: Authoritative list of failed Sisyphus experiments. Read before proposing any accuracy improvement.
 ---
@@ -8,7 +8,7 @@ charter: Authoritative list of failed Sisyphus experiments. Read before proposin
 
 Every experiment here was run, reverted, and documented. **Before proposing any accuracy improvement, open this file and search for the approach.** New track proposals must first pass the error-decorrelation gate described in [diagnosis.md §4](./diagnosis.md).
 
-**Canonical count:** 35 enumerated experiments below. Narrative references in commit messages or prose (e.g. "#35 error cancellation", "14번째 시도", "누적 33 methods") use **informal** numbering that counts early exploration attempts separately; those narrative numbers are **not authoritative** and do not match the table count below. When in doubt, cite the table entry (`DE-NN`).
+**Canonical count:** 36 enumerated experiments below. Narrative references in commit messages or prose (e.g. "#35 error cancellation", "14번째 시도", "누적 33 methods") use **informal** numbering that counts early exploration attempts separately; those narrative numbers are **not authoritative** and do not match the table count below. When in doubt, cite the table entry (`DE-NN`).
 
 ## 1. Theme summary (11 categories)
 
@@ -43,8 +43,8 @@ AAFE ± 0.02, noise level.
 ### DE-03 — IVIVE chain ensemble (R&R/PT × WS/PT, 4 chains)
 Negative result.
 
-### DE-04 — UGT metabolism enabled in engine
-Engine AAFE 2.861 → 3.090. Revert.
+### DE-04 — UGT metabolism enabled in engine (pre-v0.3.2 pipeline)
+Engine AAFE 2.861 → 3.090. Revert. **Re-measured 2026-05-13 under current pipeline as DE-36 — prior conclusion does NOT generalize; today UGT path is mildly Engine-positive and Meta-neutral.** See DE-36 for the refreshed measurement; DE-04 retained for historical record only.
 
 ### DE-05 — E2E differentiable MLP
 Holdout 3.265. N=65 insufficient to learn a full SMILES→Cmax map.
@@ -148,6 +148,20 @@ Distinct from DE-30 (UDE / gradient-through-solver): pre-train an MLP operator t
 - **Gate 2 — E2E fine-tuning: FAIL.** Scaffold-CV AAFE 3.544 vs XGBoost 3.369 (+5.2% worse). Error correlation r(E2E, XGB)=0.867 — somewhat orthogonal, but E2E too inaccurate to contribute. The 12-D latent bottleneck through the physics operator over-constrains the model at N=1,239 training samples.
 
 Mechanism: the operator captures engine physics perfectly, but the engine's systematic bias (AAFE 3.42) transfers through unchanged — fine-tuning with N=1,239 cannot correct it via the encoder. Same SMILES information ceiling as DE-05/DE-17/DE-30 reached from a different architectural angle. Branch `feature/neural-operator-surrogate` (commit `b85b18d`); archive tag `archive/neural-operator-surrogate-2026-04-02`. Telltale if it returns: "differentiable surrogate / amortized engine / pre-trained operator + encoder fine-tuning" with N < 5K Cmax training data.
+
+### DE-36 — UGT fm redistribution re-measurement (2026-05-13)
+**Refresh of a prior unrecorded sensitivity test** that had concluded "UGT fm redistribution degrades Engine AAFE 2.861 → 3.090" (cited as a comment in `src/sisyphus/predict/ivive.py` pre-2026-05-13). That measurement was pre-v0.3.2 + pre-public-only-headline + pre-ECM-auto-activation; current pipeline is materially different. Re-measured under current main + DrugBank-present:
+
+- **Engine (overall N=107):** 3.791 → 3.762 (**−0.029**, marginally helpful)
+- **Meta (overall N=107):** 2.679 → 2.679 (**+0.0002**, invariant — error cancellation)
+- **Engine (in-domain N=79):** 3.466 → 3.440 (**−0.026**)
+- **Per-drug (16 shifts ≥5% on Engine):** 11 improved (dapagliflozin FE 15.8 → 13.7, etodolac 8.4 → 7.0, ketorolac 7.1 → 5.8, metronidazole 10.6 → 9.8, glasdegib 4.0 → 3.2 — mostly UGT-substrate NSAIDs / gliflozins / etc that were under-predicting); 5 worsened (codeine 2.0 → 2.4, morphine 1.9 → 2.1, losartan 2.2 → 2.5 — over-predicting drugs got more over-prediction).
+
+Old narrative ("UGT path is harmful") **does not generalize** to the current pipeline. New finding: UGT path is mildly Engine-positive and **headline-neutral**. The Engine improvement gets re-absorbed by the 4-track meta-learner's track weights (DE-08~DE-18 error-cancellation family).
+
+Not activated in production because: (a) zero Meta benefit, (b) UGT annotations sourced only from DrugBank → public-clone reproducibility would require a curated `data/enzymes/ugt2b7_substrates.json`-style registry (separate cycle, parallel to the v0.3.2 NAT2/UGT1A1 pattern). Comment in `ivive.py` updated to point here. Telltale if it returns: "UGT path / UGT fm redistribution / DrugBank-driven UGT enrichment" without a public-clone-reproducible UGT substrate registry AND without re-running the error-decorrelation gate at the meta-learner level.
+
+Artifacts: `/tmp/4track_state_A_ugt_off.json` and `/tmp/4track_state_B_ugt_on.json` (not committed; comparison summary in `ivive.py:640-655` comment).
 
 ---
 

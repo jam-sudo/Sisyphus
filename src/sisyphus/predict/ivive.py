@@ -637,8 +637,22 @@ def build_drug_on_graph(
     db = drugbank_lookup()
     substrate_enzymes = db.get_substrate_enzymes(profile.smiles)
 
-    # UGT fm redistribution disabled — sensitivity test showed engine AAFE
-    # degradation (2.861→3.090). UGT code retained but inactive.
+    # UGT fm redistribution disabled — sensitivity re-tested 2026-05-13 under
+    # current pipeline (post-v0.3.2, public-clone-augmented-with-local-DrugBank).
+    #
+    #   Overall N=107:     Engine 3.791 → 3.762 (-0.029)  Meta 2.679 → 2.679 (+0.0002)
+    #   In-domain N=79:    Engine 3.466 → 3.440 (-0.026)  Meta 2.733 → 2.734 (+0.0005)
+    #   Per-drug: 11 Engine FE improved (dapagliflozin -2.15, etodolac -1.43,
+    #             ketorolac -1.28), 5 worsened (codeine +0.44, morphine +0.18).
+    #
+    # Verdict: prior conclusion "UGT degrades Engine 2.861 → 3.090" was STALE
+    # under current pipeline. Today UGT path is mildly Engine-positive but
+    # Meta-invariant due to error cancellation (track weights re-distribute).
+    # Not activated in production because:
+    #   (a) zero net Meta improvement at current weights
+    #   (b) UGT data sourced from DrugBank only → public-clone reproducibility
+    #       would require a curated literature registry (separate cycle)
+    # See docs/claude/dead-ends.md DE-NN for the refreshed measurement.
     ugt_enzymes = None
 
     # OATP1B1-substrate metabolic_fraction override: when ECM provides the
