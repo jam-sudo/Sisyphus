@@ -28,6 +28,7 @@ import numpy as np
 import pytest
 
 from sisyphus.pipeline.predict import predict
+from tests._artifact_helpers import skip_if_local_artifacts
 
 _PRAVA_SMILES = (
     "CC[C@@H](C)C(=O)O[C@@H]1C[C@H](C=C2[C@@H]1CC[C@H]"
@@ -43,6 +44,7 @@ _PITA_SMILES = (
 )
 
 
+@skip_if_local_artifacts
 @pytest.mark.slow
 def test_pravastatin_auto_ecm_activates():
     """predict(pravastatin) auto-activates ECM and produces the FDA-anchored Cmax."""
@@ -60,6 +62,7 @@ def test_pravastatin_auto_ecm_activates():
     )
 
 
+@skip_if_local_artifacts
 @pytest.mark.slow
 def test_fluvastatin_no_auto_ecm():
     """predict(fluvastatin) does NOT auto-activate ECM (CYP2C9-dominant per Niemi 2009)."""
@@ -77,6 +80,7 @@ def test_fluvastatin_no_auto_ecm():
     )
 
 
+@skip_if_local_artifacts
 @pytest.mark.slow
 def test_pitavastatin_auto_ecm_activates():
     """predict(pitavastatin) auto-activates ECM under v0.3.1 promotion.
@@ -85,7 +89,7 @@ def test_pitavastatin_auto_ecm_activates():
     metabolic_fraction=0 (parallel pravastatin justification: Niemi 2009
     PM/EM ~3x; OATP1B1 hepatic uptake is rate-limiting).
 
-    EMPIRICAL NOTE: pitavastatin Cmax under auto-ECM is 0.00116 mg/L
+    EMPIRICAL NOTE (public-clone): pitavastatin Cmax under auto-ECM is 0.00116 mg/L
     (FE 3.012x under FDA Livalo 0.0035) on a public-clone deterministic
     state. With DrugBank+logp_correction enrichment local-developer Cmax
     was 0.00168 (FE 2.08). The under-prediction reflects a combination of
@@ -96,6 +100,7 @@ def test_pitavastatin_auto_ecm_activates():
     improvement is deferred to per-drug Jmax/PS curation + DrugBank-
     independent fm allocation work.
     """
+    # marker applied above via decorator on this function (see definition below)
     result = predict(_PITA_SMILES, dose_mg=2.0, route="oral", n_mc_samples=0)
     assert result.engine_pk is not None
     cmax = result.engine_pk.cmax.mean

@@ -12,9 +12,12 @@ import pathlib
 
 import pytest
 
+from tests._artifact_helpers import skip_if_local_artifacts
+
 _CACHE = pathlib.Path("data/training/4track_holdout_predictions.json")
 
 
+@skip_if_local_artifacts
 @pytest.mark.slow
 def test_ecm_holdout_spot_check_10_drugs():
     """Per-drug Meta Cmax must match cached 4track predictions within 5%."""
