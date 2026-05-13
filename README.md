@@ -290,14 +290,14 @@ $$AAFE = 10^{\operatorname{mean}\left(\left|\log_{10}\frac{C_{max,pred}}{C_{max,
 
 The 4-track meta-learner combines mechanistic PBPK (Engine), data-driven XGBoost C<sub>max</sub> (ML), a closed-form CL/F analytical (CLF), and a conditional VDss analytical track. Weights are compound-type-adaptive and LOOCV-calibrated: base compounds blend Engine 0.60 / ML 0.40; other compounds use Engine 0.35 / ML 0.50 / CLF 0.15, with VDss 0.20 added when applicability criteria are satisfied (and the remaining tracks re-scaled by ×0.80 so the total is 1.0). In-domain AAFE (N=81) excludes 26 drugs flagged as out-of-applicability-domain (prodrugs, high-MW, extreme lipophilicity, extended-release formulation mismatch). The in-domain N shifted 79→81 vs the previous cache because the logp residual correction had pushed two drugs across the high-lipophilicity AD threshold.
 
-**Prospective validation** (FDA NMEs approved 2024–2025, curated 2026-04, never used in training or tuning):
+**Prospective validation** (FDA NMEs approved 2024–2025, curated 2026-04, never used in training or tuning; refreshed 2026-05-12 under public-clone state):
 
-| Slice | AAFE | 95% CI | %2-fold | N |
+| Slice | AAFE | %2-fold | N | Notes |
 |---|:-:|:-:|:-:|:-:|
-| All | 2.361 | [1.65, 3.50] | 53% | 15 |
-| In-domain | 2.043 | [1.46, 2.98] | — | 13 |
+| All | 2.402 | 53.3% | 15 | was 2.361 with DrugBank+logp_correction |
+| In-domain | 2.200 | 63.6% | 11 | was 2.043 (N=13); 2 drugs flipped to AD-flag under public-only logP |
 
-Prospective AAFE is below retrospective (2.361 &lt; 2.751), the opposite direction from classical over-fitting. However, N=15 is underpowered; CI spans 1.65–3.50. The 2.361 prospective number was computed on the local-developer state with DrugBank+logp_correction and is pending refresh under public-clone state in a follow-up commit (expected delta is small; only ~3 of 15 prospective drugs have DrugBank records).
+Prospective AAFE remains **below** retrospective (2.402 &lt; 2.751 overall; 2.200 &lt; 2.837 in-domain), the opposite direction from classical over-fitting on the 107-holdout. N=15 is underpowered; bootstrap 95% CIs are not refreshed in this slice (small N, narrative-only). Artifact: `data/validation/prospective_N15_public_only_2026-05-12.json`.
 
 **Cherry-picking caveat.** The 107-holdout has been used for ~47 configuration feedback cycles (track weights, routing, meta-learner variants). A quantitative audit (`docs/claude/cherry_picking_audit_2026-04-22.md`) scores aggregate risk 4.65/10 (moderate). The retrospective-contamination estimate (2.85–3.10 from the audit) brackets the new public-clone Meta point estimate 2.751, meaning the point estimate cannot statistically reject the null hypothesis that tuning inflated AAFE. A secondary permanent holdout (N50) is planned per `docs/claude/cherry_picking_process_v1.md`.
 

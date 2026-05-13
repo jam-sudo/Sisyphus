@@ -55,6 +55,7 @@ from __future__ import annotations
 import pytest
 
 from sisyphus.pipeline.predict import predict
+from tests._artifact_helpers import skip_if_local_artifacts
 
 _CLINICAL_CMAX = {
     "sepiapterin":       0.0024,
@@ -102,6 +103,7 @@ _KNOWN_FAILURES = {
 }
 
 
+@skip_if_local_artifacts
 @pytest.mark.parametrize(
     "drug_name",
     [

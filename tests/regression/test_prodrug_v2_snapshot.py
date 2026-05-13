@@ -31,6 +31,7 @@ from __future__ import annotations
 import pytest
 
 from sisyphus.pipeline.predict import predict
+from tests._artifact_helpers import skip_if_local_artifacts
 
 _PINNED = {
     "sepiapterin":       8.679384e+00,
@@ -56,6 +57,7 @@ _DOSE_ROUTE = {
 }
 
 
+@skip_if_local_artifacts
 @pytest.mark.parametrize("drug_name", list(_PINNED.keys()))
 def test_cmax_snapshot(drug_name):
     pinned = _PINNED[drug_name]
