@@ -292,12 +292,12 @@ The 4-track meta-learner combines mechanistic PBPK (Engine), data-driven XGBoost
 
 **Prospective validation** (FDA NMEs approved 2024–2025, curated 2026-04, never used in training or tuning; refreshed 2026-05-12 under public-clone state):
 
-| Slice | AAFE | %2-fold | N | Notes |
-|---|:-:|:-:|:-:|:-:|
-| All | 2.402 | 53.3% | 15 | was 2.361 with DrugBank+logp_correction |
-| In-domain | 2.200 | 63.6% | 11 | was 2.043 (N=13); 2 drugs flipped to AD-flag under public-only logP |
+| Slice | AAFE | 95% CI | %2-fold | N | Notes |
+|---|:-:|:-:|:-:|:-:|:-:|
+| All | 2.402 | [1.68, 3.49] | 53.3% | 15 | was 2.361 with DrugBank+logp_correction |
+| In-domain | 2.200 | [1.49, 3.40] | 63.6% | 11 | was 2.043 (N=13); 2 drugs flipped to AD-flag under public-only logP |
 
-Prospective AAFE remains **below** retrospective (2.402 &lt; 2.751 overall; 2.200 &lt; 2.837 in-domain), the opposite direction from classical over-fitting on the 107-holdout. N=15 is underpowered; bootstrap 95% CIs are not refreshed in this slice (small N, narrative-only). Artifact: `data/validation/prospective_N15_public_only_2026-05-12.json`.
+Prospective AAFE remains **below** retrospective (2.402 &lt; 2.751 overall; 2.200 &lt; 2.837 in-domain), the opposite direction from classical over-fitting on the 107-holdout. N=15 is underpowered, so the prospective CIs are wide (Meta overall [1.68, 3.49], in-domain [1.49, 3.40]) — both overlap the retrospective in-domain Meta CI [2.37, 3.41], so the apparent prospective advantage is **not** statistically distinguishable from sampling noise. Bootstrap CIs computed 2026-05-15 (10,000 resamples on |log<sub>10</sub>(fold)|, seed=20260422) via `scripts/bootstrap_4track_ci.py`. Artifacts: `data/validation/prospective_N15_public_only_2026-05-12.json` (per-drug folds), `data/validation/prospective_ci_2026-05-15.json` (CI bundle).
 
 **Cherry-picking caveat.** The 107-holdout has been used for ~47 configuration feedback cycles (track weights, routing, meta-learner variants). A quantitative audit (`docs/claude/cherry_picking_audit_2026-04-22.md`) scores aggregate risk 4.65/10 (moderate). The retrospective-contamination estimate (2.85–3.10 from the audit) brackets the new public-clone Meta point estimate 2.751, meaning the point estimate cannot statistically reject the null hypothesis that tuning inflated AAFE. A secondary permanent holdout (N50) is planned per `docs/claude/cherry_picking_process_v1.md`.
 
