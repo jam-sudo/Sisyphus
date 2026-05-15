@@ -1,0 +1,62 @@
+{
+  "computed_at": "2026-05-15-v0.4-prospective",
+  "source_cache": "data/validation/prospective_N15_public_only_2026-05-12.json",
+  "context": "prospective N=15 FDA NMEs 2024-2025 under public-clone deterministic state (post 2026-05-09 audit honesty regen); B-07 CI refresh.",
+  "method": "bootstrap on abs(log10(fold))",
+  "n_bootstrap": 10000,
+  "seed": 20260422,
+  "overall": {
+    "n": 15,
+    "engine": {
+      "aafe": 3.3608,
+      "ci_95_low": 2.5949,
+      "ci_95_high": 4.3429,
+      "n": 15,
+      "pct_2fold": 13.3,
+      "pct_3fold": 46.7
+    },
+    "ml": {
+      "aafe": 2.7424,
+      "ci_95_low": 1.8105,
+      "ci_95_high": 4.3476,
+      "n": 15,
+      "pct_2fold": 46.7,
+      "pct_3fold": 53.3
+    },
+    "meta": {
+      "aafe": 2.4017,
+      "ci_95_low": 1.6787,
+      "ci_95_high": 3.4859,
+      "n": 15,
+      "pct_2fold": 53.3,
+      "pct_3fold": 60.0
+    }
+  },
+  "in_domain": {
+    "n": 11,
+    "engine": {
+      "aafe": 3.5016,
+      "ci_95_low": 2.498,
+      "ci_95_high": 4.9121,
+      "n": 11,
+      "pct_2fold": 18.2,
+      "pct_3fold": 36.4
+    },
+    "ml": {
+      "aafe": 2.305,
+      "ci_95_low": 1.5299,
+      "ci_95_high": 3.731,
+      "n": 11,
+      "pct_2fold": 54.5,
+      "pct_3fold": 63.6
+    },
+    "meta": {
+      "aafe": 2.2003,
+      "ci_95_low": 1.493,
+      "ci_95_high": 3.396,
+      "n": 11,
+      "pct_2fold": 63.6,
+      "pct_3fold": 63.6
+    }
+  }
+}

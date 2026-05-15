@@ -59,9 +59,6 @@ R-130964 active thiol PK is poorly characterized (rapid covalent binding to P2Y1
 ### B-06 — PredictionResult.phenotypes_applied metadata
 **Effort**: 20 min. **Value**: PredictionResult exposes which phenotypes the engine applied, so downstream consumers (TDM, MIPD, reports) can audit. **Risk**: zero (additive field; existing callers ignore it).
 
-### B-07 — Bootstrap 95% CIs on prospective slice (N=15)
-**Effort**: 20 min. **Value**: README §Prospective table is currently CI-less because N=15 is small. Adding bootstrap CIs (10k resamples, seed 20260422) is mostly cosmetic but completes the "every published AAFE has a CI" pattern established in PR #44. **Risk**: zero (no behavior change).
-
 ### B-08 — DrugBank-free reproducibility alternatives
 **Effort**: variable. **Value**: closes the audit-cycle reproducibility gap (PR #43) more thoroughly than artifact gates alone. Three alternatives:
 

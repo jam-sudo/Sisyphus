@@ -56,7 +56,15 @@ def pct_within_n_fold(folds: list[float], n: float) -> float | None:
 
 
 def _track_summary(rows: list[dict], track_key: str) -> dict:
-    folds = [r.get(f"{track_key}_fold") for r in rows]
+    # Accept either compact key ("eng_fold", 107-holdout cache) or verbose
+    # ("engine_fold", prospective N=15 cache) for the engine track.
+    alt_key = {"eng": "engine_fold"}.get(track_key)
+    folds: list[float | None] = []
+    for r in rows:
+        v = r.get(f"{track_key}_fold")
+        if v is None and alt_key:
+            v = r.get(alt_key)
+        folds.append(v)
     out = aafe_with_ci(folds)
     out["pct_2fold"] = pct_within_n_fold(folds, 2.0)
     out["pct_3fold"] = pct_within_n_fold(folds, 3.0)
