@@ -89,3 +89,33 @@ class TestPredictPhenotypesWiring:
         ) as spy:
             predict("Cn1c(=O)c2c(ncn2C)n(C)c1=O", dose_mg=100.0, phenotypes={})
             assert not spy.called
+
+    # -- PredictionResult.phenotypes_applied audit metadata (B-06) --
+
+    def test_phenotypes_applied_empty_when_none(self):
+        """phenotypes=None must produce PredictionResult.phenotypes_applied = ()."""
+        result = predict("Cn1c(=O)c2c(ncn2C)n(C)c1=O", dose_mg=100.0, phenotypes=None)
+        assert result.phenotypes_applied == ()
+
+    def test_phenotypes_applied_empty_when_empty_dict(self):
+        """phenotypes={} must produce PredictionResult.phenotypes_applied = ()."""
+        result = predict("Cn1c(=O)c2c(ncn2C)n(C)c1=O", dose_mg=100.0, phenotypes={})
+        assert result.phenotypes_applied == ()
+
+    def test_phenotypes_applied_round_trips_single(self):
+        """Single-gene phenotypes round-trips as ordered (gene, code) pairs."""
+        result = predict(
+            "Cn1c(=O)c2c(ncn2C)n(C)c1=O",
+            dose_mg=100.0,
+            phenotypes={"CYP1A2": "PM"},
+        )
+        assert result.phenotypes_applied == (("CYP1A2", "PM"),)
+        assert dict(result.phenotypes_applied) == {"CYP1A2": "PM"}
+
+    def test_phenotypes_applied_round_trips_multi(self):
+        """Multi-gene phenotypes round-trip; dict reconstruction is order-free."""
+        passed = {"CYP1A2": "PM", "CYP3A5": "EM"}
+        result = predict(
+            "Cn1c(=O)c2c(ncn2C)n(C)c1=O", dose_mg=100.0, phenotypes=passed,
+        )
+        assert dict(result.phenotypes_applied) == passed

@@ -464,3 +464,7 @@ class PredictionResult:
     warnings: tuple[str, ...]
     cmax_90ci: tuple[float, float] | None
     clf_pk: PKEndpoints | None = None
+    # Ordered (gene, phenotype_code) pairs that were applied to the body
+    # graph for this prediction. Empty when no phenotypes were supplied.
+    # Round-trips via dict(result.phenotypes_applied).
+    phenotypes_applied: tuple[tuple[str, str], ...] = ()
