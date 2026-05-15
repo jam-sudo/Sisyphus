@@ -8,6 +8,7 @@ import pytest
 
 from sisyphus.graph.builder import build_from_yaml
 from sisyphus.predict.phenotype import (
+    NAT2_ACETYLATOR_ALIASES,
     PHENOTYPE_SCALES,
     TRANSPORTER_ALIASES,
     apply_phenotype_to_graph,
@@ -61,6 +62,60 @@ def test_all_phenotype_codes_valid():
     for code in PHENOTYPE_SCALES:
         out = parse_phenotype_spec(f"CYP2D6:{code}")
         assert out == {"CYP2D6": code}
+
+
+# ---------------------------------------------------------------------------
+# CPIC NAT2 acetylator alias (B-05)
+# ---------------------------------------------------------------------------
+
+
+def test_nat2_slow_acetylator_aliases_to_pm():
+    """CPIC NAT2:SA (slow acetylator) → PM (0.10×)."""
+    assert parse_phenotype_spec("NAT2:SA") == {"NAT2": "PM"}
+
+
+def test_nat2_intermediate_acetylator_aliases_to_im():
+    assert parse_phenotype_spec("NAT2:IA") == {"NAT2": "IM"}
+
+
+def test_nat2_rapid_acetylator_aliases_to_em():
+    """NAT2:RA (rapid acetylator) → EM (1.00×), NOT RM (1.50×).
+
+    NAT2 "Rapid" is the wild-type/normal phenotype, distinct from the
+    CYP "Rapid Metabolizer" category. Alias is gene-conditional.
+    """
+    assert parse_phenotype_spec("NAT2:RA") == {"NAT2": "EM"}
+
+
+def test_nat2_acetylator_alias_case_insensitive():
+    assert parse_phenotype_spec("nat2:sa") == {"NAT2": "PM"}
+
+
+def test_nat2_pm_pass_through_unchanged():
+    """Existing NAT2:PM input is untouched (no double-aliasing)."""
+    assert parse_phenotype_spec("NAT2:PM") == {"NAT2": "PM"}
+
+
+def test_acetylator_alias_only_applies_to_nat2():
+    """SA is not a global alias — CYP2D6:SA must still fail."""
+    with pytest.raises(ValueError, match="Unknown phenotype"):
+        parse_phenotype_spec("CYP2D6:SA")
+
+
+def test_nat2_acetylator_alias_targets_match_phenotype_scales():
+    """Every acetylator alias target must be a real phenotype code."""
+    for ace, target in NAT2_ACETYLATOR_ALIASES.items():
+        assert target in PHENOTYPE_SCALES, f"{ace} → {target} not in PHENOTYPE_SCALES"
+
+
+def test_nat2_sa_scales_enzyme_like_pm():
+    """End-to-end: NAT2:SA on graph equals NAT2:PM (0.10× abundance)."""
+    g = build_from_yaml(_PHYS)
+    sa_graph = apply_phenotype_to_graph(g, parse_phenotype_spec("NAT2:SA"))
+    pm_graph = apply_phenotype_to_graph(g, parse_phenotype_spec("NAT2:PM"))
+    assert sa_graph.nodes["liver"].enzymes["NAT2"].mean == pytest.approx(
+        pm_graph.nodes["liver"].enzymes["NAT2"].mean
+    )
 
 
 # ---------------------------------------------------------------------------

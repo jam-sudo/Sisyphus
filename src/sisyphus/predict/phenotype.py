@@ -51,6 +51,18 @@ TRANSPORTER_ALIASES: dict[str, str] = {
     "SLCO1B1": "OATP1B1",
 }
 
+# CPIC NAT2 uses acetylator nomenclature (SA/IA/RA) while Sisyphus uses the
+# unified PM/IM/EM scheme. The mapping is gene-conditional: "RA" (Rapid
+# Acetylator) means wild-type / normal NAT2 activity (≡ EM, 1.00×) and must
+# not be confused with the CYP "RM" (Rapid Metabolizer, 1.50×). Applied only
+# when the tag is NAT2.
+# Source: Relling 2020 CPIC NAT2 / isoniazid guideline (CPT 108:1265).
+NAT2_ACETYLATOR_ALIASES: dict[str, str] = {
+    "SA": "PM",
+    "IA": "IM",
+    "RA": "EM",
+}
+
 
 def parse_phenotype_spec(spec: str) -> dict[str, str]:
     """Parse a CLI phenotype string into {gene_or_enzyme: phenotype}.
@@ -65,6 +77,8 @@ def parse_phenotype_spec(spec: str) -> dict[str, str]:
         "2D6:pm,2c9:im"              → {"CYP2D6": "PM", "CYP2C9": "IM"}
         "SLCO1B1:PM"                 → {"SLCO1B1": "PM"}
         "CYP2D6:PM,SLCO1B1:IM"       → {"CYP2D6": "PM", "SLCO1B1": "IM"}
+        "NAT2:SA"                    → {"NAT2": "PM"}   # CPIC acetylator alias
+        "NAT2:RA"                    → {"NAT2": "EM"}
     """
     out: dict[str, str] = {}
     if not spec:
@@ -85,6 +99,8 @@ def parse_phenotype_spec(spec: str) -> dict[str, str]:
         if tag not in TRANSPORTER_ALIASES and not tag.startswith("CYP") and tag[:1].isdigit():
             tag = "CYP" + tag
         phenotype = phenotype.strip().upper()
+        if tag == "NAT2" and phenotype in NAT2_ACETYLATOR_ALIASES:
+            phenotype = NAT2_ACETYLATOR_ALIASES[phenotype]
         if phenotype not in PHENOTYPE_SCALES:
             raise ValueError(
                 f"Unknown phenotype {phenotype!r} for {tag}. "
