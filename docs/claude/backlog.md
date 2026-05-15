@@ -56,9 +56,6 @@ R-130964 active thiol PK is poorly characterized (rapid covalent binding to P2Y1
 
 ## Tier 3 — Small items (trivial effort, narrow value)
 
-### B-06 — PredictionResult.phenotypes_applied metadata
-**Effort**: 20 min. **Value**: PredictionResult exposes which phenotypes the engine applied, so downstream consumers (TDM, MIPD, reports) can audit. **Risk**: zero (additive field; existing callers ignore it).
-
 ### B-08 — DrugBank-free reproducibility alternatives
 **Effort**: variable. **Value**: closes the audit-cycle reproducibility gap (PR #43) more thoroughly than artifact gates alone. Three alternatives:
 

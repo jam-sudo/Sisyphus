@@ -487,4 +487,5 @@ def predict(
         ad_flags=tuple(extra_flags),
         warnings=tuple(warnings_list),
         cmax_90ci=cmax_90ci,
+        phenotypes_applied=tuple(phenotypes.items()) if phenotypes else (),
     )
