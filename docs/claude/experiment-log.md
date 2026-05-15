@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-14
+last_updated: 2026-05-13
 parent: ../../CLAUDE.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -7,39 +7,6 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 # Experiment Log
 
 Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md).
-
----
-
-## 2026-05-14 — public-clone reproducibility verification + bit-for-bit claim correction
-
-**Motivation:** README §Reproducibility note (line 289, added 2026-05-09 / PR #43) asserted that `git clone + pip install -r requirements-lock.txt` reproduces the canonical cache **bit-for-bit**. Verifying this empirically on a fresh venv (Python 3.13 / macOS-arm64 / brew libomp 22.1.5) had not been done. Audit-driven follow-up.
-
-**Method:** 
-1. Fresh `.venv` from `requirements-lock.txt` (Python 3.13 from miniconda, brew-installed libomp for xgboost).
-2. Two `scripts/run_engine_benchmark.py --save-json …` runs:
-   - **Dev-state** (local default): `data/drugbank/` + `models/adme/logp_correction.json` present on disk → loaded silently by `predict/drugbank.py` and the ADME layer.
-   - **Public-clone**: both gitignored artifacts renamed `.disabled` for the duration of the run, restored on exit via shell trap.
-3. Compared aggregate AAFEs + per-drug Cmax against the committed `data/training/4track_holdout_predictions.json`.
-
-**Result:**
-
-| Track | README | Cache JSON | Dev-rerun (artifacts present) | Public-rerun (artifacts disabled) |
-|---|---|---|---|---|
-| Meta (overall) | 2.751 | 2.7509 | **2.681** | **2.755** |
-| Engine (overall) | 4.008 | 4.0075 | 3.787 | 4.015 |
-| ML (overall) | 3.012 | 3.0121 | 3.010 | 3.010 |
-| Meta (in-domain) | 2.837 (N=81) | 2.8374 (N=81) | 2.735 (N=79) | 2.840 (N=81) |
-
-**Per-drug bit-identity (public-rerun vs cache):** 85 of 107 drugs differ at float64; largest engine Cmax drifts trazodone 0.291 → 0.256 (-12%), ponatinib 0.0664 → 0.0615 (-7.5%), ciprofloxacin 1.284 → 1.192 (-7.1%), ketorolac 0.075 → 0.080 (+6.9%), ketoconazole 0.536 → 0.502 (-6.4%), vonoprazan 0.0877 → 0.0822 (-6.2%). Aggregate AAFE drift +0.18% on Engine, +0.15% on Meta — well inside the bootstrap 95% CI half-width and within rounding at 3 sig figs.
-
-**Interpretation:**
-1. **Headline AAFE reproduces at 3 sig figs** under public-clone state on a stock macOS-arm64 stack. The README's narrative (2.751 / 4.008 / 3.012 / 2.837, N=81 with 4 NSAIDs `HIGH_ACID_LOW_FUP`-flagged) is empirically supported.
-2. **"Bit-for-bit" is false** for non-matching numerics stacks. The drift is almost certainly accumulated last-bit divergence in scipy.integrate.LSODA + numpy BLAS (Accelerate vs OpenBLAS) + XGBoost ensemble sums; the production path is mean-only deterministic per the 2026-05-01 hardening, so it isn't RNG drift.
-3. **Dev-state silent-shift quantification re-confirmed independently.** With both gitignored artifacts loaded, AAFE moves 2.755 → 2.681 (-2.7% on Meta), matching the +2.7% the README explicitly attributes to artifact removal. 4 drugs flip in-domain → flagged (diclofenac, etodolac, febuxostat, ketorolac → `HIGH_ACID_LOW_FUP`); 2 flip back to in-domain (cabozantinib, sonidegib → lose `EXTREME_LIPOPHILIC`). All matches the c87155f / 2026-05-01 AD-flag change.
-
-**Disposition:** README §Reproducibility note edited (commit pending) to replace "bit-for-bit" with a precision-stratified claim (3 sig figs aggregate; per-drug Cmax bit-identity contingent on numerics-stack match). Canonical cache JSON unchanged. CLAUDE.md headline unchanged. No code change.
-
-**Branch:** to be committed on `main` as docs-only.
 
 ---
 
