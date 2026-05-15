@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-13
+last_updated: 2026-05-15
 parent: ../../CLAUDE.md
 charter: Deferred work items with effort/value/risk tags. Promote to a spec cycle, GitHub Issue, dead-ends.md, or experiment-log.md when the disposition is decided. Items here have NOT been triaged through brainstorming yet — they are candidates, not commitments.
 ---
@@ -55,9 +55,6 @@ R-130964 active thiol PK is poorly characterized (rapid covalent binding to P2Y1
 **Blocked by**: B-03 decision (or independent decision to generalize the schema before clopidogrel).
 
 ## Tier 3 — Small items (trivial effort, narrow value)
-
-### B-05 — CPIC NAT2 SA/RA → PM/EM CLI alias
-**Effort**: 30 min. **Value**: align Sisyphus CLI with CPIC nomenclature (SA = slow acetylator, RA = rapid acetylator) so external scripts don't need to translate. **Risk**: zero (additive alias only). Mentioned in earlier session as deferred.
 
 ### B-06 — PredictionResult.phenotypes_applied metadata
 **Effort**: 20 min. **Value**: PredictionResult exposes which phenotypes the engine applied, so downstream consumers (TDM, MIPD, reports) can audit. **Risk**: zero (additive field; existing callers ignore it).
