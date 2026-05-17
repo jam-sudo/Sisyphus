@@ -40,19 +40,23 @@ Reverse-chronological by **when the item was identified**, grouped by tier. Tier
 
 ## Tier 2 — Capability extensions (moderate, single-issue closeout)
 
+### B-04 — Multi-enzyme prodrug conversion schema (per-enzyme yield)
+**Effort**: 4–6h (schema + builder + tests; engine already supports per-edge yield via `params.edge_param`). **Value**: unlocks B-03, prasugrel, ticagrelor, and other dual-fate prodrugs. **Risk**: low — backward-compatible (optional per-enzyme `yield` field with entry-level fallback); existing 6 entries bit-identical post-migration.
+
+**Spec**: `docs/superpowers/specs/2026-05-17-multi-enzyme-prodrug-yield-design.md`.
+
+**Prerequisite for B-03** (re-ordered 2026-05-17 after a structural-blocker analysis showed clopidogrel's CES1-dead-end + CYP2C19-active dual fate cannot be expressed with a single entry-level yield without violating mass balance or mechanistic-A doctrine; see experiment-log 2026-05-17 entry).
+
 ### B-03 — Clopidogrel (#11 잔여)
-**Effort**: 2–3h. **Value**: closes the remaining 1/3 of issue #11. **Risk**: medium — clopidogrel is a 107-holdout member, so the addition will shift headline AAFE and require regen + delta documentation. Also forces a 2-step prodrug schema decision (CYP2C19/3A4 → 2-oxo → R-130964); current registry assumes single-enzyme conversion.
+**Effort**: 2–3h **after B-04 lands**. **Value**: closes the remaining 1/3 of issue #11. **Risk**: medium — clopidogrel is a 107-holdout member, so the addition shifts headline AAFE and requires regen + delta documentation. Disposition expected **ceiling_accepted** per v3 mechanistic-A doctrine (R-130964 active thiol PK poorly characterized in primary literature; rapid covalent P2Y12 binding sink prevents conventional CL/Vd measurement).
 
-**Two sub-decisions**:
-1. Single-step approximation (CYP2C19 → R-130964, skip the 2-oxo intermediate) — fits current schema, lower fidelity.
-2. Schema extension (multi-enzyme conversion chain) — generalizes to other 2-step prodrugs (clopidogrel, prasugrel, ticagrelor), one-time investment.
+**Implementation outline** (see §8 of the B-04 spec for the full path):
+- Registry entry with per-enzyme yields: `CES1{yield=0}` (dead-end) + `CYP2C19{yield≈1}` (active fraction); overall systemic yield ~15% emerges from the combination, not a global scalar.
+- `observation_species="parent"` — 107-holdout reference is parent clopidogrel Cmax; mismatch with "active" would inject a deliberate 5–20× species-mismatch fold error.
+- `cyp_clearance_overrides.json` entry with `metabolic_fraction=0` to route 100% of hepatic CL through the two ProdrugActivationEdges (CES1 + CYP2C19), preventing double-count with XGBoost-derived CL.
+- 107-holdout regen + bootstrap CIs refreshed + AAFE delta documented.
 
-R-130964 active thiol PK is poorly characterized (rapid covalent binding to P2Y12, t½ ~30 min) — ceiling_accepted disposition expected per the v3 mechanistic-A doctrine.
-
-### B-04 — Multi-enzyme prodrug conversion schema
-**Effort**: 1 day (schema spec + impl). **Value**: unlocks B-03, prasugrel, ticagrelor, and other 2-step prodrugs. **Risk**: medium — schema extension is forward-compatible but every prodrug touches it.
-
-**Blocked by**: B-03 decision (or independent decision to generalize the schema before clopidogrel).
+**Blocked by**: B-04.
 
 ## Tier 3 — Small items (trivial effort, narrow value)
 
