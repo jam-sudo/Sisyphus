@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-13
+last_updated: 2026-05-17
 parent: ../../CLAUDE.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -7,6 +7,31 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 # Experiment Log
 
 Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md).
+
+---
+
+## 2026-05-17 — B-03 clopidogrel structural-blocker discovery → B-04 promoted to prerequisite
+
+**Motivation:** B-03 (clopidogrel registry entry, closes remaining 1/3 of issue #11) was scheduled as a 2–3h drop-in following the simvastatin/irinotecan PR #34 pattern. A pre-implementation design pass revealed the current single-enzyme schema cannot represent clopidogrel's dual-fate hepatic metabolism without violating either mass balance or the v3 mechanistic-A doctrine. Backlog ordering reset; B-04 now ships first.
+
+**Method:** brainstorming-driven design review. Three candidate paths examined:
+1. Register only CYP2C19 (single-step approximation) + `metabolic_fraction=0` zeroing → loses the CES1 dead-end branch → parent CL 5–7× under-clear → R-130964 over-predict.
+2. Register both CES1 and CYP2C19 with one entry-level yield → engine applies the same yield to both edges → CES1 path mechanistically generates active R-130964 (biologically wrong; CES1 makes inactive SR26334).
+3. Symmetric variant → mirror of (2).
+
+All three break because the registry schema has a single `conversion_yield_fraction` per entry, while clopidogrel needs different yields per enzyme (CES1=0 dead-end, CYP2C19≈1 active).
+
+**Result:** B-04 (multi-enzyme prodrug conversion schema) is a hard prerequisite for B-03, not an independent alternative. Re-ordered in `docs/claude/backlog.md`. B-04 design spec written:
+`docs/superpowers/specs/2026-05-17-multi-enzyme-prodrug-yield-design.md` — adds optional per-enzyme `yield` field with entry-level fallback (backward-compatible; 6 existing single-enzyme entries bit-identical post-migration). Engine flux already supports per-edge yield (`params.edge_param(edge_id, "conversion_yield")`, `src/sisyphus/engine/flux.py:639`), so B-04 scope is registry + builder + tests only — no engine work. Estimated effort 4–6h (down from "1 day" the prior backlog entry quoted).
+
+**Interpretation:**
+1. The original backlog entries for B-03 ("2–3h") and B-04 ("blocked by B-03 decision") inverted the dependency. Going forward: B-04 implementable independently and B-03 implementable on top of B-04.
+2. Clopidogrel disposition is expected **ceiling_accepted** regardless of schema. R-130964 active thiol PK is genuinely poorly characterized in primary literature (covalent P2Y12 binding sink prevents standard CL/Vd measurement). The schema change unlocks mechanistic correctness, not predictive accuracy gain.
+3. Observation-species choice for clopidogrel: `parent` (not `active`). The 107-holdout reference is parent clopidogrel Cmax; switching to active species would inject a deliberate 5–20× species-mismatch fold error.
+
+**Disposition:** spec written, committed (pending), no code change. B-04 implementation deferred to a separate session via the writing-plans skill.
+
+**Branch:** to be committed on `main` as docs-only.
 
 ---
 
