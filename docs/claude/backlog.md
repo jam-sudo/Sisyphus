@@ -40,13 +40,6 @@ Reverse-chronological by **when the item was identified**, grouped by tier. Tier
 
 ## Tier 2 — Capability extensions (moderate, single-issue closeout)
 
-### B-04 — Multi-enzyme prodrug conversion schema (per-enzyme yield)
-**Effort**: 4–6h (schema + builder + tests; engine already supports per-edge yield via `params.edge_param`). **Value**: unlocks B-03, prasugrel, ticagrelor, and other dual-fate prodrugs. **Risk**: low — backward-compatible (optional per-enzyme `yield` field with entry-level fallback); existing 6 entries bit-identical post-migration.
-
-**Spec**: `docs/superpowers/specs/2026-05-17-multi-enzyme-prodrug-yield-design.md`.
-
-**Prerequisite for B-03** (re-ordered 2026-05-17 after a structural-blocker analysis showed clopidogrel's CES1-dead-end + CYP2C19-active dual fate cannot be expressed with a single entry-level yield without violating mass balance or mechanistic-A doctrine; see experiment-log 2026-05-17 entry).
-
 ### B-03 — Clopidogrel (#11 잔여)
 **Effort**: 2–3h **after B-04 lands**. **Value**: closes the remaining 1/3 of issue #11. **Risk**: medium — clopidogrel is a 107-holdout member, so the addition shifts headline AAFE and requires regen + delta documentation. Disposition expected **ceiling_accepted** per v3 mechanistic-A doctrine (R-130964 active thiol PK poorly characterized in primary literature; rapid covalent P2Y12 binding sink prevents conventional CL/Vd measurement).
 
@@ -56,7 +49,7 @@ Reverse-chronological by **when the item was identified**, grouped by tier. Tier
 - `cyp_clearance_overrides.json` entry with `metabolic_fraction=0` to route 100% of hepatic CL through the two ProdrugActivationEdges (CES1 + CYP2C19), preventing double-count with XGBoost-derived CL.
 - 107-holdout regen + bootstrap CIs refreshed + AAFE delta documented.
 
-**Blocked by**: B-04.
+**Blocked by**: ~~B-04~~ (shipped 2026-05-19). Ready to implement.
 
 ## Tier 3 — Small items (trivial effort, narrow value)
 

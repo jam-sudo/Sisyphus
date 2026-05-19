@@ -4,6 +4,7 @@
 **Issue**: [#11](https://github.com/jam-sudo/Sisyphus/issues/11) (prerequisite to closing the remaining 1/3 — clopidogrel)
 **Backlog ref**: B-04 (currently blocked-by B-03; this spec inverts that to **B-04 must ship before B-03 can be implemented**)
 **Predecessor**: v0.3.4 prodrug registry expansion (PR #34, `docs/superpowers/specs/2026-05-08-prodrug-registry-expansion-design.md`)
+**Status**: Implemented 2026-05-19 (commits `3be53f4`..`4b07186`; see [experiment-log.md](../../claude/experiment-log.md) 2026-05-19 entry).
 
 ---
 
