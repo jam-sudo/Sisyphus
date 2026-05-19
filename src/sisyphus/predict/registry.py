@@ -1,6 +1,7 @@
 """Prodrug activation registry — SMILES-keyed config loader (v2).
 
-Maps canonical SMILES → (ActiveMetabolite, observation_species, enzyme_affinity_for_conversion, enzyme_yields).
+Maps canonical SMILES → (ActiveMetabolite, observation_species,
+enzyme_affinity_for_conversion, enzyme_yields).
 Used by predict.ivive.build_drug_on_graph to attach prodrug activation
 configs to DrugOnGraph instances.
 

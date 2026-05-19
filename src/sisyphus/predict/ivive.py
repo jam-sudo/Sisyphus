@@ -623,13 +623,16 @@ def build_drug_on_graph(
     # Prodrug activation routing: SMILES → ActiveMetabolite via registry.
     registry_result = lookup_active_metabolite(profile.smiles)
     if registry_result is not None:
-        active_metabolite, observation_species, conv_affinities, conv_enzyme_yields = registry_result
+        (active_metabolite, observation_species,
+         conv_affinities, conv_enzyme_yields) = registry_result
         # Attach the per-enzyme yields onto the ActiveMetabolite instance.
         # registry builds AM with enzyme_yields={} by default; we replace
         # that field here since AM is frozen.
         if conv_enzyme_yields:
             from dataclasses import replace
-            active_metabolite = replace(active_metabolite, enzyme_yields=conv_enzyme_yields)
+            active_metabolite = replace(
+                active_metabolite, enzyme_yields=conv_enzyme_yields
+            )
     else:
         active_metabolite = None
         observation_species = "parent"
