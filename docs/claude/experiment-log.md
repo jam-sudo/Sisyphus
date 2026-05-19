@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-17
+last_updated: 2026-05-19
 parent: ../../CLAUDE.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -7,6 +7,31 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 # Experiment Log
 
 Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md).
+
+---
+
+## 2026-05-19 — B-04 multi-enzyme prodrug yield schema (no headline impact)
+
+**Commits** (`main` direct, subagent-driven plan execution): `3be53f4`, `7acbbe1`, `6c0e9e9`, `9e187de`, `0938bf9`, `4b07186`.
+
+**Outcome:** schema-only change; 107-holdout AAFE bit-identical pre/post on CI (local snapshot tests skipped under `@skip_if_local_artifacts` decorator due to public-clone state; CI is the gate).
+
+**What shipped**:
+- `ActiveMetabolite.enzyme_yields: dict[str, Distribution]` (default empty).
+- `DrugOnGraph.sample(rng)` and `.realize_means()` propagate the dict through reconstruction.
+- Registry loader (`predict/registry.py`) parses optional per-enzyme `yield` on each `enzyme_affinity_for_conversion[<tag>]` block; multi-enzyme entries must declare `yield` for every enzyme or none (all-or-nothing rule, spec §5.4); `lookup_active_metabolite` now returns a 4-tuple.
+- `predict/ivive.py` threads the new dict onto the frozen `ActiveMetabolite` via `dataclasses.replace` (no-op for empty dict).
+- Builder (`graph/builder.py`) emits one `ProdrugActivationEdge` per (site × tag) intersection instead of one per site with collapsed tags; each edge reads `am.enzyme_yields.get(tag, am.conversion_yield_fraction)`. `sorted(...)` makes edge order deterministic.
+- New unit test file `tests/unit/test_prodrug_per_enzyme_yield.py` (14 tests across 4 classes: dataclass field, sample/realize_means propagation, registry parsing, builder edge emission).
+- New schema regression `tests/regression/test_prodrug_v3_registry_schema.py` (all-or-nothing rule + [0,1] range check on production registry).
+
+**Why this matters**: unblocks B-03 (clopidogrel). Clopidogrel's hepatic fate splits into CES1 → SR26334 (~85% inactive dead-end) and CYP2C19 → R-130964 (~15% active). A single entry-level yield cannot represent this without violating mass balance, species identity, or the mechanistic-A doctrine (see §3 of the B-04 spec). Per-enzyme yield resolves the structural blocker identified 2026-05-17.
+
+**Backward compat**: 6 existing single-enzyme entries (BH4, GS-441524, tebipenem, R406, simvastatin, irinotecan) unchanged. Builder loop emits (1 site × 1 tag = 1 edge) per pre-B-04 site, with `enzyme_tags=frozenset({tag})` and yield from entry-level fallback — bit-identical edge structure and yields. Snapshot regression and 107-holdout headline expected bit-identical pre/post (CI verifies).
+
+**Process note**: shipped via subagent-driven-development skill (writing-plans → implementer + spec-reviewer + code-quality-reviewer per task). 6 implementation commits + 1 docs commit. One Task 4 dispatch failed with socket error after 30min on haiku; re-dispatched on opus, completed in 65s.
+
+**Next**: B-03 implementation (clopidogrel registry entry + 107-holdout regen with documented AAFE delta).
 
 ---
 
