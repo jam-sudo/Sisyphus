@@ -4,10 +4,18 @@ See docs/superpowers/specs/2026-05-17-multi-enzyme-prodrug-yield-design.md
 """
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 import numpy as np
 import pytest
 
 from sisyphus.core import ActiveMetabolite, Distribution, DrugOnGraph
+from sisyphus.graph.body import BodyGraph
+from sisyphus.graph.builder import augment_for_active_species
+from sisyphus.graph.types import Node, ProdrugActivationEdge
+from sisyphus.predict.registry import lookup_active_metabolite
+from tests.unit.test_prodrug_v2_registry import _v2_entry
 
 
 def _minimal_active(**overrides) -> ActiveMetabolite:
@@ -107,12 +115,6 @@ class TestDrugOnGraphPropagatesEnzymeYields:
 # TestRegistryParsesPerEnzymeYield (Task 3 — B-04)
 # ---------------------------------------------------------------------------
 
-import json
-from pathlib import Path
-
-from sisyphus.predict.registry import lookup_active_metabolite
-from tests.unit.test_prodrug_v2_registry import _v2_entry
-
 
 class TestRegistryParsesPerEnzymeYield:
     def _write(self, tmp_path: Path, entries: dict) -> Path:
@@ -201,10 +203,6 @@ class TestRegistryParsesPerEnzymeYield:
 # ---------------------------------------------------------------------------
 # TestBuilderPerEnzymeYield (Task 5 — B-04)
 # ---------------------------------------------------------------------------
-
-from sisyphus.graph.body import BodyGraph
-from sisyphus.graph.builder import augment_for_active_species
-from sisyphus.graph.types import Node, ProdrugActivationEdge
 
 
 def _graph_with_ces1_and_cyp2c19_in_liver() -> BodyGraph:
