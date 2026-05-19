@@ -1,6 +1,6 @@
 """Prodrug activation registry — SMILES-keyed config loader (v2).
 
-Maps canonical SMILES → (ActiveMetabolite, observation_species, enzyme_affinity_for_conversion).
+Maps canonical SMILES → (ActiveMetabolite, observation_species, enzyme_affinity_for_conversion, enzyme_yields).
 Used by predict.ivive.build_drug_on_graph to attach prodrug activation
 configs to DrugOnGraph instances.
 
@@ -105,14 +105,23 @@ def _build_active_metabolite(entry: dict, smiles: str) -> ActiveMetabolite:
     )
 
 
-def _build_enzyme_affinity_for_conversion(entry: dict, smiles: str) -> dict[str, Distribution]:
-    """Parse enzyme_affinity_for_conversion dict; ignore citation keys."""
+def _build_enzyme_affinity_for_conversion(
+    entry: dict, smiles: str
+) -> tuple[dict[str, Distribution], dict[str, Distribution]]:
+    """Parse enzyme_affinity_for_conversion dict; ignore citation keys.
+
+    Returns ``(affinities, enzyme_yields)``. ``enzyme_yields`` is empty
+    when no entry declares a per-enzyme ``yield`` field. When >=2 enzymes
+    are declared, every enzyme MUST declare ``yield`` (all-or-nothing) -
+    mixed declarations raise ValueError. See B-04 spec §5.4.
+    """
     raw = entry["enzyme_affinity_for_conversion"]
     if not isinstance(raw, dict) or not raw:
         raise ValueError(
             f"enzyme_affinity_for_conversion must be non-empty dict for SMILES {smiles!r}"
         )
     affinities: dict[str, Distribution] = {}
+    yields: dict[str, Distribution] = {}
     for tag, dist_raw in raw.items():
         if not isinstance(dist_raw, dict):
             raise ValueError(
@@ -122,16 +131,41 @@ def _build_enzyme_affinity_for_conversion(entry: dict, smiles: str) -> dict[str,
         if "mean" not in dist_raw:
             raise ValueError(f"affinity entry for tag {tag!r} missing 'mean'")
         affinities[tag] = _distribution_from_dict(dist_raw)
-    return affinities
+        if "yield" in dist_raw:
+            y = dist_raw["yield"]
+            if not isinstance(y, dict) or "mean" not in y:
+                raise ValueError(
+                    f"per-enzyme yield for tag {tag!r} must be dict with 'mean'/'cv', "
+                    f"got {y!r}"
+                )
+            y_mean = float(y["mean"])
+            if not (0.0 <= y_mean <= 1.0):
+                raise ValueError(
+                    f"per-enzyme yield for tag {tag!r} must be in [0, 1], got {y_mean}"
+                )
+            yields[tag] = _distribution_from_dict(y)
+
+    # All-or-nothing rule for multi-enzyme entries (spec §5.4).
+    if len(affinities) >= 2 and yields and len(yields) != len(affinities):
+        missing = sorted(set(affinities) - set(yields))
+        raise ValueError(
+            f"prodrug registry entry for SMILES {smiles!r}: multi-enzyme entries "
+            f"must declare per-enzyme 'yield' for every enzyme or none. "
+            f"Missing yield for: {missing}"
+        )
+
+    return affinities, yields
 
 
 def lookup_active_metabolite(
     smiles: str, registry_path: Path | None = None
-) -> tuple[ActiveMetabolite, str, dict[str, Distribution]] | None:
+) -> tuple[ActiveMetabolite, str, dict[str, Distribution], dict[str, Distribution]] | None:
     """Look up SMILES in v2 prodrug registry.
 
-    Returns ``(ActiveMetabolite, observation_species, enzyme_affinity_for_conversion)``
-    or ``None`` if not found.
+    Returns ``(ActiveMetabolite, observation_species,
+    enzyme_affinity_for_conversion, enzyme_yields)`` or ``None`` if not
+    found. ``enzyme_yields`` is empty when the entry does not declare
+    per-enzyme yields (single-enzyme entries; backward-compat path).
 
     Raises ``ValueError`` on invalid registry entries.
     """
@@ -171,5 +205,5 @@ def lookup_active_metabolite(
         )
 
     am = _build_active_metabolite(entry, canonical)
-    affinities = _build_enzyme_affinity_for_conversion(entry, canonical)
-    return am, obs_species, affinities
+    affinities, enzyme_yields = _build_enzyme_affinity_for_conversion(entry, canonical)
+    return am, obs_species, affinities, enzyme_yields

@@ -101,3 +101,98 @@ class TestDrugOnGraphPropagatesEnzymeYields:
         rng = np.random.default_rng(0)
         sampled = drug.sample(rng)
         assert sampled.active_metabolite.enzyme_yields == {}
+
+
+# ---------------------------------------------------------------------------
+# TestRegistryParsesPerEnzymeYield (Task 3 — B-04)
+# ---------------------------------------------------------------------------
+
+import json
+from pathlib import Path
+
+from sisyphus.predict.registry import lookup_active_metabolite
+from tests.unit.test_prodrug_v2_registry import _v2_entry
+
+
+class TestRegistryParsesPerEnzymeYield:
+    def _write(self, tmp_path: Path, entries: dict) -> Path:
+        p = tmp_path / "registry.json"
+        p.write_text(json.dumps(entries))
+        return p
+
+    def test_lookup_returns_four_tuple(self, tmp_path):
+        """Single-enzyme entry: 4-tuple, empty enzyme_yields dict."""
+        reg = self._write(tmp_path, {"C": _v2_entry()})
+        result = lookup_active_metabolite("C", registry_path=reg)
+        assert result is not None
+        assert len(result) == 4
+        am, obs, affinities, enzyme_yields = result
+        assert affinities["SPR"].mean == 50.0
+        assert enzyme_yields == {}
+
+    def test_single_enzyme_with_yield_is_parsed(self, tmp_path):
+        """Optional per-enzyme yield on a single-enzyme entry round-trips."""
+        entry = _v2_entry(
+            enzyme_affinity_for_conversion={
+                "SPR": {
+                    "mean": 50.0,
+                    "cv": 0.5,
+                    "yield": {"mean": 0.5, "cv": 0.1},
+                }
+            }
+        )
+        reg = self._write(tmp_path, {"C": entry})
+        _, _, _, enzyme_yields = lookup_active_metabolite("C", registry_path=reg)
+        assert "SPR" in enzyme_yields
+        assert enzyme_yields["SPR"].mean == 0.5
+        assert enzyme_yields["SPR"].cv == 0.1
+
+    def test_multi_enzyme_with_all_yields_is_parsed(self, tmp_path):
+        """Multi-enzyme entry with per-enzyme yield on every enzyme."""
+        entry = _v2_entry(
+            enzyme_affinity_for_conversion={
+                "CES1": {
+                    "mean": 100.0, "cv": 0.5,
+                    "yield": {"mean": 0.0, "cv": 0.0},
+                },
+                "CYP2C19": {
+                    "mean": 30.0, "cv": 0.4,
+                    "yield": {"mean": 1.0, "cv": 0.30},
+                },
+            }
+        )
+        reg = self._write(tmp_path, {"C": entry})
+        _, _, affinities, enzyme_yields = lookup_active_metabolite("C", registry_path=reg)
+        assert set(affinities.keys()) == {"CES1", "CYP2C19"}
+        assert set(enzyme_yields.keys()) == {"CES1", "CYP2C19"}
+        assert enzyme_yields["CES1"].mean == 0.0
+        assert enzyme_yields["CYP2C19"].mean == 1.0
+
+    def test_multi_enzyme_missing_yield_raises(self, tmp_path):
+        """Multi-enzyme with partial declaration is rejected at load time."""
+        entry = _v2_entry(
+            enzyme_affinity_for_conversion={
+                "CES1": {
+                    "mean": 100.0, "cv": 0.5,
+                    "yield": {"mean": 0.0, "cv": 0.0},
+                },
+                "CYP2C19": {"mean": 30.0, "cv": 0.4},  # no yield
+            }
+        )
+        reg = self._write(tmp_path, {"C": entry})
+        with pytest.raises(ValueError, match="yield"):
+            lookup_active_metabolite("C", registry_path=reg)
+
+    def test_yield_out_of_range_raises(self, tmp_path):
+        """Per-enzyme yield must satisfy 0 <= mean <= 1."""
+        entry = _v2_entry(
+            enzyme_affinity_for_conversion={
+                "SPR": {
+                    "mean": 50.0, "cv": 0.5,
+                    "yield": {"mean": 1.5, "cv": 0.0},
+                }
+            }
+        )
+        reg = self._write(tmp_path, {"C": entry})
+        with pytest.raises(ValueError, match="yield"):
+            lookup_active_metabolite("C", registry_path=reg)

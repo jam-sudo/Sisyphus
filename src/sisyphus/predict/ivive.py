@@ -623,7 +623,7 @@ def build_drug_on_graph(
     # Prodrug activation routing: SMILES → ActiveMetabolite via registry.
     registry_result = lookup_active_metabolite(profile.smiles)
     if registry_result is not None:
-        active_metabolite, observation_species, conv_affinities = registry_result
+        active_metabolite, observation_species, conv_affinities, _reg_enzyme_yields = registry_result
     else:
         active_metabolite = None
         observation_species = "parent"
