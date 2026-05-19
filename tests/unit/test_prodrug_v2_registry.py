@@ -35,19 +35,20 @@ def _v2_entry(**overrides) -> dict:
     return base
 
 
-def test_lookup_returns_three_tuple(tmp_path):
+def test_lookup_returns_four_tuple(tmp_path):
     smiles = "C"
     canonical = "C"
     reg = _write_registry(tmp_path, {canonical: _v2_entry()})
     result = lookup_active_metabolite(smiles, registry_path=reg)
     assert result is not None
-    assert len(result) == 3
-    am, obs, affinities = result
+    assert len(result) == 4
+    am, obs, affinities, enzyme_yields = result
     assert isinstance(am, ActiveMetabolite)
     assert obs == "parent"
     assert "SPR" in affinities
     assert affinities["SPR"].mean == 50.0
     assert affinities["SPR"].cv == 0.5
+    assert enzyme_yields == {}
 
 
 def test_lookup_returns_none_for_unknown_smiles(tmp_path):
@@ -95,5 +96,5 @@ def test_loader_strips_citation_keys_from_distribution(tmp_path):
     reg = _write_registry(tmp_path, {"C": entry})
     result = lookup_active_metabolite("C", registry_path=reg)
     assert result is not None
-    _, _, affinities = result
+    _, _, affinities, _ = result
     assert affinities["SPR"].mean == 50.0
