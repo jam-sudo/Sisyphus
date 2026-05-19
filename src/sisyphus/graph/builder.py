@@ -355,17 +355,21 @@ def augment_for_active_species(
             f"{ {n: sorted(node.enzymes.keys()) for n, node in graph.nodes.items() if node.enzymes} }"  # noqa: E501
         )
 
-    # One ProdrugActivationEdge per site
+    # One ProdrugActivationEdge per (site × tag) intersection.
+    # Per-enzyme yield with entry-level fallback (B-04 §5.2).
     for site in conversion_sites:
-        activation_edge = ProdrugActivationEdge(
-            source=site,
-            target=active_node_name,
-            enzyme_tags=enzyme_tags,
-            conversion_yield=am.conversion_yield_fraction,
-            mw_parent=drug.mw,
-            mw_active=am.mw,
-        )
-        graph.add_edge(activation_edge)
+        node_tags = set(graph.nodes[site].enzymes.keys())
+        for tag in sorted(enzyme_tags & node_tags):  # sorted for deterministic edge order
+            yld = am.enzyme_yields.get(tag, am.conversion_yield_fraction)
+            activation_edge = ProdrugActivationEdge(
+                source=site,
+                target=active_node_name,
+                enzyme_tags=frozenset({tag}),
+                conversion_yield=yld,
+                mw_parent=drug.mw,
+                mw_active=am.mw,
+            )
+            graph.add_edge(activation_edge)
 
     # 1C elimination from active to sink (UNCHANGED from v1)
     elimination_edge = OneCompartmentEliminationEdge(

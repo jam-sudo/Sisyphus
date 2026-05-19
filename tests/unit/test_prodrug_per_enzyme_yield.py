@@ -196,3 +196,143 @@ class TestRegistryParsesPerEnzymeYield:
         reg = self._write(tmp_path, {"C": entry})
         with pytest.raises(ValueError, match="yield"):
             lookup_active_metabolite("C", registry_path=reg)
+
+
+# ---------------------------------------------------------------------------
+# TestBuilderPerEnzymeYield (Task 5 — B-04)
+# ---------------------------------------------------------------------------
+
+from sisyphus.graph.body import BodyGraph
+from sisyphus.graph.builder import augment_for_active_species
+from sisyphus.graph.types import Node, ProdrugActivationEdge
+
+
+def _graph_with_ces1_and_cyp2c19_in_liver() -> BodyGraph:
+    g = BodyGraph()
+    g.add_node(Node(
+        name="liver",
+        node_type="organ",
+        volume=Distribution(1.5),
+        enzymes={
+            "CES1": Distribution(mean=8e7, cv=0.5),
+            "CYP2C19": Distribution(mean=1.4e6, cv=0.6),
+        },
+        ivive_scaling=6e-5,
+    ))
+    g.add_node(Node(name="venous_blood", node_type="blood_pool",
+                    volume=Distribution(5.0)))
+    g.add_node(Node(name="metabolized_gut", node_type="sink",
+                    volume=Distribution(0.0)))
+    return g
+
+
+class TestBuilderPerEnzymeYield:
+    def test_single_enzyme_entry_falls_back_to_entry_level_yield(self):
+        """Backward compat: single-enzyme entry produces edge with entry-level yield."""
+        g = _graph_with_ces1_and_cyp2c19_in_liver()
+        am = _minimal_active(
+            conversion_yield_fraction=Distribution(0.85, cv=0.1),
+            # enzyme_yields={} default
+        )
+        drug = _minimal_drug(
+            active_metabolite=am,
+            observation_species="parent",
+            enzyme_affinity_for_conversion={"CES1": Distribution(100.0)},
+        )
+        augment_for_active_species(g, drug)
+        edges = [e for e in g.edges if isinstance(e, ProdrugActivationEdge)]
+        assert len(edges) == 1
+        assert edges[0].enzyme_tags == frozenset({"CES1"})
+        assert edges[0].conversion_yield.mean == 0.85
+
+    def test_multi_enzyme_entry_emits_per_tag_edges(self):
+        """Multi-enzyme entry: one edge per tag per site, each with its own yield."""
+        g = _graph_with_ces1_and_cyp2c19_in_liver()
+        am = _minimal_active(
+            conversion_yield_fraction=Distribution(0.15, cv=0.4),
+            enzyme_yields={
+                "CES1": Distribution(0.0, cv=0.0),
+                "CYP2C19": Distribution(1.0, cv=0.30),
+            },
+        )
+        drug = _minimal_drug(
+            active_metabolite=am,
+            observation_species="parent",
+            enzyme_affinity_for_conversion={
+                "CES1": Distribution(100.0),
+                "CYP2C19": Distribution(50.0),
+            },
+        )
+        augment_for_active_species(g, drug)
+        edges = [e for e in g.edges if isinstance(e, ProdrugActivationEdge)]
+        # 1 site x 2 tags = 2 edges
+        assert len(edges) == 2
+        by_tag = {next(iter(e.enzyme_tags)): e for e in edges}
+        assert set(by_tag.keys()) == {"CES1", "CYP2C19"}
+        assert by_tag["CES1"].conversion_yield.mean == 0.0
+        assert by_tag["CYP2C19"].conversion_yield.mean == 1.0
+        # Each edge carries exactly one tag (per-enzyme edge).
+        assert by_tag["CES1"].enzyme_tags == frozenset({"CES1"})
+        assert by_tag["CYP2C19"].enzyme_tags == frozenset({"CYP2C19"})
+
+    def test_dead_end_yield_zero_is_valid(self):
+        """yield=0 produces an edge that consumes parent but contributes no active."""
+        g = _graph_with_ces1_and_cyp2c19_in_liver()
+        am = _minimal_active(
+            enzyme_yields={
+                "CES1": Distribution(0.0, cv=0.0),
+                "CYP2C19": Distribution(1.0, cv=0.0),
+            },
+        )
+        drug = _minimal_drug(
+            active_metabolite=am,
+            observation_species="parent",
+            enzyme_affinity_for_conversion={
+                "CES1": Distribution(100.0),
+                "CYP2C19": Distribution(50.0),
+            },
+        )
+        augment_for_active_species(g, drug)
+        ces1_edges = [
+            e for e in g.edges
+            if isinstance(e, ProdrugActivationEdge) and e.enzyme_tags == frozenset({"CES1"})
+        ]
+        assert len(ces1_edges) == 1
+        # Yield is exactly 0 - engine flux multiplies active production by this.
+        assert ces1_edges[0].conversion_yield.mean == 0.0
+
+    def test_multi_enzyme_entry_with_partial_node_coverage(self):
+        """If a node holds only some of the declared tags, only those edges are emitted."""
+        # liver has both CES1 and CYP2C19; add a gut_wall with only CES1.
+        g = _graph_with_ces1_and_cyp2c19_in_liver()
+        g.add_node(Node(
+            name="gut_wall",
+            node_type="barrier_organ",
+            volume=Distribution(1.0),
+            enzymes={"CES1": Distribution(mean=1e6, cv=0.5)},
+            ivive_scaling=6e-5,
+        ))
+        am = _minimal_active(
+            enzyme_yields={
+                "CES1": Distribution(0.0, cv=0.0),
+                "CYP2C19": Distribution(1.0, cv=0.0),
+            },
+        )
+        drug = _minimal_drug(
+            active_metabolite=am,
+            observation_species="parent",
+            enzyme_affinity_for_conversion={
+                "CES1": Distribution(100.0),
+                "CYP2C19": Distribution(50.0),
+            },
+        )
+        augment_for_active_species(g, drug)
+        edges = [e for e in g.edges if isinstance(e, ProdrugActivationEdge)]
+        # liver: CES1 + CYP2C19 = 2 edges. gut_wall: CES1 only = 1 edge. total 3.
+        assert len(edges) == 3
+        by_source_tag = {(e.source, next(iter(e.enzyme_tags))) for e in edges}
+        assert by_source_tag == {
+            ("liver", "CES1"),
+            ("liver", "CYP2C19"),
+            ("gut_wall", "CES1"),
+        }
