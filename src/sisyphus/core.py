@@ -341,6 +341,10 @@ class DrugOnGraph:
                 conversion_yield_fraction=Distribution(
                     mean=self.active_metabolite.conversion_yield_fraction.sample(rng),
                     cv=0.0),
+                enzyme_yields={
+                    k: Distribution(mean=v.sample(rng), cv=0.0)
+                    for k, v in self.active_metabolite.enzyme_yields.items()
+                },
             ) if self.active_metabolite is not None else None,
             observation_species=self.observation_species,
         )
@@ -404,6 +408,10 @@ class DrugOnGraph:
                 conversion_yield_fraction=Distribution(
                     mean=self.active_metabolite.conversion_yield_fraction.mean,
                     cv=0.0),
+                enzyme_yields={
+                    k: Distribution(mean=v.mean, cv=0.0)
+                    for k, v in self.active_metabolite.enzyme_yields.items()
+                },
             ) if self.active_metabolite is not None else None,
             observation_species=self.observation_species,
         )
