@@ -166,6 +166,8 @@ class ActiveMetabolite:
         conversion_site: Name of parent-graph node where conversion occurs.
         conversion_yield_fraction: Fractional molar conversion (Distribution,
             default 1.0 = stoichiometric).
+        enzyme_yields: Optional per-enzyme yield overrides (B-04). Defaults
+            to empty dict.
     """
 
     name: str
@@ -178,6 +180,17 @@ class ActiveMetabolite:
     conversion_yield_fraction: Distribution = field(
         default_factory=lambda: Distribution(1.0, cv=0.0)
     )
+    enzyme_yields: dict[str, Distribution] = field(default_factory=dict)
+    """Per-enzyme conversion yield (B-04).
+
+    Optional override of ``conversion_yield_fraction`` keyed by enzyme tag.
+    When ``enzyme_yields[tag]`` is set, the builder uses it for edges
+    catalyzed by ``tag``; when unset, edges fall back to the entry-level
+    ``conversion_yield_fraction``. Empty dict (default) preserves the
+    pre-B-04 single-yield behaviour.
+
+    See docs/superpowers/specs/2026-05-17-multi-enzyme-prodrug-yield-design.md
+    """
 
 
 # ---------------------------------------------------------------------------
