@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-04-20
+last_updated: 2026-05-20
 parent: ../../CLAUDE.md
 charter: Full inventory of files/models/data/scripts an agent may need to open
 ---
@@ -56,6 +56,7 @@ Top-level [CLAUDE.md](../../CLAUDE.md) is for orientation. This file is the file
 - `validation/surrogate_production_accuracy.json` — Track D1 surrogate R² / relative error on 13 drugs.
 - `validation/oatp_phase2a_stiff_diagnosis.json`, `oatp_abundance_sweep.json` — OATP Phase 2A flow-limited-plateau evidence.
 - `validation/enkf_vs_ibis_postmerge.json` — 2026-04-18 smoke test.
+- `validation/4track_ci_2026-05-12_v0.4.json` — public-clone 4-track bootstrap CIs (refreshed in place for B-03).
 
 **Reference:**
 - `reference/clinical_pk.json`, `reference/holdout.json`, `reference/adme_measured.csv` — clinical PK reference set, holdout split, measured ADME.
@@ -67,6 +68,7 @@ Top-level [CLAUDE.md](../../CLAUDE.md) is for orientation. This file is the file
 - `physiology/achour2021_correlation.json` — log-space correlation matrix + CVs for correlation_group "liver_achour2021".
 - `sbi/populations.json` — Track C1 population registry.
 - `sbi/method_routing.json` — per-drug TDM method routing (production).
+- `sbi/prodrug_activation_registry.json` — active-metabolite/prodrug routing registry (7 entries after B-03; per-enzyme yields supported for multi-fate prodrugs).
 
 ## Physiology (`src/sisyphus/physiology/`)
 

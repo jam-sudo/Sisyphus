@@ -23,7 +23,7 @@ _REGISTRY_PATH = _REPO_ROOT / "data" / "sbi" / "prodrug_activation_registry.json
 
 _EXPECTED_PRODRUG_NAMES = frozenset({
     "BH4", "GS-441524", "tebipenem", "R406",
-    "simvastatin", "irinotecan",
+    "simvastatin", "irinotecan", "R-130964",
 })
 
 
