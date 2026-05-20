@@ -42,6 +42,19 @@ def _canonicalize(smiles: str) -> str | None:
     return Chem.MolToSmiles(mol, canonical=True)
 
 
+def _inchikey_connectivity(smiles: str) -> str | None:
+    """Return the connectivity block of the RDKit InChIKey for ``smiles``.
+
+    This fallback lets stereospecific registry entries match non-isomeric
+    clinical reference SMILES for the same connectivity. The registry remains
+    keyed by canonical SMILES for normal lookups.
+    """
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        return None
+    return Chem.MolToInchiKey(mol).split("-", maxsplit=1)[0]
+
+
 @lru_cache(maxsize=1)
 def _load_registry_cached(path_str: str) -> dict:
     path = Path(path_str)
@@ -182,6 +195,13 @@ def lookup_active_metabolite(
         registry = _load_registry_cached(str(path))
 
     entry = registry.get(canonical)
+    if entry is None:
+        query_connectivity = _inchikey_connectivity(canonical)
+        if query_connectivity is not None:
+            for registered_smiles, candidate in registry.items():
+                if _inchikey_connectivity(registered_smiles) == query_connectivity:
+                    entry = candidate
+                    break
     if entry is None:
         return None
 

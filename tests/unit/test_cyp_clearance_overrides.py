@@ -28,6 +28,7 @@ _PRAVASTATIN_VARIANT = (
     "([C@@H]2CC[C@H](C[C@H](CC(=O)O)O)O)C)O"
 )
 _MORPHINE_SMILES = "CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O"
+_CLOPIDOGREL_SMILES = "COC(=O)[C@H](c1ccccc1Cl)N1CCc2sccc2C1"
 
 
 class TestLookupMetabolicFraction:
@@ -37,6 +38,10 @@ class TestLookupMetabolicFraction:
     def test_pravastatin_variant_smiles_returns_zero(self):
         """Different SMILES of the same molecule must resolve via InChIKey."""
         assert lookup_metabolic_fraction(_PRAVASTATIN_VARIANT) == 0.0
+
+    def test_clopidogrel_returns_zero(self):
+        """B-03: explicit prodrug edges carry parent hepatic consumption."""
+        assert lookup_metabolic_fraction(_CLOPIDOGREL_SMILES) == 0.0
 
     def test_unregistered_drug_returns_one(self):
         assert lookup_metabolic_fraction(_MORPHINE_SMILES) == 1.0

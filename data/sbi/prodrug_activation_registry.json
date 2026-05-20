@@ -142,5 +142,46 @@
       "source_dbs_searched": ["PubMed", "GoogleScholar", "FDA"],
       "n_candidates_reviewed": 9
     }
+  },
+  "COC(=O)[C@H](c1ccccc1Cl)N1CCc2sccc2C1": {
+    "name": "R-130964",
+    "mw": 355.836,
+    "fup": {"mean": 0.02, "cv": 0.30},
+    "CL_per_h": {"mean": 35.0, "cv": 0.70},
+    "Vd_L": {"mean": 50.0, "cv": 0.70},
+    "conversion_yield_fraction": {"mean": 0.15, "cv": 0.40},
+    "yield_source": "literature",
+    "observation_species": "parent",
+    "enzyme_affinity_for_conversion": {
+      "CES1": {
+        "mean": 0.030,
+        "cv": 0.70,
+        "yield": {"mean": 0.0, "cv": 0.0},
+        "citation": "Tang 2006 DMD 34:1467-76; Hagihara 2009 / CES1 reviews: hepatic CES1 hydrolyzes most clopidogrel to inactive carboxylate (~85% dead-end path)."
+      },
+      "CYP3A4": {
+        "mean": 0.030,
+        "cv": 0.70,
+        "yield": {"mean": 1.0, "cv": 0.30},
+        "citation": "Kazui 2010 DMD 38:92-99 and Zahno 2010 Br J Pharmacol: CYP3A4 contributes to clopidogrel two-step oxidative bioactivation to the active thiol metabolite."
+      },
+      "CYP2C9": {
+        "mean": 0.030,
+        "cv": 0.70,
+        "yield": {"mean": 1.0, "cv": 0.30},
+        "citation": "Kazui 2010 DMD 38:92-99; Sisyphus ontology maps CYP2C19/CYP2C8 DrugBank annotations to the CYP2C9 2C-subfamily surrogate, so this tag represents the CYP2C19-dominant 2C contribution."
+      }
+    },
+    "affinity_source": "literature",
+    "_clinical_citation": "Active thiol metabolite weight/formula from DrugBank DBMET01163; parent clopidogrel holdout Cmax from FDA-label-derived clinical_pk.json.",
+    "_v3_origin_note": "B-03 issue #11 residual. Clopidogrel is a parent-scored holdout prodrug: CES1 routes most parent to an inactive dead-end, while CYP3A4 + Sisyphus 2C-subfamily surrogate route the represented oxidative bioactivation path to R-130964.",
+    "v3_metadata": {
+      "citation": "Tang 2006 DMD 34:1467-1476 (CES1 hydrolysis); Kazui 2010 DMD 38:92-99 (CYP enzymes in two oxidative steps); Zahno 2010 Br J Pharmacol 161:393-404 (CYP3A4/2C19 in vitro contribution); DrugBank DBMET01163 (active metabolite formula/MW).",
+      "doctrine_path": "B-03 §3: parent Cmax is the 107-holdout target, so observation_species=parent. Active thiol CL/V is ceiling_accepted because chemically labile active metabolite and covalent P2Y12 binding prevent a clean conventional CL/V measurement.",
+      "disposition_state": "ceiling_accepted",
+      "source_dbs_searched": ["PubMed", "GoogleScholar", "FDA", "DrugBank"],
+      "n_candidates_reviewed": 7,
+      "ceiling_rationale": "The explicit prodrug edges model clopidogrel parent consumption, not a calibrated active-thiol PK claim. CES1/CYP affinity values are literature-anchored order-of-magnitude capacities chosen to preserve the known ~85/15 inactive-vs-active fate split under Sisyphus enzyme ontology; active CL/V remains a placeholder because R-130964 is labile and target-binding."
+    }
   }
 }

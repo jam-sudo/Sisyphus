@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-15
+last_updated: 2026-05-20
 parent: ../../CLAUDE.md
 charter: Deferred work items with effort/value/risk tags. Promote to a spec cycle, GitHub Issue, dead-ends.md, or experiment-log.md when the disposition is decided. Items here have NOT been triaged through brainstorming yet — they are candidates, not commitments.
 ---
@@ -37,19 +37,6 @@ Reverse-chronological by **when the item was identified**, grouped by tier. Tier
 2. **Meta-learner re-evaluation with error-decorrelation gate** — per `diagnosis.md` §4. If the registry build is real, re-train meta weights with the UGT path active and verify the gain isn't cancelled.
 
 **Trigger to revisit**: capability completeness becomes a priority, or someone wants a real DrugBank-free reproducibility story.
-
-## Tier 2 — Capability extensions (moderate, single-issue closeout)
-
-### B-03 — Clopidogrel (#11 잔여)
-**Effort**: 2–3h **after B-04 lands**. **Value**: closes the remaining 1/3 of issue #11. **Risk**: medium — clopidogrel is a 107-holdout member, so the addition shifts headline AAFE and requires regen + delta documentation. Disposition expected **ceiling_accepted** per v3 mechanistic-A doctrine (R-130964 active thiol PK poorly characterized in primary literature; rapid covalent P2Y12 binding sink prevents conventional CL/Vd measurement).
-
-**Implementation outline** (see §8 of the B-04 spec for the full path):
-- Registry entry with per-enzyme yields: `CES1{yield=0}` (dead-end) + `CYP2C19{yield≈1}` (active fraction); overall systemic yield ~15% emerges from the combination, not a global scalar.
-- `observation_species="parent"` — 107-holdout reference is parent clopidogrel Cmax; mismatch with "active" would inject a deliberate 5–20× species-mismatch fold error.
-- `cyp_clearance_overrides.json` entry with `metabolic_fraction=0` to route 100% of hepatic CL through the two ProdrugActivationEdges (CES1 + CYP2C19), preventing double-count with XGBoost-derived CL.
-- 107-holdout regen + bootstrap CIs refreshed + AAFE delta documented.
-
-**Blocked by**: ~~B-04~~ (shipped 2026-05-19). Ready to implement.
 
 ## Tier 3 — Small items (trivial effort, narrow value)
 

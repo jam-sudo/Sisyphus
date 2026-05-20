@@ -34,6 +34,18 @@
         "Fujino 2004 J Pharm Sci 93:1019-26: ~80% biliary excretion (parent + glucuronide); minor CYP2C9 4-OH metabolism (~5-10%); UGT1A3/2B7 lactonization is reversible via paraoxonase. Intracellular metabolism not rate-limiting."
       ],
       "notes": "Pitavastatin parallels pravastatin: OATP1B1 hepatic uptake is rate-limiting (Niemi 2009 PM/EM ~3x); intracellular CYP2C9 + UGT1A3/2B7 paths are downstream of uptake and thus not rate-limiting at the whole-organ level. Setting metabolic_fraction=0 routes all hepatic CL through ECM (OATP1B1 saturable + ECM passive + biliary CL_int). EMPIRICAL NOTE: setting mf=0 vs mf=1.0 changes pitavastatin Cmax by <2% (sweep 2026-05-04), so the metabolic_fraction value is mechanistically chosen rather than empirically tuned. The residual ~2x under-prediction (Cmax 0.00168 vs FDA 0.0035) reflects Jmax/PS calibration uncertainty (Hirano 2004 scaled-from-pravastatin estimate carries 2x literature range), not metabolic_fraction error. v0.3.x parameter recalibration tracked separately."
+    },
+    {
+      "drug": "clopidogrel",
+      "smiles": "COC(=O)[C@H](c1ccccc1Cl)N1CCc2sccc2C1",
+      "inchikey": "GKTWGGQPFAXNFI-HNNXBMFYSA-N",
+      "metabolic_fraction": 0.0,
+      "literature": [
+        "Tang 2006 DMD 34:1467-76: hepatic CES1 hydrolyzes clopidogrel to inactive carboxylate; CES1 is the major dead-end pathway.",
+        "Kazui 2010 DMD 38:92-99: CYP3A4 and CYP2C19-family enzymes contribute to the two oxidative bioactivation steps.",
+        "B-03 design 2026-05-20: explicit ProdrugActivationEdges carry parent hepatic consumption, so the default XGBoost-derived parent CYP path must be zeroed to avoid double-counting."
+      ],
+      "notes": "Clopidogrel parent hepatic consumption is represented explicitly by prodrug activation edges: CES1 dead-end yield=0 plus CYP3A4/CYP2C9-surrogate active-yield edges. metabolic_fraction=0 prevents the default XGBoost-derived enzyme_affinity path from adding a second parent clearance route. The 107-holdout observation remains parent Cmax, not active R-130964 Cmax."
     }
   ]
 }

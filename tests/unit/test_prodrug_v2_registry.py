@@ -56,6 +56,17 @@ def test_lookup_returns_none_for_unknown_smiles(tmp_path):
     assert lookup_active_metabolite("CCO", registry_path=reg) is None
 
 
+def test_lookup_falls_back_to_inchikey_connectivity_for_stereo_variant(tmp_path):
+    """Stereospecific registry keys should match non-isomeric reference SMILES."""
+    stereo = "COC(=O)[C@H](c1ccccc1Cl)N1CCc2sccc2C1"
+    non_stereo = "COC(=O)C(c1ccccc1Cl)N1CCc2sccc2C1"
+    reg = _write_registry(tmp_path, {stereo: _v2_entry(name="R-130964")})
+    result = lookup_active_metabolite(non_stereo, registry_path=reg)
+    assert result is not None
+    am, _, _, _ = result
+    assert am.name == "R-130964"
+
+
 def test_loader_rejects_infrastructure_only(tmp_path):
     reg = _write_registry(tmp_path, {"C": _v2_entry(affinity_source="infrastructure_only")})
     with pytest.raises(ValueError, match="affinity_source"):
