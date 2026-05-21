@@ -114,6 +114,8 @@ class ResolvedParams:
             return self._drug.ps_eff.mean
         if param == "cl_int_bile":
             return self._drug.cl_int_bile.mean
+        if param == "fu_correction_liver":
+            return self._drug.fu_correction_liver.mean
         raise KeyError(f"Unknown drug param: {param}")
 
     def drug_kp(self, node_name: str) -> float:

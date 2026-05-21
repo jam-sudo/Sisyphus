@@ -232,6 +232,10 @@ class ClearanceFluxSpec(FluxSpec):
                 return  # No metabolism at this node
 
             fup = params.drug_param("fup")
+            # B-11: hepatic intracellular fu correction at flagged nodes.
+            if params.node_param(self.source_name, "fu_correction_applicable") > 0:
+                fup = fup * params.drug_param("fu_correction_liver")
+
             q = params.total_inflow(self.source_name)
 
             # Well-stirred: CL = (Q * fup * CLint) / (Q + fup * CLint)
@@ -261,6 +265,10 @@ class ClearanceFluxSpec(FluxSpec):
                 return
 
             fup = params.drug_param("fup")
+            # B-11: hepatic intracellular fu correction at flagged nodes.
+            if params.node_param(self.source_name, "fu_correction_applicable") > 0:
+                fup = fup * params.drug_param("fu_correction_liver")
+
             q = params.total_inflow(self.source_name)
 
             # Parallel-tube: CL = Q × (1 - e^(-fup × CLint / Q))
