@@ -56,7 +56,8 @@ class Node:
     transporters: dict[str, Distribution] = field(default_factory=dict)
     ivive_scaling: float = 0.0
     lookup_name: str = ""  # base organ name for Kp/PS lookup (e.g. "adipose" for "adipose_tissue")
-    fu_correction_applicable: float = 0.0  # B-11: 1.0 if hepatic intracellular fu correction applies at this node
+    # B-11: 1.0 if hepatic intracellular fu correction applies at this node.
+    fu_correction_applicable: float = 0.0
 
 
 # ---------------------------------------------------------------------------
