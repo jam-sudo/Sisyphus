@@ -29,6 +29,7 @@ _PRAVASTATIN_VARIANT = (
 )
 _MORPHINE_SMILES = "CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O"
 _CLOPIDOGREL_SMILES = "COC(=O)[C@H](c1ccccc1Cl)N1CCc2sccc2C1"
+_CLOPIDOGREL_NONSTEREO = "COC(=O)C(C1=CC=CC=C1Cl)N2CCC3=C(C2)C=CS3"
 
 
 class TestLookupMetabolicFraction:
@@ -42,6 +43,15 @@ class TestLookupMetabolicFraction:
     def test_clopidogrel_returns_zero(self):
         """B-03: explicit prodrug edges carry parent hepatic consumption."""
         assert lookup_metabolic_fraction(_CLOPIDOGREL_SMILES) == 0.0
+
+    def test_clopidogrel_nonstereo_falls_back_via_inchikey_connectivity(self):
+        """B-03 fix-forward: clinical_pk.json uses non-isomeric SMILES whose
+        full InChIKey stereo block differs from the stereospecific override.
+        The connectivity-block fallback restores the metabolic_fraction=0
+        scaling on the production benchmark path. Without this fallback the
+        explicit ProdrugActivationEdges and the default XGBoost CL path run
+        in parallel, double-counting clopidogrel hepatic consumption."""
+        assert lookup_metabolic_fraction(_CLOPIDOGREL_NONSTEREO) == 0.0
 
     def test_unregistered_drug_returns_one(self):
         assert lookup_metabolic_fraction(_MORPHINE_SMILES) == 1.0

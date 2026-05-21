@@ -32,29 +32,40 @@ _REGISTRY_PATH = (
 
 
 @lru_cache(maxsize=1)
-def _load() -> dict[str, float]:
-    """Load the registry once and index by InChIKey → metabolic_fraction."""
+def _load() -> tuple[dict[str, float], dict[str, list[float]]]:
+    """Load the registry once; index by full InChIKey and connectivity block.
+
+    The connectivity index lets us match a non-isomeric query SMILES against
+    a stereospecific override (and vice versa) — both forms share their
+    first InChIKey block. Connectivity matches are only honored when the
+    block is unambiguous (one override per connectivity); collisions
+    fail-safe to the default 1.0.
+    """
     if not _REGISTRY_PATH.exists():
         logger.debug("cyp_clearance_overrides: registry not found at %s", _REGISTRY_PATH)
-        return {}
+        return {}, {}
     with _REGISTRY_PATH.open() as f:
         data = json.load(f)
-    index: dict[str, float] = {}
+    full_index: dict[str, float] = {}
+    conn_index: dict[str, list[float]] = {}
     for entry in data.get("overrides", []):
         ikey = entry.get("inchikey")
         frac = entry.get("metabolic_fraction")
         if ikey is None or frac is None:
             continue
-        index[ikey] = float(frac)
-    return index
+        full_index[ikey] = float(frac)
+        conn_index.setdefault(ikey.split("-", maxsplit=1)[0], []).append(float(frac))
+    return full_index, conn_index
 
 
 def lookup_metabolic_fraction(smiles: str) -> float:
     """Return the metabolic_fraction for ``smiles``, or 1.0 if not registered.
 
-    Lookup is by RDKit InChIKey to be SMILES-variant-robust. If RDKit is
-    unavailable or the SMILES is invalid, returns 1.0 (default no-scaling
-    behavior, fail-safe).
+    Lookup is by RDKit InChIKey to be SMILES-variant-robust. Falls back to
+    InChIKey-connectivity matching when the full key misses, so a
+    stereospecific override applies to a non-isomeric query SMILES (and
+    vice versa). If RDKit is unavailable or the SMILES is invalid, returns
+    1.0 (fail-safe default).
     """
     try:
         from rdkit import Chem
@@ -64,4 +75,10 @@ def lookup_metabolic_fraction(smiles: str) -> float:
     if mol is None:
         return 1.0
     ikey = Chem.MolToInchiKey(mol)
-    return _load().get(ikey, 1.0)
+    full_index, conn_index = _load()
+    if ikey in full_index:
+        return full_index[ikey]
+    matches = conn_index.get(ikey.split("-", maxsplit=1)[0], [])
+    if len(matches) == 1:
+        return matches[0]
+    return 1.0

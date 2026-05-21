@@ -10,26 +10,29 @@ Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the *
 
 ---
 
-## 2026-05-20 — B-03 clopidogrel dual-fate prodrug registry
+## 2026-05-20 — B-03 clopidogrel dual-fate prodrug registry + double-count fix-forward
 
 **Motivation:** close the remaining #11 prodrug registry item after B-04 made per-enzyme yields possible. Clopidogrel is a 107-holdout member scored as **parent** Cmax, while its mechanism splits hepatic fate into CES1 inactive hydrolysis and CYP oxidative bioactivation.
 
-**What shipped:**
+**What shipped** (codex branch + fix-forward on top):
 - New B-03 design spec: `docs/superpowers/specs/2026-05-20-clopidogrel-prodrug-design.md`.
 - `data/sbi/prodrug_activation_registry.json`: clopidogrel entry using B-04 per-enzyme yields — `CES1 yield=0` dead-end, `CYP3A4 yield=1`, and `CYP2C9 yield=1` as the existing Sisyphus 2C-subfamily surrogate for CYP2C19 contribution. `observation_species="parent"` so the holdout target remains apples-to-apples.
-- `data/transporters/cyp_clearance_overrides.json`: clopidogrel `metabolic_fraction=0.0` to prevent default XGBoost-derived hepatic CL from double-counting the explicit ProdrugActivationEdges.
-- `predict/registry.py`: InChIKey-connectivity fallback so stereospecific registry keys match non-isomeric clinical reference SMILES. This is needed for clopidogrel because the holdout SMILES lacks stereo.
-- Clopidogrel integration coverage added to `tests/integration/test_predict_prodrug_simvastatin.py`; registry/unit tests updated.
+- `data/transporters/cyp_clearance_overrides.json`: clopidogrel `metabolic_fraction=0.0` to prevent the default XGBoost-derived hepatic CL from double-counting the explicit ProdrugActivationEdges.
+- `predict/registry.py`: InChIKey-connectivity fallback so the stereospecific registry key matches the non-isomeric clinical_pk.json SMILES.
+- `predict/cyp_clearance_overrides.py` **fix-forward**: parallel InChIKey-connectivity fallback. The original B-03 commit added the fallback only to the prodrug registry lookup; the override lookup was still keyed on the full InChIKey (stereo block included), so the non-isomeric clinical_pk SMILES missed the stereospecific override, the XGBoost CL path ran in parallel with the prodrug edges, and parent hepatic CL was silently double-counted. This was the root cause of the apparently small +0.003 AAFE delta in the initial codex regen.
+- `tests/regression/test_holdout_unchanged.py` **doctrine update**: prior rule (no holdout drug in registry) is replaced by two complementary gates — (a) every holdout-in-registry entry must use `observation_species="parent"` (active-species observation would inject species mismatch), and (b) every such entry must have `metabolic_fraction=0.0` in cyp_clearance_overrides (otherwise double-count).
+- `tests/integration/test_predict_prodrug_simvastatin.py`, `tests/unit/test_cyp_clearance_overrides.py`, `tests/regression/test_prodrug_registry_seed.py`: clopidogrel + non-isomeric SMILES InChIKey-fallback coverage.
 
 **Numerical outcome (public-clone deterministic state: DrugBank + logP correction hidden during regen):**
-- Overall Meta AAFE: 2.7509 → **2.7535** (+0.0025, noise-level).
-- Overall Engine AAFE: 4.0075 → **4.0101** (+0.0026).
-- In-domain Meta AAFE: 2.8374 → **2.8379** (+0.0005).
-- Clopidogrel parent Engine fold: 2.52× → **2.23×**; Meta fold: 2.72× → **2.56×**. The single-drug mechanistic improvement is slightly offset by aggregate rounding/error-cancellation.
+- Overall Meta AAFE: 2.7509 → **2.7715** (+0.0206, +0.7%) — within bootstrap CI [2.37, 3.26].
+- Overall Engine AAFE: 4.0075 → **4.0651**.
+- Overall ML AAFE: 3.0121 → **3.0103** (bit-identical save bootstrap-noise; ML artifacts unchanged).
+- In-domain Meta AAFE: 2.8374 → **2.8625**; In-domain N=81 ✓.
+- Clopidogrel parent Engine fold: 2.52× → **9.58×**; Meta fold: 2.72× → **5.15×**. The single-drug worsening exposes that the B-03 affinity values (0.030 each) were calibrated to preserve the literature ~85/15 inactive/active fate split, **not** the absolute parent extraction ratio. Double-counting was incidentally masking this calibration gap. Literature-IVIVE-scaled CES1 affinities (e.g. from Tang 2006 Vmax/Km) are a follow-up; CLAUDE.md invariant #8 forbids fudging the value to Cmax loss.
 
-**Artifacts:** regenerated `data/training/4track_holdout_predictions.json`; refreshed bootstrap CI bundle `data/validation/4track_ci_2026-05-12_v0.4.json` in place (10,000 resamples, seed 20260422; computed_at `2026-05-20-v0.4-b03`).
+**Artifacts:** regenerated `data/training/4track_holdout_predictions.json`; refreshed bootstrap CI bundle `data/validation/4track_ci_2026-05-12_v0.4.json` in place (10,000 resamples, seed 20260422; computed_at `2026-05-20-v0.4-b03-fixforward`).
 
-**Disposition:** B-03 shipped; removed from backlog. Active R-130964 disposition remains `ceiling_accepted` because the labile thiol and covalent P2Y12 binding prevent a clean conventional CL/V measurement.
+**Disposition:** B-03 shipped (with the override-lookup fix). Active R-130964 disposition remains `ceiling_accepted` because the labile thiol and covalent P2Y12 binding prevent a clean conventional CL/V measurement. CES1 affinity calibration tracked as a separate B-03.x follow-up.
 
 ---
 
