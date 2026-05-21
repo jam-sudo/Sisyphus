@@ -212,3 +212,36 @@ def test_well_stirred_no_effect_when_node_flag_off():
     c_out = 100.0 * 1.0 / (1.5 * 1.0)
     expected = (q * fup * clint) / (q + fup * clint) * c_out
     assert abs(rate_at_one - expected) < 1e-10
+
+
+def test_prodrug_flux_applies_correction_at_flagged_node_via_predict(monkeypatch):
+    """End-to-end: clopidogrel routes through ProdrugActivationFlux at the
+    liver (flagged) node. fu_correction_liver > 1.0 must lower predicted parent
+    Cmax. Verified via predict() because clopidogrel is a registered prodrug
+    so its production path IS the one Task 7 modifies."""
+    from sisyphus.pipeline.predict import predict
+
+    # Patch at the source module so the function-local import in ivive.py
+    # re-binds on every predict() call.
+    clopidogrel = "COC(=O)C(C1=CC=CC=C1Cl)N2CCC3=C(C2)C=CS3"  # non-stereo
+
+    monkeypatch.setattr(
+        "sisyphus.predict.hepatic_fu_correction.lookup_hepatic_fu_correction",
+        lambda smiles, registry_path=None: Distribution(mean=5.0, cv=0.0),
+        raising=False,
+    )
+    high = predict(clopidogrel, dose_mg=300.0, route="oral")
+    cmax_high = float(high.engine_pk.cmax.mean)
+
+    monkeypatch.setattr(
+        "sisyphus.predict.hepatic_fu_correction.lookup_hepatic_fu_correction",
+        lambda smiles, registry_path=None: Distribution(mean=1.0, cv=0.0),
+        raising=False,
+    )
+    low = predict(clopidogrel, dose_mg=300.0, route="oral")
+    cmax_low = float(low.engine_pk.cmax.mean)
+
+    assert cmax_high < cmax_low, (
+        f"ProdrugActivationFlux at liver must respect fu_correction_liver; "
+        f"fu_corr=5: {cmax_high:.4f}, fu_corr=1: {cmax_low:.4f}"
+    )

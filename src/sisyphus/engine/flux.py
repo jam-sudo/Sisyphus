@@ -631,6 +631,9 @@ class ProdrugActivationFluxSpec(FluxSpec):
             return  # No catalysis at this node for this drug
 
         fup = params.drug_param("fup")
+        # B-11: hepatic intracellular fu correction at flagged nodes.
+        if params.node_param(self.source_name, "fu_correction_applicable") > 0:
+            fup = fup * params.drug_param("fu_correction_liver")
         q = params.total_inflow(self.source_name)
         denom = q + fup * clint_organ
         if denom < 1e-12:
