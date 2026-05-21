@@ -8,8 +8,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-import pytest
-
 _REGISTRY_PATH = (
     Path(__file__).resolve().parent.parent.parent
     / "data" / "transporters" / "hepatic_fu_correction.json"
