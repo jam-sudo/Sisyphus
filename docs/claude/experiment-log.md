@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-20
+last_updated: 2026-05-21
 parent: ../../CLAUDE.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -7,6 +7,30 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 # Experiment Log
 
 Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md).
+
+---
+
+## 2026-05-21 — B-11 Phase A hepatic intracellular fu correction infrastructure
+
+**Motivation:** prepare engine for per-drug `fu_correction_liver` scaling to address systematic over-prediction of plasma Cmax for highly protein-bound drugs (clopidogrel, paroxetine, abiraterone class). Phase A ships infrastructure only; registry is empty; 107-holdout cache is bit-identical.
+
+**What shipped (12 commits on `feat/b11-phase-a-infra`, e841356..a142a26):**
+
+- `DrugOnGraph.fu_correction_liver: Distribution` field (default 1.0, cv=0); propagated through `sample(rng)` and `realize_means()`.
+- New `src/sisyphus/predict/hepatic_fu_correction.py` loader: returns `Distribution(mean=1.0, cv=0.0)` for unregistered SMILES; full InChIKey + connectivity-block fallback; loader-level anti-fudge guard rejects `fu_correction_liver < 1.0`.
+- New `data/transporters/hepatic_fu_correction.json` with empty `overrides` list (Phase A end state).
+- `Node.fu_correction_applicable: float = 0.0` field; parsed in `graph.builder._build_node`; exposed in `engine.compiler.ResolvedParams.node_param` (additive branch, mirrors `_ivive_scaling` pattern).
+- `engine.compiler.ResolvedParams.drug_param("fu_correction_liver")` additive branch returning the realized mean.
+- `ClearanceFluxSpec.apply` well_stirred + parallel_tube branches: at flagged nodes, `fup_effective = fup × fu_correction_liver`. ECM (extended) and GFR branches untouched.
+- `ProdrugActivationFluxSpec.apply`: same gated pattern.
+- `data/physiology/reference_man.yaml` liver node carries `fu_correction_applicable: 1.0`.
+- 12 new tests covering field propagation, loader (schema + connectivity-collision safety), registry schema regressions, YAML flag, gated correction direct (WS + PT synthetic graphs), gated correction end-to-end (clopidogrel via `predict()`), and identity-blind random-rename invariance.
+
+**Numerical outcome (acceptance gate):** 107-holdout Meta AAFE = 2.7715238009 — bit-identical to canonical (delta 0.0 across all 4 tracks; per-drug Cmax 107/107 bit-identical to 1e-10). Empty registry means every `lookup_hepatic_fu_correction` returns the default 1.0, the gates fire but multiply by 1.0 (identity), so no engine behavior change.
+
+**Spec amendment**: §4.2 was amended (commit 5e80aee) to acknowledge that `engine/compiler.py` receives additive `node_param` / `drug_param` branches (mirroring `_ivive_scaling`, `_fup` patterns). Invariant #8's intent (no restructure, no fudge) is preserved; the literal "untouched" wording in the original spec was untenable.
+
+**Next:** Phase B literature curation cycle for 19 over-predict drugs (`meta_fold > 3`). PPB-related subset (~5–7 drugs) curated via primary literature (Watanabe 2009 / Yamazaki 2010 / Riccardi 2017 / Patilea-Vrana 2017); others marked `ceiling_accepted` or `not_applicable`. Phase B acceptance gate: Meta AAFE delta ≥ 1% (ship), < 0.5% (DE-37 escape clause), or worse (revert curation, keep infra).
 
 ---
 
