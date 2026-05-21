@@ -55,6 +55,9 @@ class ResolvedParams:
             for name, node in graph.nodes.items()
         }
         self._ivive_scaling = {name: node.ivive_scaling for name, node in graph.nodes.items()}
+        self._fu_correction_applicable = {
+            name: node.fu_correction_applicable for name, node in graph.nodes.items()
+        }
         self._lookup_names = {
             name: node.lookup_name if node.lookup_name else name
             for name, node in graph.nodes.items()
@@ -75,6 +78,8 @@ class ResolvedParams:
             return self._volumes[node_name]
         if param == "ivive_scaling":
             return self._ivive_scaling.get(node_name, 0.0)
+        if param == "fu_correction_applicable":
+            return self._fu_correction_applicable.get(node_name, 0.0)
         raise KeyError(f"Unknown node param: {param}")
 
     def is_blood_pool(self, node_name: str) -> bool:

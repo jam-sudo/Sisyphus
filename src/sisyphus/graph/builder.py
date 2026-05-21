@@ -228,6 +228,10 @@ def _build_node(spec: dict[str, Any]) -> Node:
     # no string manipulation needed to resolve "adipose_tissue" → "adipose".
     lookup_name = spec.get("lookup_name", spec["name"])
 
+    # fu_correction_applicable: 1.0 if hepatic intracellular fu correction applies (B-11).
+    # Default 0.0 (no correction). Phase A: liver-only.
+    fu_correction_applicable = float(spec.get("fu_correction_applicable", 0.0))
+
     return Node(
         name=spec["name"],
         node_type=spec["type"],
@@ -237,6 +241,7 @@ def _build_node(spec: dict[str, Any]) -> Node:
         transporters=transporters,
         ivive_scaling=ivive_scaling,
         lookup_name=lookup_name,
+        fu_correction_applicable=fu_correction_applicable,
     )
 
 
