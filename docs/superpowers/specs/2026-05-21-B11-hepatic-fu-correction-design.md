@@ -82,7 +82,7 @@ SMILES → MolecularProfile → ADMEProperties
 | `src/sisyphus/engine/flux.py` | MODIFY | `ClearanceFluxSpec.apply` (well_stirred + parallel_tube branches) + `ProdrugActivationFluxSpec.apply`: gated correction |
 | `data/physiology/reference_man.yaml` | MODIFY | Liver node gets `fu_correction_applicable: true` parameter |
 
-`src/sisyphus/engine/compiler.py` and `solver.py` remain untouched (CLAUDE.md invariant #8 no-touch list).
+`src/sisyphus/engine/compiler.py` receives only additive `node_param` / `drug_param` branches mirroring the existing `_ivive_scaling` and `_fup` patterns (a few lines each); `solver.py` is untouched. No restructuring or loss-fitting modifications — the invariant #8 intent (don't restructure load-bearing modules, don't fit to loss) is preserved.
 
 ### 4.3 Identity-blind preservation
 
