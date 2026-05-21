@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-20
+last_updated: 2026-05-21
 parent: ../../CLAUDE.md
 charter: Deferred work items with effort/value/risk tags. Promote to a spec cycle, GitHub Issue, dead-ends.md, or experiment-log.md when the disposition is decided. Items here have NOT been triaged through brainstorming yet — they are candidates, not commitments.
 ---
@@ -20,6 +20,14 @@ Reverse-chronological by **when the item was identified**, grouped by tier. Tier
 4. If priorities change such that an item is no longer expected to ship, move it to a `## Won't Do` section with a one-line reason — don't delete (preserve the audit trail).
 
 ## Tier 1 — Substantive accuracy levers (large, high-value, requires spec cycle)
+
+### B-11 — Hepatic intracellular fu correction (Phase A shipped, Phase B pending)
+
+**Effort:** Phase A shipped 2026-05-21 (infra, ~1 day). Phase B: 2–5 days literature curation across 19 over-predict holdout drugs. **Value:** estimated −1% to −10% Meta AAFE if literature is rich; DE-37 fallback if thin (<0.5% shift). **Risk:** low — defaults preserve current behavior; per-drug rollback by deleting registry rows.
+
+**Spec:** `docs/superpowers/specs/2026-05-21-B11-hepatic-fu-correction-design.md`
+**Plan:** `docs/superpowers/plans/2026-05-21-B11-hepatic-fu-correction.md`
+**Implementation status:** Phase A shipped at HEAD `a142a26` on `feat/b11-phase-a-infra`; Phase B pending.
 
 ### B-01 — DE-33 / Jmax-PS architectural recalibration
 **Effort**: 1+ day (full spec cycle). **Value**: highest ceiling lever in the project (could move Meta AAFE materially on OATP1B1 non-statin substrates). **Risk**: HIGH — per dead-ends.md, ECM tunes have a strong prior of breaking statin balance (DE-08–DE-18 error-cancellation family).
