@@ -46,26 +46,17 @@ def _default() -> Distribution:
     return Distribution(mean=1.0, cv=0.0)
 
 
-@lru_cache(maxsize=1)
-def _load(path_str: str) -> tuple[dict[str, Distribution], dict[str, list[Distribution]]]:
-    """Load registry; index by full InChIKey and connectivity block.
+def _parse_overrides(
+    raw_data: dict,
+) -> tuple[dict[str, Distribution], dict[str, list[Distribution]]]:
+    """Parse and validate the registry overrides list.
 
-    Validates every entry: disposition is in the allowed set and
-    ``fu_correction_liver.mean >= 1.0`` (anti-fudge guard). Connectivity
-    matches are only honored when unambiguous (one override per block).
+    Raises ValueError on invalid disposition or sub-1.0 fu_correction_liver.
     """
-    path = Path(path_str)
-    if not path.exists():
-        logger.warning("hepatic_fu_correction registry not found at %s", path)
-        return {}, {}
-
-    with path.open() as f:
-        data = json.load(f)
-
     full_index: dict[str, Distribution] = {}
     conn_index: dict[str, list[Distribution]] = {}
 
-    for entry in data.get("overrides", []):
+    for entry in raw_data.get("overrides", []):
         disposition = entry.get("disposition")
         if disposition not in _VALID_DISPOSITIONS:
             raise ValueError(
@@ -97,6 +88,23 @@ def _load(path_str: str) -> tuple[dict[str, Distribution], dict[str, list[Distri
         conn_index.setdefault(ikey.split("-", maxsplit=1)[0], []).append(dist)
 
     return full_index, conn_index
+
+
+@lru_cache(maxsize=1)
+def _load(path_str: str) -> tuple[dict[str, Distribution], dict[str, list[Distribution]]]:
+    """Load registry; index by full InChIKey and connectivity block.
+
+    Validates every entry: disposition is in the allowed set and
+    ``fu_correction_liver.mean >= 1.0`` (anti-fudge guard). Connectivity
+    matches are only honored when unambiguous (one override per block).
+    """
+    path = Path(path_str)
+    if not path.exists():
+        logger.warning("hepatic_fu_correction registry not found at %s", path)
+        return {}, {}
+
+    with path.open() as f:
+        return _parse_overrides(json.load(f))
 
 
 def lookup_hepatic_fu_correction(
@@ -151,31 +159,4 @@ def _load_uncached(
     if not path.exists():
         return {}, {}
     with path.open() as f:
-        data = json.load(f)
-    full_index: dict[str, Distribution] = {}
-    conn_index: dict[str, list[Distribution]] = {}
-    for entry in data.get("overrides", []):
-        disposition = entry.get("disposition")
-        if disposition not in _VALID_DISPOSITIONS:
-            raise ValueError(
-                f"hepatic_fu_correction entry for {entry.get('drug')!r} has "
-                f"disposition={disposition!r}; must be one of "
-                f"{sorted(_VALID_DISPOSITIONS)}"
-            )
-        ikey = entry.get("inchikey")
-        raw = entry.get("fu_correction_liver")
-        if ikey is None or not isinstance(raw, dict) or "mean" not in raw:
-            raise ValueError(
-                f"hepatic_fu_correction entry for {entry.get('drug')!r} missing "
-                f"required fields (inchikey, fu_correction_liver.mean)"
-            )
-        mean = float(raw["mean"])
-        if mean < 1.0:
-            raise ValueError(
-                f"hepatic_fu_correction entry for {entry.get('drug')!r} has "
-                f"fu_correction_liver.mean={mean} < 1.0; values must be >= 1.0"
-            )
-        dist = Distribution(mean=mean, cv=float(raw.get("cv", 0.0)))
-        full_index[ikey] = dist
-        conn_index.setdefault(ikey.split("-", maxsplit=1)[0], []).append(dist)
-    return full_index, conn_index
+        return _parse_overrides(json.load(f))

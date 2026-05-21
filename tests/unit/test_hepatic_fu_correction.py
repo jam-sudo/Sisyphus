@@ -77,3 +77,29 @@ def test_loader_rejects_unknown_disposition(tmp_path):
     reg = _write_registry(tmp_path, [bad])
     with pytest.raises(ValueError, match="disposition"):
         lookup_hepatic_fu_correction(_CLOPIDOGREL_STEREO, registry_path=reg)
+
+
+def test_connectivity_collision_returns_default(tmp_path):
+    """If two registry entries share the same InChIKey connectivity block but
+    different stereo blocks, the connectivity fallback must NOT silently pick
+    one — it must return the default (no scaling) for safety."""
+    # Construct two distinct full InChIKeys that share the connectivity block.
+    # Real InChIKeys are 14char-10char-1char (e.g., GKTWGGQPFAXNFI-HNNXBMFYSA-N).
+    entry_a = _valid_entry(
+        drug="alpha",
+        inchikey="GKTWGGQPFAXNFI-HNNXBMFYSA-N",
+        fu_correction_liver={"mean": 5.0, "cv": 0.3},
+    )
+    entry_b = _valid_entry(
+        drug="beta",
+        inchikey="GKTWGGQPFAXNFI-DFRTYUOPQX-N",  # different stereo block
+        fu_correction_liver={"mean": 9.0, "cv": 0.4},
+    )
+    reg = _write_registry(tmp_path, [entry_a, entry_b])
+
+    # Verify the loader stores two entries under the same connectivity block.
+    from sisyphus.predict.hepatic_fu_correction import _load_uncached
+    full_index, conn_index = _load_uncached(reg)
+    assert len(full_index) == 2
+    assert "GKTWGGQPFAXNFI" in conn_index
+    assert len(conn_index["GKTWGGQPFAXNFI"]) == 2
