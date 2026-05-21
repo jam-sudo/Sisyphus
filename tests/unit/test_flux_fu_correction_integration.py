@@ -214,6 +214,157 @@ def test_well_stirred_no_effect_when_node_flag_off():
     assert abs(rate_at_one - expected) < 1e-10
 
 
+def _eval_clearance_rate_with_names(
+    *,
+    model: str,
+    blood_name: str,
+    liver_name: str,
+    sink_name: str,
+    fu_correction_applicable: float,
+    fu_correction_liver: float,
+    abundance: float = 10.0,
+    flow_rate: float = 20.0,
+    affinity: float = 5.0,
+) -> float:
+    """Build a 3-node graph with arbitrary node names and return the
+    absolute mass-loss rate at the (flagged) liver-equivalent source.
+
+    Mirrors `_eval_clearance_rate` exactly but parametrises every node
+    name so the rename test can vary only the strings.
+    """
+    g = BodyGraph()
+    g.add_node(Node(name=blood_name, node_type="blood_pool", volume=Distribution(5.0)))
+    g.add_node(
+        Node(
+            name=liver_name,
+            node_type="organ",
+            volume=Distribution(1.5),
+            enzymes={"CYP3A4": Distribution(abundance)},
+            ivive_scaling=0.01,
+            fu_correction_applicable=fu_correction_applicable,
+        )
+    )
+    g.add_node(Node(name=sink_name, node_type="sink", volume=Distribution(1.0)))
+    g.add_edge(FlowEdge(source=blood_name, target=liver_name, flow_rate=Distribution(flow_rate)))
+    g.add_edge(ClearanceEdge(source=liver_name, target=sink_name, model=model))
+
+    # State indices assigned alphabetically by node name (BodyGraph dict
+    # preserves insertion order; we mirror the synthetic-graph pattern in
+    # the helpers above which orders blood=0, liver=1, sink=2). To stay
+    # robust to arbitrary names, derive the order from g.nodes insertion.
+    node_names = list(g.nodes.keys())
+    state_index = {name: i for i, name in enumerate(node_names)}
+    liver_idx = state_index[liver_name]
+    sink_idx = state_index[sink_name]
+    spec = ClearanceFluxSpec.from_edge(1, g.edges[1], state_index)
+
+    drug = _make_drug(
+        enzyme_affinity={"CYP3A4": Distribution(affinity)},
+        fu_correction_liver=Distribution(mean=fu_correction_liver, cv=0.0),
+        kp_overrides={liver_name: Distribution(1.0)},
+    )
+    params = ResolvedParams(g, drug)
+
+    y = np.zeros(3)
+    y[liver_idx] = 100.0
+    dydt = np.zeros(3)
+    spec.apply(0.0, y, dydt, params)
+
+    assert abs(dydt[liver_idx] + dydt[sink_idx]) < 1e-12
+    return float(-dydt[liver_idx])
+
+
+def test_identity_blind_random_rename_invariant():
+    """B-11 invariant: ClearanceFlux apply at a flagged node produces
+    bit-identical rates after every node in the BodyGraph is renamed to
+    a random string (as long as the fu_correction_applicable flag travels
+    with the renamed liver, which the synthetic-graph builder ensures).
+
+    Mirrors tests/regression/test_prodrug_v2_identity_blind.py — but
+    operates on the engine flux directly (no predict()) because the
+    Task 6 patch lives entirely inside ClearanceFluxSpec.apply and the
+    rate computation is the load-bearing invariant.
+
+    Verifies that the engine reads node_param("fu_correction_applicable")
+    from the per-node flag rather than string-matching the literal
+    "liver". Any `if node_name == "liver"` branch inside the engine would
+    break this test.
+    """
+    # Canonical names — the original engineering vocabulary.
+    rate_canonical_corr = _eval_clearance_rate_with_names(
+        model="well_stirred",
+        blood_name="blood",
+        liver_name="liver",
+        sink_name="sink",
+        fu_correction_applicable=1.0,
+        fu_correction_liver=5.0,
+    )
+
+    # Random rename — every node string is replaced with an unrelated tag.
+    rate_renamed_corr = _eval_clearance_rate_with_names(
+        model="well_stirred",
+        blood_name="Z1Q9K",
+        liver_name="Q4M2X",
+        sink_name="P5N7T",
+        fu_correction_applicable=1.0,
+        fu_correction_liver=5.0,
+    )
+
+    assert rate_canonical_corr == rate_renamed_corr, (
+        f"Identity-blind violated (well_stirred, corrected): "
+        f"canonical={rate_canonical_corr!r}, renamed={rate_renamed_corr!r}"
+    )
+
+    # And the gate-off case: same equality must hold whether or not the
+    # flag is on, but renaming with the flag off must also be bit-identical.
+    rate_canonical_off = _eval_clearance_rate_with_names(
+        model="well_stirred",
+        blood_name="blood",
+        liver_name="liver",
+        sink_name="sink",
+        fu_correction_applicable=0.0,
+        fu_correction_liver=5.0,
+    )
+    rate_renamed_off = _eval_clearance_rate_with_names(
+        model="well_stirred",
+        blood_name="Z1Q9K",
+        liver_name="Q4M2X",
+        sink_name="P5N7T",
+        fu_correction_applicable=0.0,
+        fu_correction_liver=5.0,
+    )
+    assert rate_canonical_off == rate_renamed_off, (
+        f"Identity-blind violated (well_stirred, gate off): "
+        f"canonical={rate_canonical_off!r}, renamed={rate_renamed_off!r}"
+    )
+
+    # Sanity: the corrected vs uncorrected paths must differ (otherwise
+    # the test could be trivially satisfied by the gate never firing).
+    assert rate_canonical_corr != rate_canonical_off
+
+    # Parallel-tube branch: same invariance must hold.
+    rate_pt_canonical = _eval_clearance_rate_with_names(
+        model="parallel_tube",
+        blood_name="blood",
+        liver_name="liver",
+        sink_name="sink",
+        fu_correction_applicable=1.0,
+        fu_correction_liver=5.0,
+    )
+    rate_pt_renamed = _eval_clearance_rate_with_names(
+        model="parallel_tube",
+        blood_name="K8B3Y",
+        liver_name="X7R2L",
+        sink_name="M3J9V",
+        fu_correction_applicable=1.0,
+        fu_correction_liver=5.0,
+    )
+    assert rate_pt_canonical == rate_pt_renamed, (
+        f"Identity-blind violated (parallel_tube): "
+        f"canonical={rate_pt_canonical!r}, renamed={rate_pt_renamed!r}"
+    )
+
+
 def test_prodrug_flux_applies_correction_at_flagged_node_via_predict(monkeypatch):
     """End-to-end: clopidogrel routes through ProdrugActivationFlux at the
     liver (flagged) node. fu_correction_liver > 1.0 must lower predicted parent
