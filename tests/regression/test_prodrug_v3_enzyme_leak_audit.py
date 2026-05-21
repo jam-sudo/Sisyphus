@@ -64,7 +64,13 @@ _skip_if_local_artifacts = pytest.mark.skipif(
 # Item 5 SPR: ceiling_accepted → no physiology YAML change → empty
 CHANGED_ENZYME_ABUNDANCES: frozenset[str] = frozenset()
 # Items 1, 4 ceiling (no value change). Items 2, 3 literature_applied.
-DRUG_SPECIFIC_CHANGES: frozenset[str] = frozenset({"remdesivir", "fostamatinib"})
+# 2026-05-20 (B-03): clopidogrel added to prodrug registry with parent
+# observation and CES1/CYP per-enzyme yields; cyp_clearance_overrides
+# metabolic_fraction=0 zeroes its default XGBoost CL. Intentional drug-
+# specific change relative to the pre-v3 baseline.
+DRUG_SPECIFIC_CHANGES: frozenset[str] = frozenset({
+    "remdesivir", "fostamatinib", "clopidogrel",
+})
 
 
 @pytest.fixture(scope="module")
