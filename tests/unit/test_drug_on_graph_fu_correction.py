@@ -75,3 +75,18 @@ class TestFuCorrectionLiverField:
         dog = _minimal_dog()
         rng = np.random.default_rng(seed=42)
         assert dog.sample(rng).fu_correction_liver.mean == pytest.approx(1.0)
+
+
+class TestBuildDrugOnGraphAttachesFuCorrection:
+    def test_default_one_when_smiles_unregistered(self):
+        """Drugs not in hepatic_fu_correction.json get the default 1.0."""
+        from sisyphus.predict.adme import predict_adme
+        from sisyphus.predict.chemistry import compute_profile
+        from sisyphus.predict.ivive import build_drug_on_graph
+
+        # ethanol — never in any registry
+        profile = compute_profile("CCO")
+        adme = predict_adme(profile)
+        dog = build_drug_on_graph(profile, adme, dose_mg=100.0, route="oral")
+        assert dog.fu_correction_liver.mean == pytest.approx(1.0)
+        assert dog.fu_correction_liver.cv == pytest.approx(0.0)

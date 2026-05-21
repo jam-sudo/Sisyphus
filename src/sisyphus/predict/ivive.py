@@ -670,6 +670,12 @@ def build_drug_on_graph(
     from sisyphus.predict.cyp_clearance_overrides import lookup_metabolic_fraction
     metabolic_fraction = lookup_metabolic_fraction(profile.smiles)
 
+    # Hepatic intracellular fu correction (B-11): per-drug registry lookup
+    # returns Distribution(mean >= 1.0, cv >= 0.0) reflecting relative
+    # uptake-driven elevation of intracellular unbound fraction.
+    from sisyphus.predict.hepatic_fu_correction import lookup_hepatic_fu_correction
+    fu_correction_liver = lookup_hepatic_fu_correction(profile.smiles)
+
     # Decompose CLint to per-enzyme affinities (CYP + UGT + non-CYP)
     enzyme_affinity = _decompose_clint(
         adme.clint, profile.compound_type, profile.pka,
@@ -730,6 +736,7 @@ def build_drug_on_graph(
         solubility=adme.solubility,
         enzyme_affinity=enzyme_affinity,
         renal_clearance=renal_cl,
+        fu_correction_liver=fu_correction_liver,
         particle_radius_um=particle_radius,
         transporter_kinetics=transporter_kinetics or {},
         active_metabolite=active_metabolite,
