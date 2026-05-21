@@ -239,6 +239,11 @@ class DrugOnGraph:
     # Renal
     renal_clearance: Distribution  # L/h, total plasma basis
 
+    # Hepatic binding correction (B-11) — scales fup inside well-stirred/parallel-tube model
+    fu_correction_liver: Distribution = field(
+        default_factory=lambda: Distribution(mean=1.0, cv=0.0)
+    )
+
     # Formulation (absorption model)
     particle_radius_um: float = 25.0  # particle radius for absorption rate calc
 
@@ -323,6 +328,9 @@ class DrugOnGraph:
                 ) for k, v in self.transporter_kinetics.items()
             },
             renal_clearance=Distribution(mean=self.renal_clearance.sample(rng), cv=0.0),
+            fu_correction_liver=Distribution(
+                mean=self.fu_correction_liver.sample(rng), cv=0.0
+            ),
             ps_passive=Distribution(mean=self.ps_passive.sample(rng), cv=0.0),
             ps_eff=Distribution(mean=self.ps_eff.sample(rng), cv=0.0),
             cl_int_bile=Distribution(mean=self.cl_int_bile.sample(rng), cv=0.0),
@@ -390,6 +398,7 @@ class DrugOnGraph:
                 ) for k, v in self.transporter_kinetics.items()
             },
             renal_clearance=Distribution(mean=self.renal_clearance.mean, cv=0.0),
+            fu_correction_liver=Distribution(mean=self.fu_correction_liver.mean, cv=0.0),
             ps_passive=Distribution(mean=self.ps_passive.mean, cv=0.0),
             ps_eff=Distribution(mean=self.ps_eff.mean, cv=0.0),
             cl_int_bile=Distribution(mean=self.cl_int_bile.mean, cv=0.0),
