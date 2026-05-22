@@ -76,10 +76,10 @@ Note: predicted fup values are XGBoost model outputs. DrugBank fup override appl
 
 - **meta_fold**: 20.22 | **predicted fup**: 0.4179 | **type**: base
 - **Clinical info source**: StatPearls NBK526094; PBPK PMC7600566; Drugs.com monograph
-- **Major clearance pathway**: Extensive first-pass hepatic metabolism by CYP2B6 (major), CYP1A2, CYP3A4 → l-desmethylselegiline + l-methylamphetamine → l-amphetamine. Oral bioavailability only 4–10% (extremely high first-pass). Protein binding 85–90% (macroglobulin + albumin). High hepatic extraction ratio drug.
-- **Mechanism hypothesis**: formulation / extreme first-pass — oral F=4–10% is known but extremely difficult to model accurately. The engine likely assigns normal gut-wall + hepatic extraction but misses the near-complete presystemic loss. Also, plasma protein binding (85–90%) with predicted fup=0.42 suggests our fup model may underestimate binding ~2–3× (clinical fup ~0.10–0.15), which would compound the error.
-- **Preliminary disposition for T12**: PPB-related candidate (secondary mechanism) — predicted fup (0.42) likely overestimates true fup (literature: 0.10–0.15). Primary mechanism is extreme first-pass under-representation. Fup correction alone insufficient; flag as ceiling_accepted unless fup correction can be combined with better F.
-- **Rationale**: The 20× fold error combines at least two mechanisms: (1) extreme first-pass metabolism that pushes F to 4–10%, which is hard to capture accurately; (2) possible fup over-estimation by ~3× (literature fup ~0.10–0.15 vs. predicted 0.42). Even at fup 0.10, the PPB argument is borderline (threshold is fup<0.10 AND hepatic-CL-dominant). The primary driver is the extreme oral bioavailability problem. Classify as not_applicable for PPB correction; the fix requires improving first-pass/F modeling, which is not B-11 scope.
+- **Major clearance pathway**: Extensive first-pass hepatic metabolism by CYP2B6 (major), CYP1A2, CYP3A4 → l-desmethylselegiline + l-methylamphetamine → l-amphetamine. Oral bioavailability only 4–10% (extremely high first-pass). Protein binding reported as 85–90% in StatPearls/PMC7600566 (macroglobulin + albumin); DrugBank lists fup=0.005 (>99.5% bound) — sources disagree by ~10×. High hepatic extraction ratio drug.
+- **Mechanism hypothesis**: formulation / extreme first-pass — oral F=4–10% is known but extremely difficult to model accurately. The engine likely assigns normal gut-wall + hepatic extraction but misses the near-complete presystemic loss. Plasma protein binding is reported inconsistently (StatPearls 85–90% bound → fup ~0.10–0.15; DrugBank fup=0.005 → 99.5% bound); the XGBoost prediction (fup=0.42) is above both reported ranges.
+- **Preliminary disposition for T12**: PPB-related candidate (secondary mechanism) — predicted fup (0.42) overestimates literature ranges (whether 0.10–0.15 per StatPearls or 0.005 per DrugBank). Primary mechanism is extreme first-pass under-representation. Fup correction alone insufficient; flag as ceiling_accepted unless fup correction can be combined with better F.
+- **Rationale**: The 20× fold error combines at least two mechanisms: (1) extreme first-pass metabolism that pushes F to 4–10%, which is hard to capture accurately; (2) possible fup over-estimation by ~3–80× depending on which literature source is used. The primary driver is the extreme oral bioavailability problem. Classify as not_applicable for PPB correction; the fix requires improving first-pass/F modeling, which is not B-11 scope.
 
   **Revised disposition**: not_applicable (primary mechanism: extreme first-pass F=4–10%, PPB correction cannot address this)
 
@@ -110,12 +110,11 @@ Note: predicted fup values are XGBoost model outputs. DrugBank fup override appl
 ### abiraterone
 
 - **meta_fold**: 9.60 | **predicted fup**: 0.1469 | **type**: neutral
-- **Clinical info source**: FDA label Zytiga® 2021 (https://www.accessdata.fda.gov/drugsatfda_docs/label/2021/202379s035lbl.pdf); Goldwater 2017 PMID:28107519
-- **Major clearance pathway**: Hepatic, primarily SULT2A1 sulfation and CYP3A4 oxidation to inactive metabolites. Protein binding >99% (fup <0.01 in clinical data vs. predicted 0.147 — a 15× discrepancy). ~88% fecal excretion (55% unchanged abiraterone acetate + 22% abiraterone), confirming incomplete absorption/high first-pass.
-- **Mechanism hypothesis**: PPB-related + formulation (food effect) — the 15× discrepancy between predicted fup (0.147) and clinical fup (<0.01) is striking. Abiraterone is taken fasted (500 mg, standard label dose); with high-fat meal Cmax increases 17-fold. The reference Cmax is likely fasted-state. Additionally, the predicted fup is 15× higher than clinical value, meaning our model massively underestimates protein binding → hepatic extraction is overestimated.
-- **Preliminary disposition for T12**: PPB-related candidate (strong) — predicted fup is approximately 15× above clinical value. If clinical fup (<0.01) were used, the WS extraction would be dramatically different. Additionally, food effect (17×) suggests the reference clinical data must be food-state-specified carefully. Strong candidate for fu,inc/fu,plasma literature search (SULT2A1 substrates + albumin binding literature).
-- **Rationale**: Abiraterone has predicted fup=0.147 but clinical fup is reported as <0.01 (>99% bound). This is the largest PPB prediction error in the 19-drug set. The WS model uses fup directly; if fup is 15× overestimated, CL is correspondingly over-predicted → Cmax under-predicted? Wait — over-predicted Cmax means CL is under-predicted (drug accumulates). If our predicted fup=0.147 is too HIGH, then the model assigns higher CL than at fup=0.01 → Cmax would be lower, not higher. This is the OPPOSITE direction. Re-examine: the 9.6× fold error is predicted OVER observed (predicted 0.700 vs. obs 0.073 mg/L). The engine over-predicts Cmax. With fup=0.147, the WS model computes insufficient hepatic extraction, causing drug to accumulate. At true fup<0.01, hepatic extraction would be even lower (not higher), meaning CL further decreases → Cmax would go UP, making the over-prediction WORSE. The mechanism is therefore NOT PPB-related in the B-11 sense. The over-prediction instead reflects: (1) food effect — if reference is fasted and engine models standard absorption, engine over-predicts by ~10-17×; (2) abiraterone acetate is a prodrug (acetate → abiraterone) with formulation-dependent conversion. The holdup is absorption/formulation, not hepatic CL.
-- **Revised disposition for T12**: not_applicable — food effect + prodrug/formulation mechanism dominates. PPB correction would worsen the fold error (true fup<0.01 would decrease CL further → more accumulation → even higher predicted Cmax).
+- **Clinical info source**: FDA label Zytiga® 2021 (https://www.accessdata.fda.gov/drugsatfda_docs/label/2021/202379s035lbl.pdf); Goldwater 2017 PMID:28107519; Bohnert 2013 PBPK SULT2A1 disposition
+- **Major clearance pathway**: Hepatic, primarily SULT2A1 sulfation and CYP3A4 oxidation to inactive metabolites. Protein binding >99% (clinical fup <0.01 vs. predicted 0.147 — XGBoost overshoot of ~15×). ~88% fecal excretion (55% unchanged abiraterone acetate + 22% abiraterone), confirming incomplete absorption/high first-pass.
+- **Mechanism hypothesis**: PPB-related (CYP3A4 + SULT2A1, fup<0.10) — predicted fup=0.147 is borderline above the strict 0.10 cutoff, but clinical fup<0.01 clearly satisfies the PPB criterion (highly protein-bound). The B-11 mechanism multiplies the *predicted* fup (0.147) by `fu_correction_liver ≥ 1.0`, raising `fup_effective` → raising hepatic CL → lowering Cmax. Direction is correct (mirrors oxybutynin: predicted fup 0.20, clinical ~0.01, also over-predicted 8×). Food effect (17× fasted→fed) and abiraterone-acetate prodrug conversion are confounders for absolute fold error but do not invalidate the PPB-correction direction.
+- **Preliminary disposition for T12**: PPB-related candidate (literature_applied target) — abiraterone is well-studied in PBPK literature (Bohnert 2013 SULT2A1 dispositions; multiple PBPK papers). Search fu,inc/fu,plasma data for SULT2A1 substrates and highly-albumin-bound steroidal scaffolds. If no literature is found, fall through to ceiling_accepted at `fu_correction_liver=1.0` (matches oxybutynin/progesterone fallback).
+- **Rationale**: Abiraterone meets the PPB criteria once the upstream XGBoost overshoot is recognized: predicted fup=0.147 vs. clinical fup<0.01, hepatic CYP3A4 + SULT2A1 dominant. The B-11 correction direction (`fup_eff = fup × fu_corr` with `fu_corr ≥ 1`) raises effective CL → reduces Cmax → moves the 9.6× over-prediction toward the observed value, parallel to oxybutynin. The XGBoost over-prediction of bound-drug fup (0.147 vs. <0.01) is an upstream engine concern (model under-represents binding for steroidal/SULT2A1 substrates) that is independent of B-11 scope — B-11 operates on whatever fup predict_adme returned. Food effect and prodrug activation are separate dispositional gaps not addressed here.
 
 ---
 
@@ -261,10 +260,11 @@ After direction analysis (confirming fu correction would reduce Cmax to correct 
 |---|---|---|---|---|
 | **paroxetine** | 0.05 | 13.22 | PPB candidate | fup=0.05, hepatic CYP2D6, correct direction; confounded by autoinhibition |
 | **oxybutynin** | 0.20→0.01 | 8.16 | PPB candidate (strong) | clinical fup≈0.01 vs predicted 0.20, hepatic CYP3A4, correct direction |
+| **abiraterone** | 0.147→<0.01 | 9.60 | PPB candidate | clinical fup<0.01 vs predicted 0.147, hepatic CYP3A4+SULT2A1, correct direction (parallel to oxybutynin) |
 | **progesterone** | 0.04 | 9.27 | PPB candidate (borderline) | fup=0.04, hepatic CYP3A4, correct direction; extreme first-pass confound |
 | **fesoterodine** | 0.03 | 7.66 | PPB but PRODRUG AD-out | parent fup 0.03 but active metabolite (5-HMT) fup=0.50; out of AD |
 
-**PPB-related candidates for T12 literature search**: **3 drugs** — paroxetine, oxybutynin, progesterone
+**PPB-related candidates for T12 literature search**: **4 drugs** — paroxetine, oxybutynin, abiraterone, progesterone
 
 (fesoterodine excluded: PRODRUG flag; active metabolite fup=0.50 not PPB-related)
 
@@ -274,7 +274,6 @@ After direction analysis (confirming fu correction would reduce Cmax to correct 
 |---|---|---|---|
 | lenacapavir | 0.002 | 37.98 | P-gp intestinal secretion is primary CL; out of AD; correction direction wrong |
 | posaconazole | 0.02 | 4.92 | Out of AD (HIGH_MW); absorption/P-gp mechanism; UGT not hepatic-CYP |
-| abiraterone | 0.147 | 9.60 | True fup <0.01 would WORSEN prediction (lower CL → more accumulation); food/prodrug mechanism |
 | budesonide | 0.125 | 14.95 | Formulation (EC) F=9% dominates; fu correction insufficient |
 | selegiline | 0.418 | 20.22 | Predicted fup >0.10; extreme first-pass F=4-10% dominates |
 
@@ -287,7 +286,6 @@ After direction analysis (confirming fu correction would reduce Cmax to correct 
 | methylphenidate | 0.950 | 24.73 | CES1 hydrolysis; high fup; enzyme not in registry |
 | selegiline | 0.418 | 20.22 | Extreme first-pass (F=4–10%); primary mechanism |
 | budesonide | 0.125 | 14.95 | Formulation: enteric-coated F=9%; first-pass |
-| abiraterone | 0.147 | 9.60 | Food effect (17× fasted→fed); prodrug; correction direction wrong |
 | fesoterodine | 0.030 | 7.66 | PRODRUG (AD-out); active metabolite fup=0.50 |
 | fluvoxamine | 0.215 | 7.46 | CYP1A2 autoinhibition; fup above threshold |
 | vonoprazan | 0.150 | 7.38 | Lysosomal trapping (basic drug); fup above threshold |
@@ -301,14 +299,14 @@ After direction analysis (confirming fu correction would reduce Cmax to correct 
 
 ### Totals
 
-- **PPB-related candidates (T12 targets)**: 3 drugs — paroxetine, oxybutynin, progesterone
-- **Not applicable**: 16 drugs
+- **PPB-related candidates (T12 targets)**: 4 drugs — paroxetine, oxybutynin, abiraterone, progesterone
+- **Not applicable**: 15 drugs
 - **Total audited**: 19
 
 ### Key patterns in not_applicable group
 
 1. **Enzyme not in registry (4 drugs)**: methylphenidate (CES1), clopidogrel (CES1/CYP2C19), sumatriptan (MAO-A), morphine (UGT2B7) — systematic gap in the enzyme_affinity schema
-2. **Extreme first-pass / formulation (4 drugs)**: selegiline (F=4–10%), budesonide (EC F=9%), abiraterone (food effect 17×), ramelteon (F=1.8%) — F estimation is a second systematic gap
+2. **Extreme first-pass / formulation (3 drugs)**: selegiline (F=4–10%), budesonide (EC F=9%), ramelteon (F=1.8%) — F estimation is a second systematic gap
 3. **Wrong clearance route (2 drugs)**: acamprosate (renal), azacitidine (cytidine deaminase) — structural absence of alternative CL routes
 4. **Absorption/formulation + P-gp (2 drugs)**: lenacapavir (P-gp secretion), posaconazole (gastric-pH-dependent absorption)
 5. **Autoinhibition kinetics (2 drugs)**: fluvoxamine (CYP1A2), paroxetine (CYP2D6) — time-dependent inhibition not modeled
@@ -325,7 +323,7 @@ For drugs with fup < 0.10 and hepatic-CL-dominant, the B-11 correction direction
 - Engine over-predicts Cmax → this means CL is UNDER-predicted → which means `fup × CLint` in model < true
 - B-11 applies `fup_effective = fup × fu_correction_liver` where `fu_correction_liver > 1`
 - This RAISES `fup_effective × CLint` → RAISES CL_hepatic → REDUCES Cmax → correction in right direction ✓
-- For abiraterone: predicted fup=0.147 >> clinical fup<0.01. At even lower fup (0.01), CL would decrease further → Cmax would increase further → the direction is WRONG for B-11. Confirmed: not_applicable.
+- For abiraterone and oxybutynin: predicted fup overshoots clinical (0.147 vs. <0.01; 0.20 vs. ~0.01). The B-11 mechanism multiplies *predicted* fup by `fu_correction_liver ≥ 1` — it does NOT swap predicted fup for clinical fup. Starting from predicted fup, raising `fup_effective` increases CL → reduces Cmax → moves over-prediction toward observed. Direction is therefore correct for both drugs. The XGBoost fup overshoot for highly-bound drugs is a separate upstream concern that does not invalidate B-11 candidacy.
 
 ---
 
