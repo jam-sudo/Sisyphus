@@ -21,13 +21,16 @@ Reverse-chronological by **when the item was identified**, grouped by tier. Tier
 
 ## Tier 1 — Substantive accuracy levers (large, high-value, requires spec cycle)
 
-### B-11 — Hepatic intracellular fu correction (Phase A shipped, Phase B pending)
+### ~~B-11~~ — Hepatic intracellular fu correction (Phase A shipped, Phase B closed as DE-37 2026-05-22)
 
-**Effort:** Phase A shipped 2026-05-21 (infra, ~1 day). Phase B: 2–5 days literature curation across 19 over-predict holdout drugs. **Value:** estimated −1% to −10% Meta AAFE if literature is rich; DE-37 fallback if thin (<0.5% shift). **Risk:** low — defaults preserve current behavior; per-drug rollback by deleting registry rows.
+**Status:** Closed. Phase A infrastructure shipped to main 2026-05-21 (commit `a0c90f8`, no headline shift by design). Phase B literature search closed as **DE-37** 2026-05-22 — primary corpus (Watanabe 2009 / Yamazaki 2010 / Riccardi 2017 / Patilea-Vrana 2017) is paywall-only via public web tools; 0 of 4 PPB candidates yielded a usable `fu_inc/fu_p` ratio. 19 audit rows kept as documentation trail (4 ceiling_accepted, 15 not_applicable). All entries `mean=1.0` → 107-holdout cache bit-identical post-Phase-B vs post-Phase-A (Meta AAFE 2.7715238009, delta 0.0).
+
+**Future-iteration unlock:** subscription access to one of the 4 primary papers OR an independent hepatocyte-uptake assay providing `fu_inc/fu_p` for ≥1 of {paroxetine, oxybutynin, abiraterone, progesterone, similar high-PPB CYP-substrate}. Infrastructure is ready to receive new entries; loader anti-fudge guard still enforces `>= 1.0`.
 
 **Spec:** `docs/superpowers/specs/2026-05-21-B11-hepatic-fu-correction-design.md`
 **Plan:** `docs/superpowers/plans/2026-05-21-B11-hepatic-fu-correction.md`
-**Implementation status:** Phase A shipped at HEAD `a142a26` on `feat/b11-phase-a-infra`; Phase B pending.
+**Phase B curation log:** `docs/superpowers/specs/2026-05-22-B11-Phase-B-curation-log.md`
+**Dead-end entry:** `docs/claude/dead-ends.md` §DE-37
 
 ### B-01 — DE-33 / Jmax-PS architectural recalibration
 **Effort**: 1+ day (full spec cycle). **Value**: highest ceiling lever in the project (could move Meta AAFE materially on OATP1B1 non-statin substrates). **Risk**: HIGH — per dead-ends.md, ECM tunes have a strong prior of breaking statin balance (DE-08–DE-18 error-cancellation family).
