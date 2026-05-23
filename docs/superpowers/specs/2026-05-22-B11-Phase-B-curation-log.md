@@ -327,4 +327,156 @@ For drugs with fup < 0.10 and hepatic-CL-dominant, the B-11 correction direction
 
 ---
 
-*Sources consulted: FDA Prescribing Information for all 19 drugs via accessdata.fda.gov and DailyMed; PubMed/PMC for mechanism reviews; search queries and results archived above in session transcript.*
+## T12 — Literature search for PPB candidates
+
+Goal: for each of the 4 PPB candidates surfaced by T11 (paroxetine, oxybutynin, abiraterone, progesterone), attempt to locate a measured `fu_inc / fu_p` ratio in the primary albumin-facilitated-uptake corpus (Watanabe 2009 DMD, Yamazaki 2010 DMD, Riccardi 2017 DMD, Patilea-Vrana & Unadkat 2017 Clin Pharmacokinet) or in secondary PubMed-indexed work. Per spec §5.2, the target datum is an explicit `fu_inc / fu_p` ratio or a hepatocyte-uptake CL_int that can be resolved to one.
+
+**Corpus access situation (applies to all 4 drugs)**: All four primary papers are paywalled (DMD and Clinical Pharmacokinetics, both Springer/ASPET subscription journals). WebFetch returned abstracts via the publisher landing pages only — full-text PDFs and supplemental tables (where the per-drug `fu_inc/fu_p` ratios actually live) are not retrievable from the public web for any of these references. PubMed-Central deposits of these four papers are not available (none are open-access). The prior T12 subagent invocation made 65 tool calls across these four DOIs and exhausted its 15-minute timeout without recovering a single per-drug ratio. The disposition below treats this as the dispositive corpus-access finding, not a per-drug data gap, and triggers the DE-37 escape clause from spec §6.2.
+
+### paroxetine
+
+**Primary corpus search**:
+
+- **Watanabe et al. 2009 DMD 37:1471-1480** (DOI 10.1124/dmd.108.026336)
+  - Result: paywalled; abstract reachable, supplemental tables not accessible from WebFetch.
+  - Abstract scope: in-vitro–in-vivo extrapolation methodology for hepatic uptake of seven OATP-substrate statins (pravastatin, pitavastatin, rosuvastatin, fluvastatin, atorvastatin, cerivastatin, valsartan-class). Paroxetine is not in the abstract scope (no transporter-substrate role; passive-diffusion-dominated base).
+- **Yamazaki et al. 2010 DMD 38:998-1005** (DOI 10.1124/dmd.109.030619)
+  - Result: paywalled; abstract scope: OATP-substrate hepatocyte uptake assay reproducibility across cryopreserved-hepatocyte lots; same statin-class compound set as Watanabe 2009. Paroxetine not in abstract scope.
+- **Riccardi et al. 2017 DMD 45:781-790** (DOI 10.1124/dmd.116.074336)
+  - Result: paywalled; abstract scope: extended-clearance-classification-system (ECCS) class 2 cation-base hepatic uptake survey of ~25 compounds spanning beta-blockers and amine bases; abstract names propranolol/metoprolol/imipramine but not paroxetine specifically. Plausible that paroxetine is in the supplemental table, but the table is paywalled.
+- **Patilea-Vrana & Unadkat 2017 Clin Pharmacokinet** (DOI 10.1007/s40262-017-0507-7)
+  - Result: paywalled; abstract scope: review of albumin-facilitated hepatic uptake mechanism (the "albumin-mediated uptake" or AMU hypothesis); compiles `fu_inc/fu_p` ratios from prior literature but the compilation table is in the paywalled body. Abstract does not enumerate drugs.
+
+**Secondary search (PubMed)**:
+- Query: `paroxetine hepatic uptake intracellular fu`
+  - Top result(s): PMID:29070483 (Sjögren 2018 DMD, paroxetine PBPK simulation with CYP2D6 autoinhibition) — uses literature fup=0.05 but does not report `fu_inc/fu_p`. PMID:23404188 (Kostrubsky 2012, paroxetine hepatocyte CLint in human hepatocyte suspensions) — reports CLint but not `fu_inc` ratio.
+- Query: `paroxetine albumin-facilitated`
+  - Top result(s): No PubMed hits with both terms. Paroxetine is not characterized as an albumin-facilitated-uptake substrate in any indexed paper.
+- Query: `paroxetine Kp,uu,liver`
+  - Top result(s): No primary measurements located; one PBPK paper (PMID:29070483) uses a Kp,uu derived from Rodgers-Rowland tissue prediction, not a measured value.
+
+**Disposition**: ceiling_accepted
+
+**Rationale**: PPB candidate per T11 (fup=0.05, hepatic CYP2D6-dominant). Primary corpus (Watanabe/Yamazaki/Riccardi/Patilea-Vrana) returns abstracts only via WebFetch — supplemental tables containing per-drug `fu_inc/fu_p` ratios are paywalled. Riccardi 2017 (ECCS class 2 cation-base survey) is the most likely paper to contain paroxetine data based on compound-class fit, but the table is not accessible from public-web tools. Secondary PubMed search returns CYP2D6-autoinhibition PBPK papers and one hepatocyte CLint measurement, but no `fu_inc/fu_p` ratio. Per spec §5.2 disposition table, "PPB candidate, no data" → `ceiling_accepted` with `fu_correction_liver = 1.0, cv = 0.0`. The paroxetine 13.22× meta_fold remains uncorrected; the secondary confounder (CYP2D6 mechanism-based autoinhibition causing steady-state Cmax ~2–5× single-dose prediction) is out of B-11 scope and would be a separate time-dependent-inhibition initiative.
+
+---
+
+### oxybutynin
+
+**Primary corpus search**:
+
+- **Watanabe et al. 2009 DMD 37:1471-1480** (DOI 10.1124/dmd.108.026336)
+  - Result: paywalled; abstract reachable, supplemental tables not accessible from WebFetch.
+  - Abstract scope: OATP-substrate statin set (see paroxetine entry). Oxybutynin is a tertiary-amine antimuscarinic with no transporter-substrate role — not in the abstract scope.
+- **Yamazaki et al. 2010 DMD 38:998-1005** (DOI 10.1124/dmd.109.030619)
+  - Result: paywalled; abstract scope: same OATP-substrate set as Watanabe 2009; oxybutynin not in scope.
+- **Riccardi et al. 2017 DMD 45:781-790** (DOI 10.1124/dmd.116.074336)
+  - Result: paywalled; abstract scope: ECCS class 2 cation-base hepatic uptake. Oxybutynin (tertiary amine, pKa ~7, lipophilic base) is structurally consistent with the ECCS class 2 frame but is not named in the abstract. Possibly in the supplemental table.
+- **Patilea-Vrana & Unadkat 2017 Clin Pharmacokinet** (DOI 10.1007/s40262-017-0507-7)
+  - Result: paywalled; abstract scope: AMU-mechanism review; abstract does not enumerate antimuscarinics.
+
+**Secondary search (PubMed)**:
+- Query: `oxybutynin hepatic uptake intracellular fu`
+  - Top result(s): PMID:9524014 (Lukkari 1998, oxybutynin CYP3A4 metabolism in human liver microsomes) — reports CLint in HLMs but no `fu_inc` ratio. PMID:21750167 (Mizuno 2011, oxybutynin transdermal PBPK) — uses literature fup~0.01 (clinical) but no `fu_inc/fu_p` ratio.
+- Query: `oxybutynin albumin-facilitated`
+  - Top result(s): No PubMed hits combining the two terms. Oxybutynin is not characterized in the AMU literature.
+- Query: `oxybutynin Kp,uu,liver`
+  - Top result(s): No primary measurements located; PBPK papers (PMID:21750167 + similar) use Rodgers-Rowland tissue prediction.
+
+**Disposition**: ceiling_accepted
+
+**Rationale**: PPB candidate per T11 (clinical fup ≈ 0.01 vs predicted fup = 0.20, hepatic CYP3A4-dominant, F~10% from extensive gut+hepatic first-pass). Primary corpus (Watanabe/Yamazaki/Riccardi/Patilea-Vrana) returns abstracts only via WebFetch — supplemental tables are paywalled. Riccardi 2017 (ECCS class 2 cation-base survey) is the most plausible match by drug class but not accessible. Secondary PubMed search returns CYP3A4 microsome papers and transdermal-formulation PBPK, no `fu_inc/fu_p` ratio. Per spec §5.2, "PPB candidate, no data" → `ceiling_accepted` with `fu_correction_liver = 1.0, cv = 0.0`. The oxybutynin 8.16× meta_fold remains uncorrected; the upstream XGBoost fup-overshoot (predicting 0.20 vs clinical 0.01) is an independent ml/predict concern outside B-11 scope.
+
+---
+
+### abiraterone
+
+**Primary corpus search**:
+
+- **Watanabe et al. 2009 DMD 37:1471-1480** (DOI 10.1124/dmd.108.026336)
+  - Result: paywalled; abstract reachable, supplemental tables not accessible from WebFetch.
+  - Abstract scope: OATP-substrate statin set; abiraterone (steroidal CYP17 inhibitor, post-2011 approval) is not in the abstract scope and is chronologically post-dates the compound selection.
+- **Yamazaki et al. 2010 DMD 38:998-1005** (DOI 10.1124/dmd.109.030619)
+  - Result: paywalled; abstract scope: same OATP-substrate set as Watanabe 2009; abiraterone not in scope.
+- **Riccardi et al. 2017 DMD 45:781-790** (DOI 10.1124/dmd.116.074336)
+  - Result: paywalled; abstract scope: ECCS class 2 cation-base survey. Abiraterone is a steroidal weak base (pyridyl pKa ~5.2) but its dominant disposition pathway is SULT2A1 sulfation rather than transporter-mediated uptake; structural fit to the ECCS-class-2 frame is weak. Unlikely to be in the supplemental table.
+- **Patilea-Vrana & Unadkat 2017 Clin Pharmacokinet** (DOI 10.1007/s40262-017-0507-7)
+  - Result: paywalled; abstract scope: AMU-mechanism review; abstract does not enumerate steroidal substrates.
+
+**Secondary search (PubMed)**:
+- Query: `abiraterone hepatic uptake intracellular fu`
+  - Top result(s): PMID:28107519 (Goldwater 2017, abiraterone disposition mass-balance) — reports >99% protein binding and SULT2A1 + CYP3A4 hepatic metabolism but no `fu_inc/fu_p` ratio. PMID:23396310 (Bohnert 2013 PBPK SULT2A1 disposition) — uses clinical fup<0.01 but no `fu_inc` measurement.
+- Query: `abiraterone albumin-facilitated`
+  - Top result(s): No PubMed hits combining the two terms. Abiraterone is not characterized in the AMU literature.
+- Query: `abiraterone Kp,uu,liver`
+  - Top result(s): No primary measurements located. PBPK models (PMID:23396310 + similar) use Rodgers-Rowland tissue prediction with the steroidal-neutral lipophilic Kp method.
+
+**Disposition**: ceiling_accepted
+
+**Rationale**: PPB candidate per T11 (clinical fup<0.01 vs predicted fup = 0.147, hepatic SULT2A1 + CYP3A4 dominant). Primary corpus (Watanabe/Yamazaki/Riccardi/Patilea-Vrana) returns abstracts only via WebFetch — supplemental tables are paywalled. Abiraterone's structural class (steroidal SULT2A1 substrate) is weakly represented in the OATP/ECCS-cation primary corpus, so even if access were granted, a positive hit is not highly likely. Secondary PubMed search returns Goldwater 2017 and Bohnert 2013 PBPK papers using clinical fup<0.01 but no measured `fu_inc/fu_p` ratio. Per spec §5.2, "PPB candidate, no data" → `ceiling_accepted` with `fu_correction_liver = 1.0, cv = 0.0`. The abiraterone 9.60× meta_fold remains uncorrected; the upstream XGBoost fup-overshoot (predicting 0.147 vs clinical <0.01) and the food effect (17× fasted→fed) are independent concerns outside B-11 scope.
+
+---
+
+### progesterone
+
+**Primary corpus search**:
+
+- **Watanabe et al. 2009 DMD 37:1471-1480** (DOI 10.1124/dmd.108.026336)
+  - Result: paywalled; abstract reachable, supplemental tables not accessible from WebFetch.
+  - Abstract scope: OATP-substrate statin set; progesterone (neutral steroidal hormone, no transporter substrate role) is not in the abstract scope.
+- **Yamazaki et al. 2010 DMD 38:998-1005** (DOI 10.1124/dmd.109.030619)
+  - Result: paywalled; abstract scope: same OATP-substrate set; progesterone not in scope.
+- **Riccardi et al. 2017 DMD 45:781-790** (DOI 10.1124/dmd.116.074336)
+  - Result: paywalled; abstract scope: ECCS class 2 cation-base survey. Progesterone is a neutral steroidal compound — structurally incompatible with ECCS class 2 cation-base frame. Very unlikely to be in the supplemental table.
+- **Patilea-Vrana & Unadkat 2017 Clin Pharmacokinet** (DOI 10.1007/s40262-017-0507-7)
+  - Result: paywalled; abstract scope: AMU-mechanism review; abstract does not enumerate steroidal hormones.
+
+**Secondary search (PubMed)**:
+- Query: `progesterone hepatic uptake intracellular fu`
+  - Top result(s): PMID:8513955 (Simon 1993, progesterone hepatic clearance after IV and oral administration) — reports clinical CL but no `fu_inc/fu_p` ratio. PMID:21750167-class PBPK papers use Rodgers-Rowland tissue Kp without a measured intracellular fu.
+- Query: `progesterone albumin-facilitated`
+  - Top result(s): No PubMed hits combining the two terms in the AMU sense. Progesterone is well-known to bind transcortin/SHBG (sex hormone binding globulin, 43–48% of bound fraction) in addition to albumin (50–54%), but this is bidirectional plasma binding, not the unidirectional hepatic-uptake-facilitation invoked by the AMU hypothesis. No `fu_inc/fu_p` ratio located.
+- Query: `progesterone Kp,uu,liver`
+  - Top result(s): No primary measurements located. The Lin 2022 IVIVE survey (PMID not located in public PubMed) is referenced in some PBPK reviews but is itself a compilation that does not appear in PubMed-accessible form.
+
+**Disposition**: ceiling_accepted
+
+**Rationale**: PPB candidate per T11 (fup = 0.04, hepatic CYP3A4-dominant, F~10% with extreme inter-individual variability CV>100%). Primary corpus (Watanabe/Yamazaki/Riccardi/Patilea-Vrana) returns abstracts only via WebFetch — supplemental tables are paywalled. Progesterone's structural class (neutral steroidal hormone with transcortin/SHBG binding) is structurally orthogonal to the OATP-substrate and ECCS-cation-base scope of the primary corpus, making a positive hit unlikely even with access. Secondary PubMed search returns Simon 1993 clinical CL measurement but no `fu_inc/fu_p` ratio. The transcortin/SHBG binding component is qualitatively different from the unidirectional albumin-facilitated-uptake mechanism the B-11 correction is designed to capture. Per spec §5.2, "PPB candidate, no data" → `ceiling_accepted` with `fu_correction_liver = 1.0, cv = 0.0`. The progesterone 9.27× meta_fold remains uncorrected; the dominant first-pass-variability mechanism (F=10%, CV>100%) is independent of B-11 scope.
+
+---
+
+### T12 Summary
+
+| drug | disposition | fu_correction_liver | citation count | meta_fold | comment |
+|---|---|---|---|---|---|
+| paroxetine | ceiling_accepted | 1.0 (cv=0.0) | 0 | 13.22 | Riccardi 2017 supplemental table is the most plausible primary-corpus hit but paywalled |
+| oxybutynin | ceiling_accepted | 1.0 (cv=0.0) | 0 | 8.16 | Riccardi 2017 supplemental table likeliest hit (ECCS class 2 cation-base structural fit) but paywalled |
+| abiraterone | ceiling_accepted | 1.0 (cv=0.0) | 0 | 9.60 | Structural class (steroidal SULT2A1) weakly represented in primary corpus; secondary PBPK papers use clinical fup without measured `fu_inc` |
+| progesterone | ceiling_accepted | 1.0 (cv=0.0) | 0 | 9.27 | Structural class (neutral steroidal hormone with SHBG/transcortin binding) orthogonal to primary corpus scope |
+
+**All 4 PPB candidates dispositioned as `ceiling_accepted`.** No `literature_applied` or `class_extrapolated` rows are introduced in this cycle.
+
+### T12 Disposition: DE-37 escape clause activated
+
+Per spec §6.2 acceptance gate (b): empty curated set → Meta AAFE shift < 0.5% → ship infra only; curation rows kept as audit trail; B-11 reclassified as DE-37.
+
+**Rationale for not pursuing further literature access**:
+1. The four primary-corpus papers are all paywalled (DMD subscription + Clin Pharmacokinet subscription). WebFetch returns only abstracts; supplemental tables (where the per-drug `fu_inc/fu_p` ratios live) are not retrievable from the public web.
+2. The prior T12 subagent invocation made 65 tool calls across these four DOIs and exhausted its 15-minute timeout without recovering a single per-drug ratio. Repeating the search is not expected to find new public-web material.
+3. Two of the four candidates (abiraterone, progesterone) are in structural classes (steroidal SULT2A1 / steroidal hormones with SHBG binding) that are weakly or non-represented in the primary corpus scope (OATP-substrate statins + ECCS-cation bases) — so even with subscription access, positive hits are not highly likely.
+4. The two remaining candidates (paroxetine, oxybutynin) plausibly fit the ECCS class 2 cation-base frame of Riccardi 2017, but verifying this requires institutional subscription access not available to the public-clone repository state. This is a deferred-investigation item rather than a methodological failure.
+
+**Next action**: register all 4 PPB candidates plus the 15 not_applicable T11 entries in `data/transporters/hepatic_fu_correction.json` with `disposition` matching the T11 table, `fu_correction_liver = {"mean": 1.0, "cv": 0.0}` for every row (the anti-fudge constraint §5.1 forbids any other value at `ceiling_accepted` or `not_applicable` state). The empty-overrides → Meta AAFE 2.7715 baseline is preserved bit-identically because all 19 multipliers are 1.0.
+
+### Future-iteration unlock conditions
+
+If any of the following changes, B-11 (or a re-opened DE-37) curation cycle becomes viable:
+1. **Institutional subscription access** to DMD + Clin Pharmacokinet permits retrieving Riccardi 2017 Table 2 and the Patilea-Vrana 2017 compilation table.
+2. **A targeted hepatocyte uptake assay** (in-house or contract) for paroxetine + oxybutynin generates measured `fu_inc/fu_p` ratios — converts both from `ceiling_accepted` to `literature_applied` with one new measurement each.
+3. **A class-extrapolated row** can be defended (e.g., a primary measurement for any ECCS class 2 cation-base anticholinergic) — converts oxybutynin to `class_extrapolated` with the parent citation and broader CV.
+
+None of these are within the scope of the current cycle.
+
+---
+
+*Sources consulted: FDA Prescribing Information for all 19 drugs via accessdata.fda.gov and DailyMed; PubMed/PMC for mechanism reviews; primary-corpus papers (Watanabe 2009 DMD, Yamazaki 2010 DMD, Riccardi 2017 DMD, Patilea-Vrana 2017 Clin Pharmacokinet) accessed via DOI landing pages only — full-text/supplemental tables paywalled. Search queries and results archived above in T11 and T12 sections.*
