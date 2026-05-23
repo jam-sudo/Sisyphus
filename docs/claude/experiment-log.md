@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-21
+last_updated: 2026-05-22
 parent: ../../CLAUDE.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -7,6 +7,24 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 # Experiment Log
 
 Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md).
+
+---
+
+## 2026-05-22 — B-11 Phase B closed as DE-37 (literature paywall blockage)
+
+**Outcome:** DE-37. The 4 PPB candidates identified in T11 (paroxetine, oxybutynin, abiraterone, progesterone) all dispositioned `ceiling_accepted` after T12 confirmed the 4 primary-corpus papers (Watanabe 2009 DMD, Yamazaki 2010 DMD, Riccardi 2017 DMD, Patilea-Vrana 2017 CPK) are paywall-only via WebFetch — abstracts reachable but supplemental tables containing per-drug `fu_inc/fu_p` ratios are not. Secondary PubMed search recovered mechanism-context papers (CYP2D6 autoinhibition for paroxetine; CYP3A4 microsome CLint for oxybutynin; SULT2A1 PBPK for abiraterone; clinical CL for progesterone) but no measured ratio. The remaining 15 drugs were dispositioned `not_applicable` per T11 mechanism triage (non-PPB primary mechanism).
+
+**Numerical outcome:** 19 audit rows committed with `fu_correction_liver={mean: 1.0, cv: 0.0}` (identity multiplier). 107-holdout Meta AAFE post-Phase-B = **2.7715238009**, **bit-identical** to post-Phase-A (delta 0.0; per-drug Cmax 107/107 bit-identical to 1e-10). Phase B is a no-op against the engine, as expected when every value is the default.
+
+**What shipped (2 commits on `feat/b11-phase-b-curation`):**
+- `cbb8c5a docs(b-11): Phase B Task 12 literature search log — DE-37 path` — T12 search trail (4 papers × 4 candidates + 3 PubMed queries × 4 candidates).
+- `d10bbef feat(data): hepatic_fu_correction Phase B 19-drug audit rows (B-11 Task 13)` — populated `data/transporters/hepatic_fu_correction.json`.
+
+**Infrastructure preserved:** Phase A (commits `e841356..a142a26` + `a0c90f8`) remains canonical on main. Future iterations with subscription access or a hepatocyte-uptake assay providing `fu_inc/fu_p` for ≥1 PPB candidate can revisit by simply adding rows; the loader (`hepatic_fu_correction.py`) and engine gates (`ClearanceFluxSpec` WS+PT, `ProdrugActivationFluxSpec`) are ready.
+
+**Telltale-if-it-returns:** If a B-11 successor proposal arrives, check whether the proposer has primary-corpus subscription access or measured assay data. Without that, the public-clone literature corpus remains insufficient; the DE-37 disposition repeats.
+
+**Cross-references:** [dead-ends.md §DE-37](./dead-ends.md), [backlog.md §B-11](./backlog.md), `docs/superpowers/specs/2026-05-22-B11-Phase-B-curation-log.md`.
 
 ---
 

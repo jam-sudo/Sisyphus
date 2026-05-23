@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-13
+last_updated: 2026-05-22
 parent: ../../CLAUDE.md
 charter: Authoritative list of failed Sisyphus experiments. Read before proposing any accuracy improvement.
 ---
@@ -8,7 +8,7 @@ charter: Authoritative list of failed Sisyphus experiments. Read before proposin
 
 Every experiment here was run, reverted, and documented. **Before proposing any accuracy improvement, open this file and search for the approach.** New track proposals must first pass the error-decorrelation gate described in [diagnosis.md §4](./diagnosis.md).
 
-**Canonical count:** 36 enumerated experiments below. Narrative references in commit messages or prose (e.g. "#35 error cancellation", "14번째 시도", "누적 33 methods") use **informal** numbering that counts early exploration attempts separately; those narrative numbers are **not authoritative** and do not match the table count below. When in doubt, cite the table entry (`DE-NN`).
+**Canonical count:** 37 enumerated experiments below. Narrative references in commit messages or prose (e.g. "#35 error cancellation", "14번째 시도", "누적 33 methods") use **informal** numbering that counts early exploration attempts separately; those narrative numbers are **not authoritative** and do not match the table count below. When in doubt, cite the table entry (`DE-NN`).
 
 ## 1. Theme summary (11 categories)
 
@@ -25,6 +25,7 @@ Every experiment here was run, reverted, and documented. **Before proposing any 
 | Class-aware / batch-specific meta weighting | DE-25 | kinase under-prediction diagnosed; no weight combo beats baseline |
 | F% bioavailability predictor | DE-26 | trained, negative; VDss-style unlock does not apply |
 | Direct CL/F + t½ predictors | DE-27, DE-28 | CL/F R²=0.232 + t½ variants all negative; falsifies "IVIVE bypass" as the reason VDss worked |
+| Hepatic intracellular fu correction (PPB-targeted) | DE-37 | Phase A infra shipped; primary literature corpus paywall-locked, 4 PPB candidates dispositioned ceiling_accepted, Meta AAFE shift 0.0% |
 
 **Root cause (shared across categories):** Cmax residuals are not learnable from molecular structure (CV R² < 0). Remaining error ≈ experimental variability + formulation + inter-patient variability. SMILES → Cmax carries a fundamental information-channel ceiling.
 
@@ -162,6 +163,21 @@ Old narrative ("UGT path is harmful") **does not generalize** to the current pip
 Not activated in production because: (a) zero Meta benefit, (b) UGT annotations sourced only from DrugBank → public-clone reproducibility would require a curated `data/enzymes/ugt2b7_substrates.json`-style registry (separate cycle, parallel to the v0.3.2 NAT2/UGT1A1 pattern). Comment in `ivive.py` updated to point here. Telltale if it returns: "UGT path / UGT fm redistribution / DrugBank-driven UGT enrichment" without a public-clone-reproducible UGT substrate registry AND without re-running the error-decorrelation gate at the meta-learner level.
 
 Artifacts: `/tmp/4track_state_A_ugt_off.json` and `/tmp/4track_state_B_ugt_on.json` (not committed; comparison summary in `ivive.py:640-655` comment).
+
+### DE-37 — Hepatic intracellular fu correction (B-11)
+
+**Date:** 2026-05-22
+**Hypothesis:** Per-drug `fu_correction_liver` from primary literature (Watanabe 2009 DMD 37:1471 / Yamazaki 2010 DMD 38:998 / Riccardi 2017 DMD 45:781 / Patilea-Vrana 2017 Clin Pharmacokinet) would reduce systematic over-prediction for highly bound drugs in the 107-holdout by gating hepatic CLint on fu_inc instead of fup at well-stirred and parallel-tube extraction sites.
+
+**What was measured:** 19 holdout drugs with meta_fold > 3 were mechanism-triaged (T11). 4 identified as PPB-related candidates (paroxetine, oxybutynin, abiraterone, progesterone); the other 15 dispositioned `not_applicable` (P-gp, renal, CES1, extreme first-pass, formulation, prodrug-entity mismatch, autoinhibition, lysosomal trapping, gastric-pH absorption, MAO-A, cytidine deaminase, high-fup, UGT2B7 — see `data/transporters/hepatic_fu_correction.json`). T12 literature search across the 4 primary corpus papers + secondary PubMed queries (hepatic uptake, albumin-facilitated, Kp,uu,liver) returned 0 usable fu_inc/fu_p ratios for any of the 4 PPB candidates — every primary paper is paywalled subscription-only and WebFetch retrieves only abstracts, not the supplemental tables where per-drug ratios live. Final registry: 19 audit rows, all `fu_correction_liver = {mean: 1.0, cv: 0.0}` (identity); 0 literature_applied, 0 class_extrapolated, 4 ceiling_accepted, 15 not_applicable.
+
+**Outcome:** Meta AAFE shift = 0.0% (2.7715238009 → 2.7715238009, bit-identical 107/107 per-drug, T14 verification). Phase A infrastructure (`DrugOnGraph.fu_correction_liver`, loader, ClearanceFluxSpec + ProdrugActivationFluxSpec gating, liver-node applicability flag, identity-blind random-rename invariance test) is shipped to main (commit `a0c90f8`). Curation rows retained as audit trail.
+
+**Why it failed:** The primary literature corpus that publishes hepatocyte uptake fu_inc/fu_p ratios (Watanabe / Yamazaki / Riccardi / Patilea-Vrana et al.) is paywalled, and the per-drug ratios live in supplemental tables that WebFetch cannot retrieve from abstracts. Secondary PubMed sources for the 4 PPB candidates returned mechanism-context papers (autoinhibition PBPK, transdermal PBPK, SULT2A1-class steroid PBPK) without the specific fu_inc measurement. Without literature support, no defensible non-identity multiplier could be curated, so the infra runs on an all-identity registry.
+
+**What this implies:** Either (a) fu_inc/fu_p ratios are not the dominant over-prediction mechanism for the 4 audited PPB candidates, (b) the accessible literature does not measure these ratios for the specific drugs of interest, or (c) both. Future iterations may revisit per spec §6.2 with: subscription access to the four primary DMD/CPK papers, in-house hepatocyte uptake assay data for the PPB candidates, or transporter-mediated alternatives (OATP / NTCP uptake clearance instead of fu_inc gating). Telltale if it returns: "hepatic intracellular fu / fu_inc / Kp,uu,liver / albumin-facilitated uptake" applied to highly-bound holdout drugs without a paired public-corpus or experimentally-measured ratio per drug.
+
+Artifacts: `data/transporters/hepatic_fu_correction.json` (19 audit rows), curation log `docs/superpowers/specs/2026-05-22-B11-Phase-B-curation-log.md`, spec `docs/superpowers/specs/2026-05-21-B11-hepatic-fu-correction-design.md`, plan `docs/superpowers/plans/2026-05-21-B11-hepatic-fu-correction.md`. Phase A infra shipped at `a0c90f8`; Phase B curation at `d10bbef`.
 
 ---
 
