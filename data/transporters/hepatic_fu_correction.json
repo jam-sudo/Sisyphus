@@ -1,3 +1,247 @@
 {
-  "overrides": []
+  "_schema_version": "2026-05-22-B11-Phase-B",
+  "_doctrine": "All 19 audit-trail rows for the 19 over-predict T11/T12 candidates. Every fu_correction_liver=1.0 (cv=0.0) is identity → registry preserves the Phase A bit-identical Meta AAFE 2.7715 baseline. Per spec §6.2 DE-37 escape clause (2026-05-22-B11-Phase-B-curation-log.md §T12): all 4 PPB candidates dispositioned ceiling_accepted because the primary-corpus papers are paywalled (Watanabe 2009 / Yamazaki 2010 / Riccardi 2017 / Patilea-Vrana 2017) and the supplemental tables (where per-drug fu_inc/fu_p ratios live) are not retrievable from public WebFetch. The 15 not_applicable entries document the mechanism reasons for non-curation. No literature_applied or class_extrapolated rows are introduced in this cycle.",
+  "overrides": [
+    {
+      "drug": "paroxetine",
+      "smiles": "Fc1ccc([C@@H]2CCNC[C@H]2COc2ccc3c(c2)OCO3)cc1",
+      "inchikey": "AHOUBRCZNHFOSL-YOEHRIQHSA-N",
+      "fu_correction_liver": {"mean": 1.0, "cv": 0.0},
+      "disposition": "ceiling_accepted",
+      "literature": [],
+      "notes": "PPB candidate (fup=0.05, hepatic CYP2D6-dominant). Primary corpus (Watanabe 2009 / Yamazaki 2010 / Riccardi 2017 / Patilea-Vrana 2017) abstracts only; supplemental tables paywalled. Riccardi 2017 ECCS class 2 cation-base survey is the most plausible primary hit but inaccessible. Secondary PubMed search returned CYP2D6 autoinhibition PBPK papers (PMID:29070483, PMID:23404188) with no fu_inc/fu_p ratio.",
+      "n_candidates_reviewed": 4,
+      "source_dbs_searched": [
+        "Watanabe 2009 DMD 37:1471-1480 (abstract only; supp paywalled)",
+        "Yamazaki 2010 DMD 38:998-1005 (abstract only; supp paywalled)",
+        "Riccardi 2017 DMD 45:781-790 (abstract only; supp paywalled)",
+        "Patilea-Vrana & Unadkat 2017 Clin Pharmacokinet (abstract only; body paywalled)",
+        "PubMed: paroxetine hepatic uptake intracellular fu",
+        "PubMed: paroxetine albumin-facilitated",
+        "PubMed: paroxetine Kp,uu,liver"
+      ]
+    },
+    {
+      "drug": "oxybutynin",
+      "smiles": "CCN(CC)CC#CCOC(=O)C(O)(c1ccccc1)C1CCCCC1",
+      "inchikey": "XIQVNETUBQGFHX-UHFFFAOYSA-N",
+      "fu_correction_liver": {"mean": 1.0, "cv": 0.0},
+      "disposition": "ceiling_accepted",
+      "literature": [],
+      "notes": "PPB candidate (clinical fup~0.01 vs predicted 0.20, hepatic CYP3A4-dominant, F~10%). Primary corpus abstracts only; supplemental tables paywalled. Riccardi 2017 ECCS class 2 cation-base survey is the most plausible primary hit (structural class match) but inaccessible. Secondary PubMed search returned PMID:9524014 (Lukkari 1998 CYP3A4 microsomes) and PMID:21750167 (Mizuno 2011 transdermal PBPK) with no fu_inc/fu_p ratio.",
+      "n_candidates_reviewed": 4,
+      "source_dbs_searched": [
+        "Watanabe 2009 DMD 37:1471-1480 (abstract only; supp paywalled)",
+        "Yamazaki 2010 DMD 38:998-1005 (abstract only; supp paywalled)",
+        "Riccardi 2017 DMD 45:781-790 (abstract only; supp paywalled)",
+        "Patilea-Vrana & Unadkat 2017 Clin Pharmacokinet (abstract only; body paywalled)",
+        "PubMed: oxybutynin hepatic uptake intracellular fu",
+        "PubMed: oxybutynin albumin-facilitated",
+        "PubMed: oxybutynin Kp,uu,liver"
+      ]
+    },
+    {
+      "drug": "abiraterone",
+      "smiles": "C[C@]12CC[C@H](O)CC1=CC[C@@H]1[C@@H]2CC[C@]2(C)C(c3cccnc3)=CC[C@@H]12",
+      "inchikey": "GZOSMCIZMLWJML-VJLLXTKPSA-N",
+      "fu_correction_liver": {"mean": 1.0, "cv": 0.0},
+      "disposition": "ceiling_accepted",
+      "literature": [],
+      "notes": "PPB candidate (clinical fup<0.01 vs predicted 0.147, hepatic SULT2A1 + CYP3A4 dominant). Primary corpus abstracts only; supplemental tables paywalled. Steroidal SULT2A1 substrate class is weakly represented in the OATP/ECCS-cation primary corpus scope, so even with subscription access, positive hit probability is low. Secondary PubMed search returned Goldwater 2017 (PMID:28107519) and Bohnert 2013 PBPK (PMID:23396310) using clinical fup without measured fu_inc.",
+      "n_candidates_reviewed": 4,
+      "source_dbs_searched": [
+        "Watanabe 2009 DMD 37:1471-1480 (abstract only; supp paywalled)",
+        "Yamazaki 2010 DMD 38:998-1005 (abstract only; supp paywalled)",
+        "Riccardi 2017 DMD 45:781-790 (abstract only; supp paywalled)",
+        "Patilea-Vrana & Unadkat 2017 Clin Pharmacokinet (abstract only; body paywalled)",
+        "PubMed: abiraterone hepatic uptake intracellular fu",
+        "PubMed: abiraterone albumin-facilitated",
+        "PubMed: abiraterone Kp,uu,liver"
+      ]
+    },
+    {
+      "drug": "progesterone",
+      "smiles": "CC(=O)[C@H]1CC[C@H]2[C@@H]3CCC4=CC(=O)CC[C@]4(C)[C@H]3CC[C@]12C",
+      "inchikey": "RJKFOVLPORLFTN-LEKSSAKUSA-N",
+      "fu_correction_liver": {"mean": 1.0, "cv": 0.0},
+      "disposition": "ceiling_accepted",
+      "literature": [],
+      "notes": "PPB candidate (fup=0.04, hepatic CYP3A4-dominant, F~10% with CV>100%). Primary corpus abstracts only; supplemental tables paywalled. Neutral steroidal hormone with transcortin/SHBG binding is structurally orthogonal to the OATP-substrate and ECCS-cation-base primary corpus scope. Transcortin/SHBG binding is bidirectional plasma binding, not the unidirectional albumin-facilitated hepatic uptake that B-11 captures. Secondary PubMed returned PMID:8513955 (Simon 1993 clinical CL) without measured fu_inc.",
+      "n_candidates_reviewed": 4,
+      "source_dbs_searched": [
+        "Watanabe 2009 DMD 37:1471-1480 (abstract only; supp paywalled)",
+        "Yamazaki 2010 DMD 38:998-1005 (abstract only; supp paywalled)",
+        "Riccardi 2017 DMD 45:781-790 (abstract only; supp paywalled)",
+        "Patilea-Vrana & Unadkat 2017 Clin Pharmacokinet (abstract only; body paywalled)",
+        "PubMed: progesterone hepatic uptake intracellular fu",
+        "PubMed: progesterone albumin-facilitated",
+        "PubMed: progesterone Kp,uu,liver"
+      ]
+    },
+    {
+      "drug": "lenacapavir",
+      "smiles": "CC(C)(C#Cc1ccc(-c2ccc(Cl)c3c(NS(C)(=O)=O)nn(CC(F)(F)F)c23)c([C@H](Cc2cc(F)cc(F)c2)NC(=O)Cn2nc(C(F)(F)F)c3c2C(F)(F)[C@@H]2C[C@H]32)n1)S(C)(=O)=O",
+      "inchikey": "BRYXUCLEHAUSDY-WEWMWRJBSA-N",
+      "fu_correction_liver": {"mean": 1.0, "cv": 0.0},
+      "disposition": "not_applicable",
+      "literature": [],
+      "notes": "Out of AD (HIGH_MW + EXTREME_LIPOPHILIC + PGP_EFFLUX_RISK). Primary clearance is intestinal P-gp secretion (31-60% unchanged drug in feces), not hepatic-CYP. PPB correction cannot address P-gp efflux mechanism. Mechanism: transporter (P-gp intestinal secretion).",
+      "n_candidates_reviewed": 0,
+      "source_dbs_searched": []
+    },
+    {
+      "drug": "acamprosate",
+      "smiles": "CC(=O)NCCCS(=O)(=O)O",
+      "inchikey": "AFCGFAGUEYAMAO-UHFFFAOYSA-N",
+      "fu_correction_liver": {"mean": 1.0, "cv": 0.0},
+      "disposition": "not_applicable",
+      "literature": [],
+      "notes": "Renal excretion dominant (no CYP/UGT involvement). No hepatic CL pathway to correct. fup=0.58 also excludes PPB criterion. Mechanism: route (renal).",
+      "n_candidates_reviewed": 0,
+      "source_dbs_searched": []
+    },
+    {
+      "drug": "methylphenidate",
+      "smiles": "COC(=O)C(C1CCCCN1)C2=CC=CC=C2",
+      "inchikey": "DUGOZIWVEXMGBE-UHFFFAOYSA-N",
+      "fu_correction_liver": {"mean": 1.0, "cv": 0.0},
+      "disposition": "not_applicable",
+      "literature": [],
+      "notes": "CES1 hydrolysis ~85% of clearance (not CYP). High fup (0.95) excludes PPB criterion. CES1 not in enzyme_affinity registry. Mechanism: enzyme not registered.",
+      "n_candidates_reviewed": 0,
+      "source_dbs_searched": []
+    },
+    {
+      "drug": "selegiline",
+      "smiles": "C#CCN(C)[C@H](C)Cc1ccccc1",
+      "inchikey": "MEZLKOACVSPNER-GFCCVEGCSA-N",
+      "fu_correction_liver": {"mean": 1.0, "cv": 0.0},
+      "disposition": "not_applicable",
+      "literature": [],
+      "notes": "Extreme first-pass (F=4-10%) dominates. Predicted fup=0.42 above PPB threshold (literature inconsistent: StatPearls 0.10-0.15 vs DrugBank 0.005). Primary mechanism is bioavailability, not PPB. Mechanism: first-pass / F estimation.",
+      "n_candidates_reviewed": 0,
+      "source_dbs_searched": []
+    },
+    {
+      "drug": "budesonide",
+      "smiles": "CCCC1O[C@@H]2C[C@H]3[C@@H]4CCC5=CC(=O)C=C[C@]5(C)[C@H]4[C@@H](O)C[C@]3(C)[C@]2(C(=O)CO)O1",
+      "inchikey": "VOVIALXJUBGFJZ-KWVAZRHASA-N",
+      "fu_correction_liver": {"mean": 1.0, "cv": 0.0},
+      "disposition": "not_applicable",
+      "literature": [],
+      "notes": "Enteric-coated delayed-release formulation engineered for F~9% local IBD action. Formulation-specific bioavailability dominates the 15x fold error. Mechanism: formulation / first-pass.",
+      "n_candidates_reviewed": 0,
+      "source_dbs_searched": []
+    },
+    {
+      "drug": "fesoterodine",
+      "smiles": "CC(C)C(=O)OC1=C(C=C(C=C1)CO)C(CCN(C(C)C)C(C)C)C2=CC=CC=C2",
+      "inchikey": "DCCSDBARQIPTGU-HSZRJFAPSA-N",
+      "fu_correction_liver": {"mean": 1.0, "cv": 0.0},
+      "disposition": "not_applicable",
+      "literature": [],
+      "notes": "PRODRUG (AD-out). Parent fup=0.03 but circulating active metabolite 5-HMT has fup~0.50 (not PPB-related by criteria). Parent vs metabolite Cmax reference entity mismatch. Mechanism: prodrug entity mismatch.",
+      "n_candidates_reviewed": 0,
+      "source_dbs_searched": []
+    },
+    {
+      "drug": "fluvoxamine",
+      "smiles": "COCCCCC(=NOCCN)C1=CC=C(C=C1)C(F)(F)F",
+      "inchikey": "CJOFXWAVKWHTFT-XSFVSMFZSA-N",
+      "fu_correction_liver": {"mean": 1.0, "cv": 0.0},
+      "disposition": "not_applicable",
+      "literature": [],
+      "notes": "fup=0.22 above PPB threshold. Primary mechanism: CYP1A2 mechanism-based autoinhibition (fluvoxamine potently inhibits its own metabolizer). Time-dependent inhibition not modeled by engine. Mechanism: enzyme autoinhibition.",
+      "n_candidates_reviewed": 0,
+      "source_dbs_searched": []
+    },
+    {
+      "drug": "vonoprazan",
+      "smiles": "CNCc1cc(-c2ccccc2F)n(S(=O)(=O)c2cccnc2)c1",
+      "inchikey": "BFDBKMOZYNOTPK-UHFFFAOYSA-N",
+      "fu_correction_liver": {"mean": 1.0, "cv": 0.0},
+      "disposition": "not_applicable",
+      "literature": [],
+      "notes": "Predicted fup=0.15 borderline; clinical fup~0.20 above PPB threshold. Strongly basic (pKa~9) drug; likely lysosomal trapping inflating Vd. Mechanism: distribution (lysosomal trapping).",
+      "n_candidates_reviewed": 0,
+      "source_dbs_searched": []
+    },
+    {
+      "drug": "ramelteon",
+      "smiles": "CCC(=O)NCC[C@@H]1CCc2ccc3c(c21)CCO3",
+      "inchikey": "YLXDSYKOBKBWJQ-LBPRGKRZSA-N",
+      "fu_correction_liver": {"mean": 1.0, "cv": 0.0},
+      "disposition": "not_applicable",
+      "literature": [],
+      "notes": "fup=0.18 above PPB threshold. Extreme oral first-pass (F=1.8%) dominates the 6x fold error. Primary mechanism: bioavailability. Mechanism: first-pass / F estimation.",
+      "n_candidates_reviewed": 0,
+      "source_dbs_searched": []
+    },
+    {
+      "drug": "clopidogrel",
+      "smiles": "COC(=O)C(C1=CC=CC=C1Cl)N2CCC3=C(C2)C=CS3",
+      "inchikey": "GKTWGGQPFAXNFI-HNNXBMFYSA-N",
+      "fu_correction_liver": {"mean": 1.0, "cv": 0.0},
+      "disposition": "not_applicable",
+      "literature": [],
+      "notes": "Parent fup=0.22 above PPB threshold. CES1 hydrolyzes 85% of absorbed drug (parent disposition). Already addressed by separate B-03 prodrug spec (2026-05-20-clopidogrel-prodrug-design.md). Mechanism: prodrug + CES1 hydrolysis (separate spec).",
+      "n_candidates_reviewed": 0,
+      "source_dbs_searched": []
+    },
+    {
+      "drug": "posaconazole",
+      "smiles": "CC[C@@H]([C@H](C)O)n1ncn(-c2ccc(N3CCN(c4ccc(OC[C@@H]5CO[C@@](Cn6cncn6)(c6ccc(F)cc6F)C5)cc4)CC3)cc2)c1=O",
+      "inchikey": "RAGOYPUPXAKGKH-XAKZXMRKSA-N",
+      "fu_correction_liver": {"mean": 1.0, "cv": 0.0},
+      "disposition": "not_applicable",
+      "literature": [],
+      "notes": "Out of AD (HIGH_MW + PGP_EFFLUX_RISK). UGT1A4 glucuronidation primary (not CYP). Oral suspension has gastric-pH-dependent precipitation + erratic absorption. Mechanism: absorption / formulation + P-gp.",
+      "n_candidates_reviewed": 0,
+      "source_dbs_searched": []
+    },
+    {
+      "drug": "sumatriptan",
+      "smiles": "CNS(=O)(=O)CC1=CC2=C(C=C1)NC=C2CCN(C)C",
+      "inchikey": "KQKPFRSPSRPDEB-UHFFFAOYSA-N",
+      "fu_correction_liver": {"mean": 1.0, "cv": 0.0},
+      "disposition": "not_applicable",
+      "literature": [],
+      "notes": "fup=0.86 well above PPB threshold. Primary clearance is MAO-A oxidation, which is not in the CYP-based enzyme_affinity registry. Mechanism: enzyme not registered (MAO-A).",
+      "n_candidates_reviewed": 0,
+      "source_dbs_searched": []
+    },
+    {
+      "drug": "azacitidine",
+      "smiles": "C1=NC(=NC(=O)N1C2C(C(C(O2)CO)O)O)N",
+      "inchikey": "NMUSYJAQQFHJEW-KVTDHHQDSA-N",
+      "fu_correction_liver": {"mean": 1.0, "cv": 0.0},
+      "disposition": "not_applicable",
+      "literature": [],
+      "notes": "fup=0.98 well above PPB threshold. Cleared by spontaneous chemical hydrolysis + cytidine deaminase (not CYP/UGT). Oral ONUREG formulation F~11-13%. Mechanism: enzyme not registered (cytidine deaminase) + formulation.",
+      "n_candidates_reviewed": 0,
+      "source_dbs_searched": []
+    },
+    {
+      "drug": "venlafaxine",
+      "smiles": "COc1ccc(C(CN(C)C)C2(O)CCCCC2)cc1",
+      "inchikey": "PNVNVHUZROJLTJ-UHFFFAOYSA-N",
+      "fu_correction_liver": {"mean": 1.0, "cv": 0.0},
+      "disposition": "not_applicable",
+      "literature": [],
+      "notes": "fup=0.73 well above PPB threshold. Modest 3.8x fold error likely from CYP2D6 EM/PM population variability or IR vs ER formulation. Mechanism: pharmacogenomic variability.",
+      "n_candidates_reviewed": 0,
+      "source_dbs_searched": []
+    },
+    {
+      "drug": "morphine",
+      "smiles": "CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O",
+      "inchikey": "BQJCRHHNABKAKU-KBQPJGBKSA-N",
+      "fu_correction_liver": {"mean": 1.0, "cv": 0.0},
+      "disposition": "not_applicable",
+      "literature": [],
+      "notes": "fup=0.65 well above PPB threshold. UGT2B7-dominant glucuronidation; UGT2B7 representation in enzyme_affinity registry is a separate gap. Already routed via SBI+reweight production override. Mechanism: enzyme registration + routing override.",
+      "n_candidates_reviewed": 0,
+      "source_dbs_searched": []
+    }
+  ]
 }
