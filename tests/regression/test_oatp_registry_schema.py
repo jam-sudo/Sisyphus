@@ -37,7 +37,9 @@ _OVERRIDES_PATH = _REPO_ROOT / "data" / "transporters" / "cyp_clearance_override
 # → fm = 1 - 1/AUCR ≈ 0.67; user-approved 2026-05-25).
 # Rosuvastatin: fm_CYP = 0.10 (Martin 2003 [14C]-mass balance, 90% unchanged
 # biliary + 10% N-desmethyl via CYP2C9; PMC7825190 PBPK convergent).
-_EXPECTED_ECM_APPLICABLE = frozenset({"pravastatin", "pitavastatin", "atorvastatin", "rosuvastatin"})
+_EXPECTED_ECM_APPLICABLE = frozenset(
+    {"pravastatin", "pitavastatin", "atorvastatin", "rosuvastatin"}
+)
 
 
 def _load_oatp() -> dict:
