@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-21
+last_updated: 2026-05-25
 parent: ../../CLAUDE.md
 charter: Deferred work items with effort/value/risk tags. Promote to a spec cycle, GitHub Issue, dead-ends.md, or experiment-log.md when the disposition is decided. Items here have NOT been triaged through brainstorming yet — they are candidates, not commitments.
 ---
@@ -64,6 +64,18 @@ Pick one when there's actual external interest in reproducing the headline.
 **Effort**: 1+ day. **Value**: forward-compatibility with current ecosystem; numpy 1.26 is LTS until 2027 but rdkit 2022.09 is several years stale. **Risk**: medium — version migrations historically shift Cmax (PR #42 hypothesis disproven only because the drift driver was elsewhere, but newer libs WILL produce some drift). Headline regen required.
 
 **Deferred from**: PR #42 close note ("numpy 2.x migration deserves its own spec cycle").
+
+### B-12 — GitHub Actions Node.js 20 → 24 migration (hard deadline 2026-09-16)
+**Effort**: 1–2 h (action pin bumps + CI dry-run). **Value**: keeps CI green past the GitHub-runner Node 20 removal. **Risk**: low — pure infra, action maintainers handle the Node 24 compat internally. **Deadline**: hard — Node 20 binary removed from runner 2026-09-16; soft transition 2026-06-02 (runner default → Node 24, env opt-out exists until 09-16).
+
+**Source**: CI run `26415053877` (2026-05-25) annotation: *"Node.js 20 actions are deprecated. … `actions/checkout@v4`, `actions/setup-python@v5` … forced to Node 24 starting June 2nd, 2026. Node 20 removed September 16th, 2026."*
+
+**Action**:
+1. Around 2026-06-15 (2 weeks after soft transition), check for newer Node-24-native action versions (`actions/checkout@v5`, `actions/setup-python@v6` or equivalent).
+2. Bump pins in `.github/workflows/ci.yml`. Verify CI still green.
+3. If newer versions not yet released, set `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true` env in workflow as interim measure.
+
+**Synergy**: natural pairing with [[B-09]] (numpy 2.x + rdkit migration) — both are "ecosystem version refresh" infra work. If bundling, [[B-09]] is the headline (Cmax-affecting); B-12 is the freebie addendum.
 
 ### ~~B-10~~ — Pitavastatin/rosuvastatin/atorvastatin metabolic_fraction curation (closed 2026-05-25)
 
