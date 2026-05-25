@@ -29,7 +29,8 @@
       },
       "source": "Km: Niemi 2009 review (Simonson 2004, Ho 2006; range 4.0-7.3 \u03bcM). Jmax: scaled from rosuvastatin/pravastatin clinical hepatic uptake CL ratio \u2248 1.2 (Ho 2006 Gastro).",
       "smiles": "CC(C)c1nc(N(C)S(C)(=O)=O)nc(-c2ccc(F)cc2)c1/C=C/[C@@H](O)C[C@@H](O)CC(=O)O",
-      "inchikey": "BPRHUIZQVSMCRT-VEUZHWNKSA-N"
+      "inchikey": "BPRHUIZQVSMCRT-VEUZHWNKSA-N",
+      "ecm_applicable": true
     },
     "atorvastatin": {
       "jmax_pmol_per_min_per_mg": {
@@ -42,7 +43,8 @@
       },
       "source": "Km: Kameyama 2005 (via Niemi 2009 review). Jmax: scaled from atorvastatin/pravastatin OATP1B1-specific uptake CL ratio \u2248 1.5 (Hirano 2006 review, excluding CYP3A4 contribution).",
       "smiles": "CC(C)c1c(C(=O)Nc2ccccc2)c(-c2ccccc2)c(-c2ccc(F)cc2)n1CC[C@@H](O)C[C@@H](O)CC(=O)O",
-      "inchikey": "XUKUURHRXDUEBC-KAYWLYCHSA-N"
+      "inchikey": "XUKUURHRXDUEBC-KAYWLYCHSA-N",
+      "ecm_applicable": true
     },
     "pitavastatin": {
       "jmax_pmol_per_min_per_mg": {
