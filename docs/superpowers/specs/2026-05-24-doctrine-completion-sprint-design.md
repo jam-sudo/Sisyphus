@@ -55,16 +55,18 @@ Clopidogrel IS in the 107-holdout (parent observation). Atorvastatin and rosuvas
 
 Implementer MUST use these sources. Alternative sources require spec amendment.
 
-| Parameter | Primary source | Fallback | Value (if known) |
-|---|---|---|---|
-| **CES1 hepatic abundance** | Pharmaceutics 2025 (PMC12735975) | Sato 2012 | 1664.4 ± 781.7 pmol/mg microsomal protein |
-| **CES1 clopidogrel Vmax/Km** | Mol Pharm 2025 PMC12673578 ("Confounding Effect of Hepatic CES1 Variability on Clopidogrel Oxidation") | PMC5369137 (MDPI 2017 review) | TBD by implementer |
-| **CYP3A4/2C19 clopidogrel contribution ratio** | Kazui 2010 DMD 38:92-99 | Zahno 2010 Br J Pharmacol 161:393 | Relative %, already cited in B-03 |
-| **Atorvastatin CYP3A4 CL_int** | Park 2008 (primary; cited via ResearchGate aggregator) | Reactome R-HSA-9754706 | 1.22 mL/min/nmol (para- + ortho-OH sum) |
-| **Atorvastatin CYP3A5 CL_int** | Park 2008 | — | 0.37 mL/min/nmol |
-| **Rosuvastatin fm partition** | Niemi 2009 Pharmacol Ther 125:84 (PMC2765590) | Martin 2003 review | TBD by implementer (expected ~0.0~0.1 CYP, rest OATP1B1+biliary) |
+| Parameter | Primary source | Fallback | Value (mean) | Uncertainty (cv) |
+|---|---|---|---|---|
+| **CES1 hepatic abundance** | Pharmaceutics 2025 (PMC12735975) | Sato 2012 | 1664.4 pmol/mg microsomal protein | **0.47** (SD 781.7) |
+| **CES1 clopidogrel Vmax/Km** | Mol Pharm 2025 PMC12673578 ("Confounding Effect of Hepatic CES1 Variability on Clopidogrel Oxidation") | PMC5369137 (MDPI 2017 review) | TBD by implementer | TBD by implementer |
+| **CYP3A4/2C19 clopidogrel contribution ratio** | Kazui 2010 DMD 38:92-99 | Zahno 2010 Br J Pharmacol 161:393 | Relative %, already cited in B-03 | use existing cv=0.30 |
+| **Atorvastatin CYP3A4 CL_int** | **primary citation TBD by implementer via Reactome R-HSA-9754706 citation tracing** (ResearchGate snippet cites 1.22 mL/min/nmol but the primary publication is NOT verified; could be Jacobsen 2000, Lennernäs 2003, Park 2008, or other) | Reactome R-HSA-9754706 | 1.22 mL/min/nmol (para- + ortho-OH sum) | TBD |
+| **Atorvastatin CYP3A5 CL_int** | same as above | — | 0.37 mL/min/nmol | TBD |
+| **Rosuvastatin fm partition** | Niemi 2009 Pharmacol Ther 125:84 (PMC2765590) | Martin 2003 review | TBD by implementer (expected ~0.0~0.1 CYP, rest OATP1B1+biliary) | TBD |
 
-**Source fallback rule:** if primary unavailable in 30 minutes of search, drop to fallback. If fallback also unavailable, log as DE-38 (Phase B only) or skip-with-rationale (Phase A — atorvastatin/rosuvastatin only).
+**Source fallback rule:** primary source must be **open-access (no paywall) and machine-readable**. If primary requires paywall login OR cannot be fetched within 2 WebFetch attempts, drop to fallback. If fallback also fails the same gate, log as DE-38 (Phase B only) or skip-with-rationale (Phase A — atorvastatin/rosuvastatin only). Time spent is not the gate; access success is.
+
+**Distribution propagation rule (invariant #2):** every literature value MUST enter Sisyphus as `Distribution(mean=<lit_mean>, cv=<lit_cv_or_default>)`. If literature reports SD/range, convert to cv. If only mean is available, use cv=0.30 (CYP), cv=0.40 (transporter), cv=0.50 (CES — high variability default per Pharmaceutics 2025 158-fold range). Do NOT use bare floats.
 
 ---
 
@@ -97,15 +99,34 @@ Update `enzyme_affinity_for_conversion` in clopidogrel entry. Replace placeholde
 
 ## 5. Phase A Detail (B-10)
 
+### A.0 `metabolic_fraction` semantics (MUST READ)
+
+Definition: `metabolic_fraction` (mf) is the fraction of **total in-vivo hepatic CL** attributable to **intracellular CYP/UGT metabolism** (as opposed to OATP1B1 uptake / biliary excretion). It is the multiplier applied to XGBoost-derived per-enzyme `enzyme_affinity` values when the ECM transporter path is active, to prevent double-counting.
+
+```
+mf = CL_intracellular_CYP_or_UGT / CL_total_hepatic
+```
+
+Per-drug ground truth (existing precedent):
+- **pravastatin**: mf = 0.0 — OATP1B1 uptake is rate-limiting, intracellular CL ≈ 0
+- **pitavastatin**: mf = 0.0 — same pattern, CYP2C9 + UGT downstream of uptake (not rate-limiting)
+
+Expected literature consensus values for this sprint:
+- **atorvastatin**: mf ≈ 0.6~0.8 (CYP3A4 dominant; OATP1B1 contributes ~20~40%) — Park 2008 / Lennernäs 2003 / Maeda 2011
+- **rosuvastatin**: mf ≈ 0.0~0.1 (mostly biliary + OATP1B1; CYP2C9 contribution <10%) — Niemi 2009 / Martin 2003
+
+If the implementer's derived mf falls OUTSIDE these ranges by >0.2, halt and report — likely interpretation error of source data.
+
 ### A.1 Atorvastatin
 
 **Mechanism:** mixed CYP3A4 + OATP1B1. fm_CYP3A4 partition is non-trivial.
 
 **Approach:**
-1. Extract atorvastatin total in-vivo hepatic CL from FDA label or PK reference.
-2. Estimate CYP3A4 + CYP3A5 contribution from Park 2008 CL_int × CYP3A4 abundance.
-3. Compute fm_CYP = CL_CYP / CL_total → `metabolic_fraction`.
-4. If fm_CYP = 0.7, `metabolic_fraction = 0.7` (XGBoost CL × 0.7 reflects CYP fraction; remaining 30% routed through ECM OATP1B1).
+1. Extract atorvastatin total in-vivo hepatic CL from FDA label or PK reference (CL ≈ 37 L/h consensus).
+2. Estimate CYP3A4 + CYP3A5 contribution from primary CL_int citation × CYP3A4 abundance (Sato 2014 ~108 pmol/mg microsomal).
+3. Compute mf = CL_CYP / CL_total_hepatic per the §A.0 definition.
+4. Expected landing: mf ≈ 0.6~0.8. If outside this range, halt per §A.0 sanity gate.
+5. Enter as `Distribution(mean=<computed>, cv=0.30)` if literature reports point estimate; widen cv if literature range is broad.
 
 ### A.2 Rosuvastatin
 
@@ -113,8 +134,10 @@ Update `enzyme_affinity_for_conversion` in clopidogrel entry. Replace placeholde
 
 **Approach:**
 1. Niemi 2009 review reports rosuvastatin CYP-mediated metabolism as <10% of total CL.
-2. `metabolic_fraction = 0.0` if CYP contribution is negligible (similar to pravastatin/pitavastatin pattern).
-3. If small but non-zero CYP contribution exists (e.g., 0.05), use that.
+2. Apply §A.0 definition: mf = CL_CYP / CL_total ≈ 0.0~0.1.
+3. If literature consensus is "negligible CYP" → mf = 0.0 (matches pravastatin/pitavastatin pattern).
+4. If small but non-zero CYP contribution (e.g., CYP2C9 ~5%) → mf = 0.05.
+5. Enter as `Distribution(mean=<computed>, cv=0.30)`.
 
 ### A.3 ecm_applicable flip
 
@@ -143,11 +166,21 @@ Run `pytest tests/integration/test_oatp_ecm_statins.py` and verify all FE gates 
 Given Tang/Mol-Pharm Vmax (nmol/min/mg HLM) and Km (μM):
 
 ```
-CL_int_per_mg_HLM = Vmax / Km   [mL/min/mg]
-CL_int_per_pmol_CES1 = CL_int_per_mg_HLM / 1664.4 pmol/mg   [mL/min/pmol]
+CL_int_per_mg_HLM     = Vmax / Km                  [mL/min/mg HLM]
+CL_int_per_pmol_CES1  = CL_int_per_mg_HLM / 1664.4 [mL/min/pmol CES1]
 ```
 
-Convert to Sisyphus `enzyme_affinity` unit (CL_int per unit enzyme abundance). Compare to current placeholder 0.030. Replace if literature-derived.
+Both values enter as `Distribution(mean=<lit_mean>, cv=<lit_cv_or_default>)` per §3 propagation rule. CES1 abundance Distribution: `Distribution(mean=1664.4, cv=0.47)`. Vmax cv = 0.40 default (CES is high-variability per Pharmaceutics 2025 158× range), Km cv = 0.30 default.
+
+**MANDATORY unit-sanity gate (DO NOT SKIP):**
+
+The current placeholder `CES1.mean = 0.030` is the reference order-of-magnitude. After computing the IVIVE value from literature:
+
+1. **If derived value falls within [0.003, 0.30] (~10× either direction of 0.030)** → unit conversion is consistent with Sisyphus `enzyme_affinity` convention. Proceed.
+2. **If derived value falls outside [0.003, 0.30]** → unit conversion is likely WRONG. STOP. Read `src/sisyphus/engine/flux.py::ClearanceFluxSpec.apply` to determine the actual abundance unit (pmol/L, pmol absolute, fmol/mg, etc.) used by `node.enzymes[tag] × drug.enzyme_affinity[tag]`. Re-derive unit conversion. Do NOT commit a mis-scaled value to "see if benchmark accepts it" — that is Cmax-loss tuning by another name.
+3. **If derived value lands at 0.030 ± 0.005 (placeholder neighborhood)** → unexpected coincidence; verify literature was actually applied (not silently reused the placeholder). Proceed with caution.
+
+Replace placeholder ONLY if (1) holds. Document the derived numbers + unit-sanity verification in commit message.
 
 ### B.3 CYP3A4 / CYP2C9 update
 
@@ -187,11 +220,14 @@ If clopidogrel FE worsens or unchanged: revert, log DE-38.
 | Risk | Mitigation |
 |---|---|
 | Mol Pharm 2025 (PMC12673578) doesn't actually contain Vmax/Km | Fallback PMC5369137; if both fail → DE-38 |
-| Park 2008 CL_int 1.22 attribution wrong (could be derived value) | Verify via Reactome ADME source list; cross-check with Lennernäs 2003 |
+| Atorvastatin 1.22 mL/min/nmol attribution wrong (ResearchGate snippet may not match Park 2008 primary) | Reactome R-HSA-9754706 citation tracing required; cross-check with Lennernäs 2003 / Jacobsen 2000 / Maeda 2011 |
 | Rosuvastatin fm CYP > 0.1 (Niemi review contradicted) | Use Niemi consensus; spec amendment if alternative source justifies |
 | Clopidogrel CES1 IVIVE 5× over-scales (overcorrects 5.15× to <1×) | Honest outcome — DE-38 (in-vitro→in-vivo scaling failure); document direction |
 | Phase A breaks atorvastatin or rosuvastatin FE gate | Revert that statin only; partial Phase A completion |
 | Headline Meta AAFE regresses on non-clopidogrel drugs (RNG-order-style) | Should not occur (registry change is local); investigate if observed |
+| **Unit conversion error in §6.B.2 IVIVE** | §B.2 mandatory unit-sanity gate ([0.003, 0.30] window). STOP if outside. |
+| **Distribution propagation skipped (bare floats committed)** | §3 propagation rule. Spec reviewer MUST verify `Distribution(mean, cv)` syntax used. |
+| **mf semantics misinterpreted (atorvastatin lands at 0.0 or 0.95)** | §A.0 sanity gate (mf outside [0.4, 0.9] for atorvastatin halts work). |
 
 ---
 
@@ -217,7 +253,7 @@ If clopidogrel FE worsens or unchanged: revert, log DE-38.
 All of above, plus:
 1. Update `CLAUDE.md` headline metrics table (Meta AAFE, In-domain Meta).
 2. Regenerate `data/training/4track_holdout_predictions.json`.
-3. Optionally bootstrap new 95% CI (10k resamples, seed=20260524) → `data/validation/4track_ci_2026-05-24.json`.
+3. **Bootstrap new 95% CI MANDATORY if `|ΔMeta AAFE| > 0.01`** (10k resamples, seed=20260524) → `data/validation/4track_ci_2026-05-24.json`. Below 0.01 shift: existing 2026-05-12 CI remains canonical.
 
 ### If Phase A partial + Phase B DE-38
 1. Document atorvastatin/rosuvastatin individually (whichever flipped successfully).
