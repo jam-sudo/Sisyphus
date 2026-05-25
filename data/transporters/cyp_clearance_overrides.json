@@ -36,6 +36,32 @@
       "notes": "Pitavastatin parallels pravastatin: OATP1B1 hepatic uptake is rate-limiting (Niemi 2009 PM/EM ~3x); intracellular CYP2C9 + UGT1A3/2B7 paths are downstream of uptake and thus not rate-limiting at the whole-organ level. Setting metabolic_fraction=0 routes all hepatic CL through ECM (OATP1B1 saturable + ECM passive + biliary CL_int). EMPIRICAL NOTE: setting mf=0 vs mf=1.0 changes pitavastatin Cmax by <2% (sweep 2026-05-04), so the metabolic_fraction value is mechanistically chosen rather than empirically tuned. The residual ~2x under-prediction (Cmax 0.00168 vs FDA 0.0035) reflects Jmax/PS calibration uncertainty (Hirano 2004 scaled-from-pravastatin estimate carries 2x literature range), not metabolic_fraction error. v0.3.x parameter recalibration tracked separately."
     },
     {
+      "drug": "atorvastatin",
+      "smiles": "CC(C)c1c(C(=O)Nc2ccccc2)c(-c2ccccc2)c(-c2ccc(F)cc2)n1CC[C@@H](O)C[C@@H](O)CC(=O)O",
+      "inchikey": "XUKUURHRXDUEBC-KAYWLYCHSA-N",
+      "metabolic_fraction": 0.65,
+      "literature": [
+        "Kantola et al. 1998 Clin Pharmacol Ther 64:58-65 (PMID 9695720): atorvastatin acid AUC ~3-fold elevated by itraconazole 200 mg/d (n=10, 40 mg ATV); fm_CYP3A4 ≈ 1 - 1/AUCR ≈ 0.67.",
+        "Park et al. 2008 Xenobiotica 38(9):1240-1251 (PMID 18720283): CYP3A4 contributes 85%, CYP3A5 15% of in vitro atorvastatin metabolism; CL_int CYP3A4/CYP3A5 ratio 2.4x (para-OH) and 5.0x (ortho-OH).",
+        "Morse et al. 2019 CPT Pharmacomet Syst Pharmacol 8(9):664-675 (PMC6765700): atorvastatin PBPK Vmax/Km CYP3A4 o-OH = 1353/33, p-OH = 1048/34.8 (μL/min/mg microsomal·μM) per Jacobsen 2000 DMD; UGT1A3 = 6.2 μL/min/mg per Goosen 2007; fup = 0.022; concludes 'atorvastatin hepatic clearance is uptake rate limited by OATPs'.",
+        "Lee et al. 2020 PMC7582433: atorvastatin PBPK CLint_uptake (OATP) = 612.3 mL/min vs CLint_met (CYP3A4) = 3469.5 mL/min; hepatic OATP removal increases AUC ~16x, confirming uptake rate-limitation.",
+        "Lipitor (atorvastatin calcium) FDA label 2017 (NDA 020702): total plasma CL = 625 mL/min (37.5 L/h); F = 14%; plasma protein binding > 98%."
+      ],
+      "notes": "Atorvastatin has mixed CYP3A4 + OATP1B1 hepatic clearance. fm_CYP3A4 ≈ 0.65 anchored on Kantola 1998 itraconazole DDI (AUC ratio ~3 → 1 - 1/3 ≈ 0.67); within-CYP3A split 85/15 between CYP3A4/CYP3A5 per Park 2008. metabolic_fraction=0.65 scales the XGBoost-derived CYP3A4 affinity when ECM auto-activates, leaving the OATP1B1 contribution (~0.35) routed through ECM. UGT1A3 glucuronidation contributes <5% (negligible vs CYP3A). NOTE: the naive well-stirred CL_metabolic / CL_total calculation gives ~0.29 (below spec sanity gate) because OATP1B1 is the in-vivo rate-limiting step (Morse 2019, Lee 2020 PMC7582433); the DDI-anchored fm is the operationally correct value for the engine to scale. test_oatp_ecm_statins atorvastatin xfail remains in place because Peff XGBoost over-predicts atorvastatin absorption (test docstring lines 18-30); this mf entry completes the v0.3 ECM doctrine but does NOT fix the Peff-driven FE gate failure."
+    },
+    {
+      "drug": "rosuvastatin",
+      "smiles": "CC(C)c1nc(N(C)S(C)(=O)=O)nc(-c2ccc(F)cc2)c1/C=C/[C@@H](O)C[C@@H](O)CC(=O)O",
+      "inchikey": "BPRHUIZQVSMCRT-VEUZHWNKSA-N",
+      "metabolic_fraction": 0.10,
+      "literature": [
+        "Martin PD et al. (2003) Metabolism, excretion, and pharmacokinetics of rosuvastatin in healthy adult male volunteers. Clin Ther 25(11):2822-2835. PMID 14693307. [14C]-rosuvastatin 20 mg oral mass-balance: ~90% of dose recovered unchanged (feces predominant); ~10% metabolized, principally to N-desmethyl rosuvastatin via CYP2C9.",
+        "Niemi M et al. (2009) Organic anion transporting polypeptide 1B1: a genetically polymorphic transporter of major importance for hepatic drug uptake. Pharmacol Ther 125(1):84-117. PMC2765590. Rosuvastatin OATP1B1 Km 4.0-7.3 μM; SLCO1B1 c.521CC homozygotes show 65% higher rosuvastatin AUC vs c.521TT, confirming OATP1B1 uptake is rate-limiting for hepatic clearance.",
+        "Lai Y et al. (2021) Examination of PBPK models of rosuvastatin. CPT Pharmacometrics Syst Pharmacol. PMC7825190. ~10% of clearance attributed to hepatic metabolism (minimal CYP2C9/2C19, UGT1A1/1A3); remainder biliary excretion of unchanged parent."
+      ],
+      "notes": "Rosuvastatin: OATP1B1-uptake-dominated, minimal CYP metabolism. mf=0.10 anchored to Martin 2003 [14C]-rosuvastatin mass balance: ~90% of dose recovered unchanged (feces) + ~10% as N-desmethyl rosuvastatin via CYP2C9 (principal metabolic pathway; CYP2C19 and UGT1A1/1A3 are minor contributors). 90% of total hepatic CL is biliary efflux of unchanged parent following OATP1B1 hepatic uptake; only 10% is true intracellular CYP/UGT metabolism. mf=0.10 routes the XGBoost-derived per-enzyme CLint at 10% scale; the remaining 90% is captured by the ECM (OATP1B1-uptake-rate-limited) clearance path. Consistent with pravastatin/pitavastatin mechanistic pattern (mf=0.0) but with a small non-zero CYP2C9 contribution. Niemi 2009 confirms OATP1B1 rate-limitation (SLCO1B1 c.521CC +65% AUC). NOTE: test_oatp_ecm_statins rosuvastatin xfail remains in place because Peff XGBoost over-predicts rosuvastatin absorption (test docstring lines 18-30); this mf entry completes the v0.3 ECM doctrine but does NOT fix the Peff-driven FE gate failure."
+    },
+    {
       "drug": "clopidogrel",
       "smiles": "COC(=O)[C@H](c1ccccc1Cl)N1CCc2sccc2C1",
       "inchikey": "GKTWGGQPFAXNFI-HNNXBMFYSA-N",
