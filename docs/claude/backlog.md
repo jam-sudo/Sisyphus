@@ -65,10 +65,13 @@ Pick one when there's actual external interest in reproducing the headline.
 
 **Deferred from**: PR #42 close note ("numpy 2.x migration deserves its own spec cycle").
 
-### B-10 — Pitavastatin/rosuvastatin/atorvastatin metabolic_fraction curation
-**Effort**: 4–6h. **Value**: complete the v0.3 ECM auto-activation rollout. Currently only pravastatin has a literature-anchored `metabolic_fraction` in `data/transporters/cyp_clearance_overrides.json`; pitavastatin was promoted in v0.3.1 (PR #30) with mf=0 mechanistic-only, rosuvastatin/atorvastatin not yet promoted. Each requires Niemi/Lautens-style fm curation per statin.
+### ~~B-10~~ — Pitavastatin/rosuvastatin/atorvastatin metabolic_fraction curation (closed 2026-05-25)
 
-**Deferred from**: README §463 note ("Pitavastatin/rosuvastatin/atorvastatin remain unflagged pending literature-curated metabolic_fraction entries (deferred to v0.3.x follow-up commits)").
+**Status:** Closed. Shipped in 2026-05-24 doctrine completion sprint Phase A. atorvastatin + rosuvastatin promoted with literature-curated metabolic_fraction entries (Kantola 1998 / Martin 2003 anchors); ecm_applicable=true flipped. v0.3 ECM doctrine complete for all 4 statin substrates. Pitavastatin was already promoted in v0.3.1 (PR #30) — README §463 was stale.
+
+**Spec:** `docs/superpowers/specs/2026-05-24-doctrine-completion-sprint-design.md`
+**Plan:** `docs/superpowers/plans/2026-05-24-doctrine-completion-sprint.md`
+**Commit:** `1cd6ff1`
 
 ---
 
