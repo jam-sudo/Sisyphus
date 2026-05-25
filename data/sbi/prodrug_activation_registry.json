@@ -154,34 +154,34 @@
     "observation_species": "parent",
     "enzyme_affinity_for_conversion": {
       "CES1": {
-        "mean": 0.030,
-        "cv": 0.70,
+        "mean": 0.0586,
+        "cv": 0.50,
         "yield": {"mean": 0.0, "cv": 0.0},
-        "citation": "Tang 2006 DMD 34:1467-76; Hagihara 2009 / CES1 reviews: hepatic CES1 hydrolyzes most clopidogrel to inactive carboxylate (~85% dead-end path)."
+        "citation": "Subash et al. 2025 Mol Pharm PMC12673578 (rCES1 Xenotech, Vmax 2353 pmol/min/mg, Km 14.92 μM; rCES1 specific content 2.69 nmol/mg from Table 1 LC-MS/MS proteomics); CES1 hepatic abundance 1664 pmol/mg microsomal (8.0e7 pmol/liver) per Boberg 2017 PMC5267516. B-03.x doctrine-completion literature-IVIVE (2026-05-25 sprint)."
       },
       "CYP3A4": {
-        "mean": 0.030,
-        "cv": 0.70,
+        "mean": 0.0322,
+        "cv": 0.30,
         "yield": {"mean": 1.0, "cv": 0.30},
-        "citation": "Kazui 2010 DMD 38:92-99 and Zahno 2010 Br J Pharmacol: CYP3A4 contributes to clopidogrel two-step oxidative bioactivation to the active thiol metabolite."
+        "citation": "Kazui et al. 2010 DMD 38:92-99: CYP3A4 contributes 36% of step-2 sulfenic→thiol bioactivation within the 15% CYP-total fate budget. IVIVE-derived from CES1 absolute affinity (Subash 2025) under the 85/15 inactive/active fate split."
       },
       "CYP2C9": {
-        "mean": 0.030,
-        "cv": 0.70,
+        "mean": 0.0817,
+        "cv": 0.30,
         "yield": {"mean": 1.0, "cv": 0.30},
-        "citation": "Kazui 2010 DMD 38:92-99; Sisyphus ontology maps CYP2C19/CYP2C8 DrugBank annotations to the CYP2C9 2C-subfamily surrogate, so this tag represents the CYP2C19-dominant 2C contribution."
+        "citation": "Kazui et al. 2010 DMD 38:92-99; Sisyphus 2C-subfamily surrogate receives the CYP2C19-dominant contribution = 64% of the 15% CYP-total fate budget. IVIVE-derived from CES1 absolute affinity (Subash 2025)."
       }
     },
-    "affinity_source": "literature",
+    "affinity_source": "literature_ivive",
     "_clinical_citation": "Active thiol metabolite weight/formula from DrugBank DBMET01163; parent clopidogrel holdout Cmax from FDA-label-derived clinical_pk.json.",
     "_v3_origin_note": "B-03 issue #11 residual. Clopidogrel is a parent-scored holdout prodrug: CES1 routes most parent to an inactive dead-end, while CYP3A4 + Sisyphus 2C-subfamily surrogate route the represented oxidative bioactivation path to R-130964.",
     "v3_metadata": {
-      "citation": "Tang 2006 DMD 34:1467-1476 (CES1 hydrolysis); Kazui 2010 DMD 38:92-99 (CYP enzymes in two oxidative steps); Zahno 2010 Br J Pharmacol 161:393-404 (CYP3A4/2C19 in vitro contribution); DrugBank DBMET01163 (active metabolite formula/MW).",
-      "doctrine_path": "B-03 §3: parent Cmax is the 107-holdout target, so observation_species=parent. Active thiol CL/V is ceiling_accepted because chemically labile active metabolite and covalent P2Y12 binding prevent a clean conventional CL/V measurement.",
-      "disposition_state": "ceiling_accepted",
+      "citation": "Subash 2025 Mol Pharm PMC12673578 (CES1 Vmax/Km, rCES1 specific content); Boberg 2017 PMC5267516 (CES1 hepatic abundance 1664 pmol/mg); Kazui 2010 DMD 38:92-99 (CYP3A4/2C19 step-2 contribution within 15% bioactivation fate split); Zahno 2010 Br J Pharmacol 161:393-404 (CYP3A4/2C19 in vitro contribution corroboration); DrugBank DBMET01163 (active metabolite formula/MW).",
+      "doctrine_path": "B-03 §3 (parent observation, observation_species=parent). B-03.x doctrine completion (2026-05-25 sprint §B.2): literature-IVIVE replaces placeholder 0.030 CES1/CYP affinities using Subash 2025 rCES1 Vmax/Km (157.7 μL/min/mg rCES1 protein) ÷ rCES1 specific content (2690 pmol/mg, Subash Table 1) → CES1 affinity 0.0586 μL/min/pmol; CYP3A4 and CYP2C9 affinities derived to preserve the Kazui 85/15 inactive/active fate split (CYP3A4 36% × CYP2C9 64% of the 15% CYP budget per Kazui 2010 Table 3 step-2). 1.92× CLint scale-up vs placeholder.",
+      "disposition_state": "literature_applied",
       "source_dbs_searched": ["PubMed", "GoogleScholar", "FDA", "DrugBank"],
-      "n_candidates_reviewed": 7,
-      "ceiling_rationale": "The explicit prodrug edges model clopidogrel parent consumption, not a calibrated active-thiol PK claim. CES1/CYP affinity values are literature-anchored order-of-magnitude capacities chosen to preserve the known ~85/15 inactive-vs-active fate split under Sisyphus enzyme ontology; active CL/V remains a placeholder because R-130964 is labile and target-binding."
+      "n_candidates_reviewed": 9,
+      "ceiling_rationale": "Parent clopidogrel hepatic CL is now literature-IVIVE per Subash 2025 rCES1 kinetics + Boberg 2017 abundance + Kazui 2010 fate-split partition. Active thiol metabolite (R-130964) CL/V remain ceiling_accepted: chemically labile and covalently P2Y12-bound, no clean conventional CL/V measurement exists in literature. observation_species=parent unchanged."
     }
   }
 }
