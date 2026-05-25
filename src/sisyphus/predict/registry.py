@@ -28,8 +28,15 @@ _DEFAULT_REGISTRY_PATH = (
 )
 
 
-_VALID_AFFINITY_SOURCES = frozenset({"literature", "class_extrapolated"})
-"""v2 rejects 'infrastructure_only' (tier 3); see spec §3.3."""
+_VALID_AFFINITY_SOURCES = frozenset({"literature", "literature_ivive", "class_extrapolated"})
+"""v2 rejects 'infrastructure_only' (tier 3); see spec §3.3.
+
+'literature_ivive' (added 2026-05-25 by B-03.x doctrine completion sprint):
+distinguishes affinities derived from in-vitro Vmax/Km × abundance IVIVE
+(literature-anchored numeric derivation) from raw 'literature' (a single
+literature value taken verbatim). Both are doctrinally equivalent (no Cmax
+tuning); the distinction is provenance documentation, not validation logic.
+"""
 
 _VALID_YIELD_SOURCES = frozenset({"literature", "class_extrapolated"})
 
