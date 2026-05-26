@@ -52,7 +52,7 @@ The recent public-clone reproducibility cycle (PR #43, B-03, B-03.x, 2026-05-09 
 ### In-scope (Phase 2)
 
 1. Two new substrate registries: `data/enzymes/{ugt2b7,ugt1a9}_substrates.json` following the NAT2/UGT1A1 schema exactly.
-2. Two new abundance declarations in `data/physiology/reference_man.yaml` for UGT2B7 and UGT1A9.
+2. Two new abundance declarations in `data/physiology/reference_man.yaml` for UGT2B7 and UGT1A9 — **liver node only**.
 3. Two new loader functions + extended aggregator in `src/sisyphus/predict/non_cyp_substrates.py`.
 4. One-line activation edit in `src/sisyphus/predict/ivive.py` (remove `ugt_enzymes = None`, derive from registry).
 5. Three new tests (schema, unit lookup, integration mechanism).
@@ -62,6 +62,7 @@ The recent public-clone reproducibility cycle (PR #43, B-03, B-03.x, 2026-05-09 
 
 ### Out-of-scope (deferred)
 
+- **Gut wall UGT abundance.** UGT2B7 in particular has substantial gut expression (relevant for morphine first-pass), but DE-36's measurement was liver-only. Gut UGT expansion is a separate cycle; activating it without re-anchoring the meta-learner risks under-prediction of orally-dosed UGT2B7 substrates.
 - **UGT2B7/UGT1A9 phenotype scaling.** UGT2B7\*2, UGT1A9\*3, etc. allele-aware predict(phenotypes={...}) propagation is Phase 2.x.
 - **UGT1A4 registry.** No seed drug in DE-36's 9-drug list is UGT1A4-dominant. Added in a future cycle when the first UGT1A4 substrate is needed.
 - **Multi-enzyme attribution schema (Approach 2 from brainstorming).** Each drug appears in exactly one registry under its dominant UGT isoform. Minor isoforms documented in `notes` field for future Phase 2.x phenotype work.
@@ -256,6 +257,22 @@ DE-36 measured Engine Δ = −0.029. Engine improvement is the affirmative signa
 Max(|Cmax_post − Cmax_pre| / Cmax_pre) over 107 holdout drugs < 50%.
 
 Rationale: a single drug shifting >50% indicates a wiring bug (e.g., abundance off by 10x, fm mis-assigned). Normal DE-36-class shifts are 5-30%.
+
+### Gate-D (required) — 99-of-107 bit-identical invariance
+
+Of 107 holdout drugs, **only the 8 seed drugs in the new UGT2B7/UGT1A9 registries** may have `|Cmax_post − Cmax_pre| > 1e-8` mg/L. The other 99 drugs MUST be bit-identical to the pre-B-02 cache.
+
+Rationale: post-2026-05-01 Hardening, `realize_means()` is per-node deterministic; `get_non_cyp_fractions` returns `{}` for non-substrate drugs unchanged; adding YAML abundance entries for UGT2B7/UGT1A9 is silent for drugs whose `enzyme_affinity` lacks those tags. Non-UGT-registry drugs therefore MUST be bit-identical. Failure indicates either (a) RNG-order coupling regression (Hardening invariant broken), (b) aggregator wiring bug routing UGT path to non-seed drugs, or (c) YAML edit accidentally modifying a non-UGT enzyme. All are critical wiring bugs.
+
+### Gate-E (required) — Atomic deployment
+
+YAML abundance entries, registry files, `non_cyp_substrates.py` extension, `ivive.py` activation edit, and tests MUST merge in a single PR. Partial deployment is unsafe:
+
+- Registry without YAML abundance → drugs gain `enzyme_affinity["UGT2B7"]` but `liver.enzymes` lacks the tag → engine `KeyError` or silent 0-clearance.
+- YAML abundance without registry → harmless but pointless (no drugs use the new path).
+- Activation code without registry → harmless (registry lookups return None).
+
+The CI on the merge commit must show all gates A/B/C/D passing.
 
 ### Gate-A failure response (anti-fudge procedure)
 
