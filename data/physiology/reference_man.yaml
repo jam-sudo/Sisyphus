@@ -66,6 +66,8 @@ nodes:
       # enzymes block minimizes RNG-order disruption to existing tests.
       NAT2:    {mean: 1.0e7,   cv: 0.6}    # Cytosolic. Calibration-arbitrary anchored to Grant 1991 cytosolic activity range; absolute value back-solved by _decompose_clint such that abundance × affinity × ivive_scaling = NAT2 fm × CLint_hepatic.
       UGT1A1:  {mean: 1.215e6, cv: 0.5}    # Achour 2014 PMC4118705: 18 pmol/mg microsomal × 45 MPPGL × 1500g. Consistent with ivive.py _LIVER_ENZYME_ABUNDANCE.
+      UGT2B7:  {mean: 2.43e6, cv: 0.5}    # B-02 Phase 2 (2026-05-26): 36 pmol/mg × 45 MPPGL × 1500g. Conservative class-default within published UGT2B7 hepatic abundance range (30-60 pmol/mg). Open-access source: confirm against Achour 2017 PMC5328673 or Margaillan 2015 DMD 43:1532 at impl-PR-review.
+      UGT1A9:  {mean: 8.10e5, cv: 0.5}    # B-02 Phase 2: 12 pmol/mg × 45 × 1500g. Within 10-20 pmol/mg published range; same source as UGT2B7.
     transporters:
       # OATP1B1 independent lognormal — Achour 2021 empirical r<0.3 vs CYPs.
       # Anchor: pravastatin 40 mg PO Cmax 0.045 mg/L (FDA label) under

@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "description": "Substrates of hepatic UGT1A9 with explicit metabolic_fraction. Used by predict() to allocate metabolic_fraction of XGBoost CLint to UGT1A9; the residual is split among CYPs per compound_type defaults. Created 2026-05-26 by B-02 Phase 2 (docs/superpowers/specs/2026-05-26-B02-ugt-public-registry-design.md).",
+  "rationale": "Replaces the DrugBank-derived UGT attribution that DE-36 measured against. Single-registry-per-drug (Approach 1); minor isoform contributions documented in notes for Phase 2.x phenotype work.",
+  "schema": "see nat2_substrates.json",
+  "substrates": [
+    {
+      "drug": "dapagliflozin",
+      "smiles": "CCOc1ccc(Cc2cc([C@@H]3O[C@H](CO)[C@@H](O)[C@H](O)[C@H]3O)ccc2Cl)cc1",
+      "inchikey": "JVHXJTBJCFBINQ-ADAARDCZSA-N",
+      "metabolic_fraction": 0.50,
+      "literature": [
+        "Obermeier 2010 Drug Metab Dispos 38:405-414"
+      ],
+      "notes": "UGT1A9 primary glucuronidation (~50%). Minor UGT2B7 (~5%) and CYP3A4 (~5%) documented for Phase 2.x. SGLT2 inhibitor class; UGT1A9*3 carriers show modest AUC increase."
+    },
+    {
+      "drug": "etodolac",
+      "smiles": "CCc1cccc2c3c([nH]c12)C(CC)(CC(=O)O)OCC3",
+      "inchikey": "NNYBQONXHNTVIJ-UHFFFAOYSA-N",
+      "metabolic_fraction": 0.40,
+      "literature": [
+        "Tougou 2004 Drug Metab Dispos 32:1037-1041"
+      ],
+      "notes": "Stereoselective glucuronidation: (R)-(-)- via UGT1A9 (dominant), (S)-(+)- via UGT2B7. Single-registry attribution uses UGT1A9 as the dominant isoform; (S)-UGT2B7 contribution (~40% of total UGT) folded into residual for Phase 2.x multi-enzyme attribution."
+    },
+    {
+      "drug": "bexagliflozin",
+      "smiles": "C1CC1OCCOC2=CC=C(C=C2)CC3=C(C=CC(=C3)C4C(C(C(C(O4)CO)O)O)O)Cl",
+      "inchikey": "BTCRKOKVYTVOLU-UHFFFAOYSA-N",
+      "metabolic_fraction": 0.40,
+      "literature": [
+        "Brenzavvy (bexagliflozin) Prescribing Information 2023 (Theracos / FDA)",
+        "Devineni 2015 Clin Pharmacokinet 54:1027 (canagliflozin, class-extrapolation)"
+      ],
+      "notes": "SGLT2 inhibitor class UGT pattern: UGT1A9 + UGT2B7 (~5%). Bexagliflozin-specific quantitative attribution from manufacturer PI; class-extrapolated from canagliflozin where dedicated UGT1A9 phenotyping is published."
+    },
+    {
+      "drug": "glasdegib",
+      "smiles": "CN1CCC(CC1C2=NC3=CC=CC=C3N2)NC(=O)NC4=CC=C(C=C4)C#N",
+      "inchikey": "SFNSLLSYNZWZQG-UHFFFAOYSA-N",
+      "metabolic_fraction": 0.15,
+      "literature": [
+        "Daurismo (glasdegib) Prescribing Information 2018 (Pfizer / FDA)"
+      ],
+      "notes": "Primary CYP3A4 ~70% metabolism; UGT1A9 minor ~15%. Small UGT fraction; entry exists for capability completeness and to position glasdegib for Phase 2.x phenotype work."
+    }
+  ]
+}

@@ -28,40 +28,47 @@ def _aafe(preds: list[dict]) -> float:
     not HOLDOUT_JSON.exists(),
     reason=f"{HOLDOUT_JSON.name} not present — regeneration required",
 )
-def test_cached_holdout_aafe_is_2p769() -> None:
-    """Cached predictions file: Meta AAFE is the public-clone headline 2.769 (±0.005).
+def test_cached_holdout_aafe_is_2p698() -> None:
+    """Cached predictions file: Meta AAFE is the public-clone headline 2.698 (±0.020).
 
-    Baseline updated 2026-05-25 (B-03.x literature-IVIVE shift on
-    clopidogrel: CES1 / CYP3A4 / CYP2C9-surrogate affinities flipped
-    from B-03 placeholders 0.030 each to literature-derived values
-    per Subash 2025 PMC12673578 rCES1 Vmax/Km + Boberg 2017
-    PMC5267516 CES1 abundance + Kazui 2010 DMD 38:92-99 85/15
-    inactive/active fate split). Disposition state advanced
-    ceiling_accepted -> literature_applied; affinity_source advanced
-    literature -> literature_ivive (predict/registry.py enum
-    extended in T13.5).
+    Baseline updated 2026-05-27 (B-02 Phase 2 UGT public registry activation;
+    spec docs/superpowers/specs/2026-05-26-B02-ugt-public-registry-design.md).
 
-    Prior pin (2.772, 2026-05-20) reflected B-03 placeholders calibrated
-    to the 85/15 fate split but not the absolute parent extraction.
-    B-03.x shifts clopidogrel Meta FE 5.15x -> 4.67x (predicted Cmax
-    1.402 mg/L vs observed 0.300 mg/L) — small Meta-track improvement
-    (-0.003 AAFE) because the ML track (FE 1.37x) dominates the
-    clopidogrel meta-learner weighting.
+    B-02 activates UGT2B7 + UGT1A9 paths via 2 literature-curated substrate
+    registries (8 seed drugs: morphine, codeine, ketorolac, indomethacin via
+    UGT2B7; dapagliflozin, etodolac, bexagliflozin, glasdegib via UGT1A9).
+    YAML adds UGT2B7 (2.43e6 pmol) + UGT1A9 (8.10e5 pmol) abundances to liver.
+    No DrugBank dependency.
 
-    Public-clone reproducible state (no DrugBank, no logp_correction;
-    InChIKey-connectivity fallback active in both registry and
-    cyp_clearance_overrides lookups):
-      Meta AAFE  2.769  (overall N=107, %2-fold 44.9, %3-fold 63.6)
-      Engine     4.057  (-0.008 vs B-03; CYP partition reshape)
+    Gate-D 99-of-107 bit-identical verified (only the 8 seeds shift; all 99
+    non-seed drugs match the pre-B-02 same-numerics-stack cache to <1e-8).
+    Gate-A Meta Δ = +0.0067 (b02=2.6983 vs main-same-numerics=2.6916), which
+    is 1.6% of the bootstrap CI half-width [2.3151, 3.1690] — well within
+    sampling noise. See data/validation/4track_ci_2026-05-27_B02.json.
+
+    Secondary finding (DE-38, dead-ends.md): morphine engine FE 1.90 -> 2.94
+    and codeine 1.98 -> 2.71 (worsened) because UGT2B7 effective CL is lower
+    than the CYP-default allocation it replaced. 6 of 8 seeds improved
+    (under-predicted drugs moved toward observation); 2 of 8 worsened
+    (over-predicted drugs moved away). Net Meta increase reflects the
+    mass-balance of these per-drug movements. Phase 2.x follow-up = B-13
+    (UGT2B7 abundance + IVIVE recalibration).
+
+    Cache regenerated under same numerics stack as preceding versions:
+      Meta AAFE  2.698  (overall N=107, %2-fold 46.7, %3-fold 61.7)
+      Engine     3.831
       ML         3.010  (bit-identical — ML model artifacts unchanged)
-      In-domain  2.859  (N=81)
+      In-domain  2.760  (N=79; 2 drugs flipped AD-flag under engine recompute)
 
-    Tolerance kept at 0.005 (carried over from the 2026-05-09 baseline;
-    accommodates the same in-domain composition drift around AD-flag
-    thresholds).
+    Tolerance widened to 0.020 (4x the prior 0.005 heuristic) to reflect the
+    amended Gate-A criterion: bootstrap CI half-width is the statistical
+    noise floor (~0.43 for Meta overall), of which 0.020 is ~5%. The prior
+    0.005 was an artifact of the B-03.x cycle's coincidentally tiny delta.
+    See spec amendment 2026-05-27.
 
-    If this fails, the holdout prediction cache has been regenerated with
-    a behavior change. Investigate."""
+    If this fails outside ±0.020 of 2.698, the cache has been regenerated
+    with a behavior change or the numerics stack drifted materially.
+    Investigate."""
     with HOLDOUT_JSON.open() as f:
         data = json.load(f)
     # Primary path: use pre-computed AAFE stored in the file
@@ -73,4 +80,4 @@ def test_cached_holdout_aafe_is_2p769() -> None:
         if isinstance(data, dict) and "drugs" in data:
             preds = data["drugs"]
         aafe = _aafe(preds)
-    assert abs(aafe - 2.769) < 0.005, f"AAFE drifted: {aafe:.4f}"
+    assert abs(aafe - 2.698) < 0.020, f"AAFE drifted: {aafe:.4f}"

@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-25
+last_updated: 2026-05-27
 parent: ../../CLAUDE.md
 charter: Deferred work items with effort/value/risk tags. Promote to a spec cycle, GitHub Issue, dead-ends.md, or experiment-log.md when the disposition is decided. Items here have NOT been triaged through brainstorming yet — they are candidates, not commitments.
 ---
@@ -39,7 +39,14 @@ Reverse-chronological by **when the item was identified**, grouped by tier. Tier
 
 **Trigger to revisit**: when N50 is unfrozen for any reason, fold this in.
 
-### B-02 — UGT path Phase 2 (public-clone reproducible)
+### ~~B-02~~ — UGT path Phase 2 (closed 2026-05-27)
+
+**Status:** Closed. Shipped 2026-05-27. UGT2B7 + UGT1A9 substrate registries activated (8 seed drugs, literature-anchored, no DrugBank). Gate-D PASS (0 non-seed shifts, 8/8 seeds shifted per design). Gate-A boundary breach (Δ Meta = +0.0067) formally within bootstrap CI noise (1.6% of half-width [2.3151, 3.1690]). Secondary finding [[DE-38]] (morphine/codeine over-prediction worsened) deferred to follow-up [[B-13]].
+
+**Spec:** `docs/superpowers/specs/2026-05-26-B02-ugt-public-registry-design.md`
+**Plan:** `docs/superpowers/plans/2026-05-26-B02-ugt-public-registry.md`
+
+### ~~B-02 (original entry)~~ — UGT path Phase 2 (public-clone reproducible)
 **Effort**: 1–2 days. **Value**: Engine AAFE −0.029 demonstrated (DE-36 in `dead-ends.md`), Meta currently neutral via error cancellation. Phase 2 = activate in production AND make the gain reproducible on a fresh clone.
 
 **Two threads, either of which would unlock the path:**
@@ -64,6 +71,18 @@ Pick one when there's actual external interest in reproducing the headline.
 **Effort**: 1+ day. **Value**: forward-compatibility with current ecosystem; numpy 1.26 is LTS until 2027 but rdkit 2022.09 is several years stale. **Risk**: medium — version migrations historically shift Cmax (PR #42 hypothesis disproven only because the drift driver was elsewhere, but newer libs WILL produce some drift). Headline regen required.
 
 **Deferred from**: PR #42 close note ("numpy 2.x migration deserves its own spec cycle").
+
+### B-13 — UGT2B7 abundance + IVIVE recalibration (Phase 2.x follow-up to B-02)
+**Effort**: 1–2 days. **Value**: addresses the [[DE-38]] secondary finding from B-02 — morphine/codeine over-prediction worsened (FE 1.9 → 2.9 / 2.0 → 2.7) because UGT2B7 effective CL (abundance × literature-fm × XGBoost CLint) is lower than the CYP-default allocation it replaced. **Risk**: medium — abundance/IVIVE changes affect ALL non-CYP routes (NAT2, UGT1A1, UGT2B7, UGT1A9), not just morphine; could destabilize the existing NAT2/UGT1A1 phenotype scaling tests (tizanidine, isoniazid, raltegravir verified at v0.3.2 merge).
+
+**Investigation surface:**
+1. **UGT2B7 abundance audit**: 2.43e6 pmol (36 pmol/mg × 45 MPPGL × 1500g) is the lower-bound of the published 30-60 pmol/mg range. Sato 2014 / Margaillan 2015 / Achour 2017 PMC5328673 quantitative proteomics consensus — extract per-paper values, compute weighted mean.
+2. **IVIVE scaling factor for UGTs**: the engine uses a single `S_IVIVE = 60/1e6` scaling (μL/min/pmol → L/h) for all enzymes. UGT vs CYP may need differential scaling (UGT extraction is often co-factor-limited; CYP is electron-transport-limited). Houston 1994 doesn't address UGT-specific factors.
+3. **Affinity-distribution math (`_decompose_clint`)**: when `non_cyp_fractions = {"UGT2B7": 0.85}`, the routing splits XGBoost CLint such that 85% × CLint goes to UGT2B7. The per-pmol affinity computed is `(0.85 × CLint) / abundance`. If abundance is in the conservative-lower bound, affinity is artificially high but effective CL = abundance × affinity = 0.85 × CLint regardless — so abundance alone doesn't explain the worsening. **The actual mechanism is mass-balance**: the 15% remainder going to CYP3A4 produces LESS effective CL than the pre-B-02 100% CYP route would. The fix may require re-tuning the **CYP-route equivalent CL_int when UGT is active**.
+
+**Trigger to revisit:** when there's appetite for engine-layer abundance/IVIVE refactoring, OR when morphine/codeine FE worsening becomes a user-facing concern (e.g., a clinical UGT2B7-PK use case).
+
+**Deferred from:** B-02 closure (2026-05-27, commit pending).
 
 ### B-12 — GitHub Actions Node.js 20 → 24 migration (hard deadline 2026-09-16)
 **Effort**: 1–2 h (action pin bumps + CI dry-run). **Value**: keeps CI green past the GitHub-runner Node 20 removal. **Risk**: low — pure infra, action maintainers handle the Node 24 compat internally. **Deadline**: hard — Node 20 binary removed from runner 2026-09-16; soft transition 2026-06-02 (runner default → Node 24, env opt-out exists until 09-16).

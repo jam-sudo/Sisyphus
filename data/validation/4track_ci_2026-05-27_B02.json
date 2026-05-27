@@ -1,0 +1,62 @@
+{
+  "computed_at": "2026-05-27-B02",
+  "source_cache": "data/training/4track_holdout_predictions.json",
+  "context": "public-clone deterministic state (no DrugBank, no logp_correction); audit-driven honesty regen.",
+  "method": "bootstrap on abs(log10(fold))",
+  "n_bootstrap": 10000,
+  "seed": 20260422,
+  "overall": {
+    "n": 107,
+    "engine": {
+      "aafe": 3.8314,
+      "ci_95_low": 3.1802,
+      "ci_95_high": 4.6451,
+      "n": 107,
+      "pct_2fold": 30.8,
+      "pct_3fold": 43.9
+    },
+    "ml": {
+      "aafe": 3.0103,
+      "ci_95_low": 2.5574,
+      "ci_95_high": 3.5598,
+      "n": 107,
+      "pct_2fold": 43.0,
+      "pct_3fold": 57.9
+    },
+    "meta": {
+      "aafe": 2.6983,
+      "ci_95_low": 2.3151,
+      "ci_95_high": 3.169,
+      "n": 107,
+      "pct_2fold": 46.7,
+      "pct_3fold": 61.7
+    }
+  },
+  "in_domain": {
+    "n": 79,
+    "engine": {
+      "aafe": 3.5211,
+      "ci_95_low": 2.9052,
+      "ci_95_high": 4.2822,
+      "n": 79,
+      "pct_2fold": 31.6,
+      "pct_3fold": 46.8
+    },
+    "ml": {
+      "aafe": 2.969,
+      "ci_95_low": 2.4476,
+      "ci_95_high": 3.6378,
+      "n": 79,
+      "pct_2fold": 45.6,
+      "pct_3fold": 59.5
+    },
+    "meta": {
+      "aafe": 2.7603,
+      "ci_95_low": 2.3008,
+      "ci_95_high": 3.3364,
+      "n": 79,
+      "pct_2fold": 45.6,
+      "pct_3fold": 59.5
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "description": "Substrates of hepatic UGT2B7 with explicit metabolic_fraction. Used by predict() to allocate metabolic_fraction of XGBoost CLint to UGT2B7; the residual is split among CYPs per compound_type defaults. Created 2026-05-26 by B-02 Phase 2 (docs/superpowers/specs/2026-05-26-B02-ugt-public-registry-design.md).",
+  "rationale": "Replaces the DrugBank-derived UGT attribution that DE-36 measured against. Single-registry-per-drug (Approach 1); minor isoform contributions documented in notes for Phase 2.x phenotype work.",
+  "schema": "see nat2_substrates.json",
+  "substrates": [
+    {
+      "drug": "morphine",
+      "smiles": "CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O",
+      "inchikey": "BQJCRHHNABKAKU-UHFFFAOYSA-N",
+      "metabolic_fraction": 0.85,
+      "literature": [
+        "Coffman 1997 Drug Metab Dispos 25:1-4",
+        "Court 2003 J Pharmacol Exp Ther 305:998-1005"
+      ],
+      "notes": "Primary M3G + M6G glucuronidation via UGT2B7. Minor UGT1A1 (~5%, contributes to M3G/M6G ratio variation) documented for Phase 2.x phenotype scaling. UGT2B7*2 H268Y reduces morphine clearance ~30% in PMs."
+    },
+    {
+      "drug": "codeine",
+      "smiles": "COc1ccc2c3c1O[C@H]1[C@@H](O)C=C[C@H]4[C@@H](C2)N(C)CC[C@@]341",
+      "inchikey": "OROGSEYTTFOCAN-DNJOTXNNSA-N",
+      "metabolic_fraction": 0.70,
+      "literature": [
+        "Court 2003 J Pharmacol Exp Ther 305:998-1005"
+      ],
+      "notes": "C-6-glucuronide via UGT2B7. ~10% O-demethylation to morphine via CYP2D6 (Phase 2.x). UGT2B7*2 polymorphism: codeine glucuronidation slightly reduced in PMs but clinically modest."
+    },
+    {
+      "drug": "ketorolac",
+      "smiles": "O=C(c1ccccc1)c1ccc2n1CCC2C(=O)O",
+      "inchikey": "OZWKMVRBQXNZKK-UHFFFAOYSA-N",
+      "metabolic_fraction": 0.75,
+      "literature": [
+        "Jett 1999 Pharmacology 58:101-110"
+      ],
+      "notes": "Acyl-glucuronidation primary (~80%). Minor p-hydroxylation via CYP. Acidic substrate; B-11 Phase B HIGH_ACID_LOW_FUP AD flag may apply."
+    },
+    {
+      "drug": "indomethacin",
+      "smiles": "COc1ccc2c(c1)c(CC(=O)O)c(C)n2C(=O)c1ccc(Cl)cc1",
+      "inchikey": "CGIGDMFJXJATDK-UHFFFAOYSA-N",
+      "metabolic_fraction": 0.15,
+      "literature": [
+        "Mamiya 2000 Drug Metab Dispos 28:1474-1477",
+        "Vree 1993 Br J Clin Pharmacol 35:467-472"
+      ],
+      "notes": "Mixed pathway: CYP2C9 O-demethylation ~50%, N-deacylation ~10%, UGT2B7 acyl-glucuronidation ~15%, parent excretion ~10%. Small UGT fraction; entry exists for capability completeness."
+    }
+  ]
+}
