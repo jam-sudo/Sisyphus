@@ -56,7 +56,8 @@ Top-level [CLAUDE.md](../../CLAUDE.md) is for orientation. This file is the file
 - `validation/surrogate_production_accuracy.json` — Track D1 surrogate R² / relative error on 13 drugs.
 - `validation/oatp_phase2a_stiff_diagnosis.json`, `oatp_abundance_sweep.json` — OATP Phase 2A flow-limited-plateau evidence.
 - `validation/enkf_vs_ibis_postmerge.json` — 2026-04-18 smoke test.
-- `validation/4track_ci_2026-05-12_v0.4.json` — public-clone 4-track bootstrap CIs (refreshed in place for B-03).
+- `validation/4track_ci_2026-05-12_v0.4.json` — public-clone 4-track bootstrap CIs (B-03 era).
+- `validation/4track_ci_2026-05-27_B02.json` — post-B-02 4-track bootstrap CIs (UGT public registry activated; Meta CI [2.3151, 3.1690], half-width 0.43).
 
 **Reference:**
 - `reference/clinical_pk.json`, `reference/holdout.json`, `reference/adme_measured.csv` — clinical PK reference set, holdout split, measured ADME.
@@ -69,6 +70,8 @@ Top-level [CLAUDE.md](../../CLAUDE.md) is for orientation. This file is the file
 - `sbi/populations.json` — Track C1 population registry.
 - `sbi/method_routing.json` — per-drug TDM method routing (production).
 - `sbi/prodrug_activation_registry.json` — active-metabolite/prodrug routing registry (7 entries after B-03; per-enzyme yields supported for multi-fate prodrugs).
+- `enzymes/nat2_substrates.json`, `enzymes/ugt1a1_substrates.json` — non-CYP substrate registries (v0.3.2 PR #32: NAT2 phenotype scaling for isoniazid/hydralazine/procainamide; UGT1A1 for raltegravir/atazanavir/dolutegravir).
+- `enzymes/ugt2b7_substrates.json`, `enzymes/ugt1a9_substrates.json` — B-02 Phase 2 UGT substrate registries (4 drugs each, literature-anchored, no DrugBank dependency; spec `docs/superpowers/specs/2026-05-26-B02-ugt-public-registry-design.md`).
 
 ## Physiology (`src/sisyphus/physiology/`)
 

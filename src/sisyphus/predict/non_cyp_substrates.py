@@ -22,6 +22,8 @@ logger = logging.getLogger(__name__)
 _REPO_ROOT = pathlib.Path(__file__).resolve().parents[3]
 _NAT2_PATH = _REPO_ROOT / "data" / "enzymes" / "nat2_substrates.json"
 _UGT1A1_PATH = _REPO_ROOT / "data" / "enzymes" / "ugt1a1_substrates.json"
+_UGT2B7_PATH = _REPO_ROOT / "data" / "enzymes" / "ugt2b7_substrates.json"
+_UGT1A9_PATH = _REPO_ROOT / "data" / "enzymes" / "ugt1a9_substrates.json"
 
 
 def _smiles_to_inchikey(smiles: str) -> str | None:
@@ -56,6 +58,24 @@ def _load_ugt1a1_index() -> dict[str, dict]:
     return {entry["inchikey"]: entry for entry in data.get("substrates", [])}
 
 
+@lru_cache(maxsize=1)
+def _load_ugt2b7_index() -> dict[str, dict]:
+    """Return {inchikey: substrate_entry} for ugt2b7_substrates.json."""
+    if not _UGT2B7_PATH.exists():
+        return {}
+    data = json.loads(_UGT2B7_PATH.read_text())
+    return {entry["inchikey"]: entry for entry in data.get("substrates", [])}
+
+
+@lru_cache(maxsize=1)
+def _load_ugt1a9_index() -> dict[str, dict]:
+    """Return {inchikey: substrate_entry} for ugt1a9_substrates.json."""
+    if not _UGT1A9_PATH.exists():
+        return {}
+    data = json.loads(_UGT1A9_PATH.read_text())
+    return {entry["inchikey"]: entry for entry in data.get("substrates", [])}
+
+
 def lookup_nat2_substrate(smiles: str) -> dict | None:
     """Return the registry entry if the SMILES matches a NAT2 substrate.
 
@@ -76,21 +96,44 @@ def lookup_ugt1a1_substrate(smiles: str) -> dict | None:
     return _load_ugt1a1_index().get(ikey)
 
 
+def lookup_ugt2b7_substrate(smiles: str) -> dict | None:
+    """Return the registry entry if the SMILES matches a UGT2B7 substrate."""
+    ikey = _smiles_to_inchikey(smiles)
+    if ikey is None:
+        return None
+    return _load_ugt2b7_index().get(ikey)
+
+
+def lookup_ugt1a9_substrate(smiles: str) -> dict | None:
+    """Return the registry entry if the SMILES matches a UGT1A9 substrate."""
+    ikey = _smiles_to_inchikey(smiles)
+    if ikey is None:
+        return None
+    return _load_ugt1a9_index().get(ikey)
+
+
 def get_non_cyp_fractions(smiles: str) -> dict[str, float]:
-    """Aggregate NAT2 + UGT1A1 metabolic fractions for the given SMILES.
+    """Aggregate NAT2 + UGT1A1 + UGT2B7 + UGT1A9 metabolic fractions for the given SMILES.
 
     Returns {gene: metabolic_fraction} ready to pass into _get_fm_fractions.
     Empty dict if no substrate match. If multi-gene total exceeds 1.0
-    (round-off or curation overlap), values are re-normalized to sum=1.0
-    and a logger.info message is emitted.
+    (round-off or curation overlap; the cross-registry duplicate test
+    enforces no overlap, but re-normalization is a safety net), values
+    are re-normalized to sum=1.0 and a logger.info message is emitted.
+
+    B-02 Phase 2 (2026-05-26): UGT2B7 + UGT1A9 added; spec
+    docs/superpowers/specs/2026-05-26-B02-ugt-public-registry-design.md.
     """
     out: dict[str, float] = {}
-    nat2 = lookup_nat2_substrate(smiles)
-    if nat2 is not None:
-        out["NAT2"] = float(nat2["metabolic_fraction"])
-    ugt = lookup_ugt1a1_substrate(smiles)
-    if ugt is not None:
-        out["UGT1A1"] = float(ugt["metabolic_fraction"])
+    for gene, lookup in [
+        ("NAT2",   lookup_nat2_substrate),
+        ("UGT1A1", lookup_ugt1a1_substrate),
+        ("UGT2B7", lookup_ugt2b7_substrate),
+        ("UGT1A9", lookup_ugt1a9_substrate),
+    ]:
+        entry = lookup(smiles)
+        if entry is not None:
+            out[gene] = float(entry["metabolic_fraction"])
     total = sum(out.values())
     if total > 1.0:
         logger.info(

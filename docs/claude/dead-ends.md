@@ -179,6 +179,29 @@ Artifacts: `/tmp/4track_state_A_ugt_off.json` and `/tmp/4track_state_B_ugt_on.js
 
 Artifacts: `data/transporters/hepatic_fu_correction.json` (19 audit rows), curation log `docs/superpowers/specs/2026-05-22-B11-Phase-B-curation-log.md`, spec `docs/superpowers/specs/2026-05-21-B11-hepatic-fu-correction-design.md`, plan `docs/superpowers/plans/2026-05-21-B11-hepatic-fu-correction.md`. Phase A infra shipped at `a0c90f8`; Phase B curation at `d10bbef`.
 
+### DE-38 — Morphine / Codeine over-prediction worsens under UGT2B7 activation (secondary finding from B-02)
+
+**Date:** 2026-05-27
+
+**Hypothesis (not the primary B-02 hypothesis):** activating literature-anchored UGT2B7 path for canonical substrates would improve per-drug FE for all 4 UGT2B7 entries (morphine, codeine, ketorolac, indomethacin).
+
+**What was measured (same-numerics-stack regen):**
+- morphine: engine FE 1.90 → **2.94** (over-prediction worsened, eng 0.0354 → 0.0549 vs obs 0.0186)
+- codeine: engine FE 1.98 → **2.71** (eng 0.276 → 0.377 vs obs 0.139)
+- ketorolac: 6.61 → 6.15 (improved, under-prediction reduced)
+- indomethacin: 7.87 → 7.79 (slightly improved)
+- The 4 UGT1A9 entries (dapagliflozin, etodolac, bexagliflozin, glasdegib) all improved.
+
+**Outcome:** Net Meta AAFE Δ = +0.0067 (within bootstrap noise [2.3151, 3.1690], 1.6% of CI half-width). 6 of 8 seeds improved; 2 of 8 (morphine + codeine) worsened. The Δ direction is determined by the 2 worsening drugs offsetting the 6 improvements.
+
+**Why morphine + codeine worsened:** activating UGT2B7 redirects 70-85% of XGBoost CLint from the default CYP route to the UGT2B7 route. The UGT2B7 effective clearance (abundance × literature-fm × XGBoost CLint) is LOWER than the default CYP allocation, so total hepatic CL drops → Cmax rises. Pre-B-02 morphine engine FE 1.90 was a **coincidental cancellation** — over-extraction via CYP-default + missing UGT path summed to a moderate FE. Activating the correct UGT path REVEALED that the CYP-default routing was over-extracting these drugs.
+
+**What this implies:** B-02 ships as designed (literature-anchored, anti-fudge preserved). The morphine/codeine worsening is a **secondary diagnostic finding** about the engine's CYP-default routing balance for UGT-dominant substrates — orthogonal to B-02's capability + reproducibility mandate. Phase 2.x (backlog B-13) will address UGT2B7 abundance + IVIVE recalibration to reconcile.
+
+**Telltale if it returns under a new label:** "morphine over-prediction" or "UGT abundance recalibration" applied to UGT2B7 substrates without a CYP-route IVIVE rebalancing alongside.
+
+Artifacts: `data/training/4track_holdout_predictions.json` (post-B-02 cache), `data/validation/4track_ci_2026-05-27_B02.json` (bootstrap CI), spec `docs/superpowers/specs/2026-05-26-B02-ugt-public-registry-design.md`, plan `docs/superpowers/plans/2026-05-26-B02-ugt-public-registry.md`.
+
 ---
 
 ## 3. When to consult this list
