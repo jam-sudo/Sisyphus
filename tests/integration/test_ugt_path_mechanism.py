@@ -15,7 +15,6 @@ import pytest
 
 from sisyphus.pipeline.predict import predict
 
-
 _UGT2B7_DRUGS = {
     "morphine":     ("CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O",        10.0),
     "codeine":      ("COc1ccc2c3c1O[C@H]1[C@@H](O)C=C[C@H]4[C@@H](C2)N(C)CC[C@@]341", 30.0),
