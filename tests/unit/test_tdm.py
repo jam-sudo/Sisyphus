@@ -209,21 +209,43 @@ class TestCIFloor:
         assert (hi0 - lo0) <= (hi1 - lo1) + 1e-9
 
     def test_floor_no_op_when_already_wide(self, physiology):
-        """Wide CIs should be unchanged by a small floor."""
-        graph, compiled = physiology
+        """Wide CIs should be unchanged by a small floor.
+
+        2026-05-27: drug fixture swapped morphine → ciprofloxacin (matches the
+        other tests in this class). Reason: post-B-02 (UGT2B7 substrate
+        registry), morphine TDM at n_prior=60 with obs=0.02 mg/L produces
+        IS degeneracy (ESS=1.0) because the predicted Cmax shifted 0.035 →
+        0.055 mg/L (engine FE 1.90 → 2.94, approaching the >3x degeneracy
+        threshold documented in CLAUDE.md). Degenerate CI is not "wide", so
+        the test's precondition is no longer met by morphine. Ciprofloxacin
+        is not in any non-CYP registry (Gate-D bit-identical pre/post-B-02),
+        so its TDM is unaffected by B-02 and reliably produces a wide CI
+        when obs ≈ predicted. The test still validates `apply_ci_floor`
+        no-op behavior — only the fixture drug changes."""
         from sisyphus.predict.adme import predict_adme
         from sisyphus.predict.chemistry import compute_profile
         from sisyphus.predict.ivive import build_drug_on_graph
+        from sisyphus.regimen.solver import solve_regimen
 
-        smiles = "CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O"
+        graph, compiled = physiology
+        smiles = "O=C(O)c1cn(C2CC2)c2cc(N3CCNCC3)c(F)cc2c1=O"  # ciprofloxacin
         profile = compute_profile(smiles)
         adme = predict_adme(profile)
-        drug = build_drug_on_graph(profile, adme, 30.0, "oral")
-        regimen = DosingRegimen.single_oral(30.0)
+        drug = build_drug_on_graph(profile, adme, 500.0, "oral")
+        regimen = DosingRegimen.single_oral(500.0)
+
+        # Use the simulated Cmax as the observation (FE=1 → wide posterior).
+        rng = np.random.default_rng(42)
+        sim = solve_regimen(
+            compiled, ResolvedParams(graph.sample(rng), drug.sample(rng)),
+            regimen, t_total_h=24.0,
+        )
+        t_obs = 4.0
+        c_pred = float(np.interp(t_obs, sim.time_h, sim.concentrations["venous_blood"]))
 
         r0 = bayesian_update(
             compiled, graph, drug, regimen,
-            observations=[Observation(time_h=1.0, concentration=0.02, cv=0.10)],
+            observations=[Observation(time_h=t_obs, concentration=c_pred, cv=0.10)],
             n_prior=60, seed=42,
         )
         r1 = apply_ci_floor(r0, 0.001)  # absurdly small floor
