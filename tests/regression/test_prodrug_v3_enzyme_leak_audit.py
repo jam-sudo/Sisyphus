@@ -68,8 +68,17 @@ CHANGED_ENZYME_ABUNDANCES: frozenset[str] = frozenset()
 # observation and CES1/CYP per-enzyme yields; cyp_clearance_overrides
 # metabolic_fraction=0 zeroes its default XGBoost CL. Intentional drug-
 # specific change relative to the pre-v3 baseline.
+# 2026-05-27 (B-02 Phase 2): UGT2B7 + UGT1A9 substrate registries activated;
+# 8 seed drugs gain registry-driven UGT enzyme attribution in DrugOnGraph,
+# shifting their Cmax (Gate-D-verified: only these 8 shifted on the
+# same-numerics-stack comparison). Adding to DRUG_SPECIFIC_CHANGES so the
+# leak audit recognizes the change as intentional, not a v3 regression.
 DRUG_SPECIFIC_CHANGES: frozenset[str] = frozenset({
     "remdesivir", "fostamatinib", "clopidogrel",
+    # B-02 UGT2B7 seed drugs:
+    "morphine", "codeine", "ketorolac", "indomethacin",
+    # B-02 UGT1A9 seed drugs:
+    "dapagliflozin", "etodolac", "bexagliflozin", "glasdegib",
 })
 
 
