@@ -47,7 +47,7 @@ B-13 IS that separate cycle.
 
 The original B-13 backlog entry framed the work as "UGT2B7 abundance + IVIVE recalibration" with 3 investigation surfaces (gut, liver, IVIVE). The ultrathink reduced scope to **gut UGT only**:
 
-- **Liver UGT2B7 abundance audit** (current 2.43e6 = lower-bound 36 pmol/mg, mid-point would be 3.04e6 = 45): the `_decompose_clint` math derives affinity as `(CLint × fm) / (abundance × IVIVE)`. Increasing liver abundance INCREASES the denominator, decreasing per-pmol affinity, but the product `abundance × affinity = CLint × fm` is UNCHANGED. So liver abundance audit alone has no effective-CL impact for the activated UGT path. Removed from scope.
+- **Liver UGT2B7 abundance audit** (current 2.43e6 = lower-bound 36 pmol/mg, mid-point would be 3.04e6 = 45): the `_decompose_clint` math derives affinity as `(CLint × fm) / (abundance × IVIVE)`. Increasing liver abundance INCREASES the denominator, decreasing per-pmol affinity. At the LIVER, the product `abundance × affinity = CLint × fm` is unchanged — null effect. BUT at the GUT (where the same per-pmol affinity is reused with a different abundance), `gut_CL_via_UGT2B7 = gut_UGT2B7 × affinity` → liver abundance ↑ causes gut_CL ↓. Liver abundance audit therefore ACTIVELY COUNTERACTS B-13's gut extraction goal. Removed from scope.
 - **IVIVE differential** (UGT-specific vs CYP-specific scaling, supported by Cubitt 2009 / Riley 2005 systematic UGT under-prediction literature): requires extending the `ivive_scaling` field from organ-level to enzyme-level in the engine. This is an architectural change. Deferred to a hypothetical B-13.x with its own spec.
 
 What remains: **gut UGT abundance addition**. Effective CL impact is direct (gut abundance × affinity is a new clearance contribution). This is the smallest scope that addresses the mechanistic gap.
@@ -64,7 +64,7 @@ What remains: **gut UGT abundance addition**. Effective CL impact is direct (gut
 
 ### Out-of-scope
 
-- **Liver UGT2B7/UGT1A9 abundance audit** (analytically null for effective CL given the fm-normalized affinity derivation; documented in §Background above).
+- **Liver UGT2B7/UGT1A9 abundance audit** (counteracts B-13's gut extraction goal — see §Background "Why this is NOT an abundance/IVIVE recalibration").
 - **IVIVE differential / enzyme-level scaling** (requires engine architectural change; deferred to B-13.x with its own spec).
 - **Phenotype scaling for UGT2B7/UGT1A9** (B-02 Phase 2.y backlog item).
 - **Gut UGT1A1 / UGT1A4 / UGT1A6 / UGT1A8 / UGT2B15 / UGT2B17** addition (no holdout drug currently has affinity for these; adding them would be inert until a registry pairs them).
@@ -80,11 +80,13 @@ UGT2B7: {mean: 9.0e4, cv: 0.6}
 
 Derivation: 15 pmol/mg × 6000 mg mucosal protein = 9.0e4 pmol total in gut wall.
 
-**Anchor:** Bhatt 2019 DMD 47:498 ("Comparative Quantitative Proteomic Analysis of Hepatic and Extrahepatic UGT and CYP Enzymes in Human Tissues") — Table 2 reports intestinal microsomal UGT2B7 5-30 pmol/mg with median ~15 across donors. Open-access via PMC.
+**Primary anchor:** Couto N / Al-Majdoub ZM et al. 2020 PMC8048492 ("Quantitative Proteomics of Drug-Metabolizing Enzymes in the Human Intestine", AAPS J) — already cited in `data/physiology/reference_man.yaml` for CES2 and ALPI gut entries. Internally consistent normalization (same group, same enterocyte microsomal preparation). Verify intestinal UGT2B7 abundance at impl time via the paper's quantitative proteomics tables.
 
-Mucosal protein 6000 mg is the established value used by existing gut wall entries (CES2 500 pmol/mg × 6000 mg = 3.0e6, ALPI 3.89 pmol/mg × 6000 mg = 2.3e4 — both per Al-Majdoub 2020 PMC8048492).
+**Fallback:** Bhatt 2019 DMD 47:498 / Drozdzik 2018 / Akabane 2012 DMD 40:1310 — alternate open-access PMC sources reporting intestinal UGT2B7 5-30 pmol/mg with median ~15 across donors.
 
-cv = 0.6 (matches the existing CES2 cv = 0.6 in the same block, slightly higher than liver UGT cv=0.5 reflecting greater inter-donor variability in intestinal proteomics).
+Mucosal protein 6000 mg is the established value used by existing gut wall entries (CES2 500 pmol/mg × 6000 mg = 3.0e6, ALPI 3.89 pmol/mg × 6000 mg = 2.3e4).
+
+cv = 0.6 matches the existing CES2 cv = 0.6 in the same block (intestinal proteomics has greater inter-donor variability than hepatic; deterministic `realize_means()` makes cv documentation-only for the cache-regen path, but it matters for MC propagation).
 
 ### gut_wall UGT1A9 abundance
 
@@ -94,9 +96,11 @@ UGT1A9: {mean: 1.2e4, cv: 0.6}
 
 Derivation: 2 pmol/mg × 6000 mg = 1.2e4 pmol.
 
-**Anchor:** Bhatt 2019 DMD 47:498 reports intestinal UGT1A9 as **hepatic-dominant**, intestinal mucosa 0-5 pmol/mg (some donors below detection). Mid-point 2 pmol/mg used. The value is small but non-zero is mechanistically defensible: dapagliflozin and other gliflozins do show modest gut UGT1A9 metabolism in pharmacokinetic studies.
+**Primary anchor:** Couto N / Al-Majdoub 2020 PMC8048492 (same paper as UGT2B7 above). UGT1A9 is hepatic-dominant; intestinal mucosa 0-5 pmol/mg with some donors below LOD. Mid-point of DETECTED donors used (2 pmol/mg), not population mean including zeros (which would bias low).
 
-If Bhatt 2019 detail is not retrievable at implementation, fallback: 1.5 pmol/mg from Akabane 2012 DMD 40:1310 (intestinal UGT1A9 quantitative proteomics).
+**Fallback:** Bhatt 2019 DMD 47:498 / Akabane 2012 DMD 40:1310 — alternate open-access PMC sources.
+
+Non-zero gut UGT1A9 is mechanistically defensible: dapagliflozin and other SGLT2-inhibitor gliflozins do show modest gut UGT1A9 metabolism in pharmacokinetic studies.
 
 ### No fallback values below the literature lower bound
 
@@ -117,9 +121,9 @@ Reviewer at implementation-PR time checks the cited paper. No FE-driven adjustme
 
 Compare post-B-13 cache vs B-02 baseline cache (`data/training/4track_holdout_predictions.json` at commit `91a359e`, generated on miniconda Python 3.13.13 + numpy 2.2.6 stack on macOS arm64).
 
-- The 8 UGT seed drugs MAY shift.
-- The 99 non-seed drugs MUST be bit-identical (`|Cmax_post − Cmax_pre| < 1e-8 mg/L`).
-- Any unexpected non-seed shift indicates a wiring bug (e.g., RNG-order regression, enzyme-block parsing change, accidental edit). Stop and investigate.
+- The 8 UGT seed drugs MAY shift on engine and meta tracks.
+- The 99 non-seed drugs MUST be bit-identical on **BOTH** the engine track AND the meta track (`|Cmax_post − Cmax_pre| < 1e-8 mg/L` per track). The ML track is trivially bit-identical for all 107 drugs (no XGBoost model artifact change in B-13).
+- Any unexpected non-seed shift on engine OR meta indicates a wiring bug (e.g., RNG-order regression, enzyme-block parsing change, accidental edit). Stop and investigate.
 
 Compare on the SAME numerics stack used for B-02 cache generation. Cross-stack comparison invalidates the gate (per the B-02 numerics-stack incident, §experiment-log 2026-05-27).
 
