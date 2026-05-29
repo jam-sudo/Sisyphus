@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-27
+last_updated: 2026-05-29
 parent: ../../CLAUDE.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -7,6 +7,23 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 # Experiment Log
 
 Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md).
+
+---
+
+## 2026-05-29 — B-13 gut UGT expansion (CORRECTED): citation-confabulation audit + metric-neutral completeness ship
+
+**Spec:** `docs/superpowers/specs/2026-05-27-B13-gut-ugt-expansion-design.md` (+ 2026-05-29 amendment)
+**Plan:** `docs/superpowers/plans/2026-05-27-B13-gut-ugt-expansion.md`
+
+**What shipped:** gut-wall `UGT2B7 = 3.6e3 pmol` (0.60 pmol/mg total-mucosal × 6000; Al-Majdoub 2021 CPT 109:1136 / Couto 2020 DMD 48:245). Gut `UGT1A9 DROPPED` — not expressed in human small intestine (Oda 2012 isoform-specific antibody; UGT1A10 is the intestine-specific 1A isoform). Drug-level UGT1A9 affinity still acts at liver (unchanged).
+
+**Citation-confabulation audit (the substantive event):** the spec authored gut abundances on confabulated literature — claimed intestinal UGT2B7 "15 pmol/mg (5-30 range, median 15)" (real intestinal median **0.60**, ~25× over), cited to "Bhatt 2019 DMD 47:498" (actually an unrelated Kimoto maraviroc DDI paper, PMID 30862625) and "Akabane 2012 DMD 40:1310" (does not exist; NCBI esearch count=0). An 11-agent adversarial verification workflow (`verify-gut-ugt-citations`) found ground-truth *blind*, checked each citation independently, and refuted both committed values **3/3 + 3/3 at high confidence**. Both citations removed; values re-derived from primary sources. This is the second confabulation caught in the B-13 spec (the first, PMC8048492="15", was caught at implementation) — see DE-39 lesson.
+
+**Gate-D (same-numerics-stack vs B-02 cache):** **103/107 bit-identical**; only the 4 UGT2B7 gut-paired seeds shift, all DOWN (morphine −0.112%, codeine −0.034%, ketorolac −0.033%, indomethacin −0.004%). The 4 UGT1A9 seeds (gliflozins) bit-identical (gut UGT1A9 dropped). Meta **2.69828 → 2.69825** (Δ −2.7e-05); Engine 3.83145 → 3.83139; ML bit-identical; in-domain 2.76030 → 2.76025 (N=79). Within bootstrap noise [2.3151, 3.1690].
+
+**DE-38 / morphine — NOT fixed (DE-39):** the defensible gut UGT2B7 (3.6e3) is **~0.15% of hepatic** (2.43e6) — a sub-percent first-pass term that cannot close morphine's 3.4× over-prediction. morphine meta 0.0631 → 0.0631 (still ~3.4×). The fix, if any, is a **hepatic** UGT2B7 IVIVE differential (separate, un-started backlog).
+
+**Classification:** mechanism-**correctness** ship, not an accuracy ship. Net value: removed 2 confabulated citations + a non-existent enzyme entry from a committed physiology file; replaced with a defensible, basis-consistent gut UGT2B7 term. Headline AAFE unchanged at 3 sig figs (2.698). Regression guard: `tests/regression/test_gut_ugt_abundance.py` (UGT2B7 present in literature band, UGT1A9 absent).
 
 ---
 

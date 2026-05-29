@@ -1,7 +1,7 @@
 ---
 date: 2026-05-27
 spec: B-13 — Gut UGT2B7 + UGT1A9 abundance expansion (B-02 Phase 2.x follow-up)
-status: design (awaiting user review)
+status: implemented 2026-05-29 (CORRECTED — see amendment at top of body; original citations confabulated)
 parent: ../../claude/backlog.md §B-13
 related:
   - docs/claude/dead-ends.md §DE-38 (B-02 secondary finding: morphine/codeine over-prediction worsening)
@@ -10,6 +10,29 @@ related:
 ---
 
 # B-13 — Gut UGT2B7 + UGT1A9 Abundance Expansion
+
+> **AMENDMENT 2026-05-29 — literature citations corrected (READ FIRST).** The gut-abundance
+> values and citations in §"gut_wall UGT2B7/UGT1A9 abundance" below are **SUPERSEDED**. A
+> post-spec verification workflow (`verify-gut-ugt-citations`, 11 agents) found the spec's
+> citations were **CONFABULATED**: "Bhatt 2019 DMD 47:498" resolves to an unrelated maraviroc
+> DDI paper (PMID 30862625; the only real Bhatt 2019 UGT2B7 paper is *hepatic*), and "Akabane
+> 2012 DMD 40:1310" does not exist (NCBI esearch count=0). The claimed intestinal UGT2B7
+> "15 pmol/mg (5-30 range, median 15)" is ~25× the real median (0.60). As implemented:
+> - **gut UGT2B7 = 3.6e3 pmol** — NOT 9.0e4. 0.60 pmol/mg total-mucosal × 6000; Al-Majdoub
+>   2021 CPT 109:1136 (PMC8048492), corroborated Couto 2020 DMD 48:245 (jejunum 1.84 / ileum
+>   1.17). Same intestinal-proteomics dataset family as the existing ALPI/CES2 gut entries —
+>   internally basis-consistent (total mucosal protein, the ×6000 scale's unit).
+> - **gut UGT1A9 = DROPPED** — NOT 1.2e4. UGT1A9 is not expressed in human small intestine:
+>   Oda 2012 DMD 40:1620 (PMID 22619308) isoform-specific monoclonal antibody (kidney+liver
+>   only, not jejunum/ileum); Couto/Achour 2020 (PMID 32955894; liver+kidney only — UGT1A10 is
+>   the intestine-specific 1A isoform); Couto 2020 global proteomics (absent from >5000 proteins).
+> - **Presence test** asserts UGT2B7 PRESENT and UGT1A9 ABSENT (`tests/regression/test_gut_ugt_abundance.py`), inverting the spec's original `test_gut_wall_has_ugt2b7_ugt1a9`.
+> - **Gate-D outcome:** 103/107 bit-identical; 4 UGT2B7 seeds shift <0.12% (all DOWN); Meta
+>   2.69828 → 2.69825. Morphine NOT fixed (gut UGT2B7 = ~0.15% of hepatic) → **DE-39**. The
+>   hepatic UGT2B7 IVIVE differential is the remaining lever (separate, un-started backlog).
+>
+> The §Background mechanism reasoning (gut CYP3A4 phantom extraction, liver-abundance counter-
+> action) remains valid; only the gut abundance *values and citations* were wrong.
 
 ## Goal
 
