@@ -96,9 +96,18 @@ nodes:
       CES2: {mean: 3.0e6, cv: 0.6}    # Al-Majdoub 2020 PMC8048492: 500 pmol/mg × 6000 mg mucosal
       ALPI: {mean: 2.3e4, cv: 0.9}    # Al-Majdoub 2020 PMC8048492: 3.89 pmol/mg × 6000 mg mucosal
       # Phase II UGT — gut wall expression (B-13 Phase 2.x follow-up to B-02 UGT registries).
-      # NOTE: primary anchor PMC8048492 checked at impl (2026-05-28) — reports intestinal UGT2B7 median 0.60 (range 0.01-5.70) and does NOT quantify UGT1A9; 15/2 pmol/mg are outside/absent there, so re-anchored to spec fallback list per D1 (do not iterate values).
-      UGT2B7: {mean: 9.0e4, cv: 0.6}  # Bhatt 2019 DMD 47:498 (spec fallback): 15 pmol/mg × 6000 mg mucosal (median of 5-30 pmol/mg published intestinal range across donors)
-      UGT1A9: {mean: 1.2e4, cv: 0.6}  # Akabane 2012 DMD 40:1310 (spec fallback): 2 pmol/mg × 6000 mg mucosal (mid-point of detected donors, 0-5 pmol/mg; UGT1A9 is hepatic-dominant with modest gut expression)
+      # PROVENANCE (audit 2026-05-29, verify-gut-ugt-citations workflow, 11 agents): the spec's
+      # original fallback citations were CONFABULATED and have been removed — "Bhatt 2019 DMD
+      # 47:498" resolves to an unrelated maraviroc DDI paper (PMID 30862625; the only real Bhatt
+      # 2019 UGT2B7 paper is hepatic, CPT 105:131-141), and "Akabane 2012 DMD 40:1310" does not
+      # exist (NCBI esearch count=0). Re-derived from primary intestinal proteomics below, on the
+      # total-mucosal-protein basis consistent with the ×6000 scale (same dataset family as ALPI).
+      UGT2B7: {mean: 3.6e3, cv: 0.6}  # Al-Majdoub 2021 CPT 109:1136 (PMC8048492) median 0.60 pmol/mg × 6000 mg mucosal; corroborated Couto 2020 DMD 48:245 (jejunum 1.84 / ileum 1.17 pmol/mg). Gut UGT2B7 ≈ 0.15% of hepatic (2.43e6) — completeness term, NOT a morphine fix (cf. DE-39).
+      # UGT1A9 — DROPPED: not expressed in human small intestine. Oda 2012 DMD 40:1620 (PMID
+      # 22619308) isoform-specific monoclonal antibody finds UGT1A9 in kidney+liver but NOT in
+      # jejunum/ileum; Couto/Achour 2020 (PMID 32955894) report UGT1A9 in liver+kidney only
+      # (UGT1A10 is the intestine-specific 1A isoform); Couto 2020 global proteomics: UGT1A9
+      # absent from >5000 intestinal proteins. Drug-level UGT1A9 affinity still acts at liver.
       # CES1 omitted — Hatfield 2016 PMC6635651: negligible in human intestine.
     ivive_scaling: 0.00006   # 60/1e6: converts uL/min -> L/h (MPPGL * organ_wt already in abundance)
 
