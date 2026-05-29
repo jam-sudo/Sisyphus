@@ -54,6 +54,18 @@ def test_cached_holdout_aafe_is_2p698() -> None:
     mass-balance of these per-drug movements. Phase 2.x follow-up = B-13
     (UGT2B7 abundance + IVIVE recalibration).
 
+    B-13 (corrected, 2026-05-29; spec 2026-05-27-B13-gut-ugt-expansion-design):
+    adds gut-wall UGT2B7 = 3.6e3 pmol (Al-Majdoub 2021 CPT 109:1136 / Couto 2020
+    DMD 48:245, median 0.60 pmol/mg total-mucosal x 6000) and DROPS gut UGT1A9
+    (not expressed in human small intestine — Oda 2012 isoform-specific antibody).
+    The spec's original fallback citations (Bhatt 2019 DMD 47:498; Akabane 2012
+    DMD 40:1310) were CONFABULATED and removed; see DE-39. Gate-D: 103/107
+    bit-identical, only the 4 UGT2B7 gut-paired seeds shift (all DOWN, <0.12%);
+    Meta 2.69828 -> 2.69825 (delta -2.7e-05). Gut UGT2B7 is ~0.15% of hepatic
+    (2.43e6), so this does NOT fix morphine's over-prediction (DE-38) — that
+    needs a hepatic UGT2B7 IVIVE differential (deferred). B-13 ships as an
+    enzyme-level gut-wall correctness term, not a morphine fix.
+
     Cache regenerated under same numerics stack as preceding versions:
       Meta AAFE  2.698  (overall N=107, %2-fold 46.7, %3-fold 61.7)
       Engine     3.831

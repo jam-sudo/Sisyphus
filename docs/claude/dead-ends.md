@@ -204,6 +204,26 @@ Artifacts: `data/training/4track_holdout_predictions.json` (post-B-02 cache), `d
 
 ---
 
+### DE-39 — Gut UGT abundance does not fix UGT2B7-substrate over-prediction (B-13, follow-up to DE-38)
+
+**Date:** 2026-05-29
+
+**Hypothesis (B-13 original framing):** adding literature-anchored gut-wall UGT2B7 + UGT1A9 abundance would supply the first-pass clearance B-02 left missing (DE-38), pulling morphine/codeine over-prediction back down.
+
+**What was measured (corrected B-13, same-numerics-stack regen):** gut UGT2B7 added at the defensible literature value **3.6e3 pmol** (0.60 pmol/mg total-mucosal × 6000; Al-Majdoub 2021 CPT 109:1136 / PMC8048492, corroborated Couto 2020 DMD 48:245). Only the 4 UGT2B7 gut-paired seeds shift, all DOWN but trivially: morphine −0.112%, codeine −0.034%, ketorolac −0.033%, indomethacin −0.004%. Meta 2.69828 → 2.69825 (Δ −2.7e-05). Morphine stays ~3.4× over-predicted.
+
+**Why it cannot work:** the defensible gut UGT2B7 abundance (3.6e3) is **~0.15% of hepatic UGT2B7** (2.43e6). Gut first-pass via UGT2B7 is a sub-percent clearance term — it cannot close a 3.4× over-prediction. The morphine/codeine fix, if any, must come from a **hepatic** UGT2B7 IVIVE/extraction differential, not the gut node.
+
+**Citation-confabulation sub-finding (process, important):** the B-13 spec's gut abundances rested on confabulated literature. The claimed intestinal UGT2B7 "15 pmol/mg (5-30 range)" is ~25× the real median (0.60); "Bhatt 2019 DMD 47:498" resolves to an unrelated Kimoto maraviroc DDI paper (PMID 30862625); "Akabane 2012 DMD 40:1310" does not exist (NCBI esearch count=0). Gut UGT1A9 was DROPPED — not expressed in human small intestine (Oda 2012 isoform-specific antibody finds it in kidney+liver only; UGT1A10 is the intestine-specific 1A isoform; absent from Couto 2020 >5000-protein global proteomics). Caught by an 11-agent adversarial verification workflow (`verify-gut-ugt-citations`, 2026-05-29; both committed values refuted 3/3 + 3/3, high confidence). **Lesson:** spec-stage abundance/citation values must be verified against primary sources before reaching a committed YAML — "fallback citation" lists authored from memory are a confabulation risk.
+
+**Outcome:** B-13 ships as an enzyme-level gut-wall **correctness** term (proper literature-grounded gut UGT2B7; UGT1A9 correctly absent), NOT a morphine fix. Metric-neutral within bootstrap noise.
+
+**Telltale if it returns under a new label:** "gut UGT abundance," "extra-hepatic UGT first-pass," or "intestinal UGT2B7" proposed as a fix for morphine/codeine/UGT2B7-substrate over-prediction. The hepatic UGT2B7 IVIVE differential remains the only plausible lever and is a separate (un-started) backlog item.
+
+Artifacts: `data/physiology/reference_man.yaml` (gut_wall UGT2B7), `data/training/4track_holdout_predictions.json` (corrected B-13 cache), spec `docs/superpowers/specs/2026-05-27-B13-gut-ugt-expansion-design.md` (+ 2026-05-29 amendment), `tests/regression/test_gut_ugt_abundance.py`.
+
+---
+
 ## 3. When to consult this list
 
 - Before writing a design spec for any accuracy improvement.
