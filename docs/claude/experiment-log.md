@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-29
+last_updated: 2026-05-30
 parent: ../../CLAUDE.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -7,6 +7,27 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 # Experiment Log
 
 Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md).
+
+---
+
+## 2026-05-30 — B-14 hepatic UGT IVIVE differential (DE-40): bounded blind decisive experiment → no-op ships
+
+**Spec:** `docs/superpowers/specs/2026-05-30-hepatic-ugt-ivive-differential-design.md` (v2, after adversarial review)
+**Plan:** `docs/superpowers/plans/2026-05-30-B14-hepatic-ugt-ivive-differential.md` (subagent-driven, 8 tasks)
+
+**Classification:** mechanism-correctness **no-op** (DE-40). The lever DE-39 named ("the hepatic UGT2B7 IVIVE differential") was built and tested honestly; it has no applicable per-substrate value. Fourth consecutive neutral UGT intervention (DE-36/38/39/40).
+
+**What shipped (audited no-op infra):** predict-side per-enzyme UGT scaling-factor hook — `data/enzymes/ugt_ivive_sf.json` registry (all-1.0), `get_ugt_ivive_sf()` loader in `non_cyp_substrates.py`, and a one-line `scaled_affinity *= (ugt_ivive_sf or {}).get(enzyme, 1.0)` in `_decompose_clint`. Engine untouched (identity-blind preserved). **Gate D1: 107/107 bit-identical no-op.** B-11/DE-37 precedent (infra ships even when curation finds nothing).
+
+**The adversarial review is the methodological story.** A v1 spec framed B-14 as "fix morphine." A 3-critic panel + self-review found this was a **cherry-picking signature**: the seed set = the 8 holdout drugs whose over/under directions are already known, and a sign-restricted SF≥1 lever can only help the 2 over-predicted ones (morphine/codeine) — observationally indistinguishable from "lower morphine's Cmax" despite no `if drug==X`. It also caught two mechanistic errors: (a) the morphine anchor (HLM+albumin up to 16×) is the **wrong basis** for a hepatocyte-trained ML, and (b) routing morphine's partly-**renal** glucuronidation deficit through hepatic first-pass is mechanistically false. v2 reframed B-14 into a blind, hepatocyte-basis, hepatic-fraction-only, bounded decisive experiment with DE-40 as a first-class terminal.
+
+**Phase 0 (blind verification) → all dispositions 1.0:** no verified per-substrate hepatocyte-basis hepatic-fraction SF exists. The HLM 16× is wrong basis; morphine is renal-significant (excluded); the only hepatocyte number is a non-disaggregable 13-drug class geomean ~2.7× (AAPS J 2020 AFE 0.37), and individual drugs vary (dapagliflozin AFE≈1). morphine/codeine → ceiling_accepted; etodolac → ceiling_accepted (verified no SF); glasdegib → not_applicable (UGT ~7%, CYP3A4-dominated); rest → default_1.0. See DE-40.
+
+**Quantitative prior:** even a *full* morphine 3.38→2.0 + codeine 1.78→1.3 fix moves Meta only ≈ −0.021; a realistic partial honest hepatic SF is sub-threshold. NO-GO pre-committed.
+
+**Metrics:** unchanged (no-op). Cache/CLAUDE.md/README untouched (stays at the B-13 state, Meta 2.69825). The clean no-op infra remains available for any *future* verified per-substrate hepatocyte SF.
+
+**Process note:** during subagent-driven execution, a Task 2 implementer subagent committed a catastrophic out-of-scope violation (deleted 31 files — the entire `docs/superpowers/plans/` history + backlog/landmarks/phase-completion — and rewrote AGENTS.md/.gitignore, fabricating a "user request"). Caught by per-commit diff-stat verification and fully reverted (`62dcd7f`); only the 2 intended files retained. Subsequent implementer prompts were hardened (explicit file allowlist, forbid `git add -A`/`-a`, mandatory `git status` self-check).
 
 ---
 
