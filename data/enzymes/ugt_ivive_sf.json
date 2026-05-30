@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "description": "Per-substrate, per-enzyme UGT hepatocyte-basis in-vitro->in-vivo scaling factors (B-14). Default 1.0 = no-op. Spec: docs/superpowers/specs/2026-05-30-hepatic-ugt-ivive-differential-design.md. PHASE 0 OUTCOME (2026-05-30): all SFs = 1.0 (no-op). The decisive blind verification found NO verified per-substrate hepatocyte-basis hepatic-fraction UGT IVIVE-SF: the morphine '16x' is HLM/microsomal basis (wrong basis for this hepatocyte-trained ML), morphine glucuronidation is substantially renal (excluded from B-14), and the only hepatocyte-basis number is a non-disaggregable 13-drug class geomean (~2.7x, AAPS J 2020). Per the spec's single-point/anti-confabulation rule, unverifiable-per-substrate => 1.0. See DE-40. NOTE: this SF acts at EVERY node carrying the enzyme (today liver + gut UGT2B7); a future kidney-UGT node REQUIRES basis re-derivation to avoid double-counting the renal fraction.",
+  "substrates": [
+    {"drug": "morphine", "inchikey": "BQJCRHHNABKAKU-UHFFFAOYSA-N", "ivive_sf": {"UGT2B7": 1.0}, "basis": "hepatocyte", "hepatic_fraction_of_deficit": 1.0, "renal_fraction_withheld": 0.0, "disposition": "ceiling_accepted",
+      "note": "Under-prediction is documented but not as a verified hepatocyte-basis HEPATIC-fraction number. The famous up-to-16x is HLM+albumin (microsomal, wrong basis for a hepatocyte-trained engine). Glucuronidation is substantially RENAL (renal CLint,UGT ~1/3 of hepatic per-gram for UGT2B7) and renal is out of B-14 scope. Hepatocyte-basis under-prediction exists only as a 13-drug class geomean (~2.7x), not disaggregable to morphine within budget. SF=1.0.",
+      "literature": [
+        {"citation": "Gill KL, Houston JB, Galetin A. Characterization of in vitro glucuronidation clearance in human kidney microsomes: comparison with liver and intestine, impact of albumin. Drug Metab Dispos. 2012;40(4):825-835.", "pmid_or_doi": "PMC3310423", "reported_value": "HLM+albumin up to ~16x CLint increase; renal CLint,UGT ~1/3 of hepatic per-gram for UGT2B7 substrates", "basis": "HLM (microsomal)", "verified": true},
+        {"citation": "Knights KM, Spencer SM, Fallon JK, et al. Scaling factors for the IVIVE of renal drug and xenobiotic glucuronidation clearance. Br J Clin Pharmacol. 2016;81(6):1153-1164.", "pmid_or_doi": "26808419", "reported_value": "renal CLint,u,UGT must be accounted for UGT2B7/1A9 substrates", "basis": "renal microsomal", "verified": true},
+        {"citation": "IVIVE of metabolic clearance for UGT substrates using short-term suspension and long-term co-cultured human hepatocytes. AAPS J. 2020;22(4):88.", "pmid_or_doi": "10.1208/s12248-020-00482-9", "reported_value": "suspended-hepatocyte AFE 0.37 (~2.7x under-prediction) vs in-vivo HEPATIC CLint, 13-drug UGT class geomean; HepatoPac AFE 0.69", "basis": "hepatocyte (class geomean)", "verified": true}
+      ]},
+    {"drug": "codeine", "inchikey": "OROGSEYTTFOCAN-DNJOTXNNSA-N", "ivive_sf": {"UGT2B7": 1.0}, "basis": "hepatocyte", "hepatic_fraction_of_deficit": 1.0, "renal_fraction_withheld": 0.0, "disposition": "ceiling_accepted",
+      "note": "Same as morphine: no verified per-substrate hepatocyte-basis hepatic-fraction SF; HLM-basis and renal contaminate the accessible numbers; hepatocyte class geomean ~2.7x not disaggregable. SF=1.0.",
+      "literature": [{"citation": "see morphine entry (UGT2B7 O-glucuronidation, same hepatocyte-class IVIVE literature)", "pmid_or_doi": "10.1208/s12248-020-00482-9", "reported_value": "covered by the UGT-substrate class geomean AFE 0.37", "basis": "hepatocyte (class geomean)", "verified": true}]},
+    {"drug": "ketorolac", "inchikey": "OZWKMVRBQXNZKK-UHFFFAOYSA-N", "ivive_sf": {"UGT2B7": 1.0}, "basis": "hepatocyte", "disposition": "default_1.0",
+      "note": "Acidic NSAID, AD-flagged HIGH_ACID_LOW_FUP (out of in-domain). No verified per-substrate hepatocyte UGT IVIVE SF. SF=1.0.", "literature": []},
+    {"drug": "indomethacin", "inchikey": "CGIGDMFJXJATDK-UHFFFAOYSA-N", "ivive_sf": {"UGT2B7": 1.0}, "basis": "hepatocyte", "disposition": "default_1.0",
+      "note": "CYP2C9-dominated (registry fm[UGT2B7]=0.15); UGT is a minor route. No verified per-substrate hepatocyte UGT IVIVE SF. SF=1.0.", "literature": []},
+    {"drug": "dapagliflozin", "inchikey": "JVHXJTBJCFBINQ-ADAARDCZSA-N", "ivive_sf": {"UGT1A9": 1.0}, "basis": "hepatocyte", "disposition": "default_1.0",
+      "note": "Clean UGT1A9 substrate whose PBPK models are verified with standard IVIVE (individual hepatocyte AFE ~1, NOT the class 0.37) — so the class under-prediction does not apply. No forced SF. SF=1.0.", "literature": []},
+    {"drug": "etodolac", "inchikey": "NNYBQONXHNTVIJ-UHFFFAOYSA-N", "ivive_sf": {"UGT1A9": 1.0}, "basis": "hepatocyte", "disposition": "ceiling_accepted",
+      "note": "Blind verification (recovered, citation-verified): no etodolac-specific UGT/glucuronidation IVIVE scaling factor exists; Gill 2012 and Rowland albumin-effect substrate sets exclude it. AD-flagged. SF=1.0.", "literature": []},
+    {"drug": "bexagliflozin", "inchikey": "BTCRKOKVYTVOLU-UHFFFAOYSA-N", "ivive_sf": {"UGT1A9": 1.0}, "basis": "hepatocyte", "disposition": "default_1.0",
+      "note": "SGLT2-inhibitor UGT1A9 substrate, same class as dapagliflozin; no forced hepatocyte SF. SF=1.0.", "literature": []},
+    {"drug": "glasdegib", "inchikey": "SFNSLLSYNZWZQG-UHFFFAOYSA-N", "ivive_sf": {"UGT1A9": 1.0}, "basis": "hepatocyte", "disposition": "not_applicable",
+      "note": "Blind verification (recovered, citation-verified): UGT N-glucuronide is a MINOR pathway (~7% of circulating radioactivity); clearance is CYP3A4-dominated (Lam 2017 Xenobiotica PMID 27866461). UGT not rate-limiting. SF=1.0.", "literature": []}
+  ]
+}

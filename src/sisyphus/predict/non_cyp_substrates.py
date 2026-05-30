@@ -24,6 +24,7 @@ _NAT2_PATH = _REPO_ROOT / "data" / "enzymes" / "nat2_substrates.json"
 _UGT1A1_PATH = _REPO_ROOT / "data" / "enzymes" / "ugt1a1_substrates.json"
 _UGT2B7_PATH = _REPO_ROOT / "data" / "enzymes" / "ugt2b7_substrates.json"
 _UGT1A9_PATH = _REPO_ROOT / "data" / "enzymes" / "ugt1a9_substrates.json"
+_UGT_IVIVE_SF_PATH = _REPO_ROOT / "data" / "enzymes" / "ugt_ivive_sf.json"
 
 
 def _smiles_to_inchikey(smiles: str) -> str | None:
@@ -73,6 +74,15 @@ def _load_ugt1a9_index() -> dict[str, dict]:
     if not _UGT1A9_PATH.exists():
         return {}
     data = json.loads(_UGT1A9_PATH.read_text())
+    return {entry["inchikey"]: entry for entry in data.get("substrates", [])}
+
+
+@lru_cache(maxsize=1)
+def _load_ugt_ivive_sf_index() -> dict[str, dict]:
+    """Return {inchikey: entry} for ugt_ivive_sf.json (B-14)."""
+    if not _UGT_IVIVE_SF_PATH.exists():
+        return {}
+    data = json.loads(_UGT_IVIVE_SF_PATH.read_text())
     return {entry["inchikey"]: entry for entry in data.get("substrates", [])}
 
 
@@ -142,3 +152,23 @@ def get_non_cyp_fractions(smiles: str) -> dict[str, float]:
         )
         out = {k: v / total for k, v in out.items()}
     return out
+
+
+# --- IVIVE magnitude correction (B-14) ---------------------------------------
+# Distinct from the fm-routing lookups above: fm decides WHICH enzyme carries the
+# clearance; this SF decides HOW MUCH the in-vitro CLint under-predicts in vivo.
+def get_ugt_ivive_sf(smiles: str) -> dict[str, float]:
+    """Return {UGT_tag: scaling_factor} for the SMILES, or {} if unlisted/invalid.
+
+    UNLIKE the lookup_* functions above (which return None), this returns a dict
+    and NEVER raises: invalid SMILES -> {}. The {} default makes the caller's
+    ``.get(enzyme, 1.0)`` a bit-identical no-op. See spec
+    docs/superpowers/specs/2026-05-30-hepatic-ugt-ivive-differential-design.md.
+    """
+    ikey = _smiles_to_inchikey(smiles)
+    if ikey is None:
+        return {}
+    entry = _load_ugt_ivive_sf_index().get(ikey)
+    if entry is None:
+        return {}
+    return {k: float(v) for k, v in entry.get("ivive_sf", {}).items()}
