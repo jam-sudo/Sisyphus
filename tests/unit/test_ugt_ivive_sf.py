@@ -1,5 +1,8 @@
 """B-14 loader unit tests."""
 from __future__ import annotations
+
+from sisyphus.core import Distribution
+from sisyphus.predict.ivive import _decompose_clint
 from sisyphus.predict.non_cyp_substrates import get_ugt_ivive_sf
 
 _CAFFEINE = "CN1C=NC2=C1C(=O)N(C(=O)N2C)C"  # not a UGT substrate
@@ -19,11 +22,6 @@ def test_seed_returns_ugt_map():
     sf = get_ugt_ivive_sf(morphine)
     assert "UGT2B7" in sf
     assert isinstance(sf["UGT2B7"], float)  # value set later by Phase 0; structure stable
-
-
-from sisyphus.predict.ivive import _decompose_clint
-# match ivive.py's Distribution import from Step 1, e.g.:
-from sisyphus.core import Distribution
 
 
 def _aff(ugt_ivive_sf=None, fractions=None, ugt=None, ctype="base"):
