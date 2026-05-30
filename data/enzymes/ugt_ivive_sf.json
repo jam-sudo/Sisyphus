@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "description": "Per-substrate, per-enzyme UGT hepatocyte-basis in-vitro->in-vivo scaling factors (B-14). Default 1.0 = no-op. Spec: docs/superpowers/specs/2026-05-30-hepatic-ugt-ivive-differential-design.md. NOTE: this SF acts at EVERY node carrying the enzyme (today liver + gut UGT2B7, reference_man.yaml); a future kidney-UGT node REQUIRES basis re-derivation to avoid double-counting the renal fraction withheld in Phase 0.",
+  "substrates": [
+    {"drug": "morphine", "inchikey": "BQJCRHHNABKAKU-UHFFFAOYSA-N", "ivive_sf": {"UGT2B7": 1.0}, "basis": "hepatocyte", "hepatic_fraction_of_deficit": 1.0, "renal_fraction_withheld": 0.0, "disposition": "default_1.0", "literature": []},
+    {"drug": "codeine", "inchikey": "OROGSEYTTFOCAN-DNJOTXNNSA-N", "ivive_sf": {"UGT2B7": 1.0}, "basis": "hepatocyte", "hepatic_fraction_of_deficit": 1.0, "renal_fraction_withheld": 0.0, "disposition": "default_1.0", "literature": []},
+    {"drug": "ketorolac", "inchikey": "OZWKMVRBQXNZKK-UHFFFAOYSA-N", "ivive_sf": {"UGT2B7": 1.0}, "basis": "hepatocyte", "disposition": "default_1.0", "literature": []},
+    {"drug": "indomethacin", "inchikey": "CGIGDMFJXJATDK-UHFFFAOYSA-N", "ivive_sf": {"UGT2B7": 1.0}, "basis": "hepatocyte", "disposition": "default_1.0", "literature": []},
+    {"drug": "dapagliflozin", "inchikey": "JVHXJTBJCFBINQ-ADAARDCZSA-N", "ivive_sf": {"UGT1A9": 1.0}, "basis": "hepatocyte", "disposition": "default_1.0", "literature": []},
+    {"drug": "etodolac", "inchikey": "NNYBQONXHNTVIJ-UHFFFAOYSA-N", "ivive_sf": {"UGT1A9": 1.0}, "basis": "hepatocyte", "disposition": "default_1.0", "literature": []},
+    {"drug": "bexagliflozin", "inchikey": "BTCRKOKVYTVOLU-UHFFFAOYSA-N", "ivive_sf": {"UGT1A9": 1.0}, "basis": "hepatocyte", "disposition": "default_1.0", "literature": []},
+    {"drug": "glasdegib", "inchikey": "SFNSLLSYNZWZQG-UHFFFAOYSA-N", "ivive_sf": {"UGT1A9": 1.0}, "basis": "hepatocyte", "disposition": "default_1.0", "literature": []}
+  ]
+}
