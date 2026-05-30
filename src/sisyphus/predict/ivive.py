@@ -250,6 +250,7 @@ def _decompose_clint(
     ugt_enzymes: set[str] | None = None,
     metabolic_fraction: float = 1.0,
     non_cyp_fractions: dict[str, float] | None = None,
+    ugt_ivive_sf: dict[str, float] | None = None,
 ) -> dict[str, Distribution]:
     """Decompose total hepatic CLint into per-enzyme affinities.
 
@@ -281,6 +282,10 @@ def _decompose_clint(
             pravastatin) so the engine's ECM transporter path provides the
             hepatic clearance without the metabolic path double-counting.
             See ``predict/cyp_clearance_overrides.py``.
+        ugt_ivive_sf: Per-UGT-enzyme in-vitro->in-vivo scaling factor map
+            (B-14). ``None``/``{}`` is a bit-identical no-op. ``{"UGT2B7": k}``
+            multiplies the UGT2B7-routed affinity by k; non-UGT enzymes are
+            untouched (the map carries only UGT keys).
 
     Returns:
         Dict mapping enzyme tag -> CLint per pmol enzyme (uL/min/pmol)
@@ -304,6 +309,8 @@ def _decompose_clint(
         # affinity = (CLint_hepatic * fm) / (abundance * ivive_scaling)
         affinity = (clint_hepatic_l_per_h * fraction) / (abundance * _IVIVE_SCALING)
         scaled_affinity = max(affinity, 0.0) * metabolic_fraction
+        # B-14: hepatic UGT IVIVE differential — scales ONLY the UGT-routed affinity.
+        scaled_affinity *= (ugt_ivive_sf or {}).get(enzyme, 1.0)
         # Carry CLint's CV through to affinity
         enzyme_affinity[enzyme] = Distribution(mean=scaled_affinity, cv=clint.cv)
 
