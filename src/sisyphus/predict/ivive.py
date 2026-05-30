@@ -663,6 +663,11 @@ def build_drug_on_graph(
     ugt_tags = {tag for tag in _non_cyp if tag.startswith("UGT")}
     ugt_enzymes = ugt_tags or None
 
+    # B-14: per-substrate UGT IVIVE scaling factor (hepatocyte-basis, hepatic-
+    # fraction-only). Default {} -> bit-identical no-op. Spec 2026-05-30.
+    from sisyphus.predict.non_cyp_substrates import get_ugt_ivive_sf
+    ugt_ivive_sf = get_ugt_ivive_sf(profile.smiles)
+
     # OATP1B1-substrate metabolic_fraction override: when ECM provides the
     # hepatic transporter path for drugs whose hepatocyte CLint is uptake-
     # dominated, scale the metabolic affinities to avoid double-counting.
@@ -683,6 +688,7 @@ def build_drug_on_graph(
         ugt_enzymes=ugt_enzymes,
         metabolic_fraction=metabolic_fraction,
         non_cyp_fractions=non_cyp_fractions,
+        ugt_ivive_sf=ugt_ivive_sf,
     )
 
     # Compute Kp for each tissue using selected method
