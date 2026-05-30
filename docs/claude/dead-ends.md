@@ -224,6 +224,29 @@ Artifacts: `data/physiology/reference_man.yaml` (gut_wall UGT2B7), `data/trainin
 
 ---
 
+### DE-40 — Hepatic UGT IVIVE differential has no verified per-substrate value (B-14; closes DE-39's named lever)
+
+**Date:** 2026-05-30
+
+**Hypothesis (the lever DE-39 named):** correct the hepatic UGT in-vitro→in-vivo under-prediction with a per-substrate scaling factor (SF) on the UGT-routed affinity, pulling morphine/codeine over-prediction down. Designed as a *bounded blind decisive experiment* (spec `2026-05-30-hepatic-ugt-ivive-differential-design.md` v2) after a 3-critic adversarial review demolished a v1 "fix morphine" framing as cherry-picking.
+
+**What was built (ships, audited no-op):** a predict-side, per-enzyme SF hook — `data/enzymes/ugt_ivive_sf.json` registry + `get_ugt_ivive_sf()` loader + a one-line multiply in `_decompose_clint` (engine untouched; identity-blind preserved). With an all-1.0 registry it is a **107/107 bit-identical no-op** (Gate D1). Infrastructure shipped per the B-11/DE-37 precedent.
+
+**What the decisive blind verification found — no applicable SF exists (all dispositions → 1.0):**
+1. **Wrong basis.** The famous morphine under-prediction (up to ~16×, Gill/Galetin 2012 PMC3310423) is **HLM/microsomal**; the engine's ML CLint is **hepatocyte**-trained (TDC Hepatocyte_AZ). Intact hepatocytes already recover most of that albumin/binding correction, so the HLM fold is the wrong multiplier — applying it would double-count and over-clear (flip morphine to under-predicted).
+2. **Renal, not hepatic.** Morphine glucuronidation is substantially **renal** (renal CLint,UGT ≈ ⅓ of hepatic per-gram for UGT2B7, Gill 2012; Knights 2016 PMID 26808419). Renal clearance does **not** cause hepatic first-pass; it is explicitly out of B-14 scope.
+3. **No per-substrate hepatocyte number.** The only hepatocyte-basis figure is a **13-drug class geomean ~2.7×** (suspended-hepatocyte AFE 0.37, AAPS J 2020, DOI 10.1208/s12248-020-00482-9) — not disaggregable to morphine within budget, and individual drugs vary (dapagliflozin's own AFE ≈ 1, i.e. its PBPK is well-predicted, so the class number must NOT be applied uniformly). Per the spec's single-point/anti-confabulation rule, unverifiable-per-substrate ⇒ SF = 1.0.
+
+**Quantitative prior (pre-registered):** even a *full* morphine 3.38→2.0 + codeine 1.78→1.3 fix moves Meta AAFE only ≈ −0.021, so any realistic partial, honest hepatic SF is sub-threshold. NO-GO.
+
+**Outcome:** predicted/realized Meta Δ = 0 (no-op). This is the **fourth** UGT intervention to land neutral (DE-36/38/39/40) and it **closes DE-39's "only remaining lever"**: the hepatic UGT IVIVE differential, evaluated honestly (hepatocyte-basis, hepatic-fraction-only, blind, per-substrate-verified), has no applicable literature value. The clean no-op infra remains for any *future* verified per-substrate hepatocyte SF.
+
+**Telltale if it returns:** "hepatic UGT IVIVE / UGT under-prediction correction / albumin-effect scaling" proposed for morphine/codeine without a **verified, hepatocyte-basis, hepatic-fraction-only, per-substrate** number. The HLM albumin fold and the renal contribution are the two traps. The DE-38-complete idea (UGT IVIVE **plus** a CYP-route rebalance) remains theoretically open but is a different cycle — B-14 shows the UGT-IVIVE half alone has no honest large value.
+
+Artifacts: `data/enzymes/ugt_ivive_sf.json` (all-1.0 audited registry), `src/sisyphus/predict/non_cyp_substrates.py` (`get_ugt_ivive_sf`), `src/sisyphus/predict/ivive.py` (`_decompose_clint` hook), `tests/unit/test_ugt_ivive_sf.py`, `tests/regression/test_ugt_ivive_sf_registry_schema.py`, spec `docs/superpowers/specs/2026-05-30-hepatic-ugt-ivive-differential-design.md` (v2), plan `docs/superpowers/plans/2026-05-30-B14-hepatic-ugt-ivive-differential.md`.
+
+---
+
 ## 3. When to consult this list
 
 - Before writing a design spec for any accuracy improvement.
