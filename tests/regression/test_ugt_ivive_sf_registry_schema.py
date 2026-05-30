@@ -1,5 +1,6 @@
 """B-14 registry integrity: enforces the anti-fudge + correct-basis invariants."""
 from __future__ import annotations
+
 import json
 import pathlib
 
@@ -14,24 +15,26 @@ def test_ugt_ivive_sf_schema():
     assert subs, "registry must list the seed substrates"
     seen = set()
     for e in subs:
+        drug = e["drug"]
         ikey = e["inchikey"]
         assert ikey not in seen, f"duplicate inchikey {ikey}"
         seen.add(ikey)
-        assert "<" not in ikey, f"{e['drug']}: placeholder InChIKey not replaced"
+        assert "<" not in ikey, f"{drug}: placeholder InChIKey not replaced"
         sf = e["ivive_sf"]
-        assert isinstance(sf, dict) and sf, f"{e['drug']}: ivive_sf must be a non-empty map"
-        assert all(k.startswith("UGT") for k in sf), f"{e['drug']}: SF keys must be UGT tags"
+        assert isinstance(sf, dict) and sf, f"{drug}: ivive_sf must be a non-empty map"
+        assert all(k.startswith("UGT") for k in sf), f"{drug}: SF keys must be UGT tags"
         disp = e["disposition"]
-        assert disp in _VALID_DISP, f"{e['drug']}: bad disposition {disp}"
+        assert disp in _VALID_DISP, f"{drug}: bad disposition {disp}"
         if disp in {"default_1.0", "not_applicable", "ceiling_accepted"}:
-            assert all(v == 1.0 for v in sf.values()), f"{e['drug']}: {disp} entries must be exactly 1.0"
+            assert all(v == 1.0 for v in sf.values()), f"{drug}: {disp} must be all 1.0"
         if disp == "literature_applied":
-            assert any(v != 1.0 for v in sf.values()), f"{e['drug']}: literature_applied but all 1.0"
-            assert e["basis"] in _VALID_BASIS, f"{e['drug']}: basis must be in {_VALID_BASIS}"
+            assert any(v != 1.0 for v in sf.values()), f"{drug}: literature_applied all 1.0"
+            assert e["basis"] in _VALID_BASIS, f"{drug}: basis must be in {_VALID_BASIS}"
             lits = e.get("literature", [])
-            assert lits and all(l.get("verified") and l.get("pmid_or_doi") for l in lits), \
-                f"{e['drug']}: literature_applied needs a verified PMID/DOI"
+            assert lits and all(
+                lit.get("verified") and lit.get("pmid_or_doi") for lit in lits
+            ), f"{drug}: literature_applied needs a verified PMID/DOI"
             if any(v > 5 for v in sf.values()):
-                assert len(lits) >= 2, f"{e['drug']}: ivive_sf>5 needs a second verifying source"
-        if e["drug"] in {"morphine", "codeine"}:
-            assert "hepatic_fraction_of_deficit" in e, f"{e['drug']}: must record hepatic/renal partition"
+                assert len(lits) >= 2, f"{drug}: ivive_sf>5 needs a second source"
+        if drug in {"morphine", "codeine"}:
+            assert "hepatic_fraction_of_deficit" in e, f"{drug}: must record partition"
