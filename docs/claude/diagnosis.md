@@ -1,12 +1,12 @@
 ---
-last_updated: 2026-04-20
+last_updated: 2026-05-31
 parent: ../../CLAUDE.md
 charter: Why Sisyphus's Cmax accuracy ceiling exists, what broke it, and which paths remain open
 ---
 
 # Accuracy Ceiling Diagnosis
 
-**Short version:** Meta AAFE 2.695 (4-track, post-merge) is the ceiling under the current architecture. The ceiling is a combined **CLint target-noise floor** (R²≈0.24 is intrinsic, not engineering-limited) + **pipeline error-cancellation** (the 4 tracks are co-calibrated on a specific error profile; partial replacements destroy the balance). VDss analytical 4th track proved that **orthogonal** tracks can still be added, so the ceiling is not absolute — but "orthogonal" now has an empirical test (error decorrelation with existing tracks) that must precede any track proposal.
+**Short version:** Meta AAFE 2.698 (4-track; was 2.695 at 2026-04-20 — the 2.695→2.698 drift is numerics-stack + metric-neutral UGT/prodrug cycles per [CLAUDE.md](../../CLAUDE.md), the qualitative ceiling model is unchanged) is the ceiling under the current architecture. The ceiling is a combined **CLint target-noise floor** (R²≈0.24 is intrinsic, not engineering-limited) + **pipeline error-cancellation** (the 4 tracks are co-calibrated on a specific error profile; partial replacements destroy the balance). VDss analytical 4th track proved that **orthogonal** tracks can still be added, so the ceiling is not absolute — but "orthogonal" now has an empirical test (error decorrelation with existing tracks) that must precede any track proposal.
 
 Before proposing any accuracy improvement, read [dead-ends.md](./dead-ends.md) first — 40 enumerated attempts are documented. Most new proposals that "haven't been tried" are variants of something already reverted.
 
