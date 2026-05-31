@@ -54,7 +54,7 @@ graph     ←  (nothing)                  (BodyGraph types, YAML builder)
 
 ## Process discipline
 
-- **Plan-then-execute** for non-trivial work. Use the `superpowers:brainstorming` skill to produce a spec at `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`, then `superpowers:writing-plans` to produce a plan at `docs/superpowers/plans/YYYY-MM-DD-<topic>.md`, then execute with `superpowers:subagent-driven-development` or `superpowers:executing-plans`.
+- **Plan-then-execute** for non-trivial work. Use the `superpowers:brainstorming` skill to produce a spec at `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` (specs are public audit-trail and committed), then `superpowers:writing-plans` to produce an implementation plan, then execute with `superpowers:subagent-driven-development` or `superpowers:executing-plans`.
 - **Headline AAFE protection.** Production-promoted numbers (Meta AAFE on the 107-holdout) are protected. Never edit the metrics block in `README.md` or local `CLAUDE.md` from session context alone — always reconcile against `data/training/4track_holdout_predictions.json` after re-running `scripts/run_engine_benchmark.py`.
 - **Routing changes** reconcile against `data/sbi/method_routing.json`.
 
@@ -67,9 +67,8 @@ graph     ←  (nothing)                  (BodyGraph types, YAML builder)
 | `docs/claude/dead-ends.md` | Failed-experiment catalog. **MUST READ before any accuracy improvement proposal.** |
 | `docs/claude/experiment-log.md` | Chronological experiment history |
 | `docs/claude/diagnosis.md` | Accuracy ceiling analysis (target-noise floor + error cancellation) |
-| `docs/claude/landmarks.md` | File / model / data / script inventory |
-| `docs/claude/phase-completion.md` | Shipped phases and tracks |
-| `docs/claude/backlog.md` | Deferred work items with effort/value/risk tags. Promote to spec cycle / Issue / dead-ends / experiment-log when disposition decided. |
+| `docs/claude/cherry_picking_process_v1.md` | Pre-registration, holdout discipline, decorrelation gate |
+| `docs/claude/cherry_picking_audit_2026-04-22.md` | Quantitative cherry-picking risk audit (4.65/10) |
 
 ## Update order after an experiment
 
@@ -77,7 +76,6 @@ graph     ←  (nothing)                  (BodyGraph types, YAML builder)
 2. **Append entry to `docs/claude/experiment-log.md`** — at top, with date, commit, numeric outcome.
 3. **If the experiment failed**, also add to `docs/claude/dead-ends.md` with the next `DE-NN` id.
 4. **If the experiment reshapes ceiling analysis**, update `docs/claude/diagnosis.md` directly.
-5. **If a new file/model/script shipped**, add it to `docs/claude/landmarks.md`.
 
 ## Artifact gates — do not introduce silent fallbacks
 

@@ -12,6 +12,24 @@ track `pyproject.toml`.
 
 ## [Unreleased]
 
+### Docs reorganization — internal scratchpad split to `docs/_internal/` (gitignored, 2026-05-30)
+
+Agent-operational docs that external readers do not need are now gitignored under
+`docs/_internal/`, mirroring the existing `CLAUDE.md` local-only decision (2026-05-02).
+Moved out of the tracked tree (via `git mv`, history preserved): `backlog.md`,
+`landmarks.md`, `phase-completion.md`, `hardening_backlog.md`, `propranolol_cmax_drift.md`
+(from `docs/claude/`), `next_steps_plan.md` + `current_directory_completion_audit_2026-04-24.md`
+(from `docs/`), and the entire `docs/superpowers/plans/` directory (implementation
+scaffolding — specs stay public as audit-trail per `cherry_picking_process_v1.md` §2).
+`AGENTS.md` was slimmed to a public contributor guide; the full agent-operational superset
+now lives at `docs/_internal/AGENT_INTERNAL.md`. The committed `docs/claude/` set is now the
+externally-meaningful five: `dead-ends`, `experiment-log`, `diagnosis`,
+`cherry_picking_process_v1`, `cherry_picking_audit_2026-04-22`. **Note:** historical
+CHANGELOG / spec / experiment-log entries that cite the moved paths
+(`docs/superpowers/plans/…`, `docs/claude/backlog.md`, etc.) are left as immutable dated
+records; those files now live under `docs/_internal/` and resolve only in a working tree
+that retains the internal docs.
+
 ### v3 — Prodrug Activation Input-Data Quality Refresh (2026-05-01, branch `feat/prodrug-activation-v3`)
 
 Resolution of T1 caution flags deferred from v2. Architecture unchanged

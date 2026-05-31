@@ -59,3 +59,9 @@ sbi-logs/
 
 # Local-only Claude Code context (per-user agent memory; untracked by user request 2026-05-02)
 CLAUDE.md
+
+# Internal agent-operational docs (backlog, landmarks, plans, sub-backlogs, audit
+# snapshots). Public-facing agent guidance lives in AGENTS.md; the
+# docs/_internal/AGENT_INTERNAL.md superset is kept local-only because external
+# readers don't need the day-to-day scratchpad (untracked by user request 2026-05-30).
+docs/_internal/
