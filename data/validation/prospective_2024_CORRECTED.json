@@ -32,5 +32,21 @@
     "N=5 in-domain still small for statistical certainty",
     "DrugBank fup (measured) used \u2014 same as holdout, not a differentiator",
     "2/5 drugs (danicopan, inavolisib) have medium-confidence Cmax (SS/AR estimate)"
-  ]
+  ],
+  "vorasidenib_catch_2026_05_31": {
+    "drug": "vorasidenib",
+    "found_in": [
+      "clinical_pk.json (gold-tier reference, dose 200mg cmax 0.133)",
+      "mmpk_expanded_v2.csv",
+      "vdss_v2_training.csv",
+      "bioavailability_v1.csv",
+      "holdout.json['train']"
+    ],
+    "reason": "Missed by the original 'verified NOT in mmpk_expanded_full.csv' check (vorasidenib is absent from _full but present in _v2 + vdss + bioavailability + clinical_pk + holdout-train). Seen by training/reference \u2014 not genuinely prospective.",
+    "effect": "Prospective set N=15 -> N=14; overall meta AAFE 2.402 -> 2.319 (%2fold 53.3 -> 57.1); in-domain N=11 -> N=10, 2.200 -> 2.077 (%2fold 63.6 -> 70.0). vorasidenib meta fold was 3.91, so removal slightly improves the aggregate.",
+    "artifacts": [
+      "data/validation/prospective_N14_public_only_2026-05-31.json",
+      "data/validation/prospective_ci_2026-05-31_N14.json"
+    ]
+  }
 }
