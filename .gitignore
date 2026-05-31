@@ -30,10 +30,19 @@ venv/
 Thumbs.db
 *:Zone.Identifier
 
+# Merge / patch conflict artifacts
+*.orig
+*.rej
+
 # Testing
 .pytest_cache/
 .coverage
 htmlcov/
+.hypothesis/
+
+# Linter / type-checker caches
+.ruff_cache/
+.mypy_cache/
 
 # Jupyter
 .ipynb_checkpoints/
@@ -65,3 +74,7 @@ CLAUDE.md
 # docs/_internal/AGENT_INTERNAL.md superset is kept local-only because external
 # readers don't need the day-to-day scratchpad (untracked by user request 2026-05-30).
 docs/_internal/
+
+# Manuscript drafts (local-only; binary, frequently revised — not version-tracked)
+Sisyphus_Preprint_*.docx
+Sisyphus_Preprint_*.pdf
