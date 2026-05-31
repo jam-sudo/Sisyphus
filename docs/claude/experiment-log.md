@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-30
+last_updated: 2026-05-31
 parent: ../../CLAUDE.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -7,6 +7,22 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 # Experiment Log
 
 Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md).
+
+---
+
+## 2026-05-31 — Full-codebase completeness audit + 3 hardening fixes (no metric change)
+
+**Trigger:** user request — full architecture/completeness evaluation. A 29-agent adversarial workflow (7 dimensions: invariants, engine, predict/ml, tests, data/science, docs, roadmap; each load-bearing claim refuted by an independent skeptic; synthesis siding with verifiers).
+
+**Audit verdict:** overall **B+ / ~77**. The three load-bearing ideas (body-as-graph, all-Distribution, engine-knows-types-not-identities) survive adversarial scrutiny; the invariants that matter for correctness/integrity (engine identity-blindness, mass conservation, holdout exclusion, no-fudge) all hold under direct verification. Drag is integration/bookkeeping debt, not correctness. Two audit alarms self-corrected at the verification stage: the holdout leak-guard *does* run in CI (the slow-marker mechanism was refuted), and the `engine→ml` import is dormant-dead (function-local, gated on `backend="surrogate"` which no shipped path passes), not a live dependency.
+
+**Fix 1 — CLAUDE.md headline reconcile (the audit's #1, independently found by 5/7 dimensions).** The metrics block was stale at the 2026-05-25 B-03.x state (Meta 2.772 / In-domain 2.862 / N=81); the shipped cache (`4track_holdout_predictions.json` overall.meta=**2.69825**, in_domain.n=**79**), the README table, and the pinned test `test_cached_holdout_aafe_is_2p698` all read 2.698 / N=79. Reconciled the table + caption + † note to the cache. CLAUDE.md is git-untracked (`9006cf9`), so the headline is unguarded — drift is the expected failure mode (local-only edit, no commit).
+
+**Fix 2 — pravastatin holdout→MMPK leak (severity corrected from the audit).** The audit called it a "live leak in the shipped numbers"; deeper tracing shows that is **overstated**. The shipped `xgboost_cmax.json` (`v3_clean`, 2026-04-04) was trained on Omega's `mmpk_clean.csv` with its own N=107 3-key exclusion — *not* via the in-repo `ml_cmax_improvement.load_mmpk_data`, which saves no model. What is real and forward-looking: pravastatin is the **only** holdout drug (1/107, verified by replicating the two-filter logic) surviving both in-repo filters — `in_holdout=False` rows + an InChIKey-14 mismatch (clinical_pk `GOSGZXISMCZCDW` vs MMPK `TUZYXOIXSAXUGO`) the `ho_ik` filter can't catch (the other ~70 holdout drugs in the corpus are correctly excluded by InChIKey). Corrected the `in_holdout` flag in both `mmpk_expanded_{full,v2}.csv` (the universal first-line filter), added a name-based exclusion to `load_mmpk_data` (defense-in-depth, mirrors `build_n50_exclusion.py`), and added `tests/regression/test_mmpk_holdout_leak.py`. Commit `c957507`.
+
+**Fix 3 — JAX RHS silent-drop guard.** `ProdrugActivationFluxSpec`/`OneCompartmentEliminationFluxSpec` had no branch in `make_jax_rhs` and no terminal else → silently dropped from the JAX RHS (dead path; no production caller uses `backend="jax"`; JAX absent from the lockfile). Added a pure-Python `_unsupported_flux_specs()` guard that raises `NotImplementedError`, unit-tested without JAX so it runs in CI. Engine identity-blindness preserved (type-based dispatch, no name logic). Commit `49d9f69`.
+
+**Metrics:** **unchanged.** None of the three touches the prediction/benchmark path or model artifacts — Fix 1 is a doc reconcile, Fix 2 is forward-looking data/loader hardening (shipped model unaffected), Fix 3 guards a dead path. Cache stays Meta 2.69825 / N=79. Fixes 2–3 on branch `fix/audit-followups`; Fix 1 is a local-only CLAUDE.md edit.
 
 ---
 
