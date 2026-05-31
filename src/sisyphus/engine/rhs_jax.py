@@ -50,6 +50,29 @@ from sisyphus.engine.flux import (
     TransitFluxSpec,
 )
 
+# Concrete FluxSpec subclasses the JAX RHS can vectorize. ProdrugActivation and
+# OneCompartmentElimination are intentionally absent — they have no JAX branch.
+# Before _unsupported_flux_specs() guarded make_jax_rhs, such specs fell through
+# the build loop silently, omitting their flux from the RHS.
+_JAX_SUPPORTED_FLUX = (
+    FlowFluxSpec,
+    ClearanceFluxSpec,
+    TransitFluxSpec,
+    AbsorptionFluxSpec,
+    DiffusionFluxSpec,
+    ActiveTransportFluxSpec,
+)
+
+
+def _unsupported_flux_specs(flux_specs):
+    """Return the flux specs whose type the JAX RHS cannot vectorize.
+
+    Pure Python (imports no JAX) so the "no silent drop" invariant is testable
+    even when JAX is not installed.
+    """
+    return [s for s in flux_specs if not isinstance(s, _JAX_SUPPORTED_FLUX)]
+
+
 # ---------------------------------------------------------------------------
 # make_jax_rhs — the public API
 # ---------------------------------------------------------------------------
@@ -82,6 +105,18 @@ def make_jax_rhs(
         )
 
     n_states = compiled.n_states
+
+    # Fail loudly rather than silently dropping a flux the JAX RHS cannot
+    # vectorize (e.g. ProdrugActivation / OneCompartmentElimination). The
+    # SciPy backend handles them; backend="jax" must not corrupt those graphs.
+    unsupported = _unsupported_flux_specs(compiled.flux_specs)
+    if unsupported:
+        names = sorted({type(s).__name__ for s in unsupported})
+        raise NotImplementedError(
+            f"JAX RHS cannot vectorize flux type(s) {names}; they would be "
+            f"silently dropped. Use backend='scipy' (default) or add a "
+            f"vmap-safe branch to rhs_jax.py."
+        )
 
     # -- Extract static topology per flux type (Python, not JAX) ------------
     # Each list collects (source_idx, target_idx, edge_id) for that flux type.
