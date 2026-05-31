@@ -8,7 +8,7 @@ charter: Why Sisyphus's Cmax accuracy ceiling exists, what broke it, and which p
 
 **Short version:** Meta AAFE 2.695 (4-track, post-merge) is the ceiling under the current architecture. The ceiling is a combined **CLint target-noise floor** (R²≈0.24 is intrinsic, not engineering-limited) + **pipeline error-cancellation** (the 4 tracks are co-calibrated on a specific error profile; partial replacements destroy the balance). VDss analytical 4th track proved that **orthogonal** tracks can still be added, so the ceiling is not absolute — but "orthogonal" now has an empirical test (error decorrelation with existing tracks) that must precede any track proposal.
 
-Before proposing any accuracy improvement, read [dead-ends.md](./dead-ends.md) first — 32 enumerated attempts are documented. Most new proposals that "haven't been tried" are variants of something already reverted.
+Before proposing any accuracy improvement, read [dead-ends.md](./dead-ends.md) first — 40 enumerated attempts are documented. Most new proposals that "haven't been tried" are variants of something already reverted.
 
 ---
 
@@ -72,7 +72,7 @@ Population-level AAFE 1.7 is **unreachable from SMILES alone** under the current
 
 ## See also
 
-- [dead-ends.md](./dead-ends.md) — the 32 enumerated failed attempts in one place.
+- [dead-ends.md](./dead-ends.md) — the 40 enumerated failed attempts in one place.
 - [experiment-log.md](./experiment-log.md) — chronological record of experiments, successes and failures.
 - `docs/breakthrough_path.md` — UDE roadmap (Phase 1 falsified; Phase 2 / 3 pending).
 - `docs/holdout_contamination_audit.md` — the 2026-04-04 leakage discovery and fix (AAFE 2.283 → invalidated).

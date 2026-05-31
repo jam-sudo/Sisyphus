@@ -12,7 +12,14 @@ track `pyproject.toml`.
 
 ## [Unreleased]
 
-### Docs reorganization — internal scratchpad split to `docs/_internal/` (gitignored, 2026-05-30)
+### B-13 gut UGT expansion + B-14 hepatic UGT IVIVE + audit hardening (2026-05-29 → 2026-05-31)
+
+- **B-13 — gut UGT2B7 correction (PR #49, `242b100`, 2026-05-29).** Gut-wall `UGT2B7 = 3.6e3 pmol` (0.60 pmol/mg total-mucosal × 6000; Al-Majdoub 2021 / Couto 2020); gut `UGT1A9` dropped (not expressed in human small intestine; Oda 2012). Drug-level UGT1A9 affinity still acts at liver. Metric-neutral: Meta AAFE 2.69828 → 2.69825 (103/107 bit-identical; only the 4 UGT2B7 gut seeds shift, all down). A citation-confabulation audit (11-agent adversarial verification) re-derived both gut abundances from primary sources after two fabricated citations were caught.
+- **B-14 — hepatic UGT IVIVE differential = DE-40 no-op (PR #50, `3b0b72b`, 2026-05-30).** Predict-side per-enzyme UGT scaling-factor hook ships as audited no-op infrastructure: `data/enzymes/ugt_ivive_sf.json` (all-1.0 registry) + `get_ugt_ivive_sf()` loader in `predict/non_cyp_substrates.py` + a one-line `scaled_affinity *= sf` in `_decompose_clint`. Engine untouched (identity-blind preserved); 107/107 bit-identical. No verified per-substrate hepatocyte-basis hepatic-fraction SF exists (DE-40); the clean hook remains available for any future curated value.
+- **gitignore housekeeping (PR #52, `7749f41`, 2026-05-30).** Added `.ruff_cache/`, `.mypy_cache/`, `.hypothesis/`, `*.orig`, `*.rej`, and `Sisyphus_Preprint_*.{docx,pdf}` (local-only manuscript drafts). No tracked files affected.
+- **Pravastatin holdout→MMPK leak closed + JAX RHS guard (PR #53, `d424688`, 2026-05-31).** Forward-looking audit follow-up: pravastatin was the only holdout drug surviving both filters in `ml_cmax_improvement.load_mmpk_data` (in_holdout=False rows + an InChIKey-14 connectivity mismatch the `ho_ik` filter missed). Corrected the `in_holdout` flag in `mmpk_expanded_{full,v2}.csv`, added a name-based exclusion (`load_holdout_names()`), and pinned it with `tests/regression/test_mmpk_holdout_leak.py`. The shipped `xgboost_cmax.json` was trained via Omega's own 3-key exclusion, so the headline cache is **unaffected** (stays Meta 2.698). Also hardened `make_jax_rhs` with a pure-Python `_unsupported_flux_specs()` guard that raises `NotImplementedError` instead of silently dropping prodrug-activation / 1-compartment-elimination fluxes (dead path; no production caller uses `backend="jax"`).
+
+### Docs reorganization — internal scratchpad split to `docs/_internal/` (PR #51, gitignored, 2026-05-30)
 
 Agent-operational docs that external readers do not need are now gitignored under
 `docs/_internal/`, mirroring the existing `CLAUDE.md` local-only decision (2026-05-02).

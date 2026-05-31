@@ -6,7 +6,7 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 
 # Experiment Log
 
-Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md).
+Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
 
 ---
 
@@ -1311,7 +1311,7 @@ See [DE-32](./dead-ends.md#de-32--sbi-v3-oatp-training-expansion-2026-04-14).
 - Track B — multi-dose v2.0 + TDM v2.1 (IS + IBIS + EnKF + SBI + MIPD dose-adjust).
 - Full suite: 348 → 357 → 371 → 434 → 435 → 448 → **494** (2026-04-21, current).
 
-Detailed per-phase milestones: see [phase-completion.md](./phase-completion.md).
+Detailed per-phase milestones: see [phase-completion.md](../_internal/phase-completion.md) (local-only; moved to `docs/_internal/` in PR #51).
 
 ---
 
