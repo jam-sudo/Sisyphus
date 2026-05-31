@@ -1311,7 +1311,7 @@ See [DE-32](./dead-ends.md#de-32--sbi-v3-oatp-training-expansion-2026-04-14).
 - Track B — multi-dose v2.0 + TDM v2.1 (IS + IBIS + EnKF + SBI + MIPD dose-adjust).
 - Full suite: 348 → 357 → 371 → 434 → 435 → 448 → **494** (2026-04-21, current).
 
-Detailed per-phase milestones: see [phase-completion.md](./phase-completion.md).
+Detailed per-phase milestones: see [phase-completion.md](../_internal/phase-completion.md) (local-only; moved to `docs/_internal/` in PR #51).
 
 ---
 
