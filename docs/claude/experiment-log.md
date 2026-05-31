@@ -6,7 +6,7 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 
 # Experiment Log
 
-Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md).
+Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
 
 ---
 

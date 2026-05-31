@@ -34,7 +34,7 @@ graph     ←  (nothing)                  (BodyGraph types, YAML builder)
 
 ## Before proposing accuracy improvements
 
-⚠ **Read `docs/claude/dead-ends.md` first.** It catalogs 32+ enumerated failed attempts (post-hoc meta-learners, CLint R² gains, ADME replacements, foundation models, docking, UDE, E2E Neural PK, etc.). The accuracy ceiling is a combined CLint target-noise floor + pipeline error cancellation. New track proposals must first pass an error-decorrelation gate — see `docs/claude/diagnosis.md` §4.
+⚠ **Read `docs/claude/dead-ends.md` first.** It catalogs 40 enumerated failed attempts (DE-01..DE-40: post-hoc meta-learners, CLint R² gains, ADME replacements, foundation models, docking, UDE, E2E Neural PK, UGT IVIVE, etc.). The accuracy ceiling is a combined CLint target-noise floor + pipeline error cancellation. New track proposals must first pass an error-decorrelation gate — see `docs/claude/diagnosis.md` §4.
 
 ## Code style
 
@@ -79,7 +79,7 @@ graph     ←  (nothing)                  (BodyGraph types, YAML builder)
 
 ## Artifact gates — do not introduce silent fallbacks
 
-**Lesson from the 2026-05-09 audit cycle.** Two gitignored artifacts silently augmented prediction accuracy for ~4 weeks, anchoring a headline AAFE (2.679) that no public clone could reproduce. The current headline 2.751 is the *honest* public-clone deterministic value, and CI is anchored to that state.
+**Lesson from the 2026-05-09 audit cycle.** Two gitignored artifacts silently augmented prediction accuracy for ~4 weeks, anchoring a headline AAFE (2.679) that no public clone could reproduce. The current headline 2.698 is the *honest* public-clone deterministic value (pinned test `test_cached_holdout_aafe_is_2p698`), and CI is anchored to that state.
 
 When adding any new data file or model artifact that `predict()` (or any downstream code) loads conditionally via `Path.exists()`:
 
