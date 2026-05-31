@@ -13,24 +13,25 @@ from pathlib import Path
 from sisyphus.pipeline.predict import predict
 
 # ---------------------------------------------------------------------------
-# Curated prospective drugs (2024-2025 FDA NMEs, not in mmpk training)
+# Curated prospective drugs (2024-2025 FDA NMEs, genuinely unseen by training).
 #
 # Single-dose Cmax obtained via:
 #  (a) FDA label explicit single-dose PK, or
 #  (b) SS Cmax / accumulation ratio AR where AR = 1 / (1 - exp(-ln(2) * tau / t_half))
 #
-# All SMILES from DrugBank (canonical). All verified NOT in mmpk_expanded_full.csv.
+# All SMILES from DrugBank (canonical). Eligibility requires the drug be ABSENT
+# from ALL training/reference corpora — not just mmpk_expanded_full.csv but also
+# mmpk_expanded_v2.csv, vdss_v2_training.csv, bioavailability_v1.csv,
+# clinical_pk.json, and holdout.json['train'].
+#
+# 2026-05-31: vorasidenib REMOVED. The original "verified NOT in
+# mmpk_expanded_full.csv" check was too narrow — vorasidenib is present in
+# clinical_pk.json (gold-tier reference), mmpk_expanded_v2.csv,
+# vdss_v2_training.csv, bioavailability_v1.csv and holdout.json['train'], so it
+# was never genuinely prospective. See data/validation/prospective_2024_CORRECTED.json.
 # ---------------------------------------------------------------------------
 
 _CANDIDATES = [
-    {
-        "name": "vorasidenib",
-        "smiles": "C[C@@H](Nc1nc(N[C@H](C)C(F)(F)F)nc(-c2cccc(Cl)n2)n1)C(F)(F)F",
-        "dose_mg": 40.0,
-        "obs_mg_L": 0.0302,
-        "notes": "Voranigo 40mg QD; FDA SS Cmax 133 ng/mL / AR_AUC 4.4 (t1/2=10d)",
-        "flags": ["SS_CORRECTED_AR4.4", "VERY_LONG_THALF"],
-    },
     {
         "name": "pirtobrutinib",
         "smiles": "COc1ccc(F)cc1C(=O)NCc1ccc(-c2nn([C@@H](C)C(F)(F)F)c(N)c2C(N)=O)cc1",

@@ -1,22 +1,6 @@
 {
   "drugs": [
     {
-      "name": "vorasidenib",
-      "dose_mg": 40.0,
-      "obs": 0.0302,
-      "eng": 0.21065650000971828,
-      "ml": 0.105397752897684,
-      "meta": 0.12796035108504908,
-      "fold": 4.237097718047982,
-      "conf": "high",
-      "ad_flags": [],
-      "curation_flags": [
-        "SS_CORRECTED_AR4.4",
-        "VERY_LONG_THALF"
-      ],
-      "notes": "Voranigo 40mg QD; FDA SS Cmax 133 ng/mL / AR_AUC 4.4 (t1/2=10d)"
-    },
-    {
       "name": "pirtobrutinib",
       "dose_mg": 200.0,
       "obs": 3.99,
@@ -80,10 +64,11 @@
     }
   ],
   "summary": {
-    "N_total": 5,
+    "N_total": 4,
     "N_in_domain_clean": 0,
-    "aafe_all": 3.434801769780066,
+    "aafe_all": 3.2591922390080144,
     "aafe_in_domain_clean": null,
     "pct_within_2fold": 0.0
-  }
+  },
+  "_note": "vorasidenib removed 2026-05-31 (training-data leak; see prospective_2024_CORRECTED.json). Now N=4 kinase NMEs."
 }

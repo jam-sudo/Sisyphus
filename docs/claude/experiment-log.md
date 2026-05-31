@@ -10,6 +10,21 @@ Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the *
 
 ---
 
+## 2026-05-31 — Prospective vorasidenib contamination removal (N=15 → N=14)
+
+**Finding.** vorasidenib, counted as one of the 15 prospective FDA-NME drugs, is in fact present in the training/reference corpora: `clinical_pk.json` (gold-tier reference, dose 200 mg / Cmax 0.133), `mmpk_expanded_v2.csv`, `vdss_v2_training.csv`, `bioavailability_v1.csv`, and `holdout.json['train']`. The original kinase-batch curation comment claimed "verified NOT in `mmpk_expanded_full.csv`" — true, but too narrow: vorasidenib is absent from `_full` yet present in `_v2`/vdss/bioavailability/clinical_pk. So it was never genuinely prospective. The 2026-05-09 honesty audit caught vadadustat/aprocitentan/seladelpar but missed vorasidenib.
+
+**Fix.** Removed vorasidenib from `scripts/prospective_batch_validator.py::_CANDIDATES` and from the canonical prospective cache. The remaining 14 drugs' per-drug predictions are unchanged (dropping one drug does not alter the others'), so the corrected aggregates derive directly from the published `prospective_N15_public_only_2026-05-12.json` folds — no numerics-stack regeneration, no stack-drift confound.
+
+**Effect (public-clone):**
+- Overall: N=15 AAFE **2.402** → N=14 **2.319** (%2-fold 53.3 → 57.1); CI [1.59, 3.47].
+- In-domain: N=11 AAFE **2.200** → N=10 **2.077** (%2-fold 63.6 → 70.0); CI [1.39, 3.29].
+- vorasidenib's meta fold was 3.91 (one of the worse in-domain folds), so the contamination was making the prospective number look *worse*; removal slightly improves it. Direction aside, the point is integrity — a training-seen drug cannot be in the prospective set.
+
+**Artifacts:** `data/validation/prospective_N14_public_only_2026-05-31.json` (per-drug folds), `data/validation/prospective_ci_2026-05-31_N14.json` (CI bundle, seed 20260422, 10k resamples). Audit record appended to `data/validation/prospective_2024_CORRECTED.json`. Superseded `prospective_N15_public_only_2026-05-12.json` / `prospective_ci_2026-05-15.json` retained for audit trail. README prospective rows + CLAUDE.md prospective rows reconciled.
+
+---
+
 ## 2026-05-31 — Full-codebase completeness audit + 3 hardening fixes (no metric change)
 
 **Trigger:** user request — full architecture/completeness evaluation. A 29-agent adversarial workflow (7 dimensions: invariants, engine, predict/ml, tests, data/science, docs, roadmap; each load-bearing claim refuted by an independent skeptic; synthesis siding with verifiers).
