@@ -63,6 +63,15 @@ def load_holdout_ik():
             if ik: ik_set.add(ik)
     return ik_set
 
+def load_holdout_names() -> set[str]:
+    """Lowercased reference drug names (holdout + train) for name-based training
+    exclusion — robust to the SMILES-representation drift that can defeat
+    load_holdout_ik (a different InChIKey-14 for the same drug). Mirrors the
+    name-based policy in build_n50_exclusion.py."""
+    with open(ROOT / "data/reference/holdout.json") as f:
+        hd = json.load(f)
+    return {n.lower().strip() for n in hd.get("holdout", []) + hd.get("train", [])}
+
 def scaffold_split(smiles_list, n_folds=5, seed=42):
     s2i = {}
     for i, smi in enumerate(smiles_list):
@@ -122,8 +131,14 @@ def compute_mordred(smi):
 
 def load_mmpk_data():
     ho_ik = load_holdout_ik()
+    ho_names = load_holdout_names()
     mmpk = pd.read_csv(ROOT / "data/training/mmpk_expanded_full.csv")
     mmpk = mmpk[~mmpk["in_holdout"]].reset_index(drop=True)
+    # Name-based holdout exclusion (defense-in-depth): catches reference drugs
+    # whose MMPK canon_smiles yields a different InChIKey-14 than their
+    # clinical_pk SMILES, so the ho_ik filter below would miss them (e.g.
+    # pravastatin: clinical_pk GOSGZXISMCZCDW vs MMPK TUZYXOIXSAXUGO).
+    mmpk = mmpk[~mmpk["name"].str.lower().isin(ho_names)].reset_index(drop=True)
 
     # Per-drug: take median entry
     dedup = mmpk.groupby("canon_smiles").agg(
