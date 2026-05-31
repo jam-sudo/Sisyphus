@@ -78,3 +78,6 @@ docs/_internal/
 # Manuscript drafts (local-only; binary, frequently revised — not version-tracked)
 Sisyphus_Preprint_*.docx
 Sisyphus_Preprint_*.pdf
+
+# Personal/admin documents (user-managed, never part of the PBPK codebase — 2026-05-31)
+JaeMinYoon_*
