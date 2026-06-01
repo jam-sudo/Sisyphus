@@ -675,13 +675,13 @@ benchmark:   pytest tests/benchmark/ (holdout AAFE gate, main merge 시)
 Sisyphus는 [Omega PBPK](https://github.com/jam-sudo/Omega)의 후속 프로젝트다.
 
 **가져오는 것 (데이터 자산):**
-- Platinum reference (176 drugs clinical Cmax) → `data/reference/clinical_pk.json`
+- Platinum reference (177 drugs clinical Cmax, 331 total) → `data/reference/clinical_pk.json`
 - Holdout split (Murcko, seed=42) → `data/reference/holdout.json`
 - ICRP reference man physiology, R&R tissue composition → `data/physiology/`
 - Kp estimation 수식 3종 → engine flux 계산에 활용
 - MMPK clinical Cmax data → `data/training/`
 - ADME reference (153 compounds) → `data/reference/`
-- Compound YAML configs (22 drugs) → `data/compounds/`
+- Compound YAML configs (5 engine-validation drugs) → `data/compounds/`
 
 **가져오지 않는 것 (아키텍처 차이):**
 - 35-state hardcoded ODE → graph-compiled ODE
