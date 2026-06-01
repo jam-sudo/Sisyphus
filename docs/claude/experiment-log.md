@@ -10,6 +10,26 @@ Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the *
 
 ---
 
+## 2026-06-01 — Prospective benchmark: production-aware decontamination + exhaustive 2024-2025 expansion (N=14 → N=28; reverses the favorable claim)
+
+**Headline.** The honest, decontaminated, expanded prospective AAFE is **3.21** (overall N=28, CI [2.42, 4.37]) / **3.20** (in-domain N=16) — *worse* than the retrospective holdout (2.698). This **reverses** the prior "prospective < retrospective (favorable)" reading, which (N=15, 2.402) was a small-sample / curation artifact — exactly the under-powering the cherry-picking audit flagged.
+
+**Production-aware contamination gate.** Built `scripts/check_prospective_eligibility.py`, which distinguishes PRODUCTION training inputs (a hit = ineligible) from non-production files (informational). Tracing model build→load in `src/` established the real production inputs: Cmax ML ← `mmpk_clean.csv` (Omega, pre-2024, absent from repo); CLF ← `clf_training.csv` (`xgboost_clf`, **no prospective-exclusion filter**); VDss ← TDC VDss_Lombardo (`xgboost_vdss`; the `vdss_v2_training.csv` model `xgboost_vdss_v2` is **not loaded**); engine reference ← `clinical_pk.json`. Membership in non-production files (`mmpk_expanded_*`, `vdss_v2_training`, `bioavailability_v1`) is therefore NOT contamination — which is why the naïve "in any data/training CSV" check over-flagged all 14.
+
+**Two structural leaks found.**
+- **vorasidenib** (shipped 2026-05-31, PR #56): in `clinical_pk.json` gold reference.
+- **aficamten + gepotidacin**: in `clf_training.csv` → the CLF track trained on them (csv→model build times confirm; `train_clf_vdf_models.py` has no holdout/prospective filter). Removed (N=14 → N=12). The other 12 existing drugs are production-clean.
+
+**Exhaustive expansion.** Discovery: 146 raw rows / 101 unique 2024-2025 FDA NMEs (3 cross-checked web sources) → 37 new oral small-molecule candidates → adversarial per-drug Cmax verification (FDA label / EMA EPAR / peer-reviewed PK, ≥2 sources within ~1.5×). Exclusions (documented, no silent caps): 4 verification-failures (avutometinib, brensocatib, elinzanetant, ziftomenib), 7 combination products, **9 production-contaminated** (ensartinib→holdout.train, deuruxolitinib→clinical_pk, +7→clf_training.csv), 1 prodrug (sepiapterin, parent-Cmax fold ~3000; consistent with the prior vadadustat prodrug exclusion). **16 added.** All 28 re-scored on one numerics stack, public-clone (`scripts/score_prospective_candidates.py`; ~2-4% per-drug stack drift vs the 2026-05-12 cache, so the existing 12 were rescored rather than mixed).
+
+**Results.** existing-12 (rescored) 2.52; new-16 **3.85** (only 6% within 2-fold); overall-28 **3.21**; in-domain-16 **3.20**. **Robust**: dropping the 2 worst folds (mirdametinib 30×, sevabertinib 17× — both FDA-label-verified under-predictions, not data errors) still leaves overall 2.76 (>2.698); median fold 2.72. The N=28 CI [2.42, 4.37] still overlaps the retrospective in-domain Meta CI, so the gap is **directional, not statistically separated**.
+
+**Artifacts.** `data/validation/prospective_N28_public_only_2026-06-01.json` (per-drug folds + full methodology/exclusion record), `prospective_ci_2026-06-01_N28.json`. Scripts: `check_prospective_eligibility.py`, `score_prospective_candidates.py`. README + CLAUDE.md prospective rows reconciled. Holdout headline (Meta 2.698) untouched — no `src/`, no production-model, no holdout-cache change.
+
+**Follow-ups (backlog).** (1) `clf_training.csv` has no prospective/recent-drug exclusion, so it systematically contaminates the CLF track with new approvals (9 of 26 discovered candidates were already in it) — add an exclusion filter to `build_clf_training_data.py` + retrain `xgboost_clf`. (2) The engine prodrug heuristic missed sepiapterin (an obvious prodrug got `ad_flags=[]`) — tighten prodrug detection.
+
+---
+
 ## 2026-05-31 — Prospective vorasidenib contamination removal (N=15 → N=14)
 
 **Finding.** vorasidenib, counted as one of the 15 prospective FDA-NME drugs, is in fact present in the training/reference corpora: `clinical_pk.json` (gold-tier reference, dose 200 mg / Cmax 0.133), `mmpk_expanded_v2.csv`, `vdss_v2_training.csv`, `bioavailability_v1.csv`, and `holdout.json['train']`. The original kinase-batch curation comment claimed "verified NOT in `mmpk_expanded_full.csv`" — true, but too narrow: vorasidenib is absent from `_full` yet present in `_v2`/vdss/bioavailability/clinical_pk. So it was never genuinely prospective. The 2026-05-09 honesty audit caught vadadustat/aprocitentan/seladelpar but missed vorasidenib.
