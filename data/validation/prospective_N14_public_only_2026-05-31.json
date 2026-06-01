@@ -1,6 +1,7 @@
 {
   "context": "public-clone deterministic prospective N=14 (post 2026-05-31 vorasidenib contamination removal). vorasidenib excluded: present in clinical_pk.json (gold-tier reference), mmpk_expanded_v2.csv, vdss_v2_training.csv, bioavailability_v1.csv, and holdout.json['train'] \u2014 i.e. seen by training/reference, not genuinely prospective. Per-drug predictions for the remaining 14 are copied verbatim from prospective_N15_public_only_2026-05-12.json (removing one drug does not change the others' predictions; no numerics-stack regeneration).",
   "supersedes": "prospective_N15_public_only_2026-05-12.json",
+  "superseded_by": "prospective_N28_public_only_2026-06-01.json (2026-06-01 expansion; also drops aficamten+gepotidacin as clf_training.csv/CLF-track leaks)",
   "n": 14,
   "drugs": [
     {
