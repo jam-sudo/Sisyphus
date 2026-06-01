@@ -330,7 +330,7 @@ Bayesian update was validated in two stages: a single-drug functional test, then
 |--------|:-----:|:---------:|
 | C<sub>max</sub> CV | 44.3% | 19.8% |
 | ESS | &mdash; | 586.6 (29.3% of 2,000) |
-| CV reduction | &mdash; | 55.4% |
+| CV reduction | &mdash; | 55.3% |
 
 **Multi-drug benchmark** (5 holdout drugs, synthetic patient observations scaled from engine C(t) profiles to observed C<sub>max</sub>, 10% log-normal assay noise, seed = 42):
 
@@ -621,7 +621,7 @@ simulation with native uncertainty propagation.
 https://github.com/jam-sudo/Sisyphus
 ```
 
-> The git tag `v1.0.0` (commit `67b7064`) records an earlier feature-branch
+> The git tag `v1.0.0` (commit `d6ee9a6`) records an earlier feature-branch
 > milestone that has been superseded by the current `main` line under a
 > more conservative measurement regime. See `CHANGELOG.md` for details.
 
