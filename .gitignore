@@ -75,9 +75,22 @@ CLAUDE.md
 # readers don't need the day-to-day scratchpad (untracked by user request 2026-05-30).
 docs/_internal/
 
-# Manuscript drafts (local-only; binary, frequently revised — not version-tracked)
+# Manuscript / preprint / FDA-essay drafts and any binary document (local-only;
+# binary, frequently revised — not version-tracked). The repo tracks ZERO binary
+# documents (verified 2026-06-02), so these formats are ignored everywhere. To
+# track a specific one, add a `!path/to/file.pdf` exception below this block.
+*.docx
+*.doc
+*.pdf
+*.odt
+*.rtf
+# (legacy explicit globs retained for clarity — now subsumed by the rules above)
 Sisyphus_Preprint_*.docx
 Sisyphus_Preprint_*.pdf
+# Manuscript text artifacts that aren't binary (e.g. plaintext abstract). Targeted
+# by name so legit tracked docs like Sisyphus_Design_v4.md are NOT shadowed.
+Sisyphus_abstract*
+Sisyphus_Preprint_*.txt
 
 # Personal/admin documents (user-managed, never part of the PBPK codebase — 2026-05-31)
 JaeMinYoon_*
