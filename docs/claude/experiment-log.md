@@ -10,6 +10,18 @@ Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the *
 
 ---
 
+## 2026-06-01 — Novel-drug (prospective) failure root-caused to bioavailability (F), not CLint; low-F AD flag falsified (DE-41)
+
+**Investigation** (systematic-debugging) of why the expanded prospective set (N=28, AAFE 3.21) is so much worse than retrospective — specifically the catastrophic engine under-predictions (mirdametinib 30×, sevabertinib 17×).
+
+**Root cause (decisive, IV/oral decomposition):** **bioavailability (F) under-prediction, not clearance.** Engine CL_systemic ≈ literature (mirdametinib 4.8 vs 4.6 L/h), but engine F = 0.05–0.08 vs implied real F ≈ 1.0 — the entire 12–88× Cmax gap is in the absorption / first-pass model. corr(engine_F, |log10 fold|) = −0.54 on the prospective new-16; CLint is *not* the differentiator. Engine (5.10) ≫ ML (3.40) on the new drugs. Refines the ceiling story (diagnosis.md §8): the CLint R²=0.24 floor governs the *retrospective* set; the *prospective* gap is an F/absorption extrapolation problem.
+
+**Proposed mitigation FALSIFIED on the 107-holdout (so NOT shipped):** a low predicted-F applicability-domain flag (and an engine↔ML divergence flag). The systematic-debugging holdout-validation step killed both: holdout corr(engine_F, |log fold|) = −0.037 (vs −0.54 prospective — does not generalize); 17 of 21 holdout drugs with F<0.10 are within 2-fold; flagging F<0.08 removes 7 in-domain drugs and barely moves AAFE (2.760→2.732), i.e. removes *well*-predicted drugs. engine↔ML divergence holdout r=−0.033. The per-drug error is not recoverable from the model's own outputs (consistent with ~30% PI coverage). Logged **DE-41**.
+
+**Outcome:** doc-only, no code change. The diagnosis is the deliverable; the AD-flag idea is a documented dead-end. The honest open lever is measured-F routing or an absorption-model recalibration, not an AD signal.
+
+---
+
 ## 2026-06-01 — Prospective benchmark: production-aware decontamination + exhaustive 2024-2025 expansion (N=14 → N=28; reverses the favorable claim)
 
 **Headline.** The honest, decontaminated, expanded prospective AAFE is **3.21** (overall N=28, CI [2.42, 4.37]) / **3.20** (in-domain N=16) — *worse* than the retrospective holdout (2.698). This **reverses** the prior "prospective < retrospective (favorable)" reading, which (N=15, 2.402) was a small-sample / curation artifact — exactly the under-powering the cherry-picking audit flagged.

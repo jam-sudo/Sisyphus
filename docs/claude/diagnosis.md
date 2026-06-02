@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-31
+last_updated: 2026-06-01
 parent: ../../CLAUDE.md
 charter: Why Sisyphus's Cmax accuracy ceiling exists, what broke it, and which paths remain open
 ---
@@ -8,7 +8,7 @@ charter: Why Sisyphus's Cmax accuracy ceiling exists, what broke it, and which p
 
 **Short version:** Meta AAFE 2.698 (4-track; was 2.695 at 2026-04-20 — the 2.695→2.698 drift is numerics-stack + metric-neutral UGT/prodrug cycles per [CLAUDE.md](../../CLAUDE.md), the qualitative ceiling model is unchanged) is the ceiling under the current architecture. The ceiling is a combined **CLint target-noise floor** (R²≈0.24 is intrinsic, not engineering-limited) + **pipeline error-cancellation** (the 4 tracks are co-calibrated on a specific error profile; partial replacements destroy the balance). VDss analytical 4th track proved that **orthogonal** tracks can still be added, so the ceiling is not absolute — but "orthogonal" now has an empirical test (error decorrelation with existing tracks) that must precede any track proposal.
 
-Before proposing any accuracy improvement, read [dead-ends.md](./dead-ends.md) first — 40 enumerated attempts are documented. Most new proposals that "haven't been tried" are variants of something already reverted.
+Before proposing any accuracy improvement, read [dead-ends.md](./dead-ends.md) first — 41 enumerated attempts are documented. Most new proposals that "haven't been tried" are variants of something already reverted.
 
 ---
 
@@ -70,9 +70,23 @@ Population-level AAFE 1.7 is **unreachable from SMILES alone** under the current
 
 ---
 
+## 8. Novel-drug failure mode — bioavailability (F), not CLint (2026-06-01)
+
+The 2026-06-01 prospective expansion (N=28; prospective Meta AAFE 3.21 > retrospective 2.698) exposed a failure mode the CLint-centric story above does **not** capture. The engine's worst prospective errors are catastrophic **under**-predictions of low-clearance, high-exposure 2025 NMEs (mirdametinib 30×, sevabertinib 17×). An IV-vs-oral decomposition localises the error:
+
+- Engine **CL_systemic is ≈ correct** (mirdametinib 4.8 vs literature CL/F 4.6 L/h; the drug *is* low-clearance and the engine knows it).
+- Engine **bioavailability F is catastrophically low** (mirdametinib F=0.08, sevabertinib F=0.05) vs implied real F ≈ 0.5–1.0. The entire 12–88× Cmax gap is in the absorption / first-pass (F) model, not clearance.
+- On the prospective new-16, corr(engine_F, |log10 fold|) = −0.54 (lower predicted F → worse). CLint is **not** the differentiator (median CLint ≈ equal for under- vs over-predicted). The engine track (5.10) is much worse than ML (3.40) on the new drugs.
+
+**Refinement to §1:** for *novel / out-of-distribution* drugs the binding constraint is the **F (fa·fg·fh) absorption model**, not the CLint R²=0.24 floor — CL_systemic was right where Cmax was 30× off. The CLint ceiling governs the *retrospective, in-distribution* set; the *prospective* gap is an absorption-model extrapolation problem.
+
+**No predict-time AD signal recovers it** (see dead-ends.md DE-41): low predicted-F and engine↔ML divergence both correlate ≈0 with error on the holdout (the engine predicts low F for nearly everything — median 0.18 — co-calibrated, so it is not discriminative). The per-drug F error is structural, consistent with the ~30% PI coverage. A real lever would be **measured-F routing** or an **absorption-model recalibration** (untested), not an AD flag.
+
+---
+
 ## See also
 
-- [dead-ends.md](./dead-ends.md) — the 40 enumerated failed attempts in one place.
+- [dead-ends.md](./dead-ends.md) — the 41 enumerated failed attempts in one place.
 - [experiment-log.md](./experiment-log.md) — chronological record of experiments, successes and failures.
 - `docs/breakthrough_path.md` — UDE roadmap (Phase 1 falsified; Phase 2 / 3 pending).
 - `docs/holdout_contamination_audit.md` — the 2026-04-04 leakage discovery and fix (AAFE 2.283 → invalidated).
