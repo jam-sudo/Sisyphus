@@ -12,7 +12,7 @@ Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the *
 
 ## 2026-06-01 — Novel-drug (prospective) failure root-caused to bioavailability (F), not CLint; low-F AD flag falsified (DE-41)
 
-**Investigation** (systematic-debugging) of why the expanded prospective set (N=28, AAFE 3.21) is so much worse than retrospective — specifically the catastrophic engine under-predictions (mirdametinib 30×, sevabertinib 17×).
+**Investigation** (systematic-debugging) of why the expanded prospective set (N=28, AAFE 3.21) is so much worse than retrospective — specifically the catastrophic engine under-predictions (mirdametinib 30×, sevabertinib 18×).
 
 **Root cause (decisive, IV/oral decomposition):** **bioavailability (F) under-prediction, not clearance.** Engine CL_systemic ≈ literature (mirdametinib 4.8 vs 4.6 L/h), but engine F = 0.05–0.08 vs implied real F ≈ 1.0 — the entire 12–88× Cmax gap is in the absorption / first-pass model. corr(engine_F, |log10 fold|) = −0.54 on the prospective new-16; CLint is *not* the differentiator. Engine (5.10) ≫ ML (3.40) on the new drugs. Refines the ceiling story (diagnosis.md §8): the CLint R²=0.24 floor governs the *retrospective* set; the *prospective* gap is an F/absorption extrapolation problem.
 
@@ -34,7 +34,7 @@ Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the *
 
 **Exhaustive expansion.** Discovery: 146 raw rows / 101 unique 2024-2025 FDA NMEs (3 cross-checked web sources) → 37 new oral small-molecule candidates → adversarial per-drug Cmax verification (FDA label / EMA EPAR / peer-reviewed PK, ≥2 sources within ~1.5×). Exclusions (documented, no silent caps): 4 verification-failures (avutometinib, brensocatib, elinzanetant, ziftomenib), 7 combination products, **9 production-contaminated** (ensartinib→holdout.train, deuruxolitinib→clinical_pk, +7→clf_training.csv), 1 prodrug (sepiapterin, parent-Cmax fold ~3000; consistent with the prior vadadustat prodrug exclusion). **16 added.** All 28 re-scored on one numerics stack, public-clone (`scripts/score_prospective_candidates.py`; ~2-4% per-drug stack drift vs the 2026-05-12 cache, so the existing 12 were rescored rather than mixed).
 
-**Results.** existing-12 (rescored) 2.52; new-16 **3.85** (only 6% within 2-fold); overall-28 **3.21**; in-domain-16 **3.20**. **Robust**: dropping the 2 worst folds (mirdametinib 30×, sevabertinib 17× — both FDA-label-verified under-predictions, not data errors) still leaves overall 2.76 (>2.698); median fold 2.72. The N=28 CI [2.42, 4.37] still overlaps the retrospective in-domain Meta CI, so the gap is **directional, not statistically separated**.
+**Results.** existing-12 (rescored) 2.52; new-16 **3.85** (only 6% within 2-fold); overall-28 **3.21**; in-domain-16 **3.20**. **Robust**: dropping the 2 worst folds (mirdametinib 30×, sevabertinib 18× — both FDA-label-verified under-predictions, not data errors) still leaves overall 2.76 (>2.698); median fold 2.72. The N=28 CI [2.42, 4.37] still overlaps the retrospective in-domain Meta CI, so the gap is **directional, not statistically separated**.
 
 **Artifacts.** `data/validation/prospective_N28_public_only_2026-06-01.json` (per-drug folds + full methodology/exclusion record), `prospective_ci_2026-06-01_N28.json`. Scripts: `check_prospective_eligibility.py`, `score_prospective_candidates.py`. README + CLAUDE.md prospective rows reconciled. Holdout headline (Meta 2.698) untouched — no `src/`, no production-model, no holdout-cache change.
 

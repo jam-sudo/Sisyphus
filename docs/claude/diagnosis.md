@@ -72,7 +72,7 @@ Population-level AAFE 1.7 is **unreachable from SMILES alone** under the current
 
 ## 8. Novel-drug failure mode — bioavailability (F), not CLint (2026-06-01)
 
-The 2026-06-01 prospective expansion (N=28; prospective Meta AAFE 3.21 > retrospective 2.698) exposed a failure mode the CLint-centric story above does **not** capture. The engine's worst prospective errors are catastrophic **under**-predictions of low-clearance, high-exposure 2025 NMEs (mirdametinib 30×, sevabertinib 17×). An IV-vs-oral decomposition localises the error:
+The 2026-06-01 prospective expansion (N=28; prospective Meta AAFE 3.21 > retrospective 2.698) exposed a failure mode the CLint-centric story above does **not** capture. The engine's worst prospective errors are catastrophic **under**-predictions of low-clearance, high-exposure 2025 NMEs (mirdametinib 30×, sevabertinib 18×). An IV-vs-oral decomposition localises the error:
 
 - Engine **CL_systemic is ≈ correct** (mirdametinib 4.8 vs literature CL/F 4.6 L/h; the drug *is* low-clearance and the engine knows it).
 - Engine **bioavailability F is catastrophically low** (mirdametinib F=0.08, sevabertinib F=0.05) vs implied real F ≈ 0.5–1.0. The entire 12–88× Cmax gap is in the absorption / first-pass (F) model, not clearance.

@@ -252,7 +252,7 @@ Artifacts: `data/enzymes/ugt_ivive_sf.json` (all-1.0 audited registry), `src/sis
 
 **Date:** 2026-06-01
 
-**Context:** the 2026-06-01 prospective expansion (N=28, Meta AAFE 3.21 > retrospective 2.698) showed the engine catastrophically under-predicts some 2025 NMEs (mirdametinib 30×, sevabertinib 17×). Root-caused via IV/oral decomposition to **bioavailability (F) under-prediction, not clearance** — engine F = 0.05–0.08 vs implied real F ≈ 1.0, while engine CL_systemic ≈ literature (mirdametinib 4.8 vs 4.6 L/h). See diagnosis.md §8.
+**Context:** the 2026-06-01 prospective expansion (N=28, Meta AAFE 3.21 > retrospective 2.698) showed the engine catastrophically under-predicts some 2025 NMEs (mirdametinib 30×, sevabertinib 18×). Root-caused via IV/oral decomposition to **bioavailability (F) under-prediction, not clearance** — engine F = 0.05–0.08 vs implied real F ≈ 1.0, while engine CL_systemic ≈ literature (mirdametinib 4.8 vs 4.6 L/h). See diagnosis.md §8.
 
 **Hypothesis:** the engine's own low predicted-F (or engine↔ML track disagreement) is a predict-time signal of an OOD / unreliable Cmax that the applicability-domain detector could flag, excluding the catastrophic cases from in-domain.
 
