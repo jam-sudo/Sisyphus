@@ -8,7 +8,7 @@ charter: Authoritative list of failed Sisyphus experiments. Read before proposin
 
 Every experiment here was run, reverted, and documented. **Before proposing any accuracy improvement, open this file and search for the approach.** New track proposals must first pass the error-decorrelation gate described in [diagnosis.md §4](./diagnosis.md).
 
-**Canonical count:** 40 enumerated experiments below. Narrative references in commit messages or prose (e.g. "#35 error cancellation", "14번째 시도", "누적 33 methods") use **informal** numbering that counts early exploration attempts separately; those narrative numbers are **not authoritative** and do not match the table count below. When in doubt, cite the table entry (`DE-NN`).
+**Canonical count:** 41 enumerated experiments below. Narrative references in commit messages or prose (e.g. "#35 error cancellation", "14번째 시도", "누적 33 methods") use **informal** numbering that counts early exploration attempts separately; those narrative numbers are **not authoritative** and do not match the table count below. When in doubt, cite the table entry (`DE-NN`).
 
 ## 1. Theme summary (13 categories)
 
@@ -245,6 +245,22 @@ Artifacts: `data/physiology/reference_man.yaml` (gut_wall UGT2B7), `data/trainin
 **Telltale if it returns:** "hepatic UGT IVIVE / UGT under-prediction correction / albumin-effect scaling" proposed for morphine/codeine without a **verified, hepatocyte-basis, hepatic-fraction-only, per-substrate** number. The HLM albumin fold and the renal contribution are the two traps. The DE-38-complete idea (UGT IVIVE **plus** a CYP-route rebalance) remains theoretically open but is a different cycle — B-14 shows the UGT-IVIVE half alone has no honest large value.
 
 Artifacts: `data/enzymes/ugt_ivive_sf.json` (all-1.0 audited registry), `src/sisyphus/predict/non_cyp_substrates.py` (`get_ugt_ivive_sf`), `src/sisyphus/predict/ivive.py` (`_decompose_clint` hook), `tests/unit/test_ugt_ivive_sf.py`, `tests/regression/test_ugt_ivive_sf_registry_schema.py`, spec `docs/superpowers/specs/2026-05-30-hepatic-ugt-ivive-differential-design.md` (v2), plan `docs/superpowers/plans/2026-05-30-B14-hepatic-ugt-ivive-differential.md`.
+
+---
+
+### DE-41 — Predict-time AD signal for catastrophic novel-drug Cmax errors (low-F / track-divergence) (2026-06-01)
+
+**Date:** 2026-06-01
+
+**Context:** the 2026-06-01 prospective expansion (N=28, Meta AAFE 3.21 > retrospective 2.698) showed the engine catastrophically under-predicts some 2025 NMEs (mirdametinib 30×, sevabertinib 17×). Root-caused via IV/oral decomposition to **bioavailability (F) under-prediction, not clearance** — engine F = 0.05–0.08 vs implied real F ≈ 1.0, while engine CL_systemic ≈ literature (mirdametinib 4.8 vs 4.6 L/h). See diagnosis.md §8.
+
+**Hypothesis:** the engine's own low predicted-F (or engine↔ML track disagreement) is a predict-time signal of an OOD / unreliable Cmax that the applicability-domain detector could flag, excluding the catastrophic cases from in-domain.
+
+**Result — falsified on the 107-holdout:** corr(engine_F, |log10 fold|) = **−0.037** on the holdout (vs −0.54 on the prospective new-16 — does **not** generalize). Of 21 holdout drugs with engine F<0.10, **17 are within 2-fold** (the engine predicts low F for nearly everything — median 0.18 — and it is co-calibrated). Flagging F<0.08 removes 7 in-domain drugs but only moves in-domain AAFE 2.760→2.732 — it removes *well*-predicted drugs. engine↔ML divergence is also flat (holdout r=−0.033; top-20 vs bottom-20 divergence AAFE 2.48 vs 2.57).
+
+**Why it failed:** the per-drug Cmax error is **not recoverable from the model's own outputs** — consistent with the structural-error ceiling (~30% PI coverage). The F under-prediction is real but near-uniform, so it carries no discriminative OOD signal. The honest lever is measured-F routing or an absorption-model recalibration, not an AD flag.
+
+**Telltale if it returns:** "flag low predicted-F / high track-disagreement as out-of-domain." Re-check the holdout correlation (≈0) before building — it looks predictive on a prospective slice but does not generalize.
 
 ---
 
