@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-31
+last_updated: 2026-06-02
 parent: ../../CLAUDE.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -7,6 +7,16 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 # Experiment Log
 
 Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
+
+---
+
+## 2026-06-02 — Measured-input path shipped (SP1); the "1.980 floor" is stale; engine-only path is not error-cancellation-free
+
+**SP1 (measured-input engine path).** Added `MeasuredADMEInput` + an opt-in `measured_adme` override to `predict()` (additive; `measured_adme=None` is bit-identical — 4-SMILES exact-float test + 789-test suite unchanged). Branch `feat/measured-input-engine-path`. Atomic fup+clint pairing (engine-IVIVE grounds), CV floor 0.10. Engine-only benchmark `scripts/run_measured_adme_benchmark.py` reuses the 12 source-cited PoC drugs. Spec/plan: `docs/superpowers/specs/2026-06-02-dual-track-evolution-design.md`, `docs/superpowers/plans/2026-06-02-measured-input-engine-path.md`.
+
+**Systematic-debugging finding (the "1.98 floor" is stale).** `diagnosis.md §3`'s "2.329 → 1.980" is an earlier engine state. Re-running the byte-unchanged `measured_adme_poc.py` today gives clean-10 2.81 → 2.69 (not 1.98); production `predict(measured_adme=...)` gives 2.63 → 2.33. The engine evolved under the unchanged script (realize_means hardening, clopidogrel prodrug routing B-03, registries). Production (2.33) beats the leaner PoC path (2.69) — clopidogrel prodrug routing alone moves the PoC clean-10 2.69 → 2.40. §3 reconciled.
+
+**Refinement to the measured-input thesis.** The engine-only measured path is NOT error-cancellation-free: alprazolam FE *worsens* 2.67 → 6.04 under correct measured fup (0.20 vs predicted 0.028) — wrong predicted ADME was compensating for engine structural error. Measured input helps only ~11% in aggregate; engine structural error dominates the residual. The measured-input path is best used as a **structural-engine-error probe**, not a guaranteed clean test-bed. This narrows the spec §0 "error-cancellation-free / bias-corrections land cleanly" claim.
 
 ---
 

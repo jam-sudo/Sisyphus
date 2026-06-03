@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-01
+last_updated: 2026-06-02
 parent: ../../CLAUDE.md
 charter: Why Sisyphus's Cmax accuracy ceiling exists, what broke it, and which paths remain open
 ---
@@ -34,12 +34,13 @@ Evidence:
 
 ## 3. Measured ADME PoC (Pattern C)
 
-12 holdout drugs with measured fup + CLint, engine-only (no meta). Clean set (N=10, excluding montelukast/abiraterone extreme outliers):
-- AAFE 2.329 → **1.980** (measured ADME), median FE 2.19 → **1.88**, 8/10 improved.
-- fup-matched subgroup (N=8): 1.91 → 1.79 (CLint-only effect, 6% gain).
-- fup-corrected subgroup (N=2): 5.15 → 2.96 (fup+CLint, 42% gain).
+12 holdout drugs with measured fup + CLint, engine-only (no meta). Clean set (N=10, excluding montelukast/abiraterone extreme outliers).
 
-**Conclusion:** engine architecture is sound. Minor systematic bias exists but is not dominant. Input quality is the bottleneck. Error cancellation happens in some drugs (abiraterone fup 0.085→0.01 worsened FE 20.8→39.1) but is not the dominant pattern — 80% of drugs benefit from measured data.
+**Reconciled 2026-06-02.** The earlier "AAFE 2.329 → **1.980**" figures are a *stale engine state*. `scripts/measured_adme_poc.py` is byte-unchanged, but the engine evolved underneath it (the 2026-05-01 `realize_means` hardening; clopidogrel prodrug routing, 2026-05-20 B-03; the OATP/non_cyp registries). Re-running the unchanged PoC **today** gives clean-10 **2.81 → 2.69**, not 1.98. Current reproducible numbers:
+- **Production `predict(measured_adme=fup+clint)`, engine-only** (`scripts/run_measured_adme_benchmark.py`): clean-10 SMILES **2.63 → measured 2.33** (~11% gain). This is the honest current floor; it *beats* the leaner PoC path (2.69) because production prodrug-routes clopidogrel (FE 10.25 → 3.35; that one drug moves the PoC clean-10 2.69 → 2.40) and applies the registries.
+- The legacy fup-matched (1.91→1.79) / fup-corrected (5.15→2.96) subgroup splits were tied to the stale state and are not re-derived.
+
+**Conclusion (refined 2026-06-02):** measured ADME helps *modestly* (~11%), not dramatically — the engine carries significant **structural** error that correct fup/CLint do not remove. Critically, the engine-only measured path is **not** error-cancellation-free: alprazolam's FE *worsens* 2.67 → 6.04 when given the correct measured fup (0.20 vs predicted 0.028) — the wrong predicted fup was *compensating* for a separate engine error (cf. abiraterone 20.8 → 39.1 under measured fup). So "input quality is the bottleneck" is only partly true: engine structural error and internal compensation are real, and the measured-input path is a **probe of engine structure**, not a guaranteed clean win.
 
 ## 4. The VDss exception — when a new track *is* OK
 

@@ -388,7 +388,7 @@ if __name__ == "__main__":
 - [ ] **Step 2: Run the benchmark and sanity-check the direction**
 
 Run: `python scripts/run_measured_adme_benchmark.py`
-Expected: prints a per-drug table; the clean-set (N≈10) **measured AAFE < SMILES AAFE** (Pattern C reference ≈ 1.98 measured vs ≈ 3–4 SMILES). If measured ≥ SMILES on the clean set, STOP and investigate (the override is not reaching the engine).
+Expected: prints a per-drug table; the clean-set (N≈10) **measured AAFE < SMILES AAFE** (reconciled 2026-06-02: ≈ 2.33 measured vs ≈ 2.63 SMILES; the legacy 1.98 was a stale engine state — see experiment-log 2026-06-02). If measured ≥ SMILES on the clean set, STOP and investigate (the override is not reaching the engine).
 
 - [ ] **Step 3: Commit**
 
@@ -401,7 +401,7 @@ git commit -m "feat(validation): engine-only measured-input benchmark (reuses 12
 
 ## Self-Review
 
-**Spec coverage (spec §4 SP1):** MeasuredADMEInput contract (Task 1) ✓; keyword-only param + override branch + `adme` rebind for both builds (Task 2) ✓; atomic fup+clint + CV floor + >0 (Task 1) ✓; bit-identical `None` test + present-changes + warning-tag (Task 2) ✓; engine-only benchmark reproducing ~1.98 (Task 3) ✓. **Deferred (noted in spec, not this plan):** N≥20 curation with fresh verified citations (Task 3 reuses the 12 already-sourced PoC drugs); `kp_method` cosmetic fix (excluded); 107/107 full-cache rerun (the `None`-path is code-identical and proven by Task 2's exact-float test over 4 drugs — a full regen risks stack-drift false alarms, so it is not a plan gate).
+**Spec coverage (spec §4 SP1):** MeasuredADMEInput contract (Task 1) ✓; keyword-only param + override branch + `adme` rebind for both builds (Task 2) ✓; atomic fup+clint + CV floor + >0 (Task 1) ✓; bit-identical `None` test + present-changes + warning-tag (Task 2) ✓; engine-only benchmark (Task 3) ✓ — reproduces 2.63→2.33 (the 1.98 was a stale engine state; see experiment-log 2026-06-02). **Deferred (noted in spec, not this plan):** N≥20 curation with fresh verified citations (Task 3 reuses the 12 already-sourced PoC drugs); `kp_method` cosmetic fix (excluded); 107/107 full-cache rerun (the `None`-path is code-identical and proven by Task 2's exact-float test over 4 drugs — a full regen risks stack-drift false alarms, so it is not a plan gate).
 
 **Placeholder scan:** none — every step has exact code/commands.
 
