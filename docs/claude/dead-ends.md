@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-31
+last_updated: 2026-06-03
 parent: ../../CLAUDE.md
 charter: Authoritative list of failed Sisyphus experiments. Read before proposing any accuracy improvement.
 ---
@@ -8,9 +8,9 @@ charter: Authoritative list of failed Sisyphus experiments. Read before proposin
 
 Every experiment here was run, reverted, and documented. **Before proposing any accuracy improvement, open this file and search for the approach.** New track proposals must first pass the error-decorrelation gate described in [diagnosis.md §4](./diagnosis.md).
 
-**Canonical count:** 41 enumerated experiments below. Narrative references in commit messages or prose (e.g. "#35 error cancellation", "14번째 시도", "누적 33 methods") use **informal** numbering that counts early exploration attempts separately; those narrative numbers are **not authoritative** and do not match the table count below. When in doubt, cite the table entry (`DE-NN`).
+**Canonical count:** 43 enumerated experiments below. Narrative references in commit messages or prose (e.g. "#35 error cancellation", "14번째 시도", "누적 33 methods") use **informal** numbering that counts early exploration attempts separately; those narrative numbers are **not authoritative** and do not match the table count below. When in doubt, cite the table entry (`DE-NN`).
 
-## 1. Theme summary (13 categories)
+## 1. Theme summary (14 categories)
 
 | Category | Representative entries | Headline outcome |
 |---|---|---|
@@ -27,6 +27,7 @@ Every experiment here was run, reverted, and documented. **Before proposing any 
 | Direct CL/F + t½ predictors | DE-27, DE-28 | CL/F R²=0.232 + t½ variants all negative; falsifies "IVIVE bypass" as the reason VDss worked |
 | Hepatic intracellular fu correction (PPB-targeted) | DE-37 | Phase A infra shipped; primary literature corpus paywall-locked, 4 PPB candidates dispositioned ceiling_accepted, Meta AAFE shift 0.0% |
 | UGT path / abundance / IVIVE interventions | DE-36, DE-38, DE-39, DE-40 | four consecutive metric-neutral UGT cycles; no per-substrate hepatocyte-basis scaling factor exists; ΔMeta AAFE ≤ 0.003 |
+| Absorption / first-pass bioavailability-F recalibration | DE-41, DE-42, DE-43 | engine F under-call is bidirectional first-pass dispersion (not absorption); the absorption knob is linear = a flat scalar; and the fixed-weight meta damps **any** engine recalibration to ~18% pass-through on **both** the retrospective and prospective sets — the engine is not a headline lever on any benchmark |
 
 **Root cause (shared across categories):** Cmax residuals are not learnable from molecular structure (CV R² < 0). Remaining error ≈ experimental variability + formulation + inter-patient variability. SMILES → Cmax carries a fundamental information-channel ceiling.
 
@@ -261,6 +262,38 @@ Artifacts: `data/enzymes/ugt_ivive_sf.json` (all-1.0 audited registry), `src/sis
 **Why it failed:** the per-drug Cmax error is **not recoverable from the model's own outputs** — consistent with the structural-error ceiling (~30% PI coverage). The F under-prediction is real but near-uniform, so it carries no discriminative OOD signal. The honest lever is measured-F routing or an absorption-model recalibration, not an AD flag.
 
 **Telltale if it returns:** "flag low predicted-F / high track-disagreement as out-of-domain." Re-check the holdout correlation (≈0) before building — it looks predictive on a prospective slice but does not generalize.
+
+---
+
+### DE-42 — Absorption-model recalibration as an F-accuracy lever (DE-41's "honest lever", now tested end-to-end) (2026-06-03)
+
+**Date:** 2026-06-03
+
+**Context:** DE-41 / diagnosis.md §8 left "an absorption-model recalibration" as the one un-tested honest lever for the systematic engine bioavailability-F under-call (median engine-F/lit-F ≈ 0.46, 10/10 measured-fup+CLint PoC drugs). Two measurement-only multi-agent decompositions tested it (engine `F = fa·Fg·Fh`; runtime monkeypatch only, no tracked file changed; headline Meta 2.698 / engine 3.831 reproduced exactly as controls).
+
+**Confirmed diagnostic:** the *median* under-call localises to **fa** (fraction absorbed) — fa median bias 0.55 (vs physiological ~0.9), Fg ≈ 1.0, Fh ≈ 1.05 — because `ka = 2.88·Peff·ka_fraction/radius` (~6%/segment) loses the race to gut transit (~3.85/h), so most dose transits to faeces unabsorbed (dasatinib fa 0.16, sildenafil 0.22). Decisive: the non-CYP3A acids (diclofenac/etodolac/febuxostat) have an empty `metabolized_gut` sink (Fg ≈ 1 real) yet suppressed F ⇒ the loss is fa, not first-pass.
+
+**Why the lever fails:** `ka` enters the ODE **linearly** (`rate = ka·y`), so any uniform multiplier — the `2.88` constant, a villous-amplification factor, a corrected particle radius, or a literature transit-window — is mathematically the *same flat scalar*. It nulls the median (5.25× → engine-F/lit-F 1.0; engine N=107 3.831→3.336) but **cannot reduce per-drug dispersion**: all 4 candidates plateau at geomean fold-error 1.43–1.45 (flat-scalar 1.40, itself inside the ±15% lit-F noise band); the one nonlinear candidate (Peff Caco-2→in-vivo remap) made it *worse* (1.52); engine SITT (195 min) already matches literature (Yu 1996, 199 min). On the full N=107 holdout the best refinement scored engine AAFE **3.405 — worse than the plain scalar (3.336)** — and flipped the engine from 14 to 30 `>3×`-over-predictors (the co-calibration-break signature; un-refit Meta regresses +3%, **meta-regression risk HIGH**).
+
+**The real residual is bidirectional first-pass, not absorption:** once fa→1, the per-drug error splits into two *opposing* modes one knob cannot reconcile — (a) **CYP3A first-pass over-extraction** for bases (alprazolam/carbamazepine/quinine cap at F ≈ 0.5 vs lit 0.8–0.9 even at fa=1; candidate cause: gut-CYP3A abundance scaled-to-midazolam over-extracting non-midazolam substrates) and (b) **well-stirred Fh under-extraction** for high-PPB acids (diclofenac fup=0.003, febuxostat, etodolac overshoot — the DE-37/B-11 hepatic-fu problem). Fixing the bases worsens the acids. Both halves are already data-blocked / co-calibrated.
+
+**Telltale if it returns:** "recalibrate the absorption constant / villous amplification / particle radius / transit time to fix the engine's low bioavailability F." It nulls the median F on a PoC set but is a flat scalar in disguise (ka is linear), worsens the holdout vs the simpler scalar, and breaks meta co-calibration. The only un-foreclosed F lever is **measured-F routing**; the recoverable structural residual is first-pass (gut/hepatic CYP3A IVIVE ⊕ hepatic-fu for high-PPB acids), not absorption.
+
+---
+
+### DE-43 — Engine first-pass recalibration as a *prospective*-set lever; the meta damps engine changes to ~18% on BOTH benchmarks (2026-06-03)
+
+**Date:** 2026-06-03
+
+**Context:** DE-42 foreclosed absorption recalibration for the *retrospective* headline. Open question: the *prospective* N=28 set (Meta AAFE 3.21 — the real novel-drug failure, §8) is **not** part of the meta co-calibration, so a first-pass lever foreclosed retrospectively might still net-improve it. A measurement-only test decomposed the prospective catastrophes and measured two levers on **both** benchmarks via the production meta path (runtime monkeypatch only; before-controls bit-exact: retro meta 2.69825 / engine 3.8314).
+
+**Decomposition (production predicted-ADME, `F = fa·Fg·Fh`):** the catastrophic under-predictors (mirdametinib engine 74×, sevabertinib 53×, pirtobrutinib, pacritinib, tovorafenib … mostly kinase inhibitors) are **fa-first, Fg-second** — fa 0.08–0.32 (absorption starved: low Peff, or low RDKit-solubility → `particle_radius=50µm` → `ka ≪` gut transit), then gut-CYP3A Fg 0.37–0.55 (the midazolam-calibrated `gut_wall` CYP3A4 over-extracting). Fh is correct (consistent with §8: CL_systemic correct). The over-predictors (imlunestrant, taletrectinib) are `not_F` (Vdss/distribution, out-of-AD) — a blunt F lever *worsens* them.
+
+**Result — both levers fail at the meta:** absorption scalar (5.25×): prospective meta 3.171→3.102 (−0.069) but retro meta 2.698→**2.780** (+0.082) → **net −0.012** (costs the headline more than it gains). Gut-CYP3A 0.5×: prospective meta 3.171→3.151 (−0.020), retro meta neutral (−0.0006) → net +0.020 but **inside the N=28 bootstrap CI** (statistically zero) and **not literature-anchored** (halving a midazolam-calibrated abundance = tuning to Cmax, Invariant #8).
+
+**Why it failed (the unifying mechanism):** both levers move the **engine track** materially on prospective (absorption 4.11→3.75; gut-CYP3A 4.11→4.00; mirdametinib engine fold 58→13 / 58→51) — but the fixed-weight **meta-learner damps this to ~18–19% pass-through, the SAME on prospective as on retrospective.** The meta is robust to engine errors by construction (down-weights outlier engine predictions), which symmetrically prevents engine *improvements* from propagating. **Prospective is NOT exempt from co-calibration** — the engine is structurally not a headline lever on *any* benchmark. Plus the DE-42 bidirectional tension: relieving the catastrophic unders blows up the `not_F` over-predictors (imlunestrant 17×→62× under the absorption scalar).
+
+**Telltale if it returns:** "the prospective / novel-drug set isn't co-calibrated, so an engine F / first-pass / gut-CYP3A recalibration will fix it." It improves the engine track on both sets but the fixed-weight meta mutes it to ~18%; net is neutral-to-negative and within N=28 noise. The only un-foreclosed F lever is per-drug **measured-F routing**, not an engine recalibration.
 
 ---
 
