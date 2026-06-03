@@ -10,6 +10,20 @@ Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the *
 
 ---
 
+## 2026-06-03 (cont. 2) — Measured-F routing shipped (the one un-foreclosed F lever): clean-10 engine 2.33 → 1.77
+
+DE-42/DE-43 foreclosed every *engine-recalibration* route to the F under-call and named exactly one un-foreclosed lever: **per-drug measured-F routing**. Built it as `MeasuredADMEInput.f_bioavail` (oral bioavailability, 0 < F ≤ 1), extending the SP1 measured-ADME channel. Branch `feat/measured-f-routing`; spec `docs/superpowers/specs/2026-06-03-measured-f-routing-design.md`.
+
+**Mechanism (exposure-scaling, approved).** F is emergent in the engine (fa·Fg·Fh) — there is no F input. `predict()` computes the engine's own oral F via an IV-reference solve (`F_engine = oral AUC / IV AUC`; clearance cancels, so it is the pure structural fraction), then scales engine Cmax/AUC by `k = F_measured/F_engine` (clamped [0.05, 50]; `f_bioavail_cv` folded into the CV in quadrature). Pipeline-layer only — engine stays identity-blind (Invariant #1). Oral-only (ignored + warned for IV). Lands on `result.engine_pk`; the production meta path is **bit-identical when `f_bioavail` is None** (4-SMILES exact-float test + 28-case measured suite).
+
+**Result (separate measured-input benchmark, engine-only; `scripts/run_measured_adme_benchmark.py`).** clean-10: SMILES **2.632** → measured fup+clint **2.334** → measured fup+clint+F **1.770**. F was the dominant structural error: alprazolam 6.04→1.68, quinine 7.68→1.47, sildenafil 3.40→1.12, etodolac 2.79→1.41. This also closes the stale-"1.98 floor" story — the real measured floor, *with* F, is 1.77 (< 1.98). Expected single-drug worsenings — dasatinib 1.66→4.10 (forcing the true low F=0.25 exposes previously-compensating engine errors, the DE-42 effect at single-drug scale) and clopidogrel 3.35→4.97 (prodrug; F-routing on the parent is documented out-of-scope) — confirm the channel is honest, not Cmax-fudged.
+
+**Caveats.** Lit-F values are approximate ballparks (illustrative, not calibrated; never blended into 2.698). F sets exposure scale, not absorption-rate *shape* — slow-absorber Cmax residual is corrected by the composable measured-`peff` input (SP1). MC uncertainty of F beyond the CI rescale, and component fa/Fg/Fh routing, are follow-ups.
+
+**Outcome:** capability shipped, additive, headline-neutral. The measured-input regime now corrects the project's dominant engine structural error (F) for callers who can supply it.
+
+---
+
 ## 2026-06-03 (cont.) — The prospective F lever is also foreclosed (DE-43); the meta damps engine changes to ~18% on BOTH benchmarks
 
 Follow-on to the DE-42 entry below. Open question after DE-42: the *prospective* N=28 set (Meta AAFE 3.21 — the real novel-drug failure, §8) is **not** part of the meta co-calibration, so a first-pass lever foreclosed retrospectively might still net-improve it. Measurement-only test (runtime monkeypatch only; before-controls bit-exact — retro meta 2.69825 / engine 3.8314; prospective before 3.171/4.109 = documented 3.208/4.302 within the ~12% stack drift; lever deltas are same-stack).

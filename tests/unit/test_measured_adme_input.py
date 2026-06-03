@@ -41,3 +41,39 @@ def test_nonpositive_value_raises():
 def test_cv_below_floor_raises():
     with pytest.raises(ValueError, match="< 0.10"):
         MeasuredADMEInput(fup=0.20, clint=13.0, fup_cv=0.05)
+
+
+# ── measured-F routing (f_bioavail) ──────────────────────────────────────
+
+
+def test_f_bioavail_constructs_alone():
+    # f_bioavail is independent — may be supplied without fup/clint.
+    m = MeasuredADMEInput(f_bioavail=0.54)
+    assert m.f_bioavail == 0.54
+    assert m.f_bioavail_cv == 0.15
+    assert m.fup is None and m.clint is None
+
+
+def test_f_bioavail_with_other_measured():
+    m = MeasuredADMEInput(fup=0.20, clint=13.0, f_bioavail=0.9)
+    assert m.f_bioavail == 0.9
+
+
+def test_f_bioavail_above_one_raises():
+    with pytest.raises(ValueError, match="0 < F <= 1"):
+        MeasuredADMEInput(f_bioavail=1.5)
+
+
+def test_f_bioavail_zero_raises():
+    with pytest.raises(ValueError, match="0 < F <= 1"):
+        MeasuredADMEInput(f_bioavail=0.0)
+
+
+def test_f_bioavail_one_is_allowed():
+    # F=1.0 (complete bioavailability) is a valid boundary.
+    assert MeasuredADMEInput(f_bioavail=1.0).f_bioavail == 1.0
+
+
+def test_f_bioavail_cv_below_floor_raises():
+    with pytest.raises(ValueError, match="< 0.10"):
+        MeasuredADMEInput(f_bioavail=0.5, f_bioavail_cv=0.05)

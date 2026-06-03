@@ -69,6 +69,82 @@ def _adjust_ad_for_prodrug(
     return in_domain, warnings
 
 
+# ── Measured-F routing (exposure-scaling) ────────────────────────────────
+# F (oral bioavailability) is emergent in the engine (F = fa*Fg*Fh); there is no
+# F input to set. A caller-supplied measured F sets the systemic exposure SCALE:
+# compute the engine's own oral F via an IV-reference solve and scale engine
+# Cmax/AUC by F_measured/F_engine. Pipeline-layer only (engine stays identity-
+# blind). See docs/superpowers/specs/2026-06-03-measured-f-routing-design.md.
+_F_K_MIN = 0.05  # clamp bounds on the F-correction factor k, to bound numerical
+_F_K_MAX = 50.0  # absurdity when the engine catastrophically mis-calls F.
+
+
+def _engine_oral_bioavailability(
+    compiled, params, drug: DrugOnGraph, oral_auc: float, observation_node: str
+) -> float | None:
+    """Engine's emergent oral F = oral AUC / IV-reference AUC (matched dose).
+
+    Both AUCs are the 0-24h truncated AUC, so clearance cancels only
+    approximately (exactly at infinite time) — F_engine carries a mild truncation
+    bias for drugs whose t1/2 approaches the 24h window, so the reported F_engine
+    is a 24h-truncated F, not a pure fa*Fg*Fh structural fraction. The IV
+    reference uses the SAME compiled graph and params as the oral solve, so the
+    exposure-scaling stays self-consistent and target-hitting (corrected oral
+    AUC / IV AUC == F_measured) is exact regardless. Returns None if the reference
+    solve fails or an AUC is non-positive (caller then skips correction).
+    """
+    import numpy as np
+
+    from sisyphus.engine.solver import _IV_CMAX_DELAY_H, solve
+    from sisyphus.pk.endpoints import compute_endpoints
+
+    iv_idx = compiled.state_index.get("venous_blood")
+    if iv_idx is None or oral_auc <= 0:
+        return None
+    y0 = np.zeros(compiled.n_states)
+    y0[iv_idx] = drug.dose_mg
+    iv_sim = solve(compiled, params, y0, t_span=(0, 24), t_min_h=_IV_CMAX_DELAY_H)
+    if not iv_sim.solver_success:
+        return None
+    iv_pk = compute_endpoints(
+        iv_sim, observation_node=observation_node, t_min_h=_IV_CMAX_DELAY_H
+    )
+    iv_auc = iv_pk.auc_0t.mean
+    if iv_auc <= 0:
+        return None
+    return oral_auc / iv_auc
+
+
+def _apply_measured_f(
+    engine_pk: PKEndpoints, f_engine: float, f_measured: float, f_cv: float
+) -> tuple[PKEndpoints, float, bool]:
+    """Scale engine Cmax/AUC by k = F_measured/F_engine (clamped).
+
+    f_cv (measurement CV of F) is folded into the Cmax/AUC CV in quadrature.
+    Tmax / t_half / cl / vss are unchanged (F sets exposure scale, not shape).
+    Returns ``(scaled_pk, k, was_clamped)``.
+    """
+    import dataclasses
+    import math
+
+    k_raw = f_measured / f_engine
+    k = min(max(k_raw, _F_K_MIN), _F_K_MAX)
+    clamped = not math.isclose(k, k_raw, rel_tol=1e-9)
+
+    def _scale(dist: Distribution | None) -> Distribution | None:
+        if dist is None:
+            return None
+        return Distribution(mean=dist.mean * k, cv=math.sqrt(dist.cv ** 2 + f_cv ** 2))
+
+    scaled = dataclasses.replace(
+        engine_pk,
+        cmax=_scale(engine_pk.cmax),
+        auc_0t=_scale(engine_pk.auc_0t),
+        auc_0inf=_scale(engine_pk.auc_0inf),
+    )
+    return scaled, k, clamped
+
+
 # Resolve physiology YAML relative to repository root.
 # src/sisyphus/pipeline/predict.py -> ../../../../data/physiology
 _PHYSIOLOGY_DIR = Path(__file__).resolve().parent.parent.parent.parent / "data" / "physiology"
@@ -179,6 +255,7 @@ def predict(
     cmax_90ci: tuple[float, float] | None = None
     graph = None
     compiled = None
+    f_correction_k: float | None = None  # measured-F exposure-scaling factor
 
     # ── Step 1: Chemistry + ADME ─────────────────────────────────────────
     profile = compute_profile(smiles)
@@ -213,6 +290,11 @@ def predict(
         if _ov:
             adme = _dc_replace(adme, **_ov)
             warnings_list.append(f"measured_adme:overrides={sorted(_ov)}")
+        # measured-F is oral-only (F=1 by definition for IV); warn + ignore else.
+        if measured_adme.f_bioavail is not None and route != "oral":
+            warnings_list.append(
+                "measured_adme:f_bioavail ignored for non-oral route (F=1 for IV)"
+            )
 
     # Auto-activate ECM (OATP1B1 saturable + ECM passive + biliary CL_int)
     # ONLY for drugs flagged ecm_applicable=true in oatp1b1.json. The flag
@@ -372,6 +454,37 @@ def predict(
                 engine_pk.tmax.mean,
                 engine_pk.auc_0t.mean,
             )
+            # ── Measured-F routing (oral only; no-op when f_bioavail is None) ──
+            # Scale the engine track to honor a caller-supplied oral F. Runs the
+            # IV-reference solve ONLY when f_bioavail is set, so the SMILES-only
+            # path stays bit-identical.
+            if (
+                measured_adme is not None
+                and measured_adme.f_bioavail is not None
+                and route == "oral"
+            ):
+                _f_eng = _engine_oral_bioavailability(
+                    compiled, params, drug, engine_pk.auc_0t.mean, _obs_node
+                )
+                if _f_eng is not None and _f_eng > 0:
+                    engine_pk, f_correction_k, _clamped = _apply_measured_f(
+                        engine_pk, _f_eng, measured_adme.f_bioavail,
+                        measured_adme.f_bioavail_cv,
+                    )
+                    warnings_list.append(
+                        f"measured_adme:f_bioavail={measured_adme.f_bioavail} "
+                        f"f_engine={_f_eng:.3f} k={f_correction_k:.2f}"
+                        + (" (clamped)" if _clamped else "")
+                    )
+                    logger.info(
+                        "Measured-F: F_engine=%.3f -> F_measured=%.3f (k=%.2f)",
+                        _f_eng, measured_adme.f_bioavail, f_correction_k,
+                    )
+                else:
+                    warnings_list.append(
+                        "measured_adme:f_bioavail skipped "
+                        "(engine F-reference solve unavailable)"
+                    )
         else:
             warnings_list.append("ODE solver did not converge")
             logger.warning("ODE solver did not converge")
@@ -403,6 +516,11 @@ def predict(
             except Exception as e:
                 warnings_list.append(f"MC propagation failed: {e}")
                 logger.warning("MC propagation failed: %s", e)
+
+    # MC recomputes Cmax independently of engine_pk, so apply the same measured-F
+    # exposure-scaling to the PI to keep it consistent with the corrected point.
+    if cmax_90ci is not None and f_correction_k is not None:
+        cmax_90ci = (cmax_90ci[0] * f_correction_k, cmax_90ci[1] * f_correction_k)
 
     # ── Step 3: ML direct Cmax ───────────────────────────────────────────
     ml_pk: PKEndpoints | None = None

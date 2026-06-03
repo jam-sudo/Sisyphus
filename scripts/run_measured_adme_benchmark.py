@@ -34,6 +34,16 @@ _MEASURED = [
 ]
 _OUTLIERS = {"montelukast", "abiraterone"}
 
+# Approximate literature oral bioavailability F — well-established ballparks, NOT
+# a citation-curated dataset (same provenance/caveat as scripts/run_f_decomposition.py
+# lit_F). Used to demonstrate the measured-F routing channel; the measured-F column
+# is illustrative, not a calibrated benchmark.
+_LIT_F = {
+    "alprazolam": 0.90, "carbamazepine": 0.80, "clozapine": 0.55, "diclofenac": 0.55,
+    "sildenafil": 0.40, "etodolac": 1.00, "quinine": 0.80, "febuxostat": 0.85,
+    "dasatinib": 0.25, "clopidogrel": 0.50,
+}
+
 
 def _aafe(folds):
     return float(np.exp(np.mean(np.log(folds)))) if folds else float("nan")
@@ -44,7 +54,9 @@ def main() -> int:
     from sisyphus.predict.adme import MeasuredADMEInput
 
     drugs = json.loads(CLINICAL_PK.read_text())["drugs"]
-    rows, fe_s, fe_m, fe_s_clean, fe_m_clean = [], [], [], [], []
+    rows = []
+    fe_s, fe_m, fe_mf = [], [], []
+    fe_s_clean, fe_m_clean, fe_mf_clean = [], [], []
 
     for name, fup, clint in _MEASURED:
         rec = drugs.get(name)
@@ -60,23 +72,46 @@ def main() -> int:
         c_s = predict(smiles, dose, route=route).engine_pk.cmax.mean
         c_m = predict(smiles, dose, route=route,
                       measured_adme=MeasuredADMEInput(fup=fup, clint=clint)).engine_pk.cmax.mean
+        lit_f = _LIT_F.get(name)
+        c_mf = None
+        if lit_f is not None:
+            c_mf = predict(
+                smiles, dose, route=route,
+                measured_adme=MeasuredADMEInput(fup=fup, clint=clint, f_bioavail=lit_f),
+            ).engine_pk.cmax.mean
+
         f_s = max(c_s / obs, obs / c_s)
         f_m = max(c_m / obs, obs / c_m)
-        rows.append((name, obs, c_s, c_m, f_s, f_m))
+        f_mf = max(c_mf / obs, obs / c_mf) if c_mf else None
+        rows.append((name, obs, c_s, c_m, c_mf, f_s, f_m, f_mf))
         fe_s.append(f_s)
         fe_m.append(f_m)
+        if f_mf is not None:
+            fe_mf.append(f_mf)
         if name not in _OUTLIERS:
             fe_s_clean.append(f_s)
             fe_m_clean.append(f_m)
+            if f_mf is not None:
+                fe_mf_clean.append(f_mf)
 
-    print(f"\n{'drug':<16}{'obs':>10}{'eng_smiles':>12}{'eng_meas':>12}{'FE_s':>8}{'FE_m':>8}")
-    for name, obs, c_s, c_m, f_s, f_m in rows:
+    hdr = (f"\n{'drug':<16}{'obs':>10}{'eng_smiles':>12}{'eng_meas':>12}"
+           f"{'eng_m+F':>12}{'FE_s':>7}{'FE_m':>7}{'FE_m+F':>8}")
+    print(hdr)
+    for name, obs, c_s, c_m, c_mf, f_s, f_m, f_mf in rows:
         flag = " *" if name in _OUTLIERS else ""
-        print(f"{name:<16}{obs:>10.4f}{c_s:>12.4f}{c_m:>12.4f}{f_s:>8.2f}{f_m:>8.2f}{flag}")
-    print(f"\nN={len(rows)} engine-only AAFE SMILES={_aafe(fe_s):.3f} measured={_aafe(fe_m):.3f}")
+        mf_c = f"{c_mf:>12.4f}" if c_mf is not None else f"{'--':>12}"
+        mf_fe = f"{f_mf:>8.2f}" if f_mf is not None else f"{'--':>8}"
+        print(f"{name:<16}{obs:>10.4f}{c_s:>12.4f}{c_m:>12.4f}{mf_c}"
+              f"{f_s:>7.2f}{f_m:>7.2f}{mf_fe}{flag}")
+    print(f"\nN={len(rows)} engine-only AAFE  SMILES={_aafe(fe_s):.3f}  "
+          f"measured(fup+clint)={_aafe(fe_m):.3f}  "
+          f"measured(fup+clint+F)={_aafe(fe_mf):.3f} [N={len(fe_mf)}]")
     print(f"N={len(fe_s_clean)} (excl montelukast/abiraterone)  "
-          f"SMILES={_aafe(fe_s_clean):.3f}  measured={_aafe(fe_m_clean):.3f}")
-    print("\nSEPARATE from the 2.698 headline — do not merge into 4track_holdout_predictions.json.")
+          f"SMILES={_aafe(fe_s_clean):.3f}  measured={_aafe(fe_m_clean):.3f}  "
+          f"measured+F={_aafe(fe_mf_clean):.3f} [N={len(fe_mf_clean)}]")
+    print("\nNOTE: the +F column uses APPROXIMATE literature oral-F ballparks (see _LIT_F "
+          "docstring) — illustrative of the measured-F channel, not a calibrated benchmark.")
+    print("SEPARATE from the 2.698 headline — do not merge into 4track_holdout_predictions.json.")
     return 0
 
 
