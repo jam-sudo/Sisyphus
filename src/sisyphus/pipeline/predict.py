@@ -9,10 +9,14 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import numpy as np
 
 from sisyphus.core import Distribution, DrugOnGraph, PKEndpoints, PredictionResult
+
+if TYPE_CHECKING:
+    from sisyphus.predict.adme import MeasuredADMEInput
 
 logger = logging.getLogger(__name__)
 
@@ -80,6 +84,7 @@ def predict(
     phenotypes: dict[str, str] | None = None,
     phenotype_scale_overrides: dict[str, float] | None = None,
     kp_method: str = "rodgers_rowland",
+    measured_adme: MeasuredADMEInput | None = None,
 ) -> PredictionResult:
     """End-to-end prediction: SMILES -> PredictionResult.
 
@@ -178,6 +183,36 @@ def predict(
     # ── Step 1: Chemistry + ADME ─────────────────────────────────────────
     profile = compute_profile(smiles)
     adme = predict_adme(profile)
+
+    # ── Step 1b: measured-ADME override (additive; no-op when None) ──────
+    # predict_adme() always runs first, so the ML/VDss tracks never see None.
+    # When measured_adme is supplied, REBIND the `adme` name via
+    # dataclasses.replace so BOTH build_drug_on_graph calls (this step's and the
+    # phenotype back-solve at the liver_enzymes_pre path) consume the substituted
+    # values. When None, this block is skipped and `adme` is the unmodified
+    # predicted object — the SMILES-only path is bit-identical. Reported
+    # measured-input results read result.engine_pk (peff/vdss overrides also move
+    # the CLF/VDss meta-tracks; only the engine track is clean).
+    if measured_adme is not None:
+        from dataclasses import replace as _dc_replace
+        _ov: dict[str, Distribution] = {}
+        if measured_adme.fup is not None:
+            _ov["fup"] = Distribution(mean=measured_adme.fup, cv=measured_adme.fup_cv)
+        if measured_adme.clint is not None:
+            _ov["clint"] = Distribution(mean=measured_adme.clint, cv=measured_adme.clint_cv)
+        if measured_adme.peff is not None:
+            _ov["peff"] = Distribution(mean=measured_adme.peff, cv=measured_adme.peff_cv)
+        if measured_adme.vdss is not None:
+            _ov["vdss"] = Distribution(mean=measured_adme.vdss, cv=measured_adme.vdss_cv)
+        if measured_adme.rbp is not None:
+            _ov["rbp"] = Distribution(mean=measured_adme.rbp, cv=measured_adme.rbp_cv)
+        if measured_adme.solubility is not None:
+            _ov["solubility"] = Distribution(
+                mean=measured_adme.solubility, cv=measured_adme.solubility_cv
+            )
+        if _ov:
+            adme = _dc_replace(adme, **_ov)
+            warnings_list.append(f"measured_adme:overrides={sorted(_ov)}")
 
     # Auto-activate ECM (OATP1B1 saturable + ECM passive + biliary CL_int)
     # ONLY for drugs flagged ecm_applicable=true in oatp1b1.json. The flag

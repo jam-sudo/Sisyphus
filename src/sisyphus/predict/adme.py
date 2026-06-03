@@ -59,6 +59,63 @@ class ADMEProperties:
     rbp: Distribution
 
 
+@dataclass(frozen=True)
+class MeasuredADMEInput:
+    """Caller-supplied measured ADME values that override predicted ones in predict().
+
+    A field left None falls through to the XGBoost/heuristic prediction.
+
+    REQUIRED PAIR: fup and clint must both be supplied or both omitted — they
+    co-determine hepatic CL_int in the engine's well-stirred extraction, so
+    pairing a measured value with a predicted one distorts engine clearance.
+
+    *_cv are measurement-level CVs (instrument error, below the model-prediction
+    CVs above). Rejected below 0.10 (cv < 0.10 raises): a tighter CV implies a unit
+    error and collapses the Monte-Carlo envelope to false confidence.
+
+    NOTE: peff perturbs the engine (and the CLF meta-track); vdss has ZERO engine
+    effect — the engine derives volume from Rodgers-Rowland Kp, not this scalar, so
+    vdss only moves the VDss meta-track. A "clean engine-only" measured prediction
+    must therefore be read via result.engine_pk (see the measured-input benchmark).
+    """
+
+    fup: float | None = None
+    fup_cv: float = 0.15
+    clint: float | None = None
+    clint_cv: float = 0.20
+    peff: float | None = None
+    peff_cv: float = 0.25
+    vdss: float | None = None
+    vdss_cv: float = 0.20
+    rbp: float | None = None
+    rbp_cv: float = 0.15
+    solubility: float | None = None
+    solubility_cv: float = 0.30
+
+    def __post_init__(self) -> None:
+        if (self.fup is None) != (self.clint is None):
+            raise ValueError(
+                "MeasuredADMEInput: fup and clint must be supplied together or "
+                "both omitted (they co-determine engine CL_int)."
+            )
+        for name, val in (
+            ("fup", self.fup), ("clint", self.clint), ("peff", self.peff),
+            ("vdss", self.vdss), ("rbp", self.rbp), ("solubility", self.solubility),
+        ):
+            if val is not None and val <= 0:
+                raise ValueError(f"MeasuredADMEInput.{name} must be > 0, got {val}")
+        for name, cv in (
+            ("fup_cv", self.fup_cv), ("clint_cv", self.clint_cv),
+            ("peff_cv", self.peff_cv), ("vdss_cv", self.vdss_cv),
+            ("rbp_cv", self.rbp_cv), ("solubility_cv", self.solubility_cv),
+        ):
+            if cv < 0.10:
+                raise ValueError(
+                    f"MeasuredADMEInput.{name}={cv} < 0.10; a CV below 10% implies "
+                    "a unit error and collapses the MC envelope."
+                )
+
+
 # ---------------------------------------------------------------------------
 # Model cache
 # ---------------------------------------------------------------------------
