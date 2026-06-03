@@ -70,12 +70,13 @@ class MeasuredADMEInput:
     pairing a measured value with a predicted one distorts engine clearance.
 
     *_cv are measurement-level CVs (instrument error, below the model-prediction
-    CVs above). Floored at 0.10: a tighter CV implies a unit error and collapses
-    the Monte-Carlo envelope to false confidence.
+    CVs above). Rejected below 0.10 (cv < 0.10 raises): a tighter CV implies a unit
+    error and collapses the Monte-Carlo envelope to false confidence.
 
-    NOTE: peff and vdss overrides also perturb the CLF and VDss meta-tracks, so a
-    measured-input prediction is "clean engine-only" only when read via
-    result.engine_pk (see the measured-input benchmark).
+    NOTE: peff perturbs the engine (and the CLF meta-track); vdss has ZERO engine
+    effect — the engine derives volume from Rodgers-Rowland Kp, not this scalar, so
+    vdss only moves the VDss meta-track. A "clean engine-only" measured prediction
+    must therefore be read via result.engine_pk (see the measured-input benchmark).
     """
 
     fup: float | None = None
