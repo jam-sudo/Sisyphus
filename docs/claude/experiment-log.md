@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-02
+last_updated: 2026-06-03
 parent: ../../CLAUDE.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -7,6 +7,48 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 # Experiment Log
 
 Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
+
+---
+
+## 2026-06-03 (cont. 2) — Measured-F routing shipped (the one un-foreclosed F lever): clean-10 engine 2.33 → 1.77
+
+DE-42/DE-43 foreclosed every *engine-recalibration* route to the F under-call and named exactly one un-foreclosed lever: **per-drug measured-F routing**. Built it as `MeasuredADMEInput.f_bioavail` (oral bioavailability, 0 < F ≤ 1), extending the SP1 measured-ADME channel. Branch `feat/measured-f-routing`; spec `docs/superpowers/specs/2026-06-03-measured-f-routing-design.md`.
+
+**Mechanism (exposure-scaling, approved).** F is emergent in the engine (fa·Fg·Fh) — there is no F input. `predict()` computes the engine's own oral F via an IV-reference solve (`F_engine = oral AUC / IV AUC`; clearance cancels, so it is the pure structural fraction), then scales engine Cmax/AUC by `k = F_measured/F_engine` (clamped [0.05, 50]; `f_bioavail_cv` folded into the CV in quadrature). Pipeline-layer only — engine stays identity-blind (Invariant #1). Oral-only (ignored + warned for IV). Lands on `result.engine_pk`; the production meta path is **bit-identical when `f_bioavail` is None** (4-SMILES exact-float test + 28-case measured suite).
+
+**Result (separate measured-input benchmark, engine-only; `scripts/run_measured_adme_benchmark.py`).** clean-10: SMILES **2.632** → measured fup+clint **2.334** → measured fup+clint+F **1.770**. F was the dominant structural error: alprazolam 6.04→1.68, quinine 7.68→1.47, sildenafil 3.40→1.12, etodolac 2.79→1.41. This also closes the stale-"1.98 floor" story — the real measured floor, *with* F, is 1.77 (< 1.98). Expected single-drug worsenings — dasatinib 1.66→4.10 (forcing the true low F=0.25 exposes previously-compensating engine errors, the DE-42 effect at single-drug scale) and clopidogrel 3.35→4.97 (prodrug; F-routing on the parent is documented out-of-scope) — confirm the channel is honest, not Cmax-fudged.
+
+**Caveats.** Lit-F values are approximate ballparks (illustrative, not calibrated; never blended into 2.698). F sets exposure scale, not absorption-rate *shape* — slow-absorber Cmax residual is corrected by the composable measured-`peff` input (SP1). MC uncertainty of F beyond the CI rescale, and component fa/Fg/Fh routing, are follow-ups.
+
+**Outcome:** capability shipped, additive, headline-neutral. The measured-input regime now corrects the project's dominant engine structural error (F) for callers who can supply it.
+
+---
+
+## 2026-06-03 (cont.) — The prospective F lever is also foreclosed (DE-43); the meta damps engine changes to ~18% on BOTH benchmarks
+
+Follow-on to the DE-42 entry below. Open question after DE-42: the *prospective* N=28 set (Meta AAFE 3.21 — the real novel-drug failure, §8) is **not** part of the meta co-calibration, so a first-pass lever foreclosed retrospectively might still net-improve it. Measurement-only test (runtime monkeypatch only; before-controls bit-exact — retro meta 2.69825 / engine 3.8314; prospective before 3.171/4.109 = documented 3.208/4.302 within the ~12% stack drift; lever deltas are same-stack).
+
+**Prospective decomposition (`F = fa·Fg·Fh`, production predicted ADME).** The catastrophic under-predictors (mirdametinib engine 74×, sevabertinib 53×, sebetralstat, pirtobrutinib, pacritinib, tovorafenib, zongertinib, vimseltinib — mostly kinase inhibitors) are **fa-first, Fg-second**: fa 0.08–0.32 (absorption starved — low Peff, or low RDKit-solubility → `particle_radius=50µm` → `ka ≪` gut transit ~1.5–2.1/h), then gut-CYP3A Fg 0.37–0.55. Fh correct (§8: CL_systemic correct). My pre-test hypothesis (fa-saturated, pure-CYP3A mode) was **wrong** — fa is the dominant loss. The over-predictors (imlunestrant, taletrectinib) are `not_F` (Vdss/distribution, out-of-AD); a blunt F lever worsens them.
+
+**Both levers measured on both benchmarks (production meta path).** Absorption scalar 5.25×: prospective meta 3.171→3.102 (−0.069), retro meta 2.698→**2.780** (+0.082) → **net −0.012** (negative; costs the headline). Gut-CYP3A 0.5×: prospective meta 3.171→3.151 (−0.020), retro meta 2.698→2.698 (−0.0006) → net +0.020 but inside the N=28 bootstrap CI and not literature-anchored (Invariant #8).
+
+**The capstone mechanism.** Both levers move the **engine track** materially on prospective (absorption 4.11→3.75, gut-CYP3A 4.11→4.00; mirdametinib engine fold 58→13) but the fixed-weight **meta damps it to ~18–19% pass-through — identically on prospective and retrospective.** The meta is robust to engine errors by construction (it down-weights outlier engine predictions), which symmetrically prevents engine *improvements* from propagating. **Prospective is NOT exempt from co-calibration**; the engine is structurally not a headline lever on *any* benchmark. This is the unifying mechanism behind all 35+ error-cancellation dead-ends, now quantified. Logged **DE-43**.
+
+**Outcome:** doc-only (DE-43 + this entry + diagnosis §8). No code, no metric change. Net: the engine-recalibration avenue is now exhaustively foreclosed (retrospective *and* prospective). The only un-foreclosed F lever is per-drug measured-F routing; the alternative would be a meta-architecture change (AD-gated engine weighting), itself likely foreclosed (DE-23/24/25/41) and N=28-underpowered. Reproduce: workflow script `prospective-f-lever` under `…/workflows/scripts/`; all probes runtime monkeypatches under `/tmp`.
+
+---
+
+## 2026-06-03 — The DE-41 absorption-recalibration lever, tested end-to-end and foreclosed (DE-42); F under-call is bidirectional first-pass
+
+Two measurement-only multi-agent decompositions (runtime monkeypatch only; no tracked file changed; headline Meta AAFE 2.698 / engine 3.831 reproduced exactly as controls) tested the one open lever DE-41 / diagnosis.md §8 named — an absorption-model recalibration for the systematic engine bioavailability-F under-call.
+
+**Decomposition (engine F = fa·Fg·Fh, 10 measured-fup+CLint PoC drugs).** Three independent methods (per-segment mass balance, analytic well-stirred, public oral/IV AUC₀–t ratio) localise the *median* F under-call to **fa** (fraction absorbed): fa median bias 0.55 (vs physiological ~0.9), Fg ≈ 1.0, Fh ≈ 1.05. Mechanism: `ka = 2.88·Peff·ka_fraction/radius` (~6%/segment) ≪ gut transit (~3.85/h), so most dose transits to faeces unabsorbed (dasatinib fa 0.16, sildenafil 0.22). Decisive: non-CYP3A acids (diclofenac/etodolac/febuxostat) have an empty `metabolized_gut` sink (Fg ≈ 1 real) yet suppressed F ⇒ the loss is fa. Feasibility probe: scaling the `2.88` constant ~5.25× nulls median engine-F/lit-F (0.46→1.0) and improves engine-only N=107 AAFE 3.831→3.336 (−13%), **but** the un-refit meta regresses +3% (go/no-go = *conditional*).
+
+**Refinement attempt (the user's "refine the lever first" call) — foreclosed, DE-42.** `ka` enters the ODE linearly, so every "defensible" refinement (villous-amplification factor, corrected particle radius, literature SITT) is mathematically the *same flat scalar*: all 4 candidates plateau at geomean fold-error 1.43–1.45 (vs the flat-scalar 1.40, itself within the ±15% lit-F noise band); the one nonlinear candidate (Peff Caco-2→in-vivo remap) made dispersion *worse* (1.52); engine SITT (195 min) already matches Yu 1996 (199 min). On the full N=107 holdout the best refinement scored engine AAFE **3.405 — worse than the plain scalar (3.336)** — and flipped the engine from 14 to 30 `>3×`-over-predictors (co-calibration-break signature; **meta-regression risk HIGH**).
+
+**The real residual is bidirectional first-pass (sharpens §8 / DE-41).** Once fa→1, the per-drug error splits into two *opposing* modes no single absorption knob can reconcile: (a) **CYP3A first-pass over-extraction** for bases (alprazolam/carbamazepine/quinine cap at F ≈ 0.5 vs lit 0.8–0.9 even at fa=1 — candidate cause: the gut-CYP3A abundance scaled-to-midazolam over-extracting non-midazolam substrates), and (b) **well-stirred Fh under-extraction** for high-PPB acids (diclofenac fup=0.003, etc. overshoot — the DE-37/B-11 hepatic-fu problem). The engine's F under-call is therefore not a uniform scalar deficit; it is first-pass dispersion, and both halves are already data-blocked / co-calibrated.
+
+**Outcome:** doc-only (DE-42 + this entry + diagnosis §8 refinement). No code, no metric change. Net on accuracy: the F lever DE-41 left open is now tested and closed — the headline 2.698 is not movable by absorption recalibration. Reproduce: the two workflow scripts under `…/workflows/scripts/` (`engine-f-decomposition`, `absorption-lever-refinement`); all probes were runtime monkeypatches under `/tmp`.
 
 ---
 

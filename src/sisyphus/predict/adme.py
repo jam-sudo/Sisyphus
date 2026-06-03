@@ -77,6 +77,14 @@ class MeasuredADMEInput:
     effect — the engine derives volume from Rodgers-Rowland Kp, not this scalar, so
     vdss only moves the VDss meta-track. A "clean engine-only" measured prediction
     must therefore be read via result.engine_pk (see the measured-input benchmark).
+
+    f_bioavail is measured oral bioavailability F (0 < F <= 1). It is INDEPENDENT
+    (not paired) and ORAL-ONLY. The engine's F is emergent (fa*Fg*Fh); a supplied
+    F sets the systemic exposure SCALE — predict() computes the engine's own F via
+    an IV-reference solve and scales engine Cmax/AUC by F_measured/F_engine. It does
+    not set the absorption-rate shape (compose with measured peff for slow
+    absorbers). Lands on result.engine_pk; ignored for non-oral routes. See
+    docs/superpowers/specs/2026-06-03-measured-f-routing-design.md.
     """
 
     fup: float | None = None
@@ -91,12 +99,19 @@ class MeasuredADMEInput:
     rbp_cv: float = 0.15
     solubility: float | None = None
     solubility_cv: float = 0.30
+    f_bioavail: float | None = None
+    f_bioavail_cv: float = 0.15
 
     def __post_init__(self) -> None:
         if (self.fup is None) != (self.clint is None):
             raise ValueError(
                 "MeasuredADMEInput: fup and clint must be supplied together or "
                 "both omitted (they co-determine engine CL_int)."
+            )
+        if self.f_bioavail is not None and not (0.0 < self.f_bioavail <= 1.0):
+            raise ValueError(
+                f"MeasuredADMEInput.f_bioavail must satisfy 0 < F <= 1, "
+                f"got {self.f_bioavail}"
             )
         for name, val in (
             ("fup", self.fup), ("clint", self.clint), ("peff", self.peff),
@@ -108,6 +123,7 @@ class MeasuredADMEInput:
             ("fup_cv", self.fup_cv), ("clint_cv", self.clint_cv),
             ("peff_cv", self.peff_cv), ("vdss_cv", self.vdss_cv),
             ("rbp_cv", self.rbp_cv), ("solubility_cv", self.solubility_cv),
+            ("f_bioavail_cv", self.f_bioavail_cv),
         ):
             if cv < 0.10:
                 raise ValueError(
