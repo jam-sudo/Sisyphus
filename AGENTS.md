@@ -79,7 +79,7 @@ graph     ←  (nothing)                  (BodyGraph types, YAML builder)
 
 ## Artifact gates — do not introduce silent fallbacks
 
-**Lesson from the 2026-05-09 audit cycle.** Two gitignored artifacts silently augmented prediction accuracy for ~4 weeks, anchoring a headline AAFE (2.679) that no public clone could reproduce. The current headline 2.698 is the *honest* public-clone deterministic value (pinned test `test_cached_holdout_aafe_is_2p698`), and CI is anchored to that state.
+**Lesson from the 2026-05-09 audit cycle.** Two gitignored artifacts silently augmented prediction accuracy for ~4 weeks, anchoring a headline AAFE (2.679) that no public clone could reproduce. The current headline 2.784 is the *honest* public-clone deterministic value (pinned test `test_cached_holdout_aafe_is_2p784`; was 2.698 pre-FLUX-1, regenerated on the canonical CI stack via `.github/workflows/flux1-regen.yml`), and CI is anchored to that state. FLUX-1 (PR #65, 2026-06-04) moved it 2.698 → 2.784 — a correctness-first *regression* (a real flow-limitation bug fixed; the wrong formula had been load-bearing as calibration).
 
 When adding any new data file or model artifact that `predict()` (or any downstream code) loads conditionally via `Path.exists()`:
 

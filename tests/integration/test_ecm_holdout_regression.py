@@ -31,14 +31,6 @@ _CACHE = pathlib.Path("data/training/4track_holdout_predictions.json")
 _TOLERANCE = 0.35
 
 
-@pytest.mark.xfail(
-    reason="FLUX-1 (2026-06-03): the committed cache is still canonical pre-fix "
-    "(Meta 2.698), but the intrinsic-clearance fix changed many holdout drugs' Cmax, "
-    "so fresh recompute drifts >35% from the stale cache. Pending canonical-env "
-    "regen of data/training/4track_holdout_predictions.json — see experiment-log.md "
-    "FLUX-1 handoff.",
-    strict=False,
-)
 @skip_if_local_artifacts
 @pytest.mark.slow
 def test_ecm_holdout_spot_check_10_drugs():

@@ -28,8 +28,16 @@ def _aafe(preds: list[dict]) -> float:
     not HOLDOUT_JSON.exists(),
     reason=f"{HOLDOUT_JSON.name} not present — regeneration required",
 )
-def test_cached_holdout_aafe_is_2p698() -> None:
-    """Cached predictions file: Meta AAFE is the public-clone headline 2.698 (±0.020).
+def test_cached_holdout_aafe_is_2p784() -> None:
+    """Cached predictions file: Meta AAFE is the public-clone headline 2.784 (±0.020).
+
+    FLUX-1 (2026-06-04): the flow-limitation double-count fix regenerated this cache
+    on the canonical CI stack — headline 2.698 → **2.784** (a regression; correct
+    physics, the wrong formula was load-bearing as calibration — see experiment-log
+    2026-06-04). Of the 2.698→2.784 move, ~+0.8% is the FLUX-1 effect itself
+    (same-stack 2.762→2.784) and the rest is a stack refresh (the prior 2.698 cache
+    predated the current CI numerics stack). in_domain.n is now 81 (was 79).
+
 
     Baseline updated 2026-05-27 (B-02 Phase 2 UGT public registry activation;
     spec docs/superpowers/specs/2026-05-26-B02-ugt-public-registry-design.md).
@@ -92,4 +100,4 @@ def test_cached_holdout_aafe_is_2p698() -> None:
         if isinstance(data, dict) and "drugs" in data:
             preds = data["drugs"]
         aafe = _aafe(preds)
-    assert abs(aafe - 2.698) < 0.020, f"AAFE drifted: {aafe:.4f}"
+    assert abs(aafe - 2.784) < 0.020, f"AAFE drifted: {aafe:.4f}"

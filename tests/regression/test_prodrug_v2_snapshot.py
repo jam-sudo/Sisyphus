@@ -36,7 +36,7 @@ from tests._artifact_helpers import skip_if_local_artifacts
 _PINNED = {
     "sepiapterin":       8.679384e+00,
     "remdesivir":        1.573162e+00,
-    "tebipenem_pivoxil": 4.553034e-01,
+    "tebipenem_pivoxil": 3.109251e-01,  # FLUX-1 2026-06-04: intrinsic clearance (was 4.553034e-01)
     "fostamatinib":      6.675183e-02,
 }
 
@@ -57,31 +57,13 @@ _DOSE_ROUTE = {
 }
 
 
-# FLUX-1 (2026-06-03): the intrinsic-clearance fix changed prodrug activation
-# extraction, so the tebipenem_pivoxil pin (0.4553) is stale (now ~0.311 on the
-# macOS dev stack). Pending canonical-env regen of _PINNED — see experiment-log.md
-# FLUX-1 handoff. The other 3 prodrug pins are unaffected.
-_FLUX1_STALE_PINS = {"tebipenem_pivoxil"}
+# FLUX-1 (2026-06-04): the intrinsic-clearance fix changed prodrug activation
+# extraction; the tebipenem_pivoxil pin was regenerated on the canonical CI stack
+# (4.553034e-01 → 3.109251e-01). The other 3 prodrug pins are unaffected.
 
 
 @skip_if_local_artifacts
-@pytest.mark.parametrize(
-    "drug_name",
-    [
-        pytest.param(
-            name,
-            marks=(
-                [pytest.mark.xfail(
-                    reason="FLUX-1: prodrug activation clearance changed; pin stale, "
-                    "regenerate _PINNED in canonical env.",
-                    strict=False,
-                )]
-                if name in _FLUX1_STALE_PINS else []
-            ),
-        )
-        for name in _PINNED
-    ],
-)
+@pytest.mark.parametrize("drug_name", list(_PINNED.keys()))
 def test_cmax_snapshot(drug_name):
     pinned = _PINNED[drug_name]
     smiles = _SMILES[drug_name]

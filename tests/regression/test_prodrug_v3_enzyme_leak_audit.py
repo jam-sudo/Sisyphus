@@ -91,15 +91,6 @@ def _load_holdout_drugs():
     return [r for r in load_reference() if r.in_holdout]
 
 
-@pytest.mark.xfail(
-    reason="FLUX-1 (2026-06-03): the intrinsic-clearance fix is an intended GLOBAL "
-    "change to hepatic/gut extraction, so many 'expected_unchanged' drugs now differ "
-    ">7% from the pre-v3 baseline (this audit detects per-drug leaks against a fixed "
-    "baseline; a global formula change legitimately invalidates it). Regenerate "
-    "tests/regression/data/prodrug_v3_pre_baseline.json in the canonical env and "
-    "remove this xfail — see experiment-log.md FLUX-1 handoff.",
-    strict=False,
-)
 @_skip_if_local_artifacts
 @pytest.mark.slow
 def test_enzyme_leak_audit(pre_baseline: dict[str, float]) -> None:

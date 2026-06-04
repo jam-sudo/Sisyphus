@@ -11,12 +11,7 @@ name: FLUX-1 canonical regen
 # Then:     gh run download <run-id>  (cache + baseline + bootstrap + regen_output.txt)
 
 on:
-  workflow_dispatch:
-  push:
-    branches: [fix/flux1-extraction-double-count]
-    paths:
-      - '.github/workflows/flux1-regen.yml'
-      - 'scripts/regen_flux1_canonical.py'
+  workflow_dispatch:   # manual only; dispatchable once on the default branch (kept for the OATP1B1 re-anchor follow-up regen)
 
 jobs:
   regen:
