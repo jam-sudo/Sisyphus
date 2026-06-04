@@ -1,8 +1,20 @@
 # Conformal Prediction Intervals — calibrated Cmax PI (fixes the 29.9%@90% under-coverage) — Design
 
 **Date:** 2026-06-04
-**Status:** draft (awaiting review)
+**Status:** CORE IMPLEMENTED + real-data proof (branch `fix/rbp-concentration-basis`); deployment (train/CV+ calibration artifact + pipeline wiring) is the next increment.
 **Branch (proposed):** `feat/conformal-pi`
+
+**Outcome (2026-06-04, core increment).** `src/sisyphus/validation/conformal.py` ships the split-conformal
+core (finite-sample `conformal_quantile`, multiplicative `conformal_interval`, `empirical_coverage`,
+`nonconformity_scores`), unit-tested (`tests/unit/test_conformal.py`, incl. the marginal-coverage
+guarantee on synthetic biased/heavy-tailed residuals). **Real-data proof** (`tests/integration/
+test_conformal_coverage.py`, LOO cross-conformal on the committed holdout cache — *measures* the
+method's coverage, does NOT tune a deployed constant on the holdout): meta-track coverage **0.907 at
+nominal 90%** (vs the documented MC **0.299**), and calibrated across levels (50%→0.505, 80%→0.804,
+95%→0.953); 90% half-width **/÷8.88-fold** (the honest, wide price of structural error). **Remaining
+(next increment):** generate `data/validation/conformal_calibration.json` from **train/CV+** residuals
+(Invariant #5 — never holdout), then wire `PredictionResult.cmax_90ci` to the conformal interval while
+relabelling the MC interval as the parameter-uncertainty component.
 
 ## 1. Problem
 
