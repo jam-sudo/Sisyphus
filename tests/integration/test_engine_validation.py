@@ -25,19 +25,27 @@ from sisyphus.engine.solver import solve
 from sisyphus.graph.builder import build_from_yaml
 from sisyphus.pk.endpoints import compute_endpoints
 
-# Parity targets. caffeine/warfarin are low-extraction and remain at Omega's
-# deterministic ODE values. midazolam/propranolol are HIGH-extraction drugs:
-# the FLUX-1 fix (2026-06-03) corrects a flow-limitation double-count that
-# capped hepatic/gut extraction at 0.5, so Sisyphus now legitimately diverges
-# from Omega's predecessor values (which shared the double-counted PBPK
-# structure). Their targets are pinned to the FLUX-1-corrected Cmax — more
-# first-pass extraction, lower Cmax, as physiology requires. See
-# docs/superpowers/specs/2026-06-03-flux1-extraction-double-count-design.md.
+# Parity targets — drift-regression snapshots. caffeine (RBP=1.0) is the only
+# RBP-invariant case and stays at Omega's deterministic ODE value. The other
+# three carry RBP != 1 in their curated configs (midazolam 0.66, warfarin 0.58,
+# propranolol 0.81), so two correctness fixes legitimately moved them off Omega:
+#   FLUX-1 (2026-06-03): flow-limitation double-count (E capped at 0.5).
+#   RBP-2  (2026-06-04): blood:plasma concentration-basis — convective flow now
+#     carries whole-blood A/V (no RBP at blood pools) and the metabolic/renal
+#     sink drives off unbound PLASMA, so the realized hepatic extraction is the
+#     canonical fu_b form E = fup*CLint/(Q*RBP + fup*CLint), fu_b = fup/RBP.
+#     For RBP < 1 this raises first-pass extraction -> lower Cmax (verified
+#     direction; caffeine RBP=1.0 is a bit-identical no-op, the surgical witness).
+# Targets below are the post-RBP-2 macOS-stack snapshots; the +/-5% gate absorbs
+# the documented macOS<->CI stack drift (caffeine/warfarin goldens already
+# carried ~1.3%/1.1% such drift pre-RBP-2). A CI regen would tighten them.
+# Specs: 2026-06-03-flux1-extraction-double-count-design.md,
+#        2026-06-04-rbp-concentration-basis-design.md.
 OMEGA_TARGETS = {
-    "midazolam": {"cmax": 0.005909, "tmax": 1.5},   # FLUX-1: was 0.006943 (Omega)
-    "caffeine": {"cmax": 1.7139, "tmax": 1.0},
-    "warfarin": {"cmax": 0.4922, "tmax": 3.0},
-    "propranolol": {"cmax": 0.082528, "tmax": 1.5},  # FLUX-1: was 0.1355 (Omega)
+    "midazolam": {"cmax": 0.002800, "tmax": 1.5},   # RBP-2: was 0.005909 (FLUX-1)
+    "caffeine": {"cmax": 1.7139, "tmax": 1.0},       # RBP=1.0 -> unchanged
+    "warfarin": {"cmax": 0.343133, "tmax": 3.0},     # RBP-2: was 0.4922
+    "propranolol": {"cmax": 0.059875, "tmax": 1.5},  # RBP-2: was 0.082528 (FLUX-1)
 }
 
 

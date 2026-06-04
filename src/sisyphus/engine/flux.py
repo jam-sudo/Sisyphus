@@ -155,11 +155,14 @@ class FlowFluxSpec(FluxSpec):
         v_source = params.node_param(self.source_name, "volume")
 
         kp = params.drug_kp(self.source_name)
-        rbp = params.drug_param("rbp")
+        # RBP-2: the convective edge carries WHOLE BLOOD. A blood-pool node's A/V
+        # is already blood (gate RBP to 1); a tissue node's blood outlet is
+        # A*RBP/(V*Kp). (Spec 2026-06-04-rbp-concentration-basis-design.md.)
+        rbp = 1.0 if params.is_blood_pool(self.source_name) else params.drug_param("rbp")
 
-        # Outflow concentration from source
-        # For tissue: C_out = A * RBP / (V * Kp)
-        # For blood: Kp=1, RBP cancels or =1, so C_out = A / V
+        # Outflow blood concentration from source
+        #   tissue:     C_out = A * RBP / (V * Kp)
+        #   blood pool: C_out = A / V    (RBP gated to 1)
         c_out = y[self.source_idx] * rbp / (v_source * kp) if v_source > 0 else 0.0
 
         flux = q * c_out
@@ -249,13 +252,15 @@ class ClearanceFluxSpec(FluxSpec):
             # double-count the flow term and cap extraction at 0.5.
             cl_intrinsic = fup * clint_organ
 
-            # Concentration leaving the organ
+            # RBP-2: the metabolic sink acts on unbound PLASMA (fup·CLint·C_plasma).
+            # The separate convective Q·c_out edge supplies the flow limitation, so
+            # the realized extraction emerges E = fup·CLint/(Q·RBP + fup·CLint) =
+            # fu_b·CLint/(Q+fu_b·CLint), fu_b = fup/RBP (canonical well-stirred).
             v = params.node_param(self.source_name, "volume")
             kp = params.drug_kp(self.source_name)
-            rbp = params.drug_param("rbp")
-            c_out = y[self.source_idx] * rbp / (v * kp) if v > 0 else 0.0
+            c_plasma = y[self.source_idx] / (v * kp) if v > 0 else 0.0
 
-            rate = cl_intrinsic * c_out
+            rate = cl_intrinsic * c_plasma
 
         elif self.model == "parallel_tube":
             # Compute organ-level CLint (same as well-stirred)
@@ -284,21 +289,22 @@ class ClearanceFluxSpec(FluxSpec):
             # parallel_tube is not wired in the reference physiology.
             cl_intrinsic = fup * clint_organ
 
+            # RBP-2: plasma-basis sink (see well_stirred).
             v = params.node_param(self.source_name, "volume")
             kp = params.drug_kp(self.source_name)
-            rbp = params.drug_param("rbp")
-            c_out = y[self.source_idx] * rbp / (v * kp) if v > 0 else 0.0
+            c_plasma = y[self.source_idx] / (v * kp) if v > 0 else 0.0
 
-            rate = cl_intrinsic * c_out
+            rate = cl_intrinsic * c_plasma
 
         elif self.model == "gfr_filtration":
             renal_cl = params.drug_param("renal_clearance")
             if renal_cl <= 0:
                 return
+            # RBP-2: renal_cl = GFR·fup is plasma-basis → filter PLASMA A/(V·Kp),
+            # not blood. The convective edge supplies flow limitation.
             v = params.node_param(self.source_name, "volume")
             kp = params.drug_kp(self.source_name)
-            rbp = params.drug_param("rbp")
-            c_plasma = y[self.source_idx] * rbp / (v * kp) if v > 0 else 0.0
+            c_plasma = y[self.source_idx] / (v * kp) if v > 0 else 0.0
             rate = renal_cl * c_plasma
 
         elif self.model == "extended":
@@ -346,11 +352,12 @@ class ClearanceFluxSpec(FluxSpec):
                 return
             cl_intrinsic = fup * ps_inf * cl_int_h / den
 
+            # RBP-2: plasma-basis sink (CL_int,hep·C_plasma); the convective edge
+            # supplies flow limitation (see well_stirred).
             v = params.node_param(src, "volume")
             kp = params.drug_kp(src)
-            rbp = params.drug_param("rbp")
-            c_out = y[self.source_idx] * rbp / (v * kp) if v > 0 else 0.0
-            rate = cl_intrinsic * c_out
+            c_plasma = y[self.source_idx] / (v * kp) if v > 0 else 0.0
+            rate = cl_intrinsic * c_plasma
 
         else:
             return
@@ -658,13 +665,13 @@ class ProdrugActivationFluxSpec(FluxSpec):
         # would double-count Q and cap the activated fraction at 0.5.
         cl_intrinsic = fup * clint_organ
 
-        # Concentration leaving the source compartment (well-stirred)
+        # RBP-2: plasma-basis activation sink (fup·CLint·C_plasma); the convective
+        # edge supplies flow limitation (see well_stirred / ClearanceFluxSpec).
         v = params.node_param(self.source_name, "volume")
         kp = params.drug_kp(self.source_name)
-        rbp = params.drug_param("rbp")
-        c_out = y[self.source_idx] * rbp / (v * kp) if v > 0 else 0.0
+        c_plasma = y[self.source_idx] / (v * kp) if v > 0 else 0.0
 
-        rate_parent = cl_intrinsic * c_out
+        rate_parent = cl_intrinsic * c_plasma
         y_frac = params.edge_param(self.edge_id, "conversion_yield")
         rate_active = rate_parent * self.mw_ratio * y_frac
 
