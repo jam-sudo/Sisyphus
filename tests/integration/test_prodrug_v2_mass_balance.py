@@ -108,7 +108,9 @@ def test_steady_state_matches_analytical():
 
 
 def test_extraction_efficiency_matches_well_stirred_formula():
-    """Active production rate at known parent concentration matches well-stirred formula."""
+    """FLUX-1: parent loss = intrinsic-clearance activation (fup·CLint·c_out) +
+    convective outflow (Q·c_out). The activation sink uses the intrinsic clearance
+    so that, combined with the convective edge, hepatic extraction approaches 1.0."""
     q, v_source = 60.0, 10.0
     abundance, affinity, ivive = 1e6, 10.0, 6e-5
     fup = 1.0
@@ -129,9 +131,9 @@ def test_extraction_efficiency_matches_well_stirred_formula():
     dydt = rhs(0.0, y)
 
     clint = abundance * affinity * ivive
-    cl_organ = (q * fup * clint) / (q + fup * clint)
+    cl_intrinsic = fup * clint
     c_out = a_parent / v_source  # blood_pool, kp=1, rbp=1
-    expected_rate_parent_loss_via_activation = cl_organ * c_out
+    expected_rate_parent_loss_via_activation = cl_intrinsic * c_out
 
     flow_out = q * c_out
     total_parent_loss = expected_rate_parent_loss_via_activation + flow_out

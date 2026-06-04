@@ -236,13 +236,13 @@ class ClearanceFluxSpec(FluxSpec):
             if params.node_param(self.source_name, "fu_correction_applicable") > 0:
                 fup = fup * params.drug_param("fu_correction_liver")
 
-            q = params.total_inflow(self.source_name)
-
-            # Well-stirred: CL = (Q * fup * CLint) / (Q + fup * CLint)
-            denom = q + fup * clint_organ
-            if denom < 1e-12:
-                return
-            clh = (q * fup * clint_organ) / denom
+            # FLUX-1: apply the *intrinsic* (flow-unlimited) clearance to c_out.
+            # The node is a perfusion compartment with a separate convective
+            # Q·c_out outflow edge, so the flow limitation emerges from the ODE
+            # and the realized extraction is fup·CLint/(Q+fup·CLint) → 1.0.
+            # Applying the whole-organ CL_h (which already embeds Q) here would
+            # double-count the flow term and cap extraction at 0.5.
+            cl_intrinsic = fup * clint_organ
 
             # Concentration leaving the organ
             v = params.node_param(self.source_name, "volume")
@@ -250,7 +250,7 @@ class ClearanceFluxSpec(FluxSpec):
             rbp = params.drug_param("rbp")
             c_out = y[self.source_idx] * rbp / (v * kp) if v > 0 else 0.0
 
-            rate = clh * c_out
+            rate = cl_intrinsic * c_out
 
         elif self.model == "parallel_tube":
             # Compute organ-level CLint (same as well-stirred)
@@ -269,22 +269,22 @@ class ClearanceFluxSpec(FluxSpec):
             if params.node_param(self.source_name, "fu_correction_applicable") > 0:
                 fup = fup * params.drug_param("fu_correction_liver")
 
-            q = params.total_inflow(self.source_name)
-
-            # Parallel-tube: CL = Q × (1 - e^(-fup × CLint / Q))
-            if q < 1e-12:
-                return
-            exponent = -fup * clint_organ / q
-            # Clamp exponent to avoid overflow for very high CLint
-            exponent = max(exponent, -50.0)
-            clh = q * (1.0 - np.exp(exponent))
+            # FLUX-1: in a single well-mixed perfusion compartment (separate
+            # convective Q·c_out outflow edge), the metabolic sink must be the
+            # intrinsic clearance fup·CLint — same as well_stirred. A true
+            # parallel-tube extraction Q·(1−e^(−fup·CLint/Q)) requires an axial
+            # concentration gradient (sub-compartmentalized liver), which this
+            # compartment cannot represent; applying the whole-organ PT clearance
+            # to c_out alongside the convective edge double-counts flow (E→0.5).
+            # parallel_tube is not wired in the reference physiology.
+            cl_intrinsic = fup * clint_organ
 
             v = params.node_param(self.source_name, "volume")
             kp = params.drug_kp(self.source_name)
             rbp = params.drug_param("rbp")
             c_out = y[self.source_idx] * rbp / (v * kp) if v > 0 else 0.0
 
-            rate = clh * c_out
+            rate = cl_intrinsic * c_out
 
         elif self.model == "gfr_filtration":
             renal_cl = params.drug_param("renal_clearance")
@@ -327,19 +327,25 @@ class ClearanceFluxSpec(FluxSpec):
             cl_int_h = cl_int_metab + cl_int_bile
 
             fup = params.drug_param("fup")
-            q = params.total_inflow(src)
 
-            num = q * fup * ps_inf * cl_int_h
-            den = q * (ps_eff + cl_int_h) + fup * ps_inf * cl_int_h
+            # FLUX-1: intrinsic hepatic clearance (flow-unlimited). At QSSA the
+            # hepatocyte removal per unit blood concentration is
+            #   CL_int,hep = fup·PS_inf·CL_int_h / (PS_eff + CL_int_h).
+            # The separate convective Q·c_out outflow edge supplies the flow
+            # limitation, so the realized extraction is the well-stirred wrap
+            # CL_int,hep/(Q+CL_int,hep) → 1.0 at high CLint. The prior whole-organ
+            # form embedded Q in num+den and, applied to c_out, double-counted
+            # flow, capping extraction at 0.5.
+            den = ps_eff + cl_int_h
             if den < 1e-12:
                 return
-            clh = num / den
+            cl_intrinsic = fup * ps_inf * cl_int_h / den
 
             v = params.node_param(src, "volume")
             kp = params.drug_kp(src)
             rbp = params.drug_param("rbp")
             c_out = y[self.source_idx] * rbp / (v * kp) if v > 0 else 0.0
-            rate = clh * c_out
+            rate = cl_intrinsic * c_out
 
         else:
             return
@@ -634,11 +640,13 @@ class ProdrugActivationFluxSpec(FluxSpec):
         # B-11: hepatic intracellular fu correction at flagged nodes.
         if params.node_param(self.source_name, "fu_correction_applicable") > 0:
             fup = fup * params.drug_param("fu_correction_liver")
-        q = params.total_inflow(self.source_name)
-        denom = q + fup * clint_organ
-        if denom < 1e-12:
-            return
-        cl_organ = (q * fup * clint_organ) / denom
+
+        # FLUX-1: conversion sites are perfusion compartments (liver/gut_wall)
+        # with a separate convective Q·c_out outflow edge, so the activation
+        # sink must use the intrinsic clearance fup·CLint. The flow limitation
+        # emerges from the convective edge; applying the whole-organ CL_h here
+        # would double-count Q and cap the activated fraction at 0.5.
+        cl_intrinsic = fup * clint_organ
 
         # Concentration leaving the source compartment (well-stirred)
         v = params.node_param(self.source_name, "volume")
@@ -646,7 +654,7 @@ class ProdrugActivationFluxSpec(FluxSpec):
         rbp = params.drug_param("rbp")
         c_out = y[self.source_idx] * rbp / (v * kp) if v > 0 else 0.0
 
-        rate_parent = cl_organ * c_out
+        rate_parent = cl_intrinsic * c_out
         y_frac = params.edge_param(self.edge_id, "conversion_yield")
         rate_active = rate_parent * self.mw_ratio * y_frac
 

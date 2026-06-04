@@ -93,7 +93,9 @@ class TestPosteriorShiftsTowardObservation:
         prior = result.prior_cmax.mean
         post = result.posterior_cmax.mean
         # Posterior should shift in the direction of observation (here: lower than prior ~0.037)
-        assert prior > 0.025  # engine overpredicts morphine
+        # FLUX-1 (2026-06-03): morphine extraction increased (prior 0.025 -> 0.0216), but it
+        # still over-predicts vs the synthetic obs (0.01865), so the shift-down mechanism holds.
+        assert prior > 0.0186  # engine still over-predicts morphine relative to obs
         assert post < prior, f"posterior {post:.4f} should be less than prior {prior:.4f}"
 
 

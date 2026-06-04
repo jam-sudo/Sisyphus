@@ -142,19 +142,20 @@ def test_well_stirred_fu_correction_amplifies_clearance_when_flagged():
         fu_correction_liver=5.0,
     )
 
-    # Analytical expected values
-    q, clint, fup = 20.0, 0.5, 0.1
+    # FLUX-1: intrinsic clearance CL_int = fup_eff * CLint applied to c_out
+    # (flow limitation now emerges from the separate convective outflow edge).
+    clint, fup = 0.5, 0.1
     c_out = 100.0 * 1.0 / (1.5 * 1.0)
-    expected_baseline = (q * fup * clint) / (q + fup * clint) * c_out
-    expected_corrected = (q * 5 * fup * clint) / (q + 5 * fup * clint) * c_out
+    expected_baseline = fup * clint * c_out
+    expected_corrected = 5 * fup * clint * c_out
 
     assert abs(rate_baseline - expected_baseline) < 1e-10
     assert abs(rate_corrected - expected_corrected) < 1e-10
 
     # Sanity: fu_corr=5 strictly raises CL (the gate's purpose).
     assert rate_corrected > rate_baseline
-    # And in the near-linear regime (fup*CLint << Q), the ratio approaches 5.
-    assert 4.9 < rate_corrected / rate_baseline < 5.0
+    # Intrinsic clearance is exactly linear in fup_eff, so the ratio is exactly 5.
+    assert abs(rate_corrected / rate_baseline - 5.0) < 1e-9
 
 
 def test_parallel_tube_fu_correction_amplifies_clearance_when_flagged():
@@ -173,17 +174,19 @@ def test_parallel_tube_fu_correction_amplifies_clearance_when_flagged():
         fu_correction_liver=5.0,
     )
 
-    q, clint, fup = 20.0, 0.5, 0.1
+    # FLUX-1: parallel_tube collapses to the intrinsic clearance fup_eff*CLint
+    # in a single well-mixed compartment (true PT needs an axial gradient).
+    clint, fup = 0.5, 0.1
     c_out = 100.0 * 1.0 / (1.5 * 1.0)
-    expected_baseline = q * (1.0 - np.exp(-fup * clint / q)) * c_out
-    expected_corrected = q * (1.0 - np.exp(-5 * fup * clint / q)) * c_out
+    expected_baseline = fup * clint * c_out
+    expected_corrected = 5 * fup * clint * c_out
 
     assert abs(rate_baseline - expected_baseline) < 1e-10
     assert abs(rate_corrected - expected_corrected) < 1e-10
 
     assert rate_corrected > rate_baseline
-    # PT in linear regime also ~5× (1 - exp(-5x) / (1 - exp(-x)) → 5 as x → 0).
-    assert 4.9 < rate_corrected / rate_baseline < 5.0
+    # Intrinsic clearance is exactly linear in fup_eff, so the ratio is exactly 5.
+    assert abs(rate_corrected / rate_baseline - 5.0) < 1e-9
 
 
 def test_well_stirred_no_effect_when_node_flag_off():
@@ -208,9 +211,9 @@ def test_well_stirred_no_effect_when_node_flag_off():
 
     # And rate_at_one must equal the un-corrected analytical CL
     # (i.e., fu_correction_liver has truly no effect).
-    q, clint, fup = 20.0, 0.5, 0.1
+    clint, fup = 0.5, 0.1  # FLUX-1 intrinsic clearance (q no longer wraps CL)
     c_out = 100.0 * 1.0 / (1.5 * 1.0)
-    expected = (q * fup * clint) / (q + fup * clint) * c_out
+    expected = fup * clint * c_out
     assert abs(rate_at_one - expected) < 1e-10
 
 

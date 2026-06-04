@@ -88,11 +88,14 @@ def _make_ecm_drug(
 
 def _clh_ref(q, fup, ps_active, ps_passive, ps_eff,
              cl_int_metab, cl_int_bile):
+    # FLUX-1: intrinsic (flow-unlimited) hepatic clearance, as applied to c_out
+    # in the perfusion compartment. CL_int,hep = fup·PS_inf·CL_int_h/(PS_eff+CL_int_h).
+    # The `q` arg is retained for call-site compatibility but no longer wraps the
+    # clearance — the flow limitation emerges from the separate convective edge.
     ps_inf = ps_active + ps_passive
     cl_int_h = cl_int_metab + cl_int_bile
-    num = q * fup * ps_inf * cl_int_h
-    den = q * (ps_eff + cl_int_h) + fup * ps_inf * cl_int_h
-    return num / den if den > 0 else 0.0
+    den = ps_eff + cl_int_h
+    return fup * ps_inf * cl_int_h / den if den > 0 else 0.0
 
 
 def _compute_rate(graph, drug, liver_name, sink_name, amount_liver,
@@ -132,10 +135,16 @@ def test_ecm_formula_matches_hand_computed():
 
 
 def test_ecm_degenerate_limit_matches_well_stirred():
-    """With PS_passive=PS_eff=1e6, no OATP, bile=0, extended rate ≈ WS rate."""
+    """With PS_passive=PS_eff≫CL_int_h, no OATP, bile=0, extended rate ≈ WS rate.
+
+    FLUX-1: both branches now apply the intrinsic clearance, so the ECM→WS limit
+    requires PS_eff ≫ CL_int_h (CL_int,hep = fup·PS_inf·CL_int_h/(PS_eff+CL_int_h)
+    → fup·CL_int_h). At CL_int_h≈2.8e4 this needs PS≈1e9 for <1e-3 agreement; the
+    old whole-organ q-wrap masked the finite-PS_eff gap.
+    """
     drug = _make_ecm_drug(
         fup=0.1, cyp3a4_affinity=50.0,
-        oatp_jmax=0.0, ps_passive=1e6, ps_eff=1e6, cl_int_bile=0.0,
+        oatp_jmax=0.0, ps_passive=1e9, ps_eff=1e9, cl_int_bile=0.0,
     )
     g_ext = _make_liver_graph(oatp_abundance=0.0, cyp3a4_abundance=9.2475e6)
     rate_ext = _compute_rate(g_ext, drug, "liver",
@@ -199,14 +208,11 @@ def test_ps_active_from_two_transporters():
     )
     # PS_active = 10000 × 2/4 + 5000 × 3/6 = 5000 + 2500 = 7500
     # CL_int_h = 10 (no metab, only bile=10)
-    # Q=100, fup=0.1, PS_inf=7500, PS_eff=0
-    # CL_h = 100 × 0.1 × 7500 × 10 / (100 × (0 + 10) + 0.1 × 7500 × 10)
-    #      = 750000 / (1000 + 7500) = 88.2352...
+    # FLUX-1 intrinsic: CL_int,hep = fup × PS_inf × CL_int_h / (PS_eff + CL_int_h)
+    #      = 0.1 × 7500 × 10 / (0 + 10) = 750
     rate = _compute_rate(g, drug, "liver", "metabolized_hepatic",
                          amount_liver=1.0)
-    expected_clh = (100.0 * 0.1 * 7500.0 * 10.0) / (
-        100.0 * (0.0 + 10.0) + 0.1 * 7500.0 * 10.0
-    )
+    expected_clh = (0.1 * 7500.0 * 10.0) / (0.0 + 10.0)
     c_out = 1.0 / 1.8  # rbp=1, kp=1, v=1.8
     assert rate == pytest.approx(expected_clh * c_out, rel=1e-6)
 

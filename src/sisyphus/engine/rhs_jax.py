@@ -285,60 +285,45 @@ def make_jax_rhs(
         # ---------------------------------------------------------------
 
         # 2a. Well-stirred model
-        #     CL = (Q * fup * CLint) / (Q + fup * CLint)
-        #     C_out = A[src] * RBP / (V[src] * Kp[src])
-        #     rate = CL * C_out
+        #     FLUX-1: intrinsic clearance applied to C_out. The convective
+        #     Q*c_out outflow edge supplies the flow limitation, so realized
+        #     extraction is fup*CLint/(Q+fup*CLint) -> 1.0. Applying the
+        #     whole-organ CL_h here (embedding Q) double-counts flow (E->0.5).
+        #     rate = (fup * CLint) * C_out ;  C_out = A[src]*RBP/(V[src]*Kp[src])
         if has_cl_ws:
             clint = params.node_clint_organ[_cl_ws_src]
-            q_ws = params.node_total_inflow[_cl_ws_src]
             v_ws = params.node_volumes[_cl_ws_src]
             kp_ws = params.node_kp[_cl_ws_src]
 
-            denom_ws = q_ws + fup * clint
-            # Safe division: if denom < epsilon, CL = 0
-            clh_ws = jnp.where(
-                denom_ws > 1e-12,
-                (q_ws * fup * clint) / denom_ws,
-                0.0,
-            )
+            cl_intrinsic_ws = fup * clint
             c_out_ws = jnp.where(
                 v_ws > 0.0,
                 y[_cl_ws_src] * rbp / (v_ws * kp_ws),
                 0.0,
             )
-            rate_ws = clh_ws * c_out_ws
+            rate_ws = cl_intrinsic_ws * c_out_ws
 
             dydt = dydt.at[_cl_ws_src].add(-rate_ws)
             dydt = dydt.at[_cl_ws_tgt].add(rate_ws)
 
         # 2b. Parallel-tube model
-        #     CL = Q * (1 - exp(-fup * CLint / Q))
-        #     C_out same as well-stirred
+        #     FLUX-1: in a single well-mixed compartment a true parallel-tube
+        #     extraction (axial gradient) is not representable; mirror the
+        #     numpy path and apply the intrinsic clearance fup*CLint to C_out
+        #     so the convective edge supplies flow limitation without a
+        #     double-count. parallel_tube is not wired in reference physiology.
         if has_cl_pt:
             clint_pt = params.node_clint_organ[_cl_pt_src]
-            q_pt = params.node_total_inflow[_cl_pt_src]
             v_pt = params.node_volumes[_cl_pt_src]
             kp_pt = params.node_kp[_cl_pt_src]
 
-            # Exponent with clamp to avoid overflow for very high CLint
-            exponent = jnp.where(
-                q_pt > 1e-12,
-                -fup * clint_pt / q_pt,
-                0.0,
-            )
-            exponent = jnp.clip(exponent, -50.0, 0.0)
-
-            clh_pt = jnp.where(
-                q_pt > 1e-12,
-                q_pt * (1.0 - jnp.exp(exponent)),
-                0.0,
-            )
+            cl_intrinsic_pt = fup * clint_pt
             c_out_pt = jnp.where(
                 v_pt > 0.0,
                 y[_cl_pt_src] * rbp / (v_pt * kp_pt),
                 0.0,
             )
-            rate_pt = clh_pt * c_out_pt
+            rate_pt = cl_intrinsic_pt * c_out_pt
 
             dydt = dydt.at[_cl_pt_src].add(-rate_pt)
             dydt = dydt.at[_cl_pt_tgt].add(rate_pt)

@@ -18,11 +18,19 @@ from sisyphus.engine.solver import solve
 from sisyphus.graph.builder import build_from_yaml
 from sisyphus.pk.endpoints import compute_endpoints
 
+# Parity targets. caffeine/warfarin are low-extraction and remain at Omega's
+# deterministic ODE values. midazolam/propranolol are HIGH-extraction drugs:
+# the FLUX-1 fix (2026-06-03) corrects a flow-limitation double-count that
+# capped hepatic/gut extraction at 0.5, so Sisyphus now legitimately diverges
+# from Omega's predecessor values (which shared the double-counted PBPK
+# structure). Their targets are pinned to the FLUX-1-corrected Cmax — more
+# first-pass extraction, lower Cmax, as physiology requires. See
+# docs/superpowers/specs/2026-06-03-flux1-extraction-double-count-design.md.
 OMEGA_TARGETS = {
-    "midazolam": {"cmax": 0.006943, "tmax": 1.5},
+    "midazolam": {"cmax": 0.005909, "tmax": 1.5},   # FLUX-1: was 0.006943 (Omega)
     "caffeine": {"cmax": 1.7139, "tmax": 1.0},
     "warfarin": {"cmax": 0.4922, "tmax": 3.0},
-    "propranolol": {"cmax": 0.1355, "tmax": 1.5},
+    "propranolol": {"cmax": 0.082528, "tmax": 1.5},  # FLUX-1: was 0.1355 (Omega)
 }
 
 
