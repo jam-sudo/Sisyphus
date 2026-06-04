@@ -89,7 +89,11 @@ nodes:
     volume: 1.03
     composition: {fn: 0.0163, fp: 0.0185, fw: 0.718, pH: 7.0}
     enzymes:
-      CYP3A4: 21224338      # scaled to match midazolam gut CLint 1600 L/h
+      CYP3A4: 13837729      # FLUX-1 re-anchor (2026-06-03): prior 21224338 was the midazolam
+                            # back-fit under the E<=0.5 flow-double-count. Scaled x0.652 =
+                            # Q_gut/(Q_gut+fup*CLint_gut) at midazolam, holding gut E_gut=0.258
+                            # invariant under the fixed intrinsic-clearance flux. Re-derive if the
+                            # gut absorption / first-pass model changes.
       # Prodrug activation enzymes — independent lognormal.
       # Values from T1 deliverable §1 (intestinal-specific isoforms).
       SPR:  {mean: 3.0e3, cv: 1.2}    # Lower expression vs liver (PMC7520308 colon mention)

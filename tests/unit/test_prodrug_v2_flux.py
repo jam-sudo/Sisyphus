@@ -73,7 +73,12 @@ def _build_flow_graph(
 
 
 def test_flux_well_stirred_rate_matches_formula():
-    """Rate should equal (Q × fup × CLint) / (Q + fup × CLint) × C_out × yield × mw_ratio."""
+    """FLUX-1: rate = (fup × CLint) × C_out × yield × mw_ratio (intrinsic clearance).
+
+    The conversion site is a perfusion compartment with a separate convective
+    outflow edge, so the activation sink uses the intrinsic clearance fup·CLint;
+    the prior whole-organ CL_h = Q·fup·CLint/(Q+fup·CLint) double-counted flow.
+    """
     abundance, affinity, ivive = 1e6, 10.0, 6e-5
     fup, q, v_source = 0.5, 60.0, 10.0
     g, drug = _build_flow_graph(
@@ -94,9 +99,9 @@ def test_flux_well_stirred_rate_matches_formula():
     flux_spec.apply(t=0.0, y=y, dydt=dydt, params=params)
 
     clint = abundance * affinity * ivive
-    cl_organ = (q * fup * clint) / (q + fup * clint)
+    cl_intrinsic = fup * clint
     c_out = a_parent / v_source
-    expected_rate_parent = cl_organ * c_out
+    expected_rate_parent = cl_intrinsic * c_out
     expected_rate_active = expected_rate_parent * 1.0 * 1.0  # mw_ratio=1, yield=1
 
     assert dydt[state_idx["conversion_node"]] == pytest.approx(-expected_rate_parent, rel=1e-6)

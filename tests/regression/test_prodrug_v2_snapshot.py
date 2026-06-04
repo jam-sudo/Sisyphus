@@ -36,7 +36,7 @@ from tests._artifact_helpers import skip_if_local_artifacts
 _PINNED = {
     "sepiapterin":       8.679384e+00,
     "remdesivir":        1.573162e+00,
-    "tebipenem_pivoxil": 4.553034e-01,
+    "tebipenem_pivoxil": 3.109251e-01,  # FLUX-1 2026-06-04: intrinsic clearance (was 4.553034e-01)
     "fostamatinib":      6.675183e-02,
 }
 
@@ -55,6 +55,11 @@ _DOSE_ROUTE = {
     "tebipenem_pivoxil": (300.0, "oral"),
     "fostamatinib":      (75.0, "oral"),
 }
+
+
+# FLUX-1 (2026-06-04): the intrinsic-clearance fix changed prodrug activation
+# extraction; the tebipenem_pivoxil pin was regenerated on the canonical CI stack
+# (4.553034e-01 → 3.109251e-01). The other 3 prodrug pins are unaffected.
 
 
 @skip_if_local_artifacts

@@ -1,9 +1,16 @@
 # tests/integration/test_engine_validation.py
-"""Integration test: validate full pipeline against Omega ODE output.
+"""Integration test: validate full pipeline against reference ODE Cmax.
 
 Runs 4 validation drugs through the complete pipeline:
     YAML -> BodyGraph -> compile -> solve -> Cmax
-and compares against Omega's deterministic ODE Cmax values within +/-5%.
+and compares against reference deterministic ODE Cmax within +/-5%.
+
+caffeine/warfarin are LOW-extraction and pinned to Omega's predecessor values.
+midazolam/propranolol are HIGH-extraction: the FLUX-1 fix (2026-06-03) corrected
+a flow-limitation double-count that Omega shared, so their targets are now
+FLUX-1-corrected Sisyphus snapshots, not independent Omega values (see
+OMEGA_TARGETS comment). The test thus mixes 2 cross-engine parity checks with 2
+self-consistency snapshots; all 4 still serve as drift regressions.
 """
 
 from pathlib import Path
@@ -18,11 +25,19 @@ from sisyphus.engine.solver import solve
 from sisyphus.graph.builder import build_from_yaml
 from sisyphus.pk.endpoints import compute_endpoints
 
+# Parity targets. caffeine/warfarin are low-extraction and remain at Omega's
+# deterministic ODE values. midazolam/propranolol are HIGH-extraction drugs:
+# the FLUX-1 fix (2026-06-03) corrects a flow-limitation double-count that
+# capped hepatic/gut extraction at 0.5, so Sisyphus now legitimately diverges
+# from Omega's predecessor values (which shared the double-counted PBPK
+# structure). Their targets are pinned to the FLUX-1-corrected Cmax — more
+# first-pass extraction, lower Cmax, as physiology requires. See
+# docs/superpowers/specs/2026-06-03-flux1-extraction-double-count-design.md.
 OMEGA_TARGETS = {
-    "midazolam": {"cmax": 0.006943, "tmax": 1.5},
+    "midazolam": {"cmax": 0.005909, "tmax": 1.5},   # FLUX-1: was 0.006943 (Omega)
     "caffeine": {"cmax": 1.7139, "tmax": 1.0},
     "warfarin": {"cmax": 0.4922, "tmax": 3.0},
-    "propranolol": {"cmax": 0.1355, "tmax": 1.5},
+    "propranolol": {"cmax": 0.082528, "tmax": 1.5},  # FLUX-1: was 0.1355 (Omega)
 }
 
 
