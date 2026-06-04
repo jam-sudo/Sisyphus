@@ -178,11 +178,16 @@ class ClearanceFluxSpec(FluxSpec):
       uptake, passive efflux, metabolism, biliary clearance. See
       ``docs/superpowers/specs/2026-04-20-oatp-ecm-hepatic-clearance-design.md``.
 
-    Well-stirred model::
+    Well-stirred model (FLUX-1: intrinsic clearance on the compartment outlet)::
 
         CLint_organ = sum(abundance_i * affinity_i) * ivive_scaling
-        CL_organ = (Q * fup * CLint) / (Q + fup * CLint)
-        rate = CL_organ * C_in
+        rate = (fup * CLint_organ) * c_out        # NOT the whole-organ CL_h
+
+    The node is a perfusion compartment: a separate convective FlowEdge carries
+    Q * c_out out of it, so the flow limitation emerges from the ODE and the
+    realized hepatic extraction is fup*CLint/(Q + fup*CLint) -> 1.0. Applying the
+    whole-organ CL_h = Q*fup*CLint/(Q+fup*CLint) to c_out here would double-count
+    the flow term and cap extraction at 0.5 (see flux.py FLUX-1 comments).
 
     GFR filtration::
 
@@ -576,10 +581,15 @@ class ProdrugActivationFluxSpec(FluxSpec):
     Mirrors ClearanceFluxSpec(model="well_stirred") math but routes flux
     to the active species pool (not a sink), with MW × yield scaling.
 
-    CLint_node = Σ_tag (abundance[tag] × affinity_for_conversion[tag]) × ivive
-    CL_organ   = (Q × fup × CLint) / (Q + fup × CLint)
-    rate_parent = CL_organ × c_unbound_at_node
-    rate_active = rate_parent × (mw_active/mw_parent) × conversion_yield
+    FLUX-1: the conversion site is a perfusion compartment with a separate
+    convective Q·c_out outflow edge, so the intrinsic clearance is applied::
+
+        CLint_node = Σ_tag (abundance[tag] × affinity_for_conversion[tag]) × ivive
+        rate_parent = (fup × CLint_node) × c_out      # NOT the whole-organ CL_h
+        rate_active = rate_parent × (mw_active/mw_parent) × conversion_yield
+
+    The flow limitation emerges from the convective edge (extraction → 1.0);
+    the old whole-organ form Q·fup·CLint/(Q+fup·CLint) double-counted flow.
 
     Identity-blind: engine iterates enzyme_tags only.
     """

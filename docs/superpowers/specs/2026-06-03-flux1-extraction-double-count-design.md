@@ -47,9 +47,14 @@ In a perfusion compartment the metabolic sink must be the **intrinsic** clearanc
 | `parallel_tube` (unused in production) | `Q·(1−e^(−fup·CLint/Q))·c_out` | `fup·CLint·c_out` + comment: true PT needs an axial-gradient liver (out of scope) |
 
 The ECM `clh` is exactly the well-stirred *wrap* of `CL_int,hep` (`clh = Q·CL_int,hep/(Q+CL_int,hep)`),
-so dropping the wrap is the minimal correct fix. The `gfr_filtration` branch is **not** a
-perfusion-compartment double-count (kidney has no convective drug-return modeled the same way) and is
-out of scope here (its separate low-severity RBP-basis nit is a different follow-up).
+so dropping the wrap is the minimal correct fix. The `gfr_filtration` branch is out of scope: the
+kidney **does** share the dual perfusion-compartment topology (arterial→kidney inflow + a convective
+return), but `gfr_filtration` applies a **direct filtration clearance** `renal_cl` (≈ GFR·fup, not a
+Q-wrapped whole-organ `CL_h`) to `c_plasma`. There is therefore no embedded `Q` to double-count —
+combined with the convective edge it already yields the correct renal extraction
+`renal_cl/(Q_kidney+renal_cl)`. (Earlier drafts stated "kidney has no convective drug-return," which is
+factually wrong; the correct reason is the absence of a flow-wrap in `renal_cl`. The renal edge's
+separate low-severity RBP-basis `c_plasma` nit is a different follow-up.)
 
 **Rejected — form (b)** `CL_h·C_in` (DESIGN.md spec form): also correct, but needs the mixed inflow
 concentration `C_in`, breaking the engine's per-edge locality. Form (a) is standard perfusion-limited

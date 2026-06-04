@@ -1,9 +1,16 @@
 # tests/integration/test_engine_validation.py
-"""Integration test: validate full pipeline against Omega ODE output.
+"""Integration test: validate full pipeline against reference ODE Cmax.
 
 Runs 4 validation drugs through the complete pipeline:
     YAML -> BodyGraph -> compile -> solve -> Cmax
-and compares against Omega's deterministic ODE Cmax values within +/-5%.
+and compares against reference deterministic ODE Cmax within +/-5%.
+
+caffeine/warfarin are LOW-extraction and pinned to Omega's predecessor values.
+midazolam/propranolol are HIGH-extraction: the FLUX-1 fix (2026-06-03) corrected
+a flow-limitation double-count that Omega shared, so their targets are now
+FLUX-1-corrected Sisyphus snapshots, not independent Omega values (see
+OMEGA_TARGETS comment). The test thus mixes 2 cross-engine parity checks with 2
+self-consistency snapshots; all 4 still serve as drift regressions.
 """
 
 from pathlib import Path
