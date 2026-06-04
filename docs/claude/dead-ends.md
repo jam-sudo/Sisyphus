@@ -297,6 +297,29 @@ Artifacts: `data/enzymes/ugt_ivive_sf.json` (all-1.0 audited registry), `src/sis
 
 ---
 
+### DE-44 — CLint-floor "breakthrough" survey: 7 candidates, all foreclosed as headline levers (2026-06-04)
+
+**Date:** 2026-06-04
+
+**Context:** A schema-free adversarial workflow (8 agents, web + repo, error-cancellation-gated) stress-tested 7 *non-trivial* ways to break the CLint floor, seeded after the external deep-research confirmed the floor is real. All 7 returned **kill as a 2.78-headline lever**; the convergence is the result. Honest probability any moves the headline: **~3–5%** (the residual lives entirely in the `invivo-F-prior` surprise branch, which DE-28/42/43 make unlikely).
+
+**Per-candidate verdicts (with the repo fact that kills each):**
+- **Per-isoform rCYP CLint** — data-infeasible: ChEMBL CYP targets are *inhibition IC50*, not substrate-CLint; the merged corpus has ~2 recombinant-basis records of 552. rCYP→in-vivo noise is *relocated* into the substrate-dependent ISEF/RAF (CYP3A4 ISEF ~8-fold), not removed. Collides DE-11/16/20/21/36/40 (fm reallocation = Engine-positive / Meta-neutral).
+- **kcat×Km×[E] structured decomposition** — both factor arms already dead in-repo: kcat (C–H BDE) = DE-18 (r=+0.033); Km (docking) = DE-13 ("binding affinity ≠ metabolic rate, do not retry"). A product of two zero-signal estimators compounds variance, it does not create signal.
+- **Hierarchical multi-assay target-denoising** — data fatal: of 5,338 unique CLint compounds **exactly 1** has cross-source measurements (field max ~50) → Dawid-Skene unidentifiable. Mechanism also wrong: Bowman & Benet 2019 (our own cited source) shows interlab variance is *systematic per-protocol bias*, not random noise — averaging averages bias.
+- **Calibrated-CLint-uncertainty → meta *routing*** — the inverse-variance mechanism already ran: DE-26 M7 Local-BMA **+0.082 worse**, M9 +0.014 worse. Only the *PI-recalibration* half survives (touches the interval, not the point estimate → cannot trip co-calibration), and only for *coverage/UQ*, not point-AAFE. CLint-CV ranks |Cmax fold-error| weakly (SRCC≈0.16).
+- **Per-subclass measured-input routing (aggregate)** — the ML track is `predict_cmax(smiles, dose)`, **structurally blind to measured ADME**, so the strongest meta track (3.01) is frozen and the shipped measured "≈11% gain" is *engine-only* and never propagates to the meta headline. Capability already shipped; the "targeted-selection" wrapper adds nothing testable.
+- **+BSA / albumin-mediated PSu,inf (OATP)** — *keep as correctness only, not a lever*: a real primary-literature mechanistic fix (Li/Benet 2020, ~1.9–2.0 fold, no scaling) but **inert** — touches 1 holdout drug (pravastatin, inviolable) and 0 prospective → ΔMeta≈0.000. Ships under [[correctness-over-benchmark]] (spec `2026-06-04-oatp-ecm-reanchor-design.md`).
+- **Structure→F as engine prior/anchor** — collides DE-28 (repo's own structure→F predictor = scaffold-CV R²=−0.09; the external "Q²=0.58" is the optimistic/AD-filtered tail) + DE-43 damping + circularity (engine E and structure→F are both functions of the same SMILES → no orthogonal information = DE-23 in F clothing).
+
+**Why the whole class fails (unifying):** CLint enters the pipeline **only through the engine track**, which the fixed-weight meta damps to ~18% pass-through (DE-43) under r>0.986 track co-calibration (DE-26). So any CLint improvement *in isolation* either re-learns the existing weights (null) or breaks co-calibration (regression) — the pattern of 18+ prior reverts. The floor is two floors (DE-14 target-noise + mechanistic transporter–enzyme-interplay IVIVE), neither reachable from the CLint side.
+
+**Survivors (correctness/UQ, NOT headline):** (1) +BSA/ECM as correct-but-inert physics; (2) conformal/CQR PI-recalibration for the 29.9%@90% coverage problem — run the ~minutes cached-data kill-test first (Spearman ρ between |log Cmax fold-error| and propagated engine CLint-CV; if |ρ|<0.3 even the UQ value is marginal). One cheap falsification worth running to *retire the premise*: the `invivo-F-prior` test (reuse `xgboost_bioavailability.json` + `_apply_f_correction` at shrinkage w∈{0.25,0.5,1.0}, re-score; pre-registered to rise +0.02–0.08, kill if so).
+
+**Telltale if it returns:** "a better structure→CLint / per-isoform / denoised / uncertainty-routed CLint will move the headline." It will not — CLint is engine-only and the meta damps it; the headline is already in the OrBiTo band (2.08–2.74 vs 2.78). Ship CLint-side work **only** as correctness or calibrated-UQ, never sold as an accuracy lever.
+
+---
+
 ## 3. When to consult this list
 
 - Before writing a design spec for any accuracy improvement.
