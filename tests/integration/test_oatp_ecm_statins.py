@@ -120,8 +120,12 @@ _STATIN_CASES: dict[str, dict] = {
 #   pitavastatin: local-dev Cmax 0.00168 mg/L (FE 2.08) under gate 3.0.
 #                 public-only Cmax ~0.00116 mg/L (FE ~3.01). Gate 3.2 = small
 #                 buffer over public-only canonical.
+# Re-anchor 2026-06-04: OATP1B1 abundance is now calibrated on PITAVASTATIN
+# (non-holdout, FE 1.000 at 1.3e5); pravastatin is a VALIDATION read-out and
+# uses the general Meta bar (3.0), NOT its former holdout-tuned 1.6 (an
+# Invariant #5 erosion). pravastatin independently validates to FE ~1.40.
 _FE_GATE: dict[str, float] = {
-    "pravastatin": 1.6,
+    "pravastatin": 3.0,
     "rosuvastatin": 3.0,
     "atorvastatin": 3.0,
     "pitavastatin": 3.2,
@@ -202,15 +206,14 @@ def _simulate_cmax(drug_name: str) -> tuple[float, float]:
 _STATIN_NAMES = list(_STATIN_CASES.keys())
 
 
-# FLUX-1 (2026-06-03): the intrinsic-clearance fix removed the flow-limitation
-# double-count from the extended/ECM branch, so pravastatin's hepatic extraction
-# increased and its Cmax dropped (FE 1.066 -> 2.282). The OATP1B1 abundance
-# (5.0e5) was calibrated against the OLD flow-double-counted wrap, so it now
-# over-extracts. Re-anchoring it requires a non-holdout OATP1B1 substrate —
-# pravastatin is in the holdout (invariant #5), so the abundance cannot be
-# tuned to it. Deferred to a follow-up; xfail strict=False documents the
-# known, explained regression without hiding it (XPASS if a re-anchor lands).
-_FLUX1_ECM_RECAL_FAILS = {"pravastatin", "pitavastatin"}
+# FLUX-1 (2026-06-03) increased ECM hepatic extraction (intrinsic-clearance fix),
+# so the pravastatin-tuned OATP1B1 abundance (5.0e5) over-extracted → pravastatin
+# and pitavastatin were deferred to xfail. RESOLVED 2026-06-04: re-anchored the
+# OATP1B1 abundance to PITAVASTATIN (non-holdout, |ln FE| optimum 1.3e5, FE 1.000;
+# reference_man.yaml), which un-erodes Invariant #5 (off the holdout) and lifts
+# pravastatin (holdout, validation-only) to FE ~1.40. Both now pass strict.
+# Spec: docs/superpowers/specs/2026-06-04-oatp-ecm-reanchor-design.md.
+_FLUX1_ECM_RECAL_FAILS: set[str] = set()
 
 
 def _xfail_reason(name: str) -> str | None:

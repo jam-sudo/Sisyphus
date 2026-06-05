@@ -10,6 +10,18 @@ Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the *
 
 ---
 
+## 2026-06-04 (cont. 4) — OATP1B1 re-anchor to pitavastatin (non-holdout): un-erodes Invariant #5, un-xfails the FLUX-1-deferred statins, headline-neutral
+
+Closed the FLUX-1-deferred OATP/ECM xfail. Branch `fix/rbp-concentration-basis`; spec `docs/superpowers/specs/2026-06-04-oatp-ecm-reanchor-design.md`.
+
+**Problem.** The liver OATP1B1 uptake abundance (`reference_man.yaml`, 5.0e5) was calibrated on **pravastatin**, which is in the **holdout** (Invariant #5 erosion; the audit confirmed pravastatin's ECM path activates in the production benchmark). FLUX-1 raised ECM extraction → the pravastatin-tuned abundance over-extracted → `test_oatp_ecm_statins[pravastatin, pitavastatin]` were xfail-deferred.
+
+**Fix (anchor = pitavastatin, a non-holdout OATP substrate).** Sweep under the FLUX-1+RBP-2-corrected extended model (`realize_means`): pitavastatin |ln FE| optimum **1.3e5** (FE 1.000). Re-anchored OATP1B1 abundance **5.0e5 → 1.3e5**. **pravastatin is now a validation read-out** and improves **FE 2.28 → 1.40** as a clean consequence (never the anchor); its test gate relaxed from the holdout-tuned **1.6 → 3.0** (general Meta bar). `_FLUX1_ECM_RECAL_FAILS` emptied; pravastatin + pitavastatin **un-xfailed → PASS strict**. rosuvastatin/atorvastatin stay xfail (Peff over-prediction); fluvastatin stays xfail (issue #21 — OATP not rate-limiting). +BSA PSu,inf not adopted (minimal re-anchor).
+
+**Headline-neutral (verified on a consistent stack).** Isolating the abundance change on one stack: Meta **2.625 → 2.633 (+0.008)** — confirms the spec's ΔMeta≈0 (pravastatin is the only ecm_applicable holdout drug). ⚠ The apparent −0.15 vs the committed 2.784 was **macOS-py3.13 vs CI-py3.10-lock stack drift**, not the re-anchor — my conda stack is non-canonical, so the committed CI cache (2.784) is **NOT regenerated** from it (the CLAUDE.md developer-state trap); `run_engine_benchmark.py` writes nothing without `--save-json`, so the committed cache is untouched and `test_cached_holdout_aafe_is_2p784` passes. A canonical CI regen lands within the pin's ±0.020 (FLUX-1 pattern). **144 integration/regression pass, 0 fail.** Pure correctness + Invariant #5 un-erosion + test-debt closure ([[correctness-over-benchmark]]).
+
+---
+
 ## 2026-06-04 (cont. 3) — Conformal prediction intervals: the 29.9%@90% PI under-coverage fixed (deployed)
 
 Shipped split-conformal Cmax prediction intervals — the user-facing 90% PI is now calibrated. Branch `fix/rbp-concentration-basis`; spec `docs/superpowers/specs/2026-06-04-conformal-prediction-interval-design.md`; TDD.

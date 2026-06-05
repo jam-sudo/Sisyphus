@@ -1,9 +1,21 @@
 # OATP1B1 Re-Anchor (post-FLUX-1) + optional +BSA PSu,inf — Design
 
 **Date:** 2026-06-04
-**Status:** draft (awaiting review — one open decision flagged §3)
+**Status:** IMPLEMENTED (branch `fix/rbp-concentration-basis`); anchor decision resolved → pitavastatin.
 **Depends on:** FLUX-1 (`2026-06-03-flux1-extraction-double-count-design.md`) — this closes the FLUX-1-deferred xfail.
-**Branch (proposed):** `fix/oatp-ecm-reanchor`
+**Branch:** `fix/rbp-concentration-basis`
+
+**Outcome (2026-06-04).** Anchor = **pitavastatin** (§3 recommended). Sweep (`realize_means`, post-FLUX-1+RBP-2):
+pitavastatin |ln FE| optimum = **1.3e5** (FE 1.000); `reference_man.yaml` OATP1B1 abundance re-anchored
+**5.0e5 → 1.3e5**. **pravastatin (holdout) is now validation-only** and improves to **FE 1.40** (was 2.28
+@ 5e5) as a clean consequence — its test gate relaxed from the holdout-tuned **1.6 → 3.0** (general bar).
+**Headline-neutral**: isolated on one stack, Meta **2.625 → 2.633 (+0.008)** — confirms the spec's ΔMeta≈0
+(the −0.15 vs the committed 2.784 was macOS-py3.13 vs CI-py3.10-lock **stack drift**, not the re-anchor;
+the committed CI cache is NOT regenerated from this non-canonical stack — CLAUDE.md developer-state trap —
+and a CI regen lands within the cache-pin ±0.020 tolerance, FLUX-1 pattern). `test_oatp_ecm_statins`
+[pravastatin, pitavastatin] **un-xfailed → PASS** (strict); rosuvastatin/atorvastatin stay xfail (Peff);
+fluvastatin stays xfail (issue #21, OATP not rate-limiting). Invariant #5 **un-eroded** (abundance no
+longer tuned to a holdout drug). +BSA PSu,inf was NOT adopted (minimal clean re-anchor; deferred).
 
 ## 1. Problem — two coupled defects in the OATP/ECM path
 

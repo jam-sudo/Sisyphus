@@ -70,12 +70,13 @@ nodes:
       UGT1A9:  {mean: 8.10e5, cv: 0.5}    # B-02 Phase 2: 12 pmol/mg × 45 × 1500g. Within 10-20 pmol/mg published range; same source as UGT2B7.
     transporters:
       # OATP1B1 independent lognormal — Achour 2021 empirical r<0.3 vs CYPs.
-      # Anchor: pravastatin 40 mg PO Cmax 0.045 mg/L (FDA label) under
-      # ECM-only hepatic clearance (post-#12 metabolic_fraction=0 for
-      # pravastatin removes XGBoost-CYP / ECM double-counting).
-      # Calibration sweep 2026-05-02: FE 1.058 at 5.0e5
-      # (data/validation/oatp_ecm_abundance_calibration.json).
-      OATP1B1: {mean: 5.0e5, cv: 0.484}
+      # RE-ANCHORED 2026-06-04 (post-FLUX-1+RBP-2) to PITAVASTATIN 2 mg PO
+      # Cmax 0.0035 mg/L (FDA Livalo label), a NON-holdout OATP1B1 substrate —
+      # un-erodes Invariant #5 (the prior 5.0e5 was calibrated on pravastatin,
+      # which is in the holdout). Pitavastatin |ln FE| optimum = 1.3e5 (FE 1.000);
+      # pravastatin (holdout) is now a VALIDATION read-out, improving FE 2.28->1.40
+      # as a clean consequence. Spec 2026-06-04-oatp-ecm-reanchor-design.md.
+      OATP1B1: {mean: 1.3e5, cv: 0.484}
     ivive_scaling: 0.00006   # 60/1e6: converts uL/min -> L/h (MPPGL * organ_wt already in abundance)
     fu_correction_applicable: 1.0   # B-11: hepatic intracellular fu correction is applied at this node by ClearanceFlux + ProdrugActivationFlux
 
