@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sisyphus — graph-based whole-body PBPK simulation</title>
+<meta name="description" content="Sisyphus turns a SMILES string and a dose into Cmax, AUC, and half-life with honest uncertainty — by modeling the body as a typed graph and propagating distributions through an auto-derived ODE system." />
+<meta property="og:title" content="Sisyphus — PBPK as a graph" />
+<meta property="og:description" content="SMILES + dose → Cmax with native uncertainty. A graph-based whole-body PBPK platform." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://sisyphus-pbpk.io/" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;450;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --paper:oklch(0.991 0.004 95); --surface:oklch(1 0 0); --surface-2:oklch(0.984 0.004 95);
+  --ink:oklch(0.24 0.012 255); --ink-soft:oklch(0.42 0.011 255); --ink-mute:oklch(0.58 0.010 255);
+  --hair:oklch(0.905 0.005 255); --hair-soft:oklch(0.945 0.004 255);
+  --blue:oklch(0.52 0.11 248); --blue-deep:oklch(0.44 0.12 248); --blue-soft:oklch(0.93 0.035 248);
+  --teal:oklch(0.55 0.085 178); --teal-soft:oklch(0.93 0.03 178);
+  --clay:oklch(0.60 0.105 52); --clay-soft:oklch(0.93 0.04 52);
+  --serif:"Newsreader",Georgia,serif; --sans:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-weight:450;line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:var(--blue-deep);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+.lab{font-family:var(--mono);font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-mute)}
+
+/* topbar */
+.topbar{position:sticky;top:0;z-index:10;background:color-mix(in oklch,var(--paper) 86%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--hair)}
+.topbar .row{display:flex;align-items:center;gap:18px;height:60px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:19px;font-weight:600;letter-spacing:-0.01em;color:var(--ink)}
+.brand:hover{text-decoration:none}
+.mark{width:24px;height:24px;border-radius:6px;background:var(--ink);position:relative;flex:none}
+.mark::after{content:"";position:absolute;width:6.5px;height:6.5px;border-radius:50%;background:var(--clay);top:5px;right:5px}
+.topbar .ver{font-family:var(--mono);font-size:10px;color:var(--ink-mute);align-self:flex-start;margin-top:14px}
+.topbar nav{margin-left:auto;display:flex;align-items:center;gap:22px}
+.topbar nav a{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft)}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--sans);font-weight:600;font-size:13.5px;border-radius:9px;padding:9px 16px;cursor:pointer;border:1px solid transparent;white-space:nowrap}
+.btn.primary{background:var(--blue);color:#fff}
+.btn.primary:hover{background:var(--blue-deep);text-decoration:none}
+.btn.ghost{background:var(--surface);color:var(--ink);border-color:var(--hair)}
+.btn.ghost:hover{border-color:var(--ink-mute);text-decoration:none}
+.topbar .btn{padding:8px 14px}
+
+/* hero */
+.hero{padding:64px 0 56px;border-bottom:1px solid var(--hair)}
+.hero .grid{display:grid;grid-template-columns:1.02fr 1fr;gap:48px;align-items:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:0.08em;color:var(--blue-deep);background:var(--blue-soft);padding:5px 11px;border-radius:999px;margin-bottom:20px}
+.eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--blue)}
+h1{font-family:var(--serif);font-weight:500;font-size:clamp(38px,5vw,56px);line-height:1.04;letter-spacing:-0.02em;margin:0 0 18px}
+.sub{font-size:16.5px;color:var(--ink-soft);max-width:34em;margin:0 0 26px}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:30px}
+.stats{display:grid;grid-template-columns:repeat(4,auto);gap:30px;border-top:1px solid var(--hair);padding-top:20px}
+.stat .v{font-family:var(--serif);font-weight:600;font-size:27px;letter-spacing:-0.01em;line-height:1}
+.stat .k{font-family:var(--mono);font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-mute);margin-top:7px}
+.shot{border:1px solid var(--hair);border-radius:14px;overflow:hidden;box-shadow:0 1px 2px rgba(20,22,28,.05),0 30px 70px -45px rgba(20,22,28,.5);display:block;background:var(--surface-2)}
+.shot img{display:block;width:100%;height:auto}
+.shotcap{font-family:var(--serif);font-style:italic;font-size:12.5px;color:var(--ink-mute);margin-top:10px;text-align:center}
+
+/* sections */
+section{padding:56px 0;border-bottom:1px solid var(--hair)}
+.sec-head{max-width:46em;margin-bottom:30px}
+.sec-head h2{font-family:var(--serif);font-weight:500;font-size:clamp(24px,3vw,32px);letter-spacing:-0.01em;margin:10px 0 8px}
+.sec-head p{color:var(--ink-soft);margin:0;font-size:15px}
+
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:var(--surface);border:1px solid var(--hair);border-radius:12px;padding:20px}
+.card .n{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-mute)}
+.card h3{font-family:var(--serif);font-weight:600;font-size:18px;letter-spacing:-0.01em;margin:8px 0 8px}
+.card p{margin:0;font-size:13.5px;color:var(--ink-soft);line-height:1.55}
+
+.wf-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+a.wf{display:block;background:var(--surface);border:1px solid var(--hair);border-radius:11px;padding:16px 18px;color:inherit}
+a.wf:hover{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-soft);text-decoration:none}
+a.wf .nm{font-family:var(--mono);font-size:13px;color:var(--blue-deep);display:flex;align-items:center;gap:8px}
+a.wf .nm .g{width:6px;height:6px;border-radius:50%;background:var(--blue)}
+a.wf p{margin:8px 0 0;font-size:12.5px;color:var(--ink-soft)}
+
+/* validation */
+.val{display:grid;grid-template-columns:1.4fr 1fr;gap:28px;align-items:start}
+.figpanel{border:1px solid var(--hair);border-radius:12px;overflow:hidden;background:var(--surface)}
+.figpanel img{display:block;width:100%;height:auto}
+.btable{width:100%;border-collapse:collapse;font-size:13px}
+.btable th{font-family:var(--mono);font-size:9.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-mute);font-weight:500;text-align:right;padding:9px 12px;border-bottom:1px solid var(--hair)}
+.btable th:first-child{text-align:left}
+.btable td{padding:10px 12px;border-bottom:1px solid var(--hair-soft);text-align:right;font-family:var(--mono);font-size:12.5px}
+.btable td:first-child{text-align:left;font-family:var(--sans);color:var(--ink-soft)}
+.btable tr.hl td{background:var(--blue-soft)}
+.btable tr.hl td:first-child{color:var(--blue-deep);font-weight:600}
+.btable .big{font-family:var(--serif);font-size:15px;font-weight:600}
+.caveat{font-size:13.5px;line-height:1.6;color:var(--ink-soft);border-left:2px solid var(--clay);padding:2px 0 2px 16px;margin-top:22px;max-width:58em}
+.caveat b{color:oklch(0.46 0.1 52);font-weight:600}
+
+/* quickstart */
+.code{background:var(--ink);color:var(--paper);border-radius:12px;padding:18px 20px;font-family:var(--mono);font-size:13px;line-height:1.8;overflow-x:auto}
+.code .c{color:var(--ink-mute)}
+.code .p{color:oklch(0.78 0.09 178)}
+
+/* footer */
+footer{padding:40px 0 56px}
+.flinks{display:flex;flex-wrap:wrap;gap:8px 26px;font-family:var(--mono);font-size:12.5px;margin-bottom:22px}
+.scope{font-size:12.5px;color:var(--ink-mute);max-width:60em;line-height:1.6}
+.foot-meta{font-family:var(--mono);font-size:10.5px;color:var(--ink-mute);margin-top:20px;display:flex;align-items:center;gap:8px}
+.foot-meta .dot{width:5px;height:5px;border-radius:50%;background:var(--teal)}
+
+@media(max-width:860px){
+  .hero .grid{grid-template-columns:1fr;gap:34px}
+  .stats{grid-template-columns:repeat(2,1fr);gap:22px}
+  .cards{grid-template-columns:1fr}
+  .wf-grid{grid-template-columns:1fr 1fr}
+  .val{grid-template-columns:1fr}
+  .topbar nav a:not(.btn){display:none}
+}
+@media(max-width:520px){
+  .wf-grid{grid-template-columns:1fr}
+  .hero{padding:44px 0 40px}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap row">
+    <a class="brand" href="/"><span class="mark"></span>Sisyphus</a>
+    <span class="ver">v0.4</span>
+    <nav>
+      <a href="/app/">Console</a>
+      <a href="#validation">Validation</a>
+      <a href="https://github.com/jam-sudo/Sisyphus">GitHub</a>
+      <a class="btn primary" href="/app/">Launch console →</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap grid">
+    <div>
+      <span class="eyebrow"><span class="dot"></span>graph-based whole-body PBPK</span>
+      <h1>The body as a graph.<br />PK as a distribution.</h1>
+      <p class="sub">Sisyphus turns a SMILES string and a dose into C<sub>max</sub>, AUC, and half-life — with honest uncertainty — by modeling the body as a typed directed graph and propagating distributions through an ODE system derived from its topology.</p>
+      <div class="cta">
+        <a class="btn primary" href="/app/">Launch the console →</a>
+        <a class="btn ghost" href="https://github.com/jam-sudo/Sisyphus">View on GitHub</a>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="v">2.78</div><div class="k">holdout AAFE</div></div>
+        <div class="stat"><div class="v">N=107</div><div class="k">external holdout</div></div>
+        <div class="stat"><div class="v">43.9%</div><div class="k">within 2-fold</div></div>
+        <div class="stat"><div class="v">34</div><div class="k">compartment ODE</div></div>
+      </div>
+    </div>
+    <div>
+      <a class="shot" href="/app/"><img src="docs/figures/console-predict.png" alt="Sisyphus PBPK Console — caffeine prediction view" loading="lazy" /></a>
+      <div class="shotcap">The interactive console — a real prediction, rendered.</div>
+    </div>
+  </div>
+</section>
+
+<section id="ideas">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="lab">Architecture</span>
+      <h2>Three ideas that define Sisyphus</h2>
+      <p>The design choices that make it extensible and honest, not just another PBPK script.</p>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="n">01 · topology</div>
+        <h3>The body is a graph</h3>
+        <p>Organs are nodes; vessels, transit, and clearance are typed edges. The ODE system is derived from graph topology — you extend the model by editing YAML, never the engine.</p>
+      </div>
+      <div class="card">
+        <div class="n">02 · uncertainty</div>
+        <h3>Everything is a Distribution</h3>
+        <p>Every physiological and drug parameter carries its uncertainty. Monte-Carlo propagation makes prediction intervals the native output, not a bolt-on.</p>
+      </div>
+      <div class="card">
+        <div class="n">03 · extensibility</div>
+        <h3>The engine knows types, not identities</h3>
+        <p>No organ or drug names live in the engine. Identity lives in data, so new organs, enzymes, and routes never require an engine change.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="workflows">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="lab">Capabilities</span>
+      <h2>Six clinical workflows, one engine</h2>
+      <p>Every view in the console is the same identity-blind ODE engine, parameterized differently. <a href="/app/">Open the console →</a></p>
+    </div>
+    <div class="wf-grid">
+      <a class="wf" href="/app/"><div class="nm"><span class="g"></span>predict</div><p>SMILES → C<sub>max</sub>, T<sub>max</sub>, AUC, t½ with a 90% prediction interval.</p></a>
+      <a class="wf" href="/app/"><div class="nm"><span class="g"></span>simulate</div><p>Multi-dose regimens — steady state, accumulation, trough convergence.</p></a>
+      <a class="wf" href="/app/"><div class="nm"><span class="g"></span>tdm</div><p>Bayesian therapeutic drug monitoring with SBI / IBIS / IS routing.</p></a>
+      <a class="wf" href="/app/"><div class="nm"><span class="g"></span>ddi</div><p>Drug–drug interactions via enzyme-abundance change before compile.</p></a>
+      <a class="wf" href="/app/"><div class="nm"><span class="g"></span>dose-adjust</div><p>Model-informed precision dosing to a target steady-state exposure.</p></a>
+      <a class="wf" href="/app/"><div class="nm"><span class="g"></span>benchmark</div><p>External N=107 holdout validation — predicted vs observed, by track.</p></a>
+    </div>
+  </div>
+</section>
+
+<section id="validation">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="lab">Validation</span>
+      <h2>Measured against a held-out reality</h2>
+      <p>A scaffold-stratified N=107 external holdout, never used in training, tuning, or model selection.</p>
+    </div>
+    <div class="val">
+      <div class="figpanel"><img src="docs/figures/figure2_scatter.png" alt="Predicted vs observed Cmax on the N=107 holdout (log–log)" loading="lazy" /></div>
+      <div>
+        <table class="btable">
+          <thead><tr><th>Track</th><th>AAFE</th><th>within 2-fold</th></tr></thead>
+          <tbody>
+            <tr class="hl"><td>Meta (production)</td><td class="big">2.78</td><td>43.9%</td></tr>
+            <tr><td>Engine only</td><td>4.46</td><td>27.1%</td></tr>
+            <tr><td>ML only</td><td>3.01</td><td>43.0%</td></tr>
+            <tr><td>Meta, in-domain</td><td>2.83</td><td>42.0%</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:13.5px;color:var(--ink-soft);margin:16px 0 0">A four-track meta-learner blends a mechanistic engine, a data-driven ML C<sub>max</sub>, a CL/F analytical, and a conditional VDss track. Prospective FDA NMEs (2024–25) are harder still at <b>AAFE 3.27</b> — generalization, stated plainly.</p>
+      </div>
+    </div>
+    <div class="caveat">The user-facing 90% prediction interval is a train-calibrated <b>split-conformal</b> interval, holdout-validated to <b>0.953</b> coverage at nominal 0.90 — but wide (÷× ~13), the honest price of structural error. Sisyphus surfaces this rather than hiding it.</div>
+  </div>
+</section>
+
+<section id="quickstart">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="lab">Quickstart</span>
+      <h2>Or run it from the command line</h2>
+      <p>The console is one face of a Python library + CLI.</p>
+    </div>
+    <div class="code"><span class="c"># install</span>
+pip install -e ".[dev,ml,chem]"
+
+<span class="c"># predict caffeine 100 mg</span>
+sisyphus predict --smiles <span class="p">"Cn1c(=O)c2c(ncn2C)n(C)c1=O"</span> --dose 100</div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="flinks">
+      <a href="/app/">Interactive console</a>
+      <a href="https://github.com/jam-sudo/Sisyphus">Repository</a>
+      <a href="https://github.com/jam-sudo/Sisyphus/blob/main/README.md">Full README</a>
+      <a href="https://github.com/jam-sudo/Sisyphus/blob/main/docs/reproducibility.md">Reproducibility</a>
+      <a href="https://github.com/jam-sudo/Sisyphus/blob/main/docs/sbi_multi_drug_results.md">SBI results</a>
+      <a href="https://github.com/jam-sudo/Sisyphus/blob/main/docs/engine_advantage_analysis.md">Engine advantage</a>
+    </div>
+    <p class="scope">Sisyphus is research software for computational pharmacokinetics — model development and reproducible method evaluation. It is not intended for direct clinical decision-making.</p>
+    <div class="foot-meta"><span class="dot"></span>open source · sisyphus-pbpk.io · graph-based whole-body PBPK with native uncertainty</div>
+  </div>
+</footer>
+
+</body>
+</html>
