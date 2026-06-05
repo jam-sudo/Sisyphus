@@ -269,10 +269,12 @@ def make_jax_rhs(
             kp_src = params.node_kp[_flow_src]
             q = params.edge_flow_rates[_flow_eid]
 
-            # C_out: safe division (avoid /0 when volume is zero)
+            # RBP-2: convective edge carries WHOLE BLOOD. Blood-pool source A/V is
+            # already blood (gate RBP->1); tissue source outlet is A*RBP/(V*Kp).
+            rbp_flow = jnp.where(params.node_is_blood[_flow_src] > 0.5, 1.0, rbp)
             c_out = jnp.where(
                 v_src > 0.0,
-                y[_flow_src] * rbp / (v_src * kp_src),
+                y[_flow_src] * rbp_flow / (v_src * kp_src),
                 0.0,
             )
             flow_flux = q * c_out
@@ -296,12 +298,13 @@ def make_jax_rhs(
             kp_ws = params.node_kp[_cl_ws_src]
 
             cl_intrinsic_ws = fup * clint
-            c_out_ws = jnp.where(
+            # RBP-2: plasma-basis sink → emergent fu_b extraction (see numpy flux).
+            c_plasma_ws = jnp.where(
                 v_ws > 0.0,
-                y[_cl_ws_src] * rbp / (v_ws * kp_ws),
+                y[_cl_ws_src] / (v_ws * kp_ws),
                 0.0,
             )
-            rate_ws = cl_intrinsic_ws * c_out_ws
+            rate_ws = cl_intrinsic_ws * c_plasma_ws
 
             dydt = dydt.at[_cl_ws_src].add(-rate_ws)
             dydt = dydt.at[_cl_ws_tgt].add(rate_ws)
@@ -318,12 +321,13 @@ def make_jax_rhs(
             kp_pt = params.node_kp[_cl_pt_src]
 
             cl_intrinsic_pt = fup * clint_pt
-            c_out_pt = jnp.where(
+            # RBP-2: plasma-basis sink (see well_stirred).
+            c_plasma_pt = jnp.where(
                 v_pt > 0.0,
-                y[_cl_pt_src] * rbp / (v_pt * kp_pt),
+                y[_cl_pt_src] / (v_pt * kp_pt),
                 0.0,
             )
-            rate_pt = cl_intrinsic_pt * c_out_pt
+            rate_pt = cl_intrinsic_pt * c_plasma_pt
 
             dydt = dydt.at[_cl_pt_src].add(-rate_pt)
             dydt = dydt.at[_cl_pt_tgt].add(rate_pt)
@@ -336,9 +340,10 @@ def make_jax_rhs(
             v_gfr = params.node_volumes[_cl_gfr_src]
             kp_gfr = params.node_kp[_cl_gfr_src]
 
+            # RBP-2: renal_cl = GFR*fup is plasma-basis → filter PLASMA A/(V*Kp).
             c_plasma_gfr = jnp.where(
                 v_gfr > 0.0,
-                y[_cl_gfr_src] * rbp / (v_gfr * kp_gfr),
+                y[_cl_gfr_src] / (v_gfr * kp_gfr),
                 0.0,
             )
             rate_gfr = renal_cl * c_plasma_gfr

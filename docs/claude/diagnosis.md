@@ -91,6 +91,20 @@ The 2026-06-01 prospective expansion (N=28; prospective Meta AAFE 3.21 > retrosp
 
 ---
 
+## 9. The external accuracy bar — we are already at the commercial ceiling (2026-06-04)
+
+A verified deep-research (107 agents; IMI OrBiTo Part 4, Ahmad 2020/2021, 58 APIs, >200 clinical studies, **expert-harmonised** inputs across GastroPlus + Simcyp + GI-Sim) gives the field's reference numbers for bottom-up oral PBPK: **oral AUC/Cmax/t½ AFE 1.11–1.97, AAFE 2.08–2.74, ~50% within 2-fold, ~90% within 10-fold, per-API AFE spanning 0.22–22.76** (~2 orders of magnitude even with hand-tuned inputs); bioavailability on the 19 IV-referenced APIs AFE 1.37 / AAFE 1.75.
+
+**Implication for the ceiling story:** Sisyphus's headline **2.78 Cmax AAFE / 43.9% within-2-fold (fully automated, SMILES-only) sits just above this expert-harmonised commercial band.** This is not a system that is "lagging" — it is at the regime ceiling of the entire bottom-up-PBPK approach. The realistic objective is therefore reframed: **(a) enter the 2.08–2.74 AAFE band, (b) lift %within-2-fold above ~50%, (c) compress the per-compound dispersion** (OrBiTo's 0.22–22.76 spread shows the residual is a few hard subclasses, not a uniform error) — **not** to collapse AAFE, which the same evidence shows is intrinsically capped.
+
+**The CLint floor, externally confirmed and refined.** §1's R²≈0.24 ceiling is corroborated by primary literature (interlab hepatocyte CLint CV up to 99.8%; predicted-vs-observed R² 0.08–0.32; error persists even when in-vitro values *agree* across labs — Bowman & Benet 2019 PMC7191673; Fagerholm 2024). But the floor is specifically the **in-vitro→in-vivo IVIVE-scaling** path, *not* a structure→endpoint representation floor: Morgan+XGB (R²=0.205) beats every foundation-model embedding, and structure-based in-silico **F** (Q²=0.58) *beats* the in-vitro-IVIVE route (R²=0.20). So a fancier structure→CLint regressor is foreclosed (confirms the foundation-model dead-end), and the field-accepted escapes are **measured-input routing** and **mechanism-specific corrections** — concretely, +BSA / extended-clearance **albumin-mediated uptake** (PSu,inf) for OATP substrates reconciles in-vitro with in-vivo at ~1.9–2.0 fold with *no* empirical scaling across all 16 tested substrates (Li/Benet 2020 AAPS J). This is the one un-foreclosed accuracy lever found, and it maps onto the existing ECM/OATP1B1 machinery + the FLUX-1-deferred xfailed statin re-anchor. See [[external-pbpk-benchmark-bar]] and experiment-log 2026-06-04.
+
+**Correctness cross-link.** The post-FLUX-1 audit found the canonical well-stirred driving force is blood unbound `fu_b = fup/Rb` (Pang & Han 2019) — independently corroborating that the engine's RBP concentration-basis cluster (clearance sink applies `fup`, not `fup/RBP`) is a deviation from the textbook equation, not merely an internal inconsistency. Spec: `docs/superpowers/specs/2026-06-04-rbp-concentration-basis-design.md`. Largely off the `realize_means` headline path (RBP clamped ~[0.5,1.5]); a correctness item, not a benchmark lever.
+
+**Open follow-ups (research in flight 2026-06-04):** whether any *breakthrough* attacks the CLint floor without tripping error-cancellation (per-isoform rCYP direct prediction, kcat×Km×[E] structured decomposition, multi-assay target-denoising, calibrated-CLint-uncertainty→uncertainty-aware meta); and whether conformal/CQR + model-form-discrepancy recalibration fixes the §empirical PI under-coverage (29.9%@90%). Both must clear the end-to-end Cmax-holdout / error-decorrelation gate, not isolated metrics.
+
+---
+
 ## See also
 
 - [dead-ends.md](./dead-ends.md) — the 41 enumerated failed attempts in one place.

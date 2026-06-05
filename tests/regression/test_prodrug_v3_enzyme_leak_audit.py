@@ -79,6 +79,13 @@ DRUG_SPECIFIC_CHANGES: frozenset[str] = frozenset({
     "morphine", "codeine", "ketorolac", "indomethacin",
     # B-02 UGT1A9 seed drugs:
     "dapagliflozin", "etodolac", "bexagliflozin", "glasdegib",
+    # 2026-06-04 OATP1B1 re-anchor (5.0e5 -> 1.3e5, reference_man.yaml): a
+    # physiology abundance change whose only holdout-overlapping ECM-active
+    # substrate is pravastatin (Cmax 0.0230 -> 0.0314, intentional — its ECM
+    # extraction was re-anchored off the holdout onto pitavastatin, Invariant #5;
+    # spec 2026-06-04-oatp-ecm-reanchor-design.md). The CHANGED_ENZYME_ABUNDANCES
+    # mechanism is a placeholder, so the intentional change is recorded here.
+    "pravastatin",
 })
 
 
