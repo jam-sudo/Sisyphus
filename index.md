@@ -17,6 +17,12 @@ multi-dose simulation, Bayesian therapeutic drug monitoring, model-informed
 precision dosing, drug-drug interaction modeling, pharmacogenomic phenotype-aware
 prediction, and PK/PD effect estimation.
 
+## ▶ [Launch the interactive console](/app/)
+
+**[Open the Sisyphus PBPK Console →](/app/)** — a clickable workspace over all six
+workflows (predict · simulate · tdm · ddi · dose-adjust · benchmark) with live PK
+curves and uncertainty, driven by real engine output.
+
 ![Sisyphus validation scatter](docs/figures/figure2_scatter.png)
 
 ## Quickstart
@@ -28,6 +34,7 @@ sisyphus predict --smiles "Cn1c(=O)c2c(ncn2C)n(C)c1=O" --dose 100
 
 ## Project Links
 
+- [Interactive console](/app/)
 - [Repository](https://github.com/jam-sudo/Sisyphus)
 - [Full README](README.md)
 - [Preprint PDF](Sisyphus_Preprint.pdf)
