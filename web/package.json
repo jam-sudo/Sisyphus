@@ -1,0 +1,27 @@
+{
+  "name": "sisyphus-console",
+  "private": true,
+  "version": "0.4.0",
+  "type": "module",
+  "description": "Sisyphus PBPK Console — scientific-editorial web interface for the SMILES → Cmax PBPK platform.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "build:pages": "npm run build && node scripts/sync-app.mjs",
+    "preview": "vite preview",
+    "smoke": "node scripts/smoke.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "jsdom": "^25.0.1",
+    "typescript": "^5.6.3",
+    "vite": "^6.0.5"
+  }
+}
