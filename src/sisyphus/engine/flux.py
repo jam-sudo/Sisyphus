@@ -175,11 +175,22 @@ class ClearanceFluxSpec(FluxSpec):
     """Hepatic / renal clearance flux. Four models supported:
 
     - ``well_stirred``  — classical WS with organ-level CLint (default)
-    - ``parallel_tube`` — PT exponential extraction approximation
+    - ``parallel_tube`` — collapses to the well_stirred intrinsic sink in a
+      single well-mixed compartment (a true axial-gradient parallel-tube model
+      is not representable here; not wired in the reference physiology)
     - ``gfr_filtration`` — renal filtration (``CL_renal × C_plasma``)
     - ``extended``      — ECM: QSSA-closed hepatocyte with active + passive
       uptake, passive efflux, metabolism, biliary clearance. See
       ``docs/superpowers/specs/2026-04-20-oatp-ecm-hepatic-clearance-design.md``.
+
+    Hepatic fu correction (B-11): at a node flagged ``fu_correction_applicable``,
+    ``well_stirred`` and ``parallel_tube`` replace ``fup`` with
+    ``fup × fu_correction_liver`` (an empirical fu_inc/fu_plasma uptake
+    correction). ``extended`` and ``gfr_filtration`` intentionally do NOT — the
+    ECM models concentrative hepatic uptake explicitly (PS_active/PS_inf/PS_eff)
+    so the WS-style factor would double-count it, and GFR is a plasma sink with
+    no uptake term. The production liver edge is ``extended``; pipeline.predict
+    warns if a curated non-1.0 value lands on such an edge.
 
     Well-stirred model (FLUX-1: intrinsic clearance on the compartment outlet)::
 
@@ -338,6 +349,13 @@ class ClearanceFluxSpec(FluxSpec):
             cl_int_h = cl_int_metab + cl_int_bile
 
             fup = params.drug_param("fup")
+            # NOTE: the extended ECM intentionally does NOT apply the B-11
+            # fu_correction_liver here (unlike well_stirred/parallel_tube). It is
+            # an empirical fu_inc/fu_plasma factor for concentrative hepatic
+            # uptake, which the ECM already models mechanistically via
+            # PS_active/PS_inf/PS_eff — applying it on top would double-count.
+            # pipeline.predict warns if a non-1.0 value is curated for a drug
+            # whose flagged node clears via this model.
 
             # FLUX-1: intrinsic hepatic clearance (flow-unlimited). At QSSA the
             # hepatocyte removal per unit blood concentration is
