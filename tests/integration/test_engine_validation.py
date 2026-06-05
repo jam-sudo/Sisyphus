@@ -5,12 +5,14 @@ Runs 4 validation drugs through the complete pipeline:
     YAML -> BodyGraph -> compile -> solve -> Cmax
 and compares against reference deterministic ODE Cmax within +/-5%.
 
-caffeine/warfarin are LOW-extraction and pinned to Omega's predecessor values.
-midazolam/propranolol are HIGH-extraction: the FLUX-1 fix (2026-06-03) corrected
-a flow-limitation double-count that Omega shared, so their targets are now
-FLUX-1-corrected Sisyphus snapshots, not independent Omega values (see
-OMEGA_TARGETS comment). The test thus mixes 2 cross-engine parity checks with 2
-self-consistency snapshots; all 4 still serve as drift regressions.
+Only caffeine (R_B:P=1, low-extraction) remains an Omega cross-engine parity
+check. midazolam/propranolol (high-extraction) moved off Omega via the FLUX-1
+flow-limitation fix (2026-06-03), and midazolam/warfarin/propranolol (R_B:P!=1)
+moved via the RBP-2 blood:plasma basis fix (2026-06-04) — Omega shared both
+bugs, so their targets are now post-correction Sisyphus snapshots, not
+independent Omega values (see OMEGA_TARGETS comment). The test thus mixes 1
+cross-engine parity check (caffeine) with 3 self-consistency snapshots; all 4
+still serve as drift regressions.
 """
 
 from pathlib import Path

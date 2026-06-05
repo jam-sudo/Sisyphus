@@ -242,7 +242,7 @@ y0[compiled.state_index[drug.administration_node]] = drug.dose_mg
 result = solve(compiled, params, y0, t_span=(0, 24))
 pk = compute_endpoints(result)
 
-print(f"Cmax: {pk.cmax.mean:.4f} mg/L")  # 0.0069 mg/L (matches Omega ±0.5%)
+print(f"Cmax: {pk.cmax.mean:.4f} mg/L")  # ~0.0028 mg/L (post FLUX-1 + RBP-2; see Validation)
 ```
 
 ### Monte Carlo uncertainty
@@ -253,25 +253,30 @@ from sisyphus.engine.uncertainty import UncertaintyEngine
 ue = UncertaintyEngine()
 mc = ue.propagate_fast(compiled, graph, drug, n_samples=1000)
 
-print(mc.pk.cmax)                # Distribution(mean≈1.18, cv≈0.3)
-print(mc.cmax_90ci)              # (0.57, 1.59) mg/L
+print(mc.pk.cmax)                # Distribution(mean≈0.0030, cv≈0.22)
+print(mc.cmax_90ci)              # (0.0018, 0.0040) mg/L
 print(len(mc.cmax_samples))      # 1000 individual realizations
 ```
 
 ## Validation
 
-### Engine validation against Omega PBPK
+### Engine validation: Omega parity and post-correction snapshots
 
-Four drugs with known compound parameters were simulated and compared against the [Omega PBPK](https://github.com/jam-sudo/Omega) ODE engine (35-state hardcoded model):
+Four drugs with known compound parameters are simulated end-to-end (YAML &rarr; BodyGraph &rarr; compile &rarr; solve &rarr; C<sub>max</sub>). They originally matched the [Omega PBPK](https://github.com/jam-sudo/Omega) ODE engine (35-state hardcoded model) to within ~0.5% — but Omega *shared* two physiological bugs that Sisyphus has since corrected, so cross-engine parity is no longer the right oracle for three of the four:
 
-| Drug | Dose | Sisyphus C<sub>max</sub> (mg/L) | Omega C<sub>max</sub> (mg/L) | Relative error |
-|------|:----:|:------------:|:----------:|:-----:|
-| Midazolam | 2 mg PO | 0.006911 | 0.006943 | 0.5% |
-| Caffeine | 100 mg PO | 1.7151 | 1.7139 | 0.1% |
-| Warfarin | 10 mg PO | 0.4917 | 0.4922 | 0.1% |
-| Propranolol | 80 mg PO | 0.1353 | 0.1355 | 0.1% |
+- **FLUX-1** (2026-06-03): a flow-limitation double-count that capped hepatic/gut extraction at E&rarr;0.5. Moves high-extraction drugs (midazolam, propranolol).
+- **RBP-2** (2026-06-04): a blood:plasma concentration-basis correction. Moves any drug with R<sub>B:P</sub> &ne; 1 (midazolam 0.66, warfarin 0.58, propranolol 0.81).
 
-Mass balance error &lt; 10<sup>&minus;12</sup> for all simulations.
+After both fixes, only **caffeine** (R<sub>B:P</sub>=1, low-extraction) remains a true cross-engine Omega-parity check. The other three are now **Sisyphus self-consistency regression snapshots** — their divergence from Omega *is* the correctness fix, not an error. Values are pinned in `tests/integration/test_engine_validation.py` (&plusmn;5% gate; the targets carry documented macOS&harr;CI numerics-stack drift).
+
+| Drug | Dose | Sisyphus C<sub>max</sub> (mg/L) | Omega C<sub>max</sub> (mg/L) | Basis |
+|------|:----:|:------------:|:----------:|:------|
+| Caffeine | 100 mg PO | 1.6910 | 1.7139 | **Omega parity** — R<sub>B:P</sub>=1, low-extraction; invariant to both fixes (1.3% &lt; &plusmn;5% gate, macOS-stack drift) |
+| Midazolam | 2 mg PO | 0.002800 | 0.006943 | Sisyphus snapshot — FLUX-1 + RBP-2 (R<sub>B:P</sub> 0.66) |
+| Warfarin | 10 mg PO | 0.343133 | 0.4922 | Sisyphus snapshot — RBP-2 (R<sub>B:P</sub> 0.58); FLUX-1 no-op (low-extraction) |
+| Propranolol | 80 mg PO | 0.059875 | 0.1355 | Sisyphus snapshot — FLUX-1 + RBP-2 (R<sub>B:P</sub> 0.81) |
+
+Mass balance error &lt; 10<sup>&minus;12</sup> for all simulations. **Lesson:** Omega parity is *not* a sufficient correctness oracle — both shared bugs survived for as long as they did precisely because parity held.
 
 ### Holdout benchmark (SMILES &rarr; C<sub>max</sub>)
 

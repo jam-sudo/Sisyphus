@@ -7,8 +7,16 @@ exactly the code paths Task 6 modifies, independent of which
 production drug routes through which flux type.
 
 Identity-blind random-rename invariance is verified in Task 8.
-ProdrugActivationFluxSpec gating is verified in Task 7. ECM
-(extended) branch is out of B-11 scope.
+ProdrugActivationFluxSpec gating is verified in Task 7. The ECM
+(extended) clearance model intentionally does NOT apply the correction:
+it models concentrative hepatic uptake explicitly (PS_active/PS_inf/
+PS_eff), so multiplying fup by the WS-style fu_inc/fu_plasma factor
+would double-count that uptake. That decision is pinned by
+``test_extended_clearance_ignores_fu_correction_by_design`` and the
+silent-no-op trap (the production liver clears via ``extended``) is
+closed by a runtime warning from ``pipeline.predict`` — see
+``test_predict_warns_when_fu_correction_dropped_at_extended_node``
+(2026-06-05 contract fix).
 """
 
 from __future__ import annotations
@@ -159,9 +167,14 @@ def test_well_stirred_fu_correction_amplifies_clearance_when_flagged():
 
 
 def test_parallel_tube_fu_correction_amplifies_clearance_when_flagged():
-    """parallel_tube branch: same gating behavior with the PT formula
-        CL = Q * (1 - exp(-fup_eff * CLint / Q))
-    Verifies the Task 6 patch is applied to the PT branch too.
+    """parallel_tube branch: same fu_correction gating as well_stirred.
+
+    Post-FLUX-1 the parallel_tube branch collapses to the intrinsic
+    clearance ``fup_eff * CLint`` applied to ``c_out`` — a single
+    well-mixed compartment cannot represent the axial gradient a true
+    parallel-tube ``CL = Q*(1 - exp(-fup_eff*CLint/Q))`` requires — so the
+    assertion below pins that collapsed form. This still verifies the
+    Task 6 fu correction is applied to the PT branch.
     """
     rate_baseline = _eval_clearance_rate(
         model="parallel_tube",
@@ -399,3 +412,83 @@ def test_prodrug_flux_applies_correction_at_flagged_node_via_predict(monkeypatch
         f"ProdrugActivationFlux at liver must respect fu_correction_liver; "
         f"fu_corr=5: {cmax_high:.4f}, fu_corr=1: {cmax_low:.4f}"
     )
+
+
+def test_extended_clearance_ignores_fu_correction_by_design():
+    """The extended (ECM) clearance model intentionally does NOT apply
+    fu_correction_liver, unlike well_stirred / parallel_tube.
+
+    fu_correction_liver is fu_inc/fu_plasma — an empirical lumped correction
+    for albumin-facilitated / transporter-mediated *concentrative hepatic
+    uptake* (B-11 spec §2). The ECM models exactly that uptake mechanistically
+    (PS_active/PS_inf/PS_eff), so multiplying fup by the WS-style factor on top
+    would double-count. This test PINS that decision: a flagged node whose
+    clearance edge is ``extended`` produces a bit-identical rate whether
+    fu_correction_liver is 1.0 or 5.0. The PRODUCTION liver clearance edge is
+    ``extended`` (reference_man.yaml), so this is the behavior on the real
+    headline path. The matching contract guard — a runtime warning when a
+    non-1.0 value is curated — lives in pipeline.predict.
+    """
+    rate_baseline = _eval_clearance_rate(
+        model="extended",
+        fu_correction_applicable=1.0,
+        fu_correction_liver=1.0,
+    )
+    rate_corrected = _eval_clearance_rate(
+        model="extended",
+        fu_correction_applicable=1.0,
+        fu_correction_liver=5.0,
+    )
+
+    # Sanity: the ECM sink is active (non-zero), else the equality is vacuous.
+    assert rate_baseline > 0.0
+    # fu_correction has NO effect on the extended branch — by design.
+    assert rate_baseline == rate_corrected, (
+        f"extended ECM must ignore fu_correction_liver (would double-count the "
+        f"explicit PS uptake); baseline={rate_baseline!r}, "
+        f"corrected={rate_corrected!r}"
+    )
+
+
+def test_predict_warns_when_fu_correction_dropped_at_extended_node(monkeypatch):
+    """pipeline.predict surfaces a warning when a non-identity
+    fu_correction_liver is curated for a drug whose flagged hepatic node clears
+    via the extended ECM (which drops the correction by design).
+
+    Closes the B-11 'silent no-op' trap: the production liver clearance edge is
+    ``extended``, so without this warning a future curated value would vanish
+    unnoticed and still pass every test. Patches the source-module lookup (the
+    function-local import in ivive.py re-binds on every predict() call).
+    """
+    from sisyphus.pipeline.predict import predict
+
+    caffeine = "CN1C=NC2=C1C(=O)N(C(=O)N2C)C"
+    monkeypatch.setattr(
+        "sisyphus.predict.hepatic_fu_correction.lookup_hepatic_fu_correction",
+        lambda smiles, registry_path=None: Distribution(mean=2.0, cv=0.0),
+        raising=False,
+    )
+    result = predict(caffeine, dose_mg=100.0, route="oral")
+
+    assert any(
+        "fu_correction_liver" in w and "dropped" in w for w in result.warnings
+    ), f"expected dropped-fu_correction warning; got {result.warnings!r}"
+
+
+def test_predict_no_fu_correction_warning_at_default(monkeypatch):
+    """Control: with the default fu_correction_liver=1.0 (every shipped registry
+    value today), NO warning is emitted — so the production headline path is
+    bit-identical (the guard fires only on a curated non-1.0 value)."""
+    from sisyphus.pipeline.predict import predict
+
+    caffeine = "CN1C=NC2=C1C(=O)N(C(=O)N2C)C"
+    monkeypatch.setattr(
+        "sisyphus.predict.hepatic_fu_correction.lookup_hepatic_fu_correction",
+        lambda smiles, registry_path=None: Distribution(mean=1.0, cv=0.0),
+        raising=False,
+    )
+    result = predict(caffeine, dose_mg=100.0, route="oral")
+
+    assert not any(
+        "fu_correction_liver" in w and "dropped" in w for w in result.warnings
+    ), f"no warning expected at default 1.0; got {result.warnings!r}"
