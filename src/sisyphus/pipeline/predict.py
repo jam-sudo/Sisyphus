@@ -7,6 +7,8 @@ calls them in the right order and combines results.
 
 from __future__ import annotations
 
+import functools
+import json
 import logging
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -19,6 +21,26 @@ if TYPE_CHECKING:
     from sisyphus.predict.adme import MeasuredADMEInput
 
 logger = logging.getLogger(__name__)
+
+_CONFORMAL_CALIBRATION = Path("data/validation/conformal_calibration.json")
+
+
+@functools.lru_cache(maxsize=1)
+def _conformal_q90_meta() -> float | None:
+    """Train-calibrated split-conformal 90% half-width (log10) for the meta track.
+
+    The user-facing 90% Cmax PI is the conformal interval (holdout-validated ~0.95
+    coverage at nominal 0.90), superseding the parameter-only MC interval (~0.30).
+    Calibrated on the TRAIN set (Invariant #5: never the holdout). Returns None if
+    the calibration artifact is absent/unreadable (the pipeline then falls back to
+    the MC interval, or None). See validation/conformal.py + scripts/calibrate_conformal.py.
+    """
+    try:
+        art = json.loads(_CONFORMAL_CALIBRATION.read_text())
+        q = float(art["tracks"]["meta"]["0.1"])
+        return q if np.isfinite(q) else None
+    except Exception:
+        return None
 
 
 def _resolve_observation_node(drug: DrugOnGraph, base_node: str = "venous_blood") -> str:
@@ -616,6 +638,18 @@ def predict(
             extra_flags.append("HIGH_ACID_LOW_FUP")
     in_ad, prodrug_warnings = _adjust_ad_for_prodrug(drug, extra_flags)
     warnings_list = list(warnings_list) + prodrug_warnings
+
+    # ── Conformal calibrated 90% PI (user-facing interval) ────────────────
+    # Supersede the parameter-only MC interval (~30% coverage at nominal 90%)
+    # with the train-calibrated split-conformal interval (holdout-validated
+    # ~0.95 at nominal 0.90). Multiplicative: meta /÷ 10**q90, from the FINAL
+    # meta point (f-correction already applied). Skipped for infusion (the
+    # calibration regime is single-dose oral / IV-bolus) and when the artifact
+    # is unavailable (then cmax_90ci keeps the MC value, or None).
+    _q90 = _conformal_q90_meta()
+    if not is_infusion and _q90 is not None and final_pk.cmax.mean > 0:
+        _factor = 10.0 ** _q90
+        cmax_90ci = (final_pk.cmax.mean / _factor, final_pk.cmax.mean * _factor)
 
     # ── Confidence ────────────────────────────────────────────────────────
     if not in_ad:

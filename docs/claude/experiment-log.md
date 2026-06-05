@@ -10,6 +10,18 @@ Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the *
 
 ---
 
+## 2026-06-04 (cont. 3) — Conformal prediction intervals: the 29.9%@90% PI under-coverage fixed (deployed)
+
+Shipped split-conformal Cmax prediction intervals — the user-facing 90% PI is now calibrated. Branch `fix/rbp-concentration-basis`; spec `docs/superpowers/specs/2026-06-04-conformal-prediction-interval-design.md`; TDD.
+
+**Why.** The MC PI propagates *parameter* uncertainty only → empirical coverage **29.9% at nominal 90%** (~60pp of the spread is structural model-form error the MC cannot represent — externally: a parameter-only interval is "confidently wrong" under model-form error, Kennedy-O'Hagan). Conformal gives valid *marginal* coverage regardless of base-model structural error (the bias is absorbed into a wider interval; CQR's guarantee is distribution-free and independent of base-model correctness — deep-research 2026-06-04).
+
+**Core + proof.** `src/sisyphus/validation/conformal.py`: finite-sample split-conformal quantile (`ceil((n+1)(1-α))/n`), multiplicative log-Cmax interval `pred /÷ 10**q`, coverage, scores. Unit-tested incl. the marginal-coverage guarantee on synthetic biased heavy-tailed residuals. LOO cross-conformal on the holdout cache (a *measurement* of the method, not holdout tuning): meta coverage **0.907@90%** vs MC 0.299, calibrated across levels (0.505/0.804/0.907/0.953 at 50/80/90/95%).
+
+**Deployed (Invariant #5 — calibrate on TRAIN, validate on HOLDOUT).** `scripts/calibrate_conformal.py` runs `predict()` on the train set (67/76 valid) → `data/validation/conformal_calibration.json`. The meta is **not overfit to train Cmax** (fixed weights), so train residuals are if anything *wider* than holdout's → the deployed interval is **slightly conservative**: meta **q90=1.111 (/÷12.92)**, **holdout-validated coverage 0.953@90%** (0.766@80%, 0.991@95%). `pipeline.predict` sets `cmax_90ci = meta /÷ 10**q90` from the final f-corrected meta point for every oral/IV-bolus prediction even at `n_mc_samples=0` (conformal transform inlined to respect the pipeline→{predict,engine,ml,pk} layer rule — no `validation` import; artifact loaded as data); infusion stays `None`; falls back to MC/None if the artifact is absent. **Point estimates / headline 2.784 bit-identical** (149 integration/regression pass, cache-pin unchanged). Honest caveats: the interval is **wide (/÷~13-fold @90%)** — the price of structural error — and **marginal, not conditional** (Mondrian-by-AD inert, DE-41). CLAUDE.md PI note updated; the 29.9% MC figure now refers to the superseded parameter-uncertainty component (still available behind `n_mc_samples>0`). **Next (the OATP re-anchor, #2):** spec `2026-06-04-oatp-ecm-reanchor-design.md`.
+
+---
+
 ## 2026-06-04 (cont. 2) — RBP-2: blood:plasma concentration-basis cleanup (the unfinished FLUX-1 class) — bit-identical on the holdout, correct physics
 
 Implemented the audit's dominant residual finding (the RBP concentration-basis cluster), the explicitly-FLUX-1-deferred "RBP-basis" follow-up. Branch `fix/rbp-concentration-basis`; spec `docs/superpowers/specs/2026-06-04-rbp-concentration-basis-design.md`; TDD.

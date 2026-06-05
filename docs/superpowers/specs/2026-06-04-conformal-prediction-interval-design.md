@@ -1,8 +1,22 @@
 # Conformal Prediction Intervals — calibrated Cmax PI (fixes the 29.9%@90% under-coverage) — Design
 
 **Date:** 2026-06-04
-**Status:** CORE IMPLEMENTED + real-data proof (branch `fix/rbp-concentration-basis`); deployment (train/CV+ calibration artifact + pipeline wiring) is the next increment.
+**Status:** DEPLOYED (branch `fix/rbp-concentration-basis`): core + train calibration artifact + pipeline wiring, all tests green.
 **Branch (proposed):** `feat/conformal-pi`
+
+**Deployment outcome (2026-06-04).** `scripts/calibrate_conformal.py` runs `predict()` on the **train**
+set (67/76 with valid SMILES+dose+Cmax; Invariant #5 — not the holdout) and writes
+`data/validation/conformal_calibration.json` (`q_α` per level per track). **Train-calibration is valid
+and slightly conservative** — the meta is not overfit to train Cmax (fixed weights), so train residuals
+are if anything wider than holdout's: deployed meta **q90 = 1.111 (/÷12.92)** gives **holdout-validated
+coverage 0.953 at nominal 0.90** (vs the MC's 0.299), 0.766@80%, 0.991@95%. `pipeline.predict` now sets
+`PredictionResult.cmax_90ci` from the conformal interval (`meta /÷ 10**q90`, computed from the final
+f-corrected meta point) for every oral/IV-bolus prediction even at `n_mc_samples=0`; infusion stays
+`None` (out of the calibration regime); falls back to MC/None if the artifact is absent. **Point
+estimates / headline 2.784 are bit-identical** (conformal touches only the interval). The interval is
+**wide (/÷~13-fold at 90%) — the honest price of structural error** — and **marginal, not conditional**
+(Mondrian-by-AD was shown inert). Tests: `tests/unit/test_conformal.py`, `tests/integration/
+test_conformal_coverage.py` (LOO proof), `tests/integration/test_conformal_pipeline.py` (wiring).
 
 **Outcome (2026-06-04, core increment).** `src/sisyphus/validation/conformal.py` ships the split-conformal
 core (finite-sample `conformal_quantile`, multiplicative `conformal_interval`, `empirical_coverage`,
