@@ -471,7 +471,7 @@ def test_predict_warns_when_fu_correction_dropped_at_extended_node(monkeypatch):
     result = predict(caffeine, dose_mg=100.0, route="oral")
 
     assert any(
-        "fu_correction_liver" in w and "not applied" in w for w in result.warnings
+        "fu_correction_liver" in w and "dropped" in w for w in result.warnings
     ), f"expected dropped-fu_correction warning; got {result.warnings!r}"
 
 
@@ -490,5 +490,5 @@ def test_predict_no_fu_correction_warning_at_default(monkeypatch):
     result = predict(caffeine, dose_mg=100.0, route="oral")
 
     assert not any(
-        "fu_correction_liver" in w and "not applied" in w for w in result.warnings
+        "fu_correction_liver" in w and "dropped" in w for w in result.warnings
     ), f"no warning expected at default 1.0; got {result.warnings!r}"

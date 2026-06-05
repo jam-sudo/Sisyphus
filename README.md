@@ -242,7 +242,7 @@ y0[compiled.state_index[drug.administration_node]] = drug.dose_mg
 result = solve(compiled, params, y0, t_span=(0, 24))
 pk = compute_endpoints(result)
 
-print(f"Cmax: {pk.cmax.mean:.4f} mg/L")  # 0.0069 mg/L (matches Omega ±0.5%)
+print(f"Cmax: {pk.cmax.mean:.4f} mg/L")  # ~0.0028 mg/L (post FLUX-1 + RBP-2; see Validation)
 ```
 
 ### Monte Carlo uncertainty
@@ -253,8 +253,8 @@ from sisyphus.engine.uncertainty import UncertaintyEngine
 ue = UncertaintyEngine()
 mc = ue.propagate_fast(compiled, graph, drug, n_samples=1000)
 
-print(mc.pk.cmax)                # Distribution(mean≈1.18, cv≈0.3)
-print(mc.cmax_90ci)              # (0.57, 1.59) mg/L
+print(mc.pk.cmax)                # Distribution(mean≈0.0030, cv≈0.22)
+print(mc.cmax_90ci)              # (0.0018, 0.0040) mg/L
 print(len(mc.cmax_samples))      # 1000 individual realizations
 ```
 
@@ -271,7 +271,7 @@ After both fixes, only **caffeine** (R<sub>B:P</sub>=1, low-extraction) remains 
 
 | Drug | Dose | Sisyphus C<sub>max</sub> (mg/L) | Omega C<sub>max</sub> (mg/L) | Basis |
 |------|:----:|:------------:|:----------:|:------|
-| Caffeine | 100 mg PO | 1.7139 | 1.7139 | **Omega parity** — R<sub>B:P</sub>=1, low-extraction; invariant to both fixes (engine reproduces within the &plusmn;5% gate) |
+| Caffeine | 100 mg PO | 1.6910 | 1.7139 | **Omega parity** — R<sub>B:P</sub>=1, low-extraction; invariant to both fixes (1.3% &lt; &plusmn;5% gate, macOS-stack drift) |
 | Midazolam | 2 mg PO | 0.002800 | 0.006943 | Sisyphus snapshot — FLUX-1 + RBP-2 (R<sub>B:P</sub> 0.66) |
 | Warfarin | 10 mg PO | 0.343133 | 0.4922 | Sisyphus snapshot — RBP-2 (R<sub>B:P</sub> 0.58); FLUX-1 no-op (low-extraction) |
 | Propranolol | 80 mg PO | 0.059875 | 0.1355 | Sisyphus snapshot — FLUX-1 + RBP-2 (R<sub>B:P</sub> 0.81) |

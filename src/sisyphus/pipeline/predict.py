@@ -186,9 +186,11 @@ def _fu_correction_drop_warning(graph, fu_correction_liver_mean: float) -> str |
     however, uses the extended ECM, which models concentrative hepatic uptake
     explicitly (PS_active / PS_inf / PS_eff) and therefore intentionally drops
     the WS-style ``fu_inc/fu_plasma`` factor — applying it would double-count
-    that uptake. Without this warning a future curated value would silently
-    no-op on the liver and pass every test. Returns ``None`` (no warning) for
-    the default ``1.0``, so the current headline path is bit-identical.
+    that uptake. Without this warning a curated value would silently no-op on
+    that clearance edge (for a non-prodrug liver, its entire clearance
+    contribution; a prodrug's ProdrugActivation edge at the same node still
+    applies it) and pass every test. Returns ``None`` (no warning) for the
+    default ``1.0``, so the current headline path is bit-identical.
     """
     if fu_correction_liver_mean == 1.0:
         return None
@@ -210,13 +212,14 @@ def _fu_correction_drop_warning(graph, fu_correction_liver_mean: float) -> str |
     nodes = sorted({src for src, _ in dropped})
     models = sorted({model for _, model in dropped})
     return (
-        f"fu_correction_liver={fu_correction_liver_mean:.3g} is not applied at "
-        f"clearance node(s) {nodes} (model(s): {models}): these models capture "
-        f"hepatic uptake mechanistically and intentionally drop the "
-        f"well_stirred/parallel_tube fu correction (applying it would "
-        f"double-count). It still applies to well_stirred/parallel_tube "
-        f"clearance and ProdrugActivation; to model enhanced hepatic uptake set "
-        f"the ECM transporter params (ps_active jmax/km)."
+        f"fu_correction_liver={fu_correction_liver_mean:.3g} is dropped by the "
+        f"clearance-edge model at node(s) {nodes} (model(s): {models}): these "
+        f"models do not apply the well_stirred/parallel_tube fu correction "
+        f"(the extended ECM models hepatic uptake explicitly, so it would "
+        f"double-count; gfr_filtration is a plasma sink with no fup term). It "
+        f"is still applied by any well_stirred/parallel_tube clearance or "
+        f"ProdrugActivation edge at the same node; for an extended-ECM node, "
+        f"model enhanced uptake via the transporter params (ps_active jmax/km)."
     )
 
 
