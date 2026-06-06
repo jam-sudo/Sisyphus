@@ -1,0 +1,3 @@
+# API-server deps (engine deps come from ../requirements-lock.txt)
+fastapi>=0.115
+uvicorn[standard]>=0.30
