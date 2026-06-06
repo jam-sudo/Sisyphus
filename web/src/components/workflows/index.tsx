@@ -1,4 +1,4 @@
-import type { AppState, ConsoleData, WorkflowId } from "../../types";
+import type { AppState, ConsoleData, Drug, WorkflowId } from "../../types";
 import { drugById } from "../../data";
 import { PredictView } from "./PredictView";
 import { SimulateView } from "./SimulateView";
@@ -15,14 +15,16 @@ export function WorkflowView({
   tab,
   running,
   data,
+  drug: drugOverride,
 }: {
   wf: WorkflowId;
   s: AppState;
   tab: number;
   running: boolean;
   data: ConsoleData;
+  drug?: Drug;
 }) {
-  const drug = drugById(data, s.drugId);
+  const drug = drugOverride ?? drugById(data, s.drugId);
   if (wf === "predict") return <PredictView drug={drug} s={s} tab={tab} running={running} />;
   if (wf === "simulate") return <SimulateView drug={drug} s={s} tab={tab} data={data} />;
   if (wf === "tdm") return <TdmView drug={drug} s={s} tab={tab} />;

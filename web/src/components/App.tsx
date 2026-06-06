@@ -3,8 +3,8 @@
    Loads real-engine data via the data layer; ported from app.jsx.
    ============================================================ */
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import type { AppState, Observation, WorkflowId } from "../types";
-import { useConsoleData, drugById } from "../data";
+import type { AppState, Drug, Observation, WorkflowId } from "../types";
+import { useConsoleData, drugById, engineClient } from "../data";
 import { Pill } from "./panels";
 import { RailInputs } from "./RailInputs";
 import { WorkflowView, WORKFLOWS, oid } from "./workflows";
@@ -40,7 +40,7 @@ function sanitize(raw: unknown): AppState {
     if (cleaned.length) obs = cleaned;
   }
   return {
-    drugId: typeof p.drugId === "string" ? p.drugId : b.drugId,
+    drugId: typeof p.drugId === "string" && p.drugId !== "custom" ? p.drugId : b.drugId,
     dose: Math.max(0, num(p.dose, b.dose)),
     route: "oral", // static tier is oral-only (IV arrives with the live engine tier)
     method: p.method === "engine" || p.method === "ml" ? p.method : "hybrid",
@@ -91,7 +91,24 @@ export function App() {
   const [toast, setToast] = useState<string | null>(null);
   const runTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // live engine (arbitrary-SMILES) state
+  const [live, setLive] = useState(false);
+  const [customDrug, setCustomDrug] = useState<Drug | null>(null);
+  const [predicting, setPredicting] = useState(false);
+  const [predictError, setPredictError] = useState<string | null>(null);
+  const [smilesDraft, setSmilesDraft] = useState("");
+  const [nameDraft, setNameDraft] = useState("");
+
   const set = (patch: Partial<AppState>) => setS((prev) => ({ ...prev, ...patch }));
+
+  // probe the live backend once
+  useEffect(() => {
+    let alive = true;
+    engineClient.health().then((ok) => alive && setLive(ok));
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   useEffect(() => {
     try {
@@ -130,17 +147,43 @@ export function App() {
     );
   }
 
-  const drug = drugById(data, s.drugId);
+  const isCustom = s.drugId === "custom";
+  const activeDrug: Drug | null = isCustom ? customDrug : drugById(data, s.drugId);
   const wfCfg = WORKFLOWS.find((x) => x.id === wf) ?? WORKFLOWS[0];
   const tabs = wfCfg.tabs;
   const safeTab = Math.min(tab, tabs.length - 1);
+  const customPredictMode = wf === "predict" && isCustom;
+  const busy = running || predicting;
 
-  function run() {
+  async function run() {
+    if (customPredictMode) {
+      const smiles = smilesDraft.trim();
+      if (!smiles) return setPredictError("Enter a SMILES string.");
+      if (!live) return setPredictError("Live engine is offline — pick a preset compound.");
+      setPredicting(true);
+      setPredictError(null);
+      try {
+        const d = await engineClient.predict({
+          smiles,
+          dose_mg: s.dose,
+          route: s.route,
+          name: nameDraft.trim() || undefined,
+        });
+        setCustomDrug(d);
+        setToast("prediction complete · " + d.name);
+        setTimeout(() => setToast(null), 1900);
+      } catch (e) {
+        setPredictError(e instanceof Error ? e.message : String(e));
+      } finally {
+        setPredicting(false);
+      }
+      return;
+    }
     setRunning(true);
     if (runTimer.current) clearTimeout(runTimer.current);
     runTimer.current = setTimeout(() => {
       setRunning(false);
-      setToast(wf === "benchmark" ? "benchmark complete · N=107" : "prediction complete · " + drug.name);
+      setToast(wf === "benchmark" ? "benchmark complete · N=107" : "prediction complete · " + (activeDrug?.name ?? ""));
       setTimeout(() => setToast(null), 1900);
     }, 620);
   }
@@ -158,22 +201,25 @@ export function App() {
         <Pill kind="mute">seed 42</Pill>
       </>
     );
+  } else if (!activeDrug) {
+    badges = live ? <Pill kind="mute">awaiting SMILES</Pill> : <Pill kind="warn">live engine offline</Pill>;
   } else {
     badges = (
       <>
-        <Pill kind={drug.inDomain ? "dom" : "warn"}>{drug.inDomain ? "in domain" : "out of domain"}</Pill>
-        <Pill kind={drug.confidence === "high" ? "ok" : drug.confidence === "medium" ? "dom" : "warn"}>{drug.confidence}</Pill>
-        {drug.hasPD && <span className="pdtag">PK/PD · {drug.hasPD}</span>}
+        <Pill kind={activeDrug.inDomain ? "dom" : "warn"}>{activeDrug.inDomain ? "in domain" : "out of domain"}</Pill>
+        <Pill kind={activeDrug.confidence === "high" ? "ok" : activeDrug.confidence === "medium" ? "dom" : "warn"}>{activeDrug.confidence}</Pill>
+        {activeDrug.hasPD && <span className="pdtag">PK/PD · {activeDrug.hasPD}</span>}
       </>
     );
   }
 
-  const runHint =
-    wf === "benchmark"
-      ? "10,000 bootstrap resamples"
-      : wf === "predict" && s.nmc > 1
-      ? "MC N=" + s.nmc.toLocaleString() + " · ~" + (s.nmc / 30).toFixed(0) + " s"
-      : "deterministic · ~414 ms";
+  const runHint = customPredictMode
+    ? live ? "live engine · ~0.5 s/solve" : "live engine offline"
+    : wf === "benchmark"
+    ? "10,000 bootstrap resamples"
+    : wf === "predict" && s.nmc > 1
+    ? "MC N=" + s.nmc.toLocaleString() + " · ~" + (s.nmc / 30).toFixed(0) + " s"
+    : "deterministic · ~414 ms";
 
   return (
     <div className="stage">
@@ -198,17 +244,32 @@ export function App() {
             </nav>
           </div>
           <div className="rail-fields">
-            <RailInputs wf={wf} s={s} set={set} data={data} />
+            <RailInputs
+              wf={wf}
+              s={s}
+              set={set}
+              data={data}
+              live={live}
+              smilesDraft={smilesDraft}
+              setSmilesDraft={setSmilesDraft}
+              nameDraft={nameDraft}
+              setNameDraft={setNameDraft}
+              predictError={predictError}
+            />
           </div>
           <div className="rail-run">
-            <button className="btn-run" onClick={run} disabled={running}>
-              {running ? (
+            <button
+              className="btn-run"
+              onClick={run}
+              disabled={busy || (customPredictMode && (!live || !smilesDraft.trim()))}
+            >
+              {busy ? (
                 <>
                   <span className="spin" />
-                  solving…
+                  {predicting ? "predicting…" : "solving…"}
                 </>
               ) : (
-                <>{RUN_LABELS[wf]}&nbsp; →</>
+                <>{customPredictMode ? "Predict SMILES" : RUN_LABELS[wf]}&nbsp; →</>
               )}
             </button>
             <div className="run-hint">{runHint}</div>
@@ -223,9 +284,13 @@ export function App() {
                 <div className="dn">
                   Holdout validation <span className="sub">SMILES → Cₘₐₓ · external</span>
                 </div>
+              ) : activeDrug ? (
+                <div className="dn">
+                  {activeDrug.name} <span className="sub">{activeDrug.formula} · {activeDrug.mw}</span>
+                </div>
               ) : (
                 <div className="dn">
-                  {drug.name} <span className="sub">{drug.formula} · {drug.mw}</span>
+                  Custom compound <span className="sub">enter a SMILES →</span>
                 </div>
               )}
             </div>
@@ -238,8 +303,16 @@ export function App() {
               </button>
             ))}
           </div>
-          <div className={"content" + (running ? " running" : "")}>
-            <WorkflowView wf={wf} s={s} tab={safeTab} running={running} data={data} />
+          <div className={"content" + (busy ? " running" : "")}>
+            {wf !== "benchmark" && !activeDrug ? (
+              <div className="custom-empty">
+                {live
+                  ? "Enter a SMILES string in the rail, then hit Predict SMILES."
+                  : "Live engine is offline — select a preset compound to explore."}
+              </div>
+            ) : (
+              <WorkflowView wf={wf} s={s} tab={safeTab} running={busy} data={data} drug={activeDrug ?? undefined} />
+            )}
           </div>
           <div className="provenance">
             <span className="dot" />

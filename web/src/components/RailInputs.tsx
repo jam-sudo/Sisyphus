@@ -38,25 +38,44 @@ export function RailInputs({
   s,
   set,
   data,
+  live,
+  smilesDraft,
+  setSmilesDraft,
+  nameDraft,
+  setNameDraft,
+  predictError,
 }: {
   wf: WorkflowId;
   s: AppState;
   set: SetFn;
   data: ConsoleData;
+  live: boolean;
+  smilesDraft: string;
+  setSmilesDraft: (v: string) => void;
+  nameDraft: string;
+  setNameDraft: (v: string) => void;
+  predictError: string | null;
 }) {
   const drug = drugById(data, s.drugId);
+  const isCustom = s.drugId === "custom";
 
   const DrugPicker = (
     <div className="field">
       <label>
-        Compound <span className="hintdot">SMILES preset</span>
+        Compound <span className="hintdot">{isCustom ? "custom SMILES" : "SMILES preset"}</span>
       </label>
       <select
         className="sel"
         value={s.drugId}
         onChange={(e) => {
-          const nd = drugById(data, e.target.value);
-          set({ drugId: e.target.value, dose: nd.dose, obs: defObs(nd) });
+          const v = e.target.value;
+          if (v === "custom") {
+            if (!smilesDraft.trim()) setSmilesDraft(drug.smiles);
+            set({ drugId: "custom" });
+          } else {
+            const nd = drugById(data, v);
+            set({ drugId: v, dose: nd.dose, obs: defObs(nd) });
+          }
         }}
       >
         {data.drugs.map((d) => (
@@ -64,10 +83,38 @@ export function RailInputs({
             {d.name}
           </option>
         ))}
+        <option value="custom" disabled={!live}>
+          {live ? "✎ Custom SMILES…" : "✎ Custom SMILES (engine offline)"}
+        </option>
       </select>
-      <div className="inp smiles" style={{ marginTop: 8, color: "var(--blue)", fontSize: 11 }}>
-        {drug.smiles}
-      </div>
+      {isCustom ? (
+        <div style={{ marginTop: 8 }}>
+          <input
+            className="inp smiles"
+            value={smilesDraft}
+            spellCheck={false}
+            placeholder="paste a SMILES string…"
+            onChange={(e) => setSmilesDraft(e.target.value)}
+            style={{ color: "var(--blue)", fontSize: 11 }}
+          />
+          <input
+            className="inp"
+            value={nameDraft}
+            placeholder="name (optional)"
+            onChange={(e) => setNameDraft(e.target.value)}
+            style={{ marginTop: 7, fontSize: 12 }}
+          />
+          {predictError && (
+            <div style={{ marginTop: 7, fontFamily: "var(--mono)", fontSize: 10.5, color: "oklch(0.46 0.1 52)" }}>
+              {predictError}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="inp smiles" style={{ marginTop: 8, color: "var(--blue)", fontSize: 11 }}>
+          {drug.smiles}
+        </div>
+      )}
     </div>
   );
 
