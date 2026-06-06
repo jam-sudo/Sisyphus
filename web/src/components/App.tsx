@@ -89,7 +89,6 @@ export function App() {
   const [tab, setTab] = useState(0);
   const [running, setRunning] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
-  const [scale, setScale] = useState(1);
   const runTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const set = (patch: Partial<AppState>) => setS((prev) => ({ ...prev, ...patch }));
@@ -108,17 +107,6 @@ export function App() {
       /* ignore */
     }
   }, [wf]);
-
-  // fit-to-viewport scaling (letterbox the fixed 1280×800 canvas)
-  useEffect(() => {
-    function fit() {
-      const sc = Math.min(1, (window.innerWidth - 36) / 1280, (window.innerHeight - 36) / 800);
-      setScale(sc > 0 ? sc : 1);
-    }
-    fit();
-    window.addEventListener("resize", fit);
-    return () => window.removeEventListener("resize", fit);
-  }, []);
 
   if (loading) {
     return (
@@ -189,7 +177,7 @@ export function App() {
 
   return (
     <div className="stage">
-      <div className="app" style={{ transform: `scale(${scale})`, transformOrigin: "center center" }}>
+      <div className="app">
         {/* RAIL */}
         <aside className="rail">
           <div className="rail-top">

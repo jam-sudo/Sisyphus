@@ -36,15 +36,16 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
-#root { height: 100vh; }
+#root { min-height: 100vh; }
 
-/* viewport shell that letterboxes the fixed app */
+/* responsive shell — centers the fluid app card on desktop */
 .stage {
-  height: 100vh; width: 100vw; display: flex; align-items: center; justify-content: center;
-  padding: 22px; overflow: auto;
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  padding: 22px;
 }
 .app {
-  width: 1280px; height: 800px; min-height: 800px;
+  width: min(1280px, calc(100vw - 44px));
+  height: min(800px, calc(100vh - 44px));
   background: var(--paper);
   border: 1px solid var(--hair);
   border-radius: 16px;
@@ -256,3 +257,47 @@ svg.chart { display: block; width: 100%; height: auto; }
 /* data-provenance ribbon */
 .provenance { font-family: var(--mono); font-size: 9px; color: var(--ink-mute); letter-spacing: 0.04em; padding: 6px 26px; border-top: 1px solid var(--hair); background: var(--surface-2); display: flex; align-items: center; gap: 8px; flex: none; }
 .provenance .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--teal); flex: none; }
+
+/* ============================================================
+   Responsive — desktop card unchanged ≥1100px; stack below.
+   ============================================================ */
+
+/* small laptop / tablet landscape: keep the 2-pane card, but stack
+   in-content splits and shrink stat rows so nothing gets cramped */
+@media (max-width: 1100px) {
+  .split, .split-even { grid-template-columns: 1fr; }
+  .statline { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* phone / tablet portrait: single column, natural page scroll */
+@media (max-width: 860px) {
+  html, body { height: auto; }
+  #root { height: auto; min-height: 0; }
+  .stage { display: block; padding: 0; min-height: 100vh; }
+  .app {
+    width: 100%; height: auto; min-height: 100vh;
+    border: 0; border-radius: 0; box-shadow: none;
+    grid-template-columns: 1fr; /* rail stacks above main */
+  }
+
+  /* rail → top section */
+  .rail { border-right: 0; border-bottom: 1px solid var(--hair); }
+  .rail-top { padding: 18px 16px 0; }
+  .rail-fields { flex: none; overflow: visible; padding: 6px 16px 16px; }
+  .rail-run { padding: 14px 16px 18px; }
+
+  /* nav → horizontal scrollable chip row */
+  .nav { flex-direction: row; flex-wrap: nowrap; overflow-x: auto; gap: 8px; padding-bottom: 6px; -webkit-overflow-scrolling: touch; }
+  .nav button { width: auto; flex: none; padding: 9px 14px; }
+  .nav button .desc { display: none; }
+
+  /* main: no nested scroll — let the document scroll */
+  .main { min-height: 0; }
+  .mbar { flex-wrap: wrap; padding: 14px 16px; }
+  .mbar .badges { flex-wrap: wrap; }
+  .tabs { padding: 0 16px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .tabs button { white-space: nowrap; }
+  .content { overflow: visible; padding: 16px 16px 28px; }
+  .panel { overflow-x: auto; } /* safety net for wide tables */
+  .seg button { padding: 9px 0; } /* larger touch target */
+}
