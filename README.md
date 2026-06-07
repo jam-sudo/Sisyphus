@@ -271,12 +271,14 @@ After both fixes, only **caffeine** (R<sub>B:P</sub>=1, low-extraction) remains 
 
 | Drug | Dose | Sisyphus C<sub>max</sub> (mg/L) | Omega C<sub>max</sub> (mg/L) | Basis |
 |------|:----:|:------------:|:----------:|:------|
-| Caffeine | 100 mg PO | 1.6910 | 1.7139 | **Omega parity** — R<sub>B:P</sub>=1, low-extraction; invariant to both fixes (1.3% &lt; &plusmn;5% gate, macOS-stack drift) |
-| Midazolam | 2 mg PO | 0.002800 | 0.006943 | Sisyphus snapshot — FLUX-1 + RBP-2 (R<sub>B:P</sub> 0.66) |
-| Warfarin | 10 mg PO | 0.343133 | 0.4922 | Sisyphus snapshot — RBP-2 (R<sub>B:P</sub> 0.58); FLUX-1 no-op (low-extraction) |
-| Propranolol | 80 mg PO | 0.059875 | 0.1355 | Sisyphus snapshot — FLUX-1 + RBP-2 (R<sub>B:P</sub> 0.81) |
+| Caffeine (Omega parity) | 100 mg PO | 1.6910 | 1.7139 | **Omega parity** — R<sub>B:P</sub>=1, low-extraction; invariant to both fixes (1.3% &lt; &plusmn;5% gate, macOS-stack drift) |
+| Midazolam (Sisyphus snapshot, post-FLUX-1/RBP-2) | 2 mg PO | 0.002800 | 0.006943 | Sisyphus snapshot — FLUX-1 + RBP-2 (R<sub>B:P</sub> 0.66) |
+| Warfarin (Sisyphus snapshot, post-FLUX-1/RBP-2) | 10 mg PO | 0.343133 | 0.4922 | Sisyphus snapshot — RBP-2 (R<sub>B:P</sub> 0.58); FLUX-1 no-op (low-extraction) |
+| Propranolol (Sisyphus snapshot, post-FLUX-1/RBP-2) | 80 mg PO | 0.059875 | 0.1355 | Sisyphus snapshot — FLUX-1 + RBP-2 (R<sub>B:P</sub> 0.81) |
 
 Mass balance error &lt; 10<sup>&minus;12</sup> for all simulations. **Lesson:** Omega parity is *not* a sufficient correctness oracle — both shared bugs survived for as long as they did precisely because parity held.
+
+> Engine-validation targets: high-extraction drugs (midazolam, propranolol) use post-FLUX-1/RBP-2 Sisyphus regression snapshots, not Omega parity — Omega shared the flow-limitation double-count bug FLUX-1 fixed, so Omega parity is no longer a correctness oracle for them. Warfarin is also a Sisyphus snapshot (RBP-2 only; FLUX-1 was a no-op for this low-extraction drug). The blood:plasma concentration basis is RBP-2 (whole-blood pools reported on a plasma basis); see `docs/superpowers/specs/2026-06-04-rbp-concentration-basis-design.md`.
 
 ### Holdout benchmark (SMILES &rarr; C<sub>max</sub>)
 
