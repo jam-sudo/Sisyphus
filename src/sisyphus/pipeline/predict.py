@@ -171,58 +171,6 @@ def _apply_measured_f(
 # src/sisyphus/pipeline/predict.py -> ../../../../data/physiology
 _PHYSIOLOGY_DIR = Path(__file__).resolve().parent.parent.parent.parent / "data" / "physiology"
 
-# Clearance models that model hepatic uptake mechanistically and therefore do
-# NOT apply the B-11 well_stirred/parallel_tube fu_inc/fu_plasma correction
-# (applying it would double-count the explicit PS uptake / GFR plasma sink).
-_FU_CORRECTION_DROP_MODELS = frozenset({"extended", "gfr_filtration"})
-
-
-def _fu_correction_drop_warning(graph, fu_correction_liver_mean: float) -> str | None:
-    """Warn when a non-identity hepatic fu_correction lands on a flagged node
-    whose clearance edge uses a model that does not apply it.
-
-    B-11 wired ``fu_correction_liver`` into the well_stirred / parallel_tube
-    clearance models and ProdrugActivation. The production liver clearance edge,
-    however, uses the extended ECM, which models concentrative hepatic uptake
-    explicitly (PS_active / PS_inf / PS_eff) and therefore intentionally drops
-    the WS-style ``fu_inc/fu_plasma`` factor — applying it would double-count
-    that uptake. Without this warning a curated value would silently no-op on
-    that clearance edge (for a non-prodrug liver, its entire clearance
-    contribution; a prodrug's ProdrugActivation edge at the same node still
-    applies it) and pass every test. Returns ``None`` (no warning) for the
-    default ``1.0``, so the current headline path is bit-identical.
-    """
-    if fu_correction_liver_mean == 1.0:
-        return None
-    from sisyphus.graph.types import ClearanceEdge
-
-    flagged = {
-        name for name, node in graph.nodes.items()
-        if node.fu_correction_applicable > 0
-    }
-    dropped = sorted({
-        (edge.source, edge.model)
-        for edge in graph.edges
-        if isinstance(edge, ClearanceEdge)
-        and edge.source in flagged
-        and edge.model in _FU_CORRECTION_DROP_MODELS
-    })
-    if not dropped:
-        return None
-    nodes = sorted({src for src, _ in dropped})
-    models = sorted({model for _, model in dropped})
-    return (
-        f"fu_correction_liver={fu_correction_liver_mean:.3g} is dropped by the "
-        f"clearance-edge model at node(s) {nodes} (model(s): {models}): these "
-        f"models do not apply the well_stirred/parallel_tube fu correction "
-        f"(the extended ECM models hepatic uptake explicitly, so it would "
-        f"double-count; gfr_filtration is a plasma sink with no fup term). It "
-        f"is still applied by any well_stirred/parallel_tube clearance or "
-        f"ProdrugActivation edge at the same node; for an extended-ECM node, "
-        f"model enhanced uptake via the transporter params (ps_active jmax/km)."
-    )
-
-
 def predict(
     smiles: str,
     dose_mg: float,
@@ -492,13 +440,12 @@ def predict(
         from sisyphus.graph.builder import augment_for_active_species
         graph = augment_for_active_species(graph, drug)
 
-        # B-11 contract guard: surface a warning if a curated (non-1.0)
-        # fu_correction_liver lands on a flagged node whose clearance model
-        # drops it (extended ECM / gfr). No-op today — every registry value is
-        # 1.0 — so the headline path stays bit-identical.
-        _fu_warn = _fu_correction_drop_warning(graph, drug.fu_correction_liver.mean)
-        if _fu_warn:
-            warnings_list.append(_fu_warn)
+        # WS-2 contract guard: a curated (non-1.0) fu_correction_liver that would
+        # be ENTIRELY dropped (flagged node, drop-model clearance, no honoring
+        # flux) is a contract violation — fail loud rather than silently no-op.
+        # No-op today (every registry value is 1.0) → headline bit-identical.
+        from sisyphus.engine.contracts import assert_fu_correction_honored
+        assert_fu_correction_honored(graph, drug.fu_correction_liver.mean)
 
         compiler = ODECompiler()
         compiled = compiler.compile(graph)
@@ -569,6 +516,10 @@ def predict(
         else:
             warnings_list.append("ODE solver did not converge")
             logger.warning("ODE solver did not converge")
+    except ValueError:
+        # WS-2 contract guard (assert_fu_correction_honored) raises ValueError on a
+        # genuine contract violation — fail loud, never degrade it into a warning.
+        raise
     except Exception as e:
         warnings_list.append(f"Engine failed: {e}")
         logger.warning("Engine simulation failed: %s", e)

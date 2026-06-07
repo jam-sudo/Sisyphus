@@ -82,3 +82,17 @@ def test_assert_noop_on_identity_value():
 def test_assert_noop_when_prodrug_honors_it():
     g = _graph_extended_plus_prodrug_flagged()
     assert_fu_correction_honored(g, fu_correction_liver_mean=1.4)  # no raise
+
+
+def test_pipeline_raises_when_curated_value_would_be_dropped(monkeypatch):
+    """A non-1.0 fu_correction_liver on the production (extended) liver raises."""
+    import sisyphus.predict.hepatic_fu_correction as hfc
+    from sisyphus.core import Distribution
+    from sisyphus.pipeline.predict import predict
+
+    # Force a non-identity hepatic fu_correction for any SMILES.
+    monkeypatch.setattr(
+        hfc, "lookup_hepatic_fu_correction", lambda smiles: Distribution(1.4, cv=0.0)
+    )
+    with pytest.raises(ValueError, match="entirely dropped"):
+        predict("CCO", dose_mg=100.0, route="oral")

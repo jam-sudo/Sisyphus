@@ -22,6 +22,7 @@ closed by a runtime warning from ``pipeline.predict`` — see
 from __future__ import annotations
 
 import numpy as np
+import pytest
 
 from sisyphus.core import Distribution, DrugOnGraph
 from sisyphus.engine.compiler import ResolvedParams
@@ -450,15 +451,17 @@ def test_extended_clearance_ignores_fu_correction_by_design():
     )
 
 
-def test_predict_warns_when_fu_correction_dropped_at_extended_node(monkeypatch):
-    """pipeline.predict surfaces a warning when a non-identity
-    fu_correction_liver is curated for a drug whose flagged hepatic node clears
-    via the extended ECM (which drops the correction by design).
+def test_predict_raises_when_fu_correction_dropped_at_extended_node(monkeypatch):
+    """pipeline.predict raises when a non-identity fu_correction_liver is curated
+    for a drug whose flagged hepatic node clears via the extended ECM (which
+    drops the correction by design).
 
     Closes the B-11 'silent no-op' trap: the production liver clearance edge is
-    ``extended``, so without this warning a future curated value would vanish
-    unnoticed and still pass every test. Patches the source-module lookup (the
-    function-local import in ivive.py re-binds on every predict() call).
+    ``extended``, so a future curated value that would vanish there is a contract
+    violation — WS-2 replaced the prior warning with a loud ``ValueError`` via
+    ``engine.contracts.assert_fu_correction_honored``. Patches the source-module
+    lookup (the function-local import in ivive.py re-binds on every predict()
+    call).
     """
     from sisyphus.pipeline.predict import predict
 
@@ -468,11 +471,8 @@ def test_predict_warns_when_fu_correction_dropped_at_extended_node(monkeypatch):
         lambda smiles, registry_path=None: Distribution(mean=2.0, cv=0.0),
         raising=False,
     )
-    result = predict(caffeine, dose_mg=100.0, route="oral")
-
-    assert any(
-        "fu_correction_liver" in w and "dropped" in w for w in result.warnings
-    ), f"expected dropped-fu_correction warning; got {result.warnings!r}"
+    with pytest.raises(ValueError, match="entirely dropped"):
+        predict(caffeine, dose_mg=100.0, route="oral")
 
 
 def test_predict_no_fu_correction_warning_at_default(monkeypatch):
