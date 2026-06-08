@@ -128,8 +128,6 @@ def make_jax_rhs(
     # Clearance: separate by model type
     cl_ws_src = []  # well_stirred source indices
     cl_ws_tgt = []
-    cl_pt_src = []  # parallel_tube source indices
-    cl_pt_tgt = []
     cl_gfr_src = []  # gfr_filtration source indices
     cl_gfr_tgt = []
 
@@ -160,9 +158,6 @@ def make_jax_rhs(
             if spec.model == "well_stirred":
                 cl_ws_src.append(spec.source_idx)
                 cl_ws_tgt.append(spec.target_idx)
-            elif spec.model == "parallel_tube":
-                cl_pt_src.append(spec.source_idx)
-                cl_pt_tgt.append(spec.target_idx)
             elif spec.model == "gfr_filtration":
                 cl_gfr_src.append(spec.source_idx)
                 cl_gfr_tgt.append(spec.target_idx)
@@ -213,8 +208,6 @@ def make_jax_rhs(
 
     _cl_ws_src = jnp.array(cl_ws_src, dtype=jnp.int32)
     _cl_ws_tgt = jnp.array(cl_ws_tgt, dtype=jnp.int32)
-    _cl_pt_src = jnp.array(cl_pt_src, dtype=jnp.int32)
-    _cl_pt_tgt = jnp.array(cl_pt_tgt, dtype=jnp.int32)
     _cl_gfr_src = jnp.array(cl_gfr_src, dtype=jnp.int32)
     _cl_gfr_tgt = jnp.array(cl_gfr_tgt, dtype=jnp.int32)
 
@@ -240,7 +233,6 @@ def make_jax_rhs(
     # -- Boolean flags for which flux types are present ---------------------
     has_flow = len(flow_src) > 0
     has_cl_ws = len(cl_ws_src) > 0
-    has_cl_pt = len(cl_pt_src) > 0
     has_cl_gfr = len(cl_gfr_src) > 0
     has_transit = len(transit_src) > 0
     has_absorption = len(absorption_src) > 0
@@ -326,29 +318,6 @@ def make_jax_rhs(
 
             dydt = dydt.at[_cl_ws_src].add(-rate_ws)
             dydt = dydt.at[_cl_ws_tgt].add(rate_ws)
-
-        # 2b. Parallel-tube model
-        #     FLUX-1: in a single well-mixed compartment a true parallel-tube
-        #     extraction (axial gradient) is not representable; mirror the
-        #     numpy path and apply the intrinsic clearance fup*CLint to C_out
-        #     so the convective edge supplies flow limitation without a
-        #     double-count. parallel_tube is not wired in reference physiology.
-        if has_cl_pt:
-            clint_pt = params.node_clint_organ[_cl_pt_src]
-            v_pt = params.node_volumes[_cl_pt_src]
-            kp_pt = params.node_kp[_cl_pt_src]
-
-            cl_intrinsic_pt = fup * clint_pt
-            # RBP-2: plasma-basis sink (see well_stirred).
-            c_plasma_pt = jnp.where(
-                v_pt > 0.0,
-                y[_cl_pt_src] / (v_pt * kp_pt),
-                0.0,
-            )
-            rate_pt = cl_intrinsic_pt * c_plasma_pt
-
-            dydt = dydt.at[_cl_pt_src].add(-rate_pt)
-            dydt = dydt.at[_cl_pt_tgt].add(rate_pt)
 
         # 2c. GFR filtration
         #     rate = renal_cl * C_plasma
