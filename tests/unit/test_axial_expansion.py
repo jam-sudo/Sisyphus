@@ -140,3 +140,9 @@ def test_large_n_converges_to_parallel_tube():
 def test_extraction_monotone_in_n():
     # N >= 2 only: axial_subcompartments=1 maps to the default N=10, so n=1 is NOT a 1-tank case.
     assert _extraction(2) < _extraction(10) < _extraction(50)
+
+
+def test_unexpanded_parallel_tube_fails_loud_at_compile():
+    g = _pt_graph(4)  # NOT expanded
+    with pytest.raises(ValueError, match="parallel_tube"):
+        ODECompiler().compile(g)
