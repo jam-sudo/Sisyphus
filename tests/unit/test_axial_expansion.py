@@ -146,3 +146,11 @@ def test_unexpanded_parallel_tube_fails_loud_at_compile():
     g = _pt_graph(4)  # NOT expanded
     with pytest.raises(ValueError, match="parallel_tube"):
         ODECompiler().compile(g)
+
+
+def test_pipeline_handles_parallel_tube_graph(monkeypatch):
+    """A graph with a parallel_tube edge is auto-expanded by the pipeline (no raise)."""
+    # Smoke test: predict() must not raise the unexpanded-parallel_tube ValueError.
+    from sisyphus.pipeline.predict import predict
+    result = predict("CCO", dose_mg=100.0, route="oral")
+    assert result is not None  # production graph has no parallel_tube → expand_axial is a no-op

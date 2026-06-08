@@ -440,6 +440,9 @@ def predict(
         from sisyphus.graph.builder import augment_for_active_species
         graph = augment_for_active_species(graph, drug)
 
+        from sisyphus.graph.axial import expand_axial
+        graph = expand_axial(graph)  # no-op unless a parallel_tube edge is present
+
         # WS-2 contract guard: a curated (non-1.0) fu_correction_liver that would
         # be ENTIRELY dropped (flagged node, drop-model clearance, no honoring
         # flux) is a contract violation — fail loud rather than silently no-op.

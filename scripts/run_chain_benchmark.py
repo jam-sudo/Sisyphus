@@ -1,13 +1,20 @@
 #!/usr/bin/env python3
-"""Phase 2A chain benchmark: 6 IVIVE chains × 61 holdout drugs.
+"""Phase 2A chain benchmark: 3 IVIVE chains × holdout drugs.
 
-Chains = 3 Kp methods × 2 CLh methods:
+Chains = 3 Kp methods × well-stirred CLh:
   A: R&R + well-stirred          (baseline)
   B: Poulin-Theil + well-stirred
   C: R&R+BZ + well-stirred
-  D: R&R + parallel-tube
-  E: Poulin-Theil + parallel-tube
-  F: R&R+BZ + parallel-tube
+
+The parallel-tube CLh chains (former D/E/F) are removed: an unexpanded
+``parallel_tube`` edge now fails loud at compile and must be axially expanded
+first (``graph.axial.expand_axial``), but single-organ axial expansion requires
+a *perfusion-only* organ (flow + clearance edges only). In reference_man the
+only well_stirred clearance organ is ``gut_wall``, which also carries 8
+absorption edges, so ``expand_axial`` correctly raises ``NotImplementedError``
+on it. Rather than hack around the scope guard, the PT chains are dropped; the
+``expand_axial`` call below stays wired (a no-op for A/B/C) so any future
+perfusion-only parallel_tube organ is handled.
 
 Output:
   1. Per-chain engine AAFE
@@ -39,9 +46,9 @@ CHAINS = [
     {"name": "A: R&R/WS",    "kp": "rodgers_rowland", "clh": "well_stirred"},
     {"name": "B: PT/WS",     "kp": "poulin_theil",    "clh": "well_stirred"},
     {"name": "C: BZ/WS",     "kp": "berezhkovskiy",   "clh": "well_stirred"},
-    {"name": "D: R&R/PT",    "kp": "rodgers_rowland", "clh": "parallel_tube"},
-    {"name": "E: PT/PT",     "kp": "poulin_theil",    "clh": "parallel_tube"},
-    {"name": "F: BZ/PT",     "kp": "berezhkovskiy",   "clh": "parallel_tube"},
+    # Parallel-tube CLh chains (D/E/F) removed — see module docstring. An
+    # unexpanded parallel_tube edge fails loud at compile, and axial expansion
+    # of reference_man's gut_wall is out of scope (it has absorption edges).
 ]
 
 
@@ -87,6 +94,14 @@ def run_engine_for_drug(ref, chain, base_graph):
     # CLh method via graph edge model
     if chain["clh"] != "well_stirred":
         graph = swap_clearance_model(graph, chain["clh"])
+
+    # Expand any parallel_tube organ into N serial well_stirred tanks before
+    # compile (an unexpanded parallel_tube edge fails loud at compile). No-op
+    # for the current well_stirred chains (A/B/C); kept wired so a future
+    # perfusion-only parallel_tube organ would compile to genuine axial
+    # parallel-tube extraction (default N=10) instead of raising.
+    from sisyphus.graph.axial import expand_axial
+    graph = expand_axial(graph)
 
     compiler = ODECompiler()
     compiled = compiler.compile(graph)
