@@ -10,6 +10,20 @@ Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the *
 
 ---
 
+## 2026-06-07 — Engine contract hardening (WS-2/3/4/5/6, audit findings 2–6): headline-neutral, correctness/contract
+
+Closed findings 2–6 of `docs/engine_audit_findings_2026-06-04.md` (finding 1/RBP-2 already shipped). Spec `docs/superpowers/specs/2026-06-07-engine-contract-hardening-design.md`; plans `docs/superpowers/plans/2026-06-07-{engine-contract-hardening,axial-parallel-tube}.md`. Merge commit `f8edfbc` (16 commits + 1 review-fix). **Headline 2.784 bit-identical throughout** (`test_cached_holdout_aafe_is_2p784` green); invariants **#1 (identity-blind)** and **#8 (no `compiler.py`/`solver.py` edits)** held. Full sweep 956 passed / 15 skipped / 7 xfailed / 1 xpassed (pre-existing).
+
+- **WS-2 — extended-ECM fu_correction fail-loud.** New `engine/contracts.py`: `assert_fu_correction_honored(graph, mean)` raises a distinct `FuCorrectionContractError(ValueError)` when a non-identity `fu_correction_liver` would be **entirely** dropped (flagged node, extended/gfr-only clearance, no honoring well_stirred/prodrug flux). False-positive-free (prodrug coexistence honored). Wired into `uncertainty.py` + `pipeline.predict`; the pipeline re-raises **only** that distinct type so genuine engine ValueErrors still degrade to ML-fallback (final-review fix). The extended ECM still intentionally drops the WS-style factor (PS_active models uptake explicitly — applying it would double-count); this makes the silent no-op loud, it is **not** a physics change.
+- **WS-3 — real parallel-tube via axial sub-compartment expansion.** New `graph/axial.py` `expand_axial(graph)` rewrites each `parallel_tube` clearance organ into N serial well-stirred sub-tanks (volume/N, enzymes/N; `lookup_name`=parent so Kp/PS resolve to the parent; engine diff = 0 lines). Empirically converges to the analytic PT extraction `1−exp(−fu_b·CLint/Q)` (N=10→0.6145, N=50→0.6285 → 0.6321). Single-tank `parallel_tube` flux removed from SciPy + JAX; an unexpanded edge fails loud at compile. `Node.axial_subcompartments` (default 1→N=10 when `parallel_tube` requested without explicit N). Wired into `predict` (before the fu_correction guard) — no-op for production (reference_man has no `parallel_tube` edge). `run_chain_benchmark` D/E/F dropped (its only well_stirred organ is gut_wall, which has absorption edges → scope guard correctly rejects; pre-fix those configs were a degenerate WS-collapse anyway).
+- **WS-5 — active-transport direction.** `ActiveTransportEdge.direction` ("uptake" default | "efflux"); SciPy + JAX read the transporter node by direction (target=uptake, source=efflux; substrate conc always source). No production consumer — contract + backend-parity correctness only.
+- **WS-4 — JAX↔SciPy parity.** JAX well_stirred now applies `fu_correction_liver` (pytree-consistent `JaxParams` fields); `resolve_to_jax` fails loud on ≥2 transporters with distinct Km (the aggregate-Vmax/weighted-Km approximation diverges); comprehensive per-branch RHS-level parity suite (rtol 1e-9: flow/ws±fu/gfr/transit/absorption/diffusion/transport-uptake+efflux).
+- **WS-6 — docs.** README engine-validation table reconciled (caffeine = Omega parity; midazolam/propranolol/warfarin = post-FLUX-1/RBP-2 Sisyphus snapshots).
+
+**Why headline-neutral:** production uses no `parallel_tube`/`active_transport` edges, all 19 `fu_correction_liver` registry values are 1.0, and JAX is non-production — so every change is a no-op on the SciPy holdout path. This is a [[correctness-over-benchmark]] cycle: honest contracts + a real PT model, zero metric movement. Executed subagent-driven (per-task implementer + spec/quality review) in worktree `engine-contract-hardening`. ⚠ Merged to **local main only** (not pushed); a canonical CI regen is not required (bit-identical).
+
+---
+
 ## 2026-06-04 (cont. 4) — OATP1B1 re-anchor to pitavastatin (non-holdout): un-erodes Invariant #5, un-xfails the FLUX-1-deferred statins, headline-neutral
 
 Closed the FLUX-1-deferred OATP/ECM xfail. Branch `fix/rbp-concentration-basis`; spec `docs/superpowers/specs/2026-06-04-oatp-ecm-reanchor-design.md`.
