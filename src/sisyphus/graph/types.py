@@ -58,6 +58,9 @@ class Node:
     lookup_name: str = ""  # base organ name for Kp/PS lookup (e.g. "adipose" for "adipose_tissue")
     # B-11: 1.0 if hepatic intracellular fu correction applies at this node.
     fu_correction_applicable: float = 0.0
+    # WS-3: >1 expands this perfusion organ into N serial well-stirred sub-tanks
+    # (axial gradient → parallel-tube extraction) via graph.axial.expand_axial.
+    axial_subcompartments: int = 1
 
 
 # ---------------------------------------------------------------------------
@@ -134,7 +137,8 @@ class ClearanceEdge(Edge):
 
     ``model`` selects the mathematical formulation:
         - ``"well_stirred"`` — hepatic well-stirred model
-        - ``"parallel_tube"`` — parallel-tube extraction
+        - ``"parallel_tube"`` — true parallel-tube via axial sub-compartment
+          expansion (build-time; see graph.axial).
         - ``"gfr_filtration"`` — glomerular filtration (renal)
         - ``"extended"`` — Extended Clearance Model (ECM): active + passive
           uptake, passive efflux, metabolism, biliary clearance via QSSA.
@@ -158,6 +162,10 @@ class ActiveTransportEdge(Edge):
     """
 
     edge_type: str = field(default="active_transport", init=False)
+    # WS-5: "uptake" → transporter at TARGET (e.g. hepatic OATP, blood→liver);
+    # "efflux" → transporter at SOURCE (e.g. gut P-gp, gut_wall→lumen). Driving
+    # (substrate) concentration is the SOURCE in both cases.
+    direction: str = "uptake"
 
 
 @dataclass(frozen=True)

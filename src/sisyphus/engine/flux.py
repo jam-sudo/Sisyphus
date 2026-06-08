@@ -175,18 +175,20 @@ class ClearanceFluxSpec(FluxSpec):
     """Hepatic / renal clearance flux. Four models supported:
 
     - ``well_stirred``  — classical WS with organ-level CLint (default)
-    - ``parallel_tube`` — collapses to the well_stirred intrinsic sink in a
-      single well-mixed compartment (a true axial-gradient parallel-tube model
-      is not representable here; not wired in the reference physiology)
+    - ``parallel_tube`` — NOT a single-tank flux; expanded into N serial
+      well_stirred sub-tanks at build time by ``graph.axial.expand_axial``
+      (true axial-gradient parallel-tube).
     - ``gfr_filtration`` — renal filtration (``CL_renal × C_plasma``)
     - ``extended``      — ECM: QSSA-closed hepatocyte with active + passive
       uptake, passive efflux, metabolism, biliary clearance. See
       ``docs/superpowers/specs/2026-04-20-oatp-ecm-hepatic-clearance-design.md``.
 
     Hepatic fu correction (B-11): at a node flagged ``fu_correction_applicable``,
-    ``well_stirred`` and ``parallel_tube`` replace ``fup`` with
-    ``fup × fu_correction_liver`` (an empirical fu_inc/fu_plasma uptake
-    correction). ``extended`` and ``gfr_filtration`` intentionally do NOT — the
+    ``well_stirred`` replaces ``fup`` with ``fup × fu_correction_liver`` (an
+    empirical fu_inc/fu_plasma uptake correction). Because ``parallel_tube`` is
+    expanded into ``well_stirred`` sub-tanks at build time, the correction
+    applies to each sub-tank through that same branch.
+    ``extended`` and ``gfr_filtration`` intentionally do NOT — the
     ECM models concentrative hepatic uptake explicitly (PS_active/PS_inf/PS_eff)
     so the WS-style factor would double-count it, and GFR is a plasma sink with
     no uptake term. The production liver edge is ``extended``; pipeline.predict
@@ -222,6 +224,13 @@ class ClearanceFluxSpec(FluxSpec):
 
     @classmethod
     def from_edge(cls, edge_id: int, edge, state_index: dict[str, int]) -> ClearanceFluxSpec:
+        if edge.model == "parallel_tube":
+            raise ValueError(
+                "ClearanceEdge model='parallel_tube' must be expanded into axial "
+                "sub-compartments before compile (graph.axial.expand_axial); it is "
+                "not a single-tank flux. Set Node.axial_subcompartments and call "
+                "expand_axial(graph) before ODECompiler().compile(graph)."
+            )
         return cls(
             edge_id,
             state_index[edge.source],
@@ -267,40 +276,6 @@ class ClearanceFluxSpec(FluxSpec):
             # The separate convective Q·c_out edge supplies the flow limitation, so
             # the realized extraction emerges E = fup·CLint/(Q·RBP + fup·CLint) =
             # fu_b·CLint/(Q+fu_b·CLint), fu_b = fup/RBP (canonical well-stirred).
-            v = params.node_param(self.source_name, "volume")
-            kp = params.drug_kp(self.source_name)
-            c_plasma = y[self.source_idx] / (v * kp) if v > 0 else 0.0
-
-            rate = cl_intrinsic * c_plasma
-
-        elif self.model == "parallel_tube":
-            # Compute organ-level CLint (same as well-stirred)
-            clint_organ = 0.0
-            ivive = params.node_param(self.source_name, "ivive_scaling")
-            for tag, abundance in params.node_enzymes(self.source_name).items():
-                affinity = params.drug_enzyme_affinity(tag)
-                if affinity > 0 and abundance > 0:
-                    clint_organ += abundance * affinity * ivive
-
-            if clint_organ <= 0:
-                return
-
-            fup = params.drug_param("fup")
-            # B-11: hepatic intracellular fu correction at flagged nodes.
-            if params.node_param(self.source_name, "fu_correction_applicable") > 0:
-                fup = fup * params.drug_param("fu_correction_liver")
-
-            # FLUX-1: in a single well-mixed perfusion compartment (separate
-            # convective Q·c_out outflow edge), the metabolic sink must be the
-            # intrinsic clearance fup·CLint — same as well_stirred. A true
-            # parallel-tube extraction Q·(1−e^(−fup·CLint/Q)) requires an axial
-            # concentration gradient (sub-compartmentalized liver), which this
-            # compartment cannot represent; applying the whole-organ PT clearance
-            # to c_out alongside the convective edge double-counts flow (E→0.5).
-            # parallel_tube is not wired in the reference physiology.
-            cl_intrinsic = fup * clint_organ
-
-            # RBP-2: plasma-basis sink (see well_stirred).
             v = params.node_param(self.source_name, "volume")
             kp = params.drug_kp(self.source_name)
             c_plasma = y[self.source_idx] / (v * kp) if v > 0 else 0.0
@@ -539,6 +514,18 @@ class ActiveTransportFluxSpec(FluxSpec):
     MW is needed to convert mg/L → µM: C_µM = C_mg_L × 1000 / MW.
     """
 
+    def __init__(
+        self,
+        edge_id: int,
+        source_idx: int,
+        target_idx: int,
+        source_name: str,
+        target_name: str,
+        direction: str = "uptake",
+    ) -> None:
+        super().__init__(edge_id, source_idx, target_idx, source_name, target_name)
+        self.direction = direction
+
     @classmethod
     def from_edge(cls, edge_id: int, edge, state_index: dict[str, int]) -> ActiveTransportFluxSpec:
         return cls(
@@ -547,6 +534,7 @@ class ActiveTransportFluxSpec(FluxSpec):
             state_index[edge.target],
             edge.source,
             edge.target,
+            getattr(edge, "direction", "uptake"),
         )
 
     def apply(
@@ -571,8 +559,12 @@ class ActiveTransportFluxSpec(FluxSpec):
         if c_um <= 0:
             return
 
+        # WS-5: transporter sits at the target for uptake, the source for efflux.
+        # The driving (substrate) concentration is always the source (computed above).
+        transporter_node = self.target_name if self.direction == "uptake" else self.source_name
+
         total_rate = 0.0
-        node_transporters = params.node_transporters(self.target_name)
+        node_transporters = params.node_transporters(transporter_node)
 
         for tag, abundance in node_transporters.items():
             jmax = params.drug_transporter_jmax(tag)
@@ -591,7 +583,7 @@ class ActiveTransportFluxSpec(FluxSpec):
         # Convert from µM·volume/time units back to mg/time
         # rate is in arbitrary units scaled by abundance, jmax, and concentration
         # The IVIVE scaling factor handles unit conversion
-        ivive = params.node_param(self.target_name, "ivive_scaling")
+        ivive = params.node_param(transporter_node, "ivive_scaling")
         mass_rate = total_rate * ivive
 
         dydt[self.source_idx] -= mass_rate

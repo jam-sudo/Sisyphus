@@ -51,6 +51,7 @@ class JaxParams:
     node_volumes: jnp.ndarray  # (n_nodes,)
     node_kp: jnp.ndarray  # (n_nodes,)
     node_is_blood: jnp.ndarray  # (n_nodes,) 1.0 if blood_pool, else 0.0
+    node_fu_correction_applicable: jnp.ndarray  # (n_nodes,) 1.0 if flagged
 
     # -- Scalar drug properties ---------------------------------------------
     drug_fup: float
@@ -59,6 +60,7 @@ class JaxParams:
     drug_renal_cl: float
     drug_peff: float
     drug_particle_radius: float
+    drug_fu_correction_liver: float
 
     # -- Per-edge arrays (indexed by edge_id) -------------------------------
     edge_flow_rates: jnp.ndarray  # (n_edges,)
@@ -81,8 +83,9 @@ if JAX_AVAILABLE:
     def _jaxparams_flatten(p):
         children = (
             p.node_volumes, p.node_kp, p.node_is_blood,
+            p.node_fu_correction_applicable,
             p.drug_fup, p.drug_rbp, p.drug_mw, p.drug_renal_cl,
-            p.drug_peff, p.drug_particle_radius,
+            p.drug_peff, p.drug_particle_radius, p.drug_fu_correction_liver,
             p.edge_flow_rates, p.edge_transit_rates,
             p.edge_ka_fractions, p.edge_ps_products,
             p.node_clint_organ, p.node_total_inflow, p.node_ivive_scaling,
@@ -135,6 +138,7 @@ def resolve_to_jax(compiled: CompiledODE, params: ResolvedParams) -> JaxParams:
     volumes = []
     kps = []
     is_blood = []
+    fu_correction_applicable = []
     ivive_scaling = []
     total_inflow = []
     clint_organ = []
@@ -145,6 +149,7 @@ def resolve_to_jax(compiled: CompiledODE, params: ResolvedParams) -> JaxParams:
         volumes.append(params.node_param(name, "volume"))
         kps.append(params.drug_kp(name))
         is_blood.append(1.0 if params.is_blood_pool(name) else 0.0)
+        fu_correction_applicable.append(params.node_param(name, "fu_correction_applicable"))
         ivive_scaling.append(params.node_param(name, "ivive_scaling"))
         total_inflow.append(params.total_inflow(name))
 
@@ -166,6 +171,20 @@ def resolve_to_jax(compiled: CompiledODE, params: ResolvedParams) -> JaxParams:
         # We cannot collapse to single Vmax/Km exactly when Km differs.
         # Approximation: store aggregate Vmax and abundance-weighted Km.
         transporters = params.node_transporters(name)
+        active_kms = set()
+        for tag, abundance in transporters.items():
+            j = params.drug_transporter_jmax(tag)
+            km = params.drug_transporter_km(tag)
+            if j > 0 and km > 0 and abundance > 0:
+                active_kms.add(round(km, 9))
+        if len(active_kms) > 1:
+            raise NotImplementedError(
+                f"node {name!r} has {len(active_kms)} active transporters with "
+                f"distinct Km {sorted(active_kms)}; the JAX aggregate-Vmax / "
+                f"weighted-Km approximation diverges from SciPy's exact "
+                f"per-transporter Michaelis-Menten sum. Use backend='scipy' "
+                f"(default), or implement exact padded per-transporter MM in JAX."
+            )
         vmax_sum = 0.0
         km_weighted_num = 0.0  # sum(abundance * jmax * km)
         vmax_weight = 0.0  # sum(abundance * jmax) -- same as vmax_sum
@@ -232,12 +251,14 @@ def resolve_to_jax(compiled: CompiledODE, params: ResolvedParams) -> JaxParams:
         node_volumes=jnp.array(volumes, dtype=jnp.float64),
         node_kp=jnp.array(kps, dtype=jnp.float64),
         node_is_blood=jnp.array(is_blood, dtype=jnp.float64),
+        node_fu_correction_applicable=jnp.array(fu_correction_applicable, dtype=jnp.float64),
         drug_fup=drug_fup,
         drug_rbp=drug_rbp,
         drug_mw=drug_mw,
         drug_renal_cl=drug_renal_cl,
         drug_peff=drug_peff,
         drug_particle_radius=drug_particle_radius,
+        drug_fu_correction_liver=params.drug_param("fu_correction_liver"),
         edge_flow_rates=jnp.array(flow_rates, dtype=jnp.float64),
         edge_transit_rates=jnp.array(transit_rates, dtype=jnp.float64),
         edge_ka_fractions=jnp.array(ka_fractions, dtype=jnp.float64),

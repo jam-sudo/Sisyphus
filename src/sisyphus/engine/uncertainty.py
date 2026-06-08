@@ -19,6 +19,7 @@ import numpy as np
 
 from sisyphus.core import Distribution, DrugOnGraph, PKEndpoints, SimResult
 from sisyphus.engine.compiler import CompiledODE, ResolvedParams
+from sisyphus.engine.contracts import assert_fu_correction_honored
 from sisyphus.engine.solver import solve, solve_mc
 from sisyphus.graph.body import BodyGraph
 
@@ -132,6 +133,7 @@ class UncertaintyEngine:
             extraction.  ``propagate_fast()`` is recommended for new
             production code — it threads ``t_min_h`` automatically.
         """
+        assert_fu_correction_honored(graph, drug.fu_correction_liver.mean)
         results: list[SimResult] = []
         n_failures = 0
 
@@ -208,6 +210,7 @@ class UncertaintyEngine:
         Returns:
             MCResult with aggregated PKEndpoints and 90% PI.
         """
+        assert_fu_correction_honored(graph, drug.fu_correction_liver.mean)
         # Pre-compute initial conditions template (reused each iteration)
         y0_template = np.zeros(compiled.n_states)
         admin_idx = compiled.state_index[drug.administration_node]

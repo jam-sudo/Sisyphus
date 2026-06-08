@@ -1,7 +1,9 @@
 """Engine integration tests for B-11 fu_correction_liver gating (Task 6).
 
 Verifies the correction multiplies fup at flagged nodes ONLY in
-ClearanceFluxSpec well_stirred + parallel_tube branches. Uses a
+the ClearanceFluxSpec well_stirred branch (an axial/parallel-tube edge is
+expanded into well_stirred sub-tanks at build time, so it inherits the
+same gating through that branch). Uses a
 synthetic minimal BodyGraph (NOT predict()) so the test exercises
 exactly the code paths Task 6 modifies, independent of which
 production drug routes through which flux type.
@@ -22,6 +24,7 @@ closed by a runtime warning from ``pipeline.predict`` — see
 from __future__ import annotations
 
 import numpy as np
+import pytest
 
 from sisyphus.core import Distribution, DrugOnGraph
 from sisyphus.engine.compiler import ResolvedParams
@@ -161,42 +164,6 @@ def test_well_stirred_fu_correction_amplifies_clearance_when_flagged():
     assert abs(rate_corrected - expected_corrected) < 1e-10
 
     # Sanity: fu_corr=5 strictly raises CL (the gate's purpose).
-    assert rate_corrected > rate_baseline
-    # Intrinsic clearance is exactly linear in fup_eff, so the ratio is exactly 5.
-    assert abs(rate_corrected / rate_baseline - 5.0) < 1e-9
-
-
-def test_parallel_tube_fu_correction_amplifies_clearance_when_flagged():
-    """parallel_tube branch: same fu_correction gating as well_stirred.
-
-    Post-FLUX-1 the parallel_tube branch collapses to the intrinsic
-    clearance ``fup_eff * CLint`` applied to ``c_out`` — a single
-    well-mixed compartment cannot represent the axial gradient a true
-    parallel-tube ``CL = Q*(1 - exp(-fup_eff*CLint/Q))`` requires — so the
-    assertion below pins that collapsed form. This still verifies the
-    Task 6 fu correction is applied to the PT branch.
-    """
-    rate_baseline = _eval_clearance_rate(
-        model="parallel_tube",
-        fu_correction_applicable=1.0,
-        fu_correction_liver=1.0,
-    )
-    rate_corrected = _eval_clearance_rate(
-        model="parallel_tube",
-        fu_correction_applicable=1.0,
-        fu_correction_liver=5.0,
-    )
-
-    # FLUX-1: parallel_tube collapses to the intrinsic clearance fup_eff*CLint
-    # in a single well-mixed compartment (true PT needs an axial gradient).
-    clint, fup = 0.5, 0.1
-    c_out = 100.0 * 1.0 / (1.5 * 1.0)
-    expected_baseline = fup * clint * c_out
-    expected_corrected = 5 * fup * clint * c_out
-
-    assert abs(rate_baseline - expected_baseline) < 1e-10
-    assert abs(rate_corrected - expected_corrected) < 1e-10
-
     assert rate_corrected > rate_baseline
     # Intrinsic clearance is exactly linear in fup_eff, so the ratio is exactly 5.
     assert abs(rate_corrected / rate_baseline - 5.0) < 1e-9
@@ -358,28 +325,6 @@ def test_identity_blind_random_rename_invariant():
     # the test could be trivially satisfied by the gate never firing).
     assert rate_canonical_corr != rate_canonical_off
 
-    # Parallel-tube branch: same invariance must hold.
-    rate_pt_canonical = _eval_clearance_rate_with_names(
-        model="parallel_tube",
-        blood_name="blood",
-        liver_name="liver",
-        sink_name="sink",
-        fu_correction_applicable=1.0,
-        fu_correction_liver=5.0,
-    )
-    rate_pt_renamed = _eval_clearance_rate_with_names(
-        model="parallel_tube",
-        blood_name="K8B3Y",
-        liver_name="X7R2L",
-        sink_name="M3J9V",
-        fu_correction_applicable=1.0,
-        fu_correction_liver=5.0,
-    )
-    assert rate_pt_canonical == rate_pt_renamed, (
-        f"Identity-blind violated (parallel_tube): "
-        f"canonical={rate_pt_canonical!r}, renamed={rate_pt_renamed!r}"
-    )
-
 
 def test_prodrug_flux_applies_correction_at_flagged_node_via_predict(monkeypatch):
     """End-to-end: clopidogrel routes through ProdrugActivationFlux at the
@@ -416,7 +361,7 @@ def test_prodrug_flux_applies_correction_at_flagged_node_via_predict(monkeypatch
 
 def test_extended_clearance_ignores_fu_correction_by_design():
     """The extended (ECM) clearance model intentionally does NOT apply
-    fu_correction_liver, unlike well_stirred / parallel_tube.
+    fu_correction_liver, unlike well_stirred.
 
     fu_correction_liver is fu_inc/fu_plasma — an empirical lumped correction
     for albumin-facilitated / transporter-mediated *concentrative hepatic
@@ -450,15 +395,17 @@ def test_extended_clearance_ignores_fu_correction_by_design():
     )
 
 
-def test_predict_warns_when_fu_correction_dropped_at_extended_node(monkeypatch):
-    """pipeline.predict surfaces a warning when a non-identity
-    fu_correction_liver is curated for a drug whose flagged hepatic node clears
-    via the extended ECM (which drops the correction by design).
+def test_predict_raises_when_fu_correction_dropped_at_extended_node(monkeypatch):
+    """pipeline.predict raises when a non-identity fu_correction_liver is curated
+    for a drug whose flagged hepatic node clears via the extended ECM (which
+    drops the correction by design).
 
     Closes the B-11 'silent no-op' trap: the production liver clearance edge is
-    ``extended``, so without this warning a future curated value would vanish
-    unnoticed and still pass every test. Patches the source-module lookup (the
-    function-local import in ivive.py re-binds on every predict() call).
+    ``extended``, so a future curated value that would vanish there is a contract
+    violation — WS-2 replaced the prior warning with a loud ``ValueError`` via
+    ``engine.contracts.assert_fu_correction_honored``. Patches the source-module
+    lookup (the function-local import in ivive.py re-binds on every predict()
+    call).
     """
     from sisyphus.pipeline.predict import predict
 
@@ -468,11 +415,8 @@ def test_predict_warns_when_fu_correction_dropped_at_extended_node(monkeypatch):
         lambda smiles, registry_path=None: Distribution(mean=2.0, cv=0.0),
         raising=False,
     )
-    result = predict(caffeine, dose_mg=100.0, route="oral")
-
-    assert any(
-        "fu_correction_liver" in w and "dropped" in w for w in result.warnings
-    ), f"expected dropped-fu_correction warning; got {result.warnings!r}"
+    with pytest.raises(ValueError, match="entirely dropped"):
+        predict(caffeine, dose_mg=100.0, route="oral")
 
 
 def test_predict_no_fu_correction_warning_at_default(monkeypatch):

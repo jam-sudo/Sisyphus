@@ -242,6 +242,7 @@ def _build_node(spec: dict[str, Any]) -> Node:
         ivive_scaling=ivive_scaling,
         lookup_name=lookup_name,
         fu_correction_applicable=fu_correction_applicable,
+        axial_subcompartments=int(spec.get("axial_subcompartments", 1)),
     )
 
 
