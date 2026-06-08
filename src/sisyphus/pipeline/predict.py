@@ -16,6 +16,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 from sisyphus.core import Distribution, DrugOnGraph, PKEndpoints, PredictionResult
+from sisyphus.engine.contracts import FuCorrectionContractError
 
 if TYPE_CHECKING:
     from sisyphus.predict.adme import MeasuredADMEInput
@@ -519,9 +520,10 @@ def predict(
         else:
             warnings_list.append("ODE solver did not converge")
             logger.warning("ODE solver did not converge")
-    except ValueError:
-        # WS-2 contract guard (assert_fu_correction_honored) raises ValueError on a
-        # genuine contract violation — fail loud, never degrade it into a warning.
+    except FuCorrectionContractError:
+        # WS-2 contract violation (entirely-dropped fu_correction) is a hard
+        # contract error — propagate. Genuine engine ValueErrors (compile/solve)
+        # fall through to the soft ML-only fallback below.
         raise
     except Exception as e:
         warnings_list.append(f"Engine failed: {e}")

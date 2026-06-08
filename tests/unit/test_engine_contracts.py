@@ -96,3 +96,19 @@ def test_pipeline_raises_when_curated_value_would_be_dropped(monkeypatch):
     )
     with pytest.raises(ValueError, match="entirely dropped"):
         predict("CCO", dose_mg=100.0, route="oral")
+
+
+def test_non_contract_engine_valueerror_degrades_to_ml_fallback(monkeypatch):
+    """A generic ValueError from the engine (e.g. compile) must NOT hard-abort
+    predict(); it degrades to the ML-only fallback (the WS-2 narrow re-raise only
+    propagates the fu_correction contract violation)."""
+    import sisyphus.engine.compiler as comp
+    from sisyphus.pipeline.predict import predict
+
+    def _boom(self, graph):
+        raise ValueError("synthetic compile failure")
+
+    monkeypatch.setattr(comp.ODECompiler, "compile", _boom)
+    result = predict("CCO", dose_mg=100.0, route="oral")
+    assert result is not None  # degraded, did not raise
+    assert any("Engine failed" in w or "failed" in w.lower() for w in result.warnings)

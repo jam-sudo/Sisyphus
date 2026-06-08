@@ -14,6 +14,17 @@ from sisyphus.graph.types import ClearanceEdge, ProdrugActivationEdge
 if TYPE_CHECKING:
     from sisyphus.graph.body import BodyGraph
 
+
+class FuCorrectionContractError(ValueError):
+    """Raised when a non-identity ``fu_correction_liver`` would be entirely dropped.
+
+    Subclasses ``ValueError`` (still the project's one hard exception) but is a
+    DISTINCT type so the pipeline can re-raise ONLY this contract violation while
+    letting genuine engine ``ValueError``s (compile/solve) degrade to the ML-only
+    fallback.
+    """
+
+
 # Clearance models that do NOT apply the B-11 fu_correction_liver factor
 # (extended ECM models hepatic uptake explicitly; gfr is a plasma sink).
 _FU_CORRECTION_DROP_MODELS = frozenset({"extended", "gfr_filtration"})
@@ -28,7 +39,7 @@ def flagged_nodes_without_honoring_flux(graph: BodyGraph) -> list[str]:
 
     A node is returned iff: it is flagged ``fu_correction_applicable > 0``; it is
     the source of a ClearanceEdge with a drop-model (extended / gfr_filtration);
-    and NO ClearanceEdge with a honoring model (well_stirred / parallel_tube) and
+    and NO ClearanceEdge with a honoring model (well_stirred) and
     NO ProdrugActivationEdge also originate from it.
 
     Identity-blind: inspects node flags + edge types/models only, never names.
@@ -65,7 +76,7 @@ def assert_fu_correction_honored(graph: BodyGraph, fu_correction_liver_mean: flo
         return
     offenders = flagged_nodes_without_honoring_flux(graph)
     if offenders:
-        raise ValueError(
+        raise FuCorrectionContractError(
             f"fu_correction_liver={fu_correction_liver_mean:.3g} is entirely "
             f"dropped at flagged node(s) {offenders}: their clearance uses a "
             f"model that does not apply it (extended ECM / gfr_filtration) and no "
