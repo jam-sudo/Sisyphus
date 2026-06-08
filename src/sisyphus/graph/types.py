@@ -58,6 +58,9 @@ class Node:
     lookup_name: str = ""  # base organ name for Kp/PS lookup (e.g. "adipose" for "adipose_tissue")
     # B-11: 1.0 if hepatic intracellular fu correction applies at this node.
     fu_correction_applicable: float = 0.0
+    # WS-3: >1 expands this perfusion organ into N serial well-stirred sub-tanks
+    # (axial gradient → parallel-tube extraction) via graph.axial.expand_axial.
+    axial_subcompartments: int = 1
 
 
 # ---------------------------------------------------------------------------
