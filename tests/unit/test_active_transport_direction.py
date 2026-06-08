@@ -61,3 +61,24 @@ def test_uptake_default_unchanged():
     dydt = rhs(0.0, y)
     # Uptake reads target (liver) transporters; mass moves blood → liver via transport.
     assert dydt[compiled.state_index["liver"]] > 0
+
+
+def test_efflux_scipy_jax_parity():
+    import pytest
+    pytest.importorskip("jax")
+    import jax.numpy as jnp
+
+    from sisyphus.engine.params_jax import resolve_to_jax
+    from sisyphus.engine.rhs_jax import make_jax_rhs
+
+    g = _efflux_graph()
+    compiled = ODECompiler().compile(g)
+    params = ResolvedParams(g, _drug())
+    rhs_scipy = compiled.make_rhs(params)
+    y = np.zeros(compiled.n_states)
+    y[compiled.state_index["gut_wall"]] = 10.0
+    dydt_scipy = rhs_scipy(0.0, y)
+
+    jax_params = resolve_to_jax(compiled, params)
+    dydt_jax = np.asarray(make_jax_rhs(compiled)(0.0, jnp.asarray(y), jax_params))
+    np.testing.assert_allclose(dydt_jax, dydt_scipy, rtol=1e-6, atol=1e-9)

@@ -145,8 +145,10 @@ def make_jax_rhs(
     diffusion_tgt = []
     diffusion_eid = []
 
-    transport_src = []
-    transport_tgt = []
+    # Active transport, split by direction. The transporter-bearing node differs:
+    #   uptake → target node; efflux → source node. Substrate conc is always the source.
+    transport_up_src, transport_up_node, transport_up_tgt = [], [], []
+    transport_ef_src, transport_ef_node, transport_ef_tgt = [], [], []
 
     for spec in compiled.flux_specs:
         if isinstance(spec, FlowFluxSpec):
@@ -195,8 +197,14 @@ def make_jax_rhs(
             diffusion_eid.append(spec.edge_id)
 
         elif isinstance(spec, ActiveTransportFluxSpec):
-            transport_src.append(spec.source_idx)
-            transport_tgt.append(spec.target_idx)
+            if getattr(spec, "direction", "uptake") == "uptake":
+                transport_up_src.append(spec.source_idx)
+                transport_up_node.append(spec.target_idx)   # transporter at target
+                transport_up_tgt.append(spec.target_idx)
+            else:
+                transport_ef_src.append(spec.source_idx)
+                transport_ef_node.append(spec.source_idx)   # transporter at source
+                transport_ef_tgt.append(spec.target_idx)
 
     # Convert to JAX arrays (static, traced as constants by jit)
     _flow_src = jnp.array(flow_src, dtype=jnp.int32)
@@ -222,8 +230,12 @@ def make_jax_rhs(
     _diffusion_tgt = jnp.array(diffusion_tgt, dtype=jnp.int32)
     _diffusion_eid = jnp.array(diffusion_eid, dtype=jnp.int32)
 
-    _transport_src = jnp.array(transport_src, dtype=jnp.int32)
-    _transport_tgt = jnp.array(transport_tgt, dtype=jnp.int32)
+    _t_up_src = jnp.array(transport_up_src, dtype=jnp.int32)
+    _t_up_node = jnp.array(transport_up_node, dtype=jnp.int32)
+    _t_up_tgt = jnp.array(transport_up_tgt, dtype=jnp.int32)
+    _t_ef_src = jnp.array(transport_ef_src, dtype=jnp.int32)
+    _t_ef_node = jnp.array(transport_ef_node, dtype=jnp.int32)
+    _t_ef_tgt = jnp.array(transport_ef_tgt, dtype=jnp.int32)
 
     # -- Boolean flags for which flux types are present ---------------------
     has_flow = len(flow_src) > 0
@@ -233,7 +245,8 @@ def make_jax_rhs(
     has_transit = len(transit_src) > 0
     has_absorption = len(absorption_src) > 0
     has_diffusion = len(diffusion_src) > 0
-    has_transport = len(transport_src) > 0
+    has_t_up = len(transport_up_src) > 0
+    has_t_ef = len(transport_ef_src) > 0
 
     # -- The RHS function ---------------------------------------------------
 
@@ -408,36 +421,33 @@ def make_jax_rhs(
             dydt = dydt.at[_diffusion_tgt].add(diff_flux)
 
         # ---------------------------------------------------------------
-        # 6. Active transport (Michaelis-Menten)
-        #    C_uM = (A[src] / V[src]) * 1000 / MW
-        #    rate = Vmax_total * C_uM / (Km_eff + C_uM) * ivive
-        #
-        #    Pre-computed per node:
-        #      Vmax_total = sum(abundance_i * jmax_i)
-        #      Km_eff = weighted average Km
+        # 6. Active transport (Michaelis-Menten), split by direction.
+        #    Substrate conc from the SOURCE; Vmax/Km/ivive from the transporter node
+        #    (target for uptake, source for efflux). mass moves source → edge target.
         # ---------------------------------------------------------------
-        if has_transport:
+        def _transport_mass(src_idx, node_idx):
             mw = params.drug_mw
-            v_src_t = params.node_volumes[_transport_src]
-            vmax = params.node_transport_vmax[_transport_tgt]
-            km = params.node_transport_km[_transport_tgt]
-            ivive_t = params.node_ivive_scaling[_transport_tgt]
-
-            # Concentration in uM
-            c_mg_l = jnp.where(v_src_t > 0.0, y[_transport_src] / v_src_t, 0.0)
+            v_src_t = params.node_volumes[src_idx]
+            vmax = params.node_transport_vmax[node_idx]
+            km = params.node_transport_km[node_idx]
+            ivive_t = params.node_ivive_scaling[node_idx]
+            c_mg_l = jnp.where(v_src_t > 0.0, y[src_idx] / v_src_t, 0.0)
             c_um = jnp.where(mw > 0.0, c_mg_l * 1000.0 / mw, 0.0)
-
-            # Michaelis-Menten: Vmax * C / (Km + C)
             mm_rate = jnp.where(
                 (vmax > 0.0) & (km > 0.0) & (c_um > 0.0),
                 vmax * c_um / (km + c_um),
                 0.0,
             )
-            # IVIVE scaling converts to mass rate (mg/h)
-            mass_rate = mm_rate * ivive_t
+            return mm_rate * ivive_t
 
-            dydt = dydt.at[_transport_src].add(-mass_rate)
-            dydt = dydt.at[_transport_tgt].add(mass_rate)
+        if has_t_up:
+            mass = _transport_mass(_t_up_src, _t_up_node)
+            dydt = dydt.at[_t_up_src].add(-mass)
+            dydt = dydt.at[_t_up_tgt].add(mass)
+        if has_t_ef:
+            mass = _transport_mass(_t_ef_src, _t_ef_node)
+            dydt = dydt.at[_t_ef_src].add(-mass)
+            dydt = dydt.at[_t_ef_tgt].add(mass)
 
         return dydt
 
