@@ -57,3 +57,32 @@ def test_ws_fu_correction_parity():
     """Flagged well_stirred node with non-identity fu_correction: JAX == SciPy."""
     s, j = _rhs_pair(_ws_flagged_graph(), _drug(fu_corr=1.5))
     np.testing.assert_allclose(j, s, rtol=1e-9, atol=1e-12)
+
+
+def test_jax_fails_loud_on_distinct_km_multitransporter():
+    """≥2 active transporters with distinct Km at one node: the JAX aggregate
+    Vmax/weighted-Km approximation diverges from SciPy → fail loud, not silent."""
+    from sisyphus.core import TransporterKinetics
+    from sisyphus.graph.types import ActiveTransportEdge
+
+    g = BodyGraph()
+    g.add_node(Node(name="blood", node_type="blood_pool", volume=Distribution(1.0)))
+    g.add_node(Node(name="organ", node_type="organ", volume=Distribution(1.0),
+                    transporters={"A": Distribution(1e10), "B": Distribution(1e10)},
+                    ivive_scaling=1e-4))
+    g.add_edge(FlowEdge(source="blood", target="organ", flow_rate=Distribution(10.0)))
+    g.add_edge(FlowEdge(source="organ", target="blood", flow_rate=Distribution(10.0)))
+    g.add_edge(ActiveTransportEdge(source="blood", target="organ"))
+    drug = DrugOnGraph(
+        name="d", smiles="CCO", dose_mg=100.0, route="oral", administration_node="blood",
+        mw=300.0, pka=4.5, compound_type="acid", fup=Distribution(0.3), rbp=Distribution(1.0),
+        kp_method="provided", kp_overrides={"organ": Distribution(1.0)}, peff=Distribution(1.0),
+        solubility=Distribution(1.0), enzyme_affinity={}, renal_clearance=Distribution(0.0),
+        transporter_kinetics={
+            "A": TransporterKinetics(jmax=Distribution(100.0), km=Distribution(10.0)),
+            "B": TransporterKinetics(jmax=Distribution(100.0), km=Distribution(80.0)),
+        },
+    )
+    compiled = ODECompiler().compile(g)
+    with pytest.raises(NotImplementedError, match="distinct Km"):
+        resolve_to_jax(compiled, ResolvedParams(g, drug))

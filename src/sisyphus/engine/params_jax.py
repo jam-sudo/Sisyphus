@@ -171,6 +171,20 @@ def resolve_to_jax(compiled: CompiledODE, params: ResolvedParams) -> JaxParams:
         # We cannot collapse to single Vmax/Km exactly when Km differs.
         # Approximation: store aggregate Vmax and abundance-weighted Km.
         transporters = params.node_transporters(name)
+        active_kms = set()
+        for tag, abundance in transporters.items():
+            j = params.drug_transporter_jmax(tag)
+            km = params.drug_transporter_km(tag)
+            if j > 0 and km > 0 and abundance > 0:
+                active_kms.add(round(km, 9))
+        if len(active_kms) > 1:
+            raise NotImplementedError(
+                f"node {name!r} has {len(active_kms)} active transporters with "
+                f"distinct Km {sorted(active_kms)}; the JAX aggregate-Vmax / "
+                f"weighted-Km approximation diverges from SciPy's exact "
+                f"per-transporter Michaelis-Menten sum. Use backend='scipy' "
+                f"(default), or implement exact padded per-transporter MM in JAX."
+            )
         vmax_sum = 0.0
         km_weighted_num = 0.0  # sum(abundance * jmax * km)
         vmax_weight = 0.0  # sum(abundance * jmax) -- same as vmax_sum
