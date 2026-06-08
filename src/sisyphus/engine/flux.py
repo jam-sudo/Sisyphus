@@ -539,6 +539,18 @@ class ActiveTransportFluxSpec(FluxSpec):
     MW is needed to convert mg/L → µM: C_µM = C_mg_L × 1000 / MW.
     """
 
+    def __init__(
+        self,
+        edge_id: int,
+        source_idx: int,
+        target_idx: int,
+        source_name: str,
+        target_name: str,
+        direction: str = "uptake",
+    ) -> None:
+        super().__init__(edge_id, source_idx, target_idx, source_name, target_name)
+        self.direction = direction
+
     @classmethod
     def from_edge(cls, edge_id: int, edge, state_index: dict[str, int]) -> ActiveTransportFluxSpec:
         return cls(
@@ -547,6 +559,7 @@ class ActiveTransportFluxSpec(FluxSpec):
             state_index[edge.target],
             edge.source,
             edge.target,
+            getattr(edge, "direction", "uptake"),
         )
 
     def apply(
@@ -571,8 +584,12 @@ class ActiveTransportFluxSpec(FluxSpec):
         if c_um <= 0:
             return
 
+        # WS-5: transporter sits at the target for uptake, the source for efflux.
+        # The driving (substrate) concentration is always the source (computed above).
+        transporter_node = self.target_name if self.direction == "uptake" else self.source_name
+
         total_rate = 0.0
-        node_transporters = params.node_transporters(self.target_name)
+        node_transporters = params.node_transporters(transporter_node)
 
         for tag, abundance in node_transporters.items():
             jmax = params.drug_transporter_jmax(tag)
@@ -591,7 +608,7 @@ class ActiveTransportFluxSpec(FluxSpec):
         # Convert from µM·volume/time units back to mg/time
         # rate is in arbitrary units scaled by abundance, jmax, and concentration
         # The IVIVE scaling factor handles unit conversion
-        ivive = params.node_param(self.target_name, "ivive_scaling")
+        ivive = params.node_param(transporter_node, "ivive_scaling")
         mass_rate = total_rate * ivive
 
         dydt[self.source_idx] -= mass_rate

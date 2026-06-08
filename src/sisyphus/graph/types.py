@@ -158,6 +158,10 @@ class ActiveTransportEdge(Edge):
     """
 
     edge_type: str = field(default="active_transport", init=False)
+    # WS-5: "uptake" → transporter at TARGET (e.g. hepatic OATP, blood→liver);
+    # "efflux" → transporter at SOURCE (e.g. gut P-gp, gut_wall→lumen). Driving
+    # (substrate) concentration is the SOURCE in both cases.
+    direction: str = "uptake"
 
 
 @dataclass(frozen=True)
