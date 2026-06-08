@@ -310,7 +310,12 @@ def make_jax_rhs(
             v_ws = params.node_volumes[_cl_ws_src]
             kp_ws = params.node_kp[_cl_ws_src]
 
-            cl_intrinsic_ws = fup * clint
+            # WS-4: hepatic intracellular fu correction at flagged nodes (parity
+            # with the SciPy well_stirred branch).
+            fu_corr = params.drug_fu_correction_liver
+            applicable = params.node_fu_correction_applicable[_cl_ws_src]
+            fup_eff = jnp.where(applicable > 0.5, fup * fu_corr, fup)
+            cl_intrinsic_ws = fup_eff * clint
             # RBP-2: plasma-basis sink → emergent fu_b extraction (see numpy flux).
             c_plasma_ws = jnp.where(
                 v_ws > 0.0,
