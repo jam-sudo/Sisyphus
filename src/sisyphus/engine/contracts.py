@@ -18,7 +18,9 @@ if TYPE_CHECKING:
 # (extended ECM models hepatic uptake explicitly; gfr is a plasma sink).
 _FU_CORRECTION_DROP_MODELS = frozenset({"extended", "gfr_filtration"})
 # Clearance models that DO apply it (well-stirred family).
-_FU_CORRECTION_HONORING_MODELS = frozenset({"well_stirred", "parallel_tube"})
+# parallel_tube is expanded to well_stirred tanks before compile (graph.axial),
+# so the honoring clearance model at runtime is well_stirred only.
+_FU_CORRECTION_HONORING_MODELS = frozenset({"well_stirred"})
 
 
 def flagged_nodes_without_honoring_flux(graph: BodyGraph) -> list[str]:
