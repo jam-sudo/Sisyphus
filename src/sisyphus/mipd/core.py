@@ -15,11 +15,19 @@ heterogeneous observation types.
 """
 from __future__ import annotations
 
+import logging
 import math
 from dataclasses import dataclass
 from typing import Protocol
 
 import numpy as np
+
+logger = logging.getLogger(__name__)
+
+# Effective-sample-size floor (as a fraction of the draws) below which the
+# resampled posterior is too degenerate — too few distinct particles — for its
+# credible interval to be trusted; the SIR resample logs a warning when crossed.
+_N_EFF_WARN_FRACTION = 0.005  # 0.5% of the draws
 
 
 @dataclass(frozen=True)
@@ -164,9 +172,16 @@ class PosteriorPK:
     These are **parameter-uncertainty** bands (bioavailability F only) — they do
     NOT carry calibrated predictive coverage, because structural model error is
     not in them (the F-only ``meta_cmax.ci90`` is narrow and under-covers the
-    observable Cmax). ``cmax_90ci`` (API-populated) IS the calibrated predictive
-    interval: the train-calibrated split-conformal band around the posterior meta
-    point. Use ``cmax_90ci`` as the user-facing 90% Cmax interval.
+    observable Cmax). ``cmax_90ci`` (API-populated) is the train-calibrated
+    split-conformal band placed around the posterior meta point, and is the
+    user-facing 90% Cmax interval.
+
+    Caveat (review finding #6): the conformal q90 is calibrated on the **a-priori**
+    (unconditioned, SMILES-only) prediction error — it is NOT re-calibrated for the
+    conditioned posterior. So when an informative Cmax-bearing observation is
+    supplied, conditioning has already reduced the true error and the a-priori band
+    is conservative (over-wide). A conditioned-case recalibration is future work; the
+    band is honest-but-conservative, never anti-conservative.
     """
 
     f: Posterior
@@ -175,7 +190,9 @@ class PosteriorPK:
     n_eff: float
     meta_cmax: Posterior | None = None
     cmax_90ci: tuple[float, float] | None = None
-    cl_scale: Posterior | None = None  # clint-scale latent posterior (CL-grid path)
+    # metabolic clint-scale latent posterior (CL-grid path); scales enzyme
+    # (CYP/UGT/NAT) clearance only — renal/biliary CL is held fixed.
+    cl_scale: Posterior | None = None
 
 
 def _softmax_resample(
@@ -194,6 +211,13 @@ def _softmax_resample(
     else:
         w = w / w_sum
     n_eff = float(1.0 / np.sum(w ** 2))
+    if n_eff < _N_EFF_WARN_FRACTION * n:
+        logger.warning(
+            "SIR posterior is degenerate: n_eff=%.1f of %d draws (<%.1f%% of the "
+            "prior); the observation is far from the prior or its cv is too tight — "
+            "widen the prior or treat the credible interval with caution.",
+            n_eff, n, 100.0 * _N_EFF_WARN_FRACTION,
+        )
     idx = rng.choice(n, size=n, p=w)
     return idx, n_eff
 

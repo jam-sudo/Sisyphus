@@ -5,12 +5,14 @@ engine-as-prior on a MeasuredF observation must reproduce the empirically
 validated measured-F routing Cmax (Gate 0b/0c) — i.e. the SIR core generalizes
 the shipped, validated mechanism into a full posterior.
 """
+import types
+
 import numpy as np
 import pytest
 
 from sisyphus.mipd import MeasuredF, PosteriorPK
 from sisyphus.mipd.amortizer import NeuralAmortizer, SIRAmortizer
-from sisyphus.mipd.api import predict_posterior
+from sisyphus.mipd.api import _recover_f_engine, predict_posterior
 from sisyphus.mipd.core import APrioriPK
 from sisyphus.pipeline.predict import predict
 from sisyphus.predict.adme import MeasuredADMEInput
@@ -55,3 +57,41 @@ def test_sir_amortizer_reproduces_sir_core_posterior():
 def test_neural_amortizer_raises_informative_error_without_torch():
     with pytest.raises(NotImplementedError, match="torch"):
         NeuralAmortizer()
+
+
+def _probe(warnings, scaled_cmax):
+    return types.SimpleNamespace(
+        warnings=warnings,
+        engine_pk=types.SimpleNamespace(cmax=types.SimpleNamespace(mean=scaled_cmax)),
+    )
+
+
+def test_recover_f_engine_prefers_the_warning_value():
+    probe = _probe(["measured_adme:f_bioavail=0.5 f_engine=0.273 k=1.83"], 0.546)
+    assert _recover_f_engine(probe, cmax0=1.0) == pytest.approx(0.273)
+
+
+def test_recover_f_engine_raises_when_routing_did_not_scale():
+    # Failed IV-reference solve: 'skipped' warning, engine Cmax left UNscaled (== cmax0).
+    # The old linear fallback would silently return the probe F (0.5).
+    probe = _probe(
+        ["measured_adme:f_bioavail skipped (engine F-reference solve unavailable)"], 1.0
+    )
+    with pytest.raises(ValueError, match="did not run|cl_latent"):
+        _recover_f_engine(probe, cmax0=1.0)
+
+
+def test_recover_f_engine_raises_on_nonpositive_probe_cmax():
+    probe = _probe([], 0.0)
+    with pytest.raises(ValueError, match="non-positive"):
+        _recover_f_engine(probe, cmax0=1.0)
+
+
+def test_predict_posterior_rejects_non_oral_route_on_f_only_path():
+    with pytest.raises(ValueError, match="oral"):
+        predict_posterior(MIDAZOLAM, DOSE, [MeasuredF(0.3)], route="iv", seed=0)
+
+
+def test_predict_posterior_rejects_non_oral_route_on_cl_grid_path():
+    with pytest.raises(ValueError, match="oral"):
+        predict_posterior(MIDAZOLAM, DOSE, cl_latent=True, route="iv", n_grid=5, seed=0)

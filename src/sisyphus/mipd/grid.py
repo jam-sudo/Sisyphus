@@ -38,6 +38,23 @@ def _fill_nan_log_s(values: np.ndarray, s_grid: np.ndarray) -> np.ndarray:
     return values
 
 
+def _nearest_finite_backfill(conc: np.ndarray) -> np.ndarray:
+    """Replace any NaN-containing rows by the nearest fully-finite row.
+
+    Nearest is by absolute row-index distance; ties go to the lower index. Unlike
+    an adjacent-copy, this never copies a still-NaN neighbor. Assumes at least one
+    fully-finite row exists (the caller guards total engine failure separately).
+    """
+    conc = np.asarray(conc, dtype=float)
+    finite = np.array([g for g in range(conc.shape[0]) if np.all(np.isfinite(conc[g]))])
+    if finite.size == 0:
+        raise ValueError("no finite concentration row to backfill from")
+    for g in range(conc.shape[0]):
+        if not np.all(np.isfinite(conc[g])):
+            conc[g] = conc[finite[int(np.argmin(np.abs(finite - g)))]]
+    return conc
+
+
 def build_cl_grid(
     smiles: str,
     dose_mg: float,
@@ -62,6 +79,12 @@ def build_cl_grid(
     from sisyphus.predict.adme import predict_adme
     from sisyphus.predict.chemistry import compute_profile
     from sisyphus.predict.ivive import build_drug_on_graph
+    from sisyphus.predict.non_cyp_substrates import get_non_cyp_fractions
+    from sisyphus.predict.transporter_db import (
+        is_oatp_ecm_applicable,
+        load_hepatic_ecm_params_for_smiles,
+        load_oatp1b1_kinetics_for_smiles,
+    )
 
     if t_grid is None:
         t_grid = _default_t_grid()
@@ -71,13 +94,33 @@ def build_cl_grid(
     adme = predict_adme(profile)
     graph = build_from_yaml(_PHYSIOLOGY_DIR / "reference_man.yaml")
 
+    # Mirror predict() step-1 disposition detection so the grid's engine path is
+    # faithful for OATP/ECM and non-CYP (UGT/NAT) substrates — not just CYP drugs.
+    # Without these args the s=1 grid diverges from predict() (e.g. ~18% for codeine,
+    # ~50% for morphine). NOTE: this duplicates pipeline.predict's detection; review
+    # finding #10 tracks extracting a shared drug-build helper to remove the copy.
+    auto_oatp_kinetics = None
+    auto_ecm_params = None
+    if is_oatp_ecm_applicable(profile.smiles):
+        auto_oatp_kinetics = load_oatp1b1_kinetics_for_smiles(profile.smiles)
+        auto_ecm_params = load_hepatic_ecm_params_for_smiles(profile.smiles)
+        if not (auto_oatp_kinetics is not None and auto_ecm_params is not None):
+            auto_oatp_kinetics = None  # flag set but registry data missing -> disable
+            auto_ecm_params = None
+    non_cyp_fractions = get_non_cyp_fractions(profile.smiles)
+
     # Snapshot pre-phenotype liver abundances and rebuild the drug from them, so
     # back-solved affinities match the engine multiplication (mirrors predict()).
     liver_pre: dict[str, float] | None = None
     if "liver" in graph.nodes and graph.nodes["liver"].enzymes:
         liver_pre = {tag: d.mean for tag, d in graph.nodes["liver"].enzymes.items()}
     drug = build_drug_on_graph(
-        profile, adme, dose_mg, route, liver_enzymes=liver_pre, kp_method=kp_method
+        profile, adme, dose_mg, route,
+        liver_enzymes=liver_pre,
+        kp_method=kp_method,
+        transporter_kinetics=auto_oatp_kinetics,
+        hepatic_ecm_params=auto_ecm_params,
+        non_cyp_fractions=non_cyp_fractions,
     )
     graph = augment_for_active_species(graph, drug)
     graph = expand_axial(graph)
@@ -94,6 +137,9 @@ def build_cl_grid(
     aucs: list[float] = []
     fengs: list[float] = []
     for s in s_grid:
+        # Scale METABOLIC intrinsic clearance only (enzyme_affinity: CYP/UGT/NAT).
+        # renal_clearance and any transporter/biliary terms are left untouched, so
+        # the clint-scale latent is a metabolic-CL scale, not a total-CL scale.
         drug_s = dataclasses.replace(
             drug,
             enzyme_affinity={
@@ -122,15 +168,21 @@ def build_cl_grid(
         )
         fengs.append(feng if (feng is not None and feng > 0) else np.nan)
 
-    cmax = _fill_nan_log_s(np.array(cmaxs), s_grid)
+    cmaxs_arr = np.array(cmaxs)
+    fengs_arr = np.array(fengs)
+    if not np.isfinite(cmaxs_arr).any():
+        raise ValueError(
+            f"engine failed at all {n_grid} clint-scale grid points; cannot build CL grid"
+        )
+    if not np.isfinite(fengs_arr).any():
+        raise ValueError(
+            f"engine produced no valid oral bioavailability at any of {n_grid} grid points"
+        )
+    cmax = _fill_nan_log_s(cmaxs_arr, s_grid)
     auc = _fill_nan_log_s(np.array(aucs), s_grid)
-    f_engine = np.clip(_fill_nan_log_s(np.array(fengs), s_grid), 1e-4, 1.0)
-    conc = np.array(conc_rows)
-    # backfill any failed curve rows from a neighbor so interpolation stays valid.
-    for g in range(conc.shape[0]):
-        if not np.all(np.isfinite(conc[g])):
-            src = g - 1 if g > 0 else g + 1
-            conc[g] = conc[src]
+    f_engine = np.clip(_fill_nan_log_s(fengs_arr, s_grid), 1e-4, 1.0)
+    # backfill any failed curve rows from the nearest finite row so interp stays valid.
+    conc = _nearest_finite_backfill(np.array(conc_rows))
 
     return CLGrid(
         s_grid=s_grid, t_grid=t_grid, conc=conc, cmax=cmax, auc=auc, f_engine=f_engine

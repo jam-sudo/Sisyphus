@@ -15,6 +15,7 @@ from sisyphus.mipd.core import (
     MeasuredCmax,
     MeasuredF,
     Posterior,
+    _softmax_resample,
     sir_posterior,
 )
 
@@ -92,3 +93,26 @@ def test_posterior_ci90_brackets_point_estimate():
     lo, hi = p.ci90
     assert lo < p.point < hi
     assert p.point == pytest.approx(np.median(np.arange(1.0, 101.0)))
+
+
+def test_softmax_resample_warns_when_n_eff_is_degenerate(caplog):
+    import logging
+
+    rng = np.random.default_rng(0)
+    n = 20000
+    loglik = np.full(n, -1e6)
+    loglik[0] = 0.0  # one sample dominates -> n_eff ~ 1 (degenerate posterior)
+    with caplog.at_level(logging.WARNING, logger="sisyphus.mipd.core"):
+        _idx, n_eff = _softmax_resample(loglik, rng)
+    assert n_eff < 10.0
+    assert any("n_eff" in r.getMessage() for r in caplog.records)
+
+
+def test_softmax_resample_no_warning_when_well_mixed(caplog):
+    import logging
+
+    rng = np.random.default_rng(0)
+    loglik = np.zeros(20000)  # uniform weights -> n_eff == n (no degeneracy)
+    with caplog.at_level(logging.WARNING, logger="sisyphus.mipd.core"):
+        _softmax_resample(loglik, rng)
+    assert not any("n_eff" in r.getMessage() for r in caplog.records)

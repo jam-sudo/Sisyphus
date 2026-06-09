@@ -9,8 +9,16 @@ forward interpolates the precomputed response in log-log space:
 
     forward(F, s):  c(t) = (F / F_engine(s)) * interp_s( c(t; s) )
 
-so AUC = F*Dose/CL(s) and Cmax = (F/F_engine(s))*Cmax(s) — the standard (F, CL)
-decomposition, with the engine providing the s -> {c(t), Cmax, AUC, F_engine} map.
+with the engine providing the s -> {c(t), Cmax, AUC, F_engine} map.
+
+Scope of the latent ``s``: it scales the drug's **metabolic** intrinsic clearance
+(``enzyme_affinity``, the CYP/UGT/NAT terms — the engine's weakest link, R^2~0.24).
+Renal and biliary clearance are held FIXED. So ``Cmax = (F/F_engine(s))*Cmax(s)``
+and the grid's ``AUC(s)`` is the engine's *total*-CL AUC at metabolic-clint scale
+``s`` — NOT ``F*Dose/CL_total`` with a single scaled CL. For a drug whose
+clearance is renal-dominated, ``s`` therefore has limited leverage on AUC, and a
+MeasuredAUC/MeasuredConc anchor will constrain it only weakly.
+
 The grid itself is built by ``sisyphus.mipd.grid`` (engine solves); this module is
 pure numpy over a given grid.
 """
@@ -49,8 +57,15 @@ class CLGrid:
         """Model venous concentration at time ``t`` for each clint-scale in ``s``.
 
         Interpolates each grid curve at ``t`` (linear in time), then interpolates
-        across scale in log-log space. ``s`` is clipped to the grid range.
+        across scale in log-log space. ``s`` is clipped to the grid range. ``t`` must
+        lie within the grid's time span — a later time (e.g. a TDM trough past the
+        grid horizon) would be silently edge-clamped by ``np.interp``, so it raises.
         """
+        if t < self.t_grid[0] or t > self.t_grid[-1]:
+            raise ValueError(
+                f"observation time t={t} h is outside the engine grid "
+                f"[{self.t_grid[0]}, {self.t_grid[-1]}] h; extend the grid to cover it"
+            )
         s = np.asarray(s, dtype=float)
         c_at_t = np.array(
             [np.interp(t, self.t_grid, self.conc[g]) for g in range(self.s_grid.size)]
@@ -96,9 +111,11 @@ class CLGridForward:
 
 @dataclass(frozen=True)
 class CLPrior:
-    """Prior over the clint-scale latent, centered at 1 (the engine's a-priori).
+    """Prior over the **metabolic** clint-scale latent, centered at 1 (a-priori).
 
-    ``cv`` defaults wide (1.0) because CLint is the engine's weakest link
+    ``s`` multiplies the drug's enzyme (CYP/UGT/NAT) intrinsic clearance only;
+    renal/biliary clearance is held fixed (see the module docstring). ``cv``
+    defaults wide (1.0) because metabolic CLint is the engine's weakest link
     (``_CLINT_CV=1.0``, R^2~0.24). Samples are clipped to the grid range so the
     forward never extrapolates outside the precomputed scales.
     """
@@ -137,6 +154,15 @@ def sir_posterior_2d(
 
     Handles MeasuredF / MeasuredCmax / MeasuredAUC (from core) and MeasuredConc.
     Reports the clint-scale posterior on ``PosteriorPK.cl_scale``.
+
+    Identifiability (review finding #7): F and the clint-scale ``s`` are NOT jointly
+    identified by an exposure-magnitude observation alone — AUC ~ F/CL and Cmax both
+    move with F/s, so a single MeasuredAUC or MeasuredCmax constrains only the ridge
+    ``F/CL = const`` (the marginals on F and ``s`` stay prior-wide along it). To
+    separate them you need a curve-**shape** observation: a MeasuredConc on the
+    elimination tail (or two concs) pins ke = CL/V independently of F, breaking the
+    ridge. With magnitude-only data, prefer the F-only path (don't free ``s``), or
+    supply a measured F to anchor one axis.
     """
     if rng is None:
         rng = np.random.default_rng()

@@ -43,6 +43,16 @@ def _recover_f_engine(probe_result, cmax0: float) -> float:
     scaled = probe_result.engine_pk.cmax.mean
     if scaled <= 0:
         raise ValueError("measured-F probe produced non-positive Cmax; cannot recover F_engine")
+    # No f_engine token means the measured-F routing did NOT scale the engine (the
+    # IV-reference solve was unavailable). The engine Cmax is then bit-identical to
+    # cmax0, so the linear fallback would silently return the probe F (0.5). Refuse
+    # rather than fabricate an F_engine.
+    if cmax0 <= 0 or abs(scaled / cmax0 - 1.0) < 1e-9:
+        raise ValueError(
+            "measured-F routing did not run (the engine F-reference solve was "
+            "unavailable), so F_engine cannot be recovered from the probe; use "
+            "cl_latent=True for the CL-grid path, which derives F_engine directly"
+        )
     return cmax0 * _F_PROBE / scaled
 
 
@@ -52,7 +62,10 @@ def _attach_meta_and_interval(post: PosteriorPK, smiles: str, dose_mg: float, ap
     The non-engine tracks (ML/CLF/VDss) are F/CL-independent, so they are fixed
     across the posterior. ``meta_cmax`` is the product posterior (parameter
     uncertainty); ``cmax_90ci`` is the train-calibrated split-conformal predictive
-    interval around the posterior meta point (the user-facing 90% band).
+    interval around the posterior meta point (the user-facing 90% band). The q90 is
+    the **a-priori** (unconditioned) conformal quantile and is not re-calibrated for
+    the conditioned posterior, so it is conservative when an informative Cmax obs is
+    supplied (review finding #6; see ``PosteriorPK``).
     """
     from sisyphus.pipeline.predict import _conformal_q90_meta
 
@@ -89,15 +102,28 @@ def predict_posterior(
         observations: MeasuredF / MeasuredCmax / MeasuredAUC / MeasuredConc. Empty
             (default) returns the a-priori engine prediction as a prior posterior.
         prior_cv: width of the bioavailability (F) prior.
-        cl_prior_cv: width of the clearance (clint-scale) prior (CL-grid path only).
-        cl_latent: force the 2-latent (F, CL) CL-grid path. Auto-enabled when a
-            MeasuredConc observation is present (it constrains the curve shape).
+        cl_prior_cv: width of the metabolic clint-scale prior (CL-grid path only;
+            scales enzyme CL — CYP/UGT/NAT — not renal/biliary clearance).
+        cl_latent: force the 2-latent (F, metabolic clint-scale) CL-grid path.
+            Auto-enabled when a MeasuredConc observation is present. NOTE: F and the
+            clint-scale are only jointly identified by a curve-SHAPE observation
+            (MeasuredConc on the elimination tail); with magnitude-only data
+            (MeasuredCmax/AUC) they trade off along an F/CL ridge — prefer the F-only
+            path or anchor F with a MeasuredF (review finding #7).
         n_grid: clint-scale grid resolution for the CL-grid path.
         seed: RNG seed for reproducible SIR.
         predict_kwargs: forwarded to ``pipeline.predict.predict`` (e.g. kp_method).
     """
     from sisyphus.pipeline.predict import predict
     from sisyphus.predict.adme import MeasuredADMEInput
+
+    if route != "oral":
+        # The engine-as-prior latent is oral bioavailability F (IV has F≡1, so the
+        # F prior degenerates at the 1.0 ceiling and F_engine≈1 carries no signal).
+        raise ValueError(
+            f"predict_posterior supports oral route only — the latent is oral "
+            f"bioavailability F (IV has F≡1). Got route={route!r}."
+        )
 
     observations = list(observations)
     needs_grid = cl_latent or any(isinstance(o, MeasuredConc) for o in observations)

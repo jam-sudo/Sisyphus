@@ -85,6 +85,24 @@ def test_sir_2d_with_measured_auc_concentrates_cl_scale():
     assert post.auc.point == pytest.approx(5.0, rel=0.20)
 
 
+def test_conc_at_raises_when_time_is_beyond_the_grid():
+    # the synthetic grid maxes at t=12.0 h; a later trough must not edge-clamp silently.
+    with pytest.raises(ValueError, match="outside the engine grid"):
+        GRID.conc_at(np.array([1.0]), 20.0)
+
+
+def test_measured_conc_raises_when_time_is_beyond_the_grid():
+    fwd = CLGridForward(GRID)
+    state = fwd(np.array([0.5]), np.array([1.0]))
+    with pytest.raises(ValueError, match="outside the engine grid"):
+        MeasuredConc(0.01, t=20.0).log_likelihood(state)
+
+
+def test_conc_at_allows_time_at_the_grid_boundary():
+    # t exactly at the last grid node is in-bounds (no spurious raise).
+    assert np.isfinite(GRID.conc_at(np.array([1.0]), 12.0)[0])
+
+
 def test_sir_2d_with_measured_conc_constrains_the_posterior():
     rng = np.random.default_rng(0)
     fwd = CLGridForward(GRID)
