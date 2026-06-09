@@ -320,6 +320,77 @@ Artifacts: `data/enzymes/ugt_ivive_sf.json` (all-1.0 audited registry), `src/sis
 
 ---
 
+### DE-45 — Dose-number / dissolution as a SMILES-only orthogonal track (2026-06-08)
+
+**Date:** 2026-06-08
+
+**Hypothesis (diagnosis §6 named candidate):** a biopharmaceutics **dose-number** track (`Do = (Dose/V0)/S`, fa_cap = min(1,1/Do)) would be clearance/distribution-orthogonal (like VDss) and target the documented prospective fa-starvation failure (low-solubility BCS II/IV kinase inhibitors, §8/DE-43), passing the |r|<0.5 decorrelation gate.
+
+**What was measured (N=107 holdout, public-clone state):** existing-track residual matrix confirmed co-calibration (engine↔ml r=0.596, meta↔both 0.84–0.92). Candidate dose-number track: signal-vs-residual corr(log Do, engine residual)=+0.222 full / +0.135 in-domain (n.s.); candidate-Cmax residual **vs ML r=+0.544 (FAIL)** / vs engine +0.136; in-domain vs ML +0.581 (FAIL). Standalone AAFE 15–18 (instantaneous-absorption 1-cpt proxy, irrelevant — fails the gate regardless).
+
+**Why it failed (decisive number):** in this codebase solubility is `log10 S = −logP + 0.5` (Yalkowsky-from-logP), so **corr(log Do, logP) = +0.912** — the dose-number *is* logP wearing a costume, and the engine already ingests logP (→Peff, Kp, solubility, first-pass). No *residual* dissolution information exists for the engine to lack (the DE-44 structure→F circularity trap). Robust to removing the solubility floor (uncapped log Do: engine r=+0.217, n.s.) and to the fa formula (invDo vs Amidon agree ±0.004). Diagnostic against the fa-starvation thesis itself: dissolution-limited drugs (Do>1, N=82) are *less* under-predicted (mean engine residual −0.353) than solubility-OK drugs (Do≤1, N=25; −0.635).
+
+**Telltale if it returns:** "dose-number / BCS-class / dissolution-limited fa as a new track." It is logP in this codebase → circular. The only un-foreclosed variant is a **pKa-aware pH-dependent** solubility (Henderson-Hasselbalch ionization term, not reducible to logP) — un-run, low probability, pre-register |r|<0.5 AND the pH-term (not logP) carrying the signal. A genuinely orthogonal absorption track needs **measured** aqueous solubility / crystal form / particle size (a measured-input lever), not a SMILES proxy.
+
+Artifacts: scratch `/tmp/dose_number_gate.py`, `/tmp/dose_number_robust.py`; analysis `docs/claude/layered-analysis-and-leap-2026-06-08.md` (Exp 2). `src/sisyphus/predict/adme.py:272` (`_estimate_solubility`).
+
+---
+
+### DE-46 — Renal active-secretion as a SMILES-only orthogonal track (2026-06-08)
+
+**Date:** 2026-06-08
+
+**Hypothesis (diagnosis §6 named candidate):** a charge/polarity proxy for active tubular secretion (`renal_score = charged·(TPSA/100)·max(0,2−logP)`) would seed a transporter-axis-orthogonal track.
+
+**What was measured (N=107):** only **23/107** holdout drugs score >0 (secretion-relevant); signal-vs-residual corr ≈ 0 with every track (engine −0.084 p=0.39, ml +0.117 p=0.23, **meta +0.011 p=0.91**).
+
+**Why it failed:** the retrospective holdout has too few secretion-dominated drugs to carry orthogonal signal, and renal clearance is a terminal-elimination (not Cmax) driver for most of them; the renal subclass is already among the best-predicted (AAFE 2.06, 0 drugs in the >3-fold tail). Quantitation would anyway need OATP1B1-style Jmax/Km registry data (a measured/curated input), gated behind the latent transporter-MM unit bug (D-1, `flux.py:726-736`).
+
+**Telltale if it returns:** "renal secretion / OAT-OCT-MATE analytical track to move the headline." No signal on this holdout; it is a correctness/breadth item (needs the D-1 unit fix + a transporter kinetics registry), not a decorrelated headline track.
+
+Artifacts: `docs/claude/layered-analysis-and-leap-2026-06-08.md` (Exp 3).
+
+---
+
+### DE-47 — Measured-ADME-aware ML regressor track (2026-06-08)
+
+**Date:** 2026-06-08
+
+**Hypothesis (the leading 2026-06-08 leap candidate):** the meta's strongest track (ML, ~3.01) is `predict_cmax(smiles, dose)` — blind to measured ADME (DE-44), so measured fup/CLint reach only the meta-damped engine track. A NEW XGBoost track trained on **measured** {fup, clint, dose, descriptors}→clinical Cmax (corpus `mmpk_pbpk_features.csv`, 1,128 drugs, fup/clint verified measured) would inject orthogonal measured information (like VDss), pass the |r|<0.5 gate, and let the meta exploit measured inputs.
+
+**What was measured (high power, N=93 holdout overlap, clean holdout-excluded train of 1035):** provenance clean (fup/clint literature-measured, not model outputs; cmax_obs is the clinical value — not circular). Track CV AAFE **3.79** (worse than SMILES-ML 3.01 and far worse than engine-measured 2.33). **Decorrelation gate FAIL:** residual r = **+0.685 / +0.784 / +0.787** vs engine/ml/meta (p<1e-13; partial-r controlling for log-obs +0.59/+0.70/+0.70). Even the oracle per-drug min(track, engine) blend = 2.40 > engine-measured 2.33.
+
+**Why it failed (the unifying mechanism — W2):** the dominant error mode is **bioavailability-F blindness, shared across all tracks regardless of input**. A flat regressor has no F (absorption/first-pass/volume) mechanism either, so it re-makes the *same directional errors on the same drugs* (the DE-41 low-F cluster) → correlated residuals. Measured fup/clint were **nearly inert** features (importance 0.045/0.053 vs dose 0.49): measured ADME is only usable *mechanistically* (through the engine), not by a regressor. **The error, not the input, is what must decorrelate** — and F-error is everywhere. This is the fourth gate failure of 2026-06-08 and the empirical heart of the F wall.
+
+**Scope caveat:** concerns the MEASURED-INPUT regime only; zero bearing on the SMILES-only 2.784 holdout (measured ADME absent there). The genuine measured-regime lever is **measured-regime routing** (trust the measured-*engine* more when measured ADME is present — an input-availability regime switch, the extension of shipped measured-F routing), NOT a measured-ADME regressor track.
+
+**Telltale if it returns:** "feed measured fup/CLint into a new ML/analytical track so the meta can use them." The regressor shares the F-blindness and fails the gate; route measured inputs to the measured-aware *engine* instead.
+
+Artifacts: corpus `data/training/mmpk_pbpk_features.csv`, exclusions `mmpk_sisyphus_holdout_exclusions.json`, per-track residuals `data/training/4track_holdout_predictions.json`; analysis `docs/claude/layered-analysis-and-leap-2026-06-08.md` (Exp 4).
+
+---
+
+### DE-48 — Measured-regime engine up-weighting / routing (2026-06-08)
+
+**Date:** 2026-06-08
+
+**Hypothesis (the leading 2026-06-08 leap candidate, proposed in `layered-analysis-and-leap-2026-06-08.md` Leap B):** in the measured-input regime, measured fup/CLint reach mainly the engine track (ML strictly blind, VDss blind, CLF partially Tmax-coupled), so the fixed-weight meta "drags" the measured-aware engine back toward SMILES-blind tracks. A measured-regime weight switch (up-weight / bypass to the measured-engine when measured ADME is present — an input-availability switch, NOT class-aware DE-25/27) was expected to recover toward a "~2.33 engine-measured floor."
+
+**What was measured (high power, N=93 holdout drugs with measured fup+clint; gate workflow + adversarial verification, runtime-monkeypatch only, no tracked-file changes):**
+- SMILES-only production meta AAFE **2.78**; measured-ADME production meta AAFE **~2.9** (a small *regression* from supplying measured ADME); engine-measured AAFE **~3.84** (reproduced 3 independent ways + by a skeptic — NOT the prior-phase's stale 3.51).
+- **The "2.33 floor" was a hand-curated clean-10 PoC artifact** (reproduced exactly on those 10 drugs); on the representative N=93 the engine-measured is 3.84.
+- Every routing variant *loses*: V1 engine=1.0 → 3.84; best reweight (engine 0.7/ml 0.3) → ~3.12; hindsight-optimal w=0.3 → 2.89 — **all > the SMILES meta 2.78**. AAFE rises monotonically with engine weight. Invariance intact (bit-identical when measured ADME absent; 2.784 headline unmoved).
+
+**Why it failed:** engine-measured (3.84) is **worse** than the meta (2.78) on a representative set, because measured high-CLint blows up first-pass actives in the engine (selegiline 126×, acamprosate 100×, methylphenidate 64×, progesterone 49×, abiraterone 40× over) and the ML/VDss tracks were correctly **damping exactly those**. **This is DE-43 in the measured regime: the meta's engine-damping is a feature, not a bug** — up-weighting the engine degrades. Holds on the obs-agree subset (N=52: engine 3.92 vs meta 3.05).
+
+**What this retracts:** the `layered-analysis-and-leap-2026-06-08.md` Leap B recommendation and its "2.33 engine-measured floor / ≤2.0 measured operating point" claim. The measured-input regime is **not** a better operating point on a representative set. *(Caveat: measured on a dirty tree with uncommitted engine changes; exact 3.84 is non-canonical and should be CI-regenerated, but the 3.84-vs-2.78 inversion margin is too large to flip.)*
+
+**Telltale if it returns:** "in the measured regime, trust/up-weight the measured engine more." It degrades — the engine-measured number cited (2.33) is a clean-subset cherry-pick; on a representative set it is ~3.84 and the meta already beats it. The only surviving measured lever is a **new F-orthogonal data modality** (measured solubility/permeability/transporter kinetics / measured F), not a reweight.
+
+Artifacts: gate workflow `next-step-measured-regime-gate`; analysis `docs/claude/layered-analysis-and-leap-2026-06-08.md` (Leap B, retracted); `scripts/run_measured_adme_benchmark.py`, `data/training/mmpk_pbpk_features.csv`, `src/sisyphus/ml/ensemble.py`.
+
+---
+
 ## 3. When to consult this list
 
 - Before writing a design spec for any accuracy improvement.
