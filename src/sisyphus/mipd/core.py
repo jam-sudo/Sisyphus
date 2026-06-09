@@ -114,7 +114,11 @@ class FPrior:
     """Wide prior over the true F, centered on ``f_engine``, truncated to (0, 1].
 
     ``cv`` defaults wide (1.0) because the engine's emergent F is the dominant
-    structural error — the prior should not over-trust it.
+    structural error — the prior should not over-trust it. Note: the (0, 1] clip
+    truncates the upper tail, so for near-fully-bioavailable drugs (F -> 1) the
+    posterior piles at the ceiling and its upper credible bound can be one-sided
+    (degenerate). A logit/Beta latent would keep near-boundary intervals
+    two-sided; the F-clip is a known limitation of the lognormal-clip prior.
     """
 
     f_engine: float
@@ -153,12 +157,24 @@ class Posterior:
 
 @dataclass(frozen=True)
 class PosteriorPK:
-    """The posterior over PK after conditioning on observations."""
+    """The posterior over PK after conditioning on observations.
+
+    ``cmax``/``auc`` are the engine-track posterior and ``meta_cmax`` (populated
+    by the API) is the production meta blend routed through the same posterior.
+    These are **parameter-uncertainty** bands (bioavailability F only) — they do
+    NOT carry calibrated predictive coverage, because structural model error is
+    not in them (the F-only ``meta_cmax.ci90`` is narrow and under-covers the
+    observable Cmax). ``cmax_90ci`` (API-populated) IS the calibrated predictive
+    interval: the train-calibrated split-conformal band around the posterior meta
+    point. Use ``cmax_90ci`` as the user-facing 90% Cmax interval.
+    """
 
     f: Posterior
     cmax: Posterior
     auc: Posterior
     n_eff: float
+    meta_cmax: Posterior | None = None
+    cmax_90ci: tuple[float, float] | None = None
 
 
 def sir_posterior(

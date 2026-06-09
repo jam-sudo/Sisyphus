@@ -20,6 +20,7 @@ from sisyphus.mipd.core import (
     PosteriorPK,
     sir_posterior,
 )
+from sisyphus.mipd.meta import MetaTracks, build_meta_tracks, meta_blend_cmax
 
 __all__ = [
     "APrioriPK",
@@ -31,4 +32,7 @@ __all__ = [
     "Posterior",
     "PosteriorPK",
     "sir_posterior",
+    "MetaTracks",
+    "build_meta_tracks",
+    "meta_blend_cmax",
 ]

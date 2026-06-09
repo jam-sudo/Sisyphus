@@ -9,14 +9,16 @@ so the SMILES-only path is unchanged.
 """
 from __future__ import annotations
 
+import dataclasses
 import re
 
 import numpy as np
 
 from sisyphus.mipd.amortizer import SIRAmortizer
-from sisyphus.mipd.core import APrioriPK, PosteriorPK
+from sisyphus.mipd.core import APrioriPK, Posterior, PosteriorPK
+from sisyphus.mipd.meta import build_meta_tracks, meta_blend_cmax
 
-_F_ENGINE_RE = re.compile(r"f_engine=([0-9.]+)")
+_F_ENGINE_RE = re.compile(r"f_engine=([0-9.eE+-]+)")
 _F_PROBE = 0.5  # arbitrary in-range F used only to recover F_engine via the routing
 
 
@@ -57,7 +59,7 @@ def predict_posterior(
         seed: RNG seed for reproducible SIR.
         predict_kwargs: forwarded to ``pipeline.predict.predict`` (e.g. kp_method).
     """
-    from sisyphus.pipeline.predict import predict
+    from sisyphus.pipeline.predict import _conformal_q90_meta, predict
     from sisyphus.predict.adme import MeasuredADMEInput
 
     ap = predict(smiles, dose_mg, route=route, **predict_kwargs)
@@ -75,6 +77,29 @@ def predict_posterior(
 
     apriori = APrioriPK(cmax0=cmax0, auc0=auc0, f_engine=f_engine)
     rng = np.random.default_rng(seed)
-    return SIRAmortizer(prior_cv=prior_cv, n_samples=n_samples).posterior(
+    post = SIRAmortizer(prior_cv=prior_cv, n_samples=n_samples).posterior(
         apriori, list(observations), rng=rng
+    )
+
+    # Route the engine posterior through the production meta blend so the
+    # *product* output carries the posterior. The non-engine tracks (ML/CLF/VDss)
+    # are F-independent, so they are fixed across the posterior.
+    tracks = build_meta_tracks(smiles, dose_mg, ap)
+    meta_samples = meta_blend_cmax(post.cmax.samples, tracks)
+    meta_point = float(np.median(meta_samples))
+
+    # Calibrated predictive interval: the train-calibrated split-conformal band
+    # around the posterior meta point. The F-posterior band (meta_cmax.ci90) is
+    # parameter uncertainty only and does NOT carry predictive coverage; the
+    # conformal band reflects residual structural error (holdout-validated ~0.95
+    # at nominal 0.90). It is calibrated on the a-priori meta, so it is a
+    # conservative (wide) bound for the measured-conditioned point.
+    cmax_90ci: tuple[float, float] | None = None
+    q90 = _conformal_q90_meta()
+    if q90 is not None and meta_point > 0:
+        factor = 10.0**q90
+        cmax_90ci = (meta_point / factor, meta_point * factor)
+
+    return dataclasses.replace(
+        post, meta_cmax=Posterior(meta_samples), cmax_90ci=cmax_90ci
     )
