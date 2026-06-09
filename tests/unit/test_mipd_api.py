@@ -5,14 +5,15 @@ engine-as-prior on a MeasuredF observation must reproduce the empirically
 validated measured-F routing Cmax (Gate 0b/0c) — i.e. the SIR core generalizes
 the shipped, validated mechanism into a full posterior.
 """
-import types
+import dataclasses
 
 import numpy as np
 import pytest
 
+import sisyphus.pipeline.predict as pp
 from sisyphus.mipd import MeasuredF, PosteriorPK
 from sisyphus.mipd.amortizer import NeuralAmortizer, SIRAmortizer
-from sisyphus.mipd.api import _recover_f_engine, predict_posterior
+from sisyphus.mipd.api import predict_posterior
 from sisyphus.mipd.core import APrioriPK
 from sisyphus.pipeline.predict import predict
 from sisyphus.predict.adme import MeasuredADMEInput
@@ -59,32 +60,30 @@ def test_neural_amortizer_raises_informative_error_without_torch():
         NeuralAmortizer()
 
 
-def _probe(warnings, scaled_cmax):
-    return types.SimpleNamespace(
-        warnings=warnings,
-        engine_pk=types.SimpleNamespace(cmax=types.SimpleNamespace(mean=scaled_cmax)),
-    )
+def test_f_only_path_calls_predict_once_with_compute_f_engine(monkeypatch):
+    # The F-only path must read engine_f off the single a-priori predict() call —
+    # no second 'probe' predict() (the removed warning-regex hack, review #10).
+    calls = []
+    real = pp.predict
+
+    def spy(*a, **k):
+        calls.append(k)
+        return real(*a, **k)
+
+    monkeypatch.setattr(pp, "predict", spy)
+    predict_posterior(MIDAZOLAM, DOSE, [MeasuredF(0.3)], seed=0)
+    assert len(calls) == 1
+    assert calls[0].get("compute_f_engine") is True
 
 
-def test_recover_f_engine_prefers_the_warning_value():
-    probe = _probe(["measured_adme:f_bioavail=0.5 f_engine=0.273 k=1.83"], 0.546)
-    assert _recover_f_engine(probe, cmax0=1.0) == pytest.approx(0.273)
-
-
-def test_recover_f_engine_raises_when_routing_did_not_scale():
-    # Failed IV-reference solve: 'skipped' warning, engine Cmax left UNscaled (== cmax0).
-    # The old linear fallback would silently return the probe F (0.5).
-    probe = _probe(
-        ["measured_adme:f_bioavail skipped (engine F-reference solve unavailable)"], 1.0
-    )
-    with pytest.raises(ValueError, match="did not run|cl_latent"):
-        _recover_f_engine(probe, cmax0=1.0)
-
-
-def test_recover_f_engine_raises_on_nonpositive_probe_cmax():
-    probe = _probe([], 0.0)
-    with pytest.raises(ValueError, match="non-positive"):
-        _recover_f_engine(probe, cmax0=1.0)
+def test_f_only_path_raises_when_engine_f_unavailable(monkeypatch):
+    # If the engine F-reference solve is unavailable (engine_f None), the F-only
+    # path must refuse rather than fabricate an F_engine (relocated review #2 guard).
+    good = predict(MIDAZOLAM, DOSE, compute_f_engine=True)
+    broken = dataclasses.replace(good, engine_f=None)
+    monkeypatch.setattr(pp, "predict", lambda *a, **k: broken)
+    with pytest.raises(ValueError, match="F-reference solve unavailable"):
+        predict_posterior(MIDAZOLAM, DOSE, [MeasuredF(0.3)], seed=0)
 
 
 def test_predict_posterior_rejects_non_oral_route_on_f_only_path():

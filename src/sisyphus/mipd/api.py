@@ -17,7 +17,6 @@ interval (``cmax_90ci``) is attached.
 from __future__ import annotations
 
 import dataclasses
-import re
 
 import numpy as np
 
@@ -25,35 +24,6 @@ from sisyphus.mipd.amortizer import SIRAmortizer
 from sisyphus.mipd.clgrid import MeasuredConc
 from sisyphus.mipd.core import APrioriPK, Posterior, PosteriorPK
 from sisyphus.mipd.meta import build_meta_tracks, meta_blend_cmax
-
-_F_ENGINE_RE = re.compile(r"f_engine=([0-9.eE+-]+)")
-_F_PROBE = 0.5  # arbitrary in-range F used only to recover F_engine via the routing
-
-
-def _recover_f_engine(probe_result, cmax0: float) -> float:
-    """Recover the engine's emergent F_engine from a measured-F probe call.
-
-    Prefers the value the routing surfaces in its warning (clamp-proof); falls
-    back to the exact linear arithmetic ``F_engine = Cmax0 * F_probe / Cmax_scaled``.
-    """
-    for w in probe_result.warnings or []:
-        m = _F_ENGINE_RE.search(w)
-        if m:
-            return float(m.group(1))
-    scaled = probe_result.engine_pk.cmax.mean
-    if scaled <= 0:
-        raise ValueError("measured-F probe produced non-positive Cmax; cannot recover F_engine")
-    # No f_engine token means the measured-F routing did NOT scale the engine (the
-    # IV-reference solve was unavailable). The engine Cmax is then bit-identical to
-    # cmax0, so the linear fallback would silently return the probe F (0.5). Refuse
-    # rather than fabricate an F_engine.
-    if cmax0 <= 0 or abs(scaled / cmax0 - 1.0) < 1e-9:
-        raise ValueError(
-            "measured-F routing did not run (the engine F-reference solve was "
-            "unavailable), so F_engine cannot be recovered from the probe; use "
-            "cl_latent=True for the CL-grid path, which derives F_engine directly"
-        )
-    return cmax0 * _F_PROBE / scaled
 
 
 def _attach_meta_and_interval(post: PosteriorPK, smiles: str, dose_mg: float, ap) -> PosteriorPK:
@@ -115,7 +85,6 @@ def predict_posterior(
         predict_kwargs: forwarded to ``pipeline.predict.predict`` (e.g. kp_method).
     """
     from sisyphus.pipeline.predict import predict
-    from sisyphus.predict.adme import MeasuredADMEInput
 
     if route != "oral":
         # The engine-as-prior latent is oral bioavailability F (IV has F≡1, so the
@@ -129,7 +98,14 @@ def predict_posterior(
     needs_grid = cl_latent or any(isinstance(o, MeasuredConc) for o in observations)
     rng = np.random.default_rng(seed)
 
-    ap = predict(smiles, dose_mg, route=route, **predict_kwargs)
+    # Read F_engine straight off the a-priori call (compute_f_engine) on the F-only
+    # path — no second 'probe' predict + warning regex. The CL-grid path derives
+    # F_engine from the grid, so it does not need the extra IV-reference solve.
+    ap = predict(
+        smiles, dose_mg, route=route,
+        compute_f_engine=not needs_grid,
+        **predict_kwargs,
+    )
     if ap.engine_pk is None or ap.engine_pk.cmax is None:
         raise ValueError("engine produced no Cmax for this input; cannot build a posterior")
 
@@ -137,12 +113,13 @@ def predict_posterior(
         # F-only analytic path (engine linear in dose -> exact vertical scaling).
         cmax0 = ap.engine_pk.cmax.mean
         auc0 = ap.engine_pk.auc_0t.mean if ap.engine_pk.auc_0t is not None else 0.0
-        probe = predict(
-            smiles, dose_mg, route=route,
-            measured_adme=MeasuredADMEInput(f_bioavail=_F_PROBE),
-            **predict_kwargs,
-        )
-        f_engine = min(max(_recover_f_engine(probe, cmax0), 1e-4), 1.0)
+        if ap.engine_f is None:
+            raise ValueError(
+                "engine F-reference solve unavailable; cannot build the F posterior "
+                "(use cl_latent=True for the CL-grid path, which derives F_engine "
+                "from the engine grid)"
+            )
+        f_engine = min(max(ap.engine_f, 1e-4), 1.0)
         apriori = APrioriPK(cmax0=cmax0, auc0=auc0, f_engine=f_engine)
         post = SIRAmortizer(prior_cv=prior_cv, n_samples=n_samples).posterior(
             apriori, observations, rng=rng

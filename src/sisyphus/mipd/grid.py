@@ -78,13 +78,7 @@ def build_cl_grid(
     from sisyphus.pk.endpoints import compute_endpoints
     from sisyphus.predict.adme import predict_adme
     from sisyphus.predict.chemistry import compute_profile
-    from sisyphus.predict.ivive import build_drug_on_graph
-    from sisyphus.predict.non_cyp_substrates import get_non_cyp_fractions
-    from sisyphus.predict.transporter_db import (
-        is_oatp_ecm_applicable,
-        load_hepatic_ecm_params_for_smiles,
-        load_oatp1b1_kinetics_for_smiles,
-    )
+    from sisyphus.predict.ivive import build_drug_on_graph, detect_disposition
 
     if t_grid is None:
         t_grid = _default_t_grid()
@@ -94,20 +88,11 @@ def build_cl_grid(
     adme = predict_adme(profile)
     graph = build_from_yaml(_PHYSIOLOGY_DIR / "reference_man.yaml")
 
-    # Mirror predict() step-1 disposition detection so the grid's engine path is
-    # faithful for OATP/ECM and non-CYP (UGT/NAT) substrates — not just CYP drugs.
-    # Without these args the s=1 grid diverges from predict() (e.g. ~18% for codeine,
-    # ~50% for morphine). NOTE: this duplicates pipeline.predict's detection; review
-    # finding #10 tracks extracting a shared drug-build helper to remove the copy.
-    auto_oatp_kinetics = None
-    auto_ecm_params = None
-    if is_oatp_ecm_applicable(profile.smiles):
-        auto_oatp_kinetics = load_oatp1b1_kinetics_for_smiles(profile.smiles)
-        auto_ecm_params = load_hepatic_ecm_params_for_smiles(profile.smiles)
-        if not (auto_oatp_kinetics is not None and auto_ecm_params is not None):
-            auto_oatp_kinetics = None  # flag set but registry data missing -> disable
-            auto_ecm_params = None
-    non_cyp_fractions = get_non_cyp_fractions(profile.smiles)
+    # Use predict()'s shared disposition detector (single source of truth) so the
+    # grid's engine path is faithful for OATP/ECM and non-CYP (UGT/NAT) substrates,
+    # not just CYP drugs. Without these args the s=1 grid diverges from predict()
+    # (e.g. ~18% for codeine, ~50% for morphine).
+    auto_oatp_kinetics, auto_ecm_params, non_cyp_fractions = detect_disposition(profile)
 
     # Snapshot pre-phenotype liver abundances and rebuild the drug from them, so
     # back-solved affinities match the engine multiplication (mirrors predict()).
