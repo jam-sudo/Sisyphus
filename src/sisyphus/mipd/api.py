@@ -1,11 +1,18 @@
 """Public MIPD API: SMILES + dose + sparse measured data -> posterior PK.
 
-``predict_posterior`` wires the existing a-priori ``predict()`` to the SIR
-inference core. It calls the engine twice (once a-priori for Cmax0/AUC0, once
-with a measured-F probe to recover the engine's emergent F_engine), then runs
-SIR over the bioavailability latent given the supplied observations. With no
-observations it returns the a-priori engine prediction as a (prior) posterior,
-so the SMILES-only path is unchanged.
+``predict_posterior`` updates the engine-as-prior from sparse measured data:
+
+- No observations / measured F/Cmax/AUC: the fast F-only analytic path (the
+  engine is linear in dose, so the F forward is exact). With no observations it
+  returns the a-priori engine prediction, so the SMILES-only path is unchanged.
+- A ``MeasuredConc`` observation (or ``cl_latent=True``): the CL-grid path, a
+  2-latent (F, clint-scale) posterior. A clearance latent changes the curve
+  shape, so the engine is solved once on a clint-scale grid and the forward
+  interpolates it (see ``mipd.grid`` / ``mipd.clgrid``).
+
+Either way the engine posterior is routed through the production meta blend
+(``meta_cmax``, the product output) and a calibrated split-conformal predictive
+interval (``cmax_90ci``) is attached.
 """
 from __future__ import annotations
 
@@ -15,6 +22,7 @@ import re
 import numpy as np
 
 from sisyphus.mipd.amortizer import SIRAmortizer
+from sisyphus.mipd.clgrid import MeasuredConc
 from sisyphus.mipd.core import APrioriPK, Posterior, PosteriorPK
 from sisyphus.mipd.meta import build_meta_tracks, meta_blend_cmax
 
@@ -38,6 +46,29 @@ def _recover_f_engine(probe_result, cmax0: float) -> float:
     return cmax0 * _F_PROBE / scaled
 
 
+def _attach_meta_and_interval(post: PosteriorPK, smiles: str, dose_mg: float, ap) -> PosteriorPK:
+    """Route the engine posterior through the meta blend + attach the conformal PI.
+
+    The non-engine tracks (ML/CLF/VDss) are F/CL-independent, so they are fixed
+    across the posterior. ``meta_cmax`` is the product posterior (parameter
+    uncertainty); ``cmax_90ci`` is the train-calibrated split-conformal predictive
+    interval around the posterior meta point (the user-facing 90% band).
+    """
+    from sisyphus.pipeline.predict import _conformal_q90_meta
+
+    tracks = build_meta_tracks(smiles, dose_mg, ap)
+    meta_samples = meta_blend_cmax(post.cmax.samples, tracks)
+    meta_point = float(np.median(meta_samples))
+
+    cmax_90ci: tuple[float, float] | None = None
+    q90 = _conformal_q90_meta()
+    if q90 is not None and meta_point > 0:
+        factor = 10.0**q90
+        cmax_90ci = (meta_point / factor, meta_point * factor)
+
+    return dataclasses.replace(post, meta_cmax=Posterior(meta_samples), cmax_90ci=cmax_90ci)
+
+
 def predict_posterior(
     smiles: str,
     dose_mg: float,
@@ -45,61 +76,70 @@ def predict_posterior(
     *,
     route: str = "oral",
     prior_cv: float = 1.0,
+    cl_prior_cv: float = 1.0,
     n_samples: int = 20000,
     seed: int = 0,
+    cl_latent: bool = False,
+    n_grid: int = 13,
     **predict_kwargs,
 ) -> PosteriorPK:
     """Posterior PK for ``smiles`` at ``dose_mg`` given ``observations``.
 
     Args:
-        observations: sequence of MeasuredF / MeasuredCmax / MeasuredAUC. Empty
+        observations: MeasuredF / MeasuredCmax / MeasuredAUC / MeasuredConc. Empty
             (default) returns the a-priori engine prediction as a prior posterior.
-        prior_cv: width of the F prior (wide by default — the engine F is the
-            dominant structural error).
+        prior_cv: width of the bioavailability (F) prior.
+        cl_prior_cv: width of the clearance (clint-scale) prior (CL-grid path only).
+        cl_latent: force the 2-latent (F, CL) CL-grid path. Auto-enabled when a
+            MeasuredConc observation is present (it constrains the curve shape).
+        n_grid: clint-scale grid resolution for the CL-grid path.
         seed: RNG seed for reproducible SIR.
         predict_kwargs: forwarded to ``pipeline.predict.predict`` (e.g. kp_method).
     """
-    from sisyphus.pipeline.predict import _conformal_q90_meta, predict
+    from sisyphus.pipeline.predict import predict
     from sisyphus.predict.adme import MeasuredADMEInput
+
+    observations = list(observations)
+    needs_grid = cl_latent or any(isinstance(o, MeasuredConc) for o in observations)
+    rng = np.random.default_rng(seed)
 
     ap = predict(smiles, dose_mg, route=route, **predict_kwargs)
     if ap.engine_pk is None or ap.engine_pk.cmax is None:
         raise ValueError("engine produced no Cmax for this input; cannot build a posterior")
-    cmax0 = ap.engine_pk.cmax.mean
-    auc0 = ap.engine_pk.auc_0t.mean if ap.engine_pk.auc_0t is not None else 0.0
 
-    probe = predict(
-        smiles, dose_mg, route=route,
-        measured_adme=MeasuredADMEInput(f_bioavail=_F_PROBE),
-        **predict_kwargs,
-    )
-    f_engine = min(max(_recover_f_engine(probe, cmax0), 1e-4), 1.0)
+    if not needs_grid:
+        # F-only analytic path (engine linear in dose -> exact vertical scaling).
+        cmax0 = ap.engine_pk.cmax.mean
+        auc0 = ap.engine_pk.auc_0t.mean if ap.engine_pk.auc_0t is not None else 0.0
+        probe = predict(
+            smiles, dose_mg, route=route,
+            measured_adme=MeasuredADMEInput(f_bioavail=_F_PROBE),
+            **predict_kwargs,
+        )
+        f_engine = min(max(_recover_f_engine(probe, cmax0), 1e-4), 1.0)
+        apriori = APrioriPK(cmax0=cmax0, auc0=auc0, f_engine=f_engine)
+        post = SIRAmortizer(prior_cv=prior_cv, n_samples=n_samples).posterior(
+            apriori, observations, rng=rng
+        )
+    else:
+        # CL-grid 2-latent (F, clint-scale) path — handles MeasuredConc.
+        from sisyphus.mipd.clgrid import CLGridForward, CLPrior, sir_posterior_2d
+        from sisyphus.mipd.core import FPrior
+        from sisyphus.mipd.grid import build_cl_grid
 
-    apriori = APrioriPK(cmax0=cmax0, auc0=auc0, f_engine=f_engine)
-    rng = np.random.default_rng(seed)
-    post = SIRAmortizer(prior_cv=prior_cv, n_samples=n_samples).posterior(
-        apriori, list(observations), rng=rng
-    )
+        grid = build_cl_grid(
+            smiles, dose_mg, route=route, n_grid=n_grid,
+            kp_method=predict_kwargs.get("kp_method", "rodgers_rowland"),
+        )
+        i1 = int(np.argmin(np.abs(np.log(grid.s_grid))))  # the s=1 (a-priori) point
+        f_engine0 = float(min(max(grid.f_engine[i1], 1e-4), 1.0))
+        f_prior = FPrior(f_engine0, prior_cv)
+        cl_prior = CLPrior(
+            cv=cl_prior_cv, s_min=float(grid.s_grid[0]), s_max=float(grid.s_grid[-1])
+        )
+        post = sir_posterior_2d(
+            f_prior, cl_prior, CLGridForward(grid), observations,
+            n_samples=n_samples, rng=rng,
+        )
 
-    # Route the engine posterior through the production meta blend so the
-    # *product* output carries the posterior. The non-engine tracks (ML/CLF/VDss)
-    # are F-independent, so they are fixed across the posterior.
-    tracks = build_meta_tracks(smiles, dose_mg, ap)
-    meta_samples = meta_blend_cmax(post.cmax.samples, tracks)
-    meta_point = float(np.median(meta_samples))
-
-    # Calibrated predictive interval: the train-calibrated split-conformal band
-    # around the posterior meta point. The F-posterior band (meta_cmax.ci90) is
-    # parameter uncertainty only and does NOT carry predictive coverage; the
-    # conformal band reflects residual structural error (holdout-validated ~0.95
-    # at nominal 0.90). It is calibrated on the a-priori meta, so it is a
-    # conservative (wide) bound for the measured-conditioned point.
-    cmax_90ci: tuple[float, float] | None = None
-    q90 = _conformal_q90_meta()
-    if q90 is not None and meta_point > 0:
-        factor = 10.0**q90
-        cmax_90ci = (meta_point / factor, meta_point * factor)
-
-    return dataclasses.replace(
-        post, meta_cmax=Posterior(meta_samples), cmax_90ci=cmax_90ci
-    )
+    return _attach_meta_and_interval(post, smiles, dose_mg, ap)

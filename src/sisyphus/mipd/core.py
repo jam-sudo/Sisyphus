@@ -175,6 +175,27 @@ class PosteriorPK:
     n_eff: float
     meta_cmax: Posterior | None = None
     cmax_90ci: tuple[float, float] | None = None
+    cl_scale: Posterior | None = None  # clint-scale latent posterior (CL-grid path)
+
+
+def _softmax_resample(
+    loglik: np.ndarray, rng: np.random.Generator
+) -> tuple[np.ndarray, float]:
+    """Importance weights from log-likelihoods -> resample indices + n_eff.
+
+    Stable softmax; falls back to uniform weights if the sum is degenerate.
+    Shared by the F-only (sir_posterior) and 2-latent (sir_posterior_2d) paths.
+    """
+    n = loglik.size
+    w = np.exp(loglik - loglik.max())
+    w_sum = w.sum()
+    if not np.isfinite(w_sum) or w_sum <= 0.0:
+        w = np.full(n, 1.0 / n)
+    else:
+        w = w / w_sum
+    n_eff = float(1.0 / np.sum(w ** 2))
+    idx = rng.choice(n, size=n, p=w)
+    return idx, n_eff
 
 
 def sir_posterior(
@@ -198,14 +219,7 @@ def sir_posterior(
     loglik = np.zeros(n_samples)
     for obs in observations:
         loglik = loglik + obs.log_likelihood(state)
-    w = np.exp(loglik - loglik.max())
-    w_sum = w.sum()
-    if not np.isfinite(w_sum) or w_sum <= 0.0:
-        w = np.full(n_samples, 1.0 / n_samples)
-    else:
-        w = w / w_sum
-    n_eff = float(1.0 / np.sum(w ** 2))
-    idx = rng.choice(n_samples, size=n_samples, p=w)
+    idx, n_eff = _softmax_resample(loglik, rng)
     return PosteriorPK(
         f=Posterior(state["f"][idx]),
         cmax=Posterior(state["cmax"][idx]),
