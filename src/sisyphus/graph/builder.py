@@ -25,6 +25,7 @@ from sisyphus.graph.types import (
     FlowEdge,
     Node,
     OneCompartmentEliminationEdge,
+    ParacellularAbsorptionEdge,
     ProdrugActivationEdge,
     TissueComposition,
     TransitEdge,
@@ -120,6 +121,14 @@ def build_from_yaml(path: Path) -> BodyGraph:
 
         elif edge_type == "absorption":
             edge = AbsorptionEdge(
+                source=edge_spec["source"],
+                target=edge_spec["target"],
+                ka_fraction=_parse_distribution(edge_spec.get("ka_fraction", 1.0)),
+            )
+            graph.add_edge(edge)
+
+        elif edge_type == "paracellular_absorption":
+            edge = ParacellularAbsorptionEdge(
                 source=edge_spec["source"],
                 target=edge_spec["target"],
                 ka_fraction=_parse_distribution(edge_spec.get("ka_fraction", 1.0)),
