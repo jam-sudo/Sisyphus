@@ -50,11 +50,19 @@ Point the frontend at it: `cd web && VITE_API_URL=http://127.0.0.1:8000 npm run 
    The console then enables the **✎ Custom SMILES** option (free-text SMILES →
    real prediction). Until then the public site runs the static preset tier.
 
+### Security knobs (env-overridable, see `server/config.py`)
+- **CORS** is restricted to `https://sisyphus-pbpk.io` (the production console
+  origin) — arbitrary origins are no longer reflected. Add more origins (e.g. a
+  localhost dev origin) via `SISYPHUS_CORS_ORIGINS` (comma-separated), no code
+  change needed.
+- **Rate limiting:** `POST /predict` is capped per client IP (default
+  `20/minute`) via slowapi; over-cap requests get `429`. Tune with
+  `SISYPHUS_PREDICT_RATE_LIMIT` (e.g. `10/minute`). `GET /health` is unlimited.
+
 ### Notes / before a public, uncapped deploy
 - The free Space sleeps when idle; the first request after sleep cold-starts
   (~30–60 s to wake + load models). The frontend handles this with a loading state.
-- CORS currently allows all origins (`*`); restrict to `https://sisyphus-pbpk.io`
-  in `server/app.py` for production.
-- No auth/rate-limiting yet — add before exposing an uncapped public endpoint.
+- Still **no auth** — add a token/key before exposing a fully public, uncapped
+  endpoint (the rate limit above bounds abuse but does not authenticate callers).
 - Cloud Run (scale-to-zero, custom `api.sisyphus-pbpk.io`) is an alternative host;
   the same image works (`docker build -f server/Dockerfile .`).
