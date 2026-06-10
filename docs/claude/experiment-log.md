@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-03
+last_updated: 2026-06-09
 parent: ../../CLAUDE.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -7,6 +7,18 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 # Experiment Log
 
 Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
+
+---
+
+## 2026-06-09 — Preprint posted to ChemRxiv (DOI 10.26434/chemrxiv.15004452/v1)
+
+Public preprint posted: **ChemRxiv, DOI [10.26434/chemrxiv.15004452/v1](https://doi.org/10.26434/chemrxiv.15004452/v1)** — "Sisyphus: A Topology-Compiled Physiologically Based Pharmacokinetic Platform with Structure-Only Input and Bayesian Parameter Refinement" (Yoon JM, Independent Researcher; v1). Reformatted from the internal v10 draft for public release: first-person/dev-log/version-history removed, clean IMRaD, the confessional audit absorbed into an objective Limitations section, academic contribution framing.
+
+**Posted headline figures (reconciled to the public-clone `4track_holdout_predictions.json` at build time):** Meta AAFE **2.698** (107-drug holdout), prospective **3.21** (N=28, *worse* than retrospective — F under-prediction on novel chemotypes), measured-ADME engine **2.81→2.69** (clean N=10, mixed), Bayesian single-obs CV reduction **~78%** (fresh 5-drug rerun mean 77.8% at N=400 vs committed 78.1% at N=2000), **41** enumerated negative experiments.
+
+**Three support tables were re-run fresh during reformatting and corrected stale values** (all confirmed by re-running the repo's own scripts): (1) measured-ADME was **2.33→1.98 / 8-of-10** in v10 but is non-reproducible — current `scripts/measured_adme_poc.py` gives **2.81→2.69 / 6-of-10** (clean) and **3.87→4.01** (full 12); (2) multi-dose Table 7 atorvastatin was "within 7%" in v10 but `scripts/verify_v2.py` now gives **2.09× over** (metformin 0.42, warfarin 0.12 folds); (3) prospective flipped from a v10 "2.402 < retrospective" favorable claim to **3.21 > 2.698** (decontaminated N=28). Engine numerical validation (4 drugs) and Bayesian Table 8 reproduced cleanly.
+
+⚠ **Version skew:** this posted snapshot reflects the **2.698 public-clone state** and **predates** the FLUX-1 **2.784** line + DE-45/46/47/48 + oxybutynin reference fix recorded in the 2026-06-08 entry below. The public ChemRxiv v1 therefore does **not** include post-2026-06-08 changes; a **v2** would be required to incorporate the 2.784 physics-corrected figures. Originally **rejected by bioRxiv** (requires an institutional-oversight affiliation; author is independent) → posted on ChemRxiv. Submission package (`ChemRxiv_submission_metadata.md`, `Sisyphus_Preprint.{docx,pdf}`, `Sisyphus_abstract_plaintext.txt`) in the workspace root.
 
 ---
 
