@@ -14,7 +14,7 @@ Reference Cmax values (40 mg/2 mg oral, realize_means(), post-Hardening,
                                             local-developer Cmax was 0.0422 / FE 1.066)
 - pitavastatin auto-ECM:        0.00116 mg/L (FDA 0.0035, FE 3.012 public-only;
                                               local-developer was 0.00168 / FE 2.08)
-- fluvastatin no-ECM:           0.0539 mg/L
+- fluvastatin no-ECM:           0.0603 mg/L (+paracellular; was 0.0539 pre-PARA)
 
 These tests verify mechanical correctness (auto-activation fires correctly,
 warnings emitted, no-ECM path doesn't leak) rather than absolute clinical
@@ -80,7 +80,7 @@ def test_fluvastatin_no_auto_ecm():
     assert not any("oatp1b1:auto_ecm" in w for w in result.warnings), (
         f"fluvastatin should NOT auto-activate ECM, but got warnings: {result.warnings}"
     )
-    expected = 0.0539  # public-clone deterministic; with DrugBank+logp_corr was 0.0583
+    expected = 0.0603  # public-clone; +paracellular absorption (was 0.0539 pre-PARA)
     rel_err = abs(cmax - expected) / expected
     assert rel_err < 0.05, (
         f"fluvastatin Cmax shifted unexpectedly: actual={cmax:.4f}, "
