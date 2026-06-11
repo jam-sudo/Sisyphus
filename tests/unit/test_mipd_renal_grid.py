@@ -88,3 +88,40 @@ def test_build_renal_cl_grid_faithful_to_solve_regimen():
     sim = solve_regimen(compiled, params, reg, t_total_h=float(g.t_grid[-1]))
     direct = np.interp(g.t_grid, sim.time_h, sim.concentrations[obs_node])
     assert np.allclose(g.conc[0], direct, rtol=1e-6, atol=1e-9)
+
+
+def test_sir_posterior_renal_trough_moves_r_correctly():
+    # Higher trough than the r=1 curve predicts -> patient clears SLOWER -> r < 1.
+    from sisyphus.mipd.clgrid import MeasuredConc
+    from sisyphus.mipd.renal_grid import (
+        RenalCLForward,
+        RenalCLPrior,
+        sir_posterior_renal,
+    )
+    grid = _toy_grid()  # at r=1.0, conc_at(t=2.0) == 2.0
+    fwd = RenalCLForward(grid)
+    rng = np.random.default_rng(0)
+    # measured trough HIGHER than the r=1 prediction (4.0 vs 2.0) -> slower CL -> r<1
+    high = sir_posterior_renal(
+        RenalCLPrior(cv=1.0, r_min=0.5, r_max=2.0), fwd,
+        [MeasuredConc(value=4.0, t=2.0, cv=0.1)], n_samples=20000, rng=rng,
+    )
+    assert high.renal_scale.point < 1.0
+    assert high.cmax.point > grid.cmax[1]  # slower CL -> higher exposure than r=1
+    assert high.n_eff > 100
+
+
+def test_sir_posterior_renal_iv_has_degenerate_f():
+    from sisyphus.mipd.clgrid import MeasuredConc
+    from sisyphus.mipd.renal_grid import (
+        RenalCLForward,
+        RenalCLPrior,
+        sir_posterior_renal,
+    )
+    post = sir_posterior_renal(
+        RenalCLPrior(r_min=0.5, r_max=2.0), RenalCLForward(_toy_grid()),
+        [MeasuredConc(value=3.0, t=1.0, cv=0.2)], n_samples=5000,
+        rng=np.random.default_rng(0),
+    )
+    assert np.allclose(post.f.samples, 1.0)  # F == 1 for IV
+    assert post.renal_scale is not None

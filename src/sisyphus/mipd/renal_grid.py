@@ -186,3 +186,33 @@ def build_renal_cl_grid(
     auc = _fill_nan_log_s(np.array(aucs), r_grid)
     conc = _nearest_finite_backfill(np.array(conc_rows))
     return RenalCLGrid(r_grid=r_grid, t_grid=t_grid, conc=conc, cmax=cmax, auc=auc)
+
+
+def sir_posterior_renal(
+    prior: RenalCLPrior,
+    forward: RenalCLForward,
+    observations,
+    n_samples: int = 20000,
+    rng: np.random.Generator | None = None,
+) -> PosteriorPK:
+    """SIR posterior over the renal-CL scale ``r`` given observations.
+
+    Draws ``r`` from the prior, weights by the joint observation likelihood
+    (e.g. a steady-state ``MeasuredConc`` trough via ``conc_at``), resamples.
+    F is degenerate (== 1) for the IV path. Reports ``n_eff``.
+    """
+    if rng is None:
+        rng = np.random.default_rng()
+    r = prior.sample(n_samples, rng)
+    state = forward(r)
+    loglik = np.zeros(n_samples)
+    for obs in observations:
+        loglik = loglik + obs.log_likelihood(state)
+    idx, n_eff = _softmax_resample(loglik, rng)
+    return PosteriorPK(
+        f=Posterior(np.ones(idx.size)),
+        cmax=Posterior(state["cmax"][idx]),
+        auc=Posterior(state["auc"][idx]),
+        n_eff=n_eff,
+        renal_scale=Posterior(r[idx]),
+    )
