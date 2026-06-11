@@ -45,3 +45,14 @@ def test_predict_tdm_extreme_crcl_warns():
         ATENOLOL, _iv_regimen(), [], covariates=Covariates(crcl_ml_min=3), n_grid=5, seed=0
     )
     assert any("crcl" in w.lower() for w in post.warnings)
+
+
+def test_predict_tdm_age_individualizes():
+    post = predict_tdm(ATENOLOL, _iv_regimen(), [], covariates=Covariates(age_years=80), n_grid=5, seed=0)
+    assert post.cmax.point > 0
+    assert post.renal_scale is not None
+
+
+def test_predict_tdm_extreme_age_warns():
+    post = predict_tdm(ATENOLOL, _iv_regimen(), [], covariates=Covariates(age_years=120), n_grid=5, seed=0)
+    assert any("age" in w.lower() for w in post.warnings)
