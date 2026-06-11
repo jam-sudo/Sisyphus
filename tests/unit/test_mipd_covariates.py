@@ -47,3 +47,38 @@ def test_covariates_rejects_nonpositive_crcl():
         Covariates(crcl_ml_min=0.0)
     with pytest.raises(ValueError):
         Covariates(crcl_ml_min=-5.0)
+
+
+def test_covariates_weight_age_fields_and_validation():
+    import pytest
+    from sisyphus.mipd.covariates import Covariates
+    c = Covariates(body_weight_kg=10.0, age_years=2.0)
+    assert c.body_weight_kg == 10.0 and c.age_years == 2.0
+    with pytest.raises(ValueError):
+        Covariates(body_weight_kg=0.0)
+    with pytest.raises(ValueError):
+        Covariates(age_years=-1.0)
+
+
+def test_covariates_has_physiology():
+    from sisyphus.mipd.covariates import Covariates
+    assert Covariates().has_physiology() is False
+    assert Covariates(crcl_ml_min=50).has_physiology() is False  # CrCl is not physiology
+    assert Covariates(body_weight_kg=10).has_physiology() is True
+    assert Covariates(age_years=80).has_physiology() is True
+
+
+def test_covariates_renal_factor_unaffected_by_weight_age():
+    from sisyphus.mipd.covariates import Covariates
+    # renal is CrCl-only — weight/age never change renal_factor
+    assert Covariates(body_weight_kg=10, age_years=80).renal_factor() == 1.0
+    assert Covariates(crcl_ml_min=62.5, body_weight_kg=10, age_years=80).renal_factor() == 0.5
+
+
+def test_covariates_warnings_flags_extremes():
+    from sisyphus.mipd.covariates import Covariates
+    assert Covariates().warnings() == ()
+    assert Covariates(crcl_ml_min=90, body_weight_kg=70, age_years=30).warnings() == ()
+    assert any("crcl" in w.lower() for w in Covariates(crcl_ml_min=3).warnings())
+    assert any("weight" in w.lower() for w in Covariates(body_weight_kg=1.0).warnings())
+    assert any("age" in w.lower() for w in Covariates(age_years=120).warnings())
