@@ -18,6 +18,9 @@ import numpy as np
 
 from sisyphus.mipd.core import Posterior, PosteriorPK, _softmax_resample
 
+# numpy 2.0+ renamed trapz -> trapezoid; match the codebase idiom (pk/nca.py).
+_trapz = getattr(np, "trapezoid", np.trapz)
+
 
 @dataclass(frozen=True)
 class RenalCLPrior:
@@ -100,3 +103,86 @@ class RenalCLForward:
             "auc": self._interp(self._lauc, r),
             "conc_at": conc_at,
         }
+
+
+def _regimen_interval_h(regimen) -> float:
+    """Dosing interval tau from a regimen (events[1]-events[0]); 24.0 if single-dose."""
+    ev = regimen.events
+    return float(ev[1].time_h - ev[0].time_h) if len(ev) >= 2 else 24.0
+
+
+def build_renal_cl_grid(
+    smiles: str,
+    regimen,
+    *,
+    n_grid: int = 13,
+    r_range: tuple[float, float] = (0.2, 5.0),
+    renal_factor: float = 1.0,
+    kp_method: str = "rodgers_rowland",
+    dt_output: float = 0.1,
+) -> RenalCLGrid:
+    """Solve the IV regimen over a renal-CL grid and return a ``RenalCLGrid``.
+
+    Reuses ``grid._build_grid_engine`` (engine setup, CrCl renal_factor) and
+    ``regimen.solver.solve_regimen`` (multi-dose solve). ``cmax``/``auc`` are the
+    steady-state final-dosing-interval quantities. F == 1 (no f_engine column).
+    """
+    import dataclasses
+
+    from sisyphus.core import Distribution
+    from sisyphus.engine.compiler import ResolvedParams
+    from sisyphus.mipd.grid import (
+        _build_grid_engine,
+        _fill_nan_log_s,
+        _nearest_finite_backfill,
+    )
+    from sisyphus.regimen.solver import solve_regimen
+
+    compiled, realized_graph, drug, obs_node = _build_grid_engine(
+        smiles, regimen.events[0].dose_mg, "iv", renal_factor, kp_method
+    )
+    r_grid = np.geomspace(r_range[0], r_range[1], n_grid)
+
+    last = float(regimen.last_dose_time_h)
+    tau = _regimen_interval_h(regimen)
+    t_total = last + max(tau, 24.0)
+    n_points = max(2, int(round(t_total / dt_output)) + 1)
+    t_grid = np.linspace(0.0, t_total, n_points)
+
+    conc_rows: list[np.ndarray] = []
+    cmaxs: list[float] = []
+    aucs: list[float] = []
+    for r in r_grid:
+        drug_r = dataclasses.replace(
+            drug,
+            renal_clearance=Distribution(
+                mean=drug.renal_clearance.mean * float(r), cv=drug.renal_clearance.cv
+            ),
+        )
+        params_r = ResolvedParams(realized_graph, drug_r.realize_means())
+        sim = solve_regimen(compiled, params_r, regimen, t_total_h=t_total, dt_output=dt_output)
+        if not sim.solver_success:
+            conc_rows.append(np.full(t_grid.size, np.nan))
+            cmaxs.append(np.nan)
+            aucs.append(np.nan)
+            continue
+        t_native = sim.time_h
+        c_native = sim.concentrations[obs_node]
+        conc_rows.append(np.interp(t_grid, t_native, c_native))
+        mask = (t_native >= last - 1e-9) & (t_native <= last + tau + 1e-9)
+        if mask.sum() >= 2:
+            cmaxs.append(float(np.max(c_native[mask])))
+            aucs.append(float(_trapz(c_native[mask], t_native[mask])))
+        else:
+            cmaxs.append(np.nan)
+            aucs.append(np.nan)
+
+    cmaxs_arr = np.array(cmaxs)
+    if not np.isfinite(cmaxs_arr).any():
+        raise ValueError(
+            f"engine failed at all {n_grid} renal-scale grid points; cannot build the grid"
+        )
+    cmax = _fill_nan_log_s(cmaxs_arr, r_grid)
+    auc = _fill_nan_log_s(np.array(aucs), r_grid)
+    conc = _nearest_finite_backfill(np.array(conc_rows))
+    return RenalCLGrid(r_grid=r_grid, t_grid=t_grid, conc=conc, cmax=cmax, auc=auc)

@@ -15,7 +15,7 @@ def _toy_grid() -> RenalCLGrid:
         [6.0, 2.0, 1.0, 0.5],    # r=2.0
     ])
     cmax = conc.max(axis=1)
-    auc = np.trapz(conc, t_grid, axis=1)
+    auc = np.trapezoid(conc, t_grid, axis=1)
     return RenalCLGrid(r_grid=r_grid, t_grid=t_grid, conc=conc, cmax=cmax, auc=auc)
 
 
@@ -43,3 +43,48 @@ def test_renal_forward_interpolates_cmax_auc_monotone():
     assert state["auc"][0] > state["auc"][1]
     assert callable(state["conc_at"])
     assert state["conc_at"](1.0).shape == (2,)
+
+
+ATENOLOL = "CC(C)NCC(O)COc1ccc(CC(N)=O)cc1"  # high-fup, renally-cleared
+
+
+def _iv_regimen():
+    from sisyphus.regimen.types import DosingRegimen
+    return DosingRegimen.iv_infusion(dose_mg=50.0, duration_h=0.5, interval_h=8.0, n_doses=5)
+
+
+def test_build_renal_cl_grid_shape_and_horizon():
+    from sisyphus.mipd.renal_grid import build_renal_cl_grid
+    g = build_renal_cl_grid(ATENOLOL, _iv_regimen(), n_grid=5, r_range=(0.5, 2.0))
+    assert g.cmax.shape == g.auc.shape == (5,)
+    assert np.all(g.r_grid[1:] > g.r_grid[:-1])
+    # horizon spans last_dose (4*8=32h) + max(interval 8, 24) = 56h
+    assert g.t_grid[-1] >= 56.0 - 1e-6
+    import pytest
+    with pytest.raises(ValueError):
+        g.conc_at(np.array([1.0]), 999.0)
+
+
+def test_build_renal_cl_grid_lower_r_higher_exposure():
+    from sisyphus.mipd.renal_grid import build_renal_cl_grid
+    g = build_renal_cl_grid(ATENOLOL, _iv_regimen(), n_grid=5, r_range=(0.5, 2.0))
+    # ascending r -> descending steady-state AUC (more renal CL -> less exposure)
+    assert g.auc[0] > g.auc[-1]
+
+
+def test_build_renal_cl_grid_faithful_to_solve_regimen():
+    # The grid's per-r curve must equal a direct solve_regimen at that r.
+    from sisyphus.mipd.grid import _build_grid_engine
+    from sisyphus.mipd.renal_grid import build_renal_cl_grid
+    from sisyphus.engine.compiler import ResolvedParams
+    from sisyphus.regimen.solver import solve_regimen
+
+    reg = _iv_regimen()
+    g = build_renal_cl_grid(ATENOLOL, reg, n_grid=3, r_range=(1.0, 1.0))  # single r=1
+    compiled, realized_graph, drug, obs_node = _build_grid_engine(
+        ATENOLOL, reg.events[0].dose_mg, "iv", 1.0, "rodgers_rowland"
+    )
+    params = ResolvedParams(realized_graph, drug.realize_means())
+    sim = solve_regimen(compiled, params, reg, t_total_h=float(g.t_grid[-1]))
+    direct = np.interp(g.t_grid, sim.time_h, sim.concentrations[obs_node])
+    assert np.allclose(g.conc[0], direct, rtol=1e-6, atol=1e-9)
