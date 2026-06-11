@@ -23,6 +23,7 @@ import numpy as np
 from sisyphus.mipd.amortizer import SIRAmortizer
 from sisyphus.mipd.clgrid import MeasuredConc
 from sisyphus.mipd.core import APrioriPK, Posterior, PosteriorPK
+from sisyphus.mipd.covariates import Covariates
 from sisyphus.mipd.meta import build_meta_tracks, meta_blend_cmax
 
 
@@ -63,10 +64,23 @@ def predict_posterior(
     n_samples: int = 20000,
     seed: int = 0,
     cl_latent: bool = False,
+    covariates: Covariates | None = None,
     n_grid: int = 13,
     **predict_kwargs,
 ) -> PosteriorPK:
     """Posterior PK for ``smiles`` at ``dose_mg`` given ``observations``.
+
+    Output fields (all on the returned PosteriorPK):
+      - ``cmax`` (+ ``cmax.ci90``): the engine-track posterior, fully conditioned
+        and CrCl-individualized — the PRIMARY estimate for TDM / patient
+        individualization. Its ci90 is a parameter-uncertainty band (under-covers
+        structural error).
+      - ``meta_cmax``: the production population blend (covariate-blind ML/CLF/VDss
+        mixed in; damped under conditioning, DE-43) — the SMILES-anchor product.
+      - ``cmax_90ci``: the train-calibrated conformal predictive band around the
+        meta point — the only coverage-validated interval (conservative under
+        conditioning, review #6).
+      - ``warnings``: structured non-fatal flags (e.g. extreme CrCl).
 
     Args:
         observations: MeasuredF / MeasuredCmax / MeasuredAUC / MeasuredConc. Empty
@@ -80,6 +94,10 @@ def predict_posterior(
             (MeasuredConc on the elimination tail); with magnitude-only data
             (MeasuredCmax/AUC) they trade off along an F/CL ridge — prefer the F-only
             path or anchor F with a MeasuredF (review finding #7).
+        covariates: patient covariates (v1: measured CrCl) that deterministically
+            individualize the engine's renal clearance (CrCl/125). Routes through a
+            single renal-scaled engine solve when no MeasuredConc is present, so the
+            metabolic clint latent stays fixed.
         n_grid: clint-scale grid resolution for the CL-grid path.
         seed: RNG seed for reproducible SIR.
         predict_kwargs: forwarded to ``pipeline.predict.predict`` (e.g. kp_method).
@@ -96,21 +114,71 @@ def predict_posterior(
 
     observations = list(observations)
     needs_grid = cl_latent or any(isinstance(o, MeasuredConc) for o in observations)
+    renal_factor = covariates.renal_factor() if covariates is not None else 1.0
+    individualized = renal_factor != 1.0
     rng = np.random.default_rng(seed)
 
-    # Read F_engine straight off the a-priori call (compute_f_engine) on the F-only
-    # path — no second 'probe' predict + warning regex. The CL-grid path derives
-    # F_engine from the grid, so it does not need the extra IV-reference solve.
+    warnings_list: list[str] = []
+    if covariates is not None and covariates.crcl_ml_min is not None:
+        if not (5.0 <= covariates.crcl_ml_min <= 200.0):
+            warnings_list.append(
+                f"crcl:extreme:{covariates.crcl_ml_min}: the engine renal model is "
+                "glomerular-filtration-only and least reliable outside [5, 200] mL/min"
+            )
+
+    # ap is needed for the (covariate-blind) meta tracks regardless. engine_f is
+    # only consumed by the reference F-only branch, so the IV-reference solve is
+    # requested only there.
     ap = predict(
         smiles, dose_mg, route=route,
-        compute_f_engine=not needs_grid,
+        compute_f_engine=(not needs_grid and not individualized),
         **predict_kwargs,
     )
     if ap.engine_pk is None or ap.engine_pk.cmax is None:
         raise ValueError("engine produced no Cmax for this input; cannot build a posterior")
 
-    if not needs_grid:
-        # F-only analytic path (engine linear in dose -> exact vertical scaling).
+    # Used by both the grid path and the single renal-scaled solve below.
+    from sisyphus.mipd.grid import build_cl_grid
+
+    if needs_grid:
+        # CL-grid 2-latent (F, clint-scale) path — handles MeasuredConc. CrCl
+        # individualizes renal CL via renal_factor; the clint latent is freed.
+        from sisyphus.mipd.clgrid import CLGridForward, CLPrior, sir_posterior_2d
+        from sisyphus.mipd.core import FPrior
+
+        grid = build_cl_grid(
+            smiles, dose_mg, route=route, n_grid=n_grid,
+            kp_method=predict_kwargs.get("kp_method", "rodgers_rowland"),
+            renal_factor=renal_factor,
+        )
+        i1 = int(np.argmin(np.abs(np.log(grid.s_grid))))
+        f_engine0 = float(min(max(grid.f_engine[i1], 1e-4), 1.0))
+        f_prior = FPrior(f_engine0, prior_cv)
+        cl_prior = CLPrior(
+            cv=cl_prior_cv, s_min=float(grid.s_grid[0]), s_max=float(grid.s_grid[-1])
+        )
+        post = sir_posterior_2d(
+            f_prior, cl_prior, CLGridForward(grid), observations,
+            n_samples=n_samples, rng=rng,
+        )
+    elif individualized:
+        # CrCl-only (no curve-shape obs): a single renal-scaled engine solve at
+        # clint-scale s=1 (clint latent stays FIXED). Reuses build_cl_grid with a
+        # 1-point grid; conc_at fragility does not bite (no MeasuredConc here).
+        g1 = build_cl_grid(
+            smiles, dose_mg, route=route, n_grid=1, s_range=(1.0, 1.0),
+            kp_method=predict_kwargs.get("kp_method", "rodgers_rowland"),
+            renal_factor=renal_factor,
+        )
+        cmax0 = float(g1.cmax[0])
+        auc0 = float(g1.auc[0])
+        f_engine = float(min(max(g1.f_engine[0], 1e-4), 1.0))
+        apriori = APrioriPK(cmax0=cmax0, auc0=auc0, f_engine=f_engine)
+        post = SIRAmortizer(prior_cv=prior_cv, n_samples=n_samples).posterior(
+            apriori, observations, rng=rng
+        )
+    else:
+        # Reference F-only analytic path (unchanged): cmax0 off the a-priori call.
         cmax0 = ap.engine_pk.cmax.mean
         auc0 = ap.engine_pk.auc_0t.mean if ap.engine_pk.auc_0t is not None else 0.0
         if ap.engine_f is None:
@@ -124,25 +192,6 @@ def predict_posterior(
         post = SIRAmortizer(prior_cv=prior_cv, n_samples=n_samples).posterior(
             apriori, observations, rng=rng
         )
-    else:
-        # CL-grid 2-latent (F, clint-scale) path — handles MeasuredConc.
-        from sisyphus.mipd.clgrid import CLGridForward, CLPrior, sir_posterior_2d
-        from sisyphus.mipd.core import FPrior
-        from sisyphus.mipd.grid import build_cl_grid
 
-        grid = build_cl_grid(
-            smiles, dose_mg, route=route, n_grid=n_grid,
-            kp_method=predict_kwargs.get("kp_method", "rodgers_rowland"),
-        )
-        i1 = int(np.argmin(np.abs(np.log(grid.s_grid))))  # the s=1 (a-priori) point
-        f_engine0 = float(min(max(grid.f_engine[i1], 1e-4), 1.0))
-        f_prior = FPrior(f_engine0, prior_cv)
-        cl_prior = CLPrior(
-            cv=cl_prior_cv, s_min=float(grid.s_grid[0]), s_max=float(grid.s_grid[-1])
-        )
-        post = sir_posterior_2d(
-            f_prior, cl_prior, CLGridForward(grid), observations,
-            n_samples=n_samples, rng=rng,
-        )
-
-    return _attach_meta_and_interval(post, smiles, dose_mg, ap)
+    post = _attach_meta_and_interval(post, smiles, dose_mg, ap)
+    return dataclasses.replace(post, warnings=tuple(warnings_list))

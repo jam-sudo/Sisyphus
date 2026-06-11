@@ -94,3 +94,38 @@ def test_predict_posterior_rejects_non_oral_route_on_f_only_path():
 def test_predict_posterior_rejects_non_oral_route_on_cl_grid_path():
     with pytest.raises(ValueError, match="oral"):
         predict_posterior(MIDAZOLAM, DOSE, cl_latent=True, route="iv", n_grid=5, seed=0)
+
+
+from sisyphus.mipd.covariates import Covariates
+
+ATENOLOL = "CC(C)NCC(O)COc1ccc(CC(N)=O)cc1"  # high-fup, renally-cleared
+
+
+def test_covariate_none_is_bit_identical_to_no_covariate():
+    a = predict_posterior(MIDAZOLAM, DOSE, seed=0)
+    b = predict_posterior(MIDAZOLAM, DOSE, covariates=Covariates(), seed=0)
+    assert np.array_equal(a.cmax.samples, b.cmax.samples)
+
+
+def test_crcl_only_uses_single_solve_not_2latent_grid():
+    post = predict_posterior(
+        MIDAZOLAM, DOSE, covariates=Covariates(crcl_ml_min=25), seed=0
+    )
+    assert post.cl_scale is None  # clint latent NOT freed (no MeasuredConc)
+    assert post.cmax.point > 0
+
+
+def test_renal_impairment_raises_exposure_for_renal_drug():
+    healthy = predict_posterior(ATENOLOL, DOSE, covariates=Covariates(crcl_ml_min=120), seed=0)
+    impaired = predict_posterior(ATENOLOL, DOSE, covariates=Covariates(crcl_ml_min=20), seed=0)
+    assert impaired.auc.point > healthy.auc.point
+    # Document the expected magnitude (engine attributes a modest renal fraction to
+    # atenolol): a 6x CrCl drop raises AUC by >3%. Guards a near-off renal regression.
+    assert impaired.auc.point / healthy.auc.point > 1.03
+
+
+def test_extreme_crcl_emits_warning_normal_does_not():
+    low = predict_posterior(MIDAZOLAM, DOSE, covariates=Covariates(crcl_ml_min=3), seed=0)
+    assert any("crcl" in w.lower() for w in low.warnings)
+    normal = predict_posterior(MIDAZOLAM, DOSE, covariates=Covariates(crcl_ml_min=90), seed=0)
+    assert normal.warnings == ()
