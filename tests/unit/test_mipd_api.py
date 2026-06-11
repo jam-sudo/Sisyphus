@@ -15,11 +15,13 @@ from sisyphus.mipd import MeasuredF, PosteriorPK
 from sisyphus.mipd.amortizer import NeuralAmortizer, SIRAmortizer
 from sisyphus.mipd.api import predict_posterior
 from sisyphus.mipd.core import APrioriPK
+from sisyphus.mipd.covariates import Covariates
 from sisyphus.pipeline.predict import predict
 from sisyphus.predict.adme import MeasuredADMEInput
 
 MIDAZOLAM = "C[n+]1cnc2n1-c1ccc(Cl)cc1C(c1ccccc1F)=NC2"
 DOSE = 7.5
+ATENOLOL = "CC(C)NCC(O)COc1ccc(CC(N)=O)cc1"  # high-fup, renally-cleared
 
 
 def test_predict_posterior_no_observations_matches_apriori_engine_cmax():
@@ -94,11 +96,6 @@ def test_predict_posterior_rejects_non_oral_route_on_f_only_path():
 def test_predict_posterior_rejects_non_oral_route_on_cl_grid_path():
     with pytest.raises(ValueError, match="oral"):
         predict_posterior(MIDAZOLAM, DOSE, cl_latent=True, route="iv", n_grid=5, seed=0)
-
-
-from sisyphus.mipd.covariates import Covariates
-
-ATENOLOL = "CC(C)NCC(O)COc1ccc(CC(N)=O)cc1"  # high-fup, renally-cleared
 
 
 def test_covariate_none_is_bit_identical_to_no_covariate():

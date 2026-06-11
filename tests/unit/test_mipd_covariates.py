@@ -41,6 +41,7 @@ def test_covariates_empty_is_no_op():
 
 def test_covariates_rejects_nonpositive_crcl():
     import pytest
+
     from sisyphus.mipd.covariates import Covariates
     with pytest.raises(ValueError):
         Covariates(crcl_ml_min=0.0)
