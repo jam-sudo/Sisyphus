@@ -64,6 +64,7 @@ def build_cl_grid(
     s_range: tuple[float, float] = (0.1, 10.0),
     kp_method: str = "rodgers_rowland",
     t_grid: np.ndarray | None = None,
+    renal_factor: float = 1.0,
 ) -> CLGrid:
     """Solve the engine over a clint-scale grid and return a ``CLGrid``."""
     from sisyphus.engine.compiler import ODECompiler, ResolvedParams
@@ -107,6 +108,19 @@ def build_cl_grid(
         hepatic_ecm_params=auto_ecm_params,
         non_cyp_fractions=non_cyp_fractions,
     )
+    # CrCl renal individualization (covariate-fixed, applied once to the base
+    # drug): scale the drug-level renal (glomerular-filtration) clearance. The
+    # per-scale enzyme_affinity scaling below is orthogonal and unchanged.
+    # F_engine is invariant to this (the engine is linear time-invariant), so the
+    # f_engine column is unaffected (see the design spec, verification C2).
+    if renal_factor != 1.0:
+        drug = dataclasses.replace(
+            drug,
+            renal_clearance=Distribution(
+                mean=drug.renal_clearance.mean * renal_factor,
+                cv=drug.renal_clearance.cv,
+            ),
+        )
     graph = augment_for_active_species(graph, drug)
     graph = expand_axial(graph)
 

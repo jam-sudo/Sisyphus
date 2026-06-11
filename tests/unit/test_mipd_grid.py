@@ -113,3 +113,38 @@ def test_nearest_finite_backfill_skips_a_nan_neighbor():
     assert np.all(np.isfinite(out))
     assert np.array_equal(out[0], conc[2])
     assert np.array_equal(out[1], conc[2])
+
+
+def test_build_cl_grid_renal_factor_scales_exposure_and_preserves_f_engine():
+    import numpy as np
+    base = build_cl_grid(MIDAZOLAM, DOSE, n_grid=5, s_range=(0.5, 2.0))
+    low_renal = build_cl_grid(
+        MIDAZOLAM, DOSE, n_grid=5, s_range=(0.5, 2.0), renal_factor=0.25
+    )
+    # Lower renal clearance -> higher total AUC at every clint scale (renal_cl>0).
+    assert np.all(low_renal.auc >= base.auc)
+    assert low_renal.auc[0] > base.auc[0]
+    # F_engine = AUC_oral/AUC_iv is invariant to systemic renal scaling (LTI).
+    # The tiny residual is the documented 0-24h AUC-truncation artifact
+    # (_engine_oral_bioavailability), which grows with the renal change; assert it
+    # stays small in absolute terms AND far below the exposure change it rides on.
+    f_dev = np.max(np.abs(low_renal.f_engine - base.f_engine) / base.f_engine)
+    auc_dev = np.max(np.abs(low_renal.auc - base.auc) / base.auc)
+    assert f_dev < 0.01           # f_engine barely moves (<1%)
+    assert f_dev < 0.5 * auc_dev  # ...and far less than the exposure it accompanies
+
+
+def test_build_cl_grid_renal_factor_unity_is_unchanged():
+    import numpy as np
+    a = build_cl_grid(MIDAZOLAM, DOSE, n_grid=5, s_range=(0.5, 2.0))
+    b = build_cl_grid(MIDAZOLAM, DOSE, n_grid=5, s_range=(0.5, 2.0), renal_factor=1.0)
+    assert np.array_equal(a.cmax, b.cmax)
+    assert np.array_equal(a.auc, b.auc)
+
+
+def test_build_cl_grid_single_point_at_unit_scale():
+    # n_grid=1 at s=1 is the single renal-scaled solve the API uses for CrCl-only.
+    g = build_cl_grid(MIDAZOLAM, DOSE, n_grid=1, s_range=(1.0, 1.0), renal_factor=0.5)
+    assert g.cmax.shape == (1,)
+    assert g.cmax[0] > 0 and g.auc[0] > 0
+    assert 0.0 < g.f_engine[0] <= 1.0
