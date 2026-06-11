@@ -144,7 +144,9 @@ def test_renal_individualization_larger_for_high_renal_fraction_drug():
 def test_predict_posterior_weight_age_routes_through_individualized_solve():
     # weight (no obs, no CrCl) must reach the engine via the individualized solve,
     # not the reference F-only path; the clint latent stays fixed.
-    post = predict_posterior(MIDAZOLAM, DOSE, covariates=Covariates(body_weight_kg=10, age_years=2), seed=0)
+    post = predict_posterior(
+        MIDAZOLAM, DOSE, covariates=Covariates(body_weight_kg=10, age_years=2), seed=0
+    )
     assert post.cl_scale is None
     assert post.cmax.point > 0
 

@@ -51,6 +51,7 @@ def test_covariates_rejects_nonpositive_crcl():
 
 def test_covariates_weight_age_fields_and_validation():
     import pytest
+
     from sisyphus.mipd.covariates import Covariates
     c = Covariates(body_weight_kg=10.0, age_years=2.0)
     assert c.body_weight_kg == 10.0 and c.age_years == 2.0
