@@ -55,6 +55,59 @@ def _nearest_finite_backfill(conc: np.ndarray) -> np.ndarray:
     return conc
 
 
+def _build_grid_engine(
+    smiles: str,
+    dose_mg: float,
+    route: str,
+    renal_factor: float,
+    kp_method: str,
+):
+    """Build + compile the engine for a grid: profile -> adme -> graph -> drug.
+
+    Returns ``(compiled, realized_graph, drug, obs_node)``. Applies the CrCl
+    renal_factor once to the base drug. Shared by ``build_cl_grid`` (single-bolus
+    clint grid) and ``build_renal_cl_grid`` (multi-dose renal grid).
+    """
+    from sisyphus.engine.compiler import ODECompiler
+    from sisyphus.graph.axial import expand_axial
+    from sisyphus.graph.builder import augment_for_active_species, build_from_yaml
+    from sisyphus.pipeline.predict import _PHYSIOLOGY_DIR, _resolve_observation_node
+    from sisyphus.predict.adme import predict_adme
+    from sisyphus.predict.chemistry import compute_profile
+    from sisyphus.predict.ivive import build_drug_on_graph, detect_disposition
+
+    profile = compute_profile(smiles)
+    adme = predict_adme(profile)
+    graph = build_from_yaml(_PHYSIOLOGY_DIR / "reference_man.yaml")
+    auto_oatp_kinetics, auto_ecm_params, non_cyp_fractions = detect_disposition(profile)
+
+    liver_pre: dict[str, float] | None = None
+    if "liver" in graph.nodes and graph.nodes["liver"].enzymes:
+        liver_pre = {tag: d.mean for tag, d in graph.nodes["liver"].enzymes.items()}
+    drug = build_drug_on_graph(
+        profile, adme, dose_mg, route,
+        liver_enzymes=liver_pre,
+        kp_method=kp_method,
+        transporter_kinetics=auto_oatp_kinetics,
+        hepatic_ecm_params=auto_ecm_params,
+        non_cyp_fractions=non_cyp_fractions,
+    )
+    if renal_factor != 1.0:
+        drug = dataclasses.replace(
+            drug,
+            renal_clearance=Distribution(
+                mean=drug.renal_clearance.mean * renal_factor,
+                cv=drug.renal_clearance.cv,
+            ),
+        )
+    graph = augment_for_active_species(graph, drug)
+    graph = expand_axial(graph)
+    compiled = ODECompiler().compile(graph)
+    realized_graph = graph.realize_means()
+    obs_node = _resolve_observation_node(drug)
+    return compiled, realized_graph, drug, obs_node
+
+
 def build_cl_grid(
     smiles: str,
     dose_mg: float,
@@ -67,67 +120,18 @@ def build_cl_grid(
     renal_factor: float = 1.0,
 ) -> CLGrid:
     """Solve the engine over a clint-scale grid and return a ``CLGrid``."""
-    from sisyphus.engine.compiler import ODECompiler, ResolvedParams
+    from sisyphus.engine.compiler import ResolvedParams
     from sisyphus.engine.solver import _IV_CMAX_DELAY_H, solve
-    from sisyphus.graph.axial import expand_axial
-    from sisyphus.graph.builder import augment_for_active_species, build_from_yaml
-    from sisyphus.pipeline.predict import (
-        _PHYSIOLOGY_DIR,
-        _engine_oral_bioavailability,
-        _resolve_observation_node,
-    )
+    from sisyphus.pipeline.predict import _engine_oral_bioavailability
     from sisyphus.pk.endpoints import compute_endpoints
-    from sisyphus.predict.adme import predict_adme
-    from sisyphus.predict.chemistry import compute_profile
-    from sisyphus.predict.ivive import build_drug_on_graph, detect_disposition
 
     if t_grid is None:
         t_grid = _default_t_grid()
     s_grid = np.geomspace(s_range[0], s_range[1], n_grid)
 
-    profile = compute_profile(smiles)
-    adme = predict_adme(profile)
-    graph = build_from_yaml(_PHYSIOLOGY_DIR / "reference_man.yaml")
-
-    # Use predict()'s shared disposition detector (single source of truth) so the
-    # grid's engine path is faithful for OATP/ECM and non-CYP (UGT/NAT) substrates,
-    # not just CYP drugs. Without these args the s=1 grid diverges from predict()
-    # (e.g. ~18% for codeine, ~50% for morphine).
-    auto_oatp_kinetics, auto_ecm_params, non_cyp_fractions = detect_disposition(profile)
-
-    # Snapshot pre-phenotype liver abundances and rebuild the drug from them, so
-    # back-solved affinities match the engine multiplication (mirrors predict()).
-    liver_pre: dict[str, float] | None = None
-    if "liver" in graph.nodes and graph.nodes["liver"].enzymes:
-        liver_pre = {tag: d.mean for tag, d in graph.nodes["liver"].enzymes.items()}
-    drug = build_drug_on_graph(
-        profile, adme, dose_mg, route,
-        liver_enzymes=liver_pre,
-        kp_method=kp_method,
-        transporter_kinetics=auto_oatp_kinetics,
-        hepatic_ecm_params=auto_ecm_params,
-        non_cyp_fractions=non_cyp_fractions,
+    compiled, realized_graph, drug, obs_node = _build_grid_engine(
+        smiles, dose_mg, route, renal_factor, kp_method
     )
-    # CrCl renal individualization (covariate-fixed, applied once to the base
-    # drug): scale the drug-level renal (glomerular-filtration) clearance. The
-    # per-scale enzyme_affinity scaling below is orthogonal and unchanged.
-    # F_engine is invariant to this (the engine is linear time-invariant), so the
-    # f_engine column is unaffected (see the design spec, verification C2).
-    if renal_factor != 1.0:
-        drug = dataclasses.replace(
-            drug,
-            renal_clearance=Distribution(
-                mean=drug.renal_clearance.mean * renal_factor,
-                cv=drug.renal_clearance.cv,
-            ),
-        )
-    graph = augment_for_active_species(graph, drug)
-    graph = expand_axial(graph)
-
-    compiler = ODECompiler()
-    compiled = compiler.compile(graph)
-    realized_graph = graph.realize_means()
-    obs_node = _resolve_observation_node(drug)
     t_min_h = _IV_CMAX_DELAY_H if route == "iv" else 0.0
     admin_idx = compiled.state_index[drug.administration_node]
 
