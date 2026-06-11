@@ -193,6 +193,10 @@ class PosteriorPK:
     # metabolic clint-scale latent posterior (CL-grid path); scales enzyme
     # (CYP/UGT/NAT) clearance only — renal/biliary CL is held fixed.
     cl_scale: Posterior | None = None
+    # Structured non-fatal flags (e.g. extreme CrCl). Empty by default
+    # (additive — preserves the prior PosteriorPK contract). Project doctrine:
+    # never silently drop a warning.
+    warnings: tuple[str, ...] = ()
 
 
 def _softmax_resample(
