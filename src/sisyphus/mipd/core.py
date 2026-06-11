@@ -163,6 +163,26 @@ class Posterior:
         return self.ci(0.90)
 
 
+def ci_floor(
+    ci: tuple[float, float] | None, mean: float, frac: float
+) -> tuple[float, float] | None:
+    """Widen a 90% interval to half-width ``frac*mean`` if it is narrower.
+
+    Opt-in guard (``frac<=0`` is a no-op) against an over-tight conditioned
+    posterior that pathologically excludes truth. Mirrors the formula of
+    ``regimen.tdm._apply_ci_floor`` (which takes a TDMResult, so it is not a
+    drop-in here). The widened interval is centered on ``mean``.
+    """
+    if frac <= 0.0 or ci is None or mean <= 0.0:
+        return ci
+    lo, hi = ci
+    floor = frac * mean
+    half = max(mean - lo, hi - mean)
+    if half >= floor:
+        return ci
+    return (max(mean - floor, 0.0), mean + floor)
+
+
 @dataclass(frozen=True)
 class PosteriorPK:
     """The posterior over PK after conditioning on observations.
