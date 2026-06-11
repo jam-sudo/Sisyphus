@@ -148,3 +148,34 @@ def test_build_cl_grid_single_point_at_unit_scale():
     assert g.cmax.shape == (1,)
     assert g.cmax[0] > 0 and g.auc[0] > 0
     assert 0.0 < g.f_engine[0] <= 1.0
+
+
+def test_build_cl_grid_weight_age_individualizes_and_solves():
+    # generate_physiology path must run augment->expand->compile->solve end-to-end
+    # (this path has no existing caller — proven here).
+    g = build_cl_grid(MIDAZOLAM, DOSE, n_grid=3, s_range=(0.5, 2.0),
+                      body_weight_kg=40.0, age_years=70.0)
+    import numpy as np
+    assert g.cmax.shape == (3,)
+    assert np.all(np.isfinite(g.cmax)) and np.all(g.cmax > 0)
+
+
+def test_build_cl_grid_no_weight_age_is_unchanged():
+    import numpy as np
+    a = build_cl_grid(MIDAZOLAM, DOSE, n_grid=3, s_range=(0.5, 2.0))
+    b = build_cl_grid(MIDAZOLAM, DOSE, n_grid=3, s_range=(0.5, 2.0),
+                      body_weight_kg=None, age_years=None)
+    assert np.array_equal(a.cmax, b.cmax) and np.array_equal(a.auc, b.auc)
+
+
+def test_build_cl_grid_lower_weight_higher_cmax():
+    # fixed dose, lower body weight -> smaller distribution volume -> higher Cmax.
+    # (Cmax is the clean weight signal for an oral drug; AUC is confounded — for a
+    # high-extraction drug like midazolam, generate_physiology scales enzyme CLint
+    # x(BW/70) but flow Q x(BW/70)^0.75, so at lower BW first-pass extraction rises
+    # and F drops, which roughly cancels the systemic-CL effect on AUC. The IV path
+    # isolates systemic CL; see the renal-grid tests.)
+    ref = build_cl_grid(MIDAZOLAM, DOSE, n_grid=3, s_range=(0.5, 2.0))            # 70 kg
+    light = build_cl_grid(MIDAZOLAM, DOSE, n_grid=3, s_range=(0.5, 2.0),
+                          body_weight_kg=40.0)
+    assert light.cmax[1] > ref.cmax[1]  # s=1.0 (middle of geomspace(0.5,2.0,3))
