@@ -129,3 +129,16 @@ def test_extreme_crcl_emits_warning_normal_does_not():
     assert any("crcl" in w.lower() for w in low.warnings)
     normal = predict_posterior(MIDAZOLAM, DOSE, covariates=Covariates(crcl_ml_min=90), seed=0)
     assert normal.warnings == ()
+
+
+def test_renal_individualization_larger_for_high_renal_fraction_drug():
+    """The CrCl effect on AUC is larger for a renally-cleared drug (atenolol)
+    than for a hepatically-cleared one (midazolam), since renal_cl = 7.5*fup is a
+    larger fraction of total CL when fup is high and metabolism is low."""
+    def auc_ratio(smiles):
+        hi = predict_posterior(smiles, DOSE, covariates=Covariates(crcl_ml_min=120), seed=0)
+        lo = predict_posterior(smiles, DOSE, covariates=Covariates(crcl_ml_min=20), seed=0)
+        return lo.auc.point / hi.auc.point
+
+    assert auc_ratio(ATENOLOL) > auc_ratio(MIDAZOLAM)
+    assert auc_ratio(ATENOLOL) > 1.0  # impairment raises exposure for the renal drug
