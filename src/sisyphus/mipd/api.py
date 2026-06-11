@@ -115,16 +115,13 @@ def predict_posterior(
     observations = list(observations)
     needs_grid = cl_latent or any(isinstance(o, MeasuredConc) for o in observations)
     renal_factor = covariates.renal_factor() if covariates is not None else 1.0
-    individualized = renal_factor != 1.0
+    has_phys = covariates.has_physiology() if covariates is not None else False
+    body_weight_kg = covariates.body_weight_kg if covariates is not None else None
+    age_years = covariates.age_years if covariates is not None else None
+    individualized = renal_factor != 1.0 or has_phys
     rng = np.random.default_rng(seed)
 
-    warnings_list: list[str] = []
-    if covariates is not None and covariates.crcl_ml_min is not None:
-        if not (5.0 <= covariates.crcl_ml_min <= 200.0):
-            warnings_list.append(
-                f"crcl:extreme:{covariates.crcl_ml_min}: the engine renal model is "
-                "glomerular-filtration-only and least reliable outside [5, 200] mL/min"
-            )
+    warnings_list: list[str] = list(covariates.warnings()) if covariates is not None else []
 
     # ap is needed for the (covariate-blind) meta tracks regardless. engine_f is
     # only consumed by the reference F-only branch, so the IV-reference solve is
@@ -150,6 +147,8 @@ def predict_posterior(
             smiles, dose_mg, route=route, n_grid=n_grid,
             kp_method=predict_kwargs.get("kp_method", "rodgers_rowland"),
             renal_factor=renal_factor,
+            body_weight_kg=body_weight_kg,
+            age_years=age_years,
         )
         i1 = int(np.argmin(np.abs(np.log(grid.s_grid))))
         f_engine0 = float(min(max(grid.f_engine[i1], 1e-4), 1.0))
@@ -169,6 +168,8 @@ def predict_posterior(
             smiles, dose_mg, route=route, n_grid=1, s_range=(1.0, 1.0),
             kp_method=predict_kwargs.get("kp_method", "rodgers_rowland"),
             renal_factor=renal_factor,
+            body_weight_kg=body_weight_kg,
+            age_years=age_years,
         )
         cmax0 = float(g1.cmax[0])
         auc0 = float(g1.auc[0])
