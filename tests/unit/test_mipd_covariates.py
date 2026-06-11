@@ -21,3 +21,28 @@ def test_ci_floor_none_passthrough():
 
 def test_ci_floor_nonpositive_mean_passthrough():
     assert ci_floor((0.9, 1.1), 0.0, 0.2) == (0.9, 1.1)
+
+
+def test_covariates_renal_factor_unity_at_reference():
+    from sisyphus.mipd.covariates import Covariates
+    assert Covariates(crcl_ml_min=125.0).renal_factor() == 1.0
+
+
+def test_covariates_renal_factor_scales_linearly():
+    from sisyphus.mipd.covariates import Covariates
+    assert Covariates(crcl_ml_min=62.5).renal_factor() == 0.5
+
+
+def test_covariates_empty_is_no_op():
+    from sisyphus.mipd.covariates import Covariates
+    assert Covariates().renal_factor() == 1.0
+    assert Covariates(crcl_ml_min=None).renal_factor() == 1.0
+
+
+def test_covariates_rejects_nonpositive_crcl():
+    import pytest
+    from sisyphus.mipd.covariates import Covariates
+    with pytest.raises(ValueError):
+        Covariates(crcl_ml_min=0.0)
+    with pytest.raises(ValueError):
+        Covariates(crcl_ml_min=-5.0)
