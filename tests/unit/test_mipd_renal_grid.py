@@ -74,9 +74,9 @@ def test_build_renal_cl_grid_lower_r_higher_exposure():
 
 def test_build_renal_cl_grid_faithful_to_solve_regimen():
     # The grid's per-r curve must equal a direct solve_regimen at that r.
+    from sisyphus.engine.compiler import ResolvedParams
     from sisyphus.mipd.grid import _build_grid_engine
     from sisyphus.mipd.renal_grid import build_renal_cl_grid
-    from sisyphus.engine.compiler import ResolvedParams
     from sisyphus.regimen.solver import solve_regimen
 
     reg = _iv_regimen()

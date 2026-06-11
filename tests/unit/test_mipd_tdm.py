@@ -1,5 +1,4 @@
 """Integration tests for mipd.tdm.predict_tdm (IV steady-state TDM)."""
-import numpy as np
 import pytest
 
 from sisyphus.mipd.clgrid import MeasuredConc

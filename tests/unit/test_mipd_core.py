@@ -139,8 +139,9 @@ def test_posterior_pk_carries_warnings():
 
 
 def test_posterior_pk_renal_scale_defaults_none():
-    from sisyphus.mipd.core import Posterior, PosteriorPK
     import numpy as np
+
+    from sisyphus.mipd.core import Posterior, PosteriorPK
 
     s = Posterior(np.array([1.0, 2.0, 3.0]))
     post = PosteriorPK(f=s, cmax=s, auc=s, n_eff=10.0)
