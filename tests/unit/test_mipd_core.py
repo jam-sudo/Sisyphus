@@ -136,3 +136,14 @@ def test_posterior_pk_carries_warnings():
     s = Posterior(np.array([1.0, 2.0, 3.0]))
     post = PosteriorPK(f=s, cmax=s, auc=s, n_eff=10.0, warnings=("crcl:extreme:3.0",))
     assert post.warnings == ("crcl:extreme:3.0",)
+
+
+def test_posterior_pk_renal_scale_defaults_none():
+    from sisyphus.mipd.core import Posterior, PosteriorPK
+    import numpy as np
+
+    s = Posterior(np.array([1.0, 2.0, 3.0]))
+    post = PosteriorPK(f=s, cmax=s, auc=s, n_eff=10.0)
+    assert post.renal_scale is None
+    post2 = PosteriorPK(f=s, cmax=s, auc=s, n_eff=10.0, renal_scale=s)
+    assert post2.renal_scale is s

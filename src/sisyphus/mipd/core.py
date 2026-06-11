@@ -217,6 +217,10 @@ class PosteriorPK:
     # (additive — preserves the prior PosteriorPK contract). Project doctrine:
     # never silently drop a warning.
     warnings: tuple[str, ...] = ()
+    # Renal-CL latent posterior (IV steady-state TDM path, mipd.tdm.predict_tdm):
+    # the individualized renal-clearance scale relative to the CrCl-implied value.
+    # None on every other path. Additive — preserves the prior contract.
+    renal_scale: Posterior | None = None
 
 
 def _softmax_resample(
