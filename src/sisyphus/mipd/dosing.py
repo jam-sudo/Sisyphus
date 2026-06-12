@@ -182,6 +182,9 @@ def _interval_reference(
     of the final dosing interval; ``cmax`` / per-interval ``auc`` from the forward;
     ``auc24`` = per-interval AUC * (24/tau). Returns the quantity dict and the
     reference dose ``D_ref`` (= the regimen's per-dose amount).
+
+    Precondition: ``tau`` must equal the regimen's own dosing interval (the orchestrator
+    builds the regimen and tau together), so the trough time stays within the grid horizon.
     """
     from sisyphus.mipd.renal_grid import RenalCLForward, build_renal_cl_grid
 
@@ -200,5 +203,147 @@ def _interval_reference(
     return q_ref, d_ref
 
 
-def recommend_dose(*args, **kwargs):  # implemented in Task 4
-    raise NotImplementedError("recommend_dose is implemented in a later task")
+_INFEASIBLE_ATTAINMENT = 0.5  # soft-warn when the best candidate falls below this
+_TIE_EPS = 1e-3               # attainment ties within this prefer the longer interval
+
+
+def _tie_tolerance(n_samples: int) -> float:
+    """Attainment-tie band: ~2x the binomial SE of a proportion at ``n_samples``.
+
+    Attainment is ``mean(boolean)`` over the posterior particles, so its sampling SE
+    is ``sqrt(p(1-p)/n) <= sqrt(0.25/n)``. Two intervals whose attainment differs by
+    less than this are statistically tied and the longer-interval preference should
+    decide between them; a fixed ``_TIE_EPS`` below the SE would let MC noise defeat
+    that rule. Floored at ``_TIE_EPS``.
+    """
+    return max(_TIE_EPS, 2.0 * math.sqrt(0.25 / max(n_samples, 1)))
+
+
+def recommend_dose(
+    smiles: str,
+    regimen,
+    observations,
+    target: DoseTarget,
+    *,
+    covariates=None,
+    candidate_intervals: tuple[float, ...] | None = None,
+    dose_step_mg: float | None = None,
+    dose_bounds_mg: tuple[float, float] | None = None,
+    renal_prior_cv: float = 1.0,
+    n_samples: int = 20000,
+    n_grid: int = 13,
+    seed: int = 0,
+    kp_method: str = "rodgers_rowland",
+) -> DoseRecommendation:
+    """Recommend the (dose, interval) that best attains ``target`` under the posterior.
+
+    ``regimen`` is the CURRENT IV regimen the ``observations`` (steady-state troughs)
+    were measured under. The renal-CL posterior is inferred once (a patient property),
+    then propagated to each candidate interval; the dose is solved analytically per
+    interval (LTI). The winner maximizes attainment, breaking ties toward the longer
+    interval. IV-only (oral steady-state TDM is a future layer).
+
+    Callers should check ``attainment_prob`` (and ``warnings``) before acting: an
+    infeasible target still returns the best-effort longest-interval candidate.
+    Steady state for a candidate interval is approximated by ``n_doses =
+    max(2, round(cur_last/tau)+1)`` doses; a slowly-accumulating (long-half-life) drug
+    at a long candidate interval may be modeled slightly below true steady state.
+    The current regimen is assumed uniform (dose/duration/interval read from its first
+    events); a non-uniform input regimen is reconstructed as uniform.
+    """
+    from sisyphus.mipd.tdm import predict_tdm
+    from sisyphus.regimen.types import DEFAULT_IV_NODE, DosingRegimen
+
+    if any(ev.node != DEFAULT_IV_NODE for ev in regimen.events):
+        raise ValueError(
+            "recommend_dose supports IV regimens only (every event must target the IV "
+            f"node {DEFAULT_IV_NODE!r}); oral steady-state TDM is a future extension."
+        )
+
+    if float(regimen.events[0].dose_mg) <= 0.0:
+        raise ValueError("recommend_dose requires the current regimen's dose to be > 0")
+
+    observations = list(observations)
+    post = predict_tdm(
+        smiles, regimen, observations, covariates=covariates,
+        renal_prior_cv=renal_prior_cv, n_samples=n_samples, n_grid=n_grid,
+        seed=seed, kp_method=kp_method,
+    )
+    r_samples = post.renal_scale.samples
+    warnings_list = list(post.warnings)
+
+    renal_factor = covariates.renal_factor() if covariates is not None else 1.0
+    body_weight_kg = covariates.body_weight_kg if covariates is not None else None
+    age_years = covariates.age_years if covariates is not None else None
+
+    cur_dose = float(regimen.events[0].dose_mg)
+    cur_dur = float(regimen.events[0].duration_h)
+    cur_last = float(regimen.last_dose_time_h)
+    cur_tau = (
+        float(regimen.events[1].time_h - regimen.events[0].time_h)
+        if regimen.n_doses >= 2 else 24.0
+    )
+
+    base = tuple(candidate_intervals) if candidate_intervals is not None else (8.0, 12.0, 24.0)
+    taus = sorted(set(base + (cur_tau,)))
+
+    rows: list[tuple[CandidateEval, dict[str, np.ndarray], float]] = []
+    for tau in taus:
+        n_doses = max(2, int(round(cur_last / tau)) + 1)
+        reg_tau = DosingRegimen.iv_infusion(
+            dose_mg=cur_dose, duration_h=cur_dur, interval_h=tau, n_doses=n_doses
+        )
+        q_ref, d_ref = _interval_reference(
+            smiles, reg_tau, tau, r_samples, renal_factor=renal_factor,
+            body_weight_kg=body_weight_kg, age_years=age_years, n_grid=n_grid,
+            kp_method=kp_method,
+        )
+        m_lo, m_hi = _sample_m_intervals(q_ref, target)
+        a, b, _ = _max_overlap_region(m_lo, m_hi)
+        dose = _center_m(a, b) * d_ref
+        if dose_step_mg:
+            dose = round(dose / dose_step_mg) * dose_step_mg
+        if dose_bounds_mg is not None:
+            dose = min(max(dose, dose_bounds_mg[0]), dose_bounds_mg[1])
+        m_actual = dose / d_ref
+        attain = _attainment(m_actual, m_lo, m_hi)
+        rows.append((
+            CandidateEval(
+                dose_mg=float(dose), interval_h=float(tau), attainment_prob=attain,
+                trough_median=float(np.median(q_ref["trough"] * m_actual)),
+                cmax_median=float(np.median(q_ref["cmax"] * m_actual)),
+                auc24_median=float(np.median(q_ref["auc24"] * m_actual)),
+            ),
+            q_ref, m_actual,
+        ))
+
+    best_attain = max(row[0].attainment_prob for row in rows)
+    tie_eps = _tie_tolerance(r_samples.size)
+    winners = [row for row in rows if row[0].attainment_prob >= best_attain - tie_eps]
+    win_cand, win_q, win_m = max(winners, key=lambda row: row[0].interval_h)
+
+    if win_cand.dose_mg <= 0.0:
+        warnings_list.append(
+            f"recommended dose rounded to {win_cand.dose_mg:g} mg under the dose "
+            f"granularity (dose_step_mg={dose_step_mg}); the optimal dose is below one step"
+        )
+
+    if win_cand.attainment_prob < _INFEASIBLE_ATTAINMENT:
+        warnings_list.append(
+            f"best attainment {win_cand.attainment_prob:.2f} < "
+            f"{_INFEASIBLE_ATTAINMENT:.2f}; target may be infeasible for this patient"
+        )
+
+    return DoseRecommendation(
+        dose_mg=win_cand.dose_mg,
+        interval_h=win_cand.interval_h,
+        attainment_prob=win_cand.attainment_prob,
+        cmax=Posterior(win_q["cmax"] * win_m),
+        trough=Posterior(win_q["trough"] * win_m),
+        auc24=Posterior(win_q["auc24"] * win_m),
+        target=target,
+        candidates=tuple(row[0] for row in rows),
+        renal_scale=post.renal_scale,
+        n_eff=post.n_eff,
+        warnings=tuple(warnings_list),
+    )

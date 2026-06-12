@@ -7,6 +7,7 @@ import pytest
 from sisyphus.mipd.clgrid import MeasuredConc  # noqa: F401  (used by later-task tests)
 from sisyphus.mipd.covariates import Covariates  # noqa: F401  (used by later-task tests)
 from sisyphus.mipd.dosing import (
+    _TIE_EPS,
     CandidateEval,  # noqa: F401  (used by later-task tests)
     Constraint,
     DoseRecommendation,  # noqa: F401  (used by later-task tests)
@@ -16,6 +17,7 @@ from sisyphus.mipd.dosing import (
     _interval_reference,
     _max_overlap_region,
     _sample_m_intervals,
+    _tie_tolerance,
     recommend_dose,  # noqa: F401  (used by later-task tests)
 )
 from sisyphus.regimen.types import DosingRegimen
@@ -153,3 +155,140 @@ def test_interval_reference_returns_quantities_at_reference_dose():
     g = build_renal_cl_grid(ATENOLOL, reg, n_grid=5)
     expect = float(g.conc_at(np.array([1.0]), reg.last_dose_time_h + 8.0)[0])
     assert q_ref["trough"][0] == pytest.approx(expect, rel=1e-9)
+
+
+def _engine_trough_at_unit_scale(reg, dose_mg=50.0):
+    """The engine's own r=1 steady-state trough — a stack-independent anchor."""
+    from sisyphus.mipd.renal_grid import build_renal_cl_grid
+
+    g = build_renal_cl_grid(ATENOLOL, reg, n_grid=5)
+    return float(g.conc_at(np.array([1.0]), reg.last_dose_time_h + 8.0)[0])
+
+
+def test_recommend_rejects_oral_regimen():
+    oral = DosingRegimen.oral_repeated(dose_mg=50.0, interval_h=8.0, n_doses=3)
+    with pytest.raises(ValueError, match="IV"):
+        recommend_dose(ATENOLOL, oral, [], DoseTarget((Constraint("trough", low=0.1),)))
+
+
+def test_recommend_hits_feasible_trough_window():
+    reg = _iv_regimen()
+    base = _engine_trough_at_unit_scale(reg)
+    obs = [MeasuredConc(value=base, t=reg.last_dose_time_h + 8.0, cv=0.1)]
+    lo, hi = 1.3 * base, 1.7 * base
+    rec = recommend_dose(
+        ATENOLOL, reg, obs, DoseTarget((Constraint("trough", low=lo, high=hi),)),
+        candidate_intervals=(8.0,), n_grid=5, n_samples=4000, seed=0,
+    )
+    assert lo <= rec.trough.point <= hi
+    assert rec.attainment_prob > 0.5
+    assert isinstance(rec, DoseRecommendation)
+
+
+def test_recommend_tie_break_prefers_longer_interval():
+    reg = _iv_regimen()
+    from sisyphus.mipd.renal_grid import build_renal_cl_grid
+
+    g = build_renal_cl_grid(ATENOLOL, reg, n_grid=5)
+    i1 = int(np.argmin(np.abs(np.log(g.r_grid))))  # r≈1 index
+    loose = 10.0 * float(g.cmax[i1])
+    rec = recommend_dose(
+        ATENOLOL, reg, [], DoseTarget((Constraint("cmax", high=loose),)),
+        candidate_intervals=(8.0, 24.0), n_grid=5, n_samples=2000, seed=0,
+    )
+    assert rec.interval_h == 24.0
+    assert rec.attainment_prob == pytest.approx(1.0, abs=1e-6)
+    assert len(rec.candidates) == 2
+
+
+def test_recommend_dose_step_rounds_dose():
+    reg = _iv_regimen()
+    base = _engine_trough_at_unit_scale(reg)
+    obs = [MeasuredConc(value=base, t=reg.last_dose_time_h + 8.0, cv=0.1)]
+    rec = recommend_dose(
+        ATENOLOL, reg, obs, DoseTarget((Constraint("trough", low=1.3 * base, high=1.7 * base),)),
+        candidate_intervals=(8.0,), dose_step_mg=25.0, n_grid=5, n_samples=2000, seed=0,
+    )
+    assert rec.dose_mg % 25.0 == pytest.approx(0.0, abs=1e-9)
+
+
+def test_recommend_extreme_crcl_warns_and_individualizes():
+    reg = _iv_regimen()
+    rec = recommend_dose(
+        ATENOLOL, reg, [], DoseTarget((Constraint("trough", low=0.01),)),
+        covariates=Covariates(crcl_ml_min=3), candidate_intervals=(8.0,),
+        n_grid=5, n_samples=2000, seed=0,
+    )
+    assert any("crcl" in w.lower() for w in rec.warnings)
+
+
+def test_recommend_infeasible_target_warns():
+    reg = _iv_regimen()
+    base = _engine_trough_at_unit_scale(reg)
+    rec = recommend_dose(
+        ATENOLOL, reg, [],  # no obs -> wide renal prior -> wide trough spread
+        DoseTarget((Constraint("trough", low=0.999 * base, high=1.001 * base),)),
+        candidate_intervals=(8.0,), n_grid=5, n_samples=3000, seed=0,
+    )
+    assert rec.attainment_prob < 0.5
+    assert any("attainment" in w.lower() for w in rec.warnings)
+
+
+def test_recommend_renal_scale_shifts_with_observation():
+    reg = _iv_regimen()
+    base = _engine_trough_at_unit_scale(reg)
+    obs = [MeasuredConc(value=0.5 * base, t=reg.last_dose_time_h + 8.0, cv=0.2)]
+    rec = recommend_dose(
+        ATENOLOL, reg, obs, DoseTarget((Constraint("trough", low=0.01),)),
+        candidate_intervals=(8.0,), n_grid=7, n_samples=4000, seed=0,
+    )
+    assert rec.renal_scale.point > 1.0
+
+
+def test_recommend_joint_peak_trough_satisfies_both():
+    from sisyphus.mipd.renal_grid import build_renal_cl_grid
+
+    reg = _iv_regimen()
+    reg24 = DosingRegimen.iv_infusion(50.0, 0.5, 24.0, 2)
+    g24 = build_renal_cl_grid(ATENOLOL, reg24, n_grid=5)
+    i24 = int(np.argmin(np.abs(np.log(g24.r_grid))))  # r≈1
+    c24 = float(g24.cmax[i24])
+    t24 = float(g24.conc_at(np.array([1.0]), reg24.last_dose_time_h + 24.0)[0])
+    target = DoseTarget((
+        Constraint("cmax", low=0.5 * c24, high=2.0 * c24),
+        Constraint("trough", high=2.0 * t24),
+    ))
+    obs = [MeasuredConc(
+        value=_engine_trough_at_unit_scale(reg), t=reg.last_dose_time_h + 8.0, cv=0.1
+    )]
+    rec = recommend_dose(
+        ATENOLOL, reg, obs, target, candidate_intervals=(8.0, 24.0),
+        n_grid=5, n_samples=4000, seed=0,
+    )
+    assert rec.attainment_prob > 0.5
+    assert 0.5 * c24 <= rec.cmax.point <= 2.0 * c24
+    assert rec.trough.point <= 2.0 * t24
+
+
+def test_tie_tolerance_scales_with_samples():
+    assert _tie_tolerance(20000) == pytest.approx(2.0 * math.sqrt(0.25 / 20000))
+    assert _tie_tolerance(2000) > _tie_tolerance(20000)  # fewer samples -> wider band
+    assert _tie_tolerance(10**12) == pytest.approx(_TIE_EPS)  # floor engages at huge n
+
+
+def test_recommend_rejects_zero_dose_regimen():
+    reg = DosingRegimen.iv_infusion(dose_mg=0.0, duration_h=0.5, interval_h=8.0, n_doses=3)
+    with pytest.raises(ValueError, match="dose to be > 0"):
+        recommend_dose(ATENOLOL, reg, [], DoseTarget((Constraint("trough", low=0.1),)))
+
+
+def test_recommend_dose_rounded_to_zero_warns():
+    # A tiny trough ceiling forces a small optimal dose; a huge dose_step rounds it to 0 mg.
+    reg = _iv_regimen()
+    base = _engine_trough_at_unit_scale(reg)
+    rec = recommend_dose(
+        ATENOLOL, reg, [], DoseTarget((Constraint("trough", high=0.001 * base),)),
+        candidate_intervals=(8.0,), dose_step_mg=1000.0, n_grid=5, n_samples=2000, seed=0,
+    )
+    assert rec.dose_mg == 0.0
+    assert any("granularity" in w.lower() for w in rec.warnings)
