@@ -15,10 +15,10 @@ engine re-solve. See docs/superpowers/specs/2026-06-12-mipd-dose-recommendation-
 """
 from __future__ import annotations
 
-import math  # noqa: F401  (used by Task 4 solver)
+import math
 from dataclasses import dataclass
 
-import numpy as np  # noqa: F401  (used by Task 4 solver)
+import numpy as np
 
 from sisyphus.mipd.core import Posterior
 
@@ -88,6 +88,79 @@ class DoseRecommendation:
     renal_scale: Posterior
     n_eff: float
     warnings: tuple[str, ...]
+
+
+def _sample_m_intervals(
+    q_ref: dict[str, np.ndarray], target: DoseTarget
+) -> tuple[np.ndarray, np.ndarray]:
+    """Per posterior-sample feasible dose-multiplier interval ``[m_lo, m_hi]``.
+
+    Each exposure scales linearly with the dose multiplier ``m`` (LTI). A constraint
+    ``low <= m*q_ref <= high`` becomes ``m in [low/q_ref, high/q_ref]``; intersecting
+    across constraints gives ``[m_lo[i], m_hi[i]]`` per sample (0 / +inf when a side
+    is unbounded).
+
+    A sample whose reference exposure is ~0 (floored to 1e-300) gets m_lo -> inf, which
+    correctly marks it infeasible.
+    """
+    n = len(next(iter(q_ref.values())))
+    m_lo = np.zeros(n)
+    m_hi = np.full(n, np.inf)
+    for c in target.constraints:
+        q = np.maximum(np.asarray(q_ref[c.quantity], dtype=float), 1e-300)
+        if c.low is not None:
+            m_lo = np.maximum(m_lo, c.low / q)
+        if c.high is not None:
+            m_hi = np.minimum(m_hi, c.high / q)
+    return m_lo, m_hi
+
+
+def _attainment(m: float, m_lo: np.ndarray, m_hi: np.ndarray) -> float:
+    """Fraction of posterior samples whose feasible interval covers dose-multiplier ``m``."""
+    return float(np.mean((m_lo <= m) & (m <= m_hi)))
+
+
+def _max_overlap_region(
+    m_lo: np.ndarray, m_hi: np.ndarray
+) -> tuple[float, float, int]:
+    """Dose-multiplier segment ``[a, b]`` where the most sample-intervals overlap.
+
+    Classic max-interval-overlap sweep. At a tie, a start is ordered before an end so
+    a point shared by ``[., x]`` and ``[x, .]`` counts both (closed intervals). Returns
+    ``(a, b, count)``; ``b`` may be ``inf`` (only-floor constraints). Empty sample
+    intervals (``m_lo > m_hi``) are dropped.
+    """
+    feasible = m_lo <= m_hi
+    los = m_lo[feasible]
+    his = m_hi[feasible]
+    if los.size == 0:
+        return (0.0, 0.0, 0)
+    pts = np.concatenate([los, his])
+    kinds = np.concatenate([np.ones(los.size), -np.ones(his.size)])  # +1 start, -1 end
+    order = np.lexsort((-kinds, pts))  # by point asc; starts (+1) before ends (-1) at ties
+    pts = pts[order]
+    cov = np.cumsum(kinds[order])
+    best_i = int(np.argmax(cov))
+    a = float(pts[best_i])
+    b = float(pts[best_i + 1]) if best_i + 1 < pts.size else a
+    return (a, b, int(cov[best_i]))
+
+
+def _center_m(a: float, b: float) -> float:
+    """Pick the dose multiplier within the max-overlap region ``[a, b]``.
+
+    Bounded window -> geometric midpoint (max margin). Only floors (b == inf) ->
+    smallest dose meeting them (``a``). Only ceilings (a == 0) -> largest dose under
+    them (``b``).
+
+    If the region is unbounded above with a==0 (a floor that binds no sample), keep the
+    current dose (1.0).
+    """
+    if not math.isfinite(b):
+        return a if a > 0.0 else 1.0
+    if a <= 0.0:
+        return b
+    return math.sqrt(a * b)
 
 
 def recommend_dose(*args, **kwargs):  # implemented in Task 4
