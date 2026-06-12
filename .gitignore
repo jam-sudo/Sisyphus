@@ -63,6 +63,12 @@ data/docking/
 # sbi library auto-generated training telemetry (regenerable, noisy)
 sbi-logs/
 
+# Local tooling scratch/output (per-machine, regenerable — not repo-wide):
+#   .playwright-mcp/ — browser-MCP screenshots, console logs, page snapshots
+#   graphify-out/    — graphify knowledge-graph output (rebuilt via `graphify update .`)
+.playwright-mcp/
+graphify-out/
+
 # Agent/session-local config (per-machine, not repo-wide)
 .claude/
 
