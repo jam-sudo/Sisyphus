@@ -9,11 +9,78 @@ docs/superpowers/specs/2026-06-11-mipd-crcl-renal-individualization-design.md.
 """
 from __future__ import annotations
 
+import logging
+import math
 from dataclasses import dataclass
+
+logger = logging.getLogger(__name__)
 
 # Reference glomerular filtration rate the engine's renal_clearance assumes
 # (_GFR_L_PER_H = 7.5 L/h ~= 125 mL/min; src/sisyphus/predict/ivive.py:42-43).
 _REFERENCE_GFR_ML_MIN = 125.0
+
+# Cockcroft & Gault, Nephron 1976: CrCl = (140-age)*wt*(0.85 if female)/(72*SCr_mg/dL).
+_CG_AGE_CONSTANT = 140.0
+_CG_SCR_DENOMINATOR_DL = 72.0
+_CG_FEMALE_FACTOR = 0.85
+_CG_MAX_AGE_YEARS = 140.0          # validation floor: 140 - age must stay > 0
+_CG_PEDIATRIC_AGE_YEARS = 18.0     # CG is not validated below this age
+_CG_LOW_SCR_MG_DL = 0.6            # low SCr -> CrCl overestimation risk (low muscle mass)
+
+
+def cockcroft_gault(
+    age_years: float, weight_kg: float, scr_mg_dl: float, sex: str
+) -> float:
+    """Estimate creatinine clearance (mL/min) by the Cockcroft-Gault equation.
+
+    ``CrCl = (140 - age) * weight_kg * (0.85 if female else 1.0) / (72 * SCr_mg/dL)``.
+    ``scr_mg_dl`` is serum creatinine in mg/dL (NOT SI µmol/L; divide µmol/L by 88.42).
+    ``sex`` is "male"/"female" (case-insensitive). Returns an ABSOLUTE CrCl in mL/min
+    (body size enters via the weight term) — the quantity ``Covariates.crcl_ml_min``
+    expects; do not pass a BSA-normalized eGFR there instead. With actual body weight,
+    CG overestimates CrCl in obese patients (adjusted body weight needs height — future).
+
+    Raises ``ValueError`` on non-finite, non-positive, or out-of-range inputs. Logs a
+    (non-blocking) warning for age < 18 (CG unvalidated) and for very low SCr
+    (overestimation in reduced muscle mass).
+    """
+    for _name, _value in (
+        ("age_years", age_years), ("weight_kg", weight_kg), ("scr_mg_dl", scr_mg_dl)
+    ):
+        if not math.isfinite(_value):
+            raise ValueError(f"{_name} must be finite, got {_value}")
+    if not isinstance(sex, str):
+        raise ValueError(f"sex must be 'male' or 'female', got {sex!r}")
+    sex_l = sex.strip().lower()
+    if sex_l not in ("male", "female"):
+        raise ValueError(f"sex must be 'male' or 'female', got {sex!r}")
+    if age_years <= 0 or age_years >= _CG_MAX_AGE_YEARS:
+        raise ValueError(
+            f"age_years must be in (0, {_CG_MAX_AGE_YEARS}), got {age_years}"
+        )
+    if weight_kg <= 0:
+        raise ValueError(f"weight_kg must be > 0, got {weight_kg}")
+    if scr_mg_dl <= 0:
+        raise ValueError(f"scr_mg_dl must be > 0, got {scr_mg_dl}")
+
+    if age_years < _CG_PEDIATRIC_AGE_YEARS:
+        logger.warning(
+            "Cockcroft-Gault is not validated for age < %s (got %s); consider Schwartz.",
+            _CG_PEDIATRIC_AGE_YEARS, age_years,
+        )
+    if scr_mg_dl < _CG_LOW_SCR_MG_DL:
+        logger.warning(
+            "serum creatinine %s mg/dL is low; in patients with reduced muscle mass "
+            "(elderly/cachectic) Cockcroft-Gault may overestimate CrCl.", scr_mg_dl,
+        )
+
+    crcl = (
+        (_CG_AGE_CONSTANT - age_years) * weight_kg
+        / (_CG_SCR_DENOMINATOR_DL * scr_mg_dl)
+    )
+    if sex_l == "female":
+        crcl *= _CG_FEMALE_FACTOR
+    return crcl
 
 
 @dataclass(frozen=True)
