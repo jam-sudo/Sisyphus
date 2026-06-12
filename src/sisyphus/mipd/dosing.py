@@ -163,5 +163,42 @@ def _center_m(a: float, b: float) -> float:
     return math.sqrt(a * b)
 
 
+def _interval_reference(
+    smiles: str,
+    regimen,
+    tau: float,
+    r_samples: np.ndarray,
+    *,
+    renal_factor: float,
+    body_weight_kg: float | None,
+    age_years: float | None,
+    n_grid: int,
+    kp_method: str,
+) -> tuple[dict[str, np.ndarray], float]:
+    """Per posterior-sample steady-state exposures at the regimen's reference dose.
+
+    Builds one renal-CL grid at this interval (one engine re-solve), then reads each
+    quantity at the posterior's renal-scale samples: ``trough`` = the curve at the end
+    of the final dosing interval; ``cmax`` / per-interval ``auc`` from the forward;
+    ``auc24`` = per-interval AUC * (24/tau). Returns the quantity dict and the
+    reference dose ``D_ref`` (= the regimen's per-dose amount).
+    """
+    from sisyphus.mipd.renal_grid import RenalCLForward, build_renal_cl_grid
+
+    grid = build_renal_cl_grid(
+        smiles, regimen, n_grid=n_grid, renal_factor=renal_factor,
+        body_weight_kg=body_weight_kg, age_years=age_years, kp_method=kp_method,
+    )
+    state = RenalCLForward(grid)(r_samples)
+    trough = grid.conc_at(r_samples, float(regimen.last_dose_time_h) + tau)
+    q_ref = {
+        "trough": np.asarray(trough, dtype=float),
+        "cmax": np.asarray(state["cmax"], dtype=float),
+        "auc24": np.asarray(state["auc"], dtype=float) * (24.0 / tau),
+    }
+    d_ref = float(regimen.events[0].dose_mg)
+    return q_ref, d_ref
+
+
 def recommend_dose(*args, **kwargs):  # implemented in Task 4
     raise NotImplementedError("recommend_dose is implemented in a later task")

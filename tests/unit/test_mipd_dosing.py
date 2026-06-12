@@ -13,6 +13,7 @@ from sisyphus.mipd.dosing import (
     DoseTarget,
     _attainment,
     _center_m,
+    _interval_reference,
     _max_overlap_region,
     _sample_m_intervals,
     recommend_dose,  # noqa: F401  (used by later-task tests)
@@ -116,3 +117,39 @@ def test_center_m_rules():
 def test_center_m_floor_only_nonbinding_keeps_current_dose():
     # b == inf and a == 0 (floor non-binding for all samples) -> keep current dose (1.0)
     assert _center_m(0.0, math.inf) == pytest.approx(1.0)
+
+
+def test_lti_exactness_grid_scales_linearly_with_dose():
+    # The whole layer rests on the engine being linear in dose. Doubling the dose must
+    # exactly double steady-state Cmax and AUC at every renal scale. A future saturable
+    # nonlinearity would fail HERE.
+    from sisyphus.mipd.renal_grid import build_renal_cl_grid
+
+    g1 = build_renal_cl_grid(
+        ATENOLOL, DosingRegimen.iv_infusion(50.0, 0.5, 8.0, 5), n_grid=5
+    )
+    g2 = build_renal_cl_grid(
+        ATENOLOL, DosingRegimen.iv_infusion(100.0, 0.5, 8.0, 5), n_grid=5
+    )
+    assert np.allclose(g2.cmax, 2.0 * g1.cmax, rtol=1e-6)
+    assert np.allclose(g2.auc, 2.0 * g1.auc, rtol=1e-6)
+
+
+def test_interval_reference_returns_quantities_at_reference_dose():
+    reg = _iv_regimen()
+    r = np.array([1.0, 1.0, 1.0])
+    q_ref, d_ref = _interval_reference(
+        ATENOLOL, reg, 8.0, r, renal_factor=1.0, body_weight_kg=None,
+        age_years=None, n_grid=5, kp_method="rodgers_rowland",
+    )
+    assert d_ref == 50.0
+    assert set(q_ref) == {"trough", "cmax", "auc24"}
+    for key in q_ref:
+        assert q_ref[key].shape == (3,)
+        assert np.all(q_ref[key] > 0)
+    # trough must equal the grid's own conc at the end of the final interval at r=1.
+    from sisyphus.mipd.renal_grid import build_renal_cl_grid
+
+    g = build_renal_cl_grid(ATENOLOL, reg, n_grid=5)
+    expect = float(g.conc_at(np.array([1.0]), reg.last_dose_time_h + 8.0)[0])
+    assert q_ref["trough"][0] == pytest.approx(expect, rel=1e-9)
