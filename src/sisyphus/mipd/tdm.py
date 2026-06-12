@@ -55,18 +55,15 @@ def predict_tdm(
 
     observations = list(observations)
     renal_factor = covariates.renal_factor() if covariates is not None else 1.0
+    body_weight_kg = covariates.body_weight_kg if covariates is not None else None
+    age_years = covariates.age_years if covariates is not None else None
     rng = np.random.default_rng(seed)
 
-    warnings_list: list[str] = []
-    if covariates is not None and covariates.crcl_ml_min is not None:
-        if not (5.0 <= covariates.crcl_ml_min <= 200.0):
-            warnings_list.append(
-                f"crcl:extreme:{covariates.crcl_ml_min}: the engine renal model is "
-                "glomerular-filtration-only and least reliable outside [5, 200] mL/min"
-            )
+    warnings_list: list[str] = list(covariates.warnings()) if covariates is not None else []
 
     grid = build_renal_cl_grid(
-        smiles, regimen, n_grid=n_grid, renal_factor=renal_factor, kp_method=kp_method
+        smiles, regimen, n_grid=n_grid, renal_factor=renal_factor,
+        body_weight_kg=body_weight_kg, age_years=age_years, kp_method=kp_method,
     )
     post = sir_posterior_renal(
         RenalCLPrior(cv=renal_prior_cv, r_min=float(grid.r_grid[0]), r_max=float(grid.r_grid[-1])),

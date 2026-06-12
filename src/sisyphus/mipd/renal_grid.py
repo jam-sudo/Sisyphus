@@ -118,6 +118,8 @@ def build_renal_cl_grid(
     n_grid: int = 13,
     r_range: tuple[float, float] = (0.2, 5.0),
     renal_factor: float = 1.0,
+    body_weight_kg: float | None = None,
+    age_years: float | None = None,
     kp_method: str = "rodgers_rowland",
     dt_output: float = 0.1,
 ) -> RenalCLGrid:
@@ -139,7 +141,8 @@ def build_renal_cl_grid(
     from sisyphus.regimen.solver import solve_regimen
 
     compiled, realized_graph, drug, obs_node = _build_grid_engine(
-        smiles, regimen.events[0].dose_mg, "iv", renal_factor, kp_method
+        smiles, regimen.events[0].dose_mg, "iv", renal_factor, kp_method,
+        body_weight_kg, age_years,
     )
     r_grid = np.geomspace(r_range[0], r_range[1], n_grid)
 

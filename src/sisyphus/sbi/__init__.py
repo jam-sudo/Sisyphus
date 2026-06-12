@@ -15,31 +15,55 @@ Current scope (POC):
     - 3D theta: (log10_clint_scale, fup, log10_peff_scale)
     - 1D observation: log10(Cmax)
     - Simulator: full scipy engine (not surrogate — OOD bug)
-"""
 
-from sisyphus.sbi.multi_drug import (
-    DRUG_FEATURE_NAMES,
-    N_DRUG_FEATURES,
-    DrugSpec,
-    HierarchicalMultiDrugSimulator,
-    MultiDrugSimulator,
-    PopulationSpec,
-    extract_drug_features,
-    load_drug_specs_from_json,
-    load_populations,
-    pack_observation,
-    pack_observation_hierarchical,
-    population_onehot,
-    stack_training_pairs,
-    stack_training_pairs_hierarchical,
-)
-from sisyphus.sbi.physiology_generator import (
-    ENZYME_PARAMS,
-    enzyme_factor,
-    generate_physiology,
-)
-from sisyphus.sbi.priors import build_box_prior
-from sisyphus.sbi.simulator import EngineSimulator, apply_theta_to_drug
+Imports are LAZY (PEP 562 ``__getattr__``): ``torch`` is an optional extra
+(pyproject ``[project.optional-dependencies]``) and the multi-drug / simulator
+members need it. The physiology generator and priors are torch-free and must
+remain importable without torch (e.g. by ``mipd`` weight/age covariates), so the
+torch-dependent submodules are NOT imported at package-import time — each public
+name is resolved from its submodule only when first accessed.
+"""
+from __future__ import annotations
+
+import importlib
+from typing import Any
+
+# Public name -> defining submodule. Torch-free: physiology_generator, priors.
+# Torch-dependent (imported only on access): multi_drug, simulator.
+_EXPORTS = {
+    "ENZYME_PARAMS": "sisyphus.sbi.physiology_generator",
+    "enzyme_factor": "sisyphus.sbi.physiology_generator",
+    "generate_physiology": "sisyphus.sbi.physiology_generator",
+    "build_box_prior": "sisyphus.sbi.priors",
+    "DRUG_FEATURE_NAMES": "sisyphus.sbi.multi_drug",
+    "N_DRUG_FEATURES": "sisyphus.sbi.multi_drug",
+    "DrugSpec": "sisyphus.sbi.multi_drug",
+    "HierarchicalMultiDrugSimulator": "sisyphus.sbi.multi_drug",
+    "MultiDrugSimulator": "sisyphus.sbi.multi_drug",
+    "PopulationSpec": "sisyphus.sbi.multi_drug",
+    "extract_drug_features": "sisyphus.sbi.multi_drug",
+    "load_drug_specs_from_json": "sisyphus.sbi.multi_drug",
+    "load_populations": "sisyphus.sbi.multi_drug",
+    "pack_observation": "sisyphus.sbi.multi_drug",
+    "pack_observation_hierarchical": "sisyphus.sbi.multi_drug",
+    "population_onehot": "sisyphus.sbi.multi_drug",
+    "stack_training_pairs": "sisyphus.sbi.multi_drug",
+    "stack_training_pairs_hierarchical": "sisyphus.sbi.multi_drug",
+    "EngineSimulator": "sisyphus.sbi.simulator",
+    "apply_theta_to_drug": "sisyphus.sbi.simulator",
+}
+
+
+def __getattr__(name: str) -> Any:
+    module = _EXPORTS.get(name)
+    if module is None:
+        raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+    return getattr(importlib.import_module(module), name)
+
+
+def __dir__() -> list[str]:
+    return sorted(_EXPORTS)
+
 
 __all__ = [
     "DRUG_FEATURE_NAMES",

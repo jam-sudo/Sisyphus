@@ -139,3 +139,32 @@ def test_renal_individualization_larger_for_high_renal_fraction_drug():
 
     assert auc_ratio(ATENOLOL) > auc_ratio(MIDAZOLAM)
     assert auc_ratio(ATENOLOL) > 1.0  # impairment raises exposure for the renal drug
+
+
+def test_predict_posterior_weight_age_routes_through_individualized_solve():
+    # weight (no obs, no CrCl) must reach the engine via the individualized solve,
+    # not the reference F-only path; the clint latent stays fixed.
+    post = predict_posterior(
+        MIDAZOLAM, DOSE, covariates=Covariates(body_weight_kg=10, age_years=2), seed=0
+    )
+    assert post.cl_scale is None
+    assert post.cmax.point > 0
+
+
+def test_predict_posterior_lower_weight_higher_cmax():
+    # lower body weight -> smaller distribution volume -> higher Cmax (the clean oral
+    # weight signal; AUC is confounded by first-pass F for high-extraction drugs).
+    ref = predict_posterior(MIDAZOLAM, DOSE, seed=0)
+    light = predict_posterior(MIDAZOLAM, DOSE, covariates=Covariates(body_weight_kg=40), seed=0)
+    assert light.cmax.point > ref.cmax.point
+
+
+def test_predict_posterior_empty_covariates_bit_identical():
+    a = predict_posterior(MIDAZOLAM, DOSE, seed=0)
+    b = predict_posterior(MIDAZOLAM, DOSE, covariates=Covariates(), seed=0)
+    assert np.array_equal(a.cmax.samples, b.cmax.samples)
+
+
+def test_predict_posterior_extreme_weight_warns():
+    post = predict_posterior(MIDAZOLAM, DOSE, covariates=Covariates(body_weight_kg=1.0), seed=0)
+    assert any("weight" in w.lower() for w in post.warnings)

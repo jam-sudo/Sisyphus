@@ -125,3 +125,20 @@ def test_sir_posterior_renal_iv_has_degenerate_f():
     )
     assert np.allclose(post.f.samples, 1.0)  # F == 1 for IV
     assert post.renal_scale is not None
+
+
+def test_build_renal_cl_grid_weight_age_individualizes_and_solves():
+    # IV solve_regimen + generate_physiology graph must run end-to-end (torch-free).
+    from sisyphus.mipd.renal_grid import build_renal_cl_grid
+    g = build_renal_cl_grid(ATENOLOL, _iv_regimen(), n_grid=3, r_range=(0.5, 2.0),
+                            body_weight_kg=50.0, age_years=75.0)
+    assert g.cmax.shape == (3,)
+    assert np.all(np.isfinite(g.cmax)) and np.all(g.cmax > 0)
+
+
+def test_build_renal_cl_grid_no_weight_age_unchanged():
+    from sisyphus.mipd.renal_grid import build_renal_cl_grid
+    a = build_renal_cl_grid(ATENOLOL, _iv_regimen(), n_grid=3, r_range=(0.5, 2.0))
+    b = build_renal_cl_grid(ATENOLOL, _iv_regimen(), n_grid=3, r_range=(0.5, 2.0),
+                            body_weight_kg=None, age_years=None)
+    assert np.array_equal(a.cmax, b.cmax)

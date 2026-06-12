@@ -61,6 +61,8 @@ def _build_grid_engine(
     route: str,
     renal_factor: float,
     kp_method: str,
+    body_weight_kg: float | None = None,
+    age_years: float | None = None,
 ):
     """Build + compile the engine for a grid: profile -> adme -> graph -> drug.
 
@@ -78,7 +80,18 @@ def _build_grid_engine(
 
     profile = compute_profile(smiles)
     adme = predict_adme(profile)
-    graph = build_from_yaml(_PHYSIOLOGY_DIR / "reference_man.yaml")
+    if body_weight_kg is not None or age_years is not None:
+        # Weight/age covariate individualization: scale the reference graph
+        # (volumes, flows, enzyme ontogeny/aging) via the verified drop-in. Pass
+        # base_yaml ABSOLUTE — generate_physiology's default is CWD-relative.
+        from sisyphus.sbi.physiology_generator import generate_physiology
+        graph = generate_physiology(
+            body_weight_kg if body_weight_kg is not None else 70.0,
+            age_years if age_years is not None else 30.0,
+            base_yaml=_PHYSIOLOGY_DIR / "reference_man.yaml",
+        )
+    else:
+        graph = build_from_yaml(_PHYSIOLOGY_DIR / "reference_man.yaml")
     auto_oatp_kinetics, auto_ecm_params, non_cyp_fractions = detect_disposition(profile)
 
     liver_pre: dict[str, float] | None = None
@@ -118,6 +131,8 @@ def build_cl_grid(
     kp_method: str = "rodgers_rowland",
     t_grid: np.ndarray | None = None,
     renal_factor: float = 1.0,
+    body_weight_kg: float | None = None,
+    age_years: float | None = None,
 ) -> CLGrid:
     """Solve the engine over a clint-scale grid and return a ``CLGrid``."""
     from sisyphus.engine.compiler import ResolvedParams
@@ -130,7 +145,7 @@ def build_cl_grid(
     s_grid = np.geomspace(s_range[0], s_range[1], n_grid)
 
     compiled, realized_graph, drug, obs_node = _build_grid_engine(
-        smiles, dose_mg, route, renal_factor, kp_method
+        smiles, dose_mg, route, renal_factor, kp_method, body_weight_kg, age_years
     )
     t_min_h = _IV_CMAX_DELAY_H if route == "iv" else 0.0
     admin_idx = compiled.state_index[drug.administration_node]
