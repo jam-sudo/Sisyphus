@@ -137,3 +137,18 @@ class Covariates:
                 "poorly outside (0, 100] yr"
             )
         return tuple(w)
+
+    @classmethod
+    def from_cockcroft_gault(
+        cls, age_years: float, weight_kg: float, scr_mg_dl: float, sex: str
+    ) -> Covariates:
+        """Build Covariates with crcl_ml_min ESTIMATED via Cockcroft-Gault (renal-only).
+
+        Use when CrCl is not directly measured. Weight/age are inputs to the estimate
+        ONLY — they are not stored, so ``has_physiology()`` stays False and no
+        ``generate_physiology`` graph rebuild is triggered: this individualizes renal
+        CL only. For whole-body size individualization, pass body_weight_kg/age_years to
+        ``Covariates(...)`` directly. The estimate then flows through ``renal_factor()``
+        exactly like a measured CrCl.
+        """
+        return cls(crcl_ml_min=cockcroft_gault(age_years, weight_kg, scr_mg_dl, sex))

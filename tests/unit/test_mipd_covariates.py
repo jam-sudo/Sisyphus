@@ -137,3 +137,21 @@ def test_cockcroft_gault_threshold_boundaries_do_not_warn(caplog):
         cockcroft_gault(18, 72.0, 0.6, "male")
     assert "not validated" not in caplog.text.lower()
     assert "overestimate" not in caplog.text.lower()
+
+
+def test_from_cockcroft_gault_is_renal_only():
+    cov = Covariates.from_cockcroft_gault(60, 72.0, 1.0, "male")
+    assert cov.crcl_ml_min == pytest.approx(80.0)
+    assert cov.body_weight_kg is None   # renal-only: weight/age are estimate inputs, not stored
+    assert cov.age_years is None
+    assert cov.has_physiology() is False  # so no generate_physiology rebuild is triggered
+
+
+def test_from_cockcroft_gault_feeds_renal_factor():
+    cov = Covariates.from_cockcroft_gault(60, 72.0, 1.0, "male")
+    assert cov.renal_factor() == pytest.approx(80.0 / 125.0)
+
+
+def test_from_cockcroft_gault_propagates_validation():
+    with pytest.raises(ValueError, match="sex"):
+        Covariates.from_cockcroft_gault(60, 72.0, 1.0, "unknown")
