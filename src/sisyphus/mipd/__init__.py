@@ -27,6 +27,13 @@ from sisyphus.mipd.core import (
     PosteriorPK,
     sir_posterior,
 )
+from sisyphus.mipd.dosing import (
+    CandidateEval,
+    Constraint,
+    DoseRecommendation,
+    DoseTarget,
+    recommend_dose,
+)
 from sisyphus.mipd.grid import build_cl_grid
 from sisyphus.mipd.meta import MetaTracks, build_meta_tracks, meta_blend_cmax
 
@@ -49,4 +56,9 @@ __all__ = [
     "CLPrior",
     "sir_posterior_2d",
     "build_cl_grid",
+    "CandidateEval",
+    "Constraint",
+    "DoseRecommendation",
+    "DoseTarget",
+    "recommend_dose",
 ]

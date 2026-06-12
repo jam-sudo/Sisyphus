@@ -292,3 +292,11 @@ def test_recommend_dose_rounded_to_zero_warns():
     )
     assert rec.dose_mg == 0.0
     assert any("granularity" in w.lower() for w in rec.warnings)
+
+
+def test_public_names_importable_from_package():
+    import sisyphus.mipd as m
+
+    for name in ("Constraint", "DoseTarget", "CandidateEval", "DoseRecommendation",
+                 "recommend_dose"):
+        assert hasattr(m, name)
