@@ -36,6 +36,7 @@ from sisyphus.mipd.dosing import (
 )
 from sisyphus.mipd.grid import build_cl_grid
 from sisyphus.mipd.meta import MetaTracks, build_meta_tracks, meta_blend_cmax
+from sisyphus.mipd.oral_grid import build_oral_cl_grid
 
 __all__ = [
     "APrioriPK",
@@ -56,6 +57,7 @@ __all__ = [
     "CLPrior",
     "sir_posterior_2d",
     "build_cl_grid",
+    "build_oral_cl_grid",
     "CandidateEval",
     "Constraint",
     "DoseRecommendation",
