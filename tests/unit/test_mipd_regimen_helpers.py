@@ -1,8 +1,6 @@
-import numpy as np
 import pytest
 
 from sisyphus.mipd._regimen import (
-    _SHAPE_PHASE_TOL_FRAC,
     _distinct_phases,
     _regimen_interval_h,
     _regimen_route,
@@ -25,7 +23,6 @@ def test_route_oral_and_iv():
 
 
 def test_route_mixed_raises():
-    import dataclasses
     oral = _oral()
     iv = _iv()
     # Node-mixed but time-sorted: oral at t=0, IV at t=12 (the regimen constructor
