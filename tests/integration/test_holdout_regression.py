@@ -88,7 +88,7 @@ def test_cached_holdout_aafe_is_2p731() -> None:
     0.005 was an artifact of the B-03.x cycle's coincidentally tiny delta.
     See spec amendment 2026-05-27.
 
-    If this fails outside ±0.020 of 2.698, the cache has been regenerated
+    If this fails outside ±0.020 of 2.731, the cache has been regenerated
     with a behavior change or the numerics stack drifted materially.
     Investigate."""
     with HOLDOUT_JSON.open() as f:
