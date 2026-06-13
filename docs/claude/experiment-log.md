@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-03
+last_updated: 2026-06-10
 parent: ../../CLAUDE.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -7,6 +7,25 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 # Experiment Log
 
 Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
+
+---
+
+## 2026-06-10 — Batch regen finalization: headline 2.784 → 2.731 (oxybutynin + paracellular); the pinned 2.784 was STALE
+
+**The pinned 2.784 was stale.** A same-stack canonical regen (`flux1-regen.yml`, ubuntu/py3.10/locked-deps, public-clone) of `origin/main` gave Meta AAFE **2.762** — not 2.784. Cause: the oxybutynin holdout-reference fix (Cmax 0.001→0.008, `3f89594`) was merged to main via **PR #68** but the cache/pin were never regenerated, so the committed cache (2.784, frozen at FLUX-1 2026-06-04) predated it. Running a same-stack OFF baseline — the scientifically-correct way to separate a within-noise change from stack drift — is what surfaced this.
+
+**Batch regen result (canonical CI stack, runs 27252534743 + 27253165983):**
+| State | Meta AAFE | Engine | in-domain | note |
+|---|---|---|---|---|
+| pinned (frozen 6/04, pre-oxybutynin) | 2.784 | 4.458 | 2.833 | stale |
+| origin/main today (oxybutynin merged) | 2.762 | 4.470 | 2.804 | un-repinned |
+| origin/main + paracellular | **2.731** | 4.244 | 2.777 | this finalization |
+
+**Same-stack attribution (airtight):** oxybutynin **−0.026** (2.784→2.758, deterministic/label-only → stack-independent; already on main) + stack drift 6/04→6/10 **+0.004** (→2.762) + paracellular **−0.031** (2.762→2.731; matches the macOS −0.030/−1.1%; engine 4.470→4.244, −5%). Both moves are **within the bootstrap CI** (half-width ~0.42, `4track_ci_2026-06-10_flux1.json`) — correctness-driven (a wrong reference label + missing absorption physics), NOT a statistically-distinguishable accuracy gain. W1/W2/W3 ceiling holds (the 2.7-band floor is unchanged).
+
+**Paracellular absorption (PR #70), the physics being finalized.** The engine modeled only transcellular `ka`; tight-junction-pore (paracellular) transport was unmodeled, so the engine under-predicted the small-hydrophilic class (cimetidine/metformin/atenolol-like). New `ParacellularAbsorptionEdge` + `ParacellularAbsorptionFluxSpec`: `Peff_para = P_scale·F_renkin(r_mol/R_pore)·E_charge`, all constants externally anchored (Avdeef 2010 PMID 20069445; Renkin 1954 PMID 13211998; R_pore 5.6 Å; Dahlgren 2016 PMID 27504798; Adson 1994), **none fit to holdout Cmax**. Size+charge gating is automatic (no logP gate). 24 unit tests; invariants #1/#2/#3/#4/#6/#8 held. Only propranolol's self-consistency snapshot moved (+8.5%).
+
+**Finalized to canonical 2.731:** cache `4track_holdout_predictions.json`, leak-audit baseline `prodrug_v3_pre_baseline.json`, CI bootstrap `4track_ci_2026-06-10_flux1.json`, cache-pin (`test_cached_holdout_aafe_is_2p784` → `_is_2p731`), tebipenem pin (0.30925 → 0.31189), CLAUDE.md headline table. Closes the "oxybutynin 2.784→2.758 pending regen" item in the 2026-06-08 entry. A [[correctness-over-benchmark]] cycle: the score floor is unchanged, but the pinned number was stale and the correct value is 2.731.
 
 ---
 

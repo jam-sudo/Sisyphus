@@ -129,6 +129,27 @@ class AbsorptionEdge(Edge):
 
 
 @dataclass(frozen=True)
+class ParacellularAbsorptionEdge(AbsorptionEdge):
+    """Paracellular (tight-junction pore) absorption from lumen to tissue.
+
+    A second, parallel absorption pathway to the transcellular
+    ``AbsorptionEdge``.  Represents pore-restricted, charge-selective
+    permeation through intestinal tight junctions — the route by which
+    small hydrophilic drugs (cimetidine, metformin, atenolol class) are
+    absorbed despite poor transcellular permeability.
+
+    Subclasses ``AbsorptionEdge`` so the compiler's ``_build_edge_params``
+    extracts the inherited ``ka_fraction`` (segment scaling) unchanged; the
+    distinct ``edge_type`` routes it to ``ParacellularAbsorptionFluxSpec``.
+    The permeability is computed in-flux from the drug's molecular size
+    (MW → Renkin sieving) and charge class against pore physiology carried
+    in ``global_params`` — never from drug identity.
+    """
+
+    edge_type: str = field(default="paracellular_absorption", init=False)
+
+
+@dataclass(frozen=True)
 class ClearanceEdge(Edge):
     """Elimination edge.
 

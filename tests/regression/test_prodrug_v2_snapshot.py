@@ -34,9 +34,9 @@ from sisyphus.pipeline.predict import predict
 from tests._artifact_helpers import skip_if_local_artifacts
 
 _PINNED = {
-    "sepiapterin":       8.679384e+00,
+    "sepiapterin":       1.309912e+01,  # +paracellular absorption (was 8.679384e+00 pre-PARA)
     "remdesivir":        1.573162e+00,
-    "tebipenem_pivoxil": 3.109251e-01,  # FLUX-1 2026-06-04: intrinsic clearance (was 4.553034e-01)
+    "tebipenem_pivoxil": 3.118914e-01,  # 2026-06-10 batch regen (was 3.109251e-01)
     "fostamatinib":      6.675183e-02,
 }
 

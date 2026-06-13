@@ -47,8 +47,13 @@ OMEGA_TARGETS = {
     "midazolam": {"cmax": 0.002800, "tmax": 1.5},   # RBP-2: was 0.005909 (FLUX-1)
     "caffeine": {"cmax": 1.7139, "tmax": 1.0},       # RBP=1.0 -> unchanged
     "warfarin": {"cmax": 0.343133, "tmax": 3.0},     # RBP-2: was 0.4922
-    "propranolol": {"cmax": 0.059875, "tmax": 1.5},  # RBP-2: was 0.082528 (FLUX-1)
+    "propranolol": {"cmax": 0.064951, "tmax": 1.5},  # PARA: +8.5% paracellular (was 0.059875)
 }
+# PARA (2026-06-08): the paracellular absorption pathway (Renkin pore-sieving,
+# ParacellularAbsorptionFluxSpec) adds a second, size/charge-gated absorption
+# route. Only propranolol's snapshot moved >5% of the 4 validation drugs
+# (caffeine RBP=1 and the high-MW set are ~unchanged). Self-consistency snapshot
+# update, consistent with the FLUX-1 / RBP-2 precedent.
 
 
 def run_drug(drug_name: str):

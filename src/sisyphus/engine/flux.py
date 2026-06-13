@@ -12,6 +12,7 @@ parameter lookups, never on node/enzyme/drug names.
 
 from __future__ import annotations
 
+import math
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
@@ -425,6 +426,154 @@ class AbsorptionFluxSpec(FluxSpec):
         ka = 2.88 * peff * ka_frac / radius
 
         rate = ka * y[self.source_idx]
+        dydt[self.source_idx] -= rate
+        dydt[self.target_idx] += rate
+
+
+# ---------------------------------------------------------------------------
+# Paracellular absorption physics (Renkin pore-sieving)
+#
+# A second, parallel absorption route to the transcellular AbsorptionFluxSpec.
+# Models pore-restricted, charge-selective permeation through intestinal tight
+# junctions — the dominant route for small hydrophilic drugs (cimetidine,
+# metformin, atenolol class) that have poor transcellular permeability yet
+# absorb well in vivo.
+#
+# Peff_para [x10^-4 cm/s] = P_scale * F_renkin(r_mol / R_pore) * E_charge
+#
+# All constants are EXTERNAL human-intestinal-physiology / in-vitro anchors,
+# NEVER fit to holdout Cmax (Invariants #5/#8):
+#   - r_mol(MW): Avdeef 2010, Pharm Res 27:480 (PMID 20069445), refined
+#     Stokes-Einstein hydrodynamic radius.
+#   - F_renkin: Renkin 1954, J Gen Physiol 38:225 (PMID 13211998), steric x
+#     Faxen hydrodynamic hindrance.
+#   - R_pore, P_scale, E_charge: supplied by the graph (global_params), sourced
+#     from Linnankoski 2010 (PMID 19827099) / Sugano 2002 / Kataoka 2011
+#     (pore radius), an atenolol human-jejunal Peff anchor (Dahlgren 2016,
+#     PMID 27504798) for the lumped scale, and Adson 1994 (DOI
+#     10.1002/jps.2600831103) / Tam-Velicky-Dryfe for the cation-selective
+#     tight-junction charge factor.
+# ---------------------------------------------------------------------------
+
+# Refined Stokes-Einstein constants (Avdeef 2010).
+_PARA_KB_J_PER_K = 1.380649e-23  # Boltzmann constant
+_PARA_BODY_TEMP_K = 310.15  # 37 C
+_PARA_WATER_VISCOSITY_PA_S = 0.6913e-3  # water at 37 C
+
+
+def _hydrodynamic_radius_angstrom(mw: float) -> float:
+    """Drug hydrodynamic radius (Angstrom) from molecular weight.
+
+    Avdeef 2010 (PMID 20069445) refined Stokes-Einstein:
+        D_aq(37C) = 9.9e-5 * MW^-0.453   [cm^2/s]
+        r_SE      = kB*T / (6*pi*eta*D_aq)
+        r_HYD     = (0.92 + 21.8/MW) * r_SE
+    """
+    if mw <= 0:
+        return 0.0
+    d_aq_cm2_s = 9.9e-5 * mw ** (-0.453)
+    d_aq_m2_s = d_aq_cm2_s * 1e-4
+    r_se_m = _PARA_KB_J_PER_K * _PARA_BODY_TEMP_K / (
+        6.0 * math.pi * _PARA_WATER_VISCOSITY_PA_S * d_aq_m2_s
+    )
+    return (0.92 + 21.8 / mw) * r_se_m * 1e10  # m -> Angstrom
+
+
+def _renkin_sieving(lam: float) -> float:
+    """Renkin (1954) molecular sieving factor for a solute of relative radius
+    ``lam = r_molecule / r_pore``.
+
+    F(lam) = (1-lam)^2 * (1 - 2.104*lam + 2.09*lam^3 - 0.95*lam^5),  lam < 1
+           = 0,                                                       lam >= 1
+
+    (1-lam)^2 is the steric partition; the polynomial is the Faxen
+    hydrodynamic wall-drag correction.  Coefficients are exact analytic
+    constants, not fitted.
+    """
+    if lam <= 0.0 or lam >= 1.0:
+        return 0.0
+    f = (1.0 - lam) ** 2 * (1.0 - 2.104 * lam + 2.09 * lam**3 - 0.95 * lam**5)
+    return f if f > 0.0 else 0.0
+
+
+def _paracellular_charge_factor(
+    compound_type: str, cation_factor: float, anion_factor: float
+) -> float:
+    """Electrostatic factor for the cation-selective tight junction.
+
+    Cations (protonated bases) are enhanced, anions (deprotonated acids)
+    hindered, neutrals/zwitterions unaffected.  Keyed on the drug's charge
+    class — a type descriptor, never a drug identity.
+    """
+    if compound_type == "base":
+        return cation_factor
+    if compound_type == "acid":
+        return anion_factor
+    return 1.0  # neutral, zwitterion
+
+
+@register_flux("paracellular_absorption")
+class ParacellularAbsorptionFluxSpec(FluxSpec):
+    """Paracellular (tight-junction pore) absorption from lumen to tissue.
+
+    Parallel to the transcellular ``AbsorptionFluxSpec``: applies the same
+    gut surface-to-volume / dissolution geometry (``2.88 * ka_frac / radius``)
+    but to the paracellular permeability ``Peff_para`` computed from the drug's
+    molecular size (Renkin sieving) and charge class against pore physiology
+    carried in ``global_params``.  Independent of the drug's transcellular
+    ``peff`` — a low-permeability hydrophilic drug still absorbs through pores.
+
+    Inert (no flux) when the pore physiology globals are absent, when the
+    molecule is larger than the pore (Renkin -> 0), or when ``ka_fraction`` is
+    zero.
+    """
+
+    @classmethod
+    def from_edge(
+        cls, edge_id: int, edge, state_index: dict[str, int]
+    ) -> ParacellularAbsorptionFluxSpec:
+        return cls(
+            edge_id,
+            state_index[edge.source],
+            state_index[edge.target],
+            edge.source,
+            edge.target,
+        )
+
+    def apply(
+        self,
+        t: float,
+        y: np.ndarray,
+        dydt: np.ndarray,
+        params: ResolvedParams,
+    ) -> None:
+        ka_frac = params.edge_param(self.edge_id, "ka_fraction")
+        if ka_frac <= 0:
+            return
+
+        r_pore = params.global_param("paracellular_pore_radius_angstrom")
+        p_scale = params.global_param("paracellular_permeability_scale")
+        if r_pore <= 0 or p_scale <= 0:
+            return  # paracellular physiology not configured -> inert
+
+        r_mol = _hydrodynamic_radius_angstrom(params.drug_mw())
+        f_sieve = _renkin_sieving(r_mol / r_pore)
+        if f_sieve <= 0:
+            return  # molecule too large for the pore
+
+        # Charge factors default to 1.0 (no electrostatic effect) if a graph
+        # omits them; compound_type is a charge-class descriptor, not identity.
+        cation = params.global_param("paracellular_charge_factor_cation") or 1.0
+        anion = params.global_param("paracellular_charge_factor_anion") or 1.0
+        e_charge = _paracellular_charge_factor(params._drug.compound_type, cation, anion)
+
+        # Peff_para [x10^-4 cm/s]; ka uses the same gut geometry as the
+        # transcellular flux (2.88 * ka_frac / particle_radius_um, h^-1).
+        peff_para = p_scale * f_sieve * e_charge
+        radius = params.drug_param("particle_radius_um")
+        ka_para = 2.88 * peff_para * ka_frac / radius
+
+        rate = ka_para * y[self.source_idx]
         dydt[self.source_idx] -= rate
         dydt[self.target_idx] += rate
 

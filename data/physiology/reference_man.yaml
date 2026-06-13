@@ -7,6 +7,13 @@ global_params:
   body_weight: {mean: 70.0, cv: 0.0}        # kg
   hematocrit: {mean: 0.45, cv: 0.0}
   ivive_scaling: 0.00006                     # 60/1e6: converts uL/min -> L/h
+  # Paracellular (tight-junction pore) absorption physiology. Consumed by
+  # ParacellularAbsorptionFluxSpec; Peff_para = scale * F_renkin(r_mol/R_pore) * E_charge.
+  # External human-intestinal anchors only — NOT fit to holdout Cmax (Invariants #5/#8).
+  paracellular_pore_radius_angstrom: {mean: 5.6, cv: 0.08}   # Linnankoski 2010 (PMID 19827099) / Sugano 2002 / Kataoka 2011
+  paracellular_permeability_scale:   {mean: 62.8, cv: 0.4}   # x10^-4 cm/s; atenolol jejunal Peff 0.45e-4 (Dahlgren 2016, PMID 27504798) back-out, cation E=1.4 folded in
+  paracellular_charge_factor_cation: {mean: 1.4, cv: 0.25}   # cation-selective tight junction (Adson 1994; Tam-Velicky-Dryfe)
+  paracellular_charge_factor_anion:  {mean: 0.7, cv: 0.25}   # anion hindrance
 
 # ─────────────────────────────────────────────
 #  NODES  (34 total)
@@ -339,6 +346,19 @@ edges:
   - {source: ileum2_lumen, target: gut_wall, type: absorption, ka_fraction: 0.6}
   - {source: ileum3_lumen, target: gut_wall, type: absorption, ka_fraction: 0.3}
   - {source: colon_lumen, target: gut_wall, type: absorption, ka_fraction: 0.05}
+
+  # ── Paracellular absorption (lumen → gut_wall), parallel to transcellular ──
+  # Same segment weighting as the transcellular route. Per-drug permeability is
+  # size/charge-gated by Renkin sieving in ParacellularAbsorptionFluxSpec, so
+  # this is ~0 for large/lipophilic drugs and meaningful only for small
+  # hydrophilic ones. Stomach omitted (ka_fraction 0).
+  - {source: duodenum_lumen, target: gut_wall, type: paracellular_absorption, ka_fraction: 1.0}
+  - {source: jejunum1_lumen, target: gut_wall, type: paracellular_absorption, ka_fraction: 1.0}
+  - {source: jejunum2_lumen, target: gut_wall, type: paracellular_absorption, ka_fraction: 1.0}
+  - {source: ileum1_lumen, target: gut_wall, type: paracellular_absorption, ka_fraction: 0.8}
+  - {source: ileum2_lumen, target: gut_wall, type: paracellular_absorption, ka_fraction: 0.6}
+  - {source: ileum3_lumen, target: gut_wall, type: paracellular_absorption, ka_fraction: 0.3}
+  - {source: colon_lumen, target: gut_wall, type: paracellular_absorption, ka_fraction: 0.05}
 
   # ── Clearance ────────────────────────────
   - {source: liver, target: metabolized_hepatic, type: clearance, model: extended}
