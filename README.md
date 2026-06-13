@@ -135,6 +135,16 @@ MIPD recommends adjusted doses to achieve a target steady-state concentration:
 
 Linear scaling assumes non-saturable metabolism, which holds for most drugs at therapeutic concentrations. For drugs with known nonlinear pharmacokinetics (e.g., phenytoin), this approximation should be used with caution.
 
+### Engine-as-prior posterior PK (MIPD module)
+
+The `mipd/` module repositions the mechanistic engine from a one-shot SMILES&rarr;C<sub>max</sub> oracle into a **structural prior that any sparse measured observation sharply updates**. The dominant structural error of an a-priori PBPK prediction is bioavailability F (formulation, salt/crystal form, food, particle size, transporter genetics — none of which is in the SMILES); the engine gets the *structure* (dose-response, distribution kinetics, accumulation) right while getting F-*magnitude* wrong, so a single measured anchor collapses the residual error.
+
+True F is treated as a latent with a wide prior centered on the engine's emergent F<sub>engine</sub>, and updated from whatever measured data exists — a measured F, a microdose AUC, a single plasma concentration, or one dose arm — by sampling/importance-resampling (SIR). The posterior over F/CL-determining parameters propagates to a posterior over the target PK quantity with an honest interval. With **zero** measured data the posterior reduces to the a-priori prediction (so the 107-holdout headline is unchanged); each added observation narrows it. The product metric is therefore posterior-predictive accuracy and calibrated coverage *as a function of how much measured data is supplied*, in the three regimes where the population ML/meta stack has no signal by construction: out-of-domain chemistry, dose/regimen/population extrapolation, and individualized MIPD.
+
+The module provides an a-priori-to-posterior path (`predict_posterior`), steady-state IV trough TDM with a renal-clearance latent (`predict_tdm`, vancomycin/aminoglycoside scope), patient covariate individualization (creatinine clearance via measured CrCl or a Cockcroft-Gault estimate; body weight and age via a physiology-generator graph swap), and target-attainment dose recommendation (`recommend_dose`) over the resulting posterior.
+
+> This is the post-headline pivot direction: the SMILES-only C<sub>max</sub> ceiling (~2.7 AAFE) was found to be empirically walled rather than under-engineered (the meta's own residual is structure-unpredictable out-of-sample), so the program shifted to the regimes where measured data is the only lever that moves the number. Charter: `docs/superpowers/specs/2026-06-09-engine-as-prior-mipd-charter.md`.
+
 ### Drug-drug interactions
 
 DDI is modeled by adjusting enzyme abundances in the body graph prior to ODE compilation. The engine sees modified abundances and computes clearance as usual &mdash; no engine modifications are required.
@@ -393,11 +403,11 @@ SMILES + dose
                   ▼
              pipeline (meta-learner → final PredictionResult)
                   │
-       ┌──────────┼──────────┐
-       ▼          ▼          ▼
-    regimen      ddi       pkpd
-   (multi-dose, (enzyme    (effect
-    TDM, MIPD)  adj.)     compartment)
+       ┌──────────┼──────────┬──────────┐
+       ▼          ▼          ▼          ▼
+    regimen      ddi       pkpd       mipd
+   (multi-dose, (enzyme    (effect    (engine-as-prior
+    TDM)        adj.)     compartment) posterior, MIPD)
 ```
 
 | Layer | Responsibility | Depends on |
@@ -407,8 +417,9 @@ SMILES + dose
 | `predict/` | SMILES &rarr; chemistry &rarr; ADME &rarr; DrugOnGraph + transporter DB | `core` |
 | `ml/` | XGBoost C<sub>max</sub>, CL/F, VDss predictors, 4-track meta-learner | `core` |
 | `pk/` | SimResult &rarr; PKEndpoints (route-aware) | `core` |
-| `regimen/` | Multi-dose solver, TDM method dispatch (SBI/IS/IBIS), MIPD | `core`, `engine`, `graph`, `sbi` |
-| `sbi/` | Simulation-based inference training + amortized posterior | `core`, `engine` |
+| `regimen/` | Multi-dose solver, TDM method dispatch (SBI/IS/IBIS/EnKF), linear-scaling dose adjust | `core`, `engine`, `graph`, `sbi` |
+| `sbi/` | Simulation-based inference training + amortized posterior, physiology generator | `core`, `engine` |
+| `mipd/` | Engine-as-prior posterior PK: F/CL/renal latents via SIR, covariate individualization (CrCl, weight/age), target-attainment dose recommendation | `core`, `engine`, `graph`, `regimen`, `sbi` |
 | `pipeline/` | Orchestrator wiring all layers | all layers |
 | `ddi.py` | Drug-drug interactions (competitive inhibition, E<sub>max</sub> induction) | `core`, `graph` |
 | `pkpd.py` | PK/PD effect modeling (effect compartment, sigmoid E<sub>max</sub>) | `core` |
@@ -553,7 +564,7 @@ src/sisyphus/
 │   ├── tdm_sbi.py       # SBI (neural posterior) TDM method
 │   ├── tdm_ibis.py      # Iterative Bayesian Importance Sampling
 │   ├── tdm_enkf.py      # Ensemble Kalman filter (sequential alternative)
-│   └── dosing.py        # MIPD dose recommendation
+│   └── dosing.py        # Linear-scaling dose adjustment (see mipd/ for engine-as-prior MIPD)
 │
 ├── sbi/                 # Amortized neural posterior estimation
 │   ├── priors.py        # Drug/physiology prior distributions
@@ -562,6 +573,18 @@ src/sisyphus/
 │   ├── multi_drug.py    # Multi-drug amortizer + continuous (bw, age)
 │   ├── physiology_generator.py  # Achour correlated physiology sampler
 │   └── sbc.py           # Simulation-Based Calibration gate
+│
+├── mipd/                # Engine-as-prior posterior PK (model-informed precision dosing)
+│   ├── core.py          # F latent + SIR posterior (FPrior, MeasuredF/Cmax/AUC, PosteriorPK)
+│   ├── clgrid.py        # CL latent + MeasuredConc via engine clint-scale grid surrogate
+│   ├── grid.py          # build_cl_grid (CrCl-aware drug renal_clearance scaling)
+│   ├── renal_grid.py    # Renal-CL latent grid (steady-state IV)
+│   ├── tdm.py           # predict_tdm — steady-state IV trough TDM (renal-CL latent)
+│   ├── covariates.py    # Covariates(crcl_ml_min, ...) + Cockcroft-Gault CrCl estimate
+│   ├── dosing.py        # recommend_dose — target-attainment dose recommendation
+│   ├── meta.py          # Route the posterior through the meta blend (product interval)
+│   ├── api.py           # predict_posterior entry point
+│   └── amortizer.py     # (shared amortizer hooks)
 │
 ├── physiology/          # Achour correlated-physiology registry (source package)
 │   └── correlation_registry.py  # log-space correlation matrices + correlated-lognormal sampling

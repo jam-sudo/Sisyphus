@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-10
+last_updated: 2026-06-12
 parent: ../../CLAUDE.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -9,6 +9,21 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
 
 ---
+
+## 2026-06-12 — MIPD dose recommendation (target attainment) + Cockcroft-Gault CrCl (engine-as-prior, headline-neutral)
+
+Two MIPD increments on the engine-as-prior posterior stack; both are new product surface, **not** holdout-headline levers (the 2.731 a-priori benchmark is untouched — with zero measured data the posterior reduces to the a-priori prediction).
+
+- **Dose recommendation / target attainment (`mipd/dosing.py`, commit `e580ce4`).** `recommend_dose(...)` inverts the IV steady-state TDM posterior into a dose that hits a `DoseTarget` (Css,max / Css,min / AUC) subject to `Constraint`s, evaluating candidate doses (`CandidateEval`) over the renal-CL posterior via `regimen.solver.solve_regimen`. Spec `docs/superpowers/specs/2026-06-12-mipd-dose-recommendation-design.md`; builds on `mipd/tdm.py` + `mipd/renal_grid.py`.
+- **Cockcroft-Gault CrCl estimation (`mipd/covariates.py`, commit `14399fb`).** When a measured CrCl is unavailable, estimate it from age/weight/sex/serum-creatinine and feed `Covariates.renal_factor()` — composes with the 06-11 renal individualization lever. Spec `docs/superpowers/specs/2026-06-12-mipd-cockcroft-gault-crcl-design.md`.
+
+## 2026-06-11 — MIPD covariate + steady-state IV TDM layer (CrCl renal individualization, IV trough TDM, weight/age graph swap)
+
+Three increments extending the 06-09 engine-as-prior core from a-priori posterior PK into **individualized** TDM. Specs/plans under `docs/superpowers/specs/2026-06-11-mipd-{crcl-renal-individualization,steady-state-iv-tdm,weight-age-covariates}-design.md`. All headline-neutral (new product surface; the holdout a-priori path is unchanged).
+
+- **CrCl renal individualization + conditioned-output surfacing.** `predict_posterior(..., covariates=Covariates(crcl_ml_min=...))` scales `drug.renal_clearance × CrCl/125`; the un-damped individualized engine posterior `post.cmax` is surfaced as the primary TDM estimate while the validated population blend + conformal band stay intact. Added `PosteriorPK.warnings` (structured flags) and an opt-in `ci_floor` CI-widening guard. Hardened against a 5-agent code-level verification + a spec self-review that corrected an over-confident output claim. Foundational, not a clinically-complete TDM product (renal-impairment benchmark deferred).
+- **Steady-state IV TDM (renal-CL latent).** `predict_tdm(...)` conditions the engine prior on a **steady-state IV trough** to individualize renal clearance — a free renal-CL latent (prior centered on the CrCl-implied value, updated by the measured trough) over a multi-dose `solve_regimen` solve. `RenalCLPrior`/`RenalCLGrid`/`RenalCLForward` (pure numpy), `sir_posterior_renal`, `PosteriorPK.renal_scale`. v1 is IV / single-trough / renal-drug scoped (vancomycin, aminoglycosides). Fixed an IV-infusion float-overshoot in `regimen.solver.solve_regimen` (clamp segment `t_eval` to span). `_build_grid_engine` extracted to share the engine-build point across the CLint and renal grids.
+- **Weight/age covariates (graph individualization).** Swap the reference graph for `sbi.physiology_generator.generate_physiology(weight, age)` (volumes, flows, enzyme ontogeny/aging) at the shared `_build_grid_engine` point — benefits both the oral CL-grid and IV TDM paths. Renal individualization stays CrCl-only (estimating renal CL from age/weight double-channels with perfusion). Also made the `sbi` import torch-free.
 
 ## 2026-06-10 — Batch regen finalization: headline 2.784 → 2.731 (oxybutynin + paracellular); the pinned 2.784 was STALE
 
@@ -28,6 +43,14 @@ Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the *
 **Finalized to canonical 2.731:** cache `4track_holdout_predictions.json`, leak-audit baseline `prodrug_v3_pre_baseline.json`, CI bootstrap `4track_ci_2026-06-10_flux1.json`, cache-pin (`test_cached_holdout_aafe_is_2p784` → `_is_2p731`), tebipenem pin (0.30925 → 0.31189), CLAUDE.md headline table. Closes the "oxybutynin 2.784→2.758 pending regen" item in the 2026-06-08 entry. A [[correctness-over-benchmark]] cycle: the score floor is unchanged, but the pinned number was stale and the correct value is 2.731.
 
 ---
+
+## 2026-06-09 — MIPD engine-as-prior posterior PK core (the pivot after the SMILES-only headline was foreclosed) — PR #69
+
+Shipped the core of the **engine-as-prior** repositioning: the mechanistic engine moves from a one-shot SMILES→Cmax oracle (walled at 2.78) to a **structural prior that any sparse measured observation sharply updates**. Charter `docs/superpowers/specs/2026-06-09-engine-as-prior-mipd-charter.md`; merge `4cb76ed`. New module `src/sisyphus/mipd/`.
+
+- **Thesis:** engine = mechanistic structural prior; measured observation = likelihood; product = calibrated posterior over PK + interval. With zero measured data it reduces to today's a-priori prediction (so the **2.731 holdout headline is untouched**); each added observation (measured F, Cmax, AUC, a plasma conc) narrows it via SIR. The walled quantity is **bioavailability F** — not in the SMILES (formulation/salt/food/transporter genetics) — so the only lever that moves it is measured data. This is the direction after the SMILES-only program was empirically foreclosed (Test A meta-residual CV R²≤0; 48 dead-ends; `2026-06-09-differentiable-mechanism-calibrated-pbpk-design.md` §0).
+- **Shipped:** `mipd/core.py` (FPrior/MeasuredF/MeasuredCmax/MeasuredAUC, `sir_posterior`, `AnalyticForward`, `APrioriPK`/`PosteriorPK`); `mipd/clgrid.py` (CL latent + `MeasuredConc` via an engine clint-scale grid surrogate, `sir_posterior_2d`); `mipd/meta.py` (route the posterior through the meta blend for a product interval); `mipd/grid.py` (`build_cl_grid`). `predict` surfaces `engine_f` via a shared `detect_disposition`.
+- **Gate 0b/0c PASSED** (the pre-registered cheap feasibility gate, run before the build): one measured anchor materially improves Cmax, ~3× more in the out-of-domain regime. The value proposition is **not** retrospective point accuracy (DE-48: engine-with-measured-ADME is ~3.84 AAFE on N=93, worse than the 2.78 meta) — it is the three regimes where ML/meta has no signal by construction: out-of-domain chemistry, dose/regimen/population extrapolation, and individualized MIPD.
 
 ## 2026-06-08 — Layered analysis + correctness batch: 4 more gate failures (DE-45/46/47/48), oxybutynin reference fix (2.784→2.758 pending regen)
 

@@ -17,9 +17,15 @@ predict   ←  (external libs only)       (SMILES → DrugOnGraph)
 ml        ←  (external libs only)       (direct PK predictors, meta-learner)
 pk        ←  (nothing)                  (SimResult → PKEndpoints)
 graph     ←  (nothing)                  (BodyGraph types, YAML builder)
+
+# Clinical / downstream layers (wrap the engine; never modify it):
+regimen   ←  engine, graph, sbi         (multi-dose solver, TDM dispatch SBI/IS/IBIS/EnKF, dose adjust)
+sbi       ←  engine                     (amortized neural posterior + physiology generator)
+mipd      ←  engine, graph, regimen, sbi (engine-as-prior posterior PK, covariate individualization, dose recommendation)
+ddi.py / pkpd.py                        (DDI enzyme adjustment; PK/PD effect compartment)
 ```
 
-**predict does NOT import engine. engine does NOT import predict.** No cross-layer imports outside `pipeline/`.
+**predict does NOT import engine. engine does NOT import predict.** No cross-layer imports outside `pipeline/`. The clinical layers (`regimen`, `sbi`, `mipd`, `ddi`, `pkpd`) wrap the engine without modifying it (extensibility proof: each added 0 lines to `engine/`).
 
 ## Invariants (load-bearing — do not violate)
 
