@@ -37,7 +37,7 @@ def test_oral_b1_trough_carries_F_scale():
     f = np.array([2.0 * grid.f_engine[s1]])
     s = np.array([grid.s_grid[s1]])
     last, tau = float(reg.last_dose_time_h), 12.0
-    raw = float(grid.conc_at(s, last + tau))
+    raw = float(grid.conc_at(s, last + tau)[0])
     q, _ = _interval_reference_oral(SMILES, reg, tau, f, s, n_grid=5)
     assert q["trough"][0] == pytest.approx(2.0 * raw, rel=0.05)
 
