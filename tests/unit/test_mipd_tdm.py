@@ -1,6 +1,5 @@
 """Integration tests for mipd.tdm.predict_tdm (IV steady-state TDM)."""
 import numpy as np
-import pytest
 
 from sisyphus.mipd.clgrid import MeasuredConc
 from sisyphus.mipd.covariates import Covariates
@@ -14,10 +13,14 @@ def _iv_regimen():
     return DosingRegimen.iv_infusion(dose_mg=50.0, duration_h=0.5, interval_h=8.0, n_doses=5)
 
 
-def test_predict_tdm_rejects_oral_regimen():
+def test_predict_tdm_accepts_oral_regimen():
+    # Oral steady-state TDM is now supported (the IV-only rejection was removed
+    # 2026-06-12). Oral frees F (not renal CL); with no shape obs it is F-only.
     oral = DosingRegimen.oral_repeated(dose_mg=50.0, interval_h=8.0, n_doses=3)
-    with pytest.raises(ValueError, match="IV"):
-        predict_tdm(ATENOLOL, oral, [], seed=0)
+    post = predict_tdm(ATENOLOL, oral, [], n_grid=5, seed=0)
+    assert post.renal_scale is None
+    assert post.f is not None
+    assert post.cl_scale is None
 
 
 def test_predict_tdm_output_is_honest_for_iv():

@@ -16,6 +16,7 @@ from dataclasses import dataclass
 
 import numpy as np
 
+from sisyphus.mipd._regimen import _regimen_interval_h
 from sisyphus.mipd.core import Posterior, PosteriorPK, _softmax_resample
 
 # numpy 2.0+ renamed trapz -> trapezoid; match the codebase idiom (pk/nca.py).
@@ -103,12 +104,6 @@ class RenalCLForward:
             "auc": self._interp(self._lauc, r),
             "conc_at": conc_at,
         }
-
-
-def _regimen_interval_h(regimen) -> float:
-    """Dosing interval tau from a regimen (events[1]-events[0]); 24.0 if single-dose."""
-    ev = regimen.events
-    return float(ev[1].time_h - ev[0].time_h) if len(ev) >= 2 else 24.0
 
 
 def build_renal_cl_grid(

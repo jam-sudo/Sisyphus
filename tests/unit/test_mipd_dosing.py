@@ -165,10 +165,17 @@ def _engine_trough_at_unit_scale(reg, dose_mg=50.0):
     return float(g.conc_at(np.array([1.0]), reg.last_dose_time_h + 8.0)[0])
 
 
-def test_recommend_rejects_oral_regimen():
-    oral = DosingRegimen.oral_repeated(dose_mg=50.0, interval_h=8.0, n_doses=3)
-    with pytest.raises(ValueError, match="IV"):
-        recommend_dose(ATENOLOL, oral, [], DoseTarget((Constraint("trough", low=0.1),)))
+def test_recommend_supports_oral_regimen():
+    # M7: oral steady-state TDM is now supported — recommend_dose returns an oral
+    # recommendation (F latent, no renal latent) instead of raising.
+    oral = DosingRegimen.oral_repeated(dose_mg=50.0, interval_h=8.0, n_doses=6)
+    rec = recommend_dose(
+        ATENOLOL, oral, [MeasuredConc(value=0.1, t=oral.last_dose_time_h + 8.0)],
+        DoseTarget((Constraint("trough", low=0.01),)),
+        candidate_intervals=(8.0,), n_grid=5, n_samples=2000, seed=0,
+    )
+    assert rec.renal_scale is None
+    assert rec.f is not None
 
 
 def test_recommend_hits_feasible_trough_window():
@@ -292,6 +299,21 @@ def test_recommend_dose_rounded_to_zero_warns():
     )
     assert rec.dose_mg == 0.0
     assert any("granularity" in w.lower() for w in rec.warnings)
+
+
+def test_dose_recommendation_optional_renal_and_latents():
+    from sisyphus.mipd.core import Posterior
+
+    rec = DoseRecommendation(
+        dose_mg=100.0, interval_h=12.0, attainment_prob=0.9,
+        cmax=Posterior(np.ones(3)), trough=Posterior(np.ones(3)),
+        auc24=Posterior(np.ones(3)),
+        target=DoseTarget((Constraint("trough", low=0.5, high=2.0),)),
+        candidates=(), n_eff=3.0, warnings=(),
+        f=Posterior(np.ones(3)),
+    )
+    assert rec.renal_scale is None
+    assert rec.f is not None and rec.cl_scale is None
 
 
 def test_public_names_importable_from_package():
