@@ -294,6 +294,21 @@ def test_recommend_dose_rounded_to_zero_warns():
     assert any("granularity" in w.lower() for w in rec.warnings)
 
 
+def test_dose_recommendation_optional_renal_and_latents():
+    from sisyphus.mipd.core import Posterior
+
+    rec = DoseRecommendation(
+        dose_mg=100.0, interval_h=12.0, attainment_prob=0.9,
+        cmax=Posterior(np.ones(3)), trough=Posterior(np.ones(3)),
+        auc24=Posterior(np.ones(3)),
+        target=DoseTarget((Constraint("trough", low=0.5, high=2.0),)),
+        candidates=(), n_eff=3.0, warnings=(),
+        f=Posterior(np.ones(3)),
+    )
+    assert rec.renal_scale is None
+    assert rec.f is not None and rec.cl_scale is None
+
+
 def test_public_names_importable_from_package():
     import sisyphus.mipd as m
 

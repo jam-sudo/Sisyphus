@@ -85,9 +85,11 @@ class DoseRecommendation:
     auc24: Posterior
     target: DoseTarget
     candidates: tuple[CandidateEval, ...]
-    renal_scale: Posterior
     n_eff: float
     warnings: tuple[str, ...]
+    renal_scale: Posterior | None = None   # IV latent (None for oral)
+    f: Posterior | None = None             # oral F latent
+    cl_scale: Posterior | None = None      # oral metabolic-clint latent (free-both)
 
 
 def _sample_m_intervals(
