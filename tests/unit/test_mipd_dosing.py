@@ -165,10 +165,17 @@ def _engine_trough_at_unit_scale(reg, dose_mg=50.0):
     return float(g.conc_at(np.array([1.0]), reg.last_dose_time_h + 8.0)[0])
 
 
-def test_recommend_rejects_oral_regimen():
-    oral = DosingRegimen.oral_repeated(dose_mg=50.0, interval_h=8.0, n_doses=3)
-    with pytest.raises(ValueError, match="IV"):
-        recommend_dose(ATENOLOL, oral, [], DoseTarget((Constraint("trough", low=0.1),)))
+def test_recommend_supports_oral_regimen():
+    # M7: oral steady-state TDM is now supported — recommend_dose returns an oral
+    # recommendation (F latent, no renal latent) instead of raising.
+    oral = DosingRegimen.oral_repeated(dose_mg=50.0, interval_h=8.0, n_doses=6)
+    rec = recommend_dose(
+        ATENOLOL, oral, [MeasuredConc(value=0.1, t=oral.last_dose_time_h + 8.0)],
+        DoseTarget((Constraint("trough", low=0.01),)),
+        candidate_intervals=(8.0,), n_grid=5, n_samples=2000, seed=0,
+    )
+    assert rec.renal_scale is None
+    assert rec.f is not None
 
 
 def test_recommend_hits_feasible_trough_window():
