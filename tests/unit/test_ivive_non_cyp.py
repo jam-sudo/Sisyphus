@@ -120,3 +120,25 @@ def test_build_drug_on_graph_isoniazid_with_non_cyp_fractions():
     )
     assert "NAT2" in drug.enzyme_affinity
     assert drug.enzyme_affinity["NAT2"].mean > 0
+
+
+# ── detect_disposition: shared OATP-ECM + non-CYP detection (review #10) ──
+MIDAZOLAM = "C[n+]1cnc2n1-c1ccc(Cl)cc1C(c1ccccc1F)=NC2"
+CODEINE = "COc1ccc2c3c1O[C@H]1[C@@H](O)C=C[C@H]4[C@@H](C2)N(C)CC[C@@]341"
+
+
+def test_detect_disposition_returns_non_cyp_for_ugt_substrate():
+    from sisyphus.predict.chemistry import compute_profile
+    from sisyphus.predict.ivive import detect_disposition
+
+    oatp, ecm, non_cyp = detect_disposition(compute_profile(CODEINE))
+    assert oatp is None and ecm is None  # codeine is not an OATP1B1-ECM substrate
+    assert non_cyp and "UGT2B7" in non_cyp  # but it IS a UGT2B7 substrate
+
+
+def test_detect_disposition_empty_for_pure_cyp_substrate():
+    from sisyphus.predict.chemistry import compute_profile
+    from sisyphus.predict.ivive import detect_disposition
+
+    oatp, ecm, non_cyp = detect_disposition(compute_profile(MIDAZOLAM))
+    assert oatp is None and ecm is None and non_cyp == {}

@@ -12,6 +12,70 @@ track `pyproject.toml`.
 
 ## [Unreleased]
 
+### MIPD — engine-as-prior posterior PK + individualized TDM (2026-06-09 → 2026-06-12)
+
+New module `src/sisyphus/mipd/`. Repositions the mechanistic engine from a one-shot
+SMILES→C<sub>max</sub> oracle (walled at the holdout ceiling) into a **structural prior that
+any sparse measured observation sharply updates**. With zero measured data it reduces to the
+a-priori prediction, so the **107-holdout headline (2.731) is untouched** — this is new product
+surface in the regimes where the ML/meta stack has no signal by construction (out-of-domain
+chemistry, dose/regimen/population extrapolation, individualized MIPD).
+
+- **Engine-as-prior posterior PK core (PR #69, `4cb76ed`, 2026-06-09).** Bioavailability F as a
+  latent with a wide prior centered on the engine's emergent `F_engine`, updated from measured
+  observations (F, C<sub>max</sub>, AUC, plasma conc) by SIR. `mipd/core.py`, `mipd/clgrid.py`
+  (CL latent + conc grid surrogate), `mipd/meta.py` (route the posterior through the meta blend),
+  `mipd/grid.py`. `predict` surfaces `engine_f` via a shared `detect_disposition`. Gate 0b/0c
+  passed (one measured anchor materially improves C<sub>max</sub>, ~3× more out-of-domain). Charter:
+  `docs/superpowers/specs/2026-06-09-engine-as-prior-mipd-charter.md`.
+- **CrCl renal individualization + steady-state IV TDM + weight/age covariates (2026-06-11).**
+  `predict_posterior(covariates=Covariates(crcl_ml_min=...))` scales renal CL by `CrCl/125` and
+  surfaces the individualized posterior `post.cmax`; `predict_tdm(...)` conditions the prior on a
+  steady-state IV trough to individualize a renal-CL latent over a multi-dose `solve_regimen`
+  (vancomycin/aminoglycoside scope); weight/age swap the reference graph for
+  `sbi.physiology_generator.generate_physiology`. Added `PosteriorPK.{warnings,renal_scale}` and an
+  opt-in `ci_floor`. Fixed an IV-infusion float-overshoot in `regimen.solver.solve_regimen`.
+- **Dose recommendation + Cockcroft-Gault CrCl (2026-06-12).** `recommend_dose(...)` inverts the IV
+  TDM posterior into a target-attainment dose (Css,max/Css,min/AUC) under constraints; Cockcroft-Gault
+  estimates CrCl from age/weight/sex/SCr when no measured CrCl is supplied.
+
+### Holdout headline 2.784 → 2.731 — canonical CI-stack batch regen (2026-06-10)
+
+Same-stack regen (`.github/workflows/flux1-regen.yml`) of origin/main + paracellular absorption:
+Meta AAFE **2.7310** (engine 4.244, ML 2.998, in-domain 2.777, N=107). The pinned 2.784 was stale
+(predated the merged oxybutynin reference fix). Attribution: oxybutynin −0.026 + paracellular −0.031,
+both within the bootstrap CI — correctness-driven, not a distinguishable accuracy gain. Cache, baseline,
+bootstrap CIs (`data/validation/4track_ci_2026-06-10_flux1.json`), and the cache-pin (renamed
+`test_cached_holdout_aafe_is_2p731`) all regenerated.
+
+### June correctness/contract cycles (2026-06-03 → 2026-06-09)
+
+All correctness-first; the net holdout effect is captured by the 2.731 batch regen above.
+
+- **FLUX-1 — flow-limitation double-count fix (PR #65, 2026-06-04).** The clearance flux applied the
+  whole-organ `CL_h` (Q-embedded) to the compartment outlet alongside the convective `Q·c_out` edge,
+  double-counting flow and capping hepatic/gut extraction at E→0.5 instead of →1.0. Fixed to apply the
+  intrinsic clearance across all 4 clearance models; gut CYP3A4 abundance re-anchored to hold midazolam
+  E_gut invariant. Correct physics; **regresses** the benchmark (2.698 → 2.784) — the wrong formula was
+  load-bearing as calibration. This is the DE-41/42/43 first-pass-F root cause.
+- **RBP-2 — blood:plasma concentration-basis cleanup (2026-06-04).** Holdout-bit-identical; corrects
+  drugs with R<sub>B:P</sub> ≠ 1 on non-holdout paths.
+- **Conformal prediction intervals (2026-06-04).** User-facing 90% C<sub>max</sub> PI is now a
+  train-calibrated split-conformal interval (q90=1.111, /÷12.92), holdout-validated to 0.953 coverage at
+  nominal 0.90. Replaces the MC interval (29.9% @ nominal 90%). Point estimates bit-identical.
+- **OATP1B1 re-anchor to pitavastatin (2026-06-04).** Re-anchored the liver OATP1B1 uptake abundance
+  5.0e5 → 1.3e5 against a non-holdout substrate (was pravastatin = holdout → Invariant #5 erosion);
+  un-xfailed pravastatin + pitavastatin ECM tests. Headline-neutral.
+- **Measured-F routing (PR #64, 2026-06-03).** `MeasuredADMEInput.f_bioavail` exposure-scales engine
+  C<sub>max</sub>/AUC by F_measured/F_engine; bit-identical when unused (headline untouched).
+- **Engine contract hardening (WS-2..6, `f8edfbc`, 2026-06-07).** Fail-loud `engine/contracts.py`
+  fu-correction guard, real parallel-tube via `graph/axial.py` axial sub-compartment expansion,
+  active-transport direction, JAX↔SciPy RHS parity. Headline bit-identical (no production
+  `parallel_tube`/`active_transport` edges).
+- **Oxybutynin holdout reference correction (PR #68, 2026-06-09).** `cmax_mg_L` 0.001 → 0.008 (FDA
+  Ditropan IR single-dose ~8 ng/mL; a decimal/unit slip); AUC + ct_curve rescaled ×8. Primary-source,
+  model-blind. Regen-folded into the 2.731 headline above.
+
 ### B-13 gut UGT expansion + B-14 hepatic UGT IVIVE + audit hardening (2026-05-29 → 2026-05-31)
 
 - **B-13 — gut UGT2B7 correction (PR #49, `242b100`, 2026-05-29).** Gut-wall `UGT2B7 = 3.6e3 pmol` (0.60 pmol/mg total-mucosal × 6000; Al-Majdoub 2021 / Couto 2020); gut `UGT1A9` dropped (not expressed in human small intestine; Oda 2012). Drug-level UGT1A9 affinity still acts at liver. Metric-neutral: Meta AAFE 2.69828 → 2.69825 (103/107 bit-identical; only the 4 UGT2B7 gut seeds shift, all down). A citation-confabulation audit (11-agent adversarial verification) re-derived both gut abundances from primary sources after two fabricated citations were caught.

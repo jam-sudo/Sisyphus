@@ -7,15 +7,19 @@
 **Language policy:** 본문 한국어, 코드·타입·용어 영어
 **Predecessor:** [Omega PBPK](https://github.com/jam-sudo/Omega) — 35-state ODE 기반 whole-body PBPK. Sisyphus의 설계 결정 상당수는 Omega 개발 과정에서 확인된 구조적 한계에 기반한다. Omega repo의 `CLAUDE.md`에 31개 settled decisions이 기록되어 있다.
 
-> **Note (2026-05-08):** This document captures the original design rationale (Phase 0–1 era). Substantial architectural additions have shipped since the original date and are *not* reflected here:
+> **Note (2026-05-08; updated 2026-06-12):** This document captures the original design rationale (Phase 0–1 era). Substantial architectural additions have shipped since the original date and are *not* reflected in the ASCII tree / contracts below:
 >
-> - Extended Clearance Model (ECM) with closed-form QSSA hepatocyte kinetics + auto-activation gating (PR #9, #20, #22, #29, #30)
+> - Extended Clearance Model (ECM) with closed-form QSSA hepatocyte kinetics + auto-activation gating (PR #9, #20, #22, #29, #30); OATP1B1 re-anchored to a non-holdout substrate (2026-06-04)
 > - Prodrug activation v1 → v2 → v3 (PR #6, #7, #15, #34) — `ProdrugActivation` flux + registry
 > - NAT2/UGT1A1 phenotype propagation + back-solve cancellation fix (PR #32, v0.3.2)
 > - `phenotype_scale_overrides` API hook (PR #33, v0.3.3)
 > - 4-track meta-learner with VDss orthogonal track (`_W_VDSS=0.20`)
-> - Method dispatch SBI / IBIS / IS for TDM (P6, 2026-04-19)
+> - Method dispatch SBI / IBIS / IS / EnKF for TDM (P6, 2026-04-19) — `regimen/` + `sbi/` modules
 > - Mean-only deterministic realization (Hardening, 2026-05-01)
+> - **FLUX-1 flow-limitation double-count fix + RBP-2 blood:plasma basis** (2026-06-04) — corrected hepatic/gut extraction physics; engine contract hardening (fail-loud fu-correction, real parallel-tube via `graph/axial.py`, JAX↔SciPy parity) (2026-06-07)
+> - **Split-conformal user-facing 90% Cmax prediction interval** (2026-06-04) replacing the under-covering MC interval
+> - **MIPD engine-as-prior posterior PK** (`mipd/` module, 2026-06-09 → 06-12): the engine repositioned as a structural prior that sparse measured observations update via SIR — posterior PK, steady-state IV TDM, CrCl/weight/age covariate individualization, target-attainment dose recommendation. Charter: `docs/superpowers/specs/2026-06-09-engine-as-prior-mipd-charter.md`
+> - New top-level modules not in the tree below: `regimen/`, `sbi/`, `mipd/`, `ddi.py`, `pkpd.py`
 >
 > For the **current** mathematical model, ODE forms, prediction pipeline, applicability-domain rules, and validation status, refer to `README.md` §Methodology and §Validation. For **architectural rationale and invariants** (graph-as-body, distribution-native, identity-blind engine), this document remains canonical. For **chronological experiment history**, see `docs/claude/experiment-log.md`.
 

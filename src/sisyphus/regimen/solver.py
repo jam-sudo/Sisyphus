@@ -244,6 +244,12 @@ def solve_regimen(
         if seg_t_eval[-1] < t_end - 1e-12:
             seg_t_eval = np.concatenate((seg_t_eval, [t_end]))
 
+        # Clamp to the segment span and de-duplicate: a global-grid point can sit
+        # ~1e-15 past t_end from float rounding (first surfaced by IV-infusion
+        # micro-bolus segments where dt_output is commensurate with the infusion
+        # step), and solve_ivp strictly rejects any t_eval outside [t_start, t_end].
+        seg_t_eval = np.unique(np.clip(seg_t_eval, t_start, t_end))
+
         # Solve this segment
         result = solve(
             compiled,

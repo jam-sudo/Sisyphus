@@ -1,0 +1,62 @@
+{
+  "computed_at": "2026-06-10-flux1",
+  "source_cache": "data/training/4track_holdout_predictions.json",
+  "context": "Post-FLUX-1 intrinsic-clearance fix (canonical regen)",
+  "method": "bootstrap on abs(log10(fold))",
+  "n_bootstrap": 10000,
+  "seed": 20260422,
+  "overall": {
+    "n": 107,
+    "engine": {
+      "aafe": 4.2438,
+      "ci_95_low": 3.532,
+      "ci_95_high": 5.1493,
+      "n": 107,
+      "pct_2fold": 27.1,
+      "pct_3fold": 43.9
+    },
+    "ml": {
+      "aafe": 2.9981,
+      "ci_95_low": 2.55,
+      "ci_95_high": 3.5473,
+      "n": 107,
+      "pct_2fold": 43.0,
+      "pct_3fold": 58.9
+    },
+    "meta": {
+      "aafe": 2.731,
+      "ci_95_low": 2.3562,
+      "ci_95_high": 3.1898,
+      "n": 107,
+      "pct_2fold": 43.9,
+      "pct_3fold": 63.6
+    }
+  },
+  "in_domain": {
+    "n": 81,
+    "engine": {
+      "aafe": 3.8694,
+      "ci_95_low": 3.1928,
+      "ci_95_high": 4.7039,
+      "n": 81,
+      "pct_2fold": 29.6,
+      "pct_3fold": 44.4
+    },
+    "ml": {
+      "aafe": 2.9768,
+      "ci_95_low": 2.4703,
+      "ci_95_high": 3.6246,
+      "n": 81,
+      "pct_2fold": 44.4,
+      "pct_3fold": 60.5
+    },
+    "meta": {
+      "aafe": 2.7773,
+      "ci_95_low": 2.342,
+      "ci_95_high": 3.3176,
+      "n": 81,
+      "pct_2fold": 42.0,
+      "pct_3fold": 61.7
+    }
+  }
+}
