@@ -107,3 +107,71 @@ def test_rate_limit_returns_429_after_cap():
     assert client.get("/ping").status_code == 200
     assert client.get("/ping").status_code == 200
     assert client.get("/ping").status_code == 429
+
+
+# --- allow-list fail-safe (blank env must not block every origin) ----------
+
+def test_allowed_origins_blank_env_falls_back_to_default(monkeypatch):
+    # An all-blank/comma value previously parsed to [] -> CORS blocks everything,
+    # including the production console. It must fall back to the default instead.
+    monkeypatch.setenv("SISYPHUS_CORS_ORIGINS", " , ,")
+    from server.config import allowed_origins
+
+    assert allowed_origins() == ["https://sisyphus-pbpk.io"]
+
+
+# --- client_ip rate-limit key: proxy-aware, spoof-resistant -----------------
+
+class _Req:
+    """Minimal stand-in for starlette Request (headers + .client.host)."""
+
+    def __init__(self, *, xff: str | None = None, peer: str = "10.0.0.1"):
+        self.headers = {} if xff is None else {"x-forwarded-for": xff}
+        self.client = type("Client", (), {"host": peer})()
+
+
+def test_trust_proxy_env_parsing(monkeypatch):
+    from server.config import trust_proxy
+
+    monkeypatch.delenv("SISYPHUS_TRUST_PROXY", raising=False)
+    assert trust_proxy() is False
+    for v in ("1", "true", "TRUE", "yes", "on"):
+        monkeypatch.setenv("SISYPHUS_TRUST_PROXY", v)
+        assert trust_proxy() is True
+    monkeypatch.setenv("SISYPHUS_TRUST_PROXY", "0")
+    assert trust_proxy() is False
+
+
+def test_client_ip_uses_socket_peer_when_proxy_untrusted(monkeypatch):
+    # Default (no proxy trust): ignore X-Forwarded-For, use the socket peer.
+    monkeypatch.delenv("SISYPHUS_TRUST_PROXY", raising=False)
+    from server.config import client_ip
+
+    assert client_ip(_Req(xff="1.2.3.4", peer="10.0.0.7")) == "10.0.0.7"
+
+
+def test_client_ip_uses_rightmost_xff_hop_behind_trusted_proxy(monkeypatch):
+    # Behind one trusted proxy the real client is the RIGHTMOST hop (the address
+    # the proxy observed). A client-supplied "fake" left of it cannot win.
+    monkeypatch.setenv("SISYPHUS_TRUST_PROXY", "1")
+    from server.config import client_ip
+
+    assert client_ip(_Req(xff="9.9.9.9 (spoof), 203.0.113.42")) == "203.0.113.42"
+
+
+def test_client_ip_falls_back_to_peer_without_xff_even_if_trusted(monkeypatch):
+    monkeypatch.setenv("SISYPHUS_TRUST_PROXY", "1")
+    from server.config import client_ip
+
+    assert client_ip(_Req(xff=None, peer="172.16.0.3")) == "172.16.0.3"
+
+
+def test_client_ip_distinguishes_clients_behind_proxy(monkeypatch):
+    # The whole point of H1: two clients sharing one proxy IP must land in
+    # different buckets once proxy-trust is on (same socket peer, different XFF).
+    monkeypatch.setenv("SISYPHUS_TRUST_PROXY", "1")
+    from server.config import client_ip
+
+    a = client_ip(_Req(xff="198.51.100.1", peer="10.0.0.1"))
+    b = client_ip(_Req(xff="198.51.100.2", peer="10.0.0.1"))
+    assert a != b
