@@ -183,6 +183,7 @@ def predict(
     phenotype_scale_overrides: dict[str, float] | None = None,
     kp_method: str = "rodgers_rowland",
     measured_adme: MeasuredADMEInput | None = None,
+    compute_f_engine: bool = False,
 ) -> PredictionResult:
     """End-to-end prediction: SMILES -> PredictionResult.
 
@@ -233,6 +234,12 @@ def predict(
             implementation hard-coded the default and made the per-drug
             field unreachable through the public API (hardening backlog
             B3, 2026-05-02).
+        compute_f_engine: when True (and route='oral'), run the engine's
+            IV-reference solve and surface the emergent oral bioavailability
+            on ``PredictionResult.engine_f`` (24h-truncated AUC_oral/AUC_iv).
+            Default False keeps the SMILES-only path bit-identical (no extra
+            solve, ``engine_f`` is None). Used by the engine-as-prior MIPD F
+            latent so callers need not re-derive F_engine via a probe call.
 
     Returns:
         PredictionResult with combined PK endpoints and uncertainty.
@@ -264,14 +271,8 @@ def predict(
     from sisyphus.pk.endpoints import compute_endpoints
     from sisyphus.predict.adme import predict_adme
     from sisyphus.predict.chemistry import compute_profile
-    from sisyphus.predict.ivive import build_drug_on_graph
-    from sisyphus.predict.non_cyp_substrates import get_non_cyp_fractions
-    from sisyphus.predict.transporter_db import (
-        find_oatp1b1_substrate_name,
-        is_oatp_ecm_applicable,
-        load_hepatic_ecm_params_for_smiles,
-        load_oatp1b1_kinetics_for_smiles,
-    )
+    from sisyphus.predict.ivive import build_drug_on_graph, detect_disposition
+    from sisyphus.predict.transporter_db import find_oatp1b1_substrate_name
 
     warnings_list: list[str] = []
     cmax_90ci: tuple[float, float] | None = None
@@ -330,24 +331,12 @@ def predict(
     # The gate uses full InChIKey matching (spec §1.2). The cyp_clearance
     # _overrides registry is checked downstream by ivive.build_drug_on_graph
     # for the metabolic_fraction scaling (PR #22 mechanism).
-    auto_oatp_kinetics = None
-    auto_ecm_params = None
-    if is_oatp_ecm_applicable(profile.smiles):
-        auto_oatp_kinetics = load_oatp1b1_kinetics_for_smiles(profile.smiles)
-        auto_ecm_params = load_hepatic_ecm_params_for_smiles(profile.smiles)
-        if auto_oatp_kinetics is not None and auto_ecm_params is not None:
-            substrate_name = find_oatp1b1_substrate_name(profile.smiles) or "unknown"
-            warnings_list.append(f"oatp1b1:auto_ecm:{substrate_name}")
-        else:
-            # Flag set but registry data missing — log and disable ECM. This
-            # should be caught by the schema regression test, but defend at
-            # runtime too.
-            auto_oatp_kinetics = None
-            auto_ecm_params = None
-
-    # Per-gene non-CYP fm registry lookup (NAT2 / UGT1A1).
-    # Empty dict for non-substrates is a no-op downstream.
-    non_cyp_fractions = get_non_cyp_fractions(profile.smiles)
+    # Detect OATP1B1-ECM + non-CYP (UGT/NAT) disposition via the shared helper
+    # (ivive.detect_disposition — single source of truth, also used by mipd.grid).
+    auto_oatp_kinetics, auto_ecm_params, non_cyp_fractions = detect_disposition(profile)
+    if auto_oatp_kinetics is not None and auto_ecm_params is not None:
+        substrate_name = find_oatp1b1_substrate_name(profile.smiles) or "unknown"
+        warnings_list.append(f"oatp1b1:auto_ecm:{substrate_name}")
 
     drug = build_drug_on_graph(
         profile, adme, dose_mg, route,
@@ -396,6 +385,7 @@ def predict(
         t_min_h = _IV_CMAX_DELAY_H if route == "iv" else 0.0
 
     engine_pk: PKEndpoints | None = None
+    engine_f_value: float | None = None  # emergent oral F (review #10), opt-in
     try:
         graph = build_from_yaml(_PHYSIOLOGY_DIR / "reference_man.yaml")
 
@@ -486,18 +476,27 @@ def predict(
                 engine_pk.tmax.mean,
                 engine_pk.auc_0t.mean,
             )
-            # ── Measured-F routing (oral only; no-op when f_bioavail is None) ──
-            # Scale the engine track to honor a caller-supplied oral F. Runs the
-            # IV-reference solve ONLY when f_bioavail is set, so the SMILES-only
-            # path stays bit-identical.
-            if (
+            # ── Engine oral F (review #10) ──────────────────────────────────
+            # Compute the engine's emergent F_engine ONCE when the caller asks
+            # (compute_f_engine) or when measured-F routing needs it. The IV-
+            # reference solve runs ONLY then, so the SMILES-only path stays
+            # bit-identical. F_engine alone does NOT alter engine_pk (the
+            # measured-F routing below does that, separately).
+            _wants_measured_f = (
                 measured_adme is not None
                 and measured_adme.f_bioavail is not None
                 and route == "oral"
-            ):
+            )
+            _f_eng = None
+            if (compute_f_engine or _wants_measured_f) and route == "oral":
                 _f_eng = _engine_oral_bioavailability(
                     compiled, params, drug, engine_pk.auc_0t.mean, _obs_node
                 )
+                if _f_eng is not None and _f_eng > 0:
+                    engine_f_value = _f_eng
+
+            # ── Measured-F routing (oral only): scale engine track to caller F ──
+            if _wants_measured_f:
                 if _f_eng is not None and _f_eng > 0:
                     engine_pk, f_correction_k, _clamped = _apply_measured_f(
                         engine_pk, _f_eng, measured_adme.f_bioavail,
@@ -690,4 +689,5 @@ def predict(
         warnings=tuple(warnings_list),
         cmax_90ci=cmax_90ci,
         phenotypes_applied=tuple(phenotypes.items()) if phenotypes else (),
+        engine_f=engine_f_value,
     )

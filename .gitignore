@@ -63,6 +63,12 @@ data/docking/
 # sbi library auto-generated training telemetry (regenerable, noisy)
 sbi-logs/
 
+# Local tooling scratch/output (per-machine, regenerable — not repo-wide):
+#   .playwright-mcp/ — browser-MCP screenshots, console logs, page snapshots
+#   graphify-out/    — graphify knowledge-graph output (rebuilt via `graphify update .`)
+.playwright-mcp/
+graphify-out/
+
 # Agent/session-local config (per-machine, not repo-wide)
 .claude/
 
@@ -94,3 +100,9 @@ Sisyphus_Preprint_*.txt
 
 # Personal/admin documents (user-managed, never part of the PBPK codebase — 2026-05-31)
 JaeMinYoon_*
+# Career/job-search scratch in the repo root (personal, not project docs — 2026-06-12)
+lab_jobs_entrylevel.md
+resume_reframing_4jobs.md
+pharmpy_contribution_plan.md
+# Stray local plot output (regenerable scratch — 2026-06-12)
+predict.png

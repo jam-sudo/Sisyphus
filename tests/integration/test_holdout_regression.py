@@ -28,15 +28,17 @@ def _aafe(preds: list[dict]) -> float:
     not HOLDOUT_JSON.exists(),
     reason=f"{HOLDOUT_JSON.name} not present — regeneration required",
 )
-def test_cached_holdout_aafe_is_2p784() -> None:
-    """Cached predictions file: Meta AAFE is the public-clone headline 2.784 (±0.020).
+def test_cached_holdout_aafe_is_2p731() -> None:
+    """Cached predictions file: Meta AAFE is the public-clone headline 2.731 (±0.020).
 
-    FLUX-1 (2026-06-04): the flow-limitation double-count fix regenerated this cache
-    on the canonical CI stack — headline 2.698 → **2.784** (a regression; correct
-    physics, the wrong formula was load-bearing as calibration — see experiment-log
-    2026-06-04). Of the 2.698→2.784 move, ~+0.8% is the FLUX-1 effect itself
-    (same-stack 2.762→2.784) and the rest is a stack refresh (the prior 2.698 cache
-    predated the current CI numerics stack). in_domain.n is now 81 (was 79).
+    2026-06-10 batch regen (canonical CI stack): the stale FLUX-1 cache (2.784, which
+    predated the oxybutynin merge) was regenerated on origin/main (oxybutynin holdout-
+    reference fix, already merged via PR #68) + paracellular absorption — headline
+    2.784 → **2.731**. Same-stack attribution: oxybutynin −0.026 (label correction,
+    was un-repinned) + paracellular −0.031 (engine −5%); both within the bootstrap CI
+    (half-width ~0.42). in_domain.n is 81. Prior lineage: FLUX-1 (2026-06-04) took the
+    cache 2.698 → 2.784 (correct physics; the wrong formula was load-bearing as
+    calibration — see experiment-log 2026-06-04).
 
 
     Baseline updated 2026-05-27 (B-02 Phase 2 UGT public registry activation;
@@ -86,7 +88,7 @@ def test_cached_holdout_aafe_is_2p784() -> None:
     0.005 was an artifact of the B-03.x cycle's coincidentally tiny delta.
     See spec amendment 2026-05-27.
 
-    If this fails outside ±0.020 of 2.698, the cache has been regenerated
+    If this fails outside ±0.020 of 2.731, the cache has been regenerated
     with a behavior change or the numerics stack drifted materially.
     Investigate."""
     with HOLDOUT_JSON.open() as f:
@@ -100,4 +102,4 @@ def test_cached_holdout_aafe_is_2p784() -> None:
         if isinstance(data, dict) and "drugs" in data:
             preds = data["drugs"]
         aafe = _aafe(preds)
-    assert abs(aafe - 2.784) < 0.020, f"AAFE drifted: {aafe:.4f}"
+    assert abs(aafe - 2.731) < 0.020, f"AAFE drifted: {aafe:.4f}"

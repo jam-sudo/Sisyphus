@@ -11,7 +11,13 @@ from __future__ import annotations
 import numpy as np
 from numpy.typing import NDArray
 from rdkit import Chem
-from rdkit.Chem import AllChem, Descriptors
+from rdkit.Chem import Descriptors, rdFingerprintGenerator
+
+# Morgan fingerprint generator (radius=2, 2048 bits). The new rdFingerprintGenerator
+# API replaces the deprecated AllChem.GetMorganFingerprintAsBitVect; verified
+# bit-identical across all 368 reference SMILES, so XGBoost features (and the 2.731
+# headline) are unchanged. Constructed once at import — it is reusable across molecules.
+_MORGAN_GEN = rdFingerprintGenerator.GetMorganGenerator(radius=2, fpSize=2048)
 
 
 def compute_features(smiles: str) -> NDArray[np.float64]:
@@ -47,7 +53,7 @@ def compute_features(smiles: str) -> NDArray[np.float64]:
         raise ValueError(f"Invalid SMILES: {smiles!r}")
 
     # Morgan fingerprint (2048 bits, radius 2)
-    fp = AllChem.GetMorganFingerprintAsBitVect(mol, radius=2, nBits=2048)
+    fp = _MORGAN_GEN.GetFingerprint(mol)
     fp_array = np.zeros(2048, dtype=np.float64)
     for bit in fp.GetOnBits():
         fp_array[bit] = 1.0

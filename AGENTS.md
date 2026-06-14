@@ -17,9 +17,15 @@ predict   ←  (external libs only)       (SMILES → DrugOnGraph)
 ml        ←  (external libs only)       (direct PK predictors, meta-learner)
 pk        ←  (nothing)                  (SimResult → PKEndpoints)
 graph     ←  (nothing)                  (BodyGraph types, YAML builder)
+
+# Clinical / downstream layers (wrap the engine; never modify it):
+regimen   ←  engine, graph, sbi         (multi-dose solver, TDM dispatch SBI/IS/IBIS/EnKF, dose adjust)
+sbi       ←  engine                     (amortized neural posterior + physiology generator)
+mipd      ←  engine, graph, regimen, sbi (engine-as-prior posterior PK, covariate individualization, dose recommendation)
+ddi.py / pkpd.py                        (DDI enzyme adjustment; PK/PD effect compartment)
 ```
 
-**predict does NOT import engine. engine does NOT import predict.** No cross-layer imports outside `pipeline/`.
+**predict does NOT import engine. engine does NOT import predict.** No cross-layer imports outside `pipeline/`. The clinical layers (`regimen`, `sbi`, `mipd`, `ddi`, `pkpd`) wrap the engine without modifying it (extensibility proof: each added 0 lines to `engine/`).
 
 ## Invariants (load-bearing — do not violate)
 
@@ -79,7 +85,7 @@ graph     ←  (nothing)                  (BodyGraph types, YAML builder)
 
 ## Artifact gates — do not introduce silent fallbacks
 
-**Lesson from the 2026-05-09 audit cycle.** Two gitignored artifacts silently augmented prediction accuracy for ~4 weeks, anchoring a headline AAFE (2.679) that no public clone could reproduce. The current headline 2.784 is the *honest* public-clone deterministic value (pinned test `test_cached_holdout_aafe_is_2p784`; was 2.698 pre-FLUX-1, regenerated on the canonical CI stack via `.github/workflows/flux1-regen.yml`), and CI is anchored to that state. FLUX-1 (PR #65, 2026-06-04) moved it 2.698 → 2.784 — a correctness-first *regression* (a real flow-limitation bug fixed; the wrong formula had been load-bearing as calibration).
+**Lesson from the 2026-05-09 audit cycle.** Two gitignored artifacts silently augmented prediction accuracy for ~4 weeks, anchoring a headline AAFE (2.679) that no public clone could reproduce. The current headline 2.731 is the *honest* public-clone deterministic value (pinned test `test_cached_holdout_aafe_is_2p731`; regenerated on the canonical CI stack via `.github/workflows/flux1-regen.yml`), and CI is anchored to that state. Lineage: 2.698 → 2.784 after FLUX-1 (PR #65, 2026-06-04) — a correctness-first *regression* (a real flow-limitation bug fixed; the wrong formula had been load-bearing as calibration) — then 2.784 → 2.731 after the 2026-06-10 oxybutynin label-fix + paracellular-absorption batch regen (both within bootstrap CI).
 
 When adding any new data file or model artifact that `predict()` (or any downstream code) loads conditionally via `Path.exists()`:
 

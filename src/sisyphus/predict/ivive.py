@@ -595,6 +595,42 @@ def _estimate_particle_radius(solubility: Distribution) -> float:
 # ---------------------------------------------------------------------------
 
 
+def detect_disposition(
+    profile: MolecularProfile,
+) -> tuple[object | None, object | None, dict[str, float]]:
+    """Detect OATP1B1-ECM and non-CYP (UGT/NAT) disposition for a molecule.
+
+    Returns ``(transporter_kinetics, hepatic_ecm_params, non_cyp_fractions)`` — the
+    three disposition arguments ``build_drug_on_graph`` consumes. The OATP/ECM pair
+    is both-or-neither: it is populated only when the molecule is flagged
+    ``ecm_applicable`` AND both registry entries are present (the documented
+    triple-counting gate); otherwise both are None. ``non_cyp_fractions`` is an
+    empty dict for non-substrates (a downstream no-op).
+
+    Shared by ``pipeline.predict`` and ``mipd.grid`` so the engine path is built
+    identically on both — the single source of truth for disposition detection.
+    """
+    from sisyphus.predict.non_cyp_substrates import get_non_cyp_fractions
+    from sisyphus.predict.transporter_db import (
+        is_oatp_ecm_applicable,
+        load_hepatic_ecm_params_for_smiles,
+        load_oatp1b1_kinetics_for_smiles,
+    )
+
+    transporter_kinetics = None
+    hepatic_ecm_params = None
+    if is_oatp_ecm_applicable(profile.smiles):
+        transporter_kinetics = load_oatp1b1_kinetics_for_smiles(profile.smiles)
+        hepatic_ecm_params = load_hepatic_ecm_params_for_smiles(profile.smiles)
+        if not (transporter_kinetics is not None and hepatic_ecm_params is not None):
+            # Flag set but registry data missing — disable ECM (defended at runtime;
+            # the schema regression test should also catch this).
+            transporter_kinetics = None
+            hepatic_ecm_params = None
+    non_cyp_fractions = get_non_cyp_fractions(profile.smiles)
+    return transporter_kinetics, hepatic_ecm_params, non_cyp_fractions
+
+
 def build_drug_on_graph(
     profile: MolecularProfile,
     adme: ADMEProperties,
