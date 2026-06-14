@@ -50,11 +50,34 @@ Point the frontend at it: `cd web && VITE_API_URL=http://127.0.0.1:8000 npm run 
    The console then enables the **✎ Custom SMILES** option (free-text SMILES →
    real prediction). Until then the public site runs the static preset tier.
 
+### Security knobs (env-overridable, see `server/config.py`)
+- **CORS** is restricted to `https://sisyphus-pbpk.io` (the production console
+  origin) — arbitrary origins are no longer reflected. Add more origins (e.g. a
+  localhost dev origin) via `SISYPHUS_CORS_ORIGINS` (comma-separated), no code
+  change needed.
+- **Rate limiting:** `POST /predict` is capped per client (default
+  `20/minute`) via slowapi; over-cap requests get `429`. Tune with
+  `SISYPHUS_PREDICT_RATE_LIMIT` (e.g. `10/minute`, read once at startup).
+  `GET /health` is unlimited.
+- **Behind a reverse proxy (HF Spaces, Cloud Run): set `SISYPHUS_TRUST_PROXY=1`.**
+  Otherwise the rate-limit key is the socket peer — which is the *proxy*, identical
+  for every external caller — so the per-client cap collapses into one shared
+  bucket (all users throttled together; one abuser can exhaust it for everyone).
+  With it on, the key is the rightmost `X-Forwarded-For` hop (the address the
+  trusted proxy saw, not spoofable by the client). Assumes exactly one proxy hop.
+  Alternative: run uvicorn with `--proxy-headers --forwarded-allow-ips=<proxy>`.
+
+> The security contract (CORS allow-list + rate-limit key) is gated in CI by the
+> engine-free `server-security` job (`server/tests/`, `server/config.py`).
+
 ### Notes / before a public, uncapped deploy
 - The free Space sleeps when idle; the first request after sleep cold-starts
   (~30–60 s to wake + load models). The frontend handles this with a loading state.
-- CORS currently allows all origins (`*`); restrict to `https://sisyphus-pbpk.io`
-  in `server/app.py` for production.
-- No auth/rate-limiting yet — add before exposing an uncapped public endpoint.
+- The rate-limit counter is slowapi's in-memory store: it resets on each
+  cold-start and is per-worker, so the effective cap is looser than the nominal
+  string under sleep/multi-worker. Use a shared backend (e.g. Redis) for a
+  durable, multi-instance cap.
+- Still **no auth** — add a token/key before exposing a fully public, uncapped
+  endpoint (the rate limit above bounds abuse but does not authenticate callers).
 - Cloud Run (scale-to-zero, custom `api.sisyphus-pbpk.io`) is an alternative host;
   the same image works (`docker build -f server/Dockerfile .`).

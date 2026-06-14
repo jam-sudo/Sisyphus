@@ -1,3 +1,4 @@
 # API-server deps (engine deps come from ../requirements-lock.txt)
 fastapi>=0.115
 uvicorn[standard]>=0.30
+slowapi>=0.1.9  # per-IP rate limiting on /predict
