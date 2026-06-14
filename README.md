@@ -6,6 +6,8 @@
 
 [Methodology](#methodology) &middot; [Quickstart](#quickstart) &middot; [Validation](#validation) &middot; [Architecture](#architecture) &middot; [Limitations](#limitations)
 
+**Preprint:** [Yoon, J. M. (2026). *Sisyphus: A Topology-Compiled Physiologically Based Pharmacokinetic Platform with Structure-Only Input and Bayesian Parameter Refinement.* ChemRxiv.](https://doi.org/10.26434/chemrxiv.15004452/v1) &mdash; DOI [10.26434/chemrxiv.15004452/v1](https://doi.org/10.26434/chemrxiv.15004452/v1)
+
 ---
 
 Sisyphus is a physiologically based pharmacokinetic (PBPK) platform that represents the human body as a typed directed multi-graph, derives ordinary differential equation (ODE) systems from graph topology, and propagates parameter uncertainty natively through Monte Carlo sampling.
@@ -644,7 +646,15 @@ Key empirical findings from Omega that informed Sisyphus:
 
 ## How to Cite
 
-If you use Sisyphus in your research, please cite:
+If you use Sisyphus in your research, please cite the preprint:
+
+```
+Yoon, J. M. (2026). Sisyphus: A Topology-Compiled Physiologically Based
+Pharmacokinetic Platform with Structure-Only Input and Bayesian Parameter
+Refinement. ChemRxiv. https://doi.org/10.26434/chemrxiv.15004452/v1
+```
+
+Software (this repository):
 
 ```
 Yoon, J. M. (2026). Sisyphus (0.1.0): Graph-based whole-body PBPK
