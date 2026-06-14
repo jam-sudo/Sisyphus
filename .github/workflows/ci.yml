@@ -67,4 +67,6 @@ jobs:
         run: ruff check server/config.py server/tests
 
       - name: Server security tests (CORS + rate limit, engine-import-free)
-        run: pytest server/tests -v --tb=short
+        # `python -m pytest` puts the repo root (CWD) on sys.path so the
+        # top-level `server` package imports without an editable install.
+        run: python -m pytest server/tests -v --tb=short
