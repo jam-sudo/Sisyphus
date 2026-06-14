@@ -25,17 +25,21 @@ sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "scripts"))
 os.chdir(ROOT)  # engine resolves data/model paths relative to the repo root
 
-import numpy as np  # noqa: E402
-import sisyphus.engine.flux  # noqa: E402,F401  (registers flux specs)
 import gen_console_data as gcd  # noqa: E402  (helpers + weight-capture monkeypatch + _CAPTURE)
-from sisyphus.pipeline.predict import predict  # noqa: E402
-from sisyphus.pk.endpoints import compute_endpoints  # noqa: E402
-from sisyphus.graph.builder import build_from_yaml  # noqa: E402
-from rdkit.Chem import MolFromSmiles, rdMolDescriptors  # noqa: E402
-
-from fastapi import FastAPI, HTTPException  # noqa: E402
+import numpy as np  # noqa: E402
+from fastapi import FastAPI, HTTPException, Request  # noqa: E402
 from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
 from pydantic import BaseModel  # noqa: E402
+from rdkit.Chem import MolFromSmiles, rdMolDescriptors  # noqa: E402
+from slowapi import Limiter, _rate_limit_exceeded_handler  # noqa: E402
+from slowapi.errors import RateLimitExceeded  # noqa: E402
+
+import sisyphus.engine.flux  # noqa: E402,F401  (registers flux specs)
+from sisyphus.graph.builder import build_from_yaml  # noqa: E402
+from sisyphus.pipeline.predict import predict  # noqa: E402
+from sisyphus.pk.endpoints import compute_endpoints  # noqa: E402
+
+from .config import allowed_origins, client_ip, predict_rate_limit  # noqa: E402
 
 _trapz = getattr(np, "trapezoid", np.trapz)
 _SIG = gcd._sig
@@ -45,10 +49,18 @@ _LOCK = threading.Lock()  # _CAPTURE is a module global; serialize predicts
 # build the physiology graph once
 BASE_GRAPH = build_from_yaml(ROOT / "data/physiology/reference_man.yaml")
 
+# Per-client rate limiter (slowapi) — guards the heavy /predict solve. The key
+# is config.client_ip (X-Forwarded-For-aware behind a trusted proxy; see
+# server/config.py SISYPHUS_TRUST_PROXY) so the cap is per real client, not
+# per reverse-proxy IP.
+limiter = Limiter(key_func=client_ip)
+
 app = FastAPI(title="Sisyphus engine API", version="0.4")
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # tighten to the Pages origin in production if desired
+    allow_origins=allowed_origins(),  # production console origin(s) only (SISYPHUS_CORS_ORIGINS)
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
@@ -67,7 +79,8 @@ def health() -> dict:
 
 
 @app.post("/predict")
-def do_predict(req: PredictRequest) -> dict:
+@limiter.limit(predict_rate_limit())
+def do_predict(request: Request, req: PredictRequest) -> dict:
     smiles = (req.smiles or "").strip()
     if not smiles or MolFromSmiles(smiles) is None:
         raise HTTPException(status_code=400, detail="Invalid SMILES.")
