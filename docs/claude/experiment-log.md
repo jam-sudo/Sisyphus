@@ -44,6 +44,18 @@ Three increments extending the 06-09 engine-as-prior core from a-priori posterio
 
 ---
 
+## 2026-06-09 — Preprint posted to ChemRxiv (DOI 10.26434/chemrxiv.15004452/v1)
+
+Public preprint posted: **ChemRxiv, DOI [10.26434/chemrxiv.15004452/v1](https://doi.org/10.26434/chemrxiv.15004452/v1)** — "Sisyphus: A Topology-Compiled Physiologically Based Pharmacokinetic Platform with Structure-Only Input and Bayesian Parameter Refinement" (Yoon JM, Independent Researcher; v1). Reformatted from the internal v10 draft for public release: first-person/dev-log/version-history removed, clean IMRaD, the confessional audit absorbed into an objective Limitations section, academic contribution framing.
+
+**Posted headline figures (reconciled to the public-clone `4track_holdout_predictions.json` at build time):** Meta AAFE **2.698** (107-drug holdout), prospective **3.21** (N=28, *worse* than retrospective — F under-prediction on novel chemotypes), measured-ADME engine **2.81→2.69** (clean N=10, mixed), Bayesian single-obs CV reduction **~78%** (fresh 5-drug rerun mean 77.8% at N=400 vs committed 78.1% at N=2000), **41** enumerated negative experiments.
+
+**Three support tables were re-run fresh during reformatting and corrected stale values** (all confirmed by re-running the repo's own scripts): (1) measured-ADME was **2.33→1.98 / 8-of-10** in v10 but is non-reproducible — current `scripts/measured_adme_poc.py` gives **2.81→2.69 / 6-of-10** (clean) and **3.87→4.01** (full 12); (2) multi-dose Table 7 atorvastatin was "within 7%" in v10 but `scripts/verify_v2.py` now gives **2.09× over** (metformin 0.42, warfarin 0.12 folds); (3) prospective flipped from a v10 "2.402 < retrospective" favorable claim to **3.21 > 2.698** (decontaminated N=28). Engine numerical validation (4 drugs) and Bayesian Table 8 reproduced cleanly.
+
+⚠ **Version skew:** this posted snapshot reflects the **2.698 public-clone state** and **predates** the FLUX-1 **2.784** line + DE-45/46/47/48 + oxybutynin reference fix recorded in the 2026-06-08 entry below. The public ChemRxiv v1 therefore does **not** include post-2026-06-08 changes; a **v2** would be required to incorporate the post-2026-06-08 physics-corrected figures (the 2.784 line was itself finalized to the current **2.731** headline on 2026-06-10). Originally **rejected by bioRxiv** (requires an institutional-oversight affiliation; author is independent) → posted on ChemRxiv. Submission package (`ChemRxiv_submission_metadata.md`, `Sisyphus_Preprint.{docx,pdf}`, `Sisyphus_abstract_plaintext.txt`) in the workspace root.
+
+---
+
 ## 2026-06-09 — MIPD engine-as-prior posterior PK core (the pivot after the SMILES-only headline was foreclosed) — PR #69
 
 Shipped the core of the **engine-as-prior** repositioning: the mechanistic engine moves from a one-shot SMILES→Cmax oracle (walled at 2.78) to a **structural prior that any sparse measured observation sharply updates**. Charter `docs/superpowers/specs/2026-06-09-engine-as-prior-mipd-charter.md`; merge `4cb76ed`. New module `src/sisyphus/mipd/`.
