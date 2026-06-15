@@ -240,8 +240,10 @@ input is adjusted to rescue it.
 - **Unit (`pgx_metrics`):** `rho` against hand values; the two §2 worked cases
   (low-extraction `Cmax_fold≈1.10` / `AUC_fold=2.0`; high-extraction `≈5.8` / `10`) pinned
   through the analytic 1-comp reference; `rho_null1` reproduces those same worked cases
-  (it IS the 1-comp-first-pass model) and returns 0 when `E_h=0` (no first-pass ⇒ no
-  divergence); `anchor_em` round-trips the dimensionless regime `(E_h, ka/ke) → observables
+  (it IS the 1-comp-first-pass model — both the first-pass `F_fold` and the systemic shape
+  factor) and returns 0 when `fm=0` (gene uninvolved ⇒ no divergence; note it is **non-zero**
+  at `E_h≈0`, where the shape-factor gap persists); `anchor_em` round-trips the dimensionless
+  regime `(E_h, ka/ke) → observables
   → (E_h, ka/ke)` within tolerance (identifiability pin); `sign_test`, `wilcoxon_div`
   against hand-computed small cases; `rho_band` monotone in input CV.
 - **Harness regression pin:** a synthetic drug on the `well_stirred` skeleton ⇒ engine
