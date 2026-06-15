@@ -249,39 +249,67 @@ class ClearanceFluxSpec(FluxSpec):
         params: ResolvedParams,
     ) -> None:
         if self.model == "well_stirred":
-            # Compute organ-level CLint from enzyme abundances x drug affinities
-            clint_organ = 0.0
-            ivive = params.node_param(self.source_name, "ivive_scaling")
-            for tag, abundance in params.node_enzymes(self.source_name).items():
-                affinity = params.drug_enzyme_affinity(tag)
-                if affinity > 0 and abundance > 0:
-                    clint_organ += abundance * affinity * ivive
+            if not params.drug_has_enzyme_km():
+                # ===== LINEAR PATH — verbatim; production never sets enzyme_km, so this is
+                # the only path the headline takes (byte-for-byte identical, FLUX-1/RBP-2). =====
+                # Compute organ-level CLint from enzyme abundances x drug affinities
+                clint_organ = 0.0
+                ivive = params.node_param(self.source_name, "ivive_scaling")
+                for tag, abundance in params.node_enzymes(self.source_name).items():
+                    affinity = params.drug_enzyme_affinity(tag)
+                    if affinity > 0 and abundance > 0:
+                        clint_organ += abundance * affinity * ivive
 
-            if clint_organ <= 0:
-                return  # No metabolism at this node
+                if clint_organ <= 0:
+                    return  # No metabolism at this node
 
-            fup = params.drug_param("fup")
-            # B-11: hepatic intracellular fu correction at flagged nodes.
-            if params.node_param(self.source_name, "fu_correction_applicable") > 0:
-                fup = fup * params.drug_param("fu_correction_liver")
+                fup = params.drug_param("fup")
+                # B-11: hepatic intracellular fu correction at flagged nodes.
+                if params.node_param(self.source_name, "fu_correction_applicable") > 0:
+                    fup = fup * params.drug_param("fu_correction_liver")
 
-            # FLUX-1: apply the *intrinsic* (flow-unlimited) clearance to c_out.
-            # The node is a perfusion compartment with a separate convective
-            # Q·c_out outflow edge, so the flow limitation emerges from the ODE
-            # and the realized extraction is fup·CLint/(Q+fup·CLint) → 1.0.
-            # Applying the whole-organ CL_h (which already embeds Q) here would
-            # double-count the flow term and cap extraction at 0.5.
-            cl_intrinsic = fup * clint_organ
+                # FLUX-1: apply the *intrinsic* (flow-unlimited) clearance to c_out.
+                # The node is a perfusion compartment with a separate convective
+                # Q·c_out outflow edge, so the flow limitation emerges from the ODE
+                # and the realized extraction is fup·CLint/(Q+fup·CLint) → 1.0.
+                # Applying the whole-organ CL_h (which already embeds Q) here would
+                # double-count the flow term and cap extraction at 0.5.
+                cl_intrinsic = fup * clint_organ
 
-            # RBP-2: the metabolic sink acts on unbound PLASMA (fup·CLint·C_plasma).
-            # The separate convective Q·c_out edge supplies the flow limitation, so
-            # the realized extraction emerges E = fup·CLint/(Q·RBP + fup·CLint) =
-            # fu_b·CLint/(Q+fu_b·CLint), fu_b = fup/RBP (canonical well-stirred).
-            v = params.node_param(self.source_name, "volume")
-            kp = params.drug_kp(self.source_name)
-            c_plasma = y[self.source_idx] / (v * kp) if v > 0 else 0.0
+                # RBP-2: the metabolic sink acts on unbound PLASMA (fup·CLint·C_plasma).
+                # The separate convective Q·c_out edge supplies the flow limitation, so
+                # the realized extraction emerges E = fup·CLint/(Q·RBP + fup·CLint) =
+                # fu_b·CLint/(Q+fu_b·CLint), fu_b = fup/RBP (canonical well-stirred).
+                v = params.node_param(self.source_name, "volume")
+                kp = params.drug_kp(self.source_name)
+                c_plasma = y[self.source_idx] / (v * kp) if v > 0 else 0.0
 
-            rate = cl_intrinsic * c_plasma
+                rate = cl_intrinsic * c_plasma
+            else:
+                # ===== SATURABLE (MICHAELIS–MENTEN) PATH (v2.2a) =====
+                # Per-enzyme CLint_i *= 1/(1 + C_u/Km_i); C_u = fup·c_plasma (well-stirred
+                # unbound-plasma basis). Km_i = +inf (absent) ⇒ factor 1 (that enzyme stays
+                # linear). Reduces to the linear path as every C_u/Km_i → 0.
+                fup = params.drug_param("fup")
+                if params.node_param(self.source_name, "fu_correction_applicable") > 0:
+                    fup = fup * params.drug_param("fu_correction_liver")
+                v = params.node_param(self.source_name, "volume")
+                kp = params.drug_kp(self.source_name)
+                c_plasma = y[self.source_idx] / (v * kp) if v > 0 else 0.0
+                c_u = fup * c_plasma
+
+                clint_organ = 0.0
+                ivive = params.node_param(self.source_name, "ivive_scaling")
+                for tag, abundance in params.node_enzymes(self.source_name).items():
+                    affinity = params.drug_enzyme_affinity(tag)
+                    if affinity > 0 and abundance > 0:
+                        km = params.drug_enzyme_km(tag)
+                        clint_organ += abundance * affinity * ivive / (1.0 + c_u / km)
+
+                if clint_organ <= 0:
+                    return
+
+                rate = (fup * clint_organ) * c_plasma
 
         elif self.model == "gfr_filtration":
             renal_cl = params.drug_param("renal_clearance")
@@ -316,7 +344,12 @@ class ClearanceFluxSpec(FluxSpec):
 
             ps_inf = ps_active + ps_passive
 
-            # Metabolism — same pattern as well_stirred (organ-blind)
+            # Metabolism — same pattern as well_stirred (organ-blind).
+            # NOTE (v2.2a): Michaelis-Menten saturation (drug.enzyme_km) is applied in the
+            # well_stirred branch ONLY — ECM metabolism stays linear here by design, because the
+            # saturating concentration for ECM is the *intracellular* unbound (PS_active
+            # concentrates the drug), not fup·c_plasma. ECM saturation is deferred; production
+            # never sets enzyme_km so this is headline-safe. See spec 2026-06-15 §1/§7.
             cl_int_metab = 0.0
             for tag, abundance in params.node_enzymes(src).items():
                 affinity = params.drug_enzyme_affinity(tag)

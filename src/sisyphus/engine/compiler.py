@@ -140,6 +140,19 @@ class ResolvedParams:
             return self._drug.enzyme_affinity_for_conversion[tag].mean
         return 0.0
 
+    def drug_enzyme_km(self, tag: str) -> float:
+        """Return the drug's Michaelis Km (unbound mg/L) for *tag*, or +inf when absent.
+
+        +inf collapses the saturation factor 1/(1 + C_u/Km) to 1 (linear limit).
+        """
+        if tag in self._drug.enzyme_km:
+            return self._drug.enzyme_km[tag].mean
+        return float("inf")
+
+    def drug_has_enzyme_km(self) -> bool:
+        """True if the drug carries any saturable-metabolism Km (selects the MM flux path)."""
+        return bool(self._drug.enzyme_km)
+
     def node_transporters(self, node_name: str) -> dict[str, float]:
         """Return ``{transporter_tag: abundance}`` for a node."""
         return self._transporters.get(node_name, {})
