@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-12
+last_updated: 2026-06-14
 parent: ../../CLAUDE.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -9,6 +9,17 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
 
 ---
+
+## 2026-06-14 — PGx genotype-fold validation (calibration·foundation): PM fm-agreement PASS, engine oracle confirmed
+
+A new **calibration·foundation** milestone (branch `feat/pgx-genotype-fold-validation`; spec `docs/superpowers/specs/2026-06-14-pgx-genotype-fold-validation-design.md`, plan `docs/superpowers/plans/2026-06-14-pgx-genotype-fold-validation.md`). **Headline 2.731 untouched** — this is an orthogonal within-drug-ratio axis that structurally bypasses the W1/W2/W3 walls; no `predict()` change.
+
+**Primary result (parameter-free PM fm-agreement).** Independently-curated in-vitro fm (reaction-phenotyping) vs in-vivo-derived fm = 1 − 1/fold_PM (PM activity = 0), over **9 quantitative PM pairs** across the Big-3 CYP (CYP2D6/2C19/2C9) → **frac_within_0.15 = 1.00, OLS slope 0.735, MAD 0.050 → PASS.** Non-circular by construction: in-vitro reaction-phenotyping fm is independent of the clinical fold; circular genotype-derived fm (e.g. pantoprazole) was excluded per spec §9. Slope 0.735 sits at the low end of the [0.7, 1.3] acceptance band — in-vitro fm runs systematically a touch higher than in-vivo-derived fm for some CYP2C9/2C19 substrates (flurbiprofen, celecoxib); within tolerance, flagged for interpretation.
+
+- **PM activity = 0 validated:** the closed form `1/(1−fm)` reproduces observed PM folds. The existing `predict/phenotype.py` `PM = 0.10×` floor is **incompatible with explicit-fm modelling** — it double-counts the (1−fm) residual and would under-predict the fold. Logged for a production follow-up (v2 path).
+- **Engine regression (production-path oracle):** the engine reproduces the analytical oral-AUC genotype fold to ~0.23–0.31% (≪2%) across all pairs, confirming the engine's genotype response is physically correct for v1 (AUC linear regime). The oracle uses a synthetic low-extraction drug with AUC_0inf; v2 (Cmax/nonlinear) has no closed form and will require empirical comparison.
+- **Finding — CYP2C19 absent from `data/physiology/reference_man.yaml` liver enzymes** (only CYP2D6/CYP2C9 present among the Big-3). The oracle injected a synthetic abundance that cancels analytically; **v2 must add CYP2C19 to the production graph** before relying on it clinically.
+- **Durable artifact:** `data/validation/pgx_fm_registry.json` — a cross-validated Big-3 in-vivo fm registry, reusable by the v2 Cmax genotype fold, the MIPD genotype prior, and the DDI module.
 
 ## 2026-06-12 — MIPD dose recommendation (target attainment) + Cockcroft-Gault CrCl (engine-as-prior, headline-neutral)
 
