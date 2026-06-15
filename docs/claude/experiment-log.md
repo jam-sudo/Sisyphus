@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-14
+last_updated: 2026-06-15
 parent: ../../CLAUDE.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -9,6 +9,36 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
 
 ---
+
+## 2026-06-15 — PGx v2.1 Cmax-fold feasibility probe (design-stage, no production change)
+
+Pre-implementation engine probe for the v2.1 **engine-differentiated** milestone (spec
+`docs/superpowers/specs/2026-06-15-pgx-cmax-fold-engine-differentiated-design.md`). v2.1 tests
+whether the engine's first-pass ODE predicts the genotype **peak-to-exposure divergence**
+`ρ = log(Cmax_fold) − log(AUC_fold)` — a quantity with no closed form (v1's AUC-fold test was
+near-tautological). The probe (synthetic CYP2D6 PM drug, fm=0.9) settled four design questions
+before any plan was written; **no `predict()`/YAML/holdout change** (throwaway script).
+
+- **`ρ_engine` is real and controllable** — Cmax-fold diverges from AUC-fold, `ρ` from −2.3
+  (low extraction) to −0.7 (high), **monotone in hepatic extraction `E_h`**; absorption (`peff`)
+  is a secondary knob; `tmax` controllable 3.0→1.0 h. Core thesis holds: the engine produces the
+  divergence and realistic first-pass regimes are reachable.
+- **Use `well_stirred`, not the production ECM, for the controlled oracle.** On the `extended`/ECM
+  liver edge the uptake nonlinearity **breaks the analytic AUC-fold identity** at real extraction
+  (engine AUC-fold inflated 10×→12–53×), which would contaminate `ρ_engine`. Switching the liver
+  edge to `well_stirred` (linear in CLint, the model the closed form derives from) restores
+  AUC-fold = analytic. Selected via `dataclasses.replace(edge, model="well_stirred")` (edges are
+  frozen).
+- **Cmax read needs a dense early `t_eval`** (the solver snaps `tmax` to its 500-point grid) —
+  `solve()` accepts `t_eval`, so resolvable.
+- **Rigor upgrade — a second null is required.** Because `ρ_engine` is `E_h`-dominated, a cheap
+  **1-comp-with-first-pass analytic** already captures most of the divergence. So v2.1's claim is
+  reframed: the engine must beat **both** `ρ=0` (Null-0) **and** the first-pass analytic (Null-1);
+  tying Null-1 is the honest finding that the multi-compartment machinery adds nothing for genotype
+  Cmax-folds. Folded into spec §3/§6 (P3).
+
+Outcome: v2.1 is **feasible**; residual risk (EM-anchor numerical inversion + C1 grid/horizon) is
+front-loaded as a harness spike in the implementation plan.
 
 ## 2026-06-14 — PGx genotype-fold validation (calibration·foundation): PM fm-agreement PASS, engine oracle confirmed
 
