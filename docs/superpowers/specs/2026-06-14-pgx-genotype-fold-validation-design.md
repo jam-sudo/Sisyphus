@@ -204,12 +204,36 @@ in-vitro/in-vivo discordance — enumerated, not hidden.
 3. Durable cross-validated Big-3 fm registry (§6) — the lasting asset.
 4. A `phenotype.py` finding note on the PM = 0 vs 0.10-floor incompatibility (§2.1).
 
-## 9. Step 0 — feasibility gate (run first)
-Confirm **≥ 6 clean PM pairs** exist across Big-3 under the §5 filters before building
-the harness. Preliminary estimate (~6–8): 2D6 — atomoxetine, metoprolol, nortriptyline,
-desipramine, nebivolol; 2C19 — omeprazole, pantoprazole, lansoprazole. If < 6, narrow to
-the best-powered gene (likely CYP2D6) or reconsider scope. **No engine work before this
-gate passes.**
+## 9. Step 0 — feasibility gate (PASSED 2026-06-14)
+
+Gate criterion: ≥ 6 clean PM pairs across Big-3 under the §5 filters. **Result: 10 clean
+pairs (8 quantitative-grade), all three genes ≥ 2 → PASS.** Curated model-blind, fm and
+fold sourced from independent studies.
+
+| Gene | Drug | fm_invitro | fold_PM | flag |
+|---|---|---|---|---|
+| CYP2D6 | atomoxetine | 0.90 | 8.1× | — |
+| CYP2D6 | nortriptyline | 0.78 | ~4× | — |
+| CYP2D6 | desipramine | 0.85 | ~7× | — |
+| CYP2D6 | metoprolol | 0.80 | 4.9× | nonlinear first-pass (fold embeds F-rise; hepatic first-pass IS in the closed form, expect wider spread) |
+| CYP2D6 | dextromethorphan | 0.90 | ~150× | extreme fold → **directional only, excluded from the quantitative fm-agreement** (fm_invivo super-sensitive to fold noise) |
+| CYP2C19 | omeprazole | 0.75 | 7.5× | 40 mg at edge of saturable first-pass (upper-leaning) |
+| CYP2C19 | lansoprazole | 0.68 | 4.0× | ~32% CYP3A4 (fm just above threshold) |
+| CYP2C9 | celecoxib | 0.78 | 2–4.2× | true *3/*3 (n=2–3) |
+| CYP2C9 | flurbiprofen | 0.75 | 2.8× | true *3/*3 (n=2) |
+| CYP2C9 | tolbutamide | 0.82 | 6.5× | true *3/*3 (most complete panel); fm partly mass-balance-anchored → fm_confidence MEDIUM |
+
+**Excluded (with reason, logged):** pantoprazole — strong clean fold (~5×) but **every fm
+is genotype/PBPK-back-calculated (`fm = 1 − 1/fold`) → circular**, the §5 trap confirmed
+empirically; nebivolol (active moiety + racemate CYP2C19 split); propafenone (nonlinear
+first-pass + active metabolite); escitalopram / sertraline / diazepam (fm < 0.6 and/or
+active metabolite); glimepiride (active M1 + OATP1B1 co-dependence, *3/*3 only n=1);
+(S)-warfarin (true *3/*3 but steady-state only, no single-dose HV).
+
+The quantitative fm-agreement (§4.2) uses the 8 non-extreme pairs; dextromethorphan is
+directional-only; metoprolol carries the nonlinear-first-pass flag. **No quantitative
+scoring was computed at the feasibility stage** (pre-registration: scored once, after the
+benchmark JSON is locked).
 
 ## 10. Invariant #5 / holdout cleanliness
 The genotype benchmark is **independent** of the 107-drug Cmax holdout (it uses published
