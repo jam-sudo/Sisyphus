@@ -22,4 +22,6 @@ def test_engine_pm_fold_matches_analytical(gene, fm):
     engine = pgx_harness.engine_auc_fold(gene_tag=gene, fm=fm, activity_variant=0.0)
     expected = analytical_fold(fm=fm, activity=0.0)  # PM -> 1/(1-fm)
     rel = abs(engine - expected) / expected
-    assert rel < 0.02, f"{gene} fm={fm}: engine {engine:.3f} vs analytical {expected:.3f} (rel {rel:.3%})"
+    assert rel < 0.02, (
+        f"{gene} fm={fm}: engine {engine:.3f} vs analytical {expected:.3f} (rel {rel:.3%})"
+    )
