@@ -1,5 +1,14 @@
 # PGx Cmax-fold validation — engine-differentiated milestone (v2.1)
 
+> **⚠ SUPERSEDED (2026-06-15) — halted at the Step-0 feasibility gate.** The powered set
+> requires LINEAR high-first-pass drugs, but curation (`data/validation/pgx_cmax_feasibility_2026-06-15.md`)
+> found only **1** (metoprolol): the high-first-pass regime where Cmax-fold diverges from
+> AUC-fold overlaps almost entirely with the **saturable/nonlinear** regime this spec
+> deferred to v2.2. The build order was inverted — the engine-differentiated genotype
+> Cmax-fold validation **requires** the Michaelis–Menten flux. **Reordered → v2.2** (MM-flux
+> first, then validate on the data-rich nonlinear set). This spec's metric (`ρ`), EM-anchor
+> recipe, `well_stirred` oracle, and Null-0/Null-1 framing all carry forward to v2.2.
+
 > **Lineage.** Builds on v1 (`2026-06-14-pgx-genotype-fold-validation-design.md`):
 > the locked in-vitro fm registry (`data/validation/pgx_fm_registry.json`), the
 > CPIC activity scales (PM = 0 reframe), and the controlled-skeleton harness

@@ -10,6 +10,30 @@ Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the *
 
 ---
 
+## 2026-06-15 — PGx v2.1 Cmax-fold HALTED at Step-0 gate → reorder to v2.2 (MM-flux first)
+
+The v2.1 implementation (subagent-driven) reached **Task 0 (Step-0 feasibility gate) and
+REVISED**: the powered set requires **linear** high-first-pass drugs, but three independent
+model-blind Opus curators (PubMed) confirmed only **1** qualifies (**metoprolol**). Gate
+needs ≥5; not padded. Note `data/validation/pgx_cmax_feasibility_2026-06-15.md`.
+
+**The finding (why the gate fails — a real result, not a curation shortfall):** the
+high-first-pass regime where a genotype **Cmax-fold diverges from the AUC-fold** (v2.1's whole
+premise) overlaps almost entirely with the **saturable/nonlinear** regime the engine's linear
+`well_stirred` model cannot represent. Every high-divergence substrate found is nonlinear
+(propafenone Cmax 11.2×/AUC 2.4× with F 0.30→0.81; nebivolol F 0.12→0.96; atomoxetine
+Cmax ~3.6×/AUC ~11.4×, Tmax 1.5→4.5 h; omeprazole saturable + auto-inhibition; lansoprazole;
+moclobemide; venlafaxine). The linear-first-pass drugs that would be powered report only
+AUC-fold (Cmax not tabulated), are paywalled (nortriptyline AUC 3.32×/fm 0.80; risperidone
+AUC ~6×/fm ~0.75 — per-group Cmax behind Wiley/Ovid), or are prodrug/low-fm confounded.
+
+**Decision (user):** reorder — build **v2.2** (a Michaelis–Menten metabolic `ClearanceFluxSpec`,
+`CLint=Vmax/(Km+C)`) **first**, then run the genotype Cmax-fold validation on the data-rich
+nonlinear set. v2.1's metric (ρ=log(Cmax_fold/AUC_fold)), EM-anchor recipe, `well_stirred`
+oracle, and Null-0/Null-1 framing carry forward. v2.1 spec banner-marked SUPERSEDED. The
+curated folds/fm (consistency anchors: celecoxib *3/*3 Cmax 1.8×/AUC 7.7×, diazepam fold≈1,
+flurbiprofen fm 0.71) are preserved for reuse. **Headline 2.731 untouched throughout.**
+
 ## 2026-06-15 — PGx v2.1 Cmax-fold feasibility probe (design-stage, no production change)
 
 Pre-implementation engine probe for the v2.1 **engine-differentiated** milestone (spec
