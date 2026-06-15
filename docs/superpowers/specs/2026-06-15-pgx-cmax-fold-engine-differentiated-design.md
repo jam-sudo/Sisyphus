@@ -26,18 +26,14 @@ means *the engine's first-pass structure is physically right*; a FAIL is a genui
 honest falsification.
 
 **Non-goals (explicit).**
-- **Does NOT** move the 107-drug Cmax holdout headline (2.731). v2.1 is harness-isolated:
-  no `predict()` change, no `reference_man.yaml` change, no holdout-label use.
-- **Does NOT** fit/tune anything to `ρ_obs`. Every engine input is anchored to the drug's
-  **EM-arm** observations or to independent literature; the genotype perturbation is the
-  only unanchored mechanistic content, and it is fixed (PM = 0, CPIC scales). Systematic
-  deviation is reported as a *finding*, never corrected by fitting.
-- **Does NOT** cover nonlinear/saturable kinetics. That requires a Michaelis–Menten
-  metabolic clearance flux the engine does **not** have (confirmed: `ClearanceFluxSpec`
-  is linear, `rate = cl_intrinsic · c_plasma`). Deferred to **v2.2** (§11).
-- **Does NOT** add CYP2C19 to the production graph. The controlled skeleton injects a
-  synthetic gene tag (v1's `_SYNTHETIC_GENE_ABUND` pattern), so CYP2C19's production
-  silent-no-op is irrelevant here and the headline stays untouched.
+- **Validation, not productization.** v2.1 tests the engine's first-pass model on an
+  isolated harness; it does **not** wire genotype into `predict()` or the production graph.
+  CYP2C19 stays a production no-op here — the skeleton injects a synthetic gene tag
+  (v1's `_SYNTHETIC_GENE_ABUND` pattern). Shipping genotype as a real prediction input is
+  the separate MIPD-prior / CYP2C19-roster tracks (§11). (Headline isolation: §9.)
+- **No fitting.** Nothing is tuned to `ρ_obs`; systematic deviation is a reported finding,
+  not a correction (discipline: §7).
+- **Linear only.** Saturable/nonlinear genotype folds are **v2.2** (§11).
 
 ## 2. Background: why Cmax-fold ≠ AUC-fold (the load-bearing mechanism)
 
@@ -60,7 +56,7 @@ Cmax_fold = F_fold × shape_factor
   ke = CL_systemic / V ,  tmax = ln(ka/ke)/(ka − ke)
 ```
 
-Worked cases that fix intuition (and become unit-test pins, §13):
+Worked cases that fix intuition (and become unit-test pins, §10):
 - **Low extraction** (`ke_EM=0.1/h`, `ka=1/h`, PM halves CL): `AUC_fold = 2.0` but
   `Cmax_fold = 1.10`. The integral doubles; the absorption-gated peak barely moves.
 - **High extraction** (`E_h,EM=0.9`, `fm=0.9`, PM-null): `AUC_fold = 10` but
@@ -105,7 +101,7 @@ quarantined by anchoring the skeleton to the drug's measured **EM arm**, not to
    - `AUC_EM` with the curated F-decomposition ⇒ `fu·CLint` (hence `E_h`, given physiologic `Q`),
    - `tmax_EM` ⇒ `ka` (given `ke = CL_systemic/V`),
    - `Cmax_EM / AUC_EM` shape ⇒ joint `ka`, `V` constraint.
-   The solver is identified given the curated F-decomposition (§13 pins identifiability
+   The solver is identified given the curated F-decomposition (§10 pins identifiability
    on a synthetic case).
 3. **Split** hepatic CLint into the gene fraction `fm` (in-vitro, v1 registry) via
    `enzyme_affinity[gene]` and the residual `(1−fm)` via the non-scaled synthetic
@@ -139,7 +135,7 @@ a band from the published Cmax-fold and AUC-fold CIs.
 - **Secondary (consistency) set:** low-extraction drugs where `ρ_obs ≈ 0` within CI
   (tolbutamide-class). The engine must **not** predict a large `|ρ_engine|` there —
   falsifiable in the opposite direction.
-- **Excluded from the powered set (schema-enforced, §13):** `is_nonlinear=true`
+- **Excluded from the powered set (schema-enforced, §10):** `is_nonlinear=true`
   (saturable / auto-induction: omeprazole multi-dose, voriconazole), `is_prodrug=true`,
   `fm_source_type ∈ {genotype_derived, ddi_derived}` (v1 non-circularity guard),
   single-endpoint studies (Cmax-fold OR AUC-fold missing).
@@ -198,7 +194,7 @@ engine's first-pass structure does **not** add measurable Cmax-fold information 
   drug-independent population scales, no per-drug fitting. No exposure.
 - **No fitting:** §7. **Falsifiable both directions:** §6 (P2 can fail; S1 can fail).
 
-## 10. Testing (§13 detail)
+## 10. Testing
 
 - **Unit (`pgx_metrics`):** `rho` against hand values; the two §2 worked cases
   (low-extraction `Cmax_fold≈1.10` / `AUC_fold=2.0`; high-extraction `≈5.8` / `10`) pinned
@@ -212,6 +208,10 @@ engine's first-pass structure does **not** add measurable Cmax-fold information 
   circular `fm_source_type` from the powered set; requires both folds + CIs + citations.
 - **Holdout-invariance regression:** importing/running the v2.1 harness leaves
   `4track_holdout_predictions.json` untouched (no production-path import).
+
+Every new `pgx_metrics.py` function is written test-first (TDD). The benchmark JSON is
+locked **before** the engine runs on it, and the report records the pre-registered §6
+criteria verbatim alongside the realized statistics.
 
 ## 11. Out of scope (YAGNI) + v2.2 roadmap
 
@@ -235,11 +235,3 @@ genotype as a prior in `mipd.predict_posterior` (consuming the v2.1 EM-anchored 
   the §2 closed forms are reference points, not the engine's actual integrator. The §10
   oracle pins the engine against the analytic on a deliberately 1-comp-like synthetic drug.
 - **`ρ_obs` inherits study heterogeneity** (assay, population, dose) — stated per pair.
-
-## 13. Testing detail
-
-Unit, harness-regression, schema-guard, and holdout-invariance tests as enumerated in §10,
-each with the specific synthetic fixtures named there. Every new public function in
-`pgx_metrics.py` gets a unit test written first (TDD). The benchmark JSON is locked before
-the engine is run on it; the report records the pre-registered §6 criteria verbatim
-alongside the realized statistics.
