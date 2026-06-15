@@ -10,6 +10,19 @@ Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the *
 
 ---
 
+## 2026-06-15 — Engine capability: Michaelis–Menten saturable metabolic clearance (v2.2a)
+
+Added saturable hepatic metabolism to the `well_stirred` clearance flux: per-enzyme
+`CLint_i *= 1/(1 + C_u/Km_i)`, `C_u = fup·c_plasma`, gated on a new defaulted
+`DrugOnGraph.enzyme_km` dict. **Headline 2.731 bit-identical** — production never sets
+`enzyme_km`, so the flux takes the verbatim linear branch (regression-pinned
+`tests/regression/test_mm_headline_bit_identity.py`; existing holdout/cache pins unchanged).
+Tests: MM rate oracle (flux RHS = analytic), dose-proportionality-breaks (supra-proportional
+AUC under saturation), linear-limit (Km→∞ ⇒ linear). `well_stirred` only; ECM intracellular
+saturation, mechanism-based inhibition (omeprazole → v2.3), and any genotype/clinical
+validation (→ v2.2b, with its own data-feasibility gate) are out of scope. Spec/plan
+2026-06-15. Foundation for v2.2b (nonlinear genotype Cmax/AUC folds).
+
 ## 2026-06-15 — PGx v2.1 Cmax-fold HALTED at Step-0 gate → reorder to v2.2 (MM-flux first)
 
 The v2.1 implementation (subagent-driven) reached **Task 0 (Step-0 feasibility gate) and
