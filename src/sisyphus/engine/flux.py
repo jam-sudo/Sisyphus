@@ -344,7 +344,12 @@ class ClearanceFluxSpec(FluxSpec):
 
             ps_inf = ps_active + ps_passive
 
-            # Metabolism — same pattern as well_stirred (organ-blind)
+            # Metabolism — same pattern as well_stirred (organ-blind).
+            # NOTE (v2.2a): Michaelis-Menten saturation (drug.enzyme_km) is applied in the
+            # well_stirred branch ONLY — ECM metabolism stays linear here by design, because the
+            # saturating concentration for ECM is the *intracellular* unbound (PS_active
+            # concentrates the drug), not fup·c_plasma. ECM saturation is deferred; production
+            # never sets enzyme_km so this is headline-safe. See spec 2026-06-15 §1/§7.
             cl_int_metab = 0.0
             for tag, abundance in params.node_enzymes(src).items():
                 affinity = params.drug_enzyme_affinity(tag)
