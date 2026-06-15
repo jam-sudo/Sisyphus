@@ -77,6 +77,10 @@ the enzyme saturates. **`C_u` basis:** unbound plasma `fup·c_plasma`, valid for
   **unbound-concentration basis, mg/L**. Appended after the last field (`renal_clearance`) so
   all existing construction sites (25) are unaffected; empty by default. Parallels the existing
   `enzyme_affinity_for_conversion` dict. Invariant 8 holds — no existing field is modified.
+  **`DrugOnGraph.sample()` and `realize_means()` rebuild the dataclass field-by-field, so both
+  must be updated to carry `enzyme_km`** (else realization silently drops it and the flux never
+  sees it). The empty-dict comprehension makes zero `.sample()` calls ⇒ RNG order — hence the
+  headline — is preserved. `__post_init__` rejects a non-positive Km mean.
 - **`ResolvedParams`** (`src/sisyphus/engine/compiler.py`): add
   `drug_enzyme_km(tag: str) -> float` returning `self._drug.enzyme_km[tag].mean` when present,
   else `float("inf")` (⇒ saturation factor `1/(1+C_u/∞) = 1`).
@@ -105,9 +109,12 @@ A cheap "has any enzyme_km" predicate is threaded through `ResolvedParams` (e.g.
   `4track_holdout_predictions.json` is unchanged by this work; (b) a sampled drug with empty
   `enzyme_km` produces an identical `SimResult` (same Cmax/AUC to full float precision) before
   vs after the change.
-- **MM analytic oracle:** a synthetic drug, IV bolus, single perfusion compartment, one enzyme
-  with finite `Km` ⇒ engine concentration-time matches an **independent scipy integration** of
-  `dC/dt = −Vmax·C/(Km + C)/V` (Vmax = abundance·affinity·Km) within tolerance.
+- **MM rate oracle (the RHS check):** with a finite `Km`, the `well_stirred` flux's computed
+  elimination rate equals the analytic `fup·Σ abundanceᵢ·affinityᵢ·ivive/(1+C_u/Kmᵢ)·c_plasma`
+  (= the `−Vmax·C/(Km+C)` RHS, `Vmaxᵢ = abundanceᵢ·affinityᵢ·Kmᵢ`) for a constructed state —
+  asserted directly on `ClearanceFluxSpec.apply`, independent of accumulation (scipy's
+  integrator is already trusted). A full single-compartment conc-time match is **not** used —
+  the production graph is multi-compartment, so an isolated 1-comp analytic would not match.
 - **Saturation behaviour:** at `C_u ≫ Km`, dose-proportionality breaks — doubling the dose
   yields **>2×** AUC (supra-proportional); the effect scales with `dose/Km`.
 - **Linear-limit pin:** `Km → ∞` (and `Km ≫ C_u`) reproduces the linear-model AUC within
