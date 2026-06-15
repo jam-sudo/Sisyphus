@@ -19,14 +19,23 @@ _YAML = Path("data/physiology/reference_man.yaml")
 _RESID = "RESIDUAL_HEPATIC"
 
 # Total synthetic hepatic CLint (summed abundance*affinity, pre-IVIVE) split
-# fm/(1-fm) between the gene and RESIDUAL_HEPATIC. Chosen in the LOW-EXTRACTION
-# (linear) regime so the oral-AUC identity ``AUC = Dose / CLint`` — and hence
-# the genotype fold ``1/(1-fm+fm*a)`` — holds exactly. At higher CLint the
-# hepatic first-pass extraction-regime distortion (E -> 1) breaks the closed
-# form (oral AUC stops being linear in 1/CLint); at lower CLint the slow PM
-# terminal phase dominates and AUC truncation matters. _CLTOT=2e3 with the
-# AUC_0inf extrapolation below holds the worst-case PM fold to <0.6% across
-# CYP2D6/CYP2C19/CYP2C9 x fm in {0.7, 0.9}. See Task-2 calibration notes.
+# fm/(1-fm) between the gene and RESIDUAL_HEPATIC. Kept in the LOW-EXTRACTION
+# (linear) regime so the oral-AUC identity ``AUC ∝ Dose / CLint`` — and hence
+# the genotype fold ``1/(1-fm+fm*a)`` — holds exactly.
+#
+# Why _CLTOT=2000 (not lower, not higher)?
+#   HIGH end: very high CLint pushes hepatic extraction E → 1 (well-stirred
+#   saturated regime) where oral AUC ∝ 1/CLint over-shoots — the closed-form
+#   additivity breaks and the fold diverges from the analytic oracle.
+#   LOW end: lower CLint produces a slower PM-arm terminal phase whose tail is
+#   NOT fully captured within any finite integration window. The old ``_CLTOT=50``
+#   path appeared to give fold ≈ 1.003 for that reason — the AUC_0t (trapezoidal)
+#   under-counted PM exposure because the slow terminal phase extended beyond
+#   the window, not because ivive ≈ 6e-5 made clearance negligible (that
+#   narrative was INCORRECT and is retired). With the AUC_0inf extrapolation
+#   (AUC_0t + C_last/k_terminal) the truncation artifact is removed, and
+#   _CLTOT=2000 holds the worst-case PM fold error to <0.6% across
+#   CYP2D6/CYP2C19/CYP2C9 × fm ∈ {0.7, 0.9}. See Task-2 calibration notes.
 _CLTOT = 2000.0
 
 # Integration horizon. With AUC_0inf extrapolation the fold is window-robust
@@ -75,6 +84,12 @@ def _auc_0inf(graph, drug: DrugOnGraph) -> float:
     artifact that would otherwise bias the slow (low-CLint PM) arm and corrupt
     the genotype fold — see the _CLTOT note. Physics (the ODE) is untouched;
     this is post-hoc NCA on the engine's own concentration-time curve.
+
+    Load-bearing assumption: hepatic clearance uses the ``extended`` (ECM)
+    model, which is linear here only because the synthetic drug has
+    ``ps_passive = ps_eff = 1e6 ≫ cl_int_h``, so the ECM uptake term
+    ``fup·ps·cl_int / (ps + cl_int) → fup·cl_int`` and flux additivity
+    (hence the closed-form AUC identity) is recovered.
     """
     rg, rd = graph.realize_means(), drug.realize_means()
     compiled = ODECompiler().compile(rg)
