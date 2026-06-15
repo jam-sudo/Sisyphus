@@ -29,8 +29,6 @@ drug, same formulation), and genotype is a pure engine/mechanistic effect with *
 track input** (W3 N/A). So this is a *new value axis*, not a headline lever.
 
 **Non-goals (explicit).**
-- **Does NOT** move the 2.731 holdout headline (separate dataset, separate axis;
-  bit-identical to current predict()).
 - **Does NOT** claim "the engine does PGx" as a differentiated capability. v1 is mostly
   a **closed-form calibration** (see §4.1); the engine's differentiated value (Cmax,
   nonlinear, sequential gut/hepatic first-pass, multi-dose) is **v2**.
