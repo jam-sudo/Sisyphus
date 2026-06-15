@@ -207,8 +207,8 @@ in-vitro/in-vivo discordance — enumerated, not hidden.
 ## 9. Step 0 — feasibility gate (PASSED 2026-06-14)
 
 Gate criterion: ≥ 6 clean PM pairs across Big-3 under the §5 filters. **Result: 10 clean
-pairs (8 quantitative-grade), all three genes ≥ 2 → PASS.** Curated model-blind, fm and
-fold sourced from independent studies.
+pairs (9 quantitative-grade — only dextromethorphan is excluded, as extreme), all three
+genes ≥ 2 → PASS.** Curated model-blind, fm and fold sourced from independent studies.
 
 | Gene | Drug | fm_invitro | fold_PM | flag |
 |---|---|---|---|---|
@@ -230,10 +230,10 @@ first-pass + active metabolite); escitalopram / sertraline / diazepam (fm < 0.6 
 active metabolite); glimepiride (active M1 + OATP1B1 co-dependence, *3/*3 only n=1);
 (S)-warfarin (true *3/*3 but steady-state only, no single-dose HV).
 
-The quantitative fm-agreement (§4.2) uses the 8 non-extreme pairs; dextromethorphan is
-directional-only; metoprolol carries the nonlinear-first-pass flag. **No quantitative
-scoring was computed at the feasibility stage** (pre-registration: scored once, after the
-benchmark JSON is locked).
+The quantitative fm-agreement (§4.2) uses the 9 non-extreme pairs (metoprolol included,
+carrying the nonlinear-first-pass flag); only dextromethorphan is excluded (extreme,
+directional-only). **No quantitative scoring was computed at the feasibility stage**
+(pre-registration: scored once, after the benchmark JSON is locked).
 
 ## 10. Invariant #5 / holdout cleanliness
 The genotype benchmark is **independent** of the 107-drug Cmax holdout (it uses published
