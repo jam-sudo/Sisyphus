@@ -1,0 +1,92 @@
+{
+  "atomoxetine": {
+    "gene": "CYP2D6",
+    "fm_invitro": 0.9,
+    "fm_invivo": 0.8765432098765432,
+    "fm_invivo_ci": [
+      0.8333333333333334,
+      0.9090909090909091
+    ]
+  },
+  "nortriptyline": {
+    "gene": "CYP2D6",
+    "fm_invitro": 0.78,
+    "fm_invivo": 0.75,
+    "fm_invivo_ci": [
+      0.6666666666666667,
+      0.8
+    ]
+  },
+  "desipramine": {
+    "gene": "CYP2D6",
+    "fm_invitro": 0.85,
+    "fm_invivo": 0.8571428571428572,
+    "fm_invivo_ci": [
+      0.8,
+      0.8888888888888888
+    ]
+  },
+  "metoprolol": {
+    "gene": "CYP2D6",
+    "fm_invitro": 0.8,
+    "fm_invivo": 0.7959183673469388,
+    "fm_invivo_ci": [
+      0.75,
+      0.8333333333333334
+    ]
+  },
+  "dextromethorphan": {
+    "gene": "CYP2D6",
+    "fm_invitro": 0.9,
+    "fm_invivo": 0.9933333333333333,
+    "fm_invivo_ci": [
+      0.9875,
+      0.9966666666666667
+    ]
+  },
+  "omeprazole": {
+    "gene": "CYP2C19",
+    "fm_invitro": 0.75,
+    "fm_invivo": 0.8666666666666667,
+    "fm_invivo_ci": [
+      0.8,
+      0.8888888888888888
+    ]
+  },
+  "lansoprazole": {
+    "gene": "CYP2C19",
+    "fm_invitro": 0.68,
+    "fm_invivo": 0.75,
+    "fm_invivo_ci": [
+      0.7058823529411764,
+      0.7777777777777778
+    ]
+  },
+  "celecoxib": {
+    "gene": "CYP2C9",
+    "fm_invitro": 0.78,
+    "fm_invivo": 0.7142857142857143,
+    "fm_invivo_ci": [
+      0.5,
+      0.7619047619047619
+    ]
+  },
+  "flurbiprofen": {
+    "gene": "CYP2C9",
+    "fm_invitro": 0.75,
+    "fm_invivo": 0.6428571428571428,
+    "fm_invivo_ci": [
+      0.5652173913043478,
+      0.696969696969697
+    ]
+  },
+  "tolbutamide": {
+    "gene": "CYP2C9",
+    "fm_invitro": 0.82,
+    "fm_invivo": 0.8461538461538461,
+    "fm_invivo_ci": [
+      0.8214285714285714,
+      0.8666666666666667
+    ]
+  }
+}
