@@ -274,6 +274,11 @@ class DrugOnGraph:
     # See docs/superpowers/specs/2026-04-27-prodrug-activation-v2-design.md §3.2.
     enzyme_affinity_for_conversion: dict[str, Distribution] = field(default_factory=dict)
 
+    # v2.2a saturable metabolism — per-enzyme Michaelis Km on the UNBOUND-conc basis (mg/L).
+    # Empty = linear (current behaviour). Vmax_i = abundance_i * affinity_i * Km_i emerges
+    # implicitly; the well_stirred flux multiplies enzyme i's CLint by 1/(1 + C_u/Km_i).
+    enzyme_km: dict[str, Distribution] = field(default_factory=dict)
+
     def __post_init__(self) -> None:
         if self.observation_species not in ("parent", "active"):
             raise ValueError(
@@ -289,6 +294,9 @@ class DrugOnGraph:
                 "enzyme_affinity_for_conversion is non-empty but active_metabolite is None; "
                 "set active_metabolite or empty the dict"
             )
+        for _tag, _dist in self.enzyme_km.items():
+            if _dist.mean <= 0:
+                raise ValueError(f"enzyme_km[{_tag!r}] mean must be > 0, got {_dist.mean}")
 
     def sample(self, rng: np.random.Generator) -> DrugOnGraph:
         """Sample all Distributions to produce a realized (point-value) copy.
@@ -320,6 +328,9 @@ class DrugOnGraph:
             enzyme_affinity_for_conversion={
                 k: Distribution(mean=v.sample(rng), cv=0.0)
                 for k, v in self.enzyme_affinity_for_conversion.items()
+            },
+            enzyme_km={
+                k: Distribution(mean=v.sample(rng), cv=0.0) for k, v in self.enzyme_km.items()
             },
             transporter_kinetics={
                 k: TransporterKinetics(
@@ -390,6 +401,9 @@ class DrugOnGraph:
             enzyme_affinity_for_conversion={
                 k: Distribution(mean=v.mean, cv=0.0)
                 for k, v in self.enzyme_affinity_for_conversion.items()
+            },
+            enzyme_km={
+                k: Distribution(mean=v.mean, cv=0.0) for k, v in self.enzyme_km.items()
             },
             transporter_kinetics={
                 k: TransporterKinetics(
