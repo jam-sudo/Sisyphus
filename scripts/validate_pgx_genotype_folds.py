@@ -4,6 +4,8 @@ Run from the repo root:  python scripts/validate_pgx_genotype_folds.py
 """
 from __future__ import annotations
 
+import json
+from datetime import date
 from pathlib import Path
 
 import numpy as np
@@ -14,6 +16,13 @@ from sisyphus.engine.compiler import ODECompiler, ResolvedParams
 from sisyphus.engine.solver import solve
 from sisyphus.graph.builder import build_from_yaml
 from sisyphus.predict.phenotype import apply_phenotype_to_graph
+from sisyphus.validation.pgx_metrics import (
+    a_emp,
+    analytical_fold,
+    fm_agreement,
+    fm_invivo,
+    fm_invivo_ci,
+)
 
 _YAML = Path("data/physiology/reference_man.yaml")
 _RESID = "RESIDUAL_HEPATIC"
@@ -128,3 +137,90 @@ def engine_auc_fold(gene_tag: str, fm: float, activity_variant: float) -> float:
     )
     auc_var = _auc_0inf(variant, drug)
     return auc_var / auc_em
+
+
+_BENCH = Path("data/validation/pgx_genotype_folds.json")
+_ACTIVITY = {"PM": 0.0, "IM": 0.5, "NM": 1.0, "EM": 1.0, "UM": 2.0}
+
+
+def _evaluate(pairs: list[dict]) -> list[dict]:
+    rows = []
+    for p in pairs:
+        a = _ACTIVITY[p["phenotype"]]
+        fm = p["fm_invitro"]
+        fold = p["obs_auc_fold_pm"]
+        row = {
+            **{k: p[k] for k in ("drug", "gene", "phenotype", "quantitative", "flags")},
+            "fm_invitro": fm,
+            "obs_fold": fold,
+            "fm_invivo": fm_invivo(fold) if p["phenotype"] == "PM" else None,
+            "fm_invivo_ci": (
+                list(fm_invivo_ci(p["obs_auc_fold_ci"])) if p["phenotype"] == "PM" else None
+            ),
+            "analytical_fold": analytical_fold(fm=fm, activity=a),
+            "a_emp": a_emp(fold, fm) if (p["phenotype"] != "PM" and fm >= 0.6) else None,
+            "engine_fold": engine_auc_fold(p["gene"], fm, a),
+        }
+        row["engine_vs_analytical_rel"] = (
+            abs(row["engine_fold"] - row["analytical_fold"]) / row["analytical_fold"]
+        )
+        rows.append(row)
+    return rows
+
+
+def main() -> None:
+    pairs = json.loads(_BENCH.read_text())["pairs"]
+    rows = _evaluate(pairs)
+
+    pm = [r for r in rows if r["phenotype"] == "PM" and r["quantitative"]]
+    agreement = fm_agreement(
+        [r["fm_invitro"] for r in pm], [r["fm_invivo"] for r in pm], tol=0.15
+    )
+    primary_pass = agreement["frac_within_tol"] >= 0.70 and 0.7 <= agreement["slope"] <= 1.3
+
+    engine_pass = all(r["engine_vs_analytical_rel"] < 0.02 for r in rows)
+
+    registry = {
+        r["drug"]: {
+            "gene": r["gene"], "fm_invitro": r["fm_invitro"],
+            "fm_invivo": r["fm_invivo"], "fm_invivo_ci": r["fm_invivo_ci"],
+        }
+        for r in rows if r["phenotype"] == "PM"
+    }
+
+    stamp = date.today().isoformat()
+    out = {
+        "created": stamp,
+        "primary_pm_fm_agreement": agreement,
+        "primary_pass": primary_pass,
+        "engine_regression_pass": engine_pass,
+        "secondary_im_um": "no IM/UM pairs in v1 benchmark (deferred)",
+        "pairs": rows,
+    }
+    Path(f"data/validation/pgx_fold_validation_{stamp}.json").write_text(json.dumps(out, indent=2))
+    Path("data/validation/pgx_fm_registry.json").write_text(json.dumps(registry, indent=2))
+
+    md = [
+        f"# PGx genotype-fold validation — {stamp}",
+        "",
+        f"- Primary (PM fm-agreement): frac_within_0.15 = {agreement['frac_within_tol']:.2f}, "
+        f"slope = {agreement['slope']:.2f}, MAD = {agreement['mad']:.3f}  -> "
+        f"**{'PASS' if primary_pass else 'REVIEW'}**",
+        f"- Engine regression (<2% vs analytical): **{'PASS' if engine_pass else 'FAIL'}**",
+        "",
+        "| drug | gene | fm_invitro | obs_fold | fm_invivo | engine vs analytical |",
+        "|---|---|---|---|---|---|",
+    ]
+    for r in rows:
+        fv = f"{r['fm_invivo']:.3f}" if r["fm_invivo"] is not None else "-"
+        md.append(
+            f"| {r['drug']} | {r['gene']} | {r['fm_invitro']:.2f} | {r['obs_fold']:.1f} | "
+            f"{fv} | {r['engine_vs_analytical_rel']:.2%} |"
+        )
+    Path(f"data/validation/pgx_fold_validation_{stamp}.md").write_text("\n".join(md) + "\n")
+    print(f"primary_pass={primary_pass} engine_pass={engine_pass} "
+          f"frac_within={agreement['frac_within_tol']:.2f} slope={agreement['slope']:.2f}")
+
+
+if __name__ == "__main__":
+    main()

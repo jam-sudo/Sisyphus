@@ -1,0 +1,205 @@
+{
+  "created": "2026-06-14",
+  "primary_pm_fm_agreement": {
+    "n": 9,
+    "frac_within_tol": 1.0,
+    "mad": 0.05003988173300346,
+    "slope": 0.7350408089834297,
+    "tol": 0.15
+  },
+  "primary_pass": true,
+  "engine_regression_pass": true,
+  "secondary_im_um": "no IM/UM pairs in v1 benchmark (deferred)",
+  "pairs": [
+    {
+      "drug": "atomoxetine",
+      "gene": "CYP2D6",
+      "phenotype": "PM",
+      "quantitative": true,
+      "flags": [],
+      "fm_invitro": 0.9,
+      "obs_fold": 8.1,
+      "fm_invivo": 0.8765432098765432,
+      "fm_invivo_ci": [
+        0.8333333333333334,
+        0.9090909090909091
+      ],
+      "analytical_fold": 10.000000000000002,
+      "a_emp": null,
+      "engine_fold": 10.030821423922298,
+      "engine_vs_analytical_rel": 0.0030821423922295916
+    },
+    {
+      "drug": "nortriptyline",
+      "gene": "CYP2D6",
+      "phenotype": "PM",
+      "quantitative": true,
+      "flags": [],
+      "fm_invitro": 0.78,
+      "obs_fold": 4.0,
+      "fm_invivo": 0.75,
+      "fm_invivo_ci": [
+        0.6666666666666667,
+        0.8
+      ],
+      "analytical_fold": 4.545454545454546,
+      "a_emp": null,
+      "engine_fold": 4.557593088749292,
+      "engine_vs_analytical_rel": 0.0026704795248441823
+    },
+    {
+      "drug": "desipramine",
+      "gene": "CYP2D6",
+      "phenotype": "PM",
+      "quantitative": true,
+      "flags": [],
+      "fm_invitro": 0.85,
+      "obs_fold": 7.0,
+      "fm_invivo": 0.8571428571428572,
+      "fm_invivo_ci": [
+        0.8,
+        0.8888888888888888
+      ],
+      "analytical_fold": 6.666666666666666,
+      "a_emp": null,
+      "engine_fold": 6.686070657583545,
+      "engine_vs_analytical_rel": 0.002910598637531825
+    },
+    {
+      "drug": "metoprolol",
+      "gene": "CYP2D6",
+      "phenotype": "PM",
+      "quantitative": true,
+      "flags": [
+        "nonlinear_first_pass"
+      ],
+      "fm_invitro": 0.8,
+      "obs_fold": 4.9,
+      "fm_invivo": 0.7959183673469388,
+      "fm_invivo_ci": [
+        0.75,
+        0.8333333333333334
+      ],
+      "analytical_fold": 5.000000000000001,
+      "a_emp": null,
+      "engine_fold": 5.013695358297186,
+      "engine_vs_analytical_rel": 0.0027390716594370085
+    },
+    {
+      "drug": "dextromethorphan",
+      "gene": "CYP2D6",
+      "phenotype": "PM",
+      "quantitative": false,
+      "flags": [
+        "extreme_fold"
+      ],
+      "fm_invitro": 0.9,
+      "obs_fold": 150.0,
+      "fm_invivo": 0.9933333333333333,
+      "fm_invivo_ci": [
+        0.9875,
+        0.9966666666666667
+      ],
+      "analytical_fold": 10.000000000000002,
+      "a_emp": null,
+      "engine_fold": 10.030821423922298,
+      "engine_vs_analytical_rel": 0.0030821423922295916
+    },
+    {
+      "drug": "omeprazole",
+      "gene": "CYP2C19",
+      "phenotype": "PM",
+      "quantitative": true,
+      "flags": [
+        "dose_edge_linearity"
+      ],
+      "fm_invitro": 0.75,
+      "obs_fold": 7.5,
+      "fm_invivo": 0.8666666666666667,
+      "fm_invivo_ci": [
+        0.8,
+        0.8888888888888888
+      ],
+      "analytical_fold": 4.0,
+      "a_emp": null,
+      "engine_fold": 4.010270443706407,
+      "engine_vs_analytical_rel": 0.0025676109266017377
+    },
+    {
+      "drug": "lansoprazole",
+      "gene": "CYP2C19",
+      "phenotype": "PM",
+      "quantitative": true,
+      "flags": [
+        "cyp3a4_minor"
+      ],
+      "fm_invitro": 0.68,
+      "obs_fold": 4.0,
+      "fm_invivo": 0.75,
+      "fm_invivo_ci": [
+        0.7058823529411764,
+        0.7777777777777778
+      ],
+      "analytical_fold": 3.1250000000000004,
+      "a_emp": null,
+      "engine_fold": 3.132273746296352,
+      "engine_vs_analytical_rel": 0.0023275988148324695
+    },
+    {
+      "drug": "celecoxib",
+      "gene": "CYP2C9",
+      "phenotype": "PM",
+      "quantitative": true,
+      "flags": [],
+      "fm_invitro": 0.78,
+      "obs_fold": 3.5,
+      "fm_invivo": 0.7142857142857143,
+      "fm_invivo_ci": [
+        0.5,
+        0.7619047619047619
+      ],
+      "analytical_fold": 4.545454545454546,
+      "a_emp": null,
+      "engine_fold": 4.557593088749292,
+      "engine_vs_analytical_rel": 0.0026704795248441823
+    },
+    {
+      "drug": "flurbiprofen",
+      "gene": "CYP2C9",
+      "phenotype": "PM",
+      "quantitative": true,
+      "flags": [],
+      "fm_invitro": 0.75,
+      "obs_fold": 2.8,
+      "fm_invivo": 0.6428571428571428,
+      "fm_invivo_ci": [
+        0.5652173913043478,
+        0.696969696969697
+      ],
+      "analytical_fold": 4.0,
+      "a_emp": null,
+      "engine_fold": 4.010270443706407,
+      "engine_vs_analytical_rel": 0.0025676109266017377
+    },
+    {
+      "drug": "tolbutamide",
+      "gene": "CYP2C9",
+      "phenotype": "PM",
+      "quantitative": true,
+      "flags": [
+        "fm_mass_balance_anchored"
+      ],
+      "fm_invitro": 0.82,
+      "obs_fold": 6.5,
+      "fm_invivo": 0.8461538461538461,
+      "fm_invivo_ci": [
+        0.8214285714285714,
+        0.8666666666666667
+      ],
+      "analytical_fold": 5.5555555555555545,
+      "a_emp": null,
+      "engine_fold": 5.571153810663318,
+      "engine_vs_analytical_rel": 0.0028076859193973654
+    }
+  ]
+}
