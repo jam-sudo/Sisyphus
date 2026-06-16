@@ -1,5 +1,15 @@
 # PGx v2.2b — nonlinear (saturable) genotype Cmax/AUC fold validation
 
+> **⚠ SUPERSEDED (2026-06-16) — single-dose premise halted at the §7 spike.** The feasibility
+> spike + candidate screen (`data/validation/pgx_cmax_v2b_spike_2026-06-16.md`) showed that at
+> single therapeutic dose the engine does **not** robustly engage MM saturation: only
+> propafenone qualifies, and only at the low end of its 40× `Km` spread (`Km`-cherry-picking);
+> voriconazole is `fu_mic`-borderline; atomoxetine/lansoprazole robustly fail (low `fup`). The
+> v2.2a capability is correct (oracle PASS) — the limit is IVIVE of `Km`/exposure at single
+> dose. **Pivoted → a multi-dose / steady-state milestone** (accumulation raises `C_u` toward
+> `Km`), with its own feasibility gate. The saturable harness and this spec's metric/anchor
+> carry forward. See experiment-log 2026-06-16.
+
 > **Lineage.** Consumes the v2.2a Michaelis–Menten flux (`DrugOnGraph.enzyme_km`,
 > `2026-06-15-mm-saturable-clearance-design.md`) and reuses v2.1's controlled `well_stirred`
 > EM-anchored skeleton, `ρ` metric, and nulls (`2026-06-15-pgx-cmax-fold-engine-differentiated`).

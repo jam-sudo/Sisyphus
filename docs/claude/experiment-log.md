@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-15
+last_updated: 2026-06-16
 parent: ../../CLAUDE.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -9,6 +9,29 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
 
 ---
+
+## 2026-06-16 — PGx v2.2b single-dose HALTED at spike → pivot to multi-dose/steady-state
+
+The v2.2b nonlinear-genotype validation (spec/plan 2026-06-15/16) reached its **§7 feasibility
+spike (Task 1) and HALTED**: at single therapeutic dose the engine does **not** robustly engage
+the v2.2a MM saturation. Spike + candidate screen `data/validation/pgx_cmax_v2b_spike_2026-06-16.md`
+(harness `scripts/validate_pgx_cmax_v2b.py`, both on main; headline 2.731 untouched, harness-isolated).
+
+**Finding.** Saturation engagement is decided by `C_u/Km`, which the curated inputs leave
+ill-conditioned: propafenone peak first-pass liver `C_u/Km = 0.17` at Kroemer's `Km` 5.3 µM
+(FAIL) but `≈9` at Hemeryck's 0.12 µM (PASS) — a **40× literature `Km` spread spanning
+engaged↔not, with no non-circular way to pick** (low-end choice = `Km`-cherry-picking, forbidden).
+Voriconazole borderline (engagement flips with the uncertain `fu_mic`; anchor can't reach its low
+`E_h`). Atomoxetine/lansoprazole robustly fail (very low `fup` 0.02/0.03 crushes unbound exposure
+≪ `Km`). The v2.2a capability is **correct** (saturation oracle PASS, effects correctly signed +
+dose-dependent) — the wall is **IVIVE of `Km`/exposure** at single dose; in-vivo genotype
+nonlinearity lives in regimes single-dose doesn't reach.
+
+**Decision (user):** pivot to a **multi-dose / steady-state** milestone — accumulation raises
+`C_u` toward `Km` (the engine's `regimen` solver), where systemic saturators (voriconazole) are
+genuinely nonlinear. A **new, separately-gated** milestone (its own feasibility check: does
+steady-state robustly engage saturation despite the persistent `Km`/`fu_mic` uncertainty?). The
+saturable harness + v2.2a capability carry forward; the v2.2b single-dose spec is banner-SUPERSEDED.
 
 ## 2026-06-15 — Engine capability: Michaelis–Menten saturable metabolic clearance (v2.2a)
 

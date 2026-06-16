@@ -1,5 +1,11 @@
 # PGx v2.2b — Nonlinear Saturable Genotype-Fold Validation Implementation Plan
 
+> **⚠ SUPERSEDED (2026-06-16) — halted at Task 1 (the feasibility spike).** Single-dose
+> saturation is not robustly engaged (only propafenone@low-`Km`, a cherry-pick). Pivoted to a
+> multi-dose/steady-state milestone. See the spec banner +
+> `data/validation/pgx_cmax_v2b_spike_2026-06-16.md` + experiment-log 2026-06-16. Tasks 2–6
+> below were never executed.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development
 > (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use
 > checkbox (`- [ ]`) syntax for tracking.
