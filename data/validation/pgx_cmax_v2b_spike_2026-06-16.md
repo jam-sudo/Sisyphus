@@ -115,3 +115,38 @@ Implications for the v2.2b milestone:
 
 **Recommendation:** HALT v2.2b on the propafenone basis; re-curate the candidate list with an
 explicit `Cu_peak/Km ≳ 0.5` feasibility filter before resuming.
+
+## Candidate-set saturation-engagement screen (follow-up, 2026-06-16)
+
+Ran the `C_u/Km` + Gate-2 probe across the full powered set (read-only; `fu_mic=0.5`, with a
+`fu_mic ∈ {0.3, 1.0}` sensitivity):
+
+| candidate | Km (µM) | node | Km_u (mg/L) | C_u/Km | Gate-2 |Δlog AUC| | PASS |
+|---|---|---|---|---|---|---|
+| **propafenone (LOW Km)** | 0.12 | liver | 0.0205 | 9.0 | **1.04** | **PASS (all fu_mic)** |
+| **voriconazole** | 9.3 | systemic | 1.624 | 0.70 | **0.115** | **borderline** (PASS fu_mic≤0.6, FAIL @1.0) |
+| atomoxetine | 2.3 | liver | 0.294 | 0.022 | 0.012 | **FAIL** (robust; low fup 0.02) |
+| lansoprazole | 15 | liver | 2.77 | 0.005 | 0.002 | **FAIL** (robust; low fup 0.03) |
+
+**Findings.** (1) Propafenone's HALT was a **Km-choice** artifact, not the drug: at Hemeryck's
+0.12 µM it saturates deeply (robust across `fu_mic`), at Kroemer's 5.3 µM it does not — a 40×
+literature spread that spans engaged↔not, with **no non-circular way to pick** (choosing the
+low end to make the test work is `Km`-cherry-picking). (2) Voriconazole is **borderline** —
+engagement flips with the uncertain `fu_mic`, and its anchor cannot reach the intended low
+`E_h` (sits at ~0.22), so the true systemic-saturator regime is even milder. (3) Atomoxetine /
+lansoprazole **robustly fail** — their very low `fup` crushes unbound exposure far below `Km`.
+
+**Conclusion.** Single-dose + in-vitro `Km` does **not** robustly engage MM saturation for the
+candidate set: only propafenone qualifies, and only at one (cherry-picked) end of a 40× `Km`
+uncertainty. v2.2b as specced (single-dose) **does not clear its feasibility gate**. The v2.2a
+saturable capability is correct (oracle PASS); the limitation is **IVIVE of `Km`/exposure** —
+in-vivo genotype nonlinearity lives in regimes the single-dose setup doesn't reach.
+
+## DECISION (user, 2026-06-16): pivot to multi-dose / steady-state
+
+Single-dose v2.2b is **superseded**. The systemic saturators (voriconazole) show their
+nonlinearity at **steady state** (accumulation raises `C_u` toward `Km`), reachable via the
+engine's `regimen` multi-dose solver. The pivot is a **new, separately-gated milestone** (its
+own feasibility check: does steady-state robustly engage saturation given the persistent
+`Km`/`fu_mic` uncertainty?). The saturable harness (`scripts/validate_pgx_cmax_v2b.py`) and the
+v2.2a capability carry forward. Headline 2.731 untouched throughout.
