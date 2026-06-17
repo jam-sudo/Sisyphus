@@ -229,6 +229,89 @@ def _beta_for_genotype(graph_builder, drug_builder, doses, genotype, gene_tag,
     return loglog_beta(list(doses), exposures)
 
 
+def box_robustness_probe(gene_tag, fm, mw, fup, dose_mg, km_span_uM, fu_mic_grid,
+                         pm_activity, regime, interval_h=24.0, n_doses=20):
+    """Per-corner |Δlog AUC-fold (saturable − linear-null)| across the Km×fu_mic box.
+    Returns the list of corner deltas; the caller applies box_robustness_pass()."""
+    from sisyphus.validation.pgx_metrics import km_uM_to_unbound_mgL
+    deltas = []
+    for km_uM in km_span_uM:
+        for fu_mic in fu_mic_grid:
+            km_mgl = km_uM_to_unbound_mgL(km_uM, mw, fu_mic)
+            fold_sat = _genotype_fold_engine(gene_tag, fm, mw, fup, dose_mg, km_mgl,
+                                             pm_activity, regime, interval_h, n_doses)
+            fold_lin = _genotype_fold_engine(gene_tag, fm, mw, fup, dose_mg, None,
+                                             pm_activity, regime, interval_h, n_doses)
+            deltas.append(abs(np.log(fold_sat) - np.log(fold_lin)))
+    return deltas
+
+
+def _genotype_fold_engine(gene_tag, fm, mw, fup, dose_mg, km_mgl, pm_activity,
+                          regime, interval_h=24.0, n_doses=20, a_var=None):
+    """PM/EM exposure fold at one dose. km_mgl None → linear-null. a_var overrides the
+    PM gene scaling (None → use pm_activity; pass 0.0 for the idealized oracle)."""
+    cltot, abund, kp = (50.0, _SYNTHETIC_GENE_ABUND, 3.0)
+    pm_scale = pm_activity if a_var is None else a_var
+
+    def build(graph_builder):
+        g_em = graph_builder()
+        g_pm = apply_phenotype_to_graph(
+            graph_builder(), {gene_tag: "PM"},
+            phenotype_scale_overrides={gene_tag: pm_scale},
+        )
+        if km_mgl is None:
+            drug = _drug(gene_tag, fm, cltot, abund, 20.0, kp, fup, dose_mg, mw)
+        else:
+            drug = _sat_drug(gene_tag, fm, cltot, abund, 20.0, kp, km_mgl, fup,
+                             dose_mg, mw)
+        if regime == "steady_state":
+            e_em = _steady_state_exposure(g_em, drug, interval_h, n_doses, "css_avg")
+            e_pm = _steady_state_exposure(g_pm, drug, interval_h, n_doses, "css_avg")
+        else:
+            e_em = _single_dose_exposure(g_em, drug, "auc")
+            e_pm = _single_dose_exposure(g_pm, drug, "auc")
+        return e_pm / e_em
+
+    builder = (lambda: _axial_graph(gene_tag)) if regime == "single_dose" \
+        else (lambda: _well_stirred_graph(gene_tag))
+    return build(builder)
+
+
+def oracle_check(gene_tag, fm, skeleton):
+    """C2: idealized gene→0 PM (a_var=0), LINEAR engine → oral AUC fold = 1/(1-fm).
+
+    The `1/(1-fm)` identity is the *single-dose oral AUC* genotype fold in the
+    LOW-EXTRACTION limit (spec §5.4; proven on this skeleton at the v2.2b spike Gate-4
+    via `anchor_em(e_h=0.30)` + single-dose `genotype_folds`). We reuse exactly that
+    machinery so the oracle pins the engine against the analytic at a controlled low
+    extraction — at a naked synthetic cltot the AUC_0-inf tail / a steady-state average
+    does NOT reproduce the closed form (low-extraction is the stated regime). The
+    `skeleton` arg selects whether the linear-null axial PM scaling (PR #79) is also
+    exercised; the analytic fold is skeleton-independent in the low-extraction limit.
+    """
+    mw = 252.3 if gene_tag == "CYP2C9" else 341.4
+    if skeleton == "axial":
+        # Exercise the axial PM scaling (PR #79) directly: linear-null EM vs PM(a=0)
+        # single-dose AUC fold on the expanded parallel_tube liver.
+        dose, fup, kp, abund = 200.0, 0.3, 3.0, _SYNTHETIC_GENE_ABUND
+        # Anchor cltot at low extraction on the well_stirred twin, then run axial.
+        rec = anchor_em(gene_tag, e_h_target=0.30, tmax_target=2.0, fm=fm, kp=kp,
+                        fup=fup, dose_mg=dose, mw=mw, km_mgl=None)
+        cltot = rec["cltot"]
+        drug = _drug(gene_tag, fm, cltot, abund, rec["peff"], kp, fup, dose, mw)
+        g_em = _axial_graph(gene_tag)
+        g_pm = apply_phenotype_to_graph(
+            _axial_graph(gene_tag), {gene_tag: "PM"},
+            phenotype_scale_overrides={gene_tag: 0.0},
+        )
+        au_em = _single_dose_exposure(g_em, drug, "auc")
+        au_pm = _single_dose_exposure(g_pm, drug, "auc")
+        return au_pm / au_em
+    rec = anchor_em(gene_tag, e_h_target=0.30, tmax_target=2.0, fm=fm, kp=3.0,
+                    fup=0.3, dose_mg=200.0, mw=mw, km_mgl=None)
+    return genotype_folds(gene_tag, fm, rec, 200.0, mw, None, a_var=0.0)["auc_fold"]
+
+
 def _iv_drug(gene_tag, fm, cltot, abund_gene, kp, fup=0.3, dose_mg=100.0, mw=300.0,
              km_mgl: float | None = None):
     """IV-bolus twin (administration at venous_blood) for an F reference. Mirrors the
