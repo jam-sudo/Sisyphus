@@ -177,8 +177,12 @@ def apply_phenotype_to_graph(
         phenotypes: {tag: phenotype_code} from ``parse_phenotype_spec``.
             Tag may be a CYP enzyme (``CYP2D6``) or transporter gene
             (``SLCO1B1``, aliased to graph transporter ``OATP1B1``).
-        node: Which node to scale. Default "liver". Enzymes and
-            transporters are both sourced from ``graph.nodes[node]``.
+        node: Which organ to scale, by identity. A node matches if its
+            ``name`` equals ``node`` OR its ``lookup_name`` equals ``node``.
+            On a normal graph this is the single literal node (e.g. "liver").
+            On an axially-expanded graph (``graph.axial.expand_axial``) it is
+            every sub-tank ``liver__ax{i}`` (which carry ``lookup_name="liver"``),
+            so the organ total is scaled correctly. Default "liver".
         phenotype_scale_overrides: Optional ``{gene: effective_scale}`` dict.
             When provided AND a gene matches a key in ``phenotypes``, the
             override value replaces ``PHENOTYPE_SCALES[phenotype]`` for that
