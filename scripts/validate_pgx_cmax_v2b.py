@@ -192,6 +192,43 @@ def _single_dose_exposure(graph, drug, metric: str = "auc") -> float:
     raise ValueError(f"unknown metric {metric!r}")
 
 
+def _peak_liver_cu_node(graph, drug, node_name: str, fup: float = 0.3) -> float:
+    """Peak unbound conc (mg/L) at a specific node = fup * max(c_node)."""
+    rg, rd = graph.realize_means(), drug.realize_means()
+    compiled = ODECompiler().compile(rg)
+    params = ResolvedParams(rg, rd)
+    y0 = np.zeros(compiled.n_states)
+    y0[compiled.state_index[drug.administration_node]] = drug.dose_mg
+    res = solve(compiled, params, y0, t_span=(0.0, float(_T_EVAL[-1])), t_eval=_T_EVAL)
+    return float(fup * res.concentrations[node_name].max())
+
+
+def _beta_for_genotype(graph_builder, drug_builder, doses, genotype, gene_tag,
+                       pm_activity, regime, interval_h=24.0, n_doses=20):
+    """Log–log exposure–dose slope β for one genotype.
+
+    graph_builder() -> a fresh base graph; drug_builder(dose) -> the drug at that dose.
+    genotype: 'EM' (no scaling) or 'PM' (gene × pm_activity via the (A) phenotype fix).
+    regime: 'steady_state' (Arm S) or 'single_dose' (Arm F).
+    """
+    from sisyphus.validation.pgx_metrics import loglog_beta
+    exposures = []
+    for dose in doses:
+        g = graph_builder()
+        if genotype == "PM":
+            g = apply_phenotype_to_graph(
+                g, {gene_tag: "PM"}, phenotype_scale_overrides={gene_tag: pm_activity}
+            )
+        drug = drug_builder(dose)
+        if regime == "steady_state":
+            exposures.append(_steady_state_exposure(g, drug, interval_h, n_doses, "css_avg"))
+        elif regime == "single_dose":
+            exposures.append(_single_dose_exposure(g, drug, "auc"))
+        else:
+            raise ValueError(f"unknown regime {regime!r}")
+    return loglog_beta(list(doses), exposures)
+
+
 def _iv_drug(gene_tag, fm, cltot, abund_gene, kp, fup=0.3, dose_mg=100.0, mw=300.0,
              km_mgl: float | None = None):
     """IV-bolus twin (administration at venous_blood) for an F reference. Mirrors the
