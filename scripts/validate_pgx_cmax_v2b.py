@@ -132,6 +132,66 @@ def _peak_liver_cu(graph, drug: DrugOnGraph, fup: float = 0.3) -> float:
     return float(fup * c_liver.max())
 
 
+def _axial_graph(gene_tag: str, n_sub: int = 10):
+    """Well_stirred synthetic skeleton with the liver clearance edge switched to
+    parallel_tube and axially expanded into n_sub serial well_stirred sub-tanks
+    (lookup_name='liver'). Genotype scaling reaches every sub-tank via the (A) fix."""
+    import dataclasses as _dc
+
+    from sisyphus.graph.axial import expand_axial
+    from sisyphus.graph.types import ClearanceEdge
+    g = _well_stirred_graph(gene_tag)
+    g.nodes["liver"] = _dc.replace(g.nodes["liver"], axial_subcompartments=n_sub)
+    g.edges[:] = [
+        _dc.replace(e, model="parallel_tube")
+        if isinstance(e, ClearanceEdge) and e.source == "liver"
+        else e
+        for e in g.edges
+    ]
+    return expand_axial(g)
+
+
+def _steady_state_exposure(graph, drug, interval_h: float, n_doses: int,
+                           metric: str = "css_avg") -> float:
+    """Multi-dose steady-state exposure over the LAST dosing interval.
+    metric: 'css_avg' (AUC_tau/tau), 'auc_tau', or 'cmax_ss'."""
+    from sisyphus.regimen.solver import solve_regimen
+    from sisyphus.regimen.types import DosingEvent, DosingRegimen
+    rg, rd = graph.realize_means(), drug.realize_means()
+    compiled = ODECompiler().compile(rg)
+    params = ResolvedParams(rg, rd)
+    events = tuple(
+        DosingEvent(time_h=i * interval_h, dose_mg=drug.dose_mg,
+                    node=drug.administration_node)
+        for i in range(n_doses)
+    )
+    reg = DosingRegimen(events=events)
+    t_total = n_doses * interval_h
+    res = solve_regimen(compiled, params, reg, t_total_h=t_total, dt_output=0.05)
+    conc, time = res.concentrations["venous_blood"], res.time_h
+    mask = time >= (t_total - interval_h - 1e-9)
+    ct, tt = conc[mask], time[mask]
+    trapz = getattr(np, "trapezoid", np.trapz)
+    if metric == "cmax_ss":
+        return float(ct.max())
+    auc_tau = float(trapz(ct, tt))
+    if metric == "auc_tau":
+        return auc_tau
+    if metric == "css_avg":
+        return auc_tau / interval_h
+    raise ValueError(f"unknown metric {metric!r}")
+
+
+def _single_dose_exposure(graph, drug, metric: str = "auc") -> float:
+    """Single-dose exposure on the given (possibly axial) graph. metric 'auc' or 'cmax'."""
+    cmax, auc, _ = _cmax_auc_tmax(graph, drug)
+    if metric == "auc":
+        return auc
+    if metric == "cmax":
+        return cmax
+    raise ValueError(f"unknown metric {metric!r}")
+
+
 def _iv_drug(gene_tag, fm, cltot, abund_gene, kp, fup=0.3, dose_mg=100.0, mw=300.0,
              km_mgl: float | None = None):
     """IV-bolus twin (administration at venous_blood) for an F reference. Mirrors the
