@@ -217,3 +217,31 @@ def test_box_probe_monotone_in_km():
         km_span_uM=[20.0], fu_mic_grid=[0.5], pm_activity=0.03, regime="single_dose",
     )
     assert low[0] >= high[0], (low[0], high[0])
+
+
+def test_headline_isolation_holdout_cache_untouched():
+    """The harness is fully isolated: importing it and running the engine leaves the
+    holdout cache byte-identical, and the v2.2a empty-enzyme_km bit-identity pin + the
+    cached-2.731 headline pin still pass. Headline 2.731 is untouched by construction."""
+    import subprocess
+    import sys
+
+    cache = ROOT / "data" / "training" / "4track_holdout_predictions.json"
+    before = cache.read_bytes()
+    h = _harness()
+    # exercise the engine paths this milestone uses
+    h.oracle_check("CYP2C9", 0.9, "well_stirred")
+    g = h._axial_graph("CYP2D6", n_sub=6)
+    drug = h._sat_drug("CYP2D6", 0.8, 5.0e6, h._SYNTHETIC_GENE_ABUND, 20.0, 3.0, 0.3,
+                       0.1, 300.0, 341.4)
+    h._single_dose_exposure(g, drug, "auc")
+    assert cache.read_bytes() == before
+
+    r = subprocess.run(
+        [sys.executable, "-m", "pytest",
+         "tests/regression/test_mm_headline_bit_identity.py",
+         "tests/integration/test_holdout_regression.py::test_cached_holdout_aafe_is_2p731",
+         "-q"],
+        cwd=str(ROOT), capture_output=True, text=True,
+    )
+    assert r.returncode == 0, r.stdout + r.stderr
