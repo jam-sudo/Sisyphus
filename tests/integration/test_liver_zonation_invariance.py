@@ -31,3 +31,46 @@ def test_apply_zonation_preserves_total_abundance():
     # pericentral => abundance increases toward the outlet sub-tank
     means = [n.enzymes["CYP3A4"].mean for n in subs_z]
     assert all(means[i] < means[i + 1] for i in range(len(means) - 1))
+
+
+def test_G1_delta_E_decays_to_zero_with_N_linear():
+    """G1 (linear): |ΔE(N)| shrinks toward 0 as N grows — first-pass is invariant to
+    zonation in the plug-flow limit."""
+    p = _probe()
+    d10, _, _ = p.delta_E("CYP3A4", 0.9, 10, 3.0, "pericentral", cltot=100000.0, fup=0.3, mw=300.0)
+    d80, _, _ = p.delta_E("CYP3A4", 0.9, 80, 3.0, "pericentral", cltot=100000.0, fup=0.3, mw=300.0)
+    assert abs(d80) < abs(d10)
+    assert abs(d80) < 0.005
+
+
+def test_G1_delta_E_decays_to_zero_with_N_saturable():
+    """G1 (saturable): same invariance with the v2.2a MM flux engaged (high extraction)."""
+    p = _probe()
+    d10, _, _ = p.delta_E("CYP3A4", 0.9, 10, 3.0, "pericentral", cltot=1.0e6, fup=0.3,
+                          mw=300.0, km_mgl=0.5)
+    d80, _, _ = p.delta_E("CYP3A4", 0.9, 80, 3.0, "pericentral", cltot=1.0e6, fup=0.3,
+                          mw=300.0, km_mgl=0.5)
+    assert abs(d80) < abs(d10)
+    assert abs(d80) < 0.005
+
+
+def test_G3_finite_N_artifact_is_saturation_asymmetric():
+    """G3: linear is direction-SYMMETRIC (pericentral≈periportal — convexity is symmetric);
+    saturable is direction-ASYMMETRIC. Assert the asymmetry EXISTS; REPORT the sign (the §2
+    derivation expects periportal>pericentral; reported, not gated — PGx DE-49 discipline)."""
+    p = _probe()
+    n = 8
+    _, _, ez_peri_lin = p.delta_E("CYP3A4", 0.9, n, 3.0, "pericentral", cltot=100000.0,
+                                  fup=0.3, mw=300.0)
+    _, _, ez_port_lin = p.delta_E("CYP3A4", 0.9, n, 3.0, "periportal", cltot=100000.0,
+                                  fup=0.3, mw=300.0)
+    _, _, ez_peri_sat = p.delta_E("CYP3A4", 0.9, n, 3.0, "pericentral", cltot=1.0e6,
+                                  fup=0.3, mw=300.0, km_mgl=0.5)
+    _, _, ez_port_sat = p.delta_E("CYP3A4", 0.9, n, 3.0, "periportal", cltot=1.0e6,
+                                  fup=0.3, mw=300.0, km_mgl=0.5)
+    lin_asym = abs(ez_peri_lin - ez_port_lin)
+    sat_asym = abs(ez_peri_sat - ez_port_sat)
+    assert lin_asym < 1e-3
+    assert sat_asym > lin_asym
+    print(f"G3 saturable direction sign: periportal-pericentral = "
+          f"{ez_port_sat - ez_peri_sat:+.4f} (>0 => periportal extracts more, §2 expectation)")
