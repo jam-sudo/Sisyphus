@@ -47,38 +47,42 @@ def test_single_dose_exposure_positive():
     assert h._single_dose_exposure(g, drug, metric="auc") > 0
 
 
-def test_systemic_gene_diverges_delta_beta_positive():
-    """Arm-S crux: systemic clearance gene → PM (low Vmax) saturates first →
-    β_PM > β_EM → Δβ > 0 (fold diverges). Synthetic, deep-saturation params.
+def test_systemic_sign_is_regime_dependent_not_invariant():
+    """HONEST-NEGATIVE (refutes spec §5.2 hypothesis). The systemic-arm genotype
+    cross-term Δβ is NOT a topological invariant: its SIGN flips with the saturation
+    regime. Holding everything fixed except Km (cltot=5e4, kp=0.05, PM activity 0.25,
+    same dose span), a low Km (deep saturation) gives Δβ < 0 (convergence) while a high
+    Km (mild saturation) gives Δβ > 0 (divergence). So "systemic always diverges" is
+    false; whether the gene-deficient PM is the more-nonlinear arm depends on how deeply
+    each genotype saturates. This is the documented dead-end (DE-NN); see also that the
+    phenytoin-relevant low-Km regime gives the *wrong* sign vs phenytoin's clinical
+    divergence — untestable here because the crossed-grid data HALTed.
 
-    SYNTHETIC-PARAM TUNING FOR MECHANISM VISIBILITY (allowed by the plan; NOT a fit
-    to clinical data): the systemic-divergence sign only emerges when hepatic
-    clearance is genuinely *rate-limiting* so the PM genotype accumulates to a
-    higher steady-state liver C_u than the EM (the spec §5.2 premise). With the
-    near-linear-clearance spike defaults (cltot≈50, high kp) liver C_u is
-    perfusion-set and genotype-invariant → both β≈1.0 and the sign vanishes. Driving
-    the engine into the clearance-limited regime (high cltot, low kp) and choosing a
-    Km that keeps the high-Vmax EM in early saturation while the 4×-lower-Vmax PM
-    climbs into the steep supra-proportional zone across the dose span makes
-    β_PM > β_EM visible (here Δβ ≈ +0.4). The SIGN is physics-guaranteed; only its
-    visibility depends on how hard the gene is driven.
-    """
+    Unlike the first-pass arm (where PM≈0 activity pins β_PM≡1 and the convergence sign
+    is structural/robust), the systemic PM retains a saturating gene, so β_PM ≷ β_EM is
+    regime-dependent. NOT a fit to clinical data — a synthetic characterization of the
+    engine's behavior."""
     h = _harness()
     from sisyphus.validation.pgx_metrics import delta_beta
     gene, fm, mw, fup = "CYP2C9", 0.9, 252.3, 0.10
-    km_mgl = 5.0  # EM in early saturation; PM (4x lower Vmax, accumulating) crosses Km
-    cltot, abund, kp = 50000.0, h._SYNTHETIC_GENE_ABUND, 0.05  # clearance-rate-limited
-    doses = [100.0, 300.0, 900.0]  # ~10x span
+    cltot, abund, kp = 50000.0, h._SYNTHETIC_GENE_ABUND, 0.05
+    doses = [100.0, 300.0, 900.0]
 
     def gb():
         return h._well_stirred_graph(gene)
 
-    def db(dose):
-        return h._sat_drug(gene, fm, cltot, abund, 60.0, kp, km_mgl, fup, dose, mw)
+    def dbeta_at_km(km_mgl):
+        def db(dose):
+            return h._sat_drug(gene, fm, cltot, abund, 60.0, kp, km_mgl, fup, dose, mw)
+        b_em = h._beta_for_genotype(gb, db, doses, "EM", gene, 0.25, "steady_state")
+        b_pm = h._beta_for_genotype(gb, db, doses, "PM", gene, 0.25, "steady_state")
+        return delta_beta(b_pm, b_em)
 
-    b_em = h._beta_for_genotype(gb, db, doses, "EM", gene, 0.25, "steady_state")
-    b_pm = h._beta_for_genotype(gb, db, doses, "PM", gene, 0.25, "steady_state")
-    assert delta_beta(b_pm, b_em) > 0.02, (b_pm, b_em)
+    dbeta_low_km = dbeta_at_km(2.0)    # deep saturation
+    dbeta_high_km = dbeta_at_km(10.0)  # mild saturation
+    # The sign genuinely flips across the regime — that IS the finding.
+    assert dbeta_low_km < -0.02, ("expected convergence at low Km", dbeta_low_km)
+    assert dbeta_high_km > 0.02, ("expected divergence at high Km", dbeta_high_km)
 
 
 def test_first_pass_gene_converges_delta_beta_negative():
@@ -100,6 +104,36 @@ def test_first_pass_gene_converges_delta_beta_negative():
     b_em = h._beta_for_genotype(gb, db, doses, "EM", gene, 0.03, "single_dose")
     b_pm = h._beta_for_genotype(gb, db, doses, "PM", gene, 0.03, "single_dose")
     assert delta_beta(b_pm, b_em) < -0.02, (b_pm, b_em)
+
+
+def test_propafenone_em_supraproportional_p1_vs_siddoway():
+    """P1 (the one citable clinical saturation signature). Propafenone EM, axial
+    saturable engine: β_EM > 1 (supra-proportional first-pass), reproducing the
+    DIRECTION of Siddoway 1987 (EM concentration rose ~10× over a 3× dose increase,
+    β_obs ≈ 2.1). The linear-null gives β = 1.0 exactly. We assert the qualitative
+    supra-proportionality the linear model cannot produce — NOT a magnitude match,
+    since the literature Km (Kroemer 5.3 µM vs Hemeryck 0.12 µM) and fup are uncertain
+    (fup corrected to ~0.10 per the literature audit, NOT the 0.30 first assumed)."""
+    h = _harness()
+    from sisyphus.validation.pgx_metrics import km_uM_to_unbound_mgL
+    gene, fm, mw, fup = "CYP2D6", 0.80, 341.4, 0.10
+    km_mgl = km_uM_to_unbound_mgL(5.3, mw, 0.5)  # Kroemer 1989, ~0.905 mg/L unbound
+    cltot, abund, kp = 5.0e6, h._SYNTHETIC_GENE_ABUND, 3.0
+    doses = [150.0, 300.0, 450.0]
+
+    def gb():
+        return h._axial_graph(gene, n_sub=10)
+
+    def db_sat(dose):
+        return h._sat_drug(gene, fm, cltot, abund, 20.0, kp, km_mgl, fup, dose, mw)
+
+    def db_lin(dose):
+        return h._drug(gene, fm, cltot, abund, 20.0, kp, fup, dose, mw)
+
+    beta_em_sat = h._beta_for_genotype(gb, db_sat, doses, "EM", gene, 0.03, "single_dose")
+    beta_em_lin = h._beta_for_genotype(gb, db_lin, doses, "EM", gene, 0.03, "single_dose")
+    assert beta_em_sat > 1.05, ("EM should be supra-proportional", beta_em_sat)
+    assert abs(beta_em_lin - 1.0) < 0.02, ("linear-null must be proportional", beta_em_lin)
 
 
 def test_axial_inlet_cu_exceeds_well_stirred():
