@@ -194,13 +194,14 @@ def apply_phenotype_to_graph(
     """
     if not phenotypes:
         return graph
-    if node not in graph.nodes:
+
+    targets = [
+        n for n in graph.nodes.values()
+        if n.name == node or (n.lookup_name or "") == node
+    ]
+    if not targets:
         logger.warning("phenotype: node %r not in graph, skipping", node)
         return graph
-
-    target = graph.nodes[node]
-    target_enzymes = target.enzymes
-    target_transporters = getattr(target, "transporters", {}) or {}
 
     if phenotype_scale_overrides is not None:
         for tag, phenotype in phenotypes.items():
@@ -212,7 +213,17 @@ def apply_phenotype_to_graph(
                         tag, PHENOTYPE_SCALES[phenotype], override_scale,
                     )
 
-    new_node, applied, unknown = _scale_node(target, phenotypes, phenotype_scale_overrides)
+    new_nodes = dict(graph.nodes)
+    all_applied: list[str] = []
+    all_unknown: list[str] = []
+    last_target = targets[-1]
+    for target in targets:
+        new_node, applied, unknown = _scale_node(
+            target, phenotypes, phenotype_scale_overrides
+        )
+        new_nodes[target.name] = new_node
+        all_applied.extend(applied)
+        all_unknown.extend(unknown)
 
     if phenotype_scale_overrides:
         unused_overrides = sorted(set(phenotype_scale_overrides) - set(phenotypes))
@@ -221,19 +232,23 @@ def apply_phenotype_to_graph(
                 "phenotype: overrides for %s not in phenotypes dict, ignored",
                 unused_overrides,
             )
-
-    if unknown:
-        available = sorted(list(target_enzymes) + [f"(transporter){t}" for t in target_transporters])  # noqa: E501
+    if all_unknown:
+        available = sorted(
+            list(last_target.enzymes)
+            + [f"(transporter){t}" for t in (getattr(last_target, "transporters", {}) or {})]
+        )
         logger.warning(
             "phenotype: tags %s not found in %s (available: %s)",
-            unknown, node, available,
+            sorted(set(all_unknown)), node, available,
         )
-    if applied:
-        logger.info("phenotype: applied %s at %s", ", ".join(applied), node)
+    if all_applied:
+        logger.info(
+            "phenotype: applied %s at %s (%d node(s))",
+            ", ".join(sorted(set(all_applied))), node, len(targets),
+        )
 
     new_graph = BodyGraph()
-    new_graph.nodes = dict(graph.nodes)
-    new_graph.nodes[node] = new_node
+    new_graph.nodes = new_nodes
     new_graph.edges = list(graph.edges)
     new_graph.global_params = dict(graph.global_params)
     return new_graph
