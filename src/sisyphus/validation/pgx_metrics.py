@@ -7,6 +7,8 @@ in isolation. See docs/superpowers/specs/2026-06-14-pgx-genotype-fold-validation
 """
 from __future__ import annotations
 
+import numpy as np
+
 
 def analytical_fold(fm: float, activity: float) -> float:
     """Closed-form genotype AUC fold-ratio: 1 / (1 - fm + fm*activity).
@@ -68,3 +70,47 @@ def fm_agreement(fm_vitro: list[float], fm_vivo: list[float], tol: float = 0.15)
         "slope": slope,
         "tol": tol,
     }
+
+
+def km_uM_to_unbound_mgL(km_uM: float, mw: float, fu_mic: float) -> float:
+    """Literature Km (µM, total-microsomal) → engine unbound mg/L.
+
+    Km_unbound[mg/L] = km_uM × fu_mic × MW / 1000   (basis of C_u = fup·c_plasma).
+    """
+    if km_uM <= 0 or mw <= 0:
+        raise ValueError(f"km_uM and mw must be positive, got {km_uM}, {mw}")
+    if not 0 < fu_mic <= 1:
+        raise ValueError(f"fu_mic must be in (0, 1], got {fu_mic}")
+    return km_uM * fu_mic * mw / 1000.0
+
+
+def loglog_beta(doses: list[float], exposures: list[float]) -> float:
+    """Log–log slope β = d log(exposure) / d log(dose) (least squares).
+
+    β = 1 ⇒ dose-proportional (linear); β > 1 ⇒ supra-proportional (saturation).
+    """
+    if len(doses) != len(exposures) or len(doses) < 2:
+        raise ValueError("need >=2 matched (dose, exposure) points")
+    ld = np.log(np.asarray(doses, dtype=float))
+    le = np.log(np.asarray(exposures, dtype=float))
+    return float(np.polyfit(ld, le, 1)[0])
+
+
+def delta_beta(beta_pm: float, beta_em: float) -> float:
+    """Genotype cross-term Δβ = β_PM − β_EM.
+
+    >0 ⇒ systemic divergence (PM's low Vmax saturates first);
+    <0 ⇒ first-pass convergence (EM's high extraction saturates).
+    """
+    return float(beta_pm - beta_em)
+
+
+def box_robustness_pass(deltas: list[float], threshold: float = 0.10) -> bool:
+    """True iff |Δlog fold| exceeds `threshold` at EVERY Km×fu_mic box corner.
+
+    Engagement only at the favorable corner is a FAIL (the v2.2b cherry-pick
+    foreclosure). `deltas` are the per-corner |Δlog AUC-fold (sat − linear-null)|.
+    """
+    if not deltas:
+        raise ValueError("deltas must be non-empty")
+    return all(d > threshold for d in deltas)
