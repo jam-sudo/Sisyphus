@@ -31,6 +31,7 @@ from dataclasses import replace
 
 from sisyphus.core import Distribution
 from sisyphus.graph.body import BodyGraph
+from sisyphus.graph.types import Node
 
 logger = logging.getLogger(__name__)
 
@@ -110,6 +111,59 @@ def parse_phenotype_spec(spec: str) -> dict[str, str]:
     return out
 
 
+def _scale_node(
+    target: Node,
+    phenotypes: dict[str, str],
+    phenotype_scale_overrides: dict[str, float] | None,
+) -> tuple[Node, list[str], list[str]]:
+    """Scale one node's enzyme/transporter abundances by the phenotype factors.
+
+    Pure: returns ``(new_node, applied, unknown)`` and does not log.
+    """
+    target_enzymes = target.enzymes
+    target_transporters = getattr(target, "transporters", {}) or {}
+    new_enzymes: dict[str, Distribution] = dict(target_enzymes)
+    new_transporters: dict[str, Distribution] = dict(target_transporters)
+    applied: list[str] = []
+    unknown: list[str] = []
+
+    for tag, phenotype in phenotypes.items():
+        scale = PHENOTYPE_SCALES[phenotype]
+        if phenotype_scale_overrides is not None and tag in phenotype_scale_overrides:
+            override_scale = phenotype_scale_overrides[tag]
+            if override_scale < 0:
+                raise ValueError(
+                    f"phenotype_scale_overrides[{tag!r}]={override_scale} is negative"
+                )
+            scale = override_scale
+        transporter_tag = TRANSPORTER_ALIASES.get(tag)
+        if transporter_tag is not None:
+            if transporter_tag not in target_transporters:
+                unknown.append(f"{tag}→{transporter_tag}")
+                continue
+            old = target_transporters[transporter_tag]
+            new_transporters[transporter_tag] = Distribution(
+                mean=old.mean * scale,
+                cv=old.cv,
+                dist_type=old.dist_type,
+            )
+            applied.append(f"{tag}:{phenotype}({scale}×)→transporter")
+        else:
+            if tag not in target_enzymes:
+                unknown.append(tag)
+                continue
+            old = target_enzymes[tag]
+            new_enzymes[tag] = Distribution(
+                mean=old.mean * scale,
+                cv=old.cv,
+                dist_type=old.dist_type,
+            )
+            applied.append(f"{tag}:{phenotype}({scale}×)")
+
+    new_node = replace(target, enzymes=new_enzymes, transporters=new_transporters)
+    return new_node, applied, unknown
+
+
 def apply_phenotype_to_graph(
     graph: BodyGraph,
     phenotypes: dict[str, str],
@@ -147,47 +201,18 @@ def apply_phenotype_to_graph(
     target = graph.nodes[node]
     target_enzymes = target.enzymes
     target_transporters = getattr(target, "transporters", {}) or {}
-    new_enzymes: dict[str, Distribution] = dict(target_enzymes)
-    new_transporters: dict[str, Distribution] = dict(target_transporters)
-    applied: list[str] = []
-    unknown: list[str] = []
 
-    for tag, phenotype in phenotypes.items():
-        scale = PHENOTYPE_SCALES[phenotype]
-        if phenotype_scale_overrides is not None and tag in phenotype_scale_overrides:
-            override_scale = phenotype_scale_overrides[tag]
-            if override_scale < 0:
-                raise ValueError(
-                    f"phenotype_scale_overrides[{tag!r}]={override_scale} is negative"
-                )
-            logger.info(
-                "phenotype: override %s default scale %.3f -> %.3f",
-                tag, scale, override_scale,
-            )
-            scale = override_scale
-        transporter_tag = TRANSPORTER_ALIASES.get(tag)
-        if transporter_tag is not None:
-            if transporter_tag not in target_transporters:
-                unknown.append(f"{tag}→{transporter_tag}")
-                continue
-            old = target_transporters[transporter_tag]
-            new_transporters[transporter_tag] = Distribution(
-                mean=old.mean * scale,
-                cv=old.cv,
-                dist_type=old.dist_type,
-            )
-            applied.append(f"{tag}:{phenotype}({scale}×)→transporter")
-        else:
-            if tag not in target_enzymes:
-                unknown.append(tag)
-                continue
-            old = target_enzymes[tag]
-            new_enzymes[tag] = Distribution(
-                mean=old.mean * scale,
-                cv=old.cv,
-                dist_type=old.dist_type,
-            )
-            applied.append(f"{tag}:{phenotype}({scale}×)")
+    if phenotype_scale_overrides is not None:
+        for tag, phenotype in phenotypes.items():
+            if tag in phenotype_scale_overrides:
+                override_scale = phenotype_scale_overrides[tag]
+                if override_scale >= 0:
+                    logger.info(
+                        "phenotype: override %s default scale %.3f -> %.3f",
+                        tag, PHENOTYPE_SCALES[phenotype], override_scale,
+                    )
+
+    new_node, applied, unknown = _scale_node(target, phenotypes, phenotype_scale_overrides)
 
     if phenotype_scale_overrides:
         unused_overrides = sorted(set(phenotype_scale_overrides) - set(phenotypes))
@@ -206,7 +231,6 @@ def apply_phenotype_to_graph(
     if applied:
         logger.info("phenotype: applied %s at %s", ", ".join(applied), node)
 
-    new_node = replace(target, enzymes=new_enzymes, transporters=new_transporters)
     new_graph = BodyGraph()
     new_graph.nodes = dict(graph.nodes)
     new_graph.nodes[node] = new_node
