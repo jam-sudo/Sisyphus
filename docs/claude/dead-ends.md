@@ -391,6 +391,24 @@ Artifacts: gate workflow `next-step-measured-regime-gate`; analysis `docs/claude
 
 ---
 
+### DE-49 — Genotype-nonlinearity "two-arm" validation: clinical data HALT + systemic-sign non-invariance (2026-06-17)
+
+**Date:** 2026-06-17
+
+**Hypothesis (spec `2026-06-16-pgx-genotype-nonlinearity-two-arm-design.md`):** the v2.2a saturable MM engine, with literature `Km` on the gene fraction, reproduces genotype-stratified *nonlinear dose-dependence* a linear model cannot — in **two arms with opposite, topology-determined signs**: systemic clearance (phenytoin/CYP2C9) → PM's low Vmax saturates first → fold **diverges** (`Δβ>0`); first-pass extraction (propafenone/CYP2D6, axial liver) → EM's high extraction saturates → fold **converges** (`Δβ<0`). Harness-isolated; headline 2.731 untouched throughout.
+
+**Two independent failures:**
+1. **Data-availability HALT (§4.1).** No citable ≥2-dose **genotype-stratified** exposure grid exists for either clean-primary. Phenytoin: only dose-*requirement* at constant Css (van der Weide 2001) or paywalled per-genotype Vmax (Mamiya 1998); the `*3/*3` activity fraction was **not found** and **not invented**. Propafenone: clean EM/PM cross only at a **single** 300 mg dose (Tran 2022) + within-EM dose-nonlinearity (Siddoway 1987). The full genotype cross-term (P2) is **not validatable on citable human data**.
+2. **Systemic-sign non-invariance (refutes spec §5.2).** A synthetic Km×clearance sweep showed the **systemic `Δβ` sign flips**: divergence at mild saturation (high Km), **convergence at deep saturation (low Km — the phenytoin-relevant regime)**. "Systemic always diverges" is false; it holds only where PM nears its own Vmax ceiling while EM stays mildly saturated. The **first-pass convergence (`Δβ<0`) IS robust** (PM≈0 activity pins `β_PM≡1` → structural contrast).
+
+**What survives (shipped, honest):** the **first-pass arm** — the axial engine robustly produces EM-nonlinear/PM-linear genotype-modulated first-pass saturation (`Δβ<0` across the param box), the axial liver resolves a higher hepatic-inlet `C_u` than `well_stirred` (the mechanism), and the engine reproduces propafenone EM within-dose **supra-proportionality** (`β_EM>1`) matching Siddoway 1987's direction (linear-null `β=1`). Also corrected: the `1/(1−fm)` oracle is **well_stirred-only** (parallel_tube ≈3.98 vs 5.0 — topology, not a bug; strict `xfail`).
+
+**Telltale if it returns:** "the engine produces a clean opposite-sign genotype-nonlinearity invariant (systemic diverges / first-pass converges)." Only the first-pass convergence is robust; the systemic sign is **regime-dependent** and in the phenytoin-relevant regime gives the *wrong* sign vs phenytoin's clinical divergence — and there is no citable crossed-grid data to validate the systemic arm anyway. Reusable: the data-independent first-pass/axial demonstration + Siddoway EM P1; NOT a systemic genotype-fold claim. Headline 2.731 untouched (harness-isolated).
+
+Artifacts: `scripts/validate_pgx_cmax_v2b.py`, `tests/integration/test_pgx_arm_sign_mechanism.py`, `data/validation/pgx_genotype_nonlinearity_folds.json` (HALT recorded), `src/sisyphus/validation/pgx_metrics.py`.
+
+---
+
 ## 3. When to consult this list
 
 - Before writing a design spec for any accuracy improvement.

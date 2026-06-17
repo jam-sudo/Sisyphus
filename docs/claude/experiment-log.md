@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-16
+last_updated: 2026-06-17
 parent: ../../CLAUDE.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -7,6 +7,21 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 # Experiment Log
 
 Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
+
+---
+
+## 2026-06-17 — PGx genotype-nonlinearity two-arm validation: first-pass SHIPS, systemic DEAD-ENDS (DE-49)
+
+Successor to the multi-dose pivot below. Spec `docs/superpowers/specs/2026-06-16-pgx-genotype-nonlinearity-two-arm-design.md`, plan `docs/superpowers/plans/2026-06-16-pgx-genotype-nonlinearity-two-arm.md`. Built on the merged **(A) axial phenotype fix (PR #79)**. Harness-isolated; **headline 2.731 bit-identical** (guarded: holdout cache byte-unchanged + `test_mm_headline_bit_identity` + `test_cached_holdout_aafe_is_2p731` pass after the harness runs).
+
+**Hypothesis (capability-existence, two arms, opposite signs):** the v2.2a saturable MM engine reproduces genotype-stratified nonlinear dose-dependence a linear model cannot — systemic (phenytoin/CYP2C9) fold **diverges** (`Δβ>0`), first-pass (propafenone/CYP2D6, axial) fold **converges** (`Δβ<0`). Two ultrathink passes pre-corrected the metric (dose-trend not fixed-dose fold; realistic PM scaling not gene→0; arm-specific signs).
+
+**Outcome — partial ship, two honest negatives (→ DE-49):**
+- ✅ **First-pass arm SHIPS.** The axial engine robustly produces `Δβ<0` (EM-nonlinear/PM-linear) across the Km×cltot box (PM≈0 activity pins `β_PM≡1` → structural); axial liver resolves higher hepatic-inlet `C_u` than `well_stirred`; and it reproduces propafenone EM within-dose **supra-proportionality** `β_EM>1` matching Siddoway 1987 (Circulation 75:785, PMID 2434237) direction (linear-null `β=1`). Measured: first-pass `Δβ≈−0.32`.
+- ❌ **Systemic arm DEAD-ENDS twice.** (1) **Data HALT:** no citable ≥2-dose genotype-stratified Css/AUC grid exists (phenytoin — van der Weide dose-requirement only / Mamiya Vmax paywalled, `*3/*3` fraction not found & **not invented**; propafenone clean cross only at 300 mg, Tran 2022). (2) **Sign non-invariance (refutes spec §5.2):** a Km×clearance sweep showed the systemic `Δβ` sign **flips** — divergence at high Km, **convergence at low Km (the phenytoin-relevant regime, the *wrong* sign vs phenytoin's clinical divergence)**. "Systemic always diverges" is false.
+- ⚠ **`1/(1−fm)` oracle is well_stirred-only** (axial parallel_tube ≈3.98 vs 5.0 — topology, not a bug; strict `xfail`). Spec §5.4 corrected.
+
+**Process:** Task-1 helpers + Task-2 honest dataset (`pgx_genotype_nonlinearity_folds.json`, crossed-grid HALT recorded) + harness/mechanism/oracle/P1/isolation tests (`tests/integration/test_pgx_arm_sign_mechanism.py`, 10 passed / 1 xfail). Literature curation surfaced two data-quality catches: propafenone `fup`≈0.10 (not 0.30), Kroemer/Hemeryck `Km` unconfirmed. No fold magnitudes fit; no genotype-activity fraction invented. Capability-existence framing chosen by the user; full crossed-grid HALTed per the no-cherry-picking discipline. See DE-49.
 
 ---
 
