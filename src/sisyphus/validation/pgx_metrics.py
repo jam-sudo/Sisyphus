@@ -7,6 +7,8 @@ in isolation. See docs/superpowers/specs/2026-06-14-pgx-genotype-fold-validation
 """
 from __future__ import annotations
 
+import math
+
 import numpy as np
 
 
@@ -114,3 +116,41 @@ def box_robustness_pass(deltas: list[float], threshold: float = 0.10) -> bool:
     if not deltas:
         raise ValueError("deltas must be non-empty")
     return all(d > threshold for d in deltas)
+
+
+def zonation_weights(n: int, ratio: float, direction: str, shape: str = "linear") -> list[float]:
+    """Per-sub-tank abundance weights (sum=1) for an axial zonation gradient.
+
+    direction: 'pericentral' (increasing toward the OUTLET tank N), 'periportal'
+    (decreasing toward the outlet), or 'uniform'. ratio = w_max/w_min (>=1; 1 => uniform).
+    shape='linear' is an evenly-spaced ramp.
+    """
+    if n < 1:
+        raise ValueError(f"n must be >= 1, got {n}")
+    if ratio < 1.0:
+        raise ValueError(f"ratio must be >= 1, got {ratio}")
+    if direction == "uniform" or ratio == 1.0:
+        return [1.0 / n] * n
+    if direction not in ("pericentral", "periportal"):
+        raise ValueError(f"unknown direction {direction!r}")
+    if shape != "linear":
+        raise ValueError(f"unknown shape {shape!r}")
+    if n == 1:
+        return [1.0]
+    raw = [1.0 + (ratio - 1.0) * i / (n - 1) for i in range(n)]  # raw[0]=1 ... raw[-1]=ratio
+    if direction == "periportal":
+        raw = raw[::-1]
+    s = sum(raw)
+    return [r / s for r in raw]
+
+
+def plugflow_E_linear(fu: float, clint_total: float, q: float) -> float:
+    """Plug-flow (N->inf) hepatic extraction for LINEAR clearance: 1 - exp(-fu*CLint/Q).
+
+    Reference value for the axial-cascade convergence (G2). NOTE: the engine applies an
+    internal ivive_scaling, so the engine's measured E converges to this SHAPE with an
+    effective CLint, not necessarily this exact constant.
+    """
+    if q <= 0:
+        raise ValueError(f"q must be > 0, got {q}")
+    return 1.0 - math.exp(-fu * clint_total / q)
