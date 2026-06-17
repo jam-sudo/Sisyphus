@@ -67,3 +67,17 @@ def delta_E(gene_tag, fm, n_sub, ratio, direction, cltot, fup, mw, km_mgl=None,
     g_zon = apply_zonation(g_uni, gene_tag, w)
     e_zon = h._engine_e_h(g_zon, gene_tag, fm, cltot, abund, peff, kp, fup, dose_mg, mw, km_mgl)
     return e_zon - e_uni, e_uni, e_zon
+
+
+def e_curve(gene_tag, fm, n_list, cltot, fup, mw, direction="uniform", ratio=1.0,
+            km_mgl=None):
+    """E at each N in n_list (uniform if ratio==1, else zonated). For convergence checks."""
+    out = []
+    abund = h._SYNTHETIC_GENE_ABUND
+    for n_sub in n_list:
+        g = h._axial_graph(gene_tag, n_sub=n_sub)
+        if ratio != 1.0 and direction != "uniform":
+            g = apply_zonation(g, gene_tag, zonation_weights(n_sub, ratio, direction))
+        out.append(h._engine_e_h(g, gene_tag, fm, cltot, abund, 20.0, 3.0, fup, 100.0,
+                                 mw, km_mgl))
+    return out
