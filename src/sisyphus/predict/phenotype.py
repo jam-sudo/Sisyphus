@@ -31,6 +31,7 @@ from dataclasses import replace
 
 from sisyphus.core import Distribution
 from sisyphus.graph.body import BodyGraph
+from sisyphus.graph.types import Node
 
 logger = logging.getLogger(__name__)
 
@@ -110,41 +111,15 @@ def parse_phenotype_spec(spec: str) -> dict[str, str]:
     return out
 
 
-def apply_phenotype_to_graph(
-    graph: BodyGraph,
+def _scale_node(
+    target: Node,
     phenotypes: dict[str, str],
-    node: str = "liver",
-    phenotype_scale_overrides: dict[str, float] | None = None,
-) -> BodyGraph:
-    """Return a new BodyGraph with enzyme/transporter abundances scaled.
+    phenotype_scale_overrides: dict[str, float] | None,
+) -> tuple[Node, list[str], list[str]]:
+    """Scale one node's enzyme/transporter abundances by the phenotype factors.
 
-    Args:
-        graph: Input body graph (unchanged).
-        phenotypes: {tag: phenotype_code} from ``parse_phenotype_spec``.
-            Tag may be a CYP enzyme (``CYP2D6``) or transporter gene
-            (``SLCO1B1``, aliased to graph transporter ``OATP1B1``).
-        node: Which node to scale. Default "liver". Enzymes and
-            transporters are both sourced from ``graph.nodes[node]``.
-        phenotype_scale_overrides: Optional ``{gene: effective_scale}`` dict.
-            When provided AND a gene matches a key in ``phenotypes``, the
-            override value replaces ``PHENOTYPE_SCALES[phenotype]`` for that
-            gene's effect on the matched node's enzyme/transporter abundance.
-            Values are caller-supplied and caller-justified — Sisyphus does
-            not endorse specific values. Negative values raise ValueError.
-            Default ``None`` preserves current behavior.
-
-    Returns:
-        New BodyGraph with scaled Distribution for matched enzymes /
-        transporters. The CV is preserved so MC sampling still captures
-        population variability *on top of* the phenotype.
+    Pure: returns ``(new_node, applied, unknown)`` and does not log.
     """
-    if not phenotypes:
-        return graph
-    if node not in graph.nodes:
-        logger.warning("phenotype: node %r not in graph, skipping", node)
-        return graph
-
-    target = graph.nodes[node]
     target_enzymes = target.enzymes
     target_transporters = getattr(target, "transporters", {}) or {}
     new_enzymes: dict[str, Distribution] = dict(target_enzymes)
@@ -160,10 +135,6 @@ def apply_phenotype_to_graph(
                 raise ValueError(
                     f"phenotype_scale_overrides[{tag!r}]={override_scale} is negative"
                 )
-            logger.info(
-                "phenotype: override %s default scale %.3f -> %.3f",
-                tag, scale, override_scale,
-            )
             scale = override_scale
         transporter_tag = TRANSPORTER_ALIASES.get(tag)
         if transporter_tag is not None:
@@ -189,6 +160,75 @@ def apply_phenotype_to_graph(
             )
             applied.append(f"{tag}:{phenotype}({scale}×)")
 
+    new_node = replace(target, enzymes=new_enzymes, transporters=new_transporters)
+    return new_node, applied, unknown
+
+
+def apply_phenotype_to_graph(
+    graph: BodyGraph,
+    phenotypes: dict[str, str],
+    node: str = "liver",
+    phenotype_scale_overrides: dict[str, float] | None = None,
+) -> BodyGraph:
+    """Return a new BodyGraph with enzyme/transporter abundances scaled.
+
+    Args:
+        graph: Input body graph (unchanged).
+        phenotypes: {tag: phenotype_code} from ``parse_phenotype_spec``.
+            Tag may be a CYP enzyme (``CYP2D6``) or transporter gene
+            (``SLCO1B1``, aliased to graph transporter ``OATP1B1``).
+        node: Which organ to scale, by identity. A node matches if its
+            ``name`` equals ``node`` OR its ``lookup_name`` equals ``node``.
+            On a normal graph this is the single literal node (e.g. "liver").
+            On an axially-expanded graph (``graph.axial.expand_axial``) it is
+            every sub-tank ``liver__ax{i}`` (which carry ``lookup_name="liver"``),
+            so the organ total is scaled correctly. Default "liver".
+        phenotype_scale_overrides: Optional ``{gene: effective_scale}`` dict.
+            When provided AND a gene matches a key in ``phenotypes``, the
+            override value replaces ``PHENOTYPE_SCALES[phenotype]`` for that
+            gene's effect on the matched node's enzyme/transporter abundance.
+            Values are caller-supplied and caller-justified — Sisyphus does
+            not endorse specific values. Negative values raise ValueError.
+            Default ``None`` preserves current behavior.
+
+    Returns:
+        New BodyGraph with scaled Distribution for matched enzymes /
+        transporters. The CV is preserved so MC sampling still captures
+        population variability *on top of* the phenotype.
+    """
+    if not phenotypes:
+        return graph
+
+    targets = [
+        n for n in graph.nodes.values()
+        if n.name == node or (n.lookup_name or "") == node
+    ]
+    if not targets:
+        logger.warning("phenotype: node %r not in graph, skipping", node)
+        return graph
+
+    if phenotype_scale_overrides is not None:
+        for tag, phenotype in phenotypes.items():
+            if tag in phenotype_scale_overrides:
+                override_scale = phenotype_scale_overrides[tag]
+                if override_scale >= 0:
+                    logger.info(
+                        "phenotype: override %s default scale %.3f -> %.3f",
+                        tag, PHENOTYPE_SCALES[phenotype], override_scale,
+                    )
+
+    new_nodes = dict(graph.nodes)
+    all_applied: list[str] = []
+    all_unknown: list[str] = []
+    last_target = targets[-1]
+    for target in targets:
+        new_node, applied, unknown = _scale_node(
+            target, phenotypes, phenotype_scale_overrides
+        )
+        new_nodes[target.name] = new_node
+        all_applied.extend(applied)
+        all_unknown.extend(unknown)
+
     if phenotype_scale_overrides:
         unused_overrides = sorted(set(phenotype_scale_overrides) - set(phenotypes))
         if unused_overrides:
@@ -196,20 +236,23 @@ def apply_phenotype_to_graph(
                 "phenotype: overrides for %s not in phenotypes dict, ignored",
                 unused_overrides,
             )
-
-    if unknown:
-        available = sorted(list(target_enzymes) + [f"(transporter){t}" for t in target_transporters])  # noqa: E501
+    if all_unknown:
+        available = sorted(
+            list(last_target.enzymes)
+            + [f"(transporter){t}" for t in (getattr(last_target, "transporters", {}) or {})]
+        )
         logger.warning(
             "phenotype: tags %s not found in %s (available: %s)",
-            unknown, node, available,
+            sorted(set(all_unknown)), node, available,
         )
-    if applied:
-        logger.info("phenotype: applied %s at %s", ", ".join(applied), node)
+    if all_applied:
+        logger.info(
+            "phenotype: applied %s at %s (%d node(s))",
+            ", ".join(sorted(set(all_applied))), node, len(targets),
+        )
 
-    new_node = replace(target, enzymes=new_enzymes, transporters=new_transporters)
     new_graph = BodyGraph()
-    new_graph.nodes = dict(graph.nodes)
-    new_graph.nodes[node] = new_node
+    new_graph.nodes = new_nodes
     new_graph.edges = list(graph.edges)
     new_graph.global_params = dict(graph.global_params)
     return new_graph
