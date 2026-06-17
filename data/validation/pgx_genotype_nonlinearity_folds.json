@@ -1,0 +1,51 @@
+{
+  "meta": {
+    "purpose": "Locked observed evidence for the genotype-nonlinearity validation. Never refit.",
+    "spec": "docs/superpowers/specs/2026-06-16-pgx-genotype-nonlinearity-two-arm-design.md",
+    "status": "CROSSED_GRID_HALTED",
+    "halt_reason": "Data-availability gate (spec §4.1) FAILED for both clean-primaries: no citable >=2-dose genotype-stratified exposure grid exists. Phenytoin — per-genotype Michaelis-Menten Vmax is paywalled (Mamiya 1998, PMID 9860067; abstract gives only Vmax(*1/*3)~=0.58*Vmax(*1/*1)); the *3/*3 activity fraction was not found in any accessible source. Propafenone — clean EM/PM cross exists only at a single 300 mg dose (Tran 2022, PMC9324789); the within-EM dose-nonlinearity is documented (Siddoway 1987, PMID 2434237) but not stratified at >=2 genotype-crossed doses. The full genotype cross-term (P2) is NOT validatable on citable human data. Per the correctness-over-benchmark / no-cherry-picking discipline, the *3/*3 fraction was NOT invented. See data-independent arm-sign mechanism result + the propafenone EM P1 check below.",
+    "units": {"exposure": "relative (ratio) or stated", "conc": "ng/mL or ug/mL as stated", "auc": "ug*h/mL", "mw": "g/mol"}
+  },
+  "available_evidence": [
+    {
+      "drug": "propafenone", "gene": "CYP2D6", "arm": "first_pass", "tier": "p1_em_dose_response",
+      "evidence_type": "within_genotype_supraproportionality",
+      "genotype": "EM", "liver_model": "parallel_tube",
+      "mw": 341.4, "fm_cyp2d6": 0.80, "fup_note": "literature ~0.10 (≈90% protein bound); the assumed 0.30 is too high — flagged by literature audit",
+      "km_uM_candidates": {"Kroemer1989": 5.3, "Hemeryck": 0.12, "note": "neither confirmed in accessible sources; span retained for the box probe"},
+      "fu_mic_assumed": 0.5,
+      "observed": {
+        "doses_mg_per_day": [300.0, 900.0],
+        "relative_steadystate_conc": [1.0, 10.0],
+        "beta_obs_loglog": 2.10,
+        "statement": "~10-fold rise in steady-state concentration as dose increased 3-fold (300->900 mg/day) in EXTENSIVE metabolizers — saturable first-pass.",
+        "source": "Siddoway 1987, Circulation 75(4):785-791, PMID 2434237"
+      },
+      "p1_role": "The engine (axial saturable, EM) should reproduce a supra-proportional beta_EM>1 (ideally near 2.1); the linear-null gives beta=1.0. This is the one citable clinical saturation signature."
+    },
+    {
+      "drug": "propafenone", "gene": "CYP2D6", "arm": "first_pass", "tier": "context_single_dose_fold",
+      "evidence_type": "single_dose_genotype_fold_NOT_saturation_specific",
+      "dose_mg": 300.0,
+      "observed": {
+        "auc_em_ug_h_mL": 1.41, "auc_pm_ug_h_mL": 15.9, "auc_fold_pm_over_em": 11.23,
+        "cmax_em_ug_mL": 0.453, "cmax_pm_ug_mL": 1.10, "cmax_fold_pm_over_em": 2.42,
+        "thalf_em_h": 2.73, "thalf_pm_h": 12.8,
+        "source": "Tran 2022 meta-analysis, Pharmaceutics 14(7):1446, PMC9324789 (pooled n=31)"
+      },
+      "note": "Recorded as CONTEXT only. The 11.2x fold EXCEEDS the linear-null 1/(1-fm)=5x, so saturation predicts a SMALLER fold — this is the base genotype + bioavailability + t1/2 effect, NOT a saturation-validation point (same trap as voriconazole). NOT scored as a saturation signal."
+    },
+    {
+      "drug": "phenytoin", "gene": "CYP2C9", "arm": "systemic", "tier": "HALTED",
+      "evidence_type": "no_citable_crossed_grid",
+      "mw": 252.3, "fm_cyp2c9": 0.90, "fup": 0.10,
+      "what_exists": [
+        {"finding": "dose requirement at constant Css", "values": {"wt_*1/*1_mg_per_day": 314, "variant_carrier_mg_per_day": 199, "delta_pct": -37}, "source": "van der Weide 2001, Pharmacogenetics 11(4):287-291, PMID 11434505", "note": "inverse of what is needed (Css held ~constant); no dose-Css-by-genotype curve"},
+        {"finding": "Vmax(*1/*3) ~= 0.58 * Vmax(*1/*1) (42% lower, heterozygote)", "source": "Mamiya 1998, Epilepsia 39(12):1317-1323, PMID 9860067 (abstract; full table paywalled)", "note": "absolute Vmax/Km and *3/*3 homozygote NOT in abstract"}
+      ],
+      "halt": "No accessible Css-vs-dose-by-genotype data and no citable *3/*3 pm_gene_activity fraction. Systemic arm HALTED; not fabricated."
+    }
+  ],
+  "negative_controls_note": "Clinical negative-control scoring (tolbutamide hard-null, metoprolol mild-positive) also requires genotype-stratified dose data not curated here; the engine-side non-engagement is instead demonstrated synthetically in the arm-sign mechanism tests (high-Km synthetic gene -> beta~=1).",
+  "data_independent_result_pointer": "The primary deliverable under this scope is the data-independent arm-sign mechanism demonstration (tests/integration/test_pgx_arm_sign_mechanism.py): the engine produces delta_beta>0 (systemic divergence) and delta_beta<0 (first-pass convergence) from topology+MM with realistic PM scaling — no clinical data, no fitting."
+}
