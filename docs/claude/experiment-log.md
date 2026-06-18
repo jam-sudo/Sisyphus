@@ -10,6 +10,22 @@ Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the *
 
 ---
 
+## 2026-06-17 — Liver-zonation invariance probe: zonation is NOT a bulk-first-pass lever (DE-50)
+
+Bridge A from the 2026-06-17 virtual-cell fusion research ("parameterize the axial liver with cell/spatial-atlas zonation"). Spec `docs/superpowers/specs/2026-06-17-liver-zonation-phase0-design.md`, plan `…/plans/2026-06-17-liver-zonation-invariance.md`. Harness-isolated (`scripts/probe_liver_zonation.py`); headline **2.731 bit-identical** (guarded). Reuses the merged axial machinery (PR #79) + the v2.2a saturable flux.
+
+**Course-correction (ultrathink, pre-implementation).** The original premise — "does zonating a hepatic enzyme along the axial liver change first-pass / Cmax?" — was **refuted analytically**: in the continuous (plug-flow) limit, `Km·ln(c_out/c_in) + (c_out − c_in) = −V_total/Q`, so extraction depends only on the **total** enzyme, not its spatial distribution (MM and, as Km→∞, linear). The probe was reframed to **demonstrate** that invariance.
+
+**Result — invariance confirmed on the real engine (the honest negative).** `ΔE(N) = E_zonated − E_uniform → 0` as the sub-tank count grows (clean ~1/N decay), for both regimes, both directions, ratios 2–3:
+- linear (E≈0.45): |ΔE| 1.9e-4 (N=5) → 8.4e-6 (N=80);
+- saturable (E≈0.96, Km=0.5): |ΔE| 8.8e-4 (N=5) → 5.5e-5 (N=80).
+
+The finite-N effect is a **CSTR-discretization artifact** (the `_DEFAULT_AXIAL_N=10` choice), not physiology. **G3 characterization:** the artifact is direction-**symmetric** for linear clearance (convexity; |asym|≈4e-10) but direction-**asymmetric** for saturable (|asym|≈1.7e-4, **periportal > pericentral** — inlet enzyme faces higher [C] → higher MM rate; matches the §2 derivation and a 2-tank steady-state calc). Both asymmetry and convexity decay with N. **G2:** the axial cascade converges (E stabilizes; uniform and zonated share the limit) — a bonus correctness check on the PR-#79 discretization.
+
+**Takeaway.** Zonation is **not** a bulk-first-pass / Cmax lever (plug-flow invariance) → DE-50. Its real pharmacological value is **zonal/local** (pericentral bioactivation → zone-3 toxicity), i.e. **Bridge B (PD/toxicity)**, which consumes the engine's per-sub-tank concentrations — separately specced. A productized `zonation_profile` for bulk PK is **not** warranted. Report `data/validation/liver_zonation_invariance_2026-06-17.{json,md}`.
+
+---
+
 ## 2026-06-17 — PGx genotype-nonlinearity two-arm validation: first-pass SHIPS, systemic DEAD-ENDS (DE-49)
 
 Successor to the multi-dose pivot below. Spec `docs/superpowers/specs/2026-06-16-pgx-genotype-nonlinearity-two-arm-design.md`, plan `docs/superpowers/plans/2026-06-16-pgx-genotype-nonlinearity-two-arm.md`. Built on the merged **(A) axial phenotype fix (PR #79)**. Harness-isolated; **headline 2.731 bit-identical** (guarded: holdout cache byte-unchanged + `test_mm_headline_bit_identity` + `test_cached_holdout_aafe_is_2p731` pass after the harness runs).
