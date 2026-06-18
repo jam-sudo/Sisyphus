@@ -55,3 +55,26 @@ def _parent_profile_by_zone(gene_tag, fm, n_sub, cltot, fup, mw, km_mgl, dose_mg
     names = _subtank_names(g)
     c_u_by_zone = [fup * np.asarray(res.concentrations[nm]) for nm in names]
     return c_u_by_zone, np.asarray(res.time_h)
+
+
+def zone_hazard_profile(gene_tag, fm, n_sub, cltot, fup, mw, km_mgl, dose_mg,
+                        bio_direction, bio_ratio, detox_direction, detox_ratio,
+                        vmax_bio_total, vmax_detox_total, km_bio):
+    """Per-zone hazard for given bioactivation- and detox-zonation (independent),
+    totals preserved. Returns per-zone hazard (inlet->outlet)."""
+    c_by_zone, time = _parent_profile_by_zone(gene_tag, fm, n_sub, cltot, fup, mw,
+                                              km_mgl, dose_mg)
+    wbio = zonation_weights(n_sub, bio_ratio, bio_direction)
+    wdet = zonation_weights(n_sub, detox_ratio, detox_direction)
+    vmax_bio = [vmax_bio_total * w for w in wbio]
+    vmax_detox = [vmax_detox_total * w for w in wdet]
+    return zonal_hazard(c_by_zone, vmax_bio, km_bio, vmax_detox, time)
+
+
+def bulk_E(gene_tag, fm, n_sub, cltot, fup, mw, km_mgl, bio_direction, bio_ratio):
+    """Bulk parent extraction with the bioactivation enzyme zonated (G2 invariance arm)."""
+    from scripts.probe_liver_zonation import apply_zonation
+    g = h._axial_graph(gene_tag, n_sub=n_sub)
+    g = apply_zonation(g, gene_tag, zonation_weights(n_sub, bio_ratio, bio_direction))
+    return h._engine_e_h(g, gene_tag, fm, cltot, h._SYNTHETIC_GENE_ABUND, 20.0, 3.0,
+                         fup, 100.0, mw, km_mgl)

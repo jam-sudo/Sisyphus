@@ -29,3 +29,38 @@ def test_parent_profile_by_zone_decreasing_inlet_to_outlet():
     assert len(c_by_zone) == 10 and len(time) == len(c_by_zone[0])
     peaks = [float(np.max(c)) for c in c_by_zone]
     assert peaks[0] > peaks[-1] > 0          # extracted along the tube
+
+
+def _aceta_cfg():
+    """Acetaminophen-like config (controller-calibrated): bioactivation pericentral-high,
+    detox pericentral-LOW (periportal-high), Km_bio above low-dose C_u so a clean dose-
+    threshold exists. Synthetic-param selection for mechanism visibility, NOT clinical fit."""
+    return dict(gene_tag="CYP3A4", fm=0.9, n_sub=10, cltot=1.0e6, fup=0.3, mw=300.0,
+                km_mgl=0.5, vmax_bio_total=300.0, vmax_detox_total=15.0, km_bio=1.0)
+
+
+def test_G1_hazard_localizes_pericentral_for_aceta_config():
+    """G1 (sanity): bio pericentral-high + detox pericentral-low -> hazard peaks at the
+    OUTLET zone (zone 3)."""
+    p = _probe()
+    cfg = _aceta_cfg()
+    haz = p.zone_hazard_profile(**cfg, dose_mg=200.0, bio_direction="pericentral",
+                                bio_ratio=3.0, detox_direction="periportal", detox_ratio=3.0)
+    assert int(np.argmax(haz)) >= cfg["n_sub"] - 3
+
+
+def test_G2_bulk_E_invariant_while_hazard_profile_varies():
+    """G2 (centerpiece, DE-50 closure): varying bioactivation zonation leaves bulk parent
+    E ~invariant while the per-zone hazard peak-zone moves materially."""
+    p = _probe()
+    cfg = _aceta_cfg()
+    e_peri = p.bulk_E(cfg["gene_tag"], cfg["fm"], cfg["n_sub"], cfg["cltot"], cfg["fup"],
+                      cfg["mw"], cfg["km_mgl"], "pericentral", 3.0)
+    e_port = p.bulk_E(cfg["gene_tag"], cfg["fm"], cfg["n_sub"], cfg["cltot"], cfg["fup"],
+                      cfg["mw"], cfg["km_mgl"], "periportal", 3.0)
+    assert abs(e_peri - e_port) < 0.01                       # bulk ~invariant (DE-50)
+    haz_peri = p.zone_hazard_profile(**cfg, dose_mg=200.0, bio_direction="pericentral",
+                                     bio_ratio=3.0, detox_direction="uniform", detox_ratio=1.0)
+    haz_port = p.zone_hazard_profile(**cfg, dose_mg=200.0, bio_direction="periportal",
+                                     bio_ratio=3.0, detox_direction="uniform", detox_ratio=1.0)
+    assert int(np.argmax(haz_peri)) != int(np.argmax(haz_port))   # peak moves with zonation
