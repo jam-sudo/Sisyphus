@@ -71,7 +71,6 @@ Sisyphus/
 ├── scripts/                    # Training, benchmarking, and analysis scripts (13 files)
 ├── docs/                       # Documentation
 ├── pyproject.toml              # Build config, dependencies, ruff/pytest settings
-├── CLAUDE.md                   # AI coding assistant instructions
 ├── DESIGN.md                   # Full design specification (authoritative)
 └── README.md                   # Project readme
 ```

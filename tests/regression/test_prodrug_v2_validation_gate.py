@@ -5,7 +5,7 @@ documented reason. Affinity values NOT adjusted to make tests pass --
 mechanistic-A core promise.
 
 v3 update (2026-05-01, prodrug-v3 dispositions per
-docs/superpowers/specs/2026-04-29-prodrug-v3-literature.md):
+docs/_internal/specs/2026-04-29-prodrug-v3-literature.md):
 4 of 4 drugs remain xfail. v3 brought 2 literature-applied registry
 updates (Items 2 + 3); fold errors essentially unchanged because
 conversion-step extraction efficiency (well-stirred E ~1 at high CLint)

@@ -3,7 +3,7 @@
 Replace SPR/CES1/CES2/ALPI with random strings everywhere
 (physiology YAML + registry JSON); numerical Cmax must be byte-identical.
 
-Verifies invariant 1 ("Engine is identity-blind") of CLAUDE.md against
+Verifies invariant 1 ("Engine is identity-blind") against
 v2 prodrug enzyme infrastructure.
 """
 from __future__ import annotations

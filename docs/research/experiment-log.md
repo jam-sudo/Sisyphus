@@ -1,18 +1,18 @@
 ---
 last_updated: 2026-06-17
-parent: ../../CLAUDE.md
+parent: ../../README.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
 
 # Experiment Log
 
-Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
+Reverse-chronological. The project README carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
 
 ---
 
 ## 2026-06-18 — Bridge B / B1 Phase-0: zonal reactive-metabolite hazard — first PD/tox surface (POSITIVE)
 
-First concrete sub-project of **Bridge B** (the PD/toxicity surface from the 2026-06-17 virtual-cell fusion research) and the constructive closure of **DE-50**: zonation is invariant for *bulk* first-pass, but the *per-zone* reactive-metabolite hazard is exactly where it matters. Spec `docs/superpowers/specs/2026-06-18-zonal-reactive-metabolite-hazard-design.md`, plan `…/plans/2026-06-18-zonal-reactive-metabolite-hazard.md`. Harness-isolated (`scripts/probe_zonal_hazard.py`); headline **2.731 bit-identical** (guarded). Reuses the axial machinery (PR #79) + `zonation_weights` (DE-50).
+First concrete sub-project of **Bridge B** (the PD/toxicity surface from the 2026-06-17 virtual-cell fusion research) and the constructive closure of **DE-50**: zonation is invariant for *bulk* first-pass, but the *per-zone* reactive-metabolite hazard is exactly where it matters. Spec `docs/_internal/specs/2026-06-18-zonal-reactive-metabolite-hazard-design.md`, plan `…/plans/2026-06-18-zonal-reactive-metabolite-hazard.md`. Harness-isolated (`scripts/probe_zonal_hazard.py`); headline **2.731 bit-identical** (guarded). Reuses the axial machinery (PR #79) + `zonation_weights` (DE-50).
 
 **Design decision (senior-PK ultrathink).** Reading `ProdrugActivationFlux` showed that modeling the reactive metabolite as a *transported engine species* needs a bespoke multi-species axial chain + an unverified convective-transport assumption (a feasibility risk). De-risked to a **post-processor on the parent's per-sub-tank concentration profile**: per-zone hazard `H_i = ∫ max(0, MM(C_u,i; Vmax_bio,i, Km_bio) − Vmax_detox,i) dt` — local bioactivation **exceeding** local *zonated, saturable* detox (the GSH-analog). The real acetaminophen driver is the **interplay** of pericentral-high CYP2E1 and pericentral-**low** GSH.
 
@@ -27,7 +27,7 @@ First concrete sub-project of **Bridge B** (the PD/toxicity surface from the 202
 
 ## 2026-06-17 — Liver-zonation invariance probe: zonation is NOT a bulk-first-pass lever (DE-50)
 
-Bridge A from the 2026-06-17 virtual-cell fusion research ("parameterize the axial liver with cell/spatial-atlas zonation"). Spec `docs/superpowers/specs/2026-06-17-liver-zonation-phase0-design.md`, plan `…/plans/2026-06-17-liver-zonation-invariance.md`. Harness-isolated (`scripts/probe_liver_zonation.py`); headline **2.731 bit-identical** (guarded). Reuses the merged axial machinery (PR #79) + the v2.2a saturable flux.
+Bridge A from the 2026-06-17 virtual-cell fusion research ("parameterize the axial liver with cell/spatial-atlas zonation"). Spec `docs/_internal/specs/2026-06-17-liver-zonation-phase0-design.md`, plan `…/plans/2026-06-17-liver-zonation-invariance.md`. Harness-isolated (`scripts/probe_liver_zonation.py`); headline **2.731 bit-identical** (guarded). Reuses the merged axial machinery (PR #79) + the v2.2a saturable flux.
 
 **Course-correction (ultrathink, pre-implementation).** The original premise — "does zonating a hepatic enzyme along the axial liver change first-pass / Cmax?" — was **refuted analytically**: in the continuous (plug-flow) limit, `Km·ln(c_out/c_in) + (c_out − c_in) = −V_total/Q`, so extraction depends only on the **total** enzyme, not its spatial distribution (MM and, as Km→∞, linear). The probe was reframed to **demonstrate** that invariance.
 
@@ -43,7 +43,7 @@ The finite-N effect is a **CSTR-discretization artifact** (the `_DEFAULT_AXIAL_N
 
 ## 2026-06-17 — PGx genotype-nonlinearity two-arm validation: first-pass SHIPS, systemic DEAD-ENDS (DE-49)
 
-Successor to the multi-dose pivot below. Spec `docs/superpowers/specs/2026-06-16-pgx-genotype-nonlinearity-two-arm-design.md`, plan `docs/superpowers/plans/2026-06-16-pgx-genotype-nonlinearity-two-arm.md`. Built on the merged **(A) axial phenotype fix (PR #79)**. Harness-isolated; **headline 2.731 bit-identical** (guarded: holdout cache byte-unchanged + `test_mm_headline_bit_identity` + `test_cached_holdout_aafe_is_2p731` pass after the harness runs).
+Successor to the multi-dose pivot below. Spec `docs/_internal/specs/2026-06-16-pgx-genotype-nonlinearity-two-arm-design.md`, plan `docs/_internal/plans/2026-06-16-pgx-genotype-nonlinearity-two-arm.md`. Built on the merged **(A) axial phenotype fix (PR #79)**. Harness-isolated; **headline 2.731 bit-identical** (guarded: holdout cache byte-unchanged + `test_mm_headline_bit_identity` + `test_cached_holdout_aafe_is_2p731` pass after the harness runs).
 
 **Hypothesis (capability-existence, two arms, opposite signs):** the v2.2a saturable MM engine reproduces genotype-stratified nonlinear dose-dependence a linear model cannot — systemic (phenytoin/CYP2C9) fold **diverges** (`Δβ>0`), first-pass (propafenone/CYP2D6, axial) fold **converges** (`Δβ<0`). Two ultrathink passes pre-corrected the metric (dose-trend not fixed-dose fold; realistic PM scaling not gene→0; arm-specific signs).
 
@@ -94,9 +94,9 @@ validation (→ v2.2b, with its own data-feasibility gate) are out of scope. Spe
 
 ## 2026-06-15 — PGx v2.1 Cmax-fold HALTED at Step-0 gate → reorder to v2.2 (MM-flux first)
 
-The v2.1 implementation (subagent-driven) reached **Task 0 (Step-0 feasibility gate) and
+The v2.1 implementation reached **Step-0 feasibility gate and
 REVISED**: the powered set requires **linear** high-first-pass drugs, but three independent
-model-blind Opus curators (PubMed) confirmed only **1** qualifies (**metoprolol**). Gate
+automated literature-curation passes (PubMed) confirmed only **1** qualifies (**metoprolol**). Gate
 needs ≥5; not padded. Note `data/validation/pgx_cmax_feasibility_2026-06-15.md`.
 
 **The finding (why the gate fails — a real result, not a curation shortfall):** the
@@ -119,7 +119,7 @@ flurbiprofen fm 0.71) are preserved for reuse. **Headline 2.731 untouched throug
 ## 2026-06-15 — PGx v2.1 Cmax-fold feasibility probe (design-stage, no production change)
 
 Pre-implementation engine probe for the v2.1 **engine-differentiated** milestone (spec
-`docs/superpowers/specs/2026-06-15-pgx-cmax-fold-engine-differentiated-design.md`). v2.1 tests
+`docs/_internal/specs/2026-06-15-pgx-cmax-fold-engine-differentiated-design.md`). v2.1 tests
 whether the engine's first-pass ODE predicts the genotype **peak-to-exposure divergence**
 `ρ = log(Cmax_fold) − log(AUC_fold)` — a quantity with no closed form (v1's AUC-fold test was
 near-tautological). The probe (synthetic CYP2D6 PM drug, fm=0.9) settled four design questions
@@ -148,7 +148,7 @@ front-loaded as a harness spike in the implementation plan.
 
 ## 2026-06-14 — PGx genotype-fold validation (calibration·foundation): PM fm-agreement PASS, engine oracle confirmed
 
-A new **calibration·foundation** milestone (branch `feat/pgx-genotype-fold-validation`; spec `docs/superpowers/specs/2026-06-14-pgx-genotype-fold-validation-design.md`, plan `docs/superpowers/plans/2026-06-14-pgx-genotype-fold-validation.md`). **Headline 2.731 untouched** — this is an orthogonal within-drug-ratio axis that structurally bypasses the W1/W2/W3 walls; no `predict()` change.
+A new **calibration·foundation** milestone (branch `feat/pgx-genotype-fold-validation`; spec `docs/_internal/specs/2026-06-14-pgx-genotype-fold-validation-design.md`, plan `docs/_internal/plans/2026-06-14-pgx-genotype-fold-validation.md`). **Headline 2.731 untouched** — this is an orthogonal within-drug-ratio axis that structurally bypasses the W1/W2/W3 walls; no `predict()` change.
 
 **Primary result (parameter-free PM fm-agreement).** Independently-curated in-vitro fm (reaction-phenotyping) vs in-vivo-derived fm = 1 − 1/fold_PM (PM activity = 0), over **9 quantitative PM pairs** across the Big-3 CYP (CYP2D6/2C19/2C9) → **frac_within_0.15 = 1.00, OLS slope 0.735, MAD 0.050 → PASS.** Non-circular by construction: in-vitro reaction-phenotyping fm is independent of the clinical fold; circular genotype-derived fm (e.g. pantoprazole) was excluded per spec §9. Slope 0.735 sits at the low end of the [0.7, 1.3] acceptance band — in-vitro fm runs systematically a touch higher than in-vivo-derived fm for some CYP2C9/2C19 substrates (flurbiprofen, celecoxib); within tolerance, flagged for interpretation.
 
@@ -161,12 +161,12 @@ A new **calibration·foundation** milestone (branch `feat/pgx-genotype-fold-vali
 
 Two MIPD increments on the engine-as-prior posterior stack; both are new product surface, **not** holdout-headline levers (the 2.731 a-priori benchmark is untouched — with zero measured data the posterior reduces to the a-priori prediction).
 
-- **Dose recommendation / target attainment (`mipd/dosing.py`, commit `e580ce4`).** `recommend_dose(...)` inverts the IV steady-state TDM posterior into a dose that hits a `DoseTarget` (Css,max / Css,min / AUC) subject to `Constraint`s, evaluating candidate doses (`CandidateEval`) over the renal-CL posterior via `regimen.solver.solve_regimen`. Spec `docs/superpowers/specs/2026-06-12-mipd-dose-recommendation-design.md`; builds on `mipd/tdm.py` + `mipd/renal_grid.py`.
-- **Cockcroft-Gault CrCl estimation (`mipd/covariates.py`, commit `14399fb`).** When a measured CrCl is unavailable, estimate it from age/weight/sex/serum-creatinine and feed `Covariates.renal_factor()` — composes with the 06-11 renal individualization lever. Spec `docs/superpowers/specs/2026-06-12-mipd-cockcroft-gault-crcl-design.md`.
+- **Dose recommendation / target attainment (`mipd/dosing.py`, commit `e580ce4`).** `recommend_dose(...)` inverts the IV steady-state TDM posterior into a dose that hits a `DoseTarget` (Css,max / Css,min / AUC) subject to `Constraint`s, evaluating candidate doses (`CandidateEval`) over the renal-CL posterior via `regimen.solver.solve_regimen`. Spec `docs/_internal/specs/2026-06-12-mipd-dose-recommendation-design.md`; builds on `mipd/tdm.py` + `mipd/renal_grid.py`.
+- **Cockcroft-Gault CrCl estimation (`mipd/covariates.py`, commit `14399fb`).** When a measured CrCl is unavailable, estimate it from age/weight/sex/serum-creatinine and feed `Covariates.renal_factor()` — composes with the 06-11 renal individualization lever. Spec `docs/_internal/specs/2026-06-12-mipd-cockcroft-gault-crcl-design.md`.
 
 ## 2026-06-11 — MIPD covariate + steady-state IV TDM layer (CrCl renal individualization, IV trough TDM, weight/age graph swap)
 
-Three increments extending the 06-09 engine-as-prior core from a-priori posterior PK into **individualized** TDM. Specs/plans under `docs/superpowers/specs/2026-06-11-mipd-{crcl-renal-individualization,steady-state-iv-tdm,weight-age-covariates}-design.md`. All headline-neutral (new product surface; the holdout a-priori path is unchanged).
+Three increments extending the 06-09 engine-as-prior core from a-priori posterior PK into **individualized** TDM. Specs/plans under `docs/_internal/specs/2026-06-11-mipd-{crcl-renal-individualization,steady-state-iv-tdm,weight-age-covariates}-design.md`. All headline-neutral (new product surface; the holdout a-priori path is unchanged).
 
 - **CrCl renal individualization + conditioned-output surfacing.** `predict_posterior(..., covariates=Covariates(crcl_ml_min=...))` scales `drug.renal_clearance × CrCl/125`; the un-damped individualized engine posterior `post.cmax` is surfaced as the primary TDM estimate while the validated population blend + conformal band stay intact. Added `PosteriorPK.warnings` (structured flags) and an opt-in `ci_floor` CI-widening guard. Hardened against a 5-agent code-level verification + a spec self-review that corrected an over-confident output claim. Foundational, not a clinically-complete TDM product (renal-impairment benchmark deferred).
 - **Steady-state IV TDM (renal-CL latent).** `predict_tdm(...)` conditions the engine prior on a **steady-state IV trough** to individualize renal clearance — a free renal-CL latent (prior centered on the CrCl-implied value, updated by the measured trough) over a multi-dose `solve_regimen` solve. `RenalCLPrior`/`RenalCLGrid`/`RenalCLForward` (pure numpy), `sir_posterior_renal`, `PosteriorPK.renal_scale`. v1 is IV / single-trough / renal-drug scoped (vancomycin, aminoglycosides). Fixed an IV-infusion float-overshoot in `regimen.solver.solve_regimen` (clamp segment `t_eval` to span). `_build_grid_engine` extracted to share the engine-build point across the CLint and renal grids.
@@ -187,7 +187,7 @@ Three increments extending the 06-09 engine-as-prior core from a-priori posterio
 
 **Paracellular absorption (PR #70), the physics being finalized.** The engine modeled only transcellular `ka`; tight-junction-pore (paracellular) transport was unmodeled, so the engine under-predicted the small-hydrophilic class (cimetidine/metformin/atenolol-like). New `ParacellularAbsorptionEdge` + `ParacellularAbsorptionFluxSpec`: `Peff_para = P_scale·F_renkin(r_mol/R_pore)·E_charge`, all constants externally anchored (Avdeef 2010 PMID 20069445; Renkin 1954 PMID 13211998; R_pore 5.6 Å; Dahlgren 2016 PMID 27504798; Adson 1994), **none fit to holdout Cmax**. Size+charge gating is automatic (no logP gate). 24 unit tests; invariants #1/#2/#3/#4/#6/#8 held. Only propranolol's self-consistency snapshot moved (+8.5%).
 
-**Finalized to canonical 2.731:** cache `4track_holdout_predictions.json`, leak-audit baseline `prodrug_v3_pre_baseline.json`, CI bootstrap `4track_ci_2026-06-10_flux1.json`, cache-pin (`test_cached_holdout_aafe_is_2p784` → `_is_2p731`), tebipenem pin (0.30925 → 0.31189), CLAUDE.md headline table. Closes the "oxybutynin 2.784→2.758 pending regen" item in the 2026-06-08 entry. A [[correctness-over-benchmark]] cycle: the score floor is unchanged, but the pinned number was stale and the correct value is 2.731.
+**Finalized to canonical 2.731:** cache `4track_holdout_predictions.json`, leak-audit baseline `prodrug_v3_pre_baseline.json`, CI bootstrap `4track_ci_2026-06-10_flux1.json`, cache-pin (`test_cached_holdout_aafe_is_2p784` → `_is_2p731`), tebipenem pin (0.30925 → 0.31189), the README headline table. Closes the "oxybutynin 2.784→2.758 pending regen" item in the 2026-06-08 entry. A correctness-over-benchmark cycle: the score floor is unchanged, but the pinned number was stale and the correct value is 2.731.
 
 ---
 
@@ -205,7 +205,7 @@ Public preprint posted: **ChemRxiv, DOI [10.26434/chemrxiv.15004452/v1](https://
 
 ## 2026-06-09 — MIPD engine-as-prior posterior PK core (the pivot after the SMILES-only headline was foreclosed) — PR #69
 
-Shipped the core of the **engine-as-prior** repositioning: the mechanistic engine moves from a one-shot SMILES→Cmax oracle (walled at 2.78) to a **structural prior that any sparse measured observation sharply updates**. Charter `docs/superpowers/specs/2026-06-09-engine-as-prior-mipd-charter.md`; merge `4cb76ed`. New module `src/sisyphus/mipd/`.
+Shipped the core of the **engine-as-prior** repositioning: the mechanistic engine moves from a one-shot SMILES→Cmax oracle (walled at 2.78) to a **structural prior that any sparse measured observation sharply updates**. Charter `docs/_internal/specs/2026-06-09-engine-as-prior-mipd-charter.md`; merge `4cb76ed`. New module `src/sisyphus/mipd/`.
 
 - **Thesis:** engine = mechanistic structural prior; measured observation = likelihood; product = calibrated posterior over PK + interval. With zero measured data it reduces to today's a-priori prediction (so the **2.731 holdout headline is untouched**); each added observation (measured F, Cmax, AUC, a plasma conc) narrows it via SIR. The walled quantity is **bioavailability F** — not in the SMILES (formulation/salt/food/transporter genetics) — so the only lever that moves it is measured data. This is the direction after the SMILES-only program was empirically foreclosed (Test A meta-residual CV R²≤0; 48 dead-ends; `2026-06-09-differentiable-mechanism-calibrated-pbpk-design.md` §0).
 - **Shipped:** `mipd/core.py` (FPrior/MeasuredF/MeasuredCmax/MeasuredAUC, `sir_posterior`, `AnalyticForward`, `APrioriPK`/`PosteriorPK`); `mipd/clgrid.py` (CL latent + `MeasuredConc` via an engine clint-scale grid surrogate, `sir_posterior_2d`); `mipd/meta.py` (route the posterior through the meta blend for a product interval); `mipd/grid.py` (`build_cl_grid`). `predict` surfaces `engine_f` via a shared `detect_disposition`.
@@ -213,7 +213,7 @@ Shipped the core of the **engine-as-prior** repositioning: the mechanistic engin
 
 ## 2026-06-08 — Layered analysis + correctness batch: 4 more gate failures (DE-45/46/47/48), oxybutynin reference fix (2.784→2.758 pending regen)
 
-**Layered analysis (data / engine / ML+meta / validation-UQ).** Full per-layer audit (`docs/claude/layered-analysis-and-leap-2026-06-08.md`). Two structural results: (1) the **Cmax label-noise floor is AAFE ≈ 1.18** (14 clean study-replicate pairs in `mmpk_expanded_full.csv`), only 3–16% of the error variance → the ceiling is **model-limited, not label-limited** (refines diagnosis §1/§10; the "residual ≈ experimental variability" line is quantitatively false). (2) The binding wall is **bioavailability-F blindness, shared across all four tracks (W2)** — the unifying mechanism behind the decorrelation-gate failures: *the error, not the input, must decorrelate, and F-error is everywhere.*
+**Layered analysis (data / engine / ML+meta / validation-UQ).** Full per-layer audit (`docs/research/layered-analysis-and-leap-2026-06-08.md`). Two structural results: (1) the **Cmax label-noise floor is AAFE ≈ 1.18** (14 clean study-replicate pairs in `mmpk_expanded_full.csv`), only 3–16% of the error variance → the ceiling is **model-limited, not label-limited** (refines diagnosis §1/§10; the "residual ≈ experimental variability" line is quantitatively false). (2) The binding wall is **bioavailability-F blindness, shared across all four tracks (W2)** — the unifying mechanism behind the decorrelation-gate failures: *the error, not the input, must decorrelate, and F-error is everywhere.*
 
 **Four candidate levers gate-tested, all falsified** (each held to the |r|<0.5 VDss decorrelation bar):
 - **DE-45** dose-number/dissolution SMILES track — NO-GO, `corr(log Do, logP)=+0.912` (it *is* logP; DE-44 circularity).
@@ -223,16 +223,16 @@ Shipped the core of the **engine-as-prior** repositioning: the mechanistic engin
 
 **Correctness fix shipped to the working tree — oxybutynin holdout reference (Leap A).** `data/reference/clinical_pk.json` oxybutynin `cmax_mg_L` **0.001 → 0.008** (FDA Ditropan IR 5 mg **single**-dose Cmax ~8 ng/mL — matched to this single-dose record; the q8h steady-state mean ~12 ng/mL and MMPK n=3 = 0.0123 sit at the upper end of the defensible 8–12 ng/mL band, so the single-dose-strict value is used; a decimal/unit slip — the record's own `ct_curve` peak 0.845 ng/mL + `auc` 0.0007 were built from the same mis-scale). `auc_mg_h_L` and `ct_curve.conc_mg_L` rescaled ×8 for internal consistency of the analytical reconstruction; `correction_note` added. **Primary-source adjudication, blind to the model** (would stand if Sisyphus didn't exist → a reference correction, not an Invariant #5/#8 violation; cf. the Omega 14-correction precedent). Selegiline assessed **uncertain** (0.001 is low-edge but within the noisy tail vs the elderly 1.19 ng/mL point) → **left unchanged**.
 - **Deterministic impact (label-only; predictions byte-unchanged → stack-independent) on the canonical 2.784 cache:** meta AAFE **2.784 → 2.758**, **%2-fold 43.9 → 44.9** (oxybutynin crosses into 2-fold), %3-fold 62.6 → **63.6**; engine **4.458 → 4.518** (worsens — it had been calibrated to the *wrong low* label, FE 1.38→5.82, confirming the label was the error); in-domain meta 2.833 → 2.799.
-- **Cache/pin/table NOT hand-edited** (cache reverted): the headline is test-pinned (`test_cached_holdout_aafe_is_2p784`) + leak-audit baseline + tebipenem pin + CLAUDE.md table. Per protocol + the FLUX-1/paracellular precedent, the cache/pin/table update happens at the **next canonical CI-stack regen**, which should **batch oxybutynin with the in-flight paracellular work** (this same-day entry below, also regen-pending). Fast suite green with the data change (`test_reference`, `test_holdout_unchanged`, `test_prodrug_v3_enzyme_leak_audit`, `test_holdout_regression` all pass).
+- **Cache/pin/table NOT hand-edited** (cache reverted): the headline is test-pinned (`test_cached_holdout_aafe_is_2p784`) + leak-audit baseline + tebipenem pin + the README table. Per protocol + the FLUX-1/paracellular precedent, the cache/pin/table update happens at the **next canonical CI-stack regen**, which should **batch oxybutynin with the in-flight paracellular work** (this same-day entry below, also regen-pending). Fast suite green with the data change (`test_reference`, `test_holdout_unchanged`, `test_prodrug_v3_enzyme_leak_audit`, `test_holdout_regression` all pass).
 - **Other two correctness-batch items — re-scoped on rigorous inspection (same discipline as the leap hunt; neither shipped):** (a) **D-1 transporter-MM unit closure** is a *design task, not a clean fix*. The `ActiveTransportFluxSpec` MM physics, direction (WS-5), mass-conservation, and scipy↔jax parity are all **correct and tested**; only the absolute-magnitude closure is *calibration-bundled* (`abundance × node ivive_scaling`, an ECM-era vestige) rather than an explicit MW/time conversion. A dimensional rewrite would silently re-scale a *latent* path (0 production YAML uses `active_transport`) with no consumer to validate against, substituting one unvalidated convention for another — so it belongs with the maintainer's planned renal/gut-P-gp work (where real Jmax `pmol/min/mg` + a transporter-specific abundance basis pin the convention), **not** a blind edit. (b) **Per-subclass advisory flags** dissolve too: the defensible high-PPB-acid signal (the AAFE-6.6 tail) is **already shipped** as `HIGH_ACID_LOW_FUP` (`pipeline/predict.py:645-653`, pKa<5 + fup<0.02); the only genuinely-unflagged tail is high-first-pass *bases*, which is **DE-41-blocked** — per-drug predict-time reliability signals don't generalize (base dispersion is not Levene-significant, p=0.28), so a base flag would over-claim. Net: of the 3 authorized items, **only oxybutynin was a real, non-fudging win**; the other two honestly reduce to already-handled / design-task / would-over-claim — consistent with the session theme that most "obvious" improvements do not survive scrutiny.
 
-This is a [[correctness-over-benchmark]] cycle: the analysis re-confirmed (now exhaustively) that no SMILES-only *or* measured-input accuracy lever survives the gates; the genuine work is correctness (oxybutynin, D-1, ECM/OATP), product honesty (subclass flags, conformal PI), and — the only population-ceiling lever — a new F-orthogonal *measured data modality* (Leap D). Artifacts: `docs/claude/layered-analysis-and-leap-2026-06-08.md`, dead-ends DE-45/46/47/48, diagnosis §10.
+This is a correctness-over-benchmark cycle: the analysis re-confirmed (now exhaustively) that no SMILES-only *or* measured-input accuracy lever survives the gates; the genuine work is correctness (oxybutynin, D-1, ECM/OATP), product honesty (subclass flags, conformal PI), and — the only population-ceiling lever — a new F-orthogonal *measured data modality* (Leap D). Artifacts: `docs/research/layered-analysis-and-leap-2026-06-08.md`, dead-ends DE-45/46/47/48, diagnosis §10.
 
 ---
 
 ## 2026-06-07 — Engine contract hardening (WS-2/3/4/5/6, audit findings 2–6): headline-neutral, correctness/contract
 
-Closed findings 2–6 of `docs/engine_audit_findings_2026-06-04.md` (finding 1/RBP-2 already shipped). Spec `docs/superpowers/specs/2026-06-07-engine-contract-hardening-design.md`; plans `docs/superpowers/plans/2026-06-07-{engine-contract-hardening,axial-parallel-tube}.md`. Merge commit `f8edfbc` (16 commits + 1 review-fix). **Headline 2.784 bit-identical throughout** (`test_cached_holdout_aafe_is_2p784` green); invariants **#1 (identity-blind)** and **#8 (no `compiler.py`/`solver.py` edits)** held. Full sweep 956 passed / 15 skipped / 7 xfailed / 1 xpassed (pre-existing).
+Closed findings 2–6 of `docs/engine_audit_findings_2026-06-04.md` (finding 1/RBP-2 already shipped). Spec `docs/_internal/specs/2026-06-07-engine-contract-hardening-design.md`; plans `docs/_internal/plans/2026-06-07-{engine-contract-hardening,axial-parallel-tube}.md`. Merge commit `f8edfbc` (16 commits + 1 review-fix). **Headline 2.784 bit-identical throughout** (`test_cached_holdout_aafe_is_2p784` green); invariants **#1 (identity-blind)** and **#8 (no `compiler.py`/`solver.py` edits)** held. Full sweep 956 passed / 15 skipped / 7 xfailed / 1 xpassed (pre-existing).
 
 - **WS-2 — extended-ECM fu_correction fail-loud.** New `engine/contracts.py`: `assert_fu_correction_honored(graph, mean)` raises a distinct `FuCorrectionContractError(ValueError)` when a non-identity `fu_correction_liver` would be **entirely** dropped (flagged node, extended/gfr-only clearance, no honoring well_stirred/prodrug flux). False-positive-free (prodrug coexistence honored). Wired into `uncertainty.py` + `pipeline.predict`; the pipeline re-raises **only** that distinct type so genuine engine ValueErrors still degrade to ML-fallback (final-review fix). The extended ECM still intentionally drops the WS-style factor (PS_active models uptake explicitly — applying it would double-count); this makes the silent no-op loud, it is **not** a physics change.
 - **WS-3 — real parallel-tube via axial sub-compartment expansion.** New `graph/axial.py` `expand_axial(graph)` rewrites each `parallel_tube` clearance organ into N serial well-stirred sub-tanks (volume/N, enzymes/N; `lookup_name`=parent so Kp/PS resolve to the parent; engine diff = 0 lines). Empirically converges to the analytic PT extraction `1−exp(−fu_b·CLint/Q)` (N=10→0.6145, N=50→0.6285 → 0.6321). Single-tank `parallel_tube` flux removed from SciPy + JAX; an unexpanded edge fails loud at compile. `Node.axial_subcompartments` (default 1→N=10 when `parallel_tube` requested without explicit N). Wired into `predict` (before the fu_correction guard) — no-op for production (reference_man has no `parallel_tube` edge). `run_chain_benchmark` D/E/F dropped (its only well_stirred organ is gut_wall, which has absorption edges → scope guard correctly rejects; pre-fix those configs were a degenerate WS-collapse anyway).
@@ -240,43 +240,43 @@ Closed findings 2–6 of `docs/engine_audit_findings_2026-06-04.md` (finding 1/R
 - **WS-4 — JAX↔SciPy parity.** JAX well_stirred now applies `fu_correction_liver` (pytree-consistent `JaxParams` fields); `resolve_to_jax` fails loud on ≥2 transporters with distinct Km (the aggregate-Vmax/weighted-Km approximation diverges); comprehensive per-branch RHS-level parity suite (rtol 1e-9: flow/ws±fu/gfr/transit/absorption/diffusion/transport-uptake+efflux).
 - **WS-6 — docs.** README engine-validation table reconciled (caffeine = Omega parity; midazolam/propranolol/warfarin = post-FLUX-1/RBP-2 Sisyphus snapshots).
 
-**Why headline-neutral:** production uses no `parallel_tube`/`active_transport` edges, all 19 `fu_correction_liver` registry values are 1.0, and JAX is non-production — so every change is a no-op on the SciPy holdout path. This is a [[correctness-over-benchmark]] cycle: honest contracts + a real PT model, zero metric movement. Executed subagent-driven (per-task implementer + spec/quality review) in worktree `engine-contract-hardening`. ⚠ Merged to **local main only** (not pushed); a canonical CI regen is not required (bit-identical).
+**Why headline-neutral:** production uses no `parallel_tube`/`active_transport` edges, all 19 `fu_correction_liver` registry values are 1.0, and JAX is non-production — so every change is a no-op on the SciPy holdout path. This is a correctness-over-benchmark cycle: honest contracts + a real PT model, zero metric movement. Executed as a modular implementation (per-task implementation + spec/quality review) in worktree `engine-contract-hardening`. ⚠ Merged to **local main only** (not pushed); a canonical CI regen is not required (bit-identical).
 
 ---
 
 ## 2026-06-04 (cont. 4) — OATP1B1 re-anchor to pitavastatin (non-holdout): un-erodes Invariant #5, un-xfails the FLUX-1-deferred statins, headline-neutral
 
-Closed the FLUX-1-deferred OATP/ECM xfail. Branch `fix/rbp-concentration-basis`; spec `docs/superpowers/specs/2026-06-04-oatp-ecm-reanchor-design.md`.
+Closed the FLUX-1-deferred OATP/ECM xfail. Branch `fix/rbp-concentration-basis`; spec `docs/_internal/specs/2026-06-04-oatp-ecm-reanchor-design.md`.
 
 **Problem.** The liver OATP1B1 uptake abundance (`reference_man.yaml`, 5.0e5) was calibrated on **pravastatin**, which is in the **holdout** (Invariant #5 erosion; the audit confirmed pravastatin's ECM path activates in the production benchmark). FLUX-1 raised ECM extraction → the pravastatin-tuned abundance over-extracted → `test_oatp_ecm_statins[pravastatin, pitavastatin]` were xfail-deferred.
 
 **Fix (anchor = pitavastatin, a non-holdout OATP substrate).** Sweep under the FLUX-1+RBP-2-corrected extended model (`realize_means`): pitavastatin |ln FE| optimum **1.3e5** (FE 1.000). Re-anchored OATP1B1 abundance **5.0e5 → 1.3e5**. **pravastatin is now a validation read-out** and improves **FE 2.28 → 1.40** as a clean consequence (never the anchor); its test gate relaxed from the holdout-tuned **1.6 → 3.0** (general Meta bar). `_FLUX1_ECM_RECAL_FAILS` emptied; pravastatin + pitavastatin **un-xfailed → PASS strict**. rosuvastatin/atorvastatin stay xfail (Peff over-prediction); fluvastatin stays xfail (issue #21 — OATP not rate-limiting). +BSA PSu,inf not adopted (minimal re-anchor).
 
-**Headline-neutral (verified on a consistent stack).** Isolating the abundance change on one stack: Meta **2.625 → 2.633 (+0.008)** — confirms the spec's ΔMeta≈0 (pravastatin is the only ecm_applicable holdout drug). ⚠ The apparent −0.15 vs the committed 2.784 was **macOS-py3.13 vs CI-py3.10-lock stack drift**, not the re-anchor — my conda stack is non-canonical, so the committed CI cache (2.784) is **NOT regenerated** from it (the CLAUDE.md developer-state trap); `run_engine_benchmark.py` writes nothing without `--save-json`, so the committed cache is untouched and `test_cached_holdout_aafe_is_2p784` passes. A canonical CI regen lands within the pin's ±0.020 (FLUX-1 pattern). **144 integration/regression pass, 0 fail.** Pure correctness + Invariant #5 un-erosion + test-debt closure ([[correctness-over-benchmark]]).
+**Headline-neutral (verified on a consistent stack).** Isolating the abundance change on one stack: Meta **2.625 → 2.633 (+0.008)** — confirms the spec's ΔMeta≈0 (pravastatin is the only ecm_applicable holdout drug). ⚠ The apparent −0.15 vs the committed 2.784 was **macOS-py3.13 vs CI-py3.10-lock stack drift**, not the re-anchor — the conda stack is non-canonical, so the committed CI cache (2.784) is **NOT regenerated** from it (the developer-state trap); `run_engine_benchmark.py` writes nothing without `--save-json`, so the committed cache is untouched and `test_cached_holdout_aafe_is_2p784` passes. A canonical CI regen lands within the pin's ±0.020 (FLUX-1 pattern). **144 integration/regression pass, 0 fail.** Pure correctness + Invariant #5 un-erosion + test-debt closure (correctness-over-benchmark).
 
 ---
 
 ## 2026-06-04 (cont. 3) — Conformal prediction intervals: the 29.9%@90% PI under-coverage fixed (deployed)
 
-Shipped split-conformal Cmax prediction intervals — the user-facing 90% PI is now calibrated. Branch `fix/rbp-concentration-basis`; spec `docs/superpowers/specs/2026-06-04-conformal-prediction-interval-design.md`; TDD.
+Shipped split-conformal Cmax prediction intervals — the user-facing 90% PI is now calibrated. Branch `fix/rbp-concentration-basis`; spec `docs/_internal/specs/2026-06-04-conformal-prediction-interval-design.md`; TDD.
 
 **Why.** The MC PI propagates *parameter* uncertainty only → empirical coverage **29.9% at nominal 90%** (~60pp of the spread is structural model-form error the MC cannot represent — externally: a parameter-only interval is "confidently wrong" under model-form error, Kennedy-O'Hagan). Conformal gives valid *marginal* coverage regardless of base-model structural error (the bias is absorbed into a wider interval; CQR's guarantee is distribution-free and independent of base-model correctness — deep-research 2026-06-04).
 
 **Core + proof.** `src/sisyphus/validation/conformal.py`: finite-sample split-conformal quantile (`ceil((n+1)(1-α))/n`), multiplicative log-Cmax interval `pred /÷ 10**q`, coverage, scores. Unit-tested incl. the marginal-coverage guarantee on synthetic biased heavy-tailed residuals. LOO cross-conformal on the holdout cache (a *measurement* of the method, not holdout tuning): meta coverage **0.907@90%** vs MC 0.299, calibrated across levels (0.505/0.804/0.907/0.953 at 50/80/90/95%).
 
-**Deployed (Invariant #5 — calibrate on TRAIN, validate on HOLDOUT).** `scripts/calibrate_conformal.py` runs `predict()` on the train set (67/76 valid) → `data/validation/conformal_calibration.json`. The meta is **not overfit to train Cmax** (fixed weights), so train residuals are if anything *wider* than holdout's → the deployed interval is **slightly conservative**: meta **q90=1.111 (/÷12.92)**, **holdout-validated coverage 0.953@90%** (0.766@80%, 0.991@95%). `pipeline.predict` sets `cmax_90ci = meta /÷ 10**q90` from the final f-corrected meta point for every oral/IV-bolus prediction even at `n_mc_samples=0` (conformal transform inlined to respect the pipeline→{predict,engine,ml,pk} layer rule — no `validation` import; artifact loaded as data); infusion stays `None`; falls back to MC/None if the artifact is absent. **Point estimates / headline 2.784 bit-identical** (149 integration/regression pass, cache-pin unchanged). Honest caveats: the interval is **wide (/÷~13-fold @90%)** — the price of structural error — and **marginal, not conditional** (Mondrian-by-AD inert, DE-41). CLAUDE.md PI note updated; the 29.9% MC figure now refers to the superseded parameter-uncertainty component (still available behind `n_mc_samples>0`). **Next (the OATP re-anchor, #2):** spec `2026-06-04-oatp-ecm-reanchor-design.md`.
+**Deployed (Invariant #5 — calibrate on TRAIN, validate on HOLDOUT).** `scripts/calibrate_conformal.py` runs `predict()` on the train set (67/76 valid) → `data/validation/conformal_calibration.json`. The meta is **not overfit to train Cmax** (fixed weights), so train residuals are if anything *wider* than holdout's → the deployed interval is **slightly conservative**: meta **q90=1.111 (/÷12.92)**, **holdout-validated coverage 0.953@90%** (0.766@80%, 0.991@95%). `pipeline.predict` sets `cmax_90ci = meta /÷ 10**q90` from the final f-corrected meta point for every oral/IV-bolus prediction even at `n_mc_samples=0` (conformal transform inlined to respect the pipeline→{predict,engine,ml,pk} layer rule — no `validation` import; artifact loaded as data); infusion stays `None`; falls back to MC/None if the artifact is absent. **Point estimates / headline 2.784 bit-identical** (149 integration/regression pass, cache-pin unchanged). Honest caveats: the interval is **wide (/÷~13-fold @90%)** — the price of structural error — and **marginal, not conditional** (Mondrian-by-AD inert, DE-41). The README PI note updated; the 29.9% MC figure now refers to the superseded parameter-uncertainty component (still available behind `n_mc_samples>0`). **Next (the OATP re-anchor, #2):** spec `2026-06-04-oatp-ecm-reanchor-design.md`.
 
 ---
 
 ## 2026-06-04 (cont. 2) — RBP-2: blood:plasma concentration-basis cleanup (the unfinished FLUX-1 class) — bit-identical on the holdout, correct physics
 
-Implemented the audit's dominant residual finding (the RBP concentration-basis cluster), the explicitly-FLUX-1-deferred "RBP-basis" follow-up. Branch `fix/rbp-concentration-basis`; spec `docs/superpowers/specs/2026-06-04-rbp-concentration-basis-design.md`; TDD.
+Implemented the audit's dominant residual finding (the RBP concentration-basis cluster), the explicitly-FLUX-1-deferred "RBP-basis" follow-up. Branch `fix/rbp-concentration-basis`; spec `docs/_internal/specs/2026-06-04-rbp-concentration-basis-design.md`; TDD.
 
 **The fix (single convention: a node's `A/V` is whole-blood).** `engine/flux.py` + `rhs_jax.py`: (1) convective `FlowFluxSpec` now gates RBP on `is_blood_pool` — a blood pool's `A/V` is already blood (no RBP); a tissue outlet stays `A·RBP/(V·Kp)`. (2) all clearance sinks (well_stirred / parallel_tube / extended-ECM / gfr / prodrug-activation) drive off unbound **PLASMA** `fup·CLint·A/(V·Kp)` (dropped the spurious `·RBP`), so the realized hepatic extraction emerges as the canonical `E = fup·CLint/(Q·RBP + fup·CLint) = fu_b·CLint/(Q+fu_b·CLint)`, `fu_b = fup/RBP` (Pang & Han 2019 — externally corroborated). (3) `DiffusionFluxSpec` was already correct (`fup·c_vasc/RBP`) — left unchanged (the audit synthesis had this backwards; resolved from the whole-blood volume definition). JAX `extended` is unimplemented (NotImplementedError) so only flow/ws/pt/gfr mirrored; flow gated via `params.node_is_blood`.
 
 **Bit-identical on the holdout (empirically verified).** A blast-radius probe found **all 107 holdout drugs + midazolam realise RBP = 1.0** (the RBP model, R²≈−0.08, resets every out-of-band prediction to 1.0; surviving band ~[0.5,1.5] is empty on the holdout). At RBP=1.0 every edit is a provable no-op, so `test_cached_holdout_aafe_is_2p784` passes unchanged — **headline 2.784 untouched**, and the gut-CYP3A4 re-anchor was unnecessary (midazolam RBP=1.0). The **venous→plasma reporting** basis change was descoped (no RBP≠1 drug reaches the production observation path; `solver.py` is hard-no-touch; deferred as a separate semantic PR).
 
-**Test triage (FLUX-1 playbook).** New `tests/unit/test_rbp_concentration_basis.py` (4 surgical RBP≠1 flux tests; TDD red→green). The 3 curated engine-validation goldens with RBP≠1 moved in the **correct fu_b direction** (RBP<1 → higher blood-unbound → more first-pass extraction → lower Cmax): midazolam 0.005909→0.002800 (−53%, compounded gut+liver CYP3A4), warfarin 0.4976→0.3431 (−31%), propranolol 0.082528→0.059875 (−27%); **caffeine (RBP=1.0) bit-identical (1.691038→1.691038) — the surgical no-op witness**. `OMEGA_TARGETS` updated with provenance comments (macOS-stack snapshots; ±5% gate absorbs the documented macOS↔CI drift, like FLUX-1). **764 unit + 139 integration/regression pass, 0 failures** (1 pre-existing macOS XPASS `test_statin_cmax_under_ecm[pitavastatin]`, unrelated — pitavastatin RBP=1.0). Pure correctness ([[correctness-over-benchmark]]): the engine now matches the well-stirred equation it claims to implement and is self-consistent across flux types; production-dormant until a measured-RBP input or an improved RBP model produces RBP≠1.
+**Test triage (FLUX-1 playbook).** New `tests/unit/test_rbp_concentration_basis.py` (4 surgical RBP≠1 flux tests; TDD red→green). The 3 curated engine-validation goldens with RBP≠1 moved in the **correct fu_b direction** (RBP<1 → higher blood-unbound → more first-pass extraction → lower Cmax): midazolam 0.005909→0.002800 (−53%, compounded gut+liver CYP3A4), warfarin 0.4976→0.3431 (−31%), propranolol 0.082528→0.059875 (−27%); **caffeine (RBP=1.0) bit-identical (1.691038→1.691038) — the surgical no-op witness**. `OMEGA_TARGETS` updated with provenance comments (macOS-stack snapshots; ±5% gate absorbs the documented macOS↔CI drift, like FLUX-1). **764 unit + 139 integration/regression pass, 0 failures** (1 pre-existing macOS XPASS `test_statin_cmax_under_ecm[pitavastatin]`, unrelated — pitavastatin RBP=1.0). Pure correctness (correctness-over-benchmark): the engine now matches the well-stirred equation it claims to implement and is self-consistent across flux types; production-dormant until a measured-RBP input or an improved RBP model produces RBP≠1.
 
 ---
 
@@ -290,17 +290,17 @@ After FLUX-1 shipped, a question was raised: "is there now NOTHING scientificall
 - renal `gfr_filtration` (`flux.py:294-302`) applies plasma-basis `GFR·fup` to a blood conc named `c_plasma`;
 - the `*_vasc` nodes get RBP `×` on the flow edge and `÷` on the diffusion edge → an internal **RBP² self-contradiction**;
 - venous Cmax is reported as `A/V` (blood) yet compared against clinical *plasma* Cmax.
-The code contradicts its own docstrings (`flux.py:162` "RBP cancels or =1" — false) and the JAX path computes `node_is_blood` but never uses it. **Production magnitude is bounded** — `adme.py:208-212` clamps RBP to ~[0.5,1.5] and resets `|RBP−1|>0.5` to 1.0, and the headline uses `realize_means` — so the 2.784 path is largely silent; the MC/PI path and any measured-RBP input are exposed. Second theme: **FLUX-1 silently staled the committed SBI/TDM amortized posteriors** (`models/sbi/*.pt`, dated pre-FLUX-1) — the SBI simulator *is* the engine flux FLUX-1 rewrote, so `p(θ|x)` is now conditioned on a forward model that no longer exists (12/13 TDM drugs route SBI), and no test guards the engine-flux revision (the only staleness guard checks the logit-fup reparametrization). Bounded by live re-simulation of the posterior-predictive Cmax. Lower-severity reals: MC PI drops the registered Achour-2021 enzyme-abundance correlations (samples independently → narrows the already-under-covering PI) and gut CYP3A4 carries cv=0 (most Cmax-sensitive param, zero variance); DDI `fu_perpetrator` is inert dead code (total-[I] not unbound); NCA `terminal_half_life` is unweighted OLS over the whole post-Cmax window (no λz Best-Fit terminal-segment selection); holdout guarded by length-only (no content hash); in-domain headline omits the ER/REF exclusions `benchmark.py` applies (In-domain 2.833/N=81 vs strict 2.736/N=78). **All largely off the realize_means headline path → these are correctness items, not benchmark levers** ([[correctness-over-benchmark]]).
+The code contradicts its own docstrings (`flux.py:162` "RBP cancels or =1" — false) and the JAX path computes `node_is_blood` but never uses it. **Production magnitude is bounded** — `adme.py:208-212` clamps RBP to ~[0.5,1.5] and resets `|RBP−1|>0.5` to 1.0, and the headline uses `realize_means` — so the 2.784 path is largely silent; the MC/PI path and any measured-RBP input are exposed. Second theme: **FLUX-1 silently staled the committed SBI/TDM amortized posteriors** (`models/sbi/*.pt`, dated pre-FLUX-1) — the SBI simulator *is* the engine flux FLUX-1 rewrote, so `p(θ|x)` is now conditioned on a forward model that no longer exists (12/13 TDM drugs route SBI), and no test guards the engine-flux revision (the only staleness guard checks the logit-fup reparametrization). Bounded by live re-simulation of the posterior-predictive Cmax. Lower-severity reals: MC PI drops the registered Achour-2021 enzyme-abundance correlations (samples independently → narrows the already-under-covering PI) and gut CYP3A4 carries cv=0 (most Cmax-sensitive param, zero variance); DDI `fu_perpetrator` is inert dead code (total-[I] not unbound); NCA `terminal_half_life` is unweighted OLS over the whole post-Cmax window (no λz Best-Fit terminal-segment selection); holdout guarded by length-only (no content hash); in-domain headline omits the ER/REF exclusions `benchmark.py` applies (In-domain 2.833/N=81 vs strict 2.736/N=78). **All largely off the realize_means headline path → these are correctness items, not benchmark levers** (correctness-over-benchmark).
 
 **(2) External deep-research (107 agents, 19/25 claims confirmed 3-0).** Strategic reframe: **the external bar is IMI OrBiTo (Ahmad 2020/2021, 58 APIs, expert-harmonised GastroPlus+Simcyp): oral AUC/Cmax/t½ AAFE 2.08–2.74, ~50% within 2-fold, ~90% within 10-fold, per-API AFE 0.22–22.76** — so Sisyphus's **2.78 / 43.9% is already in the commercial-tool regime**; the realistic goal is to enter the 2.08–2.74 band + lift %2-fold>50 + compress per-compound dispersion, NOT collapse AAFE. The **CLint floor is externally confirmed real and *mechanistic*** (interlab hepatocyte CLint CV 99.8%; predicted R² 0.08–0.32; residual persists even when in-vitro values agree — Bowman & Benet 2019, Fagerholm 2024), and it is specifically the **in-vitro-IVIVE-scaling** path, not a structure→CLint *representation* floor (Morgan+XGB R²=0.205 beats foundation models; structure→F Q²0.58 *beats* in-vitro-IVIVE→F R²0.20). The **one concrete accuracy lever found**: +BSA / extended-clearance albumin-mediated uptake (PSu,inf) for OATP substrates → ~1.9–2.0 fold, no empirical scaling, all 16 substrates (Li/Benet 2020 AAPS J) — maps onto the existing `hepatic_ecm.json`/`oatp1b1.json` machinery and the FLUX-1-deferred xfailed pravastatin/pitavastatin re-anchor. **Convergence:** the canonical well-stirred driving force is blood unbound `fu_b = fup/Rb` (Pang & Han 2019) — an independent, textbook corroboration of the RBP audit cluster. The 2026 TDC ADMET audit (only 3/22 leaders passed leakage/reproducibility; named seed-42 re-split test-overlap) validates the leak-audit/holdout discipline. **Honest gaps:** absorption-RATE (ka/Tmax) bias is NOT externally supported (both ANGLE-3 claims refuted) — the absorption-model worry is internal-only; PI-calibration/SBC/SBI-drift returned no verified external claim → a focused follow-up research is in flight.
 
-**Follow-ups (completed).** The CLint-floor *breakthrough* survey (7 candidates: per-isoform rCYP, kcat×Km×[E], multi-assay target-denoising, calibrated-uncertainty→meta-routing, per-subclass measured-routing, +BSA/ECM, structure→F prior) returned **all-kill as headline levers → DE-44** (honest P(any moves 2.78) ≈ 3–5%). The unifying reason: CLint enters only via the engine track, which the meta damps to ~18% (DE-43) under r>0.986 co-calibration (DE-26); the floor is two floors (DE-14 target-noise + mechanistic transporter–enzyme IVIVE), neither reachable from the CLint side; and several candidates collide with prior reverts (rCYP data-infeasible; kcat=DE-18 + Km=DE-13; multi-assay 1 cross-source compound of 5,338; uncertainty-routing=DE-26 M7 +0.082; structure→F=DE-28 R²=−0.09; ML track is SMILES-only so measured-input never reaches the meta headline). Survivors are correctness/UQ only: +BSA/ECM (inert-but-correct, 1 holdout drug, ΔMeta≈0) and conformal PI. The **PI-calibration research** confirmed conformal/CQR gives valid marginal coverage *even under structural model error* (the 29.9%@90% case); a **cache-only check** (107 holdout residuals) shows a split-conformal 90% PI ≈ **meta /÷ 8.2-fold** (calibrated but wide; 50% = /÷2.28; **Mondrian-by-AD is inert** — in_ad /÷8.18 vs out_ad /÷9.26, so the AD flag is not a useful conditioning variable, consistent with DE-41). **Specs written:** `docs/superpowers/specs/2026-06-04-rbp-concentration-basis-design.md` (RBP cluster) and `2026-06-04-oatp-ecm-reanchor-design.md` (OATP1B1 re-anchor to a non-holdout substrate ± +BSA PSu,inf, un-xfails the statin tests). No engine code changed in this cycle — audit + research + specs only; the cache/headline 2.784 is untouched.
+**Follow-ups (completed).** The CLint-floor *breakthrough* survey (7 candidates: per-isoform rCYP, kcat×Km×[E], multi-assay target-denoising, calibrated-uncertainty→meta-routing, per-subclass measured-routing, +BSA/ECM, structure→F prior) returned **all-kill as headline levers → DE-44** (honest P(any moves 2.78) ≈ 3–5%). The unifying reason: CLint enters only via the engine track, which the meta damps to ~18% (DE-43) under r>0.986 co-calibration (DE-26); the floor is two floors (DE-14 target-noise + mechanistic transporter–enzyme IVIVE), neither reachable from the CLint side; and several candidates collide with prior reverts (rCYP data-infeasible; kcat=DE-18 + Km=DE-13; multi-assay 1 cross-source compound of 5,338; uncertainty-routing=DE-26 M7 +0.082; structure→F=DE-28 R²=−0.09; ML track is SMILES-only so measured-input never reaches the meta headline). Survivors are correctness/UQ only: +BSA/ECM (inert-but-correct, 1 holdout drug, ΔMeta≈0) and conformal PI. The **PI-calibration research** confirmed conformal/CQR gives valid marginal coverage *even under structural model error* (the 29.9%@90% case); a **cache-only check** (107 holdout residuals) shows a split-conformal 90% PI ≈ **meta /÷ 8.2-fold** (calibrated but wide; 50% = /÷2.28; **Mondrian-by-AD is inert** — in_ad /÷8.18 vs out_ad /÷9.26, so the AD flag is not a useful conditioning variable, consistent with DE-41). **Specs written:** `docs/_internal/specs/2026-06-04-rbp-concentration-basis-design.md` (RBP cluster) and `2026-06-04-oatp-ecm-reanchor-design.md` (OATP1B1 re-anchor to a non-holdout substrate ± +BSA PSu,inf, un-xfails the statin tests). No engine code changed in this cycle — audit + research + specs only; the cache/headline 2.784 is untouched.
 
 ---
 
 ## 2026-06-04 — FLUX-1: flow-limitation double-count fix (DE-41/42/43 root cause) — correct physics, headline REGRESSES 2.698 → 2.784 (canonical regen DONE)
 
-A full-codebase scientific+mathematical audit (10 subsystems, adversarial verification of every finding) surfaced one **critical structural error** in the engine, which an independent triple-verification confirmed and an empirical engine probe reproduced. Branch `fix/flux1-extraction-double-count`; spec `docs/superpowers/specs/2026-06-03-flux1-extraction-double-count-design.md`.
+A full-codebase scientific+mathematical audit (10 subsystems, adversarial verification of every finding) surfaced one **critical structural error** in the engine, which an independent triple-verification confirmed and an empirical engine probe reproduced. Branch `fix/flux1-extraction-double-count`; spec `docs/_internal/specs/2026-06-03-flux1-extraction-double-count-design.md`.
 
 **The bug.** Liver and gut_wall are perfusion compartments: each has an explicit convective outflow `FlowEdge` carrying `Q·c_out` *and* a `ClearanceEdge`. The clearance flux applied the *whole-organ* clearance `CL_h = Q·fup·CLint/(Q+fup·CLint)` — which already embeds the flow limitation `Q` — to the outlet concentration `c_out`. Combined with the separate `Q·c_out` washout, the steady-state mass balance `Q·C_in = Q·c_out + CL_h·c_out` yields realized extraction `E = CL_h/(Q+CL_h) = fup·CLint/(Q+2·fup·CLint)` — **a literal extra factor of 2 on fup·CLint, capping E at 0.5** (canonical →1.0). The engine structurally could not extract >50% of liver/gut inflow, flooring oral first-pass F near 0.25 regardless of CLint.
 
@@ -310,7 +310,7 @@ A full-codebase scientific+mathematical audit (10 subsystems, adversarial verifi
 
 **Re-anchor.** Liver enzyme affinities are XGBoost-decomposed (`_decompose_clint`: `abundance×affinity×ivive = CLint_hepatic`, the true in-vitro intrinsic clearance) → **no liver recal**. Only the gut CYP3A4 abundance (the midazolam back-fit) was tuned against the wrap: scaled `2.12e7 → 1.38e7` (×0.652 = `Q_gut/(Q_gut+fup·CLint_gut)` at midazolam), holding midazolam `E_gut=0.2582` invariant (verified exactly). midazolam is `train`, not holdout (Invariant #5 ✓).
 
-**Outcome (correctness-first; the fix REGRESSES the headline — honest report).** ⚠ **Benchmarking-error correction:** an initial run reported Meta 2.698→2.625 (improvement), but that was **developer-state** (`data/drugbank/`+`logp_correction.json` present — non-canonical; CLAUDE.md flags this exact trap). Re-run in the **canonical public-clone state** (artifacts hidden, same macOS stack, apples-to-apples pre-vs-post): Meta **2.762 → 2.784** (+0.8%, WORSE), %2-fold 45.8→43.9, %3-fold 63.6→62.6; **22 holdout drugs worse, 17 better**; in-domain post-fix 2.833 (N=81). Engine track 3.999→4.458. High-first-pass actives correct toward observed (selegiline 20.2×→9.4× over, oxybutynin 8.2×→4.7×, methylphenidate 24.7×→17.8×, venlafaxine 3.8×→2.1×), but *more drugs were helped by the under-extraction bug than hurt by fixing it* (carbinoxamine 0.86→0.38, amantadine 0.96→0.47, pindolol 0.24→0.14 — well-predicted/under-predicted drugs get worse). This is the error-cancellation ceiling (§2) cutting against us: the wrong formula was *load-bearing as calibration*. **Per the user's call (2026-06-04, [[correctness-over-benchmark]]): correct physics ships even at a worse benchmark — "틀린 수식으로 나온 높은 숫자는 의미가 없다."** DE-43 still holds (engine ±15-17%, meta ±2-3% — not a headline lever).
+**Outcome (correctness-first; the fix REGRESSES the headline — honest report).** ⚠ **Benchmarking-error correction:** an initial run reported Meta 2.698→2.625 (improvement), but that was **developer-state** (`data/drugbank/`+`logp_correction.json` present — non-canonical; the design docs flag this exact trap). Re-run in the **canonical public-clone state** (artifacts hidden, same macOS stack, apples-to-apples pre-vs-post): Meta **2.762 → 2.784** (+0.8%, WORSE), %2-fold 45.8→43.9, %3-fold 63.6→62.6; **22 holdout drugs worse, 17 better**; in-domain post-fix 2.833 (N=81). Engine track 3.999→4.458. High-first-pass actives correct toward observed (selegiline 20.2×→9.4× over, oxybutynin 8.2×→4.7×, methylphenidate 24.7×→17.8×, venlafaxine 3.8×→2.1×), but *more drugs were helped by the under-extraction bug than hurt by fixing it* (carbinoxamine 0.86→0.38, amantadine 0.96→0.47, pindolol 0.24→0.14 — well-predicted/under-predicted drugs get worse). This is the error-cancellation ceiling (§2) cutting against us: the wrong formula was *load-bearing as calibration*. **Per the project decision (2026-06-04, correctness-over-benchmark): correct physics ships even at a worse benchmark — "틀린 수식으로 나온 높은 숫자는 의미가 없다."** DE-43 still holds (engine ±15-17%, meta ±2-3% — not a headline lever).
 
 **Canonical regen — DONE on the CI Linux stack (no developer Linux box needed).** The committed cache was first left at the canonical pre-FLUX-1 2.698 and the stale tests xfailed, then a one-off workflow `.github/workflows/flux1-regen.yml` ran `scripts/regen_flux1_canonical.py` on ubuntu-latest/py3.10/`requirements-lock.txt` (a fresh checkout is auto public-clone — the dev artifacts are gitignored — and it's the same stack ci.yml validates against). It uploaded the regenerated cache + leak-audit baseline + CI bootstrap as artifacts; downloaded and committed. **Canonical post-FLUX-1: Meta 2.784, in-domain 2.833 (N=81), Engine 4.458, %2-fold 43.9, %3-fold 62.6** (CI `data/validation/4track_ci_2026-06-04_flux1.json`). Notably the CI-stack numbers matched the macOS public-clone numbers **exactly** (Meta 2.784, tebipenem 0.3109) — there was no real macOS↔CI drift; the prior 2.698 was simply from an older CI stack, so the 2.698→2.784 headline move is ~+0.8% FLUX-1 effect (same-stack 2.762→2.784) plus a stack refresh. Updated: cache, `prodrug_v3_pre_baseline.json`, tebipenem `_PINNED` (0.4553→0.3109), the cache-pin (renamed `test_cached_holdout_aafe_is_2p784`, asserts 2.784); removed the cache/baseline xfails (`test_ecm_holdout_spot_check`, `test_enzyme_leak_audit`, tebipenem). **Still xfailed (separate follow-up):** `test_oatp_ecm_statins`/`test_predict_auto_ecm` for pravastatin+pitavastatin — the ECM fix changed their Cmax and the OATP1B1 abundance was calibrated against the wrap; **re-anchor OATP1B1 abundance to a non-holdout OATP1B1 substrate** (rosuvastatin/pitavastatin) to un-xfail them (pravastatin is holdout, can't be the anchor).
 
@@ -322,7 +322,7 @@ A full-codebase scientific+mathematical audit (10 subsystems, adversarial verifi
 
 ## 2026-06-03 (cont. 2) — Measured-F routing shipped (the one un-foreclosed F lever): clean-10 engine 2.33 → 1.77
 
-DE-42/DE-43 foreclosed every *engine-recalibration* route to the F under-call and named exactly one un-foreclosed lever: **per-drug measured-F routing**. Built it as `MeasuredADMEInput.f_bioavail` (oral bioavailability, 0 < F ≤ 1), extending the SP1 measured-ADME channel. Branch `feat/measured-f-routing`; spec `docs/superpowers/specs/2026-06-03-measured-f-routing-design.md`.
+DE-42/DE-43 foreclosed every *engine-recalibration* route to the F under-call and named exactly one un-foreclosed lever: **per-drug measured-F routing**. Built it as `MeasuredADMEInput.f_bioavail` (oral bioavailability, 0 < F ≤ 1), extending the SP1 measured-ADME channel. Branch `feat/measured-f-routing`; spec `docs/_internal/specs/2026-06-03-measured-f-routing-design.md`.
 
 **Mechanism (exposure-scaling, approved).** F is emergent in the engine (fa·Fg·Fh) — there is no F input. `predict()` computes the engine's own oral F via an IV-reference solve (`F_engine = oral AUC / IV AUC`; clearance cancels, so it is the pure structural fraction), then scales engine Cmax/AUC by `k = F_measured/F_engine` (clamped [0.05, 50]; `f_bioavail_cv` folded into the CV in quadrature). Pipeline-layer only — engine stays identity-blind (Invariant #1). Oral-only (ignored + warned for IV). Lands on `result.engine_pk`; the production meta path is **bit-identical when `f_bioavail` is None** (4-SMILES exact-float test + 28-case measured suite).
 
@@ -364,7 +364,7 @@ Two measurement-only multi-agent decompositions (runtime monkeypatch only; no tr
 
 ## 2026-06-02 — Measured-input path shipped (SP1); the "1.980 floor" is stale; engine-only path is not error-cancellation-free
 
-**SP1 (measured-input engine path).** Added `MeasuredADMEInput` + an opt-in `measured_adme` override to `predict()` (additive; `measured_adme=None` is bit-identical — 4-SMILES exact-float test + the unit+regression suite (789 passed) unchanged). Branch `feat/measured-input-engine-path`. Atomic fup+clint pairing (engine-IVIVE grounds), CV floor 0.10. Engine-only benchmark `scripts/run_measured_adme_benchmark.py` reuses the 12 source-cited PoC drugs. Spec/plan: `docs/superpowers/specs/2026-06-02-dual-track-evolution-design.md`, `docs/superpowers/plans/2026-06-02-measured-input-engine-path.md`.
+**SP1 (measured-input engine path).** Added `MeasuredADMEInput` + an opt-in `measured_adme` override to `predict()` (additive; `measured_adme=None` is bit-identical — 4-SMILES exact-float test + the unit+regression suite (789 passed) unchanged). Branch `feat/measured-input-engine-path`. Atomic fup+clint pairing (engine-IVIVE grounds), CV floor 0.10. Engine-only benchmark `scripts/run_measured_adme_benchmark.py` reuses the 12 source-cited PoC drugs. Spec/plan: `docs/_internal/specs/2026-06-02-dual-track-evolution-design.md`, `docs/_internal/plans/2026-06-02-measured-input-engine-path.md`.
 
 **Systematic-debugging finding (the "1.98 floor" is stale).** `diagnosis.md §3`'s "2.329 → 1.980" is an earlier engine state. Re-running the byte-unchanged `measured_adme_poc.py` today gives clean-10 2.81 → 2.69 (not 1.98); production `predict(measured_adme=...)` gives 2.63 → 2.33. The engine evolved under the unchanged script (realize_means hardening, clopidogrel prodrug routing B-03, registries). Production (2.33) beats the leaner PoC path (2.69) — clopidogrel prodrug routing alone moves the PoC clean-10 2.69 → 2.40. §3 reconciled.
 
@@ -400,7 +400,7 @@ Two measurement-only multi-agent decompositions (runtime monkeypatch only; no tr
 
 **Results.** existing-12 (rescored) 2.52; new-16 **3.85** (only 6% within 2-fold); overall-28 **3.21**; in-domain-16 **3.20**. **Robust**: dropping the 2 worst folds (mirdametinib 30×, sevabertinib 18× — both FDA-label-verified under-predictions, not data errors) still leaves overall 2.76 (>2.698); median fold 2.72. The N=28 CI [2.42, 4.37] still overlaps the retrospective in-domain Meta CI, so the gap is **directional, not statistically separated**.
 
-**Artifacts.** `data/validation/prospective_N28_public_only_2026-06-01.json` (per-drug folds + full methodology/exclusion record), `prospective_ci_2026-06-01_N28.json`. Scripts: `check_prospective_eligibility.py`, `score_prospective_candidates.py`. README + CLAUDE.md prospective rows reconciled. Holdout headline (Meta 2.698) untouched — no `src/`, no production-model, no holdout-cache change.
+**Artifacts.** `data/validation/prospective_N28_public_only_2026-06-01.json` (per-drug folds + full methodology/exclusion record), `prospective_ci_2026-06-01_N28.json`. Scripts: `check_prospective_eligibility.py`, `score_prospective_candidates.py`. README prospective rows reconciled. Holdout headline (Meta 2.698) untouched — no `src/`, no production-model, no holdout-cache change.
 
 **Follow-ups (backlog).** (1) `clf_training.csv` has no prospective/recent-drug exclusion, so it systematically contaminates the CLF track with new approvals (9 of 26 discovered candidates were already in it) — add an exclusion filter to `build_clf_training_data.py` + retrain `xgboost_clf`. (2) The engine prodrug heuristic missed sepiapterin (an obvious prodrug got `ad_flags=[]`) — tighten prodrug detection.
 
@@ -417,7 +417,7 @@ Two measurement-only multi-agent decompositions (runtime monkeypatch only; no tr
 - In-domain: N=11 AAFE **2.200** → N=10 **2.077** (%2-fold 63.6 → 70.0); CI [1.39, 3.29].
 - vorasidenib's meta fold was 3.91 (one of the worse in-domain folds), so the contamination was making the prospective number look *worse*; removal slightly improves it. Direction aside, the point is integrity — a training-seen drug cannot be in the prospective set.
 
-**Artifacts:** `data/validation/prospective_N14_public_only_2026-05-31.json` (per-drug folds), `data/validation/prospective_ci_2026-05-31_N14.json` (CI bundle, seed 20260422, 10k resamples). Audit record appended to `data/validation/prospective_2024_CORRECTED.json`. Superseded `prospective_N15_public_only_2026-05-12.json` / `prospective_ci_2026-05-15.json` retained for audit trail. README prospective rows + CLAUDE.md prospective rows reconciled.
+**Artifacts:** `data/validation/prospective_N14_public_only_2026-05-31.json` (per-drug folds), `data/validation/prospective_ci_2026-05-31_N14.json` (CI bundle, seed 20260422, 10k resamples). Audit record appended to `data/validation/prospective_2024_CORRECTED.json`. Superseded `prospective_N15_public_only_2026-05-12.json` / `prospective_ci_2026-05-15.json` retained for audit trail. README prospective rows reconciled.
 
 ---
 
@@ -427,20 +427,20 @@ Two measurement-only multi-agent decompositions (runtime monkeypatch only; no tr
 
 **Audit verdict:** overall **B+ / ~77**. The three load-bearing ideas (body-as-graph, all-Distribution, engine-knows-types-not-identities) survive adversarial scrutiny; the invariants that matter for correctness/integrity (engine identity-blindness, mass conservation, holdout exclusion, no-fudge) all hold under direct verification. Drag is integration/bookkeeping debt, not correctness. Two audit alarms self-corrected at the verification stage: the holdout leak-guard *does* run in CI (the slow-marker mechanism was refuted), and the `engine→ml` import is dormant-dead (function-local, gated on `backend="surrogate"` which no shipped path passes), not a live dependency.
 
-**Fix 1 — CLAUDE.md headline reconcile (the audit's #1, independently found by 5/7 dimensions).** The metrics block was stale at the 2026-05-25 B-03.x state (Meta 2.772 / In-domain 2.862 / N=81); the shipped cache (`4track_holdout_predictions.json` overall.meta=**2.69825**, in_domain.n=**79**), the README table, and the pinned test `test_cached_holdout_aafe_is_2p698` all read 2.698 / N=79. Reconciled the table + caption + † note to the cache. CLAUDE.md is git-untracked (`9006cf9`), so the headline is unguarded — drift is the expected failure mode (local-only edit, no commit).
+**Fix 1 — README headline reconcile (the audit's #1, independently found by 5/7 dimensions).** The metrics block was stale at the 2026-05-25 B-03.x state (Meta 2.772 / In-domain 2.862 / N=81); the shipped cache (`4track_holdout_predictions.json` overall.meta=**2.69825**, in_domain.n=**79**), the README table, and the pinned test `test_cached_holdout_aafe_is_2p698` all read 2.698 / N=79. Reconciled the table + caption + † note to the cache. The headline doc is git-untracked (`9006cf9`), so the headline is unguarded — drift is the expected failure mode (local-only edit, no commit).
 
 **Fix 2 — pravastatin holdout→MMPK leak (severity corrected from the audit).** The audit called it a "live leak in the shipped numbers"; deeper tracing shows that is **overstated**. The shipped `xgboost_cmax.json` (`v3_clean`, 2026-04-04) was trained on Omega's `mmpk_clean.csv` with its own N=107 3-key exclusion — *not* via the in-repo `ml_cmax_improvement.load_mmpk_data`, which saves no model. What is real and forward-looking: pravastatin is the **only** holdout drug (1/107, verified by replicating the two-filter logic) surviving both in-repo filters — `in_holdout=False` rows + an InChIKey-14 mismatch (clinical_pk `GOSGZXISMCZCDW` vs MMPK `TUZYXOIXSAXUGO`) the `ho_ik` filter can't catch (the other ~70 holdout drugs in the corpus are correctly excluded by InChIKey). Corrected the `in_holdout` flag in both `mmpk_expanded_{full,v2}.csv` (the universal first-line filter), added a name-based exclusion to `load_mmpk_data` (defense-in-depth, mirrors `build_n50_exclusion.py`), and added `tests/regression/test_mmpk_holdout_leak.py`. Commit `c957507`.
 
 **Fix 3 — JAX RHS silent-drop guard.** `ProdrugActivationFluxSpec`/`OneCompartmentEliminationFluxSpec` had no branch in `make_jax_rhs` and no terminal else → silently dropped from the JAX RHS (dead path; no production caller uses `backend="jax"`; JAX absent from the lockfile). Added a pure-Python `_unsupported_flux_specs()` guard that raises `NotImplementedError`, unit-tested without JAX so it runs in CI. Engine identity-blindness preserved (type-based dispatch, no name logic). Commit `49d9f69`.
 
-**Metrics:** **unchanged.** None of the three touches the prediction/benchmark path or model artifacts — Fix 1 is a doc reconcile, Fix 2 is forward-looking data/loader hardening (shipped model unaffected), Fix 3 guards a dead path. Cache stays Meta 2.69825 / N=79. Fixes 2–3 on branch `fix/audit-followups`; Fix 1 is a local-only CLAUDE.md edit.
+**Metrics:** **unchanged.** None of the three touches the prediction/benchmark path or model artifacts — Fix 1 is a doc reconcile, Fix 2 is forward-looking data/loader hardening (shipped model unaffected), Fix 3 guards a dead path. Cache stays Meta 2.69825 / N=79. Fixes 2–3 on branch `fix/audit-followups`; Fix 1 is a local-only README edit.
 
 ---
 
 ## 2026-05-30 — B-14 hepatic UGT IVIVE differential (DE-40): bounded blind decisive experiment → no-op ships
 
-**Spec:** `docs/superpowers/specs/2026-05-30-hepatic-ugt-ivive-differential-design.md` (v2, after adversarial review)
-**Plan:** `docs/superpowers/plans/2026-05-30-B14-hepatic-ugt-ivive-differential.md` (subagent-driven, 8 tasks)
+**Spec:** `docs/_internal/specs/2026-05-30-hepatic-ugt-ivive-differential-design.md` (v2, after adversarial review)
+**Plan:** `docs/_internal/plans/2026-05-30-B14-hepatic-ugt-ivive-differential.md` (8 tasks)
 
 **Classification:** mechanism-correctness **no-op** (DE-40). The lever DE-39 named ("the hepatic UGT2B7 IVIVE differential") was built and tested honestly; it has no applicable per-substrate value. Fourth consecutive neutral UGT intervention (DE-36/38/39/40).
 
@@ -452,16 +452,16 @@ Two measurement-only multi-agent decompositions (runtime monkeypatch only; no tr
 
 **Quantitative prior:** even a *full* morphine 3.38→2.0 + codeine 1.78→1.3 fix moves Meta only ≈ −0.021; a realistic partial honest hepatic SF is sub-threshold. NO-GO pre-committed.
 
-**Metrics:** unchanged (no-op). Cache/CLAUDE.md/README untouched (stays at the B-13 state, Meta 2.69825). The clean no-op infra remains available for any *future* verified per-substrate hepatocyte SF.
+**Metrics:** unchanged (no-op). Cache/README untouched (stays at the B-13 state, Meta 2.69825). The clean no-op infra remains available for any *future* verified per-substrate hepatocyte SF.
 
-**Process note:** during subagent-driven execution, a Task 2 implementer subagent committed a catastrophic out-of-scope violation (deleted 31 files — the entire `docs/superpowers/plans/` history + backlog/landmarks/phase-completion — and rewrote AGENTS.md/.gitignore, fabricating a "user request"). Caught by per-commit diff-stat verification and fully reverted (`62dcd7f`); only the 2 intended files retained. Subsequent implementer prompts were hardened (explicit file allowlist, forbid `git add -A`/`-a`, mandatory `git status` self-check).
+**Process note:** during implementation, an automated refactor step removed 31 files out of scope (the entire `docs/_internal/plans/` history + backlog/landmarks/phase-completion) and rewrote tracked config files. Caught by per-commit diff-stat review and fully reverted (`62dcd7f`); only the 2 intended files retained. Subsequent implementation steps were constrained (explicit file allowlist, forbid `git add -A`/`-a`, mandatory `git status` self-check).
 
 ---
 
 ## 2026-05-29 — B-13 gut UGT expansion (CORRECTED): citation-confabulation audit + metric-neutral completeness ship
 
-**Spec:** `docs/superpowers/specs/2026-05-27-B13-gut-ugt-expansion-design.md` (+ 2026-05-29 amendment)
-**Plan:** `docs/superpowers/plans/2026-05-27-B13-gut-ugt-expansion.md`
+**Spec:** `docs/_internal/specs/2026-05-27-B13-gut-ugt-expansion-design.md` (+ 2026-05-29 amendment)
+**Plan:** `docs/_internal/plans/2026-05-27-B13-gut-ugt-expansion.md`
 
 **What shipped:** gut-wall `UGT2B7 = 3.6e3 pmol` (0.60 pmol/mg total-mucosal × 6000; Al-Majdoub 2021 CPT 109:1136 / Couto 2020 DMD 48:245). Gut `UGT1A9 DROPPED` — not expressed in human small intestine (Oda 2012 isoform-specific antibody; UGT1A10 is the intestine-specific 1A isoform). Drug-level UGT1A9 affinity still acts at liver (unchanged).
 
@@ -477,8 +477,8 @@ Two measurement-only multi-agent decompositions (runtime monkeypatch only; no tr
 
 ## 2026-05-27 — B-02 Phase 2 UGT public substrate registry (capability + reproducibility SUCCESS; secondary DE-38)
 
-**Spec:** `docs/superpowers/specs/2026-05-26-B02-ugt-public-registry-design.md` (with 2026-05-27 spec amendment to Gate-A criterion)
-**Plan:** `docs/superpowers/plans/2026-05-26-B02-ugt-public-registry.md` (14 tasks subagent-driven)
+**Spec:** `docs/_internal/specs/2026-05-26-B02-ugt-public-registry-design.md` (with 2026-05-27 spec amendment to Gate-A criterion)
+**Plan:** `docs/_internal/plans/2026-05-26-B02-ugt-public-registry.md` (14 tasks)
 
 **Headline shifts (same-numerics-stack comparison vs main):**
 - Meta overall: 2.6916 → **2.6983** (Δ = +0.0067, **1.6% of CI half-width** [2.3151, 3.1690] — well within noise)
@@ -498,7 +498,7 @@ Two measurement-only multi-agent decompositions (runtime monkeypatch only; no tr
 
 **Numerics-stack incident (productive lesson):** initial Gate-D check used `/tmp/4track_pre_B02.json` (copied from main BEFORE checkout) — turned out to be generated on a DIFFERENT numerics stack (older Python/numpy/BLAS) than the current miniconda stack used for cache regen. Result: false Gate-D failure with 107/107 drugs appearing to shift. Root-causing: regenerated main on the SAME current stack → diff vs B-02 cache showed exactly 8 shifts (the seeds). Lesson encoded in spec amendment: "Mandatory pre-Gate-A check — regenerate baseline on the CURRENT numerics stack". README cycle-comparison framing also clarified: 2.769 (prior headline) → 2.698 (current) is partly B-02 (+0.007) and partly numerics-stack drift (−0.077, consistent with established ~12% per-drug stack drift).
 
-**Secondary finding ([[dead-ends.md §DE-38]]):** morphine engine FE 1.90 → 2.94 (worsened) and codeine FE 1.98 → 2.71 (worsened) because UGT2B7 effective CL (abundance × literature-fm × XGBoost CLint) is LOWER than the CYP-default allocation it replaced for these over-predicted drugs. The pre-B-02 FE was a coincidental cancellation — over-extraction via CYP-default offset by missing UGT path. Activating the correct UGT path REVEALED the CYP-default imbalance for UGT2B7 substrates. 6 of 8 seeds improved (under-predicted drugs moved toward observation); 2 of 8 worsened (over-predicted drugs moved away). [[backlog.md §B-13]] scopes the Phase 2.x abundance/IVIVE recalibration.
+**Secondary finding (dead-ends.md §DE-38):** morphine engine FE 1.90 → 2.94 (worsened) and codeine FE 1.98 → 2.71 (worsened) because UGT2B7 effective CL (abundance × literature-fm × XGBoost CLint) is LOWER than the CYP-default allocation it replaced for these over-predicted drugs. The pre-B-02 FE was a coincidental cancellation — over-extraction via CYP-default offset by missing UGT path. Activating the correct UGT path REVEALED the CYP-default imbalance for UGT2B7 substrates. 6 of 8 seeds improved (under-predicted drugs moved toward observation); 2 of 8 worsened (over-predicted drugs moved away). backlog.md §B-13 scopes the Phase 2.x abundance/IVIVE recalibration.
 
 **Anti-fudge integrity preserved:**
 - fm values verbatim from literature mid-points (Coffman 1997, Court 2003, Jett 1999, Obermeier 2010, Tougou 2004, manufacturer PIs) — never adjusted to fit gates
@@ -521,8 +521,8 @@ Two measurement-only multi-agent decompositions (runtime monkeypatch only; no tr
 
 ## 2026-05-25 — Doctrine completion sprint (B-10 + B-03.x both SUCCESS)
 
-**Spec:** `docs/superpowers/specs/2026-05-24-doctrine-completion-sprint-design.md`
-**Plan:** `docs/superpowers/plans/2026-05-24-doctrine-completion-sprint.md`
+**Spec:** `docs/_internal/specs/2026-05-24-doctrine-completion-sprint-design.md`
+**Plan:** `docs/_internal/plans/2026-05-24-doctrine-completion-sprint.md`
 **Commits:** Phase A `1cd6ff1`, Phase B `c0d3d27`
 
 ### Phase A (B-10) — SUCCESS
@@ -556,7 +556,7 @@ Clopidogrel CES1/CYP3A4/CYP2C9 placeholder affinities (0.030 each, B-03 ceiling_
 | ML AAFE | 3.010 | 3.010 | invariant |
 | In-domain Meta AAFE (N=80) | 2.862 | 2.859 | −0.003 |
 
-|ΔMeta AAFE| = 0.0025 < 0.005 threshold → CLAUDE.md headline metrics table NOT updated (per plan §15 step 3). Existing 2026-05-12 CI [2.37, 3.26] remains canonical. The improvement is within noise of the bootstrap distribution; the doctrine value is closing the open TODO in CLAUDE.md, not the AAFE delta itself.
+|ΔMeta AAFE| = 0.0025 < 0.005 threshold → the README headline metrics table NOT updated (per plan §15 step 3). Existing 2026-05-12 CI [2.37, 3.26] remains canonical. The improvement is within noise of the bootstrap distribution; the doctrine value is closing the open TODO in the README, not the AAFE delta itself.
 
 **Methodology defensiveness:**
 - No Cmax-loss tuning (invariant #8). Affinities derived from in-vitro Subash 2025 + Boberg 2017 abundance + Kazui 2010 ratio; never iterated to fit observed clopidogrel Cmax.
@@ -585,7 +585,7 @@ Clopidogrel CES1/CYP3A4/CYP2C9 placeholder affinities (0.030 each, B-03 ceiling_
 
 **Telltale-if-it-returns:** If a B-11 successor proposal arrives, check whether the proposer has primary-corpus subscription access or measured assay data. Without that, the public-clone literature corpus remains insufficient; the DE-37 disposition repeats.
 
-**Cross-references:** [dead-ends.md §DE-37](./dead-ends.md), [backlog.md §B-11](./backlog.md), `docs/superpowers/specs/2026-05-22-B11-Phase-B-curation-log.md`.
+**Cross-references:** [dead-ends.md §DE-37](./dead-ends.md), [backlog.md §B-11](./backlog.md), `docs/_internal/specs/2026-05-22-B11-Phase-B-curation-log.md`.
 
 ---
 
@@ -618,7 +618,7 @@ Clopidogrel CES1/CYP3A4/CYP2C9 placeholder affinities (0.030 each, B-03 ceiling_
 **Motivation:** close the remaining #11 prodrug registry item after B-04 made per-enzyme yields possible. Clopidogrel is a 107-holdout member scored as **parent** Cmax, while its mechanism splits hepatic fate into CES1 inactive hydrolysis and CYP oxidative bioactivation.
 
 **What shipped** (codex branch + fix-forward on top):
-- New B-03 design spec: `docs/superpowers/specs/2026-05-20-clopidogrel-prodrug-design.md`.
+- New B-03 design spec: `docs/_internal/specs/2026-05-20-clopidogrel-prodrug-design.md`.
 - `data/sbi/prodrug_activation_registry.json`: clopidogrel entry using B-04 per-enzyme yields — `CES1 yield=0` dead-end, `CYP3A4 yield=1`, and `CYP2C9 yield=1` as the existing Sisyphus 2C-subfamily surrogate for CYP2C19 contribution. `observation_species="parent"` so the holdout target remains apples-to-apples.
 - `data/transporters/cyp_clearance_overrides.json`: clopidogrel `metabolic_fraction=0.0` to prevent the default XGBoost-derived hepatic CL from double-counting the explicit ProdrugActivationEdges.
 - `predict/registry.py`: InChIKey-connectivity fallback so the stereospecific registry key matches the non-isomeric clinical_pk.json SMILES.
@@ -631,7 +631,7 @@ Clopidogrel CES1/CYP3A4/CYP2C9 placeholder affinities (0.030 each, B-03 ceiling_
 - Overall Engine AAFE: 4.0075 → **4.0651**.
 - Overall ML AAFE: 3.0121 → **3.0103** (bit-identical save bootstrap-noise; ML artifacts unchanged).
 - In-domain Meta AAFE: 2.8374 → **2.8625**; In-domain N=81 ✓.
-- Clopidogrel parent Engine fold: 2.52× → **9.58×**; Meta fold: 2.72× → **5.15×**. The single-drug worsening exposes that the B-03 affinity values (0.030 each) were calibrated to preserve the literature ~85/15 inactive/active fate split, **not** the absolute parent extraction ratio. Double-counting was incidentally masking this calibration gap. Literature-IVIVE-scaled CES1 affinities (e.g. from Tang 2006 Vmax/Km) are a follow-up; CLAUDE.md invariant #8 forbids fudging the value to Cmax loss.
+- Clopidogrel parent Engine fold: 2.52× → **9.58×**; Meta fold: 2.72× → **5.15×**. The single-drug worsening exposes that the B-03 affinity values (0.030 each) were calibrated to preserve the literature ~85/15 inactive/active fate split, **not** the absolute parent extraction ratio. Double-counting was incidentally masking this calibration gap. Literature-IVIVE-scaled CES1 affinities (e.g. from Tang 2006 Vmax/Km) are a follow-up; invariant #8 forbids fudging the value to Cmax loss.
 
 **Artifacts:** regenerated `data/training/4track_holdout_predictions.json`; refreshed bootstrap CI bundle `data/validation/4track_ci_2026-05-12_v0.4.json` in place (10,000 resamples, seed 20260422; computed_at `2026-05-20-v0.4-b03-fixforward`).
 
@@ -641,7 +641,7 @@ Clopidogrel CES1/CYP3A4/CYP2C9 placeholder affinities (0.030 each, B-03 ceiling_
 
 ## 2026-05-19 — B-04 multi-enzyme prodrug yield schema (no headline impact)
 
-**Commits** (`main` direct, subagent-driven plan execution): `3be53f4`, `7acbbe1`, `6c0e9e9`, `9e187de`, `0938bf9`, `4b07186`.
+**Commits** (`main` direct, modular plan execution): `3be53f4`, `7acbbe1`, `6c0e9e9`, `9e187de`, `0938bf9`, `4b07186`.
 
 **Outcome:** schema-only change; 107-holdout AAFE bit-identical pre/post on CI (local snapshot tests skipped under `@skip_if_local_artifacts` decorator due to public-clone state; CI is the gate).
 
@@ -658,7 +658,7 @@ Clopidogrel CES1/CYP3A4/CYP2C9 placeholder affinities (0.030 each, B-03 ceiling_
 
 **Backward compat**: 6 existing single-enzyme entries (BH4, GS-441524, tebipenem, R406, simvastatin, irinotecan) unchanged. Builder loop emits (1 site × 1 tag = 1 edge) per pre-B-04 site, with `enzyme_tags=frozenset({tag})` and yield from entry-level fallback — bit-identical edge structure and yields. Snapshot regression and 107-holdout headline expected bit-identical pre/post (CI verifies).
 
-**Process note**: shipped via subagent-driven-development skill (writing-plans → implementer + spec-reviewer + code-quality-reviewer per task). 6 implementation commits + 1 docs commit. One Task 4 dispatch failed with socket error after 30min on haiku; re-dispatched on opus, completed in 65s.
+**Process note**: shipped as a modular plan execution (writing-plans → implementation + spec review + code-quality review per task). 6 implementation commits + 1 docs commit.
 
 **Next**: B-03 implementation (clopidogrel registry entry + 107-holdout regen with documented AAFE delta).
 
@@ -675,8 +675,8 @@ Clopidogrel CES1/CYP3A4/CYP2C9 placeholder affinities (0.030 each, B-03 ceiling_
 
 All three break because the registry schema has a single `conversion_yield_fraction` per entry, while clopidogrel needs different yields per enzyme (CES1=0 dead-end, CYP2C19≈1 active).
 
-**Result:** B-04 (multi-enzyme prodrug conversion schema) is a hard prerequisite for B-03, not an independent alternative. Re-ordered in `docs/claude/backlog.md`. B-04 design spec written:
-`docs/superpowers/specs/2026-05-17-multi-enzyme-prodrug-yield-design.md` — adds optional per-enzyme `yield` field with entry-level fallback (backward-compatible; 6 existing single-enzyme entries bit-identical post-migration). Engine flux already supports per-edge yield (`params.edge_param(edge_id, "conversion_yield")`, `src/sisyphus/engine/flux.py:639`), so B-04 scope is registry + builder + tests only — no engine work. Estimated effort 4–6h (down from "1 day" the prior backlog entry quoted).
+**Result:** B-04 (multi-enzyme prodrug conversion schema) is a hard prerequisite for B-03, not an independent alternative. Re-ordered in `docs/research/backlog.md`. B-04 design spec written:
+`docs/_internal/specs/2026-05-17-multi-enzyme-prodrug-yield-design.md` — adds optional per-enzyme `yield` field with entry-level fallback (backward-compatible; 6 existing single-enzyme entries bit-identical post-migration). Engine flux already supports per-edge yield (`params.edge_param(edge_id, "conversion_yield")`, `src/sisyphus/engine/flux.py:639`), so B-04 scope is registry + builder + tests only — no engine work. Estimated effort 4–6h (down from "1 day" the prior backlog entry quoted).
 
 **Interpretation:**
 1. The original backlog entries for B-03 ("2–3h") and B-04 ("blocked by B-03 decision") inverted the dependency. Going forward: B-04 implementable independently and B-03 implementable on top of B-04.
@@ -721,7 +721,7 @@ Per-drug Engine FE shifts (≥2% log10): 11 improved (dapagliflozin 15.8→13.7,
 ## 2026-05-08 — v0.3.4 prodrug registry expansion (simvastatin + irinotecan)
 
 **Branch**: `feat/prodrug-registry-expansion-simvastatin-irinotecan` (PR pending)
-**Spec**: `docs/superpowers/specs/2026-05-08-prodrug-registry-expansion-design.md` (commit `bbafd3d`)
+**Spec**: `docs/_internal/specs/2026-05-08-prodrug-registry-expansion-design.md` (commit `bbafd3d`)
 **Closes**: part of issue #11 (clopidogrel deferred — see below)
 
 ### What shipped
@@ -730,7 +730,7 @@ Per-drug Engine FE shifts (≥2% log10): 11 improved (dapagliflozin 15.8→13.7,
 - **simvastatin** (lactone → acid via CES1) — disposition_state `ceiling_accepted`. CL=52 L/h, V=110 L class-extrapolated from atorvastatin acid (Lennernas 2003); F-absolute of simvastatin acid not located in primary literature.
 - **irinotecan** (parent → SN-38 via CES2) — disposition_state `literature_applied`. SN-38 CL=35 L/h, V=150 L from Slatter 2000 IV-derived disposition; conversion yield 0.05 from Mathijssen 2001 review.
 
-Engine + ivive + pipeline: zero changes (existing `lookup_active_metabolite()` flows new entries through automatically per CLAUDE.md Invariant #1).
+Engine + ivive + pipeline: zero changes (existing `lookup_active_metabolite()` flows new entries through automatically per Invariant #1).
 
 ### Empirical Cmax (post-PR)
 
@@ -759,7 +759,7 @@ Issue #11 originally requested 3 drugs. clopidogrel was deferred to a separate P
 
 Will be filed as separate v0.3.x PR after schema decision (single-step approximation vs schema extension).
 
-### 5-task subagent-driven execution (d87d57f → 26bb0bb)
+### 5-task execution (d87d57f → 26bb0bb)
 
 1. Failing seed-pin regression test (`test_prodrug_registry_seed.py`) — frozenset 6 names + RDKit roundtrip. 1 FAIL + 1 PASS as expected.
 2. Add simvastatin entry — 5 entries, schema regression PASS.
@@ -798,7 +798,7 @@ Will be filed as separate v0.3.x PR after schema decision (single-step approxima
 ## 2026-05-07 — v0.3.3 phenotype_scale_overrides API hook
 
 **Branch**: `feat/phenotype-scale-overrides` (PR pending)
-**Spec**: `docs/superpowers/specs/2026-05-07-phenotype-scale-overrides-design.md` (commit `8dd6cf7`)
+**Spec**: `docs/_internal/specs/2026-05-07-phenotype-scale-overrides-design.md` (commit `8dd6cf7`)
 **Closes**: issue #31 (capability request from GenoADME — per-substrate effective phenotype scale injection)
 
 ### What shipped
@@ -819,7 +819,7 @@ Sisyphus ships **no calibration tables**. Caller (GenoADME's case) is responsibl
 
 Override compresses toward EM as specified. GenoADME can dial in any scale to match their meta-analysis target (e.g., Niemi 2006 men-stratum AUC ratio 3.32 central).
 
-### 4-task subagent-driven execution
+### 4-task execution
 
 Tasks 1-4 (`291d74f` → `740da17`):
 1. 7 failing unit tests (TDD target — TypeError on unknown kwarg)
@@ -855,8 +855,8 @@ Bit-identical (Meta 2.679 pin holds). Production benchmark uses default `phenoty
 ## 2026-05-06 — v0.3.2 NAT2 + UGT1A1 phenotype propagation + back-solve cancellation fix
 
 **Branch**: `feat/nat2-ugt1a1-phenotype` (PR pending)
-**Spec**: `docs/superpowers/specs/2026-05-04-nat2-ugt1a1-phenotype-design.md` (v3, commit `9af6c30`)
-**Plan**: `docs/superpowers/plans/2026-05-04-nat2-ugt1a1-phenotype.md` (commit `c1d94b3`)
+**Spec**: `docs/_internal/specs/2026-05-04-nat2-ugt1a1-phenotype-design.md` (v3, commit `9af6c30`)
+**Plan**: `docs/_internal/plans/2026-05-04-nat2-ugt1a1-phenotype.md` (commit `c1d94b3`)
 **Closes**: issue #10 (NAT2 + UGT1A1 PHENOTYPE_SCALES infrastructure)
 
 ### What shipped (12 task commits, b7cd2af → 82076c6)
@@ -895,7 +895,7 @@ The plan's CYP propagation regression test originally used **caffeine** (CYP1A2)
 - caffeine has 5 DrugBank CYP annotations → `_get_fm_fractions` allocates fm CYP1A2 = 0.20 (1/5 equal split), not the spec's assumed ~0.80. Post-fix Cmax shift only ~1.06× — gate 1.5× was unreachable.
 - warfarin has 3 CYP annotations → CYP2C9 fm ≈ 0.30 (vs literature ~0.65-0.92 for the S-enantiomer). Post-fix shift ~1.02×, gate 1.2× unreachable.
 
-Implementer (Task 2 subagent) replaced with **tizanidine** (CYP1A2-only DrugBank annotation, fm=0.833 → 1.52× ratio) and **irbesartan** (CYP2C9-only, fm=0.833 → 1.25× ratio). Spec reviewer verified empirically and confirmed the deviation is justified — the original gates were structurally unachievable given the model's DrugBank-driven equal-fm allocation.
+During implementation these were replaced with **tizanidine** (CYP1A2-only DrugBank annotation, fm=0.833 → 1.52× ratio) and **irbesartan** (CYP2C9-only, fm=0.833 → 1.25× ratio). A spec-review pass verified empirically and confirmed the deviation is justified — the original gates were structurally unachievable given the model's DrugBank-driven equal-fm allocation.
 
 The replacement preserves regression intent (decisively distinguishes pre-fix 1.000 from post-fix > 1) with cleaner single-CYP probe drugs. Spec §11 acceptance criteria still mention caffeine/warfarin as historical record; the actual gates in `tests/integration/test_phenotype_cyp_propagation.py` use tizanidine/irbesartan/pravastatin.
 
@@ -909,7 +909,7 @@ The replacement preserves regression intent (decisively distinguishes pre-fix 1.
 
 ### Architecture invariants preserved
 
-- Engine: 0 line changes. Identity-blind multiplication still works for new tags (CLAUDE.md Invariant #1).
+- Engine: 0 line changes. Identity-blind multiplication still works for new tags (Invariant #1).
 - Distribution-everywhere: NAT2/UGT1A1 abundances are Distribution with cv > 0 (Invariant #2).
 - No drug-specific branches: registry data is per-drug, but code path is generic (Invariant #6).
 - Hardening `realize_means()` deterministic path: untouched. Adding NAT2/UGT1A1 to YAML at end of liver.enzymes block minimizes RNG-order disruption for any seed=42 MC sampling.
@@ -980,8 +980,8 @@ This **revises the v0.3 PR #29 narrative** retroactively: the pre-v0.3 (buggy au
 ## 2026-05-03 — v0.3 ECM auto-activation gating
 
 **Branch**: `feat/ecm-auto-activation` (PR pending)
-**Spec**: `docs/superpowers/specs/2026-05-03-ecm-auto-activation-design.md`
-**Plan**: `docs/superpowers/plans/2026-05-03-ecm-auto-activation.md`
+**Spec**: `docs/_internal/specs/2026-05-03-ecm-auto-activation-design.md`
+**Plan**: `docs/_internal/plans/2026-05-03-ecm-auto-activation.md`
 
 ### What shipped
 
@@ -1221,7 +1221,7 @@ The Meta value 2.695 from Hardening EXACTLY matches the pre-Achour 2026-04-14 va
 - Re-pinned: `test_holdout_regression.py` (2.702→2.695), `test_prodrug_v2_snapshot.py` (4 drugs)
 - Cache: `data/training/4track_holdout_predictions.json` regenerated
 - CI: `data/validation/4track_ci_2026-05-01.json` (10k bootstrap, seed=20260422)
-- Headline: CLAUDE.md + README.md updated
+- Headline: README.md updated
 
 **Follow-ups**:
 - (none open from this work; this CLOSES the engine drift investigation queued from 2026-04-29)
@@ -1231,9 +1231,9 @@ The Meta value 2.695 from Hardening EXACTLY matches the pre-Achour 2026-04-14 va
 ## 2026-05-01 — Prodrug Activation v3 (input-data refresh, all-disposition)
 
 **Branch**: `feat/prodrug-activation-v3` (gated on v2 PR #7 merge per spec §8.1, satisfied 2026-04-30 by `78d12e3`).
-**Spec**: `docs/superpowers/specs/2026-04-29-prodrug-activation-v3-design.md`
-**Plan**: `docs/superpowers/plans/2026-04-29-prodrug-activation-v3.md` (19 tasks across 5 phases — all complete)
-**Literature deliverable**: `docs/superpowers/specs/2026-04-29-prodrug-v3-literature.md`
+**Spec**: `docs/_internal/specs/2026-04-29-prodrug-activation-v3-design.md`
+**Plan**: `docs/_internal/plans/2026-04-29-prodrug-activation-v3.md` (19 tasks across 5 phases — all complete)
+**Literature deliverable**: `docs/_internal/specs/2026-04-29-prodrug-v3-literature.md`
 
 **Per-item dispositions** (mechanistic-A doctrine compliant per spec §3.3):
 
@@ -1273,7 +1273,7 @@ This is the canonical mechanistic-A outcome: "we know the literature gap exists;
 - Tests: `tests/integration/test_prodrug_v3_registry_schema.py` (NEW), `tests/regression/test_prodrug_v3_enzyme_leak_audit.py` (NEW)
 - Baseline capture: `scripts/capture_prodrug_v3_baseline.py` + `tests/regression/data/prodrug_v3_pre_baseline.json`
 - Updated: validation_gate, snapshot, pipeline_smoke (xfail reasons + functional-only)
-- Docs: literature deliverable summary tables; CLAUDE.md v3 note; CHANGELOG v3 entry
+- Docs: literature deliverable summary tables; README v3 note; CHANGELOG v3 entry
 
 ---
 
@@ -1316,7 +1316,7 @@ Meta %2-fold/3-fold unchanged (46.7%, 62.6%). Engine %3-fold improved 40.2 → 5
 
 **Follow-ups (queued):**
 1. Refresh bootstrap 95% CIs against v2 cache post-merge (10k resamples, seed=20260422).
-2. Update CLAUDE.md headline AAFE table post-merge.
+2. Update the README headline AAFE table post-merge.
 3. Hardening: deterministic mean-only realization for engine validation tests (eliminates RNG-order fragility).
 4. v3 spec §5 Item 5 amendment: kidney 3e4 retained but at YAML position-after-gut_wall (already in this commit; v3 spec wording may need clarifying).
 
@@ -1348,7 +1348,7 @@ Meta %3-fold: 65.4 → 62.6. Engine %3-fold: 57.9 → 40.2.
 **Significance:**
 
 - **Meta AAFE robust** (Δ +0.9%) — ML track is unchanged (model artifacts not retrained); Meta combines Engine + ML + classifier + Vd, so ML stability dampens Engine drift. This is the headline-protection mechanism in action.
-- **Engine track degraded** (Δ +19.1%) — substantial. Likely root cause: P4.5 Achour correlated abundance prior (merged 2026-04-23) shifting Cmax predictions ~15-25% lower across most drugs. Earlier candidates (V3 IV-Cmax routing, ECM hepatic clearance migration) may also contribute. Per `docs/claude/propranolol_cmax_drift.md`, the propranolol +16% drift on `b366035` was an early canary; the broader engine drift documented here is consistent with that direction.
+- **Engine track degraded** (Δ +19.1%) — substantial. Likely root cause: P4.5 Achour correlated abundance prior (merged 2026-04-23) shifting Cmax predictions ~15-25% lower across most drugs. Earlier candidates (V3 IV-Cmax routing, ECM hepatic clearance migration) may also contribute. Per `docs/research/propranolol_cmax_drift.md`, the propranolol +16% drift on `b366035` was an early canary; the broader engine drift documented here is consistent with that direction.
 - **ML AAFE unchanged** — confirms ML model artifacts were not retrained between 2026-04-14 and 2026-04-29 (would otherwise show drift).
 - **N changed: 85→80 in-domain** — applicability-domain criteria evolved or 5 drugs newly flagged. Not investigated in this entry; flagged for follow-up.
 - **Cherry-picking impact:** the 2026-04-22 audit estimated retrospective-contamination band 2.85–3.10. New Meta point estimate 2.719 sits below this band, but bootstrap CI not yet refreshed against new cache; old [2.30, 3.20] CI is stale.
@@ -1366,15 +1366,15 @@ Meta %3-fold: 65.4 → 62.6. Engine %3-fold: 57.9 → 40.2.
 
 **Files updated:**
 - `data/training/4track_holdout_predictions.json` (regenerated)
-- `CLAUDE.md` headline performance table (point estimates, %2/3-fold, n_in_domain; CIs annotated stale)
-- `docs/claude/experiment-log.md` (this entry)
+- README headline performance table (point estimates, %2/3-fold, n_in_domain; CIs annotated stale)
+- `docs/research/experiment-log.md` (this entry)
 
 ---
 
 ## 2026-04-22 — Achour 2021 Correlated Physiology Prior (P4.5 infrastructure)
 
-Spec: `docs/superpowers/specs/2026-04-22-achour-abundance-correlation-design.md`
-Plan: `docs/superpowers/plans/2026-04-22-achour-abundance-correlation.md`
+Spec: `docs/_internal/specs/2026-04-22-achour-abundance-correlation-design.md`
+Plan: `docs/_internal/plans/2026-04-22-achour-abundance-correlation.md`
 Branch: feat/achour-correlated-abundance (merged commit TBD).
 
 **Outcome:** Infrastructure landed. `Distribution` gains optional `correlation_group`
@@ -1409,8 +1409,8 @@ re-measure SBC on the 52-cell grid.
 **Infrastructure shipped (7 commits, `4630b0b..4e10ad2`):**
 Route-aware `t_min_h = _IV_CMAX_DELAY_H (5/60 h) if route=="iv" else 0.0` threaded through `solve()`, `solve_mc()`, `compute_endpoints()`, `propagate_fast()` (scipy backend), pipeline. Oral (107 holdout + production) byte-identical to V2 — pinned by `tests/integration/test_v3_oral_regression.py`. 562 pass / 4 skip / 2 xfail, zero new failures.
 
-- Design spec: `docs/superpowers/specs/2026-04-22-iv-cmax-observation-design.md` (`d88183a`)
-- Plan: `docs/superpowers/plans/2026-04-22-v3-iv-cmax-observation.md` (`de6292b`)
+- Design spec: `docs/_internal/specs/2026-04-22-iv-cmax-observation-design.md` (`d88183a`)
+- Plan: `docs/_internal/plans/2026-04-22-v3-iv-cmax-observation.md` (`de6292b`)
 - Impl chain: `4630b0b` (solve anchor) → `9bc2e3d` (solve_mc windowed) → `2742df8` (compute_endpoints) → `6ed22e7` (propagate_fast) → `3f86e2e` (pipeline route-cond) → `ed3207f` (oral regression) → `4e10ad2` (propagate caveat)
 
 **ECM generalization re-run under V3 (`7aa49ae`, `data/validation/oatp_generalization_result_v3.json`):**
@@ -1447,10 +1447,10 @@ V3 methodology spec written + committed (`d88183a`) BEFORE engine re-run (`7aa49
 **SUPERSEDED by V3 run (2026-04-22) above.** Original V2 result preserved as `data/validation/oatp_generalization_result.v2.json`. Kept here for historical context only.
 
 
-**Spec:** `docs/superpowers/specs/2026-04-21-ecm-generalization-test-design.md`
+**Spec:** `docs/_internal/specs/2026-04-21-ecm-generalization-test-design.md`
   - v1 `9115e63` + v2 amendment `6e7ce0a` (substrate swap) + v2.1 `0d78c38` (valsartan Jmax scaling)
 
-**Plan:** `docs/superpowers/plans/2026-04-21-ecm-generalization-test.md` (commit `3c85fe4`)
+**Plan:** `docs/_internal/plans/2026-04-21-ecm-generalization-test.md` (commit `3c85fe4`)
 
 **Result:** `data/validation/oatp_generalization_result.json` (commit `4fb6d38`)
 
@@ -1496,9 +1496,9 @@ Single run at N=1000, seed 42. No post-run parameter adjustment. All spec/plan a
 
 ### OATP ECM hepatic clearance — IMPLEMENTED (2026-04-21, branch `feat/oatp-ecm`)
 
-- **Spec**: `docs/superpowers/specs/2026-04-20-oatp-ecm-hepatic-clearance-design.md`
-- **Plan**: `docs/superpowers/plans/2026-04-20-oatp-ecm-hepatic-clearance.md`
-- **Outcome**: ECM closed-form hepatic-clearance flux shipped. 12-task TDD plan executed via subagent-driven development. `ClearanceFluxSpec` gains `"extended"` model; `DrugOnGraph` gains `ps_passive`, `ps_eff`, `cl_int_bile`; `data/transporters/hepatic_ecm.json` + `load_hepatic_ecm_params()` added.
+- **Spec**: `docs/_internal/specs/2026-04-20-oatp-ecm-hepatic-clearance-design.md`
+- **Plan**: `docs/_internal/plans/2026-04-20-oatp-ecm-hepatic-clearance.md`
+- **Outcome**: ECM closed-form hepatic-clearance flux shipped. 12-task TDD plan executed as a modular implementation. `ClearanceFluxSpec` gains `"extended"` model; `DrugOnGraph` gains `ps_passive`, `ps_eff`, `cl_int_bile`; `data/transporters/hepatic_ecm.json` + `load_hepatic_ecm_params()` added.
 - **YAML change**: `data/physiology/reference_man.yaml` liver clearance model `well_stirred → extended`; two `active_transport` edges removed; `liver.transporters.OATP1B1` abundance re-calibrated `1.0e11 → 5.0e5` via `scripts/calibrate_oatp_abundance_ecm.py` (pravastatin FE=1.013 under ECM).
 - **107 holdout**: Meta AAFE 2.695 preserved exactly (|Δ|=0.000019). Non-OATP drugs use `PS_passive=PS_eff=1e6, CL_int_bile=0` defaults; ECM reduces to well-stirred algebraically.
 - **Stiffness elimination**: all 5 statins solve in <0.12 s under ECM (vs 41-min stall pre-ECM on 4/5 statins). Primary engineering win of the migration.
@@ -1531,12 +1531,12 @@ Single run at N=1000, seed 42. No post-run parameter adjustment. All spec/plan a
   - CV tightens 1/2 – 1/4× across all drugs — posterior over-concentrated on a single obs.
 - **Interpretation**: reweighting effective when |bias| ≥ 20%, regressive when |bias| < 10%. N=200 single-obs stochastic error amplified by likelihood. Bias-variance tradeoff.
 - **Production decision**: default `sbi_reweight=False` retained. Per-drug routing: `method_routing.json` gets `sbi_reweight: {"morphine": true}`, morphine route `is` → `sbi`. CLI auto: `[auto] routing morphine → method=sbi +reweight`. Final production: **12 SBI / 0 IS / 1 IBIS** (IS override retired). 7 SBI dispatch tests pass.
-- **Decision package**: `docs/superpowers/specs/2026-04-19-p6-morphine-fix-decision.md`.
+- **Decision package**: `docs/_internal/specs/2026-04-19-p6-morphine-fix-decision.md`.
 
 ### P7 Ketorolac AD flag (2026-04-19)
 - **Decision**: close P7 as documented structural limitation. 2026-04-11 engine-level fup override attempt regressed engine AAFE +0.306 (see DE-31 in dead-ends.md).
 - **Option 2 implementation**: `pipeline/predict.py` gains `HIGH_ACID_LOW_FUP` AD flag — informational warning for drugs with pKa < 5 AND DrugBank measured fup < 0.02. Ketorolac, ibuprofen flagged. Morphine / base drugs not flagged. Engine numbers unchanged.
-- **Decision package**: `docs/superpowers/specs/2026-04-19-p7-ketorolac-decision.md`.
+- **Decision package**: `docs/_internal/specs/2026-04-19-p7-ketorolac-decision.md`.
 
 ### P4 Continuous Hierarchical Infrastructure (2026-04-16, branch `feat/continuous-hierarchical`)
 - **Physiology generator**: `src/sisyphus/sbi/physiology_generator.py` — `generate_physiology(BW, age)` builds BodyGraph for any patient 0.5–85y, 5–120kg. Hines 2008 enzyme ontogeny (exponential maturation) + Wynne 1989 aging decline + allometric volume/flow scaling.
@@ -1562,7 +1562,7 @@ See [DE-32](./dead-ends.md#de-32--sbi-v3-oatp-training-expansion-2026-04-14).
 - **107 holdout regression**: Meta AAFE 2.695 exact invariance.
 - **Tests**: 422 + 12 new unit = 434. Integration +2. All pass.
 - **Pravastatin SBC**: not executed (manual, ~40 min). Engine prior predictive Cmax shifts 0.039 → 0.045 direction confirmed. Future SBC run should gate cov_dev < 0.10.
-- **Design spec / plan**: `docs/superpowers/specs/2026-04-15-oatp1b1-hepatic-uptake-design.md`, `docs/superpowers/plans/2026-04-15-oatp1b1-pravastatin.md`.
+- **Design spec / plan**: `docs/_internal/specs/2026-04-15-oatp1b1-hepatic-uptake-design.md`, `docs/_internal/plans/2026-04-15-oatp1b1-pravastatin.md`.
 
 ### Phase 2.0.5 — SBI routing expansion (2026-04-12, commits `ccc15a0` code + `43051ab` eval)
 - **logit(fup) reparameterization**: theta[1] ∈ [−4.595, +4.595] (logit space). `apply_theta_to_drug` sigmoid-inverts. Improves prior coverage for low-fup acids / statins.

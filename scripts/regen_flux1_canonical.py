@@ -115,7 +115,7 @@ def main() -> None:
           "test_enzyme_leak_audit, and tebipenem from _FLUX1_STALE_PINS")
     print("  -> KEEP OATP xfails (pravastatin/pitavastatin statin + auto_ecm) "
           "until OATP1B1 re-anchor")
-    print("  Then: restore artifacts, run full suite, update CLAUDE.md headline "
+    print("  Then: restore artifacts, run full suite, update the README headline "
           "table to the new Meta, commit, merge.")
 
 

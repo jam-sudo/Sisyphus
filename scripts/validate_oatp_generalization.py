@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ECM generalization test — engine execution driver.
 
-Pre-registered per spec docs/superpowers/specs/2026-04-21-ecm-generalization-test-design.md.
+Pre-registered per spec docs/_internal/specs/2026-04-21-ecm-generalization-test-design.md.
 
 For each VERIFIED non-statin OATP1B1 substrate (valsartan + glimepiride under amendment v2):
 1. Load IV dose + observed Cmax from data/validation/oatp_generalization_drugs.json
@@ -185,12 +185,12 @@ def main() -> None:
     print(f"\n=== Aggregate Mode: {mode.value} ===")
 
     report = {
-        "spec": "docs/superpowers/specs/2026-04-21-ecm-generalization-test-design.md",
+        "spec": "docs/_internal/specs/2026-04-21-ecm-generalization-test-design.md",
         "spec_commit": "0d78c38",
         "spec_commit_chain": ["9115e63", "6e7ce0a", "0d78c38"],
         "amendment": "v2/v2.1 — substrate set = valsartan + glimepiride (N=2)",
         "methodology": "V3 IV-Cmax (windowed max at t >= 5 min)",
-        "methodology_spec": "docs/superpowers/specs/2026-04-22-iv-cmax-observation-design.md",
+        "methodology_spec": "docs/_internal/specs/2026-04-22-iv-cmax-observation-design.md",
         "methodology_commit_chain": ["4630b0b", "9bc2e3d", "2742df8", "6ed22e7", "3f86e2e", "ed3207f", "4e10ad2"],
         "v2_result_path": "data/validation/oatp_generalization_result.v2.json",
         "mc_n_samples": _MC_N_SAMPLES,

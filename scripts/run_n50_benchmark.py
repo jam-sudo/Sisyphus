@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """N50 secondary permanent holdout benchmark runner.
 
-Per docs/superpowers/specs/2026-04-22-n50-secondary-holdout-design.md.
+Per docs/_internal/specs/2026-04-22-n50-secondary-holdout-design.md.
 
 Two modes:
 
@@ -24,7 +24,7 @@ Route mapping:
   route='oral'       → predict(route='oral')
 
 CI: bootstrap 10,000 resamples on abs(log10(fold)), report
-    10^percentile([2.5, 97.5]). Per docs/claude/cherry_picking_process_v1.md §3.
+    10^percentile([2.5, 97.5]). Per docs/research/cherry_picking_process_v1.md §3.
 """
 
 from __future__ import annotations

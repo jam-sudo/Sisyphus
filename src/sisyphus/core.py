@@ -148,7 +148,7 @@ class ActiveMetabolite:
     One-compartment plasma disposition: aggregate ``CL_per_h`` and ``Vd_L``
     represent the active's apparent clearance and volume of distribution.
     No enzyme-level decomposition (out of scope; see
-    docs/superpowers/specs/2026-04-24-prodrug-activation-design.md §2).
+    docs/_internal/specs/2026-04-24-prodrug-activation-design.md §2).
 
     The conversion edge connects ``conversion_site`` (a parent-graph node)
     to the active's plasma compartment. Conversion is 1st-order in parent
@@ -189,7 +189,7 @@ class ActiveMetabolite:
     ``conversion_yield_fraction``. Empty dict (default) preserves the
     pre-B-04 single-yield behaviour.
 
-    See docs/superpowers/specs/2026-05-17-multi-enzyme-prodrug-yield-design.md
+    See docs/_internal/specs/2026-05-17-multi-enzyme-prodrug-yield-design.md
     """
 
 
@@ -265,13 +265,13 @@ class DrugOnGraph:
     ps_overrides: dict[str, Distribution] = field(default_factory=dict)
 
     # Prodrug activation — see ActiveMetabolite + spec
-    # docs/superpowers/specs/2026-04-24-prodrug-activation-design.md
+    # docs/_internal/specs/2026-04-24-prodrug-activation-design.md
     active_metabolite: ActiveMetabolite | None = None
     observation_species: str = "parent"  # "parent" | "active"
 
     # v2 prodrug activation — drug-side enzyme affinity for conversion
     # (separate from enzyme_affinity which is for elimination).
-    # See docs/superpowers/specs/2026-04-27-prodrug-activation-v2-design.md §3.2.
+    # See docs/_internal/specs/2026-04-27-prodrug-activation-v2-design.md §3.2.
     enzyme_affinity_for_conversion: dict[str, Distribution] = field(default_factory=dict)
 
     # v2.2a saturable metabolism — per-enzyme Michaelis Km on the UNBOUND-conc basis (mg/L).

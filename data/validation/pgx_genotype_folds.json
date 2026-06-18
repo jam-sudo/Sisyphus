@@ -4,7 +4,7 @@
     "purpose": "PGx genotype-fold calibration·foundation benchmark (PM, Big-3 CYP)",
     "discipline": "model-blind; fm and fold sourced from independent studies; locked before scoring",
     "fm_definition": "fraction of TOTAL systemic clearance via the gene (frac_metabolized x enzyme_split x (1 - f_renal))",
-    "spec": "docs/superpowers/specs/2026-06-14-pgx-genotype-fold-validation-design.md"
+    "spec": "docs/_internal/specs/2026-06-14-pgx-genotype-fold-validation-design.md"
   },
   "pairs": [
     {"drug": "atomoxetine",      "gene": "CYP2D6",  "phenotype": "PM", "fm_invitro": 0.90, "fm_confidence": "high",   "fm_source_type": "in_vitro_phenotyping", "obs_auc_fold_pm": 8.1, "obs_auc_fold_ci": [6.0, 11.0], "f_renal": 0.03, "is_prodrug": false, "is_nonlinear": false, "quantitative": true,  "flags": [],                       "citation_fm": "Ring 2002 PMID 11854152", "citation_fold": "Yu/Markowitz 2016 PMID 26859445"},

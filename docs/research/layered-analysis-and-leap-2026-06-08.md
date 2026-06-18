@@ -1,12 +1,11 @@
 ---
 last_updated: 2026-06-08
-parent: ../../CLAUDE.md
 charter: A full layer-by-layer (data / engine / ML+meta / validation-UQ) analysis of Sisyphus and an honest, gate-tested assessment of where a genuine performance leap is — and is not — available. Re-examines foreclosed methodology. Scientific-mathematical rigor is the binding constraint.
 ---
 
 # Sisyphus — Layered Analysis & Performance-Leap Assessment (2026-06-08)
 
-> Method: five independent deep-dive analyses (data, engine, ML/meta, validation/UQ, plus a decisive
+> Method: five independent deep-dives (data, engine, ML/meta, validation/UQ, plus a decisive
 > decorrelation experiment), each grounded in `dead-ends.md` (44 prior entries) and `diagnosis.md`, each
 > required to pass the **error-decorrelation gate** (|r|<0.5 on per-drug log-Cmax residuals vs every existing
 > track — the only empirically-proven path, the VDss exception) before any claim of a lever. Four new
@@ -56,7 +55,7 @@ Sisyphus's accuracy is bounded by **three nested walls**, in order of how deep t
 
 | Wall | What it is | Confirmed by |
 |---|---|---|
-| **W1 — CLint target-noise** | hepatocyte CLint R²≈0.24 is intrinsic (interlab CV up to 99.8%) | DE-14/44, Bowman-Benet 2019, external deep-research |
+| **W1 — CLint target-noise** | hepatocyte CLint R²≈0.24 is intrinsic (interlab CV up to 99.8%) | DE-14/44, Bowman-Benet 2019, external literature review |
 | **W2 — bioavailability-F structural error** | the engine's `fa·Fg·Fh` map is wrong in a **bidirectional**, per-drug way no single knob reconciles; shared across tracks | DE-41/42/43, FLUX-1, this session's 4 gate failures |
 | **W3 — meta co-calibration** | the fixed-weight geometric blend damps any single-track change to ~18% (r>0.986 co-calibration + a disagreement penalty that *down-weights the engine on exactly the drugs a fix targets*) | DE-23/24/25/26/43, this session's meta-math derivation |
 
@@ -185,7 +184,7 @@ space is decorrelation-exhausted.** Therefore a higher SMILES-only number requir
 channel*, which by definition is not SMILES.
 
 ### V.1 Leap A — Correctness as the product (ship; durable; not headline)
-Per [[correctness-over-benchmark]]. Concrete, ready:
+Per correctness-over-benchmark. Concrete, ready:
 - **Reference-data fixes** (oxybutynin ~8×, selegiline 2×) — primary-source-adjudicated.
 - **D-1 transporter-MM unit closure** — a real latent bug; prerequisite for any transporter physics.
 - **ECM/OATP albumin-mediated uptake re-anchor** — the one un-foreclosed *mechanistic* lever (Li/Benet 2020,
@@ -270,4 +269,4 @@ hepatic-fu for acids (data-blocked); selling any measured-ADME work as a move on
 ---
 
 *See also: `dead-ends.md` (DE-45/46/47 appended), `diagnosis.md` §1/§4/§8/§9, the FLUX-1 spec, and
-[[external-pbpk-benchmark-bar]] / [[correctness-over-benchmark]].*
+external-pbpk-benchmark-bar / correctness-over-benchmark.*

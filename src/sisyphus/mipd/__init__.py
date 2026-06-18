@@ -6,7 +6,7 @@ dominant structural error is bioavailability F; this package treats true F as a
 latent, places a wide prior on it centered at the engine's emergent F_engine,
 and updates it from measured observations (measured F, Cmax, AUC) via SIR.
 
-Charter: docs/superpowers/specs/2026-06-09-engine-as-prior-mipd-charter.md
+Charter: docs/_internal/specs/2026-06-09-engine-as-prior-mipd-charter.md
 (Gate 0b/0c PASSED: one measured anchor materially improves Cmax, ~3x more OOD.)
 """
 from sisyphus.mipd.clgrid import (

@@ -1,5 +1,5 @@
 {
-  "spec": "docs/superpowers/specs/2026-04-21-ecm-generalization-test-design.md",
+  "spec": "docs/_internal/specs/2026-04-21-ecm-generalization-test-design.md",
   "spec_commit": "0d78c38",
   "spec_commit_chain": [
     "9115e63",
@@ -8,7 +8,7 @@
   ],
   "amendment": "v2/v2.1 \u2014 substrate set = valsartan + glimepiride (N=2)",
   "methodology": "V3 IV-Cmax (windowed max at t >= 5 min)",
-  "methodology_spec": "docs/superpowers/specs/2026-04-22-iv-cmax-observation-design.md",
+  "methodology_spec": "docs/_internal/specs/2026-04-22-iv-cmax-observation-design.md",
   "methodology_commit_chain": [
     "4630b0b",
     "9bc2e3d",

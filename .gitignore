@@ -69,16 +69,16 @@ sbi-logs/
 .playwright-mcp/
 graphify-out/
 
-# Agent/session-local config (per-machine, not repo-wide)
+# Local editor / tooling config (per-machine, not repo-wide)
 .claude/
 
-# Local-only Claude Code context (per-user agent memory; untracked by user request 2026-05-02)
+# Local-only project context and contributor notes (per-user; untracked 2026-05-02 / 2026-06-18)
 CLAUDE.md
+AGENTS.md
 
-# Internal agent-operational docs (backlog, landmarks, plans, sub-backlogs, audit
-# snapshots). Public-facing agent guidance lives in AGENTS.md; the
-# docs/_internal/AGENT_INTERNAL.md superset is kept local-only because external
-# readers don't need the day-to-day scratchpad (untracked by user request 2026-05-30).
+# Internal development docs (backlog, landmarks, design specs/plans, sub-backlogs,
+# audit snapshots) kept local-only — external readers don't need the day-to-day
+# scratchpad (untracked 2026-05-30 / 2026-06-18).
 docs/_internal/
 
 # Manuscript / preprint / FDA-essay drafts and any binary document (local-only;

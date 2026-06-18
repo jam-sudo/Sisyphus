@@ -11,7 +11,7 @@ Michaelis-Menten in this path), so at a fixed disposition every steady-state exp
 scales linearly with dose. The dose knob is therefore inverted *analytically* (one
 solve per interval, then a max-interval-overlap sweep over per-sample feasible
 dose-multiplier ranges); only the interval knob (nonlinear accumulation) costs an
-engine re-solve. See docs/superpowers/specs/2026-06-12-mipd-dose-recommendation-design.md.
+engine re-solve. See docs/_internal/specs/2026-06-12-mipd-dose-recommendation-design.md.
 """
 from __future__ import annotations
 

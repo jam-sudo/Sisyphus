@@ -42,7 +42,7 @@ def test_cached_holdout_aafe_is_2p731() -> None:
 
 
     Baseline updated 2026-05-27 (B-02 Phase 2 UGT public registry activation;
-    spec docs/superpowers/specs/2026-05-26-B02-ugt-public-registry-design.md).
+    spec docs/_internal/specs/2026-05-26-B02-ugt-public-registry-design.md).
 
     B-02 activates UGT2B7 + UGT1A9 paths via 2 literature-curated substrate
     registries (8 seed drugs: morphine, codeine, ketorolac, indomethacin via

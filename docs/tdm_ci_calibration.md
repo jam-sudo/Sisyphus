@@ -6,7 +6,7 @@
 
 ## TL;DR
 
-- The previous CLAUDE.md number "90 % CI coverage = 10 / 15 (67 %)" came from a benchmark that computed CI via `exp(mu ± 1.645 σ)` where `(mu, σ)` are derived from `posterior_mean` and `posterior_cv`. That approximation silently over-covers asymmetric posteriors and was running on a stale code revision.
+- The previous documented number "90 % CI coverage = 10 / 15 (67 %)" came from a benchmark that computed CI via `exp(mu ± 1.645 σ)` where `(mu, σ)` are derived from `posterior_mean` and `posterior_cv`. That approximation silently over-covers asymmetric posteriors and was running on a stale code revision.
 - Every dispatch path (`importance_sampling`, `ibis`, `enkf`, `sbi`) now populates `TDMResult.cmax_ci_90` directly from the empirical weighted (or uniformly weighted) quantile of the raw posterior Cmax samples.
 - The same 15-run benchmark on current code with the empirical CI fails on the 6 hard-drug runs (0 / 3 ketorolac, 0 / 3 rivaroxaban) — the stale 67 % was partly an artefact of the lognormal approximation's over-coverage.
 - The real root cause on ketorolac is that the engine's ADME prediction for `fup` (0.069 XGBoost vs 0.010 DrugBank-measured) mis-centers the prior by a factor of 7×. No posterior method — IS, IBIS, EnKF, or SBI — can reach truth when the prior is that far off. Documented as a structural limitation.

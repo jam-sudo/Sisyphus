@@ -1,7 +1,7 @@
 {
   "meta": {
     "purpose": "Locked observed evidence for the genotype-nonlinearity validation. Never refit.",
-    "spec": "docs/superpowers/specs/2026-06-16-pgx-genotype-nonlinearity-two-arm-design.md",
+    "spec": "docs/_internal/specs/2026-06-16-pgx-genotype-nonlinearity-two-arm-design.md",
     "status": "CROSSED_GRID_HALTED",
     "halt_reason": "Data-availability gate (spec §4.1) FAILED for both clean-primaries: no citable >=2-dose genotype-stratified exposure grid exists. Phenytoin — per-genotype Michaelis-Menten Vmax is paywalled (Mamiya 1998, PMID 9860067; abstract gives only Vmax(*1/*3)~=0.58*Vmax(*1/*1)); the *3/*3 activity fraction was not found in any accessible source. Propafenone — clean EM/PM cross exists only at a single 300 mg dose (Tran 2022, PMC9324789); the within-EM dose-nonlinearity is documented (Siddoway 1987, PMID 2434237) but not stratified at >=2 genotype-crossed doses. The full genotype cross-term (P2) is NOT validatable on citable human data. Per the correctness-over-benchmark / no-cherry-picking discipline, the *3/*3 fraction was NOT invented. See data-independent arm-sign mechanism result + the propafenone EM P1 check below.",
     "units": {"exposure": "relative (ratio) or stated", "conc": "ng/mL or ug/mL as stated", "auc": "ug*h/mL", "mw": "g/mol"}

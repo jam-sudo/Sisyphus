@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "description": "Substrates of hepatic UGT2B7 with explicit metabolic_fraction. Used by predict() to allocate metabolic_fraction of XGBoost CLint to UGT2B7; the residual is split among CYPs per compound_type defaults. Created 2026-05-26 by B-02 Phase 2 (docs/superpowers/specs/2026-05-26-B02-ugt-public-registry-design.md).",
+  "description": "Substrates of hepatic UGT2B7 with explicit metabolic_fraction. Used by predict() to allocate metabolic_fraction of XGBoost CLint to UGT2B7; the residual is split among CYPs per compound_type defaults. Created 2026-05-26 by B-02 Phase 2 (docs/_internal/specs/2026-05-26-B02-ugt-public-registry-design.md).",
   "rationale": "Replaces the DrugBank-derived UGT attribution that DE-36 measured against. Single-registry-per-drug (Approach 1); minor isoform contributions documented in notes for Phase 2.x phenotype work.",
   "schema": "see nat2_substrates.json",
   "substrates": [

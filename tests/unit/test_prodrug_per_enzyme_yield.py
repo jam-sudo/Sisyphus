@@ -1,6 +1,6 @@
 """Unit tests for per-enzyme prodrug yield (B-04).
 
-See docs/superpowers/specs/2026-05-17-multi-enzyme-prodrug-yield-design.md
+See docs/_internal/specs/2026-05-17-multi-enzyme-prodrug-yield-design.md
 """
 from __future__ import annotations
 

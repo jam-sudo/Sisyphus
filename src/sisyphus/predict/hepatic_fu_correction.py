@@ -14,7 +14,7 @@ connectivity-block fallback so non-isomeric query SMILES still match
 stereospecific registry entries.
 
 Registry file: ``data/transporters/hepatic_fu_correction.json``
-Schema: see docs/superpowers/specs/2026-05-21-B11-hepatic-fu-correction-design.md
+Schema: see docs/_internal/specs/2026-05-21-B11-hepatic-fu-correction-design.md
 """
 
 from __future__ import annotations
@@ -78,7 +78,7 @@ def _parse_overrides(
             raise ValueError(
                 f"hepatic_fu_correction entry for {entry.get('drug')!r} has "
                 f"fu_correction_liver.mean={mean} < 1.0; values must be >= 1.0 "
-                f"per CLAUDE.md invariant #8 (no fudge to Cmax loss). To raise "
+                f"per invariant #8 (no fudge to Cmax loss). To raise "
                 f"hepatic CL for a highly bound drug, use a literature-derived "
                 f"fu_inc/fu_plasma ratio >= 1.0."
             )

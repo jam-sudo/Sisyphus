@@ -1,6 +1,6 @@
 """V3.1 integration: IV infusion routes through regimen.solver.
 
-Spec: docs/superpowers/specs/2026-04-22-v3.1-iv-infusion-design.md §5 Phase 1.
+Spec: docs/_internal/specs/2026-04-22-v3.1-iv-infusion-design.md §5 Phase 1.
 
 Invariants to preserve:
 - Oral and IV bolus paths unchanged (V3 behavior).

@@ -14,7 +14,7 @@ from sisyphus.engine.compiler import CompiledODE, ResolvedParams
 
 # Clinical first-draw convention for IV bolus Cmax (5 min post-injection).
 # Used by route-aware Cmax extraction to skip the deterministic t=0 spike
-# (see docs/superpowers/specs/2026-04-22-iv-cmax-observation-design.md §5).
+# (see docs/_internal/specs/2026-04-22-iv-cmax-observation-design.md §5).
 _IV_CMAX_DELAY_H = 5.0 / 60.0
 
 

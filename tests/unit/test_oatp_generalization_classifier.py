@@ -1,6 +1,6 @@
 """Unit tests for ECM generalization test classifier.
 
-Tests pure classifier logic per spec docs/superpowers/specs/2026-04-21-ecm-generalization-test-design.md.
+Tests pure classifier logic per spec docs/_internal/specs/2026-04-21-ecm-generalization-test-design.md.
 """  # noqa: E501
 
 from __future__ import annotations

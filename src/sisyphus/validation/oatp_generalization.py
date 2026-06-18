@@ -1,7 +1,7 @@
 """ECM generalization test classifier.
 
 Pure functions for pre-registered pass/fail logic per spec
-docs/superpowers/specs/2026-04-21-ecm-generalization-test-design.md.
+docs/_internal/specs/2026-04-21-ecm-generalization-test-design.md.
 
 Separation from the execution script enables fast unit tests and keeps
 the classification logic frozen independently of orchestration changes.

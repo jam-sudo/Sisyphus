@@ -64,7 +64,7 @@ nodes:
       CYP2E1: {mean: 3307500, cv: 0.442, correlation_group: liver_achour2021}
       # Prodrug activation enzymes — independent lognormal (no Achour matrix entry).
       # Values from T1 literature deliverable
-      # (docs/superpowers/specs/2026-04-27-prodrug-v2-task1-literature.md §1).
+      # (docs/_internal/specs/2026-04-27-prodrug-v2-task1-literature.md §1).
       SPR:  {mean: 1.0e5, cv: 1.0}    # Class-estimated; rat specific activity (PMC7520308) + UniProt P35270 MW
       CES1: {mean: 8.0e7, cv: 0.47}   # Boberg 2017 PMC5267516: 1664 pmol/mg × 48000 mg microsomal
       CES2: {mean: 8.4e6, cv: 0.61}   # Boberg 2017 PMC5267516: 174 pmol/mg × 48000 mg microsomal

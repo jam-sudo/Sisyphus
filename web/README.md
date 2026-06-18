@@ -1,7 +1,7 @@
 # Sisyphus PBPK Console
 
 A scientific-editorial web interface for the Sisyphus PBPK platform — turns the
-CLI into a clickable clinical tool. Built from the Claude Design handoff
+CLI into a clickable clinical tool. Built from the design handoff
 ("Direction B — Workspace Console") and **wired to the real Sisyphus engine**.
 
 Six workflows, all driven by real-engine numbers:

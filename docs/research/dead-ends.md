@@ -1,6 +1,5 @@
 ---
 last_updated: 2026-06-03
-parent: ../../CLAUDE.md
 charter: Authoritative list of failed Sisyphus experiments. Read before proposing any accuracy improvement.
 ---
 
@@ -179,7 +178,7 @@ Artifacts: `/tmp/4track_state_A_ugt_off.json` and `/tmp/4track_state_B_ugt_on.js
 
 **What this implies:** Either (a) fu_inc/fu_p ratios are not the dominant over-prediction mechanism for the 4 audited PPB candidates, (b) the accessible literature does not measure these ratios for the specific drugs of interest, or (c) both. Future iterations may revisit per spec §6.2 with: subscription access to the four primary DMD/CPK papers, in-house hepatocyte uptake assay data for the PPB candidates, or transporter-mediated alternatives (OATP / NTCP uptake clearance instead of fu_inc gating). Telltale if it returns: "hepatic intracellular fu / fu_inc / Kp,uu,liver / albumin-facilitated uptake" applied to highly-bound holdout drugs without a paired public-corpus or experimentally-measured ratio per drug.
 
-Artifacts: `data/transporters/hepatic_fu_correction.json` (19 audit rows), curation log `docs/superpowers/specs/2026-05-22-B11-Phase-B-curation-log.md`, spec `docs/superpowers/specs/2026-05-21-B11-hepatic-fu-correction-design.md`, plan `docs/superpowers/plans/2026-05-21-B11-hepatic-fu-correction.md`. Phase A infra shipped at `a0c90f8`; Phase B curation at `d10bbef`.
+Artifacts: `data/transporters/hepatic_fu_correction.json` (19 audit rows), curation log `docs/_internal/specs/2026-05-22-B11-Phase-B-curation-log.md`, spec `docs/_internal/specs/2026-05-21-B11-hepatic-fu-correction-design.md`, plan `docs/_internal/plans/2026-05-21-B11-hepatic-fu-correction.md`. Phase A infra shipped at `a0c90f8`; Phase B curation at `d10bbef`.
 
 ### DE-38 — Morphine / Codeine over-prediction worsens under UGT2B7 activation (secondary finding from B-02)
 
@@ -202,7 +201,7 @@ Artifacts: `data/transporters/hepatic_fu_correction.json` (19 audit rows), curat
 
 **Telltale if it returns under a new label:** "morphine over-prediction" or "UGT abundance recalibration" applied to UGT2B7 substrates without a CYP-route IVIVE rebalancing alongside.
 
-Artifacts: `data/training/4track_holdout_predictions.json` (post-B-02 cache), `data/validation/4track_ci_2026-05-27_B02.json` (bootstrap CI), spec `docs/superpowers/specs/2026-05-26-B02-ugt-public-registry-design.md`, plan `docs/superpowers/plans/2026-05-26-B02-ugt-public-registry.md`.
+Artifacts: `data/training/4track_holdout_predictions.json` (post-B-02 cache), `data/validation/4track_ci_2026-05-27_B02.json` (bootstrap CI), spec `docs/_internal/specs/2026-05-26-B02-ugt-public-registry-design.md`, plan `docs/_internal/plans/2026-05-26-B02-ugt-public-registry.md`.
 
 ---
 
@@ -216,13 +215,13 @@ Artifacts: `data/training/4track_holdout_predictions.json` (post-B-02 cache), `d
 
 **Why it cannot work:** the defensible gut UGT2B7 abundance (3.6e3) is **~0.15% of hepatic UGT2B7** (2.43e6). Gut first-pass via UGT2B7 is a sub-percent clearance term — it cannot close a 3.4× over-prediction. The morphine/codeine fix, if any, must come from a **hepatic** UGT2B7 IVIVE/extraction differential, not the gut node.
 
-**Citation-confabulation sub-finding (process, important):** the B-13 spec's gut abundances rested on confabulated literature. The claimed intestinal UGT2B7 "15 pmol/mg (5-30 range)" is ~25× the real median (0.60); "Bhatt 2019 DMD 47:498" resolves to an unrelated Kimoto maraviroc DDI paper (PMID 30862625); "Akabane 2012 DMD 40:1310" does not exist (NCBI esearch count=0). Gut UGT1A9 was DROPPED — not expressed in human small intestine (Oda 2012 isoform-specific antibody finds it in kidney+liver only; UGT1A10 is the intestine-specific 1A isoform; absent from Couto 2020 >5000-protein global proteomics). Caught by an 11-agent adversarial verification workflow (`verify-gut-ugt-citations`, 2026-05-29; both committed values refuted 3/3 + 3/3, high confidence). **Lesson:** spec-stage abundance/citation values must be verified against primary sources before reaching a committed YAML — "fallback citation" lists authored from memory are a confabulation risk.
+**Citation-confabulation sub-finding (process, important):** the B-13 spec's gut abundances rested on confabulated literature. The claimed intestinal UGT2B7 "15 pmol/mg (5-30 range)" is ~25× the real median (0.60); "Bhatt 2019 DMD 47:498" resolves to an unrelated Kimoto maraviroc DDI paper (PMID 30862625); "Akabane 2012 DMD 40:1310" does not exist (NCBI esearch count=0). Gut UGT1A9 was DROPPED — not expressed in human small intestine (Oda 2012 isoform-specific antibody finds it in kidney+liver only; UGT1A10 is the intestine-specific 1A isoform; absent from Couto 2020 >5000-protein global proteomics). Caught by an adversarial citation-verification pass (`verify-gut-ugt-citations`, 2026-05-29; both committed values refuted 3/3 + 3/3, high confidence). **Lesson:** spec-stage abundance/citation values must be verified against primary sources before reaching a committed YAML — "fallback citation" lists authored from memory are a confabulation risk.
 
 **Outcome:** B-13 ships as an enzyme-level gut-wall **correctness** term (proper literature-grounded gut UGT2B7; UGT1A9 correctly absent), NOT a morphine fix. Metric-neutral within bootstrap noise.
 
 **Telltale if it returns under a new label:** "gut UGT abundance," "extra-hepatic UGT first-pass," or "intestinal UGT2B7" proposed as a fix for morphine/codeine/UGT2B7-substrate over-prediction. The hepatic UGT2B7 IVIVE differential remains the only plausible lever and is a separate (un-started) backlog item.
 
-Artifacts: `data/physiology/reference_man.yaml` (gut_wall UGT2B7), `data/training/4track_holdout_predictions.json` (corrected B-13 cache), spec `docs/superpowers/specs/2026-05-27-B13-gut-ugt-expansion-design.md` (+ 2026-05-29 amendment), `tests/regression/test_gut_ugt_abundance.py`.
+Artifacts: `data/physiology/reference_man.yaml` (gut_wall UGT2B7), `data/training/4track_holdout_predictions.json` (corrected B-13 cache), spec `docs/_internal/specs/2026-05-27-B13-gut-ugt-expansion-design.md` (+ 2026-05-29 amendment), `tests/regression/test_gut_ugt_abundance.py`.
 
 ---
 
@@ -245,7 +244,7 @@ Artifacts: `data/physiology/reference_man.yaml` (gut_wall UGT2B7), `data/trainin
 
 **Telltale if it returns:** "hepatic UGT IVIVE / UGT under-prediction correction / albumin-effect scaling" proposed for morphine/codeine without a **verified, hepatocyte-basis, hepatic-fraction-only, per-substrate** number. The HLM albumin fold and the renal contribution are the two traps. The DE-38-complete idea (UGT IVIVE **plus** a CYP-route rebalance) remains theoretically open but is a different cycle — B-14 shows the UGT-IVIVE half alone has no honest large value.
 
-Artifacts: `data/enzymes/ugt_ivive_sf.json` (all-1.0 audited registry), `src/sisyphus/predict/non_cyp_substrates.py` (`get_ugt_ivive_sf`), `src/sisyphus/predict/ivive.py` (`_decompose_clint` hook), `tests/unit/test_ugt_ivive_sf.py`, `tests/regression/test_ugt_ivive_sf_registry_schema.py`, spec `docs/superpowers/specs/2026-05-30-hepatic-ugt-ivive-differential-design.md` (v2), plan `docs/superpowers/plans/2026-05-30-B14-hepatic-ugt-ivive-differential.md`.
+Artifacts: `data/enzymes/ugt_ivive_sf.json` (all-1.0 audited registry), `src/sisyphus/predict/non_cyp_substrates.py` (`get_ugt_ivive_sf`), `src/sisyphus/predict/ivive.py` (`_decompose_clint` hook), `tests/unit/test_ugt_ivive_sf.py`, `tests/regression/test_ugt_ivive_sf_registry_schema.py`, spec `docs/_internal/specs/2026-05-30-hepatic-ugt-ivive-differential-design.md` (v2), plan `docs/_internal/plans/2026-05-30-B14-hepatic-ugt-ivive-differential.md`.
 
 ---
 
@@ -269,7 +268,7 @@ Artifacts: `data/enzymes/ugt_ivive_sf.json` (all-1.0 audited registry), `src/sis
 
 **Date:** 2026-06-03
 
-**Context:** DE-41 / diagnosis.md §8 left "an absorption-model recalibration" as the one un-tested honest lever for the systematic engine bioavailability-F under-call (median engine-F/lit-F ≈ 0.46, 10/10 measured-fup+CLint PoC drugs). Two measurement-only multi-agent decompositions tested it (engine `F = fa·Fg·Fh`; runtime monkeypatch only, no tracked file changed; headline Meta 2.698 / engine 3.831 reproduced exactly as controls).
+**Context:** DE-41 / diagnosis.md §8 left "an absorption-model recalibration" as the one un-tested honest lever for the systematic engine bioavailability-F under-call (median engine-F/lit-F ≈ 0.46, 10/10 measured-fup+CLint PoC drugs). Two measurement-only decompositions tested it (engine `F = fa·Fg·Fh`; runtime monkeypatch only, no tracked file changed; headline Meta 2.698 / engine 3.831 reproduced exactly as controls).
 
 **Confirmed diagnostic:** the *median* under-call localises to **fa** (fraction absorbed) — fa median bias 0.55 (vs physiological ~0.9), Fg ≈ 1.0, Fh ≈ 1.05 — because `ka = 2.88·Peff·ka_fraction/radius` (~6%/segment) loses the race to gut transit (~3.85/h), so most dose transits to faeces unabsorbed (dasatinib fa 0.16, sildenafil 0.22). Decisive: the non-CYP3A acids (diclofenac/etodolac/febuxostat) have an empty `metabolized_gut` sink (Fg ≈ 1 real) yet suppressed F ⇒ the loss is fa, not first-pass.
 
@@ -301,7 +300,7 @@ Artifacts: `data/enzymes/ugt_ivive_sf.json` (all-1.0 audited registry), `src/sis
 
 **Date:** 2026-06-04
 
-**Context:** A schema-free adversarial workflow (8 agents, web + repo, error-cancellation-gated) stress-tested 7 *non-trivial* ways to break the CLint floor, seeded after the external deep-research confirmed the floor is real. All 7 returned **kill as a 2.78-headline lever**; the convergence is the result. Honest probability any moves the headline: **~3–5%** (the residual lives entirely in the `invivo-F-prior` surprise branch, which DE-28/42/43 make unlikely).
+**Context:** A schema-free adversarial review (web + repo, error-cancellation-gated) stress-tested 7 *non-trivial* ways to break the CLint floor, seeded after the external literature review confirmed the floor is real. All 7 returned **kill as a 2.78-headline lever**; the convergence is the result. Honest probability any moves the headline: **~3–5%** (the residual lives entirely in the `invivo-F-prior` surprise branch, which DE-28/42/43 make unlikely).
 
 **Per-candidate verdicts (with the repo fact that kills each):**
 - **Per-isoform rCYP CLint** — data-infeasible: ChEMBL CYP targets are *inhibition IC50*, not substrate-CLint; the merged corpus has ~2 recombinant-basis records of 552. rCYP→in-vivo noise is *relocated* into the substrate-dependent ISEF/RAF (CYP3A4 ISEF ~8-fold), not removed. Collides DE-11/16/20/21/36/40 (fm reallocation = Engine-positive / Meta-neutral).
@@ -309,7 +308,7 @@ Artifacts: `data/enzymes/ugt_ivive_sf.json` (all-1.0 audited registry), `src/sis
 - **Hierarchical multi-assay target-denoising** — data fatal: of 5,338 unique CLint compounds **exactly 1** has cross-source measurements (field max ~50) → Dawid-Skene unidentifiable. Mechanism also wrong: Bowman & Benet 2019 (our own cited source) shows interlab variance is *systematic per-protocol bias*, not random noise — averaging averages bias.
 - **Calibrated-CLint-uncertainty → meta *routing*** — the inverse-variance mechanism already ran: DE-26 M7 Local-BMA **+0.082 worse**, M9 +0.014 worse. Only the *PI-recalibration* half survives (touches the interval, not the point estimate → cannot trip co-calibration), and only for *coverage/UQ*, not point-AAFE. CLint-CV ranks |Cmax fold-error| weakly (SRCC≈0.16).
 - **Per-subclass measured-input routing (aggregate)** — the ML track is `predict_cmax(smiles, dose)`, **structurally blind to measured ADME**, so the strongest meta track (3.01) is frozen and the shipped measured "≈11% gain" is *engine-only* and never propagates to the meta headline. Capability already shipped; the "targeted-selection" wrapper adds nothing testable.
-- **+BSA / albumin-mediated PSu,inf (OATP)** — *keep as correctness only, not a lever*: a real primary-literature mechanistic fix (Li/Benet 2020, ~1.9–2.0 fold, no scaling) but **inert** — touches 1 holdout drug (pravastatin, inviolable) and 0 prospective → ΔMeta≈0.000. Ships under [[correctness-over-benchmark]] (spec `2026-06-04-oatp-ecm-reanchor-design.md`).
+- **+BSA / albumin-mediated PSu,inf (OATP)** — *keep as correctness only, not a lever*: a real primary-literature mechanistic fix (Li/Benet 2020, ~1.9–2.0 fold, no scaling) but **inert** — touches 1 holdout drug (pravastatin, inviolable) and 0 prospective → ΔMeta≈0.000. Ships under correctness-over-benchmark (spec `2026-06-04-oatp-ecm-reanchor-design.md`).
 - **Structure→F as engine prior/anchor** — collides DE-28 (repo's own structure→F predictor = scaffold-CV R²=−0.09; the external "Q²=0.58" is the optimistic/AD-filtered tail) + DE-43 damping + circularity (engine E and structure→F are both functions of the same SMILES → no orthogonal information = DE-23 in F clothing).
 
 **Why the whole class fails (unifying):** CLint enters the pipeline **only through the engine track**, which the fixed-weight meta damps to ~18% pass-through (DE-43) under r>0.986 track co-calibration (DE-26). So any CLint improvement *in isolation* either re-learns the existing weights (null) or breaks co-calibration (regression) — the pattern of 18+ prior reverts. The floor is two floors (DE-14 target-noise + mechanistic transporter–enzyme-interplay IVIVE), neither reachable from the CLint side.
@@ -332,7 +331,7 @@ Artifacts: `data/enzymes/ugt_ivive_sf.json` (all-1.0 audited registry), `src/sis
 
 **Telltale if it returns:** "dose-number / BCS-class / dissolution-limited fa as a new track." It is logP in this codebase → circular. The only un-foreclosed variant is a **pKa-aware pH-dependent** solubility (Henderson-Hasselbalch ionization term, not reducible to logP) — un-run, low probability, pre-register |r|<0.5 AND the pH-term (not logP) carrying the signal. A genuinely orthogonal absorption track needs **measured** aqueous solubility / crystal form / particle size (a measured-input lever), not a SMILES proxy.
 
-Artifacts: scratch `/tmp/dose_number_gate.py`, `/tmp/dose_number_robust.py`; analysis `docs/claude/layered-analysis-and-leap-2026-06-08.md` (Exp 2). `src/sisyphus/predict/adme.py:272` (`_estimate_solubility`).
+Artifacts: scratch `/tmp/dose_number_gate.py`, `/tmp/dose_number_robust.py`; analysis `docs/research/layered-analysis-and-leap-2026-06-08.md` (Exp 2). `src/sisyphus/predict/adme.py:272` (`_estimate_solubility`).
 
 ---
 
@@ -348,7 +347,7 @@ Artifacts: scratch `/tmp/dose_number_gate.py`, `/tmp/dose_number_robust.py`; ana
 
 **Telltale if it returns:** "renal secretion / OAT-OCT-MATE analytical track to move the headline." No signal on this holdout; it is a correctness/breadth item (needs the D-1 unit fix + a transporter kinetics registry), not a decorrelated headline track.
 
-Artifacts: `docs/claude/layered-analysis-and-leap-2026-06-08.md` (Exp 3).
+Artifacts: `docs/research/layered-analysis-and-leap-2026-06-08.md` (Exp 3).
 
 ---
 
@@ -366,7 +365,7 @@ Artifacts: `docs/claude/layered-analysis-and-leap-2026-06-08.md` (Exp 3).
 
 **Telltale if it returns:** "feed measured fup/CLint into a new ML/analytical track so the meta can use them." The regressor shares the F-blindness and fails the gate; route measured inputs to the measured-aware *engine* instead.
 
-Artifacts: corpus `data/training/mmpk_pbpk_features.csv`, exclusions `mmpk_sisyphus_holdout_exclusions.json`, per-track residuals `data/training/4track_holdout_predictions.json`; analysis `docs/claude/layered-analysis-and-leap-2026-06-08.md` (Exp 4).
+Artifacts: corpus `data/training/mmpk_pbpk_features.csv`, exclusions `mmpk_sisyphus_holdout_exclusions.json`, per-track residuals `data/training/4track_holdout_predictions.json`; analysis `docs/research/layered-analysis-and-leap-2026-06-08.md` (Exp 4).
 
 ---
 
@@ -387,7 +386,7 @@ Artifacts: corpus `data/training/mmpk_pbpk_features.csv`, exclusions `mmpk_sisyp
 
 **Telltale if it returns:** "in the measured regime, trust/up-weight the measured engine more." It degrades — the engine-measured number cited (2.33) is a clean-subset cherry-pick; on a representative set it is ~3.84 and the meta already beats it. The only surviving measured lever is a **new F-orthogonal data modality** (measured solubility/permeability/transporter kinetics / measured F), not a reweight.
 
-Artifacts: gate workflow `next-step-measured-regime-gate`; analysis `docs/claude/layered-analysis-and-leap-2026-06-08.md` (Leap B, retracted); `scripts/run_measured_adme_benchmark.py`, `data/training/mmpk_pbpk_features.csv`, `src/sisyphus/ml/ensemble.py`.
+Artifacts: gate workflow `next-step-measured-regime-gate`; analysis `docs/research/layered-analysis-and-leap-2026-06-08.md` (Leap B, retracted); `scripts/run_measured_adme_benchmark.py`, `data/training/mmpk_pbpk_features.csv`, `src/sisyphus/ml/ensemble.py`.
 
 ---
 
@@ -429,7 +428,7 @@ Artifacts: `scripts/probe_liver_zonation.py`, `tests/integration/test_liver_zona
 
 - Before writing a design spec for any accuracy improvement.
 - Before proposing "let's try SMILES → X for X in {CLint, fup, VDss, CL/F, t½, F%, ...}" — check the relevant category first.
-- When a teammate / agent suggests an idea that "sounds new" — grep this file for the keyword before investing time.
+- When an idea comes up that "sounds new" — grep this file for the keyword before investing time.
 
 ## 4. How to add a new entry
 

@@ -690,7 +690,7 @@ def build_drug_on_graph(
     substrate_enzymes = db.get_substrate_enzymes(profile.smiles)
 
     # UGT path activated 2026-05-26 via public substrate registry (B-02 Phase 2).
-    # See docs/claude/dead-ends.md §DE-36 for the disabled-state baseline and
+    # See docs/research/dead-ends.md §DE-36 for the disabled-state baseline and
     # the Meta-invariance prior; this activation matches that mechanism but
     # sources fm from data/enzymes/{ugt2b7,ugt1a9}_substrates.json
     # (literature-curated, no DrugBank dependency).

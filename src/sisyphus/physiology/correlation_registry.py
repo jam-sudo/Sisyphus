@@ -9,7 +9,7 @@ This module provides a thread-unsafe global registry (single-process, batch use
 only) and the ``sample_correlated`` function that draws correlated lognormal
 variates consistent with the stored matrices.
 
-Spec: docs/superpowers/specs/2026-04-22-achour-abundance-correlation-design.md
+Spec: docs/_internal/specs/2026-04-22-achour-abundance-correlation-design.md
 """
 from __future__ import annotations
 

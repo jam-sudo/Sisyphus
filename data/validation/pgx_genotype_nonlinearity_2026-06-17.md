@@ -1,7 +1,7 @@
 # PGx genotype-nonlinearity two-arm validation — results (2026-06-17)
 
-**Spec:** `docs/superpowers/specs/2026-06-16-pgx-genotype-nonlinearity-two-arm-design.md`
-**Plan:** `docs/superpowers/plans/2026-06-16-pgx-genotype-nonlinearity-two-arm.md`
+**Spec:** `docs/_internal/specs/2026-06-16-pgx-genotype-nonlinearity-two-arm-design.md`
+**Plan:** `docs/_internal/plans/2026-06-16-pgx-genotype-nonlinearity-two-arm.md`
 **Harness:** `scripts/validate_pgx_cmax_v2b.py` · **Tests:** `tests/integration/test_pgx_arm_sign_mechanism.py` (10 passed, 1 xfail)
 **Isolation:** no `predict()` / `reference_man.yaml` / holdout change. Headline Meta AAFE **2.731 bit-identical** (holdout cache byte-unchanged + `test_mm_headline_bit_identity` + `test_cached_holdout_aafe_is_2p731` pass after the harness runs). Built on the merged (A) axial phenotype fix (PR #79).
 
@@ -40,4 +40,4 @@ The `1/(1−fm)` oral-AUC genotype-fold identity is **well_stirred-only** (fold=
 - Kroemer 1989 (5.3 µM) / Hemeryck (0.12 µM) propafenone `Km` could **not** be confirmed in accessible sources; the 40× span is retained in the box probe.
 
 ## Discipline
-No fold magnitudes fit; no genotype-activity fraction invented; the crossed-grid HALT recorded honestly in `data/validation/pgx_genotype_nonlinearity_folds.json`. Headline 2.731 untouched throughout. Full negative logged as **DE-49** (`docs/claude/dead-ends.md`).
+No fold magnitudes fit; no genotype-activity fraction invented; the crossed-grid HALT recorded honestly in `data/validation/pgx_genotype_nonlinearity_folds.json`. Headline 2.731 untouched throughout. Full negative logged as **DE-49** (`docs/research/dead-ends.md`).

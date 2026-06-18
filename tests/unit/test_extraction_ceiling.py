@@ -14,7 +14,7 @@ The pre-fix bug applied the *whole-organ* CL_h (which already embeds Q) to
     E_bug = fup·CLint / (Q + 2·fup·CLint)  →  0.5
 
 Both the ``well_stirred`` (gut) and ``extended``/ECM (production liver) paths
-are covered. See docs/superpowers/specs/2026-06-03-flux1-extraction-double-count-design.md.
+are covered. See docs/_internal/specs/2026-06-03-flux1-extraction-double-count-design.md.
 """
 
 from __future__ import annotations

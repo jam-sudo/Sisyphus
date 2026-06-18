@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build exclusion inventory for N50 curation.
 
-Per docs/superpowers/specs/2026-04-22-n50-secondary-holdout-design.md §3,
+Per docs/_internal/specs/2026-04-22-n50-secondary-holdout-design.md §3,
 a drug is eligible for N50 only if NOT present in:
   E1: 107-drug primary holdout (data/reference/holdout.json::holdout[])
   E2: MMPK training corpus (data/training/mmpk_*.csv)

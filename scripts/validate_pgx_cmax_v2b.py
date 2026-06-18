@@ -10,7 +10,7 @@ linear-Km=inf null. Headline-isolated: imports nothing from the production predi
 path; no predict()/reference_man.yaml/holdout change.
 
 Recipe ported from the never-executed v2.1 scaffold
-(docs/superpowers/plans/2026-06-15-pgx-cmax-fold-engine-differentiated.md, Task 3),
+(docs/_internal/plans/2026-06-15-pgx-cmax-fold-engine-differentiated.md, Task 3),
 extended with a saturable drug builder + a saturable EM-anchor.
 """
 from __future__ import annotations

@@ -10,7 +10,7 @@
    - DDI fold changes              → the real engine apply_inhibition
      / apply_induction re-solves (drug.ddi), NOT a heuristic.
 
-   Ported from the Claude Design prototype (pk.js), retyped, with the
+   Ported from the design prototype (pk.js), retyped, with the
    mock drug library replaced by real-engine data.
    ============================================================ */
 import type { Drug, ConsoleData, Observation } from "./types";
