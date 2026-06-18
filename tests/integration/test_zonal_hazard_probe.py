@@ -6,6 +6,7 @@ import importlib.util
 from pathlib import Path
 
 import numpy as np
+import pytest
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 _SCRIPT = ROOT / "scripts" / "probe_zonal_hazard.py"
@@ -64,3 +65,20 @@ def test_G2_bulk_E_invariant_while_hazard_profile_varies():
     haz_port = p.zone_hazard_profile(**cfg, dose_mg=200.0, bio_direction="periportal",
                                      bio_ratio=3.0, detox_direction="uniform", detox_ratio=1.0)
     assert int(np.argmax(haz_peri)) != int(np.argmax(haz_port))   # peak moves with zonation
+
+
+def test_G3_dose_threshold_and_zone_specificity():
+    """G3 (the mechanism): below the threshold dose NO zone has hazard; above it the
+    pericentral (high-bio/low-detox) zone crosses FIRST; raising detox protects."""
+    p = _probe()
+    cfg = _aceta_cfg()
+    kw = dict(bio_direction="pericentral", bio_ratio=3.0,
+              detox_direction="periportal", detox_ratio=3.0)   # detox pericentral-low
+    haz_lo = p.zone_hazard_profile(**cfg, dose_mg=50.0, **kw)
+    haz_hi = p.zone_hazard_profile(**cfg, dose_mg=200.0, **kw)
+    assert max(haz_lo) == pytest.approx(0.0)                  # below threshold: no hazard
+    assert max(haz_hi) > 0.0                                  # above threshold: hazard
+    assert int(np.argmax(haz_hi)) >= cfg["n_sub"] - 3         # ...pericentral zone
+    cfg_protected = dict(cfg, vmax_detox_total=cfg["vmax_detox_total"] * 3.0)
+    haz_protected = p.zone_hazard_profile(**cfg_protected, dose_mg=200.0, **kw)
+    assert max(haz_protected) < max(haz_hi)                   # detoxification protects
