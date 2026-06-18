@@ -10,6 +10,21 @@ Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the *
 
 ---
 
+## 2026-06-18 — Bridge B / B1 Phase-0: zonal reactive-metabolite hazard — first PD/tox surface (POSITIVE)
+
+First concrete sub-project of **Bridge B** (the PD/toxicity surface from the 2026-06-17 virtual-cell fusion research) and the constructive closure of **DE-50**: zonation is invariant for *bulk* first-pass, but the *per-zone* reactive-metabolite hazard is exactly where it matters. Spec `docs/superpowers/specs/2026-06-18-zonal-reactive-metabolite-hazard-design.md`, plan `…/plans/2026-06-18-zonal-reactive-metabolite-hazard.md`. Harness-isolated (`scripts/probe_zonal_hazard.py`); headline **2.731 bit-identical** (guarded). Reuses the axial machinery (PR #79) + `zonation_weights` (DE-50).
+
+**Design decision (senior-PK ultrathink).** Reading `ProdrugActivationFlux` showed that modeling the reactive metabolite as a *transported engine species* needs a bespoke multi-species axial chain + an unverified convective-transport assumption (a feasibility risk). De-risked to a **post-processor on the parent's per-sub-tank concentration profile**: per-zone hazard `H_i = ∫ max(0, MM(C_u,i; Vmax_bio,i, Km_bio) − Vmax_detox,i) dt` — local bioactivation **exceeding** local *zonated, saturable* detox (the GSH-analog). The real acetaminophen driver is the **interplay** of pericentral-high CYP2E1 and pericentral-**low** GSH.
+
+**Result (all three gates pass; the values are the deliverable):**
+- **G2 — local matters, bulk doesn't (DE-50 closure).** Varying bioactivation zonation leaves bulk parent extraction ~invariant (span **4.3e-4**) while the per-zone hazard peak-zone moves (pericentral→z5, periportal→z0). A quantity invisible to the (walled) bulk Cmax is highly visible to zonal hazard — the Bridge-B value proposition.
+- **G3 — saturable-detox dose-threshold + zone-specificity.** Clean threshold for the acetaminophen config (bio pericentral-high, detox pericentral-low): dose 50 → maxH 0; 100 → 0.11; 200 → 1.26; 800 → 29.8, **all peaking at the pericentral zone (z9 = zone-3/centrilobular)**. Raising detox 3× protects (100 mg: 0.11→0; 200 mg: 1.26→0.21) — the GSH-protection mechanism. Correctly-signed.
+- **G1 — localization** (sanity): hazard peaks pericentrally for the acetaminophen config.
+
+**Takeaway.** The engine *can* mechanistically represent zonal hepatotoxicity (acetaminophen zone-3 pattern reproduced qualitatively) on a surface **orthogonal** to the walled bulk-PK headline — the first PD/tox capability the Cmax-only platform lacked. Report `data/validation/zonal_hazard_probe_2026-06-18.{json,md}`. **B1.x follow-ups:** transported reactive-metabolite (downstream-detox fidelity; needs the convection feasibility spike), GSH-**pool depletion dynamics** (vs the steady-state saturable proxy), quantitative threshold/PoD vs data (DOSE-L1000). Qualitative mechanism demonstration only — no calibrated tox number; no parameter tuned to clinical data (synthetic-param selection for mechanism visibility, documented).
+
+---
+
 ## 2026-06-17 — Liver-zonation invariance probe: zonation is NOT a bulk-first-pass lever (DE-50)
 
 Bridge A from the 2026-06-17 virtual-cell fusion research ("parameterize the axial liver with cell/spatial-atlas zonation"). Spec `docs/superpowers/specs/2026-06-17-liver-zonation-phase0-design.md`, plan `…/plans/2026-06-17-liver-zonation-invariance.md`. Harness-isolated (`scripts/probe_liver_zonation.py`); headline **2.731 bit-identical** (guarded). Reuses the merged axial machinery (PR #79) + the v2.2a saturable flux.
