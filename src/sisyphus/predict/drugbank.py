@@ -82,9 +82,8 @@ class DrugBankLookup:
             # then this single message announces the fallback at first use.
             logger.info(
                 "DrugBank not present at %s — running in public-clone deterministic "
-                "state. fup/pKa/logP enrichments will not apply. See AGENTS.md "
-                "§\"Artifact gates\" for the headline AAFE footprint (~+2.7%% when "
-                "absent vs present).",
+                "state. fup/pKa/logP enrichments will not apply (headline AAFE "
+                "footprint ~+2.7%% when absent vs present).",
                 self._data_dir,
             )
             return
@@ -95,7 +94,7 @@ class DrugBankLookup:
         logger.info(
             "DrugBank loaded from %s — enriching %d SMILES, %d InChIKey, %d enzyme, "
             "%d fup, %d pka, %d logp. Predictions will differ from public-clone "
-            "state; see AGENTS.md §\"Artifact gates\".",
+            "state.",
             self._data_dir, len(self._smiles_to_id), len(self._inchikey14_to_id),
             len(self._enzyme_substrates), len(self._fup), len(self._pka), len(self._logp),
         )

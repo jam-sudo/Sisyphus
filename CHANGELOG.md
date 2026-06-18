@@ -92,8 +92,8 @@ Moved out of the tracked tree (via `git mv`, history preserved): `backlog.md`,
 (from `docs/claude/`), `next_steps_plan.md` + `current_directory_completion_audit_2026-04-24.md`
 (from `docs/`), and the entire `docs/superpowers/plans/` directory (implementation
 scaffolding — specs stay public as audit-trail per `cherry_picking_process_v1.md` §2).
-`AGENTS.md` was slimmed to a public contributor guide; the full agent-operational superset
-now lives at `docs/_internal/AGENT_INTERNAL.md`. The committed `docs/claude/` set is now the
+The full agent-operational superset lives locally at `docs/_internal/AGENT_INTERNAL.md`.
+The committed `docs/claude/` set is now the
 externally-meaningful five: `dead-ends`, `experiment-log`, `diagnosis`,
 `cherry_picking_process_v1`, `cherry_picking_audit_2026-04-22`. **Note:** historical
 CHANGELOG / spec / experiment-log entries that cite the moved paths

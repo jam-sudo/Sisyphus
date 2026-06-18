@@ -75,10 +75,11 @@ graphify-out/
 # Local-only Claude Code context (per-user agent memory; untracked by user request 2026-05-02)
 CLAUDE.md
 
-# Internal agent-operational docs (backlog, landmarks, plans, sub-backlogs, audit
-# snapshots). Public-facing agent guidance lives in AGENTS.md; the
-# docs/_internal/AGENT_INTERNAL.md superset is kept local-only because external
-# readers don't need the day-to-day scratchpad (untracked by user request 2026-05-30).
+# Agent-operational docs kept local-only (single-author repo; no external
+# collaborators, so no public agent guidance is published). AGENTS.md, the
+# internal backlog/landmarks/plans, and the docs/_internal/AGENT_INTERNAL.md
+# superset all stay untracked (AGENTS.md untracked by user request 2026-06-18).
+AGENTS.md
 docs/_internal/
 
 # Manuscript / preprint / FDA-essay drafts and any binary document (local-only;

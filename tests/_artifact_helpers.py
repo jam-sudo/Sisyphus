@@ -35,8 +35,8 @@ def _public_only_reason() -> str:
         present.append(str(_LOGP_CORRECTION_FILE.relative_to(ROOT)))
     return (
         f"Local-developer artifact(s) present: {', '.join(present)}. "
-        "This test is anchored to public-clone deterministic Cmax values "
-        "(see AGENTS.md §\"Artifact gates\"). To run it locally, hide the "
+        "This test is anchored to public-clone deterministic Cmax values. "
+        "To run it locally, hide the "
         "artifact(s) first: `mv data/drugbank data/drugbank.local-archive` "
         "and/or `mv models/adme/logp_correction.json{,.local-archive}`. CI "
         "runs without these artifacts and evaluates the test normally."
