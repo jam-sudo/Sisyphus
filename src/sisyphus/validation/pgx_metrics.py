@@ -154,3 +154,27 @@ def plugflow_E_linear(fu: float, clint_total: float, q: float) -> float:
     if q <= 0:
         raise ValueError(f"q must be > 0, got {q}")
     return 1.0 - math.exp(-fu * clint_total / q)
+
+
+def mm_rate(c: float, vmax: float, km: float) -> float:
+    """Michaelis-Menten rate Vmax*c/(Km+c)."""
+    return vmax * c / (km + c)
+
+
+def zonal_hazard(c_u_by_zone, vmax_bio_by_zone, km_bio, vmax_detox_by_zone, time):
+    """Per-zone reactive-metabolite hazard = time-integral of bioactivation rate that
+    EXCEEDS local saturable detox capacity: H_i = ∫ max(0, MM(C_u,i; Vmax_bio,i, Km_bio)
+    − Vmax_detox,i) dt. The covalent-binding / toxicity proxy (spec §2).
+
+    c_u_by_zone: list of per-zone unbound-conc arrays (each len == len(time)).
+    vmax_bio_by_zone / vmax_detox_by_zone: per-zone scalars. Returns a per-zone list.
+    """
+    t = np.asarray(time, dtype=float)
+    trapz = getattr(np, "trapezoid", np.trapz)
+    out = []
+    for c_u, vmax_bio, vmax_detox in zip(c_u_by_zone, vmax_bio_by_zone, vmax_detox_by_zone):
+        c_arr = np.asarray(c_u, dtype=float)
+        form = vmax_bio * c_arr / (km_bio + c_arr)          # MM formation rate
+        excess = np.maximum(0.0, form - vmax_detox)         # reactive escaping detox
+        out.append(float(trapz(excess, t)))
+    return out
