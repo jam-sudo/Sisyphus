@@ -409,6 +409,22 @@ Artifacts: `scripts/validate_pgx_cmax_v2b.py`, `tests/integration/test_pgx_arm_s
 
 ---
 
+### DE-50 — Liver-zonation as a bulk-first-pass / Cmax lever: plug-flow invariance (2026-06-17)
+
+**Date:** 2026-06-17
+
+**Hypothesis (Bridge A of the virtual-cell fusion research):** parameterize the axial liver (`liver__ax1..N`, PR #79) with cell/spatial-atlas **zonation** — pericentral CYP3A4/2E1/1A2 gradients instead of the uniform `1/N` split — to refine first-pass / Cmax. Harness-isolated; headline 2.731 untouched.
+
+**Refuted analytically, then confirmed on the engine.** In the continuous (plug-flow) limit the axial tube obeys `Km·ln(c_out/c_in) + (c_out − c_in) = −V_total/Q` — extraction depends **only on total enzyme**, not its spatial distribution (MM, and as Km→∞ linear). The probe (`scripts/probe_liver_zonation.py`) demonstrates `ΔE(N) = E_zonated − E_uniform → 0` as `N→∞` (clean ~1/N decay; linear |ΔE| 1.9e-4→8.4e-6, saturable 8.8e-4→5.5e-5 over N=5→80, total preserved). The finite-N effect is a **CSTR-discretization artifact** of `_DEFAULT_AXIAL_N=10`, not physiology.
+
+**Why it fails:** spatially redistributing a fixed total enzyme along a plug-flow sinusoid does not change how much of the throughput is cleared — the catalytic capacity it meets is the same regardless of arrangement. Zonation's real consequence is **local/zonal** (per-zone metabolite/reactive-exposure → zonal toxicity, the acetaminophen/DILI pattern), NOT bulk extraction. (Side finding: the finite-N artifact is direction-symmetric for linear clearance but direction-asymmetric for saturable — **periportal > pericentral** extraction — both vanishing with N.)
+
+**Telltale if it returns:** "zonate the liver enzymes (from scRNA-seq/spatial atlases) to improve PBPK first-pass/Cmax." It is invariant in the continuum; any axial-model effect is a discretization artifact that vanishes with N. Zonation belongs to **Bridge B (PD/zonal toxicity)**, consuming per-sub-tank concentrations — not bulk-PK parameterization. (Bonus: the probe doubles as a convergence check on the PR-#79 axial cascade.)
+
+Artifacts: `scripts/probe_liver_zonation.py`, `tests/integration/test_liver_zonation_invariance.py`, `tests/unit/test_zonation_weights.py`, `src/sisyphus/validation/pgx_metrics.py` (`zonation_weights`, `plugflow_E_linear`), `data/validation/liver_zonation_invariance_2026-06-17.{json,md}`.
+
+---
+
 ## 3. When to consult this list
 
 - Before writing a design spec for any accuracy improvement.
