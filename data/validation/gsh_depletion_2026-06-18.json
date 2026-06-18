@@ -1,0 +1,102 @@
+{
+  "title": "Zonal GSH-pool depletion probe (Bridge B / B1.x, Phase-0)",
+  "date": "2026-06-18",
+  "conclusion": "A depleting per-zone GSH pool makes the zonal reactive-metabolite hazard HISTORY-DEPENDENT: a pure concentration reordering leaves the static pointwise hazard unchanged (rel diff 0.0e+00) while moving the dynamic hazard (0.03) \u2014 structure beyond the B1 static model and orthogonal to bulk parent PK (DE-50, bulk-E span 4.3e-04). The CLEAN signature of pool memory is this ordering test, not the physical bolus-vs-divided arm: there the excess path-dependence over the static envelope baseline = -1.091 (honest-negative \u2014 the pool's escape-saturation CAPS the bolus hazard and so COMPRESSES the dynamic ratio below the static envelope ratio, rather than amplifying it). Dose transition width dynamic 0.263 vs static 0.471 (log10-dose, smaller=sharper); raising GSH0 lowers hazard (NAC lever). k_syn/tau pinned a priori from GSH t1/2. Headline 2.731 untouched (harness-isolated). Qualitative acetaminophen mechanism; not a tox number.",
+  "pinned": {
+    "t_half_gsh_h": 3.0,
+    "k_syn_per_h": 0.23104906018664842,
+    "kg": 1.0,
+    "tau_h": 4.0,
+    "gsh0_total": 150.0,
+    "km_bio": 1.0
+  },
+  "G_order": {
+    "static_asc": 1834.4166666666665,
+    "static_desc": 1834.4166666666665,
+    "static_rel_diff": 0.0,
+    "dyn_asc": 1506.730711466808,
+    "dyn_desc": 1462.7109111591838,
+    "dyn_rel_diff": 0.029215439741565295
+  },
+  "G2_invariance_contrast": [
+    {
+      "bio_zonation": "pericentral",
+      "bulk_E": 0.957487,
+      "hazard_peak_zone": 4,
+      "maxH": 0.189
+    },
+    {
+      "bio_zonation": "uniform",
+      "bulk_E": 0.957914,
+      "hazard_peak_zone": 0,
+      "maxH": 0.3264
+    },
+    {
+      "bio_zonation": "periportal",
+      "bulk_E": 0.957631,
+      "hazard_peak_zone": 0,
+      "maxH": 0.5273
+    }
+  ],
+  "G2_bulk_E_span": 0.0004270000000000662,
+  "G_time": {
+    "dyn_bolus": 1.7232578385485686,
+    "dyn_divided": 0.39573700982165877,
+    "dyn_ratio": 4.354553139533664,
+    "static_bolus": 6.885685980303515,
+    "static_divided": 1.2644317654053812,
+    "static_ratio": 5.445676207047788,
+    "excess_path_dependence": -1.0911230675141246,
+    "tau_h": 4.0
+  },
+  "G_cliff": {
+    "rows": [
+      {
+        "dose": 50.0,
+        "dyn_maxH": 0.0513,
+        "dyn_peak_zone": 9,
+        "static_maxH": 0.0
+      },
+      {
+        "dose": 100.0,
+        "dyn_maxH": 0.1172,
+        "dyn_peak_zone": 9,
+        "static_maxH": 0.1105
+      },
+      {
+        "dose": 200.0,
+        "dyn_maxH": 0.3229,
+        "dyn_peak_zone": 9,
+        "static_maxH": 1.2642
+      },
+      {
+        "dose": 400.0,
+        "dyn_maxH": 1.7233,
+        "dyn_peak_zone": 9,
+        "static_maxH": 6.8857
+      },
+      {
+        "dose": 800.0,
+        "dyn_maxH": 20.2813,
+        "dyn_peak_zone": 9,
+        "static_maxH": 29.8434
+      }
+    ],
+    "width_dynamic": 0.26318631757999356,
+    "width_static": 0.470816626398987
+  },
+  "G_NAC": [
+    {
+      "gsh0_scale": 1.0,
+      "maxH": 1.7233
+    },
+    {
+      "gsh0_scale": 1.5,
+      "maxH": 0.9911
+    },
+    {
+      "gsh0_scale": 3.0,
+      "maxH": 0.4281
+    }
+  ]
+}

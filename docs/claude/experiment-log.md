@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-17
+last_updated: 2026-06-18
 parent: ../../CLAUDE.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -9,6 +9,18 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 Reverse-chronological. Top-level [CLAUDE.md](../../CLAUDE.md) carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
 
 ---
+
+## 2026-06-18 — Bridge B / B1.x Phase-0: zonal GSH-pool depletion — history-dependent hazard (POSITIVE; G-time honest-negative)
+
+Deepened the B1 static-detox hazard (PR #82) to a **dynamic, depleting per-zone GSH pool** (`gsh_pool_hazard`, a self-contained RK4 post-processor; `k_syn=ln2/t½_GSH`, t½≈3 h → **0.231/h**, τ=4 h, both pinned **a priori** before observing any outcome). Spec `docs/superpowers/specs/2026-06-18-gsh-pool-depletion-design.md`, plan `…/plans/2026-06-18-gsh-pool-depletion.md`. Harness-isolated (`scripts/probe_gsh_depletion.py`); headline **2.731 bit-identical** (guarded, pins green). Reuses the axial machinery (PR #79) + B1 harness (PR #82) + `zonation_weights` (DE-50).
+
+**Direction set by the 2026-06-18 ultrathink** (caught two confounds in the first draft pre-code): the first design's path-test "static control" was not actually controlled (the static pointwise hazard `∫f(C)dt` is path-sensitive whenever the concentration envelope changes), and its sharpness metric was rigged by the static model's hard-zero floor (log-log slope → ∞). Reframed to lead with the **analytically-guaranteed** distinction.
+
+**Centerpiece — G-order (history-dependence), clean.** The static hazard is a pointwise-integral functional, hence **provably invariant to any reordering** of the concentration trajectory. Feeding both models a profile and its **exact time-reverse** (same value-multiset): static rel diff **0.0** (fp-exact, by reversal symmetry of the trapezoid) vs dynamic rel diff **0.029** — the pool carries order/history information the static model structurally cannot. Orthogonal to bulk parent PK (DE-50, bulk-E span **4.3e-4**).
+
+**G-cliff (POSITIVE).** The dynamic dose–hazard transition is **sharper** than the static ramp (log10-dose 10→90% width **0.263 vs 0.471**) — the autocatalytic depletion feedback (scavenging weakens as the pool empties) realized. **G-NAC (POSITIVE, analytic).** Raising GSH0 ×{1,1.5,3} monotonically lowers maxH (1.72→0.99→0.43). **G1/G2** localize to the pericentral (zone-3) outlet and confirm bulk-invariance.
+
+**G-time (HONEST-NEGATIVE → DE-51).** The physical bolus-vs-2×-divided arm shows **excess path-dependence = −1.09** (dynamic ratio 4.35 < static 5.45): the pool's escape-saturation *caps* the bolus hazard and so **compresses** the dynamic path-ratio **below** the static envelope ratio, rather than amplifying it. So divided-dosing is **not** a clean pool-memory signal — the ordering test is. Not tuned to flip (k_syn/τ pinned a priori). Logged DE-51. Components: `data/validation/gsh_depletion_2026-06-18.{json,md}`, `tests/unit/test_gsh_pool_hazard.py` (7), `tests/integration/test_gsh_depletion_probe.py` (9). Qualitative acetaminophen mechanism, not a calibrated tox number.
 
 ## 2026-06-18 — Bridge B / B1 Phase-0: zonal reactive-metabolite hazard — first PD/tox surface (POSITIVE)
 
