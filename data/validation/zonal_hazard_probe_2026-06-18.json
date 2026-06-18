@@ -1,0 +1,137 @@
+{
+  "title": "Zonal reactive-metabolite hazard probe (Bridge B / B1, Phase-0)",
+  "date": "2026-06-18",
+  "conclusion": "The per-zone reactive-metabolite hazard (local bioactivation exceeding local saturable detox) is a real surface ORTHOGONAL to bulk PK: varying bioactivation zonation leaves bulk parent extraction ~invariant (DE-50, span 4.3e-04) while the per-zone hazard peak-zone moves. A saturable-detox DOSE-THRESHOLD with pericentral (zone-3) specificity emerges, and raising detox capacity protects \u2014 qualitatively reproducing the acetaminophen centrilobular pattern. First concrete Bridge-B endpoint; headline 2.731 untouched (harness-isolated). Post-processor fidelity; transported-metabolite + GSH-pool dynamics + quantitative PoD are B1.x.",
+  "config": {
+    "gene_tag": "CYP3A4",
+    "fm": 0.9,
+    "n_sub": 10,
+    "cltot": 1000000.0,
+    "fup": 0.3,
+    "mw": 300.0,
+    "km_mgl": 0.5,
+    "vmax_bio_total": 300.0,
+    "vmax_detox_total": 15.0,
+    "km_bio": 1.0
+  },
+  "doses": [
+    50.0,
+    100.0,
+    200.0,
+    400.0,
+    800.0
+  ],
+  "G3_dose_threshold": [
+    {
+      "dose": 50.0,
+      "maxH": 0.0,
+      "peak_zone": 0,
+      "profile": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maxH_3x_detox": 0.0
+    },
+    {
+      "dose": 100.0,
+      "maxH": 0.11051922014771655,
+      "peak_zone": 9,
+      "profile": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0205,
+        0.0596,
+        0.1105
+      ],
+      "maxH_3x_detox": 0.0
+    },
+    {
+      "dose": 200.0,
+      "maxH": 1.2642406239349029,
+      "peak_zone": 9,
+      "profile": [
+        0.0628,
+        0.2484,
+        0.4403,
+        0.6209,
+        0.7776,
+        0.9096,
+        1.0198,
+        1.1124,
+        1.1922,
+        1.2642
+      ],
+      "maxH_3x_detox": 0.2104278004696463
+    },
+    {
+      "dose": 400.0,
+      "maxH": 6.885685980303515,
+      "peak_zone": 9,
+      "profile": [
+        2.2531,
+        3.1356,
+        3.932,
+        4.6321,
+        5.2328,
+        5.7368,
+        6.147,
+        6.4697,
+        6.7129,
+        6.8857
+      ],
+      "maxH_3x_detox": 5.08066727244169
+    },
+    {
+      "dose": 800.0,
+      "maxH": 29.843357732946885,
+      "peak_zone": 9,
+      "profile": [
+        9.0402,
+        11.8187,
+        14.4928,
+        17.0502,
+        19.4865,
+        21.8054,
+        24.003,
+        26.0741,
+        28.0201,
+        29.8434
+      ],
+      "maxH_3x_detox": 27.172188282076505
+    }
+  ],
+  "G2_invariance_contrast": [
+    {
+      "bio_zonation": "pericentral",
+      "bulk_E": 0.957487,
+      "hazard_peak_zone": 5,
+      "maxH": 0.8428
+    },
+    {
+      "bio_zonation": "uniform",
+      "bulk_E": 0.957914,
+      "hazard_peak_zone": 0,
+      "maxH": 2.1769
+    },
+    {
+      "bio_zonation": "periportal",
+      "bulk_E": 0.957631,
+      "hazard_peak_zone": 0,
+      "maxH": 4.1374
+    }
+  ],
+  "G2_bulk_E_span": 0.0004270000000000662
+}

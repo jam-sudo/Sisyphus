@@ -31,6 +31,18 @@ def _load_harness():
 h = _load_harness()
 
 
+def _load_zonation_probe():
+    spec = importlib.util.spec_from_file_location(
+        "zon_probe", _ROOT / "scripts" / "probe_liver_zonation.py"
+    )
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+_zon = _load_zonation_probe()  # exposes apply_zonation (robust under script + pytest)
+
+
 def _subtank_names(graph):
     subs = [n.name for n in graph.nodes.values() if (n.lookup_name or n.name) == "liver"]
     return sorted(subs, key=lambda nm: int(re.search(r"__ax(\d+)$", nm).group(1)))
@@ -73,8 +85,124 @@ def zone_hazard_profile(gene_tag, fm, n_sub, cltot, fup, mw, km_mgl, dose_mg,
 
 def bulk_E(gene_tag, fm, n_sub, cltot, fup, mw, km_mgl, bio_direction, bio_ratio):
     """Bulk parent extraction with the bioactivation enzyme zonated (G2 invariance arm)."""
-    from scripts.probe_liver_zonation import apply_zonation
     g = h._axial_graph(gene_tag, n_sub=n_sub)
-    g = apply_zonation(g, gene_tag, zonation_weights(n_sub, bio_ratio, bio_direction))
+    g = _zon.apply_zonation(g, gene_tag, zonation_weights(n_sub, bio_ratio, bio_direction))
     return h._engine_e_h(g, gene_tag, fm, cltot, h._SYNTHETIC_GENE_ABUND, 20.0, 3.0,
                          fup, 100.0, mw, km_mgl)
+
+
+# Controller-calibrated acetaminophen-like config (2026-06-18): bioactivation
+# pericentral-high, detox pericentral-low, Km_bio above low-dose C_u -> a clean
+# dose-threshold. Synthetic-param selection for mechanism visibility, NOT a clinical fit.
+_CFG = dict(gene_tag="CYP3A4", fm=0.9, n_sub=10, cltot=1.0e6, fup=0.3, mw=300.0,
+            km_mgl=0.5, vmax_bio_total=300.0, vmax_detox_total=15.0, km_bio=1.0)
+_DOSES = [50.0, 100.0, 200.0, 400.0, 800.0]
+
+
+def run_sweep():
+    """G1 localization, G2 bulk-invariant/hazard-variant, G3 dose-threshold + protection.
+    Returns a dict of all numbers (no hand-written values)."""
+    cfg = _CFG
+    aceta = dict(bio_direction="pericentral", bio_ratio=3.0,
+                 detox_direction="periportal", detox_ratio=3.0)  # detox pericentral-low
+
+    # G3: dose-threshold curve + protective lever (3x detox) on the aceta config.
+    g3 = []
+    for d in _DOSES:
+        haz = zone_hazard_profile(**cfg, dose_mg=d, **aceta)
+        cfg_prot = dict(cfg, vmax_detox_total=cfg["vmax_detox_total"] * 3.0)
+        haz_p = zone_hazard_profile(**cfg_prot, dose_mg=d, **aceta)
+        g3.append({"dose": d, "maxH": max(haz), "peak_zone": int(np.argmax(haz)),
+                   "profile": [round(x, 4) for x in haz],
+                   "maxH_3x_detox": max(haz_p)})
+
+    # G2: bulk E vs bioactivation zonation (should be ~invariant) and hazard peak-zone
+    # (should move). Uniform detox isolates the bioactivation-zonation effect.
+    g2 = []
+    for bdir in ("pericentral", "uniform", "periportal"):
+        e = bulk_E(cfg["gene_tag"], cfg["fm"], cfg["n_sub"], cfg["cltot"], cfg["fup"],
+                   cfg["mw"], cfg["km_mgl"], bdir, 1.0 if bdir == "uniform" else 3.0)
+        haz = zone_hazard_profile(**cfg, dose_mg=200.0, bio_direction=bdir,
+                                  bio_ratio=1.0 if bdir == "uniform" else 3.0,
+                                  detox_direction="uniform", detox_ratio=1.0)
+        g2.append({"bio_zonation": bdir, "bulk_E": round(e, 6),
+                   "hazard_peak_zone": int(np.argmax(haz)), "maxH": round(max(haz), 4)})
+
+    e_span = max(r["bulk_E"] for r in g2) - min(r["bulk_E"] for r in g2)
+    return {"config": cfg, "doses": _DOSES, "G3_dose_threshold": g3,
+            "G2_invariance_contrast": g2, "G2_bulk_E_span": e_span}
+
+
+def main():
+    import json
+
+    res = run_sweep()
+    base = _ROOT / "data" / "validation" / "zonal_hazard_probe_2026-06-18"
+    out = {
+        "title": "Zonal reactive-metabolite hazard probe (Bridge B / B1, Phase-0)",
+        "date": "2026-06-18",
+        "conclusion": (
+            "The per-zone reactive-metabolite hazard (local bioactivation exceeding local "
+            "saturable detox) is a real surface ORTHOGONAL to bulk PK: varying bioactivation "
+            "zonation leaves bulk parent extraction ~invariant (DE-50, span "
+            f"{res['G2_bulk_E_span']:.1e}) while the per-zone hazard peak-zone moves. A "
+            "saturable-detox DOSE-THRESHOLD with pericentral (zone-3) specificity emerges, "
+            "and raising detox capacity protects — qualitatively reproducing the "
+            "acetaminophen centrilobular pattern. First concrete Bridge-B endpoint; "
+            "headline 2.731 untouched (harness-isolated). Post-processor fidelity; "
+            "transported-metabolite + GSH-pool dynamics + quantitative PoD are B1.x."
+        ),
+        **res,
+    }
+    base.with_suffix(".json").write_text(json.dumps(out, indent=2))
+
+    lines = [
+        "# Zonal reactive-metabolite hazard probe — Bridge B / B1 Phase-0 (2026-06-18)",
+        "",
+        "**Harness-isolated** (`scripts/probe_zonal_hazard.py`); the reactive metabolite is "
+        "a POST-PROCESSOR on the axial parent profile, not an engine species. No "
+        "`predict()` / `reference_man.yaml` / holdout change; headline **2.731 "
+        "bit-identical**. Reuses the axial machinery (PR #79) + `zonation_weights` (DE-50).",
+        "", "## Conclusion", "", out["conclusion"], "",
+        "## G2 — local matters, bulk doesn't (DE-50 closure)",
+        "",
+        f"Bulk parent extraction span across bioactivation zonation: "
+        f"**{res['G2_bulk_E_span']:.2e}** (~invariant), while the hazard peak-zone moves:",
+        "",
+        "| bio zonation | bulk E | hazard peak-zone | maxH |",
+        "|---|---|---|---|",
+    ]
+    for r in res["G2_invariance_contrast"]:
+        lines.append(
+            f"| {r['bio_zonation']} | {r['bulk_E']} | "
+            f"{r['hazard_peak_zone']} | {r['maxH']} |"
+        )
+    lines += [
+        "",
+        "## G3 — saturable-detox dose-threshold + zone-specificity (acetaminophen config)",
+        "",
+        "Bioactivation pericentral-high, detox pericentral-low. Below the threshold no zone "
+        "has hazard; above it the pericentral (zone-3) zone crosses first; 3× detox protects.",
+        "",
+        "| dose | maxH | peak-zone | maxH (3× detox) |",
+        "|---|---|---|---|",
+    ]
+    for r in res["G3_dose_threshold"]:
+        lines.append(
+            f"| {r['dose']} | {r['maxH']:.4g} | {r['peak_zone']} | "
+            f"{r['maxH_3x_detox']:.4g} |"
+        )
+    lines += [
+        "",
+        "peak-zone is 0-indexed inlet(0)→outlet(9); zone 9 = pericentral / zone 3 / "
+        "centrilobular. The dose=50 row (maxH 0) is below threshold.",
+        "",
+    ]
+    base.with_suffix(".md").write_text("\n".join(lines))
+    print(f"wrote {base.with_suffix('.json').name} and {base.with_suffix('.md').name}")
+    g3_summary = [(r["dose"], round(r["maxH"], 3)) for r in res["G3_dose_threshold"]]
+    print("G2 bulk_E span:", f"{res['G2_bulk_E_span']:.2e}", "| G3 threshold:", g3_summary)
+
+
+if __name__ == "__main__":
+    main()
