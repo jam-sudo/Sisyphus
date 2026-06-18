@@ -82,19 +82,18 @@ def _static_profile_hazard(c_by_zone, time, bio_dir, bio_ratio, detox_dir, detox
 # ---------- G-order: pure history-dependence (no engine) ----------
 def _ordering_profiles(levels, dt_h=2.0, pts_per_step=200):
     """Two single-zone C_u(t) trajectories visiting the SAME value-multiset in ascending vs
-    descending order (each level held dt_h). Static hazard is identical by construction;
-    dynamic differs (pool memory)."""
+    descending order (each level held dt_h). c_desc is the EXACT time-reverse of c_asc on the
+    uniform grid, so the static trapezoid ∫f(C)dt is provably identical (reversal symmetry of
+    the trapezoid rule, to fp); the dynamic pool hazard differs (pool memory)."""
     asc = list(levels)
-    desc = list(levels)[::-1]
-    t_parts, ca, cd = [], [], []
-    for k, (la, ld) in enumerate(zip(asc, desc)):
+    t_parts, ca = [], []
+    for k, la in enumerate(asc):
         seg = np.linspace(k * dt_h, (k + 1) * dt_h, pts_per_step, endpoint=False)
         t_parts.append(seg)
         ca.append(np.full_like(seg, float(la)))
-        cd.append(np.full_like(seg, float(ld)))
     t = np.concatenate(t_parts + [np.array([len(asc) * dt_h])])
     c_asc = np.concatenate(ca + [np.array([float(asc[-1])])])
-    c_desc = np.concatenate(cd + [np.array([float(desc[-1])])])
+    c_desc = c_asc[::-1].copy()  # exact reverse on the uniform grid => static-invariant
     return t, c_asc, c_desc
 
 
@@ -260,12 +259,15 @@ def main():
             f"hazard unchanged (rel diff {res['G_order']['static_rel_diff']:.1e}) while moving "
             f"the dynamic hazard ({res['G_order']['dyn_rel_diff']:.2f}) — structure beyond the "
             "B1 static model and orthogonal to bulk parent PK (DE-50, bulk-E span "
-            f"{res['G2_bulk_E_span']:.1e}). Excess path-dependence over the static envelope "
-            f"baseline = {res['G_time']['excess_path_dependence']:+.3f}; dose transition width "
-            f"dynamic {res['G_cliff']['width_dynamic']:.3f} vs static "
-            f"{res['G_cliff']['width_static']:.3f} (log10-dose); raising GSH0 lowers hazard "
-            "(NAC lever). k_syn/tau pinned a priori from GSH t1/2. Headline 2.731 untouched "
-            "(harness-isolated). Qualitative acetaminophen mechanism; not a calibrated tox number."
+            f"{res['G2_bulk_E_span']:.1e}). The CLEAN signature of pool memory is this ordering "
+            "test, not the physical bolus-vs-divided arm: there the excess path-dependence over "
+            f"the static envelope baseline = {res['G_time']['excess_path_dependence']:+.3f} "
+            "(honest-negative — the pool's escape-saturation CAPS the bolus hazard and so "
+            "COMPRESSES the dynamic ratio below the static envelope ratio, rather than amplifying "
+            f"it). Dose transition width dynamic {res['G_cliff']['width_dynamic']:.3f} vs static "
+            f"{res['G_cliff']['width_static']:.3f} (log10-dose, smaller=sharper); raising GSH0 "
+            "lowers hazard (NAC lever). k_syn/tau pinned a priori from GSH t1/2. Headline 2.731 "
+            "untouched (harness-isolated). Qualitative acetaminophen mechanism; not a tox number."
         ),
         **res,
     }
@@ -306,7 +308,10 @@ def main():
         "",
         f"dynamic ratio {tt['dyn_ratio']:.3f} vs static ratio {tt['static_ratio']:.3f} "
         f"=> **excess {tt['excess_path_dependence']:+.3f}** (tau {tt['tau_h']} h). The static "
-        "path effect is measured, not assumed zero; the excess is the pool-dynamics signature.",
+        "path effect is measured, not assumed zero. **Honest-negative:** the excess is "
+        "*negative* — the pool's escape-saturation caps the bolus hazard and compresses the "
+        "dynamic bolus/divided ratio BELOW the static envelope ratio. So the physical divided-"
+        "dose arm is not where pool memory shows up cleanly; the G-order test is.",
         "",
         "## G-cliff — dynamic vs static dose-response sharpness",
         "",
