@@ -234,3 +234,110 @@ WARFARIN_INR = PDModel(
     hill=1.0,
     baseline=1.0,  # baseline INR = 1.0
 )
+
+
+# ---------------------------------------------------------------------------
+# B2.0 — generic direct/pointwise concentration-response (CR) layer
+# ---------------------------------------------------------------------------
+
+from collections.abc import Callable  # noqa: E402  (grouped with the CR layer)
+
+
+def _resp_linear(c, slope, intercept):
+    return intercept + slope * c
+
+
+def _resp_mm_excess(c, vmax, km, threshold):
+    return np.maximum(0.0, vmax * c / (km + c) - threshold)
+
+
+def _resp_sigmoid_emax(c, emax, ec50, hill, baseline):
+    return _sigmoid_emax(c, emax, ec50, hill, baseline)
+
+
+# registry key -> pure C_array->rate_array response (self-contained; no validation import)
+_CR_RESPONSES: dict[str, Callable] = {
+    "linear": _resp_linear,
+    "mm_excess": _resp_mm_excess,
+    "sigmoid_emax": _resp_sigmoid_emax,
+}
+
+
+@dataclass(frozen=True)
+class CRSpec:
+    """Config for one concentration-response evaluation (spec §2).
+
+    node: node name(s) to read C(t) from. response: a registry key (see _CR_RESPONSES) or a
+    raw ``(C_array, **params) -> rate_array`` callable. params: a dict broadcasts to all
+    nodes; a list aligns per-node (len == len(node)). conc_scale: multiplies C BEFORE the
+    response (set to fup for unbound-driven effect). ke0: optional effect-site first-order
+    delay (None => direct C).
+    """
+
+    node: str | list[str]
+    response: str | Callable
+    params: dict | list[dict]
+    conc_scale: float = 1.0
+    ke0: float | None = None
+
+    def __post_init__(self) -> None:
+        if isinstance(self.response, str) and self.response not in _CR_RESPONSES:
+            raise ValueError(
+                f"unknown response {self.response!r}; known: {sorted(_CR_RESPONSES)}"
+            )
+        if isinstance(self.node, list) and isinstance(self.params, list):
+            if len(self.params) != len(self.node):
+                raise ValueError(
+                    f"params list len {len(self.params)} != node list len {len(self.node)}"
+                )
+
+
+@dataclass(frozen=True)
+class CRNodeResult:
+    """Per-node CR output (all aggregations always computed)."""
+
+    trajectory: NDArray[np.float64]
+    peak: float
+    tpeak: float
+    nadir: float
+    tnadir: float
+    integral: float
+
+
+def concentration_response(
+    sim_result: SimResult, spec: CRSpec
+) -> dict[str, CRNodeResult]:
+    """Apply a configured direct/pointwise concentration-response to node concentration(s).
+
+    Per node: C_drive = conc_scale * C; optional effect-site delay (ke0); response_fn;
+    then trajectory/peak/tpeak/nadir/tnadir/integral. Pure post-processor — no engine.
+    KeyError if a node is absent (mirrors compute_effect). Spec §2.
+    """
+    nodes = [spec.node] if isinstance(spec.node, str) else list(spec.node)
+    if isinstance(spec.params, list):
+        params_per_node = spec.params
+    else:
+        params_per_node = [spec.params] * len(nodes)
+    fn = spec.response if callable(spec.response) else _CR_RESPONSES[spec.response]
+    trapz = getattr(np, "trapezoid", np.trapz)
+
+    time = np.asarray(sim_result.time_h, dtype=float)
+    out: dict[str, CRNodeResult] = {}
+    for name, params in zip(nodes, params_per_node):
+        if name not in sim_result.concentrations:
+            raise KeyError(
+                f"node {name!r} not in SimResult; available: "
+                f"{sorted(sim_result.concentrations)}"
+            )
+        c_drive = spec.conc_scale * np.asarray(sim_result.concentrations[name], dtype=float)
+        driver = c_drive if spec.ke0 is None else _compute_effect_site(time, c_drive, spec.ke0)
+        r = np.asarray(fn(driver, **params), dtype=float)
+        out[name] = CRNodeResult(
+            trajectory=r,
+            peak=float(np.max(r)),
+            tpeak=float(time[int(np.argmax(r))]),
+            nadir=float(np.min(r)),
+            tnadir=float(time[int(np.argmin(r))]),
+            integral=float(trapz(r, time)),
+        )
+    return out
