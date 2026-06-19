@@ -9,9 +9,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
     # Suite wall-time reached ~24-25min after the paracellular merge (the prior
-    # ceiling timed out main + feature CI); 40 gives headroom. pytest-xdist
-    # parallelization is the follow-up to bring this back down.
-    timeout-minutes: 40
+    # ceiling timed out main + feature CI); 40 then 55 as the suite grew (a 40min
+    # run was cancelled at the ceiling, 2026-06-18). pytest-xdist parallelization
+    # is the standing follow-up to bring this back down rather than keep raising it.
+    timeout-minutes: 55
     steps:
       - uses: actions/checkout@v6
 

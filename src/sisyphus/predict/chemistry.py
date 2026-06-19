@@ -380,7 +380,7 @@ def compute_profile(smiles: str) -> MolecularProfile:
     # logP correction (residual learning) — only for Crippen, not experimental.
     # NOTE: this model is gitignored (`models/adme/logp_correction.json`). When
     # present locally it shifts headline AAFE by ~+2.7% (favourably); CI/public
-    # clones run without it. See AGENTS.md §"Artifact gates".
+    # clones run without it.
     _LOGP_CORR_PATH = Path(__file__).resolve().parent.parent.parent.parent / "models" / "adme" / "logp_correction.json"  # noqa: E501
     if db_logp is None and _LOGP_CORR_PATH.exists():
         try:

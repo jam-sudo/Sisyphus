@@ -409,6 +409,16 @@ Artifacts: `scripts/validate_pgx_cmax_v2b.py`, `tests/integration/test_pgx_arm_s
 
 ---
 
+### DE-51 — Divided-dose (bolus vs split) as a clean signal of GSH-pool memory: escape-saturation compresses it (2026-06-18)
+
+**Date:** 2026-06-18
+
+**Hypothesis (B1.x, the GSH-pool depletion sub-project):** with a dynamic, depleting per-zone GSH pool (`gsh_pool_hazard`), the same total dose given as one bolus vs two spaced half-doses should show the pool's *cumulative depletion memory* as **excess path-dependence** — the dynamic bolus/divided hazard ratio exceeding the static (envelope-only) ratio, because the pool partially regenerates between divided doses. Harness-isolated; headline 2.731 untouched.
+
+**Refuted on the engine (a-priori-pinned params, not tuned).** The measured excess is **negative**: dynamic ratio 4.35 < static ratio 5.45, excess **−1.09** (config: APAP zonation, k_syn=0.231/h, τ=4 h). The pool's **escape-saturation** is the cause — once a zone's pool is overwhelmed the escape factor `1 − GSH/(Kg+GSH) → 1` and *caps* the bolus hazard, so the dynamic model **compresses** the bolus-vs-divided separation **below** the static threshold model (which has no such ceiling and keeps scaling the tall-peak excess). So the static pointwise model actually *overstates* bolus-vs-divided risk separation relative to the saturating pool.
+
+**Why it fails as a demonstration:** the physical divided-dose envelope effect is large and present in BOTH models (the static control is path-sensitive, not flat — the original confound the 2026-06-18 ultrathink caught), and the pool's saturation ceiling pushes the *dynamic* ratio the wrong way. **Do not** use bolus-vs-divided as the pool-memory signal. The clean, confound-free signature of pool/history memory is the **G-order test** (a pure concentration reordering: static hazard fp-invariant by the measure-preserving-reordering identity, dynamic hazard moves — rel diff 0.0 vs 0.029), which B1.x ships as the centerpiece. The rest of B1.x is POSITIVE (G-cliff sharper, G-NAC monotone, G2 orthogonality) — only this one arm is the dead end. See experiment-log 2026-06-18 (B1.x).
+
 ### DE-50 — Liver-zonation as a bulk-first-pass / Cmax lever: plug-flow invariance (2026-06-17)
 
 **Date:** 2026-06-17
