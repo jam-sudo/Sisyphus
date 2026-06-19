@@ -463,8 +463,10 @@ class ClearanceFluxSpec(FluxSpec):
     """Enzyme-mediated elimination.
     
     CLint_organ = Σ(enzyme_abundance_i × drug_affinity_i) × IVIVE_scaling
-    CLh = well_stirred(Q, fup, CLint_organ)   — or other model
-    rate = CLh × C_in
+    rate = fup × CLint_organ × C_plasma   (intrinsic clearance — the convective
+        flow edge transports Q×C separately, so hepatic/gut extraction emerges
+        E→1 rather than the whole-organ CLh that double-counts Q; see FLUX-1,
+        2026-06-04)
     """
     
     def apply(self, t, y, dydt, params):
@@ -477,10 +479,10 @@ class ClearanceFluxSpec(FluxSpec):
         
         if self.model == "well_stirred":
             fup = params.drug_param("fup")
-            q = params.total_inflow(self.source)  # 이 node의 총 inflow
-            clh = (q * fup * clint_organ) / max(q + fup * clint_organ, 1e-12)
-            c_in = ...  # mixed input concentration
-            rate = clh * c_in
+            # Apply the INTRINSIC clearance to the compartment's plasma conc; the
+            # separate convective flow edge carries Q·c_out, so E emerges →1.
+            # (Applying the whole-organ CLh here would double-count Q — FLUX-1.)
+            rate = fup * clint_organ * c_plasma
         elif self.model == "gfr_filtration":
             rate = params.drug_param("renal_clearance") * c_plasma
         
