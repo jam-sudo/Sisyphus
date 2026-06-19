@@ -24,7 +24,7 @@ def compute_endpoints(
         t_min_h: Minimum time for Cmax extraction (skips t < t_min_h). Used
             for IV bolus to avoid the deterministic t=0 spike; default 0.0
             (V2-compatible). AUC and terminal half-life remain full-interval.
-            See docs/superpowers/specs/2026-04-22-iv-cmax-observation-design.md.
+            See docs/_internal/specs/2026-04-22-iv-cmax-observation-design.md.
 
     Returns:
         PKEndpoints with Cmax, Tmax, AUC, t½.

@@ -216,7 +216,7 @@ class TestCIFloor:
         registry), morphine TDM at n_prior=60 with obs=0.02 mg/L produces
         IS degeneracy (ESS=1.0) because the predicted Cmax shifted 0.035 →
         0.055 mg/L (engine FE 1.90 → 2.94, approaching the >3x degeneracy
-        threshold documented in CLAUDE.md). Degenerate CI is not "wide", so
+        threshold documented in the design docs). Degenerate CI is not "wide", so
         the test's precondition is no longer met by morphine. Ciprofloxacin
         is not in any non-CYP registry (Gate-D bit-identical pre/post-B-02),
         so its TDM is unaffected by B-02 and reliably produces a wide CI

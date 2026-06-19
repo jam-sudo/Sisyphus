@@ -2,7 +2,7 @@
 """Pure metric functions for the PGx genotype-fold validation.
 
 No engine / no I/O — operates on plain numbers so the science is unit-testable
-in isolation. See docs/superpowers/specs/2026-06-14-pgx-genotype-fold-validation
+in isolation. See docs/_internal/specs/2026-06-14-pgx-genotype-fold-validation
 -design.md (sec 4).
 """
 from __future__ import annotations

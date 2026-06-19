@@ -182,7 +182,7 @@ class ClearanceFluxSpec(FluxSpec):
     - ``gfr_filtration`` — renal filtration (``CL_renal × C_plasma``)
     - ``extended``      — ECM: QSSA-closed hepatocyte with active + passive
       uptake, passive efflux, metabolism, biliary clearance. See
-      ``docs/superpowers/specs/2026-04-20-oatp-ecm-hepatic-clearance-design.md``.
+      ``docs/_internal/specs/2026-04-20-oatp-ecm-hepatic-clearance-design.md``.
 
     Hepatic fu correction (B-11): at a node flagged ``fu_correction_applicable``,
     ``well_stirred`` replaces ``fup`` with ``fup × fu_correction_liver`` (an
@@ -324,7 +324,7 @@ class ClearanceFluxSpec(FluxSpec):
 
         elif self.model == "extended":
             # Extended Clearance Model (ECM) — QSSA-closed hepatocyte.
-            # See docs/superpowers/specs/2026-04-20-oatp-ecm-hepatic-clearance-design.md
+            # See docs/_internal/specs/2026-04-20-oatp-ecm-hepatic-clearance-design.md
             src = self.source_name
             ivive = params.node_param(src, "ivive_scaling")
 

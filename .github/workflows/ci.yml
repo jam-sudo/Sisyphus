@@ -16,6 +16,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: Guard — no internal/development references in tracked files
+        run: python3 scripts/check_no_internal_refs.py
+
       - name: Set up Python 3.10
         uses: actions/setup-python@v6
         with:

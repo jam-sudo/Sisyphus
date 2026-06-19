@@ -84,7 +84,7 @@ class MeasuredADMEInput:
     an IV-reference solve and scales engine Cmax/AUC by F_measured/F_engine. It does
     not set the absorption-rate shape (compose with measured peff for slow
     absorbers). Lands on result.engine_pk; ignored for non-oral routes. See
-    docs/superpowers/specs/2026-06-03-measured-f-routing-design.md.
+    docs/_internal/specs/2026-06-03-measured-f-routing-design.md.
     """
 
     fup: float | None = None
@@ -310,7 +310,7 @@ def predict_adme(profile: MolecularProfile) -> ADMEProperties:
     # disagrees by >5x with XGBoost (the "ketorolac fix" from the TDM D2
     # writeup). Ran the 107-holdout benchmark and measured:
     #    Engine AAFE: 3.421 → 3.726 (+0.306, major regression, matches the
-    #                 34+ prior error-cancellation failures in CLAUDE.md)
+    #                 34+ prior error-cancellation failures in the dead-ends log)
     #    Meta AAFE:   2.695 → 2.728 (+0.033, noise level but wrong direction)
     #    Ketorolac engine fold: 0.259x → 0.534x (directionally better but
     #                 still well under truth 0.80 — TDM CI still doesn't cover

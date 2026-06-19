@@ -1,12 +1,12 @@
 ---
 last_updated: 2026-04-22
-parent: ../../CLAUDE.md
+parent: ../../README.md
 charter: Process document for cherry-picking reduction. Derived from cherry_picking_audit_2026-04-22.md §7. Binding for all future accuracy-changing work.
 ---
 
 # Cherry-Picking Reduction Process V1
 
-Derived from `docs/claude/cherry_picking_audit_2026-04-22.md` §7. Active from `3e38210`.
+Derived from `docs/research/cherry_picking_audit_2026-04-22.md` §7. Active from `3e38210`.
 
 The 107-holdout is exposed to 47+ config decisions (track weights, routing overrides, meta-learner choices). Audit aggregate score 4.65/10 (moderate). This document codifies four safeguards to stop the score from drifting higher.
 
@@ -34,9 +34,9 @@ The 107-holdout is exposed to 47+ config decisions (track weights, routing overr
 
 ## §2. Pre-Registration Template
 
-**Scope:** Any change that can affect `data/training/4track_holdout_predictions.json` (= the file backing the CLAUDE.md headline). Examples: track weight edits, routing additions, meta-learner changes, new tracks, calibration constant edits.
+**Scope:** Any change that can affect `data/training/4track_holdout_predictions.json` (= the file backing the README headline). Examples: track weight edits, routing additions, meta-learner changes, new tracks, calibration constant edits.
 
-**Required artifact:** A spec file at `docs/superpowers/specs/YYYY-MM-DD-<change>-design.md` containing these sections BEFORE any code execution touches the holdout benchmark:
+**Required artifact:** A spec file at `docs/_internal/specs/YYYY-MM-DD-<change>-design.md` containing these sections BEFORE any code execution touches the holdout benchmark:
 
 1. **Hypothesis** — what the change is expected to do in one sentence.
 2. **Pre-specified direction** — which direction is "success" (e.g., "AAFE decrease by ≥ 2% on 107-holdout").
@@ -53,7 +53,7 @@ The 107-holdout is exposed to 47+ config decisions (track weights, routing overr
 
 ## §3. 95% CI Reporting in All AAFE Claims
 
-**Rule:** Every AAFE number in CLAUDE.md, experiment-log.md, commit messages, PR descriptions, and external papers must be accompanied by a bootstrap 95% CI and the N.
+**Rule:** Every AAFE number in the project README, experiment-log.md, commit messages, PR descriptions, and external papers must be accompanied by a bootstrap 95% CI and the N.
 
 **Bootstrap method:** 10,000 resamples with replacement on `abs(log10(fold))`, report `10^percentile(bootstrap, [2.5, 97.5])`.
 
@@ -66,7 +66,7 @@ The 107-holdout is exposed to 47+ config decisions (track weights, routing overr
 
 The CI upper bound (3.20) brackets the audit's true-AAFE estimate (2.85–3.10), meaning we cannot statistically reject the null hypothesis that retrospective tuning inflated the point estimate. This is the most important finding in this process doc — *the point estimate alone is not a defensible claim*.
 
-**Action:** Update CLAUDE.md headline table to include CI column. Do this in the same commit as this process doc.
+**Action:** Update the README headline table to include CI column. Do this in the same commit as this process doc.
 
 ---
 
@@ -116,7 +116,7 @@ A commit without one of these tags touching Cmax pipeline code will fail a futur
 
 **Review cadence:** Every 6 months or when a new cherry-picking audit is run. Next audit scheduled after N50 first measurement.
 
-**Amendment:** Must be via a spec under `docs/superpowers/specs/`. This document cannot be amended by direct edit except for the headline AAFE/CI numbers in §3, which are updated with each production benchmark re-run.
+**Amendment:** Must be via a spec under `docs/_internal/specs/`. This document cannot be amended by direct edit except for the headline AAFE/CI numbers in §3, which are updated with each production benchmark re-run.
 
 **Escape hatch:** None. A process that can be bypassed "in an emergency" is not a process. If a genuine emergency requires bypassing these gates, the bypass itself is a negative experiment and must be documented in `dead-ends.md` alongside the numerical outcome.
 
@@ -126,8 +126,8 @@ A commit without one of these tags touching Cmax pipeline code will fail a futur
 
 | # | Action | Owner | Timing |
 |---|---|---|---|
-| 1 | Update CLAUDE.md headline with 95% CI | Hypatia | same commit as this doc |
-| 2 | Curate N50 (50 drugs, new holdout file) | Hypatia + user | before next accuracy commit |
-| 3 | Write `scripts/routing_decorrelation_gate.py` | Hypatia | when next routing entry is proposed |
+| 1 | Update the README headline with 95% CI | the author | same commit as this doc |
+| 2 | Curate N50 (50 drugs, new holdout file) | the author | before next accuracy commit |
+| 3 | Write `scripts/routing_decorrelation_gate.py` | the author | when next routing entry is proposed |
 | 4 | Pre-commit hook for tag enforcement | deferred | after N50 lands |
 | 5 | First N50 benchmark run + CI | deferred | after N50 lands + cycle freeze |

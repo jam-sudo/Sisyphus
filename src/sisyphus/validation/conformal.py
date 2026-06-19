@@ -15,7 +15,7 @@ models did NOT train on (train / cross-conformal), never on the holdout — fitt
 ``q`` on holdout residuals is tuning on the holdout. The holdout is the honest
 out-of-sample coverage *validation*, not the calibration source.
 
-Spec: docs/superpowers/specs/2026-06-04-conformal-prediction-interval-design.md
+Spec: docs/_internal/specs/2026-06-04-conformal-prediction-interval-design.md
 """
 
 from __future__ import annotations

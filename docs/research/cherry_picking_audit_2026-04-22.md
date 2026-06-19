@@ -1,6 +1,6 @@
 ---
 last_updated: 2026-04-22
-author: Hypatia (Claude Sonnet 4.6 agent)
+author: the author
 type: audit
 charter: Quantitative retrospective assessment of cherry-picking risk in Sisyphus
 ---
@@ -336,7 +336,7 @@ it to all Cmax-pipeline changes.
 
 **3. Report AAFE with 95% CI in all claims.**
 Replace "Meta AAFE 2.695" with "Meta AAFE 2.695 [95% CI: 2.29–3.18, N=107]" in
-CLAUDE.md, README, and papers. This forces honest communication of the statistical
+the project README and papers. This forces honest communication of the statistical
 precision of the holdout benchmark.
 
 **4. Distinguish "LOOCV-validated" from "holdout-validated" in commit messages.**
@@ -376,15 +376,15 @@ remains uncertain due to the holdout exposure problem.
 | Routing git history | `git log --follow -- data/sbi/method_routing.json` (4 commits) |
 | Weight change timeline | `git log -- src/sisyphus/ml/ensemble.py` (12 commits) |
 | LOOCV validation | `git show ea931a0`, `git show 201f37e`, `scripts/run_loocv_validation.py` |
-| Dead-end count | `docs/claude/dead-ends.md` (32 enumerated) |
+| Dead-end count | `docs/research/dead-ends.md` (32 enumerated) |
 | Holdout AAFE (verified) | `data/training/4track_holdout_predictions.json` (computed = 2.6946 ✓) |
 | Prospective AAFE (verified) | `data/validation/prospective_N15_4track.json` (computed = 2.3613 ✓) |
 | Contamination episode | `git show 5e5a3d0`, `docs/holdout_contamination_audit.md` |
 | Prospective self-correction | `git show 2a7a281` (retraction), `git show 39b1de5` (expansion) |
-| Error cancellation PoC | `docs/claude/experiment-log.md` §Measured ADME PoC |
+| Error cancellation PoC | `docs/research/experiment-log.md` §Measured ADME PoC |
 
 ---
 
-*Audit conducted by: Hypatia (Claude Sonnet 4.6), 2026-04-22. Read-only
+*Audit conducted by: the author, 2026-04-22. Read-only
 investigation — no code, weights, or routing changed. All numbers independently
 computed from raw data files and cross-checked against stored values.*

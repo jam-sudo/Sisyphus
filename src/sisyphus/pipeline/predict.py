@@ -97,7 +97,7 @@ def _adjust_ad_for_prodrug(
 # F input to set. A caller-supplied measured F sets the systemic exposure SCALE:
 # compute the engine's own oral F via an IV-reference solve and scale engine
 # Cmax/AUC by F_measured/F_engine. Pipeline-layer only (engine stays identity-
-# blind). See docs/superpowers/specs/2026-06-03-measured-f-routing-design.md.
+# blind). See docs/_internal/specs/2026-06-03-measured-f-routing-design.md.
 _F_K_MIN = 0.05  # clamp bounds on the F-correction factor k, to bound numerical
 _F_K_MAX = 50.0  # absurdity when the engine catastrophically mis-calls F.
 
@@ -207,7 +207,7 @@ def predict(
             bolus y0 shortcut. ``None`` or <= 0.5 falls back to V3 bolus.
             MC for infusion is V3.1 Phase 2 scope and is skipped with a
             warning in Phase 1. See
-            docs/superpowers/specs/2026-04-22-v3.1-iv-infusion-design.md.
+            docs/_internal/specs/2026-04-22-v3.1-iv-infusion-design.md.
         phenotypes: Optional CPIC phenotype assignments mapping enzyme or
             transporter gene tag (e.g., ``"CYP2D6"``, ``"SLCO1B1"``) to
             phenotype label (``"PM"``/``"IM"``/``"EM"``/``"NM"``/``"UM"``/

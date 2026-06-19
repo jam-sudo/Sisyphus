@@ -57,7 +57,7 @@ def test_inchikey_connectivity_fallback_for_stereo_variant(tmp_path):
 
 
 def test_loader_rejects_value_below_one(tmp_path):
-    """Anti-fudge guard: fu_correction_liver < 1.0 is not allowed (CLAUDE.md #8)."""
+    """Anti-fudge guard: fu_correction_liver < 1.0 is not allowed (invariant #8)."""
     bad = _valid_entry(fu_correction_liver={"mean": 0.7, "cv": 0.1})
     reg = _write_registry(tmp_path, [bad])
     with pytest.raises(ValueError, match=r"fu_correction_liver.*>= 1\.0"):

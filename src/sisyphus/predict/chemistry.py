@@ -404,7 +404,7 @@ def compute_profile(smiles: str) -> MolecularProfile:
     # pKa: DrugBank ChemAxon → fallback SMARTS
     # NOTE: XGBoost pKa model (R²=0.79, MAE=1.6) was tested but reverted.
     # More accurate pKa broke error cancellation → Meta AAFE worsened 2.058→2.161.
-    # See docs/superpowers/specs/2026-03-26-pka-berezhkovskiy-design.md.
+    # See docs/_internal/specs/2026-03-26-pka-berezhkovskiy-design.md.
     db_pka = db.get_pka(canonical)
     if db_pka is not None:
         pka, compound_type = _classify_from_pka(db_pka[0], db_pka[1])

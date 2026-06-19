@@ -5,7 +5,7 @@ the drug's renal (glomerular-filtration) clearance: the engine's reference renal
 model is ``CL_renal = GFR*fup`` with GFR = 7.5 L/h (~125 mL/min), so an
 individual's renal CL is scaled by ``CrCl / 125``. Weight/age covariates (via
 sbi.physiology_generator) are a documented future extension — see the design spec
-docs/superpowers/specs/2026-06-11-mipd-crcl-renal-individualization-design.md.
+docs/_internal/specs/2026-06-11-mipd-crcl-renal-individualization-design.md.
 """
 from __future__ import annotations
 

@@ -20,5 +20,5 @@
     "value": 0.24
   },
   "hyperparameters": {},
-  "retrained_reason": "Weakest predictor in pipeline (R^2=0.24 intrinsic to hepatocyte assay noise). 14+ improvement attempts failed \u2014 see docs/claude/dead-ends.md"
+  "retrained_reason": "Weakest predictor in pipeline (R^2=0.24 intrinsic to hepatocyte assay noise). 14+ improvement attempts failed \u2014 see docs/research/dead-ends.md"
 }

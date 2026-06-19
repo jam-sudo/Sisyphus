@@ -27,7 +27,7 @@ chemistry, dose/regimen/population extrapolation, individualized MIPD).
   (CL latent + conc grid surrogate), `mipd/meta.py` (route the posterior through the meta blend),
   `mipd/grid.py`. `predict` surfaces `engine_f` via a shared `detect_disposition`. Gate 0b/0c
   passed (one measured anchor materially improves C<sub>max</sub>, ~3× more out-of-domain). Charter:
-  `docs/superpowers/specs/2026-06-09-engine-as-prior-mipd-charter.md`.
+  `docs/_internal/specs/2026-06-09-engine-as-prior-mipd-charter.md`.
 - **CrCl renal individualization + steady-state IV TDM + weight/age covariates (2026-06-11).**
   `predict_posterior(covariates=Covariates(crcl_ml_min=...))` scales renal CL by `CrCl/125` and
   surfaces the individualized posterior `post.cmax`; `predict_tdm(...)` conditions the prior on a
@@ -86,18 +86,18 @@ All correctness-first; the net holdout effect is captured by the 2.731 batch reg
 ### Docs reorganization — internal scratchpad split to `docs/_internal/` (PR #51, gitignored, 2026-05-30)
 
 Agent-operational docs that external readers do not need are now gitignored under
-`docs/_internal/`, mirroring the existing `CLAUDE.md` local-only decision (2026-05-02).
+`docs/_internal/`, mirroring the existing local-only project-context decision (2026-05-02).
 Moved out of the tracked tree (via `git mv`, history preserved): `backlog.md`,
 `landmarks.md`, `phase-completion.md`, `hardening_backlog.md`, `propranolol_cmax_drift.md`
-(from `docs/claude/`), `next_steps_plan.md` + `current_directory_completion_audit_2026-04-24.md`
-(from `docs/`), and the entire `docs/superpowers/plans/` directory (implementation
+(from `docs/research/`), `next_steps_plan.md` + `current_directory_completion_audit_2026-04-24.md`
+(from `docs/`), and the entire `docs/_internal/plans/` directory (implementation
 scaffolding — specs stay public as audit-trail per `cherry_picking_process_v1.md` §2).
-The full agent-operational superset lives locally at `docs/_internal/AGENT_INTERNAL.md`.
-The committed `docs/claude/` set is now the
+The full internal development superset lives locally under `docs/_internal/`.
+The committed `docs/research/` set is now the
 externally-meaningful five: `dead-ends`, `experiment-log`, `diagnosis`,
 `cherry_picking_process_v1`, `cherry_picking_audit_2026-04-22`. **Note:** historical
 CHANGELOG / spec / experiment-log entries that cite the moved paths
-(`docs/superpowers/plans/…`, `docs/claude/backlog.md`, etc.) are left as immutable dated
+(`docs/_internal/plans/…`, `docs/research/backlog.md`, etc.) are left as immutable dated
 records; those files now live under `docs/_internal/` and resolve only in a working tree
 that retains the internal docs.
 
@@ -114,7 +114,7 @@ Resolution of T1 caution flags deferred from v2. Architecture unchanged
 - Item 5 (SPR primary proteomic abundance): **ceiling_accepted** (no quantitative MS-based human SPR pmol/mg located; HPA + Wu 2020 review animal-only)
 - Item 6 (CES2/tebipenem direct CLint): **ceiling_accepted** (no in vitro tebipenem-pivoxil/CES2 Vmax/Km located; Gupta 2023 generic intestinal esterases)
 
-**v1→v2→v3 fold-error progression** (per `docs/superpowers/specs/2026-04-29-prodrug-v3-literature.md`):
+**v1→v2→v3 fold-error progression** (per `docs/_internal/specs/2026-04-29-prodrug-v3-literature.md`):
 
 | Drug | v1 | v2 | v3 | gate |
 |---|---|---|---|---|
@@ -127,7 +127,7 @@ Resolution of T1 caution flags deferred from v2. Architecture unchanged
 
 Per spec §3.3 mechanistic-A promise, gate-fail with mechanistic-A-compliant values is acceptable outcome (informative not failing). v4 candidates require new mechanistic terms beyond data refresh: extra-hepatic esterase distribution, BH4 first-pass depletion, in vitro CES2/tebipenem kinetics.
 
-References: `docs/superpowers/specs/2026-04-29-prodrug-activation-v3-design.md` + `docs/superpowers/specs/2026-04-29-prodrug-v3-literature.md` + plan `docs/superpowers/plans/2026-04-29-prodrug-activation-v3.md`.
+References: `docs/_internal/specs/2026-04-29-prodrug-activation-v3-design.md` + `docs/_internal/specs/2026-04-29-prodrug-v3-literature.md` + plan `docs/_internal/plans/2026-04-29-prodrug-activation-v3.md`.
 
 ### Added
 - **Prodrug activation routing infrastructure** (branch `feat/prodrug-activation`,
@@ -200,7 +200,7 @@ References: `docs/superpowers/specs/2026-04-29-prodrug-activation-v3-design.md` 
 
   **Disposition decisions** (from brainstorming review, 2026-04-28):
   - **D1 (deferred to v3)**: v1 active species CL/Vd values retained
-    unchanged. T1 literature (`docs/superpowers/specs/2026-04-27-prodrug-v2-task1-literature.md`
+    unchanged. T1 literature (`docs/_internal/specs/2026-04-27-prodrug-v2-task1-literature.md`
     §4) found inconsistencies for BH4, GS-441524, R406 (1.5–50× literature
     deviation). Deferred to preserve clean architectural attribution
     (v2 = conversion math + affinity sourcing only). v3 task to update
@@ -251,7 +251,7 @@ References: `docs/superpowers/specs/2026-04-29-prodrug-activation-v3-design.md` 
   `bbedd9f`): 29.9% at N=107 holdout × 1000 MC samples. AAFE 2.719
   reproduces the 2.695 headline within MC noise. PI captures ~1/3 of
   observed residual spread — interval is ~3× too narrow relative to
-  structural error. Recorded in CLAUDE.md as diagnostic, not calibrated.
+  structural error. Recorded in the project README as diagnostic, not calibrated.
   Artifact: `data/validation/holdout_pi_coverage_2026-04-24.json`.
 - **P4.5 Achour correlated abundance prior** (merge `2275932`, 2026-04-23):
   `Distribution.correlation_group` field + `physiology.correlation_registry`
@@ -273,7 +273,7 @@ References: `docs/superpowers/specs/2026-04-29-prodrug-activation-v3-design.md` 
   with migration guidance instead of failing opaquely on a missing YAML
   file. Use `reference_man()` + body-weight override via the
   continuous-hierarchical path.
-- `CLAUDE.md` — added Prediction-interval coverage section under
+- `README.md` — added Prediction-interval coverage section under
   Current Performance (diagnostic caveat emphasized).
 - `docs/current_directory_completion_audit_2026-04-24.md` — counter-audit
   patch Option α (commit `c52b62f`): 3-way `NotImplementedError`

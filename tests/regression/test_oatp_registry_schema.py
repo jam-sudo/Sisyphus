@@ -32,7 +32,7 @@ _OVERRIDES_PATH = _REPO_ROOT / "data" / "transporters" / "cyp_clearance_override
 # (Niemi 2009 PM/EM ~3x, OATP-rate-limited, parallel pravastatin justification).
 # 2026-05-25 (B-10 doctrine completion sprint): atorvastatin + rosuvastatin
 # promoted with literature-curated metabolic_fraction entries per spec
-# docs/superpowers/specs/2026-05-24-doctrine-completion-sprint-design.md.
+# docs/_internal/specs/2026-05-24-doctrine-completion-sprint-design.md.
 # Atorvastatin: fm_CYP3A4 = 0.65 (Kantola 1998 itraconazole DDI, AUC ratio ~3
 # → fm = 1 - 1/AUCR ≈ 0.67; user-approved 2026-05-25).
 # Rosuvastatin: fm_CYP = 0.10 (Martin 2003 [14C]-mass balance, 90% unchanged

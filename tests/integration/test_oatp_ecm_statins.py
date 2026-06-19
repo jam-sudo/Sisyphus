@@ -212,7 +212,7 @@ _STATIN_NAMES = list(_STATIN_CASES.keys())
 # OATP1B1 abundance to PITAVASTATIN (non-holdout, |ln FE| optimum 1.3e5, FE 1.000;
 # reference_man.yaml), which un-erodes Invariant #5 (off the holdout) and lifts
 # pravastatin (holdout, validation-only) to FE ~1.40. Both now pass strict.
-# Spec: docs/superpowers/specs/2026-06-04-oatp-ecm-reanchor-design.md.
+# Spec: docs/_internal/specs/2026-06-04-oatp-ecm-reanchor-design.md.
 _FLUX1_ECM_RECAL_FAILS: set[str] = set()
 
 

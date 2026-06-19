@@ -7,7 +7,7 @@ clearance. This module builds the engine over a renal-CL scale ``r`` (scaling
 ``regimen.solver.solve_regimen``, and runs a low-D SIR over ``r`` conditioned on a
 ``MeasuredConc`` trough. ``r`` multiplies the CrCl-set renal CL, so its prior is
 centered on the CrCl-implied value (r=1.0). See the design spec
-docs/superpowers/specs/2026-06-11-mipd-steady-state-iv-tdm-design.md.
+docs/_internal/specs/2026-06-11-mipd-steady-state-iv-tdm-design.md.
 """
 from __future__ import annotations
 

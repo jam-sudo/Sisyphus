@@ -6,7 +6,7 @@ Used by predict.ivive.build_drug_on_graph to attach prodrug activation
 configs to DrugOnGraph instances.
 
 Registry file: ``data/sbi/prodrug_activation_registry.json``
-Schema: see docs/superpowers/specs/2026-04-27-prodrug-activation-v2-design.md §4.7
+Schema: see docs/_internal/specs/2026-04-27-prodrug-activation-v2-design.md §4.7
 """
 
 from __future__ import annotations

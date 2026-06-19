@@ -132,7 +132,7 @@ def get_non_cyp_fractions(smiles: str) -> dict[str, float]:
     are re-normalized to sum=1.0 and a logger.info message is emitted.
 
     B-02 Phase 2 (2026-05-26): UGT2B7 + UGT1A9 added; spec
-    docs/superpowers/specs/2026-05-26-B02-ugt-public-registry-design.md.
+    docs/_internal/specs/2026-05-26-B02-ugt-public-registry-design.md.
     """
     out: dict[str, float] = {}
     for gene, lookup in [
@@ -163,7 +163,7 @@ def get_ugt_ivive_sf(smiles: str) -> dict[str, float]:
     UNLIKE the lookup_* functions above (which return None), this returns a dict
     and NEVER raises: invalid SMILES -> {}. The {} default makes the caller's
     ``.get(enzyme, 1.0)`` a bit-identical no-op. See spec
-    docs/superpowers/specs/2026-05-30-hepatic-ugt-ivive-differential-design.md.
+    docs/_internal/specs/2026-05-30-hepatic-ugt-ivive-differential-design.md.
     """
     ikey = _smiles_to_inchikey(smiles)
     if ikey is None:

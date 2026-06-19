@@ -5,7 +5,7 @@ Computes leave-one-out cross-conformal coverage on the committed holdout cache
 algorithm's marginal-coverage property on the holdout (the holdout's designated
 role is validation) — it does NOT tune any deployed parameter on the holdout
 (the production quantile is calibrated on train / CV+; Invariant #5). Documented
-MC baseline at nominal 90% is 0.299 (CLAUDE.md); conformal restores ~0.90.
+MC baseline at nominal 90% is 0.299; conformal restores ~0.90.
 """
 
 import json

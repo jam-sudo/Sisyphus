@@ -9,7 +9,7 @@ Related files referenced below:
 - Physiology: `data/physiology/reference_man.yaml` (liver node, `ivive_scaling`)
 - Kinetics: `data/transporters/oatp1b1.json`
 - V3 test result: `data/validation/oatp_generalization_result_v3.json`
-- Specs: `docs/superpowers/specs/2026-04-20-oatp-ecm-hepatic-clearance-design.md`, `2026-04-21-ecm-generalization-test-design.md` (amendment v2.1 commit `0d78c38`)
+- Specs: `docs/_internal/specs/2026-04-20-oatp-ecm-hepatic-clearance-design.md`, `2026-04-21-ecm-generalization-test-design.md` (amendment v2.1 commit `0d78c38`)
 - Memory: `project_ecm_generalization_test.md`
 
 ---
@@ -155,7 +155,7 @@ clh → (q × fup × ps_inf × cl_int_h) / (fup × ps_inf × cl_int_h) = q
 
 ## 4. Flat-CLuptake scaling (amendment v2.1) and its Km-invariance
 
-Amendment v2.1 (`docs/superpowers/specs/2026-04-21-ecm-generalization-test-design.md`, commit `0d78c38`) introduced a Jmax-scaling rule for OATP1B1 substrates whose primary Jmax is not available in the literature. From `data/transporters/oatp1b1.json`:
+Amendment v2.1 (`docs/_internal/specs/2026-04-21-ecm-generalization-test-design.md`, commit `0d78c38`) introduced a Jmax-scaling rule for OATP1B1 substrates whose primary Jmax is not available in the literature. From `data/transporters/oatp1b1.json`:
 
 > Amendment v2.1: valsartan promoted from blocked_drugs to drugs via flat-CLuptake Jmax scaling — `Jmax_val = (Jmax_prava/Km_prava) × Km_val = (228/13.6) × 1.39 = 23.3 pmol/min/mg, CV 0.70 (widened to absorb scaling uncertainty)`.
 
@@ -277,9 +277,9 @@ If this number changes, one of the three source files has changed. Update the ta
 
 ## 8. Cross-references
 
-- `docs/superpowers/specs/2026-04-20-oatp-ecm-hepatic-clearance-design.md` — ECM architecture design, QSSA derivation.
-- `docs/superpowers/specs/2026-04-21-ecm-generalization-test-design.md` — V3 test spec, amendment v2/v2.1.
-- `docs/superpowers/specs/2026-04-22-iv-cmax-observation-design.md` — V3 IV-Cmax observation routing (predates this doc but is a prerequisite for V3 numeric interpretation).
+- `docs/_internal/specs/2026-04-20-oatp-ecm-hepatic-clearance-design.md` — ECM architecture design, QSSA derivation.
+- `docs/_internal/specs/2026-04-21-ecm-generalization-test-design.md` — V3 test spec, amendment v2/v2.1.
+- `docs/_internal/specs/2026-04-22-iv-cmax-observation-design.md` — V3 IV-Cmax observation routing (predates this doc but is a prerequisite for V3 numeric interpretation).
 - `project_ecm_generalization_test.md` (memory) — DE-33 context, TransPortal Km audit (dead-end #12).
 - `project_remaining_priorities.md` — DE-33 in dead-ends list, current active work.
 - `src/sisyphus/engine/flux.py:291-334` — authoritative engine source.
