@@ -28,7 +28,8 @@ logger = logging.getLogger(__name__)
 _MODEL_DIR = Path(__file__).resolve().parent.parent.parent.parent / "models" / "adme"
 
 # ---------------------------------------------------------------------------
-# Default CVs for prediction uncertainty (from Omega conformal intervals)
+# Default CVs for prediction uncertainty (hand-set scalars informed by Omega's
+# observed prediction spread; not derived from a conformal procedure)
 # ---------------------------------------------------------------------------
 _FUP_CV = 0.5  # fup prediction has ~50% CV
 _CLINT_CV = 1.0  # CLint prediction is the weakest link (R²=0.24)

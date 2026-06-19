@@ -460,17 +460,18 @@ def _compute_kp_poulin_theil(
 
 
 def _apply_bz_correction(kp: float, fup: float) -> float:
-    """Berezhkovskiy (2004) correction for R&R Kp.
-
-    Accounts for plasma protein binding effect on tissue partitioning
-    at steady state.  Reduces Kp for highly bound drugs (fup << 1).
+    """Berezhkovskiy-style correction pulling R&R Kp toward unity.
 
     Kp_bz = Kp_rr / (1 + (Kp_rr - 1) * fup)
 
-    For fup=0.01, Kp=100: Kp_bz = 100 / (1 + 99*0.01) = 50.3 (halved).
-    For fup=0.5,  Kp=10:  Kp_bz = 10 / (1 + 9*0.5) = 1.8 (5x reduction).
-
-    Source: Berezhkovskiy (2004), J Pharm Sci 93:1628.
+    The correction shrinks Kp toward 1; its magnitude GROWS with fup (largest as
+    fup -> 1, vanishing as fup -> 0) and with the distance of Kp from 1:
+        fup=0.01, Kp=100 -> 100 / 1.99 = 50.3  (mild — fup is small)
+        fup=0.5,  Kp=10  -> 10  / 5.5  = 1.8   (strong)
+    NOTE: this is NOT a "highly-bound-only" shrink — at fup << 1 it is nearly a
+    no-op. The exact algebraic form has not been reconciled against
+    Berezhkovskiy (2004), J Pharm Sci 93:1628; treat this method as experimental.
+    The default ``kp_method`` is ``rodgers_rowland``, which does not call this.
     """
     denom = 1.0 + (kp - 1.0) * fup
     if denom < 1e-10:

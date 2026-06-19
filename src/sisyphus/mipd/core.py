@@ -108,7 +108,13 @@ class MeasuredCmax:
 
 @dataclass(frozen=True)
 class MeasuredAUC:
-    """Measured AUC(0-t) (mg*h/L) at the predicted dose/route."""
+    """Measured AUC(0-t) (mg*h/L) at the predicted dose/route.
+
+    The likelihood compares ``value`` against the engine's AUC over its simulated
+    window (``state["auc"]`` = ``auc_0t``), NOT AUC(0-inf). Supply a window-matched
+    AUC(0-t); a clinical AUC(0-inf) or steady-state AUC(0-tau) is a different
+    quantity (the engine does not currently compute ``auc_0inf``).
+    """
 
     value: float
     cv: float = 0.30
