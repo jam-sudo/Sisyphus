@@ -178,3 +178,84 @@ def zonal_hazard(c_u_by_zone, vmax_bio_by_zone, km_bio, vmax_detox_by_zone, time
         excess = np.maximum(0.0, form - vmax_detox)         # reactive escaping detox
         out.append(float(trapz(excess, t)))
     return out
+
+
+def gsh_pool_hazard(c_u_by_zone, vmax_bio_by_zone, km_bio, gsh0_by_zone, k_syn, kg, time,
+                    steps_per_interval: int = 8):
+    """Per-zone reactive-metabolite hazard under a DYNAMIC, depleting GSH pool (spec §2).
+
+    Pool ODE per zone:  dGSH/dt = k_syn*(GSH0 - GSH) - R_form(t)*GSH/(Kg+GSH),
+    with R_form(t) = Vmax_bio * C_u(t) / (Km_bio + C_u(t)). Hazard (escaped covalent
+    binding) = ∫ R_form(t) * (1 - GSH(t)/(Kg+GSH(t))) dt.
+
+    Integrated with a self-contained fixed-step RK4 on a grid refined `steps_per_interval`x
+    per input interval (linear C_u interpolation); GSH is clamped >= 0 against the
+    autocatalytic crash. Pure numpy / deterministic / no scipy. Returns a per-zone list.
+    """
+    t = np.asarray(time, dtype=float)
+    if t.ndim != 1 or t.size < 2:
+        raise ValueError("time must be a 1-D array of length >= 2")
+    trapz = getattr(np, "trapezoid", np.trapz)
+
+    # Refined uniform integration grid spanning [t0, t_end].
+    n_fine = (t.size - 1) * int(steps_per_interval) + 1
+    tf = np.linspace(t[0], t[-1], n_fine)
+
+    def _rform(c):
+        return vmax_bio * c / (km_bio + c)
+
+    out = []
+    for c_u, vmax_bio, gsh0 in zip(c_u_by_zone, vmax_bio_by_zone, gsh0_by_zone):
+        c_arr = np.asarray(c_u, dtype=float)
+        c_fine = np.interp(tf, t, c_arr)
+
+        def _dgsh(gsh, c):
+            return k_syn * (gsh0 - gsh) - _rform(c) * gsh / (kg + gsh)
+
+        gsh = float(gsh0)
+        gsh_fine = np.empty(n_fine)
+        gsh_fine[0] = gsh
+        for i in range(n_fine - 1):
+            dt = tf[i + 1] - tf[i]
+            c0, c1 = c_fine[i], c_fine[i + 1]
+            cmid = 0.5 * (c0 + c1)
+            k1 = _dgsh(gsh, c0)
+            k2 = _dgsh(gsh + 0.5 * dt * k1, cmid)
+            k3 = _dgsh(gsh + 0.5 * dt * k2, cmid)
+            k4 = _dgsh(gsh + dt * k3, c1)
+            gsh = gsh + (dt / 6.0) * (k1 + 2 * k2 + 2 * k3 + k4)
+            if gsh < 0.0:
+                gsh = 0.0
+            gsh_fine[i + 1] = gsh
+
+        escape = 1.0 - gsh_fine / (kg + gsh_fine)
+        haz_rate = _rform(c_fine) * escape
+        out.append(float(trapz(haz_rate, tf)))
+    return out
+
+
+def transition_width(doses, values):
+    """Dose-span over which a (monotone-ish) dose-response curve rises 10%->90% of its own
+    max, on a log10-dose axis. Smaller = sharper. Curve is normalized to its max so the
+    metric is immune to a hard-zero floor (spec §4 G-cliff). Returns inf if the curve never
+    reaches 90% above 10% (e.g. all-zero / flat)."""
+    d = np.asarray(doses, dtype=float)
+    v = np.asarray(values, dtype=float)
+    vmax = float(np.max(v))
+    if vmax <= 0.0:
+        return float("inf")
+    vn = v / vmax
+    ld = np.log10(d)
+
+    def _cross(level):
+        for i in range(1, len(vn)):
+            if vn[i - 1] < level <= vn[i]:
+                # linear interp in log-dose where vn crosses `level`
+                f = (level - vn[i - 1]) / (vn[i] - vn[i - 1])
+                return ld[i - 1] + f * (ld[i] - ld[i - 1])
+        return None
+
+    lo, hi = _cross(0.1), _cross(0.9)
+    if lo is None or hi is None:
+        return float("inf")
+    return float(hi - lo)

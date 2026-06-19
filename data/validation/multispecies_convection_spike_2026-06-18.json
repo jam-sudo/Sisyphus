@@ -1,0 +1,43 @@
+{
+  "title": "Multi-species engine-convection feasibility spike (Bridge B / B1.x)",
+  "date": "2026-06-18",
+  "verdict": "YES",
+  "conclusion": "FEASIBLE (YES). A synthetic TWO-species axial graph (parent liver__ax1..N + metabolite__ax1..N + shared metabolite_sink) compiles and solves on the stock engine with ZERO src/engine change: T1 compiles, T2 solves, T3 mass-conserves (mass_balance_error 3.55e-15; species balance closes, formed 52.47 = chain_end 3.378e-17 + sink_end 52.47). T4: per-zone formation is spatially resolved and inter-zone convection (TransitEdge) moves the metabolite center-of-mass toward the outlet. T5: a Damkohler sweep (Da = N*k_detox/k_conv, k_conv fixed) shows the convection-vs-local shift is large at low Da (convected/stable regime) and ~0 at high Da (local/reactive regime); monotone-decreasing = True. Production already ships well-mixed multi-species, so this validates AXIAL composition; the high-Da agreement (shift->0) validates the local-only post-processor (scripts/probe_zonal_hazard.py) as the Da>>1 limit. Harness-isolated; headline 2.731 bit-identical.",
+  "monotone_decreasing": true,
+  "mass_balance_error": 3.552713678800501e-15,
+  "formed": 52.465967513113554,
+  "chain_end": 3.378393446122302e-17,
+  "sink_end": 52.465967513113554,
+  "shift_low_da": 4.350446347563259,
+  "shift_high_da": 0.33329407389263577,
+  "da_shift_curve": [
+    4.350446347563259,
+    4.295635874110985,
+    4.141436809655646,
+    3.634316020517507,
+    2.5095378133452595,
+    0.9878023735114656,
+    0.33329407389263577
+  ],
+  "da_shift_uniform": [
+    4.410538161130539,
+    4.354511150789708,
+    4.196868717858028,
+    3.6783432446506197,
+    2.5298793422022783,
+    0.9890324762480089,
+    0.3333034871639218
+  ],
+  "da_grid": [
+    0.03,
+    0.1,
+    0.3,
+    1.0,
+    3.0,
+    10.0,
+    30.0
+  ],
+  "k_conv": 5.555555555555555,
+  "v_zone": 0.18,
+  "n_zones": 10
+}

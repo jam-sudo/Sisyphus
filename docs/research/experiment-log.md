@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-17
+last_updated: 2026-06-18
 parent: ../../README.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -9,6 +9,28 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 Reverse-chronological. The project README carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
 
 ---
+
+## 2026-06-18 — Bridge B / B1.x: multi-species engine-convection spike — axial composition FEASIBLE (YES)
+
+A run-then-pin feasibility spike: does the axial machinery (PR #79) **compose** with the engine's existing active-metabolite species — can a metabolite be **spatially resolved** across the axial chain (per-zone formation + inter-zone convection), conserving mass, with **zero `src/engine/` change**? Spec `docs/_internal/specs/2026-06-18-multispecies-engine-convection-spike-design.md`, plan `…/plans/2026-06-18-multispecies-engine-convection-spike.md`. Harness-isolated (`scripts/spike_multispecies_convection.py`); headline **2.731 bit-identical** (guarded).
+
+**Reframed by iterative ultrathink (6 rounds to convergence).** The original "transported reactive-metabolite" framing was physiologically wrong for its own use case (reactive metabolites are *locally consumed* — the B1/GSH-pool post-processor is correct there). And production **already ships** a well-mixed parent→active-metabolite species (`pipeline/predict.py`, `core.py` `active_metabolite`, prodrug registry), so the basic capability was not the question. Narrowed to the genuinely novel bit: **axial composition** (a spatially-resolved, inter-zone-convecting metabolite), justified by niche stable/zonal-metabolite cases — *not* DILI.
+
+**VERDICT: YES, feasible with graph construction alone.** Task-0 discovery established the crux: the engine assigns one ODE state **per node** (topological) and `ProdrugActivationFlux` is **tag-keyed** — `active_metabolite.name` is read-layer only — so **N metabolite nodes coexist** (no single-named-metabolite limit). The full N=10 two-species axial graph (parent `liver__ax1..N` + `metabolite__ax1..N` + shared sink; per-zone `ProdrugActivationEdge` formation, `TransitEdge` convection, `OneCompartmentEliminationEdge` detox) compiles, solves, and conserves mass (`mass_balance_error` **3.55e-15**; species balance closes, formed 52.47 = chain 3e-17 + sink 52.47).
+
+**The Damköhler decision map** (chain `Da = N·k_detox/k_conv`, `k_conv` fixed): center-of-mass shift (convected − local control) = `[+4.35, +4.30, +4.14, +3.63, +2.51, +0.99, +0.33]` for Da `[0.03…30]` — **monotone-decreasing**, crossover bracket Da∈(1,3). Low Da (stable): convection sweeps the metabolite to the outlet → engine captures what the local-only post-processor misses. **High Da (reactive): shift→0 → the engine agrees with the local-only post-processor — directly validating the B1/GSH-pool model for reactive metabolites.** Reported boundary: distinct per-species ADME (own fup/Kp) is a separate capability the engine's single-drug state does not provide; noted, not built. Components: `data/validation/multispecies_convection_spike_2026-06-18.{json,md}`, `tests/integration/test_multispecies_convection_spike.py` (6). Capability established + mapped; not a calibrated product. No engine change; headline untouched.
+
+## 2026-06-18 — Bridge B / B1.x Phase-0: zonal GSH-pool depletion — history-dependent hazard (POSITIVE; G-time honest-negative)
+
+Deepened the B1 static-detox hazard (PR #82) to a **dynamic, depleting per-zone GSH pool** (`gsh_pool_hazard`, a self-contained RK4 post-processor; `k_syn=ln2/t½_GSH`, t½≈3 h → **0.231/h**, τ=4 h, both pinned **a priori** before observing any outcome). Spec `docs/_internal/specs/2026-06-18-gsh-pool-depletion-design.md`, plan `…/plans/2026-06-18-gsh-pool-depletion.md`. Harness-isolated (`scripts/probe_gsh_depletion.py`); headline **2.731 bit-identical** (guarded, pins green). Reuses the axial machinery (PR #79) + B1 harness (PR #82) + `zonation_weights` (DE-50).
+
+**Direction set by the 2026-06-18 ultrathink** (caught two confounds in the first draft pre-code): the first design's path-test "static control" was not actually controlled (the static pointwise hazard `∫f(C)dt` is path-sensitive whenever the concentration envelope changes), and its sharpness metric was rigged by the static model's hard-zero floor (log-log slope → ∞). Reframed to lead with the **analytically-guaranteed** distinction.
+
+**Centerpiece — G-order (history-dependence), clean.** The static hazard is a pointwise-integral functional, hence **provably invariant to any reordering** of the concentration trajectory. Feeding both models a profile and its **exact time-reverse** (same value-multiset): static rel diff **0.0** (fp-exact, by reversal symmetry of the trapezoid) vs dynamic rel diff **0.029** — the pool carries order/history information the static model structurally cannot. Orthogonal to bulk parent PK (DE-50, bulk-E span **4.3e-4**).
+
+**G-cliff (POSITIVE).** The dynamic dose–hazard transition is **sharper** than the static ramp (log10-dose 10→90% width **0.263 vs 0.471**) — the autocatalytic depletion feedback (scavenging weakens as the pool empties) realized. **G-NAC (POSITIVE, analytic).** Raising GSH0 ×{1,1.5,3} monotonically lowers maxH (1.72→0.99→0.43). **G1/G2** localize to the pericentral (zone-3) outlet and confirm bulk-invariance.
+
+**G-time (HONEST-NEGATIVE → DE-51).** The physical bolus-vs-2×-divided arm shows **excess path-dependence = −1.09** (dynamic ratio 4.35 < static 5.45): the pool's escape-saturation *caps* the bolus hazard and so **compresses** the dynamic path-ratio **below** the static envelope ratio, rather than amplifying it. So divided-dosing is **not** a clean pool-memory signal — the ordering test is. Not tuned to flip (k_syn/τ pinned a priori). Logged DE-51. Components: `data/validation/gsh_depletion_2026-06-18.{json,md}`, `tests/unit/test_gsh_pool_hazard.py` (7), `tests/integration/test_gsh_depletion_probe.py` (9). Qualitative acetaminophen mechanism, not a calibrated tox number.
 
 ## 2026-06-18 — Bridge B / B1 Phase-0: zonal reactive-metabolite hazard — first PD/tox surface (POSITIVE)
 
