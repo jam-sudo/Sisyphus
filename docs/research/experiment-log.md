@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-18
+last_updated: 2026-06-19
 parent: ../../README.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -9,6 +9,14 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 Reverse-chronological. The project README carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
 
 ---
+
+## 2026-06-19 — Bridge B / B2.0: generic concentration-response (CR) layer (consolidation)
+
+Consolidated the Bridge-B PD/tox pattern into one reusable, mechanistic **direct/pointwise** concentration-response layer in `pkpd.py`: `concentration_response(sim, CRSpec) → {node → CRNodeResult}` (per node: `conc_scale·C` → optional `ke0` effect-site → registry response → `trajectory/peak/tpeak/nadir/tnadir/integral`). Spec/plan `docs/_internal/{specs,plans}/2026-06-19-concentration-response-layer*` (local-only). Harness-isolated (additive to `pkpd.py`, which nothing in `predict/`/`pipeline/` imports); headline **2.731 bit-identical** (guarded, pins green). `pkpd` imports nothing from `validation`. PR #86.
+
+**Validated by reproducing BOTH existing concentration→effect computations** from one config-driven path (the abstraction-is-right evidence, not a copied-formula tautology): **P1** — `mm_excess`+`integral`+`conc_scale=fup` reproduces `validation.pgx_metrics.zonal_hazard` (B1's zonal hazard) per zone to fp (`rtol=1e-12`); **P2** — `sigmoid_emax`+`ke0` reproduces `pkpd.compute_effect` (`effect`/`emax_achieved`/`temax`) to fp (and guards against future divergence). All 13 tests unit-level on synthetic `SimResult`s — **zero engine solves** (negligible CI cost; the kernel is input-agnostic arithmetic).
+
+Scope set over four ultrathink rounds (unbound `conc_scale`; **direct-only scope** — dynamic PD / TGI / the GSH-pool are a separate *stateful* abstraction, **B4 is NOT an instance**; reproduce-both proof; clean `pkpd`⊥`validation` layering; unit-only/synthetic). 3-entry registry (`sigmoid_emax`/`mm_excess`/`linear`); `hinge`/`mm`/composition/`inhibitory_emax` deferred. Infrastructure, not a new endpoint. Follow-ups: B2.1 (tissue-PoD instance), B2.2 (Distribution/MC through the layer), B2.x (stateful responses).
 
 ## 2026-06-18 — Bridge B / B1.x: multi-species engine-convection spike — axial composition FEASIBLE (YES)
 
