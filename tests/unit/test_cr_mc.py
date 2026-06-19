@@ -185,3 +185,38 @@ def test_g_zero_inflation_honesty():
     assert mc.peak.p5 == 0.0  # zero-inflated tail a lognormal Distribution can't represent
     assert mc.peak.mean > 0.0
     assert (mc.peak.samples == 0.0).any() and (mc.peak.samples > 0.0).any()
+
+
+def test_g_layering_pkpd_imports_no_validation_or_engine_uncertainty():
+    import ast
+    import pathlib
+
+    src = (
+        pathlib.Path(__file__).resolve().parents[2] / "src" / "sisyphus" / "pkpd.py"
+    ).read_text()
+    tree = ast.parse(src)
+    mods = []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            mods += [a.name for a in node.names]
+        elif isinstance(node, ast.ImportFrom) and node.module:
+            mods.append(node.module)
+    assert not any("validation" in m for m in mods), \
+        f"pkpd imports a validation module: {[m for m in mods if 'validation' in m]}"
+    assert not any("engine.uncertainty" in m for m in mods), \
+        f"pkpd imports engine.uncertainty: {[m for m in mods if 'engine.uncertainty' in m]}"
+
+
+def test_g_headline_isolation_mc():
+    import json
+    import pathlib
+
+    root = pathlib.Path(__file__).resolve().parents[2]
+    d = json.loads((root / "data" / "training" / "4track_holdout_predictions.json").read_text())
+    assert abs(d["overall"]["meta"]["aafe"] - 2.731) < 5e-3
+    # predict/pipeline must not import any CR symbol (deterministic or MC)
+    for sub in ("predict", "pipeline"):
+        for f in (root / "src" / "sisyphus" / sub).glob("*.py"):
+            txt = f.read_text()
+            assert "concentration_response" not in txt and "CRSpec" not in txt
+            assert "concentration_response_mc" not in txt and "CRNodeMCResult" not in txt
