@@ -26,7 +26,7 @@ from dataclasses import dataclass
 import numpy as np
 from numpy.typing import NDArray
 
-from sisyphus.core import SimResult
+from sisyphus.core import Distribution, SimResult
 
 logger = logging.getLogger(__name__)
 
@@ -341,3 +341,133 @@ def concentration_response(
             integral=float(trapz(r, time)),
         )
     return out
+
+
+@dataclass(frozen=True)
+class EndpointMC:
+    """MC summary of one scalar CR endpoint (spec §2): moments + percentiles + raw samples."""
+
+    mean: float
+    std: float
+    p5: float
+    p50: float
+    p95: float
+    samples: NDArray[np.float64]  # (n_draws,) ground truth — derive any quantile
+
+
+@dataclass(frozen=True)
+class CRNodeMCResult:
+    """Per-node CR endpoints with propagated uncertainty (spec §2)."""
+
+    peak: EndpointMC
+    tpeak: EndpointMC
+    nadir: EndpointMC
+    tnadir: EndpointMC
+    integral: EndpointMC
+    n_samples: int
+
+
+_CR_ENDPOINTS = ("peak", "tpeak", "nadir", "tnadir", "integral")
+
+
+def _realize_param_value(v, rng: np.random.Generator | None):
+    """One param value -> float. Distribution -> .mean (rng is None) or a draw; else passthrough."""
+    if isinstance(v, Distribution):
+        return v.mean if rng is None else v.sample(rng)
+    return v
+
+
+def _realize_spec(spec: CRSpec, rng: np.random.Generator | None) -> CRSpec:
+    """Realize any Distribution in params/conc_scale to floats; structure/node/response/ke0 kept.
+
+    rng is None => realize to means (deterministic). Param dict order then conc_scale fixes the
+    RNG draw order, so a given seed is reproducible (spec §3 step 1).
+    """
+    if isinstance(spec.params, list):
+        params = [
+            {k: _realize_param_value(val, rng) for k, val in d.items()} for d in spec.params
+        ]
+    else:
+        params = {k: _realize_param_value(val, rng) for k, val in spec.params.items()}
+    conc_scale = _realize_param_value(spec.conc_scale, rng)
+    return CRSpec(
+        node=spec.node,
+        response=spec.response,
+        params=params,
+        conc_scale=conc_scale,
+        ke0=spec.ke0,
+    )
+
+
+def _summarize_endpoint(arr: NDArray[np.float64]) -> EndpointMC:
+    p5, p50, p95 = (float(x) for x in np.percentile(arr, [5, 50, 95]))
+    return EndpointMC(
+        mean=float(np.mean(arr)),
+        std=float(np.std(arr)),  # population std (ddof=0), MC sample summary
+        p5=p5,
+        p50=p50,
+        p95=p95,
+        samples=arr,
+    )
+
+
+def _wrap_scalar_endpoint(v: float) -> EndpointMC:
+    return EndpointMC(mean=v, std=0.0, p5=v, p50=v, p95=v, samples=np.array([v], dtype=float))
+
+
+def concentration_response_mc(
+    sim_or_ensemble: SimResult | list[SimResult],
+    spec: CRSpec,
+    n_samples: int = 0,
+    seed: int = 0,
+) -> dict[str, CRNodeMCResult]:
+    """MC-propagate CR-param and concentration uncertainty to the CR endpoints (spec §2-§4).
+
+    Two sources, one joint loop: per draw realize Distribution params/conc_scale AND sample one
+    ensemble member, then reuse the deterministic ``concentration_response``. ``n_samples=0`` is
+    an exact deterministic reduction to B2.0 (Distributions realized to ``.mean``). Pure
+    post-processor — no engine. Headline 2.731 untouched.
+    """
+    if n_samples < 0:
+        raise ValueError(f"n_samples must be >= 0, got {n_samples}")
+    ensemble = (
+        [sim_or_ensemble] if isinstance(sim_or_ensemble, SimResult) else list(sim_or_ensemble)
+    )
+    if not ensemble:
+        raise ValueError("ensemble is empty; pass a SimResult or a non-empty list[SimResult]")
+
+    nodes = [spec.node] if isinstance(spec.node, str) else list(spec.node)
+
+    if n_samples == 0:
+        det = concentration_response(ensemble[0], _realize_spec(spec, None))
+        return {
+            name: CRNodeMCResult(
+                **{ep: _wrap_scalar_endpoint(getattr(det[name], ep)) for ep in _CR_ENDPOINTS},
+                n_samples=0,
+            )
+            for name in nodes
+        }
+
+    rng = np.random.default_rng(seed)
+    raw: dict[str, dict[str, list[float]]] = {
+        name: {ep: [] for ep in _CR_ENDPOINTS} for name in nodes
+    }
+    for _ in range(n_samples):
+        realized = _realize_spec(spec, rng)  # step 1: params first (fixes RNG order)
+        member = ensemble[int(rng.integers(len(ensemble)))]  # step 2: one C(t)
+        res = concentration_response(member, realized)
+        for name in nodes:
+            r = res[name]
+            for ep in _CR_ENDPOINTS:
+                raw[name][ep].append(getattr(r, ep))
+
+    return {
+        name: CRNodeMCResult(
+            **{
+                ep: _summarize_endpoint(np.asarray(raw[name][ep], dtype=float))
+                for ep in _CR_ENDPOINTS
+            },
+            n_samples=n_samples,
+        )
+        for name in nodes
+    }
