@@ -10,6 +10,26 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-06-19 — B2.2 CR-layer MC uncertainty propagation
+
+New `pkpd.concentration_response_mc(sim_or_ensemble, spec, n_samples=0, seed=0)` propagates
+two uncertainty sources to the concentration-response endpoints (peak/tpeak/nadir/tnadir/
+integral): (a) CR-parameter uncertainty (response params / `conc_scale` supplied as
+`core.Distribution`) and (b) upstream concentration uncertainty (a `list[SimResult]` ensemble,
+e.g. the engine's MC output). One joint MC loop pairs one realized parameter set with one
+sampled ensemble member per draw, reusing the deterministic `concentration_response` (B2.0)
+unchanged; each endpoint is summarized as `EndpointMC` (mean/std/p5/p50/p95 + the raw sample
+array). `n_samples=0` reduces exactly to B2.0 (Distributions realized to their means, single
+SimResult, scalar wrapped with std=0). Pure post-processor — no engine solves; `predict()`,
+`pipeline`, and the Cmax path are untouched; headline Meta AAFE 2.731 stays bit-identical
+(`test_cached_holdout_aafe_is_2p731` passes; `concentration_response` byte-identical). Reporting
+percentiles + raw samples (rather than forcing a lognormal Distribution) keeps zero-inflated and
+bounded effect endpoints honest. All-unit gates (synthetic `SimResult`, zero engine solves):
+exact deterministic reduction, analytic parameter-mean and spread, per-member concentration
+samples, both-sources variance composition (std exceeds either single source), seed
+reproducibility, mm_excess zero-inflation honesty, layering (`pkpd` depends only on `core`), and
+headline isolation. Spec and plan kept local-only under `docs/_internal/`.
+
 ## 2026-06-19 — Bridge B / B2.0: generic concentration-response (CR) layer (consolidation)
 
 Consolidated the Bridge-B PD/tox pattern into one reusable, mechanistic **direct/pointwise** concentration-response layer in `pkpd.py`: `concentration_response(sim, CRSpec) → {node → CRNodeResult}` (per node: `conc_scale·C` → optional `ke0` effect-site → registry response → `trajectory/peak/tpeak/nadir/tnadir/integral`). Spec/plan `docs/_internal/{specs,plans}/2026-06-19-concentration-response-layer*` (local-only). Harness-isolated (additive to `pkpd.py`, which nothing in `predict/`/`pipeline/` imports); headline **2.731 bit-identical** (guarded, pins green). `pkpd` imports nothing from `validation`. PR #86.
