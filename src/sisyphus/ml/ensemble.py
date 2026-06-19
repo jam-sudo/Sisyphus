@@ -141,10 +141,13 @@ class MetaLearner:
                 log_ml = np.log10(max(cmax_ml, 1e-10))
                 disagreement = abs(log_eng - log_ml)
                 if disagreement > _DISAGREEMENT_THRESHOLD_LOG10:
-                    scale = _DISAGREEMENT_THRESHOLD_LOG10 / disagreement
+                    # Distinct name from the VDss `scale` above (already consumed
+                    # when the track weights were built) — this only down-weights
+                    # the engine track on engine/ML disagreement.
+                    penalty = _DISAGREEMENT_THRESHOLD_LOG10 / disagreement
                     # Update engine weight in tracks
                     tracks = [
-                        (lc, w * scale) if lc == log_eng else (lc, w)
+                        (lc, w * penalty) if lc == log_eng else (lc, w)
                         for lc, w in tracks
                     ]
 
