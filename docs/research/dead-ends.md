@@ -82,7 +82,7 @@ Frozen embedding + Ridge / MLP / XGBoost, every combination. **Morgan FP + XGB R
 MMPK AUC → CL/F direct prediction (N=1,014), Vd/F inverse (N=940). CL/F XGB CV R²=0.232, Vd/F R²=0.332. Analytical 1-cpt Cmax. 3-track LOOCV: w_clf=0.00 (base / other both). Standalone AAFE=3.133. Meta Δ=−0.005 (noise). Oracle 1.788 across 28/107 drugs but not unlockable with fixed weights. Benet hypothesis ("IVIVE bypass → accuracy gain") **not verified**. Infrastructure retained, w_clf=0.00.
 
 ### DE-16 — ChEMBL CLint expansion (2026-03-27)
-ChEMBL 36 all-extract: 539 unique compounds (534 net new). TDC Hep 978 + ChEMBL 517 = 1,910 compounds. Scaffold CV R² 0.279 → 0.333 (+0.054). Engine AAFE 3.416 → 3.515 (+0.099 worse), meta AAFE 2.277 → 2.316 (+0.038 worse). LOOCV w_base 0.45 → 0.25 (meta-learner loses confidence in engine). Revert. Data archived under `data/chembl/` and `data/training/clint_expanded_v2.csv`.
+ChEMBL 36 all-extract: 539 unique compounds (534 net new). TDC Hep 978 + ChEMBL 517 = 1,910 compounds. Scaffold CV R² 0.279 → 0.333 (+0.054). Engine AAFE 3.416 → 3.515 (+0.099 worse), meta AAFE 2.277 → 2.316 (+0.038 worse). LOOCV w_base 0.45 → 0.25 (meta-learner loses confidence in engine). Revert. Data archived under `data/chembl/` and `data/training/clint_expanded_v2.csv`. **(The +0.054 is *mixed*-CV; on a hepatocyte-holdout the same merge HALVES R² — see DE-52.)**
 
 ### DE-17 — CLint 3-class classification (2026-03-29)
 Low / Med / High (10/50 cutoff), XGB classifier accuracy 53.5% (kappa 0.299, scaffold CV). Probability-weighted MC mixture. Engine AAFE +0.108 worse; Meta AAFE 2.277 → 2.255 (Δ=−0.023, **marginal noise-level improvement**). w_base=0.45 retained. Coarser prediction destroys less error cancellation, but the effect is within noise.
@@ -405,6 +405,20 @@ Artifacts: gate workflow `next-step-measured-regime-gate`; analysis `docs/resear
 **Telltale if it returns:** "the engine produces a clean opposite-sign genotype-nonlinearity invariant (systemic diverges / first-pass converges)." Only the first-pass convergence is robust; the systemic sign is **regime-dependent** and in the phenytoin-relevant regime gives the *wrong* sign vs phenytoin's clinical divergence — and there is no citable crossed-grid data to validate the systemic arm anyway. Reusable: the data-independent first-pass/axial demonstration + Siddoway EM P1; NOT a systemic genotype-fold claim. Headline 2.731 untouched (harness-isolated).
 
 Artifacts: `scripts/validate_pgx_cmax_v2b.py`, `tests/integration/test_pgx_arm_sign_mechanism.py`, `data/validation/pgx_genotype_nonlinearity_folds.json` (HALT recorded), `src/sisyphus/validation/pgx_metrics.py`.
+
+---
+
+### DE-52 — Assay-mixing under the hepatocyte CLint label: mixed-CV R² rises while hepatocyte-holdout R² halves (record correction; production unaffected) (2026-06-30)
+
+**Date:** 2026-06-30
+
+**Finding (empirical, this session).** Merging non-hepatocyte rows (TDC microsome + ChEMBL) into the `clint_hep` column of `data/training/clint_expanded_v2.csv` (1,910 rows = tdc_hep 978 + tdc_mic 415 + chembl 517) **halves the hepatocyte-prediction R²**. Honest hepatocyte-**holdout** evaluation (scaffold-grouped 5-fold OOF over the 978 `tdc_hep` rows, repo `descriptors.compute_features`, leak-free non-hep augmentation): hep-only R² **≈ 0.24–0.26** vs full-mix R² **≈ 0.11–0.15** → **1.73–2.21× degradation** across three XGB configs. **Microsome is the culprit** (mic-only 1.89×); **ChEMBL is near-inert** (chembl-only 1.07×, the `_harmonize_value` unit fix largely works). Mechanism: microsome CLint sits ~10× below the hepatocyte scale on the log target, so mixing it under one label drags hepatocyte predictions.
+
+**Record correction.** The recorded mixed-CV R² "gains" — DE-16 ChEMBL **0.279→0.333**, and `data/validation/clint_biogen_expansion_result.json` biogen **cv_r2 0.42→0.55** — are computed on the **mixed** test set and **invert** the honest signal: they reward fitting the off-scale microsome/biogen distribution, not hepatocyte prediction. `scripts/train_clint_expanded.py`'s A-vs-B comparison evaluates each model on its **own** dataset (Model B on the mixed set), so it structurally cannot surface this degradation.
+
+**Production is NOT affected.** `src/sisyphus/predict/adme.py` loads `models/adme/xgboost_clint.json`, which is **byte-distinct** from the mixed experimental artifacts (`xgboost_clint_expanded.json`, `xgboost_clint_v3_biogen.json`) and whose `xgboost_clint.meta.json` declares `trained_on = TDC Hepatocyte_AZ` (single assay). `train_clint_expanded.py`'s DECISION gate reverted the mixed model when Meta AAFE worsened (DE-11 / DE-16). Guard added: `tests/regression/test_clint_provenance.py`.
+
+**Telltale if it returns:** "merging microsome / ChEMBL / Biogen lifts CLint CV R²" — true on mixed-CV, **false on a hepatocyte-holdout**. To honestly use cross-assay data, apply **per-source assay calibration** (overlap-compound regression, NOT a global median offset) **before** merging; uncalibrated merge adds noise, not signal. The hepatocyte single-assay ceiling (ρ≈0.24 scaffold-CV, the meta's documented R²) is only the *real* limit once the mixing is removed.
 
 ---
 
