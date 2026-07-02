@@ -31,6 +31,7 @@ logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger(__name__)
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "src"))
 BW_KG = 70.0  # reference body weight
 
 # Sanity bounds for CL/F (mL/min/kg)
@@ -62,9 +63,49 @@ def load_holdout_exclusions() -> set[str]:
     return names
 
 
+def _inchikey14(smiles: str) -> str | None:
+    """First 14 chars of the InChIKey (connectivity block), or None on failure."""
+    from rdkit import Chem
+    from rdkit.Chem.inchi import MolToInchi, InchiToInchiKey
+
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        return None
+    try:
+        inchi = MolToInchi(mol)
+        if not inchi:
+            return None
+        key = InchiToInchiKey(inchi)
+        return key[:14] if key else None
+    except Exception:
+        return None
+
+
+def load_holdout_inchikeys() -> set[str]:
+    """Structural (InChIKey-14) keys for every holdout drug.
+
+    The name/flag filters miss holdout compounds whose training-row name differs
+    by spelling, salt form, or stereo descriptor (e.g. valaciclovir vs
+    valacyclovir, darunavir vs darunavir ethanolate). InChIKey-14 matches on the
+    connectivity block, closing that gap. SMILES come from clinical_pk.json via
+    the reference loader.
+    """
+    from sisyphus.validation.reference import load_reference
+
+    keys: set[str] = set()
+    for r in load_reference():
+        if r.in_holdout and r.smiles:
+            k = _inchikey14(r.smiles)
+            if k:
+                keys.add(k)
+    logger.info("Holdout InChIKey-14 keys loaded: %d", len(keys))
+    return keys
+
+
 def main() -> None:
     holdout_names = load_holdout_drugs()
     exclusion_names = load_holdout_exclusions()
+    holdout_inchikeys = load_holdout_inchikeys()
 
     mmpk_path = ROOT / "data" / "training" / "mmpk_expanded_full.csv"
     logger.info("Loading MMPK data from %s", mmpk_path)
@@ -76,6 +117,7 @@ def main() -> None:
     n_holdout_flag = 0
     n_holdout_name = 0
     n_holdout_excl = 0
+    n_holdout_ik = 0
     n_no_smiles = 0
     n_zero_dose = 0
     n_clf_out_of_range = 0
@@ -88,7 +130,7 @@ def main() -> None:
             smiles = row["canon_smiles"].strip()
             name_lower = name.lower()
 
-            # Skip holdout drugs (triple check)
+            # Skip holdout drugs (four keys: flag, name, exclusion list, structure)
             if row.get("in_holdout", "").strip().lower() == "true":
                 n_holdout_flag += 1
                 continue
@@ -101,6 +143,12 @@ def main() -> None:
 
             if not smiles:
                 n_no_smiles += 1
+                continue
+
+            # Structural (InChIKey-14) holdout check — catches spelling / salt /
+            # stereo variants the name filters miss (DE: CLF-track leak audit).
+            if _inchikey14(smiles) in holdout_inchikeys:
+                n_holdout_ik += 1
                 continue
 
             dose_mg_str = row.get("dose_mg", "").strip()
@@ -178,6 +226,7 @@ def main() -> None:
     logger.info("Total rows:              %d", n_total)
     logger.info("Holdout (in_holdout):    %d", n_holdout_flag)
     logger.info("Holdout (name match):    %d", n_holdout_name)
+    logger.info("Holdout (InChIKey-14):   %d", n_holdout_ik)
     logger.info("Holdout (exclusion):     %d", n_holdout_excl)
     logger.info("No SMILES:               %d", n_no_smiles)
     logger.info("Zero/missing dose:       %d", n_zero_dose)
