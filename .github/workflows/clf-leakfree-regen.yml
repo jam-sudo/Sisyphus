@@ -1,0 +1,59 @@
+name: CLF leak-free canonical regen
+
+# One-off manual workflow: regenerate the canonical benchmark cache + CLF/VDF
+# models + leak-audit baseline + CI bootstrap on the canonical CI stack
+# (ubuntu-latest / Python 3.10 / requirements-lock.txt — the same stack ci.yml
+# validates against) after the CLF InChIKey-14 holdout-filter fix (PR #90).
+#
+# A fresh checkout is automatically public-clone state (data/drugbank +
+# logp_correction are gitignored), so this produces canonical numbers without any
+# developer machine. The regen runs a DUAL arm (baseline retrain from the leaky
+# csv, then leak-free retrain) so the leak effect is isolated on one stack/run;
+# the LEAK-FREE arm's artifacts are the canonical outputs to download and commit.
+#
+# Trigger:  gh workflow run clf-leakfree-regen.yml --ref fix/clf-holdout-ik14-key
+# Then:     gh run download <run-id>   (models + csv + cache + bootstrap + regen_output.txt)
+
+on:
+  workflow_dispatch:   # manual only
+
+jobs:
+  regen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.10"
+          cache: pip
+
+      - name: Install locked dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-lock.txt
+          pip install -e . --no-deps
+
+      - name: Confirm public-clone state (artifacts must be absent)
+        run: |
+          test ! -e data/drugbank/drugs.csv || (echo "drugbank present — not public-clone" && exit 1)
+          test ! -e models/adme/logp_correction.json || (echo "logp_correction present" && exit 1)
+
+      - name: Regenerate canonical CLF leak-free artifacts
+        run: PYTHONPATH=src python scripts/regen_clf_leakfree_canonical.py 2>&1 | tee regen_output.txt
+
+      - name: Upload regenerated artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: clf-leakfree-canonical
+          path: |
+            data/training/clf_training.csv
+            models/direct_pk/xgboost_clf.json
+            models/direct_pk/xgboost_vdf.json
+            data/training/4track_holdout_predictions.json
+            tests/regression/data/prodrug_v3_pre_baseline.json
+            data/validation/4track_ci_*clf_leakfree*.json
+            regen_output.txt
+          if-no-files-found: error
