@@ -16,7 +16,8 @@ ignores stereochemistry, so it also flags true diastereomers that share
 connectivity (quinidine, present in clf_training.csv, collides with the holdout
 drug quinine). This is a conservative false-positive: it removes a legitimate
 training row rather than admitting a leak, which is the safe direction. The AAFE
-impact of this exclusion is negligible (docs/claude_science §8.5: Δ ≈ 0.007).
+impact of this exclusion is negligible (a leak-free retrain moves the 107-holdout
+meta AAFE by Delta ~= 0.007, within bootstrap-CI noise).
 """
 from __future__ import annotations
 

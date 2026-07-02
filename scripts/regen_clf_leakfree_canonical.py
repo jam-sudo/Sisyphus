@@ -27,7 +27,7 @@ are the canonical outputs to download and commit. Run:
     PYTHONPATH=src python scripts/regen_clf_leakfree_canonical.py
 
 Then apply the printed pin edits, restore artifacts, run the full suite, update
-the README/CLAUDE.md headline to the new Meta, commit, merge.
+the README headline to the new Meta, commit, merge.
 """
 
 from __future__ import annotations
@@ -131,7 +131,7 @@ def main() -> None:
     print(f"  -> rename/repin tests/integration/test_holdout_regression.py cache pin "
           f"to assert abs(aafe - {meta_aafe:.4f}) < 0.020")
     print(f"  -> _PINNED['tebipenem_pivoxil'] = {teb:.6e}")
-    print("  -> README + CLAUDE.md headline table Meta -> new value (reconcile vs cache JSON)")
+    print("  -> README headline table Meta -> new value (reconcile vs cache JSON)")
     print("  -> commit leak-free clf_training.csv + xgboost_clf/vdf.json + cache + "
           "bootstrap + leak baseline")
 
