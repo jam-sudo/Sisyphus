@@ -62,7 +62,7 @@ def test_structural_filter_catches_name_evading_leaks():
     # SMILES as they appear in clf_training.csv (name-evading forms)
     cases = {
         "valaciclovir": "CC(C)[C@H](N)C(=O)OCCOCn1cnc2c(=O)nc(N)[nH]c21",
-        "darunavir": "CC(C)CN(C[C@@H](O)[C@H](Cc1ccccc1)NC(=O)O[C@H]1CO[C@H]2OCC[C@H]21)S(=O)(=O)c1ccc(N)cc1",
+        "darunavir": "CC(C)CN(C[C@@H](O)[C@H](Cc1ccccc1)NC(=O)O[C@H]1CO[C@H]2OCC[C@H]21)S(=O)(=O)c1ccc(N)cc1",  # noqa: E501
     }
     for name, smi in cases.items():
         ik = mod._inchikey14(smi)
