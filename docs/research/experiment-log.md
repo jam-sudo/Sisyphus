@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-19
+last_updated: 2026-07-02
 parent: ../../README.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -7,6 +7,35 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 # Experiment Log
 
 Reverse-chronological. The project README carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
+
+---
+
+## 2026-07-02 — CL/F-track InChIKey-14 holdout leak fix + canonical regen (2.731 → 2.735)
+
+An independent reproduction audit found the CL/F direct-track training builder
+(`scripts/build_clf_training_data.py`) filtered holdout drugs by name/flag only (in_holdout
+flag, holdout name list, MMPK exclusion list), missing 5 name-evading structural holdout
+collisions that reached `clf_training.csv`: valaciclovir/valacyclovir (spelling),
+darunavir/darunavir ethanolate (salt), ofloxacin/levofloxacin + dexmethylphenidate/
+methylphenidate (enantiomers), quinidine/quinine (diastereomer — conservative false-positive).
+Fix (PR #90): add a structural **InChIKey-14** connectivity-block key as the 4th filter;
+regenerating the CSV drops the 5 (1131 → 1126). Guard test `test_clf_holdout_inchikey_filter.py`.
+
+Canonical regen on the CI stack (dual-arm, one run, `.github/workflows/clf-leakfree-regen.yml`
+→ `scripts/regen_clf_leakfree_canonical.py`): a **baseline** retrain from the leaky CSV
+reproduced the committed headline to **2.73104** (vs pinned 2.731044, ±0.00004 retrain drift),
+so the leak Δ is cleanly attributable; the **leak-free** retrain gives Meta AAFE **2.73531**.
+Δ_leak = **+0.00427**, well inside the bootstrap CI (half-width ~0.42). The sign is
+stack-dependent — a local macOS retrain moved it −0.004 — i.e. the leak effect sits at the
+retrain-noise floor and is *not* a distinguishable accuracy change. The leaked drugs are
+poorly predicted (methylphenidate 12×, quinine 8.7×), so the leak never inflated accuracy;
+this is corroborated by the multiplicative-IVIVE error-cancellation (a −150% upstream CLint-R²
+swap moves downstream meta only +1.2%). **Correctness-first** ship per Invariant #5 (holdout is
+inviolable): correct data hygiene over a marginally-lower number. Headline **2.731 → 2.735**;
+engine 4.244 / ML 2.998 unchanged; in-domain 2.777 → 2.781 (N=81); tebipenem pin unchanged
+(CL/F does not touch the prodrug arm). Re-pinned `test_cached_holdout_aafe_is_2p735`; CIs
+`data/validation/4track_ci_2026-07-02_clf_leakfree.json`. Note: the agent-write-protected
+private instructions file's headline block still reads 2.731 — needs a manual maintainer update.
 
 ---
 
