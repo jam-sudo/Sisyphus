@@ -28,8 +28,15 @@ def _aafe(preds: list[dict]) -> float:
     not HOLDOUT_JSON.exists(),
     reason=f"{HOLDOUT_JSON.name} not present — regeneration required",
 )
-def test_cached_holdout_aafe_is_2p731() -> None:
-    """Cached predictions file: Meta AAFE is the public-clone headline 2.731 (±0.020).
+def test_cached_holdout_aafe_is_2p735() -> None:
+    """Cached predictions file: Meta AAFE is the public-clone headline 2.735 (±0.020).
+
+    2026-07-02 CLF leak-free canonical regen: the CL/F-track training builder gained a
+    structural InChIKey-14 holdout key (PR #90) removing 5 name-evading stereo/salt
+    holdout collisions; a leak-free CLF/VDF retrain moved the headline 2.731 → **2.735**
+    (Δ +0.00427, within the bootstrap CI — the sign is stack-dependent, i.e. the leak
+    effect is at the retrain-noise floor). A baseline same-stack retrain reproduced the
+    committed 2.731 to ±0.00004, so the Δ is cleanly attributable to the leak fix.
 
     2026-06-10 batch regen (canonical CI stack): the stale FLUX-1 cache (2.784, which
     predated the oxybutynin merge) was regenerated on origin/main (oxybutynin holdout-
@@ -88,7 +95,7 @@ def test_cached_holdout_aafe_is_2p731() -> None:
     0.005 was an artifact of the B-03.x cycle's coincidentally tiny delta.
     See spec amendment 2026-05-27.
 
-    If this fails outside ±0.020 of 2.731, the cache has been regenerated
+    If this fails outside ±0.020 of 2.735, the cache has been regenerated
     with a behavior change or the numerics stack drifted materially.
     Investigate."""
     with HOLDOUT_JSON.open() as f:
@@ -102,4 +109,4 @@ def test_cached_holdout_aafe_is_2p731() -> None:
         if isinstance(data, dict) and "drugs" in data:
             preds = data["drugs"]
         aafe = _aafe(preds)
-    assert abs(aafe - 2.731) < 0.020, f"AAFE drifted: {aafe:.4f}"
+    assert abs(aafe - 2.735) < 0.020, f"AAFE drifted: {aafe:.4f}"

@@ -213,7 +213,7 @@ def test_g_headline_isolation_mc():
 
     root = pathlib.Path(__file__).resolve().parents[2]
     d = json.loads((root / "data" / "training" / "4track_holdout_predictions.json").read_text())
-    assert abs(d["overall"]["meta"]["aafe"] - 2.731) < 5e-3
+    assert abs(d["overall"]["meta"]["aafe"] - 2.735) < 5e-3
     # predict/pipeline must not import any CR symbol (deterministic or MC)
     for sub in ("predict", "pipeline"):
         for f in (root / "src" / "sisyphus" / sub).glob("*.py"):
