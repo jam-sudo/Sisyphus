@@ -17,6 +17,7 @@ manifest so newly trained models cannot ship without provenance.
 
 from __future__ import annotations
 
+import functools
 import hashlib
 import json
 import logging
@@ -187,6 +188,41 @@ def check_feature_hash(manifest: dict[str, Any], expected_sha256: str) -> str | 
             f"got {recorded}"
         )
     return None
+
+
+@functools.lru_cache(maxsize=1)
+def _current_feature_hash_v1() -> str:
+    """Current-pipeline feature hash, cached (one caffeine featurization/process)."""
+    return compute_feature_hash_v1()
+
+
+def warn_on_feature_schema_drift(model_json_path: Path | str) -> str | None:
+    """Warn (log, non-fatal) at load time if a model's sibling ``<stem>.meta.json``
+    records a feature-schema sha256 that disagrees with the current
+    ``compute_features`` pipeline — the drift that would silently make the model
+    predict on the wrong feature vector.
+
+    Implements the module's warn-only load-time provenance policy. Legacy
+    artifacts (no manifest, or a manifest without a recorded sha256) are silent.
+    Returns the warning string, or ``None`` when the schema matches / can't be
+    checked.
+    """
+    path = Path(model_json_path)
+    meta_path = path.with_name(path.stem + ".meta.json")
+    if not meta_path.exists():
+        return None
+    try:
+        manifest = json.loads(meta_path.read_text())
+    except (OSError, json.JSONDecodeError):
+        return None
+    schema = manifest.get("feature_schema")
+    recorded = schema.get("sha256") if isinstance(schema, dict) else None
+    if not recorded:
+        return None  # legacy artifact without a recorded hash — stay silent
+    warning = check_feature_hash(manifest, _current_feature_hash_v1())
+    if warning:
+        logger.warning("Feature-schema drift for %s: %s", path.name, warning)
+    return warning
 
 
 # ---------------------------------------------------------------------------

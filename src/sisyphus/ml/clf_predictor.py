@@ -28,6 +28,7 @@ import xgboost as xgb
 
 from sisyphus.core import Distribution
 from sisyphus.descriptors import compute_features
+from sisyphus.ml.registry import warn_on_feature_schema_drift
 
 logger = logging.getLogger(__name__)
 
@@ -62,11 +63,13 @@ class CLFPredictor:
             path = _MODEL_DIR / "xgboost_clf.json"
             self._clf_model = xgb.XGBRegressor()
             self._clf_model.load_model(str(path))
+            warn_on_feature_schema_drift(path)
             logger.info("CL/F model loaded from %s", path)
         if self._vdf_model is None:
             path = _MODEL_DIR / "xgboost_vdf.json"
             self._vdf_model = xgb.XGBRegressor()
             self._vdf_model.load_model(str(path))
+            warn_on_feature_schema_drift(path)
             logger.info("Vd/F model loaded from %s", path)
 
     def predict_clf_vdf(self, smiles: str) -> tuple[float, float]:
