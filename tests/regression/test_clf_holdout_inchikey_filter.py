@@ -71,3 +71,30 @@ def test_structural_filter_catches_name_evading_leaks():
             f"{name} (IK14 {ik}) is not caught by the structural holdout filter — "
             "a name-evading CLF-track leak would slip through."
         )
+
+
+def test_shipped_clf_training_csv_is_holdout_clean():
+    """Artifact-level guard (Invariant #5): the *committed* clf_training.csv must
+    contain ZERO holdout drugs by InChIKey-14.
+
+    The two tests above verify the builder's filter *code*; this one verifies the
+    shipped *artifact* the CLF/VDF models are trained from. A stale regeneration
+    or hand-edit that reintroduced a holdout drug would pass the code tests but
+    fail here. Mirrors tests/regression/test_mmpk_holdout_leak.py's artifact scan.
+    """
+    import csv
+
+    mod = _load_builder()
+    holdout_ik = mod.load_holdout_inchikeys()
+    csv_path = _ROOT / "data" / "training" / "clf_training.csv"
+    leaks = []
+    with csv_path.open() as f:
+        for row in csv.DictReader(f):
+            ik = mod._inchikey14(row["smiles"].strip())
+            if ik and ik in holdout_ik:
+                leaks.append((row["name"], ik))
+    assert not leaks, (
+        f"clf_training.csv contains {len(leaks)} holdout drug(s) by InChIKey-14: "
+        f"{leaks[:5]} — the structural filter was not applied to the shipped "
+        "artifact. Regenerate via scripts/build_clf_training_data.py."
+    )

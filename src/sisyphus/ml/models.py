@@ -14,6 +14,7 @@ import xgboost as xgb
 
 from sisyphus.core import Distribution
 from sisyphus.descriptors import compute_features
+from sisyphus.ml.registry import warn_on_feature_schema_drift
 
 logger = logging.getLogger(__name__)
 
@@ -39,6 +40,7 @@ class PKPredictor:
             path = _MODEL_DIR / "direct_pk" / "xgboost_cmax.json"
             self._model = xgb.XGBRegressor()
             self._model.load_model(str(path))
+            warn_on_feature_schema_drift(path)
             logger.info("XGBoost Cmax model loaded from %s", path)
 
     def predict_cmax(self, smiles: str, dose_mg: float) -> Distribution:
