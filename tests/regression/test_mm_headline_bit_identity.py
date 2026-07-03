@@ -9,8 +9,8 @@ diverge.
 
 NOTE: an *exact absolute* Cmax pin is deliberately NOT used — per-drug Cmax is not bit-identical
 across BLAS/numerics stacks (see the README "Holdout benchmark reproducibility note"), so a macOS-
-recorded float fails on CI Linux. The absolute cross-stack headline (2.735) is guarded by the
-stack-tolerant holdout cache pin ``test_cached_holdout_aafe_is_2p735``; this test guards the
+recorded float fails on CI Linux. The absolute cross-stack headline (2.743) is guarded by the
+stack-tolerant holdout cache pin ``test_cached_holdout_aafe_is_2p743``; this test guards the
 v2.2a fork locally and portably.
 """
 from __future__ import annotations

@@ -28,8 +28,15 @@ def _aafe(preds: list[dict]) -> float:
     not HOLDOUT_JSON.exists(),
     reason=f"{HOLDOUT_JSON.name} not present — regeneration required",
 )
-def test_cached_holdout_aafe_is_2p735() -> None:
-    """Cached predictions file: Meta AAFE is the public-clone headline 2.735 (±0.020).
+def test_cached_holdout_aafe_is_2p743() -> None:
+    """Cached predictions file: Meta AAFE is the public-clone headline 2.743 (±0.020).
+
+    2026-07-03 UGT single-path fm fix: build_drug_on_graph double-allocated UGT tags
+    (present in both ugt_enzymes and non_cyp_fractions), ~8x-suppressing CYP for the 8
+    B-02 UGT substrates (0.85/0.15 → 0.983/0.017). Routing each tag through one fm
+    mechanism moved the headline 2.735 → **2.743** (Δ +0.00748, within the bootstrap CI;
+    sign is stack-dependent — a local macOS re-run moved it −0.001). Predict-layer,
+    deterministic, no model retraining.
 
     2026-07-02 CLF leak-free canonical regen: the CL/F-track training builder gained a
     structural InChIKey-14 holdout key (PR #90) removing 5 name-evading stereo/salt
@@ -95,7 +102,7 @@ def test_cached_holdout_aafe_is_2p735() -> None:
     0.005 was an artifact of the B-03.x cycle's coincidentally tiny delta.
     See spec amendment 2026-05-27.
 
-    If this fails outside ±0.020 of 2.735, the cache has been regenerated
+    If this fails outside ±0.020 of 2.743, the cache has been regenerated
     with a behavior change or the numerics stack drifted materially.
     Investigate."""
     with HOLDOUT_JSON.open() as f:
@@ -109,4 +116,4 @@ def test_cached_holdout_aafe_is_2p735() -> None:
         if isinstance(data, dict) and "drugs" in data:
             preds = data["drugs"]
         aafe = _aafe(preds)
-    assert abs(aafe - 2.735) < 0.020, f"AAFE drifted: {aafe:.4f}"
+    assert abs(aafe - 2.743) < 0.020, f"AAFE drifted: {aafe:.4f}"

@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-07-02
+last_updated: 2026-07-03
 parent: ../../README.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -9,6 +9,43 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 Reverse-chronological. The project README carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
 
 ---
+
+## 2026-07-03 — UGT single-path fm fix + canonical regen (2.735 → 2.743)
+
+A full-repo 7-agent review surfaced a UGT fraction-metabolized double-allocation in
+`predict/ivive.py::build_drug_on_graph`. It derived `ugt_enzymes` from
+`get_non_cyp_fractions(smiles)` while the pipeline separately passes the SAME per-gene
+registry fractions as `non_cyp_fractions` (both trace to `detect_disposition →
+get_non_cyp_fractions`). A UGT tag present in both then double-allocates in
+`_get_fm_fractions`: it lands in the CYP+UGT block AND is overwritten by the registry
+value, so the CYP residual `(1 − fm)` leaks into a phantom UGT slot. **Empirically
+reproduced:** a UGT2B7-only substrate at the literature 0.85/0.15 fate resolves to
+**0.983/0.017** — CYP ~8× suppressed. Affects the 8 B-02 Phase 2 UGT substrates
+(morphine, codeine, ketorolac, indomethacin, dapagliflozin, etodolac, bexagliflozin,
+glasdegib), all in the 107-holdout.
+
+Fix (PR #93): exclude UGT tags already carried by `non_cyp_fractions` from the
+`ugt_enzymes` block, routing each tag through exactly one fm mechanism. Predict-layer,
+deterministic, **no model retraining**, so a single-arm canonical regen suffices
+(`ugt-regen.yml` → `regen_ugt_canonical.py`; the committed 2.735 was generated on this
+stack, so the delta is purely the fix). Headline **2.735 → 2.743** (Δ **+0.00748**,
+within the bootstrap CI [2.37, 3.20]); engine 4.244 → 4.278, in-domain 2.781 → 2.791,
+tebipenem pin unchanged. Local (macOS) was headline-neutral (2.6227 → 2.6219, −0.0008)
+— the sign is stack-dependent, i.e. the effect sits at the numerics-noise floor. The 8
+UGT drugs shift individually (morphine improves, codeine worsens) but the meta damps
+the net — the same error-cancellation as the CLF-leak fix. **Correctness-first**: the
+0.85/0.15 split is the literature fate. Guards:
+`test_ugt_tag_double_allocation_suppresses_cyp_at_decomposition` +
+`test_build_drug_on_graph_routes_ugt_registry_tag_single_path`. Cache-pin renamed
+`test_cached_holdout_aafe_is_2p743`; CIs `data/validation/4track_ci_2026-07-03_ugt.json`.
+The agent-write-protected private instructions file's headline block needs a manual
+maintainer update to 2.743.
+
+**Review provenance note:** of the 7-agent review's 4 headline-relevant findings, this
+UGT bug and the meta-weight-holdout-tuning caveat (already publicly disclosed) were
+confirmed; the phenol→acid-pKa and bioavailability-holdout-training findings were
+**falsified on verification** (acetaminophen classifies neutral; `train_bioavailability.py`
+already excludes holdout by name + InChIKey-14). Verify before acting.
 
 ## 2026-07-02 — CL/F-track InChIKey-14 holdout leak fix + canonical regen (2.731 → 2.735)
 
