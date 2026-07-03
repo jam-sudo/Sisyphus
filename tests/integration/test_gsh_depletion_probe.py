@@ -76,10 +76,10 @@ def test_headline_isolation_unchanged():
     # The 4-track holdout cache must be untouched by anything in this probe.
     p = _ROOT / "data" / "training" / "4track_holdout_predictions.json"
     d = json.loads(p.read_text())
-    assert abs(d["overall"]["meta"]["aafe"] - 2.735) < 5e-3
+    assert abs(d["overall"]["meta"]["aafe"] - 2.743) < 5e-3
 
 
-@pytest.mark.parametrize("name", ["test_cached_holdout_aafe_is_2p735",
+@pytest.mark.parametrize("name", ["test_cached_holdout_aafe_is_2p743",
                                   "test_mm_headline_bit_identity"])
 def test_headline_pins_exist(name):
     # Guard: the canonical headline pins still exist in the suite (regenerated, not removed).

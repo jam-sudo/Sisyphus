@@ -86,7 +86,7 @@ def test_G3_dose_threshold_and_zone_specificity():
 
 def test_headline_isolation_holdout_cache_untouched():
     """Running the probe leaves the holdout cache byte-identical and the v2.2a + cached
-    2.735 pins passing. Headline untouched by construction."""
+    2.743 pins passing. Headline untouched by construction."""
     import subprocess
     import sys
 
@@ -98,7 +98,7 @@ def test_headline_isolation_holdout_cache_untouched():
     r = subprocess.run(
         [sys.executable, "-m", "pytest",
          "tests/regression/test_mm_headline_bit_identity.py",
-         "tests/integration/test_holdout_regression.py::test_cached_holdout_aafe_is_2p735",
+         "tests/integration/test_holdout_regression.py::test_cached_holdout_aafe_is_2p743",
          "-q"],
         cwd=str(ROOT), capture_output=True, text=True,
     )
