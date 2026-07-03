@@ -1,0 +1,52 @@
+name: UGT single-path canonical regen
+
+# One-off manual workflow: regenerate the canonical benchmark cache + leak-audit
+# baseline + CI bootstrap on the canonical CI stack (ubuntu-latest / Python 3.10 /
+# requirements-lock.txt) after the UGT double-allocation fix (route each UGT tag
+# through one fm mechanism). Predict-layer change only — no model retraining — so a
+# fresh checkout regenerates canonical numbers deterministically. The regenerated
+# files are uploaded as artifacts to download and commit.
+#
+# Trigger:  gh workflow run ugt-regen.yml --ref main
+# Then:     gh run download <run-id>  (cache + baseline + bootstrap + regen_output.txt)
+
+on:
+  workflow_dispatch:   # manual only
+
+jobs:
+  regen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.10"
+          cache: pip
+
+      - name: Install locked dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-lock.txt
+          pip install -e . --no-deps
+
+      - name: Confirm public-clone state (artifacts must be absent)
+        run: |
+          test ! -e data/drugbank/drugs.csv || (echo "drugbank present — not public-clone" && exit 1)
+          test ! -e models/adme/logp_correction.json || (echo "logp_correction present" && exit 1)
+
+      - name: Regenerate canonical UGT-fix artifacts
+        run: PYTHONPATH=src python scripts/regen_ugt_canonical.py 2>&1 | tee regen_output.txt
+
+      - name: Upload regenerated artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ugt-canonical
+          path: |
+            data/training/4track_holdout_predictions.json
+            tests/regression/data/prodrug_v3_pre_baseline.json
+            data/validation/4track_ci_*ugt*.json
+            regen_output.txt
+          if-no-files-found: error
