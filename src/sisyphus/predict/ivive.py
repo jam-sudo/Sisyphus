@@ -697,7 +697,17 @@ def build_drug_on_graph(
     # (literature-curated, no DrugBank dependency).
     from sisyphus.predict.non_cyp_substrates import get_non_cyp_fractions
     _non_cyp = get_non_cyp_fractions(profile.smiles)
-    ugt_tags = {tag for tag in _non_cyp if tag.startswith("UGT")}
+    # Route each UGT tag through exactly ONE fm mechanism. Tags already carried by
+    # ``non_cyp_fractions`` (the per-gene registry path, which sets fm directly)
+    # must NOT also enter the ``ugt_enzymes`` block: _get_fm_fractions would then
+    # double-allocate them — the UGT tag lands in the CYP+UGT block AND is
+    # overwritten by the registry value, so the CYP residual leaks into a phantom
+    # UGT slot (~8x suppressing CYP; e.g. UGT2B7-only 0.85/0.15 → 0.983/0.017).
+    _registry_non_cyp = set(non_cyp_fractions or {})
+    ugt_tags = {
+        tag for tag in _non_cyp
+        if tag.startswith("UGT") and tag not in _registry_non_cyp
+    }
     ugt_enzymes = ugt_tags or None
 
     # B-14: per-substrate UGT IVIVE scaling factor (hepatocyte-basis, hepatic-

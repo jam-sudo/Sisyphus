@@ -142,3 +142,55 @@ def test_detect_disposition_empty_for_pure_cyp_substrate():
 
     oatp, ecm, non_cyp = detect_disposition(compute_profile(MIDAZOLAM))
     assert oatp is None and ecm is None and non_cyp == {}
+
+
+# ── UGT single-path routing (double-allocation regression) ──
+
+
+def test_ugt_tag_double_allocation_suppresses_cyp_at_decomposition():
+    """A UGT tag present in BOTH ugt_enzymes and non_cyp_fractions is
+    double-allocated: it lands in the CYP+UGT block AND is overwritten by the
+    registry value, so the CYP residual (1 - fm) leaks into a phantom UGT slot and
+    CYP is ~8x suppressed. This pins the decomposition behavior the builder must
+    avoid by routing each UGT tag through exactly one mechanism."""
+    honest = _get_fm_fractions(
+        "base", substrate_enzymes=None, ugt_enzymes=None,
+        non_cyp_fractions={"UGT2B7": 0.85},
+    )
+    double = _get_fm_fractions(
+        "base", substrate_enzymes=None, ugt_enzymes={"UGT2B7"},
+        non_cyp_fractions={"UGT2B7": 0.85},
+    )
+    cyp_honest = sum(v for k, v in honest.items() if k.startswith("CYP"))
+    cyp_double = sum(v for k, v in double.items() if k.startswith("CYP"))
+    assert honest["UGT2B7"] == pytest.approx(0.85, abs=0.01)
+    assert cyp_honest == pytest.approx(0.15, abs=0.01)
+    assert cyp_double < 0.03  # the ~8x-suppressed regime the builder must not hit
+
+
+def test_build_drug_on_graph_routes_ugt_registry_tag_single_path():
+    """Regression guard for the builder fix: when non_cyp_fractions carries a UGT
+    tag (as the pipeline supplies via detect_disposition), build_drug_on_graph's
+    internal ugt_enzymes derivation must EXCLUDE it, so the tag is not
+    double-allocated. Observed via enzyme_affinity: with the honest 0.85/0.15 split
+    the CYP affinity keeps a meaningful share; the double-allocation bug crushes
+    CYP fm ~9x (0.15 -> 0.017), which would blow up the UGT:CYP affinity ratio."""
+    from sisyphus.predict.adme import predict_adme
+    from sisyphus.predict.chemistry import compute_profile
+    from sisyphus.predict.ivive import build_drug_on_graph
+
+    profile = compute_profile(CODEINE)  # UGT2B7 substrate
+    adme = predict_adme(profile)
+    drug = build_drug_on_graph(
+        profile, adme, dose_mg=30.0, route="oral",
+        non_cyp_fractions={"UGT2B7": 0.85},
+    )
+    ea = drug.enzyme_affinity
+    assert "UGT2B7" in ea
+    cyp = sum(v.mean for k, v in ea.items() if k.startswith("CYP"))
+    ugt = sum(v.mean for k, v in ea.items() if k.startswith("UGT"))
+    assert cyp > 0, "CYP affinity fully suppressed — UGT tag double-allocated"
+    assert ugt / cyp < 12.0, (
+        f"UGT:CYP affinity ratio {ugt / cyp:.1f} implies CYP was ~8x suppressed — "
+        "the UGT registry tag is being double-allocated (also entering ugt_enzymes)."
+    )
