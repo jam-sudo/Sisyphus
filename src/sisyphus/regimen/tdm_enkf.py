@@ -348,8 +348,10 @@ def enkf_update(
 
     # 2. EnKF analysis in log-space
     log_obs = np.log(np.maximum(np.array([o.concentration for o in observations]), _LOG_FLOOR))
-    # For log-normal noise with CV c, SD in log-space ≈ c (for small c)
-    log_sigmas = np.array([o.cv for o in observations])
+    # For log-normal noise with CV c, SD in log-space ≈ c (for small c).
+    # Floor at 1e-6 so an Observation(cv=0) cannot produce a zero noise SD, which
+    # would divide-by-zero in the ESS / EnKF Kalman gain (R = diag(sigma^2)).
+    log_sigmas = np.maximum(np.array([o.cv for o in observations]), 1e-6)
     log_Y = np.log(np.maximum(Y_ok, _LOG_FLOOR))
     importance_ess = _importance_ess(log_Y, log_obs, log_sigmas)
     X_post = _enkf_analysis(X_ok, log_Y, log_obs, log_sigmas, seed + 100_000)

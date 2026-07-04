@@ -138,6 +138,10 @@ class MeasuredConc:
     t: float
     cv: float = 0.25
 
+    def __post_init__(self) -> None:
+        if not self.value > 0.0:
+            raise ValueError(f"measured concentration must be > 0, got {self.value}")
+
     def log_likelihood(self, state: dict) -> np.ndarray:
         return _lognormal_logpdf(self.value, state["conc_at"](self.t), self.cv)
 

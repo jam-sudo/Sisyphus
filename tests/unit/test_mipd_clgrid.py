@@ -118,3 +118,13 @@ def test_sir_2d_with_measured_conc_constrains_the_posterior():
     )
     # the conc anchor should pull cl_scale toward 2 (and away from the prior median 1).
     assert post.cl_scale.point == pytest.approx(2.0, rel=0.35)
+
+
+def test_measured_conc_rejects_nonpositive_value():
+    """MeasuredConc must reject value<=0 rather than silently degrade to a -700
+    log-likelihood (which collapses every particle to the prior)."""
+    with pytest.raises(ValueError):
+        MeasuredConc(0.0, t=1.0)
+    with pytest.raises(ValueError):
+        MeasuredConc(-0.5, t=1.0)
+    MeasuredConc(0.5, t=1.0)  # positive is accepted

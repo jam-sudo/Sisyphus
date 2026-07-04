@@ -6,6 +6,17 @@ from sisyphus.graph.body import BodyGraph
 from sisyphus.graph.types import FlowEdge, Node
 
 
+def test_graph_package_exports_paracellular_edge():
+    """ParacellularAbsorptionEdge is a first-class edge type (parsed by the builder,
+    used by the flux layer); it must be re-exported from the sisyphus.graph package
+    and listed in __all__ like the other edge types."""
+    import sisyphus.graph as g
+    from sisyphus.graph import ParacellularAbsorptionEdge
+
+    assert ParacellularAbsorptionEdge is not None
+    assert "ParacellularAbsorptionEdge" in g.__all__
+
+
 class TestBodyGraph:
     def test_add_node(self):
         g = BodyGraph()

@@ -1,6 +1,6 @@
 """Calibrate split-conformal Cmax prediction intervals on the TRAIN set.
 
-Invariant #5: the deployed conformal quantile is fit on the train set (76 drugs),
+Invariant #5: the deployed conformal quantile is fit on the train set (67 drugs),
 NEVER the holdout. The holdout is used only as an honest out-of-sample coverage
 *validation*. Writes data/validation/conformal_calibration.json.
 

@@ -115,6 +115,22 @@ class TestApplyInhibition:
         expected_factor = 1.0 / (1.0 + 10.0)
         assert abs(new_3a4 - base_3a4 * expected_factor) < 1.0
 
+    def test_fu_perpetrator_scales_unbound_concentration(self):
+        """fu_perpetrator < 1 lowers the driving unbound [I]_u = fu*[I], so
+        inhibition is weaker than at total concentration (fu default 1.0)."""
+        graph = _make_simple_graph()
+        base = graph.nodes["liver"].enzymes["CYP3A4"].mean
+        total = apply_inhibition(graph, Inhibitor(
+            name="i", enzyme_ki={"CYP3A4": 1.0}, plasma_concentration=10.0,
+        )).nodes["liver"].enzymes["CYP3A4"].mean
+        unbound = apply_inhibition(graph, Inhibitor(
+            name="i", enzyme_ki={"CYP3A4": 1.0}, plasma_concentration=10.0,
+            fu_perpetrator=0.1,
+        )).nodes["liver"].enzymes["CYP3A4"].mean
+        # [I]_u = 0.1*10 = 1 -> factor 1/(1+1) = 0.5, vs 1/11 at total: less inhibited
+        assert unbound > total
+        assert unbound == pytest.approx(base * 0.5)
+
     def test_does_not_affect_other_enzymes(self):
         """Inhibitor targeting CYP3A4 should not change CYP2D6."""
         graph = _make_simple_graph()

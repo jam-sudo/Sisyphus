@@ -126,8 +126,12 @@ def apply_inhibition(graph: BodyGraph, inhibitor: Inhibitor) -> BodyGraph:
                 ki = inhibitor.enzyme_ki[tag]
                 if ki <= 0:
                     raise ValueError(f"Ki must be positive for enzyme {tag!r}, got {ki}")
-                ratio = inhibitor.plasma_concentration / ki
-                # Competitive inhibition: effective = base / (1 + [I]/Ki)
+                # Unbound perpetrant drives inhibition: [I]_u = fu * [I].
+                # fu_perpetrator defaults to 1.0, so total-concentration callers
+                # are unaffected.
+                conc_u = inhibitor.plasma_concentration * inhibitor.fu_perpetrator
+                ratio = conc_u / ki
+                # Competitive inhibition: effective = base / (1 + [I]_u/Ki)
                 factor = 1.0 / (1.0 + ratio)
                 new_enzymes[tag] = Distribution(
                     mean=abundance.mean * factor,
@@ -188,7 +192,9 @@ def apply_induction(graph: BodyGraph, inducer: Inducer) -> BodyGraph:
             if tag in inducer.enzyme_emax and tag in inducer.enzyme_ec50:
                 emax = inducer.enzyme_emax[tag]
                 ec50 = inducer.enzyme_ec50[tag]
-                conc = inducer.plasma_concentration
+                # Unbound perpetrant drives induction ([I]_u = fu * [I]);
+                # fu_perpetrator defaults to 1.0 (total-concentration callers unaffected).
+                conc = inducer.plasma_concentration * inducer.fu_perpetrator
 
                 if ec50 <= 0:
                     raise ValueError(f"EC50 must be positive for enzyme {tag!r}, got {ec50}")
