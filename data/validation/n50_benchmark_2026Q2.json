@@ -1,4 +1,9 @@
 {
+  "invalidated": {
+    "date": "2026-07-04",
+    "reason": "N50 2026Q2 instrument invalidated — InChIKey-14 audit found 21/50 drugs in hard training corpora (name-based exclusion inventory missed them). This freeze AAFE (overall 5.25) is quarantined and must NOT be cited as a generalization result.",
+    "record": "docs/research/n50_2026q2_invalidation.md (dead-ends.md DE-53)"
+  },
   "cycle_id": "2026Q2",
   "run_timestamp_utc": "2026-04-24T02:34:03.017012+00:00",
   "git_commit_at_run": "02ed8e862585799cc2a34e106eef0d0c990dbc8a",

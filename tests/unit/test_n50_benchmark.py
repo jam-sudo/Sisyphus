@@ -280,6 +280,45 @@ def test_cli_freeze_refuses_overwrite(tmp_path, monkeypatch):
         freeze_file.unlink()
 
 
+def test_cli_freeze_refuses_invalidated_file(tmp_path):
+    """A freeze run on an N50 carrying an `invalidated` block must be refused,
+    even when n_admitted==n_target and --confirm is given — otherwise a
+    contaminated result could be published."""
+    payload = {
+        "cycle_id": "inv-test", "n_admitted": 50, "n_target": 50, "drugs": {},
+        "invalidated": {
+            "date": "2026-07-04",
+            "reason": "unit-test invalidation marker",
+            "record": "docs/research/n50_2026q2_invalidation.md",
+        },
+    }
+    f = tmp_path / "n50.json"
+    f.write_text(json.dumps(payload))
+    proc = _run_cli(["--freeze-run", "--confirm", "--n50-file", str(f)], ROOT)
+    assert proc.returncode == 2
+    assert "invalidated" in proc.stdout.lower()
+
+
+def test_shipped_n50_is_marked_invalidated():
+    """Guard: holdout_n50.json (cycle 2026Q2) stays flagged invalid. Its
+    exclusion inventory was name-based and let 21/50 drugs leak from training
+    (docs/research/n50_2026q2_invalidation.md); the 5.25 freeze is not a
+    generalization result. Silently un-invalidating it is a regression."""
+    payload = json.loads((ROOT / "data/reference/holdout_n50.json").read_text())
+    inv = payload.get("invalidated")
+    assert inv, "holdout_n50.json must carry an `invalidated` block"
+    assert "5.25" in inv["reason"] or "never-touch" in inv["reason"]
+    assert "n50_2026q2_invalidation" in inv.get("record", "")
+
+
+def test_shipped_freeze_is_marked_invalidated():
+    """Guard: the 2026Q2 freeze result stays quarantined so its AAFE (5.25) is
+    never cited as a generalization number."""
+    freeze = ROOT / "data/validation/n50_benchmark_2026Q2.json"
+    payload = json.loads(freeze.read_text())
+    assert payload.get("invalidated"), "freeze must carry an `invalidated` block"
+
+
 def test_cli_smoke_test_writes_nothing(tmp_path):
     """--smoke-test must not create any file in data/validation/."""
     payload = {

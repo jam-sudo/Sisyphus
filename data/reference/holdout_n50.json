@@ -1,4 +1,11 @@
 {
+  "invalidated": {
+    "date": "2026-07-04",
+    "reason": "Exclusion inventory was name-based over 3 corpora (107-holdout, MMPK, TDC). An InChIKey-14 re-audit against every shipped SMILES artifact found 21/50 drugs in hard training corpora (VDss/MMPK-Cmax/CLint/CLF/bioavailability), 2 in the meta-weight sweep cache, and 47/50 in DrugBank. This is NOT a never-touch generalization instrument; the 2026Q2 freeze AAFE (5.25) must not be cited as a generalization result.",
+    "audit_command": "python3 scripts/build_n50_exclusion.py --audit data/reference/holdout_n50.json",
+    "record": "docs/research/n50_2026q2_invalidation.md (dead-ends.md DE-53)",
+    "successor": "clean N50' deferred to a separately-authorised curation cycle; candidates must pass build_n50_exclusion.py --audit (zero hard-corpus hits)"
+  },
   "description": "N50 secondary permanent holdout, cycle 2026Q2. Per docs/_internal/specs/2026-04-22-n50-secondary-holdout-design.md. Never-touch for weight tuning, routing, or meta-learner feedback. One-time measurement per release cycle, then retired. Seed batch only \u2014 curation continues in subsequent sessions toward n_target=50.",
   "spec_commit": "da0f080",
   "cycle_id": "2026Q2",
