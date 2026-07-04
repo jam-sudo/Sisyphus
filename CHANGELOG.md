@@ -12,6 +12,32 @@ track `pyproject.toml`.
 
 ## [Unreleased]
 
+### Holdout headline 2.735 → 2.743 — UGT single-path fm fix (2026-07-03)
+
+`build_drug_on_graph` double-allocated UGT tags: a tag present in both the `ugt_enzymes` block
+and the per-gene `non_cyp_fractions` registry was counted twice in `_get_fm_fractions`, leaking
+the CYP residual into a phantom UGT slot and ~8×-suppressing CYP (a UGT2B7-only substrate at the
+literature 0.85/0.15 split resolved to 0.983/0.017). Routing each UGT tag through exactly one fm
+mechanism (PR #93) corrects the split for the 8 B-02 UGT substrates (all in-holdout). Predict-layer,
+deterministic, no model retraining; single-arm canonical CI regen (`.github/workflows/ugt-regen.yml`,
+PR #94) → Meta AAFE **2.735 → 2.743** (Δ +0.00748, within the bootstrap CI; sign stack-dependent).
+Correctness-first — 0.85/0.15 is the literature fate; the meta damps the net (morphine improves,
+codeine worsens). Cache/bootstrap regenerated; cache-pin `test_cached_holdout_aafe_is_2p743`; CIs
+`data/validation/4track_ci_2026-07-03_ugt.json`.
+
+### Holdout headline 2.731 → 2.735 — CLF leak-free canonical regen (2026-07-02)
+
+The CL/F-track training builder (`scripts/build_clf_training_data.py`) filtered holdout drugs by
+name/flag only, admitting 5 name-evading structural collisions (valacyclovir, darunavir ethanolate,
+ofloxacin/levofloxacin, dexmethylphenidate/methylphenidate, quinidine/quinine) into `clf_training.csv`.
+Added a structural **InChIKey-14** 4th filter key (1131 → 1126 rows) plus a guard test (PR #90). A
+dual-arm canonical CI regen (`.github/workflows/clf-leakfree-regen.yml`, PR #91) reproduced the
+committed 2.73104 from the leaky csv, so Δ_leak is cleanly attributable = **+0.00427** (within the
+bootstrap CI; sign stack-dependent). Correctness-first per Invariant #5 (holdout inviolable), not an
+accuracy claim — the leaked drugs are poorly predicted (methylphenidate 12×, quinine 8.7×).
+Cache/models/bootstrap regenerated; cache-pin `test_cached_holdout_aafe_is_2p735`; CIs
+`data/validation/4track_ci_2026-07-02_clf_leakfree.json`.
+
 ### MIPD — engine-as-prior posterior PK + individualized TDM (2026-06-09 → 2026-06-12)
 
 New module `src/sisyphus/mipd/`. Repositions the mechanistic engine from a one-shot
