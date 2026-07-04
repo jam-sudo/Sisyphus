@@ -102,6 +102,10 @@ class MeasuredCmax:
     value: float
     cv: float = 0.30
 
+    def __post_init__(self) -> None:
+        if not self.value > 0.0:
+            raise ValueError(f"measured Cmax must be > 0, got {self.value}")
+
     def log_likelihood(self, state: dict) -> np.ndarray:
         return _lognormal_logpdf(self.value, state["cmax"], self.cv)
 
@@ -118,6 +122,10 @@ class MeasuredAUC:
 
     value: float
     cv: float = 0.30
+
+    def __post_init__(self) -> None:
+        if not self.value > 0.0:
+            raise ValueError(f"measured AUC must be > 0, got {self.value}")
 
     def log_likelihood(self, state: dict) -> np.ndarray:
         return _lognormal_logpdf(self.value, state["auc"], self.cv)

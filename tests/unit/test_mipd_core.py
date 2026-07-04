@@ -148,3 +148,14 @@ def test_posterior_pk_renal_scale_defaults_none():
     assert post.renal_scale is None
     post2 = PosteriorPK(f=s, cmax=s, auc=s, n_eff=10.0, renal_scale=s)
     assert post2.renal_scale is s
+
+
+def test_magnitude_obs_reject_nonpositive_value():
+    """MeasuredCmax/AUC must reject value<=0 rather than silently degrade to a
+    -700 log-likelihood (which collapses every particle to the prior)."""
+    for cls in (MeasuredCmax, MeasuredAUC):
+        with pytest.raises(ValueError):
+            cls(0.0)
+        with pytest.raises(ValueError):
+            cls(-1.0)
+        cls(1.0)  # positive is accepted
