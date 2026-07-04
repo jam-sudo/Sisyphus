@@ -102,18 +102,6 @@ def _flow_aging_factor(age: float) -> float:
     return max(1.0 - 0.35 * (age - 40) / 45, 0.5)
 
 
-def _gfr_aging_factor(age: float) -> float:
-    """Glomerular filtration rate aging reduction factor.
-
-    1.0 for age ≤ 40, then linear decline, floored at 0.4.
-
-    Source: Lindeman 1985 (~1% per year after 40).
-    """
-    if age <= 40:
-        return 1.0
-    return max(1.0 - (age - 40) / 125, 0.4)
-
-
 # ---------------------------------------------------------------------------
 # Correlated abundance resampler
 # ---------------------------------------------------------------------------
