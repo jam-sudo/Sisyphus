@@ -448,6 +448,18 @@ Artifacts: `scripts/probe_liver_zonation.py`, `tests/integration/test_liver_zona
 
 ---
 
+### DE-53 — N50 secondary-holdout cycle 2026Q2 invalidated: name-based exclusion inventory let 42% of the set leak from training (2026-07-04)
+
+**Date:** 2026-07-04
+
+**Process negative, not an accuracy attempt (recorded per cherry_picking_process_v1 §6).** The N50 secondary permanent holdout (an unbiased-generalization instrument, `data/reference/holdout_n50.json`, 50/50 curated 2026-04-22, freeze AAFE **5.25** run 2026-04-24) is **not** never-touch. Its exclusion inventory checked only three corpora (107-holdout, MMPK, TDC) by **drug name**. An InChIKey-14 re-audit against every shipped SMILES artifact found **21/50 in hard training corpora** (VDss ×17, direct Cmax training rifampin=**rifampicin**/torsemide=**torasemide**/paclitaxel, CLint, CLF, bioavailability), **2 in the meta-weight sweep cache** (elafibranor, vimseltinib — a §1 violation), and **47/50 in DrugBank**.
+
+**Why the freeze 5.25 is not a generalization number:** contamination (above) + composition confound — 16 IV drugs (32%; the oral-tuned pipeline under-predicts all ~10×), 8 deliberately-adversarial OATP substrates (subset AAFE 8.45), 1 prodrug outlier (sepiapterin ~4900×). The cleanest extractable slice (hard-clean ∩ oral, N=24 novel oral NMEs) is AAFE ≈4.0 vs the 107-holdout ~2.62 on the same local stack — which **corroborates the documented prospective OOD degradation** (prospective 3.27, novel-chemotype F under-prediction), not a new signal.
+
+**Telltale if it returns:** any citation of "N50 generalization AAFE 5.25" (or a subset of it) as evidence the 2.743 headline is cherry-picking-inflated. The instrument is invalid; the number is quarantined. Fix shipped: `scripts/build_n50_exclusion.py` now keys on InChIKey-14 across all corpora + DrugBank with an `--audit` gate; `holdout_n50.json` + the freeze carry an `invalidated` block; `run_n50_benchmark.py` refuses a freeze on an invalidated file. Full record: [n50_2026q2_invalidation.md](./n50_2026q2_invalidation.md). Re-curation of a clean N50' is deferred.
+
+---
+
 ## 3. When to consult this list
 
 - Before writing a design spec for any accuracy improvement.

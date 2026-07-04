@@ -274,6 +274,13 @@ def main() -> int:
 
     payload = _load_n50(args.n50_file)
 
+    invalid = payload.get("invalidated")
+    if invalid:
+        logger.warning(
+            "N50 file %s is INVALIDATED (%s): %s",
+            args.n50_file, invalid.get("date", "?"), invalid.get("reason", ""),
+        )
+
     if args.smoke_test:
         results = run(payload)
         _print_summary("N50 SMOKE TEST (NOT A FREEZE RUN)", results, payload)
@@ -285,6 +292,14 @@ def main() -> int:
         return 0
 
     assert args.freeze_run
+    if invalid:
+        print(
+            f"ERROR: {args.n50_file} is invalidated ({invalid.get('reason', '')}). "
+            f"A freeze run on an invalidated N50 would publish a contaminated "
+            f"result. Curate a clean N50' and freeze that instead. See "
+            f"{invalid.get('record', 'docs/research/n50_2026q2_invalidation.md')}."
+        )
+        return 2
     if not args.confirm:
         print("ERROR: --freeze-run requires --confirm (one-shot per spec §7).")
         return 2
