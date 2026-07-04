@@ -29,6 +29,7 @@ from __future__ import annotations
 
 import dataclasses
 import logging
+import math
 from dataclasses import dataclass, field
 
 import numpy as np
@@ -233,6 +234,85 @@ def _extract_params(drug: DrugOnGraph) -> dict[str, float]:
     return params
 
 
+# Floor on the log-space prior std so a deterministic (cv=0) prior pins its
+# coordinate under the Metropolis ratio instead of collapsing to a delta the
+# density code cannot represent.
+_PRIOR_SIGMA_LN_FLOOR = 1e-6
+
+
+def _lognormal_log_params(mean: float, cv: float) -> tuple[float, float] | None:
+    """(mu_ln, sigma_ln) of log(X) for X ~ lognormal with arithmetic mean/cv.
+
+    Matches ``Distribution.sample``'s lognormal parameterization exactly
+    (E[X]=mean, CV=cv), so this density is consistent with the prior the IBIS
+    particles were drawn from. Returns None when the lognormal is undefined
+    (mean <= 0), signalling the caller to treat that coordinate as flat.
+    """
+    if mean <= 0.0:
+        return None
+    sigma_ln = math.sqrt(math.log(1.0 + cv * cv))
+    sigma_ln = max(sigma_ln, _PRIOR_SIGMA_LN_FLOOR)
+    mu_ln = math.log(mean) - 0.5 * sigma_ln * sigma_ln
+    return (mu_ln, sigma_ln)
+
+
+def _prior_log_params_3d(
+    drug: DrugOnGraph,
+) -> tuple[tuple[float, float] | None, ...]:
+    """Precompute the log-space prior (mu_ln, sigma_ln) for the 3D MCMC state.
+
+    The state is [log(fup), log(CLint_total), log(peff)] (see
+    ``_extract_3d_state``). fup and peff map directly to their lognormal priors.
+    CLint_total is a *sum* of the per-enzyme affinity lognormals, which has no
+    closed-form density, so it is approximated by a single lognormal via the
+    Fenton-Wilkinson method (moment-match the sum, independent enzymes). For a
+    single enzyme this reduces to that enzyme's own lognormal exactly.
+
+    Args:
+        drug: The distributional prior DrugOnGraph passed to ``ibis_update``.
+
+    Returns:
+        3-tuple of (mu_ln, sigma_ln) or None (flat) for
+        (log fup, log CLint_total, log peff).
+    """
+    fup = _lognormal_log_params(drug.fup.mean, drug.fup.cv)
+    peff = _lognormal_log_params(drug.peff.mean, drug.peff.cv)
+
+    # Fenton-Wilkinson lognormal for CLint_total = sum of enzyme affinities.
+    means = [d.mean for d in drug.enzyme_affinity.values() if d.mean > 0.0]
+    cvs = [d.cv for d in drug.enzyme_affinity.values() if d.mean > 0.0]
+    clint: tuple[float, float] | None = None
+    if means:
+        e_sum = sum(means)  # E[S]
+        var_sum = sum((c * m) ** 2 for m, c in zip(cvs, means))  # Var[S], indep.
+        if e_sum > 0.0:
+            cv_sum = math.sqrt(var_sum) / e_sum
+            clint = _lognormal_log_params(e_sum, cv_sum)
+
+    return (fup, clint, peff)
+
+
+def _log_prior_3d(
+    state_3d: NDArray[np.float64],
+    prior_params: tuple[tuple[float, float] | None, ...],
+) -> float:
+    """Log prior density of a 3D log-space state (up to an additive constant).
+
+    Sums the Gaussian log-density of each coordinate under its lognormal prior
+    (i.e. a normal on the log-scale). Coordinates whose prior is None (undefined
+    lognormal) contribute nothing (flat). The dropped 0.5*log(2*pi) constant and
+    the -log(sigma) terms cancel in the Metropolis ratio, but -log(sigma) is
+    kept so this is a proper log-density up to that one constant.
+    """
+    total = 0.0
+    for z_i, p in zip(state_3d, prior_params):
+        if p is None:
+            continue
+        mu, sigma = p
+        total += -0.5 * ((z_i - mu) / sigma) ** 2 - math.log(sigma)
+    return total
+
+
 # ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
@@ -365,6 +445,12 @@ def ibis_update(
             vals = np.array([p[key] for p in param_samples])
             prior_params[key] = float(np.mean(vals))
 
+    # Log-space prior for the 3D MCMC state, from the distributional prior.
+    # The rejuvenation kernel must target the partial posterior pi_0 * L, not L
+    # alone, or resampled particles drift toward the likelihood/MLE with no prior
+    # regularization. Computed once (prior is fixed across particles/proposals).
+    prior_3d = _prior_log_params_3d(drug)
+
     # -----------------------------------------------------------------------
     # Step 2: Sequential observation loop
     # -----------------------------------------------------------------------
@@ -436,10 +522,12 @@ def ibis_update(
             obs_seen_tuple = tuple(obs_seen)
 
             for i in range(n_ok):
-                # Current log-likelihood (all observations seen so far)
+                # Current log-likelihood (all observations seen so far) and
+                # current log-prior (the target is the partial posterior L * pi_0).
                 current_ll = _multi_obs_log_likelihood(
                     new_sims[i], obs_seen_tuple
                 )
+                current_lp = _log_prior_3d(new_3d[i], prior_3d)
 
                 for _step in range(n_mcmc_moves):
                     n_proposed += 1
@@ -476,13 +564,19 @@ def ibis_update(
                             or float(np.max(proposed_conc)) <= 0):
                         continue  # reject
 
-                    # Compute proposed log-likelihood
+                    # Compute proposed log-likelihood and log-prior
                     proposed_ll = _multi_obs_log_likelihood(
                         proposed_sim, obs_seen_tuple
                     )
+                    proposed_lp = _log_prior_3d(proposal_3d, prior_3d)
 
-                    # Metropolis-Hastings accept/reject
-                    log_alpha = proposed_ll - current_ll
+                    # Metropolis-Hastings accept/reject. The proposal is a
+                    # symmetric log-space random walk, so the Hastings term
+                    # cancels; the ratio is over the target posterior L * pi_0,
+                    # so the prior term (proposed_lp - current_lp) is required.
+                    log_alpha = (proposed_ll + proposed_lp) - (
+                        current_ll + current_lp
+                    )
                     if np.log(mcmc_rng.random()) < log_alpha:
                         # Accept
                         n_accepted += 1
@@ -491,6 +585,7 @@ def ibis_update(
                         new_cmax[i] = float(np.max(proposed_conc))
                         new_3d[i] = proposal_3d.copy()
                         current_ll = proposed_ll
+                        current_lp = proposed_lp
 
                         # Update predicted concentrations for remaining obs
                         new_pred[i] = np.array([
