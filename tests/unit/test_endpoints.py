@@ -38,6 +38,25 @@ class TestNCA:
         conc = np.array([10, 11, 12, 13, 14, 15, 16], dtype=float)
         assert terminal_half_life(time, conc) is None
 
+    def test_terminal_half_life_biexponential_excludes_distribution_phase(self):
+        """Bi-exponential C = A·exp(-α t) + B·exp(-β t) with α ≫ β: λz must be fit
+        on the terminal (β) phase, recovering ln2/β, NOT biased short by blending
+        in the steep distribution (α) slope — the bug when all post-Cmax points
+        are regressed together. Dense early sampling weights the distribution phase.
+        """
+        alpha, beta = 3.0, 0.08
+        time = np.array(
+            [0.0, 0.1, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0,
+             6.0, 9.0, 12.0, 18.0, 24.0, 36.0, 48.0]
+        )
+        conc = 20.0 * np.exp(-alpha * time) + 2.0 * np.exp(-beta * time)
+        t_half = terminal_half_life(time, conc)
+        assert t_half is not None
+        # recovers the slow (terminal) half-life
+        assert t_half == pytest.approx(np.log(2) / beta, rel=0.05)
+        # and is nowhere near the distribution-phase half-life (the old bug)
+        assert t_half > 3.0 * (np.log(2) / alpha)
+
     def test_auc_increasing(self):
         """AUC over a ramp: integral of t from 0 to 3 = 4.5"""
         time = np.array([0, 1, 2, 3], dtype=float)
