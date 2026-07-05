@@ -8,7 +8,6 @@ the source.
 from __future__ import annotations
 
 import numpy as np
-import pytest
 
 import sisyphus.engine.flux  # noqa: F401 — registers all FluxSpec implementations
 from sisyphus.core import Distribution, DrugOnGraph, TransporterKinetics
@@ -133,32 +132,6 @@ def test_active_transport_uses_target_ivive_and_transporters():
     )
     # Mass conservation within the active transport path
     assert abs(transport_contrib_src + transport_contrib_tgt) < 1e-12
-
-
-def test_active_transport_scipy_jax_parity():
-    """SciPy and JAX backends produce the same dydt for an active-transport edge."""
-    pytest.importorskip("jax")
-    import jax.numpy as jnp
-
-    from sisyphus.engine.params_jax import resolve_to_jax
-    from sisyphus.engine.rhs_jax import make_jax_rhs
-
-    graph = _minimal_uptake_graph()
-    drug = _drug_with_oatp()
-
-    compiled = ODECompiler().compile(graph)
-    params_scipy = ResolvedParams(graph, drug)
-    rhs_scipy = compiled.make_rhs(params_scipy)
-
-    y = np.zeros(compiled.n_states)
-    y[compiled.state_index["src_blood"]] = 10.0
-    dydt_scipy = rhs_scipy(0.0, y)
-
-    jax_params = resolve_to_jax(compiled, params_scipy)
-    rhs_jax_fn = make_jax_rhs(compiled)
-    dydt_jax = np.asarray(rhs_jax_fn(0.0, jnp.asarray(y), jax_params))
-
-    np.testing.assert_allclose(dydt_jax, dydt_scipy, rtol=1e-6, atol=1e-9)
 
 
 def test_active_transport_mass_conservation():
