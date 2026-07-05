@@ -460,6 +460,20 @@ Artifacts: `scripts/probe_liver_zonation.py`, `tests/integration/test_liver_zona
 
 ---
 
+### DE-54 — Post-FLUX-1 prospective re-score: the correct-physics engine does not improve out-of-distribution Cmax (confirms DE-43 + diagnosis §8 on the actual set) (2026-07-05)
+
+**Date:** 2026-07-05
+
+**Hypothesis (falsified).** FLUX-1 fixed the first-pass F ceiling (extraction `E` cap 0.5→1.0) and the documented prospective failure mode is bioavailability-F under-prediction, so re-scoring the 2026-06-01 N=28 public-clone prospective set on the current engine (HEAD `f8a4663`: FLUX-1 + CLF leak-free + UGT single-path + RBP honest-1.0) *might* improve out-of-distribution Cmax.
+
+**Result.** It does not — it marginally regresses. Meta AAFE **3.2084 → 3.2861** (+0.078); engine **4.3017 → 4.5506** (+0.249); ML **3.2704 → 3.2704** (per-drug bit-identical). In-domain (N=16) meta **3.1988 → 3.3177**. The move sits deep inside the N=28 CI [2.42, 4.37] → statistically indistinguishable; there is no improvement. **Clean comparison:** the ML track is per-drug bit-identical (max abs diff 0.0), proving the 2026-06-01 artifact and this re-score share one numerics stack (local macOS), so the delta isolates engine/predict code — not a stack artifact.
+
+**Mechanism — error cancellation removed, not created.** Prospective is under-predicted (20/28 under, geobias pred/obs 0.50). The pre-FLUX-1 `E`-cap held Cmax too *high* (extraction under-estimated → F over-estimated), partially offsetting the `fa` under-call (Cmax too *low*). FLUX-1 correctly raised `E` → lowered Cmax → removed the compensating over-estimate → deepened the net under-prediction (engine geobias 0.502 → 0.488), concentrated in high-extraction drugs (arimoclomol engine fold 4.96 → 16.10). This is the first *actual full-set re-run* confirming diagnosis §8's 2026-06-03 prediction (the fixed-weight meta damps the engine ~18% everywhere, so a first-pass lever nets neutral on prospective) and DE-43 on the re-scored set: engine +0.25 undamped, meta +0.08 damped. The residual out-of-distribution deficit is absorption-side (`fa`) dispersion — a foreclosed floor (DE-42) — not extraction.
+
+**Telltale if it returns:** any proposal to "re-score prospective on the newer engine to show FLUX-1 helped generalization," or to treat the engine as a prospective accuracy lever. It is not — retrospective or prospective (DE-43). Artifact: `data/validation/prospective_N28_current_engine_2026-07-05.json`. Directional (local stack, N=28); a citable canonical number would need a CI-stack run, but the sign and mechanism are robust.
+
+---
+
 ## 3. When to consult this list
 
 - Before writing a design spec for any accuracy improvement.
