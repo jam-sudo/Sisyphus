@@ -202,10 +202,9 @@ class UncertaintyEngine:
             observation_node: Node to extract PK from.
             t_min_h: Minimum observation time in hours.  When > 0, skips the
                 t=0 IV-bolus spike for Cmax extraction.  scipy backend only —
-                JAX and surrogate backends ignore this parameter.  Default 0.0
+                the surrogate backend ignores this parameter.  Default 0.0
                 (V2-compatible).
-            backend: Solver backend to use (``"scipy"``, ``"jax"``, or
-                ``"surrogate"``).
+            backend: Solver backend to use (``"scipy"`` or ``"surrogate"``).
 
         Returns:
             MCResult with aggregated PKEndpoints and 90% PI.
@@ -247,31 +246,6 @@ class UncertaintyEngine:
             auc_arr = np.zeros(n_ok)
 
             logger.info("MC-fast surrogate: %d/%d successful", n_ok, n_samples)
-            return self._build_mc_result(cmax_arr, tmax_arr, auc_arr, n_ok, n_failures)
-
-        # ── JAX backend: vmap over all samples in one JIT call ──
-        if backend == "jax":
-            from sisyphus.engine.solver_jax import solve_mc_jax
-
-            params_list = []
-            for i in range(n_samples):
-                rng = np.random.default_rng(seed + i)
-                realized_graph = graph.sample(rng)
-                realized_drug = drug.sample(rng)
-                params_list.append(ResolvedParams(realized_graph, realized_drug))
-
-            cmax_arr, tmax_arr, auc_arr, success_arr = solve_mc_jax(
-                compiled, params_list, y0_template, t_span, observation_node,
-            )
-
-            mask = (success_arr > 0.5) & (cmax_arr > 0)
-            cmax_arr = cmax_arr[mask]
-            tmax_arr = tmax_arr[mask]
-            auc_arr = auc_arr[mask]
-            n_ok = int(np.sum(mask))
-            n_failures = n_samples - n_ok
-
-            logger.info("MC-fast JAX: %d/%d successful", n_ok, n_samples)
             return self._build_mc_result(cmax_arr, tmax_arr, auc_arr, n_ok, n_failures)
 
         # ── SciPy backend: sequential loop (default) ──
