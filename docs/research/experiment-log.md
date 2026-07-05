@@ -10,6 +10,32 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-07-05 — Prospective N=28 re-scored on the current engine: FLUX-1 does not improve OOD Cmax (DE-54)
+
+Re-ran the 2026-06-01 public-clone prospective set (28 single-agent oral SM 2024-2025 FDA NMEs)
+through the current engine (HEAD `f8a4663`: FLUX-1 + CLF leak-free + UGT single-path + RBP
+honest-1.0) via `scripts/score_prospective_candidates.py`, closing the README "predates FLUX-1,
+not re-scored on the current engine" note with an actual number.
+
+- **Meta AAFE 3.2084 → 3.2861** (+0.078); engine 4.3017 → 4.5506 (+0.249); ML 3.2704 → 3.2704
+  (per-drug bit-identical). In-domain (N=16) meta 3.1988 → 3.3177. Deep inside the N=28 CI
+  [2.42, 4.37] → statistically indistinguishable; no improvement.
+- **Clean same-stack comparison:** the ML track is per-drug bit-identical (max abs diff 0.0) →
+  the 2026-06-01 artifact was scored on this same local macOS stack, so the delta is a pure
+  engine/predict-code measurement, not a numerics-stack artifact.
+- **Mechanism — error cancellation removed.** Prospective is under-predicted (geobias 0.50). The
+  pre-FLUX-1 `E`-cap held Cmax too high (offsetting the `fa` under-call); fixing it (`E`→1.0)
+  lowered Cmax and deepened the under-prediction (engine geobias 0.502 → 0.488), concentrated in
+  high-extraction drugs (arimoclomol engine fold 4.96 → 16.10). First actual full-set confirmation
+  of the 2026-06-03 prediction (diagnosis §8) that the fixed-weight meta damps the engine ~18%
+  everywhere — engine +0.25 undamped, meta +0.08 damped. Residual OOD deficit is absorption-side
+  (`fa`) dispersion (DE-42 floor), not extraction.
+
+Negative result recorded as **DE-54**. Artifact:
+`data/validation/prospective_N28_current_engine_2026-07-05.json`. No headline change (2.743 stands).
+
+---
+
 ## 2026-07-03 — UGT single-path fm fix + canonical regen (2.735 → 2.743)
 
 A full-repo 7-agent review surfaced a UGT fraction-metabolized double-allocation in
