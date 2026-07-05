@@ -197,21 +197,28 @@ def _predict_clint(features: np.ndarray) -> Distribution:
     return Distribution(mean=clint, cv=_CLINT_CV)
 
 
-def _predict_rbp(features: np.ndarray) -> Distribution:
-    """Predict blood:plasma ratio from Morgan FP only (2048 features).
+def _predict_rbp() -> Distribution:
+    """Return the population-default blood:plasma ratio (1.0).
 
-    Model predicts log10(RBP).  Output clamped to [0.5, 3.0].
-    RBP prediction is poor (R^2=-0.08 on 50 compounds).  Predictions
-    far from 1.0 are reset to 1.0 as a safety measure.
+    The bundled RBP XGBoost model (``xgboost_rbp.json``, TDC BTPR N=50) is
+    uninformative — scaffold-CV R²=-0.08, i.e. worse than predicting the
+    population mean — so it is deliberately not consulted.  Its ``meta.json``
+    states the intended behaviour outright: "Pipeline defaults to RBP=1.0."
+
+    Historically that default was reached through two compounding bugs rather
+    than stated plainly.  The model's target is a *raw* blood:plasma ratio, but
+    the code mis-read it as log10(RBP) and applied ``10**``, inflating every
+    prediction (e.g. caffeine 0.72 → 5.3) past the clip's 3.0 ceiling; an
+    asymmetric reset (``abs(rbp - 1.0) > 0.5``) whose low branch was unreachable
+    then snapped the clipped 3.0 down to 1.0.  Net effect: every drug — all 107
+    holdout drugs included — resolved to exactly 1.0 regardless of structure.
+
+    This function makes that outcome explicit instead of incidental: RBP is a
+    constant 1.0 (with ``_RBP_CV`` spread) until an informative model replaces
+    it.  Behaviour is bit-identical to the previous buggy path on the holdout,
+    so no benchmark re-pin is required.
     """
-    model = _load_model("xgboost_rbp.json")
-    log_rbp = float(model.predict(features)[0])
-    rbp = float(np.clip(10**log_rbp, 0.5, 3.0))
-    # RBP prediction is poor — default to 1.0 if unreasonable
-    if abs(rbp - 1.0) > 0.5:
-        logger.warning("RBP prediction %.2f far from 1.0, defaulting to 1.0", rbp)
-        rbp = 1.0
-    return Distribution(mean=rbp, cv=_RBP_CV)
+    return Distribution(mean=1.0, cv=_RBP_CV)
 
 
 def _predict_vdss(features: np.ndarray) -> Distribution:
@@ -340,7 +347,7 @@ def predict_adme(profile: MolecularProfile) -> ADMEProperties:
         fup = _predict_fup(features_2d)
 
     clint = _predict_clint(features_2d)
-    rbp = _predict_rbp(features_2d[:, :2048])  # RBP model uses only Morgan FP
+    rbp = _predict_rbp()  # uninformative model (R²<0) disabled; population default 1.0
     vdss = _predict_vdss(features_2d)
 
     # Heuristic estimates (no trained models)
