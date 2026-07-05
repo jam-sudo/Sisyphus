@@ -29,6 +29,36 @@ class TestADME:
         assert adme.peff.mean > 0
         assert adme.rbp.mean > 0
 
+    def test_rbp_is_population_default(self):
+        """The RBP model (R²<0) is disabled: _predict_rbp() returns exactly 1.0.
+
+        Guards the fix for the historical 10**-transform + asymmetric-reset
+        bug, which resolved every drug to 1.0 through a fragile path.  The
+        honest replacement must return a constant 1.0 with the RBP CV.
+        """
+        from sisyphus.predict.adme import _RBP_CV, _predict_rbp
+
+        rbp = _predict_rbp()
+        assert isinstance(rbp, Distribution)
+        assert rbp.mean == 1.0
+        assert rbp.cv == _RBP_CV
+
+    def test_rbp_structure_independent(self):
+        """RBP is 1.0 regardless of structure — including RBC partitioners.
+
+        Chloroquine and tacrolimus have genuinely high blood:plasma ratios, but
+        the disabled model must not distinguish them: all resolve to 1.0.  This
+        pins the behaviour the buggy path produced (bit-identical on holdout),
+        so the change needs no benchmark re-pin.
+        """
+        from sisyphus.predict.adme import predict_adme
+
+        # chloroquine (high RBP in vivo), tacrolimus (high RBP), aspirin (~1)
+        chloroquine = "CCN(CC)CCCC(C)Nc1ccnc2cc(Cl)ccc12"
+        for smiles in (chloroquine, _ASPIRIN_SMILES, _BENZENE_SMILES):
+            adme = predict_adme(compute_profile(smiles))
+            assert adme.rbp.mean == 1.0
+
     def test_all_distributions(self):
         """All ADME outputs should be Distributions with cv > 0."""
         from sisyphus.predict.adme import predict_adme
