@@ -474,6 +474,26 @@ Artifacts: `scripts/probe_liver_zonation.py`, `tests/integration/test_liver_zona
 
 ---
 
+### DE-55 — Adaptive / normalized conformal PI: no per-drug difficulty signal exists, so the flat /÷12.9 interval cannot be honestly tightened (2026-07-07)
+
+**Date:** 2026-07-07
+
+**The DE-44 "PI-recalibration" survivor, tested and foreclosed.** The user-facing 90% Cmax PI is a train-calibrated split-conformal interval (meta q90 = 1.111 → **/÷12.9**, holdout coverage **0.9533** at nominal 0.90). The over-coverage cannot be "fixed" by lowering q — that is tuning on the holdout (Invariant #5). The only honest tightening is **adaptive/normalized conformal**: give easy drugs a narrower interval via a per-drug difficulty signal σ(x). The pre-registered kill-test (Spearman ρ between |log10 meta fold-error| and σ) is **dead across every signal**: div(eng,ml)=−0.035, div(eng,meta)=−0.002, div(ml,meta)=−0.057, n_ad_flags=−0.051, |log meta|=−0.069, meta_cmax=+0.056, not_in_ad=−0.061, and — the specifically-named signal — **MC parameter-uncertainty half-width ρ=+0.039** (max |ρ|=0.069). Mechanistically airtight: the MC propagates *parameter* uncertainty only (~30% coverage at nominal 90%); the dominant ~60pp of the spread is **structural model-form error not in the MC**, and it is per-drug **non-discriminable** (confirms DE-41). **Mondrian-by-compound-type also DEAD** — it *widens* the mean interval **+86%**: splitting n=67 into acid/base/neutral/zwitterion (14/23/27/3) makes the finite-sample conformal quantile `ceil((n+1)(1−α))` land at ~the class maximum, so per-class train q (base 1.356, neutral 1.545) exceeds the pooled 1.100. **Verdict:** the flat /÷12.9 PI is near-optimal under Invariant #5; its 0.953 over-coverage is the *safe* direction. The PI is not broken (split-conformal already fixed the 30%-coverage MC PI) — it just cannot be adaptively narrowed because the error is unpredictable per-drug. Artifact `data/validation/pi_fprior_killtests_2026-07-07.json`.
+
+**Telltale if it returns:** "a normalized / CQR / Mondrian conformal will tighten the 13-fold PI." It will not — no per-drug difficulty signal predicts the error (ρ≈0 for all, incl. MC-CV), and small-n Mondrian widens it. Ship PI work only if a *new* orthogonal difficulty signal clears |ρ|≥0.3 first.
+
+---
+
+### DE-56 — invivo-F-prior: the pre-registered "surprise" (AAFE falls) is the DE-42 flat-scalar median-bias artifact, placebo-proven (2026-07-07)
+
+**Date:** 2026-07-07
+
+**The DE-44 `invivo-F-prior` test, run with placebo controls — killed, richer than predicted.** Applied the structure→F predictor (`xgboost_bioavailability.json`, target log10(F/100), **scaffold-CV R²=−0.09** — noise, DE-28) to the holdout via the measured-F routing at shrinkage w∈{0.25,0.5,1.0}. DE-44 pre-registered "AAFE **rises** +0.02–0.08 → kill." Instead the meta AAFE **fell**: 2.7428 → 2.685 (w=0.25) → **2.646** (w=0.5) → 2.736 (w=1.0) — non-monotonic, the surprise branch. **Placebo controls at w=0.5 resolve it decisively:** REAL per-drug F Δ=**−0.097**, but a **CONSTANT** F (geomean) Δ=**−0.133** and a **SHUFFLED** F (drug↔F match destroyed) Δ=**−0.116** both *reproduce and exceed* it. Per-drug F information is **zero** (real is *worse* than shuffled). **Mechanism:** f_eng geomean 0.148 vs Fpred 0.424, median k=**2.57** (upscale) — the engine systematically under-predicts F, so *any* upward F scalar nulls that median bias → AAFE dips; a constant does it cleanest. This is **DE-42** (flat scalar nulls median F, not dispersion) shown directly on the meta headline. **Triple-dead:** (1) the effect is the placebo-proven flat-scalar artifact, no F signal (re-confirms DE-28/42); (2) the scalar is a holdout-fit median-bias correction = **Invariant #8 forbidden** ("fudge to Cmax loss, any form"); (3) even the best (constant) −0.133 is within the bootstrap CI half-width ~0.42 and does not generalize (the prospective F-under-call differs, DE-54; DE-42's over-tail flip). Artifact `data/validation/pi_fprior_killtests_2026-07-07.json`.
+
+**Telltale if it returns:** "an in-vivo F prior improved the holdout AAFE by ~0.10." That drop is a **flat-scalar median-bias null**, not F information — a constant or shuffled F reproduces it, and the scalar is holdout-fit (Invariant #8) and non-generalizing. Any future F-prior must beat its own constant/shuffled placebo before it counts.
+
+---
+
 ## 3. When to consult this list
 
 - Before writing a design spec for any accuracy improvement.
