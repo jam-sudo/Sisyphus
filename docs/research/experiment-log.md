@@ -10,6 +10,30 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-07-07 — Two DE-44 kill-tests run: adaptive PI walled (DE-55), invivo-F-prior killed via placebo (DE-56)
+
+Ran the two cheap pre-registered kill-tests DE-44 flagged as "survivors to test," on the 107-holdout
+(local macOS public-clone; deltas are stack-internal). Both foreclosed.
+
+- **Adaptive/normalized conformal PI (DE-55):** the user-facing 90% Cmax PI is train-calibrated
+  split-conformal, meta q90=1.111 (/÷12.9), holdout coverage 0.9533. The over-coverage can't be lowered
+  without tuning on the holdout (Inv #5); the only honest tightening is adaptive-by-difficulty. Spearman
+  ρ(|log meta fold-error|, σ) is dead for every obs-free signal — divergence(×3), AD flags, magnitude,
+  and the specifically-named **MC parameter-uncertainty half-width ρ=0.039** (max |ρ|=0.069). Mondrian
+  by compound-type *widens* +86% (n=67 split → per-class conformal q lands at ~class-max). The flat
+  /÷12.9 PI is near-optimal under Inv #5; the structural error is per-drug non-discriminable (DE-41).
+- **invivo-F-prior (DE-56):** applied the structure→F predictor (R²=−0.09 noise) via measured-F routing
+  at shrinkage w. DE-44 pre-registered "AAFE rises → kill"; instead it **fell** (2.743 → 2.646 at w=0.5,
+  non-monotonic) — the surprise branch. **Placebo controls decided it:** a CONSTANT F (Δ−0.133) and a
+  SHUFFLED F (Δ−0.116) both reproduce/exceed the real per-drug F (Δ−0.097) → zero per-drug F info. It is
+  the DE-42 flat-scalar median-bias null (f_eng 0.148 vs Fpred 0.424, median k 2.57 upscale nulls the
+  engine's systematic F-under-call). Triple-dead: placebo-artifact + Invariant #8 (holdout-fit scalar =
+  fudge to Cmax loss) + within-CI + non-generalizing.
+
+The pre-registration + placebo discipline caught what would otherwise read as a "broke the ceiling"
+false positive (a −0.10 AAFE drop). No headline change (2.743). Artifact
+`data/validation/pi_fprior_killtests_2026-07-07.json`; DE-55, DE-56.
+
 ## 2026-07-06 — OATP1B1 ECM: closed the FLUX-1 auto-ECM xfail; +BSA PSu,inf formally deferred (data-blocked)
 
 A 3-agent investigation of "the one un-foreclosed accuracy lever" (diagnosis §9 — the +BSA /

@@ -1,0 +1,34 @@
+{
+  "date": "2026-07-07",
+  "context": "Two pre-registered cheap kill-tests for the DE-44 'survivors' (calibrated-UQ PI-recalibration; invivo-F-prior). Both foreclosed. Local macOS public-clone stack; deltas are stack-internal (baseline reproduces the ~2.74 band).",
+  "pi_adaptive_conformal_killtest": {
+    "question": "Does any per-drug difficulty signal predict |log10 meta fold-error|, so a normalized/adaptive conformal PI could be tighter than the flat /÷12.9 while holding coverage under Invariant #5 (calibrate on train, not holdout)?",
+    "current_pi": {"method": "split_conformal", "q90_meta_log10": 1.111, "fold": 12.9, "holdout_coverage_at_nominal_0.90": 0.9533, "calibration": "train n=67"},
+    "spearman_rho_error_vs_signal": {
+      "div_eng_ml": -0.035, "div_eng_meta": -0.002, "div_ml_meta": -0.057,
+      "n_ad_flags": -0.051, "abs_log_meta": -0.069, "meta_cmax": 0.056, "not_in_ad": -0.061,
+      "mc_parameter_uncertainty_halfwidth": 0.039
+    },
+    "mondrian_by_compound_type": {
+      "verdict": "DEAD — widens +86%",
+      "reason": "n=67 split into acid/base/neutral/zwitterion (14/23/27/3); finite-sample conformal quantile ceil((n+1)(1-a)) lands at ~class-max at small n, so per-class q exceeds the pooled 90th pct. Train-calibrated per-class q (base 1.356, neutral 1.545) > global 1.100.",
+      "train_q90_by_class": {"acid": 1.112, "base": 1.356, "neutral": 1.545, "zwitterion": "INF (n=3<9)"}
+    },
+    "verdict": "WALLED — max |rho| = 0.069 across all obs-free signals incl. MC parameter-uncertainty. The structural model-form error (~60pp of the spread, not in the MC) is per-drug non-discriminable (confirms DE-41). The flat /÷12.9 PI is near-optimal under Invariant #5; its 0.953 over-coverage is the safe direction and cannot be honestly tightened (would require holdout-tuning or a non-existent adaptive signal)."
+  },
+  "invivo_f_prior_killtest": {
+    "question": "Does an in-vivo F prior (xgboost_bioavailability.json, scaffold-CV R2=-0.09) applied via the measured-F routing at shrinkage w improve the holdout meta AAFE? (DE-44 pre-registered: rises +0.02-0.08 => kill.)",
+    "baseline_meta_aafe": 2.7428,
+    "meta_aafe_by_w": {"0.0": 2.7428, "0.25": 2.6852, "0.5": 2.6459, "1.0": 2.7360},
+    "delta_vs_baseline": {"0.25": -0.0576, "0.5": -0.0969, "1.0": -0.0068},
+    "surprise": "AAFE FELL (not rose) at w=0.25/0.5 — the pre-registered surprise branch. Investigated with placebo controls.",
+    "placebo_controls_at_w0.5": {
+      "real_fpred_delta": -0.0969,
+      "constant_geomean_delta": -0.1328,
+      "shuffled_fpred_delta": -0.1160,
+      "interpretation": "CONST and SHUFFLED reproduce AND EXCEED the real per-drug F improvement => zero per-drug F information (real is slightly WORSE than shuffled). The improvement is a pure flat-scalar median-bias-null."
+    },
+    "mechanism": "f_eng geomean 0.148 vs Fpred geomean 0.424; median(Fpred/f_eng)=2.57 (upscale). The engine systematically under-predicts F, so any upward F scalar nulls that median bias -> AAFE dips; a constant does it cleanest. This is DE-42 (flat scalar nulls median F, not dispersion) shown directly on the meta.",
+    "verdict": "KILLED (triple-dead): (1) the effect is the DE-42 flat-scalar artifact, placebo-proven, zero per-drug F info (DE-28 re-confirmed); (2) the scalar is a holdout-fit median-bias correction = Invariant #8 forbidden ('fudge to Cmax loss, any form'); (3) even the best (constant) delta -0.133 is within the bootstrap CI half-width ~0.42 and does not generalize (prospective F-under-call differs; DE-42 over-tail flip)."
+  }
+}
