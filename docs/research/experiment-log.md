@@ -10,6 +10,33 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-07-06 — OATP1B1 ECM: closed the FLUX-1 auto-ECM xfail; +BSA PSu,inf formally deferred (data-blocked)
+
+A 3-agent investigation of "the one un-foreclosed accuracy lever" (diagnosis §9 — the +BSA /
+albumin-mediated PSu,inf OATP correction, Li/Benet 2020) found the re-anchor already shipped and
+the lever headline-inert, and closed its last test loose end:
+
+- **Re-anchor already done** (#66, 2026-06-04): OATP1B1 abundance 5.0e5 → 1.3e5, calibrated on
+  pitavastatin (non-holdout), pravastatin demoted to validation-only (Invariant #5 restored).
+  `test_oatp_ecm_statins[pravastatin, pitavastatin]` were already un-xfailed and passing.
+- **Closed the last loose end (#103):** `test_predict_auto_ecm.py` still pinned two auto-ECM Cmax
+  values (0.0294 / 0.00116) computed under the old 5.0e5 abundance — 53% / 90% stale under the live
+  1.3e5, so both tests were xfailed. Their purpose is mechanical (auto-activation fires, warning
+  emitted), and Cmax accuracy is already guarded by the sibling `test_oatp_ecm_statins.py`, so the
+  fragile exact pins were replaced with that sibling's **stack-robust fold-error gate** (pravastatin
+  FE<3.0, pitavastatin FE<3.2) and un-xfailed. Verified public-clone deterministic: pravastatin Cmax
+  0.0450 (FE 1.00), pitavastatin 0.0022 (FE 1.58); all 4 tests pass strict.
+- **+BSA PSu,inf formally deferred (DE-44):** the mechanistic upgrade (replace `hepatic_ecm.json`
+  seed PS midpoints with Li/Benet 2020 +BSA-derived PSu,inf, then re-derive abundance) is
+  **data-blocked** — the per-substrate PSu,inf/Kp values are in the paywalled AAPS J primary source
+  ([DOI](https://doi.org/10.1208/s12248-020-00528-y)), not to be fabricated — and near-zero-observable
+  (the abundance re-anchor absorbs the PS change; only *relative* statin shifts; pravastatin is
+  validation-only) on top of headline-inert. Deferred until the primary-source table is available.
+
+No headline change (2.743). The engine's OATP1B1 ECM is correct and tested; the residual is
+provenance (seed vs +BSA PS), not accuracy — a third correctness-not-accuracy finding this cycle,
+after the RBP honest-1.0 fix and the prospective re-score.
+
 ## 2026-07-05 — Prospective N=28 re-scored on the current engine: FLUX-1 does not improve OOD Cmax (DE-54)
 
 Re-ran the 2026-06-01 public-clone prospective set (28 single-agent oral SM 2024-2025 FDA NMEs)
