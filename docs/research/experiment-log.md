@@ -10,6 +10,33 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-07-07 (cont.) — N50' clean re-curation: infeasible from repo data (pool=0), deferred to human-led curation
+
+Scoped the clean N50' secondary-holdout curation (the unbiased-generalization instrument the
+cherry-picking caveat calls for; the 2026Q2 attempt was invalidated for contamination, DE-53). A
+3-agent investigation (spec/requirements, IK14 tooling, candidate-pool feasibility) answered the
+make-or-break question first: **is a clean N=50 even sourceable? No.**
+
+- **Clean pool = 0.** `clinical_pk.json`: 331 drugs → 177 with Cmax → 16 after removing the
+  107-holdout + 76-train (name **and** IK14) → 2 nominal clean → **0 valid** (guanfacine ER = holdout
+  HCl-salt IK14 leak; lanthanum carbonate = inorganic combo). OATP1B1 non-statin substrates in the
+  clean pool: **0 / ≥3 required.** N=50 infeasible from repo sources by −50; even N=1 not achievable.
+- **Why:** the clinical reference *is* the training source (167/331 names in holdout+train); of the 16
+  survivors, 11 are in hard corpora and 3 have unparseable SMILES. E4 (DrugBank-absent) is near-impossible
+  — DrugBank covers 14,154 IK14 blocks (the 2026Q2 set was 47/50 in DrugBank).
+- **E4 / public-clone reframe:** the 2.743 headline is public-clone (DrugBank hidden → no enrichment
+  leak), so E4 could relax to hard-corpora-only *if* the benchmark commits to public-clone — but even
+  relaxed the repo pool is ~2–5, not 50.
+- **Deferred to a human-led cycle.** A real N50' needs ~50 fresh novel molecules with primary-source
+  Cmax (no back-calc), CID-verified SMILES, ≥3 non-statin OATP1B1 substrates, oral-majority. **Integrity
+  constraint:** an agent must not generate primary-source Cmax/SMILES/DOI for a never-touch instrument —
+  a fabricated value is undetectable by the IK14 gate and would be worse than the 2026Q2 contamination.
+  The tooling (#96) and spec are ready; the blocker is human-verified data sourcing.
+
+Also flagged a tooling gap: the IK14 gate is defeated by salt forms (guanfacine HCl IK14 ≠ free-base
+IK14), a false-negative-only leak a curator would catch but worth a salt-strip fix. Full record:
+[n50_prime_feasibility_2026-07-07.md](./n50_prime_feasibility_2026-07-07.md); DE-53 status line.
+
 ## 2026-07-07 — Two DE-44 kill-tests run: adaptive PI walled (DE-55), invivo-F-prior killed via placebo (DE-56)
 
 Ran the two cheap pre-registered kill-tests DE-44 flagged as "survivors to test," on the 107-holdout
