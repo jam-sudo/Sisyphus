@@ -494,6 +494,20 @@ Artifacts: `scripts/probe_liver_zonation.py`, `tests/integration/test_liver_zona
 
 ---
 
+### DE-57 — Uncertainty-aware meta: no per-drug CLint epistemic-uncertainty signal exists to gate it (2026-07-08)
+
+**Date:** 2026-07-08
+
+**The last §9 CLint-floor candidate able to sidestep error-cancellation, tested and foreclosed.** The idea does not improve the CLint point estimate (floored at R²≈0.24; every prior improvement tripped error-cancellation, §1/§2). Instead it exploits the floor's *heteroscedasticity*: if we knew **per-drug** which CLint predictions are unreliable, the meta could down-weight the engine track there — a *weighting* change that perturbs no track's residuals, so it cannot trip error-cancellation. **Distinct from DE-55**, which killed divergence/AD/magnitude and the *propagated MC-output* uncertainty (ρ=0.039); the shipped CLint `Distribution` CV is the fixed constant `_CLINT_CV=1.0` (`predict/adme.py`), which is *why* DE-55's propagated signal was flat. This test constructs a genuine per-drug epistemic uncertainty two independent ways: **U_boot** = SD of log10(CLint) across a K=30 XGBoost bootstrap ensemble on the 1,213-compound hepatocyte training set (range [0.069, 0.412], non-degenerate); **U_ad** = 1 − max Tanimoto(Morgan) to that set.
+
+**Result (gate = Spearman ρ + bootstrap 95% CI, seed 20260422, N=107).** Core null: **ρ(U_boot, e_eng) = −0.006** [−0.20, +0.18] — CLint epistemic uncertainty does not predict engine error, though the engine *is* the CLint-fed track. Actionable null: **ρ(U, e_eng−e_ml) ≈ +0.12** for **both** proxies (U_boot [−0.07, +0.30], U_ad [−0.07, +0.31]) — CI∋0, no reweighting signal. The one CI-significant term, ρ(U_boot, r_meta) = −0.255 [−0.42, −0.07], is sub-threshold **and wrong-signed** (higher CLint uncertainty ⇒ *lower* meta error — the meta already handles uncertain-CLint drugs well). Confound-clean: ρ(U_boot, obs-magnitude) = +0.002.
+
+**Why it failed — §10.** The binding wall is bioavailability-F blindness, shared across all four tracks and **orthogonal to CLint**; Cmax error is F-driven, so no CLint-derived signal can discriminate it. A perfect CLint-uncertainty router would have nothing to route on. Per §4 the gate precedes integration → the uncertainty-aware meta is **not built**.
+
+**Telltale if it returns:** "route the meta by how uncertain the CLint prediction is." No per-drug CLint uncertainty predicts Cmax error (ρ≈0 on the actionable target for two independent constructions); the discriminating error is F, not CLint. Artifacts: `scripts/clint_uncertainty_gate.py`, `data/validation/clint_uncertainty_gate_2026-07-08.json`.
+
+---
+
 ## 3. When to consult this list
 
 - Before writing a design spec for any accuracy improvement.
