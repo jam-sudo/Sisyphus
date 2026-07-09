@@ -1,0 +1,75 @@
+{
+  "seed": 20260422,
+  "n": 107,
+  "state": "dev-state; \u0394 is state-internal (state constant across arms)",
+  "stage_a": {
+    "pct_censored": 27.4,
+    "median_abs_dlog10": 0.0882,
+    "mean_abs_dlog10": 0.1383,
+    "max_abs_dlog10": 0.5761,
+    "n_gt_0p1": 52,
+    "signed_mean": -0.034
+  },
+  "aafe": {
+    "shipped": {
+      "eng": 4.4127,
+      "ml": 2.9981,
+      "meta": 2.6219
+    },
+    "aft_exact": {
+      "eng": 4.2681,
+      "ml": 2.9981,
+      "meta": 2.6339
+    },
+    "aft_cens": {
+      "eng": 4.3218,
+      "ml": 2.9981,
+      "meta": 2.6294
+    }
+  },
+  "censoring_delta": {
+    "d_engine_aafe": 0.0537,
+    "d_meta_aafe": -0.0045
+  },
+  "ml_identical_maxdiff": 0.0,
+  "per_drug": {
+    "n_meta_better": 28,
+    "n_meta_worse": 34,
+    "n_unchanged": 45
+  },
+  "top_meta_movers": [
+    {
+      "name": "isosorbide mononitrate",
+      "d_meta_logfold": -0.144
+    },
+    {
+      "name": "acamprosate",
+      "d_meta_logfold": 0.128
+    },
+    {
+      "name": "oxybutynin",
+      "d_meta_logfold": 0.116
+    },
+    {
+      "name": "molnupiravir",
+      "d_meta_logfold": 0.112
+    },
+    {
+      "name": "lamivudine",
+      "d_meta_logfold": -0.101
+    },
+    {
+      "name": "morphine",
+      "d_meta_logfold": -0.098
+    },
+    {
+      "name": "azacitidine",
+      "d_meta_logfold": 0.093
+    },
+    {
+      "name": "pomalidomide",
+      "d_meta_logfold": -0.092
+    }
+  ],
+  "verdict": "FAIL (neutral/worse)"
+}

@@ -18,6 +18,7 @@ Before proposing any accuracy improvement, read [dead-ends.md](./dead-ends.md) f
 - **ChEMBL expansion** (539 unique new compounds, 2026-03-27): scaffold CV R² 0.279→0.333 (+0.054). Engine AAFE +0.099, Meta AAFE +0.038 — **homogeneous data expansion destroys error cancellation**.
 - **Foundation model shootout** (MoLFormer, ChemBERTa, Uni-Mol, frozen embedding + Ridge/MLP/XGB, 2026): Morgan FP + XGB (R²=0.205) dominates every alternative. CLint R²≈0.20 is a **target-noise ceiling, not a representation ceiling**.
 - **BDE features** (ALFABET, 978 compounds): r=+0.033 vs log10(CLint) — zero correlation. Hepatocyte CLint integrates kcat + Km + enzyme complement; C-H BDE captures only the kcat component.
+- **Censored (Tobit/AFT) regression** (DE-58, 2026-07-08): the training target is 27.4% censored (floor 3.0 / ceiling 150) and the shipped model treats the piles as exact; a controlled AFT-censored vs AFT-exact ablation moves CLint materially (median |Δlog10| 0.088, 52/107 >26%) but nets **engine AAFE +0.054 (worse), meta −0.0045 (noise)** end-to-end — censoring improves label *uncertainty*, not the point CLint (matches Svensson 2025), and the meta damps it (DE-43). External assay-reproducibility literature independently confirms the ~3-fold CLint interlab variability behind this floor (Fagerholm 2022; Bowman & Benet 2019, Pharm Res).
 
 Consequence: measured CLint would raise the ceiling, predicted CLint cannot (at current data scale / target noise).
 

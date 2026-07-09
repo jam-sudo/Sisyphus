@@ -508,6 +508,20 @@ Artifacts: `scripts/probe_liver_zonation.py`, `tests/integration/test_liver_zona
 
 ---
 
+### DE-58 — Censored (Tobit/AFT) CLint regression does not improve end-to-end Cmax (2026-07-08)
+
+**Date:** 2026-07-08
+
+**A deep-research candidate (Svensson et al. 2025, *AI in the Life Sciences* 7:100128), gate-tested and foreclosed.** The CLint training set (`clearance_hepatocyte_az.tab`) is **27.4% censored** — 16.1% left-censored at the assay floor (CLint=3.0), 11.3% right-censored at the ceiling (150) — yet the shipped model (`reg:squarederror` on log10) treats those piles as exact point labels. Hypothesis: honest censoring recovers information at the extremes and improves the CLint input, hence Cmax. **Controlled AFT ablation** isolates the censoring treatment: both arms are XGBoost `survival:aft` (normal distribution = Tobit on log time), identical features/hyperparameters, differing only in label bounds — **AFT-exact** (all points exact) vs **AFT-censored** (floor→left-censored `(0,3.0]`, ceiling→right-censored `[150,+inf)`).
+
+**Result.** *Stage A* — censoring moves CLint materially: median |Δlog10(CLint)|=0.088 (~22%), 52/107 holdout drugs move >26%, max 3.8× (isosorbide mononitrate 6.5→1.8); the movers are predominantly **low-CLint renally-cleared** drugs pushed *below* the naive floor (isosorbide, acamprosate, lamivudine, famotidine) — exactly where hepatic CLint is not the Cmax-binding term. *Stage B* (end-to-end, one local stack): **engine AAFE +0.054 (worse)**, **meta AAFE −0.0045** (trivial noise vs CI half-width ~0.42); per-drug meta 28 better / 34 worse / 45 unchanged = net wash. Sanity: ml bit-identical across arms (CLint-independent); AFT-exact meta (2.634) ≈ shipped (2.622), so the AFT proxy faithfully represents production.
+
+**Why it failed.** This is Svensson's own conclusion realised on our pipeline (censoring lifts *uncertainty/NLL*, not *point accuracy*) and a fresh controlled re-demonstration of three walls at once: **§2 error-cancellation** (a better-motivated CLint breaks the joint balance → engine worse), **§8/DE-42** (the moved drugs are low-CLint renal cases where F, not CLint, binds Cmax), and **DE-43** (the fixed-weight meta damps the engine move, +0.054 → −0.0045). Per §4 the gate precedes integration → not integrated.
+
+**Telltale if it returns:** "model the censored CLint labels honestly (Tobit/AFT/censored-NLL) and Cmax will improve." It will not — censoring improves label uncertainty, not the point CLint that feeds the engine, and the fixed-weight meta damps the resulting engine change to noise. Artifacts: `scripts/clint_censored_regression.py`, `data/validation/clint_censored_regression_2026-07-08.json`.
+
+---
+
 ## 3. When to consult this list
 
 - Before writing a design spec for any accuracy improvement.
