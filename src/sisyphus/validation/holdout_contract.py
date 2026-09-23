@@ -26,6 +26,12 @@ def canonical_sha256(value: Any) -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
+def label_content_sha256(labels: dict[str, Any]) -> str:
+    """Commit blinded label content before the manifest hash is known."""
+
+    return canonical_sha256({"cycle_id": labels["cycle_id"], "records": labels["records"]})
+
+
 def validate_payload(payload: Any, schema_filename: str) -> None:
     """Validate a payload and report every JSON-path error deterministically."""
 

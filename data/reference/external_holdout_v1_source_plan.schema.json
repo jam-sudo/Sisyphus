@@ -8,7 +8,7 @@
     "verified_shortlist_path", "verified_shortlist_sha256",
     "calibration_n", "final_test_n", "reserve_n", "allocation_path",
     "allocation_sha256", "exclusion_flow_path", "exclusion_flow_sha256",
-    "source_windows", "curators"
+    "source_windows", "curators", "label_content_sha256"
   ],
   "properties": {
     "protocol": {"const": "external_holdout_v1"},
@@ -27,6 +27,7 @@
     "allocation_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "exclusion_flow_path": {"type": "string", "pattern": "^[A-Za-z0-9_./-]+$"},
     "exclusion_flow_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "label_content_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "source_windows": {
       "type": "array", "minItems": 2,
       "items": {

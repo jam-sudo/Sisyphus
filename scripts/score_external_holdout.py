@@ -19,6 +19,7 @@ import numpy as np
 
 from sisyphus.validation.holdout_contract import (
     is_primary_eligible,
+    label_content_sha256,
     source_record_hash,
     validate_payload,
     validate_source_quotas,
@@ -367,6 +368,8 @@ def main() -> None:
     validate_source_quotas(manifest)
     validate_payload(payload, "external_holdout_v1_predictions.schema.json")
     validate_payload(labels, "external_holdout_v1_labels.schema.json")
+    if label_content_sha256(labels) != source_plan["label_content_sha256"]:
+        raise ValueError("Blinded label content differs from the pre-prediction commitment")
     if payload.get("manifest_sha256") != actual_sha:
         raise ValueError("predictions manifest_sha256 is missing or does not match")
     if payload.get("cycle_id") != manifest.get("cycle_id"):
@@ -398,6 +401,7 @@ def main() -> None:
     )
     report = score(rows, freeze["random_seed"], 100000)
     report["manifest_sha256"] = actual_sha
+    report["label_content_sha256"] = source_plan["label_content_sha256"]
     report["predictions_sha256"] = actual_predictions_sha
     report["labels_sha256"] = actual_labels_sha
     args.out.write_text(json.dumps(report, indent=2) + "\n")

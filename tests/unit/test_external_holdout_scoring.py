@@ -11,6 +11,7 @@ from pathlib import Path
 import pytest
 
 from sisyphus.validation.holdout_contract import (
+    label_content_sha256,
     sha256_file,
     source_record_hash,
     validate_payload,
@@ -438,6 +439,7 @@ def test_cli_uses_frozen_seed_and_bootstrap_count(tmp_path, monkeypatch):
         "protocol": "external_holdout_v1", "cycle_id": "synthetic-v1",
         "fixed_before_prediction": True, "inventory_n": 900, "verified_n": 550,
         "calibration_n": 140, "final_test_n": 120, "reserve_n": 290,
+        "label_content_sha256": label_content_sha256(labels),
         "source_windows": [
             {"source_family": "FDA", "start_date": "2020-01-01", "end_date": "2026-01-01"},
             {"source_family": "EMA", "start_date": "2020-01-01", "end_date": "2026-01-01"},
@@ -516,3 +518,10 @@ def test_cli_uses_frozen_seed_and_bootstrap_count(tmp_path, monkeypatch):
     scorer.main()
     report = json.loads(output_path.read_text())
     assert (report["seed"], report["n_bootstrap"]) == (7, 100000)
+    assert report["label_content_sha256"] == plan["label_content_sha256"]
+
+    labels["records"][0]["arms"][0]["observed_cmax_mg_l"] = 1.7
+    labels_path.write_text(json.dumps(labels))
+    sys.argv[sys.argv.index("--labels-sha256") + 1] = sha256_file(labels_path)
+    with pytest.raises(ValueError, match="pre-prediction commitment"):
+        scorer.main()

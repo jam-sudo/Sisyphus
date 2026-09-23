@@ -74,7 +74,12 @@ N=120 before curation begins, but must then define the relevant effect as at lea
    custodian retains both identities and outcomes until the container is frozen.
    The evaluator receives the frozen container plus a label-free arm manifest
    (SMILES, dose, route, arm ID); the modeling team receives identities only after
-   the one-time run is committed.
+   the one-time run is committed. Before freezing the manifest, the custodian
+   computes `label_content_sha256(labels)` from the complete label records and
+   cycle ID, and places that digest in the source plan. The helper excludes
+   `manifest_sha256`, which is not yet known. The manifest binds the source-plan
+   hash, and scoring checks the revealed labels against the earlier digest.
+   This commits the numeric Cmax outcomes before prediction without exposing them.
 
 The label-free, blinded-label, and frozen-prediction contracts are pinned in
 `data/reference/external_holdout_v1_manifest.schema.json` and

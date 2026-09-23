@@ -140,6 +140,7 @@ def test_source_plan_schema_enforces_acquisition_and_three_way_allocation():
         "allocation_sha256": zero,
         "exclusion_flow_path": "exclusion.json",
         "exclusion_flow_sha256": zero,
+        "label_content_sha256": zero,
         "source_windows": [
             {"source_family": "FDA", "start_date": "2020-01-01", "end_date": "2026-01-01"},
             {"source_family": "EMA", "start_date": "2020-01-01", "end_date": "2026-01-01"},
