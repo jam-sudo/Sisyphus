@@ -15,8 +15,8 @@ Meta-versus-ML superiority gate in `external_holdout_v1_protocol.md`.
 - Candidate ordering: ascending SHA256 of `sisyphus-p0-2026-09-23:` followed by
   the FRDB `compound_id`. Within a compound, order rows by numeric FRDB `id`.
 - Select rows using metadata only: `ADULT`, `HEALTHY`, `FASTED`, `Oral`, `SINGLE`,
-  `PLASMA`, `pkappcombo=false`, parseable application and analyte structures
-  with matching connectivity, a positive dose in mg, μg, or g, and a Cmax unit
+  `PLASMA`, `pkappcombo=false`, a parseable analyte structure, a positive dose
+  in mg, μg, or g, and a Cmax unit
   in {ng/mL, μg/mL, μg/L, mg/L, pg/mL, ng/L, mg/mL}. Do not inspect
   `pk_cmax_value` during selection.
 - Exclude compound identities and connectivity keys found in fitted training,
@@ -44,3 +44,9 @@ The ratio is descriptive: N=50 is not powered for the V1 superiority margin.
 Do not tune on these outcomes or report the pilot as an independent blinded
 holdout. Once opened, these compounds are development data and are excluded
 from any future final test.
+
+Before any outcome value or original PK table was opened, the application/analyte
+connectivity-match filter was removed: the FRDB application-SMILES field is
+empty in all 1,750 rows that pass the other metadata filters. Parent-analyte
+identity remains a mandatory original-source check after predictions are
+committed. This amendment was made from field completeness alone.
