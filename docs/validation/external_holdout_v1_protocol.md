@@ -136,6 +136,16 @@ not a shortcut to an eligible cohort. The 2026 open [PK-DataBase](https://github
 contains human PK descriptors but no Cmax field in its principal tables, so
 it cannot supply outcome labels for this protocol.
 
+Health Canada's official [Summary Reports API](https://health-products.canada.ca/api/documentation/summary-report-documentation-en.html)
+(`basisdecision/?lang=en&type=json`, snapshot SHA256
+`a796f3fb403c8362514e2d2ffb107f73967a9df3437891137deae8e33eb7db7b`)
+returns 619 drug SBD records, including 129 with an authorization date in
+2020–2026. Only 25 drug records mention `Cmax` anywhere in their summary text,
+and seven of the 2020–2026 records do. The SBD feed is suitable for discovering
+drug identities and linking to monographs, but direct Cmax table acquisition
+still requires following the primary product documents. A keyword mention is
+not an eligible PK observation.
+
 Allocate those compounds without outcome-based replacement to three disjoint
 roles: 120–150 calibration-development compounds, N=260 final external-test
 compounds, and a sealed reserve cohort. Calibration labels may be opened before
