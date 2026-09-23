@@ -257,8 +257,9 @@ compound IDs, including any predeclared challenge arms on those same compounds:
 - peer-reviewed first-in-human/SAD studies for development compounds with an
   unambiguous structure and directly tabulated Cmax;
 - older approved oral drugs absent from fitted target corpora; DrugBank catalog
-  membership is allowed under the frozen public profile, but use in a runtime
-  clinical registry is not;
+  membership remains an unresolved fup-training collision until the exact
+  fitted DrugBank subset is excluded or fup v2 is reproducibly retrained on
+  public-only inputs;
 - ideally, an independent sponsor or consortium dataset held by a data custodian,
   which gives the strongest source independence.
 
@@ -313,9 +314,12 @@ the shortlist is frozen.
 
 Reject collisions with every fitted model target corpus, clinical reference used
 by runtime registries, previous validation set, manual per-drug override, and
-meta-weight/routing cache. DrugBank membership alone is not contamination under
-the public profile if DrugBank enrichment is disabled and its values were not
-used to fit an artifact.
+meta-weight/routing cache. DrugBank membership is conservatively disqualifying
+with the currently shipped fup v2 artifact: its training recipe used DrugBank
+protein-binding values, and the exact fitted subset is unavailable in the
+public profile. Disabling DrugBank lookup at inference does not remove that
+training exposure. A future public-only fup retrain could change this rule
+after its source and artifact hashes are frozen.
 
 The exclusion-union SHA256 emitted by the audit becomes part of the frozen
 manifest. Re-running the audit must reproduce that hash; the audit report itself

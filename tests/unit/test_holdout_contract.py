@@ -210,6 +210,8 @@ def test_training_membership_refuses_missing_or_modified_source(tmp_path):
             "dataset_path": "data/training/example.csv",
             "sha256": sha256_file(source_path),
         }}))
+    fup_artifact = tmp_path / "models/adme/xgboost_fup_v2.json"
+    fup_artifact.write_text("placeholder")
     freeze = {
         "training_membership_path": "data/validation/training_membership_sources_v1.json",
         "training_membership_sha256": sha256_file(inventory_path),
@@ -228,6 +230,13 @@ def test_training_membership_refuses_missing_or_modified_source(tmp_path):
     }}))
     with pytest.raises(ValueError, match="Production model training source SHA256 mismatch"):
         verify_training_membership(tmp_path, freeze, {"data/training/example.csv"})
+    cmax_meta.write_text(json.dumps({"trained_on": {
+        "dataset_path": "data/training/example.csv", "sha256": sha256_file(source_path),
+    }}))
+    fup_artifact.write_bytes((ROOT / "models/adme/xgboost_fup_v2.json").read_bytes())
+    with pytest.raises(ValueError, match="DrugBank targets outside the public profile"):
+        verify_training_membership(tmp_path, freeze, {"data/training/example.csv"})
+    fup_artifact.write_text("placeholder")
     source_path.write_text("modified")
     with pytest.raises(ValueError, match="source SHA256 mismatch"):
         verify_training_membership(tmp_path, freeze, {"data/training/example.csv"})

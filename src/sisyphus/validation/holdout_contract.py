@@ -27,6 +27,10 @@ _PRODUCTION_FITTED_MODELS = (
     "models/adme/xgboost_peff.meta.json",
 )
 
+# This shipped artifact was fitted with licensed DrugBank fup targets as well as TDC.
+# A public-only membership inventory cannot certify it by relabeling its metadata.
+_DRUGBANK_FUP_ARTIFACT_SHA256 = "3ac08bf5dee4a7b5f7ebf9e058882f6101f965959f88a094de4db76c4b47e1f1"
+
 
 def sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -213,6 +217,12 @@ def verify_training_membership(
             raise ValueError(f"Training membership source SHA256 mismatch: {row['path']}")
     for model_path in _PRODUCTION_FITTED_MODELS:
         metadata = json.loads(resolve_frozen_path(root, model_path).read_text())
+        if (
+            model_path == "models/adme/xgboost_fup_v2.meta.json"
+            and sha256_file(resolve_frozen_path(root, "models/adme/xgboost_fup_v2.json"))
+            == _DRUGBANK_FUP_ARTIFACT_SHA256
+        ):
+            raise ValueError("Shipped fup v2 uses DrugBank targets outside the public profile")
         trained_on = metadata.get("trained_on") or {}
         dataset = trained_on.get("dataset_path")
         digest = trained_on.get("sha256")
