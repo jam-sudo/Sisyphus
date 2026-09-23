@@ -136,6 +136,18 @@ not a shortcut to an eligible cohort. The 2026 open [PK-DataBase](https://github
 contains human PK descriptors but no Cmax field in its principal tables, so
 it cannot supply outcome labels for this protocol.
 
+The repository's DrugBank `pk_data.csv` is narrative PK text, not the separately
+licensed structured Cmax table. A value-blind screen of its absorption records
+(`pk_data.csv` SHA256 `8a0c7d11da7bd1e91cddc4fb2bb6291f584b5481f0d3949ff22949f71ade9d5f`;
+`drugs.csv` SHA256 `70852f7db2d7a50935cc027681402322da6a9a40fff8fe7ca0459c1268670882`)
+found 292 records mentioning `Cmax`, 175 also mentioning a numeric mass dose,
+40 also mentioning fasting, and only two with a parseable structure and no
+structure/name collision in the repository exclusion union at `bc9ed5f`.
+The text export has no per-record original-source URL. Missing narrative detail
+does not prove ineligibility, so these are triage counts, not verified cases or
+an upper bound on DrugBank's separately available structured records. This local
+export cannot supply the external primary cohort.
+
 Health Canada's official [Summary Reports API](https://health-products.canada.ca/api/documentation/summary-report-documentation-en.html)
 (`basisdecision/?lang=en&type=json`, snapshot SHA256
 `a796f3fb403c8362514e2d2ffb107f73967a9df3437891137deae8e33eb7db7b`)
