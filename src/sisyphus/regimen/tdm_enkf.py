@@ -125,7 +125,7 @@ def _simulate_prior(
     """Simulate prior ensemble and extract state + predicted observations."""
     t_total = max(
         max(obs.time_h for obs in observations) + 24.0,
-        regimen.last_dose_time_h + 24.0,
+        regimen.last_dose_end_h + 24.0,
     )
 
     n_obs = len(observations)

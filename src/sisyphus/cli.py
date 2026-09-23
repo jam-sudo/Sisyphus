@@ -293,7 +293,7 @@ def _run_simulate(args: argparse.Namespace) -> None:
     rng = np.random.default_rng(42)
     params = ResolvedParams(graph.sample(rng), drug.sample(rng))
 
-    t_total = regimen.last_dose_time_h + 48.0
+    t_total = regimen.last_dose_end_h + 48.0
     result = solve_regimen(compiled, params, regimen, t_total_h=t_total, dt_output=0.1)
 
     metrics = compute_steady_state_metrics(result, regimen, node="venous_blood")

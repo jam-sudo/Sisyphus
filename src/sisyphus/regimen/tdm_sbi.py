@@ -240,7 +240,7 @@ def sbi_update(
 
     # Determine simulation window (match importance_sampling path)
     max_obs_t = max(obs.time_h for obs in observations)
-    t_total = max(max_obs_t + 24.0, regimen.last_dose_time_h + 24.0)
+    t_total = max(max_obs_t + 24.0, regimen.last_dose_end_h + 24.0)
 
     # ── Optional: load surrogate ensemble for fast forward sims ──
     # D1 follow-up (2026-04-10): the nominal-feature OOD guard was not

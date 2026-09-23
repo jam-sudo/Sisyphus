@@ -6,6 +6,7 @@ produce common clinical regimens (oral repeated, IV infusion, etc.).
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
 
 # ---------------------------------------------------------------------------
@@ -41,12 +42,14 @@ class DosingEvent:
     duration_h: float = 0.0
 
     def __post_init__(self) -> None:
-        if self.dose_mg < 0:
+        if not math.isfinite(self.dose_mg) or self.dose_mg < 0:
             raise ValueError(f"dose_mg must be non-negative, got {self.dose_mg}")
-        if self.time_h < 0:
+        if not math.isfinite(self.time_h) or self.time_h < 0:
             raise ValueError(f"time_h must be non-negative, got {self.time_h}")
-        if self.duration_h < 0:
+        if not math.isfinite(self.duration_h) or self.duration_h < 0:
             raise ValueError(f"duration_h must be non-negative, got {self.duration_h}")
+        if not math.isfinite(self.end_time_h):
+            raise ValueError("infusion end time must be finite")
 
     @property
     def is_bolus(self) -> bool:
@@ -102,6 +105,11 @@ class DosingRegimen:
     def last_dose_time_h(self) -> float:
         """Time of the last dosing event."""
         return self.events[-1].time_h
+
+    @property
+    def last_dose_end_h(self) -> float:
+        """Latest end time across doses, including overlapping infusions."""
+        return max(event.end_time_h for event in self.events)
 
     # -- Factory methods ---------------------------------------------------
 

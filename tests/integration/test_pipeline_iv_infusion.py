@@ -64,6 +64,11 @@ def test_negative_infusion_duration_rejected():
         predict(_VALSARTAN_SMILES, 20.0, route="iv", infusion_duration_min=-5.0)
 
 
+def test_infusion_requires_post_infusion_observation_within_24h():
+    with pytest.raises(ValueError, match="post-infusion observation"):
+        predict(_VALSARTAN_SMILES, 20.0, route="iv", infusion_duration_min=1435.0)
+
+
 def test_infusion_skips_mc_with_warning():
     """MC on infusion is Phase 2 scope — Phase 1 skips with warning."""
     result = predict(

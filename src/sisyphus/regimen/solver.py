@@ -17,6 +17,7 @@ Strategy:
 from __future__ import annotations
 
 import logging
+import math
 
 import numpy as np
 
@@ -153,7 +154,7 @@ def solve_regimen(
         params: Resolved point-value parameters.
         regimen: Dosing regimen specifying all dose events.
         t_total_h: Total simulation time (hours). If ``None``, defaults
-            to ``last_dose_time + DEFAULT_TAIL_H``.
+            to ``last_dose_end + DEFAULT_TAIL_H``.
         dt_output: Output time resolution (hours). Default 0.1h (6 min).
 
     Returns:
@@ -161,7 +162,11 @@ def solve_regimen(
         with concatenated time/concentration/amount arrays.
     """
     if t_total_h is None:
-        t_total_h = regimen.last_dose_time_h + DEFAULT_TAIL_H
+        t_total_h = regimen.last_dose_end_h + DEFAULT_TAIL_H
+    if not math.isfinite(t_total_h) or t_total_h <= regimen.last_dose_end_h:
+        raise ValueError("t_total_h must be finite and after every dose ends")
+    if not math.isfinite(dt_output) or dt_output <= 0:
+        raise ValueError("dt_output must be positive and finite")
 
     # Expand infusions into micro-boluses
     boluses = _expand_infusions(regimen.events)

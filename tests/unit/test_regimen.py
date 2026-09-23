@@ -119,6 +119,13 @@ class TestDosingEvent:
         with pytest.raises(ValueError, match="duration_h"):
             DosingEvent(time_h=0.0, dose_mg=100.0, node="a", duration_h=-0.5)
 
+    @pytest.mark.parametrize("field", ["time_h", "dose_mg", "duration_h"])
+    def test_nonfinite_event_value_raises(self, field):
+        values = {"time_h": 0.0, "dose_mg": 100.0, "node": "a", "duration_h": 0.0}
+        values[field] = float("nan")
+        with pytest.raises(ValueError, match=field):
+            DosingEvent(**values)
+
 
 class TestDosingRegimen:
     def test_single_oral(self):
@@ -156,6 +163,14 @@ class TestDosingRegimen:
         assert reg.n_doses == 2
         assert reg.events[0].duration_h == 0.5
         assert reg.events[1].time_h == 12.0
+
+    def test_last_dose_end_includes_overlapping_infusion(self):
+        regimen = DosingRegimen(events=(
+            DosingEvent(0.0, 100.0, "a", duration_h=10.0),
+            DosingEvent(8.0, 100.0, "a"),
+        ))
+        assert regimen.last_dose_time_h == 8.0
+        assert regimen.last_dose_end_h == 10.0
 
     def test_empty_regimen_raises(self):
         with pytest.raises(ValueError, match="at least one event"):
@@ -344,7 +359,7 @@ class TestSolveRegimen:
         assert "sink" in result.amounts
 
     def test_default_t_total(self):
-        """Without explicit t_total_h, simulation runs 24h past last dose."""
+        """Default horizon runs 24h past the final dose or infusion end."""
         graph = _make_two_node_graph()
         drug = _make_minimal_drug(admin_node="a", dose_mg=100.0)
         compiled, params = _compile_and_resolve(graph, drug)
@@ -359,6 +374,24 @@ class TestSolveRegimen:
 
         # last dose at 16h + 24h tail = 40h
         assert result.time_h[-1] == pytest.approx(40.0, abs=0.2)
+
+        infusion = DosingRegimen(events=(DosingEvent(0.0, 100.0, "a", duration_h=1.0),))
+        infusion_result = solve_regimen(compiled, params, infusion)
+        assert infusion_result.time_h[-1] == pytest.approx(25.0)
+
+    def test_rejects_horizon_before_final_dose_or_infusion_end(self):
+        graph = _make_two_node_graph()
+        compiled, params = _compile_and_resolve(graph, _make_minimal_drug(admin_node="a"))
+        repeated = DosingRegimen(events=(
+            DosingEvent(0.0, 100.0, "a"), DosingEvent(8.0, 100.0, "a"),
+        ))
+        infusion = DosingRegimen(events=(DosingEvent(0.0, 100.0, "a", duration_h=1.0),))
+        with pytest.raises(ValueError, match="t_total_h"):
+            solve_regimen(compiled, params, repeated, t_total_h=8.0)
+        with pytest.raises(ValueError, match="t_total_h"):
+            solve_regimen(compiled, params, infusion, t_total_h=0.5)
+        with pytest.raises(ValueError, match="dt_output"):
+            solve_regimen(compiled, params, infusion, dt_output=0.0)
 
     def test_invalid_node_does_not_crash(self):
         """Dose targeting a nonexistent node should warn, not crash."""

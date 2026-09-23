@@ -290,6 +290,8 @@ def predict(
                 f"infusion_duration_min must be non-negative, "
                 f"got {infusion_duration_min}"
             )
+        if infusion_duration_min >= 24 * 60 - 5:
+            raise ValueError("infusion_duration_min leaves no post-infusion observation in 24h")
     # Import sub-layers here to avoid circular imports and to register flux specs.
     import sisyphus.engine.flux  # noqa: F401 -- register flux specs
     from sisyphus.engine.solver import _IV_CMAX_DELAY_H, solve
