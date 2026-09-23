@@ -12,14 +12,26 @@ track `pyproject.toml`.
 
 ## [Unreleased]
 
+### Public-only Peff training source pinned (2026-09-23)
+
+- Rebuilt Peff from 874 hash-pinned TDC Caco2_Wang rows and replaced its
+  unverified legacy artifact. Three active fitted models still lack exact
+  training-source hashes.
+- Regenerated the repeatedly used development benchmark on the pinned Linux
+  stack: Meta AAFE 2.660 (bootstrap 95% CI 2.28–3.12, N=107). This is not
+  independent validation.
+- Recomputed the partially in-sample development residual band and regenerated
+  all eight web console presets. Source hashes now guard both artifacts against
+  stale model or benchmark data.
+
 ### Public-only fup model and provenance (2026-09-23)
 
 - Rebuilt fup v2 from 1,557 SHA-pinned human TDC rows, replacing the artifact
   fitted with unavailable DrugBank targets. The public external-validation gate
   continues to reject the historical artifact by its SHA256.
-- Regenerated the repeatedly used N=107 development benchmark and web figures
+- Regenerated the then-current repeatedly used N=107 development benchmark and web figures
   on the pinned Linux stack: Meta AAFE 2.676 (bootstrap 95% CI 2.30–3.14).
-  This is not independent external validation; four other fitted models still
+  This was not independent external validation; four other fitted models still
   lack exact training-source hashes.
 - Fixed the test dependency lock and retained explicit AI reviewer attribution
   in the historical P0 source-audit records.

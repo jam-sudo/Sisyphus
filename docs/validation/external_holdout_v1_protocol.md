@@ -327,13 +327,15 @@ the manifest, then run it again; only the second report is the passing freeze ga
 
 For the public profile, `freeze.training_membership_path` must point to
 `data/validation/training_membership_sources_v1.json` and its SHA256 must be
-recorded in `freeze.training_membership_sha256`. That file pins 13 conservative
+recorded in `freeze.training_membership_sha256`. That file pins 14 conservative
 corpus inputs used by `scripts/audit_external_holdout_manifest.py`; the audit and
 prediction runner verify every listed source hash before continuing. The ignored
 N50 convenience inventory is not a freeze dependency. Raw licensed DrugBank
 exports are not pinned or used by the current public-only fup artifact. Its
 1,557-row filtered human TDC dataset and model artifact are both SHA-pinned;
 `scripts/retrain_fup_public.py` rebuilds them from the committed PPBR_AZ input.
+The Peff model now uses the SHA-pinned 874-row filtered Caco2_Wang dataset;
+`scripts/train_peff.py` rebuilds it from the committed TDC tab file.
 The older `scripts/train_fup_v2.py` is a historical DrugBank-dependent recipe
 and must not be used to regenerate the public artifact.
 
@@ -345,8 +347,8 @@ under the current 107-compound holdout and three-key matching. This recovers a
 conservative Cmax exclusion source, not the exact fitted snapshot: retraining
 with the recorded hyperparameters and current feature code did not reproduce
 the shipped model's tree dump or predictions. The shipped Cmax metadata still
-has `sha256: unknown_legacy`; three other active fitted models also lack exact
-source hashes. CL/F, Vd/F, and fup v2 are pinned to their training CSVs.
+has `sha256: unknown_legacy`; two other active fitted models also lack exact
+source hashes. CL/F, Vd/F, fup v2, and Peff are pinned to their training CSVs.
 It therefore does not prove exact model-training membership. The audit and
 prediction runner fail closed until each production fitted model names a
 repository-relative, hash-matched training dataset included in the pinned

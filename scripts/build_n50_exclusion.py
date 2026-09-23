@@ -68,6 +68,7 @@ HARD_SOURCES: list[tuple[str, str, str | None, str]] = [
     ("data/ppbr_az.tab", "Drug", "Drug_ID", "\t"),
     ("data/training/fup_tdc_public_clean.csv", "smiles", "name", ","),
     ("data/caco2_wang.tab", "Drug", "Drug_ID", "\t"),
+    ("data/training/peff_tdc_public_clean.csv", "canonical_smiles", "drug_id", ","),
     # Upstream Omega source for the shipped Cmax model; includes pre-exclusion rows.
     ("data/training/omega_mmpk_clean.csv", "smiles", "name", ","),
     ("data/training/mmpk_expanded_full.csv", "canon_smiles", "name", ","),
@@ -81,7 +82,7 @@ HARD_SOURCES: list[tuple[str, str, str | None, str]] = [
 ]
 # TDC hepatocyte is positional (col0 = ChEMBL id, col1 = SMILES, tab-delimited).
 TDC_HEP = "data/training/clearance_hepatocyte_az.tab"
-# DrugBank identity superset; the fitted fup subset is unavailable publicly.
+# DrugBank identity superset retained for the conservative N50 E4 rule.
 DRUGBANK = "data/drugbank/drugs.csv"
 
 EXCLUSION_OUT = "data/reference/n50_exclusion_ik14.json"

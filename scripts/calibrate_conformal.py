@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import json
 import pathlib
+from hashlib import sha256
 
 import numpy as np
 
@@ -23,12 +24,18 @@ from sisyphus.validation.conformal import (
     empirical_coverage,
     nonconformity_scores,
 )
+from sisyphus.validation.holdout_contract import _PRODUCTION_FITTED_MODELS
 from sisyphus.validation.reference import load_reference
 
 _LEVELS = {"0.5": 0.5, "0.2": 0.2, "0.1": 0.1, "0.05": 0.05}
 _TRACKS = ("meta", "engine", "ml")
-_OUT = pathlib.Path("data/validation/development_residual_interval.json")
-_HOLDOUT_CACHE = pathlib.Path("data/training/4track_holdout_predictions.json")
+_ROOT = pathlib.Path(__file__).resolve().parent.parent
+_OUT = _ROOT / "data/validation/development_residual_interval.json"
+_HOLDOUT_CACHE = _ROOT / "data/training/4track_holdout_predictions.json"
+
+
+def _sha(path: pathlib.Path) -> str:
+    return sha256(path.read_bytes()).hexdigest()
 
 
 def _predict_track(result, track):
@@ -45,10 +52,12 @@ def _collect_train():
     refs = [r for r in load_reference() if r.in_training]
     rows = {t: {"pred": [], "obs": []} for t in _TRACKS}
     n_ok = 0
+    skipped = []
     for ref in refs:
         try:
             res = predict(ref.smiles, ref.dose_mg, ref.route)
-        except Exception:
+        except Exception as exc:
+            skipped.append({"name": ref.name, "reason": str(exc)})
             continue
         n_ok += 1
         for t in _TRACKS:
@@ -56,7 +65,7 @@ def _collect_train():
             if p and p > 0:
                 rows[t]["pred"].append(p)
                 rows[t]["obs"].append(ref.cmax_obs)
-    return rows, n_ok, len(refs)
+    return rows, n_ok, len(refs), skipped
 
 
 def _holdout_arrays():
@@ -71,7 +80,7 @@ def _holdout_arrays():
 
 def main():
     print("Running predict() on train set (calibration; Invariant #5: not holdout)...")
-    train, n_ok, n_tot = _collect_train()
+    train, n_ok, n_tot, skipped = _collect_train()
     print(f"  train predicted: {n_ok}/{n_tot}")
 
     holdout = _holdout_arrays()
@@ -81,7 +90,15 @@ def main():
         "interval": "multiplicative: pred /÷ 10**q",
         "calibration_set": "partially_in_sample_development",
         "n_calibration_meta": len(train["meta"]["pred"]),
+        "n_training_reference": n_tot,
+        "skipped_training_reference": skipped,
         "generated_from": "scripts/calibrate_conformal.py",
+        "source_cache_sha256": _sha(_HOLDOUT_CACHE),
+        "model_artifact_sha256": {
+            path.replace(".meta.json", ".json"): _sha(
+                _ROOT / path.replace(".meta.json", ".json")
+            ) for path in _PRODUCTION_FITTED_MODELS
+        },
         "validity": "not split-conformal; fitted components saw calibration outcomes",
         "tracks": {},
         "consumed_development_benchmark_coverage": {},

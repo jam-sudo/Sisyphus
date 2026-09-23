@@ -6,9 +6,9 @@ Cmax comes from ``CmaxPrediction`` and the curve/Tmax/AUC/half-life come from
 the matching ``EngineSimulation``.  The generator never monkeypatches the
 meta-learner, re-solves the engine, or rescales a curve.
 
-Run with the conda interpreter from the repo root:
+Run with the locked Python environment from the repo root:
 
-    /opt/miniconda3/bin/python scripts/gen_console_data.py
+    python scripts/gen_console_data.py
 
 Outputs:
     web/public/data/console_data.json   -- the full console payload
@@ -29,6 +29,7 @@ import numpy as np
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO / "src"))
 
+from sisyphus._version import __version__  # noqa: E402
 from sisyphus.pipeline.predict import predict  # noqa: E402
 from sisyphus.predict.adme import predict_adme  # noqa: E402
 from sisyphus.predict.chemistry import compute_profile  # noqa: E402
@@ -205,7 +206,7 @@ def main():
         "read from CmaxPrediction.",
         "The curve, Tmax, AUC, half-life, solver status, and mass balance are read from the "
         "same EngineSimulation; no second solve or curve rescaling is performed.",
-        "N=107 is retrospective development evidence, not an independent holdout.",
+        "N=107 is a repeatedly accessed development benchmark, not an independent holdout.",
     ]
 
     log.info("loading benchmark cache ...")
@@ -311,8 +312,8 @@ def main():
     payload = {
         "meta_info": {
             "generated_by": "scripts/gen_console_data.py",
-            "interpreter": "/opt/miniconda3/bin/python",
-            "engine": "Sisyphus v0.4 post-FLUX-1",
+            "interpreter": sys.executable,
+            "engine": f"Sisyphus v{__version__}",
             "notes": notes,
         },
         "constants": constants,

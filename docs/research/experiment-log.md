@@ -10,7 +10,39 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
-## 2026-09-23 (cont.) — Public-only fup retrain and current development benchmark
+## 2026-09-23 (cont.) — Public-only Peff retrain
+
+The shipped Peff model's base score matched the mean target from the committed
+TDC Caco2_Wang data after holdout filtering, but neither macOS nor pinned Linux
+retraining reproduced its trees. Replaced it with a reproducible Linux model:
+910 raw rows, 32 holdout exclusions, four canonical-SMILES duplicates, and
+874 fitted rows. Raw source SHA256 is
+`447d9f1af487c06b080145a2361dbe45af5b27afc83e1a975dd29b9ea535d6ab`;
+fitted CSV SHA256 is
+`46a5a7c4f48b6d6f4f501fdca049c1fe25cadf115658bda504d2e41d2092a06c`;
+model SHA256 is
+`1566e5b7c9ced4c2c1ce6f0d7e693b0190ae7306a8f632a9486c1658dab6e1e7`.
+Five-fold training CV: R² 0.700, Peff AAFE 2.155. The model metadata and
+external exclusion inventory pin the fitted rows.
+
+On the same Linux stack, the repeatedly used N=107 development Meta AAFE moved
+2.676 → 2.660 and Engine 3.672 → 3.624; direct ML remained 2.998. Meta
+twofold coverage fell 51.4% → 49.5%. The current cache is
+`data/training/4track_holdout_predictions.json`, with conditional bootstrap
+intervals in `data/validation/4track_ci_2026-09-23_fup_peff_public.json`.
+These development-set changes do not demonstrate independent improvement.
+Three active fitted models still lack exact source hashes, and no blinded
+external outcome cohort exists.
+
+The displayed empirical residual interval was also recalculated on the current
+stack: 63/67 development training references were usable; four had an unknown
+route. The Meta 90% log10 half-width is 1.0301 (×/÷10.72), with 94.4%
+coverage on the *consumed* N=107 set. This is partially in-sample and is not
+an independent calibration claim. Its artifact now binds the benchmark cache
+and all active fitted-model hashes. The eight frozen web presets were
+regenerated from current predictions and have resource-hash checks.
+
+## 2026-09-23 (cont.) — Public-only fup retrain and fup-only development benchmark
 
 Replaced the shipped fup v2 artifact, whose fitted DrugBank targets could not be
 recovered in this public clone. The new model uses only human TDC PPBR_AZ rows:
@@ -27,8 +59,8 @@ inventory pin the fitted CSV. The former DrugBank-trained artifact remains
 barred from the public V1 gate by its historical SHA.
 
 On the *same Linux stack*, development N=107 Meta AAFE moved 2.739 → 2.676
-and Engine 4.277 → 3.672; direct ML stayed 2.998. The new benchmark cache is
-`data/training/4track_holdout_predictions.json`, with bootstrap CI artifact
+and Engine 4.277 → 3.672; direct ML stayed 2.998. The fup-only cache at
+commit `7f9790c` was later superseded; its bootstrap CI artifact remains
 `data/validation/4track_ci_2026-09-23_fup_public.json`. This is a system
 change evaluated on a repeatedly used development set, not evidence of
 independent improvement. Four active fitted models still lack exact source
