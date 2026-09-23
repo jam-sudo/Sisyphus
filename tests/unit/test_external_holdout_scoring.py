@@ -304,6 +304,20 @@ def test_scorer_rejects_clinical_source_outside_frozen_window():
         scorer.validate_results_against_manifest(joined, manifest, windows)
 
 
+def test_scorer_rejects_verifier_absent_from_source_plan():
+    scorer = _module()
+    manifest, predictions, labels = _synthetic_contracts()
+    arm = labels["records"][0]["arms"][0]
+    arm["verified_by"] = ["curator-a", "stranger"]
+    arm["source_record_hash"] = source_record_hash(arm)
+    manifest["compounds"][0]["arms"][0]["source_record_hash"] = arm["source_record_hash"]
+    joined = scorer.join_predictions_and_labels(predictions["rows"], labels)
+    with pytest.raises(ValueError, match="Unregistered verifier"):
+        scorer.validate_results_against_manifest(
+            joined, manifest, curators=["curator-a", "curator-b"]
+        )
+
+
 def test_cli_uses_frozen_seed_and_bootstrap_count(tmp_path, monkeypatch):
     scorer = _module()
     manifest, predictions, labels = _synthetic_contracts()
@@ -346,7 +360,7 @@ def test_cli_uses_frozen_seed_and_bootstrap_count(tmp_path, monkeypatch):
                 "end_date": "2026-01-01",
             },
         ],
-        "curators": ["a", "b"],
+        "curators": ["curator-a", "curator-b"],
     }
     for stem, contents in (
         ("inventory", inventory), ("verified_shortlist", verified),

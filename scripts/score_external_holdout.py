@@ -68,7 +68,10 @@ def _paired_bootstrap(
 
 
 def validate_results_against_manifest(
-    rows: list[dict], manifest: dict, source_windows: list[dict] | None = None
+    rows: list[dict],
+    manifest: dict,
+    source_windows: list[dict] | None = None,
+    curators: list[str] | None = None,
 ) -> None:
     """Require an exact candidate/arm/input match to the frozen manifest."""
     expected: dict[tuple[str, str], dict] = {}
@@ -127,6 +130,8 @@ def validate_results_against_manifest(
             raise ValueError(f"Label source_record_hash is invalid for {key}")
         if arm["source_record_hash"] != computed_source_hash:
             raise ValueError(f"Manifest/label source_record_hash mismatch for {key}")
+        if curators is not None and not set(row["verified_by"]) <= set(curators):
+            raise ValueError(f"Unregistered verifier for {key}")
         source = row["source"]
         if source["category"] != arm["source_category"]:
             raise ValueError(f"Source category mismatch for {key}")
@@ -352,7 +357,9 @@ def main() -> None:
     if not isinstance(prediction_rows, list):
         raise ValueError("predictions.rows must be a list")
     rows = join_predictions_and_labels(prediction_rows, labels)
-    validate_results_against_manifest(rows, manifest, source_plan["source_windows"])
+    validate_results_against_manifest(
+        rows, manifest, source_plan["source_windows"], source_plan["curators"]
+    )
     report = score(rows, freeze["random_seed"], 100000)
     report["manifest_sha256"] = actual_sha
     report["predictions_sha256"] = actual_predictions_sha

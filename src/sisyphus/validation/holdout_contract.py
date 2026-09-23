@@ -62,6 +62,7 @@ _SOURCE_HASH_FIELDS = (
     "co_medications",
     "study_n",
     "source",
+    "verified_by",
 )
 
 

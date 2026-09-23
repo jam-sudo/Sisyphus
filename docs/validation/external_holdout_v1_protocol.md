@@ -179,6 +179,9 @@ snapshot date; scoring rejects a clinical source outside those windows. The audi
 checks file hashes, declared counts, full allocation and exclusion coverage,
 final-test membership, and InChIKey-14
 uniqueness across the verified shortlist. These files contain no observed Cmax.
+Each label arm's verifier list is included in its outcome-free source-record
+hash, and scoring requires every verifier to appear in the source plan's frozen
+curator registry.
 
 ## Contamination gate
 

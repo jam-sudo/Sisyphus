@@ -45,6 +45,7 @@ def _label_arm() -> dict:
             "url_or_doi": "https://example.test/review",
             "table_or_page": "p. 10",
         },
+        "verified_by": ["curator-a", "curator-b"],
     }
 
 
@@ -73,6 +74,9 @@ def test_source_record_hash_binds_metadata_but_not_outcome():
     arm["observed_cmax_mg_l"] = 9.9
     assert source_record_hash(arm) == first
     arm["food_state"] = "fed"
+    assert source_record_hash(arm) != first
+    arm["food_state"] = "fasted"
+    arm["verified_by"] = ["curator-a", "curator-c"]
     assert source_record_hash(arm) != first
 
 
