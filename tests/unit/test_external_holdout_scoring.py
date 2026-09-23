@@ -174,6 +174,8 @@ def _synthetic_contracts(n: int = 120):
             "source": {
                 "category": category,
                 "agency": agency,
+                "source_family": agency or category,
+                "source_date": "2025-01-01",
                 "citation": f"source {i}",
                 "url_or_doi": f"https://example.test/{i}",
                 "table_or_page": "p. 1",
@@ -286,6 +288,22 @@ def test_scorer_rejects_manifest_eligibility_forgery():
         scorer.validate_results_against_manifest(joined, manifest)
 
 
+def test_scorer_rejects_clinical_source_outside_frozen_window():
+    scorer = _module()
+    manifest, predictions, labels = _synthetic_contracts()
+    arm = labels["records"][0]["arms"][0]
+    arm["source"]["source_date"] = "2019-01-01"
+    arm["source_record_hash"] = source_record_hash(arm)
+    manifest["compounds"][0]["arms"][0]["source_record_hash"] = arm["source_record_hash"]
+    joined = scorer.join_predictions_and_labels(predictions["rows"], labels)
+    windows = [
+        {"source_family": family, "start_date": "2020-01-01", "end_date": "2026-01-01"}
+        for family in ("FDA", "EMA", "PMDA", "HealthCanada", "peer_reviewed")
+    ]
+    with pytest.raises(ValueError, match="outside frozen source window"):
+        scorer.validate_results_against_manifest(joined, manifest, windows)
+
+
 def test_cli_uses_frozen_seed_and_bootstrap_count(tmp_path, monkeypatch):
     scorer = _module()
     manifest, predictions, labels = _synthetic_contracts()
@@ -320,6 +338,13 @@ def test_cli_uses_frozen_seed_and_bootstrap_count(tmp_path, monkeypatch):
         "source_windows": [
             {"source_family": "FDA", "start_date": "2020-01-01", "end_date": "2026-01-01"},
             {"source_family": "EMA", "start_date": "2020-01-01", "end_date": "2026-01-01"},
+            {"source_family": "PMDA", "start_date": "2020-01-01", "end_date": "2026-01-01"},
+            {"source_family": "HealthCanada", "start_date": "2020-01-01", "end_date": "2026-01-01"},
+            {
+                "source_family": "peer_reviewed",
+                "start_date": "2020-01-01",
+                "end_date": "2026-01-01",
+            },
         ],
         "curators": ["a", "b"],
     }

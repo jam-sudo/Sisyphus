@@ -141,8 +141,11 @@ The source plan names four label-free JSON files and their SHA256 hashes:
 `allocation` maps `calibration`, `final_test`, and `reserve` to disjoint candidate-ID
 arrays; `exclusion_flow` gives every inventoried ID a `verified` or `excluded`
 decision, with a reason for each exclusion. Source families and dates must fall
-inside the frozen windows. The audit checks file hashes, declared counts, full
-allocation and exclusion coverage, final-test membership, and InChIKey-14
+inside the frozen windows. The blinded label metadata also records the date and
+family of the actual clinical Cmax report or study, separately from any catalogue
+snapshot date; scoring rejects a clinical source outside those windows. The audit
+checks file hashes, declared counts, full allocation and exclusion coverage,
+final-test membership, and InChIKey-14
 uniqueness across the verified shortlist. These files contain no observed Cmax.
 
 ## Contamination gate

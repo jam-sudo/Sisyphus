@@ -39,6 +39,8 @@ def _label_arm() -> dict:
         "source": {
             "category": "regulatory",
             "agency": "FDA",
+            "source_family": "FDA",
+            "source_date": "2025-01-01",
             "citation": "review",
             "url_or_doi": "https://example.test/review",
             "table_or_page": "p. 10",

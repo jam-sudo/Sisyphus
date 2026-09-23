@@ -12,6 +12,7 @@ import argparse
 import hashlib
 import json
 from collections import defaultdict
+from datetime import date
 from pathlib import Path
 
 import numpy as np
@@ -66,7 +67,9 @@ def _paired_bootstrap(
     return meta_boot, ml_boot, ratio_boot
 
 
-def validate_results_against_manifest(rows: list[dict], manifest: dict) -> None:
+def validate_results_against_manifest(
+    rows: list[dict], manifest: dict, source_windows: list[dict] | None = None
+) -> None:
     """Require an exact candidate/arm/input match to the frozen manifest."""
     expected: dict[tuple[str, str], dict] = {}
     for compound in manifest.get("compounds", []):
@@ -129,6 +132,18 @@ def validate_results_against_manifest(rows: list[dict], manifest: dict) -> None:
             raise ValueError(f"Source category mismatch for {key}")
         if source.get("agency") != arm.get("source_agency"):
             raise ValueError(f"Source agency mismatch for {key}")
+        if source_windows is not None:
+            expected_family = (
+                source["agency"] if source["category"] == "regulatory" else source["category"]
+            )
+            source_date = date.fromisoformat(source["source_date"])
+            if source["source_family"] != expected_family or not any(
+                window["source_family"] == expected_family
+                and date.fromisoformat(window["start_date"]) <= source_date
+                <= date.fromisoformat(window["end_date"])
+                for window in source_windows
+            ):
+                raise ValueError(f"Clinical source is outside frozen source window: {key}")
         if arm["primary_eligible"]:
             if row["execution_status"] != "ok":
                 raise ValueError(f"Primary prediction execution failed for {key}")
@@ -307,7 +322,7 @@ def main() -> None:
     payload = json.loads(args.predictions.read_text())
     labels = json.loads(args.labels.read_text())
     validate_payload(manifest, "external_holdout_v1_manifest.schema.json")
-    verify_source_plan(args.manifest, manifest)
+    source_plan = verify_source_plan(args.manifest, manifest)
     validate_source_quotas(manifest)
     validate_payload(payload, "external_holdout_v1_predictions.schema.json")
     validate_payload(labels, "external_holdout_v1_labels.schema.json")
@@ -337,7 +352,7 @@ def main() -> None:
     if not isinstance(prediction_rows, list):
         raise ValueError("predictions.rows must be a list")
     rows = join_predictions_and_labels(prediction_rows, labels)
-    validate_results_against_manifest(rows, manifest)
+    validate_results_against_manifest(rows, manifest, source_plan["source_windows"])
     report = score(rows, freeze["random_seed"], 100000)
     report["manifest_sha256"] = actual_sha
     report["predictions_sha256"] = actual_predictions_sha

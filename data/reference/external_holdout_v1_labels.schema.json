@@ -54,10 +54,15 @@
                 "study_n": {"type": "integer", "minimum": 1},
                 "source": {
                   "type": "object",
-                  "required": ["category", "agency", "citation", "url_or_doi", "table_or_page"],
+                  "required": [
+                    "category", "agency", "source_family", "source_date",
+                    "citation", "url_or_doi", "table_or_page"
+                  ],
                   "properties": {
                     "category": {"enum": ["regulatory", "peer_reviewed", "independent_sponsor"]},
                     "agency": {"type": ["string", "null"]},
+                    "source_family": {"type": "string", "minLength": 1},
+                    "source_date": {"type": "string", "format": "date"},
                     "citation": {"type": "string", "minLength": 1},
                     "url_or_doi": {"type": "string", "minLength": 1},
                     "table_or_page": {"type": "string", "minLength": 1}
