@@ -165,6 +165,18 @@ structure/name exclusion union, leaving five provisional structure-clean
 leads. This is not a verified eligibility count, and an unresolved name does
 not prove that its structure is novel.
 
+The PMDA [English review-report index](https://www.pmda.go.jp/english/review-services/reviews/approved-information/drugs/0001.html)
+(snapshot SHA256
+`11568ed9c0bafb86d94fcc2959a4a9694556cc694a174db6cc10157b1a111e59`)
+lists 174 product rows approved in 2020–2025, with 152 distinct non-proprietary
+name strings and English report links. A first PubChem lookup resolved 53 of
+those strings; 44 hit the repository's exclusion union and nine were
+provisionally clean. Another 49 lookups returned HTTP 503, so this is an
+**incomplete lower-bound screen**, not a reliable eligibility or attrition
+rate. Route, formulation, fasted single-dose parent Cmax, and report dates
+still require verification in the individual PMDA reviews. PMDA also notes
+that its Japanese originals prevail over the English translations.
+
 Allocate those compounds without outcome-based replacement to three disjoint
 roles: 120–150 calibration-development compounds, N=260 final external-test
 compounds, and a sealed reserve cohort. Calibration labels may be opened before
