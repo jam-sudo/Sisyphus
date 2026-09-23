@@ -327,7 +327,8 @@ R   = AAFE_meta / AAFE_ml = exp(mean_i(d_i))
 
 Retain the meta/PBPK production path only when all primary requirements hold:
 
-- point estimate `R <= 0.90`;
+- point estimate `R <= 0.90` for N=260, or `R <= 0.85` for the
+  preregistered N=120 fallback;
 - paired compound-bootstrap 95% CI upper bound `< 1.0`;
 - geometric prediction/observation bias in `[0.8, 1.25]`;
 - at least 50% within two-fold;

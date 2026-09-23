@@ -77,6 +77,24 @@ def test_score_rejects_nonpositive_observation():
         scorer.score(rows, seed=7, n_boot=10)
 
 
+@pytest.mark.parametrize("n, expected", [(120, False), (260, True)])
+def test_superiority_uses_preregistered_cohort_margin(n, expected):
+    scorer = _module()
+    rows = [
+        {
+            "candidate_id": f"c{i}",
+            "primary_eligible": True,
+            "observed_cmax_mg_l": 1.0,
+            "meta_cmax_mg_l": 1.0,
+            "ml_cmax_mg_l": 1 / 0.88,
+        }
+        for i in range(n)
+    ]
+    result = scorer.score(rows, seed=7, n_boot=100)
+    assert result["meta_superiority_gate"] is expected
+    assert result["meta_ml_ratio_limit"] == (0.85 if n == 120 else 0.90)
+
+
 def test_manifest_validation_rejects_arm_input_drift():
     scorer = _module()
     manifest = {

@@ -21,7 +21,7 @@
     "verified_shortlist_path": {"type": "string", "pattern": "^[A-Za-z0-9_./-]+$"},
     "verified_shortlist_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "calibration_n": {"type": "integer", "minimum": 120, "maximum": 150},
-    "final_test_n": {"type": "integer", "minimum": 120},
+    "final_test_n": {"enum": [120, 260]},
     "reserve_n": {"type": "integer", "minimum": 1},
     "allocation_path": {"type": "string", "pattern": "^[A-Za-z0-9_./-]+$"},
     "allocation_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},

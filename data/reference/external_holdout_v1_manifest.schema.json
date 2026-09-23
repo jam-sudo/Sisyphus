@@ -9,7 +9,7 @@
   "properties": {
     "protocol": {"const": "docs/validation/external_holdout_v1_protocol.md"},
     "cycle_id": {"type": "string", "minLength": 1, "maxLength": 100},
-    "n_target": {"type": "integer", "minimum": 120},
+    "n_target": {"enum": [120, 260]},
     "labels_blinded": {"const": true},
     "source_plan_path": {"type": "string", "pattern": "^[A-Za-z0-9_./-]+$"},
     "source_plan_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},

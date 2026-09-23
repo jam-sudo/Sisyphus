@@ -268,7 +268,8 @@ def score(rows: list[dict], seed: int, n_boot: int) -> dict:
             np.median([np.mean(v) for v in by_compound_width.values()])
         )
 
-    superiority = bool(ratio <= 0.90 and ratio_ci[1] < 1.0)
+    ratio_limit = 0.85 if len(meta) == 120 else 0.90
+    superiority = bool(ratio <= ratio_limit and ratio_ci[1] < 1.0)
     release_gate = bool(
         superiority
         and 0.8 <= bias <= 1.25
@@ -287,6 +288,7 @@ def score(rows: list[dict], seed: int, n_boot: int) -> dict:
         "ml_aafe": float(np.exp(ml.mean())),
         "ml_bootstrap_95_ci": ml_ci,
         "meta_ml_aafe_ratio": ratio,
+        "meta_ml_ratio_limit": ratio_limit,
         "paired_ratio_95_ci": ratio_ci,
         "meta_geometric_bias": bias,
         "meta_pct_within_2fold": pct_2fold,
