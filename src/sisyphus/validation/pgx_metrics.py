@@ -170,7 +170,7 @@ def zonal_hazard(c_u_by_zone, vmax_bio_by_zone, km_bio, vmax_detox_by_zone, time
     vmax_bio_by_zone / vmax_detox_by_zone: per-zone scalars. Returns a per-zone list.
     """
     t = np.asarray(time, dtype=float)
-    trapz = getattr(np, "trapezoid", np.trapz)
+    trapz = np.trapezoid if hasattr(np, "trapezoid") else np.trapz
     out = []
     for c_u, vmax_bio, vmax_detox in zip(c_u_by_zone, vmax_bio_by_zone, vmax_detox_by_zone):
         c_arr = np.asarray(c_u, dtype=float)
@@ -195,7 +195,7 @@ def gsh_pool_hazard(c_u_by_zone, vmax_bio_by_zone, km_bio, gsh0_by_zone, k_syn, 
     t = np.asarray(time, dtype=float)
     if t.ndim != 1 or t.size < 2:
         raise ValueError("time must be a 1-D array of length >= 2")
-    trapz = getattr(np, "trapezoid", np.trapz)
+    trapz = np.trapezoid if hasattr(np, "trapezoid") else np.trapz
 
     # Refined uniform integration grid spanning [t0, t_end].
     n_fine = (t.size - 1) * int(steps_per_interval) + 1

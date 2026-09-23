@@ -180,7 +180,7 @@ def solve_mc(
         cmax = float(np.max(conc))
         tmax = float(sol.t[np.argmax(conc)])
 
-    _trapz = getattr(np, "trapezoid", np.trapz)  # numpy 2.0+ vs 1.x
+    _trapz = np.trapezoid if hasattr(np, "trapezoid") else np.trapz
     # AUC is full-interval by design: total drug exposure is independent of
     # the Cmax observation window; masking AUC would be clinically incorrect.
     auc = float(_trapz(conc, sol.t))

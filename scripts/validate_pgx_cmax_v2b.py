@@ -104,7 +104,7 @@ def _cmax_auc_tmax(graph, drug: DrugOnGraph) -> tuple[float, float, float]:
     y0[compiled.state_index[drug.administration_node]] = drug.dose_mg
     res = solve(compiled, params, y0, t_span=(0.0, float(_T_EVAL[-1])), t_eval=_T_EVAL)
     conc, time = res.concentrations["venous_blood"], res.time_h
-    trapz = getattr(np, "trapezoid", np.trapz)
+    trapz = np.trapezoid if hasattr(np, "trapezoid") else np.trapz
     auc_0t = float(trapz(conc, time))
     i0 = int(len(time) * 0.7)
     tt, ct = time[i0:], conc[i0:]
@@ -171,7 +171,7 @@ def _steady_state_exposure(graph, drug, interval_h: float, n_doses: int,
     conc, time = res.concentrations["venous_blood"], res.time_h
     mask = time >= (t_total - interval_h - 1e-9)
     ct, tt = conc[mask], time[mask]
-    trapz = getattr(np, "trapezoid", np.trapz)
+    trapz = np.trapezoid if hasattr(np, "trapezoid") else np.trapz
     if metric == "cmax_ss":
         return float(ct.max())
     auc_tau = float(trapz(ct, tt))

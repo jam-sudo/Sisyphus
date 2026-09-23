@@ -163,7 +163,7 @@ def _solve(graph, drug):
 
 
 def _zone_amounts(res, n):
-    trapz = getattr(np, "trapezoid", np.trapz)
+    trapz = np.trapezoid if hasattr(np, "trapezoid") else np.trapz
     t = np.asarray(res.time_h)
     return [float(trapz(np.asarray(res.amounts[f"metabolite__ax{i+1}"]), t)) for i in range(n)]
 

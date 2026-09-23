@@ -64,7 +64,8 @@ def simulate(graph, drug):
         raise RuntimeError("solver failed")
     c = result.concentrations["venous_blood"]
     cmax = float(np.max(c))
-    auc = float(np.trapz(c, result.time_h))
+    trapz = np.trapezoid if hasattr(np, "trapezoid") else np.trapz
+    auc = float(trapz(c, result.time_h))
     return cmax, auc
 
 
@@ -132,8 +133,8 @@ def main():
         f"{niemi['EM'][1]/auc_em:>10.2f}{niemi['PM'][1]/auc_pm:>10.2f}"
     )
     print(
-        f"\nNote: AUC obs is 0-12h; pred is 0-24h. Pravastatin t1/2 ~1.8h → "
-        f"24h AUC ~ 12h AUC + ~ε; comparison is valid within ~5%."
+        "\nNote: AUC obs is 0-12h; pred is 0-24h. Pravastatin t1/2 ~1.8h → "
+        "24h AUC ~ 12h AUC + ~ε; comparison is valid within ~5%."
     )
 
 
