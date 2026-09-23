@@ -42,6 +42,26 @@ _IVIVE_SCALING = 6e-5  # from reference_man.yaml
 # GFR: glomerular filtration rate (L/h)
 _GFR_L_PER_H = 7.5  # ~125 mL/min = 7.5 L/h
 
+# Urine flow at the end of the nephron (L/h). Scotcher et al. 2016,
+# Eur J Pharm Sci 94:59-71 (doi:10.1016/j.ejps.2016.03.018) assume 1 mL/min.
+_URINE_FLOW_L_PER_H = 0.06  # 1 mL/min
+
+# Effective lumped tubular surface area (cm^2) for scaling peff -> PS.
+# Back-calculated from the Scotcher 2016 mechanistic-model calibration point:
+# their 5-compartment model reaches F' = 0.5 (half of urine/plasma equilibrium)
+# at Caco-2 Papp = 14.8e-6 cm/s under a pH 6.5/7.4 gradient. In the
+# one-compartment reduction used below F' = PS/(PS + UF), so F' = 0.5 means
+# PS = UF = 0.06 L/h. Sisyphus `peff` is in-vivo-calibrated Caco-2
+# (peff = 10**1.29 * Papp ~= 19.5x, adme._CACO2_TO_INVIVO_OFFSET), putting the
+# half-reabsorption point at peff = 2.886e-4 cm/s, hence
+#   TSA = 0.06 L/h * 1000 cm3/L / (2.886e-4 cm/s * 3600 s/h) = 57.8 cm^2.
+# This is an EFFECTIVE area, well below the geometric proximal-tubule area: a
+# well-stirred tubule sees fully concentrated filtrate everywhere and so
+# over-reabsorbs relative to Scotcher's 5-region plug-flow-with-water-removal
+# structure, and the lumping difference is absorbed here. Anchored to the
+# published renal model ONLY — never fitted to Sisyphus Cmax loss (Invariant #8).
+_TUBULAR_SURFACE_AREA_CM2 = 57.8
+
 # ---------------------------------------------------------------------------
 # Enzyme abundances (pmol, total organ) — from reference_man.yaml
 # ---------------------------------------------------------------------------
@@ -539,23 +559,46 @@ def _compute_all_kp(
 # ---------------------------------------------------------------------------
 
 
-def _estimate_renal_clearance(fup: Distribution, profile: MolecularProfile) -> Distribution:
-    """Estimate renal clearance from GFR and fraction unbound.
+def _estimate_renal_clearance(fup: Distribution, peff: Distribution) -> Distribution:
+    """Estimate renal clearance from filtration and passive tubular reabsorption.
 
-    For drugs undergoing glomerular filtration without active secretion:
-        CL_renal = GFR * fup
+    One-compartment (well-stirred) tubule mass balance: drug enters by
+    glomerular filtration (``fup * GFR``), leaves in urine (``UF * C_tubule``),
+    and exchanges passively across the tubular wall in both directions
+    (``PS * (C_tubule - fup * C_plasma)``). At steady state this gives
 
-    Active secretion/reabsorption would require transporter data.
+        CL_renal = fup * UF * (GFR + PS) / (UF + PS)
+
+    algebraically identical to the Scotcher et al. 2016 formulation
+    ``CL = fup * GFR * (1 - F_reabs)``, ``F_reabs = F' * (1 - UF/GFR)``,
+    ``F' = PS / (PS + UF)``, reduced to a single tubular region.
+
+    Limits: ``PS -> 0`` recovers ``fup * GFR`` (impermeable; filtration only),
+    ``PS -> inf`` gives ``fup * UF`` (equilibrates with plasma, so the drug
+    leaves only as fast as water does). The previous model was the ``PS = 0``
+    limit applied to *every* drug, which over-predicted renal clearance for
+    permeable, high-fup compounds (e.g. caffeine, paracetamol) by ~an order of
+    magnitude — they are filtered freely but almost entirely reabsorbed.
+
+    NOT modelled: active secretion (so secretion-dominant drugs are still
+    under-predicted), pH/ionisation-dependent reabsorption, and peff
+    uncertainty — the returned cv tracks fup only.
 
     Args:
         fup: Fraction unbound in plasma.
-        profile: Molecular profile (reserved for future use, e.g. charge-based
-            reabsorption estimates).
+        peff: Effective permeability (x10^-4 cm/s).
 
     Returns:
         Renal clearance (L/h) as Distribution.
     """
-    cl_renal = _GFR_L_PER_H * fup.mean
+    # peff (x10^-4 cm/s) * TSA (cm^2) -> L/h
+    ps_l_per_h = peff.mean * 1e-4 * 3600.0 * _TUBULAR_SURFACE_AREA_CM2 / 1000.0
+    cl_renal = (
+        fup.mean
+        * _URINE_FLOW_L_PER_H
+        * (_GFR_L_PER_H + ps_l_per_h)
+        / (_URINE_FLOW_L_PER_H + ps_l_per_h)
+    )
     return Distribution(mean=cl_renal, cv=fup.cv)
 
 
@@ -748,7 +791,7 @@ def build_drug_on_graph(
     particle_radius = _estimate_particle_radius(adme.solubility)
 
     # Estimate renal clearance
-    renal_cl = _estimate_renal_clearance(adme.fup, profile)
+    renal_cl = _estimate_renal_clearance(adme.fup, adme.peff)
 
     # Set administration node based on route
     if route == "oral":

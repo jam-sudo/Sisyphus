@@ -315,7 +315,7 @@ class ClearanceFluxSpec(FluxSpec):
             renal_cl = params.drug_param("renal_clearance")
             if renal_cl <= 0:
                 return
-            # RBP-2: renal_cl = GFR·fup is plasma-basis → filter PLASMA A/(V·Kp),
+            # RBP-2: renal_cl (fup-scaled, ivive.py) is plasma-basis → filter PLASMA A/(V·Kp),
             # not blood. The convective edge supplies flow limitation.
             v = params.node_param(self.source_name, "volume")
             kp = params.drug_kp(self.source_name)

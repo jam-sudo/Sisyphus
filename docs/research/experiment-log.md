@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-07-03
+last_updated: 2026-09-22
 parent: ../../README.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -9,6 +9,44 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 Reverse-chronological. The project README carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
 
 ---
+
+## 2026-09-22 — Passive tubular reabsorption: renal CL is no longer filtration-only (correctness; headline-neutral)
+
+`_estimate_renal_clearance` was `CL_renal = GFR·fup` for every drug — the zero-permeability
+limit, i.e. everything filtered is excreted and nothing is reabsorbed. That over-predicts renal
+CL by ~an order of magnitude for permeable, high-fup drugs, which are filtered freely and then
+almost entirely reabsorbed. Replaced with the one-compartment (well-stirred) tubule balance
+
+    CL_renal = fup · UF · (GFR + PS) / (UF + PS),    PS = peff · TSA
+
+reusing the already-predicted `peff`; `UF` = 1 mL/min urine flow. This is algebraically identical
+(verified to machine precision) to the Scotcher et al. 2016 form `fup·GFR·(1−F_reabs)` with
+`F_reabs = F'(1−UF/GFR)`, `F' = PS/(PS+UF)`, reduced to a single tubular region
+(Eur J Pharm Sci 94:59-71, doi:10.1016/j.ejps.2016.03.018). Limits are exact: `PS→0` recovers
+the old `fup·GFR`, `PS→∞` gives `fup·UF`. `TSA = 57.8 cm²` is back-calculated from that paper's
+own model calibration point (F′=0.5 at Caco-2 Papp 14.8e-6 cm/s) through the existing
+`_CACO2_TO_INVIVO_OFFSET`; it is an *effective* lumped area (a well-stirred tubule over-reabsorbs
+vs the 5-region plug-flow structure, and the lumping difference lands here). **Anchored to the
+published renal model only — never fitted to Cmax loss (Invariant #8).**
+
+- **Renal CL vs clinical** (fold error, old → new): caffeine 52.6→13.0, antipyrine 25.6→5.3,
+  theophylline 10.9→3.4, paracetamol 9.5→3.4, midazolam 11.9→3.4. Secretion-dominant drugs
+  (metformin, atenolol, lisinopril) are unchanged-and-still-under-predicted — active secretion
+  is explicitly out of scope and now documented as such.
+- **Headline: neutral.** 107-holdout, public-clone, local stack (reproduces the committed cache
+  bit-identically): Meta 2.7428 → **2.7416** (−0.0012), Engine 4.2779 → 4.2548 (−0.0232), ML
+  unchanged. Meta %2-fold and %3-fold are unchanged; Engine %2-fold is unchanged and %3-fold
+  moves 43.9% → 43.0%. 37/107 engine Cmax values move, all ≤4%. Consistent
+  with DE-43 (the fixed-weight meta damps engine moves) — renal is a minor elimination route for
+  most holdout drugs. Ships on correctness, not on the number.
+- **PK-DB curve check** (open-licence timecourses, old vs new on the same canonical engine):
+  curve fold error improves caffeine 28.0→24.9, paracetamol IV 32.7→29.2, oral 22.5→21.4;
+  midazolam unchanged (1.96→1.95). Directionally right but small — the dominant residual on
+  those two curves is the CLint assay-floor artifact, not renal (DE-58).
+
+The committed `4track_holdout_predictions.json` is **not** regenerated here (macOS is not the
+canonical numerics stack); the Δ is within the ±0.020 pin so `test_cached_holdout_aafe_is_2p743`
+still passes against the existing cache. A canonical Linux regen is the follow-up.
 
 ## 2026-07-07 (cont.) — N50' clean re-curation: infeasible from repo data (pool=0), deferred to human-led curation
 
