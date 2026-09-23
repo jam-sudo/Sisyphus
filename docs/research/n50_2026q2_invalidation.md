@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-07-04
+last_updated: 2026-09-23
 parent: ./cherry_picking_process_v1.md
 charter: Record that the N50 secondary-holdout cycle 2026Q2 is invalidated as a never-touch generalization instrument. Binding — the 2026Q2 freeze AAFE (5.25) must not be cited as a generalization result.
 ---
@@ -45,11 +45,18 @@ salt-insensitive) against every shipped SMILES-bearing artifact:
 | **Meta-weight tuning** | 2 | elafibranor + vimseltinib appear in `data/validation/meta_weight_sweep_cache.json` — a direct violation of the §1 "no track-weight tuning against N50" rule |
 | **DrugBank enrichment** (soft E4) | **47 / 50** | only 3 drugs pass the conservative E4 rule |
 
+**2026-09-23 provenance correction:** The 47/50 count is an identity-superset
+overlap, not a verified count of fup training rows. However, the shipped fup v2
+training recipe does use DrugBank protein-binding targets. Without its licensed
+fitted subset, a DrugBank hit cannot be cleared as merely enrichment. The
+current N50 audit therefore rejects either repository-source or DrugBank hits.
+
 The synonym misses are the tell: name matching cannot equate *rifampin* with
 *rifampicin* or *torsemide* with *torasemide*, but they are the same molecule and
 were in the MMPK Cmax training set. InChIKey-14 catches all of them. The audit is
 reproducible with `scripts/build_n50_exclusion.py --audit
-data/reference/holdout_n50.json` (exits non-zero: "FAIL: 21/50 in hard corpora").
+data/reference/holdout_n50.json` in an environment with the licensed DrugBank
+identity source (exits non-zero on both classes of hits).
 
 ## Composition confound (separate from contamination)
 
@@ -73,8 +80,9 @@ smoke test (post FLUX-1 / CLF / UGT, the same headline pipeline) gives **5.27** 
 i.e. the result is pipeline-version-stable, so staleness is not the issue; the
 curation is.
 
-The cleanest number extractable from the existing set — drugs clean of every hard
-corpus **and** oral (N=24 genuinely-novel oral NMEs) — is AAFE **≈4.0**, versus
+The least repository-contaminated number extractable from the existing set —
+drugs clean of the then-classified hard corpora **and** oral (N=24, with
+DrugBank/fup membership unresolved) — is AAFE **≈4.0**, versus
 the 107-holdout on the same local numerics stack (~2.62). That ~1.5× gap is real,
 but it **corroborates the already-documented prospective degradation** (the
 FDA-NME prospective set is AAFE 3.27, root cause = bioavailability-F
@@ -87,7 +95,7 @@ pure cherry-picking optimism.
 
 1. **Exclusion tooling fixed.** `scripts/build_n50_exclusion.py` now keys on
    InChIKey-14 across **all** hard corpora plus DrugBank, and gained an `--audit`
-   mode that fails on any hard-corpus hit. This is the gate any future N50' must
+   mode that fails on any repository or DrugBank hit. This is the gate any future N50' must
    pass **before** curation, not after.
 2. **The instrument is marked invalid in-band.** `holdout_n50.json` and the freeze
    JSON carry an `invalidated` block; `scripts/run_n50_benchmark.py` refuses a

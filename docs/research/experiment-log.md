@@ -10,6 +10,18 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-23 (cont.) — DrugBank fup provenance and N50 fail-closed gate
+
+The checked-in fup v2 training script merges TDC PPBR_AZ with DrugBank
+protein-binding targets; the 2026-03-24 ablation record reports 2,753 merged
+training samples. Its old manifest named only TDC, so the source description
+now names both inputs while retaining `unknown_legacy` for the missing fitted
+snapshot hash. The public clone does not have the licensed DrugBank fup subset.
+The N50 identity audit previously returned success on a DrugBank-only hit,
+despite requiring absence from both maps to claim a never-seen candidate. It
+now fails on such hits conservatively. This does not retroactively validate
+any earlier N50 or external performance result.
+
 ## 2026-09-23 (cont.) — CL/F and Vd/F training source pinned from canonical regen
 
 Commit `3168e90` co-committed the leak-free `clf_training.csv` and the two

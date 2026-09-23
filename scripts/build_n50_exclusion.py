@@ -21,16 +21,17 @@ every shipped training/enrichment artifact and:
       report per-source counts.
 
   --audit N50_FILE -- cross-check a curated N50 file's SMILES against the
-      inventory and print a contamination report (hard training corpora vs the
-      softer DrugBank-enrichment pool). Exits non-zero for missing sources,
-      unparseable candidates, or hard-corpus hits.
+      inventory and print a contamination report (repository training corpora
+      and conservative DrugBank membership). Exits non-zero for missing
+      sources, unparseable candidates, or either corpus hit.
 
 Hard corpora (a hit = disqualifying, including conservative pre-exclusion
 sources whose exact fitted rows are not proven): Omega MMPK Cmax source,
 MMPK Cmax x3, CLF, bioavailability, expanded CLint x2, VDss, TDC hepatocyte.
-DrugBank is reported separately: presence there
-means the drug COULD have been an ADME-enrichment source (spec E4 is
-conservative -- treat as seen), but it is not itself a fitted-target leak.
+DrugBank is reported separately because the exact fup-trained subset is
+unavailable in the public clone. The shipped fup v2 training recipe uses its
+protein-binding values, so any DrugBank identity is a conservative potential
+fitted-target hit and disqualifies a never-seen candidate.
 """
 
 from __future__ import annotations
@@ -79,7 +80,7 @@ HARD_SOURCES: list[tuple[str, str, str | None, str]] = [
 ]
 # TDC hepatocyte is positional (col0 = ChEMBL id, col1 = SMILES, tab-delimited).
 TDC_HEP = "data/training/clearance_hepatocyte_az.tab"
-# DrugBank enrichment pool (soft E4); carries a precomputed inchikey_14 column.
+# DrugBank identity superset; the fitted fup subset is unavailable publicly.
 DRUGBANK = "data/drugbank/drugs.csv"
 
 EXCLUSION_OUT = "data/reference/n50_exclusion_ik14.json"
@@ -125,7 +126,7 @@ def _ingest_hard(root: pathlib.Path) -> dict[str, set[str]]:
 
 
 def _ingest_drugbank(root: pathlib.Path) -> dict[str, str]:
-    """IK14 -> drug name for the DrugBank enrichment pool."""
+    """IK14 -> drug name for the conservative DrugBank identity superset."""
     db: dict[str, str] = {}
     fp = root / DRUGBANK
     if not fp.exists():
@@ -165,8 +166,8 @@ def build(root: pathlib.Path) -> int:
     inventory = {
         "description": (
             "N50 exclusion inventory keyed on InChIKey-14 (connectivity block, "
-            "stereo/salt-insensitive). hard_corpora = fitted-target leakage; "
-            "drugbank = softer E4 enrichment presence. Built by "
+            "stereo/salt-insensitive). hard_corpora = training-source overlap; "
+            "drugbank = potential fup fitted-target overlap (also excluding). Built by "
             "scripts/build_n50_exclusion.py."
         ),
         "hard_corpora": {k: sorted(v) for k, v in sorted(hard.items())},
@@ -218,9 +219,9 @@ def audit(root: pathlib.Path, n50_path: pathlib.Path) -> int:
     if unparseable:
         print(f"  ** unparseable SMILES: {unparseable}")
 
-    print(f"\n--- HARD training-corpus hits (fitted-target leakage): {len(hard_hits)} ---")
+    print(f"\n--- Repository training-source hits: {len(hard_hits)} ---")
     if not hard_hits and not unparseable:
-        print("  NONE — clean of every ML/engine training corpus by IK14. ✓")
+        print("  NONE — no repository source hits by IK14.")
     elif not hard_hits:
         print("  No hits among parsed structures; unparseable candidates remain unresolved.")
     for name, key, tags in hard_hits:
@@ -228,22 +229,20 @@ def audit(root: pathlib.Path, n50_path: pathlib.Path) -> int:
         for tag in tags[:8]:
             print(f"       {tag}")
 
-    print(f"\n--- DrugBank-enrichment presence (soft E4): {len(db_hits)} ---")
+    print(f"\n--- DrugBank potential fup-training hits: {len(db_hits)} ---")
     for name, key in db_hits:
         print(f"  ~ {name} ({key})")
 
     print("\n--- VERDICT ---")
-    if hard_hits or unparseable:
+    if hard_hits or db_hits or unparseable:
         print(
-            f"  FAIL: {len(hard_hits)} hard-corpus hits and {len(unparseable)} "
+            f"  FAIL: {len(hard_hits)} repository hits, {len(db_hits)} DrugBank hits, "
+            f"and {len(unparseable)} "
             f"unparseable structures among {len(drugs)} drugs. This N50 is NOT "
             f"a valid never-touch generalization instrument."
         )
         return 1
-    print(
-        f"  PASS on hard corpora. {len(db_hits)}/{len(drugs)} touch DrugBank "
-        f"(spec E4 is conservative — review each before freeze)."
-    )
+    print("  PASS: no repository or DrugBank identity hits.")
     return 0
 
 
@@ -254,7 +253,7 @@ def main() -> int:
         type=pathlib.Path,
         metavar="N50_FILE",
         help="audit a curated N50 JSON for IK14 contamination (non-zero exit on "
-        "any hard-corpus hit) instead of building the inventory",
+        "any repository or DrugBank hit) instead of building the inventory",
     )
     args = parser.parse_args()
     if args.audit is not None:

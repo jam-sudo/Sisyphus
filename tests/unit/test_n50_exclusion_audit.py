@@ -110,3 +110,13 @@ def test_audit_rejects_unparseable_candidate(excl_module, tmp_path, monkeypatch,
     candidate.write_text(json.dumps({"drugs": {}}))
     with pytest.raises(ValueError, match="non-empty drugs"):
         excl_module.audit(tmp_path, candidate)
+
+
+def test_audit_rejects_drugbank_only_identity_hit(excl_module, tmp_path, monkeypatch):
+    key = excl_module.ik14("CCO")
+    monkeypatch.setattr(excl_module, "_require_sources", lambda root: None)
+    monkeypatch.setattr(excl_module, "_ingest_hard", lambda root: {})
+    monkeypatch.setattr(excl_module, "_ingest_drugbank", lambda root: {key: "ethanol"})
+    candidate = tmp_path / "candidate.json"
+    candidate.write_text(json.dumps({"drugs": {"test": {"smiles": "CCO"}}}))
+    assert excl_module.audit(tmp_path, candidate) == 1

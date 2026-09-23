@@ -3,7 +3,7 @@
   "artifact_sha256": "3ac08bf5dee4a7b5f7ebf9e058882f6101f965959f88a094de4db76c4b47e1f1",
   "target": "logit(fup), output via sigmoid to (0, 1)",
   "trained_on": {
-    "dataset_path": "TDC PPBR_AZ (holdout-excluded)",
+    "dataset_path": "TDC PPBR_AZ + DrugBank protein_binding fup (holdout-excluded)",
     "sha256": "unknown_legacy"
   },
   "feature_schema": {

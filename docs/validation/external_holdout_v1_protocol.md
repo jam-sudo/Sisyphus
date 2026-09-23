@@ -329,9 +329,11 @@ recorded in `freeze.training_membership_sha256`. That file pins 12 conservative
 corpus inputs used by `scripts/audit_external_holdout_manifest.py`; the audit and
 prediction runner verify every listed source hash before continuing. The ignored
 N50 convenience inventory is not a freeze dependency. Raw licensed DrugBank
-exports are not currently pinned; if a production model was fitted on them,
-its training membership must be made auditable under the chosen resource
-profile before the external gate can pass.
+exports are not currently pinned. The checked-in fup v2 training recipe uses
+DrugBank protein-binding targets alongside TDC PPBR_AZ, and the model's source
+hash remains unknown. Its fitted membership must be made auditable under the
+chosen resource profile, or the model must be reproducibly retrained without
+that source, before the external gate can pass.
 
 The inventory includes the [Omega `mmpk_clean.csv` source at commit
 `08a45047`](https://github.com/jam-sudo/Omega/blob/08a45047a2b5dcdca8c9a8f36ff1fe3b50ed3d6d/data/ml/clinical/mmpk_clean.csv),
