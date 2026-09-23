@@ -63,6 +63,11 @@ N=120 before curation begins, but must then define the relevant effect as at lea
    parent active-moiety mg; record the reported mass and conversion in that
    evidence. Salt/solvate mass alone or an unknown basis is not primary-eligible.
    Both curators verify this mapping before the prediction manifest is frozen.
+   Record the first permitted post-dose meal time as `postdose_fast_h`; primary
+   fasted arms require at least four food-free hours after dosing. Unknown
+   timing stays non-primary, even if a source calls the pre-dose state fasted.
+   This threshold follows [ICH M13A's fasting-study meal standard](https://www.ema.europa.eu/system/files/documents/scientific-guideline/ich-m13a-guideline-bioequivalence-immediate-release-solid-oral-dosage-forms_step-5_en.pdf)
+   and the diagnostic P0 adjudication rule.
 5. Store labels encrypted or in a separate access-controlled repository. The
    custodian retains both identities and outcomes until the container is frozen.
    The evaluator receives the frozen container plus a label-free arm manifest
@@ -75,9 +80,10 @@ The label-free, blinded-label, and frozen-prediction contracts are pinned in
 `data/reference/external_holdout_v1_predictions.schema.json`. Every executable
 stage validates these schemas. Primary eligibility is recomputed from the label
 metadata at scoring; the manifest boolean is never trusted by itself.
-The dose-basis requirement was added on 2026-09-23 after diagnostic P0 exposed
-a possible verlukast-sodium ambiguity. No V1 cohort or predictions had been
-frozen; P0 remains development evidence and is not a V1 test.
+The dose-basis and post-dose meal requirements were added on 2026-09-23 after
+diagnostic P0 exposed a possible verlukast-sodium ambiguity and fasted-study
+meal-timing ambiguity. No V1 cohort or predictions had been frozen; P0 remains
+development evidence and is not a V1 test.
 
 ### Operational acquisition plan
 

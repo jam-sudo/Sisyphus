@@ -181,6 +181,7 @@ def _synthetic_contracts(n: int = 120):
             "dosage_form": "tablet",
             "release_type": "IR",
             "food_state": "fasted",
+            "postdose_fast_h": 4.0,
             "salt_form": None,
             "dose_basis": "parent_active_moiety",
             "dose_basis_evidence": "Source table reports 10 mg of parent drug.",
@@ -316,6 +317,18 @@ def test_scorer_rejects_unverified_dose_basis_even_with_matching_hash(basis):
     arm["salt_form"] = "sodium"
     arm["dose_basis"] = basis
     arm["dose_basis_evidence"] = "Original reports 10 mg tablet; active-moiety basis unconfirmed."
+    arm["source_record_hash"] = source_record_hash(arm)
+    manifest["compounds"][0]["arms"][0]["source_record_hash"] = arm["source_record_hash"]
+    joined = scorer.join_predictions_and_labels(predictions["rows"], labels)
+    with pytest.raises(ValueError, match="Derived eligibility mismatch"):
+        scorer.validate_results_against_manifest(joined, manifest)
+
+
+def test_scorer_rejects_early_postdose_meal_even_with_matching_hash():
+    scorer = _module()
+    manifest, predictions, labels = _synthetic_contracts()
+    arm = labels["records"][0]["arms"][0]
+    arm["postdose_fast_h"] = 2.0
     arm["source_record_hash"] = source_record_hash(arm)
     manifest["compounds"][0]["arms"][0]["source_record_hash"] = arm["source_record_hash"]
     joined = scorer.join_predictions_and_labels(predictions["rows"], labels)

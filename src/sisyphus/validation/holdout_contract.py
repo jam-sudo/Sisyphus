@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 from collections import Counter
 from collections.abc import Callable
 from datetime import date
@@ -54,6 +55,7 @@ _SOURCE_HASH_FIELDS = (
     "dosage_form",
     "release_type",
     "food_state",
+    "postdose_fast_h",
     "salt_form",
     "dose_basis",
     "dose_basis_evidence",
@@ -78,10 +80,17 @@ def primary_ineligibility_reasons(label_arm: dict[str, Any]) -> tuple[str, ...]:
     """Derive primary eligibility; a supplied boolean is never trusted."""
 
     population = label_arm.get("population") or {}
+    postdose_fast_h = label_arm.get("postdose_fast_h")
     checks = {
         "route_not_oral": label_arm.get("route") != "oral",
         "release_not_ir": label_arm.get("release_type") != "IR",
         "not_fasted": label_arm.get("food_state") != "fasted",
+        "postdose_fast_under_4h": (
+            isinstance(postdose_fast_h, bool)
+            or not isinstance(postdose_fast_h, (int, float))
+            or not math.isfinite(postdose_fast_h)
+            or postdose_fast_h < 4
+        ),
         "dose_basis_unverified": label_arm.get("dose_basis") != "parent_active_moiety",
         "dose_basis_evidence_missing": not label_arm.get("dose_basis_evidence"),
         "not_parent_analyte": label_arm.get("analyte") != "parent",

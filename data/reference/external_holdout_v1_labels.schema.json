@@ -21,7 +21,7 @@
               "type": "object",
               "required": [
                 "arm_id", "dose_mg", "route", "dosage_form", "release_type",
-                "food_state", "salt_form", "dose_basis", "dose_basis_evidence",
+                "food_state", "postdose_fast_h", "salt_form", "dose_basis", "dose_basis_evidence",
                 "analyte", "matrix", "dose_regimen",
                 "population", "co_medications", "observed_cmax_mg_l", "study_n",
                 "source", "source_record_hash", "verified_by"
@@ -33,6 +33,7 @@
                 "dosage_form": {"type": "string", "minLength": 1},
                 "release_type": {"enum": ["IR", "ER", "MR", "unknown"]},
                 "food_state": {"enum": ["fasted", "fed", "mixed", "unknown"]},
+                "postdose_fast_h": {"type": ["number", "null"], "minimum": 0},
                 "salt_form": {"type": ["string", "null"]},
                 "dose_basis": {"enum": ["parent_active_moiety", "salt_or_solvate_mass", "unknown"]},
                 "dose_basis_evidence": {"type": "string", "minLength": 1},
