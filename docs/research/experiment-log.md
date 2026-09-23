@@ -10,6 +10,17 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-23 (cont.) — Omega Cmax source recovered for conservative exclusion
+
+Recovered the public Omega `mmpk_clean.csv` snapshot at commit `08a45047`
+and pinned its 1,128 rows in the external exclusion inventory. Three-key
+matching against the 107-compound holdout excludes 100 rows, leaving 1,028,
+exactly the counts recorded for the 2026-04-04 Cmax retrain. The target mean
+also matches the fitted model's stored base score. A fresh fit with the
+recorded hyperparameters did not reproduce the shipped trees or predictions,
+so exact fitted-row provenance remains unverified and the external V1 gate
+continues to fail closed. See the protocol for the snapshot hash.
+
 ## 2026-09-23 (cont.) — Regulatory identity-pool overlap before external curation
 
 An outcome-free join of the pinned FDA NME, EMA medicine-page, EMA Article 57,

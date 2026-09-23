@@ -325,7 +325,7 @@ the manifest, then run it again; only the second report is the passing freeze ga
 
 For the public profile, `freeze.training_membership_path` must point to
 `data/validation/training_membership_sources_v1.json` and its SHA256 must be
-recorded in `freeze.training_membership_sha256`. That file pins 11 conservative
+recorded in `freeze.training_membership_sha256`. That file pins 12 conservative
 corpus inputs used by `scripts/audit_external_holdout_manifest.py`; the audit and
 prediction runner verify every listed source hash before continuing. The ignored
 N50 convenience inventory is not a freeze dependency. Raw licensed DrugBank
@@ -333,9 +333,15 @@ exports are not currently pinned; if a production model was fitted on them,
 its training membership must be made auditable under the chosen resource
 profile before the external gate can pass.
 
-This inventory currently contains conservative repository corpora, but the
-shipped model metadata still names several unavailable training datasets with
-`sha256: unknown_legacy` (including Omega `mmpk_clean.csv` for direct Cmax).
+The inventory includes the [Omega `mmpk_clean.csv` source at commit
+`08a45047`](https://github.com/jam-sudo/Omega/blob/08a45047a2b5dcdca8c9a8f36ff1fe3b50ed3d6d/data/ml/clinical/mmpk_clean.csv),
+SHA256 `e7228d14bdfdfc6c790177207779630c1e5655c19d451528c87b80e2e9de9c3d`.
+Its 1,128 rows yield the documented 100 exclusions and 1,028 remaining rows
+under the current 107-compound holdout and three-key matching. This recovers a
+conservative Cmax exclusion source, not the exact fitted snapshot: retraining
+with the recorded hyperparameters and current feature code did not reproduce
+the shipped model's tree dump or predictions. The shipped model metadata still
+has `sha256: unknown_legacy`, as do several other fitted models.
 It therefore does not prove exact model-training membership. The audit and
 prediction runner fail closed until each production fitted model names a
 repository-relative, hash-matched training dataset included in the pinned

@@ -25,9 +25,10 @@ every shipped training/enrichment artifact and:
       softer DrugBank-enrichment pool). Exits non-zero for missing sources,
       unparseable candidates, or hard-corpus hits.
 
-Hard corpora (a hit = the drug's Cmax / CLint / F / VDss was in a model's
-training set = real leakage): MMPK Cmax x3, CLF, bioavailability, expanded
-CLint x2, VDss, TDC hepatocyte. DrugBank is reported separately: presence there
+Hard corpora (a hit = disqualifying, including conservative pre-exclusion
+sources whose exact fitted rows are not proven): Omega MMPK Cmax source,
+MMPK Cmax x3, CLF, bioavailability, expanded CLint x2, VDss, TDC hepatocyte.
+DrugBank is reported separately: presence there
 means the drug COULD have been an ADME-enrichment source (spec E4 is
 conservative -- treat as seen), but it is not itself a fitted-target leak.
 """
@@ -48,6 +49,8 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 from sisyphus.validation.identity import (  # noqa: E402
     _largest_organic_fragment as _largest_organic_fragment,
+)
+from sisyphus.validation.identity import (  # noqa: E402
     ik14,
 )
 
@@ -63,6 +66,8 @@ HARD_SOURCES: list[tuple[str, str, str | None, str]] = [
     # Raw ADME memberships used by the production fup and Peff artifacts.
     ("data/ppbr_az.tab", "Drug", "Drug_ID", "\t"),
     ("data/caco2_wang.tab", "Drug", "Drug_ID", "\t"),
+    # Upstream Omega source for the shipped Cmax model; includes pre-exclusion rows.
+    ("data/training/omega_mmpk_clean.csv", "smiles", "name", ","),
     ("data/training/mmpk_expanded_full.csv", "canon_smiles", "name", ","),
     ("data/training/mmpk_expanded_v2.csv", "canon_smiles", "name", ","),
     ("data/training/mmpk_pbpk_features.csv", "smiles", "name", ","),
