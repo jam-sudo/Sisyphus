@@ -1,6 +1,6 @@
 """Ensemble and meta-learner for combining predictions.
 
-The meta-learner combines engine PK, ML PK, and CL/F analytical PK
+The meta-learner combines engine PK, ML PK, CL/F analytical PK, and VDss volume-proxy
 predictions into a final point estimate using a geometric-weighted
 combination in log space.
 
@@ -45,14 +45,16 @@ _DISAGREEMENT_THRESHOLD_LOG10 = 1.0  # 10-fold disagreement
 
 
 class MetaLearner:
-    """Combines engine, ML, and CL/F Cmax predictions via adaptive geometric weighting.
+    """Combines engine, ML, CL/F, and VDss Cmax estimates via geometric weighting.
 
     Uses a geometric-weighted mean in log space:
         log10(Cmax_final) = w_eng * log10(Cmax_engine)
                           + w_ml * log10(Cmax_ml)
                           + w_clf * log10(Cmax_clf)
+                          + w_vdss * log10(Cmax_vdss)
 
-    Weights are adaptive by compound_type and subject to disagreement penalty.
+    Only available tracks enter the blend. Weights are adaptive by compound_type
+    and subject to a disagreement penalty.
     """
 
     def __init__(

@@ -106,7 +106,7 @@ The full pipeline combines mechanistic simulation with data-driven prediction:
 4. **PBPK simulation**: 34-state ODE system solved via LSODA (Petzold, 1983)
 5. **ML direct prediction**: XGBoost C<sub>max</sub> model (trained on 1,128 drugs from multi-source clinical PK data)
 6. **CL/F analytical track**: closed-form 1-compartment C<sub>max</sub> estimate using XGBoost CL/F + V<sub>d</sub> predictions and k<sub>a</sub> from Engine T<sub>max</sub> / Peff. Decorrelates with Engine+ML residuals via different input channels.
-7. **VDss analytical track**: 1-compartment C<sub>max</sub> using XGBoost VDss (volume-of-distribution-at-steady-state). It is included whenever a positive VDss estimate is available; this routing was selected on N=107 and is not an independently validated applicability rule.
+7. **VDss volume proxy**: dose divided by predicted VDss (volume-of-distribution-at-steady-state) for a fixed 70 kg body weight. This is a simple scale estimate, not an absorption/elimination C<sub>max</sub> model. It is included whenever a positive VDss estimate is available; this routing was selected on N=107 and is not an independently validated applicability rule.
 8. **Meta-learner**: Compound-type-adaptive geometric blend of all four tracks with weights selected by LOOCV on the repeatedly accessed N=107 development set. Base compounds: engine 0.60 / ML 0.40 / CLF 0.00; non-base: engine 0.35 / ML 0.50 / CLF 0.15. VDss track weight 0.20 when activated; other weights scaled by ×0.80 so the four-track sum remains unity. These weights are frozen pending blinded external evaluation.
 
 ### Uncertainty propagation
