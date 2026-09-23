@@ -200,6 +200,20 @@ drug identities and linking to monographs, but direct Cmax table acquisition
 still requires following the primary product documents. A keyword mention is
 not an eligible PK observation.
 
+A cross-source identity check on the snapshots above (FDA XLSX SHA256
+`0dd3e4683901e3b8c41ee6bd0f54bac1c33eaae95f1fae8679e6b3b0b45502cd`)
+found 93 of the 310 EMA 2020–2025 active-substance strings with an exact
+normalized-name match to an Article 57 product whose comma-separated route
+list contains the `Oral Use` token. The FDA oral-NDA set and those EMA names
+yield 711 distinct strings after lowercasing and removing non-alphanumeric
+characters. Adding Health Canada's 124 distinct 2020–2026 medicinal-ingredient
+strings yields 808. This is a mechanical discovery count, not an eligible or
+decontaminated cohort: exact names miss salt/synonym matches, EMA rows can be
+biologics, and the Canada subset was not route-filtered. These three bounded
+subsets alone do not establish the 900-name inventory; older Article 57 products,
+investigational compounds, or other agency sources must be enumerated under a
+predeclared source window. No observed Cmax was read for this count.
+
 The official [ClinicalTrials.gov API v2](https://clinicaltrials.gov/data-about-studies/learn-about-api)
 provides another discovery route. A metadata-only pull on 2026-09-23 for
 `AREA[OutcomeMeasureTitle]Cmax` returned 5,868 result-posted studies. Among

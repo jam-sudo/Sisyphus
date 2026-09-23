@@ -10,6 +10,18 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-23 (cont.) — Regulatory identity-pool overlap before external curation
+
+An outcome-free join of the pinned FDA NME, EMA medicine-page, EMA Article 57,
+and Health Canada snapshots found 682 oral FDA NDA names, 93 recent EMA names
+with an exact Article 57 `Oral Use` match, and 124 recent Canada ingredient
+names. Deduplication by lowercase alphanumeric name leaves 808 strings across
+the three subsets. This does not imply 808 eligible or structure-clean drugs;
+Canada was not route-filtered, and exact names miss salt/synonym equivalents.
+The 900-identity acquisition milestone needs additional older or
+investigational sources. No Cmax outcomes were accessed. Method and snapshot
+hashes are in `docs/validation/external_holdout_v1_protocol.md`.
+
 ## 2026-09-23 (cont.) — External audit blocks unknown production-model membership
 
 The external-holdout exclusion union pinned 11 repository corpora, but the
