@@ -33,12 +33,19 @@ console.error = (...a) => {
   origError(...a);
 };
 
-globalThis.fetch = async () => ({
-  ok: true,
-  status: 200,
-  json: async () => JSON.parse(data),
-  text: async () => data,
-});
+let resolvePrediction;
+globalThis.fetch = async (url) => {
+  if (String(url).endsWith("/health"))
+    return { ok: true, json: async () => ({ version: "0.4.0" }) };
+  if (String(url).endsWith("/predict"))
+    return new Promise((resolve) => { resolvePrediction = resolve; });
+  return {
+    ok: true,
+    status: 200,
+    json: async () => JSON.parse(data),
+    text: async () => data,
+  };
+};
 
 const root = document.getElementById("root");
 
@@ -79,8 +86,15 @@ assert(root.textContent.includes("Caffeine"), "default drug Caffeine renders");
 assert(root.textContent.includes("Cmax") || root.querySelector(".statcell"), "endpoint stats render");
 assert(root.querySelector("svg.chart"), "concentration-time chart renders");
 assert(root.textContent.includes("in domain"), "AD badge renders");
+assert(!root.textContent.includes("split-conformal"), "no invalid conformal claim renders");
+assert(!root.textContent.includes("external holdout"), "N=107 is not labeled external holdout");
+assert(document.querySelector('input[type="number"]')?.disabled, "preset dose cannot be rescaled");
+assert(root.textContent.includes("Dose/AUC"), "24h exposure proxy is labeled without CL/F claim");
+assert(JSON.parse(data).drugs.every((d) =>
+  "doseOverAuc0t" in d.disposition && !("clf" in d.disposition)
+), "all presets use the corrected disposition contract");
 
-const WF = ["predict", "simulate", "tdm", "ddi", "dose-adjust", "benchmark"];
+const WF = ["predict", "benchmark"];
 for (const w of WF) {
   await clickNav(w);
   const tabCount = document.querySelectorAll(".tabs button").length;
@@ -98,6 +112,29 @@ await clickNav("benchmark");
 await clickTab(0);
 const circles = document.querySelectorAll(".content svg.chart circle");
 assert(circles.length >= 100, `benchmark scatter renders ${circles.length} points (≥100)`);
+
+if (process.env.SMOKE_LIVE_RACE) {
+  await clickNav("predict");
+  const picker = document.querySelector(".rail-fields select");
+  picker.value = "custom";
+  picker.dispatchEvent(new window.Event("change", { bubbles: true }));
+  await settle();
+  const smiles = document.querySelector("input.smiles");
+  const setInput = (value) => {
+    Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set.call(smiles, value);
+    smiles.dispatchEvent(new window.Event("input", { bubbles: true }));
+  };
+  setInput("CCO");
+  await settle();
+  document.querySelector(".btn-run").click();
+  await settle();
+  assert(!!resolvePrediction, "live request started");
+  setInput("CCN");
+  await settle();
+  resolvePrediction({ ok: true, json: async () => ({ ...JSON.parse(data).drugs[0], name: "Stale result" }) });
+  await settle();
+  assert(!root.textContent.includes("Stale result"), "old live response cannot replace edited inputs");
+}
 
 const realErrors = errors.filter(
   (e) => !/Warning:|act\(|StrictMode|defaultProps|deprecated/i.test(e)

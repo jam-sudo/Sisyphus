@@ -1,76 +1,28 @@
-# Reproducibility — Install & Lockfile
+# Reproducibility Contract
 
-Sisyphus pins its full dependency graph via `requirements-lock.txt` for reproducible installs. CI (`.github/workflows/ci.yml`) installs from this lockfile so local and CI environments match.
+Official metrics are generated with the `public` resource profile in the locked
+release container. The default profile ignores local licensed DrugBank exports
+and gitignored residual-correction models. A licensed research run must declare
+`SISYPHUS_PROFILE=licensed_research` and cannot produce the public headline.
 
-## Quick install (use the lockfile)
+Installed code locates the versioned model/data bundle through `SISYPHUS_ROOT`.
+Runtime results carry the active profile and SHA256 values for every primary Cmax
+artifact. The API exposes the same information and a versioned `/model-info`
+contract; the web client rejects an incompatible API major/minor version.
 
-```bash
-pip install -r requirements-lock.txt
-pip install -e .
-```
-
-This pins every transitive dep to the exact version tested.
-
-## Fresh install from source (unpinned)
-
-```bash
-pip install -e '.[ml,chem,dev]'
-```
-
-Transitive versions float within `pyproject.toml` constraints. Useful for local experimentation; not recommended for reproducing benchmark numbers.
-
-### Optional: SBI (Simulation-Based Inference)
-
-SBI training + TDM dispatching requires torch + sbi + nflows. These are NOT in `requirements-lock.txt` (would add ~1 GB to CI install). Install the `[sbi]` extra separately if you need to run SBI features:
+Use `scripts/prediction_trace.py` to compare environments stage by stage:
 
 ```bash
-pip install -e '.[sbi]'
+SISYPHUS_PROFILE=public SISYPHUS_ROOT=/path/to/bundle \
+  python scripts/prediction_trace.py --smiles '...' --dose 100 --out trace.json
 ```
 
-Without the `[sbi]` extra, `pytest.importorskip("torch")` cleanly skips SBI test modules. Non-SBI code paths (engine, ML, pipeline, TDM non-SBI methods) work without torch.
+The trace records descriptors, predicted ADME, each Cmax track, effective weights,
+engine endpoints, mass balance, time-grid hash, curve hash, environment versions,
+and artifact hashes. Compare the first diverging stage rather than treating an
+aggregate AAFE change as a model change.
 
-## Regenerating `requirements-lock.txt`
-
-Run from repository root:
-
-```bash
-python3 -m venv /tmp/sis_lock_env
-source /tmp/sis_lock_env/bin/activate
-pip install --upgrade pip
-pip install -e '.[ml,chem,dev]'
-pip freeze --exclude-editable > requirements-lock.txt
-deactivate
-rm -rf /tmp/sis_lock_env
-```
-
-**Always regenerate from a fresh venv**, not from your daily dev env. A typical dev env carries unrelated packages (chemprop, descriptastorus, mordred, `rdkit-pypi` etc.) that will pollute the lockfile and bloat CI install time.
-
-Regenerate when:
-- `pyproject.toml` dependencies change
-- An upstream CVE requires a version bump
-- A transitive version drift causes reproducibility loss
-
-## RDKit
-
-Project uses the PyPI-maintained `rdkit` package (2023.9+). Do NOT use the older community fork `rdkit-pypi` — it is deprecated and incompatible with newer numpy.
-
-If `pip install rdkit` fails on a non-standard platform:
-- Try conda: `conda install -c conda-forge rdkit`
-- Document the platform-specific workaround in this file
-- CI runs Ubuntu latest and resolves `rdkit` from PyPI without issue
-
-## CI install path
-
-`.github/workflows/ci.yml` mirrors the Quick Install above. It is not a secret third path.
-
-## Numpy 2.x
-
-Lockfile pins `numpy==2.2.6`. Sisyphus is compatible with numpy 2.x (no deprecated `np.bool`/`np.int`/`np.float` usage). If future code needs numpy 1.x behavior, pin `numpy<2` in `pyproject.toml` and regenerate the lockfile.
-
-## Platform markers
-
-`requirements-lock.txt` is generated on Linux. Some entries are Linux-only:
-
-- `nvidia-nccl-cu12` (xgboost GPU dep): marked `; platform_system == "Linux"`. Skipped on macOS/Windows installs.
-
-If you regenerate the lockfile on a different platform, verify markers are preserved by the pip version you use. Plain `pip freeze` drops markers; if you need cross-platform guarantees use `pip-compile` (pip-tools) or `uv pip compile` instead.
+Release acceptance targets are median per-drug Cmax drift below 1%, maximum drift
+below 5%, and aggregate AAFE drift below 0.02 across the canonical cross-platform
+smoke panel. Until those gates are met, only the release-container numbers are
+official; native-platform runs are diagnostic.

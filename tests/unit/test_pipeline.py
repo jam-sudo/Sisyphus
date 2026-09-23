@@ -1,11 +1,26 @@
 """Unit tests for pipeline/predict.py — end-to-end SMILES -> PredictionResult."""
 
+import numpy as np
 import pytest
 
 from sisyphus.core import PredictionResult
 
 
 class TestPipeline:
+    @pytest.mark.parametrize("dose", [0, -1, float("nan"), float("inf")])
+    def test_rejects_nonpositive_or_nonfinite_dose(self, dose):
+        from sisyphus.pipeline.predict import predict
+
+        with pytest.raises(ValueError, match="positive and finite"):
+            predict("CCO", dose)
+
+    @pytest.mark.parametrize("route", ["sc", "IV", "", None])
+    def test_rejects_unknown_route_instead_of_defaulting_to_oral(self, route):
+        from sisyphus.pipeline.predict import predict
+
+        with pytest.raises(ValueError, match="route must be"):
+            predict("CCO", 10.0, route=route)
+
     def test_end_to_end_caffeine(self):
         """Full pipeline: caffeine 100mg oral -> PredictionResult."""
         from sisyphus.pipeline.predict import predict
@@ -37,6 +52,9 @@ class TestPipeline:
 
         result = predict("Cn1c(=O)c2c(ncn2C)n(C)c1=O", dose_mg=100.0, route="iv")
         assert result.route == "iv"
+        assert result.method == "engine"
+        assert result.ml_pk is None
+        assert result.cmax_prediction.residual_interval_90 is None
 
     def test_result_has_warnings_tuple(self):
         """PredictionResult always has a warnings tuple."""
@@ -45,6 +63,21 @@ class TestPipeline:
         result = predict("Cn1c(=O)c2c(ncn2C)n(C)c1=O", dose_mg=100.0)
         assert isinstance(result.warnings, tuple)
 
+    def test_strict_solver_nonconvergence_raises(self, monkeypatch):
+        import sisyphus.engine.solver as solver
+        from sisyphus.core import SimResult
+        from sisyphus.pipeline.predict import predict
+
+        def failed_solve(*args, **kwargs):
+            return SimResult(
+                time_h=np.array([0.0]), concentrations={}, amounts={},
+                mass_balance_error=0.0, solver_success=False,
+            )
+
+        monkeypatch.setattr(solver, "solve", failed_solve)
+        with pytest.raises(RuntimeError, match="ODE solver did not converge"):
+            predict("CCO", 10.0, strict=True)
+
     def test_result_has_ad_flags(self):
         """PredictionResult carries applicability domain flags."""
         from sisyphus.pipeline.predict import predict
@@ -52,6 +85,28 @@ class TestPipeline:
         result = predict("Cn1c(=O)c2c(ncn2C)n(C)c1=O", dose_mg=100.0)
         assert isinstance(result.ad_flags, tuple)
         assert isinstance(result.in_applicability_domain, bool)
+
+    def test_final_cmax_and_engine_simulation_are_separate_contracts(self):
+        from sisyphus.pipeline.predict import predict
+
+        result = predict("Cn1c(=O)c2c(ncn2C)n(C)c1=O", dose_mg=100.0)
+        assert result.cmax_prediction is not None
+        assert result.engine_simulation is not None
+        assert result.cmax_prediction.cmax.mean == result.pk.cmax.mean
+        assert result.engine_simulation.endpoints == result.engine_pk
+        assert len(result.engine_simulation.time_h) == len(
+            result.engine_simulation.concentration_mg_l
+        )
+        assert dict(result.cmax_prediction.tracks)["engine"] == pytest.approx(
+            result.engine_pk.cmax.mean
+        )
+
+    def test_ad_membership_never_claims_high_confidence(self):
+        from sisyphus.pipeline.predict import predict
+
+        result = predict("Cn1c(=O)c2c(ncn2C)n(C)c1=O", dose_mg=100.0)
+        assert result.confidence in {"medium", "low"}
+        assert result.resource_profile == "public"
 
 
 # ── engine_f surfacing (review #10): opt-in F_engine on PredictionResult ──

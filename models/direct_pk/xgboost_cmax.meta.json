@@ -1,5 +1,6 @@
 {
   "version": "v3_clean",
+  "artifact_sha256": "b99c283d206cee4c0b2a13f34a1c4a54af2da0379d7bd27651e197f68d792ead",
   "target": "log10(cmax_mg_L / dose_mg)",
   "trained_on": {
     "dataset_path": "mmpk_clean.csv (Omega) with N=107 holdout 3-key exclusion",
@@ -10,7 +11,7 @@
     "name": "compute_features_v1",
     "n_features": 2057,
     "sha256": "b41dddd78533661b8f4aed86bdb7c5f55d15ed3cd2ad20b39e9100557eda631e",
-    "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, NumHeavyAtoms). See src/sisyphus/descriptors.py::compute_features."
+    "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, MolMR). See src/sisyphus/descriptors.py::compute_features."
   },
   "trained_at": "2026-04-04T15:05:09-0400",
   "n_drugs_original": 1128,

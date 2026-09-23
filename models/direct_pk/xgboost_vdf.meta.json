@@ -1,5 +1,6 @@
 {
   "version": "v1",
+  "artifact_sha256": "2fa38e6ea51206f02e71d131979dacc645cd700350ae57c46da0967b90ea761e",
   "target": "log10(Vd/F L/kg)",
   "trained_on": {
     "dataset_path": "MMPK clinical PK (holdout-excluded)",
@@ -9,7 +10,7 @@
     "name": "compute_features_v1",
     "n_features": 2057,
     "sha256": "b41dddd78533661b8f4aed86bdb7c5f55d15ed3cd2ad20b39e9100557eda631e",
-    "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, NumHeavyAtoms). See src/sisyphus/descriptors.py::compute_features."
+    "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, MolMR). See src/sisyphus/descriptors.py::compute_features."
   },
   "trained_at": "unknown_legacy",
   "n_drugs_original": null,

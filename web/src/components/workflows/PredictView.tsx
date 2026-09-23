@@ -1,45 +1,41 @@
 /* ============================================================
    PredictView — SMILES → PK. Curve is the REAL engine ODE
-   profile (scaled to the displayed Cmax); headline Cmax is the
-   real meta-learner output; the 90% PI is the real conformal
+   profile from the same solve; headline Cmax is the
+   meta-learner output; the 90% PI is the residual conformal
    interval; tracks/weights are the real applied values.
    ============================================================ */
 import type { AppState, Drug } from "../../types";
-import { ConcChart, McHistogram } from "../charts";
-import { StatLine, TrackBars, BodyGraph, Legend, Caveat, Pill, PipelineLog, fmt, type LogLine } from "../panels";
-import { band, engineCurve, displayedCmax, scaleTracks } from "../../pk";
+import { ConcChart } from "../charts";
+import { StatLine, TrackBars, BodyGraph, Legend, PipelineLog, fmt, type LogLine } from "../panels";
+import { engineCurve, displayedCmax } from "../../pk";
 
-function predictLog(drug: Drug, s: AppState, meta: number): LogLine[] {
-  const scale = s.dose / drug.dose;
-  const eng = (drug.tracks.engine ?? 0) * scale;
-  const ml = (drug.tracks.ml ?? 0) * scale;
+function predictLog(drug: Drug, meta: number): LogLine[] {
+  const eng = drug.tracks.engine ?? 0;
+  const ml = drug.tracks.ml ?? 0;
   return [
     { ts: "0.000 s", tag: "info", tagText: "chem", msg: `RDKit descriptors · MW <b>${drug.mw}</b> · type <b>${drug.type}</b>` },
     { ts: "0.031 s", tag: "ok", tagText: "ad", msg: "applicability domain — " + (drug.inDomain ? "<b>in-domain</b>" : "<b>out-of-domain</b> (flagged)") },
     { ts: "0.052 s", tag: "info", tagText: "adme", msg: `XGBoost fᵤₚ=${fmt(drug.disposition.fup)} · CLᵢₙₜ · Rʙ:ₚ=1.0 · VDₛₛ` },
     { ts: "0.118 s", tag: "info", tagText: "ivive", msg: `CLᵢₙₜ → per-enzyme affinity · primary <b>${drug.primaryEnzyme}</b>` },
-    { ts: "0.224 s", tag: "ok", tagText: "engine", msg: `LSODA 34-state solve · mass-balance err &lt; 10⁻¹² · Cₘₐₓ <b>${fmt(eng)}</b>` },
+    { ts: "0.224 s", tag: "ok", tagText: "engine", msg: `LSODA PBPK solve · mass-balance err <b>${fmt(drug.engineDiagnostics?.massBalanceError)}</b> · Cₘₐₓ <b>${fmt(eng)}</b>` },
     { ts: "0.341 s", tag: "info", tagText: "ml", msg: `direct XGBoost Cₘₐₓ <b>${fmt(ml)}</b>` },
-    { ts: "0.402 s", tag: "ok", tagText: "meta", msg: `4-track geometric blend → Cₘₐₓ <b>${fmt(meta)} mg/L</b> · confidence <b>${drug.confidence}</b>` },
+    { ts: "0.402 s", tag: "ok", tagText: "meta", msg: `4-track geometric blend → Cₘₐₓ <b>${fmt(meta)} mg/L</b> · confidence <b>not calibrated</b>` },
   ];
 }
 
 export function PredictView({ drug, s, tab, running }: { drug: Drug; s: AppState; tab: number; running: boolean }) {
-  const scale = s.dose / drug.dose;
-  const displayed = displayedCmax(drug, s.method) * scale; // headline Cmax for the method
+  const displayed = displayedCmax(drug, s.method);
   const cmax = displayed;
-  const auc = drug.meta.auc * scale; // engine AUC (consistent with the curve)
-  const meta = drug.meta.cmax * scale;
-  const engCmax = (drug.tracks.engine ?? drug.meta.cmax) * scale; // == curve peak
-  const curve = engineCurve(drug, s.dose); // real engine ODE profile, dose-scaled
-  const bandMC = band(curve, 1.45, 0.62);
+  const auc = drug.meta.auc;
+  const meta = drug.meta.cmax;
+  const engCmax = drug.tracks.engine ?? drug.meta.cmax;
+  const curve = engineCurve(drug);
   const tEnd = drug.curve.t[drug.curve.t.length - 1] || Math.max(drug.meta.thalf * 4, 12);
   // does the headline (meta/ml) diverge from the engine-curve peak?
   const headlineDiffersFromCurve = Math.abs(displayed - engCmax) / Math.max(engCmax, 1e-9) > 0.02;
-  // real conformal 90% PI, scaled linearly with dose
-  const piLo = drug.cmax90ci[0] * scale;
-  const piHi = drug.cmax90ci[1] * scale;
-  const showBand = s.nmc > 1 && s.method === "hybrid";
+  const residualPi = s.method === "hybrid"
+    ? (drug.residualInterval90 ?? drug.cmax90ci)
+    : null;
 
   if (tab === 0)
     return (
@@ -48,11 +44,11 @@ export function PredictView({ drug, s, tab, running }: { drug: Drug; s: AppState
           <div className="panel">
             <h5>
               Plasma concentration · time
-              <span className="meta">{s.route} · single dose · {showBand ? "MC band" : "deterministic"}</span>
+              <span className="meta">{s.route} · single dose · deterministic engine curve</span>
             </h5>
             <ConcChart
               series={[{ pts: curve, color: "var(--blue)" }]}
-              bands={showBand ? [{ upper: bandMC.upper, lower: bandMC.lower, color: "var(--blue-soft)" }] : []}
+              bands={[]}
               vlines={[{ x: drug.meta.tmax, color: "var(--blue)" }]}
               hlines={headlineDiffersFromCurve ? [{ y: displayed, color: "var(--clay)", dash: "5 4" }] : []}
               points={[{ t: drug.meta.tmax, c: engCmax, color: "var(--blue)" }]}
@@ -63,18 +59,18 @@ export function PredictView({ drug, s, tab, running }: { drug: Drug; s: AppState
           <div style={{ height: 14 }} />
           <StatLine
             items={[
-              { k: "C<sub>max</sub>", v: fmt(cmax), u: "mg/L", ci: "90% PI " + fmt(piLo) + "–" + fmt(piHi) },
+              { k: "C<sub>max</sub>", v: fmt(cmax), u: "mg/L", ci: residualPi ? "development residual 90% band " + fmt(residualPi[0]) + "–" + fmt(residualPi[1]) : "no validated interval for this track" },
               { k: "T<sub>max</sub>", v: fmt(drug.meta.tmax), u: "h" },
               { k: "t½", v: fmt(drug.meta.thalf), u: "h" },
               { k: "AUC<sub>0–t</sub>", v: fmt(auc), u: "mg·h/L" },
             ]}
           />
           <div className="figcap">
-            <b>FIG.</b> Engine ODE profile for {drug.name} {s.dose} mg {s.route} (34-state, venous blood); the dot marks the engine-track C<sub>max</sub>.{" "}
+            <b>FIG.</b> Engine ODE profile for {drug.name} {s.dose} mg {s.route}; the dot marks the engine-track C<sub>max</sub>.{" "}
             {headlineDiffersFromCurve
               ? <>Dashed line = the <span style={{ fontStyle: "normal" }}>{s.method}</span> C<sub>max</sub> ({fmt(displayed)} mg/L), the production estimate. </>
               : null}
-            The 90% PI is the train-calibrated conformal interval.
+            The Meta band is an empirical development-residual interval, not an independent conformal guarantee.
           </div>
         </div>
         <div className="stack">
@@ -87,7 +83,7 @@ export function PredictView({ drug, s, tab, running }: { drug: Drug; s: AppState
                 </span>
               ) : s.method === "engine" ? (
                 <span>
-                  <b>Engine only.</b> 34-state PBPK ODE, no ML correction.
+                  <b>Engine only.</b> PBPK ODE, no ML correction.
                 </span>
               ) : (
                 <span>
@@ -97,7 +93,7 @@ export function PredictView({ drug, s, tab, running }: { drug: Drug; s: AppState
             </p>
             <div style={{ marginTop: 12 }}>
               <TrackBars
-                drug={{ tracks: scaleTracks(drug, scale), weights: drug.weights, primaryEnzyme: drug.primaryEnzyme }}
+                drug={{ tracks: drug.tracks, weights: drug.weights, primaryEnzyme: drug.primaryEnzyme }}
                 meta={s.method === "hybrid" ? meta : null}
                 showWeights
               />
@@ -105,11 +101,11 @@ export function PredictView({ drug, s, tab, running }: { drug: Drug; s: AppState
           </div>
           <div className="panel">
             <h5>Disposition</h5>
-            <div className="kv"><span className="kk">CL/F</span><span className="vv">{fmt(drug.disposition.clf)} L/h</span></div>
+            <div className="kv"><span className="kk">Dose/AUC<sub>0–24h</sub></span><span className="vv">{fmt(drug.disposition.doseOverAuc0t)} L/h</span></div>
             <div className="kv"><span className="kk">V<sub>d</sub> (V<sub>ss</sub>·70)</span><span className="vv">{fmt(drug.disposition.vdss != null ? drug.disposition.vdss * 70 : null)} L</span></div>
             <div className="kv"><span className="kk">f<sub>u,p</sub></span><span className="vv">{fmt(drug.disposition.fup)}</span></div>
             <div className="kv"><span className="kk">k<sub>a</sub></span><span className="vv">{fmt(drug.pkfit.ka)} h⁻¹</span></div>
-            <div className="kv"><span className="kk">Mass balance</span><span className="vv">&lt; 10⁻¹²</span></div>
+            <div className="kv"><span className="kk">Mass balance error</span><span className="vv">{fmt(drug.engineDiagnostics?.massBalanceError)}</span></div>
           </div>
         </div>
       </div>
@@ -125,14 +121,14 @@ export function PredictView({ drug, s, tab, running }: { drug: Drug; s: AppState
           </h5>
           <div style={{ marginTop: 4 }}>
             <TrackBars
-              drug={{ tracks: scaleTracks(drug, scale), weights: drug.weights, primaryEnzyme: drug.primaryEnzyme }}
+              drug={{ tracks: drug.tracks, weights: drug.weights, primaryEnzyme: drug.primaryEnzyme }}
               meta={meta}
               showWeights
             />
           </div>
           <div className="divider" style={{ margin: "16px 0" }} />
           <p className="note" style={{ margin: 0 }}>
-            Tracks are deliberately <b>decorrelated</b>: the mechanistic Engine, a data-driven XGBoost C<sub>max</sub> (ML), a closed-form CL/F analytical, and a conditional VDss track. The meta-learner is a compound-type-adaptive geometric blend with LOOCV-calibrated weights.
+            The mechanistic Engine, direct XGBoost C<sub>max</sub> (ML), closed-form CL/F, and conditional VDss tracks use partly different signals. The compound-type-adaptive weights were selected on the N=107 development benchmark and therefore require confirmation on a new blinded holdout.
           </p>
         </div>
         <div className="stack">
@@ -141,7 +137,7 @@ export function PredictView({ drug, s, tab, running }: { drug: Drug; s: AppState
             {(["engine", "ml", "clf", "vdss"] as const).map((k) => (
               <div className="kv" key={k}>
                 <span className="kk" style={{ textTransform: "capitalize" }}>{k === "clf" ? "CL/F" : k === "vdss" ? "VDss" : k}</span>
-                <span className="vv">{drug.tracks[k] == null ? "— off" : fmt((drug.tracks[k] as number) * scale) + " mg/L"}</span>
+                <span className="vv">{drug.tracks[k] == null ? "— off" : fmt(drug.tracks[k] as number) + " mg/L"}</span>
               </div>
             ))}
             <div className="kv">
@@ -152,7 +148,7 @@ export function PredictView({ drug, s, tab, running }: { drug: Drug; s: AppState
           <div className="panel">
             <h5>Decorrelation</h5>
             <p className="note" style={{ margin: 0, fontSize: 12 }}>
-              Component models correlate at r &gt; 0.95 on holdout residuals — so the blend is provably near-optimal at this sample size. Improvement requires <b>better inputs</b>, not better blending.
+              Development-set performance does not establish that the blend is optimal. Further weight tuning on N=107 risks adaptive overfitting; improvements should be judged once on the preregistered external holdout.
             </p>
           </div>
         </div>
@@ -194,43 +190,13 @@ export function PredictView({ drug, s, tab, running }: { drug: Drug; s: AppState
       </div>
     );
 
-  if (tab === 3)
-    return (
-      <div className="split">
-        <div className="panel">
-          <h5>
-            Monte-Carlo C<sub>max</sub> distribution<span className="meta">illustrative · N≈1000 · CV 0.22</span>
-          </h5>
-          <McHistogram cmax={cmax} cv={0.22} />
-          <div className="figcap">
-            <b>FIG.</b> Parameter-uncertainty propagation only (diagnostic). The calibrated 90% PI is the wider conformal interval {fmt(piLo)}–{fmt(piHi)} mg/L.
-          </div>
-        </div>
-        <div className="stack">
-          <div className="panel">
-            <h5>Interval summary</h5>
-            <div className="kv"><span className="kk">C<sub>max</sub> (meta)</span><span className="vv">{fmt(meta)} mg/L</span></div>
-            <div className="kv"><span className="kk">Conformal 90% PI</span><span className="vv">{fmt(piLo)} – {fmt(piHi)}</span></div>
-            <div className="kv"><span className="kk">MC CV (diagnostic)</span><span className="vv">0.22</span></div>
-            <div className="kv"><span className="kk">Confidence</span><span className="vv"><Pill kind={drug.confidence === "high" ? "ok" : drug.confidence === "medium" ? "dom" : "warn"}>{drug.confidence}</Pill></span></div>
-          </div>
-          <div className="panel">
-            <h5>Calibration · honest by default</h5>
-            <Caveat>
-              The user-facing 90% PI is a train-calibrated <b>split-conformal</b> interval, holdout-validated to <b>0.953</b> coverage at nominal 0.90 — but wide (/÷~13-fold), the honest price of structural error. The Monte-Carlo band is parameter-uncertainty only (empirical coverage <b>29.9%</b>) — a diagnostic, not the calibrated interval.
-            </Caveat>
-          </div>
-        </div>
-      </div>
-    );
-
   // log tab
   return (
     <div className="panel">
       <h5>
         Pipeline trace<span className="meta">deterministic · ~414 ms</span>
       </h5>
-      <PipelineLog running={running} lines={predictLog(drug, s, meta)} />
+      <PipelineLog running={running} lines={predictLog(drug, meta)} />
     </div>
   );
 }

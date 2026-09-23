@@ -1,11 +1,11 @@
-"""Calibrate split-conformal Cmax prediction intervals on the TRAIN set.
+"""Reproduce the legacy development-residual Cmax interval artifact.
 
-Invariant #5: the deployed conformal quantile is fit on the train set (67 drugs),
-NEVER the holdout. The holdout is used only as an honest out-of-sample coverage
-*validation*. Writes data/validation/conformal_calibration.json.
+This is not a valid split-conformal calibration: the direct ML component saw
+part of the calibration outcomes during fitting, and N=107 coverage is consumed
+development evidence. Writes data/validation/development_residual_interval.json.
 
-Note: the ML track is trained on the train Cmax, so the meta's train residuals are
-partially in-sample; the holdout-validation block reports the true deployed coverage.
+Do not use this script to claim independent coverage. A replacement must create
+nested out-of-fold predictions or use a separate untouched calibration cohort.
 
 Run: PYTHONPATH=src python scripts/calibrate_conformal.py
 """
@@ -27,7 +27,7 @@ from sisyphus.validation.reference import load_reference
 
 _LEVELS = {"0.5": 0.5, "0.2": 0.2, "0.1": 0.1, "0.05": 0.05}
 _TRACKS = ("meta", "engine", "ml")
-_OUT = pathlib.Path("data/validation/conformal_calibration.json")
+_OUT = pathlib.Path("data/validation/development_residual_interval.json")
 _HOLDOUT_CACHE = pathlib.Path("data/training/4track_holdout_predictions.json")
 
 
@@ -76,14 +76,15 @@ def main():
 
     holdout = _holdout_arrays()
     artifact = {
-        "method": "split_conformal",
+        "method": "development_empirical_residual_quantile",
         "score": "abs_log10_fold_error",
         "interval": "multiplicative: pred /÷ 10**q",
-        "calibration_set": "train",
+        "calibration_set": "partially_in_sample_development",
         "n_calibration_meta": len(train["meta"]["pred"]),
         "generated_from": "scripts/calibrate_conformal.py",
+        "validity": "not split-conformal; fitted components saw calibration outcomes",
         "tracks": {},
-        "holdout_validation_coverage": {},
+        "consumed_development_benchmark_coverage": {},
     }
 
     print(f"\n{'track':8s} {'level':6s} {'q(log10)':>9s} {'half-width':>11s} {'holdout-cov':>12s}")
@@ -92,19 +93,19 @@ def main():
         obs = np.array(train[t]["obs"])
         scores = nonconformity_scores(pred, obs)
         artifact["tracks"][t] = {}
-        artifact["holdout_validation_coverage"][t] = {}
+        artifact["consumed_development_benchmark_coverage"][t] = {}
         h_pred, h_obs = holdout[t]
         for lvl, alpha in _LEVELS.items():
             q = conformal_quantile(scores, alpha)
             cov = empirical_coverage(h_pred, h_obs, q)
             artifact["tracks"][t][lvl] = q
-            artifact["holdout_validation_coverage"][t][lvl] = round(cov, 4)
+            artifact["consumed_development_benchmark_coverage"][t][lvl] = round(cov, 4)
             hw = "inf" if not np.isfinite(q) else f"/÷{10 ** q:.2f}"
             print(f"{t:8s} {lvl:6s} {q:9.4f} {hw:>11s} {cov:12.3f}")
 
     _OUT.write_text(json.dumps(artifact, indent=2))
     print(f"\nWrote {_OUT}")
-    print("MC baseline at nominal 0.90: 0.299 (documented). Conformal target: ~0.90.")
+    print("MC baseline at nominal 0.90: 0.299 (development diagnostic only).")
 
 
 if __name__ == "__main__":

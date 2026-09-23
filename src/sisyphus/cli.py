@@ -5,7 +5,7 @@ Usage::
     sisyphus predict --smiles "CC(=O)Oc1ccccc1C(=O)O" --dose 500
     sisyphus simulate --smiles "CN(C)C(=N)NC(=N)N" --dose 500 --interval 12 --doses 14
     sisyphus tdm --smiles "Clc1ccc2c(c1)..." --dose 5 --obs "1.0:0.015"
-    sisyphus benchmark --holdout
+    sisyphus benchmark --development-set
 """
 
 from __future__ import annotations
@@ -13,7 +13,8 @@ from __future__ import annotations
 import argparse
 import logging
 import sys
-from pathlib import Path
+
+from sisyphus.resources import get_resource_config
 
 
 def main() -> None:
@@ -25,11 +26,16 @@ def main() -> None:
     pred_parser = subparsers.add_parser("predict", help="Predict PK for a SMILES")
     pred_parser.add_argument("--smiles", required=True, help="SMILES string")
     pred_parser.add_argument("--dose", type=float, required=True, help="Dose in mg")
-    pred_parser.add_argument("--route", default="oral", choices=["oral", "iv"])
+    pred_parser.add_argument(
+        "--route", default="oral", choices=["oral"],
+        help="Production Cmax is validated for oral dosing only",
+    )
     pred_parser.add_argument("--verbose", "-v", action="store_true")
 
     # simulate command (multi-dose)
-    sim_parser = subparsers.add_parser("simulate", help="Multi-dose regimen simulation")
+    sim_parser = subparsers.add_parser(
+        "simulate", help="EXPERIMENTAL: multi-dose engine simulation"
+    )
     sim_parser.add_argument("--smiles", required=True, help="SMILES string")
     sim_parser.add_argument("--dose", type=float, required=True, help="Dose per administration (mg)")  # noqa: E501
     sim_parser.add_argument("--interval", type=float, required=True, help="Dosing interval (hours)")
@@ -38,7 +44,7 @@ def main() -> None:
     sim_parser.add_argument("--verbose", "-v", action="store_true")
 
     # tdm command (Bayesian update)
-    tdm_parser = subparsers.add_parser("tdm", help="TDM Bayesian update")
+    tdm_parser = subparsers.add_parser("tdm", help="EXPERIMENTAL: TDM Bayesian update")
     tdm_parser.add_argument("--smiles", required=True, help="SMILES string")
     tdm_parser.add_argument("--dose", type=float, required=True, help="Dose (mg)")
     tdm_parser.add_argument(
@@ -51,7 +57,7 @@ def main() -> None:
     tdm_parser.add_argument("--n-samples", type=int, default=2000, help="Prior MC samples (default: 2000)")  # noqa: E501
     tdm_parser.add_argument(
         "--method",
-        default="is",
+        default="ibis",
         choices=["is", "ibis", "enkf", "sbi", "auto"],
         help=(
             "TDM method: is (importance sampling) | ibis (iterated batch IS) | "
@@ -79,7 +85,9 @@ def main() -> None:
     tdm_parser.add_argument("--verbose", "-v", action="store_true")
 
     # ddi command
-    ddi_parser = subparsers.add_parser("ddi", help="DDI prediction (inhibition/induction)")
+    ddi_parser = subparsers.add_parser(
+        "ddi", help="EXPERIMENTAL: mechanistic DDI scenario"
+    )
     ddi_parser.add_argument("--smiles", required=True, help="Victim drug SMILES")
     ddi_parser.add_argument("--dose", type=float, required=True, help="Victim dose (mg)")
     ddi_parser.add_argument("--route", default="oral", choices=["oral", "iv"])
@@ -96,7 +104,9 @@ def main() -> None:
     ddi_parser.add_argument("--verbose", "-v", action="store_true")
 
     # dose-adjust command (MIPD)
-    da_parser = subparsers.add_parser("dose-adjust", help="MIPD dose recommendation from TDM")
+    da_parser = subparsers.add_parser(
+        "dose-adjust", help="EXPERIMENTAL: MIPD dose recommendation from TDM"
+    )
     da_parser.add_argument("--smiles", required=True, help="SMILES string")
     da_parser.add_argument("--dose", type=float, required=True, help="Current dose (mg)")
     da_parser.add_argument(
@@ -110,7 +120,7 @@ def main() -> None:
     da_parser.add_argument("--n-samples", type=int, default=2000, help="Prior MC samples")
     da_parser.add_argument(
         "--method",
-        default="is",
+        default="ibis",
         choices=["is", "ibis", "enkf", "sbi", "auto"],
         help="TDM method (same choices as tdm command)",
     )
@@ -121,8 +131,16 @@ def main() -> None:
     da_parser.add_argument("--verbose", "-v", action="store_true")
 
     # benchmark command
-    bench_parser = subparsers.add_parser("benchmark", help="Run holdout benchmark")
-    bench_parser.add_argument("--holdout", action="store_true", help="Run on holdout set only")
+    bench_parser = subparsers.add_parser(
+        "benchmark", help="Run retrospective development benchmark"
+    )
+    bench_parser.add_argument(
+        "--development-set",
+        "--holdout",
+        dest="holdout",
+        action="store_true",
+        help="Run the repeatedly accessed N=107 development set",
+    )
     bench_parser.add_argument("--max-drugs", type=int, default=None, help="Limit number of drugs")
     bench_parser.add_argument(
         "--compute-pi",
@@ -172,16 +190,30 @@ def _run_predict(args: argparse.Namespace) -> None:
 
     print(f"Drug: {result.drug_name}")
     print(f"Method: {result.method}")
-    print(f"Confidence: {result.confidence}")
-    print(f"Cmax: {result.pk.cmax.mean:.4f} mg/L")
-    if result.pk.tmax:
-        print(f"Tmax: {result.pk.tmax.mean:.2f} h")
-    if result.pk.auc_0t:
-        print(f"AUC: {result.pk.auc_0t.mean:.4f} mg*h/L")
-    if result.pk.t_half:
-        print(f"t½: {result.pk.t_half.mean:.2f} h")
-    if result.engine_pk:
-        print(f"  Engine Cmax: {result.engine_pk.cmax.mean:.4f} mg/L")
+    print(f"Execution: {result.execution_status} ({result.resource_profile} profile)")
+    print(
+        "Applicability: "
+        + ("structurally in scope" if result.in_applicability_domain else "flagged")
+        + " (confidence is not calibrated)"
+    )
+    print(f"Final oral Cmax: {result.pk.cmax.mean:.4f} mg/L")
+    if result.cmax_prediction and result.cmax_prediction.residual_interval_90:
+        lo, hi = result.cmax_prediction.residual_interval_90
+        print(
+            f"  Development empirical residual 90% interval: "
+            f"{lo:.4f}–{hi:.4f} mg/L"
+        )
+    if result.cmax_prediction and result.cmax_prediction.parameter_interval_90:
+        lo, hi = result.cmax_prediction.parameter_interval_90
+        print(f"  Parameter-MC 90% interval: {lo:.4f}–{hi:.4f} mg/L")
+    if result.engine_simulation:
+        engine = result.engine_simulation.endpoints
+        print("Engine simulation endpoints (not Meta endpoints):")
+        print(f"  Cmax: {engine.cmax.mean:.4f} mg/L")
+        print(f"  Tmax: {engine.tmax.mean:.2f} h")
+        print(f"  AUC: {engine.auc_0t.mean:.4f} mg*h/L")
+        if engine.t_half:
+            print(f"  t½: {engine.t_half.mean:.2f} h")
     if result.ml_pk:
         print(f"  ML Cmax: {result.ml_pk.cmax.mean:.4f} mg/L")
     if result.warnings:
@@ -218,36 +250,20 @@ def _build_drug_and_graph(
     final enzyme values at runtime.
     """
 
-    import sisyphus.engine.flux  # noqa: F401
-    from sisyphus.engine.compiler import ODECompiler
-    from sisyphus.graph.builder import build_from_yaml
-    from sisyphus.predict.adme import predict_adme
-    from sisyphus.predict.chemistry import compute_profile
-    from sisyphus.predict.ivive import build_drug_on_graph
+    from sisyphus.pipeline.context import prepare_simulation_context
+    from sisyphus.predict.phenotype import parse_phenotype_spec
 
-    _PHYSIOLOGY_DIR = Path(__file__).resolve().parent.parent.parent / "data" / "physiology"
-    graph = build_from_yaml(_PHYSIOLOGY_DIR / "reference_man.yaml")
-    compiled = ODECompiler().compile(graph)
-
-    profile = compute_profile(smiles)
-    adme = predict_adme(profile)
-
-    liver_enzymes = None
-    if "liver" in graph.nodes and graph.nodes["liver"].enzymes:
-        liver_enzymes = {
-            tag: dist.mean for tag, dist in graph.nodes["liver"].enzymes.items()
-        }
-
-    drug = build_drug_on_graph(profile, adme, dose_mg, route, liver_enzymes=liver_enzymes)
-
-    # Apply CYP phenotype AFTER drug build — drug.enzyme_affinity was
-    # calibrated against the reference (unscaled) enzymes, so the engine's
-    # runtime product (node.enzymes × affinity) will now reflect the
-    # phenotype multiplier exactly once.
-    if phenotype_spec:
-        graph = _apply_phenotype(graph, phenotype_spec)
-
-    return graph, compiled, drug
+    phenotypes = parse_phenotype_spec(phenotype_spec) if phenotype_spec else None
+    context = prepare_simulation_context(
+        smiles,
+        dose_mg,
+        route,
+        phenotypes=phenotypes,
+    )
+    if context.phenotype_report.unsupported:
+        unsupported = ", ".join(tag for tag, _ in context.phenotype_report.unsupported)
+        raise ValueError(f"Unsupported phenotype tag(s): {unsupported}")
+    return context.graph, context.compiled, context.drug
 
 
 def _run_simulate(args: argparse.Namespace) -> None:
@@ -255,6 +271,10 @@ def _run_simulate(args: argparse.Namespace) -> None:
     logging.basicConfig(
         level=logging.DEBUG if args.verbose else logging.WARNING,
         format="%(levelname)s %(name)s: %(message)s",
+    )
+    print(
+        "EXPERIMENTAL: multi-dose simulation is not externally clinically validated.",
+        file=sys.stderr,
     )
     import numpy as np
 
@@ -290,7 +310,9 @@ def _run_simulate(args: argparse.Namespace) -> None:
         print(f"SS reached at dose:   {metrics.dose_to_steady_state}")
 
 
-_ROUTING_TABLE_PATH = Path("data/sbi/method_routing.json")
+_ROUTING_TABLE_PATH = get_resource_config().data(
+    "sbi", "method_routing.json", required=False
+)
 
 
 def _resolve_auto_method(drug_name: str) -> tuple[str, bool]:
@@ -347,6 +369,10 @@ def _run_tdm(args: argparse.Namespace) -> None:
     logging.basicConfig(
         level=logging.DEBUG if args.verbose else logging.WARNING,
         format="%(levelname)s %(name)s: %(message)s",
+    )
+    print(
+        "EXPERIMENTAL: TDM methods lack temporally external real-patient validation.",
+        file=sys.stderr,
     )
     from sisyphus.regimen.types import DosingRegimen
 
@@ -445,6 +471,10 @@ def _run_dose_adjust(args: argparse.Namespace) -> None:
         level=logging.DEBUG if args.verbose else logging.WARNING,
         format="%(levelname)s %(name)s: %(message)s",
     )
+    print(
+        "EXPERIMENTAL: dose recommendations are not for clinical use.",
+        file=sys.stderr,
+    )
     from sisyphus.regimen.dosing import recommend_dose
     from sisyphus.regimen.types import DosingRegimen
 
@@ -478,6 +508,18 @@ def _run_dose_adjust(args: argparse.Namespace) -> None:
             args.dose_max if args.dose_max is not None else args.dose * 10,
         )
 
+    dose_method = args.method
+    if dose_method == "auto":
+        dose_method, auto_reweight = _resolve_auto_method(drug.name)
+        if auto_reweight and dose_method == "sbi":
+            print(
+                "Warning: dose-adjust does not support SBI reweight routing; "
+                "using IBIS instead.",
+                file=sys.stderr,
+            )
+            dose_method = "ibis"
+        print(f"[auto] routing {drug.name} → method={dose_method}", file=sys.stderr)
+
     result = recommend_dose(
         compiled, graph, drug, regimen,
         observations=observations,
@@ -486,7 +528,7 @@ def _run_dose_adjust(args: argparse.Namespace) -> None:
         round_increment=args.round_increment,
         n_prior=args.n_samples,
         seed=42,
-        method=args.method,
+        method=dose_method,
     )
 
     print(f"Drug: {drug.name}")
@@ -501,6 +543,7 @@ def _run_dose_adjust(args: argparse.Namespace) -> None:
     print()
     print(f"TDM: {result.tdm_result.n_successful}/{result.tdm_result.n_prior} samples, "
           f"ESS={result.tdm_result.ess:.0f}")
+    print(f"Inference method: {result.inference_method}")
 
 
 def _run_ddi(args: argparse.Namespace) -> None:
@@ -508,6 +551,10 @@ def _run_ddi(args: argparse.Namespace) -> None:
     logging.basicConfig(
         level=logging.DEBUG if args.verbose else logging.WARNING,
         format="%(levelname)s %(name)s: %(message)s",
+    )
+    print(
+        "EXPERIMENTAL: DDI output is a mechanistic scenario, not a clinical prediction.",
+        file=sys.stderr,
     )
     import numpy as np
 
@@ -574,7 +621,7 @@ def _run_ddi(args: argparse.Namespace) -> None:
 
 
 def _run_benchmark(args: argparse.Namespace) -> None:
-    """Run holdout benchmark and print summary metrics."""
+    """Run the retrospective development benchmark and print metrics."""
     logging.basicConfig(
         level=logging.DEBUG if args.verbose else logging.WARNING,
         format="%(levelname)s %(name)s: %(message)s",
@@ -588,7 +635,7 @@ def _run_benchmark(args: argparse.Namespace) -> None:
         n_mc_samples=args.n_mc_samples,
     )
 
-    print("\nBenchmark Results:")
+    print("\nRetrospective development benchmark (not independent holdout):")
     print(f"  Drugs evaluated: {result.n_drugs}")
     print(f"  AAFE: {result.aafe:.3f}")
     print(f"  %2-fold: {result.pct_2fold:.1f}%")

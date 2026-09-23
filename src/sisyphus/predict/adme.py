@@ -12,7 +12,6 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
-from pathlib import Path
 
 import numpy as np
 import xgboost as xgb
@@ -20,12 +19,13 @@ import xgboost as xgb
 from sisyphus.core import Distribution
 from sisyphus.descriptors import compute_features
 from sisyphus.predict.chemistry import MolecularProfile
+from sisyphus.resources import get_resource_config
 
 logger = logging.getLogger(__name__)
 
 # Resolve model directory relative to this source file:
 # src/sisyphus/predict/adme.py -> ../../../../models/adme
-_MODEL_DIR = Path(__file__).resolve().parent.parent.parent.parent / "models" / "adme"
+_MODEL_DIR = get_resource_config().model("adme")
 
 # ---------------------------------------------------------------------------
 # Default CVs for prediction uncertainty (hand-set scalars informed by Omega's
@@ -109,7 +109,9 @@ class MeasuredADMEInput:
                 "MeasuredADMEInput: fup and clint must be supplied together or "
                 "both omitted (they co-determine engine CL_int)."
             )
-        if self.f_bioavail is not None and not (0.0 < self.f_bioavail <= 1.0):
+        if self.f_bioavail is not None and not (
+            np.isfinite(self.f_bioavail) and 0.0 < self.f_bioavail <= 1.0
+        ):
             raise ValueError(
                 f"MeasuredADMEInput.f_bioavail must satisfy 0 < F <= 1, "
                 f"got {self.f_bioavail}"
@@ -118,18 +120,18 @@ class MeasuredADMEInput:
             ("fup", self.fup), ("clint", self.clint), ("peff", self.peff),
             ("vdss", self.vdss), ("rbp", self.rbp), ("solubility", self.solubility),
         ):
-            if val is not None and val <= 0:
-                raise ValueError(f"MeasuredADMEInput.{name} must be > 0, got {val}")
+            if val is not None and (not np.isfinite(val) or val <= 0):
+                raise ValueError(f"MeasuredADMEInput.{name} must be finite and > 0, got {val}")
         for name, cv in (
             ("fup_cv", self.fup_cv), ("clint_cv", self.clint_cv),
             ("peff_cv", self.peff_cv), ("vdss_cv", self.vdss_cv),
             ("rbp_cv", self.rbp_cv), ("solubility_cv", self.solubility_cv),
             ("f_bioavail_cv", self.f_bioavail_cv),
         ):
-            if cv < 0.10:
+            if not np.isfinite(cv) or cv < 0.10:
                 raise ValueError(
-                    f"MeasuredADMEInput.{name}={cv} < 0.10; a CV below 10% implies "
-                    "a unit error and collapses the MC envelope."
+                    f"MeasuredADMEInput.{name}={cv} must be finite and >= 0.10; "
+                    "a CV below 10% implies a unit error and collapses the MC envelope."
                 )
 
 
@@ -147,6 +149,9 @@ def _load_model(filename: str) -> xgb.XGBRegressor:
             raise FileNotFoundError(
                 f"ADME model not found: {path}. Expected models in {_MODEL_DIR}"
             )
+        from sisyphus.ml.registry import verify_model_artifact
+
+        verify_model_artifact(path)
         model = xgb.XGBRegressor()
         model.load_model(str(path))
         _model_cache[filename] = model

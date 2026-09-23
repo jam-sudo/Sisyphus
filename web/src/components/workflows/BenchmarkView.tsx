@@ -1,6 +1,6 @@
 /* ============================================================
-   BenchmarkView — holdout validation. The scatter and per-track
-   AAFE are the REAL N=107 holdout results
+   BenchmarkView — retrospective development evidence. The scatter and per-track
+   AAFE are the REAL N=107 development-benchmark results
    (data/training/4track_holdout_predictions.json).
    ============================================================ */
 import type { ConsoleData } from "../../types";
@@ -20,7 +20,7 @@ export function BenchmarkView({ tab, data }: { tab: number; data: ConsoleData })
       <div className="split">
         <div className="panel">
           <h5>
-            Predicted vs observed C<sub>max</sub><span className="meta">N = {b.n_holdout} · log–log</span>
+            Predicted vs observed C<sub>max</sub><span className="meta">N = {b.n_development} · log–log</span>
           </h5>
           <ScatterChart points={pts} h={360} />
           <div style={{ marginTop: 10 }}>
@@ -45,13 +45,12 @@ export function BenchmarkView({ tab, data }: { tab: number; data: ConsoleData })
                 <tr className="hl"><td>Meta (prod.)</td><td className="big">{f2(b.overall.meta.aafe)}</td><td>{f1(b.overall.meta.pct_2fold)}%</td></tr>
                 <tr><td>Engine</td><td>{f2(b.overall.engine.aafe)}</td><td>{f1(b.overall.engine.pct_2fold)}%</td></tr>
                 <tr><td>ML</td><td>{f2(b.overall.ml.aafe)}</td><td>{f1(b.overall.ml.pct_2fold)}%</td></tr>
-                <tr><td>Meta, in-domain</td><td>{f2(b.in_domain.meta.aafe)}</td><td>{f1(b.in_domain.meta.pct_2fold)}%</td></tr>
               </tbody>
             </table>
           </div>
           <div className="panel">
             <Caveat>
-              The holdout has informed ~47 tuning cycles; a cherry-picking audit scores aggregate risk <b>4.65/10</b>. The headline cannot statistically reject that tuning inflated AAFE — a permanent N50 holdout is planned.
+              N=107 has informed ~47 system-selection cycles and is therefore a <b>development benchmark</b>, not an independent holdout. Its bootstrap interval does not include adaptive-selection bias. The attempted N50 was invalidated; an outcome-blinded external set is still required.
             </Caveat>
           </div>
         </div>
@@ -71,15 +70,15 @@ export function BenchmarkView({ tab, data }: { tab: number; data: ConsoleData })
               <tr><th>Slice</th><th>AAFE</th><th>95% CI</th><th>%2-fold</th><th>N</th></tr>
             </thead>
             <tbody>
-              <tr className="hl"><td>All</td><td className="big">3.27</td><td>2.42–4.37</td><td>28.6%</td><td>28</td></tr>
-              <tr><td>In-domain</td><td>3.37</td><td>2.06–5.23</td><td>37.5%</td><td>16</td></tr>
+              <tr className="hl"><td>All</td><td className="big">3.29</td><td>2.45–4.48*</td><td>25.0%</td><td>28</td></tr>
+              <tr><td>In-domain</td><td>3.32</td><td>diagnostic</td><td>25.0%</td><td>16</td></tr>
             </tbody>
           </table>
         </div>
         <div className="panel">
           <h5>Reading</h5>
           <p className="note" style={{ margin: 0 }}>
-            Prospective generalization is <b>worse</b> than retrospective ({f2(b.overall.meta.aafe)} → 3.27), reversing an earlier favorable read that was a small-sample artifact. New NMEs are markedly harder for the engine — the binding constraint shifts from CL<sub>int</sub> to first-pass <b>bioavailability (F)</b>. The gap is directional, not yet statistically separated.
+            The consumed temporal challenge is <b>worse</b> than the development benchmark ({f2(b.overall.meta.aafe)} → 3.29). New NMEs are markedly harder for the engine, with first-pass <b>bioavailability</b> underprediction prominent. This cohort has now informed diagnosis and cannot serve as the current model's independent holdout. *CI is a read-only diagnostic bootstrap on the current local-stack artifact.
           </p>
         </div>
       </div>
@@ -87,8 +86,8 @@ export function BenchmarkView({ tab, data }: { tab: number; data: ConsoleData })
 
   // tracks tab
   const engW = 100;
-  const mlW = Math.round((c.HOLDOUT_AAFE === 0 ? 0 : c.ML_AAFE / c.ENGINE_AAFE) * 100);
-  const metaW = Math.round((c.HOLDOUT_AAFE / c.ENGINE_AAFE) * 100);
+  const mlW = Math.round((c.DEVELOPMENT_AAFE === 0 ? 0 : c.ML_AAFE / c.ENGINE_AAFE) * 100);
+  const metaW = Math.round((c.DEVELOPMENT_AAFE / c.ENGINE_AAFE) * 100);
   return (
     <div className="stack">
       <div className="panel">
@@ -98,12 +97,12 @@ export function BenchmarkView({ tab, data }: { tab: number; data: ConsoleData })
         </p>
         <div className="trk w"><span className="tn">Engine</span><span className="bar"><i style={{ width: engW + "%", background: "var(--blue)" }} /></span><span className="tv">{f2(c.ENGINE_AAFE)}</span><span className="tw">AAFE</span></div>
         <div className="trk w"><span className="tn">ML</span><span className="bar"><i style={{ width: mlW + "%", background: "var(--ink-soft)" }} /></span><span className="tv">{f2(c.ML_AAFE)}</span><span className="tw">AAFE</span></div>
-        <div className="trk w"><span className="tn">Meta</span><span className="bar"><i style={{ width: metaW + "%", background: "var(--ink)" }} /></span><span className="tv">{f2(c.HOLDOUT_AAFE)}</span><span className="tw">AAFE</span></div>
+        <div className="trk w"><span className="tn">Meta</span><span className="bar"><i style={{ width: metaW + "%", background: "var(--ink)" }} /></span><span className="tv">{f2(c.DEVELOPMENT_AAFE)}</span><span className="tw">AAFE</span></div>
       </div>
       <div className="panel">
         <h5>The weakest link</h5>
         <Caveat>
-          The XGBoost CL<sub>int</sub> model plateaus at R² ≈ <b>0.24</b> across 41 documented approaches — the bottleneck is assay noise in public hepatocyte data, not model capacity. Bayesian TDM mitigates this per-patient (posterior CV −55%).
+          The XGBoost CL<sub>int</sub> model plateaus at R² ≈ <b>0.24</b> across many documented approaches. More architecture search on N=107 is not independent evidence; progress requires cleaner clinical targets, an outcome-blinded holdout, and a pre-registered hypothesis.
         </Caveat>
       </div>
     </div>

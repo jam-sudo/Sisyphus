@@ -72,6 +72,9 @@ graphify-out/
 # Local editor / tooling config (per-machine, not repo-wide)
 .claude/
 
+# Claude Science independent-reproduction outputs (per-session, not repo-wide)
+docs/claude_science/
+
 # Local-only project context and contributor notes (per-user; untracked 2026-05-02 / 2026-06-18)
 CLAUDE.md
 AGENTS.md
@@ -80,6 +83,11 @@ AGENTS.md
 # audit snapshots) kept local-only — external readers don't need the day-to-day
 # scratchpad (untracked 2026-05-30 / 2026-06-18).
 docs/_internal/
+
+# Internal research notes + oracle/ablation experiments and their artifacts
+# (scripts/JSON/PNG). Local-only research scratchpad; not for the public tree
+# (name echoes the retired docs/claude/ convention) (untracked 2026-07-08).
+docs/claude_science/
 
 # Manuscript / preprint / FDA-essay drafts and any binary document (local-only;
 # binary, frequently revised — not version-tracked). The repo tracks ZERO binary

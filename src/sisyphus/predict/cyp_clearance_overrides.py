@@ -18,16 +18,14 @@ from __future__ import annotations
 
 import json
 import logging
-import pathlib
 from functools import lru_cache
+
+from sisyphus.resources import get_resource_config
 
 logger = logging.getLogger(__name__)
 
-_REGISTRY_PATH = (
-    pathlib.Path(__file__).resolve().parent.parent.parent.parent
-    / "data"
-    / "transporters"
-    / "cyp_clearance_overrides.json"
+_REGISTRY_PATH = get_resource_config().data(
+    "transporters", "cyp_clearance_overrides.json", required=False
 )
 
 

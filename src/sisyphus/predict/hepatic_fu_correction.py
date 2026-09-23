@@ -25,12 +25,12 @@ from functools import lru_cache
 from pathlib import Path
 
 from sisyphus.core import Distribution
+from sisyphus.resources import get_resource_config
 
 logger = logging.getLogger(__name__)
 
-_DEFAULT_REGISTRY_PATH = (
-    Path(__file__).resolve().parent.parent.parent.parent
-    / "data" / "transporters" / "hepatic_fu_correction.json"
+_DEFAULT_REGISTRY_PATH = get_resource_config().data(
+    "transporters", "hepatic_fu_correction.json", required=False
 )
 
 _VALID_DISPOSITIONS = frozenset({

@@ -1,0 +1,18 @@
+{
+  "profile": "external_holdout_v1_primary",
+  "route": "oral",
+  "dose_regimen": "single",
+  "simulation_horizon_h": 24.0,
+  "observation_node": "venous_blood",
+  "deterministic_solver": {
+    "method": "LSODA",
+    "rtol": 1e-8,
+    "atol": 1e-10,
+    "output_points": 500,
+    "t_min_h": 0.0
+  },
+  "monte_carlo_samples": 0,
+  "measured_adme": false,
+  "phenotypes": false,
+  "strict": true
+}

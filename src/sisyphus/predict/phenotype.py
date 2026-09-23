@@ -27,7 +27,7 @@ Cooper-DeHoff 2022 (SLCO1B1).
 from __future__ import annotations
 
 import logging
-from dataclasses import replace
+from dataclasses import dataclass, replace
 
 from sisyphus.core import Distribution
 from sisyphus.graph.body import BodyGraph
@@ -63,6 +63,15 @@ NAT2_ACETYLATOR_ALIASES: dict[str, str] = {
     "IA": "IM",
     "RA": "EM",
 }
+
+
+@dataclass(frozen=True)
+class PhenotypeApplicationReport:
+    """Audit record distinguishing requested, applied, and unsupported PGx tags."""
+
+    requested: tuple[tuple[str, str], ...]
+    applied: tuple[tuple[str, str], ...]
+    unsupported: tuple[tuple[str, str], ...]
 
 
 def parse_phenotype_spec(spec: str) -> dict[str, str]:
@@ -169,7 +178,9 @@ def apply_phenotype_to_graph(
     phenotypes: dict[str, str],
     node: str = "liver",
     phenotype_scale_overrides: dict[str, float] | None = None,
-) -> BodyGraph:
+    *,
+    return_report: bool = False,
+) -> BodyGraph | tuple[BodyGraph, PhenotypeApplicationReport]:
     """Return a new BodyGraph with enzyme/transporter abundances scaled.
 
     Args:
@@ -196,8 +207,10 @@ def apply_phenotype_to_graph(
         transporters. The CV is preserved so MC sampling still captures
         population variability *on top of* the phenotype.
     """
+    requested = tuple(phenotypes.items())
     if not phenotypes:
-        return graph
+        report = PhenotypeApplicationReport((), (), ())
+        return (graph, report) if return_report else graph
 
     targets = [
         n for n in graph.nodes.values()
@@ -205,7 +218,17 @@ def apply_phenotype_to_graph(
     ]
     if not targets:
         logger.warning("phenotype: node %r not in graph, skipping", node)
-        return graph
+        report = PhenotypeApplicationReport(requested, (), requested)
+        return (graph, report) if return_report else graph
+
+    supported_tags: set[str] = set()
+    for target in targets:
+        supported_tags.update(target.enzymes)
+        for gene, protein in TRANSPORTER_ALIASES.items():
+            if protein in (getattr(target, "transporters", {}) or {}):
+                supported_tags.add(gene)
+    applied_pairs = tuple((tag, code) for tag, code in requested if tag in supported_tags)
+    unsupported_pairs = tuple((tag, code) for tag, code in requested if tag not in supported_tags)
 
     if phenotype_scale_overrides is not None:
         for tag, phenotype in phenotypes.items():
@@ -255,4 +278,5 @@ def apply_phenotype_to_graph(
     new_graph.nodes = new_nodes
     new_graph.edges = list(graph.edges)
     new_graph.global_params = dict(graph.global_params)
-    return new_graph
+    report = PhenotypeApplicationReport(requested, applied_pairs, unsupported_pairs)
+    return (new_graph, report) if return_report else new_graph

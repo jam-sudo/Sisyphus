@@ -113,9 +113,21 @@ class TestPredictPhenotypesWiring:
         assert dict(result.phenotypes_applied) == {"CYP1A2": "PM"}
 
     def test_phenotypes_applied_round_trips_multi(self):
-        """Multi-gene phenotypes round-trip; dict reconstruction is order-free."""
+        """Only graph-supported genes are reported as actually applied."""
         passed = {"CYP1A2": "PM", "CYP3A5": "EM"}
         result = predict(
             "Cn1c(=O)c2c(ncn2C)n(C)c1=O", dose_mg=100.0, phenotypes=passed,
         )
-        assert dict(result.phenotypes_applied) == passed
+        assert dict(result.phenotypes_requested) == passed
+        assert dict(result.phenotypes_applied) == {"CYP1A2": "PM"}
+        assert dict(result.phenotypes_unsupported) == {"CYP3A5": "EM"}
+        assert result.execution_status == "partial_unsupported_input"
+
+    def test_strict_mode_rejects_unsupported_phenotype(self):
+        with pytest.raises(ValueError, match="Unsupported phenotype"):
+            predict(
+                "Cn1c(=O)c2c(ncn2C)n(C)c1=O",
+                dose_mg=100.0,
+                phenotypes={"CYP3A5": "EM"},
+                strict=True,
+            )

@@ -3,24 +3,17 @@
    Loads real-engine data via the data layer; ported from app.jsx.
    ============================================================ */
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import type { AppState, Drug, Observation, WorkflowId } from "../types";
+import type { AppState, Drug, WorkflowId } from "../types";
 import { useConsoleData, drugById, engineClient } from "../data";
 import { Pill } from "./panels";
 import { RailInputs } from "./RailInputs";
-import { WorkflowView, WORKFLOWS, oid } from "./workflows";
+import { WorkflowView, WORKFLOWS } from "./workflows";
 
 const DEFAULT_STATE: AppState = {
   drugId: "caffeine",
   dose: 100,
   route: "oral",
   method: "hybrid",
-  nmc: 1000,
-  interval: 24,
-  nDoses: 14,
-  obs: [{ id: 0, t: 0.673, c: 0.953 }],
-  assayCv: "10%",
-  inhibitor: "ketoconazole",
-  targetCss: 0.9,
   benchSet: "scaffold",
 };
 
@@ -32,25 +25,11 @@ const num = (v: unknown, fallback: number): number =>
 function sanitize(raw: unknown): AppState {
   const p = (raw && typeof raw === "object" ? raw : {}) as Record<string, unknown>;
   const b = DEFAULT_STATE;
-  let obs: Observation[] = b.obs.map((o) => ({ ...o, id: oid() }));
-  if (Array.isArray(p.obs)) {
-    const cleaned = p.obs
-      .filter((o): o is Record<string, unknown> => !!o && typeof o === "object")
-      .map((o) => ({ id: oid(), t: num((o as Record<string, unknown>).t, 1), c: num((o as Record<string, unknown>).c, 0) }));
-    if (cleaned.length) obs = cleaned;
-  }
   return {
     drugId: typeof p.drugId === "string" && p.drugId !== "custom" ? p.drugId : b.drugId,
     dose: Math.max(0, num(p.dose, b.dose)),
     route: "oral", // static tier is oral-only (IV arrives with the live engine tier)
     method: p.method === "engine" || p.method === "ml" ? p.method : "hybrid",
-    nmc: num(p.nmc, b.nmc),
-    interval: Math.max(0.25, num(p.interval, b.interval)),
-    nDoses: Math.max(2, Math.round(num(p.nDoses, b.nDoses))),
-    obs,
-    assayCv: typeof p.assayCv === "string" ? p.assayCv : b.assayCv,
-    inhibitor: typeof p.inhibitor === "string" ? p.inhibitor : b.inhibitor,
-    targetCss: Math.max(0, num(p.targetCss, b.targetCss)),
     benchSet: typeof p.benchSet === "string" ? p.benchSet : b.benchSet,
   };
 }
@@ -67,10 +46,6 @@ function loadState(): AppState {
 
 const RUN_LABELS: Record<WorkflowId, string> = {
   predict: "Run prediction",
-  simulate: "Simulate regimen",
-  tdm: "Update posterior",
-  ddi: "Apply interaction",
-  "dose-adjust": "Recommend dose",
   benchmark: "Run benchmark",
 };
 
@@ -98,6 +73,9 @@ export function App() {
   const [predictError, setPredictError] = useState<string | null>(null);
   const [smilesDraft, setSmilesDraft] = useState("");
   const [nameDraft, setNameDraft] = useState("");
+  const requestKey = JSON.stringify([s.drugId, s.dose, s.route, smilesDraft.trim(), nameDraft.trim()]);
+  const requestKeyRef = useRef(requestKey);
+  requestKeyRef.current = requestKey;
 
   const set = (patch: Partial<AppState>) => setS((prev) => ({ ...prev, ...patch }));
 
@@ -124,6 +102,23 @@ export function App() {
       /* ignore */
     }
   }, [wf]);
+
+  // Static presets are immutable records of one exact engine solve. Never
+  // fabricate a new dose by rescaling their tracks or concentration curve.
+  useEffect(() => {
+    if (!data || s.drugId === "custom") return;
+    const preset = drugById(data, s.drugId);
+    setS((prev) =>
+      prev.dose === preset.dose && prev.route === "oral"
+        ? prev
+        : { ...prev, dose: preset.dose, route: "oral" }
+    );
+  }, [data, s.drugId]);
+
+  // A live result is valid only for the exact SMILES+dose request that made it.
+  useEffect(() => {
+    if (s.drugId === "custom") setCustomDrug(null);
+  }, [s.drugId, s.dose, s.route, smilesDraft, nameDraft]);
 
   if (loading) {
     return (
@@ -157,6 +152,7 @@ export function App() {
 
   async function run() {
     if (customPredictMode) {
+      const submittedKey = requestKeyRef.current;
       const smiles = smilesDraft.trim();
       if (!smiles) return setPredictError("Enter a SMILES string.");
       if (!live) return setPredictError("Live engine is offline — pick a preset compound.");
@@ -169,11 +165,14 @@ export function App() {
           route: s.route,
           name: nameDraft.trim() || undefined,
         });
-        setCustomDrug(d);
-        setToast("prediction complete · " + d.name);
-        setTimeout(() => setToast(null), 1900);
+        if (requestKeyRef.current === submittedKey) {
+          setCustomDrug(d);
+          setToast("prediction complete · " + d.name);
+          setTimeout(() => setToast(null), 1900);
+        }
       } catch (e) {
-        setPredictError(e instanceof Error ? e.message : String(e));
+        if (requestKeyRef.current === submittedKey)
+          setPredictError(e instanceof Error ? e.message : String(e));
       } finally {
         setPredicting(false);
       }
@@ -183,7 +182,7 @@ export function App() {
     if (runTimer.current) clearTimeout(runTimer.current);
     runTimer.current = setTimeout(() => {
       setRunning(false);
-      setToast(wf === "benchmark" ? "benchmark complete · N=107" : "prediction complete · " + (activeDrug?.name ?? ""));
+      setToast(wf === "benchmark" ? "development benchmark loaded · N=107" : "prediction complete · " + (activeDrug?.name ?? ""));
       setTimeout(() => setToast(null), 1900);
     }, 620);
   }
@@ -207,8 +206,7 @@ export function App() {
     badges = (
       <>
         <Pill kind={activeDrug.inDomain ? "dom" : "warn"}>{activeDrug.inDomain ? "in domain" : "out of domain"}</Pill>
-        <Pill kind={activeDrug.confidence === "high" ? "ok" : activeDrug.confidence === "medium" ? "dom" : "warn"}>{activeDrug.confidence}</Pill>
-        {activeDrug.hasPD && <span className="pdtag">PK/PD · {activeDrug.hasPD}</span>}
+        <Pill kind={activeDrug.inDomain ? "dom" : "warn"}>confidence not calibrated</Pill>
       </>
     );
   }
@@ -217,9 +215,7 @@ export function App() {
     ? live ? "live engine · ~0.5 s/solve" : "live engine offline"
     : wf === "benchmark"
     ? "10,000 bootstrap resamples"
-    : wf === "predict" && s.nmc > 1
-    ? "MC N=" + s.nmc.toLocaleString() + " · ~" + (s.nmc / 30).toFixed(0) + " s"
-    : "deterministic · ~414 ms";
+    : "frozen reference-dose prediction";
 
   return (
     <div className="stage">
@@ -282,7 +278,7 @@ export function App() {
             <div className="title">
               {wf === "benchmark" ? (
                 <div className="dn">
-                  Holdout validation <span className="sub">SMILES → Cₘₐₓ · external</span>
+                  Development benchmark <span className="sub">SMILES + dose + route → Cₘₐₓ · not independent</span>
                 </div>
               ) : activeDrug ? (
                 <div className="dn">

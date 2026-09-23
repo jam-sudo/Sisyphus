@@ -33,10 +33,11 @@ from sisyphus.engine.compiler import CompiledODE, ODECompiler, ResolvedParams
 from sisyphus.engine.solver import solve
 from sisyphus.graph.body import BodyGraph
 from sisyphus.graph.builder import build_from_yaml
+from sisyphus.resources import get_resource_config
 
 logger = logging.getLogger(__name__)
 
-_DEFAULT_PHYSIOLOGY = Path("data/physiology/reference_man.yaml")
+_DEFAULT_PHYSIOLOGY = get_resource_config().data("physiology", "reference_man.yaml")
 _DEFAULT_OBS_NODE = "venous_blood"
 _DEFAULT_T_SPAN = (0.0, 48.0)
 # Assay-scale Gaussian noise added to log10(Cmax) (σ = log10(1 + CV))

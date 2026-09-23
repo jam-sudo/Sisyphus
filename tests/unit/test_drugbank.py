@@ -1,7 +1,12 @@
 """Tests for DrugBank lookup module."""
 import pytest
 
-from sisyphus.predict.drugbank import DrugBankConfig, DrugBankLookup
+from sisyphus.predict.drugbank import (
+    DrugBankConfig,
+    DrugBankLookup,
+    _reset_singleton,
+    drugbank_lookup,
+)
 
 
 class TestDrugBankConfig:
@@ -38,6 +43,23 @@ class TestDrugBankLookupNoData:
     def test_get_logp_returns_none(self, tmp_path):
         lookup = DrugBankLookup(data_dir=tmp_path)
         assert lookup.get_logp("CCO") is None
+
+
+class TestExecutionProfile:
+    def test_public_profile_ignores_local_licensed_export(self, monkeypatch):
+        monkeypatch.setenv("SISYPHUS_PROFILE", "public")
+        _reset_singleton()
+        lookup = drugbank_lookup()
+        assert "__disabled_drugbank__" in str(lookup._data_dir)
+        assert lookup.get_fup("CCO") is None
+        _reset_singleton()
+
+    def test_licensed_profile_requires_explicit_opt_in(self, monkeypatch):
+        monkeypatch.setenv("SISYPHUS_PROFILE", "licensed_research")
+        _reset_singleton()
+        lookup = drugbank_lookup()
+        assert lookup._data_dir.name == "drugbank"
+        _reset_singleton()
 
 
 class TestDrugBankLookupWithData:

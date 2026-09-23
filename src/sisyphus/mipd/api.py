@@ -11,8 +11,8 @@
   interpolates it (see ``mipd.grid`` / ``mipd.clgrid``).
 
 Either way the engine posterior is routed through the production meta blend
-(``meta_cmax``, the product output) and a calibrated split-conformal predictive
-interval (``cmax_90ci``) is attached.
+(``meta_cmax``, the product output). Its interval reflects posterior parameter
+uncertainty; no residual interval is validated for this path.
 """
 from __future__ import annotations
 
@@ -27,30 +27,17 @@ from sisyphus.mipd.covariates import Covariates
 from sisyphus.mipd.meta import build_meta_tracks, meta_blend_cmax
 
 
-def _attach_meta_and_interval(post: PosteriorPK, smiles: str, dose_mg: float, ap) -> PosteriorPK:
-    """Route the engine posterior through the meta blend + attach the conformal PI.
+def _attach_meta(post: PosteriorPK, smiles: str, dose_mg: float, ap) -> PosteriorPK:
+    """Route the engine posterior through the production meta blend.
 
     The non-engine tracks (ML/CLF/VDss) are F/CL-independent, so they are fixed
     across the posterior. ``meta_cmax`` is the product posterior (parameter
-    uncertainty); ``cmax_90ci`` is the train-calibrated split-conformal predictive
-    interval around the posterior meta point (the user-facing 90% band). The q90 is
-    the **a-priori** (unconditioned) conformal quantile and is not re-calibrated for
-    the conditioned posterior, so it is conservative when an informative Cmax obs is
-    supplied (review finding #6; see ``PosteriorPK``).
+    uncertainty). No predictive residual interval is attached because the
+    development residuals were not validated for conditioned posteriors.
     """
-    from sisyphus.pipeline.predict import _conformal_q90_meta
-
     tracks = build_meta_tracks(smiles, dose_mg, ap)
     meta_samples = meta_blend_cmax(post.cmax.samples, tracks)
-    meta_point = float(np.median(meta_samples))
-
-    cmax_90ci: tuple[float, float] | None = None
-    q90 = _conformal_q90_meta()
-    if q90 is not None and meta_point > 0:
-        factor = 10.0**q90
-        cmax_90ci = (meta_point / factor, meta_point * factor)
-
-    return dataclasses.replace(post, meta_cmax=Posterior(meta_samples), cmax_90ci=cmax_90ci)
+    return dataclasses.replace(post, meta_cmax=Posterior(meta_samples))
 
 
 def predict_posterior(
@@ -77,9 +64,7 @@ def predict_posterior(
         structural error).
       - ``meta_cmax``: the production population blend (covariate-blind ML/CLF/VDss
         mixed in; damped under conditioning, DE-43) — the SMILES-anchor product.
-      - ``cmax_90ci``: the train-calibrated conformal predictive band around the
-        meta point — the only coverage-validated interval (conservative under
-        conditioning, review #6).
+      - ``cmax_90ci``: None; no residual band has been validated for this path.
       - ``warnings``: structured non-fatal flags (e.g. extreme CrCl).
 
     Args:
@@ -194,5 +179,5 @@ def predict_posterior(
             apriori, observations, rng=rng
         )
 
-    post = _attach_meta_and_interval(post, smiles, dose_mg, ap)
+    post = _attach_meta(post, smiles, dose_mg, ap)
     return dataclasses.replace(post, warnings=tuple(warnings_list))

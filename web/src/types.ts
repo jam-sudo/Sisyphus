@@ -4,9 +4,9 @@
    which is itself produced by the real Sisyphus PBPK engine.
    ============================================================ */
 
-export type Confidence = "high" | "medium" | "low";
+export type Confidence = "medium" | "low";
 export type CompoundType = "neutral" | "acid" | "base" | "zwitterion";
-export type Route = "oral" | "iv";
+export type Route = "oral";
 
 /** A single (time, concentration) curve. Parallel arrays for compactness. */
 export interface Curve {
@@ -40,36 +40,11 @@ export interface Tracks {
 export type Weights = Tracks;
 
 export interface Disposition {
-  clf: number | null; // CL/F, L/h (= dose/AUC for oral)
+  doseOverAuc0t: number | null; // dose/AUC0–24h, L/h; not terminal CL/F
   vdss: number | null; // L/kg (engine ADME)
   fup: number | null;
   clint: number | null;
 }
-
-export interface TdmInfo {
-  method: string; // production-routed Bayesian method (SBI / IBIS / IS …)
-  ess: number | null; // effective sample size
-  priorCv: number | null;
-  postCv: number | null;
-  reduction: number | null; // fraction (0..1)
-}
-
-export interface SimulateInfo {
-  interval: number; // h (default regimen)
-  nDoses: number;
-  cssMax: number | null;
-  cssMin: number | null;
-  accumRatio: number | null;
-  doseToSS: number | null;
-  troughs: number[];
-}
-
-export interface DdiFold {
-  auc: number; // fold change in AUC
-  cmax: number; // fold change in Cmax
-}
-
-export type DdiMap = Record<string, DdiFold>;
 
 export interface Drug {
   id: string;
@@ -83,28 +58,29 @@ export interface Drug {
   primaryEnzyme: string;
   enzymeFraction: Record<string, number>;
   confidence: Confidence;
+  applicabilityStatus?: "structurally_in_scope" | "flagged";
   inDomain: boolean;
   adFlags: string[];
+  executionStatus?: string;
+  artifactProvenance?: Record<string, string>;
   meta: MetaEndpoints;
-  cmax90ci: [number, number]; // conformal 90% PI
+  endpointSources?: Record<string, string | null>;
+  cmax90ci: [number, number] | null; // residual 90% PI
+  intervalSource?: string | null;
+  residualInterval90?: [number, number] | null;
+  residualIntervalSource?: string | null;
+  parameterInterval90?: [number, number] | null;
+  parameterIntervalSource?: string | null;
   tracks: Tracks;
   weights: Weights;
   disposition: Disposition;
   curve: Curve; // real engine single-dose response at `dose`
   pkfit: PkFit;
-  tdm: TdmInfo;
-  simulate: SimulateInfo;
-  ddi: DdiMap;
-  /** Optional UI extras some drugs carry. */
-  hasPD?: string;
-  fdaCssMax?: number | null;
-}
-
-export interface Inhibitor {
-  name: string;
-  enzyme: string;
-  type: string; // "inhibition" | "induction" | "—"
-  strength: string | null;
+  engineDiagnostics?: {
+    observationNode: string;
+    solverSuccess: boolean;
+    massBalanceError: number;
+  };
 }
 
 export interface ScatterPoint {
@@ -124,18 +100,17 @@ export interface TrackBlock {
 }
 
 export interface BenchmarkData {
-  n_holdout: number;
+  n_development: number;
+  classification: "retrospective_development_benchmark";
   overall: { engine: TrackBlock; ml: TrackBlock; meta: TrackBlock };
   in_domain: { n: number; engine: TrackBlock; ml: TrackBlock; meta: TrackBlock };
   scatter: ScatterPoint[];
 }
 
 export interface Constants {
-  HOLDOUT_AAFE: number;
-  INDOMAIN_AAFE: number;
+  DEVELOPMENT_AAFE: number;
   ENGINE_AAFE: number;
   ML_AAFE: number;
-  conformal_factor: number;
 }
 
 export interface MetaInfo {
@@ -148,40 +123,20 @@ export interface MetaInfo {
 export interface ConsoleData {
   meta_info: MetaInfo;
   constants: Constants;
-  inhibitors: Record<string, Inhibitor>;
   benchmark: BenchmarkData;
   drugs: Drug[];
 }
 
 /* ---------------- UI state ---------------- */
-export interface Observation {
-  id: number; // stable key for list editing
-  t: number;
-  c: number;
-}
-
 export interface AppState {
   drugId: string;
   dose: number;
   route: Route;
   method: "hybrid" | "engine" | "ml";
-  nmc: number;
-  interval: number;
-  nDoses: number;
-  obs: Observation[];
-  assayCv: string;
-  inhibitor: string;
-  targetCss: number;
   benchSet: string;
 }
 
-export type WorkflowId =
-  | "predict"
-  | "simulate"
-  | "tdm"
-  | "ddi"
-  | "dose-adjust"
-  | "benchmark";
+export type WorkflowId = "predict" | "benchmark";
 
 export interface WorkflowCfg {
   id: WorkflowId;

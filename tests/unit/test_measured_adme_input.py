@@ -34,12 +34,12 @@ def test_clint_without_fup_raises():
 
 
 def test_nonpositive_value_raises():
-    with pytest.raises(ValueError, match="must be > 0"):
+    with pytest.raises(ValueError, match="finite and > 0"):
         MeasuredADMEInput(fup=0.0, clint=13.0)
 
 
 def test_cv_below_floor_raises():
-    with pytest.raises(ValueError, match="< 0.10"):
+    with pytest.raises(ValueError, match=">= 0.10"):
         MeasuredADMEInput(fup=0.20, clint=13.0, fup_cv=0.05)
 
 
@@ -75,5 +75,19 @@ def test_f_bioavail_one_is_allowed():
 
 
 def test_f_bioavail_cv_below_floor_raises():
-    with pytest.raises(ValueError, match="< 0.10"):
+    with pytest.raises(ValueError, match=">= 0.10"):
         MeasuredADMEInput(f_bioavail=0.5, f_bioavail_cv=0.05)
+
+
+@pytest.mark.parametrize("value", [float("nan"), float("inf"), -float("inf")])
+@pytest.mark.parametrize("field", ["peff", "fup_cv", "f_bioavail"])
+def test_nonfinite_measurements_and_cvs_raise(field, value):
+    kwargs = {field: value}
+    if field == "f_bioavail":
+        match = "0 < F <= 1"
+    elif field.endswith("_cv"):
+        match = "finite and >= 0.10"
+    else:
+        match = "finite and > 0"
+    with pytest.raises(ValueError, match=match):
+        MeasuredADMEInput(**kwargs)

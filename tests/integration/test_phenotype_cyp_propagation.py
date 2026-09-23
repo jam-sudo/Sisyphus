@@ -29,7 +29,12 @@ from __future__ import annotations
 import pytest
 
 from sisyphus.pipeline.predict import predict
-from sisyphus.predict.drugbank import _DEFAULT_DATA_DIR as _DRUGBANK_DIR
+from sisyphus.predict.drugbank import (
+    _DEFAULT_DATA_DIR as _DRUGBANK_DIR,
+)
+from sisyphus.predict.drugbank import (
+    _reset_singleton,
+)
 
 _drugbank_present = (_DRUGBANK_DIR / "drugs.csv").exists()
 _skip_no_drugbank = pytest.mark.skipif(
@@ -55,9 +60,18 @@ _PRAVASTATIN_SMILES = (
 )
 
 
+@pytest.fixture
+def licensed_drugbank(monkeypatch):
+    """Make licensed-artifact dependence explicit and isolate the singleton."""
+    monkeypatch.setenv("SISYPHUS_PROFILE", "licensed_research")
+    _reset_singleton()
+    yield
+    _reset_singleton()
+
+
 @_skip_no_drugbank
 @pytest.mark.slow
-def test_tizanidine_cyp1a2_pm_propagates():
+def test_tizanidine_cyp1a2_pm_propagates(licensed_drugbank):
     """CYP1A2:PM should drop tizanidine clearance, raising Cmax > 1.2× EM.
 
     Tizanidine is annotated in DrugBank as CYP1A2-only substrate → fm_CYP1A2=1.0.
@@ -78,7 +92,7 @@ def test_tizanidine_cyp1a2_pm_propagates():
 
 @_skip_no_drugbank
 @pytest.mark.slow
-def test_irbesartan_cyp2c9_pm_propagates():
+def test_irbesartan_cyp2c9_pm_propagates(licensed_drugbank):
     """CYP2C9:PM should drop irbesartan clearance, raising Cmax > 1.1× EM.
 
     Irbesartan is annotated in DrugBank as CYP2C9-only substrate → fm_CYP2C9=1.0.

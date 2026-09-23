@@ -357,7 +357,7 @@ def bayesian_update(
                 age_years=age_years,
                 sbi_reweight=sbi_reweight,
             ))
-        except FileNotFoundError as exc:
+        except (FileNotFoundError, ImportError, ModuleNotFoundError) as exc:
             if not sbi_fallback:
                 raise
             logger.warning(

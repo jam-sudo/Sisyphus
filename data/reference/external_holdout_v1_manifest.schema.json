@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Sisyphus External Holdout V1 label-free arm manifest",
+  "type": "object",
+  "required": [
+    "protocol", "cycle_id", "n_target", "labels_blinded",
+    "source_plan_path", "source_plan_sha256", "exclusion_union_sha256", "freeze", "compounds"
+  ],
+  "properties": {
+    "protocol": {"const": "docs/validation/external_holdout_v1_protocol.md"},
+    "cycle_id": {"type": "string", "minLength": 1, "maxLength": 100},
+    "n_target": {"type": "integer", "minimum": 120},
+    "labels_blinded": {"const": true},
+    "source_plan_path": {"type": "string", "pattern": "^[A-Za-z0-9_./-]+$"},
+    "source_plan_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "exclusion_union_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "freeze": {
+      "type": "object",
+      "required": [
+        "git_sha", "source_tree_sha256", "artifact_inventory_sha256",
+        "training_membership_path", "training_membership_sha256",
+        "feature_schema_path", "feature_schema_sha256",
+        "solver_settings_path", "solver_settings_sha256",
+        "dependency_lock_sha256", "container_digest", "random_seed",
+        "resource_profile"
+      ],
+      "properties": {
+        "git_sha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        "source_tree_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "artifact_inventory_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "training_membership_path": {"type": "string", "pattern": "^[A-Za-z0-9_./-]+$"},
+        "training_membership_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "feature_schema_path": {"type": "string", "pattern": "^[A-Za-z0-9_./-]+$"},
+        "feature_schema_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "solver_settings_path": {"type": "string", "pattern": "^[A-Za-z0-9_./-]+$"},
+        "solver_settings_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "dependency_lock_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "container_digest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
+        "random_seed": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+        "resource_profile": {"const": "public"}
+      },
+      "additionalProperties": false
+    },
+    "compounds": {
+      "type": "array",
+      "minItems": 120,
+      "items": {
+        "type": "object",
+        "required": ["candidate_id", "name", "smiles", "arms"],
+        "properties": {
+          "candidate_id": {"type": "string", "pattern": "^[A-Za-z0-9_-]+$"},
+          "name": {"type": "string", "minLength": 1, "maxLength": 200},
+          "smiles": {"type": "string", "minLength": 1, "maxLength": 2000},
+          "arms": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "arm_id", "dose_mg", "route", "primary_eligible",
+                "source_category", "source_agency", "source_record_hash"
+              ],
+              "properties": {
+                "arm_id": {"type": "string", "pattern": "^[A-Za-z0-9_-]+$"},
+                "dose_mg": {"type": "number", "exclusiveMinimum": 0, "maximum": 100000},
+                "route": {"const": "oral"},
+                "primary_eligible": {"type": "boolean"},
+                "source_category": {
+                  "enum": ["regulatory", "peer_reviewed", "independent_sponsor"]
+                },
+                "source_agency": {
+                  "type": ["string", "null"], "minLength": 1, "maxLength": 100
+                },
+                "challenge_strata": {
+                  "type": "array", "uniqueItems": true,
+                  "items": {"type": "string", "minLength": 1}
+                },
+                "source_record_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+              },
+              "allOf": [
+                {
+                  "if": {"properties": {"primary_eligible": {"const": true}}},
+                  "then": {"properties": {"route": {"const": "oral"}}}
+                },
+                {
+                  "if": {"properties": {"source_category": {"const": "regulatory"}}},
+                  "then": {"properties": {"source_agency": {"type": "string"}}},
+                  "else": {"properties": {"source_agency": {"type": "null"}}}
+                }
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

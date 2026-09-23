@@ -1,5 +1,6 @@
 {
   "version": "v2",
+  "artifact_sha256": "3ac08bf5dee4a7b5f7ebf9e058882f6101f965959f88a094de4db76c4b47e1f1",
   "target": "logit(fup), output via sigmoid to (0, 1)",
   "trained_on": {
     "dataset_path": "TDC PPBR_AZ (holdout-excluded)",
@@ -9,7 +10,7 @@
     "name": "compute_features_v1",
     "n_features": 2057,
     "sha256": "b41dddd78533661b8f4aed86bdb7c5f55d15ed3cd2ad20b39e9100557eda631e",
-    "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, NumHeavyAtoms). See src/sisyphus/descriptors.py::compute_features."
+    "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, MolMR). See src/sisyphus/descriptors.py::compute_features."
   },
   "trained_at": "unknown_legacy",
   "n_drugs_original": null,

@@ -2,21 +2,18 @@
 
 from __future__ import annotations
 
-import json
-import logging
 from pathlib import Path
 
 import pytest
 
 from sisyphus.ml.registry import (
     CANONICAL_SMILES,
-    ModelRecord,
-    ModelRegistry,
     check_feature_hash,
     compute_feature_hash_v1,
     load_manifest,
     manifest_path_for,
     validate_manifest,
+    verify_model_artifact,
 )
 
 ROOT = Path(__file__).resolve().parent.parent.parent
@@ -122,68 +119,29 @@ def test_logp_correction_uses_separate_feature_schema():
 
 
 # ---------------------------------------------------------------------------
-# Registry.get() returns a ModelRecord
+# Runtime verifier fails closed
 # ---------------------------------------------------------------------------
 
 
-def test_registry_get_returns_model_record():
-    reg = ModelRegistry()
-    record = reg.get(MODELS_DIRECT_PK / "xgboost_cmax.json")
-    assert isinstance(record, ModelRecord)
-    assert record.version == "v3_clean"
-    assert record.n_drugs_original == 1128
-    assert record.target.startswith("log10(cmax")
+def test_runtime_verifier_accepts_shipped_model():
+    manifest = verify_model_artifact(MODELS_DIRECT_PK / "xgboost_cmax.json")
+    assert manifest["version"] == "v3_clean"
 
 
-def test_registry_get_missing_manifest_returns_none(tmp_path, caplog):
-    """Missing manifest -> warn, return None (warn-only policy)."""
+def test_runtime_verifier_rejects_missing_manifest(tmp_path):
     fake_model = tmp_path / "nonexistent.json"
-    reg = ModelRegistry()
-    with caplog.at_level(logging.WARNING):
-        result = reg.get(fake_model)
-    assert result is None
-    assert any("manifest missing" in r.message for r in caplog.records)
+    with pytest.raises(ValueError, match="manifest unavailable"):
+        verify_model_artifact(fake_model)
 
 
 # ---------------------------------------------------------------------------
-# register() is strict on missing fields
+# Manifest validation reports missing fields
 # ---------------------------------------------------------------------------
 
 
-def test_registry_register_rejects_incomplete_manifest(tmp_path):
-    reg = ModelRegistry()
+def test_manifest_rejects_incomplete_fields():
     incomplete = {"version": "v1", "target": "log10(cmax)"}  # missing most fields
-    with pytest.raises(ValueError, match="manifest incomplete"):
-        reg.register(tmp_path / "fake.json", incomplete)
-
-
-def test_registry_register_writes_complete_manifest(tmp_path):
-    reg = ModelRegistry()
-    manifest = {
-        "version": "v1",
-        "target": "log10(cmax)",
-        "trained_on": {"dataset_path": "test.csv", "sha256": "unknown_legacy"},
-        "feature_schema": {
-            "name": "compute_features_v1",
-            "n_features": 2057,
-            "sha256": "dd014cd8",
-            "description": "test",
-        },
-        "trained_at": "2026-04-24T00:00:00Z",
-        "n_drugs_original": 100,
-        "n_drugs_excluded": 5,
-        "holdout_version": "v1",
-        "holdout_metric": {"name": "AAFE", "value": 2.5},
-        "hyperparameters": {"n_estimators": 100},
-        "retrained_reason": "test",
-    }
-    model_path = tmp_path / "fake_model.json"
-    reg.register(model_path, manifest)
-
-    written = manifest_path_for(model_path)
-    assert written.exists()
-    loaded = json.loads(written.read_text())
-    assert loaded == manifest
+    assert "manifest field missing: artifact_sha256" in validate_manifest(incomplete)
 
 
 # ---------------------------------------------------------------------------

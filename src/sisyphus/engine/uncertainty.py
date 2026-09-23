@@ -223,7 +223,9 @@ class UncertaintyEngine:
             )
 
             models = load_surrogate_ensemble()
-            scaler = np.load("models/surrogate/scaler.npz")
+            from sisyphus.resources import get_resource_config
+
+            scaler = np.load(get_resource_config().model("surrogate", "scaler.npz"))
 
             params_list = []
             for i in range(n_samples):

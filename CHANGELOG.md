@@ -12,6 +12,16 @@ track `pyproject.toml`.
 
 ## [Unreleased]
 
+### Evidence and product-contract correction (2026-07-14)
+
+- Reclassified N=107 as a repeatedly accessed development benchmark, not an independent holdout;
+  N=28 is a consumed temporal challenge. No independent external AAFE is currently available.
+- Reclassified the former “split-conformal” band as a development empirical-residual interval and
+  separated it from Monte Carlo parameter uncertainty. Historical entries below describe what was
+  claimed at the time and must not be cited as the current validation status.
+- Restricted the supported live product contract to oral SMILES + dose Cmax. IV and observation-
+  informed workflows remain experimental engine capabilities, not validated structure-only outputs.
+
 ### Holdout headline 2.735 → 2.743 — UGT single-path fm fix (2026-07-03)
 
 `build_drug_on_graph` double-allocated UGT tags: a tag present in both the `ugt_enzymes` block

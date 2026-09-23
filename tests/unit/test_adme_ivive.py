@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import pytest
+
 from sisyphus.core import Distribution
 from sisyphus.predict.chemistry import compute_profile
 
@@ -169,6 +171,15 @@ class TestIVIVE:
         drug = build_drug_on_graph(profile, adme, dose_mg=10.0, route="oral")
         assert drug.administration_node == "stomach_lumen"
         assert drug.route == "oral"
+
+    def test_invalid_route_is_not_silently_coerced_to_oral(self):
+        from sisyphus.predict.adme import predict_adme
+        from sisyphus.predict.ivive import build_drug_on_graph
+
+        profile = compute_profile(_BENZENE_SMILES)
+        adme = predict_adme(profile)
+        with pytest.raises(ValueError, match="route must be"):
+            build_drug_on_graph(profile, adme, dose_mg=10.0, route="sc")
 
     def test_kp_values_reasonable(self):
         """Kp values should be in physiological range."""

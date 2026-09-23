@@ -1,5 +1,6 @@
 {
   "version": "v1",
+  "artifact_sha256": "3978e65f253fcd0e0e64f6c4a2fd37b0c55538c319810b2857a475a2d66ff38c",
   "target": "log10(VDss L/kg)",
   "trained_on": {
     "dataset_path": "TDC VDss_Lombardo",
@@ -9,7 +10,7 @@
     "name": "compute_features_v1",
     "n_features": 2057,
     "sha256": "b41dddd78533661b8f4aed86bdb7c5f55d15ed3cd2ad20b39e9100557eda631e",
-    "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, NumHeavyAtoms). See src/sisyphus/descriptors.py::compute_features."
+    "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, MolMR). See src/sisyphus/descriptors.py::compute_features."
   },
   "trained_at": "unknown_legacy",
   "n_drugs_original": null,

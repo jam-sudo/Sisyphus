@@ -37,6 +37,9 @@ def test_iv_pipeline_90pi_is_non_degenerate():
     assert result.cmax_90ci is not None
     low, high = result.cmax_90ci
     assert high > low  # non-degenerate
+    assert result.cmax_prediction.residual_interval_90 is None
+    assert result.cmax_prediction.parameter_interval_90 == result.cmax_90ci
+    assert result.cmax_prediction.interval_source == "parameter_monte_carlo"
 
 
 def test_oral_pipeline_unchanged_by_v3():

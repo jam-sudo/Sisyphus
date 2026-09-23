@@ -8,17 +8,17 @@ Cmax (mg/L) = 10^prediction * dose_mg (since ug/mL == mg/L).
 from __future__ import annotations
 
 import logging
-from pathlib import Path
 
 import xgboost as xgb
 
 from sisyphus.core import Distribution
 from sisyphus.descriptors import compute_features
-from sisyphus.ml.registry import warn_on_feature_schema_drift
+from sisyphus.ml.registry import verify_model_artifact
+from sisyphus.resources import get_resource_config
 
 logger = logging.getLogger(__name__)
 
-_MODEL_DIR = Path(__file__).resolve().parent.parent.parent.parent / "models"
+_MODEL_DIR = get_resource_config().models_dir
 
 
 class PKPredictor:
@@ -38,9 +38,9 @@ class PKPredictor:
     def _ensure_loaded(self) -> None:
         if self._model is None:
             path = _MODEL_DIR / "direct_pk" / "xgboost_cmax.json"
+            verify_model_artifact(path)
             self._model = xgb.XGBRegressor()
             self._model.load_model(str(path))
-            warn_on_feature_schema_drift(path)
             logger.info("XGBoost Cmax model loaded from %s", path)
 
     def predict_cmax(self, smiles: str, dose_mg: float) -> Distribution:

@@ -63,3 +63,10 @@ def test_ik14_equates_rifampin_and_rifampicin(excl_module):
 def test_distinct_molecules_differ(excl_module):
     """Sanity: unrelated molecules do not collide on IK14."""
     assert excl_module.ik14("CCO") != excl_module.ik14("c1ccccc1")
+
+
+def test_ik14_strips_hydrochloride_counterion(excl_module):
+    """Free base and HCl salt must collide in the exclusion inventory."""
+    free_base = "CN1CCC(C2=CC=CC=C2)CC1"
+    hydrochloride = "CN1CCC(C2=CC=CC=C2)CC1.Cl"
+    assert excl_module.ik14(free_base) == excl_module.ik14(hydrochloride)

@@ -145,18 +145,18 @@ footer{padding:40px 0 56px}
 <section class="hero">
   <div class="wrap grid">
     <div>
-      <span class="eyebrow"><span class="dot"></span>graph-based whole-body PBPK</span>
-      <h1>The body as a graph.<br />PK as a distribution.</h1>
-      <p class="sub">Sisyphus turns a SMILES string and a dose into C<sub>max</sub>, AUC, and half-life — with honest uncertainty — by modeling the body as a typed directed graph and propagating distributions through an ODE system derived from its topology.</p>
+      <span class="eyebrow"><span class="dot"></span>oral structure + dose → Cmax</span>
+      <h1>Structure-only C<sub>max</sub>.<br />Evidence stated plainly.</h1>
+      <p class="sub">Sisyphus predicts single-dose oral C<sub>max</sub> from a parent-drug SMILES and dose. A separate graph-based PBPK solve provides mechanistic research outputs; those endpoints are not presented as if they came from the C<sub>max</sub> ensemble.</p>
       <div class="cta">
         <a class="btn primary" href="/app/">Launch the console →</a>
         <a class="btn ghost" href="https://github.com/jam-sudo/Sisyphus">View on GitHub</a>
       </div>
       <div class="stats">
-        <div class="stat"><div class="v">2.78</div><div class="k">holdout AAFE</div></div>
-        <div class="stat"><div class="v">N=107</div><div class="k">external holdout</div></div>
-        <div class="stat"><div class="v">43.9%</div><div class="k">within 2-fold</div></div>
-        <div class="stat"><div class="v">34</div><div class="k">compartment ODE</div></div>
+        <div class="stat"><div class="v">2.74</div><div class="k">development AAFE</div></div>
+        <div class="stat"><div class="v">N=107</div><div class="k">development compounds</div></div>
+        <div class="stat"><div class="v">N/A</div><div class="k">independent AAFE</div></div>
+        <div class="stat"><div class="v">44.9%</div><div class="k">within 2-fold · development</div></div>
       </div>
     </div>
     <div>
@@ -181,8 +181,8 @@ footer{padding:40px 0 56px}
       </div>
       <div class="card">
         <div class="n">02 · uncertainty</div>
-        <h3>Everything is a Distribution</h3>
-        <p>Every physiological and drug parameter carries its uncertainty. Monte-Carlo propagation makes prediction intervals the native output, not a bolt-on.</p>
+        <h3>Intervals keep their meaning</h3>
+        <p>Parameter Monte Carlo and empirical model-residual bands are separate outputs. The current residual band is development evidence, not an independent conformal guarantee.</p>
       </div>
       <div class="card">
         <div class="n">03 · extensibility</div>
@@ -197,16 +197,12 @@ footer{padding:40px 0 56px}
   <div class="wrap">
     <div class="sec-head">
       <span class="lab">Capabilities</span>
-      <h2>Six clinical workflows, one engine</h2>
-      <p>Every view in the console is the same identity-blind ODE engine, parameterized differently. <a href="/app/">Open the console →</a></p>
+      <h2>One production question, one evidence view</h2>
+      <p>The public console is intentionally narrow: oral C<sub>max</sub> prediction and transparent development-benchmark inspection. <a href="/app/">Open the console →</a></p>
     </div>
     <div class="wf-grid">
-      <a class="wf" href="/app/"><div class="nm"><span class="g"></span>predict</div><p>SMILES → C<sub>max</sub>, T<sub>max</sub>, AUC, t½ with a 90% prediction interval.</p></a>
-      <a class="wf" href="/app/"><div class="nm"><span class="g"></span>simulate</div><p>Multi-dose regimens — steady state, accumulation, trough convergence.</p></a>
-      <a class="wf" href="/app/"><div class="nm"><span class="g"></span>tdm</div><p>Bayesian therapeutic drug monitoring with SBI / IBIS / IS routing.</p></a>
-      <a class="wf" href="/app/"><div class="nm"><span class="g"></span>ddi</div><p>Drug–drug interactions via enzyme-abundance change before compile.</p></a>
-      <a class="wf" href="/app/"><div class="nm"><span class="g"></span>dose-adjust</div><p>Model-informed precision dosing to a target steady-state exposure.</p></a>
-      <a class="wf" href="/app/"><div class="nm"><span class="g"></span>benchmark</div><p>External N=107 holdout validation — predicted vs observed, by track.</p></a>
+      <a class="wf" href="/app/"><div class="nm"><span class="g"></span>predict</div><p>Parent SMILES + oral dose → C<sub>max</sub>, component tracks, applicability flags, and explicitly labeled interval sources.</p></a>
+      <a class="wf" href="/app/"><div class="nm"><span class="g"></span>benchmark</div><p>N=107 retrospective development evidence — predicted vs observed by track, never labeled as an independent holdout.</p></a>
     </div>
   </div>
 </section>
@@ -215,25 +211,25 @@ footer{padding:40px 0 56px}
   <div class="wrap">
     <div class="sec-head">
       <span class="lab">Validation</span>
-      <h2>Measured against a held-out reality</h2>
-      <p>A scaffold-stratified N=107 external holdout, never used in training, tuning, or model selection.</p>
+      <h2>Retrospective development evidence</h2>
+      <p>N=107 is compound-disjoint from audited fitted-model training, but it was repeatedly used for system selection and calibration. It is therefore development data, not an independent holdout.</p>
     </div>
     <div class="val">
-      <div class="figpanel"><img src="docs/figures/figure2_scatter.png" alt="Predicted vs observed Cmax on the N=107 holdout (log–log)" loading="lazy" /></div>
+      <div class="figpanel"><img src="docs/figures/figure2_scatter.png" alt="Predicted vs observed Cmax on the N=107 development benchmark (log–log)" loading="lazy" /></div>
       <div>
         <table class="btable">
           <thead><tr><th>Track</th><th>AAFE</th><th>within 2-fold</th></tr></thead>
           <tbody>
-            <tr class="hl"><td>Meta (production)</td><td class="big">2.78</td><td>43.9%</td></tr>
-            <tr><td>Engine only</td><td>4.46</td><td>27.1%</td></tr>
-            <tr><td>ML only</td><td>3.01</td><td>43.0%</td></tr>
-            <tr><td>Meta, in-domain</td><td>2.83</td><td>42.0%</td></tr>
+            <tr class="hl"><td>Meta · development</td><td class="big">2.74</td><td>44.9%</td></tr>
+            <tr><td>Engine only</td><td>4.28</td><td>27.1%</td></tr>
+            <tr><td>ML only</td><td>3.00</td><td>43.0%</td></tr>
+            <tr><td>Meta, structurally in-scope</td><td>2.79</td><td>42.0%</td></tr>
           </tbody>
         </table>
         <p style="font-size:13.5px;color:var(--ink-soft);margin:16px 0 0">A four-track meta-learner blends a mechanistic engine, a data-driven ML C<sub>max</sub>, a CL/F analytical, and a conditional VDss track. Prospective FDA NMEs (2024–25) are harder still at <b>AAFE 3.27</b> — generalization, stated plainly.</p>
       </div>
     </div>
-    <div class="caveat">The user-facing 90% prediction interval is a train-calibrated <b>split-conformal</b> interval, holdout-validated to <b>0.953</b> coverage at nominal 0.90 — but wide (÷× ~13), the honest price of structural error. Sisyphus surfaces this rather than hiding it.</div>
+    <div class="caveat">Independent external AAFE is currently <b>not available</b>. The displayed Meta residual band is derived from development residuals and is correspondingly wide (approximately ÷×13); it must not be interpreted as a split-conformal coverage guarantee. A preregistered, custodian-controlled external evaluation is required.</div>
   </div>
 </section>
 
@@ -245,7 +241,7 @@ footer{padding:40px 0 56px}
       <p>The console is one face of a Python library + CLI.</p>
     </div>
     <div class="code"><span class="c"># install</span>
-pip install -e ".[dev,ml,chem]"
+pip install -e ".[dev,ml]"
 
 <span class="c"># predict caffeine 100 mg</span>
 sisyphus predict --smiles <span class="p">"Cn1c(=O)c2c(ncn2C)n(C)c1=O"</span> --dose 100</div>

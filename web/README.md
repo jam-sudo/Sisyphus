@@ -1,19 +1,15 @@
 # Sisyphus PBPK Console
 
-A scientific-editorial web interface for the Sisyphus PBPK platform — turns the
-CLI into a clickable clinical tool. Built from the design handoff
+A scientific-editorial web interface for the Sisyphus structure-only Cmax core.
+It is a research console, not a clinical dosing tool. Built from the design handoff
 ("Direction B — Workspace Console") and **wired to the real Sisyphus engine**.
 
-Six workflows, all driven by real-engine numbers:
+Two supported workflows, driven by real model artifacts:
 
 | Workflow      | What it shows                                                              |
 | ------------- | ------------------------------------------------------------------------- |
 | `predict`     | SMILES → C(t) curve (real ODE), 4-track meta-learner, body graph, conformal 90% PI, pipeline log |
-| `simulate`    | multi-dose superposition, steady-state metrics, FDA-label check           |
-| `tdm`         | Bayesian prior→posterior, SBI/IBIS/IS routing, ESS / CV-reduction         |
-| `ddi`         | victim ± perpetrator, **real** AUC/Cmax fold changes, enzyme mechanism    |
-| `dose-adjust` | MIPD dose recommendation to a target Cₛₛ                                   |
-| `benchmark`   | real N=107 holdout scatter + per-track AAFE (Meta 2.784)                   |
+| `benchmark`   | N=107 retrospective development scatter + per-track AAFE; explicitly not an independent holdout |
 
 ## Stack
 
@@ -29,7 +25,7 @@ cd web
 npm install
 npm run dev        # http://localhost:5173
 npm run build      # type-check + production bundle → dist/
-npm run smoke      # headless jsdom render test of all 6 workflows
+npm run smoke      # headless jsdom render test of both workflows
 ```
 
 ## Data: real engine, two tiers
@@ -43,25 +39,22 @@ produced offline by:
 /opt/miniconda3/bin/python scripts/gen_console_data.py
 ```
 
-This regenerates `web/public/data/console_data.json` (curated drug set + DDI
-matrix + TDM + steady-state) and `web/public/data/benchmark.json` (the N=107
-holdout). Re-run it whenever the engine changes.
+This regenerates `web/public/data/console_data.json` (curated core predictions)
+and `web/public/data/benchmark.json` (the N=107 development evidence). Each
+preset uses one strict prediction; its Cmax contract and matching engine curve
+are serialized without a second solve or curve rescaling.
 
 The data layer (`src/data.ts`) talks to the engine through an `EngineClient`
 interface:
 
-- **Phase 1 (now):** `StaticEngineClient` reads the pre-computed JSON. Works on
+- **Static tier:** `SisyphusClient` reads the pre-computed JSON. Works on
   GitHub Pages with zero backend.
-- **Phase 2 (later):** an `ApiEngineClient` implementing the same interface will
-  hit a FastAPI service wrapping `pipeline.predict` for arbitrary SMILES. The
-  views import only the interface, so swapping clients needs no UI changes.
-  (A dev proxy hook is already stubbed in `vite.config.ts`.)
+- **Live tier:** when `VITE_API_URL` is configured, the same client calls the
+  FastAPI core for arbitrary SMILES.
 
-Curves use the real ODE single-dose response; multi-dose / TDM / dose-adjust
-use superposition of a 1-compartment fit to that curve (exact for linear PK);
-DDI folds are the real `apply_inhibition` / `apply_induction` re-solves. The
-honesty stays intact: the conformal 90% PI (÷×~13) and the calibration caveats
-are surfaced, not hidden.
+Curves use the matching ODE single-dose response. The conformal 90% PI
+(÷×~13) and its development-set calibration caveat are surfaced. Regimen,
+TDM, DDI, and dose-adjustment workflows are deliberately outside this console.
 
 ## Deploy (GitHub Pages — sisyphus-pbpk.io/app/)
 
@@ -88,15 +81,14 @@ broken bundles never land. (It does not deploy — `/app/` is the committed buil
 src/
   types.ts                # data contracts (mirror gen_console_data.py output)
   data.ts                 # EngineClient + useConsoleData() hook
-  pk.ts                   # PK math (real-anchored curves / superposition / DDI)
+  pk.ts                   # core Cmax/engine-curve display helpers
   styles.css              # the scientific-editorial design system
   components/
     App.tsx               # rail + nav + run flow + state
     RailInputs.tsx        # contextual per-workflow inputs
-    charts.tsx            # ConcChart, ScatterChart, McHistogram, TroughChart
+    charts.tsx            # concentration and development-scatter charts
     panels.tsx            # Stat, TrackBars, BodyGraph, Pill, Legend, …
-    workflows/            # PredictView, SimulateView, TdmView, DdiView,
-                          #   DoseAdjustView, BenchmarkView + dispatcher
+    workflows/            # supported PredictView + BenchmarkView only
 public/data/              # real-engine JSON (generated)
 scripts/smoke.mjs         # headless render smoke test
 ```

@@ -1,4 +1,10 @@
-# API-server deps (engine deps come from ../requirements-lock.txt)
-fastapi>=0.115
-uvicorn[standard]>=0.30
-slowapi>=0.1.9  # per-IP rate limiting on /predict
+# Production API and engine dependencies; training/test tools stay in requirements-lock.txt.
+numpy==2.2.6
+scipy==1.15.3
+PyYAML==6.0.3
+rdkit==2026.3.1
+xgboost-cpu==3.2.0 ; platform_system == "Linux"
+xgboost==3.2.0 ; platform_system != "Linux"
+fastapi==0.136.3
+uvicorn[standard]==0.49.0
+slowapi==0.1.9  # per-IP rate limiting on /predict

@@ -1,5 +1,6 @@
 {
   "version": "v1",
+  "artifact_sha256": "4a31a711083dd447aaed40253f09a537b5bf0c1d7958db8a77c92a38c1d00c57",
   "target": "logP residual correction (additive on Crippen logP)",
   "trained_on": {
     "dataset_path": "DrugBank logP (holdout-excluded)",

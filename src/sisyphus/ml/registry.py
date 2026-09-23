@@ -1,19 +1,4 @@
-"""Model manifest registry.
-
-Provides structured access to the `<model>.meta.json` manifest that
-accompanies every XGBoost artifact loaded by the pipeline. Enforces the
-warn-only provenance policy defined in
-``docs/science/model_manifest_schema.md``.
-
-Behaviour is intentionally non-blocking for legacy artifacts:
-
-    - Missing manifest        → warning, returns ``None``
-    - Incomplete manifest     → warning per missing field
-    - Feature-hash mismatch   → warning, does not prevent load
-
-``register_model()`` is stricter: it refuses to write an incomplete
-manifest so newly trained models cannot ship without provenance.
-"""
+"""Validate model manifests and fail closed on artifact or feature drift."""
 
 from __future__ import annotations
 
@@ -21,7 +6,6 @@ import functools
 import hashlib
 import json
 import logging
-from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
@@ -30,6 +14,7 @@ logger = logging.getLogger(__name__)
 
 REQUIRED_TOP_LEVEL = (
     "version",
+    "artifact_sha256",
     "target",
     "trained_on",
     "feature_schema",
@@ -47,51 +32,6 @@ REQUIRED_FEATURE_SCHEMA = ("name", "n_features", "sha256", "description")
 # Canonical SMILES used to compute the feature-vector fingerprint.
 # See docs/science/model_manifest_schema.md.
 CANONICAL_SMILES = "CN1C=NC2=C1C(=O)N(C(=O)N2C)C"  # caffeine
-
-
-# ---------------------------------------------------------------------------
-# Data structures
-# ---------------------------------------------------------------------------
-
-
-@dataclass(frozen=True)
-class ModelRecord:
-    """Metadata for a trained model artifact.
-
-    Mirrors the manifest JSON shape.  Keys not recovered from historical
-    context carry the literal string ``"unknown_legacy"`` (or ``None``
-    for numeric fields) per the schema.
-    """
-
-    model_path: Path
-    version: str
-    target: str
-    trained_on: dict[str, Any]
-    feature_schema: dict[str, Any]
-    trained_at: str
-    n_drugs_original: int | None
-    n_drugs_excluded: int | None
-    holdout_version: str
-    holdout_metric: dict[str, Any]
-    hyperparameters: dict[str, Any] = field(default_factory=dict)
-    retrained_reason: str = "unknown_legacy"
-
-    @classmethod
-    def from_manifest(cls, model_path: Path, manifest: dict[str, Any]) -> ModelRecord:
-        return cls(
-            model_path=model_path,
-            version=manifest.get("version", "unknown_legacy"),
-            target=manifest.get("target", "unknown_legacy"),
-            trained_on=manifest.get("trained_on", {}),
-            feature_schema=manifest.get("feature_schema", {}),
-            trained_at=manifest.get("trained_at", "unknown_legacy"),
-            n_drugs_original=manifest.get("n_drugs_original"),
-            n_drugs_excluded=manifest.get("n_drugs_excluded"),
-            holdout_version=manifest.get("holdout_version", "unknown_legacy"),
-            holdout_metric=manifest.get("holdout_metric", {}),
-            hyperparameters=manifest.get("hyperparameters", {}),
-            retrained_reason=manifest.get("retrained_reason", "unknown_legacy"),
-        )
 
 
 # ---------------------------------------------------------------------------
@@ -196,70 +136,25 @@ def _current_feature_hash_v1() -> str:
     return compute_feature_hash_v1()
 
 
-def warn_on_feature_schema_drift(model_json_path: Path | str) -> str | None:
-    """Warn (log, non-fatal) at load time if a model's sibling ``<stem>.meta.json``
-    records a feature-schema sha256 that disagrees with the current
-    ``compute_features`` pipeline — the drift that would silently make the model
-    predict on the wrong feature vector.
+def verify_model_artifact(model_json_path: Path | str) -> dict[str, Any]:
+    """Fail closed on manifest, artifact-integrity, or feature-schema drift."""
 
-    Implements the module's warn-only load-time provenance policy. Legacy
-    artifacts (no manifest, or a manifest without a recorded sha256) are silent.
-    Returns the warning string, or ``None`` when the schema matches / can't be
-    checked.
-    """
     path = Path(model_json_path)
-    meta_path = path.with_name(path.stem + ".meta.json")
-    if not meta_path.exists():
-        return None
-    try:
-        manifest = json.loads(meta_path.read_text())
-    except (OSError, json.JSONDecodeError):
-        return None
-    schema = manifest.get("feature_schema")
-    recorded = schema.get("sha256") if isinstance(schema, dict) else None
-    if not recorded:
-        return None  # legacy artifact without a recorded hash — stay silent
-    warning = check_feature_hash(manifest, _current_feature_hash_v1())
-    if warning:
-        logger.warning("Feature-schema drift for %s: %s", path.name, warning)
-    return warning
-
-
-# ---------------------------------------------------------------------------
-# Register (strict)
-# ---------------------------------------------------------------------------
-
-
-class ModelRegistry:
-    """Facade over ``load_manifest`` / ``validate_manifest``.
-
-    Retained as a class for API symmetry with the previous stub.  The
-    free functions above are the primary entry points.
-    """
-
-    def get(self, model_path: Path) -> ModelRecord | None:
-        """Load and structure a manifest.  Returns ``None`` if missing."""
-        manifest = load_manifest(model_path)
-        if manifest is None:
-            return None
-        for w in validate_manifest(manifest):
-            logger.warning("%s: %s", model_path.name, w)
-        return ModelRecord.from_manifest(model_path, manifest)
-
-    def register(self, model_path: Path, manifest: dict[str, Any]) -> None:
-        """Write a manifest for a newly trained model.
-
-        Strict: raises ``ValueError`` if any required field is missing
-        or if ``feature_schema.sha256`` is absent.  This guards new
-        artifacts — legacy manifests are handled via ``get`` (warn only).
-        """
-        warnings = validate_manifest(manifest)
-        if warnings:
-            raise ValueError(
-                f"cannot register {model_path}: manifest incomplete "
-                f"({'; '.join(warnings)})"
-            )
-        mpath = manifest_path_for(model_path)
-        with open(mpath, "w") as f:
-            json.dump(manifest, f, indent=2)
-        logger.info("wrote model manifest: %s", mpath)
+    manifest = load_manifest(path)
+    if manifest is None:
+        raise ValueError(f"Model manifest unavailable for {path}")
+    problems = validate_manifest(manifest)
+    if problems:
+        raise ValueError(f"Model manifest incomplete for {path}: {'; '.join(problems)}")
+    actual_artifact_sha = hashlib.sha256(path.read_bytes()).hexdigest()
+    if manifest["artifact_sha256"] != actual_artifact_sha:
+        raise ValueError(
+            f"Model artifact hash mismatch for {path}: "
+            f"manifest={manifest['artifact_sha256']}, actual={actual_artifact_sha}"
+        )
+    feature_schema = manifest.get("feature_schema", {})
+    if feature_schema.get("name") == "compute_features_v1":
+        warning = check_feature_hash(manifest, _current_feature_hash_v1())
+        if warning:
+            raise ValueError(f"Feature-schema drift for {path}: {warning}")
+    return manifest

@@ -11,8 +11,9 @@ of the 2026Q2 set inside hard training corpora and 47/50 inside DrugBank — the
 set was not "never-touched" and the cycle was invalidated. See
 docs/research/n50_2026q2_invalidation.md.
 
-This tool keys exclusion on the **InChIKey-14 connectivity block** (stereo- and
-salt-insensitive), which is what catches those variants. It ingests SMILES from
+This tool strips counterions to the largest organic fragment, then keys exclusion
+on the **InChIKey-14 connectivity block** (stereo-insensitive), which catches salt
+and stereochemical variants. It ingests SMILES from
 every shipped training/enrichment artifact and:
 
   build (default) -- write an IK14 -> [sources] inventory to
@@ -53,6 +54,9 @@ csv.field_size_limit(10**7)
 # (relative path, SMILES column, name column or None, delimiter). Every artifact
 # whose molecules were seen while fitting a track that feeds the Cmax pipeline.
 HARD_SOURCES: list[tuple[str, str, str | None, str]] = [
+    # Raw ADME memberships used by the production fup and Peff artifacts.
+    ("data/ppbr_az.tab", "Drug", "Drug_ID", "\t"),
+    ("data/caco2_wang.tab", "Drug", "Drug_ID", "\t"),
     ("data/training/mmpk_expanded_full.csv", "canon_smiles", "name", ","),
     ("data/training/mmpk_expanded_v2.csv", "canon_smiles", "name", ","),
     ("data/training/mmpk_pbpk_features.csv", "smiles", "name", ","),
@@ -70,13 +74,24 @@ DRUGBANK = "data/drugbank/drugs.csv"
 EXCLUSION_OUT = "data/reference/n50_exclusion_ik14.json"
 
 
+def _largest_organic_fragment(mol: Chem.Mol) -> Chem.Mol:
+    """Return the largest carbon-containing fragment for salt-insensitive audit."""
+    fragments = Chem.GetMolFrags(mol, asMols=True, sanitizeFrags=True)
+    if len(fragments) <= 1:
+        return mol
+    organic = [frag for frag in fragments if any(a.GetAtomicNum() == 6 for a in frag.GetAtoms())]
+    candidates = organic or list(fragments)
+    return max(candidates, key=lambda frag: (frag.GetNumHeavyAtoms(), frag.GetNumAtoms()))
+
+
 def ik14(smiles: str | None) -> str | None:
-    """InChIKey-14 (connectivity block) for a SMILES, or None if unparseable."""
+    """Salt-stripped InChIKey-14 for a SMILES, or None if unparseable."""
     if not smiles or not isinstance(smiles, str):
         return None
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
         return None
+    mol = _largest_organic_fragment(mol)
     try:
         key = Chem.MolToInchiKey(mol)
     except Exception:

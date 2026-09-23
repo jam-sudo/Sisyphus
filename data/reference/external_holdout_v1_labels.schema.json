@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Sisyphus External Holdout V1 blinded label-store record",
+  "type": "object",
+  "required": ["cycle_id", "manifest_sha256", "records"],
+  "properties": {
+    "cycle_id": {"type": "string", "minLength": 1},
+    "manifest_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "records": {
+      "type": "array",
+      "minItems": 120,
+      "items": {
+        "type": "object",
+        "required": ["candidate_id", "arms"],
+        "properties": {
+          "candidate_id": {"type": "string", "pattern": "^[A-Za-z0-9_-]+$"},
+          "arms": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "arm_id", "dose_mg", "route", "dosage_form", "release_type",
+                "food_state", "salt_form", "analyte", "matrix", "dose_regimen",
+                "population", "co_medications", "observed_cmax_mg_l", "study_n",
+                "source", "source_record_hash", "verified_by"
+              ],
+              "properties": {
+                "arm_id": {"type": "string", "pattern": "^[A-Za-z0-9_-]+$"},
+                "dose_mg": {"type": "number", "exclusiveMinimum": 0, "maximum": 100000},
+                "route": {"const": "oral"},
+                "dosage_form": {"type": "string", "minLength": 1},
+                "release_type": {"enum": ["IR", "ER", "MR", "unknown"]},
+                "food_state": {"enum": ["fasted", "fed", "mixed", "unknown"]},
+                "salt_form": {"type": ["string", "null"]},
+                "analyte": {"enum": ["parent", "active_metabolite", "total"]},
+                "matrix": {"enum": ["plasma", "serum", "whole_blood"]},
+                "dose_regimen": {"enum": ["single", "multiple_steady_state"]},
+                "population": {
+                  "type": "object",
+                  "required": ["age_group", "health_status"],
+                  "properties": {
+                    "age_group": {"enum": ["adult", "pediatric", "mixed", "unknown"]},
+                    "health_status": {"enum": ["healthy", "patient", "mixed", "unknown"]},
+                    "description": {"type": "string"}
+                  },
+                  "additionalProperties": false
+                },
+                "co_medications": {
+                  "type": "array", "uniqueItems": true, "items": {"type": "string"}
+                },
+                "observed_cmax_mg_l": {"type": "number", "exclusiveMinimum": 0},
+                "observed_cmax_cv": {"type": ["number", "null"], "minimum": 0},
+                "study_n": {"type": "integer", "minimum": 1},
+                "source": {
+                  "type": "object",
+                  "required": ["category", "agency", "citation", "url_or_doi", "table_or_page"],
+                  "properties": {
+                    "category": {"enum": ["regulatory", "peer_reviewed", "independent_sponsor"]},
+                    "agency": {"type": ["string", "null"]},
+                    "citation": {"type": "string", "minLength": 1},
+                    "url_or_doi": {"type": "string", "minLength": 1},
+                    "table_or_page": {"type": "string", "minLength": 1}
+                  },
+                  "additionalProperties": false
+                },
+                "source_record_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+                "verified_by": {
+                  "type": "array", "minItems": 2, "uniqueItems": true,
+                  "items": {"type": "string", "minLength": 1}
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "model_version": "0.4.0",
+  "model_name": "Sisyphus structure-only Cmax",
+  "input_contract": [
+    "canonical_parent_smiles",
+    "oral_dose_mg"
+  ],
+  "intended_use": "screening, ranking, and uncertainty-aware triage",
+  "evaluation_context": "healthy adults, single oral dose, immediate-release, fasted-state reference records",
+  "unobserved_inputs": [
+    "formulation and release mechanism",
+    "salt or solid-state form",
+    "food state",
+    "population covariates",
+    "concomitant drugs and genotype"
+  ],
+  "not_intended_for": [
+    "dose setting without measured concentrations",
+    "unqualified formulation or food-effect prediction",
+    "clinical DDI, PGx, PKPD, or MIPD decisions"
+  ],
+  "current_evidence": {
+    "independent_external_holdout": {
+      "status": "not_available",
+      "aafe": null,
+      "reason": "No outcome-blinded set remains unconsumed for the current frozen system."
+    },
+    "retrospective_development_benchmark": {
+      "n_compounds": 107,
+      "meta_aafe": 2.7427949764919104,
+      "bootstrap_95_ci": [
+        2.37,
+        3.2
+      ],
+      "classification": "compound-disjoint from audited fitted-model training but repeatedly used for system selection",
+      "source": "data/training/4track_holdout_predictions.json"
+    },
+    "consumed_temporal_challenge": {
+      "n_compounds": 28,
+      "meta_aafe": 3.286099,
+      "diagnostic_bootstrap_95_ci": [
+        2.45,
+        4.48
+      ],
+      "classification": "consumed; diagnostic only for the current system",
+      "source": "data/validation/prospective_N28_current_engine_2026-07-05.json"
+    },
+    "invalidated_n50_2026q2": {
+      "status": "invalidated",
+      "reporting_prohibited": true,
+      "reason": "21/50 hard-training-corpus collisions and composition confounding"
+    }
+  },
+  "primary_output": "CmaxPrediction",
+  "mechanistic_output": "EngineSimulation",
+  "uncertainty": {
+    "residual_interval": "development empirical residual quantile, multiplicative",
+    "parameter_interval": "Monte Carlo when requested",
+    "warning": "The residual interval is not independent split-conformal calibration. The two interval sources answer different questions and must not be conflated."
+  },
+  "applicability": {
+    "confidence_calibrated": false,
+    "ad_flags_are": "structural applicability indicators, not validated error probabilities"
+  }
+}

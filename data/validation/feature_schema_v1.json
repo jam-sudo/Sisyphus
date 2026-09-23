@@ -1,0 +1,22 @@
+{
+  "name": "compute_features_v1",
+  "implementation": "src/sisyphus/descriptors.py::compute_features",
+  "n_features": 2057,
+  "fingerprint": {
+    "algorithm": "Morgan",
+    "radius": 2,
+    "n_bits": 2048,
+    "dtype": "float64"
+  },
+  "descriptors": [
+    {"index": 2048, "name": "MolLogP", "divisor": 1.0},
+    {"index": 2049, "name": "TPSA", "divisor": 200.0},
+    {"index": 2050, "name": "MolWt", "divisor": 600.0},
+    {"index": 2051, "name": "NumHAcceptors", "divisor": 10.0},
+    {"index": 2052, "name": "NumHDonors", "divisor": 5.0},
+    {"index": 2053, "name": "NumRotatableBonds", "divisor": 15.0},
+    {"index": 2054, "name": "RingCount", "divisor": 5.0},
+    {"index": 2055, "name": "FractionCSP3", "divisor": 1.0},
+    {"index": 2056, "name": "MolMR", "divisor": 150.0}
+  ]
+}

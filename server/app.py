@@ -1,203 +1,203 @@
+"""FastAPI adapter over the structured Sisyphus prediction contracts.
+
+The API performs exactly one core prediction. It does not import experiment
+scripts, monkeypatch the meta learner, change cwd, or rescale a second curve.
 """
-Sisyphus engine API — arbitrary-SMILES predictions for the console.
 
-A thin FastAPI layer over the REAL engine. It reuses the verified entry-building
-helpers from scripts/gen_console_data.py (importing it also installs the
-MetaLearner.combine weight-capture monkeypatch and exposes _CAPTURE) plus
-pipeline.predict, and returns a Drug entry in EXACTLY the shape the frontend's
-static console_data.json uses — so every view works unchanged.
-
-Scope: predict + ddi computed live; simulate is derived client-side from the
-returned pkfit/curve; tdm/dose-adjust are out of live scope (the response carries
-a tdm placeholder the TDM view already labels "illustrative").
-
-Run locally:  uvicorn server.app:app --port 8000   (from the repo root)
-"""
 from __future__ import annotations
 
-import os
-import sys
-import threading
-from pathlib import Path
+import json
+from typing import Literal
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "src"))
-sys.path.insert(0, str(ROOT / "scripts"))
-os.chdir(ROOT)  # engine resolves data/model paths relative to the repo root
+import numpy as np
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, ConfigDict, Field
+from rdkit.Chem import MolFromSmiles, rdMolDescriptors
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
 
-import gen_console_data as gcd  # noqa: E402  (helpers + weight-capture monkeypatch + _CAPTURE)
-import numpy as np  # noqa: E402
-from fastapi import FastAPI, HTTPException, Request  # noqa: E402
-from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
-from pydantic import BaseModel  # noqa: E402
-from rdkit.Chem import MolFromSmiles, rdMolDescriptors  # noqa: E402
-from slowapi import Limiter, _rate_limit_exceeded_handler  # noqa: E402
-from slowapi.errors import RateLimitExceeded  # noqa: E402
+from sisyphus import __version__
+from sisyphus.pipeline.predict import predict
+from sisyphus.predict.adme import predict_adme
+from sisyphus.predict.chemistry import compute_profile
+from sisyphus.resources import get_resource_config
 
-import sisyphus.engine.flux  # noqa: E402,F401  (registers flux specs)
-from sisyphus.graph.builder import build_from_yaml  # noqa: E402
-from sisyphus.pipeline.predict import predict  # noqa: E402
-from sisyphus.pk.endpoints import compute_endpoints  # noqa: E402
+from .config import allowed_origins, client_ip, predict_rate_limit
 
-from .config import allowed_origins, client_ip, predict_rate_limit  # noqa: E402
 
-_trapz = getattr(np, "trapezoid", np.trapz)
-_SIG = gcd._sig
-_SIG_LIST = gcd._sig_list
-_LOCK = threading.Lock()  # _CAPTURE is a module global; serialize predicts
+def _sig(value: float | None, digits: int = 6) -> float | None:
+    return None if value is None else float(f"{float(value):.{digits}g}")
 
-# build the physiology graph once
-BASE_GRAPH = build_from_yaml(ROOT / "data/physiology/reference_man.yaml")
 
-# Per-client rate limiter (slowapi) — guards the heavy /predict solve. The key
-# is config.client_ip (X-Forwarded-For-aware behind a trusted proxy; see
-# server/config.py SISYPHUS_TRUST_PROXY) so the cap is per real client, not
-# per reverse-proxy IP.
+def _downsample(
+    time_h: tuple[float, ...], concentration: tuple[float, ...], n: int = 120
+) -> tuple[list[float], list[float]]:
+    if len(time_h) <= n:
+        return list(time_h), list(concentration)
+    idx = np.unique(np.linspace(0, len(time_h) - 1, n, dtype=int))
+    return [time_h[i] for i in idx], [concentration[i] for i in idx]
+
+
+def _pkfit(tmax: float | None, half_life: float | None) -> dict[str, float | None]:
+    ke = np.log(2.0) / half_life if half_life and half_life > 0 else None
+    if not tmax or tmax <= 0 or not ke:
+        return {"ka": None, "ke": _sig(ke), "thalf": _sig(half_life)}
+    candidates = np.logspace(np.log10(ke * 1.01), 2, 2000)
+    implied = np.log(candidates / ke) / (candidates - ke)
+    ka = float(candidates[int(np.argmin(np.abs(implied - tmax)))])
+    return {"ka": _sig(ka), "ke": _sig(ke), "thalf": _sig(half_life)}
+
+
 limiter = Limiter(key_func=client_ip)
-
-app = FastAPI(title="Sisyphus engine API", version="0.4")
+app = FastAPI(title="Sisyphus structure-only Cmax API", version=__version__)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins(),  # production console origin(s) only (SISYPHUS_CORS_ORIGINS)
+    allow_origins=allowed_origins(),
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
 
 
 class PredictRequest(BaseModel):
-    smiles: str
-    dose_mg: float = 100.0
-    route: str = "oral"
-    name: str | None = None
+    model_config = ConfigDict(extra="forbid")
+
+    smiles: str = Field(min_length=1, max_length=2000)
+    dose_mg: float = Field(default=100.0, gt=0, le=100000, allow_inf_nan=False)
+    route: Literal["oral"] = "oral"
+    name: str | None = Field(default=None, max_length=200)
 
 
 @app.get("/health")
 def health() -> dict:
-    return {"status": "ok", "engine": "Sisyphus v0.4 post-FLUX-1"}
+    return {
+        "status": "ok",
+        "version": __version__,
+        "profile": get_resource_config().profile,
+        "primary_output": "CmaxPrediction",
+    }
+
+
+@app.get("/model-info")
+def model_info() -> dict:
+    path = get_resource_config().data("model_card.json")
+    return json.loads(path.read_text())
 
 
 @app.post("/predict")
 @limiter.limit(predict_rate_limit())
 def do_predict(request: Request, req: PredictRequest) -> dict:
     smiles = (req.smiles or "").strip()
-    if not smiles or MolFromSmiles(smiles) is None:
+    mol = MolFromSmiles(smiles)
+    if not smiles or mol is None:
         raise HTTPException(status_code=400, detail="Invalid SMILES.")
+    if mol.GetNumAtoms() > 300:
+        raise HTTPException(status_code=400, detail="SMILES exceeds the 300-atom limit.")
     dose = float(req.dose_mg)
-    if not (dose > 0):
-        raise HTTPException(status_code=400, detail="Dose must be positive.")
-    route = (req.route or "oral").lower()
-    if route not in ("oral", "iv"):
-        route = "oral"
+    if not np.isfinite(dose) or dose <= 0:
+        raise HTTPException(status_code=400, detail="Dose must be positive and finite.")
+    route = req.route
     try:
-        with _LOCK:
-            return _build_entry(smiles, dose, route, req.name)
-    except HTTPException:
-        raise
-    except Exception as e:  # noqa: BLE001
-        raise HTTPException(status_code=500, detail=f"engine error: {e}") from e
+        result = predict(smiles, dose, route=route, n_mc_samples=0, strict=True)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except Exception as exc:  # noqa: BLE001
+        raise HTTPException(status_code=500, detail="Prediction failed.") from exc
 
+    cmax = result.cmax_prediction
+    engine = result.engine_simulation
+    if cmax is None:
+        raise HTTPException(status_code=500, detail="Cmax prediction unavailable.")
+    if engine is None or not engine.solver_success:
+        raise HTTPException(status_code=500, detail="Engine prediction unavailable.")
 
-def _build_entry(smiles: str, dose: float, route: str, name: str | None) -> dict:
-    # --- production predict(): meta / tracks / conformal PI / AD ---
-    res = predict(smiles, dose, route=route, n_mc_samples=0)
-    cap = dict(gcd._CAPTURE)  # weights captured during this predict()'s combine()
+    profile = compute_profile(smiles)
+    adme = predict_adme(profile)
+    track_values = dict(cmax.tracks)
+    weights = dict(cmax.weights)
 
-    # --- profile/adme/drug/graph for metadata, curve, ddi ---
-    profile, adme, drug, dgraph = gcd.build_drug_and_graph(smiles, dose, route, BASE_GRAPH)
-
-    meta_cmax = float(res.pk.cmax.mean)
-    meta_thalf = float(res.pk.t_half.mean) if res.pk.t_half else None
-    eng_cmax = res.engine_pk.cmax.mean if res.engine_pk else None
-    ml_cmax = res.ml_pk.cmax.mean if res.ml_pk else None
-    clf_cmax = res.clf_pk.cmax.mean if res.clf_pk else None
-    vdss_cmax = cap.get("vdss_cmax")
-    w = cap.get("weights", {})
-
-    # --- engine ODE curve, reconciled so its peak == engine-track Cmax ---
-    thalf_for_t = meta_thalf if (meta_thalf and meta_thalf > 0) else 6.0
-    t_end = max(4.0 * thalf_for_t, 24.0)
-    _, _, sim = gcd.solve_single(dgraph, drug, t_end)
-    t, c = sim.time_h, sim.concentrations["venous_blood"]
-    tg, cg = gcd.downsample(t, c, 120)
-    curve_t, curve_c = list(tg), list(cg)
-    if eng_cmax and max(cg) > 0:
-        f = eng_cmax / max(cg)
-        curve_c = [v * f for v in cg]
-    eng_auc = float(_trapz(curve_c, curve_t)) if curve_c else None
-    eng_tmax = float(curve_t[int(np.argmax(curve_c))]) if curve_c else None
-    clf_disp = (dose / eng_auc) if (eng_auc and eng_auc > 0) else None
-    pkfit = gcd.fit_pk(eng_tmax, meta_thalf if (meta_thalf and meta_thalf > 0) else None)
-
-    # --- DDI: real engine folds for the 4 perpetrators ---
-    ep_b = compute_endpoints(sim, observation_node="venous_blood")
-    ddi = gcd.ddi_folds(BASE_GRAPH, drug, t_end, float(ep_b.auc_0t.mean), float(ep_b.cmax.mean))
-
-    # --- metadata ---
-    formula = rdMolDescriptors.CalcMolFormula(MolFromSmiles(smiles))
-    affs: dict[str, float] = {}
-    try:
-        for tag, dist in drug.enzyme_affinity.items():
-            m = float(dist.mean)
-            if m > 0:
-                affs[tag] = m
-    except Exception:  # noqa: BLE001
-        pass
-    if affs:
-        total = sum(affs.values())
-        ordered = sorted(affs.items(), key=lambda kv: -kv[1])
-        enzyme_fraction = {k: round(v / total, 3) for k, v in ordered}
-        primary_enzyme = ordered[0][0]
+    if engine is not None:
+        curve_t, curve_c = _downsample(engine.time_h, engine.concentration_mg_l)
+        endpoints = engine.endpoints
+        engine_tmax = endpoints.tmax.mean
+        engine_auc = endpoints.auc_0t.mean
+        engine_half = endpoints.t_half.mean if endpoints.t_half else None
     else:
-        enzyme_fraction = {}
-        primary_enzyme = "renal"
+        curve_t, curve_c = [], []
+        engine_tmax = engine_auc = engine_half = None
 
+    formula = rdMolDescriptors.CalcMolFormula(mol)
     return {
         "id": "custom",
-        "name": (name or "Custom compound").strip() or "Custom compound",
+        "name": (req.name or "Custom compound").strip() or "Custom compound",
         "formula": formula,
-        "mw": _SIG(profile.mw),
+        "mw": _sig(profile.mw),
         "smiles": smiles,
         "type": profile.compound_type,
         "dose": dose,
         "route": route,
-        "primaryEnzyme": primary_enzyme,
-        "enzymeFraction": enzyme_fraction,
-        "confidence": res.confidence,
-        "inDomain": bool(res.in_applicability_domain),
-        "adFlags": list(res.ad_flags),
+        "primaryEnzyme": "not_reported",
+        "enzymeFraction": {},
+        "confidence": result.confidence,
+        "applicabilityStatus": (
+            "structurally_in_scope" if result.in_applicability_domain else "flagged"
+        ),
+        "inDomain": bool(result.in_applicability_domain),
+        "adFlags": list(result.ad_flags),
+        "executionStatus": result.execution_status,
+        "artifactProvenance": dict(result.artifact_provenance),
         "meta": {
-            "cmax": _SIG(meta_cmax),
-            "tmax": _SIG(eng_tmax),
-            "auc": _SIG(eng_auc),
-            "thalf": _SIG(meta_thalf),
+            "cmax": _sig(cmax.cmax.mean),
+            "tmax": _sig(engine_tmax),
+            "auc": _sig(engine_auc),
+            "thalf": _sig(engine_half),
+        },
+        "endpointSources": {
+            "cmax": cmax.method,
+            "tmax": "engine" if engine is not None else None,
+            "auc": "engine" if engine is not None else None,
+            "thalf": "engine" if engine is not None else None,
         },
         "cmax90ci": (
-            [_SIG(res.cmax_90ci[0]), _SIG(res.cmax_90ci[1])] if res.cmax_90ci else None
+            [_sig(cmax.interval_90[0]), _sig(cmax.interval_90[1])]
+            if cmax.interval_90
+            else None
         ),
-        "tracks": {
-            "engine": _SIG(eng_cmax),
-            "ml": _SIG(ml_cmax),
-            "clf": _SIG(clf_cmax),
-            "vdss": _SIG(vdss_cmax),
-        },
-        "weights": {
-            "engine": _SIG(w.get("engine")),
-            "ml": _SIG(w.get("ml")),
-            "clf": _SIG(w.get("clf")),
-            "vdss": _SIG(w.get("vdss")),
-        },
+        "intervalSource": cmax.interval_source,
+        "residualInterval90": (
+            [_sig(cmax.residual_interval_90[0]), _sig(cmax.residual_interval_90[1])]
+            if cmax.residual_interval_90
+            else None
+        ),
+        "residualIntervalSource": cmax.residual_interval_source,
+        "parameterInterval90": (
+            [_sig(cmax.parameter_interval_90[0]), _sig(cmax.parameter_interval_90[1])]
+            if cmax.parameter_interval_90
+            else None
+        ),
+        "parameterIntervalSource": cmax.parameter_interval_source,
+        "tracks": {k: _sig(track_values.get(k)) for k in ("engine", "ml", "clf", "vdss")},
+        "weights": {k: _sig(weights.get(k)) for k in ("engine", "ml", "clf", "vdss")},
         "disposition": {
-            "clf": _SIG(clf_disp),
-            "vdss": _SIG(adme.vdss.mean),
-            "fup": _SIG(adme.fup.mean),
-            "clint": _SIG(adme.clint.mean),
+            "doseOverAuc0t": _sig(dose / engine_auc) if engine_auc and engine_auc > 0 else None,
+            "vdss": _sig(adme.vdss.mean),
+            "fup": _sig(adme.fup.mean),
+            "clint": _sig(adme.clint.mean),
         },
-        "curve": {"t": _SIG_LIST(curve_t, 5), "c": _SIG_LIST(curve_c, 5)},
-        "pkfit": pkfit,
-        # tdm/dose-adjust are out of live scope (slow Bayesian update); the TDM view
-        # labels its shrink "illustrative — full re-inference needs the live engine".
-        "tdm": {"method": "ibis", "ess": None, "priorCv": None, "postCv": None, "reduction": None},
-        "ddi": ddi,
+        "curve": {
+            "t": [_sig(v, 5) for v in curve_t],
+            "c": [_sig(v, 5) for v in curve_c],
+        },
+        "pkfit": _pkfit(engine_tmax, engine_half),
+        "engineDiagnostics": (
+            {
+                "observationNode": engine.observation_node,
+                "solverSuccess": engine.solver_success,
+                "massBalanceError": _sig(engine.mass_balance_error),
+            }
+            if engine is not None
+            else None
+        ),
     }

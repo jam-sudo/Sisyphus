@@ -206,16 +206,8 @@ class PosteriorPK:
     These are **parameter-uncertainty** bands (bioavailability F only) — they do
     NOT carry calibrated predictive coverage, because structural model error is
     not in them (the F-only ``meta_cmax.ci90`` is narrow and under-covers the
-    observable Cmax). ``cmax_90ci`` (API-populated) is the train-calibrated
-    split-conformal band placed around the posterior meta point, and is the
-    user-facing 90% Cmax interval.
-
-    Caveat (review finding #6): the conformal q90 is calibrated on the **a-priori**
-    (unconditioned, SMILES-only) prediction error — it is NOT re-calibrated for the
-    conditioned posterior. So when an informative Cmax-bearing observation is
-    supplied, conditioning has already reduced the true error and the a-priori band
-    is conservative (over-wide). A conditioned-case recalibration is future work; the
-    band is honest-but-conservative, never anti-conservative.
+    observable Cmax). ``cmax_90ci`` remains None: the development residual
+    calibration has not been validated for conditioned or individualized posteriors.
     """
 
     f: Posterior

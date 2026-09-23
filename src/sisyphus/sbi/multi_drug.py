@@ -52,6 +52,7 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 
+from sisyphus.resources import get_resource_config
 from sisyphus.sbi.simulator import EngineSimulator
 
 if TYPE_CHECKING:
@@ -60,8 +61,9 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-_POPULATIONS_JSON = Path("data/sbi/populations.json")
-_ADULT_PHYSIOLOGY = Path("data/physiology/reference_man.yaml")
+_RESOURCES = get_resource_config()
+_POPULATIONS_JSON = _RESOURCES.data("sbi", "populations.json")
+_ADULT_PHYSIOLOGY = _RESOURCES.data("physiology", "reference_man.yaml")
 
 
 DRUG_FEATURE_NAMES: tuple[str, ...] = (

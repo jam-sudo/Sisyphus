@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
-from pathlib import Path
 
 from rdkit import Chem
 from rdkit.Chem import Descriptors
@@ -336,11 +335,20 @@ def compute_profile(smiles: str) -> MolecularProfile:
     # NOTE: this model is gitignored (`models/adme/logp_correction.json`). When
     # present locally it shifts headline AAFE by ~+2.7% (favourably); CI/public
     # clones run without it.
-    _LOGP_CORR_PATH = Path(__file__).resolve().parent.parent.parent.parent / "models" / "adme" / "logp_correction.json"  # noqa: E501
-    if db_logp is None and _LOGP_CORR_PATH.exists():
+    from sisyphus.resources import get_resource_config
+    _resources = get_resource_config()
+    _LOGP_CORR_PATH = _resources.model("adme", "logp_correction.json", required=False)
+    if (
+        _resources.profile == "licensed_research"
+        and db_logp is None
+        and _LOGP_CORR_PATH.exists()
+    ):
         try:
             import xgboost as xgb
             if not hasattr(compute_profile, "_logp_model"):
+                from sisyphus.ml.registry import verify_model_artifact
+
+                verify_model_artifact(_LOGP_CORR_PATH)
                 m = xgb.XGBRegressor()
                 m.load_model(str(_LOGP_CORR_PATH))
                 compute_profile._logp_model = m  # type: ignore[attr-defined]

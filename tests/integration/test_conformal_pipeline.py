@@ -1,9 +1,8 @@
-"""Pipeline wires the calibrated split-conformal interval into cmax_90ci.
+"""Pipeline exposes the legacy development-residual interval honestly.
 
-The user-facing 90% PI is now the train-calibrated conformal interval
-(holdout-validated coverage ~0.95 at nominal 0.90), not the parameter-only MC
-interval (~0.30 coverage). It is set even at n_mc_samples=0 (a deterministic
-transform of the meta point estimate) and is multiplicative: meta /÷ 10**q90.
+It is set even at n_mc_samples=0 and is multiplicative around Meta, but it is
+not labeled as independent split conformal. Parameter MC remains a separate
+field when requested.
 """
 
 import json
@@ -12,15 +11,14 @@ import pathlib
 from sisyphus.pipeline.predict import predict
 
 _CAFFEINE = "CN1C=NC2=C1C(=O)N(C(=O)N2C)C"
-_ART = pathlib.Path("data/validation/conformal_calibration.json")
+_ART = pathlib.Path("data/validation/development_residual_interval.json")
 
 
 def _q90_meta():
     return json.loads(_ART.read_text())["tracks"]["meta"]["0.1"]
 
 
-def test_conformal_90ci_set_without_mc():
-    """Default predict (n_mc_samples=0) populates cmax_90ci from the conformal q90."""
+def test_development_residual_90ci_set_without_mc():
     res = predict(_CAFFEINE, 100.0, "oral")
     assert res.cmax_90ci is not None
     cmax = res.pk.cmax.mean
@@ -30,3 +28,15 @@ def test_conformal_90ci_set_without_mc():
     assert abs(hi - cmax * factor) <= 1e-6 * cmax
     # The interval brackets the point estimate
     assert lo < cmax < hi
+    assert res.cmax_prediction.interval_source == "development_empirical_residual"
+    assert res.cmax_prediction.residual_interval_90 == res.cmax_90ci
+    assert res.cmax_prediction.parameter_interval_90 is None
+
+
+def test_parameter_mc_is_not_overwritten_by_residual_band():
+    res = predict(_CAFFEINE, 100.0, "oral", n_mc_samples=12)
+    cmax = res.cmax_prediction
+    assert cmax.residual_interval_90 is not None
+    assert cmax.parameter_interval_90 is not None
+    assert cmax.residual_interval_90 != cmax.parameter_interval_90
+    assert cmax.interval_90 == cmax.residual_interval_90

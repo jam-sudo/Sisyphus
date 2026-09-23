@@ -31,8 +31,24 @@ jobs:
           pip install -r requirements-lock.txt
           pip install -e . --no-deps
 
+      - name: Installed-wheel prediction smoke
+        run: |
+          python -m pip wheel . --no-deps --wheel-dir /tmp/sisyphus-wheel
+          python -m pip install --no-deps --target /tmp/sisyphus-installed /tmp/sisyphus-wheel/*.whl
+          cd /tmp
+          SISYPHUS_ROOT="$GITHUB_WORKSPACE" PYTHONPATH=/tmp/sisyphus-installed \
+            python -c "from sisyphus.pipeline.predict import predict; r=predict('CCO', 10.0, strict=True); assert r.execution_status == 'ok'"
+
       - name: Ruff (gating; pre-existing violations baselined via inline noqa)
-        run: ruff check src tests
+        run: >-
+          ruff check src tests server
+          scripts/build_n50_exclusion.py
+          scripts/gen_console_data.py
+          scripts/audit_external_holdout_manifest.py
+          scripts/predict_external_holdout_manifest.py
+          scripts/score_external_holdout.py
+          scripts/sync_public_model_metrics.py
+          scripts/prediction_trace.py
 
       - name: Unit tests
         run: pytest tests/unit -v --tb=short
@@ -47,12 +63,9 @@ jobs:
         run: pytest tests/benchmark/test_holdout.py -v --tb=short
 
   server-security:
-    # The engine API security contract (CORS allow-list + /predict rate limit).
-    # Deliberately engine-free: server/config.py + server/tests import neither the
-    # heavy engine graph nor torch, so this job stays fast and gates the security
-    # behavior that the main `test` job's testpaths=["tests"] does not collect.
+    # Exercise the API contract with the same CPU-only runtime deps as the image.
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v6
 
@@ -62,15 +75,22 @@ jobs:
           python-version: "3.10"
           cache: pip
 
-      - name: Install server deps (no engine)
+      - name: Install production API dependencies and test tools
         run: |
           python -m pip install --upgrade pip
-          pip install fastapi slowapi httpx pytest ruff
+          pip install -r server/requirements.txt pytest==9.0.3 ruff==0.15.11 httpx==0.28.1
+          pip install -e . --no-deps
 
-      - name: Ruff (server policy module + tests)
-        run: ruff check server/config.py server/tests
+      - name: Ruff (server adapter, policy, and tests)
+        run: ruff check server
 
-      - name: Server security tests (CORS + rate limit, engine-import-free)
-        # `python -m pytest` puts the repo root (CWD) on sys.path so the
-        # top-level `server` package imports without an editable install.
+      - name: Server API and security tests
         run: python -m pytest server/tests -v --tb=short
+
+  container:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v6
+      - name: Build exact-source API image
+        run: docker build -f server/Dockerfile -t sisyphus-api:ci .

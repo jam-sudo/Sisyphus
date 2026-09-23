@@ -21,18 +21,18 @@ ka determination (in priority order):
 from __future__ import annotations
 
 import logging
-from pathlib import Path
 
 import numpy as np
 import xgboost as xgb
 
 from sisyphus.core import Distribution
 from sisyphus.descriptors import compute_features
-from sisyphus.ml.registry import warn_on_feature_schema_drift
+from sisyphus.ml.registry import verify_model_artifact
+from sisyphus.resources import get_resource_config
 
 logger = logging.getLogger(__name__)
 
-_MODEL_DIR = Path(__file__).resolve().parent.parent.parent.parent / "models" / "direct_pk"
+_MODEL_DIR = get_resource_config().model("direct_pk")
 
 # Body weight assumption for unit conversion
 _BW_KG = 70.0
@@ -61,15 +61,15 @@ class CLFPredictor:
     def _ensure_loaded(self) -> None:
         if self._clf_model is None:
             path = _MODEL_DIR / "xgboost_clf.json"
+            verify_model_artifact(path)
             self._clf_model = xgb.XGBRegressor()
             self._clf_model.load_model(str(path))
-            warn_on_feature_schema_drift(path)
             logger.info("CL/F model loaded from %s", path)
         if self._vdf_model is None:
             path = _MODEL_DIR / "xgboost_vdf.json"
+            verify_model_artifact(path)
             self._vdf_model = xgb.XGBRegressor()
             self._vdf_model.load_model(str(path))
-            warn_on_feature_schema_drift(path)
             logger.info("Vd/F model loaded from %s", path)
 
     def predict_clf_vdf(self, smiles: str) -> tuple[float, float]:

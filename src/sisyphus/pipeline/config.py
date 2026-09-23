@@ -6,8 +6,10 @@ model paths, MC sample count, and physiology preset selection.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
+
+from sisyphus.resources import get_resource_config
 
 
 @dataclass
@@ -26,5 +28,5 @@ class PipelineConfig:
     physiology_preset: str = "reference_man"
     n_mc_samples: int = 1000
     observation_node: str = "venous_blood"
-    model_dir: Path = Path("models")
+    model_dir: Path = field(default_factory=lambda: get_resource_config().models_dir)
     seed: int = 42

@@ -10,34 +10,44 @@ from __future__ import annotations
 import functools
 import json
 import logging
-from pathlib import Path
+import math
+import numbers
+from dataclasses import replace
 from typing import TYPE_CHECKING
 
 import numpy as np
 
-from sisyphus.core import Distribution, DrugOnGraph, PKEndpoints, PredictionResult
+from sisyphus.core import (
+    Distribution,
+    DrugOnGraph,
+    EngineSimulation,
+    PKEndpoints,
+    PredictionResult,
+)
 from sisyphus.engine.contracts import FuCorrectionContractError
+from sisyphus.resources import artifact_provenance, get_resource_config
 
 if TYPE_CHECKING:
     from sisyphus.predict.adme import MeasuredADMEInput
 
 logger = logging.getLogger(__name__)
 
-_CONFORMAL_CALIBRATION = Path("data/validation/conformal_calibration.json")
+_RESOURCES = get_resource_config()
+_DEVELOPMENT_RESIDUAL_INTERVAL = _RESOURCES.data(
+    "validation", "development_residual_interval.json", required=False
+)
 
 
 @functools.lru_cache(maxsize=1)
-def _conformal_q90_meta() -> float | None:
-    """Train-calibrated split-conformal 90% half-width (log10) for the meta track.
+def _development_residual_q90_meta() -> float | None:
+    """Development-residual 90% half-width (log10) for the oral meta track.
 
-    The user-facing 90% Cmax PI is the conformal interval (holdout-validated ~0.95
-    coverage at nominal 0.90), superseding the parameter-only MC interval (~0.30).
-    Calibrated on the TRAIN set (Invariant #5: never the holdout). Returns None if
-    the calibration artifact is absent/unreadable (the pipeline then falls back to
-    the MC interval, or None). See validation/conformal.py + scripts/calibrate_conformal.py.
+    The underlying residuals are not independent of every fitted component, so
+    this artifact is deliberately not described as split conformal. Returns None
+    when the artifact is absent or unreadable.
     """
     try:
-        art = json.loads(_CONFORMAL_CALIBRATION.read_text())
+        art = json.loads(_DEVELOPMENT_RESIDUAL_INTERVAL.read_text())
         q = float(art["tracks"]["meta"]["0.1"])
         return q if np.isfinite(q) else None
     except Exception:
@@ -170,7 +180,7 @@ def _apply_measured_f(
 
 # Resolve physiology YAML relative to repository root.
 # src/sisyphus/pipeline/predict.py -> ../../../../data/physiology
-_PHYSIOLOGY_DIR = Path(__file__).resolve().parent.parent.parent.parent / "data" / "physiology"
+_PHYSIOLOGY_DIR = _RESOURCES.data("physiology")
 
 def predict(
     smiles: str,
@@ -184,6 +194,7 @@ def predict(
     kp_method: str = "rodgers_rowland",
     measured_adme: MeasuredADMEInput | None = None,
     compute_f_engine: bool = False,
+    strict: bool = False,
 ) -> PredictionResult:
     """End-to-end prediction: SMILES -> PredictionResult.
 
@@ -240,6 +251,9 @@ def predict(
             Default False keeps the SMILES-only path bit-identical (no extra
             solve, ``engine_f`` is None). Used by the engine-as-prior MIPD F
             latent so callers need not re-derive F_engine via a probe call.
+        strict: Fail on unavailable engine/ML paths and unsupported phenotype
+            inputs instead of returning a fallback result. Intended for CI,
+            benchmark generation, and audited deployments.
 
     Returns:
         PredictionResult with combined PK endpoints and uncertainty.
@@ -249,7 +263,23 @@ def predict(
             ``infusion_duration_min`` is set for a non-IV route, or if
             ``infusion_duration_min`` is negative.
     """
+    if not isinstance(smiles, str) or not smiles.strip():
+        raise ValueError("smiles must be a non-empty string")
+    if isinstance(dose_mg, bool) or not isinstance(dose_mg, numbers.Real):
+        raise ValueError("dose_mg must be a positive finite number")
+    dose_mg = float(dose_mg)
+    if not math.isfinite(dose_mg) or dose_mg <= 0:
+        raise ValueError(f"dose_mg must be positive and finite, got {dose_mg!r}")
+    if route not in {"oral", "iv"}:
+        raise ValueError(f"route must be 'oral' or 'iv', got {route!r}")
+    if isinstance(n_mc_samples, bool) or not isinstance(n_mc_samples, int) or n_mc_samples < 0:
+        raise ValueError("n_mc_samples must be a non-negative integer")
     if infusion_duration_min is not None:
+        if not isinstance(infusion_duration_min, numbers.Real) or not math.isfinite(
+            float(infusion_duration_min)
+        ):
+            raise ValueError("infusion_duration_min must be finite")
+        infusion_duration_min = float(infusion_duration_min)
         if route != "iv":
             raise ValueError(
                 f"infusion_duration_min={infusion_duration_min!r} requires "
@@ -262,22 +292,25 @@ def predict(
             )
     # Import sub-layers here to avoid circular imports and to register flux specs.
     import sisyphus.engine.flux  # noqa: F401 -- register flux specs
-    from sisyphus.engine.compiler import ODECompiler, ResolvedParams
     from sisyphus.engine.solver import _IV_CMAX_DELAY_H, solve
     from sisyphus.engine.uncertainty import UncertaintyEngine
-    from sisyphus.graph.builder import build_from_yaml
     from sisyphus.ml.ensemble import MetaLearner
     from sisyphus.ml.models import PKPredictor
+    from sisyphus.pipeline.context import prepare_simulation_context
     from sisyphus.pk.endpoints import compute_endpoints
     from sisyphus.predict.adme import predict_adme
     from sisyphus.predict.chemistry import compute_profile
-    from sisyphus.predict.ivive import build_drug_on_graph, detect_disposition
     from sisyphus.predict.transporter_db import find_oatp1b1_substrate_name
 
     warnings_list: list[str] = []
-    cmax_90ci: tuple[float, float] | None = None
+    parameter_cmax_90ci: tuple[float, float] | None = None
     graph = None
     compiled = None
+    drug: DrugOnGraph | None = None
+    sim_result = None
+    observation_node: str | None = None
+    phenotype_applied: tuple[tuple[str, str], ...] = ()
+    phenotype_unsupported: tuple[tuple[str, str], ...] = ()
     f_correction_k: float | None = None  # measured-F exposure-scaling factor
 
     # ── Step 1: Chemistry + ADME ─────────────────────────────────────────
@@ -318,33 +351,6 @@ def predict(
             warnings_list.append(
                 "measured_adme:f_bioavail ignored for non-oral route (F=1 for IV)"
             )
-
-    # Auto-activate ECM (OATP1B1 saturable + ECM passive + biliary CL_int)
-    # ONLY for drugs flagged ecm_applicable=true in oatp1b1.json. The flag
-    # gates against the empirically-documented triple-counting bug: drugs
-    # like fluvastatin (CYP2C9-dominant) and pitavastatin (no
-    # metabolic_fraction entry) shipped to predict() WITHOUT this gate
-    # would have XGBoost-CYP enzyme affinities running at full strength
-    # plus OATP1B1 saturable plus ECM passive — triple-counting hepatic
-    # clearance.
-    #
-    # The gate uses full InChIKey matching (spec §1.2). The cyp_clearance
-    # _overrides registry is checked downstream by ivive.build_drug_on_graph
-    # for the metabolic_fraction scaling (PR #22 mechanism).
-    # Detect OATP1B1-ECM + non-CYP (UGT/NAT) disposition via the shared helper
-    # (ivive.detect_disposition — single source of truth, also used by mipd.grid).
-    auto_oatp_kinetics, auto_ecm_params, non_cyp_fractions = detect_disposition(profile)
-    if auto_oatp_kinetics is not None and auto_ecm_params is not None:
-        substrate_name = find_oatp1b1_substrate_name(profile.smiles) or "unknown"
-        warnings_list.append(f"oatp1b1:auto_ecm:{substrate_name}")
-
-    drug = build_drug_on_graph(
-        profile, adme, dose_mg, route,
-        kp_method=kp_method,
-        transporter_kinetics=auto_oatp_kinetics,
-        hepatic_ecm_params=auto_ecm_params,
-        non_cyp_fractions=non_cyp_fractions,
-    )
 
     # ── DrugBank enrichment tags ──────────────────────────────────────
     # NOTE: fup tag checks data availability + sanity range but does NOT
@@ -387,72 +393,31 @@ def predict(
     engine_pk: PKEndpoints | None = None
     engine_f_value: float | None = None  # emergent oral F (review #10), opt-in
     try:
-        graph = build_from_yaml(_PHYSIOLOGY_DIR / "reference_man.yaml")
-
-        # CRITICAL (v0.3.2): snapshot pre-phenotype liver enzyme abundances.
-        # `_decompose_clint` back-solves enzyme affinity from abundance, so
-        # passing scaled abundances would cause phenotype scaling to cancel
-        # out at engine multiplication time (the bug that silently nulled
-        # all CYP/UGT/NAT phenotype effects pre-v0.3.2; SLCO1B1 escaped
-        # only because OATP1B1 uses saturable MM kinetics, not back-solve).
-        # We snapshot BEFORE phenotype application so affinity is computed
-        # from the unscaled baseline; phenotype then propagates through the
-        # engine as scaled_abundance × pre_affinity = scale × original_rate.
-        liver_enzymes_pre: dict[str, float] | None = None
-        if "liver" in graph.nodes and graph.nodes["liver"].enzymes:
-            liver_enzymes_pre = {
-                tag: dist.mean for tag, dist in graph.nodes["liver"].enzymes.items()
-            }
-
-        # Apply CPIC phenotype scaling AFTER snapshot. Engine reads scaled
-        # abundances from the graph; affinity (computed below from
-        # liver_enzymes_pre) carries the unscaled baseline.
-        if phenotypes:
-            from sisyphus.predict.phenotype import apply_phenotype_to_graph
-            graph = apply_phenotype_to_graph(
-                graph, phenotypes,
-                phenotype_scale_overrides=phenotype_scale_overrides,
-            )
-
-        # Rebuild drug with PRE-phenotype abundances. Phenotype's effect on
-        # the graph remains (scaled abundances flow into engine multiplication);
-        # affinity is back-solved from unscaled abundances so the multiplication
-        # propagates the scaling rather than cancelling it.
-        if liver_enzymes_pre is not None:
-            drug = build_drug_on_graph(
-                profile, adme, dose_mg, route,
-                liver_enzymes=liver_enzymes_pre,
-                kp_method=kp_method,
-                transporter_kinetics=auto_oatp_kinetics,
-                hepatic_ecm_params=auto_ecm_params,
-                non_cyp_fractions=non_cyp_fractions,
-            )
-
-        from sisyphus.graph.builder import augment_for_active_species
-        graph = augment_for_active_species(graph, drug)
-
-        from sisyphus.graph.axial import expand_axial
-        graph = expand_axial(graph)  # no-op unless a parallel_tube edge is present
-
-        # WS-2 contract guard: a curated (non-1.0) fu_correction_liver that would
-        # be ENTIRELY dropped (flagged node, drop-model clearance, no honoring
-        # flux) is a contract violation — fail loud rather than silently no-op.
-        # No-op today (every registry value is 1.0) → headline bit-identical.
-        from sisyphus.engine.contracts import assert_fu_correction_honored
-        assert_fu_correction_honored(graph, drug.fu_correction_liver.mean)
-
-        compiler = ODECompiler()
-        compiled = compiler.compile(graph)
-
-        # Deterministic mean-only realization (RNG-independent).
-        # Hardening: replaced graph.sample(rng=42) → realize_means() to
-        # eliminate seed-dependent RNG-order coupling. Adding a new
-        # Distribution to physiology YAML no longer shifts realized values
-        # for unrelated drugs. Restores 2026-04-14 baseline (Engine 3.421,
-        # Meta 2.695) by removing the lognormal-stochastic artifact.
-        realized_graph = graph.realize_means()
-        realized_drug = drug.realize_means()
-        params = ResolvedParams(realized_graph, realized_drug)
+        context = prepare_simulation_context(
+            smiles,
+            dose_mg,
+            route,
+            phenotypes=phenotypes,
+            phenotype_scale_overrides=phenotype_scale_overrides,
+            kp_method=kp_method,
+            profile=profile,
+            adme=adme,
+            base_yaml=_PHYSIOLOGY_DIR / "reference_man.yaml",
+        )
+        graph = context.graph
+        compiled = context.compiled
+        params = context.params
+        drug = context.drug
+        if context.auto_oatp:
+            substrate_name = find_oatp1b1_substrate_name(profile.smiles) or "unknown"
+            warnings_list.append(f"oatp1b1:auto_ecm:{substrate_name}")
+        phenotype_applied = context.phenotype_report.applied
+        phenotype_unsupported = context.phenotype_report.unsupported
+        if phenotype_unsupported:
+            unsupported = ", ".join(tag for tag, _ in phenotype_unsupported)
+            if strict:
+                raise ValueError(f"Unsupported phenotype tag(s): {unsupported}")
+            warnings_list.append(f"phenotype:unsupported={unsupported}")
 
         if is_infusion:
             from sisyphus.regimen.solver import solve_regimen
@@ -469,6 +434,7 @@ def predict(
 
         if sim_result.solver_success:
             _obs_node = _resolve_observation_node(drug)
+            observation_node = _obs_node
             engine_pk = compute_endpoints(sim_result, observation_node=_obs_node, t_min_h=t_min_h)
             logger.info(
                 "Engine PK: Cmax=%.4f mg/L, Tmax=%.2f h, AUC=%.4f mg*h/L",
@@ -517,6 +483,8 @@ def predict(
                         "(engine F-reference solve unavailable)"
                     )
         else:
+            if strict:
+                raise RuntimeError("ODE solver did not converge")
             warnings_list.append("ODE solver did not converge")
             logger.warning("ODE solver did not converge")
     except FuCorrectionContractError:
@@ -525,6 +493,8 @@ def predict(
         # fall through to the soft ML-only fallback below.
         raise
     except Exception as e:
+        if strict:
+            raise
         warnings_list.append(f"Engine failed: {e}")
         logger.warning("Engine simulation failed: %s", e)
 
@@ -542,73 +512,86 @@ def predict(
                     compiled, graph, drug, n_samples=n_mc_samples, t_min_h=t_min_h
                 )
                 if mc.n_samples > 0:
-                    cmax_90ci = mc.cmax_90ci
+                    parameter_cmax_90ci = mc.cmax_90ci
                     logger.info(
                         "MC propagation: %d samples, Cmax 90%% PI = (%.4f, %.4f)",
                         mc.n_samples,
-                        cmax_90ci[0],
-                        cmax_90ci[1],
+                        parameter_cmax_90ci[0],
+                        parameter_cmax_90ci[1],
                     )
             except Exception as e:
+                if strict:
+                    raise
                 warnings_list.append(f"MC propagation failed: {e}")
                 logger.warning("MC propagation failed: %s", e)
 
     # MC recomputes Cmax independently of engine_pk, so apply the same measured-F
     # exposure-scaling to the PI to keep it consistent with the corrected point.
-    if cmax_90ci is not None and f_correction_k is not None:
-        cmax_90ci = (cmax_90ci[0] * f_correction_k, cmax_90ci[1] * f_correction_k)
-
-    # ── Step 3: ML direct Cmax ───────────────────────────────────────────
-    ml_pk: PKEndpoints | None = None
-    try:
-        predictor = PKPredictor()
-        ml_cmax = predictor.predict_cmax(smiles, dose_mg)
-        ml_pk = PKEndpoints(
-            cmax=ml_cmax,
-            tmax=Distribution(1.0),  # ML does not predict Tmax
-            auc_0t=Distribution(0.0),  # ML does not predict AUC
+    if parameter_cmax_90ci is not None and f_correction_k is not None:
+        parameter_cmax_90ci = (
+            parameter_cmax_90ci[0] * f_correction_k,
+            parameter_cmax_90ci[1] * f_correction_k,
         )
-        logger.info("ML PK: Cmax=%.4f mg/L", ml_cmax.mean)
-    except Exception as e:
-        warnings_list.append(f"ML prediction failed: {e}")
-        logger.warning("ML prediction failed: %s", e)
+
+    # ── Step 3: oral-only direct tracks ──────────────────────────────────
+    # These artifacts were fitted and selected for oral Cmax. They are not
+    # route-aware, so using them in an IV ensemble would create an unvalidated
+    # hybrid. IV remains available as an explicit mechanistic engine output.
+    ml_pk: PKEndpoints | None = None
+    if route == "oral":
+        try:
+            predictor = PKPredictor()
+            ml_cmax = predictor.predict_cmax(smiles, dose_mg)
+            ml_pk = PKEndpoints(
+                cmax=ml_cmax,
+                tmax=Distribution(1.0),  # ML does not predict Tmax
+                auc_0t=Distribution(0.0),  # ML does not predict AUC
+            )
+            logger.info("ML PK: Cmax=%.4f mg/L", ml_cmax.mean)
+        except Exception as e:
+            if strict:
+                raise
+            warnings_list.append(f"ML prediction failed: {e}")
+            logger.warning("ML prediction failed: %s", e)
 
     # ── Step 3b: CL/F analytical Cmax (3rd track) ─────────────────────
     clf_pk: PKEndpoints | None = None
-    try:
-        from sisyphus.ml.clf_predictor import CLFPredictor
-        clf_pred = CLFPredictor()
-        # Pass engine Tmax for ka estimation (method 1)
-        engine_tmax = engine_pk.tmax.mean if engine_pk is not None else None
-        # Pass Peff for ka estimation (method 2)
-        peff_val = adme.peff.mean if adme is not None else None
-        clf_cmax, ka_method = clf_pred.predict_cmax(
-            smiles, dose_mg, engine_tmax=engine_tmax, peff=peff_val,
-        )
-        clf_pk = PKEndpoints(
-            cmax=clf_cmax,
-            tmax=Distribution(1.0),
-            auc_0t=Distribution(0.0),
-        )
-        logger.info("CL/F PK: Cmax=%.4f mg/L (ka=%s)", clf_cmax.mean, ka_method)
-    except Exception as e:
-        warnings_list.append(f"CL/F prediction failed: {e}")
-        logger.warning("CL/F prediction failed: %s", e)
+    if route == "oral":
+        try:
+            from sisyphus.ml.clf_predictor import CLFPredictor
+            clf_pred = CLFPredictor()
+            engine_tmax = engine_pk.tmax.mean if engine_pk is not None else None
+            peff_val = adme.peff.mean if adme is not None else None
+            clf_cmax, ka_method = clf_pred.predict_cmax(
+                smiles, dose_mg, engine_tmax=engine_tmax, peff=peff_val,
+            )
+            clf_pk = PKEndpoints(
+                cmax=clf_cmax,
+                tmax=Distribution(1.0),
+                auc_0t=Distribution(0.0),
+            )
+            logger.info("CL/F PK: Cmax=%.4f mg/L (ka=%s)", clf_cmax.mean, ka_method)
+        except Exception as e:
+            if strict:
+                raise
+            warnings_list.append(f"CL/F prediction failed: {e}")
+            logger.warning("CL/F prediction failed: %s", e)
 
     # ── Step 3b: VDss analytical Cmax = dose / (VDss_L_per_kg * 70 kg) ──
-    # LOOCV-validated: adds 4th track to meta-learner, Δ=-0.113 AAFE on holdout.
+    # Development-set result: adds 4th track, Δ=-0.113 AAFE on N=107.
     _BW_KG_VDSS = 70.0
-    try:
-        vdss_cmax_val: float | None = dose_mg / (adme.vdss.mean * _BW_KG_VDSS)
-        logger.info("VDss analytical: Cmax=%.4f mg/L (VDss=%.2f L/kg)",
-                    vdss_cmax_val, adme.vdss.mean)
-    except Exception as e:
-        vdss_cmax_val = None
-        logger.warning("VDss analytical failed: %s", e)
+    vdss_cmax_val: float | None = None
+    if route == "oral":
+        try:
+            vdss_cmax_val = dose_mg / (adme.vdss.mean * _BW_KG_VDSS)
+            logger.info("VDss analytical: Cmax=%.4f mg/L (VDss=%.2f L/kg)",
+                        vdss_cmax_val, adme.vdss.mean)
+        except Exception as e:
+            logger.warning("VDss analytical failed: %s", e)
 
     # ── Step 4: Meta-learner ─────────────────────────────────────────────
     meta = MetaLearner()
-    final_pk = meta.combine(
+    cmax_prediction = meta.combine_cmax(
         engine_pk,
         ml_pk,
         dose_mg=dose_mg,
@@ -623,13 +606,25 @@ def predict(
         vdss_cmax=vdss_cmax_val,
     )
 
+    # Backwards-compatible endpoint bundle. Only Cmax is a meta prediction;
+    # every other populated endpoint is copied from a named source track.
+    endpoint_source = engine_pk or ml_pk
+    final_pk = PKEndpoints(
+        cmax=cmax_prediction.cmax,
+        tmax=endpoint_source.tmax if endpoint_source else Distribution(0.0),
+        auc_0t=endpoint_source.auc_0t if endpoint_source else Distribution(0.0),
+        auc_0inf=endpoint_source.auc_0inf if endpoint_source else None,
+        t_half=endpoint_source.t_half if endpoint_source else None,
+        cl=endpoint_source.cl if endpoint_source else None,
+        vss=endpoint_source.vss if endpoint_source else None,
+    )
+
     # ── Determine method ─────────────────────────────────────────────────
-    if engine_pk and ml_pk:
+    available_track_names = tuple(name for name, _ in cmax_prediction.tracks)
+    if len(available_track_names) >= 2:
         method = "hybrid"
-    elif engine_pk:
-        method = "engine"
-    elif ml_pk:
-        method = "ml"
+    elif available_track_names:
+        method = available_track_names[0]
     else:
         method = "none"
 
@@ -650,28 +645,90 @@ def predict(
         if (_db_fup is not None and _db_fup < 0.02
                 and "HIGH_ACID_LOW_FUP" not in extra_flags):
             extra_flags.append("HIGH_ACID_LOW_FUP")
-    in_ad, prodrug_warnings = _adjust_ad_for_prodrug(drug, extra_flags)
+    if drug is not None:
+        in_ad, prodrug_warnings = _adjust_ad_for_prodrug(drug, extra_flags)
+    else:
+        in_ad, prodrug_warnings = len(extra_flags) == 0, []
     warnings_list = list(warnings_list) + prodrug_warnings
 
-    # ── Conformal calibrated 90% PI (user-facing interval) ────────────────
-    # Supersede the parameter-only MC interval (~30% coverage at nominal 90%)
-    # with the train-calibrated split-conformal interval (holdout-validated
-    # ~0.95 at nominal 0.90). Multiplicative: meta /÷ 10**q90, from the FINAL
-    # meta point (f-correction already applied). Skipped for infusion (the
-    # calibration regime is single-dose oral / IV-bolus) and when the artifact
-    # is unavailable (then cmax_90ci keeps the MC value, or None).
-    _q90 = _conformal_q90_meta()
-    if not is_infusion and _q90 is not None and final_pk.cmax.mean > 0:
+    # ── Distinct residual and parameter intervals ────────────────────────
+    # The residual band is empirical development evidence, not valid split
+    # conformal calibration: one component model saw part of the calibration
+    # corpus during fitting. It applies only to the unchanged, SMILES-only oral
+    # path. Parameter MC is retained separately and is never overwritten.
+    _q90 = _development_residual_q90_meta()
+    residual_cmax_90ci: tuple[float, float] | None = None
+    residual_applicable = (
+        route == "oral"
+        and measured_adme is None
+        and not phenotypes
+        and _q90 is not None
+        and final_pk.cmax.mean > 0
+    )
+    if residual_applicable:
         _factor = 10.0 ** _q90
-        cmax_90ci = (final_pk.cmax.mean / _factor, final_pk.cmax.mean * _factor)
+        residual_cmax_90ci = (
+            final_pk.cmax.mean / _factor,
+            final_pk.cmax.mean * _factor,
+        )
+    primary_interval = residual_cmax_90ci or parameter_cmax_90ci
+    primary_interval_source = (
+        "development_empirical_residual"
+        if residual_cmax_90ci is not None
+        else "parameter_monte_carlo" if parameter_cmax_90ci is not None else None
+    )
+    cmax_prediction = replace(
+        cmax_prediction,
+        interval_90=primary_interval,
+        interval_source=primary_interval_source,
+        residual_interval_90=residual_cmax_90ci,
+        residual_interval_source=(
+            "development_empirical_residual" if residual_cmax_90ci is not None else None
+        ),
+        parameter_interval_90=parameter_cmax_90ci,
+        parameter_interval_source=(
+            "parameter_monte_carlo" if parameter_cmax_90ci is not None else None
+        ),
+    )
 
-    # ── Confidence ────────────────────────────────────────────────────────
+    # ── Applicability (legacy confidence adapter) ─────────────────────────
+    # AD membership has not demonstrated empirical error stratification, so
+    # never emit "high confidence".  Keep the legacy field for clients while
+    # exposing the underlying structural flags separately.
     if not in_ad:
         confidence = "low"
-    elif engine_pk and engine_pk.cmax.mean > 0:
-        confidence = "high"
     else:
         confidence = "medium"
+
+    engine_simulation = None
+    if (
+        engine_pk is not None
+        and sim_result is not None
+        and observation_node is not None
+        and observation_node in sim_result.concentrations
+    ):
+        engine_simulation = EngineSimulation(
+            endpoints=engine_pk,
+            observation_node=observation_node,
+            time_h=tuple(float(v) for v in sim_result.time_h),
+            concentration_mg_l=tuple(
+                float(v) * (f_correction_k if f_correction_k is not None else 1.0)
+                for v in sim_result.concentrations[observation_node]
+            ),
+            solver_success=bool(sim_result.solver_success),
+            mass_balance_error=float(sim_result.mass_balance_error),
+        )
+
+    if not available_track_names:
+        execution_status = "failed"
+    elif engine_pk is None:
+        execution_status = "degraded_missing_engine"
+    elif route == "oral" and ml_pk is None:
+        execution_status = "degraded_missing_ml"
+    elif phenotype_unsupported:
+        execution_status = "partial_unsupported_input"
+    else:
+        execution_status = "ok"
 
     return PredictionResult(
         drug_name=profile.smiles[:30],
@@ -687,7 +744,14 @@ def predict(
         in_applicability_domain=in_ad,
         ad_flags=tuple(extra_flags),
         warnings=tuple(warnings_list),
-        cmax_90ci=cmax_90ci,
-        phenotypes_applied=tuple(phenotypes.items()) if phenotypes else (),
+        cmax_90ci=cmax_prediction.interval_90,
+        phenotypes_applied=phenotype_applied,
         engine_f=engine_f_value,
+        cmax_prediction=cmax_prediction,
+        engine_simulation=engine_simulation,
+        phenotypes_requested=tuple(phenotypes.items()) if phenotypes else (),
+        phenotypes_unsupported=phenotype_unsupported,
+        execution_status=execution_status,
+        resource_profile=_RESOURCES.profile,
+        artifact_provenance=artifact_provenance(_RESOURCES.profile),
     )

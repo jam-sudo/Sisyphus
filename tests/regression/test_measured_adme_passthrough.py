@@ -1,4 +1,5 @@
 """Regression: measured_adme=None must leave the SMILES-only path bit-identical."""
+import numpy as np
 import pytest
 
 from sisyphus.pipeline.predict import predict
@@ -60,6 +61,17 @@ def test_f_bioavail_scales_cmax_and_auc_together():
     cmax_ratio = corr.cmax.mean / base.cmax.mean
     auc_ratio = corr.auc_0t.mean / base.auc_0t.mean
     assert cmax_ratio == pytest.approx(auc_ratio, rel=1e-6)
+
+
+def test_f_bioavail_curve_matches_corrected_endpoints():
+    result = predict(_CAFFEINE, 100.0,
+                     measured_adme=MeasuredADMEInput(f_bioavail=0.5), strict=True)
+    curve = result.engine_simulation
+    assert curve is not None
+    assert max(curve.concentration_mg_l) == pytest.approx(result.engine_pk.cmax.mean)
+    assert np.trapezoid(curve.concentration_mg_l, curve.time_h) == pytest.approx(
+        result.engine_pk.auc_0t.mean, rel=1e-6
+    )
 
 
 def test_f_bioavail_cmax_is_linear_in_F():
