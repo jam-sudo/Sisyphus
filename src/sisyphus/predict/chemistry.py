@@ -172,8 +172,6 @@ class MolecularProfile:
 _SMARTS_CARBOXYLIC_ACID = Chem.MolFromSmarts("[CX3](=O)[OX2H1]")
 # Sulfonic acid: pKa ~1
 _SMARTS_SULFONIC_ACID = Chem.MolFromSmarts("[SX4](=O)(=O)[OX2H1]")
-# Phenol: pKa ~10 (aromatic OH)
-_SMARTS_PHENOL = Chem.MolFromSmarts("[OX2H1]c")
 # Primary/secondary/tertiary amine (not imine, amide, etc.)
 _SMARTS_AMINE = Chem.MolFromSmarts("[NX3;H2,H1,H0;!$(N=*);!$(NC=O);!$(NS=O);!$(N#*)]")
 # Aromatic N-H in rings of size >= 6 — protonatable heterocyclic nitrogen
@@ -228,7 +226,6 @@ def _estimate_pka_type(mol: Chem.Mol, logp: float) -> tuple[float | None, str]:
     has_acid = bool(
         mol.HasSubstructMatch(_SMARTS_CARBOXYLIC_ACID)
         or mol.HasSubstructMatch(_SMARTS_SULFONIC_ACID)
-        or mol.HasSubstructMatch(_SMARTS_PHENOL)
     )
 
     # Check aliphatic amines (non-aromatic nitrogen with H or lone pair).
