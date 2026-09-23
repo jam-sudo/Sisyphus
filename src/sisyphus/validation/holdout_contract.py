@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import re
 from collections import Counter
 from collections.abc import Callable
 from datetime import date
@@ -15,6 +16,16 @@ from jsonschema import Draft202012Validator, FormatChecker
 
 ROOT = Path(__file__).resolve().parents[3]
 SCHEMA_DIR = ROOT / "data" / "reference"
+
+_PRODUCTION_FITTED_MODELS = (
+    "models/direct_pk/xgboost_cmax.meta.json",
+    "models/direct_pk/xgboost_clf.meta.json",
+    "models/direct_pk/xgboost_vdf.meta.json",
+    "models/adme/xgboost_fup_v2.meta.json",
+    "models/adme/xgboost_clint.meta.json",
+    "models/adme/xgboost_vdss.meta.json",
+    "models/adme/xgboost_peff.meta.json",
+)
 
 
 def sha256_file(path: Path) -> str:
@@ -200,6 +211,20 @@ def verify_training_membership(
         path = resolve_frozen_path(root, row["path"])
         if sha256_file(path) != row["sha256"]:
             raise ValueError(f"Training membership source SHA256 mismatch: {row['path']}")
+    for model_path in _PRODUCTION_FITTED_MODELS:
+        metadata = json.loads(resolve_frozen_path(root, model_path).read_text())
+        trained_on = metadata.get("trained_on") or {}
+        dataset = trained_on.get("dataset_path")
+        digest = trained_on.get("sha256")
+        if (
+            not isinstance(dataset, str)
+            or dataset not in paths
+            or not isinstance(digest, str)
+            or re.fullmatch(r"[a-f0-9]{64}", digest) is None
+        ):
+            raise ValueError(f"Unverifiable production model training source: {model_path}")
+        if sha256_file(resolve_frozen_path(root, dataset)) != digest:
+            raise ValueError(f"Production model training source SHA256 mismatch: {model_path}")
     return inventory_sha
 
 

@@ -24,7 +24,7 @@
     "independent_external_holdout": {
       "status": "not_available",
       "aafe": null,
-      "reason": "No outcome-blinded set remains unconsumed for the current frozen system."
+      "reason": "No outcome-blinded set remains unconsumed, and exact shipped-model training memberships are not SHA-pinned."
     },
     "retrospective_development_benchmark": {
       "n_compounds": 107,
@@ -33,7 +33,7 @@
         2.37,
         3.2
       ],
-      "classification": "compound-disjoint from audited fitted-model training but repeatedly used for system selection",
+      "classification": "repeatedly used for system selection; exact disjointness from shipped-model training cannot be independently verified",
       "source": "data/training/4track_holdout_predictions.json"
     },
     "consumed_temporal_challenge": {

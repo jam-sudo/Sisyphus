@@ -311,11 +311,23 @@ the manifest, then run it again; only the second report is the passing freeze ga
 
 For the public profile, `freeze.training_membership_path` must point to
 `data/validation/training_membership_sources_v1.json` and its SHA256 must be
-recorded in `freeze.training_membership_sha256`. That file pins the 11 fitted-target
+recorded in `freeze.training_membership_sha256`. That file pins 11 conservative
 corpus inputs used by `scripts/audit_external_holdout_manifest.py`; the audit and
 prediction runner verify every listed source hash before continuing. The ignored
-N50 convenience inventory and
-licensed DrugBank exports are not freeze dependencies.
+N50 convenience inventory is not a freeze dependency. Raw licensed DrugBank
+exports are not currently pinned; if a production model was fitted on them,
+its training membership must be made auditable under the chosen resource
+profile before the external gate can pass.
+
+This inventory currently contains conservative repository corpora, but the
+shipped model metadata still names several unavailable training datasets with
+`sha256: unknown_legacy` (including Omega `mmpk_clean.csv` for direct Cmax).
+It therefore does not prove exact model-training membership. The audit and
+prediction runner fail closed until each production fitted model names a
+repository-relative, hash-matched training dataset included in the pinned
+inventory. Recovering those datasets or reproducibly retraining the models is
+a prerequisite to an external V1 freeze; changing the metadata string alone
+does not establish provenance.
 
 ## Freeze and one-time execution
 

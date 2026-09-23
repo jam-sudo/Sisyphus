@@ -2,7 +2,7 @@
   "schema_version": 1,
   "profile": "public",
   "identity_key": "largest-organic-fragment InChIKey-14",
-  "description": "Authoritative fitted-target corpus inputs used to build the external-holdout structure exclusion union. Licensed DrugBank data are excluded from the public profile.",
+  "description": "Conservative public corpus exclusion inputs, not proof of exact shipped-model training membership. External audit also requires each production model's training dataset to be present and hash-pinned here. Licensed DrugBank data are excluded from the public profile.",
   "sources": [
     {"path": "data/ppbr_az.tab", "sha256": "54c9520f4b6e04419b18bab7335583c3865d86fc53db40f74c2cff1577c8ec1b"},
     {"path": "data/caco2_wang.tab", "sha256": "447d9f1af487c06b080145a2361dbe45af5b27afc83e1a975dd29b9ea535d6ab"},

@@ -9,6 +9,7 @@ from pathlib import Path
 import pytest
 
 from sisyphus.validation.holdout_contract import (
+    _PRODUCTION_FITTED_MODELS,
     is_primary_eligible,
     primary_ineligibility_reasons,
     sha256_file,
@@ -190,6 +191,13 @@ def test_training_membership_refuses_missing_or_modified_source(tmp_path):
         "profile": "public",
         "sources": [{"path": "data/training/example.csv", "sha256": sha256_file(source_path)}],
     }))
+    for model_path in _PRODUCTION_FITTED_MODELS:
+        metadata_path = tmp_path / model_path
+        metadata_path.parent.mkdir(parents=True, exist_ok=True)
+        metadata_path.write_text(json.dumps({"trained_on": {
+            "dataset_path": "data/training/example.csv",
+            "sha256": sha256_file(source_path),
+        }}))
     freeze = {
         "training_membership_path": "data/validation/training_membership_sources_v1.json",
         "training_membership_sha256": sha256_file(inventory_path),
@@ -197,6 +205,17 @@ def test_training_membership_refuses_missing_or_modified_source(tmp_path):
     assert verify_training_membership(
         tmp_path, freeze, {"data/training/example.csv"}
     ) == sha256_file(inventory_path)
+    cmax_meta = tmp_path / _PRODUCTION_FITTED_MODELS[0]
+    cmax_meta.write_text(json.dumps({"trained_on": {
+        "dataset_path": "mmpk_clean.csv (Omega)", "sha256": "unknown_legacy",
+    }}))
+    with pytest.raises(ValueError, match="Unverifiable production model training source"):
+        verify_training_membership(tmp_path, freeze, {"data/training/example.csv"})
+    cmax_meta.write_text(json.dumps({"trained_on": {
+        "dataset_path": "data/training/example.csv", "sha256": "0" * 64,
+    }}))
+    with pytest.raises(ValueError, match="Production model training source SHA256 mismatch"):
+        verify_training_membership(tmp_path, freeze, {"data/training/example.csv"})
     source_path.write_text("modified")
     with pytest.raises(ValueError, match="source SHA256 mismatch"):
         verify_training_membership(tmp_path, freeze, {"data/training/example.csv"})

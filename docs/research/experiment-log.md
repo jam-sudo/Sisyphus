@@ -10,6 +10,20 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-23 (cont.) — External audit blocks unknown production-model membership
+
+The external-holdout exclusion union pinned 11 repository corpora, but the
+shipped direct Cmax model metadata names Omega `mmpk_clean.csv`, absent from
+the repository and local workspaces, with `sha256: unknown_legacy`. The other
+active fitted models also lack pinned source hashes. Thus a passing corpus
+collision check could not prove that a candidate was unseen by the shipped
+models. The external audit and prediction runner now require each active
+model's exact training dataset to be present in the exclusion inventory and
+to match its metadata SHA. The model card no longer claims verified
+compound-disjointness for the repeatedly used N=107 benchmark. The V1 gate
+currently fails as intended; source recovery or reproducible retraining is
+required before a valid external freeze.
+
 ## 2026-09-23 (cont.) — Salt-form holdout exclusions in retraining paths
 
 The MMPK CSVs marked clopidogrel bisulfate (both files) and sumatriptan
