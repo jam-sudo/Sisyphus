@@ -26,6 +26,10 @@ def canonical_sha256(value: Any) -> str:
 def validate_payload(payload: Any, schema_filename: str) -> None:
     """Validate a payload and report every JSON-path error deterministically."""
 
+    try:
+        json.dumps(payload, allow_nan=False)
+    except ValueError as exc:
+        raise ValueError("JSON payload contains a non-finite number") from exc
     schema = json.loads((SCHEMA_DIR / schema_filename).read_text())
     errors = sorted(
         Draft202012Validator(schema, format_checker=FormatChecker()).iter_errors(payload),

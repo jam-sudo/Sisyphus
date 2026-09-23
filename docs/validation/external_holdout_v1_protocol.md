@@ -75,6 +75,12 @@ N=260 cannot be obtained from the current repository: its clean internal candida
 pool is zero after structure-level exclusion. The set therefore requires a fresh
 external acquisition campaign. Enumerate approximately 900 candidates before any
 prediction is run, targeting at least 550 verified compounds after attrition.
+An acquisition feasibility check on the FDA's [1985–2025 NME compilation](https://www.fda.gov/drugs/drug-approvals-and-databases/compilation-cder-new-molecular-entity-nme-drug-and-new-biologic-approvals)
+(retrieved 2026-09-23) found 682 NDA rows with any route field marked oral, of
+which 132 were approved in 2020–2025. These are raw product counts, not unique,
+eligible, decontaminated compounds; they are an upper bound for that FDA source.
+The 900-identity inventory therefore needs older and investigational drugs plus
+non-FDA sources, with duplicates across agencies collapsed before allocation.
 Allocate those compounds without outcome-based replacement to three disjoint
 roles: 120–150 calibration-development compounds, N=260 final external-test
 compounds, and a sealed reserve cohort. Calibration labels may be opened before

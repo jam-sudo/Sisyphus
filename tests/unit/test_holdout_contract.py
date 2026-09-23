@@ -122,6 +122,10 @@ def test_source_plan_schema_enforces_acquisition_and_three_way_allocation():
         "curators": ["curator-a", "curator-b"],
     }
     validate_payload(plan, "external_holdout_v1_source_plan.schema.json")
+    for nonfinite in (float("nan"), float("inf")):
+        plan["inventory_n"] = nonfinite
+        with pytest.raises(ValueError, match="non-finite"):
+            validate_payload(plan, "external_holdout_v1_source_plan.schema.json")
     plan["inventory_n"] = 899
     with pytest.raises(ValueError, match="minimum of 900"):
         validate_payload(plan, "external_holdout_v1_source_plan.schema.json")

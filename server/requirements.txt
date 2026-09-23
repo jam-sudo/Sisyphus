@@ -3,6 +3,7 @@ numpy==2.2.6
 scipy==1.15.3
 PyYAML==6.0.3
 rdkit==2026.3.1
+scikit-learn==1.7.2  # XGBoost sklearn estimators are used at inference time
 xgboost-cpu==3.2.0 ; platform_system == "Linux"
 xgboost==3.2.0 ; platform_system != "Linux"
 fastapi==0.136.3
