@@ -1,0 +1,513 @@
+{
+  "task_id": "task_a3deaa90011f",
+  "dispatch_id": "ctx_4834a5bf5bd7",
+  "reviewed_at": "2026-09-23",
+  "reviewer": "Claude Code (AI first-pass source audit; not an independent human curator)",
+  "scope": "1-based manifest positions 71-80 of data/validation/self_run_p0_candidates.json, frozen order; 10 candidates, 14 arms",
+  "blinding": "self_run_p0_predictions.json and all model output NOT opened. FRDB snapshot (SHA256 647b80d9...9c7a verified) read only after dropping every column containing 'cmax'; arms mapped by AUC / t1/2 / n / application & population comments. No arm selected by outcome.",
+  "method_note": "Single AI pass. Sources: PubMed abstracts (E-utilities, no email/key), PMC full text/page scans, PMDA current IF PDF, Agios poster PDF, and a Wayback Machine copy of the Sanofi synopsis. Wiley, Springer, Karger, Elsevier and Xenobiotica originals were paywalled with no OA copy in Europe PMC; each was time-boxed. No browser automation, no .playwright-mcp writes, no email-requiring API. IR is not inferred from the oral route; where a label test or wording confirms IR it is cited. The prior 61-70 report was used as schema guidance only.",
+  "summary": {
+    "candidates": 10,
+    "arms": 14,
+    "arm_verification": {
+      "ineligible": 2,
+      "unverified": 5,
+      "verified": 3,
+      "verified_with_caveat": 4
+    },
+    "candidates_with_any_verified_cmax": [
+      "427",
+      "30872",
+      "25673",
+      "59645"
+    ],
+    "fully_unverified_candidates": [
+      "905",
+      "59689",
+      "8858",
+      "2801"
+    ],
+    "fully_ineligible_candidates": [
+      "3001",
+      "2935"
+    ],
+    "protocol_eligible_candidates_confirmed_without_caveat": 1
+  },
+  "unresolved_issues": [
+    "Efonidipine frdb_963-965: the cited IF revision (_3_1F) is 404. Values come from the current 9th ed. (_3_006_1F, Jul 2025). All three rows match n/AUC/t1/2 exactly. The statistic is mean±S.E. The dose is nominal hydrochloride ethanolate. The 10 mg dose is off-label and was assayed by LC/MS.",
+    "CRS-3123 frdb_10605/10606: Day-1 first dose of a b.i.d. MAD. The fast was only 1 h pre-dose and 2 h post-dose, which the coordinator should rule on as fasted or not. The salt vs free-base basis of the 200 mg capsule is unstated. FRDB t1/2 5 h for the 600 mg row mismatches the source (2.9 h Day 1), but the AUC/n mapping is unique.",
+    "Glyceryl 1-nitrate frdb_10780: plain tablet, IR not stated in words (median tmax 20 min). frdb_10779 (EJCP 1986, 40 mg) is paywalled; its abstract peak of 573 ng/mL is a mean-curve peak, not a Cmax statistic.",
+    "Amcenestrant frdb_13283: the live Sanofi URL is 404, so the Wayback 2023-09-26 copy was used. An IV 100 µg 14C microdose was given 3 h post oral dose; a light snack was permitted from 2 h post dose before median Tmax, with actual intake unreported. The tablet is not labelled IR.",
+    "Tebapivat frdb_13454: the FRDB value is digitized from a dose-normalized figure of MAD Day 1. The poster gives no numeric Cmax, formulation, statistic or matrix.",
+    "Silibinin A frdb_6412: ruled ineligible as a multi-ingredient botanical supplement serving, although all other conditions are met. The coordinator may override if co-formulated botanicals are acceptable.",
+    "Moguisteine frdb_6507: ruled ineligible from the abstract (metabolite M1 in serum, parent not measured). The full text was not seen.",
+    "Paywalled originals that need library retrieval: Sweatman 1981 Xenobiotica (saccharin), Suri 2016 CPDD (orteronel), Laufen 1986 EJCP (G-1-N 40 mg), Bauer 2010 Pharmacology (ralfinamide), Gou 2019 EJPS (moguisteine, to confirm the ineligibility)."
+  ],
+  "candidates": [
+    {
+      "manifest_position_1based": 71,
+      "candidate_id": "905",
+      "name": "SACCHARIN",
+      "smiles": "O=C1NS(=O)(=O)c2ccccc21",
+      "arms": [
+        {
+          "arm_id": "frdb_1841",
+          "verification": "unverified",
+          "reason": "Sweatman et al., Xenobiotica 1981. Abstract confirms a 2 g oral saccharin dose in normal volunteers (plasma curves 'complex and variable'), but full text is paywalled (no OA copy). Dosage form (capsule vs solution vs sodium salt), fasting state, subject sex/n, Cmax statistic and table were not seen. FRDB lists FASTED and AUC 6800 ug*min/mL; neither can be confirmed. Not inferring fasting or IR.",
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/7303723/",
+          "source_access_status": "abstract_only (full text paywalled / bot-challenged; time-boxed, no open-access copy in Europe PMC/Unpaywall)",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "cmax_statistic": null,
+          "exact_locator": "PubMed abstract only",
+          "analyte": "saccharin (parent; per abstract)",
+          "matrix": "plasma (per abstract)",
+          "fasting_evidence": "not in abstract",
+          "formulation_evidence": "not in abstract (salt form also unknown)",
+          "dose_evidence": "2 g oral (abstract)",
+          "population": "'normal volunteers' (abstract); n and sex unseen",
+          "manifest_dose_mg": 2000.0,
+          "manifest_cmax_unit": "μg/mL",
+          "manifest_source_uri": "https://pubmed.ncbi.nlm.nih.gov/7303723/",
+          "mapping_metadata_used": {
+            "pk_auc_value": "6800",
+            "pk_auc_units": "μg × min/mL"
+          }
+        }
+      ]
+    },
+    {
+      "manifest_position_1based": 72,
+      "candidate_id": "59689",
+      "name": "TEBAPIVAT",
+      "smiles": "Cn1c2nc(Cc3ccn[nH]3)sc2c2cnn(Cc3cccc(N)n3)c(=O)c21",
+      "arms": [
+        {
+          "arm_id": "frdb_13454",
+          "verification": "unverified",
+          "reason": "Agios poster #2043 (ASH 2021) is accessible. Methods state SAD/MAD doses given under fasting conditions to healthy men and women 18-55 y. The 5 mg arm exists only as MAD cohort 3 (5 mg QD x14 d, n=6 active); FRDB funbound comment says the value was digitized from Figure 3 (dose-normalized Day 1 exposures vs dose). The poster reports no numeric Cmax, only a dose-normalized bar chart. It does not state the statistic, dosage form or IR status, or name the matrix ('serial blood samples'). FRDB n=25 is the whole MAD population, not the 5 mg cohort. A crucial condition is unstated, and only a digitized figure value exists.",
+          "source_url": "https://www.agios.com/wp-content/uploads/2021/12/2043_AG946-HV.pdf",
+          "source_access_status": "full_text (poster PDF)",
+          "original_cmax": null,
+          "original_cmax_unit": "ng/mL/mg (dose-normalized, figure only)",
+          "cmax_statistic": "not stated (figure bars; n=6 at 5 mg)",
+          "exact_locator": "Iyer et al., Agios poster #2043, Figure 3B (MAD Day 1 dose-normalized Cmax), Methods bullet 1",
+          "analyte": "AG-946 / tebapivat (parent)",
+          "matrix": "not stated ('serial blood samples')",
+          "fasting_evidence": "'administered under fasting conditions' (Methods)",
+          "formulation_evidence": "not stated",
+          "dose_evidence": "5 mg QD, MAD cohort 3; Day 1 = first dose",
+          "population": "healthy adults; MAD cohorts 100% male, n=6 active at 5 mg",
+          "manifest_dose_mg": 5.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://www.agios.com/wp-content/uploads/2021/12/2043_AG946-HV.pdf",
+          "mapping_metadata_used": {
+            "pk_auc_value": "143.9",
+            "pk_auc_units": "ng × h/mL",
+            "pk_population_size": "25",
+            "pk_population_comment": "Source: fasting conditions to healthy men and women (18–55 years of age)",
+            "pk_funbound_comment": "Source: digitized Figure 3. Day 1: Dose-normalized AG-946 exposures versus dose for MAD cohorts"
+          }
+        }
+      ]
+    },
+    {
+      "manifest_position_1based": 73,
+      "candidate_id": "427",
+      "name": "EFONIDIPINE",
+      "smiles": "CC1=C(C(=O)OCCN(Cc2ccccc2)c2ccccc2)C(c2cccc([N+](=O)[O-])c2)C(P2(=O)OCC(C)(C)CO2)=C(C)N1",
+      "arms": [
+        {
+          "arm_id": "frdb_963",
+          "verification": "verified",
+          "reason": "The cited IF revision (_3_1F) returns HTTP 404. Values come from the current Landel interview form, 9th ed. (Jul 2025, _3_006_1F), section VII.1(2)1) ① table. Healthy adult males received a single fasted (空腹時) oral dose of Landel tablet; plasma unchanged efonidipine was measured. FRDB n=6, AUC0-24 4.1 ng*h/mL and t1/2 2.9 h match the 10 mg row exactly. IR is confirmed: IV.1(4) says the film-coated tablet passes the JP disintegration test for immediate-release preparations (即放性製剤). 10 mg is an off-label dose (IF footnote *) and was assayed by LC/MS rather than HPLC. The dose is nominal efonidipine hydrochloride ethanolate. The statistic is mean±S.E., not SD.",
+          "source_url": "https://www.info.pmda.go.jp/go/interview/3/380077_2149034F1020_3_006_1F.pdf",
+          "source_access_status": "full_text (current revision; cited revision 404)",
+          "original_cmax": "1.7±0.3",
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "arithmetic mean ± S.E., n=6",
+          "exact_locator": "Landel IF 9th ed. (2025-07), PDF p.28, VII.1.(2)1)① 単回投与 table (血漿中未変化体濃度); IR: IV.1.(4); composition IV.2.(1)",
+          "analyte": "efonidipine (unchanged parent, 血漿中未変化体)",
+          "matrix": "plasma",
+          "fasting_evidence": "'空腹時に単回経口投与'",
+          "formulation_evidence": "Landel film-coated tablet; JP 即放性製剤 disintegration test (IV.1(4))",
+          "dose_evidence": "10 mg efonidipine hydrochloride ethanolate, single oral",
+          "population": "healthy adult males, n=6",
+          "manifest_dose_mg": 10.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://www.info.pmda.go.jp/go/interview/3/380077_2149034F1020_3_1F.pdf#page=22",
+          "mapping_metadata_used": {
+            "pk_auc_value": "4.1",
+            "pk_auc_units": "ng × h/mL",
+            "pk_thalf_value": "2.9",
+            "pk_population_size": "6",
+            "pk_application_comment": "Efonidipine hydrochloride ethanolate",
+            "pk_population_comment": "PMDA Drug information page 22",
+            "pk_annotated_form": "Landel tablets"
+          }
+        },
+        {
+          "arm_id": "frdb_964",
+          "verification": "verified",
+          "reason": "The cited IF revision (_3_1F) returns HTTP 404. Values come from the current Landel interview form, 9th ed. (Jul 2025, _3_006_1F), section VII.1(2)1) ① table. Healthy adult males received a single fasted (空腹時) oral dose of Landel tablet; plasma unchanged efonidipine was measured. FRDB n=5, AUC0-24 25.4 ng*h/mL and t1/2 1.4 h match the 20 mg row exactly. IR is confirmed: IV.1(4) says the film-coated tablet passes the JP disintegration test for immediate-release preparations (即放性製剤). The dose is nominal efonidipine hydrochloride ethanolate. The statistic is mean±S.E., not SD.",
+          "source_url": "https://www.info.pmda.go.jp/go/interview/3/380077_2149034F1020_3_006_1F.pdf",
+          "source_access_status": "full_text (current revision; cited revision 404)",
+          "original_cmax": "11.7±2.4",
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "arithmetic mean ± S.E., n=5",
+          "exact_locator": "Landel IF 9th ed. (2025-07), PDF p.28, VII.1.(2)1)① 単回投与 table (血漿中未変化体濃度); IR: IV.1.(4); composition IV.2.(1)",
+          "analyte": "efonidipine (unchanged parent, 血漿中未変化体)",
+          "matrix": "plasma",
+          "fasting_evidence": "'空腹時に単回経口投与'",
+          "formulation_evidence": "Landel film-coated tablet; JP 即放性製剤 disintegration test (IV.1(4))",
+          "dose_evidence": "20 mg efonidipine hydrochloride ethanolate, single oral",
+          "population": "healthy adult males, n=5",
+          "manifest_dose_mg": 20.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://www.info.pmda.go.jp/go/interview/3/380077_2149034F1020_3_1F.pdf#page=22",
+          "mapping_metadata_used": {
+            "pk_auc_value": "25.4",
+            "pk_auc_units": "ng × h/mL",
+            "pk_thalf_value": "1.4",
+            "pk_population_size": "5",
+            "pk_application_comment": "Efonidipine hydrochloride ethanolate",
+            "pk_population_comment": "PMDA Drug information page 22",
+            "pk_annotated_form": "Landel tablets"
+          }
+        },
+        {
+          "arm_id": "frdb_965",
+          "verification": "verified",
+          "reason": "The cited IF revision (_3_1F) returns HTTP 404. Values come from the current Landel interview form, 9th ed. (Jul 2025, _3_006_1F), section VII.1(2)1) ① table. Healthy adult males received a single fasted (空腹時) oral dose of Landel tablet; plasma unchanged efonidipine was measured. FRDB n=6, AUC0-24 57.6 ng*h/mL and t1/2 2.2 h match the 40 mg row exactly. IR is confirmed: IV.1(4) says the film-coated tablet passes the JP disintegration test for immediate-release preparations (即放性製剤). 40 mg was given as two 20 mg tablets. The dose is nominal efonidipine hydrochloride ethanolate. The statistic is mean±S.E., not SD.",
+          "source_url": "https://www.info.pmda.go.jp/go/interview/3/380077_2149034F1020_3_006_1F.pdf",
+          "source_access_status": "full_text (current revision; cited revision 404)",
+          "original_cmax": "17.9±2.7",
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "arithmetic mean ± S.E., n=6",
+          "exact_locator": "Landel IF 9th ed. (2025-07), PDF p.28, VII.1.(2)1)① 単回投与 table (血漿中未変化体濃度); IR: IV.1.(4); composition IV.2.(1)",
+          "analyte": "efonidipine (unchanged parent, 血漿中未変化体)",
+          "matrix": "plasma",
+          "fasting_evidence": "'空腹時に単回経口投与'",
+          "formulation_evidence": "Landel film-coated tablet; JP 即放性製剤 disintegration test (IV.1(4))",
+          "dose_evidence": "40 mg efonidipine hydrochloride ethanolate, single oral",
+          "population": "healthy adult males, n=6",
+          "manifest_dose_mg": 40.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://www.info.pmda.go.jp/go/interview/3/380077_2149034F1020_3_1F.pdf#page=22",
+          "mapping_metadata_used": {
+            "pk_auc_value": "57.6",
+            "pk_auc_units": "ng × h/mL",
+            "pk_thalf_value": "2.2",
+            "pk_population_size": "6",
+            "pk_population_comment": "PMDA Drug information page 22"
+          }
+        }
+      ]
+    },
+    {
+      "manifest_position_1based": 74,
+      "candidate_id": "8858",
+      "name": "ORTERONEL",
+      "smiles": "CNC(=O)c1ccc2cc([C@@]3(O)CCn4cncc43)ccc2c1",
+      "arms": [
+        {
+          "arm_id": "frdb_8815",
+          "verification": "unverified",
+          "reason": "Suri et al., Clin Pharmacol Drug Dev 2016 food-effect crossover. The abstract confirms a single 400 mg orteronel dose with a fasting period in healthy male subjects and plasma measurement of orteronel. The full text (Wiley) was inaccessible, so the dosage form/IR status, the fasting-period Cmax table, the statistic and n were not seen. FRDB n=39 and AUC 17456 cannot be matched to a table.",
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/27163497",
+          "source_access_status": "abstract_only (full text paywalled / bot-challenged; time-boxed, no open-access copy in Europe PMC/Unpaywall)",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "cmax_statistic": null,
+          "exact_locator": "PubMed abstract only",
+          "analyte": "orteronel (parent; M-I also measured)",
+          "matrix": "plasma",
+          "fasting_evidence": "abstract: 'under fasting conditions' (duration unseen)",
+          "formulation_evidence": "not in abstract",
+          "dose_evidence": "400 mg single oral",
+          "population": "healthy male subjects; n unseen (FRDB 39)",
+          "manifest_dose_mg": 400.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://pubmed.ncbi.nlm.nih.gov/27163497",
+          "mapping_metadata_used": {
+            "pk_auc_value": "17456",
+            "pk_auc_units": "ng × h/mL",
+            "pk_thalf_value": "10.5",
+            "pk_population_size": "39",
+            "pk_annotated_form": "Orteronel"
+          }
+        }
+      ]
+    },
+    {
+      "manifest_position_1based": 75,
+      "candidate_id": "30872",
+      "name": "GLYCERYL 1-NITRATE",
+      "smiles": "O=[N+]([O-])OCC(O)CO",
+      "arms": [
+        {
+          "arm_id": "frdb_10779",
+          "verification": "unverified",
+          "reason": "Laufen et al., Eur J Clin Pharmacol 1986. The abstract confirms healthy volunteers given 10/20/40 mg G-1-N tablets and 20 mg drops. The 573 ng/mL it cites for 40 mg is the peak of the mean concentration-time curve, not a mean Cmax statistic. The full text (Springer) is paywalled with no OA copy, so fasting state, the exact 40 mg arm (FRDB n=12, AUCinf 2840, t1/2 2.56), the Cmax table and the statistic are unseen. The sister 1987 BJCP study states a 12-h fast, but that is not inferred for this study.",
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/3100313",
+          "source_access_status": "abstract_only (full text paywalled / bot-challenged; time-boxed, no open-access copy in Europe PMC/Unpaywall)",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "cmax_statistic": null,
+          "exact_locator": "PubMed abstract only",
+          "analyte": "glyceryl-1-nitrate (dosed as itself)",
+          "matrix": "plasma (abstract)",
+          "fasting_evidence": "not in abstract",
+          "formulation_evidence": "40 mg tablets (abstract); IR not stated",
+          "dose_evidence": "40 mg oral tablet",
+          "population": "healthy volunteers, male and female (abstract)",
+          "manifest_dose_mg": 40.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://pubmed.ncbi.nlm.nih.gov/3100313",
+          "mapping_metadata_used": {
+            "pk_auc_value": "2840",
+            "pk_auc_units": "ng × h/mL",
+            "pk_thalf_value": "2.56",
+            "pk_population_size": "12",
+            "pk_annotated_form": "GLYCERYL 1-NITRATE"
+          }
+        },
+        {
+          "arm_id": "frdb_10780",
+          "verification": "verified_with_caveat",
+          "reason": "Open PMC page scans of Laufen & Leitold, Br J Clin Pharmacol 1987. This was a two-way i.v./p.o. crossover in 10 healthy males. A single 20 mg G-1-N tablet was swallowed with 100 ml water after a 12-h fast, with fasting continued for 2 h post-dose. Plasma G-1-N was assayed by GC-ECD. In Table 1 the p.o. mean t1/2 2.58 h and n=10 match FRDB exactly (FRDB has no AUC for this arm). Caveat: the tablet is a plain tablet not explicitly labelled immediate-release. Median tmax is 20 min, which is consistent with IR, but IR is not stated in words.",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1386226/",
+          "source_access_status": "full_text (PMC page scans)",
+          "original_cmax": "307 (s.d. 74)",
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "arithmetic mean of individual Cmax, s.d. 74, n=10",
+          "exact_locator": "Laufen & Leitold, Br J Clin Pharmacol 1987;23:287-293, p.288 Methods; p.291 Table 1 (Cmax po column, Mean row); Fig. 3 p.290",
+          "analyte": "glyceryl-1-nitrate (dosed as itself; parent)",
+          "matrix": "plasma (heparinised)",
+          "fasting_evidence": "'Each subject fasted for 12 h before dosing and for 2 h thereafter' (p.288)",
+          "formulation_evidence": "'The oral dose was taken in form of a tablet' (p.288); IR not stated",
+          "dose_evidence": "20 mg G-1-N single oral tablet",
+          "population": "10 healthy male volunteers, 22-43 y",
+          "manifest_dose_mg": 20.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://pubmed.ncbi.nlm.nih.gov/3105569",
+          "mapping_metadata_used": {
+            "pk_thalf_value": "2.58",
+            "pk_population_size": "10",
+            "pk_annotated_form": "GLYCERYL 1-NITRATE"
+          }
+        }
+      ]
+    },
+    {
+      "manifest_position_1based": 76,
+      "candidate_id": "25673",
+      "name": "CRS-3123",
+      "smiles": "O=c1cc(NCCCN[C@@H]2CCOc3c(Br)cc(Br)cc32)[nH]c2ccsc12",
+      "arms": [
+        {
+          "arm_id": "frdb_10605",
+          "verification": "verified_with_caveat",
+          "reason": "Open-access PMC full text of Lomeli et al., AAC 2019, a MAD phase 1 in healthy adults (b.i.d. x 10 days). Day 1 PK follows the first dose only and the paper labels it 'following a single dose' (AUC0-12, Cmax). FRDB AUC 3,560 ng*h/mL and n=8 match the 600 mg Day-1 column of Table 1. FRDB t1/2 5 h does not match the 600 mg Day-1 t1/2 (2.9 h) or Day-10 t1/2 (6.1 h); it equals the 400 mg Day-10 value, which looks like an FRDB transcription slip. AUC and n still map uniquely to 600 mg Day 1. Caveats: (1) subjects fasted only 1 h before and 2 h after dosing, with no overnight fast stated, so this is not a standard fasted condition; (2) CRS3123 was dosed from 200 mg gelatin capsules of the dihydrochloride salt, and the paper does not say whether 200 mg is the salt or free-base amount; (3) the capsule is not explicitly labelled IR, though it is a plain gelatin capsule with no MR designation; (4) the second dose was given 12 h after the first, after the 2-3 h Tmax.",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7187627/",
+          "source_access_status": "full_text",
+          "original_cmax": "654 (CV 57.9%)",
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "geometric mean (%CV), n=8",
+          "exact_locator": "Lomeli et al., Antimicrob Agents Chemother 2019;64:e01395-19, Table 1 (Plasma, Day 1 column); Methods 'Study drug' and 'Study design'",
+          "analyte": "CRS3123 (parent)",
+          "matrix": "plasma",
+          "fasting_evidence": "'Subjects fasted 1 h before and 2 h after administration of the study product' (Methods)",
+          "formulation_evidence": "200-mg gelatin capsules of CRS3123.2HCl (SRI International)",
+          "dose_evidence": "600 mg first dose (Day 1) of b.i.d. regimen",
+          "population": "healthy adults 18-45 y, 8 active per cohort",
+          "manifest_dose_mg": 600.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://pubmed.ncbi.nlm.nih.gov/31685472",
+          "mapping_metadata_used": {
+            "pk_auc_value": "3560",
+            "pk_auc_units": "ng × h/mL",
+            "pk_thalf_value": "5",
+            "pk_population_size": "8",
+            "pk_annotated_form": "CRS3123"
+          }
+        },
+        {
+          "arm_id": "frdb_10606",
+          "verification": "verified_with_caveat",
+          "reason": "Open-access PMC full text of Lomeli et al., AAC 2019, a MAD phase 1 in healthy adults (b.i.d. x 10 days). Day 1 PK follows the first dose only and the paper labels it 'following a single dose' (AUC0-12, Cmax). FRDB AUC 2,340 ng*h/mL and n=8 match the 400 mg Day-1 column of Table 1. FRDB AUC 2340 and t1/2 3.6 match the 400 mg Day-1 column exactly. Caveats: (1) subjects fasted only 1 h before and 2 h after dosing, with no overnight fast stated, so this is not a standard fasted condition; (2) CRS3123 was dosed from 200 mg gelatin capsules of the dihydrochloride salt, and the paper does not say whether 200 mg is the salt or free-base amount; (3) the capsule is not explicitly labelled IR, though it is a plain gelatin capsule with no MR designation; (4) the second dose was given 12 h after the first, after the 2-3 h Tmax.",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7187627/",
+          "source_access_status": "full_text",
+          "original_cmax": "507 (CV 42.5%)",
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "geometric mean (%CV), n=8",
+          "exact_locator": "Lomeli et al., Antimicrob Agents Chemother 2019;64:e01395-19, Table 1 (Plasma, Day 1 column); Methods 'Study drug' and 'Study design'",
+          "analyte": "CRS3123 (parent)",
+          "matrix": "plasma",
+          "fasting_evidence": "'Subjects fasted 1 h before and 2 h after administration of the study product' (Methods)",
+          "formulation_evidence": "200-mg gelatin capsules of CRS3123.2HCl (SRI International)",
+          "dose_evidence": "400 mg first dose (Day 1) of b.i.d. regimen",
+          "population": "healthy adults 18-45 y, 8 active per cohort",
+          "manifest_dose_mg": 400.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://pubmed.ncbi.nlm.nih.gov/31685472",
+          "mapping_metadata_used": {
+            "pk_auc_value": "2340",
+            "pk_auc_units": "ng × h/mL",
+            "pk_thalf_value": "3.6",
+            "pk_population_size": "8",
+            "pk_annotated_form": "CRS3123"
+          }
+        }
+      ]
+    },
+    {
+      "manifest_position_1based": 77,
+      "candidate_id": "2801",
+      "name": "PRIRALFINAMIDE",
+      "smiles": "C[C@H](NCc1ccc(OCc2ccccc2F)cc1)C(N)=O",
+      "arms": [
+        {
+          "arm_id": "frdb_6114",
+          "verification": "unverified",
+          "reason": "Bauer et al., Pharmacology 2010. The abstract confirms a single oral 320 mg 14C-(S)-ralfinamide dose in 6 healthy male volunteers with plasma parent PK (t1/2 about 15 h, consistent with FRDB 14.7). The name in the source is ralfinamide; the manifest SMILES ((S), 2-fluorobenzyloxy) is consistent with it. The full text (Karger) is paywalled with no OA copy, so the dosage form (solution vs capsule), fasting state, dose basis (FRDB notes methanesulfonate) and the Cmax table/statistic/unit are unseen.",
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/21071997/",
+          "source_access_status": "abstract_only (full text paywalled / bot-challenged; time-boxed, no open-access copy in Europe PMC/Unpaywall)",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "cmax_statistic": null,
+          "exact_locator": "PubMed abstract only",
+          "analyte": "ralfinamide (unchanged parent, per abstract)",
+          "matrix": "plasma",
+          "fasting_evidence": "not in abstract",
+          "formulation_evidence": "not in abstract (radiolabelled dose)",
+          "dose_evidence": "320 mg 14C-(S)-ralfinamide single oral (salt basis unknown)",
+          "population": "6 healthy male volunteers",
+          "manifest_dose_mg": 320.0,
+          "manifest_cmax_unit": "μg/mL",
+          "manifest_source_uri": "https://pubmed.ncbi.nlm.nih.gov/21071997/",
+          "mapping_metadata_used": {
+            "pk_auc_value": "41.3",
+            "pk_auc_units": "mg × h/L",
+            "pk_thalf_value": "14.7",
+            "pk_population_size": "6",
+            "pk_annotated_form": "PRIRALFINAMIDE METHANESULFONATE, [14C]-",
+            "pk_funbound_comment": "Saliva/plasma ratio: 0.10 at 8 h, 0.03 at 48 h"
+          }
+        }
+      ]
+    },
+    {
+      "manifest_position_1based": 78,
+      "candidate_id": "3001",
+      "name": "MOGUISTEINE",
+      "smiles": "CCOC(=O)CC(=O)N1CCSC1COc1ccccc1OC",
+      "arms": [
+        {
+          "arm_id": "frdb_6507",
+          "verification": "ineligible",
+          "reason": "From the abstract (full text Elsevier-paywalled): the study measured the metabolite M1 in serum by HPLC-MS/MS ('HPLC-tandem mass spectrometry was used to determine concentrations of the moguisteine metabolite M1 in serum'). All reported PK parameters are for M1, and parent moguisteine was not reported. The analyte identity (parent) and matrix (plasma) both fail. The FRDB row is presumably M1 annotated as parent. Single-dose 400 mg arm, healthy Chinese adults, 3-way crossover.",
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/30703444",
+          "source_access_status": "abstract_only (full text paywalled / bot-challenged; time-boxed, no open-access copy in Europe PMC/Unpaywall)",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "cmax_statistic": null,
+          "exact_locator": "PubMed abstract, Methods and Results",
+          "analyte": "metabolite M1 (not parent moguisteine)",
+          "matrix": "serum",
+          "fasting_evidence": "not in abstract",
+          "formulation_evidence": "tablet (stage 4 described as tablet; single-dose form unstated)",
+          "dose_evidence": "400 mg single oral (one of 100/200/400 mg crossover)",
+          "population": "12 healthy Chinese adults (6M/6F)",
+          "manifest_dose_mg": 400.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://pubmed.ncbi.nlm.nih.gov/30703444",
+          "mapping_metadata_used": {
+            "pk_auc_value": "11637.72",
+            "pk_auc_units": "ng × h/mL",
+            "pk_thalf_value": "1.54",
+            "pk_population_size": "4",
+            "pk_annotated_form": "MOGUISTEINE"
+          }
+        }
+      ]
+    },
+    {
+      "manifest_position_1based": 79,
+      "candidate_id": "2935",
+      "name": "SILIBININ A",
+      "smiles": "COc1cc([C@H]2Oc3cc([C@H]4Oc5cc(O)cc(O)c5C(=O)[C@@H]4O)ccc3O[C@@H]2CO)ccc1O",
+      "arms": [
+        {
+          "arm_id": "frdb_6412",
+          "verification": "ineligible",
+          "reason": "PMC full text (author manuscript). The arm maps exactly to Product B in Table 3: silybin A dose 48.7 mg (Table 2 assay), AUClast 37.17 ng*h/mL, t1/2 1.98 h, n=12. Conditions: overnight fast, 4-h post-dose fast, single serving, plasma, healthy adults. It is ineligible because the dosed product is not a single-drug parent dose. It is a 2-capsule serving of a multi-ingredient dietary supplement (Table 1: milk thistle extract plus about 20 co-formulated botanicals including resveratrol, green tea, turmeric and ginseng), and silybin A is a constituent of the silymarin extract measured as a surrogate marker. The FRDB application comment lists the same co-ingredients, even though pkappcombo=false.",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6037411/",
+          "source_access_status": "full_text",
+          "original_cmax": "15.69 ± 11.41",
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "arithmetic mean ± SD, n=12",
+          "exact_locator": "Li et al., Clin Ther 2018;40:103-113, Table 1 (composition), Table 2 (silybin A content 48.7 mg), Table 3 (Silybin A Product B column)",
+          "analyte": "silybin A (constituent of dosed extract)",
+          "matrix": "plasma",
+          "fasting_evidence": "'Following an overnight fast...'; 'remained in a fasted state for four additional hours'",
+          "formulation_evidence": "Product B powdered capsules x2 (multi-ingredient supplement)",
+          "dose_evidence": "48.7 mg silybin A measured content of one serving (250 mg milk thistle extract, 80% silymarin)",
+          "population": "12 healthy volunteers (6M/6F), 19-34 y",
+          "manifest_dose_mg": 48.7,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://pubmed.ncbi.nlm.nih.gov/29273470/",
+          "mapping_metadata_used": {
+            "pk_auc_value": "37.17",
+            "pk_auc_units": "ng × h/mL",
+            "pk_thalf_value": "1.98",
+            "pk_population_size": "12",
+            "pk_application_comment": "Formulation also contains: 250 mg Milk Thistle (Silybum marianum PE 80% silymarin); 29 mg Pomegrantate (punica granatum PE); 20 mg Grape Seed (80% oligomeric proanthocyanidins); 20 mg Turmeric (95% curcuminoids); 50 mg Ashwagandha (Withania somnifera 4:1 PE); 9 mg Bacopa (Bacopa monnieri PE 50%); 35 mg Green Tea (98% polyphenols); 30 mg Horny Goat Weed; 4 mg Black Tea (PE 50% polyphenols); 4 mg White Tea (PE 90% polyphenols); 7 mg Blueberry; 7 mg Red Raspberry; 11 mg Bilberry; 12 mg Panax Ginseng (Root PE 80% ginsenosides); 8 mg Harada (Terminalia chebula fruit); 7 mg Boswellia (PE 65% boswellic acid); 7 mg Maca; 5 mg Shilajit (20% fulvic acid); 28 mg Resveratrol; 7.5 mg Ascorbic Acid",
+            "pk_annotated_form": "SILIBININ A"
+          }
+        }
+      ]
+    },
+    {
+      "manifest_position_1based": 80,
+      "candidate_id": "59645",
+      "name": "SAR-439859",
+      "smiles": "O=C(O)c1ccc2c(c1)CCCC(c1ccc(Cl)cc1Cl)=C2c1ccc(OC2CCN(CCCF)C2)cc1",
+      "arms": [
+        {
+          "arm_id": "frdb_13283",
+          "verification": "verified_with_caveat",
+          "reason": "The cited Sanofi URL now returns 404 (NoSuchKey). The identical file was retrieved from the Wayback Machine snapshot of 2023-09-26 (same URL). Study BEX15859 is a 14C ADME/absolute-BA study in healthy post-menopausal women. On Day 1, 400 mg amcenestrant (2 x 200 mg tablets) was given orally as a single dose in a fasted condition, and plasma amcenestrant was measured. FRDB AUC 54100, t1/2 14.7 h and n=6 match the tablet column of Table 3 exactly. Caveats: (1) a 100 ug IV [14C]-amcenestrant microdose was given 3 h after the oral tablet, before the median Tmax of 3.38 h; the tracer is 0.025% of the oral dose but its contribution to the reported Cmax is not quantified; (2) the protocol permitted a light meal or snack from 2 h after oral dosing, before the median Tmax of 3.38 h, and actual food intake is unreported; (3) the tablet is not explicitly labelled IR.",
+          "source_url": "https://web.archive.org/web/20230926044419/https://www.sanofi.com/assets/dotcom/content-app/clinical-studies/pharma/bex15859.pdf",
+          "source_access_status": "full_text (Wayback copy of cited URL; live URL 404)",
+          "original_cmax": "5100 ± 930 (geo. mean 5030, CV 18.2%)",
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "arithmetic mean ± SD, n=6 (geometric mean also given)",
+          "exact_locator": "Sanofi CSR synopsis BEX15859, PDF p.8 Table 3 (amcenestrant 400 mg tablet, plasma); study products p.2-3",
+          "analyte": "amcenestrant (parent)",
+          "matrix": "plasma",
+          "fasting_evidence": "'400 mg administered as a single dose on Day 1 in a fasted condition'; synopsis p.3 permits a light meal/snack >=2 h after oral tablet, actual intake unreported",
+          "formulation_evidence": "200 mg tablet (IR not stated)",
+          "dose_evidence": "400 mg (2 x 200 mg tablets) single oral",
+          "population": "healthy post-menopausal women 40-75 y, n=6",
+          "manifest_dose_mg": 400.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://www.sanofi.com/assets/dotcom/content-app/clinical-studies/pharma/bex15859.pdf",
+          "mapping_metadata_used": {
+            "pk_auc_value": "54100",
+            "pk_auc_units": "ng × h/mL",
+            "pk_thalf_value": "14.7",
+            "pk_population_size": "6",
+            "pk_annotated_form": "SAR-439859"
+          }
+        }
+      ]
+    }
+  ],
+  "coordinator_corrections": [
+    "Silibinin A exclusion confirmed: original Table 1 lists a multi-ingredient botanical supplement despite the frozen FRDB pkappcombo=false metadata; 48.7 mg is measured constituent content, not an isolated-parent product.",
+    "CRS-3123 short pre-dose fast kept verified_with_caveat; one hour before dosing does not establish the standard fasted state. Neither arm counts toward the primary eligible-compound set.",
+    "Efonidipine 10/20/40 mg source table visually checked in manufacturer interview-form PDF p.28, including mean±S.E., plasma unchanged parent, and 40 mg as two 20 mg tablets.",
+    "Amcenestrant caveat clarified from the original Sanofi synopsis: the IV tracer contribution to Cmax is unquantified, and an optional post-dose snack was permitted before median Tmax."
+  ]
+}
