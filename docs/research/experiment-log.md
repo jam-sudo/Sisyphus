@@ -10,6 +10,18 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-23 (cont.) — CL/F and Vd/F training source pinned from canonical regen
+
+Commit `3168e90` co-committed the leak-free `clf_training.csv` and the two
+shipped CL/F and Vd/F model artifacts after running the checked-in canonical
+regen recipe. Their current hashes match that commit. The training script
+reads this CSV, yielding 1,010 in-range CL/F and 937 in-range Vd/F rows;
+each model's stored base score matches its target mean. The two manifests now
+pin the CSV path and SHA256 instead of `unknown_legacy`. The date and CV
+metric fields remain unknown where the artifact itself cannot establish them.
+Five other active fitted models still lack exact source hashes, so the external
+V1 gate remains closed.
+
 ## 2026-09-23 (cont.) — Omega Cmax source recovered for conservative exclusion
 
 Recovered the public Omega `mmpk_clean.csv` snapshot at commit `08a45047`

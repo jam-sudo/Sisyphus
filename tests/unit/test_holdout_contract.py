@@ -182,6 +182,17 @@ def test_public_training_membership_sources_are_complete_and_hash_pinned():
         assert sha256_file(ROOT / row["path"]) == row["sha256"]
 
 
+def test_clf_and_vdf_manifests_pin_their_co_committed_training_source():
+    source = "data/training/clf_training.csv"
+    digest = sha256_file(ROOT / source)
+    for model in ("xgboost_clf", "xgboost_vdf"):
+        metadata = json.loads((ROOT / f"models/direct_pk/{model}.meta.json").read_text())
+        assert metadata["trained_on"] == {"dataset_path": source, "sha256": digest}
+        assert metadata["artifact_sha256"] == sha256_file(
+            ROOT / f"models/direct_pk/{model}.json"
+        )
+
+
 def test_training_membership_refuses_missing_or_modified_source(tmp_path):
     inventory_path = tmp_path / "data/validation/training_membership_sources_v1.json"
     inventory_path.parent.mkdir(parents=True)

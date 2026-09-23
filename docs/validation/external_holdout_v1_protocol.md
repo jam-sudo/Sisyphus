@@ -340,8 +340,9 @@ Its 1,128 rows yield the documented 100 exclusions and 1,028 remaining rows
 under the current 107-compound holdout and three-key matching. This recovers a
 conservative Cmax exclusion source, not the exact fitted snapshot: retraining
 with the recorded hyperparameters and current feature code did not reproduce
-the shipped model's tree dump or predictions. The shipped model metadata still
-has `sha256: unknown_legacy`, as do several other fitted models.
+the shipped model's tree dump or predictions. The shipped Cmax metadata still
+has `sha256: unknown_legacy`; four other active fitted models also lack exact
+source hashes. CL/F and Vd/F are pinned to their co-committed training CSV.
 It therefore does not prove exact model-training membership. The audit and
 prediction runner fail closed until each production fitted model names a
 repository-relative, hash-matched training dataset included in the pinned

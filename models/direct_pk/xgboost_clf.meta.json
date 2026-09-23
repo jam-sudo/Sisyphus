@@ -3,8 +3,8 @@
   "artifact_sha256": "2c83f5bf90a47c11150f07380e686cda3bea67cf1b44d9500895cdaf4a8da6a1",
   "target": "log10(CL/F mL/min/kg)",
   "trained_on": {
-    "dataset_path": "MMPK clinical PK (holdout-excluded)",
-    "sha256": "unknown_legacy"
+    "dataset_path": "data/training/clf_training.csv",
+    "sha256": "649e3dde6e49fcb65a1fdb5f636de38a09acd721cdbc552a96a13e89b3e63462"
   },
   "feature_schema": {
     "name": "compute_features_v1",
