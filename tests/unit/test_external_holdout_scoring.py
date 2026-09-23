@@ -498,6 +498,20 @@ def test_cli_uses_frozen_seed_and_bootstrap_count(tmp_path, monkeypatch):
     output_path = tmp_path / "score.json"
     manifest_path.write_text(json.dumps(manifest))
     verify_source_plan(manifest_path, manifest, lambda smiles: smiles)
+    verified[0].pop("synonyms")
+    verified_path = tmp_path / "verified_shortlist.json"
+    verified_path.write_text(json.dumps(verified))
+    plan["verified_shortlist_sha256"] = sha256_file(verified_path)
+    plan_path.write_text(json.dumps(plan))
+    manifest["source_plan_sha256"] = sha256_file(plan_path)
+    with pytest.raises(ValueError, match="synonyms or related structures"):
+        verify_source_plan(manifest_path, manifest)
+    verified[0]["synonyms"] = []
+    verified_path.write_text(json.dumps(verified))
+    plan["verified_shortlist_sha256"] = sha256_file(verified_path)
+    plan_path.write_text(json.dumps(plan))
+    manifest["source_plan_sha256"] = sha256_file(plan_path)
+
     extra = dict(manifest["compounds"][0])
     extra.update(candidate_id="c300", smiles="C" * 301)
     extra["arms"] = [{**extra["arms"][0], "primary_eligible": False}]
