@@ -56,7 +56,9 @@ N=120 before curation begins, but must then define the relevant effect as at lea
    tables. Each value requires two-person verification against the cited table.
 4. Record parent/analyte, salt, formulation, IR/ER/MR, fed/fasted, dose form,
    route, single/multiple dose, population, co-medication, matrix, units, study N,
-   and source table/page. The frozen `dose_mg` must be in parent active-moiety
+   Cmax central-statistic type (`arithmetic_mean`, `geometric_mean`,
+   `geometric_lsmean`, or `median`), and source table/page. The frozen `dose_mg`
+   must be in parent active-moiety
    units matching the model input. Record `dose_basis` and a source-specific
    `dose_basis_evidence` statement. For a salt, cocrystal, or solvate, an
    explicit original or regulatory equivalence may support conversion to
@@ -84,6 +86,13 @@ The dose-basis and post-dose meal requirements were added on 2026-09-23 after
 diagnostic P0 exposed a possible verlukast-sodium ambiguity and fasted-study
 meal-timing ambiguity. No V1 cohort or predictions had been frozen; P0 remains
 development evidence and is not a V1 test.
+The source Cmax statistic is also required and bound into the blinded
+source-record hash. The primary comparison accepts all four labelled central
+estimates. As a descriptive sensitivity, report compound-level Meta and ML AAFE,
+their paired ratio and 95% compound-bootstrap CI for each statistic type with
+at least 20 compounds whose every primary arm has that type. Report counts only
+below 20; count mixed-statistic compounds separately. This sensitivity never
+changes the primary cohort or release gate.
 
 ### Operational acquisition plan
 

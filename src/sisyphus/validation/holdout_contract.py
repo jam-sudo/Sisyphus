@@ -64,6 +64,7 @@ _SOURCE_HASH_FIELDS = (
     "dose_regimen",
     "population",
     "co_medications",
+    "cmax_statistic",
     "study_n",
     "source",
     "verified_by",

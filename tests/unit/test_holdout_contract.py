@@ -38,6 +38,7 @@ def _label_arm() -> dict:
         "dose_regimen": "single",
         "population": {"age_group": "adult", "health_status": "healthy"},
         "co_medications": [],
+        "cmax_statistic": "arithmetic_mean",
         "study_n": 12,
         "source": {
             "category": "regulatory",
@@ -87,6 +88,9 @@ def test_source_record_hash_binds_metadata_but_not_outcome():
     assert source_record_hash(arm) != first
     arm["verified_by"] = ["curator-a", "curator-b"]
     arm["dose_basis_evidence"] = "Different source table"
+    assert source_record_hash(arm) != first
+    arm["dose_basis_evidence"] = "Source table reports 10 mg of parent drug."
+    arm["cmax_statistic"] = "geometric_mean"
     assert source_record_hash(arm) != first
 
 

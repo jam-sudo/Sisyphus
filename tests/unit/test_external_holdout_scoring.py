@@ -36,6 +36,7 @@ def test_score_weights_compounds_not_arms():
             "candidate_id": "a",
             "primary_eligible": True,
             "observed_cmax_mg_l": 1.0,
+            "cmax_statistic": "arithmetic_mean",
             "meta_cmax_mg_l": 1.0,
             "ml_cmax_mg_l": 2.0,
         },
@@ -43,6 +44,7 @@ def test_score_weights_compounds_not_arms():
             "candidate_id": "a",
             "primary_eligible": True,
             "observed_cmax_mg_l": 2.0,
+            "cmax_statistic": "arithmetic_mean",
             "meta_cmax_mg_l": 2.0,
             "ml_cmax_mg_l": 4.0,
         },
@@ -50,6 +52,7 @@ def test_score_weights_compounds_not_arms():
             "candidate_id": "b",
             "primary_eligible": True,
             "observed_cmax_mg_l": 1.0,
+            "cmax_statistic": "arithmetic_mean",
             "meta_cmax_mg_l": 4.0,
             "ml_cmax_mg_l": 4.0,
         },
@@ -60,6 +63,33 @@ def test_score_weights_compounds_not_arms():
     assert result["meta_aafe"] == pytest.approx(2.0)
     assert result["ml_aafe"] == pytest.approx(2.0 * 2**0.5)
     assert result["meta_ml_aafe_ratio"] == pytest.approx(2**-0.5)
+
+
+def test_statistic_sensitivity_omits_mixed_compounds_and_counts_small_groups():
+    scorer = _module()
+    rows = [
+        {
+            "candidate_id": f"c{i}",
+            "cmax_statistic": "arithmetic_mean",
+            "observed_cmax_mg_l": 1.0,
+            "meta_cmax_mg_l": 1.0,
+            "ml_cmax_mg_l": 2.0,
+        }
+        for i in range(20)
+    ]
+    rows.extend([
+        {**rows[0], "candidate_id": "mixed"},
+        {**rows[0], "candidate_id": "mixed", "cmax_statistic": "median"},
+    ])
+    result = scorer.statistic_sensitivity(rows, seed=7, n_boot=100)
+    assert result["mixed_statistic_compounds"] == 1
+    arithmetic = result["groups"]["arithmetic_mean"]
+    assert (arithmetic["n_compounds"], arithmetic["n_arms"]) == (20, 20)
+    assert arithmetic["score"]["meta_ml_aafe_ratio"] == pytest.approx(0.5)
+    assert result["groups"]["median"]["score"] is None
+    assert scorer.statistic_sensitivity(rows[1:], seed=7, n_boot=100)["groups"][
+        "arithmetic_mean"
+    ]["score"] is None
 
 
 def test_score_rejects_nonpositive_observation():
@@ -85,6 +115,7 @@ def test_superiority_uses_preregistered_cohort_margin(n, expected):
             "candidate_id": f"c{i}",
             "primary_eligible": True,
             "observed_cmax_mg_l": 1.0,
+            "cmax_statistic": "arithmetic_mean",
             "meta_cmax_mg_l": 1.0,
             "ml_cmax_mg_l": 1 / 0.88,
         }
@@ -119,8 +150,9 @@ def test_manifest_validation_rejects_arm_input_drift():
         "dose_mg": 20.0,
         "route": "oral",
         "primary_eligible": True,
-        "observed_cmax_mg_l": 1.0,
-        "meta_cmax_mg_l": 1.0,
+            "observed_cmax_mg_l": 1.0,
+            "cmax_statistic": "arithmetic_mean",
+            "meta_cmax_mg_l": 1.0,
         "ml_cmax_mg_l": 1.0,
         "execution_status": "ok",
         "interval_source": "development_empirical_residual",
@@ -191,6 +223,7 @@ def _synthetic_contracts(n: int = 120):
             "population": {"age_group": "adult", "health_status": "healthy"},
             "co_medications": [],
             "observed_cmax_mg_l": 1.0,
+            "cmax_statistic": "arithmetic_mean",
             "study_n": 12,
             "source": {
                 "category": category,
@@ -293,6 +326,14 @@ def test_full_synthetic_holdout_contract_and_scoring():
     scorer.validate_results_against_manifest(joined, manifest)
     result = scorer.score(joined, seed=7, n_boot=100)
     assert result["n_compounds"] == 120
+    assert result["cmax_statistic_sensitivity"]["groups"]["arithmetic_mean"]["n_compounds"] == 120
+
+
+def test_label_schema_requires_original_cmax_statistic():
+    _, _, labels = _synthetic_contracts()
+    del labels["records"][0]["arms"][0]["cmax_statistic"]
+    with pytest.raises(ValueError, match="cmax_statistic"):
+        validate_payload(labels, "external_holdout_v1_labels.schema.json")
 
 
 def test_scorer_rejects_manifest_eligibility_forgery():

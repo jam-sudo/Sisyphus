@@ -23,7 +23,7 @@
                 "arm_id", "dose_mg", "route", "dosage_form", "release_type",
                 "food_state", "postdose_fast_h", "salt_form", "dose_basis", "dose_basis_evidence",
                 "analyte", "matrix", "dose_regimen",
-                "population", "co_medications", "observed_cmax_mg_l", "study_n",
+                "population", "co_medications", "cmax_statistic", "observed_cmax_mg_l", "study_n",
                 "source", "source_record_hash", "verified_by"
               ],
               "properties": {
@@ -52,6 +52,9 @@
                 },
                 "co_medications": {
                   "type": "array", "uniqueItems": true, "items": {"type": "string"}
+                },
+                "cmax_statistic": {
+                  "enum": ["arithmetic_mean", "geometric_mean", "geometric_lsmean", "median"]
                 },
                 "observed_cmax_mg_l": {"type": "number", "exclusiveMinimum": 0},
                 "observed_cmax_cv": {"type": ["number", "null"], "minimum": 0},

@@ -205,6 +205,39 @@ def join_predictions_and_labels(prediction_rows: list[dict], labels: dict) -> li
     return joined
 
 
+def statistic_sensitivity(rows: list[dict], seed: int, n_boot: int) -> dict:
+    """Describe same-statistic compound subsets without changing the primary gate."""
+    by_compound: dict[str, list[dict]] = defaultdict(list)
+    for row in rows:
+        by_compound[row["candidate_id"]].append(row)
+    groups = {kind: [] for kind in (
+        "arithmetic_mean", "geometric_mean", "geometric_lsmean", "median"
+    )}
+    mixed = 0
+    for compound_rows in by_compound.values():
+        types = {row["cmax_statistic"] for row in compound_rows}
+        if len(types) == 1:
+            groups[next(iter(types))].extend(compound_rows)
+        else:
+            mixed += 1
+    result = {}
+    for kind, subset in groups.items():
+        n = len({row["candidate_id"] for row in subset})
+        entry = {"n_compounds": n, "n_arms": len(subset), "score": None}
+        if n >= 20:
+            meta = _compound_errors(subset, "meta_cmax_mg_l")
+            ml = _compound_errors(subset, "ml_cmax_mg_l")
+            _, _, ratios = _paired_bootstrap(meta, ml, np.random.default_rng(seed), n_boot)
+            entry["score"] = {
+                "meta_aafe": float(np.exp(meta.mean())),
+                "ml_aafe": float(np.exp(ml.mean())),
+                "meta_ml_aafe_ratio": float(np.exp((meta - ml).mean())),
+                "paired_ratio_95_ci": [float(v) for v in np.percentile(ratios, [2.5, 97.5])],
+            }
+        result[kind] = entry
+    return {"groups": result, "mixed_statistic_compounds": mixed}
+
+
 def score(rows: list[dict], seed: int, n_boot: int) -> dict:
     primary = [row for row in rows if row.get("primary_eligible") is True]
     if not primary:
@@ -298,6 +331,7 @@ def score(rows: list[dict], seed: int, n_boot: int) -> dict:
         "meta_pi90_median_multiplicative_factor": interval_factor_median,
         "meta_superiority_gate": superiority,
         "production_release_gate": release_gate,
+        "cmax_statistic_sensitivity": statistic_sensitivity(primary, seed, n_boot),
         "seed": seed,
         "n_bootstrap": n_boot,
     }
