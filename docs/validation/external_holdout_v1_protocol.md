@@ -113,6 +113,16 @@ and final model freeze; (6) frozen N=260 manifest and encrypted label store;
 and retirement. If only N=120 can be funded, that smaller target is fixed at
 milestone 1 and the superiority margin remains 15%.
 
+The source plan names four label-free JSON files and their SHA256 hashes:
+`inventory` is an array of candidate ID, name, source family/date/reference;
+`verified_shortlist` is an array of candidate ID, the same name, and SMILES;
+`allocation` maps `calibration`, `final_test`, and `reserve` to disjoint candidate-ID
+arrays; `exclusion_flow` gives every inventoried ID a `verified` or `excluded`
+decision, with a reason for each exclusion. Source families and dates must fall
+inside the frozen windows. The audit checks file hashes, declared counts, full
+allocation and exclusion coverage, final-test membership, and InChIKey-14
+uniqueness across the verified shortlist. These files contain no observed Cmax.
+
 ## Contamination gate
 
 Before model freeze, canonicalize both candidate and corpus structures using:

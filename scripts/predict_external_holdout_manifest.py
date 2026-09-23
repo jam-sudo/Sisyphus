@@ -19,6 +19,7 @@ from sisyphus.validation.holdout_contract import (
     sha256_file,
     validate_payload,
     verify_frozen_file,
+    verify_source_plan,
     verify_training_membership,
 )
 
@@ -75,6 +76,7 @@ def main() -> None:
     validate_payload(manifest, "external_holdout_v1_manifest.schema.json")
     if manifest.get("labels_blinded") is not True:
         raise ValueError("Manifest must declare labels_blinded=true")
+    verify_source_plan(args.manifest, manifest)
 
     actual_audit_sha = _sha256(args.audit_report)
     if actual_audit_sha != args.audit_report_sha256:

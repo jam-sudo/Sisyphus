@@ -19,10 +19,9 @@ from pathlib import Path
 import yaml
 
 from sisyphus.validation.holdout_contract import (
-    resolve_frozen_path,
-    sha256_file,
     validate_payload,
     validate_source_quotas,
+    verify_source_plan,
     verify_training_membership,
 )
 
@@ -121,17 +120,7 @@ def _repository_exclusions(
 def audit(manifest_path: Path) -> dict:
     manifest = json.loads(manifest_path.read_text())
     validate_payload(manifest, "external_holdout_v1_manifest.schema.json")
-    source_plan_path = resolve_frozen_path(
-        manifest_path.parent, str(manifest["source_plan_path"])
-    )
-    source_plan = json.loads(source_plan_path.read_text())
-    validate_payload(source_plan, "external_holdout_v1_source_plan.schema.json")
-    if sha256_file(source_plan_path) != manifest["source_plan_sha256"]:
-        raise ValueError("source_plan_sha256 does not match source_plan_path")
-    if source_plan["cycle_id"] != manifest["cycle_id"]:
-        raise ValueError("Source plan cycle_id does not match manifest")
-    if source_plan["final_test_n"] != manifest["n_target"]:
-        raise ValueError("Source plan final_test_n does not match manifest n_target")
+    verify_source_plan(manifest_path, manifest, EXCLUSION.ik14)
     compounds = manifest.get("compounds")
     if not isinstance(compounds, list):
         raise ValueError("manifest.compounds must be a list")

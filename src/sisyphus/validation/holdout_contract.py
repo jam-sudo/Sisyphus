@@ -5,6 +5,8 @@ from __future__ import annotations
 import hashlib
 import json
 from collections import Counter
+from collections.abc import Callable
+from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -178,3 +180,118 @@ def verify_training_membership(
         if sha256_file(path) != row["sha256"]:
             raise ValueError(f"Training membership source SHA256 mismatch: {row['path']}")
     return inventory_sha
+
+
+def verify_source_plan(
+    manifest_path: Path,
+    manifest: dict[str, Any],
+    structure_key: Callable[[str], str | None] | None = None,
+) -> dict[str, Any]:
+    """Bind the declared acquisition counts to the custodian's actual ID files."""
+
+    root = manifest_path.parent
+    plan_path = resolve_frozen_path(root, manifest["source_plan_path"])
+    if sha256_file(plan_path) != manifest["source_plan_sha256"]:
+        raise ValueError("source_plan_sha256 does not match source_plan_path")
+    plan = json.loads(plan_path.read_text())
+    validate_payload(plan, "external_holdout_v1_source_plan.schema.json")
+    if plan["cycle_id"] != manifest["cycle_id"] or plan["final_test_n"] != manifest["n_target"]:
+        raise ValueError("Source plan cycle or final-test size does not match manifest")
+
+    files = {}
+    for stem in ("inventory", "verified_shortlist", "allocation", "exclusion_flow"):
+        path = resolve_frozen_path(root, plan[f"{stem}_path"])
+        if sha256_file(path) != plan[f"{stem}_sha256"]:
+            raise ValueError(f"{stem} SHA256 mismatch")
+        files[stem] = json.loads(path.read_text())
+
+    def indexed(rows: Any, label: str, count: int) -> dict[str, dict[str, Any]]:
+        if not isinstance(rows, list) or len(rows) != count:
+            raise ValueError(f"{label} count does not match source plan")
+        result = {}
+        for row in rows:
+            if not isinstance(row, dict) or not isinstance(row.get("candidate_id"), str):
+                raise ValueError(f"{label} contains an invalid candidate ID")
+            cid = row["candidate_id"]
+            if not cid or cid in result:
+                raise ValueError(f"{label} contains a blank or duplicate candidate ID")
+            result[cid] = row
+        return result
+
+    inventory = indexed(files["inventory"], "inventory", plan["inventory_n"])
+    verified = indexed(files["verified_shortlist"], "verified shortlist", plan["verified_n"])
+    if not verified.keys() <= inventory.keys():
+        raise ValueError("Verified shortlist contains candidates absent from inventory")
+    windows = plan["source_windows"]
+    for cid, row in inventory.items():
+        required = ("name", "source_family", "source_date", "source_ref")
+        if not all(isinstance(row.get(key), str) and row[key] for key in required):
+            raise ValueError(f"Inventory identity or source is incomplete: {cid}")
+        try:
+            source_date = date.fromisoformat(row["source_date"])
+        except ValueError as exc:
+            raise ValueError(f"Invalid inventory source date: {cid}") from exc
+        if not any(
+            window["source_family"] == row["source_family"]
+            and date.fromisoformat(window["start_date"]) <= source_date
+            <= date.fromisoformat(window["end_date"])
+            for window in windows
+        ):
+            raise ValueError(f"Inventory source is outside frozen windows: {cid}")
+    for cid, row in verified.items():
+        if (
+            row.get("name") != inventory[cid]["name"]
+            or not isinstance(row.get("smiles"), str)
+            or not row["smiles"]
+        ):
+            raise ValueError(f"Verified identity or structure is incomplete: {cid}")
+    if structure_key is not None:
+        seen: dict[str, str] = {}
+        for cid, row in verified.items():
+            key = structure_key(row["smiles"])
+            if not key or key in seen:
+                raise ValueError(
+                    f"Verified structures are invalid or share a salt/stereo family: {cid}"
+                )
+            seen[key] = cid
+        for compound in manifest["compounds"]:
+            cid = compound["candidate_id"]
+            if cid in verified and structure_key(compound["smiles"]) != structure_key(
+                verified[cid]["smiles"]
+            ):
+                raise ValueError(f"Manifest structure differs from verified shortlist: {cid}")
+
+    allocation = files["allocation"]
+    roles = ("calibration", "final_test", "reserve")
+    if not isinstance(allocation, dict) or set(allocation) != set(roles):
+        raise ValueError("Allocation must contain calibration, final_test, and reserve")
+    assigned = []
+    for role in roles:
+        ids = allocation[role]
+        if (
+            not isinstance(ids, list)
+            or len(ids) != plan[f"{role}_n"]
+            or not all(isinstance(cid, str) for cid in ids)
+        ):
+            raise ValueError(f"Allocation {role} count or IDs are invalid")
+        assigned.extend(ids)
+    if len(assigned) != len(set(assigned)) or set(assigned) != verified.keys():
+        raise ValueError("Allocation must partition the verified shortlist exactly once")
+
+    flow = indexed(files["exclusion_flow"], "exclusion flow", plan["inventory_n"])
+    if flow.keys() != inventory.keys():
+        raise ValueError("Exclusion flow must cover the full inventory")
+    for cid, row in flow.items():
+        decision = "verified" if cid in verified else "excluded"
+        if row.get("decision") != decision or (decision == "excluded" and not row.get("reason")):
+            raise ValueError(f"Exclusion flow decision or reason is invalid: {cid}")
+
+    primary_ids = {
+        compound["candidate_id"] for compound in manifest["compounds"]
+        if any(arm["primary_eligible"] for arm in compound["arms"])
+    }
+    if primary_ids != set(allocation["final_test"]):
+        raise ValueError("Manifest primary cohort does not match frozen final-test allocation")
+    if not {compound["candidate_id"] for compound in manifest["compounds"]} <= verified.keys():
+        raise ValueError("Manifest contains a compound absent from the verified shortlist")
+    return plan

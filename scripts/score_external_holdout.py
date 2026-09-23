@@ -21,6 +21,7 @@ from sisyphus.validation.holdout_contract import (
     source_record_hash,
     validate_payload,
     validate_source_quotas,
+    verify_source_plan,
 )
 
 
@@ -306,6 +307,7 @@ def main() -> None:
     payload = json.loads(args.predictions.read_text())
     labels = json.loads(args.labels.read_text())
     validate_payload(manifest, "external_holdout_v1_manifest.schema.json")
+    verify_source_plan(args.manifest, manifest)
     validate_source_quotas(manifest)
     validate_payload(payload, "external_holdout_v1_predictions.schema.json")
     validate_payload(labels, "external_holdout_v1_labels.schema.json")

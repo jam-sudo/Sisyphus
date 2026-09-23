@@ -11,8 +11,10 @@ from pathlib import Path
 import pytest
 
 from sisyphus.validation.holdout_contract import (
+    sha256_file,
     source_record_hash,
     validate_payload,
+    verify_source_plan,
 )
 
 ROOT = Path(__file__).resolve().parent.parent.parent
@@ -287,10 +289,83 @@ def test_scorer_rejects_manifest_eligibility_forgery():
 def test_cli_uses_frozen_seed_and_bootstrap_count(tmp_path, monkeypatch):
     scorer = _module()
     manifest, predictions, labels = _synthetic_contracts()
+    inventory = [
+        {
+            "candidate_id": f"c{i}", "name": f"compound-{i}",
+            "source_family": "FDA", "source_date": "2025-01-01", "source_ref": f"nda-{i}",
+        }
+        for i in range(900)
+    ]
+    verified = [
+        {"candidate_id": f"c{i}", "name": f"compound-{i}", "smiles": "C" * (i + 1)}
+        for i in range(550)
+    ]
+    allocation = {
+        "calibration": [f"c{i}" for i in range(120, 260)],
+        "final_test": [f"c{i}" for i in range(120)],
+        "reserve": [f"c{i}" for i in range(260, 550)],
+    }
+    flow = [
+        {
+            "candidate_id": f"c{i}",
+            "decision": "verified" if i < 550 else "excluded",
+            "reason": "source ineligible" if i >= 550 else "",
+        }
+        for i in range(900)
+    ]
+    plan = {
+        "protocol": "external_holdout_v1", "cycle_id": "synthetic-v1",
+        "fixed_before_prediction": True, "inventory_n": 900, "verified_n": 550,
+        "calibration_n": 140, "final_test_n": 120, "reserve_n": 290,
+        "source_windows": [
+            {"source_family": "FDA", "start_date": "2020-01-01", "end_date": "2026-01-01"},
+            {"source_family": "EMA", "start_date": "2020-01-01", "end_date": "2026-01-01"},
+        ],
+        "curators": ["a", "b"],
+    }
+    for stem, contents in (
+        ("inventory", inventory), ("verified_shortlist", verified),
+        ("allocation", allocation), ("exclusion_flow", flow),
+    ):
+        path = tmp_path / f"{stem}.json"
+        path.write_text(json.dumps(contents))
+        plan[f"{stem}_path"] = path.name
+        plan[f"{stem}_sha256"] = sha256_file(path)
+    plan_path = tmp_path / "source-plan.json"
+    plan_path.write_text(json.dumps(plan))
+    manifest["source_plan_sha256"] = sha256_file(plan_path)
     manifest_path = tmp_path / "manifest.json"
     predictions_path = tmp_path / "predictions.json"
     labels_path = tmp_path / "labels.json"
     output_path = tmp_path / "score.json"
+    manifest_path.write_text(json.dumps(manifest))
+    verify_source_plan(manifest_path, manifest, lambda smiles: smiles)
+    allocation["calibration"][0] = "c0"
+    allocation_path = tmp_path / "allocation.json"
+    allocation_path.write_text(json.dumps(allocation))
+    plan["allocation_sha256"] = sha256_file(allocation_path)
+    plan_path.write_text(json.dumps(plan))
+    manifest["source_plan_sha256"] = sha256_file(plan_path)
+    with pytest.raises(ValueError, match="partition"):
+        verify_source_plan(manifest_path, manifest)
+    allocation["calibration"][0] = "c120"
+    allocation_path.write_text(json.dumps(allocation))
+    plan["allocation_sha256"] = sha256_file(allocation_path)
+    plan_path.write_text(json.dumps(plan))
+    manifest["source_plan_sha256"] = sha256_file(plan_path)
+    verified[0]["smiles"] = verified[1]["smiles"]
+    verified_path = tmp_path / "verified_shortlist.json"
+    verified_path.write_text(json.dumps(verified))
+    plan["verified_shortlist_sha256"] = sha256_file(verified_path)
+    plan_path.write_text(json.dumps(plan))
+    manifest["source_plan_sha256"] = sha256_file(plan_path)
+    with pytest.raises(ValueError, match="share a salt/stereo family"):
+        verify_source_plan(manifest_path, manifest, lambda smiles: smiles)
+    verified[0]["smiles"] = "C"
+    verified_path.write_text(json.dumps(verified))
+    plan["verified_shortlist_sha256"] = sha256_file(verified_path)
+    plan_path.write_text(json.dumps(plan))
+    manifest["source_plan_sha256"] = sha256_file(plan_path)
     manifest_path.write_text(json.dumps(manifest))
     manifest_sha = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
     predictions["manifest_sha256"] = manifest_sha
