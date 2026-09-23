@@ -8,6 +8,8 @@
 
 **Preprint:** [Yoon, J. M. (2026). *Sisyphus: A Topology-Compiled Physiologically Based Pharmacokinetic Platform with Structure-Only Input and Bayesian Parameter Refinement.* ChemRxiv.](https://doi.org/10.26434/chemrxiv.15004452/v1) &mdash; DOI [10.26434/chemrxiv.15004452/v1](https://doi.org/10.26434/chemrxiv.15004452/v1)
 
+The published v1 preprint and archived `Sisyphus_Preprint.pdf` report an older AAFE of 2.698. The current code and benchmark report 2.743; use the validation section below for current evidence.
+
 ---
 
 Sisyphus is an oral structure-only C<sub>max</sub> prediction system with a separate physiologically based pharmacokinetic (PBPK) research engine. The engine represents the human body as a typed directed multi-graph and derives ordinary differential equation (ODE) systems from graph topology.
