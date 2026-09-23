@@ -1,7 +1,7 @@
 /* ============================================================
    PredictView — SMILES → PK. Curve is the REAL engine ODE
    profile from the same solve; headline Cmax is the
-   meta-learner output; the 90% PI is the residual conformal
+   meta-learner output; the 90% band is a development residual
    interval; tracks/weights are the real applied values.
    ============================================================ */
 import type { AppState, Drug } from "../../types";
@@ -12,14 +12,15 @@ import { engineCurve, displayedCmax } from "../../pk";
 function predictLog(drug: Drug, meta: number): LogLine[] {
   const eng = drug.tracks.engine ?? 0;
   const ml = drug.tracks.ml ?? 0;
+  const activeTracks = Object.values(drug.weights).filter((w) => w != null && w > 0).length;
   return [
-    { ts: "0.000 s", tag: "info", tagText: "chem", msg: `RDKit descriptors · MW <b>${drug.mw}</b> · type <b>${drug.type}</b>` },
-    { ts: "0.031 s", tag: "ok", tagText: "ad", msg: "applicability domain — " + (drug.inDomain ? "<b>in-domain</b>" : "<b>out-of-domain</b> (flagged)") },
-    { ts: "0.052 s", tag: "info", tagText: "adme", msg: `XGBoost fᵤₚ=${fmt(drug.disposition.fup)} · CLᵢₙₜ · Rʙ:ₚ=1.0 · VDₛₛ` },
-    { ts: "0.118 s", tag: "info", tagText: "ivive", msg: `CLᵢₙₜ → per-enzyme affinity · primary <b>${drug.primaryEnzyme}</b>` },
-    { ts: "0.224 s", tag: "ok", tagText: "engine", msg: `LSODA PBPK solve · mass-balance err <b>${fmt(drug.engineDiagnostics?.massBalanceError)}</b> · Cₘₐₓ <b>${fmt(eng)}</b>` },
-    { ts: "0.341 s", tag: "info", tagText: "ml", msg: `direct XGBoost Cₘₐₓ <b>${fmt(ml)}</b>` },
-    { ts: "0.402 s", tag: "ok", tagText: "meta", msg: `4-track geometric blend → Cₘₐₓ <b>${fmt(meta)} mg/L</b> · confidence <b>not calibrated</b>` },
+    { ts: "1", tag: "info", tagText: "chem", msg: `RDKit descriptors · MW <b>${drug.mw}</b> · type <b>${drug.type}</b>` },
+    { ts: "2", tag: "ok", tagText: "ad", msg: "applicability domain — " + (drug.inDomain ? "<b>in-domain</b>" : "<b>out-of-domain</b> (flagged)") },
+    { ts: "3", tag: "info", tagText: "adme", msg: `fᵤₚ=${fmt(drug.disposition.fup)} · CLᵢₙₜ · Rʙ:ₚ=1.0 · VDₛₛ` },
+    { ts: "4", tag: "info", tagText: "ivive", msg: "CLᵢₙₜ contributes to engine clearance" },
+    { ts: "5", tag: "ok", tagText: "engine", msg: `PBPK solve · mass-balance err <b>${fmt(drug.engineDiagnostics?.massBalanceError)}</b> · Cₘₐₓ <b>${fmt(eng)}</b>` },
+    { ts: "6", tag: "info", tagText: "ml", msg: `direct XGBoost Cₘₐₓ <b>${fmt(ml)}</b>` },
+    { ts: "7", tag: "ok", tagText: "meta", msg: `${activeTracks}-track geometric blend → Cₘₐₓ <b>${fmt(meta)} mg/L</b> · confidence <b>not calibrated</b>` },
   ];
 }
 
@@ -29,6 +30,7 @@ export function PredictView({ drug, s, tab, running }: { drug: Drug; s: AppState
   const auc = drug.meta.auc;
   const meta = drug.meta.cmax;
   const engCmax = drug.tracks.engine ?? drug.meta.cmax;
+  const activeWeights = Object.entries(drug.weights).filter(([, weight]) => weight != null && weight > 0);
   const curve = engineCurve(drug);
   const tEnd = drug.curve.t[drug.curve.t.length - 1] || Math.max(drug.meta.thalf * 4, 12);
   // does the headline (meta/ml) diverge from the engine-curve peak?
@@ -79,7 +81,7 @@ export function PredictView({ drug, s, tab, running }: { drug: Drug; s: AppState
             <p className="note" style={{ margin: 0 }}>
               {s.method === "hybrid" ? (
                 <span>
-                  <b>Hybrid meta-learner.</b> Geometric blend of four tracks; {drug.type === "base" ? "base" : "non-base"} weights.
+                  <b>Hybrid meta-learner.</b> Geometric blend of {activeWeights.length} active tracks; applied weights below.
                 </span>
               ) : s.method === "engine" ? (
                 <span>
@@ -116,8 +118,8 @@ export function PredictView({ drug, s, tab, running }: { drug: Drug; s: AppState
       <div className="split">
         <div className="panel">
           <h5>
-            Four-track meta-learner
-            <span className="meta">{drug.type === "base" ? "base · E0.60 / ML0.40" : "non-base · E0.35 / ML0.50 / CLF0.15"}</span>
+            {activeWeights.length}-track meta-learner
+            <span className="meta">{activeWeights.map(([name, weight]) => `${name} ${((weight ?? 0) * 100).toFixed(0)}%`).join(" / ")}</span>
           </h5>
           <div style={{ marginTop: 4 }}>
             <TrackBars
@@ -128,7 +130,7 @@ export function PredictView({ drug, s, tab, running }: { drug: Drug; s: AppState
           </div>
           <div className="divider" style={{ margin: "16px 0" }} />
           <p className="note" style={{ margin: 0 }}>
-            The mechanistic Engine, direct XGBoost C<sub>max</sub> (ML), closed-form CL/F, and conditional VDss tracks use partly different signals. The compound-type-adaptive weights were selected on the N=107 development benchmark and therefore require confirmation on a new blinded holdout.
+              Available mechanistic Engine, direct XGBoost C<sub>max</sub> (ML), closed-form CL/F, and conditional VDss tracks use partly different signals. The compound-type-adaptive weights were selected on the N=107 development benchmark and therefore require confirmation on a new blinded holdout.
           </p>
         </div>
         <div className="stack">
@@ -194,7 +196,7 @@ export function PredictView({ drug, s, tab, running }: { drug: Drug; s: AppState
   return (
     <div className="panel">
       <h5>
-        Pipeline trace<span className="meta">deterministic · ~414 ms</span>
+        Model stages<span className="meta">order shown · timing not measured</span>
       </h5>
       <PipelineLog running={running} lines={predictLog(drug, meta)} />
     </div>

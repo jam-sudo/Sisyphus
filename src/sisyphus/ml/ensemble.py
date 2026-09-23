@@ -1,7 +1,7 @@
 """Ensemble and meta-learner for combining predictions.
 
 The meta-learner combines engine PK, ML PK, and CL/F analytical PK
-predictions into a final calibrated output using a geometric-weighted
+predictions into a final point estimate using a geometric-weighted
 combination in log space.
 
 3-track adaptive weighting by compound_type (selected on development N=107):
@@ -178,7 +178,7 @@ class MetaLearner:
         )
         return CmaxPrediction(
             # The meta learner supplies a point estimate. Residual uncertainty
-            # is carried by the conformal interval, not an arbitrary fixed CV.
+            # is carried separately by the development residual band, not a fixed CV.
             cmax=Distribution(mean=max(cmax_final, 1e-10), cv=0.0),
             method="geometric_meta" if len(tracks) >= 2 else "single_track_fallback",
             tracks=tuple(v for v in track_values if v is not None),

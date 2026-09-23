@@ -14,8 +14,8 @@ export interface Curve {
   c: number[]; // mg/L (venous_blood plasma)
 }
 
-/** 1-compartment-with-absorption fit to the real engine curve, used for
- *  client-side multi-dose superposition / dose-response interactivity. */
+/** 1-compartment-with-absorption approximation inferred from engine Tmax
+ *  and half-life, used for client-side multi-dose interactivity. */
 export interface PkFit {
   ka: number; // /h
   ke: number; // /h

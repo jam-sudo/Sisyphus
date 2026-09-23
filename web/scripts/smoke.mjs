@@ -90,9 +90,20 @@ assert(!root.textContent.includes("split-conformal"), "no invalid conformal clai
 assert(!root.textContent.includes("external holdout"), "N=107 is not labeled external holdout");
 assert(document.querySelector('input[type="number"]')?.disabled, "preset dose cannot be rescaled");
 assert(root.textContent.includes("Dose/AUC"), "24h exposure proxy is labeled without CL/F claim");
+assert(document.querySelector(".btn-run")?.textContent.includes("View prediction"), "preset action identifies frozen prediction");
+document.querySelector(".btn-run").click();
+await settle();
+assert(!document.querySelector(".btn-run")?.textContent.includes("solving"), "preset action does not simulate a solve");
 assert(JSON.parse(data).drugs.every((d) =>
   "doseOverAuc0t" in d.disposition && !("clf" in d.disposition)
 ), "all presets use the corrected disposition contract");
+const caffeine = JSON.parse(data).drugs.find((d) => d.id === "caffeine");
+await clickTab(1);
+const activeWeights = Object.entries(caffeine.weights).filter(([, weight]) => weight != null && weight > 0);
+assert(root.textContent.includes(`${activeWeights.length}-track meta-learner`), "meta track count matches applied weights");
+assert(activeWeights.every(([name, weight]) => root.textContent.includes(`${name} ${(weight * 100).toFixed(0)}%`)), "meta weights match prediction data");
+await clickTab(3);
+assert(root.textContent.includes("timing not measured") && !root.textContent.includes("0.402 s"), "model stages do not claim fabricated timings");
 
 const WF = ["predict", "benchmark"];
 for (const w of WF) {

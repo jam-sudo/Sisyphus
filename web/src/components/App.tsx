@@ -45,8 +45,8 @@ function loadState(): AppState {
 }
 
 const RUN_LABELS: Record<WorkflowId, string> = {
-  predict: "Run prediction",
-  benchmark: "Run benchmark",
+  predict: "View prediction",
+  benchmark: "View benchmark",
 };
 
 export function App() {
@@ -62,9 +62,7 @@ export function App() {
   });
   const [s, setS] = useState<AppState>(loadState);
   const [tab, setTab] = useState(0);
-  const [running, setRunning] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
-  const runTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // live engine (arbitrary-SMILES) state
   const [live, setLive] = useState(false);
@@ -148,7 +146,7 @@ export function App() {
   const tabs = wfCfg.tabs;
   const safeTab = Math.min(tab, tabs.length - 1);
   const customPredictMode = wf === "predict" && isCustom;
-  const busy = running || predicting;
+  const busy = predicting;
 
   async function run() {
     if (customPredictMode) {
@@ -178,13 +176,9 @@ export function App() {
       }
       return;
     }
-    setRunning(true);
-    if (runTimer.current) clearTimeout(runTimer.current);
-    runTimer.current = setTimeout(() => {
-      setRunning(false);
-      setToast(wf === "benchmark" ? "development benchmark loaded · N=107" : "prediction complete · " + (activeDrug?.name ?? ""));
-      setTimeout(() => setToast(null), 1900);
-    }, 620);
+    setTab(0);
+    setToast(wf === "benchmark" ? "showing development benchmark · N=107" : "showing frozen prediction · " + (activeDrug?.name ?? ""));
+    setTimeout(() => setToast(null), 1900);
   }
 
   function changeWf(id: WorkflowId) {
@@ -212,9 +206,9 @@ export function App() {
   }
 
   const runHint = customPredictMode
-    ? live ? "live engine · ~0.5 s/solve" : "live engine offline"
+    ? live ? "live engine prediction" : "live engine offline"
     : wf === "benchmark"
-    ? "10,000 bootstrap resamples"
+    ? "precomputed bootstrap summary"
     : "frozen reference-dose prediction";
 
   return (
@@ -312,7 +306,7 @@ export function App() {
           </div>
           <div className="provenance">
             <span className="dot" />
-            real Sisyphus engine · {data.meta_info.engine} · pre-computed static tier
+            real Sisyphus engine · {data.meta_info.engine} · {isCustom && activeDrug ? "live prediction" : "precomputed static tier"}
           </div>
         </section>
 
