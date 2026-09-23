@@ -22,6 +22,11 @@ Meta-versus-ML superiority gate in `external_holdout_v1_protocol.md`.
 - Exclude compound identities and connectivity keys found in fitted training,
   clinical registries, N=107 development, N=28 temporal, or invalidated N=50
   sources using the repository's holdout exclusion logic. Record every exclusion.
+- Exclude a compound ID if its selected rows contain more than one analyte
+  connectivity key. For duplicate connectivity keys across IDs, keep the first
+  ID in the frozen hash order. Use the analyte's largest organic fragment as
+  canonical parent SMILES; confirm that it is the dosed parent in the original
+  source after prediction commitment.
 
 Commit the label-free candidate manifest and prediction script before running
 the model. Predict **all** selected candidates with the frozen release and
@@ -50,3 +55,9 @@ connectivity-match filter was removed: the FRDB application-SMILES field is
 empty in all 1,750 rows that pass the other metadata filters. Parent-analyte
 identity remains a mandatory original-source check after predictions are
 committed. This amendment was made from field completeness alone.
+
+The frozen metadata-only enumeration produced 186 candidate IDs and 452 arm
+records in `data/validation/self_run_p0_candidates.json` (SHA256
+`e304a1e57275576f3de65b515a9392ab74194529fc68f0924574d1298a44ab3c`).
+It contains no observed Cmax values. Candidate IDs and arms may be excluded
+after source review, but none may be added to this list.
