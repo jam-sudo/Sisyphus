@@ -1,0 +1,5466 @@
+{
+  "artifact_provenance": {
+    "data/enzymes/nat2_substrates.json": "b3242d74075ca03d389c5826b368d1af90041de0d6b48924b11828222bef4960",
+    "data/enzymes/ugt1a1_substrates.json": "ea35dc379502252f59a11cc4d1ac2d38255498ffd3299f2dbe4908c2aa64d3f9",
+    "data/enzymes/ugt1a9_substrates.json": "77620d08b38afa58121d37e2d7529dc157f5c57d99db8c5898458d360f78bfee",
+    "data/enzymes/ugt2b7_substrates.json": "75d5097036d1c7ac2aef2e68159abcb3c544afb3367fc67e989f2783e70b0604",
+    "data/enzymes/ugt_ivive_sf.json": "6441cb259f3821ef0a0d37944011eaa74d645124dda28fdec4a2579b46969044",
+    "data/model_card.json": "fe5b88d330dad802e2265803fb53d6da71aeccdad997c97b39062b1809c6d238",
+    "data/physiology/reference_man.yaml": "035f539bb6cb4b913dcd449adb4835c68c0f75efeb9c0105954f4cf39caa57a7",
+    "data/sbi/prodrug_activation_registry.json": "22ed50cd6d98bec57555837b403563123e5c12a84083092a17fcc98adaf023e9",
+    "data/transporters/cyp_clearance_overrides.json": "11009b9cf4393a9d1b94089a2a516cea77194c509e84202eaceed6c8f425b94e",
+    "data/transporters/hepatic_ecm.json": "1e0e3366b2759233cffc9d9b5d362ba9a07dc5c957a6dbe50ddff8a0687d9698",
+    "data/transporters/hepatic_fu_correction.json": "39c3d9276cce9a5cfc618005970a7d63da59c45e43d469dd9881316138164481",
+    "data/transporters/oatp1b1.json": "644001ae39317d96d14144a04c83d7277dd00b90f114ad7522c096d189b017a2",
+    "data/validation/development_residual_interval.json": "04dfc6f9867b7dfcb244bd15132031b54ebdcf765c0140d21dcb6ed500b4ab35",
+    "data/validation/feature_schema_v1.json": "f012ba0dcbe9ce8f8d9688b6d08aca43aaacaa9173e571a648ea40b625e17120",
+    "data/validation/solver_settings_v1.json": "db7ba9f23038a313723bba47a9286dc4245e469f81b58c5a5868b9cb627fec17",
+    "models/adme/xgboost_clint.json": "2cd4d814ac82d5fc544f84bf668505bea1ca359da1f37e9269943054b6dbafe3",
+    "models/adme/xgboost_clint.meta.json": "f8d42c3761c09084732966d99d644676c5b886e3a5d0152627609a9326edcabd",
+    "models/adme/xgboost_fup.json": "a889efc56f553573b16d1f88619629bd1e678925c856ca4ec385005a604bc091",
+    "models/adme/xgboost_fup.meta.json": "99d973dccab40e1fd7caefb2343b63ae21179a3c994db967e807c00dcc1ad157",
+    "models/adme/xgboost_fup_v2.json": "3ac08bf5dee4a7b5f7ebf9e058882f6101f965959f88a094de4db76c4b47e1f1",
+    "models/adme/xgboost_fup_v2.meta.json": "c154bcd391671742207e4365a7f9212fe181c8174b82ed387ed91eb733c2c6ef",
+    "models/adme/xgboost_peff.json": "6abeff5ece649e0e66ce6090a444ddabd64831c5d2984882f8bd45f84f982495",
+    "models/adme/xgboost_peff.meta.json": "b43d04562e8f557eaf5fd3fb2211d9f237da7c9822a86e135ea09aa9785990c4",
+    "models/adme/xgboost_vdss.json": "3978e65f253fcd0e0e64f6c4a2fd37b0c55538c319810b2857a475a2d66ff38c",
+    "models/adme/xgboost_vdss.meta.json": "245e408f9905facac309c50827f451872953fb50d516d9faf810830395b99c64",
+    "models/direct_pk/xgboost_clf.json": "2c83f5bf90a47c11150f07380e686cda3bea67cf1b44d9500895cdaf4a8da6a1",
+    "models/direct_pk/xgboost_clf.meta.json": "b2271c3ff00f73a080eee109e2543d6b4a1cb590b4aca958bc720e309df9b785",
+    "models/direct_pk/xgboost_cmax.json": "b99c283d206cee4c0b2a13f34a1c4a54af2da0379d7bd27651e197f68d792ead",
+    "models/direct_pk/xgboost_cmax.meta.json": "2fdd460b07b64b4fa4b82f0706d39c905f4ffb8375d38a7646714ed4c968c9e8",
+    "models/direct_pk/xgboost_vdf.json": "2fa38e6ea51206f02e71d131979dacc645cd700350ae57c46da0967b90ea761e",
+    "models/direct_pk/xgboost_vdf.meta.json": "c46c0eb7e55bc4bfe4898d20d7bd31ad97db34dcb11b1487c6bd73364d92639b",
+    "resource_profile": "public"
+  },
+  "container_digest": "sha256:2c15cad8fa4079cb5abfc4b9dff2e3fd8729462bd515787365d22643c1a20c71",
+  "manifest_sha256": "e304a1e57275576f3de65b515a9392ab74194529fc68f0924574d1298a44ab3c",
+  "model_git_sha": "618106b53b0c9ce3c5b8a8fe62c5adf8f02b2308",
+  "protocol": "docs/validation/self_run_pilot_p0.md",
+  "rows": [
+    {
+      "arm_id": "frdb_4805",
+      "candidate_id": "2127",
+      "interval_90": [
+        0.21106365401177732,
+        35.2463573187208
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 2.7274942651257694,
+      "ml_cmax_mg_l": 2.83056717353913,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6213",
+      "candidate_id": "2849",
+      "interval_90": [
+        0.012983096901802457,
+        2.1680988829984527
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.1677755580847776,
+      "ml_cmax_mg_l": 0.12703622767707984,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6214",
+      "candidate_id": "2849",
+      "interval_90": [
+        0.019474645351242468,
+        3.252148324253665
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.25166333710828365,
+      "ml_cmax_mg_l": 0.19055434151561979,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7874",
+      "candidate_id": "8150",
+      "interval_90": [
+        0.006399578259102573,
+        1.0686909741307717
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.08269928369548576,
+      "ml_cmax_mg_l": 0.15145949209890702,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4812",
+      "candidate_id": "2134",
+      "interval_90": [
+        0.1194398653777015,
+        19.945737189632226
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.5434753528283784,
+      "ml_cmax_mg_l": 1.2138592600073252,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_3754",
+      "candidate_id": "1776",
+      "interval_90": [
+        0.004339196483936471,
+        0.7246196436096368
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.05607376400547973,
+      "ml_cmax_mg_l": 0.08699834189192099,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_3755",
+      "candidate_id": "1776",
+      "interval_90": [
+        0.008678392964554693,
+        1.449239286665146
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.11214752796807902,
+      "ml_cmax_mg_l": 0.17399668378384198,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_3756",
+      "candidate_id": "1776",
+      "interval_90": [
+        0.01735678593454177,
+        2.8984785742374677
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.22429505600635866,
+      "ml_cmax_mg_l": 0.34799336756768395,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6036",
+      "candidate_id": "2665",
+      "interval_90": [
+        0.0007554256970319472,
+        0.12615153551660774
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.009762075171257587,
+      "ml_cmax_mg_l": 0.008310070404088817,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6037",
+      "candidate_id": "2665",
+      "interval_90": [
+        0.0015108513940492007,
+        0.2523030710307617
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.019524150342325294,
+      "ml_cmax_mg_l": 0.016620140808177634,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6038",
+      "candidate_id": "2665",
+      "interval_90": [
+        0.003021702788079172,
+        0.5046061420583122
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.03904830068440209,
+      "ml_cmax_mg_l": 0.03324028161635527,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6041",
+      "candidate_id": "2665",
+      "interval_90": [
+        0.0015108513940492007,
+        0.2523030710307617
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.019524150342325294,
+      "ml_cmax_mg_l": 0.016620140808177634,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6042",
+      "candidate_id": "2665",
+      "interval_90": [
+        0.0015108513940492007,
+        0.2523030710307617
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.019524150342325294,
+      "ml_cmax_mg_l": 0.016620140808177634,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_5784",
+      "candidate_id": "2572",
+      "interval_90": [
+        0.014689931836862794,
+        2.4531300234233
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.1898323282032065,
+      "ml_cmax_mg_l": 0.31086192285386594,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_9985",
+      "candidate_id": "10208",
+      "interval_90": [
+        0.018161184303277553,
+        3.032808250579921
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.23468998614189468,
+      "ml_cmax_mg_l": 0.35555130614356495,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1401",
+      "candidate_id": "560",
+      "interval_90": [
+        0.02731987376046854,
+        4.562254154901002
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.35304420059684943,
+      "ml_cmax_mg_l": 0.5028676359403467,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1402",
+      "candidate_id": "560",
+      "interval_90": [
+        0.02731987376046854,
+        4.562254154901002
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.35304420059684943,
+      "ml_cmax_mg_l": 0.5028676359403467,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1403",
+      "candidate_id": "560",
+      "interval_90": [
+        0.05463974751922309,
+        9.124508309515777
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.7060884011715496,
+      "ml_cmax_mg_l": 1.0057352718806933,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1404",
+      "candidate_id": "560",
+      "interval_90": [
+        0.05463974751922309,
+        9.124508309515777
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.7060884011715496,
+      "ml_cmax_mg_l": 1.0057352718806933,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1405",
+      "candidate_id": "560",
+      "interval_90": [
+        0.08195962128055398,
+        13.686762464560786
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.0591326017795428,
+      "ml_cmax_mg_l": 1.50860290782104,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1406",
+      "candidate_id": "560",
+      "interval_90": [
+        0.08195962128055398,
+        13.686762464560786
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.0591326017795428,
+      "ml_cmax_mg_l": 1.50860290782104,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1410",
+      "candidate_id": "560",
+      "interval_90": [
+        0.02731987376046854,
+        4.562254154901002
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.35304420059684943,
+      "ml_cmax_mg_l": 0.5028676359403467,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1411",
+      "candidate_id": "560",
+      "interval_90": [
+        0.05463974751922309,
+        9.124508309515777
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.7060884011715496,
+      "ml_cmax_mg_l": 1.0057352718806933,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1412",
+      "candidate_id": "560",
+      "interval_90": [
+        0.05463974751922309,
+        9.124508309515777
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.7060884011715496,
+      "ml_cmax_mg_l": 1.0057352718806933,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11357",
+      "candidate_id": "45300",
+      "interval_90": [
+        0.016137548119853292,
+        2.694873212271127
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.2085393155736561,
+      "ml_cmax_mg_l": 0.15527883232109832,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10763",
+      "candidate_id": "30759",
+      "interval_90": [
+        0.0008158300751911579,
+        0.13623870237716001
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.010542657672726751,
+      "ml_cmax_mg_l": 0.010069389037201172,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10764",
+      "candidate_id": "30759",
+      "interval_90": [
+        0.008158300750420292,
+        1.3623870235225644
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.1054265767079962,
+      "ml_cmax_mg_l": 0.10069389037201172,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10765",
+      "candidate_id": "30759",
+      "interval_90": [
+        0.08158300750195809,
+        13.623870234850768
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.0542657670509528,
+      "ml_cmax_mg_l": 1.0069389037201173,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10766",
+      "candidate_id": "30759",
+      "interval_90": [
+        0.16316601500648809,
+        27.24774047013103
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 2.108531534135141,
+      "ml_cmax_mg_l": 2.0138778074402346,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10767",
+      "candidate_id": "30759",
+      "interval_90": [
+        0.32633203000044686,
+        54.49548093816974
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 4.217063068108371,
+      "ml_cmax_mg_l": 4.027755614880469,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10768",
+      "candidate_id": "30759",
+      "interval_90": [
+        0.6526640599396228,
+        108.99096186610763
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 8.434126135424963,
+      "ml_cmax_mg_l": 8.055511229760938,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10769",
+      "candidate_id": "30759",
+      "interval_90": [
+        0.08158300750195809,
+        13.623870234850768
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.0542657670509528,
+      "ml_cmax_mg_l": 1.0069389037201173,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7343",
+      "candidate_id": "7875",
+      "interval_90": [
+        8.121420120945166e-06,
+        0.001356228180823162
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.00010494998254563974,
+      "ml_cmax_mg_l": 9.415935829651601e-05,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7160",
+      "candidate_id": "7026",
+      "interval_90": [
+        0.36378729726520104,
+        60.75028468286397
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 4.701083053177281,
+      "ml_cmax_mg_l": 8.193786398545765,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7161",
+      "candidate_id": "7026",
+      "interval_90": [
+        0.7275745945300016,
+        121.50056936566108
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 9.402166106349387,
+      "ml_cmax_mg_l": 16.38757279709153,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7162",
+      "candidate_id": "7026",
+      "interval_90": [
+        1.4551491890593728,
+        243.00113873121688
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 18.80433221269063,
+      "ml_cmax_mg_l": 32.77514559418306,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4859",
+      "candidate_id": "2197",
+      "interval_90": [
+        0.04273768801803632,
+        7.1369361528047195
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.5522826728254404,
+      "ml_cmax_mg_l": 0.55415917015764,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4617",
+      "candidate_id": "2023",
+      "interval_90": [
+        0.2765163538640916,
+        46.176563456158966
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 3.57331428240939,
+      "ml_cmax_mg_l": 7.407990757369584,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4618",
+      "candidate_id": "2023",
+      "interval_90": [
+        0.2765163538640916,
+        46.176563456158966
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 3.57331428240939,
+      "ml_cmax_mg_l": 7.407990757369584,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_3699",
+      "candidate_id": "1729",
+      "interval_90": [
+        0.02615025593395647,
+        4.366935031707533
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.33792968014974994,
+      "ml_cmax_mg_l": 0.27891733260277446,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_3703",
+      "candidate_id": "1729",
+      "interval_90": [
+        0.01569015356021736,
+        2.6201610189983815
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.20275780808782728,
+      "ml_cmax_mg_l": 0.16735039956166467,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_3704",
+      "candidate_id": "1729",
+      "interval_90": [
+        0.03138030712083442,
+        5.2403220380635105
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.40551561618081977,
+      "ml_cmax_mg_l": 0.33470079912332934,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_3705",
+      "candidate_id": "1729",
+      "interval_90": [
+        0.07845076780454406,
+        13.10080509556925
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.0137890404838132,
+      "ml_cmax_mg_l": 0.8367519978083233,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_3706",
+      "candidate_id": "1729",
+      "interval_90": [
+        0.15690153556911496,
+        26.201610184463224
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 2.027578080451069,
+      "ml_cmax_mg_l": 1.6735039956166466,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_3348",
+      "candidate_id": "1542",
+      "interval_90": [
+        0.003282144126511631,
+        0.5480982748840053
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.04241388373707005,
+      "ml_cmax_mg_l": 0.07305533509959146,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4386",
+      "candidate_id": "1860",
+      "interval_90": [
+        0.008214694872353906,
+        1.3718045017788476
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.10615533621365769,
+      "ml_cmax_mg_l": 0.10648941917532379,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4387",
+      "candidate_id": "1860",
+      "interval_90": [
+        0.01642938974467482,
+        2.7436090035521867
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.21231067242688909,
+      "ml_cmax_mg_l": 0.21297883835064757,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4388",
+      "candidate_id": "1860",
+      "interval_90": [
+        0.024644084616940176,
+        4.115413505316247
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.31846600863940244,
+      "ml_cmax_mg_l": 0.31946825752597136,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4391",
+      "candidate_id": "1860",
+      "interval_90": [
+        0.008214694872353906,
+        1.3718045017788476
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.10615533621365769,
+      "ml_cmax_mg_l": 0.10648941917532379,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6327",
+      "candidate_id": "2879",
+      "interval_90": [
+        0.0009200199258675539,
+        0.153637779082804
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.011889062962328736,
+      "ml_cmax_mg_l": 0.022401951711565157,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_12979",
+      "candidate_id": "59566",
+      "interval_90": [
+        0.0004578335862647319,
+        0.0764554477631553
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.005916407004160656,
+      "ml_cmax_mg_l": 0.008231476690034184,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_12980",
+      "candidate_id": "59566",
+      "interval_90": [
+        0.0004578335862647319,
+        0.0764554477631553
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.005916407004160656,
+      "ml_cmax_mg_l": 0.008231476690034184,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_12981",
+      "candidate_id": "59566",
+      "interval_90": [
+        0.0013735007587554649,
+        0.22936634328299807
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.017749221011981463,
+      "ml_cmax_mg_l": 0.024694430070102552,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_12982",
+      "candidate_id": "59566",
+      "interval_90": [
+        0.004578335862459414,
+        0.7645544776001738
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.059164070039178326,
+      "ml_cmax_mg_l": 0.08231476690034184,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_12983",
+      "candidate_id": "59566",
+      "interval_90": [
+        0.013735007587256575,
+        2.293663432780204
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.17749221011596275,
+      "ml_cmax_mg_l": 0.24694430070102552,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_12984",
+      "candidate_id": "59566",
+      "interval_90": [
+        0.04120502276173039,
+        6.880990298334043
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.5324766303473799,
+      "ml_cmax_mg_l": 0.7408329021030766,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_12985",
+      "candidate_id": "59566",
+      "interval_90": [
+        0.0686750379360328,
+        11.46831716385926
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.8874610505765821,
+      "ml_cmax_mg_l": 1.2347215035051275,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_12993",
+      "candidate_id": "59566",
+      "interval_90": [
+        0.0022891679312426745,
+        0.38227723880225245
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.02958203501975674,
+      "ml_cmax_mg_l": 0.04115738345017092,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_12994",
+      "candidate_id": "59566",
+      "interval_90": [
+        0.01144583965600286,
+        1.911386193976108
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.14791017509606333,
+      "ml_cmax_mg_l": 0.2057869172508546,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_12995",
+      "candidate_id": "59566",
+      "interval_90": [
+        0.022891679312167554,
+        3.8227723879792412
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.295820350194218,
+      "ml_cmax_mg_l": 0.4115738345017092,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_3671",
+      "candidate_id": "1717",
+      "interval_90": [
+        0.38014252234422286,
+        63.4815086345309
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 4.912435324210095,
+      "ml_cmax_mg_l": 7.251500602772297,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_3672",
+      "candidate_id": "1717",
+      "interval_90": [
+        0.38014252234422286,
+        63.4815086345309
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 4.912435324210095,
+      "ml_cmax_mg_l": 7.251500602772297,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_2512",
+      "candidate_id": "1269",
+      "interval_90": [
+        0.011778899578685203,
+        1.9670051924169873
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.15221418012863341,
+      "ml_cmax_mg_l": 0.2794220538250623,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7090",
+      "candidate_id": "6899",
+      "interval_90": [
+        0.019826878952669002,
+        3.3109692114105163
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.25621511620247983,
+      "ml_cmax_mg_l": 0.28437989958087073,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7091",
+      "candidate_id": "6899",
+      "interval_90": [
+        0.1321791930176659,
+        22.073128076048825
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.708100774681552,
+      "ml_cmax_mg_l": 1.895865997205805,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11276",
+      "candidate_id": "42994",
+      "interval_90": [
+        0.0815865283502625,
+        13.624458195283765
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.0543112656167937,
+      "ml_cmax_mg_l": 0.6502038173985216,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4607",
+      "candidate_id": "2015",
+      "interval_90": [
+        0.028748715455656257,
+        4.800862100813199
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.37150857120411473,
+      "ml_cmax_mg_l": 0.44408044831090243,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6104",
+      "candidate_id": "2791",
+      "interval_90": [
+        0.0014643503880473032,
+        0.2445376834708012
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.01892323576142982,
+      "ml_cmax_mg_l": 0.02971633281952714,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6106",
+      "candidate_id": "2791",
+      "interval_90": [
+        0.0007321751940476776,
+        0.12226884173941281
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.009461617881025388,
+      "ml_cmax_mg_l": 0.01485816640976357,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6108",
+      "candidate_id": "2791",
+      "interval_90": [
+        0.0007321751940476776,
+        0.12226884173941281
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.009461617881025388,
+      "ml_cmax_mg_l": 0.01485816640976357,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7078",
+      "candidate_id": "6897",
+      "interval_90": [
+        0.15408466392004228,
+        25.731209607305345
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.9911767336421464,
+      "ml_cmax_mg_l": 4.155406900214078,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7081",
+      "candidate_id": "6897",
+      "interval_90": [
+        0.15408466392004228,
+        25.731209607305345
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.9911767336421464,
+      "ml_cmax_mg_l": 4.155406900214078,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10715",
+      "candidate_id": "28981",
+      "interval_90": [
+        0.0006221137950505281,
+        0.10388925187485296
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.008039336835139138,
+      "ml_cmax_mg_l": 0.004677397504192937,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10718",
+      "candidate_id": "28981",
+      "interval_90": [
+        0.0006221137950505281,
+        0.10388925187485296
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.008039336835139138,
+      "ml_cmax_mg_l": 0.004677397504192937,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1318",
+      "candidate_id": "509",
+      "interval_90": [
+        0.0006591822444315105,
+        0.1100794593658126
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.008518358121760532,
+      "ml_cmax_mg_l": 0.016518904798120917,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1319",
+      "candidate_id": "509",
+      "interval_90": [
+        0.00131836448951312,
+        0.22015891884018782
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.017036716251922043,
+      "ml_cmax_mg_l": 0.033037809596241835,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1320",
+      "candidate_id": "509",
+      "interval_90": [
+        0.0026367289782995304,
+        0.44031783755901954
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0340734324944531,
+      "ml_cmax_mg_l": 0.06607561919248367,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1321",
+      "candidate_id": "509",
+      "interval_90": [
+        0.005273457957304921,
+        0.8806356752359134
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.06814686499802775,
+      "ml_cmax_mg_l": 0.13215123838496734,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13161",
+      "candidate_id": "59628",
+      "interval_90": [
+        0.020063391603435312,
+        3.3504653977071963
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.2592714780456175,
+      "ml_cmax_mg_l": 0.3975553688177398,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13162",
+      "candidate_id": "59628",
+      "interval_90": [
+        0.08025356641356007,
+        13.40186159079853
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.0370859121801288,
+      "ml_cmax_mg_l": 1.5902214752709591,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13163",
+      "candidate_id": "59628",
+      "interval_90": [
+        0.16050713282703483,
+        26.803723181582814
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 2.074171824359155,
+      "ml_cmax_mg_l": 3.1804429505419183,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_3372",
+      "candidate_id": "1561",
+      "interval_90": [
+        0.0028025365345757743,
+        0.46800669949036033
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.03621609964847071,
+      "ml_cmax_mg_l": 0.013152964553716135,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_3620",
+      "candidate_id": "1689",
+      "interval_90": [
+        0.05211613211026963,
+        8.703079755862289
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.6734766917442149,
+      "ml_cmax_mg_l": 0.8612139299685382,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_3621",
+      "candidate_id": "1689",
+      "interval_90": [
+        0.07817419815912921,
+        13.054619632745508
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.01021503753523,
+      "ml_cmax_mg_l": 1.2918208949528074,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_3622",
+      "candidate_id": "1689",
+      "interval_90": [
+        0.10423226421694158,
+        17.406159511123793
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.3469533834419385,
+      "ml_cmax_mg_l": 1.7224278599370764,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_3623",
+      "candidate_id": "1689",
+      "interval_90": [
+        0.1302903302745241,
+        21.757699389463685
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.6836917293456766,
+      "ml_cmax_mg_l": 2.1530348249213453,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_3624",
+      "candidate_id": "1689",
+      "interval_90": [
+        0.18240646235034877,
+        30.460779139573877
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 2.3571684206447725,
+      "ml_cmax_mg_l": 3.0142487548898838,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8463",
+      "candidate_id": "8430",
+      "interval_90": [
+        0.04706005134811899,
+        7.858744761239637
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.608138908470506,
+      "ml_cmax_mg_l": 0.772897551690963,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1527",
+      "candidate_id": "655",
+      "interval_90": [
+        0.01150778850744316,
+        1.9217312785600569
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.14871071623056448,
+      "ml_cmax_mg_l": 0.21467158429650857,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11639",
+      "candidate_id": "46397",
+      "interval_90": [
+        0.07323146018042793,
+        12.229212199401273
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.9463419393741661,
+      "ml_cmax_mg_l": 1.6592602586756817,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8592",
+      "candidate_id": "8587",
+      "interval_90": [
+        0.041230004133685376,
+        6.885162036790672
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.5327994549903116,
+      "ml_cmax_mg_l": 1.105646307295572,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1251",
+      "candidate_id": "489",
+      "interval_90": [
+        0.019620060081491073,
+        3.276431707225238
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.25354247563014276,
+      "ml_cmax_mg_l": 0.6369278828623155,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1252",
+      "candidate_id": "489",
+      "interval_90": [
+        0.019620060081491073,
+        3.276431707225238
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.25354247563014276,
+      "ml_cmax_mg_l": 0.6369278828623155,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1074",
+      "candidate_id": "451",
+      "interval_90": [
+        0.001388088538875794,
+        0.2318024145858258
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.017937733272917176,
+      "ml_cmax_mg_l": 0.004746262846769442,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1075",
+      "candidate_id": "451",
+      "interval_90": [
+        0.001388088538875794,
+        0.2318024145858258
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.017937733272917176,
+      "ml_cmax_mg_l": 0.004746262846769442,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1077",
+      "candidate_id": "451",
+      "interval_90": [
+        0.0027761770777493784,
+        0.4636048291712826
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0358754665458058,
+      "ml_cmax_mg_l": 0.009492525693538884,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1078",
+      "candidate_id": "451",
+      "interval_90": [
+        0.005552354155476958,
+        0.927209658338925
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0717509330913299,
+      "ml_cmax_mg_l": 0.01898505138707777,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7158",
+      "candidate_id": "7019",
+      "interval_90": [
+        0.04845043306879348,
+        8.090930123355921
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.6261062756481052,
+      "ml_cmax_mg_l": 0.3822074466141042,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8659",
+      "candidate_id": "8707",
+      "interval_90": [
+        0.16376898753556696,
+        27.34843324602745
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 2.1163235157664233,
+      "ml_cmax_mg_l": 1.3847275181455845,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8660",
+      "candidate_id": "8707",
+      "interval_90": [
+        0.24565348130598874,
+        41.022649869481754
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 3.174485273683729,
+      "ml_cmax_mg_l": 2.0770912772183765,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8661",
+      "candidate_id": "8707",
+      "interval_90": [
+        0.08188449376900146,
+        13.674216623217118
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.058161757898951,
+      "ml_cmax_mg_l": 0.6923637590727922,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8663",
+      "candidate_id": "8707",
+      "interval_90": [
+        0.2047112344213537,
+        34.18554155785076
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 2.6454043947325174,
+      "ml_cmax_mg_l": 1.7309093976819805,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8664",
+      "candidate_id": "8707",
+      "interval_90": [
+        0.12282674065304595,
+        20.511324934749492
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.587242636842531,
+      "ml_cmax_mg_l": 1.0385456386091882,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6130",
+      "candidate_id": "2808",
+      "interval_90": [
+        0.037115418684928986,
+        6.198051081452125
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.4796282528361653,
+      "ml_cmax_mg_l": 0.6849869598506755,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7113",
+      "candidate_id": "6962",
+      "interval_90": [
+        0.11146762807696922,
+        18.614421640079744
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.4404532023791319,
+      "ml_cmax_mg_l": 1.7805362585556428,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10097",
+      "candidate_id": "10278",
+      "interval_90": [
+        0.0035892420562009036,
+        0.5993817770689126
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0463823919389263,
+      "ml_cmax_mg_l": 0.05571637918368978,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4623",
+      "candidate_id": "2039",
+      "interval_90": [
+        0.0043320480922216425,
+        0.7234259053044099
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.05598138809405929,
+      "ml_cmax_mg_l": 0.1576671711740921,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7016",
+      "candidate_id": "6804",
+      "interval_90": [
+        0.08513327864816454,
+        14.216744104979801
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.1001445529378837,
+      "ml_cmax_mg_l": 1.633224475432319,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7017",
+      "candidate_id": "6804",
+      "interval_90": [
+        0.17026655729609125,
+        28.433488209919883
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 2.200289105872694,
+      "ml_cmax_mg_l": 3.266448950864638,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7018",
+      "candidate_id": "6804",
+      "interval_90": [
+        0.34053311459182556,
+        56.866976419780165
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 4.4005782117407755,
+      "ml_cmax_mg_l": 6.532897901729276,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7019",
+      "candidate_id": "6804",
+      "interval_90": [
+        0.6810662291833773,
+        113.7339528395146
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 8.801156423478012,
+      "ml_cmax_mg_l": 13.065795803458553,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7020",
+      "candidate_id": "6804",
+      "interval_90": [
+        1.0215993437747326,
+        170.6009292592162
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 13.20173463521271,
+      "ml_cmax_mg_l": 19.598693705187827,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7021",
+      "candidate_id": "6804",
+      "interval_90": [
+        1.3621324583662575,
+        227.46790567894618
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 17.6023128469496,
+      "ml_cmax_mg_l": 26.131591606917105,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7022",
+      "candidate_id": "6804",
+      "interval_90": [
+        1.702665572957521,
+        284.3348820986325
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 22.00289105868311,
+      "ml_cmax_mg_l": 32.66448950864638,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7023",
+      "candidate_id": "6804",
+      "interval_90": [
+        2.0431986875497956,
+        341.2018585184876
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 26.40346927042969,
+      "ml_cmax_mg_l": 39.197387410375654,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11915",
+      "candidate_id": "47561",
+      "interval_90": [
+        0.022613823104251536,
+        3.7763720769769202
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.2922297214942228,
+      "ml_cmax_mg_l": 0.18639047523532984,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11916",
+      "candidate_id": "47561",
+      "interval_90": [
+        0.022613823104251536,
+        3.7763720769769202
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.2922297214942228,
+      "ml_cmax_mg_l": 0.18639047523532984,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11917",
+      "candidate_id": "47561",
+      "interval_90": [
+        0.022613823104251536,
+        3.7763720769769202
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.2922297214942228,
+      "ml_cmax_mg_l": 0.18639047523532984,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11918",
+      "candidate_id": "47561",
+      "interval_90": [
+        0.022613823104251536,
+        3.7763720769769202
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.2922297214942228,
+      "ml_cmax_mg_l": 0.18639047523532984,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11919",
+      "candidate_id": "47561",
+      "interval_90": [
+        0.022613823104251536,
+        3.7763720769769202
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.2922297214942228,
+      "ml_cmax_mg_l": 0.18639047523532984,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11920",
+      "candidate_id": "47561",
+      "interval_90": [
+        0.022613823104251536,
+        3.7763720769769202
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.2922297214942228,
+      "ml_cmax_mg_l": 0.18639047523532984,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11921",
+      "candidate_id": "47561",
+      "interval_90": [
+        0.022613823104251536,
+        3.7763720769769202
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.2922297214942228,
+      "ml_cmax_mg_l": 0.18639047523532984,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10678",
+      "candidate_id": "28781",
+      "interval_90": [
+        0.009372163567011222,
+        1.5650947932226256
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.12111285811159793,
+      "ml_cmax_mg_l": 0.13404126322507054,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_917",
+      "candidate_id": "415",
+      "interval_90": [
+        0.04197347347078262,
+        7.009316932305651
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.5424070227296459,
+      "ml_cmax_mg_l": 0.729470584488695,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_918",
+      "candidate_id": "415",
+      "interval_90": [
+        0.04197347347078262,
+        7.009316932305651
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.5424070227296459,
+      "ml_cmax_mg_l": 0.729470584488695,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_919",
+      "candidate_id": "415",
+      "interval_90": [
+        0.04197347347078262,
+        7.009316932305651
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.5424070227296459,
+      "ml_cmax_mg_l": 0.729470584488695,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_920",
+      "candidate_id": "415",
+      "interval_90": [
+        0.04197347347078262,
+        7.009316932305651
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.5424070227296459,
+      "ml_cmax_mg_l": 0.729470584488695,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1254",
+      "candidate_id": "490",
+      "interval_90": [
+        0.00782070515775522,
+        1.306010595548686
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.10106395896010889,
+      "ml_cmax_mg_l": 0.08509180736823485,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11912",
+      "candidate_id": "47560",
+      "interval_90": [
+        0.0477776145827413,
+        7.978573493878104
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.6174117016307544,
+      "ml_cmax_mg_l": 1.0394407845580225,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_3361",
+      "candidate_id": "1552",
+      "interval_90": [
+        0.0001480497099674411,
+        0.024723408693351972
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0019131893493476465,
+      "ml_cmax_mg_l": 0.001086061898712455,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1137",
+      "candidate_id": "467",
+      "interval_90": [
+        0.009274429508737001,
+        1.5487737949139841
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.11984987853939963,
+      "ml_cmax_mg_l": 0.07811921477357799,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1138",
+      "candidate_id": "467",
+      "interval_90": [
+        0.009274429508737001,
+        1.5487737949139841
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.11984987853939963,
+      "ml_cmax_mg_l": 0.07811921477357799,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1520",
+      "candidate_id": "651",
+      "interval_90": [
+        0.19333907379846887,
+        32.28645931805538
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 2.498446345388424,
+      "ml_cmax_mg_l": 1.7094400162022911,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4331",
+      "candidate_id": "1851",
+      "interval_90": [
+        0.0505866387857856,
+        8.447663594876305
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.6537116389187504,
+      "ml_cmax_mg_l": 0.45826237619330845,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4337",
+      "candidate_id": "1851",
+      "interval_90": [
+        0.1264665969633395,
+        21.11915898700298
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.6342790972823447,
+      "ml_cmax_mg_l": 1.1456559404832711,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4720",
+      "candidate_id": "2077",
+      "interval_90": [
+        4.857055853484101,
+        811.0990351722635
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 62.76586107541861,
+      "ml_cmax_mg_l": 62.02219739833151,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1856",
+      "candidate_id": "988",
+      "interval_90": [
+        0.033490400342128766,
+        5.592694880283902
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.4327835377322961,
+      "ml_cmax_mg_l": 0.5691006503997402,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6907",
+      "candidate_id": "6731",
+      "interval_90": [
+        1.6967839522642408e-06,
+        0.00028335268691425
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 2.1926885141010183e-05,
+      "ml_cmax_mg_l": 2.1479909245191754e-05,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6911",
+      "candidate_id": "6731",
+      "interval_90": [
+        5.0903518579175905e-06,
+        0.0008500580609305961
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 6.578065543756678e-05,
+      "ml_cmax_mg_l": 6.443972773557526e-05,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6912",
+      "candidate_id": "6731",
+      "interval_90": [
+        1.6967839522642408e-06,
+        0.00028335268691425
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 2.1926885141010183e-05,
+      "ml_cmax_mg_l": 2.1479909245191754e-05,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6913",
+      "candidate_id": "6731",
+      "interval_90": [
+        3.393567905853187e-06,
+        0.0005667053740497179
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 4.3853770299139024e-05,
+      "ml_cmax_mg_l": 4.295981849038351e-05,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6914",
+      "candidate_id": "6731",
+      "interval_90": [
+        6.787135809934305e-06,
+        0.0011334107478035108
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 8.770754057537828e-05,
+      "ml_cmax_mg_l": 8.591963698076702e-05,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7893",
+      "candidate_id": "8169",
+      "interval_90": [
+        0.005195253111462503,
+        0.8675759376248914
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.06713625391229179,
+      "ml_cmax_mg_l": 0.013817874832446847,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7899",
+      "candidate_id": "8169",
+      "interval_90": [
+        0.003896439833601456,
+        0.6506819532194331
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.050352190434278014,
+      "ml_cmax_mg_l": 0.010363406124335135,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7901",
+      "candidate_id": "8169",
+      "interval_90": [
+        0.003896439833601456,
+        0.6506819532194331
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.050352190434278014,
+      "ml_cmax_mg_l": 0.010363406124335135,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_5879",
+      "candidate_id": "2630",
+      "interval_90": [
+        0.0004777852820201718,
+        0.07978726062787239
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.006174235079805835,
+      "ml_cmax_mg_l": 0.004536356075990873,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_5880",
+      "candidate_id": "2630",
+      "interval_90": [
+        0.000955570564033263,
+        0.15957452125456237
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.01234847015952017,
+      "ml_cmax_mg_l": 0.009072712151981747,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_5881",
+      "candidate_id": "2630",
+      "interval_90": [
+        0.0019111411279695537,
+        0.31914904249293097
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.024696940317787203,
+      "ml_cmax_mg_l": 0.018145424303963494,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8244",
+      "candidate_id": "8274",
+      "interval_90": [
+        1.5069967998842042e-05,
+        0.0025165937705183277
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.00019474338907340713,
+      "ml_cmax_mg_l": 7.183906543655562e-05,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8247",
+      "candidate_id": "8274",
+      "interval_90": [
+        0.015069967995121697,
+        2.5165937698970526
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.19474338902533056,
+      "ml_cmax_mg_l": 0.07183906543655562,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8248",
+      "candidate_id": "8274",
+      "interval_90": [
+        0.015069967995121697,
+        2.5165937698970526
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.19474338902533056,
+      "ml_cmax_mg_l": 0.07183906543655562,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6006",
+      "candidate_id": "2652",
+      "interval_90": [
+        0.0033252781504614763,
+        0.5553013967471645
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.042971288106409905,
+      "ml_cmax_mg_l": 0.03447388124257105,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11457",
+      "candidate_id": "45950",
+      "interval_90": [
+        0.0008715005675241402,
+        0.14553533885426712
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.011262065991917817,
+      "ml_cmax_mg_l": 0.022285988354915954,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6947",
+      "candidate_id": "6751",
+      "interval_90": [
+        0.028632768272840003,
+        4.781499620547352
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.37001023044208486,
+      "ml_cmax_mg_l": 0.6692001656762357,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6948",
+      "candidate_id": "6751",
+      "interval_90": [
+        0.10021468895473043,
+        16.735248671880733
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.2950358065445886,
+      "ml_cmax_mg_l": 2.3422005798668253,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4225",
+      "candidate_id": "1838",
+      "interval_90": [
+        0.0852318961128862,
+        14.233212626837439
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.101418948431172,
+      "ml_cmax_mg_l": 1.822077525850615,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4227",
+      "candidate_id": "1838",
+      "interval_90": [
+        0.0852318961128862,
+        14.233212626837439
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.101418948431172,
+      "ml_cmax_mg_l": 1.822077525850615,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4232",
+      "candidate_id": "1838",
+      "interval_90": [
+        0.014205316018791377,
+        2.3722021044690673
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.18356982473823158,
+      "ml_cmax_mg_l": 0.30367958764176917,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4233",
+      "candidate_id": "1838",
+      "interval_90": [
+        0.02841063203761877,
+        4.7444042089441485
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.36713964947692856,
+      "ml_cmax_mg_l": 0.6073591752835383,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_5735",
+      "candidate_id": "2546",
+      "interval_90": [
+        0.02556895641429924,
+        4.26986151767704
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.3304177704672947,
+      "ml_cmax_mg_l": 0.5259081754618282,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6438",
+      "candidate_id": "2953",
+      "interval_90": [
+        0.0017617112002092476,
+        0.2941951457521094
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.02276591494578426,
+      "ml_cmax_mg_l": 0.03405699864034348,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6439",
+      "candidate_id": "2953",
+      "interval_90": [
+        0.0044042780005969905,
+        0.7354878643926095
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.05691478736541526,
+      "ml_cmax_mg_l": 0.08514249660085868,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6440",
+      "candidate_id": "2953",
+      "interval_90": [
+        0.008808556001104572,
+        1.4709757287702883
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.11382957472967513,
+      "ml_cmax_mg_l": 0.17028499320171736,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6441",
+      "candidate_id": "2953",
+      "interval_90": [
+        0.0017617112002092476,
+        0.2941951457521094
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.02276591494578426,
+      "ml_cmax_mg_l": 0.03405699864034348,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6442",
+      "candidate_id": "2953",
+      "interval_90": [
+        0.0044042780005969905,
+        0.7354878643926095
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.05691478736541526,
+      "ml_cmax_mg_l": 0.08514249660085868,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6443",
+      "candidate_id": "2953",
+      "interval_90": [
+        0.008808556001104572,
+        1.4709757287702883
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.11382957472967513,
+      "ml_cmax_mg_l": 0.17028499320171736,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13339",
+      "candidate_id": "59661",
+      "interval_90": [
+        0.00023357522484215143,
+        0.03900565388263219
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.003018402619888697,
+      "ml_cmax_mg_l": 0.0027663487426692044,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13340",
+      "candidate_id": "59661",
+      "interval_90": [
+        0.0007007256742691911,
+        0.11701696160493517
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.009055207856341578,
+      "ml_cmax_mg_l": 0.008299046228007614,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13341",
+      "candidate_id": "59661",
+      "interval_90": [
+        0.0021021770234227787,
+        0.3510508849175411
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.027165623576974798,
+      "ml_cmax_mg_l": 0.02489713868402284,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13342",
+      "candidate_id": "59661",
+      "interval_90": [
+        0.005839380620106875,
+        0.9751413469076764
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.07546006548498087,
+      "ml_cmax_mg_l": 0.06915871856673012,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13343",
+      "candidate_id": "59661",
+      "interval_90": [
+        0.01167876123959651,
+        1.9502826937122777
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.1509201309619854,
+      "ml_cmax_mg_l": 0.13831743713346023,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13344",
+      "candidate_id": "59661",
+      "interval_90": [
+        0.023357522480358738,
+        3.9005653876192232
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.3018402619390349,
+      "ml_cmax_mg_l": 0.27663487426692046,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13345",
+      "candidate_id": "59661",
+      "interval_90": [
+        0.04671504496036803,
+        7.801130775180091
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.6036805238735541,
+      "ml_cmax_mg_l": 0.5532697485338409,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6579",
+      "candidate_id": "3272",
+      "interval_90": [
+        0.30973711931282266,
+        51.72423093538327
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 4.002613432321038,
+      "ml_cmax_mg_l": 7.010391962038937,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6580",
+      "candidate_id": "3272",
+      "interval_90": [
+        0.7743427982818202,
+        129.31057733841868
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 10.00653358079954,
+      "ml_cmax_mg_l": 17.52597990509734,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6581",
+      "candidate_id": "3272",
+      "interval_90": [
+        0.9292113579380068,
+        155.1726928060728
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 12.007840296957154,
+      "ml_cmax_mg_l": 21.03117588611681,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7655",
+      "candidate_id": "8067",
+      "interval_90": [
+        0.08936436137546809,
+        14.923309403253691
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.154821204529205,
+      "ml_cmax_mg_l": 1.2544791191949078,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7656",
+      "candidate_id": "8067",
+      "interval_90": [
+        0.08936436137546809,
+        14.923309403253691
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.154821204529205,
+      "ml_cmax_mg_l": 1.2544791191949078,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_731",
+      "candidate_id": "256",
+      "interval_90": [
+        0.09169882526543245,
+        15.313150793987614
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.184988581768233,
+      "ml_cmax_mg_l": 1.282207412632089,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1841",
+      "candidate_id": "905",
+      "interval_90": [
+        2.1036445248473004,
+        351.2959488050996
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 27.1845875323663,
+      "ml_cmax_mg_l": 24.865198474843158,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13454",
+      "candidate_id": "59689",
+      "interval_90": [
+        0.002554168409378042,
+        0.42653072046267065
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.033006534077891454,
+      "ml_cmax_mg_l": 0.06696243209504281,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_963",
+      "candidate_id": "427",
+      "interval_90": [
+        0.0011402380508174405,
+        0.19041287783860067
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.014734856927613022,
+      "ml_cmax_mg_l": 0.00766099137055145,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_964",
+      "candidate_id": "427",
+      "interval_90": [
+        0.0022804761016268506,
+        0.38082575567586024
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.029469713855122266,
+      "ml_cmax_mg_l": 0.0153219827411029,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_965",
+      "candidate_id": "427",
+      "interval_90": [
+        0.00456095220324609,
+        0.7616515113504496
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.05893942771014618,
+      "ml_cmax_mg_l": 0.0306439654822058,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8815",
+      "candidate_id": "8858",
+      "interval_90": [
+        0.17912166860895448,
+        29.912238394984
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 2.314720296955632,
+      "ml_cmax_mg_l": 4.859667518190543,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10779",
+      "candidate_id": "30872",
+      "interval_90": [
+        0.0250988603215111,
+        4.1913583052782775
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.3243428998168219,
+      "ml_cmax_mg_l": 0.27493022404621187,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10780",
+      "candidate_id": "30872",
+      "interval_90": [
+        0.012549430159003306,
+        2.095679152346525
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.16217144988576737,
+      "ml_cmax_mg_l": 0.13746511202310593,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10605",
+      "candidate_id": "25673",
+      "interval_90": [
+        0.1865642290513057,
+        31.155101103608622
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 2.4108976374807427,
+      "ml_cmax_mg_l": 1.9712452213734086,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10606",
+      "candidate_id": "25673",
+      "interval_90": [
+        0.12437615270084917,
+        20.77006740240219
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.6072650916535531,
+      "ml_cmax_mg_l": 1.3141634809156058,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6114",
+      "candidate_id": "2801",
+      "interval_90": [
+        0.06439921033596101,
+        10.754279741684385
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.8322061782373987,
+      "ml_cmax_mg_l": 1.1461109185957996,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6507",
+      "candidate_id": "3001",
+      "interval_90": [
+        0.0791412503623019,
+        13.216111518491875
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.0227118804927746,
+      "ml_cmax_mg_l": 1.322536476493454,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6412",
+      "candidate_id": "2935",
+      "interval_90": [
+        0.006577870024571859,
+        1.098464623706484
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.08500327947397963,
+      "ml_cmax_mg_l": 0.10664345013878335,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13283",
+      "candidate_id": "59645",
+      "interval_90": [
+        0.05033562334495196,
+        8.405745530103083
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.6504678631083801,
+      "ml_cmax_mg_l": 0.2034037979850071,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1809",
+      "candidate_id": "846",
+      "interval_90": [
+        0.07032104795738589,
+        11.743190910523236
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.9087318037747125,
+      "ml_cmax_mg_l": 1.1071548149191384,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4063",
+      "candidate_id": "1817",
+      "interval_90": [
+        0.00023455407786699333,
+        0.039169116434427886
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0030310519603170987,
+      "ml_cmax_mg_l": 0.0018941310803238724,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4064",
+      "candidate_id": "1817",
+      "interval_90": [
+        0.00023455407786699333,
+        0.039169116434427886
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0030310519603170987,
+      "ml_cmax_mg_l": 0.0018941310803238724,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4065",
+      "candidate_id": "1817",
+      "interval_90": [
+        0.00023455407786699333,
+        0.039169116434427886
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0030310519603170987,
+      "ml_cmax_mg_l": 0.0018941310803238724,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4066",
+      "candidate_id": "1817",
+      "interval_90": [
+        0.00023455407786699333,
+        0.039169116434427886
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0030310519603170987,
+      "ml_cmax_mg_l": 0.0018941310803238724,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4069",
+      "candidate_id": "1817",
+      "interval_90": [
+        0.00023455407786699333,
+        0.039169116434427886
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0030310519603170987,
+      "ml_cmax_mg_l": 0.0018941310803238724,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4070",
+      "candidate_id": "1817",
+      "interval_90": [
+        0.00023455407786699333,
+        0.039169116434427886
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0030310519603170987,
+      "ml_cmax_mg_l": 0.0018941310803238724,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4071",
+      "candidate_id": "1817",
+      "interval_90": [
+        0.0009382163114581074,
+        0.156676465736064
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.012124207841140901,
+      "ml_cmax_mg_l": 0.00757652432129549,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4072",
+      "candidate_id": "1817",
+      "interval_90": [
+        0.0009382163114581074,
+        0.156676465736064
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.012124207841140901,
+      "ml_cmax_mg_l": 0.00757652432129549,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4075",
+      "candidate_id": "1817",
+      "interval_90": [
+        2.345540779737366e-05,
+        0.003916911645225337
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0003031051961696501,
+      "ml_cmax_mg_l": 0.00018941310803238725,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4076",
+      "candidate_id": "1817",
+      "interval_90": [
+        4.691081558015181e-05,
+        0.007833823288013311
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.000606210392150688,
+      "ml_cmax_mg_l": 0.0003788262160647745,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4077",
+      "candidate_id": "1817",
+      "interval_90": [
+        0.00011727703893659927,
+        0.01958455821773206
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0015155259801986432,
+      "ml_cmax_mg_l": 0.0009470655401619362,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4078",
+      "candidate_id": "1817",
+      "interval_90": [
+        0.00023455407786699333,
+        0.039169116434427886
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0030310519603170987,
+      "ml_cmax_mg_l": 0.0018941310803238724,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4079",
+      "candidate_id": "1817",
+      "interval_90": [
+        0.0004691081557316238,
+        0.07833823286846119
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.006062103920603663,
+      "ml_cmax_mg_l": 0.003788262160647745,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4080",
+      "candidate_id": "1817",
+      "interval_90": [
+        0.0009382163114581074,
+        0.156676465736064
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.012124207841140901,
+      "ml_cmax_mg_l": 0.00757652432129549,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4081",
+      "candidate_id": "1817",
+      "interval_90": [
+        0.0018764326228771539,
+        0.31335293146560506
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.024248415681777033,
+      "ml_cmax_mg_l": 0.01515304864259098,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4082",
+      "candidate_id": "1817",
+      "interval_90": [
+        0.0009382163114581074,
+        0.156676465736064
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.012124207841140901,
+      "ml_cmax_mg_l": 0.00757652432129549,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4083",
+      "candidate_id": "1817",
+      "interval_90": [
+        0.0018764326228771539,
+        0.31335293146560506
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.024248415681777033,
+      "ml_cmax_mg_l": 0.01515304864259098,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4084",
+      "candidate_id": "1817",
+      "interval_90": [
+        0.0028146489341463335,
+        0.47002939717011927
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.036372623520476495,
+      "ml_cmax_mg_l": 0.022729572963886467,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_2531",
+      "candidate_id": "1278",
+      "interval_90": [
+        0.04530114865108333,
+        7.565018618579749
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.5854092867289469,
+      "ml_cmax_mg_l": 0.3037792824938747,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8222",
+      "candidate_id": "8262",
+      "interval_90": [
+        0.009287285995238067,
+        1.5509207506236327
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.12001601796006638,
+      "ml_cmax_mg_l": 0.10626361644199517,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_3574",
+      "candidate_id": "1661",
+      "interval_90": [
+        0.01568382874355044,
+        2.6191048127592667
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.2026760749193774,
+      "ml_cmax_mg_l": 0.1525423575113052,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_9848",
+      "candidate_id": "10124",
+      "interval_90": [
+        0.07962331716969233,
+        13.296613768035183
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.0289414440750082,
+      "ml_cmax_mg_l": 0.7840673866936548,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4778",
+      "candidate_id": "2096",
+      "interval_90": [
+        0.0019739654196283844,
+        0.32964032031369267
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.025508794428872043,
+      "ml_cmax_mg_l": 0.035920741812184916,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4779",
+      "candidate_id": "2096",
+      "interval_90": [
+        0.0019739654196283844,
+        0.32964032031369267
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.025508794428872043,
+      "ml_cmax_mg_l": 0.035920741812184916,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_3774",
+      "candidate_id": "1780",
+      "interval_90": [
+        0.1669174363851749,
+        27.87420521596977
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 2.157009706960992,
+      "ml_cmax_mg_l": 2.3739470440684673,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1794",
+      "candidate_id": "836",
+      "interval_90": [
+        0.024884175233566116,
+        4.155507190333174
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.3215686071565362,
+      "ml_cmax_mg_l": 0.2830527684233609,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1795",
+      "candidate_id": "836",
+      "interval_90": [
+        0.04976835046743695,
+        8.311014380717234
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.6431372143170101,
+      "ml_cmax_mg_l": 0.5661055368467218,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1796",
+      "candidate_id": "836",
+      "interval_90": [
+        0.07465252570092668,
+        12.46652157103765
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.964705821472559,
+      "ml_cmax_mg_l": 0.8491583052700828,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8266",
+      "candidate_id": "8285",
+      "interval_90": [
+        0.003556575772535682,
+        0.5939267047035168
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.04596025814342737,
+      "ml_cmax_mg_l": 0.1418767055463851,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8268",
+      "candidate_id": "8285",
+      "interval_90": [
+        0.00044457197157237794,
+        0.07424083808884432
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.005745032267998432,
+      "ml_cmax_mg_l": 0.017734588193298137,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8269",
+      "candidate_id": "8285",
+      "interval_90": [
+        0.0017782878862854317,
+        0.29696335235469595
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.022980129071941004,
+      "ml_cmax_mg_l": 0.07093835277319255,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8270",
+      "candidate_id": "8285",
+      "interval_90": [
+        0.003556575772535682,
+        0.5939267047035168
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.04596025814342737,
+      "ml_cmax_mg_l": 0.1418767055463851,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8271",
+      "candidate_id": "8285",
+      "interval_90": [
+        0.007113151545168463,
+        1.1878534094232485
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.09192051628810952,
+      "ml_cmax_mg_l": 0.2837534110927702,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8272",
+      "candidate_id": "8285",
+      "interval_90": [
+        0.014226303090263417,
+        2.375706818834222
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.18384103257526913,
+      "ml_cmax_mg_l": 0.5675068221855404,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8273",
+      "candidate_id": "8285",
+      "interval_90": [
+        0.028452606180627525,
+        4.751413637685258
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.36768206515183943,
+      "ml_cmax_mg_l": 1.1350136443710808,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8279",
+      "candidate_id": "8285",
+      "interval_90": [
+        0.003556575772535682,
+        0.5939267047035168
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.04596025814342737,
+      "ml_cmax_mg_l": 0.1418767055463851,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8283",
+      "candidate_id": "8285",
+      "interval_90": [
+        0.003556575772535682,
+        0.5939267047035168
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.04596025814342737,
+      "ml_cmax_mg_l": 0.1418767055463851,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8286",
+      "candidate_id": "8285",
+      "interval_90": [
+        0.003556575772535682,
+        0.5939267047035168
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.04596025814342737,
+      "ml_cmax_mg_l": 0.1418767055463851,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8287",
+      "candidate_id": "8285",
+      "interval_90": [
+        0.003556575772535682,
+        0.5939267047035168
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.04596025814342737,
+      "ml_cmax_mg_l": 0.1418767055463851,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8288",
+      "candidate_id": "8285",
+      "interval_90": [
+        0.003556575772535682,
+        0.5939267047035168
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.04596025814342737,
+      "ml_cmax_mg_l": 0.1418767055463851,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11762",
+      "candidate_id": "47061",
+      "interval_90": [
+        0.006479772234034482,
+        1.082082884303524
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.08373559952991273,
+      "ml_cmax_mg_l": 0.24909462834953655,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11763",
+      "candidate_id": "47061",
+      "interval_90": [
+        0.006479772234034482,
+        1.082082884303524
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.08373559952991273,
+      "ml_cmax_mg_l": 0.24909462834953655,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4436",
+      "candidate_id": "1888",
+      "interval_90": [
+        0.0015582829618803818,
+        0.26022385680409843
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.020137090215138504,
+      "ml_cmax_mg_l": 0.004992425207106286,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1438",
+      "candidate_id": "577",
+      "interval_90": [
+        0.030364857531269343,
+        5.070748080668829
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.39239335244938395,
+      "ml_cmax_mg_l": 0.2984708732040309,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4209",
+      "candidate_id": "1835",
+      "interval_90": [
+        2.489468617375667e-06,
+        0.0004157262453954694
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 3.217044359861139e-05,
+      "ml_cmax_mg_l": 5.3724315406458244e-05,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4211",
+      "candidate_id": "1835",
+      "interval_90": [
+        2.489468617375667e-06,
+        0.0004157262453954694
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 3.217044359861139e-05,
+      "ml_cmax_mg_l": 5.3724315406458244e-05,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4212",
+      "candidate_id": "1835",
+      "interval_90": [
+        2.489468617375667e-06,
+        0.0004157262453954694
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 3.217044359861139e-05,
+      "ml_cmax_mg_l": 5.3724315406458244e-05,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6169",
+      "candidate_id": "2829",
+      "interval_90": [
+        0.04153913112254722,
+        6.93678437962037
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.536794183941935,
+      "ml_cmax_mg_l": 0.8847465551123481,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_2989",
+      "candidate_id": "1428",
+      "interval_90": [
+        0.000315762463727055,
+        0.0527304271143831
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.004080476636254337,
+      "ml_cmax_mg_l": 0.006236127140124641,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6590",
+      "candidate_id": "3277",
+      "interval_90": [
+        0.01699253980030087,
+        2.8376516665468565
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.21958804357976222,
+      "ml_cmax_mg_l": 0.32177682070936253,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6593",
+      "candidate_id": "3277",
+      "interval_90": [
+        0.01699253980030087,
+        2.8376516665468565
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.21958804357976222,
+      "ml_cmax_mg_l": 0.32177682070936253,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1010",
+      "candidate_id": "437",
+      "interval_90": [
+        0.1430379379155345,
+        23.886472986119212
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.8484241504615797,
+      "ml_cmax_mg_l": 2.078492483776306,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1015",
+      "candidate_id": "437",
+      "interval_90": [
+        0.03575948447899555,
+        5.971618246548493
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.4621060376168412,
+      "ml_cmax_mg_l": 0.5196231209440765,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1016",
+      "candidate_id": "437",
+      "interval_90": [
+        0.07151896895785441,
+        11.94323649307416
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.924212075231916,
+      "ml_cmax_mg_l": 1.039246241888153,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1017",
+      "candidate_id": "437",
+      "interval_90": [
+        0.1430379379155345,
+        23.886472986119212
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.8484241504615797,
+      "ml_cmax_mg_l": 2.078492483776306,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1018",
+      "candidate_id": "437",
+      "interval_90": [
+        0.21455690687321602,
+        35.8297094791645
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 2.772636225691261,
+      "ml_cmax_mg_l": 3.117738725664459,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1025",
+      "candidate_id": "437",
+      "interval_90": [
+        0.1430379379155345,
+        23.886472986119212
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.8484241504615797,
+      "ml_cmax_mg_l": 2.078492483776306,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13307",
+      "candidate_id": "59653",
+      "interval_90": [
+        0.06331731123621288,
+        10.573609116838684
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.818225213092907,
+      "ml_cmax_mg_l": 0.34576806724394926,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_922",
+      "candidate_id": "417",
+      "interval_90": [
+        0.042769791135446995,
+        7.142297179801999
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.5526975290404541,
+      "ml_cmax_mg_l": 0.43942189614905436,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11759",
+      "candidate_id": "47055",
+      "interval_90": [
+        0.005183455962162263,
+        0.8656058848390369
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.06698380389804424,
+      "ml_cmax_mg_l": 0.13497237604977247,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_924",
+      "candidate_id": "418",
+      "interval_90": [
+        0.05827506447762274,
+        9.731584317379308
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.753066201316127,
+      "ml_cmax_mg_l": 1.3865146296360775,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_925",
+      "candidate_id": "418",
+      "interval_90": [
+        0.11655012895520386,
+        19.463168634751668
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.5061324026317162,
+      "ml_cmax_mg_l": 2.773029259272155,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_926",
+      "candidate_id": "418",
+      "interval_90": [
+        0.17482519343273933,
+        29.194752952116403
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 2.2591986039467153,
+      "ml_cmax_mg_l": 4.159543888908233,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_927",
+      "candidate_id": "418",
+      "interval_90": [
+        0.11655012895520386,
+        19.463168634751668
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.5061324026317162,
+      "ml_cmax_mg_l": 2.773029259272155,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6603",
+      "candidate_id": "3370",
+      "interval_90": [
+        0.0653025880534555,
+        10.905138372336182
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.8438801803541779,
+      "ml_cmax_mg_l": 1.3154964441668482,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8170",
+      "candidate_id": "8247",
+      "interval_90": [
+        0.05408945183729997,
+        9.03261224940621
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.6989771421364671,
+      "ml_cmax_mg_l": 0.5135560088416008,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11455",
+      "candidate_id": "45929",
+      "interval_90": [
+        0.7428308646881046,
+        124.04827447320852
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 9.599317006433365,
+      "ml_cmax_mg_l": 12.204185939798018,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_9126",
+      "candidate_id": "9234",
+      "interval_90": [
+        0.133556344038115,
+        22.303103991020343
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.7258971666187324,
+      "ml_cmax_mg_l": 6.571076318299965,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11169",
+      "candidate_id": "39483",
+      "interval_90": [
+        0.19634332600180426,
+        32.788151317704
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 2.537269138890954,
+      "ml_cmax_mg_l": 2.7916981489285915,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_9360",
+      "candidate_id": "9660",
+      "interval_90": [
+        0.15999886359279086,
+        26.718845284778865
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 2.0676036569120826,
+      "ml_cmax_mg_l": 4.009258228840812,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_9361",
+      "candidate_id": "9660",
+      "interval_90": [
+        0.3199977273817876,
+        53.43769060232294
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 4.135207316359659,
+      "ml_cmax_mg_l": 8.018516457681624,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_9362",
+      "candidate_id": "9660",
+      "interval_90": [
+        0.6399954544568325,
+        106.87538115342169
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 8.270414628755399,
+      "ml_cmax_mg_l": 16.03703291536325,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_9363",
+      "candidate_id": "9660",
+      "interval_90": [
+        0.7999943178460732,
+        133.5942264042089
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 10.338018283037082,
+      "ml_cmax_mg_l": 20.04629114420406,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_9364",
+      "candidate_id": "9660",
+      "interval_90": [
+        0.9599931818600853,
+        160.31307175932918
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 12.405621945392443,
+      "ml_cmax_mg_l": 24.05554937304487,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_750",
+      "candidate_id": "275",
+      "interval_90": [
+        0.691383201442858,
+        115.45682498634429
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 8.934478680230116,
+      "ml_cmax_mg_l": 26.3656364756129,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8640",
+      "candidate_id": "8696",
+      "interval_90": [
+        4.573699218430975e-05,
+        0.007637801860105052
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0005910415247517988,
+      "ml_cmax_mg_l": 0.0007646442337995622,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8641",
+      "candidate_id": "8696",
+      "interval_90": [
+        0.00013721097654319589,
+        0.022913405578689743
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.001773124574129616,
+      "ml_cmax_mg_l": 0.0022939327013986864,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8642",
+      "candidate_id": "8696",
+      "interval_90": [
+        0.0002744219530775495,
+        0.045826811155902876
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0035462491481449664,
+      "ml_cmax_mg_l": 0.004587865402797373,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8643",
+      "candidate_id": "8696",
+      "interval_90": [
+        4.573699218430975e-05,
+        0.007637801860105052
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0005910415247517988,
+      "ml_cmax_mg_l": 0.0007646442337995622,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8644",
+      "candidate_id": "8696",
+      "interval_90": [
+        0.00013721097654319589,
+        0.022913405578689743
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.001773124574129616,
+      "ml_cmax_mg_l": 0.0022939327013986864,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8645",
+      "candidate_id": "8696",
+      "interval_90": [
+        0.0002744219530775495,
+        0.045826811155902876
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0035462491481449664,
+      "ml_cmax_mg_l": 0.004587865402797373,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1743",
+      "candidate_id": "801",
+      "interval_90": [
+        0.0022756271750468972,
+        0.3800160141803409
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.029407053045515982,
+      "ml_cmax_mg_l": 0.028827759957579125,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4860",
+      "candidate_id": "2198",
+      "interval_90": [
+        0.1980351350180283,
+        33.070673220302815
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 2.5591317348506624,
+      "ml_cmax_mg_l": 4.720102040162685,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4861",
+      "candidate_id": "2198",
+      "interval_90": [
+        0.3960702700369718,
+        66.14134644075847
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 5.118263469713152,
+      "ml_cmax_mg_l": 9.44020408032537,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_936",
+      "candidate_id": "422",
+      "interval_90": [
+        0.0007061846117370029,
+        0.11792857123981959
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.009125751601577345,
+      "ml_cmax_mg_l": 0.007606515770721433,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_937",
+      "candidate_id": "422",
+      "interval_90": [
+        0.0014123692235714174,
+        0.23585714249590634
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.018251503204413502,
+      "ml_cmax_mg_l": 0.015213031541442866,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_938",
+      "candidate_id": "422",
+      "interval_90": [
+        0.002824738446849746,
+        0.4717142849428686
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.036503006405039534,
+      "ml_cmax_mg_l": 0.030426063082885733,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_939",
+      "candidate_id": "422",
+      "interval_90": [
+        0.0007061846117370029,
+        0.11792857123981959
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.009125751601577345,
+      "ml_cmax_mg_l": 0.007606515770721433,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_940",
+      "candidate_id": "422",
+      "interval_90": [
+        0.0014123692235714174,
+        0.23585714249590634
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.018251503204413502,
+      "ml_cmax_mg_l": 0.015213031541442866,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_941",
+      "candidate_id": "422",
+      "interval_90": [
+        0.002824738446849746,
+        0.4717142849428686
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.036503006405039534,
+      "ml_cmax_mg_l": 0.030426063082885733,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13099",
+      "candidate_id": "59595",
+      "interval_90": [
+        0.1406098885731542,
+        23.481003389235205
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.8170474044851495,
+      "ml_cmax_mg_l": 1.4643769758044707,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6314",
+      "candidate_id": "2876",
+      "interval_90": [
+        0.09727306103016811,
+        16.244014549107206
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.2570222824636976,
+      "ml_cmax_mg_l": 1.141190549501551,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_2977",
+      "candidate_id": "1422",
+      "interval_90": [
+        0.0010220225284492575,
+        0.17067159854768255
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.013207203287682791,
+      "ml_cmax_mg_l": 0.008067340978235343,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13186",
+      "candidate_id": "59629",
+      "interval_90": [
+        0.00569709342749498,
+        0.9513802438596042
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.07362134292677038,
+      "ml_cmax_mg_l": 0.057654390434146205,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13189",
+      "candidate_id": "59629",
+      "interval_90": [
+        0.00569709342749498,
+        0.9513802438596042
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.07362134292677038,
+      "ml_cmax_mg_l": 0.057654390434146205,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13191",
+      "candidate_id": "59629",
+      "interval_90": [
+        0.00569709342749498,
+        0.9513802438596042
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.07362134292677038,
+      "ml_cmax_mg_l": 0.057654390434146205,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13193",
+      "candidate_id": "59629",
+      "interval_90": [
+        0.001424273356881631,
+        0.23784506096621796
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.018405335731794502,
+      "ml_cmax_mg_l": 0.014413597608536551,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11379",
+      "candidate_id": "45349",
+      "interval_90": [
+        4.90187485578521e-05,
+        0.008185835382581682
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0006334503977066717,
+      "ml_cmax_mg_l": 0.00048640591114447733,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11380",
+      "candidate_id": "45349",
+      "interval_90": [
+        0.00012254687136177377,
+        0.020464588450967366
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0015836259938420874,
+      "ml_cmax_mg_l": 0.0012160147778611933,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11381",
+      "candidate_id": "45349",
+      "interval_90": [
+        0.00024509374268825426,
+        0.040929176896040975
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.003167251987228094,
+      "ml_cmax_mg_l": 0.0024320295557223866,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11382",
+      "candidate_id": "45349",
+      "interval_90": [
+        0.00036764061394745735,
+        0.06139376532987966
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0047508779797447,
+      "ml_cmax_mg_l": 0.0036480443335835796,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11383",
+      "candidate_id": "45349",
+      "interval_90": [
+        0.0004901874853764962,
+        0.08185835379207988
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.006334503974456027,
+      "ml_cmax_mg_l": 0.004864059111444773,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8885",
+      "candidate_id": "8964",
+      "interval_90": [
+        0.10335556518346171,
+        17.259756059806282
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.33562413967776,
+      "ml_cmax_mg_l": 1.3344321737924432,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1267",
+      "candidate_id": "492",
+      "interval_90": [
+        0.015456993598748834,
+        2.581224711594738
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.19974477175648972,
+      "ml_cmax_mg_l": 0.4086503947102759,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1278",
+      "candidate_id": "495",
+      "interval_90": [
+        0.0012456142353324728,
+        0.20801006514065049
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.016096592752245092,
+      "ml_cmax_mg_l": 0.04651824210364071,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1279",
+      "candidate_id": "495",
+      "interval_90": [
+        0.0024912284706570557,
+        0.41602013027998336
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.032193185504388225,
+      "ml_cmax_mg_l": 0.09303648420728142,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1280",
+      "candidate_id": "495",
+      "interval_90": [
+        0.004982456941293679,
+        0.8320402605565547
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.06438637100851241,
+      "ml_cmax_mg_l": 0.18607296841456283,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1281",
+      "candidate_id": "495",
+      "interval_90": [
+        0.009964913882576497,
+        1.6640805211112957
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.12877274201688446,
+      "ml_cmax_mg_l": 0.37214593682912567,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1282",
+      "candidate_id": "495",
+      "interval_90": [
+        0.01494737082368876,
+        2.496120781637555
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.1931591130230525,
+      "ml_cmax_mg_l": 0.5582189052436886,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1284",
+      "candidate_id": "495",
+      "interval_90": [
+        0.0029894741646458263,
+        0.49922415631215994
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.03863182260342258,
+      "ml_cmax_mg_l": 0.1116437810487377,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_979",
+      "candidate_id": "429",
+      "interval_90": [
+        0.017661391456099504,
+        2.949345859295842
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.22823135577840753,
+      "ml_cmax_mg_l": 0.15623345960640175,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_980",
+      "candidate_id": "429",
+      "interval_90": [
+        0.017661391456099504,
+        2.949345859295842
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.22823135577840753,
+      "ml_cmax_mg_l": 0.15623345960640175,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10428",
+      "candidate_id": "21634",
+      "interval_90": [
+        0.006871980417804903,
+        1.1475792856295781
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0888039547471001,
+      "ml_cmax_mg_l": 0.15142972800742885,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8882",
+      "candidate_id": "8956",
+      "interval_90": [
+        0.010779606434705496,
+        1.8001292639973494
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.1393006999174358,
+      "ml_cmax_mg_l": 0.2255941530473665,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_2168",
+      "candidate_id": "1141",
+      "interval_90": [
+        0.0722257542308866,
+        12.061265371127757
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.9333455889479398,
+      "ml_cmax_mg_l": 0.833262839209147,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_9391",
+      "candidate_id": "9770",
+      "interval_90": [
+        2.9499798367470502e-05,
+        0.004926288417389302
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.00038121452623554337,
+      "ml_cmax_mg_l": 0.00035030318352597333,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_9393",
+      "candidate_id": "9770",
+      "interval_90": [
+        8.849939509484387e-05,
+        0.014778865250904155
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0011436435786088364,
+      "ml_cmax_mg_l": 0.0010509095505779199,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_9394",
+      "candidate_id": "9770",
+      "interval_90": [
+        0.00014749899182545445,
+        0.02463144208495961
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0019060726310239629,
+      "ml_cmax_mg_l": 0.0017515159176298666,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_9395",
+      "candidate_id": "9770",
+      "interval_90": [
+        0.0002949979836425128,
+        0.04926288416851711
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0038121452619394257,
+      "ml_cmax_mg_l": 0.003503031835259733,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_9426",
+      "candidate_id": "9770",
+      "interval_90": [
+        5.899959673286028e-05,
+        0.009852576834431135
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0007624290524441983,
+      "ml_cmax_mg_l": 0.0007006063670519467,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_9430",
+      "candidate_id": "9770",
+      "interval_90": [
+        5.899959673286028e-05,
+        0.009852576834431135
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0007624290524441983,
+      "ml_cmax_mg_l": 0.0007006063670519467,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_5515",
+      "candidate_id": "2454",
+      "interval_90": [
+        0.06427590783200875,
+        10.733688967147943
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.8306127874947811,
+      "ml_cmax_mg_l": 1.2857163477749878,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11356",
+      "candidate_id": "45290",
+      "interval_90": [
+        0.029021323523372396,
+        4.846386004053087
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.3750313802107346,
+      "ml_cmax_mg_l": 0.3640031047644968,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10103",
+      "candidate_id": "10281",
+      "interval_90": [
+        0.037445397099285065,
+        6.253155486586749
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.48389243672412774,
+      "ml_cmax_mg_l": 0.24408555255869,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6687",
+      "candidate_id": "4904",
+      "interval_90": [
+        0.5110248370600864,
+        85.33806585550643
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 6.603777040363575,
+      "ml_cmax_mg_l": 7.21815478070888,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10885",
+      "candidate_id": "33538",
+      "interval_90": [
+        0.03068555727926534,
+        5.124303004479916
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.39653763170760975,
+      "ml_cmax_mg_l": 0.7809080762705801,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10889",
+      "candidate_id": "33538",
+      "interval_90": [
+        0.056825106067054834,
+        9.489450007351165
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.7343289475335588,
+      "ml_cmax_mg_l": 1.446126067167741,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8937",
+      "candidate_id": "9033",
+      "interval_90": [
+        0.004454099388781313,
+        0.7438077357521822
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.057558609965708926,
+      "ml_cmax_mg_l": 0.11093074567867411,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8938",
+      "candidate_id": "9033",
+      "interval_90": [
+        0.022270496943916914,
+        3.719038678762639
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.28779304982867837,
+      "ml_cmax_mg_l": 0.5546537283933706,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8939",
+      "candidate_id": "9033",
+      "interval_90": [
+        0.06681149083176408,
+        11.157116036290143
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.8633791494862073,
+      "ml_cmax_mg_l": 1.6639611851801117,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8940",
+      "candidate_id": "9033",
+      "interval_90": [
+        0.13362298166354653,
+        22.314232072583355
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.7267582989726522,
+      "ml_cmax_mg_l": 3.3279223703602234,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8941",
+      "candidate_id": "9033",
+      "interval_90": [
+        0.2672459633270859,
+        44.62846414516551
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 3.4535165979452116,
+      "ml_cmax_mg_l": 6.655844740720447,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8942",
+      "candidate_id": "9033",
+      "interval_90": [
+        0.40086894499056114,
+        66.94269621773697
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 5.180274896916943,
+      "ml_cmax_mg_l": 9.98376711108067,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8943",
+      "candidate_id": "9033",
+      "interval_90": [
+        0.534491926654181,
+        89.25692829033255
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 6.907033195890542,
+      "ml_cmax_mg_l": 13.311689481440894,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1203",
+      "candidate_id": "480",
+      "interval_90": [
+        3.841327446689129e-05,
+        0.006414785169817043
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0004963999429636611,
+      "ml_cmax_mg_l": 0.0008721740642894807,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6609",
+      "candidate_id": "3418",
+      "interval_90": [
+        0.10287320513480051,
+        17.179204840739263
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.3293907866515882,
+      "ml_cmax_mg_l": 1.0799475942801893,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13404",
+      "candidate_id": "59669",
+      "interval_90": [
+        0.04050197402307374,
+        6.763585398986543
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.5233914024251772,
+      "ml_cmax_mg_l": 1.7586333074164746,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_12099",
+      "candidate_id": "49024",
+      "interval_90": [
+        0.005682854962542716,
+        0.9490025060831627
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.07343734473113918,
+      "ml_cmax_mg_l": 0.068389155142036,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_12100",
+      "candidate_id": "49024",
+      "interval_90": [
+        0.011365709925163621,
+        1.8980050121793826
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.14687468946328877,
+      "ml_cmax_mg_l": 0.136778310284072,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_12101",
+      "candidate_id": "49024",
+      "interval_90": [
+        0.022731419850355556,
+        3.7960100243634933
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.2937493789269434,
+      "ml_cmax_mg_l": 0.273556620568144,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6801",
+      "candidate_id": "6604",
+      "interval_90": [
+        0.16355632636365505,
+        27.31292011285386
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 2.113575377393095,
+      "ml_cmax_mg_l": 4.633607206730944,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7093",
+      "candidate_id": "6901",
+      "interval_90": [
+        0.011179092700203652,
+        1.8668410610786397
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.14446310698010292,
+      "ml_cmax_mg_l": 0.2329657851378148,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_5856",
+      "candidate_id": "2625",
+      "interval_90": [
+        2.903496766844557e-06,
+        0.0004848664493993996
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 3.752076982395959e-05,
+      "ml_cmax_mg_l": 6.816677946764802e-05,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8119",
+      "candidate_id": "8243",
+      "interval_90": [
+        0.021847774885816743,
+        3.6484466444492734
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.2823303755723801,
+      "ml_cmax_mg_l": 0.8023650014893593,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8122",
+      "candidate_id": "8243",
+      "interval_90": [
+        0.0021847774885442746,
+        0.36484466443868185
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.02823303755675471,
+      "ml_cmax_mg_l": 0.08023650014893594,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8123",
+      "candidate_id": "8243",
+      "interval_90": [
+        0.0054619437214685155,
+        0.9121116611147113
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0705825938932802,
+      "ml_cmax_mg_l": 0.20059125037233982,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8124",
+      "candidate_id": "8243",
+      "interval_90": [
+        0.01092388744302252,
+        1.824223322243699
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.14116518778766515,
+      "ml_cmax_mg_l": 0.40118250074467965,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8125",
+      "candidate_id": "8243",
+      "interval_90": [
+        0.021847774885816743,
+        3.6484466444492734
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.2823303755723801,
+      "ml_cmax_mg_l": 0.8023650014893593,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8126",
+      "candidate_id": "8243",
+      "interval_90": [
+        0.04369554977197325,
+        7.296893288955285
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.5646607511491508,
+      "ml_cmax_mg_l": 1.6047300029787186,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8127",
+      "candidate_id": "8243",
+      "interval_90": [
+        0.08739109954475945,
+        14.593786578046327
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.129321502308807,
+      "ml_cmax_mg_l": 3.209460005957437,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8128",
+      "candidate_id": "8243",
+      "interval_90": [
+        0.01092388744302252,
+        1.824223322243699
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.14116518778766515,
+      "ml_cmax_mg_l": 0.40118250074467965,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8129",
+      "candidate_id": "8243",
+      "interval_90": [
+        0.021847774885816743,
+        3.6484466444492734
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.2823303755723801,
+      "ml_cmax_mg_l": 0.8023650014893593,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8130",
+      "candidate_id": "8243",
+      "interval_90": [
+        0.04369554977197325,
+        7.296893288955285
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.5646607511491508,
+      "ml_cmax_mg_l": 1.6047300029787186,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8131",
+      "candidate_id": "8243",
+      "interval_90": [
+        0.04369554977197325,
+        7.296893288955285
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.5646607511491508,
+      "ml_cmax_mg_l": 1.6047300029787186,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8133",
+      "candidate_id": "8243",
+      "interval_90": [
+        0.08739109954475945,
+        14.593786578046327
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.129321502308807,
+      "ml_cmax_mg_l": 3.209460005957437,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8140",
+      "candidate_id": "8243",
+      "interval_90": [
+        0.08739109954475945,
+        14.593786578046327
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.129321502308807,
+      "ml_cmax_mg_l": 3.209460005957437,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11351",
+      "candidate_id": "45237",
+      "interval_90": [
+        0.07440857949629166,
+        12.425784026075828
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.9615533986773768,
+      "ml_cmax_mg_l": 0.5748286276361882,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8433",
+      "candidate_id": "8372",
+      "interval_90": [
+        0.11896479075784178,
+        19.86640259323745
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.537336146591089,
+      "ml_cmax_mg_l": 0.9387172959566471,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8434",
+      "candidate_id": "8372",
+      "interval_90": [
+        0.007137887445410133,
+        1.191984155584165
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.09224016879468516,
+      "ml_cmax_mg_l": 0.05632303775739883,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8435",
+      "candidate_id": "8372",
+      "interval_90": [
+        0.023792958151509582,
+        3.973280518637675
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.3074672293174583,
+      "ml_cmax_mg_l": 0.18774345919132943,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_971",
+      "candidate_id": "428",
+      "interval_90": [
+        0.09984946523741402,
+        16.674258513712207
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.2903161611886296,
+      "ml_cmax_mg_l": 2.3440070938486963,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11078",
+      "candidate_id": "36941",
+      "interval_90": [
+        0.038516877601386224,
+        6.432086268458802
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.4977387663461474,
+      "ml_cmax_mg_l": 0.19044457993389297,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_12355",
+      "candidate_id": "50586",
+      "interval_90": [
+        0.1019803288841977,
+        17.030099891725207
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.317852490944596,
+      "ml_cmax_mg_l": 1.3868922201247362,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6619",
+      "candidate_id": "3504",
+      "interval_90": [
+        0.005305380352037642,
+        0.8859665226358924
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.06855938580351764,
+      "ml_cmax_mg_l": 0.029588019935645624,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11194",
+      "candidate_id": "40814",
+      "interval_90": [
+        0.00010287488703452276,
+        0.01717948570784953
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0013294125211935604,
+      "ml_cmax_mg_l": 0.0017317594858920634,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11195",
+      "candidate_id": "40814",
+      "interval_90": [
+        0.0006172493222734521,
+        0.10307691425817148
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.007976475128018332,
+      "ml_cmax_mg_l": 0.01039055691535238,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_11196",
+      "candidate_id": "40814",
+      "interval_90": [
+        0.0003086246611402015,
+        0.051538457129666114
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.003988237564054078,
+      "ml_cmax_mg_l": 0.00519527845767619,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4459",
+      "candidate_id": "1902",
+      "interval_90": [
+        0.028107245453810378,
+        4.693740479138637
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.36321910156768356,
+      "ml_cmax_mg_l": 0.3839784757142208,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4460",
+      "candidate_id": "1902",
+      "interval_90": [
+        0.05621449091139603,
+        9.387480958907721
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.7264382031841534,
+      "ml_cmax_mg_l": 0.7679569514284416,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4461",
+      "candidate_id": "1902",
+      "interval_90": [
+        0.1124289818134771,
+        18.774961916259905
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.4528764062479333,
+      "ml_cmax_mg_l": 1.5359139028568831,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4728",
+      "candidate_id": "2080",
+      "interval_90": [
+        0.005618096926077611,
+        0.9381883045419515
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.07260050158111239,
+      "ml_cmax_mg_l": 0.10689980605114809,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4729",
+      "candidate_id": "2080",
+      "interval_90": [
+        0.011236193852135328,
+        1.876376609080581
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.1452010031619677,
+      "ml_cmax_mg_l": 0.21379961210229617,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4730",
+      "candidate_id": "2080",
+      "interval_90": [
+        0.022472387704061344,
+        3.7527532181262075
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.29040200632123053,
+      "ml_cmax_mg_l": 0.42759922420459234,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1502",
+      "candidate_id": "625",
+      "interval_90": [
+        0.08440263377790007,
+        14.094730818082972
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.0907027108413818,
+      "ml_cmax_mg_l": 1.2730750162463071,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4486",
+      "candidate_id": "1933",
+      "interval_90": [
+        0.0608422349332949,
+        10.160286301159212
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.7862407558277977,
+      "ml_cmax_mg_l": 0.5481433197863725,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6729",
+      "candidate_id": "5563",
+      "interval_90": [
+        0.18241014833018743,
+        30.4613946759772
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 2.357216053141795,
+      "ml_cmax_mg_l": 1.6862332762007997,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_5781",
+      "candidate_id": "2569",
+      "interval_90": [
+        0.0011804234621796185,
+        0.19712359918237154
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.015254157512762297,
+      "ml_cmax_mg_l": 0.009431385997774272,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6611",
+      "candidate_id": "3430",
+      "interval_90": [
+        0.43200529437791607,
+        72.14227878559116
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 5.582637941319766,
+      "ml_cmax_mg_l": 8.08451641194435,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6562",
+      "candidate_id": "3177",
+      "interval_90": [
+        0.29137900484768986,
+        48.65853653543726
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 3.7653785935866617,
+      "ml_cmax_mg_l": 7.754984499279242,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8115",
+      "candidate_id": "8241",
+      "interval_90": [
+        0.026018765317597583,
+        4.344976891780772
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.3362304775858793,
+      "ml_cmax_mg_l": 0.5140924337225351,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8116",
+      "candidate_id": "8241",
+      "interval_90": [
+        0.07805629595266954,
+        13.034930675321739
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.0086914327560457,
+      "ml_cmax_mg_l": 1.5422773011676052,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8043",
+      "candidate_id": "8213",
+      "interval_90": [
+        0.054800718990943596,
+        9.151389574492194
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.708168573468491,
+      "ml_cmax_mg_l": 0.7599376928520979,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13119",
+      "candidate_id": "59604",
+      "interval_90": [
+        0.003845652769067886,
+        0.6422008197334221
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.049695888770656886,
+      "ml_cmax_mg_l": 0.08420129928950729,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6115",
+      "candidate_id": "2804",
+      "interval_90": [
+        0.001232068314436722,
+        0.20574797804499106
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.01592154403657685,
+      "ml_cmax_mg_l": 0.01983686862624761,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6116",
+      "candidate_id": "2804",
+      "interval_90": [
+        0.001232068314436722,
+        0.20574797804499106
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.01592154403657685,
+      "ml_cmax_mg_l": 0.01983686862624761,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10492",
+      "candidate_id": "22343",
+      "interval_90": [
+        1.3591666120368409,
+        226.97262722862047
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 17.563986357755603,
+      "ml_cmax_mg_l": 28.437166634823733,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4557",
+      "candidate_id": "1982",
+      "interval_90": [
+        0.0030895866718715723,
+        0.5159423412515468
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.03992553795486034,
+      "ml_cmax_mg_l": 0.023715338367142264,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6620",
+      "candidate_id": "3508",
+      "interval_90": [
+        1.293538933270758,
+        216.01320066786116
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 16.715905155399373,
+      "ml_cmax_mg_l": 18.255294503176337,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7515",
+      "candidate_id": "8024",
+      "interval_90": [
+        0.0003245067390154618,
+        0.054190668351802626
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.004193475536105089,
+      "ml_cmax_mg_l": 0.0022308974013386658,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7516",
+      "candidate_id": "8024",
+      "interval_90": [
+        0.0012980269560333476,
+        0.21676267340245126
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.016773902144052066,
+      "ml_cmax_mg_l": 0.008923589605354663,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7517",
+      "candidate_id": "8024",
+      "interval_90": [
+        0.0025960539120575385,
+        0.4335253468033734
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0335478042879858,
+      "ml_cmax_mg_l": 0.017847179210709326,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_7521",
+      "candidate_id": "8024",
+      "interval_90": [
+        0.0012980269560333476,
+        0.21676267340245126
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.016773902144052066,
+      "ml_cmax_mg_l": 0.008923589605354663,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_9319",
+      "candidate_id": "9627",
+      "interval_90": [
+        0.0025633066830421194,
+        0.42805675705266705
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.033124624466919446,
+      "ml_cmax_mg_l": 0.014007751069133273,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_9320",
+      "candidate_id": "9627",
+      "interval_90": [
+        0.0025633066830421194,
+        0.42805675705266705
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.033124624466919446,
+      "ml_cmax_mg_l": 0.014007751069133273,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_9321",
+      "candidate_id": "9627",
+      "interval_90": [
+        0.00016020666769238622,
+        0.026753547316168053
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.0020702890292115896,
+      "ml_cmax_mg_l": 0.0008754844418208295,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_9322",
+      "candidate_id": "9627",
+      "interval_90": [
+        0.0006408266707708706,
+        0.1070141892648936
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.00828115611686349,
+      "ml_cmax_mg_l": 0.003501937767283318,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_9323",
+      "candidate_id": "9627",
+      "interval_90": [
+        0.0019224800123054588,
+        0.32104256779348633
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.024843468350498037,
+      "ml_cmax_mg_l": 0.010505813301849954,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_9324",
+      "candidate_id": "9627",
+      "interval_90": [
+        0.005126613366068059,
+        0.8561135141026323
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.06624924893362981,
+      "ml_cmax_mg_l": 0.028015502138266545,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_9325",
+      "candidate_id": "9627",
+      "interval_90": [
+        0.01025322673220826,
+        1.7122270282173115
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.13249849786819187,
+      "ml_cmax_mg_l": 0.05603100427653309,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_9326",
+      "candidate_id": "9627",
+      "interval_90": [
+        0.020506453464460752,
+        3.4244540564420096
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.26499699573695534,
+      "ml_cmax_mg_l": 0.11206200855306618,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1812",
+      "candidate_id": "852",
+      "interval_90": [
+        0.0026653808521486804,
+        0.44510252769558706
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.034443689618895296,
+      "ml_cmax_mg_l": 0.03024154139522152,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1813",
+      "candidate_id": "852",
+      "interval_90": [
+        0.005330761704203204,
+        0.8902050553754506
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.06888737923657384,
+      "ml_cmax_mg_l": 0.06048308279044304,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1814",
+      "candidate_id": "852",
+      "interval_90": [
+        0.010661523408513637,
+        1.7804101107688075
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.13777475847453335,
+      "ml_cmax_mg_l": 0.12096616558088608,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1815",
+      "candidate_id": "852",
+      "interval_90": [
+        0.0213230468169509,
+        3.5608202215248617
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.2755495169480798,
+      "ml_cmax_mg_l": 0.24193233116177215,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1816",
+      "candidate_id": "852",
+      "interval_90": [
+        0.04264609363361586,
+        7.121640443001972
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.5510990338924644,
+      "ml_cmax_mg_l": 0.4838646623235443,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1817",
+      "candidate_id": "852",
+      "interval_90": [
+        0.08529218726739549,
+        14.243280886031291
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.102198067787045,
+      "ml_cmax_mg_l": 0.9677293246470886,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1819",
+      "candidate_id": "852",
+      "interval_90": [
+        0.0213230468169509,
+        3.5608202215248617
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.2755495169480798,
+      "ml_cmax_mg_l": 0.24193233116177215,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6840",
+      "candidate_id": "6709",
+      "interval_90": [
+        0.008146381894232762,
+        1.3603966464205328
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.10527255392254525,
+      "ml_cmax_mg_l": 0.13240700857252166,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_2213",
+      "candidate_id": "1161",
+      "interval_90": [
+        0.04975150356261276,
+        8.308201049213388
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.6429195082581045,
+      "ml_cmax_mg_l": 1.398742872172086,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_2214",
+      "candidate_id": "1161",
+      "interval_90": [
+        0.14925451068792775,
+        24.92460314765511
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.92875852477547,
+      "ml_cmax_mg_l": 4.196228616516258,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_698",
+      "candidate_id": "228",
+      "interval_90": [
+        0.6963741423855557,
+        116.29028202396924
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 8.99897468671937,
+      "ml_cmax_mg_l": 28.365495834720274,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1269",
+      "candidate_id": "493",
+      "interval_90": [
+        0.12338284027474546,
+        20.604190217798806
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.5944288979547325,
+      "ml_cmax_mg_l": 2.358193523070918,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1270",
+      "candidate_id": "493",
+      "interval_90": [
+        0.24676568054904457,
+        41.208380435523075
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 3.1888577959036972,
+      "ml_cmax_mg_l": 4.716387046141836,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1271",
+      "candidate_id": "493",
+      "interval_90": [
+        0.3701485208239364,
+        61.81257065334631
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 4.783286693860321,
+      "ml_cmax_mg_l": 7.074580569212755,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1273",
+      "candidate_id": "493",
+      "interval_90": [
+        0.12338284027474546,
+        20.604190217798806
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.5944288979547325,
+      "ml_cmax_mg_l": 2.358193523070918,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1274",
+      "candidate_id": "493",
+      "interval_90": [
+        0.12338284027474546,
+        20.604190217798806
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.5944288979547325,
+      "ml_cmax_mg_l": 2.358193523070918,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13018",
+      "candidate_id": "59570",
+      "interval_90": [
+        0.0006317078981497024,
+        0.10549140923145436
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.008163317732298073,
+      "ml_cmax_mg_l": 0.006084550008328839,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13019",
+      "candidate_id": "59570",
+      "interval_90": [
+        0.0021056929937941626,
+        0.35163803076513894
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.027211059107166875,
+      "ml_cmax_mg_l": 0.02028183336109613,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13021",
+      "candidate_id": "59570",
+      "interval_90": [
+        0.006317078981355763,
+        1.054914092290954
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.08163317732115527,
+      "ml_cmax_mg_l": 0.060845500083288394,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13022",
+      "candidate_id": "59570",
+      "interval_90": [
+        0.02105692993779301,
+        3.516380307626571
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.2721105910697482,
+      "ml_cmax_mg_l": 0.2028183336109613,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13023",
+      "candidate_id": "59570",
+      "interval_90": [
+        0.042113859875548644,
+        7.032760615246901
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.5442211821390135,
+      "ml_cmax_mg_l": 0.4056366672219226,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_13025",
+      "candidate_id": "59570",
+      "interval_90": [
+        0.08422771975107578,
+        14.06552123049021
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.088442364277749,
+      "ml_cmax_mg_l": 0.8112733344438452,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_9444",
+      "candidate_id": "9822",
+      "interval_90": [
+        0.058526910814149916,
+        9.773641136722313
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.7563207144713502,
+      "ml_cmax_mg_l": 0.26820026083199827,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10315",
+      "candidate_id": "10404",
+      "interval_90": [
+        0.014199065927386715,
+        2.3711583768980895
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.18348905721554964,
+      "ml_cmax_mg_l": 0.31002746324802016,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10316",
+      "candidate_id": "10404",
+      "interval_90": [
+        0.014199065927386715,
+        2.3711583768980895
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.18348905721554964,
+      "ml_cmax_mg_l": 0.31002746324802016,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10330",
+      "candidate_id": "10404",
+      "interval_90": [
+        0.028398131854314616,
+        4.742316753719559
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.3669781144251702,
+      "ml_cmax_mg_l": 0.6200549264960403,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10335",
+      "candidate_id": "10404",
+      "interval_90": [
+        0.028398131854314616,
+        4.742316753719559
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.3669781144251702,
+      "ml_cmax_mg_l": 0.6200549264960403,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10337",
+      "candidate_id": "10404",
+      "interval_90": [
+        0.0002839813185637956,
+        0.047423167540643935
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.003669781144518547,
+      "ml_cmax_mg_l": 0.006200549264960403,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10338",
+      "candidate_id": "10404",
+      "interval_90": [
+        0.0008519439556617809,
+        0.1422695026169878
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.011009343433173054,
+      "ml_cmax_mg_l": 0.01860164779488121,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10339",
+      "candidate_id": "10404",
+      "interval_90": [
+        0.0028398131855094312,
+        0.4742316753849764
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.03669781144352459,
+      "ml_cmax_mg_l": 0.06200549264960403,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10340",
+      "candidate_id": "10404",
+      "interval_90": [
+        0.008519439556497909,
+        1.4226950261498552
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.11009343433018112,
+      "ml_cmax_mg_l": 0.1860164779488121,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10341",
+      "candidate_id": "10404",
+      "interval_90": [
+        0.028398131854314616,
+        4.742316753719559
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.3669781144251702,
+      "ml_cmax_mg_l": 0.6200549264960403,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10342",
+      "candidate_id": "10404",
+      "interval_90": [
+        0.08519439556451372,
+        14.226950261420837
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.1009343432957974,
+      "ml_cmax_mg_l": 1.8601647794881209,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1468",
+      "candidate_id": "613",
+      "interval_90": [
+        0.001599923844773762,
+        0.2671776331157944
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.020675199298003766,
+      "ml_cmax_mg_l": 0.044938203906208174,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1763",
+      "candidate_id": "811",
+      "interval_90": [
+        0.00030621746560325063,
+        0.05113646999252186
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.003957130303768972,
+      "ml_cmax_mg_l": 0.0031298185572063405,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1764",
+      "candidate_id": "811",
+      "interval_90": [
+        0.00030621746560325063,
+        0.05113646999252186
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.003957130303768972,
+      "ml_cmax_mg_l": 0.0031298185572063405,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4683",
+      "candidate_id": "2070",
+      "interval_90": [
+        0.0020685806774238405,
+        0.3454404977515165
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.026731470944346865,
+      "ml_cmax_mg_l": 0.03155451876150582,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4684",
+      "candidate_id": "2070",
+      "interval_90": [
+        0.0020685806774238405,
+        0.3454404977515165
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.026731470944346865,
+      "ml_cmax_mg_l": 0.03155451876150582,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6949",
+      "candidate_id": "6752",
+      "interval_90": [
+        0.0029571005091838217,
+        0.4938179510918935
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.038213470329426374,
+      "ml_cmax_mg_l": 0.03836940726822656,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6950",
+      "candidate_id": "6752",
+      "interval_90": [
+        0.00029571005093826497,
+        0.04938179511250966
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.003821347033199575,
+      "ml_cmax_mg_l": 0.0038369407268226564,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6951",
+      "candidate_id": "6752",
+      "interval_90": [
+        0.0014785502546033052,
+        0.24690897554784952
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.01910673516486043,
+      "ml_cmax_mg_l": 0.01918470363411328,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8833",
+      "candidate_id": "8912",
+      "interval_90": [
+        0.010318456177519359,
+        1.72311995219279
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.13334143285307293,
+      "ml_cmax_mg_l": 0.23613779795853002,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_909",
+      "candidate_id": "408",
+      "interval_90": [
+        0.14536773759195068,
+        24.275535481319938
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.8785312538663297,
+      "ml_cmax_mg_l": 3.370370741616114,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6376",
+      "candidate_id": "2916",
+      "interval_90": [
+        0.013359144102488328,
+        2.230896497614465
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.17263507114537344,
+      "ml_cmax_mg_l": 0.17647458409669972,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10815",
+      "candidate_id": "31699",
+      "interval_90": [
+        0.07103218963506219,
+        11.86194728187941
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.9179216136291642,
+      "ml_cmax_mg_l": 0.44346330751764773,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10816",
+      "candidate_id": "31699",
+      "interval_90": [
+        0.11838698272498666,
+        19.76991213644614
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.529869356047095,
+      "ml_cmax_mg_l": 0.7391055125294128,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_10819",
+      "candidate_id": "31699",
+      "interval_90": [
+        0.1775804740875499,
+        29.654868204680888
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 2.294804034071546,
+      "ml_cmax_mg_l": 1.1086582687941193,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4823",
+      "candidate_id": "2147",
+      "interval_90": [
+        0.0003159027006966751,
+        0.05275384584255621
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.004082288864570901,
+      "ml_cmax_mg_l": 0.006330113984393253,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_821",
+      "candidate_id": "393",
+      "interval_90": [
+        0.08946804466933844,
+        14.940623888027712
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.1561610637804096,
+      "ml_cmax_mg_l": 1.7771112368112894,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8714",
+      "candidate_id": "8748",
+      "interval_90": [
+        0.20197448080933253,
+        33.728520209697585
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 2.610038382442057,
+      "ml_cmax_mg_l": 2.4607482865789843,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_8715",
+      "candidate_id": "8748",
+      "interval_90": [
+        0.9694775078960579,
+        161.89689700842908
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 12.528184235867405,
+      "ml_cmax_mg_l": 11.811591775579124,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_1635",
+      "candidate_id": "732",
+      "interval_90": [
+        0.9524050956477431,
+        159.04590712476568
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 12.307564031421673,
+      "ml_cmax_mg_l": 43.52577372804061,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6311",
+      "candidate_id": "2875",
+      "interval_90": [
+        0.006952281858572512,
+        1.160989141948778
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.08984165932110869,
+      "ml_cmax_mg_l": 0.028681903768693128,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_6312",
+      "candidate_id": "2875",
+      "interval_90": [
+        0.006952281858572512,
+        1.160989141948778
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.08984165932110869,
+      "ml_cmax_mg_l": 0.028681903768693128,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4643",
+      "candidate_id": "2063",
+      "interval_90": [
+        0.0684248311130171,
+        11.426534133384948
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 0.8842277242226633,
+      "ml_cmax_mg_l": 1.4963622166864803,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4644",
+      "candidate_id": "2063",
+      "interval_90": [
+        0.13684966222612993,
+        22.853068266785886
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.7684554484465638,
+      "ml_cmax_mg_l": 2.9927244333729606,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4645",
+      "candidate_id": "2063",
+      "interval_90": [
+        0.2736993244524501,
+        45.706136533603534
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 3.5369108968955856,
+      "ml_cmax_mg_l": 5.985448866745921,
+      "status": "ok"
+    },
+    {
+      "arm_id": "frdb_4649",
+      "candidate_id": "2063",
+      "interval_90": [
+        0.13684966222612993,
+        22.853068266785886
+      ],
+      "interval_source": "development_empirical_residual",
+      "meta_cmax_mg_l": 1.7684554484465638,
+      "ml_cmax_mg_l": 2.9927244333729606,
+      "status": "ok"
+    }
+  ]
+}

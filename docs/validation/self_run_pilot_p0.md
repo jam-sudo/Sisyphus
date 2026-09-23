@@ -65,3 +65,11 @@ records in `data/validation/self_run_p0_candidates.json` (SHA256
 `e304a1e57275576f3de65b515a9392ab74194529fc68f0924574d1298a44ab3c`).
 It contains no observed Cmax values. Candidate IDs and arms may be excluded
 after source review, but none may be added to this list.
+
+Before any outcome was opened, the 452 arm predictions were run with zero
+strict-mode failures and sealed in `data/validation/self_run_p0_predictions.json`
+(SHA256 `c54702d9f7d9b9721b0d01aeaeedcbf55381d0ad8effb744d1612f7ecb3b7674`).
+The frozen Git archive SHA256 was
+`da99f1fa13b5d7e74f413683aedd65713e5699535f5a54c9e3f6bd470e7fce`;
+the container lockfile and archive lockfile both had SHA256
+`4fb6512cd6b2cc7fa97c0b4f6f29fc13e639c5d9c7c87ad592e7ab4f77b5fcfc`.
