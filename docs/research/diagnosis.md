@@ -18,6 +18,7 @@ Before proposing any accuracy improvement, read [dead-ends.md](./dead-ends.md) f
 - **ChEMBL expansion** (539 unique new compounds, 2026-03-27): scaffold CV R² 0.279→0.333 (+0.054). Engine AAFE +0.099, Meta AAFE +0.038 — **homogeneous data expansion destroys error cancellation**.
 - **Foundation model shootout** (MoLFormer, ChemBERTa, Uni-Mol, frozen embedding + Ridge/MLP/XGB, 2026): Morgan FP + XGB (R²=0.205) dominates every alternative. CLint R²≈0.20 is a **target-noise ceiling, not a representation ceiling**.
 - **BDE features** (ALFABET, 978 compounds): r=+0.033 vs log10(CLint) — zero correlation. Hepatocyte CLint integrates kcat + Km + enzyme complement; C-H BDE captures only the kcat component.
+- **Assay-limit clipping** (2026-09-22, [DE-58](./dead-ends.md)): 16.1% of Hepatocyte_AZ labels sit exactly at the 3.0 LLOQ and 11.3% at the 150 cap, so the model never predicts below ~3 µL/min/10⁶ cells. For high-fu, low-clearance drugs that is a hard hepatic-CL floor (caffeine / acetaminophen engine curves 28× / 22× off against PK-DB timecourses). A censoring-aware (AFT interval) retrain is null on the holdout (ΔMeta −0.04 over 4 seeds) because the model cannot tell sub-LLOQ compounds apart structurally — the floor is a **discrimination** limit, and the clipping sits on top of it.
 
 Consequence: measured CLint would raise the ceiling, predicted CLint cannot (at current data scale / target noise).
 

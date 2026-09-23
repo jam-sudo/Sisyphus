@@ -508,6 +508,24 @@ Artifacts: `scripts/probe_liver_zonation.py`, `tests/integration/test_liver_zona
 
 ---
 
+### DE-58 — Censoring-aware CLint (AFT interval loss on the Hepatocyte_AZ assay limits): real label artifact, null fix (2026-09-22)
+
+**Date:** 2026-09-22
+
+**Origin.** An overlay of PK-DB open-licence plasma timecourses (pkdb_analysis dump, 2021-12-03 snapshot; not committed — 92% of studies are closed-licence) on engine curves showed the engine eliminating two high-fu, low-clearance probes far too fast: curve fold error **caffeine 28×**, **acetaminophen 22×** (engine IV t½ 2.3 h / 1.0 h vs clinical ~5 h / ~2.3 h), while midazolam (fu≈0.03) sat at ~2×. A diagnostic CLint sweep through `MeasuredADMEInput` collapsed the error (caffeine 2.2× at CLint 0.3, acetaminophen 1.6× at 1.0). Root cause: the Hepatocyte_AZ training labels are **clipped at the assay limits** — 16.1% sit exactly at 3.0 (below LLOQ) and 11.3% at 150 (upper cap) — so plain regression never predicts below ~3 µL/min/10⁶ cells. With `_CLINT_SCALING` = 10.8 L/h per unit, that floor alone gives a high-fu drug ~20 L/h hepatic CL; caffeine's clinical *total* CL is ~6 L/h.
+
+**The fix tested.** XGBoost `survival:aft` (normal, σ=0.6) with interval labels — 3.0→(0, 3], 150→[150, ∞) — identical data, exclusion, features, scaffold folds and tree hyperparameters as a plain-regression control, so the loss is the only difference.
+
+**Result.** *Scaffold CV (N=979, exact 3<Y<150 points N=744):* plain R² **0.082** → AFT **−0.16 / −0.34 / −0.58** (σ 0.6/1.0/1.4); an uncensored AFT control reproduces plain (R² 0.05), so the loss is set up correctly and the loss of accuracy comes from the censoring itself. Only 10% of below-LLOQ compounds move below 3 (plain: 0%); their CV median prediction stays ~10.5 (plain 12.3). *107-holdout, public-clone, matched holdout-only exclusion, 4 tree seeds* (local stack reproduces the canonical cache bit-identically, Meta 2.74279): ΔMeta (AFT − plain) = −0.065 / −0.004 / −0.009 / −0.089 (mean **−0.042**); ΔEngine = −0.079 / +0.173 / +0.001 / −0.148 (mean **−0.013**). The plain arm's seed-to-seed spread alone is 2.746–2.803, and the bootstrap CI half-width is ~0.42 → **null**. Probe CLint: caffeine 4.2 (prod) → 2.3 (AFT), acetaminophen 12.6 → 25.4 — still far from the ~0.3–1 the curves need.
+
+**Why it failed.** The label artifact is real, but it is not what binds. The model has almost no structural signal to tell a sub-LLOQ compound from a typical one (exact-point scaffold-CV R² ≈ 0.08, below-LLOQ compounds predicted ~10–12 under either loss), so reinterpreting 16% of labels as intervals mostly widens the spread of predictions. This refines §1: the floor is a **discrimination** limit, and the clipping sits on top of it. *Side check:* production `xgboost_clint.json` is holdout-clean — median |log error| 0.076 on its training rows vs 0.297 on the 24 holdout rows present in Hep_AZ (a holdout-excluded retrain gives 0.327; prediction correlation 0.993).
+
+**Still open (correctness, not headline):** `_estimate_renal_clearance` = GFR·fup has no tubular reabsorption, adding ~5–6 L/h renal CL to caffeine/acetaminophen whose true renal CL is <1 L/h. DE-46 covered secretion only.
+
+**Telltale if it returns:** "treat the 3.0 / 150 CLint labels as censored (Tobit / AFT / interval loss)." Done with a matched control and 4 seeds: ΔMeta −0.04 (noise), exact-point R² gets worse. The low-CLint engine error needs measured CLint (the `measured_adme` path), not a loss change. Artifacts: `scripts/clint_censored_ab.py`, `data/validation/clint_censored_ab_2026-09-22.json`.
+
+---
+
 ## 3. When to consult this list
 
 - Before writing a design spec for any accuracy improvement.

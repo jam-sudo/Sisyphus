@@ -1,0 +1,162 @@
+{
+  "date": "2026-09-22",
+  "question": "Does censoring-aware (AFT interval) CLint training fix the Hepatocyte_AZ LLOQ=3.0/ULOQ=150 label clipping?",
+  "data": {
+    "source": "data/training/clearance_hepatocyte_az.tab",
+    "n_raw": 1213,
+    "frac_at_lloq_3.0": 0.161,
+    "frac_at_uloq_150": 0.113
+  },
+  "scaffold_cv_exact_points": {
+    "note": "5-fold Murcko, holdout+train refs excluded, N=979; exact = 3<Y<150 (N=744)",
+    "A_plain": {
+      "r2": 0.082,
+      "rmse_log10": 0.427,
+      "low_censored_pred_le_3": 0.0,
+      "low_censored_pred_median": 12.34
+    },
+    "B_aft_sigma0.6": {
+      "r2": -0.159,
+      "rmse_log10": 0.48,
+      "low_censored_pred_le_3": 0.104,
+      "low_censored_pred_median": 10.51
+    },
+    "B_aft_sigma1.0": {
+      "r2": -0.342,
+      "rmse_log10": 0.516,
+      "low_censored_pred_le_3": 0.187
+    },
+    "B_aft_sigma1.4": {
+      "r2": -0.576,
+      "rmse_log10": 0.559,
+      "low_censored_pred_le_3": 0.231
+    },
+    "aft_uncensored_control_sigma0.6": {
+      "r2": 0.05,
+      "rmse_log10": 0.434
+    }
+  },
+  "holdout_107_public_clone": {
+    "note": "runtime monkeypatch of adme._predict_clint; local stack reproduces canonical cache bit-identically (baseline row)",
+    "production": {
+      "meta": 2.7428,
+      "engine": 4.2779,
+      "in_domain_meta": 2.7906,
+      "in_domain_n": 81
+    },
+    "matched_holdout_only_exclusion": {
+      "seed42": {
+        "A_plain": {
+          "meta": 2.803,
+          "engine": 4.4384,
+          "in_domain_meta": 2.8608,
+          "in_domain_n": 81
+        },
+        "B_aft": {
+          "meta": 2.7378,
+          "engine": 4.3592,
+          "in_domain_meta": 2.7868,
+          "in_domain_n": 81
+        }
+      },
+      "seed1": {
+        "A_plain": {
+          "meta": 2.7459,
+          "engine": 4.3621,
+          "in_domain_meta": 2.8364,
+          "in_domain_n": 81
+        },
+        "B_aft": {
+          "meta": 2.7421,
+          "engine": 4.535,
+          "in_domain_meta": 2.7988,
+          "in_domain_n": 81
+        }
+      },
+      "seed2": {
+        "A_plain": {
+          "meta": 2.7577,
+          "engine": 4.3373,
+          "in_domain_meta": 2.7901,
+          "in_domain_n": 81
+        },
+        "B_aft": {
+          "meta": 2.7483,
+          "engine": 4.338,
+          "in_domain_meta": 2.7868,
+          "in_domain_n": 81
+        }
+      },
+      "seed3": {
+        "A_plain": {
+          "meta": 2.7552,
+          "engine": 4.313,
+          "in_domain_meta": 2.818,
+          "in_domain_n": 81
+        },
+        "B_aft": {
+          "meta": 2.6658,
+          "engine": 4.1649,
+          "in_domain_meta": 2.7175,
+          "in_domain_n": 81
+        }
+      }
+    },
+    "holdout_plus_train_exclusion_seed42": {
+      "A_plain": {
+        "meta": 2.824,
+        "engine": 4.6908,
+        "in_domain_meta": 2.8609,
+        "in_domain_n": 81
+      },
+      "B_aft": {
+        "meta": 2.7784,
+        "engine": 4.4569,
+        "in_domain_meta": 2.8462,
+        "in_domain_n": 81
+      }
+    }
+  },
+  "production_leak_check": {
+    "prod_median_abs_err_log10_trained_rows": 0.076,
+    "prod_median_abs_err_log10_holdout_rows_in_AZ": 0.297,
+    "holdout_excluded_retrain_holdout_rows": 0.327,
+    "prod_vs_holdout_excluded_retrain_corr": 0.993,
+    "verdict": "clean; holdout rows not memorized"
+  },
+  "probe_clint_pred": {
+    "caffeine": {
+      "prod": 4.16,
+      "A": 5.43,
+      "B": 2.28
+    },
+    "acetaminophen": {
+      "prod": 12.65,
+      "A": 23.17,
+      "B": 25.4
+    },
+    "theophylline": {
+      "prod": 3.54,
+      "A": 3.3,
+      "B": 1.28
+    }
+  },
+  "origin": "PK-DB open-licence timecourse overlay: engine curve fold error caffeine 28x, acetaminophen 22x, midazolam ~2x; diagnostic CLint sweep caffeine 0.3 -> 2.2x, acetaminophen 1.0 -> 1.6x",
+  "verdict": {
+    "delta_meta_per_seed": [
+      -0.0652,
+      -0.0038,
+      -0.0094,
+      -0.0894
+    ],
+    "delta_meta_mean": -0.0419,
+    "delta_engine_per_seed": [
+      -0.0792,
+      0.1729,
+      0.0007,
+      -0.1481
+    ],
+    "delta_engine_mean": -0.0134,
+    "conclusion": "null: within seed noise and far inside bootstrap CI half-width ~0.42; not shipped"
+  }
+}
