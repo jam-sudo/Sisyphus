@@ -104,6 +104,26 @@ and biologics. Use `marketing_authorisation_date` for approval-window screening;
 table establishes the required Cmax arm. The 900-name inventory is therefore
 plausible from public catalogues, while the ≥550 source-verified, eligible
 compounds remain an unproven acquisition milestone.
+
+The NIH NCATS [Inxight Drugs FRDB download](https://drugs.ncats.io/downloads-public)
+(v. 2024-12-30 ZIP SHA256
+`647b80d9cdac4a0517ce649570517dc1aff40545bdc84617ec9f1a56405f9c7a`)
+offers a more specific Cmax discovery pool: 13,455 human PK rows across 4,051
+drug records. A label-blind screen of its metadata found 1,965 rows for 823
+compound IDs with adult, healthy, fasted, single-dose oral administration,
+nonempty dose and Cmax fields, and directly convertible mass units. Excluding
+combination applications and non-plasma analytes leaves 1,748 rows for 728
+compound IDs. Among those, 190 IDs (187 distinct analyte InChIKey-14 keys)
+have one parseable analyte structure per compound and no hit in the repository's
+fitted-corpus or previously used reference structure/name union. Only 29 of
+these 190 IDs have a row linked to an FDA, EMA, PMDA, or MHRA regulatory domain.
+These are **provisional discovery counts**, not verified eligible cases: the
+table has no clinical source date or reliable IR/parent-drug adjudication, and
+each original report, formulation, source agency, structure, and collision must
+still be checked by two curators. FRDB alone cannot provide the N=260 final
+cohort or the ≥70% regulatory-source quota. The screen neither read nor used
+observed Cmax values for model assessment.
+
 Allocate those compounds without outcome-based replacement to three disjoint
 roles: 120–150 calibration-development compounds, N=260 final external-test
 compounds, and a sealed reserve cohort. Calibration labels may be opened before
