@@ -30,9 +30,9 @@ warnings.filterwarnings("ignore")
 from rdkit import Chem, DataStructs
 from rdkit.Chem import AllChem, Descriptors, MACCSkeys, Fragments
 from rdkit.Chem.AtomPairs import Pairs as AtomPairs
-from rdkit.Chem.inchi import MolToInchi, InchiToInchiKey
 from rdkit.Chem.Scaffolds.MurckoScaffold import MurckoScaffoldSmiles
 from sisyphus.descriptors import compute_features
+from sisyphus.validation.identity import ik14
 
 
 # ═══════════════════════════════════════════════════════════════
@@ -63,12 +63,6 @@ def scaffold_split(smi_list, K=5, seed=42):
     folds = [[] for _ in range(K)]
     for i, sc in enumerate(scs): folds[i % K].extend(s2i[sc])
     return folds
-
-def ik14(smi):
-    mol = Chem.MolFromSmiles(smi)
-    if not mol: return None
-    inchi = MolToInchi(mol)
-    return InchiToInchiKey(inchi)[:14] if inchi else None
 
 def fe_corr(p1, p2, obs):
     """Error correlation between two prediction sets."""

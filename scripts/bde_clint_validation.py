@@ -41,9 +41,9 @@ logging.getLogger("tensorflow").setLevel(logging.ERROR)
 logging.getLogger("absl").setLevel(logging.ERROR)
 
 from rdkit import Chem
-from rdkit.Chem.inchi import MolToInchi, InchiToInchiKey
 from rdkit.Chem.Scaffolds.MurckoScaffold import MurckoScaffoldSmiles
 from sisyphus.descriptors import compute_features
+from sisyphus.validation.identity import ik14 as _inchikey_prefix
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -62,17 +62,6 @@ BDE_RESULTS_PATH = OUTPUT_DIR / "bde_correlation.json"
 def _canonical_smiles(smiles):
     mol = Chem.MolFromSmiles(smiles)
     return Chem.MolToSmiles(mol, isomericSmiles=True) if mol else None
-
-
-def _inchikey_prefix(smiles):
-    mol = Chem.MolFromSmiles(smiles)
-    if not mol:
-        return None
-    inchi = MolToInchi(mol)
-    if not inchi:
-        return None
-    ik = InchiToInchiKey(inchi)
-    return ik[:14] if ik else None
 
 
 def build_holdout_keys():

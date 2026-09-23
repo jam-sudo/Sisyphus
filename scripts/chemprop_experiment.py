@@ -30,8 +30,8 @@ warnings.filterwarnings("ignore")
 ROOT = Path(__file__).resolve().parent.parent
 
 from rdkit import Chem
-from rdkit.Chem.inchi import MolToInchi, InchiToInchiKey
 from rdkit.Chem.Scaffolds.MurckoScaffold import MurckoScaffoldSmiles
+from sisyphus.validation.identity import ik14
 
 from chemprop.data import MoleculeDatapoint, MoleculeDataset, build_dataloader
 from chemprop.models import MPNN
@@ -46,12 +46,6 @@ from chemprop.nn.predictors import RegressionFFN
 def aafe(p, o):
     m = (p > 0) & (o > 0)
     return float(10 ** np.mean(np.abs(np.log10(p[m] / o[m])))) if m.sum() else np.inf
-
-def ik14(smi):
-    mol = Chem.MolFromSmiles(smi)
-    if not mol: return None
-    inchi = MolToInchi(mol)
-    return InchiToInchiKey(inchi)[:14] if inchi else None
 
 def scaffold_split(smi_list, K=5, seed=42):
     s2i = {}

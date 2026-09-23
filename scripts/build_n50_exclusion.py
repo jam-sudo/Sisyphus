@@ -42,13 +42,19 @@ import logging
 import pathlib
 import sys
 
-from rdkit import Chem, RDLogger
+from rdkit import RDLogger
+
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "src"))
+from sisyphus.validation.identity import (  # noqa: E402
+    _largest_organic_fragment as _largest_organic_fragment,
+    ik14,
+)
 
 RDLogger.DisableLog("rdApp.*")
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger(__name__)
 
-ROOT = pathlib.Path(__file__).resolve().parent.parent
 csv.field_size_limit(10**7)
 
 # (relative path, SMILES column, name column or None, delimiter). Every artifact
@@ -72,31 +78,6 @@ TDC_HEP = "data/training/clearance_hepatocyte_az.tab"
 DRUGBANK = "data/drugbank/drugs.csv"
 
 EXCLUSION_OUT = "data/reference/n50_exclusion_ik14.json"
-
-
-def _largest_organic_fragment(mol: Chem.Mol) -> Chem.Mol:
-    """Return the largest carbon-containing fragment for salt-insensitive audit."""
-    fragments = Chem.GetMolFrags(mol, asMols=True, sanitizeFrags=True)
-    if len(fragments) <= 1:
-        return mol
-    organic = [frag for frag in fragments if any(a.GetAtomicNum() == 6 for a in frag.GetAtoms())]
-    candidates = organic or list(fragments)
-    return max(candidates, key=lambda frag: (frag.GetNumHeavyAtoms(), frag.GetNumAtoms()))
-
-
-def ik14(smiles: str | None) -> str | None:
-    """Salt-stripped InChIKey-14 for a SMILES, or None if unparseable."""
-    if not smiles or not isinstance(smiles, str):
-        return None
-    mol = Chem.MolFromSmiles(smiles)
-    if mol is None:
-        return None
-    mol = _largest_organic_fragment(mol)
-    try:
-        key = Chem.MolToInchiKey(mol)
-    except Exception:
-        return None
-    return key[:14] if key else None
 
 
 def _ingest_hard(root: pathlib.Path) -> dict[str, set[str]]:

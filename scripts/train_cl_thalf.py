@@ -15,18 +15,11 @@ from rdkit.Chem.Scaffolds import MurckoScaffold
 
 from sisyphus.descriptors import compute_features
 from sisyphus.validation.reference import load_reference
+from sisyphus.validation.identity import ik14 as _ik14
 
 logging.disable(logging.WARNING)
 
 BW_KG = 70.0
-
-
-def _ik14(smi):
-    try:
-        m = Chem.MolFromSmiles(smi)
-        return Chem.MolToInchiKey(m).split("-")[0] if m else None
-    except Exception:
-        return None
 
 
 def load_holdout_keys():

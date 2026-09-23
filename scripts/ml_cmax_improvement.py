@@ -30,9 +30,9 @@ log = logging.getLogger(__name__)
 
 from rdkit import Chem
 from rdkit.Chem import AllChem, MACCSkeys
-from rdkit.Chem.inchi import MolToInchi, InchiToInchiKey
 from rdkit.Chem.Scaffolds.MurckoScaffold import MurckoScaffoldSmiles
 from sisyphus.descriptors import compute_features
+from sisyphus.validation.identity import ik14 as _ik14
 
 # ═══════════════════════════════════════════════════════════════════════════
 # Utilities
@@ -41,14 +41,6 @@ from sisyphus.descriptors import compute_features
 def _canon(smi):
     mol = Chem.MolFromSmiles(smi)
     return Chem.MolToSmiles(mol, isomericSmiles=True) if mol else None
-
-def _ik14(smi):
-    mol = Chem.MolFromSmiles(smi)
-    if not mol: return None
-    inchi = MolToInchi(mol)
-    if not inchi: return None
-    ik = InchiToInchiKey(inchi)
-    return ik[:14] if ik else None
 
 def load_holdout_ik():
     with open(ROOT / "data/reference/holdout.json") as f: hd = json.load(f)

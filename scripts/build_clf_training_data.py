@@ -32,6 +32,7 @@ logger = logging.getLogger(__name__)
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
+from sisyphus.validation.identity import ik14 as _inchikey14  # noqa: E402
 BW_KG = 70.0  # reference body weight
 
 # Sanity bounds for CL/F (mL/min/kg)
@@ -61,24 +62,6 @@ def load_holdout_exclusions() -> set[str]:
     names = {name.strip().lower() for name in data.keys()}
     logger.info("MMPK holdout exclusions loaded: %d", len(names))
     return names
-
-
-def _inchikey14(smiles: str) -> str | None:
-    """First 14 chars of the InChIKey (connectivity block), or None on failure."""
-    from rdkit import Chem
-    from rdkit.Chem.inchi import MolToInchi, InchiToInchiKey
-
-    mol = Chem.MolFromSmiles(smiles)
-    if mol is None:
-        return None
-    try:
-        inchi = MolToInchi(mol)
-        if not inchi:
-            return None
-        key = InchiToInchiKey(inchi)
-        return key[:14] if key else None
-    except Exception:
-        return None
 
 
 def load_holdout_inchikeys() -> set[str]:

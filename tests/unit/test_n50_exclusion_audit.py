@@ -14,6 +14,7 @@ import json
 import pathlib
 
 import pytest
+from rdkit import Chem
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent.parent
 SCRIPT = ROOT / "scripts/build_n50_exclusion.py"
@@ -76,7 +77,7 @@ def test_drugbank_indexes_salt_stripped_parent_even_with_precomputed_key(
     excl_module, tmp_path
 ):
     salt = "CC(=O)[O-].CC(=O)[O-].[Ca+2]"
-    stored = excl_module.Chem.MolToInchiKey(excl_module.Chem.MolFromSmiles(salt))[:14]
+    stored = Chem.MolToInchiKey(Chem.MolFromSmiles(salt))[:14]
     parent = excl_module.ik14("CC(=O)[O-]")
     assert stored != parent
     path = tmp_path / excl_module.DRUGBANK

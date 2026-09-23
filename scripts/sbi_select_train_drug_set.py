@@ -27,6 +27,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
+from sisyphus.validation.identity import ik14  # noqa: E402
 
 logging.basicConfig(level=logging.WARNING, format="%(levelname)s %(message)s")
 
@@ -64,6 +65,13 @@ def _profile_one(args: tuple[str, str, float]) -> dict | None:
 def load_pool() -> list[tuple[str, str, float]]:
     with open(HOLDOUT_JSON) as f:
         holdout = {h.lower().strip() for h in json.load(f)["holdout"]}
+    with open(ROOT / "data/reference/clinical_pk.json") as f:
+        clinical = json.load(f)["drugs"]
+    holdout_ik = {
+        ik14((clinical.get(name) or clinical.get(name.replace(" ", "_")) or {}).get("smiles"))
+        for name in holdout
+    }
+    holdout_ik.discard(None)
 
     pool: dict[str, tuple[str, float]] = {}
     with open(POOL_CSV) as f:
@@ -75,6 +83,8 @@ def load_pool() -> list[tuple[str, str, float]]:
                 continue
             smi = (row.get("canon_smiles") or "").strip()
             if not smi:
+                continue
+            if ik14(smi) in holdout_ik:
                 continue
             try:
                 dose = float(row.get("dose_mg") or 0)

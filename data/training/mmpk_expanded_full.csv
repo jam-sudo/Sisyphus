@@ -3772,7 +3772,7 @@ ciprofloxacin,O=C(O)c1cn(C2CC2)c2cc(N3CCNCC3)c(F)cc2c1=O,50.0,2.97,-1.2262135550
 ciprofolxacin,O=C(O)c1cn(C2CC2)c2cc(N3CCC(NN4CCNCC4)C3)c(F)cc2c1=O,50.0,2.97,-1.2262135550188065,1,,4.0,,70.0,tablet,False,False
 clarithromycin,CCC1OC(=O)C(C)C(OC2CC(C)(OC)C(O)C(C)O2)C(C)C(OC2OC(C)CC(N(C)C)C2O)C(C)(OC)CC(C)C(=O)C(C)C(O)C1(C)O,500.0,0.8,-2.7958800173440754,1,,3.0,,,tablet,False,False
 clopidogrel,COC(=O)C(c1ccccc1Cl)N1CCc2sccc2C1,300.0,0.3,-3.0,1,,6.0,,,tablet,False,True
-clopidogrel bisulfate,COC(=O)C(c1ccccc1Cl)N1CCc2sccc2C1.O=S(=O)(O)O,300.0,0.3,-3.0,1,,6.0,,,tablet,False,False
+clopidogrel bisulfate,COC(=O)C(c1ccccc1Cl)N1CCc2sccc2C1.O=S(=O)(O)O,300.0,0.3,-3.0,1,,6.0,,,tablet,False,True
 clozapine,CN1CCN(C2=Nc3cc(Cl)ccc3Nc3ccccc32)CC1,75.0,0.413,-2.259111211735299,1,,12.0,,,tablet,False,True
 darolutamide,CC(Cn1ccc(-c2ccc(C#N)c(Cl)c2)n1)NC(=O)c1cc(C(C)O)[nH]n1,600.0,4.79,-2.0978157369690806,1,,20.0,,30.0,tablet,False,True
 dasatinib,Cc1nc(Nc2ncc(C(=O)Nc3c(C)cccc3Cl)s2)cc(N2CCN(CCO)CC2)n1,100.0,0.0822,-3.0851281824599495,1,,3.0,,,tablet,False,True

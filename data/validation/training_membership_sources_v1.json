@@ -6,8 +6,8 @@
   "sources": [
     {"path": "data/ppbr_az.tab", "sha256": "54c9520f4b6e04419b18bab7335583c3865d86fc53db40f74c2cff1577c8ec1b"},
     {"path": "data/caco2_wang.tab", "sha256": "447d9f1af487c06b080145a2361dbe45af5b27afc83e1a975dd29b9ea535d6ab"},
-    {"path": "data/training/mmpk_expanded_full.csv", "sha256": "f796091de95b831b9fc3ffcbc07e7c33048000703190208457423835ad6f4a50"},
-    {"path": "data/training/mmpk_expanded_v2.csv", "sha256": "2f96f5a4b005e79215913023ef3b4c494e0ca628b9b19d3483134d526b2f23cc"},
+    {"path": "data/training/mmpk_expanded_full.csv", "sha256": "2ce5408fcddc9d4f89b07db8f372119c9027ec5078855a67f2e9d50944bbd34f"},
+    {"path": "data/training/mmpk_expanded_v2.csv", "sha256": "18b063f07cb23fee7ef716bf803e8ab7b55af1564a8eb8dbc137cf9b8458e036"},
     {"path": "data/training/mmpk_pbpk_features.csv", "sha256": "7ae7f86da723f4773381a5fe04a2de18b91fd58462cf9625c79ca279b78a5ba4"},
     {"path": "data/training/clf_training.csv", "sha256": "649e3dde6e49fcb65a1fdb5f636de38a09acd721cdbc552a96a13e89b3e63462"},
     {"path": "data/training/bioavailability_v1.csv", "sha256": "a45516a972d18d3a1ab3c0b4151d4075262d8bf80a4b9d001e34f62aab8f93ad"},

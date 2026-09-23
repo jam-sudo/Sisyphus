@@ -3,7 +3,9 @@
 A holdout drug leaks into the MMPK corpus only if it survives BOTH filters in
 ``scripts/ml_cmax_improvement.py::load_mmpk_data`` — an ``in_holdout=False`` row
 AND a ``canon_smiles`` InChIKey-14 absent from the holdout key set (built from
-clinical_pk SMILES). Pravastatin slipped both (connectivity-level SMILES
+clinical_pk SMILES). Salt normalization is required: clopidogrel bisulfate and
+sumatriptan (Onzetra Xsail) otherwise have different IK14s from their free
+forms. Pravastatin slipped both (connectivity-level SMILES
 mismatch: clinical_pk ``GOSGZXISMCZCDW`` vs MMPK ``TUZYXOIXSAXUGO``) until its
 ``in_holdout`` flag was corrected and a name-based exclusion added. These tests
 pin the invariant and catch any future SMILES-representation drift.
@@ -14,7 +16,7 @@ import csv
 import json
 import pathlib
 
-import pytest
+from sisyphus.validation.identity import ik14
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 _MMPK = [
@@ -41,27 +43,30 @@ def test_pravastatin_in_holdout_flag_is_true():
                 )
 
 
+def test_salt_form_holdout_flags_are_true():
+    for path in _MMPK:
+        for row in _rows(path):
+            if row["name"].strip().lower() in {
+                "clopidogrel bisulfate", "sumatriptan (onzetra xsail)",
+            }:
+                assert row["in_holdout"].strip().lower() == "true", (
+                    f"{path.name}: {row['name']} must be excluded from training"
+                )
+
+
+def test_salt_form_ik14_matches_holdout_parent():
+    clinical = json.loads((ROOT / "data/reference/clinical_pk.json").read_text())["drugs"]
+    salts = {
+        "clopidogrel": "COC(=O)C(c1ccccc1Cl)N1CCc2sccc2C1.O=S(=O)(O)O",
+        "sumatriptan": "CNS(=O)(=O)CC1=CC2=C(C=C1)NC=C2CCN(C)C.C(CC(=O)O)C(=O)O",
+    }
+    for name, salt in salts.items():
+        assert ik14(salt) == ik14(clinical[name]["smiles"])
+
+
 def test_no_holdout_drug_survives_mmpk_filters():
     """Replicate load_mmpk_data's effective (in_holdout OR InChIKey-14) filter
     and assert no holdout drug reaches the ML Cmax training set."""
-    pytest.importorskip("rdkit")
-    from rdkit import Chem, RDLogger
-    from rdkit.Chem.inchi import InchiToInchiKey, MolToInchi
-
-    RDLogger.DisableLog("rdApp.*")
-
-    def ik14(smiles: str | None) -> str | None:
-        if not smiles:
-            return None
-        mol = Chem.MolFromSmiles(smiles)
-        if mol is None:
-            return None
-        inchi = MolToInchi(mol)
-        if not inchi:
-            return None
-        key = InchiToInchiKey(inchi)
-        return key[:14] if key else None
-
     clinical = json.loads(
         (ROOT / "data/reference/clinical_pk.json").read_text()
     ).get("drugs", {})

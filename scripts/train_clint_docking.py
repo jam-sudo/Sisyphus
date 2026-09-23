@@ -21,6 +21,7 @@ from rdkit.Chem.Scaffolds.MurckoScaffold import MurckoScaffoldSmiles
 from sklearn.metrics import mean_absolute_error, r2_score
 
 from sisyphus.descriptors import compute_features
+from sisyphus.validation.identity import ik14
 
 RDLogger.DisableLog("rdApp.*")
 
@@ -52,8 +53,8 @@ def inchikey_14(smiles: str) -> str:
     return Chem.inchi.MolToInchiKey(mol)[:14]
 
 
-def load_holdout_smiles() -> set[str]:
-    """Load holdout drug SMILES to exclude from training."""
+def load_holdout_ik14() -> set[str]:
+    """Load salt-insensitive holdout structures to exclude from training."""
     with open(HOLDOUT_JSON) as f:
         holdout_data = json.load(f)
     holdout_names = set(holdout_data.get("holdout", []))
@@ -63,13 +64,13 @@ def load_holdout_smiles() -> set[str]:
     with open(CLINICAL_PK_JSON) as f:
         cpk = json.load(f)
 
-    holdout_smiles = set()
+    holdout_keys = set()
     for name, data in cpk["drugs"].items():
         if name in all_names and "smiles" in data:
-            mol = Chem.MolFromSmiles(data["smiles"])
-            if mol:
-                holdout_smiles.add(Chem.MolToSmiles(mol))
-    return holdout_smiles
+            key = ik14(data["smiles"])
+            if key:
+                holdout_keys.add(key)
+    return holdout_keys
 
 
 def load_docking_features(smiles: str, cache_dir: Path, cyps: list[str]) -> dict[str, float]:
@@ -96,7 +97,7 @@ def load_docking_features(smiles: str, cache_dir: Path, cyps: list[str]) -> dict
 
 def load_tdc_data() -> pd.DataFrame:
     """Load TDC Hepatocyte_AZ data with holdout exclusion."""
-    holdout_smiles = load_holdout_smiles()
+    holdout_keys = load_holdout_ik14()
 
     rows = []
     with open(HEP_AZ_PATH) as f:
@@ -114,7 +115,7 @@ def load_tdc_data() -> pd.DataFrame:
                 continue
             canon = Chem.MolToSmiles(mol)
 
-            if canon in holdout_smiles:
+            if ik14(smiles) in holdout_keys:
                 continue
 
             rows.append({"drug_id": drug_id, "smiles": smiles, "canon_smiles": canon, "clint": clint})

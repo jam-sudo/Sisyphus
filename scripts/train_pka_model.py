@@ -34,6 +34,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 
 from sisyphus.descriptors import compute_features  # noqa: E402
+from sisyphus.validation.identity import ik14 as _inchikey_prefix  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Logging
@@ -69,23 +70,6 @@ def _canonical_smiles(smiles: str) -> str | None:
     if mol is None:
         return None
     return Chem.MolToSmiles(mol, isomericSmiles=True)
-
-
-def _inchikey_prefix(smiles: str) -> str | None:
-    """Return first 14 characters of InChIKey (connectivity block), or None."""
-    from rdkit import Chem
-    from rdkit.Chem.inchi import MolToInchi, InchiToInchiKey
-
-    mol = Chem.MolFromSmiles(smiles)
-    if mol is None:
-        return None
-    inchi = MolToInchi(mol)
-    if inchi is None:
-        return None
-    ik = InchiToInchiKey(inchi)
-    if ik is None:
-        return None
-    return ik[:14]
 
 
 # ---------------------------------------------------------------------------
@@ -160,13 +144,12 @@ def is_holdout(smiles: str, name: str, inchikey_14: str | None, keys: dict) -> b
     if csmi and csmi in keys["canonical_smiles"]:
         return True
 
-    # Key 2: InChIKey-14 (use precomputed if available, else compute)
+    # Key 2: compare the normalized structure even when a precomputed salt key exists.
+    ik = _inchikey_prefix(smiles)
+    if ik and ik in keys["inchikey_prefixes"]:
+        return True
     if inchikey_14 and inchikey_14 in keys["inchikey_prefixes"]:
         return True
-    if not inchikey_14:
-        ik = _inchikey_prefix(smiles)
-        if ik and ik in keys["inchikey_prefixes"]:
-            return True
 
     return False
 

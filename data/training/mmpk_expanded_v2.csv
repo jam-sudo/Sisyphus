@@ -3772,7 +3772,7 @@ ciprofloxacin,O=C(O)c1cn(C2CC2)c2cc(N3CCNCC3)c(F)cc2c1=O,50.0,2.97,-1.2262135550
 ciprofolxacin,O=C(O)c1cn(C2CC2)c2cc(N3CCC(NN4CCNCC4)C3)c(F)cc2c1=O,50.0,2.97,-1.2262135550188065,1,,4.0,,70.0,tablet,False,False
 clarithromycin,CCC1OC(=O)C(C)C(OC2CC(C)(OC)C(O)C(C)O2)C(C)C(OC2OC(C)CC(N(C)C)C2O)C(C)(OC)CC(C)C(=O)C(C)C(O)C1(C)O,500.0,0.8,-2.7958800173440754,1,,3.0,,,tablet,False,False
 clopidogrel,COC(=O)C(c1ccccc1Cl)N1CCc2sccc2C1,300.0,0.3,-3.0,1,,6.0,,,tablet,False,True
-clopidogrel bisulfate,COC(=O)C(c1ccccc1Cl)N1CCc2sccc2C1.O=S(=O)(O)O,300.0,0.3,-3.0,1,,6.0,,,tablet,False,False
+clopidogrel bisulfate,COC(=O)C(c1ccccc1Cl)N1CCc2sccc2C1.O=S(=O)(O)O,300.0,0.3,-3.0,1,,6.0,,,tablet,False,True
 clozapine,CN1CCN(C2=Nc3cc(Cl)ccc3Nc3ccccc32)CC1,75.0,0.413,-2.259111211735299,1,,12.0,,,tablet,False,True
 darolutamide,CC(Cn1ccc(-c2ccc(C#N)c(Cl)c2)n1)NC(=O)c1cc(C(C)O)[nH]n1,600.0,4.79,-2.0978157369690806,1,,20.0,,30.0,tablet,False,True
 dasatinib,Cc1nc(Nc2ncc(C(=O)Nc3c(C)cccc3Cl)s2)cc(N2CCN(CCO)CC2)n1,100.0,0.0822,-3.0851281824599495,1,,3.0,,,tablet,False,True
@@ -3827,7 +3827,7 @@ epinephrine,CNC[C@@H](C1=CC(=C(C=C1)O)O)O,0.3,0.001969,-2.182876,2,0.35,,,,table
 netupitant/palonosetron,CC1=CC=CC=C1C2=CC(=NC=C2N(C)C(=O)C(C)(C)C3=CC(=CC(=C3)C(F)(F)F)C(F)(F)F)N4CCN(CC4)C,450,0.72,-2.79588,3,,,,,tablet,False,False
 oxycodone/naloxone (targiniq er),C=CCN1CC[C@]23[C@@H]4C(=O)CC[C@]2([C@H]1CC5=C3C(=C(C=C5)O)O4)O,40.0,0.045225,-2.946681,2,,,,,tablet,False,False
 testosterone undecanoate (jatenzo),CCCCCCCCCCC(=O)O[C@H]1CC[C@@H]2[C@@]1(CC[C@H]3[C@H]2CCC4=CC(=O)CC[C@]34C)C,300.0,0.429,-2.844664,5,,,,,tablet,False,False
-sumatriptan (onzetra xsail),CNS(=O)(=O)CC1=CC2=C(C=C1)NC=C2CCN(C)C.C(CC(=O)O)C(=O)O,22.0,0.018044,-3.086102,2,0.54,,,,tablet,False,False
+sumatriptan (onzetra xsail),CNS(=O)(=O)CC1=CC2=C(C=C1)NC=C2CCN(C)C.C(CC(=O)O)C(=O)O,22.0,0.018044,-3.086102,2,0.54,,,,tablet,False,True
 empagliflozin/metformin (synjardy),C1COC[C@H]1OC2=CC=C(C=C2)CC3=C(C=CC(=C3)[C@H]4[C@@H]([C@H]([C@@H]([C@H](O4)CO)O)O)O)Cl,25.0,0.35035,-1.853438,2,1.25,,,,tablet,False,False
 morphine sulfate,CN1CC[C@]23[C@@H]4[C@H]1CC5=C2C(=C(C=C5)O)O[C@H]3[C@H](C=C4)O,100,0.03355,-3.474307,2,2.75,,,,tablet,False,False
 calcifediol,C[C@H](CCCC(C)(C)O)[C@H]1CC[C@@H]\2[C@@]1(CCC/C2=C\C=C/3\C[C@H](CCC3=C)O)C,0.03,0.028,-0.029963,1,,,,,tablet,False,False

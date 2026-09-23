@@ -21,20 +21,12 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from rdkit import Chem, DataStructs, RDLogger
 from rdkit.Chem import AllChem
-from rdkit.Chem.inchi import MolToInchi, InchiToInchiKey
+from sisyphus.validation.identity import ik14 as _ik14
 
 RDLogger.logger().setLevel(RDLogger.ERROR)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s: %(message)s", datefmt="%H:%M:%S")
 log = logging.getLogger(__name__)
 
-
-def _ik14(smi):
-    mol = Chem.MolFromSmiles(smi)
-    if not mol: return None
-    inchi = MolToInchi(mol)
-    if not inchi: return None
-    ik = InchiToInchiKey(inchi)
-    return ik[:14] if ik else None
 
 def compute_aafe(p, o):
     mask = (p > 0) & (o > 0)

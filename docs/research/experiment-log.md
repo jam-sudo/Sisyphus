@@ -10,6 +10,23 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-23 (cont.) — Salt-form holdout exclusions in retraining paths
+
+The MMPK CSVs marked clopidogrel bisulfate (both files) and sumatriptan
+(Onzetra Xsail, v2) as `in_holdout=False`, although their largest organic
+fragments match holdout drugs. Corrected those three flags and routed the
+in-repo training and eligibility scripts through one salt-stripped IK14
+function. The MMPK Cmax, SBI pool, deconvolution, pKa and CLint docking
+loaders now reject a salt variant even when a source flag or precomputed
+full-salt key misses it. Synthetic false-flag regressions and the corpus
+overlap check cover the exclusion behavior.
+
+This is a forward-looking retraining and curation fix. The shipped Cmax
+artifact metadata identifies a separate Omega `mmpk_clean.csv` as its source,
+not these MMPK CSVs; its training-data SHA is `unknown_legacy`, so that
+claim cannot independently establish the artifact's exact memberships. No
+headline accuracy or blind external-validation result is revised here.
+
 ## 2026-09-23 (cont.) — N50 exclusion audit fails closed and normalizes DrugBank salts
 
 The earlier guanfacine-HCl salt gap was already fixed in `ik14()`: the current

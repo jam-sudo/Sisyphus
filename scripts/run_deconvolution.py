@@ -39,6 +39,8 @@ from sisyphus.pk.endpoints import compute_endpoints
 from sisyphus.predict.adme import predict_adme
 from sisyphus.predict.chemistry import compute_profile
 from sisyphus.predict.ivive import build_drug_on_graph
+from sisyphus.validation.identity import ik14
+from sisyphus.validation.reference import load_reference
 
 logging.basicConfig(level=logging.WARNING, format="%(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
@@ -220,6 +222,8 @@ def load_mmpk_data() -> list[dict]:
     exclusion_path = _TRAINING_DIR / "mmpk_sisyphus_holdout_exclusions.json"
     with open(exclusion_path) as f:
         exclusions = set(json.load(f).keys())
+    holdout_ik = {ik14(r.smiles) for r in load_reference() if r.in_holdout}
+    holdout_ik.discard(None)
 
     data = []
     seen = set()  # deduplicate by name (take first dose entry)
@@ -227,6 +231,10 @@ def load_mmpk_data() -> list[dict]:
         for row in csv.DictReader(f):
             name = row["name"]
             if name in exclusions or name in seen:
+                continue
+            if row.get("in_holdout", "").strip().lower() == "true":
+                continue
+            if ik14(row.get("canon_smiles")) in holdout_ik:
                 continue
             seen.add(name)
             try:

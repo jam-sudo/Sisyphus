@@ -44,11 +44,12 @@ import sys
 from pathlib import Path
 
 from rdkit import Chem, RDLogger
-from rdkit.Chem.inchi import InchiToInchiKey, MolToInchi
 
 RDLogger.logger().setLevel(RDLogger.ERROR)
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "src"))
+from sisyphus.validation.identity import ik14 as _ik14  # noqa: E402
 TRAINING = ROOT / "data" / "training"
 REFERENCE = ROOT / "data" / "reference"
 
@@ -71,20 +72,6 @@ _PRODUCTION_JSON = {"clinical_pk", "holdout.train", "holdout.holdout", "mmpk_exc
 def _canon(smiles: str, isomeric: bool) -> str | None:
     mol = Chem.MolFromSmiles(smiles)
     return Chem.MolToSmiles(mol, isomericSmiles=isomeric) if mol else None
-
-
-def _ik14(smiles: str) -> str | None:
-    mol = Chem.MolFromSmiles(smiles)
-    if mol is None:
-        return None
-    try:
-        inchi = MolToInchi(mol)
-        if not inchi:
-            return None
-        ik = InchiToInchiKey(inchi)
-        return ik[:14] if ik else None
-    except Exception:
-        return None
 
 
 def build_index() -> dict:

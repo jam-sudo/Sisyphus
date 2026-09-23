@@ -30,6 +30,7 @@ from sklearn.metrics import (
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
+from sisyphus.validation.identity import ik14 as _inchikey_prefix  # noqa: E402
 
 from rdkit import RDLogger
 RDLogger.logger().setLevel(RDLogger.ERROR)
@@ -82,24 +83,12 @@ def clint_to_class(clint: float) -> int:
 # RDKit helpers
 # ---------------------------------------------------------------------------
 from rdkit import Chem
-from rdkit.Chem.inchi import MolToInchi, InchiToInchiKey
 from rdkit.Chem.Scaffolds.MurckoScaffold import MurckoScaffoldSmiles
 
 
 def _canonical_smiles(smiles: str) -> str | None:
     mol = Chem.MolFromSmiles(smiles)
     return Chem.MolToSmiles(mol, isomericSmiles=True) if mol else None
-
-
-def _inchikey_prefix(smiles: str) -> str | None:
-    mol = Chem.MolFromSmiles(smiles)
-    if mol is None:
-        return None
-    inchi = MolToInchi(mol)
-    if inchi is None:
-        return None
-    ik = InchiToInchiKey(inchi)
-    return ik[:14] if ik else None
 
 
 # ---------------------------------------------------------------------------
