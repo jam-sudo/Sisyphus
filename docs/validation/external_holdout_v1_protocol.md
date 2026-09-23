@@ -157,6 +157,29 @@ they do not authorize rerunning the same holdout as a new independent result.
 
 The locked execution sequence is:
 
+Build `scripts/Dockerfile.holdout` on Linux x86_64 from the frozen release
+checkout. It installs `requirements-lock.txt`; the custodian mounts that same
+clean checkout read-only at `/repo` and the private holdout directory at
+`/holdout`. Record `docker image inspect --format '{{.Id}}'` as the local
+`sha256:` container identifier in the manifest, verify it again immediately
+before each run, and pass that value as `SISYPHUS_CONTAINER_DIGEST`. A published
+image may instead be pinned and verified by its registry digest. The runner
+also checks the mounted checkout's git SHA and source-tree hash.
+
+```bash
+docker build -f scripts/Dockerfile.holdout -t sisyphus-holdout:v1 .
+image_id="$(docker image inspect --format '{{.Id}}' sisyphus-holdout:v1)"
+docker run --rm -v "$PWD:/repo:ro" -v "$HOLDOUT_DIR:/holdout" \
+  -e SISYPHUS_CONTAINER_DIGEST="$image_id" sisyphus-holdout:v1 \
+  python scripts/audit_external_holdout_manifest.py /holdout/manifest.json \
+  --out /holdout/audit.json
+```
+
+Use the same verified image and read-only checkout for prediction and scoring.
+For prediction, `/holdout` must contain only the manifest, source plan, audit,
+and prediction output; mount decrypted labels from a separate `/labels` volume
+only for scoring.
+
 ```bash
 python scripts/audit_external_holdout_manifest.py /holdout/manifest.json \
   --out /holdout/audit.json
@@ -165,7 +188,7 @@ python scripts/predict_external_holdout_manifest.py /holdout/manifest.json \
   --audit-report /holdout/audit.json --audit-report-sha256 <audit_sha256> \
   --out /holdout/blinded_predictions.json
 python scripts/score_external_holdout.py /holdout/blinded_predictions.json \
-  --labels /holdout/encrypted_labels.unblinded.json \
+  --labels /labels/unblinded.json \
   --manifest /holdout/manifest.json --manifest-sha256 <sha256> \
   --predictions-sha256 <predictions_sha256> --labels-sha256 <labels_sha256> \
   --out /holdout/final_score.json

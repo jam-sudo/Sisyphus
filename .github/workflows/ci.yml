@@ -103,3 +103,10 @@ jobs:
             -H 'Content-Type: application/json' \
             -d '{"smiles":"CCO","dose_mg":100}' -o /tmp/sisyphus-predict.json
           python -c 'import json; p=json.load(open("/tmp/sisyphus-predict.json")); assert p["executionStatus"] == "ok" and p["meta"]["cmax"] > 0'
+      - name: Build and smoke-test holdout evaluator image
+        run: |
+          docker build -f scripts/Dockerfile.holdout -t sisyphus-holdout:ci .
+          docker run --rm -v "$PWD:/repo:ro" sisyphus-holdout:ci \
+            python scripts/audit_external_holdout_manifest.py --help
+          docker run --rm -v "$PWD:/repo:ro" sisyphus-holdout:ci \
+            python -c 'from sisyphus.pipeline.predict import predict; assert predict("CCO", 10, strict=True).execution_status == "ok"'
