@@ -1,0 +1,525 @@
+{
+  "task_id": "task_9f94270de77d",
+  "dispatch_id": "ctx_283970fe5711",
+  "reviewed_at": "2026-09-23",
+  "reviewer": "Claude Code (AI first-pass source audit; not an independent human curator)",
+  "scope": "1-based manifest positions 151-160 of data/validation/self_run_p0_candidates.json, frozen order; 10 candidates, 12 arms",
+  "blinding": "self_run_p0_predictions.json and all model outputs were NOT opened. The FRDB snapshot /tmp/sisyphus-frdb-v2024-12-30.zip (SHA256 647b80d9...9c7a, verified) was read with every column containing 'cmax' dropped before any row was printed. Arms were mapped by dose, AUC, t1/2, n, sex, population comments and application comments only. Original-source Cmax values were then read from original tables, registry results or abstracts. The sunepitron abstract prints EM/PM Cmax next to phenotype labels, so mapping there is by FRDB population comment. The clonixin abstract prints reference Cmax next to t1/2, so mapping there is by t1/2 1.3 h. No observed-vs-predicted comparison was made.",
+  "method_note": "Single AI pass. Full originals read: PMC6304249 (berberine; Europe PMC XML incl. Table 6), IJPPS acotiamide open-access PDF (via headless browser; curl got Cloudflare 403), PMDA Acofide review report 000153467.pdf, ClinicalTrials.gov API v2 record NCT02959138 with results, and the University of Groningen oxyphenonium thesis summary (manifest core.ac.uk /download/pdf/ path 404; alternate /download/ path served the same record's PDF). Closed originals were time-boxed to abstracts or landing pages: Springer (nifuratel), Taylor & Francis Bioanalysis (ornidazole), Dustri (clonixin), Wiley J Clin Pharmacol (ranirestat), DMD/Elsevier (sunepitron). Baicalin was judged from its abstract (ineligible). Only PubMed E-utilities (via MCP), Europe PMC REST, ClinicalTrials.gov API, publisher pages, CORE and PMDA were queried. No email, contact identifier or Unpaywall was used. Transient headless-browser files that this pass created in the gitignored .playwright-mcp/ were deleted; no repository file was modified.",
+  "summary": {
+    "candidates": 10,
+    "arms": 12,
+    "arm_verification": {
+      "ineligible": 3,
+      "unverified": 7,
+      "verified_with_caveat": 2
+    },
+    "candidates_with_any_verified_cmax": [
+      "1933",
+      "8241"
+    ],
+    "fully_unverified_candidates": [
+      "5563",
+      "3430",
+      "3177",
+      "8213",
+      "59604",
+      "2804"
+    ],
+    "fully_ineligible_candidates": [
+      "2569",
+      "22343"
+    ],
+    "protocol_eligible_candidates_confirmed_without_caveat": 0
+  },
+  "unresolved_issues": [
+    "Berberine (1933): verified_with_caveat. The value is Table 6 of an open DDI paper (overnight fast, 3 x 100 mg berberine chloride tablets, parent plasma). Caveats: salt-basis dose, group n not printed, duplicated AUC values across rows (a data-quality flag), and a low-concentration Cmax.",
+    "Acotiamide (8241): frdb_8115 is verified_with_caveat (IJPPS Table 6 reference arm, overnight fast). The Results text swaps the test/reference labels, the variability is implausibly low, and the dose is on the HCl-hydrate basis. frdb_8116 is ineligible: the PMDA MAD study dosed before a meal, which PMDA itself shows raises Cmax by 63% vs fasted.",
+    "Oxyphenonium (2569): ineligible. The source is a 1981 thesis summary; the subjects were CARA (chronic respiratory disease) patients, and the value is approximate ('about 5 ng/ml'). The manifest URI is 404; the same CORE record resolves at core.ac.uk/download/232467634.pdf.",
+    "Baicalin (22343): ineligible. The dosed drug is baicalein chewable tablets; baicalin is its metabolite.",
+    "Clonixin (3177): unverified. Reference Cmax 32.39 µg/mL (fasting, IR tablets) is in the abstract, but the matrix is unstated and the full text is paywalled. The manifest dose of 250 mg is lysine clonixinate (≈160.6 mg clonixin acid); this 1.56x salt-basis discrepancy must be resolved before scoring.",
+    "Lanraplenib (59604): unverified. The CT.gov healthy-control Cmax (131.6 ng/mL, fasted, tablets) is mapped cleanly, but the registry does not name the matrix, and the controls are older subjects matched to renal-impairment patients.",
+    "Sunepitron (2804): both arms unverified. EM/PM Cmax values (1.02/10.92 ng/mL) come from the abstract; fasting and dosage form are in the paywalled DMD full text. The PM arm is n=2.",
+    "Nifuratel (5563), ornidazole (3430), ranirestat (8213): unverified. The originals are paywalled and their abstracts give no Cmax. Ranirestat's arm is the normal-hepatic-function control group of an impairment study."
+  ],
+  "candidates": [
+    {
+      "manifest_position_1based": 151,
+      "candidate_id": "1933",
+      "name": "BERBERINE",
+      "smiles": "COc1ccc2cc3[n+](cc2c1OC)CCc1cc2c(cc1-3)OCO2",
+      "arms": [
+        {
+          "arm_id": "frdb_4486",
+          "verification": "verified_with_caveat",
+          "reason": "Mapped by AUC0-inf 6.28 μg·h/L and t1/2 30.6 h, which match the 'Bbr' (berberine alone) single-dose row of Table 6; FRDB n=60 is total trial enrollment across 5 parallel groups, not the Bbr-alone group size. Parent berberine plasma Cmax read from Table 6. Caveats: dose is 300 mg of berberine chloride (salt basis; ~271 mg cation) given as 3 x 100 mg conventional tablets (IR not explicitly stated); the Bbr-alone group size is not printed in the accessible text (~12 by 60/5); the table shows identical AUC values for Bbr and Bbr(Svt) rows and implausible Cl values, a data-quality flag; Cmax is near the 0.05 ng/mL LLOQ region with high CV (73%).",
+          "source_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC6304249/fullTextXML",
+          "source_access_status": "open access full text (PMC6304249) read in full via Europe PMC XML, including Table 6",
+          "original_cmax": 0.33,
+          "original_cmax_unit": "μg/L",
+          "cmax_statistic": "arithmetic mean ± SD (0.33 ± 0.24)",
+          "exact_locator": "Drug Des Devel Ther 2019;13:129-139, Table 6 'Pharmacokinetic parameters of single-dose groups', row 'Bbr', Cmax (μg/L) column",
+          "fasting_evidence": "Methods/Study design: 'All treatments were carried out under an overnight-fasted condition along with 200 mL water'",
+          "formulation_evidence": "Methods/Drug information: 'Bbr tablets are produced by Northeast Pharmaceutical with a specification of 100 mg' (conventional tablet; IR not explicitly stated)",
+          "dose_evidence": "Single dose of 300 mg Bbr (berberine chloride) on day 1 morning; single-dose phase precedes the 7-day multiple-dose phase after washout",
+          "uncertainty": "moderate: salt-basis dose, group n not printed, table data-quality anomalies, low concentrations",
+          "analyte": "berberine (parent), LC-MS/MS transition 336.0→319.8",
+          "matrix": "plasma (heparinized blood centrifuged; plasma stored at −70°C)",
+          "population": "healthy Chinese adults 18-50 y, 1:1 male:female, Bbr-alone single-dose group",
+          "manifest_dose_mg": 300.0,
+          "manifest_cmax_unit": "μg/L",
+          "manifest_source_uri": "https://pubmed.ncbi.nlm.nih.gov/30587933/",
+          "mapping_metadata_used": {
+            "pk_auc_value": "6.28",
+            "pk_auc_units": "μg × h/L",
+            "pk_auc_type": "∞",
+            "pk_thalf_value": "30.6",
+            "pk_thalf_units": "h",
+            "pk_population_size": "60",
+            "pk_sex": "FEMALE / MALE",
+            "pk_analyte_pt": "BERBERINE",
+            "pk_annotated_form": "BERBERINE"
+          }
+        }
+      ]
+    },
+    {
+      "manifest_position_1based": 152,
+      "candidate_id": "5563",
+      "name": "NIFURATEL",
+      "smiles": "CSCC1CN(/N=C/c2ccc([N+](=O)[O-])o2)C(=O)O1",
+      "arms": [
+        {
+          "arm_id": "frdb_6729",
+          "verification": "unverified",
+          "reason": "Randomized crossover BE study of nifuratel test vs reference tablets in 24 healthy males (abstract). The abstract reports no numeric Cmax and does not state fasting; FRDB AUC0-inf 155.02 and t1/2 3.58 cannot be mapped to test or reference without the paywalled full text. Only the Springer abstract page was accessible.",
+          "source_url": "https://doi.org/10.1007/BF03190994",
+          "source_access_status": "abstract only (PubMed 17702193 and Springer landing page); full text paywalled",
+          "original_cmax": null,
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "not accessible",
+          "exact_locator": "Eur J Drug Metab Pharmacokinet 2007;32(2):69-73; abstract only",
+          "fasting_evidence": "not stated in the abstract",
+          "formulation_evidence": "abstract: 'test tablets and the reference tablets' (IR not stated)",
+          "dose_evidence": "400 mg not stated in the abstract; FRDB-only",
+          "uncertainty": "high: Cmax, fasting, dose and arm (test vs reference) unconfirmed",
+          "analyte": "nifuratel (parent), HPLC-UV",
+          "matrix": "plasma (abstract title and text)",
+          "population": "24 healthy male volunteers",
+          "manifest_dose_mg": 400.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://pubmed.ncbi.nlm.nih.gov/17702193/",
+          "mapping_metadata_used": {
+            "pk_auc_value": "155.02",
+            "pk_auc_units": "ng × h/mL",
+            "pk_auc_type": "∞",
+            "pk_thalf_value": "3.58",
+            "pk_thalf_units": "h",
+            "pk_population_size": "24",
+            "pk_sex": "MALE",
+            "pk_analyte_pt": "NIFURATEL",
+            "pk_annotated_form": "NIFURATEL"
+          }
+        }
+      ]
+    },
+    {
+      "manifest_position_1based": 153,
+      "candidate_id": "2569",
+      "name": "OXYPHENONIUM",
+      "smiles": "CC[N+](C)(CC)CCOC(=O)C(O)(c1ccccc1)C1CCCCC1",
+      "arms": [
+        {
+          "arm_id": "frdb_5781",
+          "verification": "ineligible",
+          "reason": "The accessible source is the English summary of a 1981 Groningen PhD thesis (Greving). Oral PK was studied after 10 mg oxyphenonium bromide (2 Antrenyl tablets) in patients with CARA (chronic aspecific respiratory affections; COPD/asthma) studied 'under standardized conditions', not healthy adults. The summary gives only 'about 5 ng/ml' (no statistic) from means of estimates in 7 patients; fasting is not stated; dose is on the bromide-salt basis.",
+          "source_url": "https://core.ac.uk/download/232467634.pdf",
+          "source_access_status": "manifest URI (core.ac.uk/download/pdf/232467634.pdf) returned 404; alternate CORE path returned the 6-page thesis summary PDF, read in full; full thesis chapters not in this file",
+          "original_cmax": 5,
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "approximate ('about 5 ng/ml'), derived from group-mean estimates, n=7",
+          "exact_locator": "Greving JE, 'Bioanalysis and pharmacokinetics of Oxyphenonium Bromide', thesis (Univ. Groningen, 1981), Summary p. 162-163, Chapter 10 paragraph",
+          "fasting_evidence": "not stated; 'under standardized conditions' only",
+          "formulation_evidence": "2 Antrenyl tablets (10 mg OxBr); IR presumed but not stated",
+          "dose_evidence": "10 mg oxyphenonium bromide orally (bromide salt basis; ~8.1 mg cation)",
+          "uncertainty": "high: patient population, approximate value, fasting unknown",
+          "analyte": "oxyphenonium (quaternary cation, parent) by GC-ECD after hydrolysis",
+          "matrix": "plasma",
+          "population": "CARA patients (volunteers), n=7 — not healthy",
+          "manifest_dose_mg": 10.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://core.ac.uk/download/pdf/232467634.pdf",
+          "mapping_metadata_used": {
+            "pk_auc_type": "?",
+            "pk_thalf_value": "190",
+            "pk_thalf_units": "min",
+            "pk_sex": "UNKNOWN",
+            "pk_analyte_pt": "OXYPHENONIUM"
+          }
+        }
+      ]
+    },
+    {
+      "manifest_position_1based": 154,
+      "candidate_id": "3430",
+      "name": "ORNIDAZOLE",
+      "smiles": "Cc1ncc([N+](=O)[O-])n1CC(O)CCl",
+      "arms": [
+        {
+          "arm_id": "frdb_6611",
+          "verification": "unverified",
+          "reason": "Bioanalytical-method paper with an application PK study after 1000 mg oral ornidazole in 6 healthy Chinese volunteers (abstract; MeSH male). The abstract gives no Cmax, fasting state or dosage form; the full text (Taylor & Francis/Future Science) is paywalled. FRDB AUC0-inf 332,948 ng·h/mL, t1/2 14.7 h, n=6 cannot be checked against the original table.",
+          "source_url": "https://doi.org/10.4155/bio.14.117",
+          "source_access_status": "abstract only (PubMed 25384588; tandfonline landing page shows Get Access)",
+          "original_cmax": null,
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "not accessible",
+          "exact_locator": "Bioanalysis 2014;6(18):2343-2356; abstract only",
+          "fasting_evidence": "not stated in the abstract",
+          "formulation_evidence": "not stated in the abstract",
+          "dose_evidence": "abstract: 'oral administration of 1000 mg ornidazole to six healthy Chinese volunteers'",
+          "uncertainty": "high: Cmax, fasting and formulation unconfirmed",
+          "analyte": "ornidazole (parent) measured with metabolites M3, M6, M16-1, M16-2",
+          "matrix": "plasma (abstract)",
+          "population": "6 healthy Chinese volunteers (male per MeSH)",
+          "manifest_dose_mg": 1000.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://pubmed.ncbi.nlm.nih.gov/25384588/",
+          "mapping_metadata_used": {
+            "pk_auc_value": "332948",
+            "pk_auc_units": "ng × h/mL",
+            "pk_auc_type": "∞",
+            "pk_thalf_value": "14.7",
+            "pk_thalf_units": "h",
+            "pk_population_size": "6",
+            "pk_sex": "MALE",
+            "pk_analyte_pt": "ORNIDAZOLE",
+            "pk_annotated_form": "ORNIDAZOLE"
+          }
+        }
+      ]
+    },
+    {
+      "manifest_position_1based": 155,
+      "candidate_id": "3177",
+      "name": "CLONIXIN",
+      "smiles": "Cc1c(Cl)cccc1Nc1ncccc1C(=O)O",
+      "arms": [
+        {
+          "arm_id": "frdb_6562",
+          "verification": "unverified",
+          "reason": "Abstract gives reference-product (Dorixina Forte) Cmax 32.39 ± 8.32 µg/mL with t1/2 1.3 h, matching FRDB t1/2 1.3 h; FRDB AUC0-inf 49.88 is not printed in the abstract (abstract AUC0-8h 48.92), so the reference-arm mapping is probable but not table-confirmed. Fasting and IR tablets are explicit, but the abstract says only that 'blood samples' were collected and clonixin measured; the plasma matrix is not stated and the full text is paywalled (Dustri), so per prior-batch precedent the arm stays unverified. Dose basis: 250 mg lysine clonixinate ≈ 160.6 mg clonixin free acid (FRDB application comment), whereas the manifest dose is 250 mg against the free-acid SMILES.",
+          "source_url": "https://doi.org/10.5414/cpp48349",
+          "source_access_status": "abstract only (PubMed 20420792; Dustri landing page, Add to Cart)",
+          "original_cmax": 32.39,
+          "original_cmax_unit": "μg/mL",
+          "cmax_statistic": "arithmetic mean ± SD (32.39 ± 8.32), reference formulation",
+          "exact_locator": "Int J Clin Pharmacol Ther 2010;48(5):349-354, abstract Results (reference formulation PK)",
+          "fasting_evidence": "abstract: 'single oral dose of 250-mg lysine clonixinate under fasting conditions'",
+          "formulation_evidence": "abstract: 'both 250-mg immediate-release tablets of lysine clonixinate'",
+          "dose_evidence": "250 mg lysine clonixinate (salt; ≈160.6 mg clonixin) single dose",
+          "uncertainty": "moderate: matrix unstated, AUC0-inf mapping unconfirmed, salt basis 1.56x",
+          "analyte": "clonixin (CLX, parent) by UPLC-MS/MS",
+          "matrix": "not stated in abstract ('blood samples'; FRDB plasma)",
+          "population": "26 healthy adult Mexican females (FRDB n=25)",
+          "manifest_dose_mg": 250.0,
+          "manifest_cmax_unit": "μg/mL",
+          "manifest_source_uri": "https://pubmed.ncbi.nlm.nih.gov/20420792/",
+          "mapping_metadata_used": {
+            "pk_auc_value": "49.88",
+            "pk_auc_units": "μg × h/mL",
+            "pk_auc_type": "∞",
+            "pk_thalf_value": "1.3",
+            "pk_thalf_units": "h",
+            "pk_population_size": "25",
+            "pk_sex": "FEMALE",
+            "pk_analyte_pt": "CLONIXIN",
+            "pk_annotated_form": "Lysine clonixinate",
+            "pk_application_comment": "250 mg - equivalent to 160.617 mg of clonixin"
+          }
+        }
+      ]
+    },
+    {
+      "manifest_position_1based": 156,
+      "candidate_id": "8241",
+      "name": "ACOTIAMIDE",
+      "smiles": "COc1cc(O)c(C(=O)Nc2nc(C(=O)NCCN(C(C)C)C(C)C)cs2)cc1OC",
+      "arms": [
+        {
+          "arm_id": "frdb_8115",
+          "verification": "verified_with_caveat",
+          "reason": "Mapped by AUC0-inf 511.75 and t1/2 23.49, which match the Reference preparation (A1) column of Table 6. Parent plasma Cmax read from Table 6. Caveats: the Results text reverses the test/reference labels (the abstract and Table 6 agree on reference = 25.71); dose is 100 mg acotiamide hydrochloride hydrate (salt/hydrate basis, ≈83 mg base); film-coated tablet with IR not explicitly stated; the very low SD (CV 9%) and tmax 2.5 h diverge from PMDA data (Cmax 30.8 ± 13.3 ng/mL at 100 mg fasted), a data-quality flag.",
+          "source_url": "https://journals.innovareacademics.in/index.php/ijpps/article/download/38410/23659",
+          "source_access_status": "open-access PDF (9 pages) read in full via headless browser (curl hit Cloudflare 403)",
+          "original_cmax": 25.71,
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "arithmetic mean ± SD (25.71 ± 2.31), n=24",
+          "exact_locator": "Int J Pharm Pharm Sci 2020;12(10):76-84 (doi 10.22159/ijpps.2020v12i10.38410), Table 6, Reference preparation (A1), Cmax row",
+          "fasting_evidence": "Study design: 'In each study period, after overnight fasting, drug administration was done with 240 ml of water'",
+          "formulation_evidence": "'film-coated tablets containing Acotiamide Hydrochloride Hydride 100 mg' (IR not explicitly stated)",
+          "dose_evidence": "single dose, randomized two-period crossover, 100 mg tablet",
+          "uncertainty": "moderate: label inconsistency, salt basis, suspiciously low variability",
+          "analyte": "acotiamide (parent) by LC-MS/MS",
+          "matrix": "plasma (EDTA blood centrifuged, plasma analyzed)",
+          "population": "24 healthy Indian volunteers (sex not stated)",
+          "manifest_dose_mg": 100.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://journals.innovareacademics.in/index.php/ijpps/article/view/38410",
+          "mapping_metadata_used": {
+            "pk_auc_value": "511.75",
+            "pk_auc_units": "ng × h/mL",
+            "pk_auc_type": "∞",
+            "pk_thalf_value": "23.49",
+            "pk_thalf_units": "h",
+            "pk_population_size": "24",
+            "pk_sex": "UNKNOWN",
+            "pk_analyte_pt": "ACOTIAMIDE",
+            "pk_annotated_form": "ACOTIAMIDE"
+          }
+        },
+        {
+          "arm_id": "frdb_8116",
+          "verification": "ineligible",
+          "reason": "Mapped by AUClast 537.2 and t1/2 8.99, which match the 300 mg Day 1 row of Table 23 (Japanese phase I multiple-dose study). Dosing in this study was 'before a meal' (preprandial), not fasted. The same PMDA report (Tables 20-21) shows preprandial dosing raises Cmax by 62.7% vs fasted (GMR 1.627 [1.380, 1.918]), so the FRDB FASTED tag is wrong for this arm. Day 1 is a single dose before a washout and a TID phase; n=6 per dose (FRDB 18 = total enrollment).",
+          "source_url": "https://www.pmda.go.jp/files/000153467.pdf",
+          "source_access_status": "PMDA English review report (Acofide Tablets 100 mg, Feb 2013) read in full",
+          "original_cmax": 200.0,
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "arithmetic mean ± SD (200.0 ± 140.4), n=6",
+          "exact_locator": "PMDA Report on the Deliberation Results, Acofide, section 4.(ii).A.(3), Table 23, unchanged acotiamide, 300 mg/dose, Day 1 (PDF p. 48)",
+          "fasting_evidence": "NOT fasted: 'Placebo or acotiamide (100, 300 mg) was to be administered three times daily ... before a meal'; PMDA food-effect data distinguish preprandial from fasted",
+          "formulation_evidence": "Japanese studies used 50/100 mg tablets (section 4.(i).A); IR commercial tablet",
+          "dose_evidence": "300 mg single dose on Day 1 morning",
+          "uncertainty": "low for ineligibility: preprandial dosing is documented",
+          "analyte": "unchanged acotiamide",
+          "matrix": "plasma",
+          "population": "healthy adult Japanese males aged 20-55 y",
+          "manifest_dose_mg": 300.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://www.pmda.go.jp/files/000153467.pdf",
+          "mapping_metadata_used": {
+            "pk_auc_value": "537.2",
+            "pk_auc_units": "ng × h/mL",
+            "pk_auc_type": "?",
+            "pk_thalf_value": "8.99",
+            "pk_thalf_units": "h",
+            "pk_population_size": "18",
+            "pk_sex": "MALE",
+            "pk_analyte_pt": "ACOTIAMIDE",
+            "pk_annotated_form": "ACOTIAMIDE",
+            "pk_funbound_comment": "protein binding rate (84.21%-85.95%) in human plasma in the in vitro"
+          }
+        }
+      ]
+    },
+    {
+      "manifest_position_1based": 157,
+      "candidate_id": "8213",
+      "name": "RANIRESTAT",
+      "smiles": "O=C1C[C@@]2(C(=O)N1)C(=O)N(Cc1ccc(Br)cc1F)C(=O)c1cccn12",
+      "arms": [
+        {
+          "arm_id": "frdb_8043",
+          "verification": "unverified",
+          "reason": "Open-label single-dose hepatic-impairment study; the FRDB arm is the normal-hepatic-function control group (n=5, 40 mg). The abstract gives only mild/moderate-to-normal GMRs, not the normal-group Cmax; fasting and dosage form are not stated; the J Clin Pharmacol full text is paywalled. Normal-function controls in an impairment study (matched, possibly older) also need adjudication as 'healthy adults'.",
+          "source_url": "https://doi.org/10.1002/jcph.1636",
+          "source_access_status": "abstract only (PubMed 32437025); Wiley full text paywalled",
+          "original_cmax": null,
+          "original_cmax_unit": "μg/mL",
+          "cmax_statistic": "not accessible",
+          "exact_locator": "J Clin Pharmacol 2020;60(10):1397-1403; abstract only",
+          "fasting_evidence": "not stated in the abstract",
+          "formulation_evidence": "not stated in the abstract",
+          "dose_evidence": "abstract: 'at the dose of 40 mg' single oral dose",
+          "uncertainty": "high: Cmax, fasting, formulation unconfirmed; control-group population",
+          "analyte": "ranirestat (parent)",
+          "matrix": "plasma (abstract: 'plasma ranirestat exposure')",
+          "population": "5 subjects with normal hepatic function (control group of hepatic-impairment study)",
+          "manifest_dose_mg": 40.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://pubmed.ncbi.nlm.nih.gov/32437025",
+          "mapping_metadata_used": {
+            "pk_auc_value": "71.1",
+            "pk_auc_units": "μg × h/mL",
+            "pk_auc_type": "∞",
+            "pk_thalf_value": "133.7",
+            "pk_thalf_units": "h",
+            "pk_population_size": "5",
+            "pk_sex": "FEMALE / MALE",
+            "pk_analyte_pt": "RANIRESTAT",
+            "pk_annotated_form": "Ranirestat",
+            "pk_application_comment": "Normal Hepatic Function",
+            "pk_funbound_comment": "Plasma Protein-Binding Ratio (%) of Ranirestat, Median=99.230"
+          }
+        }
+      ]
+    },
+    {
+      "manifest_position_1based": 158,
+      "candidate_id": "59604",
+      "name": "LANRAPLENIB",
+      "smiles": "Nc1cncc(-c2cn3ccnc3c(Nc3ccc(N4CCN(C5COC5)CC4)cc3)n2)n1",
+      "arms": [
+        {
+          "arm_id": "frdb_13119",
+          "verification": "unverified",
+          "reason": "Mapped by AUCinf 2153.0 and n=8, which match the 'Cohort 1: Healthy Control' group (matched to moderate renal impairment) in the posted results. Cmax is read from the posted outcome measure. Fasting and dosing (20 mg = 2 x 10 mg tablets) are explicit. The arm stays unverified because the registry never states the matrix ('concentration of drug'), and the controls were matched to renal-impairment patients (baseline mean age ~59-67 y across groups, BMI up to 36), so 'healthy adult' needs adjudication. Tablets are not labeled IR.",
+          "source_url": "https://clinicaltrials.gov/study/NCT02959138?tab=results",
+          "source_access_status": "ClinicalTrials.gov API v2 record with posted results read in full",
+          "original_cmax": 131.6,
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "arithmetic mean ± SD (131.6 ± 33.71), n=8",
+          "exact_locator": "NCT02959138 results, Outcome Measure 'PK Parameter: Cmax of Lanraplenib Presented Based on Range of CLcr', group OG001 'Cohort 1: Healthy Control'",
+          "fasting_evidence": "intervention: '20 mg (2 X 10 mg) tablets administered orally in a fasted state on Day 1'",
+          "formulation_evidence": "2 x 10 mg tablets (IR not stated)",
+          "dose_evidence": "single oral dose lanraplenib 20 mg",
+          "uncertainty": "moderate: matrix unstated in registry; older matched-control population",
+          "analyte": "lanraplenib (GS-9876, parent)",
+          "matrix": "not stated in registry ('concentration of drug')",
+          "population": "matched healthy controls (CLcr ≥90 mL/min) in a renal-impairment study, both sexes",
+          "manifest_dose_mg": 20.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "clinicaltrials.gov/ct2/show/results/NCT02959138",
+          "mapping_metadata_used": {
+            "pk_auc_value": "2153",
+            "pk_auc_units": "ng × h/mL",
+            "pk_auc_type": "∞",
+            "pk_population_size": "8",
+            "pk_sex": "FEMALE / MALE",
+            "pk_analyte_pt": "LANRAPLENIB",
+            "pk_annotated_form": "LANRAPLENIB"
+          }
+        }
+      ]
+    },
+    {
+      "manifest_position_1based": 159,
+      "candidate_id": "2804",
+      "name": "SUNEPITRON",
+      "smiles": "O=C1CCC(=O)N1C[C@H]1CC[C@H]2CN(c3ncccn3)CCN2C1",
+      "arms": [
+        {
+          "arm_id": "frdb_6115",
+          "verification": "unverified",
+          "reason": "Mapped by the FRDB population comment 'Extensive metabolizers', n=4 and the lower AUC0-inf (2.36) / t1/2 0.9, consistent with the abstract's EM group. The abstract reports mean unchanged-drug plasma Cmax 1.02 ng/mL for EMs. Fasting state and dosage form are in the paywalled full text, so the arm stays unverified; this is a single 5 mg [14C] mass-balance study in 6 healthy males.",
+          "original_cmax": 1.02,
+          "cmax_statistic": "mean (no dispersion in abstract), EM group",
+          "uncertainty": "moderate: fasting and formulation unconfirmed; n=4",
+          "population": "healthy male volunteers, dextromethorphan extensive metabolizers (CYP2D6 EM), n=4",
+          "source_url": "https://doi.org/10.1124/dmd.26.5.448",
+          "source_access_status": "abstract only (PubMed 9571226; DMD/Elsevier page, full text requires purchase)",
+          "original_cmax_unit": "ng/mL",
+          "exact_locator": "Drug Metab Dispos 1998;26(5):448-456; abstract",
+          "fasting_evidence": "not stated in the abstract",
+          "formulation_evidence": "not stated in the abstract ([14C]CP-93,393 oral dose; dosage form unknown)",
+          "dose_evidence": "abstract: 'oral administration of a 5-mg dose of [14C]CP-93,393'",
+          "analyte": "unchanged CP-93,393 (sunepitron, parent), distinct from total radioactivity",
+          "matrix": "plasma (abstract: 'maximum plasma concentration ... for unchanged CP-93,393'); a cited assay reference measured serum",
+          "manifest_dose_mg": 5.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://pubmed.ncbi.nlm.nih.gov/9571226/",
+          "mapping_metadata_used": {
+            "pk_auc_value": "2.36",
+            "pk_auc_units": "ng × h/mL",
+            "pk_auc_type": "∞",
+            "pk_thalf_value": "0.9",
+            "pk_thalf_units": "h",
+            "pk_population_size": "4",
+            "pk_sex": "MALE",
+            "pk_analyte_pt": "SUNEPITRON",
+            "pk_annotated_form": "CP-93,393, [14C]-",
+            "pk_population_comment": "Extensive metabolizers"
+          }
+        },
+        {
+          "arm_id": "frdb_6116",
+          "verification": "unverified",
+          "reason": "Mapped by the FRDB population comment 'Poor metabolizers', n=2 and the higher AUC0-inf (87.33) / t1/2 4.1, consistent with the abstract's statement that PM AUC exceeds EM AUC. The abstract reports mean unchanged-drug plasma Cmax 10.92 ng/mL for PMs. Fasting and dosage form are not accessible (paywalled), and this is an n=2 CYP2D6-poor-metabolizer subgroup.",
+          "original_cmax": 10.92,
+          "cmax_statistic": "mean (no dispersion in abstract), PM group, n=2",
+          "uncertainty": "high: fasting and formulation unconfirmed; n=2 genotype subgroup",
+          "population": "healthy male volunteers, dextromethorphan poor metabolizers (CYP2D6 PM), n=2",
+          "source_url": "https://doi.org/10.1124/dmd.26.5.448",
+          "source_access_status": "abstract only (PubMed 9571226; DMD/Elsevier page, full text requires purchase)",
+          "original_cmax_unit": "ng/mL",
+          "exact_locator": "Drug Metab Dispos 1998;26(5):448-456; abstract",
+          "fasting_evidence": "not stated in the abstract",
+          "formulation_evidence": "not stated in the abstract ([14C]CP-93,393 oral dose; dosage form unknown)",
+          "dose_evidence": "abstract: 'oral administration of a 5-mg dose of [14C]CP-93,393'",
+          "analyte": "unchanged CP-93,393 (sunepitron, parent), distinct from total radioactivity",
+          "matrix": "plasma (abstract: 'maximum plasma concentration ... for unchanged CP-93,393'); a cited assay reference measured serum",
+          "manifest_dose_mg": 5.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://pubmed.ncbi.nlm.nih.gov/9571226/",
+          "mapping_metadata_used": {
+            "pk_auc_value": "87.33",
+            "pk_auc_units": "ng × h/mL",
+            "pk_auc_type": "∞",
+            "pk_thalf_value": "4.1",
+            "pk_thalf_units": "h",
+            "pk_population_size": "2",
+            "pk_sex": "MALE",
+            "pk_analyte_pt": "SUNEPITRON",
+            "pk_annotated_form": "CP-93393, [14C]-",
+            "pk_population_comment": "Poor metabolizers"
+          }
+        }
+      ]
+    },
+    {
+      "manifest_position_1based": 160,
+      "candidate_id": "22343",
+      "name": "BAICALIN",
+      "smiles": "O=C(O)[C@H]1O[C@@H](Oc2cc3oc(-c4ccccc4)cc(=O)c3c(O)c2O)[C@H](O)[C@@H](O)[C@@H]1O",
+      "arms": [
+        {
+          "arm_id": "frdb_10492",
+          "verification": "ineligible",
+          "reason": "The dosed drug is baicalein (chewable tablets, 100-2800 mg SAD), not baicalin. Baicalin was measured as baicalein's main metabolite, so this is a metabolite arm. The chewable tablet also deviates from a standard swallowed IR form, and baicalein is a Scutellaria-derived flavonoid.",
+          "source_url": "https://doi.org/10.1016/j.jep.2014.08.031",
+          "source_access_status": "abstract (PubMed 25219601) sufficient for ineligibility; full text not retrieved",
+          "original_cmax": null,
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "not extracted (ineligible)",
+          "exact_locator": "J Ethnopharmacol 2014;156:210-215; abstract",
+          "fasting_evidence": "not assessed (ineligible)",
+          "formulation_evidence": "baicalein chewable tablets",
+          "dose_evidence": "2800 mg baicalein (highest SAD cohort); FRDB lists 2800 mg against baicalin",
+          "uncertainty": "low for ineligibility",
+          "analyte": "baicalin = metabolite of dosed baicalein (not dosed parent)",
+          "matrix": "plasma per FRDB; abstract says blood samples",
+          "population": "healthy Chinese adults, SAD n=72 total",
+          "manifest_dose_mg": 2800.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://pubmed.ncbi.nlm.nih.gov/25219601",
+          "mapping_metadata_used": {
+            "pk_auc_value": "11961.53",
+            "pk_auc_units": "ng × h/mL",
+            "pk_auc_type": "∞",
+            "pk_thalf_value": "9.65",
+            "pk_thalf_units": "h",
+            "pk_population_size": "6",
+            "pk_sex": "FEMALE / MALE",
+            "pk_analyte_pt": "BAICALIN"
+          }
+        }
+      ]
+    }
+  ],
+  "coordinator_review": {
+    "reviewed_at": "2026-09-23",
+    "scope": "Manifest and source-audit consistency cross-check only; frozen prediction file not opened.",
+    "notes": [
+      "Berberine and acotiamide each have a source-mapped numeric parent plasma Cmax but material study-data or salt-basis caveats; neither is promoted to fully verified at this stage.",
+      "Acotiamide frdb_8116 is explicitly preprandial in the PMDA source and is ineligible under the same meal-timing rule used for prior batches.",
+      "Lanraplenib remains unverified because the registry does not name the sampled matrix; do not assume plasma from a concentration outcome label.",
+      "The worker reports no email or contact-requiring API use."
+    ],
+    "source_urls": [
+      "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC6304249/fullTextXML",
+      "https://journals.innovareacademics.in/index.php/ijpps/article/download/38410/23659",
+      "https://www.pmda.go.jp/files/000153467.pdf"
+    ]
+  }
+}
