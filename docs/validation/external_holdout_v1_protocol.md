@@ -124,6 +124,18 @@ still be checked by two curators. FRDB alone cannot provide the N=260 final
 cohort or the ≥70% regulatory-source quota. The screen neither read nor used
 observed Cmax values for model assessment.
 
+A second [EPA publication data extract](https://github.com/USEPA/clinical-nonclinical-concordance)
+(`cmax_auc_dataextraction.xlsx`, SHA256
+`2600cc6014911097d53c086341279f14b27c267b56b4e6bf8edb36a644ddb950`)
+has 405 human Cmax/dose rows for 122 named drugs, mostly sourced from FDA
+documents. Only 51 names avoid an exact normalized-name hit in the repository
+union, and only nine of those explicitly say both healthy and fasted in the
+status field. Route, release type, parent analyte, and structural identity
+require original-source review; this is a small supplementary discovery pool,
+not a shortcut to an eligible cohort. The 2026 open [PK-DataBase](https://github.com/ClickFF/PK-DataBase)
+contains human PK descriptors but no Cmax field in its principal tables, so
+it cannot supply outcome labels for this protocol.
+
 Allocate those compounds without outcome-based replacement to three disjoint
 roles: 120–150 calibration-development compounds, N=260 final external-test
 compounds, and a sealed reserve cohort. Calibration labels may be opened before
