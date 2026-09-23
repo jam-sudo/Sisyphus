@@ -40,6 +40,17 @@ blend weights alone cannot resolve the broader errors. These reruns used a
 temporary macOS environment with SciPy 1.16.3 because the pinned 1.15.3 wheel
 failed to load locally; all seven Meta outputs matched the sealed values.
 
+The engine's optional 24-hour-truncated oral/IV AUC ratio was 0.051 for
+teneligliptin, 0.075 for ipragliflozin, and 0.179 for garenoxacin in these
+same reruns. This ratio is a diagnostic approximation, not a measured absolute
+bioavailability. For context, the [EMA's garenoxacin assessment](https://www.ema.europa.eu/en/documents/withdrawal-report/withdrawal-assessment-report-garenoxacin-mesylate_en.pdf)
+reports 92% absolute oral bioavailability in fasted healthy subjects. The
+repository's prior [DE-42 analysis](../research/dead-ends.md) already tested
+uniform absorption-rate increases: they improved some engine predictions but
+increased the opposite-error tail and did not improve the final Meta model.
+P0 therefore supports investigating compound-specific input and disposition
+errors, not repeating a global absorption multiplier.
+
 As a post-unseal source concern, [FDA GSRS identifies verlukast sodium](https://precision.fda.gov/uniisearch/srs/unii/Q8W8588793),
 while the [clinical paper](https://pubmed.ncbi.nlm.nih.gov/12959296/) names
 verlukast tablets without establishing in the reviewed record whether its
