@@ -1,0 +1,174 @@
+{
+  "date": "2026-09-22",
+  "change": "renal CL: filtration-only -> filtration + passive tubular reabsorption",
+  "model": "CL_renal = fup*UF*(GFR+PS)/(UF+PS), PS = peff*TSA",
+  "source": {
+    "ref": "Scotcher et al. 2016, Eur J Pharm Sci 94:59-71",
+    "doi": "10.1016/j.ejps.2016.03.018",
+    "note": "one-region reduction of the published 5-compartment model; verified algebraically identical to fup*GFR*(1-F_reabs), F_reabs=F'(1-UF/GFR), F'=PS/(PS+UF)"
+  },
+  "constants": {
+    "GFR_L_PER_H": 7.5,
+    "URINE_FLOW_L_PER_H": 0.06,
+    "TUBULAR_SURFACE_AREA_CM2": 57.8,
+    "tsa_provenance": "back-calculated from the paper's F'=0.5 anchor (Caco-2 Papp 14.8e-6 cm/s) through adme._CACO2_TO_INVIVO_OFFSET; effective lumped area, NOT fitted to Cmax loss (Invariant #8)"
+  },
+  "renal_cl_vs_clinical": {
+    "caffeine": {
+      "fup": 0.7009,
+      "peff": 9.105,
+      "clinical_cl_renal_l_h": 0.1,
+      "old_l_h": 5.257,
+      "new_l_h": 1.296,
+      "old_fold": 52.57,
+      "new_fold": 12.96
+    },
+    "acetaminophen": {
+      "fup": 0.7585,
+      "peff": 5.303,
+      "clinical_cl_renal_l_h": 0.6,
+      "old_l_h": 5.688,
+      "new_l_h": 2.033,
+      "old_fold": 9.48,
+      "new_fold": 3.39
+    },
+    "antipyrine": {
+      "fup": 0.5113,
+      "peff": 11.448,
+      "clinical_cl_renal_l_h": 0.15,
+      "old_l_h": 3.835,
+      "new_l_h": 0.796,
+      "old_fold": 25.56,
+      "new_fold": 5.31
+    },
+    "theophylline": {
+      "fup": 0.5796,
+      "peff": 6.569,
+      "clinical_cl_renal_l_h": 0.4,
+      "old_l_h": 4.347,
+      "new_l_h": 1.35,
+      "old_fold": 10.87,
+      "new_fold": 3.38
+    },
+    "midazolam": {
+      "fup": 0.0318,
+      "peff": 7.563,
+      "clinical_cl_renal_l_h": 0.02,
+      "old_l_h": 0.239,
+      "new_l_h": 0.067,
+      "old_fold": 11.94,
+      "new_fold": 3.36
+    },
+    "atenolol": {
+      "fup": 0.3394,
+      "peff": 0.812,
+      "clinical_cl_renal_l_h": 8.0,
+      "old_l_h": 2.546,
+      "new_l_h": 1.991,
+      "old_fold": 0.32,
+      "new_fold": 0.25
+    },
+    "gabapentin": {
+      "fup": 0.946,
+      "peff": 4.819,
+      "clinical_cl_renal_l_h": 6.0,
+      "old_l_h": 7.095,
+      "new_l_h": 2.691,
+      "old_fold": 1.18,
+      "new_fold": 0.45
+    },
+    "metformin": {
+      "fup": 0.8573,
+      "peff": 0.229,
+      "clinical_cl_renal_l_h": 31.0,
+      "old_l_h": 6.43,
+      "new_l_h": 5.961,
+      "old_fold": 0.21,
+      "new_fold": 0.19
+    },
+    "lisinopril": {
+      "fup": 0.1461,
+      "peff": 0.605,
+      "clinical_cl_renal_l_h": 6.0,
+      "old_l_h": 1.096,
+      "new_l_h": 0.907,
+      "old_fold": 0.18,
+      "new_fold": 0.15
+    }
+  },
+  "holdout_107_public_clone": {
+    "note": "local stack reproduces the committed cache bit-identically",
+    "baseline": {
+      "meta": {
+        "aafe": 2.7428,
+        "pct_2fold": 44.9,
+        "pct_3fold": 63.6
+      },
+      "engine": {
+        "aafe": 4.2779,
+        "pct_2fold": 27.1,
+        "pct_3fold": 43.9
+      },
+      "ml": {
+        "aafe": 2.9981,
+        "pct_2fold": 43.0,
+        "pct_3fold": 58.9
+      }
+    },
+    "renal": {
+      "meta": {
+        "aafe": 2.7416,
+        "pct_2fold": 44.9,
+        "pct_3fold": 63.6
+      },
+      "engine": {
+        "aafe": 4.2548,
+        "pct_2fold": 27.1,
+        "pct_3fold": 43.0
+      },
+      "ml": {
+        "aafe": 2.9981,
+        "pct_2fold": 43.0,
+        "pct_3fold": 58.9
+      }
+    },
+    "delta_meta": -0.0012,
+    "delta_engine": -0.0232,
+    "in_domain_n": 81,
+    "in_domain_meta": [
+      2.7906,
+      2.7894
+    ],
+    "n_engine_cmax_moved": 37,
+    "max_move": "<=4%"
+  },
+  "pkdb_curve_fold_error": {
+    "note": "open-licence PK-DB timecourses, old vs new renal on the same canonical engine",
+    "caffeine_oral": [
+      28.04,
+      24.91
+    ],
+    "acetaminophen_iv": [
+      32.67,
+      29.2
+    ],
+    "acetaminophen_oral": [
+      22.45,
+      21.36
+    ],
+    "midazolam_iv": [
+      1.96,
+      1.95
+    ],
+    "midazolam_oral": [
+      2.01,
+      2.01
+    ]
+  },
+  "not_modelled": [
+    "active tubular secretion",
+    "pH/ionisation-dependent reabsorption",
+    "peff uncertainty in the returned cv"
+  ],
+  "cache_regen": "required on the canonical Linux stack; delta is within the +/-0.020 pin so the existing cache still passes"
+}
