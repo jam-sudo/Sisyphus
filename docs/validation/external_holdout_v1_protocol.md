@@ -146,6 +146,19 @@ drug identities and linking to monographs, but direct Cmax table acquisition
 still requires following the primary product documents. A keyword mention is
 not an eligible PK observation.
 
+The official [ClinicalTrials.gov API v2](https://clinicaltrials.gov/data-about-studies/learn-about-api)
+provides another discovery route. A metadata-only pull on 2026-09-23 for
+`AREA[OutcomeMeasureTitle]Cmax` returned 5,868 result-posted studies. Among
+them, 4,799 had a Cmax-titled result with a mass-concentration unit, 1,991
+also marked healthy volunteers, 1,982 also included adults, and 918 also had
+results first posted in 2020–2026. Requiring the arm/intervention text to
+mention fasting, single dosing, oral administration, and a mass dose reduced
+that cross-field screen to 75 study records. These mentions can refer to
+different arms, repeat one compound across studies, or name an investigational
+code with no resolved structure. The registry query therefore supplies
+source-discovery leads, not 75 verified primary arms, and cannot replace
+arm-level two-person adjudication against posted results and original reports.
+
 Allocate those compounds without outcome-based replacement to three disjoint
 roles: 120–150 calibration-development compounds, N=260 final external-test
 compounds, and a sealed reserve cohort. Calibration labels may be opened before
