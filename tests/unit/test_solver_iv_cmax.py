@@ -9,6 +9,8 @@ from sisyphus.engine.compiler import ODECompiler, ResolvedParams
 from sisyphus.engine.solver import _IV_CMAX_DELAY_H, solve, solve_mc
 from sisyphus.engine.uncertainty import UncertaintyEngine
 from sisyphus.graph.builder import build_from_yaml
+from sisyphus.pipeline.context import prepare_simulation_context
+from sisyphus.pk.endpoints import compute_endpoints
 from sisyphus.predict.adme import predict_adme
 from sisyphus.predict.chemistry import compute_profile
 from sisyphus.predict.ivive import build_drug_on_graph
@@ -39,6 +41,28 @@ def test_solve_t_min_h_injects_anchor_point():
     result = solve(compiled, params, y0, t_span=(0.0, 24.0), t_min_h=_IV_CMAX_DELAY_H)
     # t_min_h must appear as an exact time point in the grid.
     assert np.any(np.isclose(result.time_h, _IV_CMAX_DELAY_H))
+
+
+def test_iv_auc_resolves_distribution_before_cmax_anchor():
+    # Caffeine redistributes rapidly: a single 0-to-5-minute trapezoid used
+    # to overestimate IV AUC by more than 25%, corrupting oral/IV F.
+    context = prepare_simulation_context("CN1C=NC2=C1C(=O)N(C(=O)N2C)C", 100.0, "iv")
+    y0 = np.zeros(context.compiled.n_states)
+    y0[context.compiled.state_index["venous_blood"]] = 100.0
+    fine_grid = np.r_[
+        np.linspace(0, _IV_CMAX_DELAY_H, 1001, endpoint=False),
+        np.linspace(_IV_CMAX_DELAY_H, 24, 499),
+    ]
+    reference = solve(context.compiled, context.params, y0, (0, 24), t_eval=fine_grid)
+    reference_auc = compute_endpoints(reference).auc_0t.mean
+    default = solve(context.compiled, context.params, y0, (0, 24), t_min_h=_IV_CMAX_DELAY_H)
+    default_auc = compute_endpoints(default).auc_0t.mean
+    _, _, mc_auc, ok = solve_mc(
+        context.compiled, context.params, y0, (0, 24), t_min_h=_IV_CMAX_DELAY_H
+    )
+    assert ok
+    assert default_auc == pytest.approx(reference_auc, rel=0.01)
+    assert mc_auc == pytest.approx(reference_auc, rel=0.01)
 
 
 def test_solve_t_min_h_zero_is_backward_compatible():

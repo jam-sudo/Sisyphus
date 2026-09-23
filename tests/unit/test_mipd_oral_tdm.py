@@ -8,7 +8,13 @@ output never attaches the oral-population ``meta_cmax``/``cmax_90ci`` or the
 """
 import numpy as np
 
-from sisyphus.mipd.clgrid import CLGridForward, MeasuredConc
+from sisyphus.mipd.clgrid import (
+    CLGridForward,
+    CLPrior,
+    FPrior,
+    MeasuredConc,
+    sir_posterior_2d,
+)
 from sisyphus.mipd.oral_grid import build_oral_cl_grid
 from sisyphus.mipd.tdm import predict_tdm
 from sisyphus.regimen.types import DosingRegimen
@@ -71,19 +77,21 @@ def test_renal_prior_cv_warning_on_oral_only_when_set():
     assert any("renal_prior_cv" in w for w in explicit.warnings)
 
 
-def test_attribution_honesty_trough_agrees_cmax_auc_diverge():
-    # Spec §7.5 / Bx2: only the observed-trough conc is attribution-independent;
-    # free-both's AUC band is wider than free-F-only's (NOT equal). The peak is set
-    # to the engine's own a-priori peak (engine-consistent, so the free-both posterior
-    # is well-conditioned, not collapsed) — a peak far off the engine curve would
-    # force a degenerate corner and an artificially narrow band, defeating the test.
+def test_attribution_honesty_single_trough_widens_exposure():
+    # Spec §7.5 / Bx2 compares the *same single trough* under F-only and
+    # free-both attribution. Adding a peak would provide extra information and
+    # could narrow the latter band, invalidating a directional width assertion.
     reg = _reg()
     grid, _, _ = build_oral_cl_grid(SMILES, reg, n_grid=9)
     last, tau = float(reg.last_dose_time_h), 12.0
     trough_obs = MeasuredConc(value=_engine_conc(grid, last + tau), t=last + tau)
-    peak = MeasuredConc(value=_engine_conc(grid, last + 2.0), t=last + 2.0)
     f_only = predict_tdm(SMILES, reg, [trough_obs], n_grid=9)
-    both = predict_tdm(SMILES, reg, [trough_obs, peak], n_grid=9)
+    f0 = float(grid.f_engine[np.argmin(np.abs(np.log(grid.s_grid)))])
+    both = sir_posterior_2d(
+        FPrior(f0, 1.0),
+        CLPrior(cv=1.0, s_min=float(grid.s_grid[0]), s_max=float(grid.s_grid[-1])),
+        CLGridForward(grid), [trough_obs], n_samples=20000, rng=np.random.default_rng(0),
+    )
     assert both.cl_scale is not None and f_only.cl_scale is None
 
     def _w(p):
@@ -91,6 +99,9 @@ def test_attribution_honesty_trough_agrees_cmax_auc_diverge():
         return hi - lo
 
     assert _w(both) > _w(f_only)
+    assert both.cmax.ci90[1] - both.cmax.ci90[0] > (
+        f_only.cmax.ci90[1] - f_only.cmax.ci90[0]
+    )
 
 
 # --- spec §7 acceptance tests #7 / #15 / #18 ---
