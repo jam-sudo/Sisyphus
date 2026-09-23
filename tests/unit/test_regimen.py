@@ -273,11 +273,22 @@ class TestSolveRegimen:
             assert np.all(np.diff(result.time_h) > 0)
             if len(regimen.events) == 2:
                 at_second_dose = np.flatnonzero(np.isclose(result.time_h, 8.0))
-                assert len(at_second_dose) == 1
-                total_at_second_dose = sum(
-                    amount[at_second_dose[0]] for amount in result.amounts.values()
+                assert len(at_second_dose) == 2
+                totals = [
+                    sum(amount[i] for amount in result.amounts.values())
+                    for i in at_second_dose
+                ]
+                assert totals == pytest.approx([100.0, 200.0])
+                assert result.time_h[at_second_dose[1]] == 8.0
+                conc = result.concentrations["a"]
+                pre = slice(None, at_second_dose[0] + 1)
+                post = slice(at_second_dose[1], None)
+                split_auc = (
+                    np.trapezoid(conc[pre], result.time_h[pre])
+                    + np.trapezoid(conc[post], result.time_h[post])
                 )
-                assert total_at_second_dose == pytest.approx(200.0)
+                assert np.trapezoid(conc, result.time_h) == pytest.approx(split_auc)
+                assert np.interp(8.0, result.time_h, conc) == pytest.approx(conc[at_second_dose[1]])
 
     def test_multi_dose_trough_increases(self):
         """Trough levels (end of interval) should increase before SS."""

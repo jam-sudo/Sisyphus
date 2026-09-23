@@ -179,12 +179,14 @@ def solve_regimen(
     all_concentrations: dict[str, list[np.ndarray]] = {
         name: [] for name in compiled.state_index
     }
+    all_administered: list[np.ndarray] = []
 
     # State vector — starts at zero
     y_current = np.zeros(compiled.n_states)
 
     # Track overall solver success
     overall_success = True
+    cumulative_administered = 0.0
 
     # Build the list of segment boundaries:
     # Each dose group triggers a segment boundary
@@ -221,6 +223,7 @@ def solve_regimen(
                     )
                     continue
                 y_current[node_idx] += ev.dose_mg
+                cumulative_administered += ev.dose_mg
                 logger.debug(
                     "Injected %.2f mg into %r at t=%.2fh",
                     ev.dose_mg,
@@ -266,15 +269,13 @@ def solve_regimen(
             )
             overall_success = False
 
-        # The boundary state after a dose replaces the previous segment's
-        # pre-dose state at the same time. Keep time strictly increasing.
+        # Place the pre-dose state one representable instant before the new
+        # post-dose state. This preserves the jump for AUC and keeps the grid
+        # strictly increasing for interpolation at the exact dose time.
         if all_time:
-            all_time[-1] = all_time[-1][:-1]
-            for name in compiled.state_index:
-                all_amounts[name][-1] = all_amounts[name][-1][:-1]
-                all_concentrations[name][-1] = all_concentrations[name][-1][:-1]
-
+            all_time[-1][-1] = np.nextafter(t_start, -np.inf)
         all_time.append(result.time_h)
+        all_administered.append(np.full_like(result.time_h, cumulative_administered))
         for name in compiled.state_index:
             all_amounts[name].append(result.amounts[name])
             all_concentrations[name].append(result.concentrations[name])
@@ -302,15 +303,13 @@ def solve_regimen(
         name: np.concatenate(arrs) for name, arrs in all_amounts.items()
     }
 
-    # Compare against doses actually injected by each time point, including
-    # infusion micro-boluses rather than the full planned infusion at t=0.
+    # Each segment carries its actually administered dose, distinguishing
+    # pre- and post-dose states across the boundary.
     total = np.zeros_like(time_concat)
     for name in compiled.state_index:
         total += amt_concat[name]
 
-    cumulative_dose = np.zeros_like(time_concat)
-    for ev in boluses:
-        cumulative_dose[time_concat >= ev.time_h - 1e-12] += ev.dose_mg
+    cumulative_dose = np.concatenate(all_administered)
 
     valid = cumulative_dose > 0
     if np.any(valid):
