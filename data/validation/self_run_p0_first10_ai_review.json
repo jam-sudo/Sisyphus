@@ -2,22 +2,24 @@
   "task_id": "task_fc65e66c94ed",
   "reviewed_at": "2026-09-23",
   "scope": "first 10 candidates of data/validation/self_run_p0_candidates.json, original order; predictions not inspected",
-  "method_note": "Eligibility judged only from original full text; abstracts/FRDB metadata not used for eligibility. 'verified' = all criteria supported with Cmax read from source; 'verified_with_caveat' = Cmax read from source but ≥1 criterion caveated; 'ineligible' = source contradicts a criterion; 'unverified' = full text inaccessible.",
+  "method_note": "Eligibility criteria are judged from original cited sources, not FRDB flags or model predictions. FRDB Cmax values were read only after all predictions were sealed and used to map duplicate-dose row IDs to exact source-table cells; this mapping did not determine eligibility or select by prediction error. 'verified_with_caveat' means original Cmax is readable but at least one P0 criterion remains unresolved. 'unverified' means the original full text was inaccessible.",
   "summary": {
     "candidates": 10,
     "arms": 25,
     "arm_verification": {
       "verified": 0,
-      "verified_with_caveat": 6,
+      "verified_with_caveat": 8,
       "ineligible": 2,
       "unverified": 13,
-      "ineligible_or_secondary": 4
+      "ineligible_or_secondary": 2
     },
     "candidates_with_any_verified_cmax": [
       "2127",
       "2849",
       "1776",
-      "10208"
+      "2665",
+      "10208",
+      "560"
     ],
     "protocol_eligible_candidates_confirmed": 0
   },
@@ -101,7 +103,7 @@
           "original_cmax_unit": null,
           "locator": null,
           "verification": "unverified",
-          "reason": "PubMed 16248851 (Curr Alzheimer Res 2005;2:483-92, DOI 10.2174/156720505774330564) has no PMC copy, Unpaywall shows no OA copy, publisher page (eurekaselect) behind Cloudflare challenge. Abstract/title state 'healthy elderly' — per protocol not used to decide, but flags likely non-adult-age ineligibility; full text needed."
+          "reason": "PubMed 16248851 (Curr Alzheimer Res 2005;2:483-92, DOI 10.2174/156720505774330564) has no PMC copy, Unpaywall shows no OA copy, publisher page (eurekaselect) behind Cloudflare challenge. Abstract/title state healthy elderly; age alone is not an exclusion. Full text is still needed for fasting, formulation, parent analyte, and the exact Cmax arm."
         }
       ]
     },
@@ -243,14 +245,16 @@
           "parent_plasma": "FOR: '血漿中未変化体' (unchanged drug)",
           "original_cmax_unit": "ng/mL",
           "locator": "Jpn J Clin Pharmacol Ther 26(1):305-306 (1995), p.305 Tab.1",
-          "healthy_adult": "AGAINST for elderly column: '健常高齢男性志願者6名 (年齢:65〜72才)'; young column (n=6) is reproduced from Uematsu et al. J Clin Pharmacol 1991 ('一部修飾') — secondary, not original to this abstract",
-          "original_cmax": null,
+          "healthy_adult": "FOR: original study enrolled six healthy men aged 65–72 years; no P0 upper-age cutoff",
+          "original_cmax": 81.4,
           "cmax_values_in_source": {
             "elderly_n6": "81.40 ± 13.91 ng/mL (2-compartment model-fitted)",
             "young_n6_secondary_from_Uematsu1991": "43.00 ± 16.36 ng/mL"
           },
-          "verification": "ineligible_or_secondary",
-          "reason": "Candidate file gives no discriminator between frdb_6041 and frdb_6042 (both 10 mg); mapping of arm to Tab.1 column NOT determined. Tab.1 has two columns: elderly (65–72 y, ineligible as healthy adult) and young (secondary citation of PubMed 1839540, which itself is inaccessible). Congress abstract, 2 pages."
+          "verification": "verified_with_caveat",
+          "reason": "Original healthy-adult fasted single-dose parent-plasma result. Immediate-release status of the 10 mg tablet is not explicit, and Cmax is model-fitted rather than an observed peak; strict P0 eligibility unresolved.",
+          "cmax_statistic": "mean ± SD 81.40 ± 13.91 ng/mL, n=6; derived by 2-compartment open-model fit",
+          "arm_mapping_evidence": "FRDB row 6041 records 81.4 ng/mL, matching the original elderly-study result; predictions not consulted."
         },
         {
           "arm_id": "frdb_6042",
@@ -263,14 +267,14 @@
           "parent_plasma": "FOR: '血漿中未変化体' (unchanged drug)",
           "original_cmax_unit": "ng/mL",
           "locator": "Jpn J Clin Pharmacol Ther 26(1):305-306 (1995), p.305 Tab.1",
-          "healthy_adult": "AGAINST for elderly column: '健常高齢男性志願者6名 (年齢:65〜72才)'; young column (n=6) is reproduced from Uematsu et al. J Clin Pharmacol 1991 ('一部修飾') — secondary, not original to this abstract",
+          "healthy_adult": "Young healthy-adult comparator, but value reproduced from Uematsu et al. 1991 rather than generated in this original study",
           "original_cmax": null,
           "cmax_values_in_source": {
             "elderly_n6": "81.40 ± 13.91 ng/mL (2-compartment model-fitted)",
             "young_n6_secondary_from_Uematsu1991": "43.00 ± 16.36 ng/mL"
           },
           "verification": "ineligible_or_secondary",
-          "reason": "Candidate file gives no discriminator between frdb_6041 and frdb_6042 (both 10 mg); mapping of arm to Tab.1 column NOT determined. Tab.1 has two columns: elderly (65–72 y, ineligible as healthy adult) and young (secondary citation of PubMed 1839540, which itself is inaccessible). Congress abstract, 2 pages."
+          "reason": "FRDB row 6042 records 43 ng/mL, matching the young comparator column reproduced from Uematsu et al. 1991. This cited 1995 source is secondary for that arm; the original 1991 paper remains inaccessible."
         }
       ]
     },
@@ -433,19 +437,21 @@
           "source_url": "https://pubmed.ncbi.nlm.nih.gov/9124849/",
           "source_access_status": "full_text_accessed",
           "accessed_via": "https://pmc.ncbi.nlm.nih.gov/articles/PMC163630/ (scanned PDF)",
-          "healthy_adult": "AGAINST: 'Ten elderly subjects... aged 71.8 ± 4.5 (range 66 to 79) years'; the 'Young' row in Table 1 is from Reference 15, dose-normalized to 200 mg (not an original measurement)",
+          "healthy_adult": "FOR: ten healthy elderly subjects, mean age 71.8 years (range 66–79), with no chronic disease; no P0 upper-age cutoff",
           "fasted": "FOR (elderly): 'administered to the elderly volunteers after overnight (10-h) fasting'",
           "single_oral_ir": "PARTIAL: single oral dose 200 mg; dosage form not stated in extracted text",
           "parent_plasma": "FOR: HPLC balofloxacin in plasma",
-          "original_cmax": null,
+          "original_cmax": 1.72,
           "original_cmax_unit": "μg/mL",
           "cmax_values_in_source": {
             "elderly_n10": "1.72 ± 0.50 μg/mL",
             "young_n6_ref15_dose_normalized": "2.17 ± 0.36 μg/mL"
           },
           "locator": "Table 1, p.2826-2827, Antimicrob Agents Chemother 1996;40:2824-8",
-          "verification": "ineligible_or_secondary",
-          "reason": "Arm-to-row mapping (frdb_1411 vs 1412) not determinable; elderly row fails healthy-adult age; young row is secondary and dose-normalized."
+          "verification": "verified_with_caveat",
+          "reason": "Original healthy-adult fasted single-dose parent-plasma result. Oral dosage form is not specified in the cited paper, so immediate-release status remains unresolved.",
+          "cmax_statistic": "mean ± SD 1.72 ± 0.50 μg/mL, n=10",
+          "arm_mapping_evidence": "FRDB row 1411 records 1.72 μg/mL, matching the original elderly-study row; predictions not consulted."
         },
         {
           "arm_id": "frdb_1412",
@@ -453,7 +459,7 @@
           "source_url": "https://pubmed.ncbi.nlm.nih.gov/9124849/",
           "source_access_status": "full_text_accessed",
           "accessed_via": "https://pmc.ncbi.nlm.nih.gov/articles/PMC163630/ (scanned PDF)",
-          "healthy_adult": "AGAINST: 'Ten elderly subjects... aged 71.8 ± 4.5 (range 66 to 79) years'; the 'Young' row in Table 1 is from Reference 15, dose-normalized to 200 mg (not an original measurement)",
+          "healthy_adult": "Young healthy-adult comparator, but value is reproduced and dose-normalized from Reference 15 rather than generated in this original study",
           "fasted": "FOR (elderly): 'administered to the elderly volunteers after overnight (10-h) fasting'",
           "single_oral_ir": "PARTIAL: single oral dose 200 mg; dosage form not stated in extracted text",
           "parent_plasma": "FOR: HPLC balofloxacin in plasma",
@@ -465,7 +471,7 @@
           },
           "locator": "Table 1, p.2826-2827, Antimicrob Agents Chemother 1996;40:2824-8",
           "verification": "ineligible_or_secondary",
-          "reason": "Arm-to-row mapping (frdb_1411 vs 1412) not determinable; elderly row fails healthy-adult age; young row is secondary and dose-normalized."
+          "reason": "FRDB row 1412 records 2.17 μg/mL, matching the young comparator row reproduced and dose-normalized from Reference 15. This cited 1996 source is secondary for that arm."
         }
       ]
     },
@@ -497,5 +503,6 @@
     }
   ],
   "review_status": "AI-assisted source extraction draft; protocol eligibility not adjudicated; do not score",
-  "coordinator_note": "The sole Claude-verified etamsylate arm lacks an explicit immediate-release statement in its original clinical paper, so its strict P0 eligibility is unresolved. No candidate in this first-ten batch is yet confirmed eligible under every criterion. Predictions were not inspected during this review."
+  "coordinator_note": "The original Claude pass marked etamsylate fully verified, but its paper does not explicitly establish immediate-release status. Subsequent coordinator review corrected age-only exclusions: healthy elderly participants meet the adult criterion. No first-ten candidate is yet confirmed to satisfy every P0 criterion. Model predictions were not inspected during source review.",
+  "coordinator_correction": "The P0 criterion healthy adult has no upper-age cutoff. Healthy elderly people are adults. The earlier age-only rejection of vapiprost and balofloxacin arms was erroneous; their original-study arms are now caveated for formulation/source issues rather than age. FRDB outcome values were used only to map duplicate-dose rows to original table columns, after predictions had been sealed and without inspecting predictions."
 }
