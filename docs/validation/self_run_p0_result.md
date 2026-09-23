@@ -90,6 +90,21 @@ increased the opposite-error tail and did not improve the final Meta model.
 P0 therefore supports investigating compound-specific input and disposition
 errors, not repeating a global absorption multiplier.
 
+The structure-only ADME path predicts ipragliflozin Peff **0.488 × 10⁻⁴
+cm/s** and aqueous solubility **0.0226 mg/mL**. The latter selects a 35 µm
+effective particle radius, giving proximal `ka = 0.0401 h⁻¹` from
+`2.88 × Peff / radius`, versus duodenal transit **3.846 h⁻¹**. A separate
+[experimental patent comparison](https://patents.google.com/patent/KR102097250B1/en)
+reports **0.554 mg/mL** at pH 6.8 for an ipragliflozin L-proline co-crystal
+(Table 2); this is a different solid form from the free-molecule SMILES input
+and is not a measurement of the clinical tablet's in-vivo dissolution. As a
+post-unseal diagnostic, supplying only this solubility value through
+`MeasuredADMEInput` changes the 100 mg engine Cmax **0.0795 → 0.1095 mg/L**
+and Meta Cmax **0.3670 → 0.4014 mg/L**, still far below the observed
+**1.406 mg/L**. The model uses solubility only to select a coarse particle-
+radius bucket, so this experiment cannot isolate permeability from
+formulation effects. No coefficient or benchmark label was changed.
+
 As a post-unseal source concern, [FDA GSRS identifies verlukast sodium](https://precision.fda.gov/uniisearch/srs/unii/Q8W8588793),
 while the [clinical paper](https://pubmed.ncbi.nlm.nih.gov/12959296/) names
 verlukast tablets without establishing in the reviewed record whether its
