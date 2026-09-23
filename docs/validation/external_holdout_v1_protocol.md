@@ -82,6 +82,28 @@ which 132 were approved in 2020–2025. These are raw product counts, not unique
 eligible, decontaminated compounds; they are an upper bound for that FDA source.
 The 900-identity inventory therefore needs older and investigational drugs plus
 non-FDA sources, with duplicates across agencies collapsed before allocation.
+EMA's [Article 57 product data](https://www.ema.europa.eu/en/human-regulatory-overview/post-authorisation/data-medicines-iso-idmp-standards-post-authorisation/public-data-article-57-database)
+(Rev. 88, snapshot dated 2026-08-05; XLSX SHA256
+`57f71f38b20f87693b36a8c5e397883746dcde4d4be8f6761945972b30692102`)
+contains 163,791 product rows. Of these, 97,719 have a route containing `Oral
+Use`, representing 6,696 distinct active-substance *strings* after lowercasing
+and removal of non-alphanumeric characters. This is a broad identity-discovery
+reservoir, not 6,696 eligible compounds: products repeat across countries,
+the substance field can group multiple products, and the file does not establish
+SMILES, IR formulation, fasted single-dose Cmax, or study provenance. Use it to
+enumerate candidates, then verify each against original clinical sources.
+
+EMA's [medicine-page JSON](https://www.ema.europa.eu/en/about-us/about-website/download-website-data-json-data-format)
+(snapshot 2026-09-23 06:01:57 UTC; SHA256
+`402ba8031d383bc1959d4933a845a6055fa906406ae234162353aae756e87d33`)
+has 319 human, authorised, non-generic, non-biosimilar, non-advanced-therapy
+product records with a `marketing_authorisation_date` in 2020–2025, covering
+310 nonempty active-substance strings. These records also include nonoral drugs
+and biologics. Use `marketing_authorisation_date` for approval-window screening;
+`european_commission_decision_date` can reflect a later procedure. Neither EMA
+table establishes the required Cmax arm. The 900-name inventory is therefore
+plausible from public catalogues, while the ≥550 source-verified, eligible
+compounds remain an unproven acquisition milestone.
 Allocate those compounds without outcome-based replacement to three disjoint
 roles: 120–150 calibration-development compounds, N=260 final external-test
 compounds, and a sealed reserve cohort. Calibration labels may be opened before
