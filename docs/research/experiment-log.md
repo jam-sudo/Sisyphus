@@ -10,6 +10,18 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-23 (cont.) — N50 exclusion audit fails closed and normalizes DrugBank salts
+
+The earlier guanfacine-HCl salt gap was already fixed in `ik14()`: the current
+code extracts the largest organic fragment, and the stored guanfacine-HCl and
+free-base structures now share a key. A remaining gap was DrugBank ingestion:
+it trusted a precomputed full-salt key even when the normalized active-fragment
+key differed (501 rows; 188 additional distinct normalized keys). The inventory
+now indexes both keys. The N50 audit also rejects missing corpus files and
+unparseable candidates instead of reporting a clean pass. Re-auditing the
+invalidated 2026Q2 N50 still finds 21/50 hard-corpus hits and 47/50 DrugBank
+presences; no new clean cohort was produced.
+
 ## 2026-09-23 — Measured absolute F now uses converged oral/IV exposure
 
 The measured-F route previously divided two 0–24h AUCs. That ratio is not a reliable

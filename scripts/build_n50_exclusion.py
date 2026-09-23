@@ -22,8 +22,8 @@ every shipped training/enrichment artifact and:
 
   --audit N50_FILE -- cross-check a curated N50 file's SMILES against the
       inventory and print a contamination report (hard training corpora vs the
-      softer DrugBank-enrichment pool). Exits non-zero if any drug is in a hard
-      corpus, so it can gate N50' curation in CI or a pre-freeze check.
+      softer DrugBank-enrichment pool). Exits non-zero for missing sources,
+      unparseable candidates, or hard-corpus hits.
 
 Hard corpora (a hit = the drug's Cmax / CLint / F / VDss was in a model's
 training set = real leakage): MMPK Cmax x3, CLF, bioavailability, expanded
@@ -139,7 +139,7 @@ def _ingest_hard(root: pathlib.Path) -> dict[str, set[str]]:
 
 
 def _ingest_drugbank(root: pathlib.Path) -> dict[str, str]:
-    """IK14 -> drug name for the DrugBank enrichment pool (uses precomputed col)."""
+    """IK14 -> drug name for the DrugBank enrichment pool."""
     db: dict[str, str] = {}
     fp = root / DRUGBANK
     if not fp.exists():
@@ -148,17 +148,30 @@ def _ingest_drugbank(root: pathlib.Path) -> dict[str, str]:
     n = 0
     with fp.open() as f:
         for row in csv.DictReader(f):
-            key = (row.get("inchikey_14") or "").strip()
-            if not key:
-                key = ik14(row.get("smiles") or row.get("canonical_smiles") or "")
-            if key:
-                db.setdefault(key, row.get("name", "?"))
+            # Keep the published key and the salt-stripped active fragment:
+            # precomputed DrugBank keys can include counterions.
+            keys = {
+                (row.get("inchikey_14") or "").strip(),
+                ik14(row.get("canonical_smiles") or row.get("smiles") or ""),
+            }
+            for key in keys:
+                if key:
+                    db.setdefault(key, row.get("name", "?"))
+            if any(keys):
                 n += 1
     logger.info("  ingested %5d ik14 from %s", n, DRUGBANK)
     return db
 
 
+def _require_sources(root: pathlib.Path) -> None:
+    required = [rel for rel, *_ in HARD_SOURCES] + [TDC_HEP, DRUGBANK]
+    missing = [rel for rel in required if not (root / rel).is_file()]
+    if missing:
+        raise FileNotFoundError(f"N50 exclusion sources missing: {', '.join(missing)}")
+
+
 def build(root: pathlib.Path) -> int:
+    _require_sources(root)
     logger.info("Building N50 exclusion inventory (InChIKey-14 keyed)...")
     hard = _ingest_hard(root)
     db = _ingest_drugbank(root)
@@ -189,12 +202,15 @@ def build(root: pathlib.Path) -> int:
 
 
 def audit(root: pathlib.Path, n50_path: pathlib.Path) -> int:
-    """Cross-check a curated N50 file. Returns 1 if any hard-corpus hit."""
+    """Cross-check a curated N50 file. Returns 1 for hits or bad structures."""
+    _require_sources(root)
     logger.info("Ingesting corpora for audit of %s ...", n50_path)
     hard = _ingest_hard(root)
     db = _ingest_drugbank(root)
 
     drugs = json.loads(n50_path.read_text()).get("drugs", {})
+    if not isinstance(drugs, dict) or not drugs:
+        raise ValueError("N50 audit requires a non-empty drugs object")
     hard_hits: list[tuple[str, str, list[str]]] = []
     db_hits: list[tuple[str, str]] = []
     unparseable: list[str] = []
@@ -217,8 +233,10 @@ def audit(root: pathlib.Path, n50_path: pathlib.Path) -> int:
         print(f"  ** unparseable SMILES: {unparseable}")
 
     print(f"\n--- HARD training-corpus hits (fitted-target leakage): {len(hard_hits)} ---")
-    if not hard_hits:
+    if not hard_hits and not unparseable:
         print("  NONE — clean of every ML/engine training corpus by IK14. ✓")
+    elif not hard_hits:
+        print("  No hits among parsed structures; unparseable candidates remain unresolved.")
     for name, key, tags in hard_hits:
         print(f"  ** {name} ({key})")
         for tag in tags[:8]:
@@ -229,11 +247,11 @@ def audit(root: pathlib.Path, n50_path: pathlib.Path) -> int:
         print(f"  ~ {name} ({key})")
 
     print("\n--- VERDICT ---")
-    if hard_hits:
+    if hard_hits or unparseable:
         print(
-            f"  FAIL: {len(hard_hits)}/{len(drugs)} drugs are in hard training "
-            f"corpora. This N50 is contaminated and is NOT a valid never-touch "
-            f"generalization instrument."
+            f"  FAIL: {len(hard_hits)} hard-corpus hits and {len(unparseable)} "
+            f"unparseable structures among {len(drugs)} drugs. This N50 is NOT "
+            f"a valid never-touch generalization instrument."
         )
         return 1
     print(
