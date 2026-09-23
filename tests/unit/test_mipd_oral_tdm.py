@@ -77,10 +77,12 @@ def test_renal_prior_cv_warning_on_oral_only_when_set():
     assert any("renal_prior_cv" in w for w in explicit.warnings)
 
 
-def test_attribution_honesty_single_trough_widens_exposure():
+def test_attribution_honesty_single_trough_widens_fold_uncertainty():
     # Spec §7.5 / Bx2 compares the *same single trough* under F-only and
     # free-both attribution. Adding a peak would provide extra information and
     # could narrow the latter band, invalidating a directional width assertion.
+    # Exposure errors are multiplicative, so compare interval fold ratios; an
+    # absolute-width comparison changes with the posterior center.
     reg = _reg()
     grid, _, _ = build_oral_cl_grid(SMILES, reg, n_grid=9)
     last, tau = float(reg.last_dose_time_h), 12.0
@@ -96,11 +98,11 @@ def test_attribution_honesty_single_trough_widens_exposure():
 
     def _w(p):
         lo, hi = p.auc.ci90
-        return hi - lo
+        return hi / lo
 
     assert _w(both) > _w(f_only)
-    assert both.cmax.ci90[1] - both.cmax.ci90[0] > (
-        f_only.cmax.ci90[1] - f_only.cmax.ci90[0]
+    assert both.cmax.ci90[1] / both.cmax.ci90[0] > (
+        f_only.cmax.ci90[1] / f_only.cmax.ci90[0]
     )
 
 

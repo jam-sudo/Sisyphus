@@ -8,6 +8,7 @@ from pathlib import Path
 
 import pytest
 
+import sisyphus.validation.holdout_contract as contract
 from sisyphus.validation.holdout_contract import (
     _PRODUCTION_FITTED_MODELS,
     is_primary_eligible,
@@ -164,6 +165,7 @@ def test_public_training_membership_sources_are_complete_and_hash_pinned():
     )
     expected = {
         "data/ppbr_az.tab",
+        "data/training/fup_tdc_public_clean.csv",
         "data/caco2_wang.tab",
         "data/training/omega_mmpk_clean.csv",
         "data/training/mmpk_expanded_full.csv",
@@ -193,7 +195,7 @@ def test_clf_and_vdf_manifests_pin_their_co_committed_training_source():
         )
 
 
-def test_training_membership_refuses_missing_or_modified_source(tmp_path):
+def test_training_membership_refuses_missing_or_modified_source(tmp_path, monkeypatch):
     inventory_path = tmp_path / "data/validation/training_membership_sources_v1.json"
     inventory_path.parent.mkdir(parents=True)
     source_path = tmp_path / "data/training/example.csv"
@@ -234,6 +236,7 @@ def test_training_membership_refuses_missing_or_modified_source(tmp_path):
         "dataset_path": "data/training/example.csv", "sha256": sha256_file(source_path),
     }}))
     fup_artifact.write_bytes((ROOT / "models/adme/xgboost_fup_v2.json").read_bytes())
+    monkeypatch.setattr(contract, "_DRUGBANK_FUP_ARTIFACT_SHA256", sha256_file(fup_artifact))
     with pytest.raises(ValueError, match="DrugBank targets outside the public profile"):
         verify_training_membership(tmp_path, freeze, {"data/training/example.csv"})
     fup_artifact.write_text("placeholder")

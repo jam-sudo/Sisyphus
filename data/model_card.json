@@ -24,14 +24,14 @@
     "independent_external_holdout": {
       "status": "not_available",
       "aafe": null,
-      "reason": "No outcome-blinded set remains unconsumed, and exact shipped-model training memberships are not SHA-pinned."
+      "reason": "No outcome-blinded set remains unconsumed, and four active fitted models still lack SHA-pinned training membership."
     },
     "retrospective_development_benchmark": {
       "n_compounds": 107,
-      "meta_aafe": 2.7427949764919104,
+      "meta_aafe": 2.675842925190836,
       "bootstrap_95_ci": [
-        2.37,
-        3.2
+        2.2967,
+        3.1449
       ],
       "classification": "repeatedly used for system selection; exact disjointness from shipped-model training cannot be independently verified",
       "source": "data/training/4track_holdout_predictions.json"
@@ -43,7 +43,7 @@
         2.45,
         4.48
       ],
-      "classification": "consumed; diagnostic only for the current system",
+      "classification": "consumed; historical 2026-07-05 system, not re-scored after the public-only fup retrain",
       "source": "data/validation/prospective_N28_current_engine_2026-07-05.json"
     },
     "invalidated_n50_2026q2": {

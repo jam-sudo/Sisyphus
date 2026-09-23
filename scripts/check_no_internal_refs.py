@@ -31,7 +31,9 @@ RULES: list[tuple[str, re.Pattern[str], str | None]] = [
     ("internal persona 'Hypatia'", re.compile(r"\bHypatia\b"), None),
     (
         "AI-tool attribution",
-        re.compile(r"Claude\s+(?:Code|Design)|Co-Authored-By:\s*Claude|Generated with .{0,8}Claude"),
+        re.compile(
+            r"Claude\s+(?:Code|Design)|Co-Authored-By:\s*Claude|Generated with .{0,8}Claude"
+        ),
         None,
     ),
     ("wiki-style [[concept]] link", re.compile(r"\[\[[a-z][a-z0-9-]{4,}\]\]"), ".md"),
@@ -67,6 +69,11 @@ def main() -> int:
         except (UnicodeDecodeError, FileNotFoundError, IsADirectoryError):
             continue  # binary or unreadable — nothing to lint
         for label, pattern, suffix in RULES:
+            # Preserve honest reviewer provenance in the published P0 audit records.
+            if (label == "AI-tool attribution"
+                    and path.startswith("data/validation/self_run_p0_candidates_")
+                    and path.endswith("_ai_review.json")):
+                continue
             if suffix is not None and not path.endswith(suffix):
                 continue
             for lineno, line in enumerate(lines, start=1):

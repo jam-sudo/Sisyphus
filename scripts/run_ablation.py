@@ -36,8 +36,8 @@ def restore(bak: Path | None, target: Path) -> None:
 def run_benchmark(lookup_on: bool) -> dict:
     """Run holdout benchmark with specified lookup config."""
     # CRITICAL: clear all caches between experiments
-    from sisyphus.predict.drugbank import DrugBankConfig, DrugBankLookup, _reset_singleton
     from sisyphus.predict import adme
+    from sisyphus.predict.drugbank import DrugBankConfig, DrugBankLookup, _reset_singleton
     adme._model_cache.clear()  # force model reload
 
     # Clear logP correction cache if exists
@@ -72,7 +72,7 @@ def main():
     logger.info("Models: fup_v2=%s, logp_correction=%s", has_fup, has_logp)
 
     if not has_fup:
-        logger.error("xgboost_fup_v2.json not found. Run train_fup_v2.py first.")
+        logger.error("xgboost_fup_v2.json not found. Run retrain_fup_public.py first.")
         return
     if not has_logp:
         logger.error("logp_correction.json not found. Run train_logp_correction.py first.")

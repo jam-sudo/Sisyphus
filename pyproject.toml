@@ -27,6 +27,7 @@ ml = [
 dev = [
     "pytest>=7.0",
     "ruff>=0.4",
+    "pandas>=2.2,<3",
 ]
 sbi = [
     "torch>=2.0",

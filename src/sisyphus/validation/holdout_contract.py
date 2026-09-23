@@ -27,7 +27,7 @@ _PRODUCTION_FITTED_MODELS = (
     "models/adme/xgboost_peff.meta.json",
 )
 
-# This shipped artifact was fitted with licensed DrugBank fup targets as well as TDC.
+# This historical artifact was fitted with licensed DrugBank fup targets as well as TDC.
 # A public-only membership inventory cannot certify it by relabeling its metadata.
 _DRUGBANK_FUP_ARTIFACT_SHA256 = "3ac08bf5dee4a7b5f7ebf9e058882f6101f965959f88a094de4db76c4b47e1f1"
 

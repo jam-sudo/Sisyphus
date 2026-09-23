@@ -222,7 +222,7 @@ def test_box_probe_monotone_in_km():
 def test_headline_isolation_holdout_cache_untouched():
     """The harness is fully isolated: importing it and running the engine leaves the
     holdout cache byte-identical, and the v2.2a empty-enzyme_km bit-identity pin + the
-    cached-2.743 headline pin still pass. Headline 2.743 is untouched by construction."""
+    cached-2.676 headline pin still passes. Headline 2.676 is untouched by construction."""
     import subprocess
     import sys
 
@@ -240,7 +240,7 @@ def test_headline_isolation_holdout_cache_untouched():
     r = subprocess.run(
         [sys.executable, "-m", "pytest",
          "tests/regression/test_mm_headline_bit_identity.py",
-         "tests/integration/test_holdout_regression.py::test_cached_holdout_aafe_is_2p743",
+         "tests/integration/test_holdout_regression.py::test_cached_holdout_aafe_is_2p676",
          "-q"],
         cwd=str(ROOT), capture_output=True, text=True,
     )

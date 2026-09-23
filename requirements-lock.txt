@@ -8,10 +8,13 @@ lightgbm==4.6.0
 numpy==2.2.6
 nvidia-nccl-cu12==2.30.4 ; platform_system == "Linux"
 packaging==26.1
+pandas==2.3.3
 pillow==12.2.0
 pluggy==1.6.0
 Pygments==2.20.0
 pytest==9.0.3
+python-dateutil==2.9.0.post0
+pytz==2026.3.post1
 PyYAML==6.0.3
 rdkit==2026.3.1
 referencing==0.37.0
@@ -19,7 +22,9 @@ rpds-py==0.30.0
 ruff==0.15.11
 scikit-learn==1.7.2
 scipy==1.15.3
+six==1.17.0
 threadpoolctl==3.6.0
 tomli==2.4.1
 typing_extensions==4.15.0
+tzdata==2026.4
 xgboost==3.2.0

@@ -28,10 +28,10 @@ every shipped training/enrichment artifact and:
 Hard corpora (a hit = disqualifying, including conservative pre-exclusion
 sources whose exact fitted rows are not proven): Omega MMPK Cmax source,
 MMPK Cmax x3, CLF, bioavailability, expanded CLint x2, VDss, TDC hepatocyte.
-DrugBank is reported separately because the exact fup-trained subset is
-unavailable in the public clone. The shipped fup v2 training recipe uses its
-protein-binding values, so any DrugBank identity is a conservative potential
-fitted-target hit and disqualifies a never-seen candidate.
+DrugBank is reported separately because its catalog membership remains a
+conservative E4 exclusion for the never-seen N50 design. The historical fup v2
+artifact also used DrugBank protein-binding targets; the current public-only
+fup artifact does not. Any DrugBank identity still disqualifies N50 under E4.
 """
 
 from __future__ import annotations
@@ -66,6 +66,7 @@ csv.field_size_limit(10**7)
 HARD_SOURCES: list[tuple[str, str, str | None, str]] = [
     # Raw ADME memberships used by the production fup and Peff artifacts.
     ("data/ppbr_az.tab", "Drug", "Drug_ID", "\t"),
+    ("data/training/fup_tdc_public_clean.csv", "smiles", "name", ","),
     ("data/caco2_wang.tab", "Drug", "Drug_ID", "\t"),
     # Upstream Omega source for the shipped Cmax model; includes pre-exclusion rows.
     ("data/training/omega_mmpk_clean.csv", "smiles", "name", ","),

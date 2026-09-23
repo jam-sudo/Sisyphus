@@ -12,6 +12,18 @@ track `pyproject.toml`.
 
 ## [Unreleased]
 
+### Public-only fup model and provenance (2026-09-23)
+
+- Rebuilt fup v2 from 1,557 SHA-pinned human TDC rows, replacing the artifact
+  fitted with unavailable DrugBank targets. The public external-validation gate
+  continues to reject the historical artifact by its SHA256.
+- Regenerated the repeatedly used N=107 development benchmark and web figures
+  on the pinned Linux stack: Meta AAFE 2.676 (bootstrap 95% CI 2.30–3.14).
+  This is not independent external validation; four other fitted models still
+  lack exact training-source hashes.
+- Fixed the test dependency lock and retained explicit AI reviewer attribution
+  in the historical P0 source-audit records.
+
 ### Evidence and product-contract correction (2026-07-14)
 
 - Reclassified N=107 as a repeatedly accessed development benchmark, not an independent holdout;

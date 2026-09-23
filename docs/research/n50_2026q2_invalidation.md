@@ -46,10 +46,11 @@ salt-insensitive) against every shipped SMILES-bearing artifact:
 | **DrugBank enrichment** (soft E4) | **47 / 50** | only 3 drugs pass the conservative E4 rule |
 
 **2026-09-23 provenance correction:** The 47/50 count is an identity-superset
-overlap, not a verified count of fup training rows. However, the shipped fup v2
-training recipe does use DrugBank protein-binding targets. Without its licensed
-fitted subset, a DrugBank hit cannot be cleared as merely enrichment. The
-current N50 audit therefore rejects either repository-source or DrugBank hits.
+overlap, not a verified count of fup training rows. The fup v2 artifact shipped
+at the time used DrugBank protein-binding targets; its licensed fitted subset
+is unavailable. The current public-only fup retrain removes that model exposure,
+but N50's conservative E4 rule still rejects either repository-source or
+DrugBank identity hits.
 
 The synonym misses are the tell: name matching cannot equate *rifampin* with
 *rifampicin* or *torsemide* with *torasemide*, but they are the same molecule and

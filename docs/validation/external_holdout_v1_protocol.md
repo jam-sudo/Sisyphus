@@ -257,9 +257,8 @@ compound IDs, including any predeclared challenge arms on those same compounds:
 - peer-reviewed first-in-human/SAD studies for development compounds with an
   unambiguous structure and directly tabulated Cmax;
 - older approved oral drugs absent from fitted target corpora; DrugBank catalog
-  membership remains an unresolved fup-training collision until the exact
-  fitted DrugBank subset is excluded or fup v2 is reproducibly retrained on
-  public-only inputs;
+  membership alone is allowed under the public profile after the fup v2 model's
+  public-only retrain, but runtime clinical-registry use is not;
 - ideally, an independent sponsor or consortium dataset held by a data custodian,
   which gives the strongest source independence.
 
@@ -314,12 +313,11 @@ the shortlist is frozen.
 
 Reject collisions with every fitted model target corpus, clinical reference used
 by runtime registries, previous validation set, manual per-drug override, and
-meta-weight/routing cache. DrugBank membership is conservatively disqualifying
-with the currently shipped fup v2 artifact: its training recipe used DrugBank
-protein-binding values, and the exact fitted subset is unavailable in the
-public profile. Disabling DrugBank lookup at inference does not remove that
-training exposure. A future public-only fup retrain could change this rule
-after its source and artifact hashes are frozen.
+meta-weight/routing cache. The current fup v2 artifact was retrained on the
+hash-pinned public TDC human subset; DrugBank catalog membership alone is not
+a fitted-target collision for this artifact. The historical DrugBank-trained
+fup artifact remains explicitly barred from the public profile. Inference-time
+DrugBank enrichment also remains disabled in that profile.
 
 The exclusion-union SHA256 emitted by the audit becomes part of the frozen
 manifest. Re-running the audit must reproduce that hash; the audit report itself
@@ -329,15 +327,15 @@ the manifest, then run it again; only the second report is the passing freeze ga
 
 For the public profile, `freeze.training_membership_path` must point to
 `data/validation/training_membership_sources_v1.json` and its SHA256 must be
-recorded in `freeze.training_membership_sha256`. That file pins 12 conservative
+recorded in `freeze.training_membership_sha256`. That file pins 13 conservative
 corpus inputs used by `scripts/audit_external_holdout_manifest.py`; the audit and
 prediction runner verify every listed source hash before continuing. The ignored
 N50 convenience inventory is not a freeze dependency. Raw licensed DrugBank
-exports are not currently pinned. The checked-in fup v2 training recipe uses
-DrugBank protein-binding targets alongside TDC PPBR_AZ, and the model's source
-hash remains unknown. Its fitted membership must be made auditable under the
-chosen resource profile, or the model must be reproducibly retrained without
-that source, before the external gate can pass.
+exports are not pinned or used by the current public-only fup artifact. Its
+1,557-row filtered human TDC dataset and model artifact are both SHA-pinned;
+`scripts/retrain_fup_public.py` rebuilds them from the committed PPBR_AZ input.
+The older `scripts/train_fup_v2.py` is a historical DrugBank-dependent recipe
+and must not be used to regenerate the public artifact.
 
 The inventory includes the [Omega `mmpk_clean.csv` source at commit
 `08a45047`](https://github.com/jam-sudo/Omega/blob/08a45047a2b5dcdca8c9a8f36ff1fe3b50ed3d6d/data/ml/clinical/mmpk_clean.csv),
@@ -347,8 +345,8 @@ under the current 107-compound holdout and three-key matching. This recovers a
 conservative Cmax exclusion source, not the exact fitted snapshot: retraining
 with the recorded hyperparameters and current feature code did not reproduce
 the shipped model's tree dump or predictions. The shipped Cmax metadata still
-has `sha256: unknown_legacy`; four other active fitted models also lack exact
-source hashes. CL/F and Vd/F are pinned to their co-committed training CSV.
+has `sha256: unknown_legacy`; three other active fitted models also lack exact
+source hashes. CL/F, Vd/F, and fup v2 are pinned to their training CSVs.
 It therefore does not prove exact model-training membership. The audit and
 prediction runner fail closed until each production fitted model names a
 repository-relative, hash-matched training dataset included in the pinned

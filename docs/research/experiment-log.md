@@ -10,6 +10,30 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-23 (cont.) — Public-only fup retrain and current development benchmark
+
+Replaced the shipped fup v2 artifact, whose fitted DrugBank targets could not be
+recovered in this public clone. The new model uses only human TDC PPBR_AZ rows:
+1,614 raw human rows, 1,557 after N=107 identity exclusion, deduplication,
+and range filtering. The pinned source SHA256 is
+`54c9520f4b6e04419b18bab7335583c3865d86fc53db40f74c2cff1577c8ec1b`;
+the exact fitted CSV SHA256 is
+`e2c70c83707b2031904a351be76ce61899557a4b14316b9429c4a77fd2eac742`.
+The Linux/Python 3.10 model artifact SHA256 is
+`b0731734730746866646a2628dded73d74254eb06ef1a6c7b457bf273d867096`.
+Five-fold training CV: fup AAFE 2.258, R² 0.384. The reproducible recipe is
+`scripts/retrain_fup_public.py`; model metadata and the external exclusion
+inventory pin the fitted CSV. The former DrugBank-trained artifact remains
+barred from the public V1 gate by its historical SHA.
+
+On the *same Linux stack*, development N=107 Meta AAFE moved 2.739 → 2.676
+and Engine 4.277 → 3.672; direct ML stayed 2.998. The new benchmark cache is
+`data/training/4track_holdout_predictions.json`, with bootstrap CI artifact
+`data/validation/4track_ci_2026-09-23_fup_public.json`. This is a system
+change evaluated on a repeatedly used development set, not evidence of
+independent improvement. Four active fitted models still lack exact source
+hashes, and there is no new blinded external outcome cohort.
+
 ## 2026-09-23 (cont.) — DrugBank fup provenance and N50 fail-closed gate
 
 The checked-in fup v2 training script merges TDC PPBR_AZ with DrugBank

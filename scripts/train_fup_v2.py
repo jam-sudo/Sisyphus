@@ -406,6 +406,11 @@ def evaluate_cv(model: xgb.XGBRegressor, X: np.ndarray, y: np.ndarray) -> dict:
 # ---------------------------------------------------------------------------
 
 def main() -> int:
+    # Historical DrugBank recipe; do not overwrite the auditable public model.
+    manifest = OUTPUT_MODEL.with_suffix(".meta.json")
+    if manifest.exists() and json.loads(manifest.read_text()).get("version") == "v2_public_tdc":
+        log.error("Refusing to overwrite public fup v2; use scripts/retrain_fup_public.py")
+        return 1
     log.info("=" * 60)
     log.info("train_fup_v2.py — XGBoost fup v2 training")
     log.info("=" * 60)
