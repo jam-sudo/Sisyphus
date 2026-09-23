@@ -258,6 +258,27 @@ class TestSolveRegimen:
                 f"peak {i} ({peaks[i-1]:.4f}) due to accumulation"
             )
 
+    def test_dose_boundaries_and_infusion_have_valid_mass_balance(self):
+        graph = _make_two_node_graph()
+        drug = _make_minimal_drug(admin_node="a", dose_mg=100.0)
+        compiled, params = _compile_and_resolve(graph, drug)
+        regimens = (
+            DosingRegimen(events=(DosingEvent(0.0, 100.0, "a", duration_h=1.0),)),
+            DosingRegimen(events=(DosingEvent(0.0, 100.0, "a"), DosingEvent(8.0, 100.0, "a"))),
+        )
+        for regimen in regimens:
+            result = solve_regimen(compiled, params, regimen, t_total_h=12.0)
+            assert result.solver_success
+            assert result.mass_balance_error < 1e-6
+            assert np.all(np.diff(result.time_h) > 0)
+            if len(regimen.events) == 2:
+                at_second_dose = np.flatnonzero(np.isclose(result.time_h, 8.0))
+                assert len(at_second_dose) == 1
+                total_at_second_dose = sum(
+                    amount[at_second_dose[0]] for amount in result.amounts.values()
+                )
+                assert total_at_second_dose == pytest.approx(200.0)
+
     def test_multi_dose_trough_increases(self):
         """Trough levels (end of interval) should increase before SS."""
         graph = _make_two_node_graph()

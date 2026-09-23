@@ -183,9 +183,8 @@ def solve_regimen(
     # State vector — starts at zero
     y_current = np.zeros(compiled.n_states)
 
-    # Track overall solver success and mass balance
+    # Track overall solver success
     overall_success = True
-    max_mbe = 0.0
 
     # Build the list of segment boundaries:
     # Each dose group triggers a segment boundary
@@ -267,21 +266,18 @@ def solve_regimen(
             )
             overall_success = False
 
-        max_mbe = max(max_mbe, result.mass_balance_error)
-
-        # Determine which time points to keep (avoid duplicating boundary
-        # points from adjacent segments)
+        # The boundary state after a dose replaces the previous segment's
+        # pre-dose state at the same time. Keep time strictly increasing.
         if all_time:
-            # Skip first point if it duplicates the last point of the
-            # previous segment
-            start_idx = 1 if len(result.time_h) > 1 else 0
-        else:
-            start_idx = 0
+            all_time[-1] = all_time[-1][:-1]
+            for name in compiled.state_index:
+                all_amounts[name][-1] = all_amounts[name][-1][:-1]
+                all_concentrations[name][-1] = all_concentrations[name][-1][:-1]
 
-        all_time.append(result.time_h[start_idx:])
+        all_time.append(result.time_h)
         for name in compiled.state_index:
-            all_amounts[name].append(result.amounts[name][start_idx:])
-            all_concentrations[name].append(result.concentrations[name][start_idx:])
+            all_amounts[name].append(result.amounts[name])
+            all_concentrations[name].append(result.concentrations[name])
 
         # Update state vector to final state of this segment
         for name, idx in compiled.state_index.items():
@@ -306,15 +302,14 @@ def solve_regimen(
         name: np.concatenate(arrs) for name, arrs in all_amounts.items()
     }
 
-    # Recompute mass balance over full time course using cumulative dose
-    # at each time point (fixes spurious MBE for multi-dose regimens where
-    # early time points only have the first dose administered).
+    # Compare against doses actually injected by each time point, including
+    # infusion micro-boluses rather than the full planned infusion at t=0.
     total = np.zeros_like(time_concat)
     for name in compiled.state_index:
         total += amt_concat[name]
 
     cumulative_dose = np.zeros_like(time_concat)
-    for ev in regimen.events:
+    for ev in boluses:
         cumulative_dose[time_concat >= ev.time_h - 1e-12] += ev.dose_mg
 
     valid = cumulative_dose > 0
