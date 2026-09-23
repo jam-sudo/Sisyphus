@@ -19,6 +19,7 @@ from pathlib import Path
 import yaml
 
 from sisyphus.validation.holdout_contract import (
+    resolve_frozen_path,
     validate_payload,
     validate_source_quotas,
     verify_source_plan,
@@ -117,10 +118,29 @@ def _repository_exclusions(
     return structures, names
 
 
+def _candidate_exclusion_hits(
+    name: str,
+    ik: str,
+    verified: dict,
+    structures: dict[str, set[str]],
+    names: dict[str, set[str]],
+) -> set[str]:
+    hits = set(structures.get(ik, set())) | names.get(_norm_name(name), set())
+    for synonym in verified["synonyms"]:
+        hits.update(names.get(_norm_name(synonym), set()))
+    for relation in verified["related_structures"]:
+        hits.update(structures.get(EXCLUSION.ik14(relation["smiles"]), set()))
+    return hits
+
+
 def audit(manifest_path: Path) -> dict:
     manifest = json.loads(manifest_path.read_text())
     validate_payload(manifest, "external_holdout_v1_manifest.schema.json")
-    verify_source_plan(manifest_path, manifest, EXCLUSION.ik14)
+    plan = verify_source_plan(manifest_path, manifest, EXCLUSION.ik14)
+    verified_path = resolve_frozen_path(manifest_path.parent, plan["verified_shortlist_path"])
+    verified = {
+        row["candidate_id"]: row for row in json.loads(verified_path.read_text())
+    }
     compounds = manifest.get("compounds")
     if not isinstance(compounds, list):
         raise ValueError("manifest.compounds must be a list")
@@ -167,7 +187,7 @@ def audit(manifest_path: Path) -> dict:
             if not arm_id or joined in arm_ids:
                 duplicate_arm_ids.append(joined)
             arm_ids.add(joined)
-        reasons = sorted(structures.get(ik, set()) | names.get(_norm_name(name), set()))
+        reasons = sorted(_candidate_exclusion_hits(name, ik, verified[cid], structures, names))
         if reasons:
             hits.append({"candidate_id": cid, "name": name, "ik14": ik, "sources": reasons})
 

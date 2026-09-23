@@ -266,6 +266,25 @@ def verify_source_plan(
             or not row["smiles"]
         ):
             raise ValueError(f"Verified identity or structure is incomplete: {cid}")
+        synonyms = row.get("synonyms")
+        relations = row.get("related_structures")
+        if (
+            not isinstance(synonyms, list)
+            or not all(isinstance(name, str) and name.strip() for name in synonyms)
+            or len(synonyms) != len(set(synonyms))
+            or not isinstance(relations, list)
+            or any(
+                not isinstance(relation, dict)
+                or set(relation) != {"relationship", "smiles", "source_ref"}
+                or relation["relationship"] not in {"parent", "prodrug", "active_metabolite"}
+                or not isinstance(relation["smiles"], str)
+                or not relation["smiles"]
+                or not isinstance(relation["source_ref"], str)
+                or not relation["source_ref"]
+                for relation in relations
+            )
+        ):
+            raise ValueError(f"Verified synonyms or related structures are invalid: {cid}")
     if structure_key is not None:
         seen: dict[str, str] = {}
         for cid, row in verified.items():
@@ -275,6 +294,8 @@ def verify_source_plan(
                     f"Verified structures are invalid or share a salt/stereo family: {cid}"
                 )
             seen[key] = cid
+            if any(not structure_key(relation["smiles"]) for relation in row["related_structures"]):
+                raise ValueError(f"Verified related structure is invalid: {cid}")
         for compound in manifest["compounds"]:
             cid = compound["candidate_id"]
             if cid in verified and structure_key(compound["smiles"]) != structure_key(

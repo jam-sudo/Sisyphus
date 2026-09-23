@@ -289,6 +289,14 @@ Before model freeze, canonicalize both candidate and corpus structures using:
 - normalized generic names and synonyms;
 - explicit parent/prodrug/active-metabolite relations.
 
+Each verified-shortlist record must include `synonyms` and
+`related_structures` (each relation has a type, SMILES, and source citation;
+empty arrays require curator review). The audit rejects a declared synonym or
+related structure that collides with the frozen exclusion union. This check
+cannot discover an omitted relation: both independent curators must search and
+verify these fields against the original drug and metabolite records before
+the shortlist is frozen.
+
 Reject collisions with every fitted model target corpus, clinical reference used
 by runtime registries, previous validation set, manual per-drug override, and
 meta-weight/routing cache. DrugBank membership alone is not contamination under

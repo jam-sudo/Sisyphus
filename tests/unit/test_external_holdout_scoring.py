@@ -30,6 +30,28 @@ def _module():
     return module
 
 
+def test_contamination_audit_checks_declared_synonyms_and_relations():
+    path = ROOT / "scripts" / "audit_external_holdout_manifest.py"
+    spec = importlib.util.spec_from_file_location("audit_external_holdout_manifest", path)
+    assert spec and spec.loader
+    audit = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(audit)
+    related_key = audit.EXCLUSION.ik14("CC")
+    hits = audit._candidate_exclusion_hits(
+        "new drug",
+        audit.EXCLUSION.ik14("CCC"),
+        {
+            "synonyms": ["Old Drug"],
+            "related_structures": [
+                {"relationship": "active_metabolite", "smiles": "CC", "source_ref": "source"}
+            ],
+        },
+        {related_key: {"training::related"}},
+        {"olddrug": {"training::synonym"}},
+    )
+    assert hits == {"training::related", "training::synonym"}
+
+
 def test_score_weights_compounds_not_arms():
     scorer = _module()
     rows = [
@@ -422,7 +444,10 @@ def test_cli_uses_frozen_seed_and_bootstrap_count(tmp_path, monkeypatch):
         for i in range(900)
     ]
     verified = [
-        {"candidate_id": f"c{i}", "name": f"compound-{i}", "smiles": "C" * (i + 1)}
+        {
+            "candidate_id": f"c{i}", "name": f"compound-{i}",
+            "smiles": "C" * (i + 1), "synonyms": [], "related_structures": [],
+        }
         for i in range(550)
     ]
     allocation = {
