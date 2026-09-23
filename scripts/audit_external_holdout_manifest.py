@@ -23,6 +23,7 @@ from sisyphus.validation.holdout_contract import (
     sha256_file,
     validate_payload,
     validate_source_quotas,
+    verify_training_membership,
 )
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -136,6 +137,12 @@ def audit(manifest_path: Path) -> dict:
         raise ValueError("manifest.compounds must be a list")
     if manifest.get("labels_blinded") is not True:
         raise ValueError("manifest.labels_blinded must be true")
+
+    verify_training_membership(
+        ROOT,
+        manifest["freeze"],
+        {rel for rel, *_ in EXCLUSION.HARD_SOURCES} | {EXCLUSION.TDC_HEP},
+    )
 
     structures, names = _repository_exclusions(manifest_path)
     ids: set[str] = set()

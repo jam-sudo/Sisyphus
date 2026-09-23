@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+import hashlib
 import importlib.util
+import json
+import sys
 from pathlib import Path
 
 import pytest
@@ -279,3 +282,34 @@ def test_scorer_rejects_manifest_eligibility_forgery():
     joined = scorer.join_predictions_and_labels(payload["rows"], labels)
     with pytest.raises(ValueError, match="Derived eligibility mismatch"):
         scorer.validate_results_against_manifest(joined, manifest)
+
+
+def test_cli_uses_frozen_seed_and_bootstrap_count(tmp_path, monkeypatch):
+    scorer = _module()
+    manifest, predictions, labels = _synthetic_contracts()
+    manifest_path = tmp_path / "manifest.json"
+    predictions_path = tmp_path / "predictions.json"
+    labels_path = tmp_path / "labels.json"
+    output_path = tmp_path / "score.json"
+    manifest_path.write_text(json.dumps(manifest))
+    manifest_sha = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+    predictions["manifest_sha256"] = manifest_sha
+    labels["manifest_sha256"] = manifest_sha
+    predictions_path.write_text(json.dumps(predictions))
+    labels_path.write_text(json.dumps(labels))
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "score_external_holdout.py", str(predictions_path),
+            "--labels", str(labels_path),
+            "--manifest", str(manifest_path),
+            "--manifest-sha256", manifest_sha,
+            "--predictions-sha256", hashlib.sha256(predictions_path.read_bytes()).hexdigest(),
+            "--labels-sha256", hashlib.sha256(labels_path.read_bytes()).hexdigest(),
+            "--out", str(output_path),
+        ],
+    )
+    scorer.main()
+    report = json.loads(output_path.read_text())
+    assert (report["seed"], report["n_bootstrap"]) == (7, 100000)

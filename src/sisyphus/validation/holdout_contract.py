@@ -151,3 +151,30 @@ def verify_frozen_file(root: Path, freeze: dict[str, Any], stem: str) -> str:
     if actual != expected:
         raise ValueError(f"{stem} SHA256 mismatch: expected={expected}, actual={actual}")
     return actual
+
+
+def verify_training_membership(
+    root: Path, freeze: dict[str, Any], expected_paths: set[str] | None = None
+) -> str:
+    """Require the public fitted-target inventory and every source it names."""
+
+    inventory_path = "data/validation/training_membership_sources_v1.json"
+    if freeze["training_membership_path"] != inventory_path:
+        raise ValueError("Training membership must use the pinned public inventory")
+    inventory_sha = verify_frozen_file(root, freeze, "training_membership")
+    inventory = json.loads((root / inventory_path).read_text())
+    if inventory.get("profile") != "public":
+        raise ValueError("Training membership profile must be public")
+    sources = inventory.get("sources")
+    if not isinstance(sources, list) or not sources:
+        raise ValueError("Training membership sources are missing")
+    paths = [row["path"] for row in sources]
+    if len(paths) != len(set(paths)) or (
+        expected_paths is not None and set(paths) != expected_paths
+    ):
+        raise ValueError("Training membership sources differ from fitted-target corpora")
+    for row in sources:
+        path = resolve_frozen_path(root, row["path"])
+        if sha256_file(path) != row["sha256"]:
+            raise ValueError(f"Training membership source SHA256 mismatch: {row['path']}")
+    return inventory_sha

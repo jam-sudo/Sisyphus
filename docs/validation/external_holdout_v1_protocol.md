@@ -29,7 +29,8 @@ AAFE = exp(mean_i(e_i))
 ```
 
 Confidence intervals use a compound-cluster bootstrap with 100,000 resamples and
-a committed seed. Report observation-uncertainty propagation separately when the
+a seed fixed in `manifest.freeze.random_seed`; the scorer has no seed or resample
+override. Report observation-uncertainty propagation separately when the
 source supplies Cmax CV/SD; do not mix it into the sampling CI.
 
 ## Size and power
@@ -137,8 +138,9 @@ the manifest, then run it again; only the second report is the passing freeze ga
 For the public profile, `freeze.training_membership_path` must point to
 `data/validation/training_membership_sources_v1.json` and its SHA256 must be
 recorded in `freeze.training_membership_sha256`. That file pins the 11 fitted-target
-corpus inputs used by `scripts/audit_external_holdout_manifest.py`; its integrity
-test verifies every listed source hash. The ignored N50 convenience inventory and
+corpus inputs used by `scripts/audit_external_holdout_manifest.py`; the audit and
+prediction runner verify every listed source hash before continuing. The ignored
+N50 convenience inventory and
 licensed DrugBank exports are not freeze dependencies.
 
 ## Freeze and one-time execution

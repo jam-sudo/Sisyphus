@@ -289,8 +289,6 @@ def main() -> None:
     parser.add_argument("--predictions-sha256", required=True)
     parser.add_argument("--labels-sha256", required=True)
     parser.add_argument("--out", type=Path, required=True)
-    parser.add_argument("--seed", type=int, default=20260714)
-    parser.add_argument("--n-bootstrap", type=int, default=100000)
     args = parser.parse_args()
 
     actual_sha = hashlib.sha256(args.manifest.read_bytes()).hexdigest()
@@ -338,7 +336,7 @@ def main() -> None:
         raise ValueError("predictions.rows must be a list")
     rows = join_predictions_and_labels(prediction_rows, labels)
     validate_results_against_manifest(rows, manifest)
-    report = score(rows, args.seed, args.n_bootstrap)
+    report = score(rows, freeze["random_seed"], 100000)
     report["manifest_sha256"] = actual_sha
     report["predictions_sha256"] = actual_predictions_sha
     report["labels_sha256"] = actual_labels_sha

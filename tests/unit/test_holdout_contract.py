@@ -15,6 +15,7 @@ from sisyphus.validation.holdout_contract import (
     source_record_hash,
     validate_payload,
     validate_source_quotas,
+    verify_training_membership,
 )
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -152,3 +153,28 @@ def test_public_training_membership_sources_are_complete_and_hash_pinned():
     assert {row["path"] for row in membership["sources"]} == expected
     for row in membership["sources"]:
         assert sha256_file(ROOT / row["path"]) == row["sha256"]
+
+
+def test_training_membership_refuses_missing_or_modified_source(tmp_path):
+    inventory_path = tmp_path / "data/validation/training_membership_sources_v1.json"
+    inventory_path.parent.mkdir(parents=True)
+    source_path = tmp_path / "data/training/example.csv"
+    source_path.parent.mkdir(parents=True)
+    source_path.write_text("original")
+    inventory_path.write_text(json.dumps({
+        "profile": "public",
+        "sources": [{"path": "data/training/example.csv", "sha256": sha256_file(source_path)}],
+    }))
+    freeze = {
+        "training_membership_path": "data/validation/training_membership_sources_v1.json",
+        "training_membership_sha256": sha256_file(inventory_path),
+    }
+    assert verify_training_membership(
+        tmp_path, freeze, {"data/training/example.csv"}
+    ) == sha256_file(inventory_path)
+    source_path.write_text("modified")
+    with pytest.raises(ValueError, match="source SHA256 mismatch"):
+        verify_training_membership(tmp_path, freeze, {"data/training/example.csv"})
+    source_path.unlink()
+    with pytest.raises(ValueError, match="does not exist"):
+        verify_training_membership(tmp_path, freeze, {"data/training/example.csv"})

@@ -19,6 +19,7 @@ from sisyphus.validation.holdout_contract import (
     sha256_file,
     validate_payload,
     verify_frozen_file,
+    verify_training_membership,
 )
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -98,7 +99,7 @@ def main() -> None:
     dependency_sha = _sha256(ROOT / "requirements-lock.txt")
     if dependency_sha != freeze["dependency_lock_sha256"]:
         raise ValueError("Dependency-lock SHA256 does not match the manifest")
-    training_membership_sha = verify_frozen_file(ROOT, freeze, "training_membership")
+    training_membership_sha = verify_training_membership(ROOT, freeze)
     feature_schema_sha = verify_frozen_file(ROOT, freeze, "feature_schema")
     solver_settings_sha = verify_frozen_file(ROOT, freeze, "solver_settings")
     container_digest = os.environ.get("SISYPHUS_CONTAINER_DIGEST")
