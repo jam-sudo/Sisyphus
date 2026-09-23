@@ -21,6 +21,28 @@ underprediction on average in this selected cohort. The complete result and
 reproducible scorer are `data/validation/self_run_p0_results.json` and
 `scripts/score_self_run_p0.py`.
 
+The pre-unseal protocol also requested a same-source-statistic sensitivity.
+Only compounds whose *every included arm* has the same Cmax statistic enter
+each group; the primary 18-compound result above remains unchanged.
+
+| Source Cmax statistic | Compounds / arms | Meta AAFE | Direct-ML AAFE | Paired ratio (95% bootstrap CI) |
+| --- | ---: | ---: | ---: | ---: |
+| Arithmetic mean | 10 / 37 | 3.82 | 3.13 | 1.22 (0.97–1.58) |
+| Geometric mean | 4 / 12 | 2.48 | 2.53 | 0.98 (0.67–1.36) |
+| Geometric LSmean | 2 / 2 | — | — | — |
+| Median | 1 / 1 | — | — | — |
+
+Garenoxacin's six arms mix arithmetic and geometric means, so it is omitted
+from these homogeneous-statistic groups only. Groups below four compounds
+are counted but not scored. Among final eligible compounds whose *scored
+arms* were all labelled `verified` in the original AI first pass, six
+compounds / 31 arms have Meta AAFE 4.11, direct-ML AAFE 2.93, and paired
+ratio 1.40 (95% bootstrap CI 1.04–1.96). The original `verified` +
+`verified_with_caveat` labels are only
+an inclusive screening ceiling; many such arms failed mandatory source
+rules and cannot be scored as a valid holdout. These small, selected subsets
+show sensitivity to source composition, not comparative efficacy.
+
 Large compound-level errors are diagnostic leads, not tuning targets:
 verlukast is underpredicted about 25-fold by Meta across two doses; oxatomide
 is overpredicted about 9-fold across two formulations; teneligliptin and
