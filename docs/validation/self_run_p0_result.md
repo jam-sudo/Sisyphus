@@ -65,7 +65,24 @@ failed to load locally; all seven Meta outputs matched the sealed values.
 The engine's optional 24-hour-truncated oral/IV AUC ratio was 0.051 for
 teneligliptin, 0.075 for ipragliflozin, and 0.179 for garenoxacin in these
 same reruns. This ratio is a diagnostic approximation, not a measured absolute
-bioavailability. For context, the [EMA's garenoxacin assessment](https://www.ema.europa.eu/en/documents/withdrawal-report/withdrawal-assessment-report-garenoxacin-mesylate_en.pdf)
+bioavailability. A separate [PMDA ipragliflozin review](https://www.pmda.go.jp/files/000206796.pdf)
+reports measured absolute bioavailability **90.2% ± 5.3%** in 14 healthy adults
+after 100 mg oral versus 25 mg IV dosing (Study CL-0057, pp. 31–32). At the
+same 100 mg oral dose, a post-unseal engine rerun gives a 24-hour AUC ratio
+of **7.47%** and Cmax **0.0795 mg/L**, versus the study's observed
+**1.406 mg/L**. Supplying the *measured* F to the existing conditional route
+raises engine Cmax to **0.961 mg/L** and Meta Cmax to **0.737 mg/L**. This
+exploratory intervention uses a clinical input unavailable in structure-only
+prediction; it supports a large exposure error in the engine but does not
+establish which absorption or first-pass component causes it. The deterministic
+100 mg engine mass balance at 24 h places **68.85 mg** in the fecal sink and
+**18.82 mg** still in the colon lumen; these two unabsorbed compartments alone
+account for **87.67%** of the simulated dose. This localizes much of the
+discrepancy to simulated uptake from the gut, while the actual tablet's
+formulation is not an input to the structure-only model. The rerun used a
+temporary macOS environment with NumPy 2.5.3 and SciPy 1.16.3; its baseline
+100 mg Meta Cmax matches the sealed 100 mg prediction to numerical precision.
+For context, the [EMA's garenoxacin assessment](https://www.ema.europa.eu/en/documents/withdrawal-report/withdrawal-assessment-report-garenoxacin-mesylate_en.pdf)
 reports 92% absolute oral bioavailability in fasted healthy subjects. The
 repository's prior [DE-42 analysis](../research/dead-ends.md) already tested
 uniform absorption-rate increases: they improved some engine predictions but
@@ -76,7 +93,10 @@ errors, not repeating a global absorption multiplier.
 As a post-unseal source concern, [FDA GSRS identifies verlukast sodium](https://precision.fda.gov/uniisearch/srs/unii/Q8W8588793),
 while the [clinical paper](https://pubmed.ncbi.nlm.nih.gov/12959296/) names
 verlukast tablets without establishing in the reviewed record whether its
-75/500 mg doses are salt mass or active-moiety mass. The primary cohort was
+75/500 mg doses are salt mass or active-moiety mass. The
+[scanned original Table 1](https://pmc.ncbi.nlm.nih.gov/articles/PMC1364621/)
+confirms **6.7 and 41.3 μg/mL** for those fasted arms; it does not resolve the
+dose basis. The primary cohort was
 not changed after unsealing. Excluding this compound as a *post-hoc
 sensitivity* gives Meta AAFE 2.97, direct ML AAFE 2.67, and ratio 1.11 across
 17 compounds; the substantive conclusion is unchanged. This uncertainty
