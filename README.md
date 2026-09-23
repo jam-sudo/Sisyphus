@@ -16,7 +16,7 @@ Sisyphus is an oral structure-only C<sub>max</sub> prediction system with a sepa
 
 The production output is C<sub>max</sub> for a canonical parent SMILES and positive oral dose. Engine-derived T<sub>max</sub>, AUC, half-life, multi-dose simulation, TDM, MIPD, DDI, PGx, and PK/PD are experimental research outputs and are not covered by the C<sub>max</sub> accuracy claim. Residual/model-error and parameter-Monte-Carlo intervals are exposed separately.
 
-**Intended use.** Sisyphus targets oral structure-only Cmax prediction (canonical parent SMILES + dose) when measured ADME is unavailable. On the repeatedly accessed retrospective **development benchmark**, Meta AAFE is 2.743 [bootstrap 95% CI 2.37&ndash;3.20, N=107]. This is not an independent holdout result: the cohort has informed repeated system-selection decisions. The current system has **no unconsumed independent external holdout AAFE**. Error of this scale and the wide development-residual interval (&divide;&times;~13-fold) restrict the tool to **screening, ranking, and uncertainty-aware triage**, not dose setting.
+**Intended use.** Sisyphus targets oral structure-only Cmax prediction (canonical parent SMILES + dose) when measured ADME is unavailable. On the repeatedly accessed retrospective **development benchmark**, Meta AAFE is 2.743 [bootstrap 95% CI 2.37&ndash;3.20, N=107]. This is not an independent holdout result: the cohort has informed repeated system-selection decisions. A source-adjudicated diagnostic P0 pilot on 18 previously unused compounds found Meta AAFE **3.34**, compared with **3.01** for direct ML; its labels were AI-assisted and it does not establish Meta superiority. The current system has **no unconsumed independently curated external holdout AAFE**. Error of this scale and the wide development-residual interval (&divide;&times;~13-fold) restrict the tool to **screening, ranking, and uncertainty-aware triage**, not dose setting.
 
 ```
 $ sisyphus predict --smiles "Cn1c(=O)c2c(ncn2C)n(C)c1=O" --dose 100
@@ -334,6 +334,20 @@ The temporal cohort is directionally worse than the retrospective development be
 The same-machine re-score moved Meta AAFE 3.208 → 3.286 and Engine AAFE 4.302 → 4.551, while the direct ML track was bit-identical. This supports an absorption/first-pass error diagnosis but does not establish a statistically separated generalization gap. †Compound bootstrap, 100,000 resamples of absolute log-fold error, seed 20260422; diagnostic because the set is consumed. Current artifact: `data/validation/prospective_N28_current_engine_2026-07-05.json`.
 
 **Adaptive-selection caveat.** N=107 has been used for ~47 configuration feedback cycles (track weights, routing, and meta variants). The audit's 2.85–3.10 selection-bias sensitivity range overlaps the current bootstrap CI ([2.37, 3.20], point estimate 2.743); the bootstrap interval does not account for adaptive search. The attempted 2026Q2 N50 was invalidated after 21/50 hard-corpus collisions and must not be cited. The replacement strategy is the outcome-blinded N=260 protocol in `docs/validation/external_holdout_v1_protocol.md` (N=120 minimum when the detectable-effect target is fixed at 15%).
+
+### Diagnostic P0 source-adjudicated pilot
+
+All 186 frozen candidates were reviewed against original PK sources before the
+sealed predictions were opened. Eighteen compounds (58 arms) met the source
+rules; 47 were excluded and 121 remain unresolved. Compound-cluster Meta AAFE
+was **3.34** (95% bootstrap CI 2.43–4.79), versus **3.01** (2.26–4.18) for
+direct ML. The paired Meta/ML ratio was **1.11** (95% CI 0.93–1.34); only
+33.3% of compounds were within twofold for Meta. These results do not show
+Meta superiority. Source eligibility was AI-assisted with coordinator checks,
+and the clarification of eligibility rules followed first-pass viewing of
+source Cmax values. This is diagnostic development evidence, not independent
+External Holdout V1 or a clinical release gate. See the [P0 result](docs/validation/self_run_p0_result.md)
+for hashes, exclusions, and remaining source uncertainty.
 
 ### Experimental multi-dose regression checks
 
