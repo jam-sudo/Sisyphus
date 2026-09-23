@@ -23,6 +23,7 @@ from sisyphus.core import (
     EngineSimulation,
     PKEndpoints,
     PredictionResult,
+    SimResult,
 )
 from sisyphus.engine.contracts import FuCorrectionContractError
 from sisyphus.resources import artifact_provenance, get_resource_config
@@ -105,47 +106,62 @@ def _adjust_ad_for_prodrug(
 # ── Measured-F routing (exposure-scaling) ────────────────────────────────
 # F (oral bioavailability) is emergent in the engine (F = fa*Fg*Fh); there is no
 # F input to set. A caller-supplied measured F sets the systemic exposure SCALE:
-# compute the engine's own oral F via an IV-reference solve and scale engine
+# compute the engine's own oral F via matched oral/IV exposure and scale engine
 # Cmax/AUC by F_measured/F_engine. Pipeline-layer only (engine stays identity-
 # blind). See docs/_internal/specs/2026-06-03-measured-f-routing-design.md.
 _F_K_MIN = 0.05  # clamp bounds on the F-correction factor k, to bound numerical
 _F_K_MAX = 50.0  # absurdity when the engine catastrophically mis-calls F.
+_F_TAIL_HORIZONS_H = (48, 96, 192, 384, 768)
 
 
 def _engine_oral_bioavailability(
-    compiled, params, drug: DrugOnGraph, oral_auc: float, observation_node: str
+    compiled, params, drug: DrugOnGraph, oral_sim: SimResult, observation_node: str
 ) -> float | None:
-    """Engine's emergent oral F = oral AUC / IV-reference AUC (matched dose).
+    """Matched-dose oral/IV AUC ratio after the exposure ratio converges.
 
-    Both AUCs are the 0-24h truncated AUC, so clearance cancels only
-    approximately (exactly at infinite time) — F_engine carries a mild truncation
-    bias for drugs whose t1/2 approaches the 24h window, so the reported F_engine
-    is a 24h-truncated F, not a pure fa*Fg*Fh structural fraction. The IV
-    reference uses the SAME compiled graph and params as the oral solve, so the
-    exposure-scaling stays self-consistent and target-hitting (corrected oral
-    AUC / IV AUC == F_measured) is exact regardless. Returns None if the reference
-    solve fails or an AUC is non-positive (caller then skips correction).
+    Absolute F concerns total exposure, not an arbitrary 24h slice. Continue
+    both 24h trajectories until their cumulative AUC ratio changes by <0.5%
+    across two consecutive doublings. If it has not stabilized by 768h, skip
+    correction rather than treat a truncated ratio as measured absolute F.
     """
-    import numpy as np
-
     from sisyphus.engine.solver import _IV_CMAX_DELAY_H, solve
-    from sisyphus.pk.endpoints import compute_endpoints
+    from sisyphus.pk.nca import auc_trapezoidal
 
     iv_idx = compiled.state_index.get("venous_blood")
-    if iv_idx is None or oral_auc <= 0:
+    if iv_idx is None or not oral_sim.solver_success:
         return None
     y0 = np.zeros(compiled.n_states)
     y0[iv_idx] = drug.dose_mg
     iv_sim = solve(compiled, params, y0, t_span=(0, 24), t_min_h=_IV_CMAX_DELAY_H)
     if not iv_sim.solver_success:
         return None
-    iv_pk = compute_endpoints(
-        iv_sim, observation_node=observation_node, t_min_h=_IV_CMAX_DELAY_H
-    )
-    iv_auc = iv_pk.auc_0t.mean
-    if iv_auc <= 0:
+    oral_auc = auc_trapezoidal(oral_sim.time_h, oral_sim.concentrations[observation_node])
+    iv_auc = auc_trapezoidal(iv_sim.time_h, iv_sim.concentrations[observation_node])
+    if not np.isfinite(oral_auc) or not np.isfinite(iv_auc) or min(oral_auc, iv_auc) <= 0:
         return None
-    return oral_auc / iv_auc
+    previous_ratio = oral_auc / iv_auc
+    stable_steps = 0
+    for end_h in _F_TAIL_HORIZONS_H:
+        next_sims = []
+        for sim in (oral_sim, iv_sim):
+            y0 = np.empty(compiled.n_states)
+            for name, idx in compiled.state_index.items():
+                y0[idx] = sim.amounts[name][-1]
+            next_sim = solve(compiled, params, y0, t_span=(end_h / 2, end_h))
+            if not next_sim.solver_success:
+                return None
+            next_sims.append(next_sim)
+        oral_sim, iv_sim = next_sims
+        oral_auc += auc_trapezoidal(oral_sim.time_h, oral_sim.concentrations[observation_node])
+        iv_auc += auc_trapezoidal(iv_sim.time_h, iv_sim.concentrations[observation_node])
+        if not np.isfinite(oral_auc) or not np.isfinite(iv_auc) or min(oral_auc, iv_auc) <= 0:
+            return None
+        ratio = oral_auc / iv_auc
+        stable_steps = stable_steps + 1 if abs(ratio / previous_ratio - 1) < 0.005 else 0
+        if stable_steps == 2:
+            return ratio
+        previous_ratio = ratio
+    return None
 
 
 def _apply_measured_f(
@@ -247,7 +263,7 @@ def predict(
             B3, 2026-05-02).
         compute_f_engine: when True (and route='oral'), run the engine's
             IV-reference solve and surface the emergent oral bioavailability
-            on ``PredictionResult.engine_f`` (24h-truncated AUC_oral/AUC_iv).
+            on ``PredictionResult.engine_f`` (converged AUC_oral/AUC_iv).
             Default False keeps the SMILES-only path bit-identical (no extra
             solve, ``engine_f`` is None). Used by the engine-as-prior MIPD F
             latent so callers need not re-derive F_engine via a probe call.
@@ -458,7 +474,7 @@ def predict(
             _f_eng = None
             if (compute_f_engine or _wants_measured_f) and route == "oral":
                 _f_eng = _engine_oral_bioavailability(
-                    compiled, params, drug, engine_pk.auc_0t.mean, _obs_node
+                    compiled, params, drug, sim_result, _obs_node
                 )
                 if _f_eng is not None and _f_eng > 0:
                     engine_f_value = _f_eng

@@ -79,10 +79,11 @@ class MeasuredADMEInput:
     vdss only moves the VDss meta-track. A "clean engine-only" measured prediction
     must therefore be read via result.engine_pk (see the measured-input benchmark).
 
-    f_bioavail is measured oral bioavailability F (0 < F <= 1). It is INDEPENDENT
+    f_bioavail is measured absolute oral bioavailability F over total exposure
+    (0 < F <= 1). It is INDEPENDENT
     (not paired) and ORAL-ONLY. The engine's F is emergent (fa*Fg*Fh); a supplied
     F sets the systemic exposure SCALE — predict() computes the engine's own F via
-    an IV-reference solve and scales engine Cmax/AUC by F_measured/F_engine. It does
+    matched oral/IV exposure solves and scales engine Cmax/AUC by F_measured/F_engine. It does
     not set the absorption-rate shape (compose with measured peff for slow
     absorbers). Lands on result.engine_pk; ignored for non-oral routes. See
     docs/_internal/specs/2026-06-03-measured-f-routing-design.md.

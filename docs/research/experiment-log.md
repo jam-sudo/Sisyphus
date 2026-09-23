@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-07-03
+last_updated: 2026-09-23
 parent: ../../README.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -9,6 +9,18 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 Reverse-chronological. The project README carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
 
 ---
+
+## 2026-09-23 — Measured absolute F now uses converged oral/IV exposure
+
+The measured-F route previously divided two 0–24h AUCs. That ratio is not a reliable
+estimate of absolute bioavailability when substantial exposure remains after 24h:
+the warfarin engine case gives 0.424 at 24h and about 0.481 by 720h (matched dose,
+same parameters). Scaling by a clinical total-exposure F would therefore overcorrect
+the 24h PK endpoints. The opt-in F calculation now continues both trajectories in
+matched intervals and accepts the ratio after two consecutive <0.5% changes; it
+skips correction if that has not occurred by 768h. The SMILES-only path is unchanged.
+This is an internal numerical correction, not an external accuracy validation.
+Full suite: 1,436 passed, 23 skipped, 3 xfailed.
 
 ## 2026-07-07 (cont.) — N50' clean re-curation: infeasible from repo data (pool=0), deferred to human-led curation
 

@@ -2,6 +2,7 @@
 import numpy as np
 import pytest
 
+from sisyphus.pipeline.context import prepare_simulation_context
 from sisyphus.pipeline.predict import predict
 from sisyphus.predict.adme import MeasuredADMEInput
 
@@ -85,13 +86,45 @@ def test_f_bioavail_cmax_is_linear_in_F():
 
 
 def test_f_bioavail_target_hitting():
-    # After correction, the engine's oral F (corrected AUC / IV AUC) ≈ F_measured.
+    # For a fast-eliminating drug, the 24h ratio has essentially converged.
     iv_auc = predict(_CAFFEINE, 100.0, route="iv").engine_pk.auc_0t.mean
     target = 0.5
     corr = predict(_CAFFEINE, 100.0,
                    measured_adme=MeasuredADMEInput(f_bioavail=target)).engine_pk
     corrected_f = corr.auc_0t.mean / iv_auc
     assert corrected_f == pytest.approx(target, rel=0.05)
+
+
+def test_measured_f_long_half_life_targets_total_exposure():
+    from sisyphus.engine.solver import solve
+
+    smiles = "CC(=O)CC(c1ccccc1)c1c(O)c2ccccc2oc1=O"  # warfarin
+    context = prepare_simulation_context(smiles, 10.0, "oral")
+    oral_y0 = np.zeros(context.compiled.n_states)
+    oral_y0[context.compiled.state_index[context.drug.administration_node]] = 10.0
+    iv_y0 = np.zeros_like(oral_y0)
+    iv_y0[context.compiled.state_index["venous_blood"]] = 10.0
+    tail = np.linspace(24, 720, 701)[1:]
+    oral_grid = np.r_[np.linspace(0, 24, 501), tail]
+    iv_grid = np.r_[
+        np.linspace(0, 5 / 60, 101, endpoint=False),
+        np.linspace(5 / 60, 24, 501), tail,
+    ]
+    oral = solve(context.compiled, context.params, oral_y0, (0, 720), t_eval=oral_grid)
+    iv = solve(context.compiled, context.params, iv_y0, (0, 720), t_eval=iv_grid)
+    oral_conc = oral.concentrations["venous_blood"]
+    iv_conc = iv.concentrations["venous_blood"]
+    f_total = np.trapezoid(oral_conc, oral.time_h) / np.trapezoid(iv_conc, iv.time_h)
+    f_24 = (
+        np.trapezoid(oral_conc[oral.time_h <= 24], oral.time_h[oral.time_h <= 24])
+        / np.trapezoid(iv_conc[iv.time_h <= 24], iv.time_h[iv.time_h <= 24])
+    )
+    base = predict(smiles, 10.0, compute_f_engine=True)
+    corrected = predict(smiles, 10.0, measured_adme=MeasuredADMEInput(f_bioavail=0.5))
+    assert f_total - f_24 > 0.04  # 24h truncation is material here
+    assert base.engine_f == pytest.approx(f_total, rel=0.01)
+    k = corrected.engine_pk.auc_0t.mean / base.engine_pk.auc_0t.mean
+    assert k * f_total == pytest.approx(0.5, rel=0.01)
 
 
 def test_f_bioavail_warning_reports_engine_f_and_k():

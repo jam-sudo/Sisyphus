@@ -182,7 +182,7 @@ def build_cl_grid(
         cmaxs.append(pk.cmax.mean)
         aucs.append(pk.auc_0t.mean)
         feng = _engine_oral_bioavailability(
-            compiled, params_s, realized_drug_s, pk.auc_0t.mean, obs_node
+            compiled, params_s, realized_drug_s, sim, obs_node
         )
         fengs.append(feng if (feng is not None and feng > 0) else np.nan)
 

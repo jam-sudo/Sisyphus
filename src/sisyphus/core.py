@@ -564,7 +564,7 @@ class PredictionResult:
     # graph for this prediction. Empty when no phenotypes were supplied.
     # Round-trips via dict(result.phenotypes_applied).
     phenotypes_applied: tuple[tuple[str, str], ...] = ()
-    # Engine's emergent oral bioavailability (24h-truncated AUC_oral/AUC_iv).
+    # Engine's emergent oral bioavailability (converged AUC_oral/AUC_iv).
     # Populated only when predict(compute_f_engine=True) and route="oral";
     # None otherwise. Surfaced for the engine-as-prior MIPD F latent so callers
     # need not re-derive it via a probe call (see sisyphus.mipd).
