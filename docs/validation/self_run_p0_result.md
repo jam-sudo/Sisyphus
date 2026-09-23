@@ -29,6 +29,30 @@ Those mechanisms and source mappings need investigation before any model
 change. Re-scoring this same P0 cohort after changes would be development
 testing, not an independent confirmation.
 
+Track-level reruns of seven compounds reproduced their sealed Meta values.
+For example, at 20 mg teneligliptin the observed Cmax was 0.236 mg/L, while
+the engine, direct ML, and Meta values were 0.0074, 0.142, and 0.046 mg/L.
+The engine's large error pulls the blend away from the more accurate ML
+estimate. At 75 mg verlukast, all four tracks were below the observed 6.7
+mg/L (engine 0.096, ML 0.284, CL/F 0.122, VDss 1.285 mg/L); at 60 mg
+oxatomide, all four were above the observed 0.0136 mg/L. Thus a change to
+blend weights alone cannot resolve the broader errors. These reruns used a
+temporary macOS environment with SciPy 1.16.3 because the pinned 1.15.3 wheel
+failed to load locally; all seven Meta outputs matched the sealed values.
+
+As a post-unseal source concern, [FDA GSRS identifies verlukast sodium](https://precision.fda.gov/uniisearch/srs/unii/Q8W8588793),
+while the [clinical paper](https://pubmed.ncbi.nlm.nih.gov/12959296/) names
+verlukast tablets without establishing in the reviewed record whether its
+75/500 mg doses are salt mass or active-moiety mass. The primary cohort was
+not changed after unsealing. Excluding this compound as a *post-hoc
+sensitivity* gives Meta AAFE 2.97, direct ML AAFE 2.67, and ratio 1.11 across
+17 compounds; the substantive conclusion is unchanged. This uncertainty
+still weakens confidence in P0 source eligibility.
+
+The development-residual 90% band covered 55/58 included arms, but its fixed
+half-width is a factor of 12.9 on either side of the point prediction. This
+pilot cannot establish independent interval calibration.
+
 P0 used AI-assisted original-source extraction with coordinator checks. The
 source eligibility clarification was committed after first-pass source Cmax
 had been viewed but before predictions were unsealed. No independent human
