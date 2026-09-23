@@ -73,3 +73,13 @@ The frozen Git archive SHA256 was
 `da99f1fa13b5d7e74f413683aedd65713e5699535f5a54c9e3f6bd470e7fce`;
 the container lockfile and archive lockfile both had SHA256
 `4fb6512cd6b2cc7fa97c0b4f6f29fc13e639c5d9c7c87ad592e7ab4f77b5fcfc`.
+
+Before opening the sealed predictions, the source-only adjudication of all 186
+candidates and 452 arms was frozen in
+`data/validation/self_run_p0_source_adjudication.json` (SHA256
+`cb964fc5a30ad140df54a9d175082f154038312c2d8337cbdc87c5c142673812`).
+It includes 18 compounds and 58 distinct arms, excludes 47 compounds, and
+leaves 121 unresolved. The assessment was AI-assisted and coordinator-checked;
+it is not independent human source verification. Source Cmax values were read
+during first-pass review before the clarification in
+`self_run_p0_pre_unseal_adjudication.md`; predictions remained sealed.
