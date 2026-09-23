@@ -57,6 +57,13 @@ def _source_tree_sha256() -> str:
     return digest.hexdigest()
 
 
+def _verify_resource_root() -> None:
+    from sisyphus.resources import get_resource_config
+
+    if get_resource_config("public").root.resolve() != ROOT.resolve():
+        raise ValueError("External holdout resources must come from the frozen checkout")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("manifest", type=Path)
@@ -112,6 +119,8 @@ def main() -> None:
             f"Container digest mismatch: manifest={freeze['container_digest']}, "
             f"runtime={container_digest}"
         )
+
+    _verify_resource_root()
 
     # Imports happen after profile/freeze checks so runtime resources cannot be
     # initialized under a different profile first.
