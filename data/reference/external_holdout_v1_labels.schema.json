@@ -2,10 +2,11 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Sisyphus External Holdout V1 blinded label-store record",
   "type": "object",
-  "required": ["cycle_id", "manifest_sha256", "records"],
+  "required": ["cycle_id", "manifest_sha256", "predictions_sha256", "records"],
   "properties": {
     "cycle_id": {"type": "string", "minLength": 1},
     "manifest_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "predictions_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "records": {
       "type": "array",
       "minItems": 120,

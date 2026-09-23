@@ -9,7 +9,7 @@ already consumed; the 2026Q2 N50 is invalidated.
 
 ## Frozen primary estimand
 
-The primary cohort contains adult, single-dose, oral immediate-release, fasted,
+The primary cohort contains healthy adults in single-dose, oral immediate-release, fasted,
 unboosted studies reporting parent-drug plasma Cmax. Inputs available to the model
 are canonical parent SMILES and oral dose in mg; route is fixed to oral. Extended/modified release,
 fed studies, combination/boosted regimens, active-metabolite observations, and
@@ -36,14 +36,22 @@ source supplies Cmax CV/SD; do not mix it into the sampling CI.
 ## Size and power
 
 The observed paired Meta-versus-ML absolute-log-error SD is 0.24–0.26 log10 units.
-At two-sided alpha 0.05 and 80% power this implies approximately:
+For the CI-only superiority test at two-sided alpha 0.05 and 80% power,
+this implies approximately:
 
 - N=90–110 compounds to detect a 15% AAFE improvement.
 - N=210–260 compounds to detect a 10% AAFE improvement.
 
 The recommended target is **N=260 compounds**. A resource-limited design may fix
-N=120 before curation begins, but must then define the relevant effect as at least
-15%; it cannot interpret a nonsignificant 5–10% difference as equivalence.
+N=120 before curation begins, but it cannot interpret a nonsignificant 5–10%
+difference as equivalence.
+The release gate also requires the point estimate to pass a stricter margin
+(`R <= 0.90` at N=260 or `R <= 0.85` at N=120). At a true effect exactly on
+either margin, the approximate probability of passing that point-estimate gate
+is only 50%, regardless of N. With paired SD 0.24–0.26 log10, a normal
+approximation gives about 80% probability of passing the *combined* point and
+CI gate at true `R ≈ 0.873` for N=260 or `R ≈ 0.814` for N=120. The size
+figures above must not be presented as 80% power for the full release gate.
 
 ## Source and sampling strategy
 
@@ -77,9 +85,14 @@ N=120 before curation begins, but must then define the relevant effect as at lea
    the one-time run is committed. Before freezing the manifest, the custodian
    computes `label_content_sha256(labels)` from the complete label records and
    cycle ID, and places that digest in the source plan. The helper excludes
-   `manifest_sha256`, which is not yet known. The manifest binds the source-plan
+   `manifest_sha256` and `predictions_sha256`, which are not yet known. The manifest binds the source-plan
    hash, and scoring checks the revealed labels against the earlier digest.
    This commits the numeric Cmax outcomes before prediction without exposing them.
+   After the one-time prediction, the custodian records its file SHA256 in the
+   sealed label envelope as `predictions_sha256` and archives the envelope's
+   SHA256 in an independent timestamped record before revealing any Cmax values.
+   Scoring checks the custodian's prediction digest. The external timestamp is
+   an operational custody requirement; local hashes alone cannot prove chronology.
 
 The label-free, blinded-label, and frozen-prediction contracts are pinned in
 `data/reference/external_holdout_v1_manifest.schema.json` and
@@ -222,7 +235,8 @@ Allocate those compounds without outcome-based replacement to three disjoint
 roles: 120–150 calibration-development compounds, N=260 final external-test
 compounds, and a sealed reserve cohort. Calibration labels may be opened before
 the final freeze and immediately become development data; final-test and reserve
-labels remain inaccessible:
+labels remain inaccessible. The prediction manifest contains only final-test
+compound IDs, including any predeclared challenge arms on those same compounds:
 
 - regulatory clinical-pharmacology packages from FDA, EMA, PMDA, Health Canada,
   and TGA for 2020–2026 novel oral small molecules not already consumed;

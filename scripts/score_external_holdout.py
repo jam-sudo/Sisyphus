@@ -376,6 +376,8 @@ def main() -> None:
         raise ValueError("predictions cycle_id does not match manifest")
     if labels.get("manifest_sha256") != actual_sha:
         raise ValueError("labels manifest_sha256 is missing or does not match")
+    if labels["predictions_sha256"] != actual_predictions_sha:
+        raise ValueError("Custodian prediction commitment does not match frozen predictions")
     if labels.get("cycle_id") != manifest.get("cycle_id"):
         raise ValueError("labels cycle_id does not match manifest")
     freeze = manifest["freeze"]

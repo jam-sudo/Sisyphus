@@ -313,7 +313,10 @@ def _synthetic_contracts(n: int = 120):
         "artifact_provenance": {"resource_profile": "public"},
         "rows": predictions,
     }
-    labels = {"cycle_id": "synthetic-v1", "manifest_sha256": zero, "records": records}
+    labels = {
+        "cycle_id": "synthetic-v1", "manifest_sha256": zero,
+        "predictions_sha256": zero, "records": records,
+    }
     return manifest, payload, labels
 
 
@@ -470,6 +473,13 @@ def test_cli_uses_frozen_seed_and_bootstrap_count(tmp_path, monkeypatch):
     output_path = tmp_path / "score.json"
     manifest_path.write_text(json.dumps(manifest))
     verify_source_plan(manifest_path, manifest, lambda smiles: smiles)
+    extra = dict(manifest["compounds"][0])
+    extra.update(candidate_id="c300", smiles="C" * 301)
+    extra["arms"] = [{**extra["arms"][0], "primary_eligible": False}]
+    manifest["compounds"].append(extra)
+    with pytest.raises(ValueError, match="outside the frozen final-test allocation"):
+        verify_source_plan(manifest_path, manifest, lambda smiles: smiles)
+    manifest["compounds"].pop()
     allocation["calibration"][0] = "c0"
     allocation_path = tmp_path / "allocation.json"
     allocation_path.write_text(json.dumps(allocation))
@@ -501,6 +511,7 @@ def test_cli_uses_frozen_seed_and_bootstrap_count(tmp_path, monkeypatch):
     predictions["manifest_sha256"] = manifest_sha
     labels["manifest_sha256"] = manifest_sha
     predictions_path.write_text(json.dumps(predictions))
+    labels["predictions_sha256"] = sha256_file(predictions_path)
     labels_path.write_text(json.dumps(labels))
     monkeypatch.setattr(
         sys,
@@ -519,6 +530,15 @@ def test_cli_uses_frozen_seed_and_bootstrap_count(tmp_path, monkeypatch):
     report = json.loads(output_path.read_text())
     assert (report["seed"], report["n_bootstrap"]) == (7, 100000)
     assert report["label_content_sha256"] == plan["label_content_sha256"]
+
+    predictions["rows"][0]["meta_cmax_mg_l"] = 1.7
+    predictions_path.write_text(json.dumps(predictions))
+    sys.argv[sys.argv.index("--predictions-sha256") + 1] = sha256_file(predictions_path)
+    with pytest.raises(ValueError, match="Custodian prediction commitment"):
+        scorer.main()
+    predictions["rows"][0]["meta_cmax_mg_l"] = 1.1
+    predictions_path.write_text(json.dumps(predictions))
+    sys.argv[sys.argv.index("--predictions-sha256") + 1] = sha256_file(predictions_path)
 
     labels["records"][0]["arms"][0]["observed_cmax_mg_l"] = 1.7
     labels_path.write_text(json.dumps(labels))

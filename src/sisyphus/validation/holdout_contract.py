@@ -313,6 +313,8 @@ def verify_source_plan(
     }
     if primary_ids != set(allocation["final_test"]):
         raise ValueError("Manifest primary cohort does not match frozen final-test allocation")
-    if not {compound["candidate_id"] for compound in manifest["compounds"]} <= verified.keys():
-        raise ValueError("Manifest contains a compound absent from the verified shortlist")
+    if {compound["candidate_id"] for compound in manifest["compounds"]} != set(
+        allocation["final_test"]
+    ):
+        raise ValueError("Manifest contains a compound outside the frozen final-test allocation")
     return plan
