@@ -30,6 +30,8 @@ def _label_arm() -> dict:
         "release_type": "IR",
         "food_state": "fasted",
         "salt_form": None,
+        "dose_basis": "parent_active_moiety",
+        "dose_basis_evidence": "Source table reports 10 mg of parent drug.",
         "analyte": "parent",
         "matrix": "plasma",
         "dose_regimen": "single",
@@ -55,6 +57,8 @@ def _label_arm() -> dict:
         ("route", "iv", "route_not_oral"),
         ("release_type", "ER", "release_not_ir"),
         ("food_state", "fed", "not_fasted"),
+        ("dose_basis", "unknown", "dose_basis_unverified"),
+        ("dose_basis_evidence", "", "dose_basis_evidence_missing"),
         ("analyte", "active_metabolite", "not_parent_analyte"),
         ("matrix", "serum", "matrix_not_plasma"),
         ("dose_regimen", "multiple_steady_state", "not_single_dose"),
@@ -77,6 +81,9 @@ def test_source_record_hash_binds_metadata_but_not_outcome():
     assert source_record_hash(arm) != first
     arm["food_state"] = "fasted"
     arm["verified_by"] = ["curator-a", "curator-c"]
+    assert source_record_hash(arm) != first
+    arm["verified_by"] = ["curator-a", "curator-b"]
+    arm["dose_basis_evidence"] = "Different source table"
     assert source_record_hash(arm) != first
 
 

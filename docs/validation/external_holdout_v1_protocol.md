@@ -56,7 +56,13 @@ N=120 before curation begins, but must then define the relevant effect as at lea
    tables. Each value requires two-person verification against the cited table.
 4. Record parent/analyte, salt, formulation, IR/ER/MR, fed/fasted, dose form,
    route, single/multiple dose, population, co-medication, matrix, units, study N,
-   and source table/page.
+   and source table/page. The frozen `dose_mg` must be in parent active-moiety
+   units matching the model input. Record `dose_basis` and a source-specific
+   `dose_basis_evidence` statement. For a salt, cocrystal, or solvate, an
+   explicit original or regulatory equivalence may support conversion to
+   parent active-moiety mg; record the reported mass and conversion in that
+   evidence. Salt/solvate mass alone or an unknown basis is not primary-eligible.
+   Both curators verify this mapping before the prediction manifest is frozen.
 5. Store labels encrypted or in a separate access-controlled repository. The
    custodian retains both identities and outcomes until the container is frozen.
    The evaluator receives the frozen container plus a label-free arm manifest
@@ -69,6 +75,9 @@ The label-free, blinded-label, and frozen-prediction contracts are pinned in
 `data/reference/external_holdout_v1_predictions.schema.json`. Every executable
 stage validates these schemas. Primary eligibility is recomputed from the label
 metadata at scoring; the manifest boolean is never trusted by itself.
+The dose-basis requirement was added on 2026-09-23 after diagnostic P0 exposed
+a possible verlukast-sodium ambiguity. No V1 cohort or predictions had been
+frozen; P0 remains development evidence and is not a V1 test.
 
 ### Operational acquisition plan
 
