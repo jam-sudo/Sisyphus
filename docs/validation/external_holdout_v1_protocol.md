@@ -158,6 +158,12 @@ different arms, repeat one compound across studies, or name an investigational
 code with no resolved structure. The registry query therefore supplies
 source-discovery leads, not 75 verified primary arms, and cannot replace
 arm-level two-person adjudication against posted results and original reports.
+In a narrower automated triage of those 75 records, 24 had exactly one
+non-placebo intervention name. The [PubChem PUG REST](https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest)
+name-to-structure lookup resolved 16; 11 of those hit the repository's existing
+structure/name exclusion union, leaving five provisional structure-clean
+leads. This is not a verified eligibility count, and an unresolved name does
+not prove that its structure is novel.
 
 Allocate those compounds without outcome-based replacement to three disjoint
 roles: 120–150 calibration-development compounds, N=260 final external-test
