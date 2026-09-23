@@ -9,6 +9,8 @@ Meta-versus-ML superiority gate in `external_holdout_v1_protocol.md`.
 
 - Model/code: Git commit `618106b53b0c9ce3c5b8a8fe62c5adf8f02b2308`, public
   resource profile, with no retraining, weight changes, or compound overrides.
+  Git tree `a1eeb19d0b84125be9d25532fc6780371a23fdbb`; execution image ID
+  `sha256:2c15cad8fa4079cb5abfc4b9dff2e3fd8729462bd515787365d22643c1a20c71`.
 - Discovery snapshot: [NCATS Inxight FRDB](https://drugs.ncats.io/downloads-public),
   2024-12-30 ZIP SHA256
   `647b80d9cdac4a0517ce649570517dc1aff40545bdc84617ec9f1a56405f9c7a`.
@@ -32,6 +34,8 @@ Commit the label-free candidate manifest and prediction script before running
 the model. Predict **all** selected candidates with the frozen release and
 record the prediction-file SHA256 in a local commit before opening any Cmax value or
 original-source PK table. No candidate may be added after that commitment.
+Record strict prediction failures by arm rather than dropping the candidate;
+report the failure count and do not treat failed arms as valid scored predictions.
 
 ## Extract and score once
 
