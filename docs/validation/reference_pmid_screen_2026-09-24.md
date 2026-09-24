@@ -1,8 +1,8 @@
 # Development-reference PMID screen — 2026-09-24
 
 The counts and 14.4-fold interval below record this screen's intermediate
-state. The later [calibration reference audit](development_calibration_reference_audit_2026-09-24.md)
-supersedes them with 139 Cmax rows, 50 training records, and a 5.34-fold
+state. The later [source-context screen](development_source_context_screen_2026-09-24.md)
+supersedes them with 130 Cmax rows, 41 training records, and a 5.34-fold
 development diagnostic interval (73.3% consumed-development coverage).
 
 This is a source-integrity check of the 173 `clinical_pk.json` rows carrying

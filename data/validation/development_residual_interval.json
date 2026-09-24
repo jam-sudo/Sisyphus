@@ -3,12 +3,12 @@
   "score": "abs_log10_fold_error",
   "interval": "multiplicative: pred /\u00f7 10**q",
   "calibration_set": "partially_in_sample_development",
-  "n_calibration_meta": 50,
-  "n_training_reference": 50,
+  "n_calibration_meta": 41,
+  "n_training_reference": 41,
   "skipped_training_reference": [],
   "generated_from": "scripts/calibrate_conformal.py",
   "source_cache_sha256": "fcf55297345e5df009e7647191c9de03ffbe705cbaf70d9762f7efb13abdd843",
-  "calibration_reference_sha256": "52923dd9d34d6ba706cb3895246a4b1a440bd9fcf67de951bdd8de9b5be7a057",
+  "calibration_reference_sha256": "d444bf324cff603e03bb2e899e28e78e93b1f98cc339186098d0dfef816e5388",
   "holdout_membership_sha256": "8c5d1b0c42247749767ac3a7da3bd61573e0f9bf45f503347a70f87b6b3ad02a",
   "model_artifact_sha256": {
     "models/direct_pk/xgboost_cmax.json": "14391eb0881cb3ec83ab2f81592c5fe75da7c949290ec438fddc2d7136f792a0",
@@ -22,34 +22,34 @@
   "validity": "not split-conformal; fitted components saw calibration outcomes",
   "tracks": {
     "meta": {
-      "0.5": 0.3464964370292309,
-      "0.2": 0.675510564165825,
+      "0.5": 0.24509133584375364,
+      "0.2": 0.683267524446912,
       "0.1": 0.7273773842519349,
       "0.05": 0.8411101733031203
     },
     "engine": {
-      "0.5": 0.6123066528108525,
-      "0.2": 1.290066469557174,
-      "0.1": 1.453073210661891,
-      "0.05": 1.7929130806302982
+      "0.5": 0.5807111637813369,
+      "0.2": 1.0341663903241736,
+      "0.1": 1.408600675728178,
+      "0.05": 1.6336643467602132
     },
     "ml": {
       "0.5": 0.3001002863677442,
       "0.2": 0.6150080875917929,
       "0.1": 0.8320331793035467,
-      "0.05": 0.9032025605798644
+      "0.05": 0.8717188646652256
     }
   },
   "consumed_development_benchmark_coverage": {
     "meta": {
-      "0.5": 0.5349,
+      "0.5": 0.3953,
       "0.2": 0.7326,
       "0.1": 0.7326,
       "0.05": 0.8256
     },
     "engine": {
-      "0.5": 0.5581,
-      "0.2": 0.9186,
+      "0.5": 0.5349,
+      "0.2": 0.8256,
       "0.1": 0.9535,
       "0.05": 0.9767
     },
@@ -57,7 +57,7 @@
       "0.5": 0.407,
       "0.2": 0.6628,
       "0.1": 0.7791,
-      "0.05": 0.8023
+      "0.05": 0.7907
     }
   }
 }

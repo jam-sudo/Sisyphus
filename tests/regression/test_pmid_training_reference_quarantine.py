@@ -54,6 +54,8 @@ def test_residual_led_training_reference_audit():
     for name in (
         "lanthanum carbonate", "cefpodoxime proxetil", "serdexmethylphenidate",
         "carglumic acid", "belzutifan", "pazopanib",
+        "benzhydrocodone", "dimethyl", "guanfacine er", "naproxen", "oseltamivir",
+        "atazanavir", "butalbital", "cefixime", "efavirenz",
     ):
         row = data["drugs"][name]
         assert row["tier"] == "unverified"
@@ -63,6 +65,8 @@ def test_residual_led_training_reference_audit():
     for name, dose, cmax in (
         ("primaquine", 30, 0.127), ("flutamide", 250, 0.0252),
         ("carisoprodol", 350, 1.8), ("atorvastatin", 40, 0.01705),
+        ("naproxen oral", 500, 64.3),
+        ("clarithromycin", 500, 1.77),
     ):
         row = data["drugs"][name]
         assert row["pk_params"]["cmax_mg_L"] == pytest.approx(cmax)

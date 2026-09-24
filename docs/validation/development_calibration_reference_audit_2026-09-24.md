@@ -1,5 +1,9 @@
 # Development calibration reference audit — 2026-09-24
 
+The counts and interval below are this audit's intermediate state. The later
+[source-context screen](development_source_context_screen_2026-09-24.md)
+supersedes them with 130 Cmax records and 41 training records.
+
 This was a residual-led audit of ten large-error **training** labels. It does not
 change the 86 scored development benchmark records or supply independent evidence.
 
