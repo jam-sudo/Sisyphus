@@ -9962,16 +9962,16 @@
     },
     "indomethacin": {
       "name": "indomethacin",
-      "tier": "gold",
-      "source": "DrugBank [A177871]: 25mg oral, Cmax=1.54 µg/mL",
+      "tier": "silver",
+      "source": "DrugBank [A177871] reports mean parent Cmax 1.54 +/- 0.76 mcg/mL after a single 25 mg oral dose in fasting subjects; original study not recovered. US indomethacin capsule label independently reports approximately 1 mcg/mL after a single 25 mg capsule, showing formulation/study variation; https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5b05b8bc-4df0-4175-bf53-72129fb21b50",
       "dose_mg": 25.0,
       "route": "oral",
       "smiles": "COc1ccc2c(c1)c(CC(=O)O)c(C)n2C(=O)c1ccc(Cl)cc1",
       "pk_params": {
         "cmax_mg_L": 1.54
       },
-      "ct_curve": null,
-      "in_holdout": true
+      "in_holdout": true,
+      "correction_note": "2026-09-24: exact 1.54 mg/L value remains secondary-source only, so downgraded to silver; its 25 mg oral arm is plausible but not primary-verified. Removed synthetic curve."
     },
     "irbesartan": {
       "name": "irbesartan",
@@ -10709,15 +10709,15 @@
     "ketoconazole": {
       "name": "ketoconazole",
       "tier": "gold",
-      "source": "DrugBank: 200mg oral, Cmax=3 mcg/mL",
+      "source": "DailyMed ketoconazole tablet label, Pharmacokinetics: single oral 200 mg tablet taken with a meal, mean parent Cmax approximately 3.5 mcg/mL; https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=369f31da-d3c3-49b8-956f-f70598760164",
       "dose_mg": 200.0,
       "route": "oral",
       "smiles": "CC(=O)N1CCN(c2ccc(OCC3COC(Cn4ccnc4)(c4ccc(Cl)cc4Cl)O3)cc2)CC1",
       "pk_params": {
-        "cmax_mg_L": 3.0
+        "cmax_mg_L": 3.5
       },
-      "ct_curve": null,
-      "in_holdout": true
+      "in_holdout": true,
+      "correction_note": "2026-09-24: replaced unsourced secondary 3.0 mg/L with label-reported approximately 3.5 mg/L after a single 200 mg fed tablet; removed synthetic curve. Food context remains a benchmark limitation."
     },
     "ketoprofen": {
       "name": "ketoprofen",
@@ -11847,15 +11847,15 @@
     "levofloxacin": {
       "name": "levofloxacin",
       "tier": "gold",
-      "source": "DrugBank: 500mg oral, Cmax=6.2 µg/mL",
+      "source": "DailyMed levofloxacin tablet label, Clinical Pharmacology Table 10: healthy males aged 18-53, single 500 mg oral tablet, mean parent Cmax 5.1 +/- 0.8 mcg/mL, AUC 47.9 +/- 6.8 mcg*h/mL; the separately reported 6.2 mcg/mL follows 500 mg IV infusion; https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=f14cf651-a213-4a4f-adb9-f628562af27c&type=display",
       "dose_mg": 500.0,
       "route": "oral",
       "smiles": "C[C@H]1COc2c(N3CCN(C)CC3)c(F)cc3c(=O)c(C(=O)O)cn1c23",
       "pk_params": {
-        "cmax_mg_L": 6.2
+        "cmax_mg_L": 5.1
       },
-      "ct_curve": null,
-      "in_holdout": true
+      "in_holdout": true,
+      "correction_note": "2026-09-24: corrected route collision: 6.2 mg/L was a 500 mg IV infusion peak, not oral. Same label provides 5.1 mg/L for a single 500 mg oral tablet in healthy males. Removed synthetic curve."
     },
     "levonorgestrel": {
       "name": "levonorgestrel",
@@ -13282,15 +13282,15 @@
     "metronidazole": {
       "name": "metronidazole",
       "tier": "gold",
-      "source": "DrugBank [L7432]: 500mg oral, Cmax=13 mg/L",
+      "source": "Pfizer Canada METRONIDAZOLE INJECTION USP product monograph, Pharmacokinetics Figure 1: single oral 500 mg metronidazole in nine females, mean parent peak approximately 13 mg/L; https://webfiles.pfizer.com/file/a1878dae-540b-4649-8912-3273916d4577",
       "dose_mg": 500.0,
       "route": "oral",
       "smiles": "Cc1ncc([N+](=O)[O-])n1CCO",
       "pk_params": {
         "cmax_mg_L": 13.0
       },
-      "ct_curve": null,
-      "in_holdout": true
+      "in_holdout": true,
+      "correction_note": "2026-09-24: original product monograph confirms single oral 500 mg / approximately 13 mg/L parent peak, including route and nine-female study context. Removed synthetic curve."
     },
     "mexiletine": {
       "name": "mexiletine",

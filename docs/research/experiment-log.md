@@ -10,7 +10,29 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
-## 2026-09-24 (cont.) — Recheck secondary DrugBank PK arms against regulatory sources
+## 2026-09-24 (cont.) — Correct the levofloxacin route and ketoconazole food arm
+
+The DrugBank follow-up identified a route collision: **6.2 mg/L** is the
+500 mg **IV** levofloxacin peak, whereas the same FDA label reports
+**5.1 mg/L** after a single 500 mg **oral tablet** in healthy men. The FDA
+ketoconazole label reports about **3.5 mg/L** after one 200 mg tablet with a
+meal, replacing the unsourced 3.0 mg/L. A manufacturer monograph confirms
+the metronidazole 500 mg oral / approximately 13 mg/L arm. The exact
+indomethacin 25 mg / 1.54 mg/L value remains secondary-source only; it is
+marked silver because a US label gives about 1 mg/L in a separate 25 mg
+capsule study. Synthetic curves were removed from all four rows. Source
+details are in the dated DrugBank-arm audit.
+
+After public-profile regeneration, the **N=85** development cache yields
+Meta AAFE **2.9079** (conditional bootstrap 95% CI **2.3839–3.5930**),
+Engine **3.9551**, direct ML **3.3040**, and descriptive in-domain Meta
+**2.8981** (N=69). The nominal 90% development-residual half-width remains
+**10.24×**, covering **78/85 (91.8%)** on the consumed cohort. No fitted
+model changed; these figures remain unsuitable for external claims.
+
+---
+
+## 2026-09-24 (cont.) — Recheck first four secondary DrugBank PK arms against regulatory sources
 
 The 100 mcg clonidine / 400.72 pg/mL arm remains traceable only to a
 secondary DrugBank statement, so it is quarantined pending the exact primary

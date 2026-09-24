@@ -89,3 +89,11 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert refs["bexagliflozin"].cmax_obs == 0.134
     for name in ("clonidine", "pindolol", "sumatriptan", "bexagliflozin"):
         assert "ct_curve" not in data["drugs"][name]
+    assert data["drugs"]["indomethacin"]["tier"] == "silver"
+    assert refs["indomethacin"].cmax_obs == 1.54
+    assert refs["ketoconazole"].cmax_obs == 3.5
+    assert refs["levofloxacin"].dose_mg == 500.0
+    assert refs["levofloxacin"].cmax_obs == 5.1
+    assert refs["metronidazole"].cmax_obs == 13.0
+    for name in ("indomethacin", "ketoconazole", "levofloxacin", "metronidazole"):
+        assert "ct_curve" not in data["drugs"][name]
