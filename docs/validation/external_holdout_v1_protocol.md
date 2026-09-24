@@ -263,6 +263,23 @@ numeric Cmax outcomes were inspected in this screen. These aggregate counts
 were obtained from the supplements retrieved 2026-09-23 and cannot establish
 the N=120 cohort.
 
+The independently maintained [e-Drug3D collection](https://chemoinfo.ipmc.cnrs.fr/edrug3d.html)
+has a downloadable [PK table](https://chemoinfo.ipmc.cnrs.fr/DOWNLOAD/MOLDB/e-Drug3D_2197_PK.txt)
+(SHA256 `39a89a1e49f91397773275699757933f0470563f6d137301e8397b82e98e766c`)
+and [structure SDF](https://chemoinfo.ipmc.cnrs.fr/DOWNLOAD/MOLDB/e-Drug3D_2197.sdf)
+(SHA256 `ca26479ed6bf2dfd5fd7ffb5cfcdccdb76f429acaee5bff8641c513134f7a264`).
+A 2026-09-23 metadata screen found 990 rows with a finite numeric Cmax field,
+683 of them marked oral, 632 also not marked as metabolites, and 36 of those
+without an exact normalized-name hit in the repository exclusions. Joining
+the PK ID to SDF structure and excluding InChIKey-14 collisions leaves **21
+distinct provisional structures**. The table does not provide the dose,
+fasting state, formulation, sampling matrix, or a Cmax-specific source link;
+its route field may list several routes for one compound. Thus these 21 are
+not verified oral Cmax arms, and the collection cannot by itself supply the
+N=120 cohort. A web preview exposed numeric Cmax values for some records
+among PK IDs 1–61 to the model-development agent before any freeze. Exclude
+all 1–61 from any future blinded cohort drawn from this source.
+
 The repository's DrugBank `pk_data.csv` is narrative PK text, not the separately
 licensed structured Cmax table. A value-blind screen of its absorption records
 (`pk_data.csv` SHA256 `8a0c7d11da7bd1e91cddc4fb2bb6291f584b5481f0d3949ff22949f71ade9d5f`;
