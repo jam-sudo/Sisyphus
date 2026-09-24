@@ -1,7 +1,7 @@
 # Development-reference PMID screen — 2026-09-24
 
-This is a source-integrity check of the 173 `clinical_pk.json` rows still carrying
-Cmax, not an independent evaluation. Ten retained rows have a PMID in
+This is a source-integrity check of the 173 `clinical_pk.json` rows carrying
+Cmax at the start of this screen, not an independent evaluation. Ten rows had a PMID in
 their `source` field. The original 14 identifiers were resolved against the
 [NCBI PubMed ESummary API](https://www.ncbi.nlm.nih.gov/books/NBK25499/), then
 the suspect sources were checked against the original publications.
@@ -71,7 +71,28 @@ now **168 Cmax rows**. The development-residual artifact uses **57 of 58**
 remaining training references (atenolol has an unknown route); its nominal
 90% half-width is now **14.4-fold**. The N=107 development benchmark is
 unchanged because these five were training references. The remaining PMID
-citations still require arm-level verification.
+citations are addressed below.
+
+The final three PMID-linked development rows were checked against source
+tables and methods. [Blomqvist
+1988](https://pk-db.com/media/data/Blomqvist1988.pdf), Table 1, reports the
+atenolol 50 mg Cmax after **four once-daily doses** (day 4, 922 nmol/L), so
+it cannot label a single-dose prediction. [Wahlländer
+1990](https://pk-db.com/media/data/Wahllaender1990.pdf) administered **200 mg
+oral caffeine** in the afternoon and another **200 mg** the next morning to
+patients with liver disease and controls, not the recorded 100 mg arm. The
+atenolol and caffeine Cmax values, other unsupported PK parameters, and
+synthetic curves were quarantined. [Elkoshi
+2002](https://pk-db.com/media/data/Elkoshi2002.pdf), Table II, does contain
+a usable fasting **single oral 20 mg** omeprazole reference arm: Losec,
+N=40 healthy male volunteers, arithmetic mean Cmax **311 μg/L** and
+AUC0–∞ **567 μg·h/L**. The recorded 141.2 μg/L was replaced with
+0.311 mg/L; its AUC was corrected to 0.567 mg·h/L and synthetic curve
+removed. There are now **166 Cmax rows**. All **56 of 56** remaining training
+references run in the development-residual calculation, whose nominal 90%
+half-width remains **14.4-fold**. The unchanged N=107 benchmark is consumed
+development evidence; these corrections do not establish independent
+performance.
 
 After morphine correction, a public-profile 107-compound rerun had zero skips;
 the other 106 predictions matched the previous cache to 1e-8 relative. The

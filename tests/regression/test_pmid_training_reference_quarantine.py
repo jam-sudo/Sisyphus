@@ -15,7 +15,7 @@ def test_pmid_training_arms_are_quarantined():
     data = json.loads(REFERENCE.read_text())
     for name in (
         "acetaminophen", "amoxicillin", "diazepam", "metoprolol",
-        "midazolam", "theophylline", "verapamil",
+        "midazolam", "theophylline", "verapamil", "atenolol", "caffeine",
     ):
         row = data["drugs"][name]
         assert row["tier"] == "unverified"
@@ -24,7 +24,7 @@ def test_pmid_training_arms_are_quarantined():
     refs = {row.name: row for row in load_reference(REFERENCE)}
     assert not {
         "acetaminophen", "amoxicillin", "diazepam", "metoprolol",
-        "midazolam", "theophylline", "verapamil",
+        "midazolam", "theophylline", "verapamil", "atenolol", "caffeine",
     } & {
         row.name for row in refs.values()
     }
@@ -35,6 +35,13 @@ def test_pmid_training_arms_are_quarantined():
     assert "ct_curve" not in metformin
     assert refs["metformin"].dose_mg == pytest.approx(500 * 129.167 / 165.63, rel=1e-5)
     assert refs["metformin"].cmax_obs == pytest.approx(1.03)
+    omeprazole = data["drugs"]["omeprazole"]
+    assert omeprazole["tier"] == "gold"
+    assert "Losec" in omeprazole["source"]
+    assert omeprazole["dose_mg"] == 20.0
+    assert omeprazole["pk_params"] == {"cmax_mg_L": 0.311, "auc_mg_h_L": 0.567}
+    assert "ct_curve" not in omeprazole
+    assert refs["omeprazole"].cmax_obs == pytest.approx(0.311)
     assert data["metadata"]["n_with_cmax"] == sum(
         bool(row.get("pk_params", {}).get("cmax_mg_L"))
         for row in data["drugs"].values()
