@@ -1,9 +1,9 @@
 # Development Cmax reference source audit — 2026-09-24
 
 This is an audit of the repeatedly used development benchmark, not an
-independent model evaluation. Eighteen scored rows used an estimated label, cited
+independent model evaluation. Twenty-three scored rows used an estimated label, cited
 the wrong analyte/arm, or lacked support for the stated Cmax. The rule was
-applied to all eighteen rows before re-scoring; no model weights or fitted
+applied to all twenty-three rows before re-scoring; no model weights or fitted
 artifacts changed.
 
 | Drug | Previous benchmark label | Source finding | Current disposition |
@@ -26,12 +26,17 @@ artifacts changed.
 | Tamsulosin | 1 mg, 0.0101 mg/L | The [tamsulosin label](https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=00097e78-9c04-4e62-8260-ddb50e9a6a93&type=display), Table 2, gives **10.1 ± 4.8 ng/mL** after **0.4 mg once daily with a light breakfast** in 23 healthy volunteers. | Claimed single 1 mg Cmax quarantined. |
 | Levocetirizine | 30 mg, 0.45 mg/L | The [XYZAL label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1673f7ff-0c7c-4403-86cf-c05eb1475222) attributes **450 ng/mL** to **5 mg in children**, while it separately reports **270 ng/mL** after a **single 5 mg adult** tablet. | Replaced with adult 5 mg / 0.270 mg/L arm; dihydrochloride dose basis recorded. |
 | Methylphenidate | 72 mg, 0.0091 mg/L | The [methylphenidate oral-solution label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=57fd619e-687d-403c-a77a-3dc3a1bab65a) reports **9.1 ng/mL** and AUC **46.7 ng·h/mL** after a **single 20 mg fasted oral solution**, not 72 mg. | Replaced with 20 mg / 0.0091 mg/L arm; hydrochloride dose basis recorded. |
+| Darolutamide | 600 mg, 4.79 mg/L | The [NUBEQA label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1a7cb212-56e4-4b9d-a73d-bfee7fe4735e) identifies **4.79 mg/L as steady-state Cmax** after 600 mg **twice daily** with food and about twofold accumulation. | Single-dose Cmax quarantined. |
+| Sonidegib | 200 mg, 1.03 mg/L | The [ODOMZO label](https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=028312dc-d155-4fd5-8abd-6bb9f011d3cc) identifies **1030 ng/mL as estimated steady-state Cmax** after 200 mg daily; accumulation is about **19-fold** over four months. | Single-dose Cmax quarantined. |
+| Clozapine | 75 mg, 0.413 mg/L | The [clozapine ODT label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9ae4b8e4-d8b1-4f01-bb4c-cd1cea90b219) identifies **413 ng/mL as steady-state Cmax** after **100 mg twice daily**. | Claimed single 75 mg Cmax quarantined. |
+| Ranolazine | 500 mg, 2.6 mg/L | The [ranolazine ER label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0cf58732-c242-49b0-8e3f-248778b4458d) identifies **2600 ng/mL as steady-state Cmax** after **1000 mg twice daily**. | Claimed single 500 mg Cmax quarantined. |
+| Itraconazole | 200 mg, 0.5 mg/L | The [itraconazole capsule label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e564067e-e469-4c51-9076-75f89f5c5cdf) identifies **0.5 µg/mL as steady-state Cmax** after **100 mg once daily** for about 15 days; 200 mg once daily gives 1.1 µg/mL. | Claimed single 200 mg Cmax quarantined. |
 
-The scored benchmark is now **N=94** from the unchanged 107-compound split.
-Meta AAFE is **2.7286** (compound bootstrap 95% CI **2.2766–3.2947**), versus
-**2.8078** (2.3531–3.3845) for the prior N=98 cache. Four unsupported
-references were excluded and two exact arms replaced; this is a change in label
-integrity, not model quality. Both cohorts
+The scored benchmark is now **N=89** from the unchanged 107-compound split.
+Meta AAFE is **2.7842** (compound bootstrap 95% CI **2.3030–3.4144**), versus
+**2.7286** (2.2766–3.2947) for the prior N=94 cache. Five mismatched
+steady-state references were excluded; this is a change in label integrity,
+not model quality. Both cohorts
 have repeatedly informed system development.
 
 The engine observes `venous_blood`, whose compartment concentration is amount
