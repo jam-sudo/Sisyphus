@@ -131,12 +131,12 @@
   },
   {
     "drug_name": "lamivudine",
-    "dose_mg": 150,
-    "cmax_mg_L": 1.4,
-    "cmax_value_original": 1.4,
+    "dose_mg": 300,
+    "cmax_mg_L": 2.6,
+    "cmax_value_original": 2.6,
     "cmax_unit_original": "mcg/mL",
-    "source": "FDA label (Epivir); Moore et al., AAC 2012",
-    "notes": "150mg single dose. Geometric mean Cmax 1.40 mcg/mL. Rapidly absorbed, Tmax 0.5-1.5h. Bioavailability ~82%.",
+    "source": "DailyMed lamivudine tablet label Table 7 (https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=2d7db3b2-9b3c-3031-e063-6294a90a342c)",
+    "notes": "Single 300 mg oral dose in HIV-1-infected adults with creatinine clearance >60 mL/min (N=6): mean Cmax 2.6 +/- 0.5 mcg/mL. The prior 150 mg/1.40 mcg/mL label arm used twice-daily dosing with other antiretrovirals.",
     "status": "confirmed"
   },
   {
@@ -185,8 +185,8 @@
     "cmax_mg_L": 0.069,
     "cmax_value_original": 69,
     "cmax_unit_original": "ng/mL",
-    "source": "FDA label (Purinethol/Purixan); single 50mg dose fasted healthy adults",
-    "notes": "50mg single dose fasted healthy adults. Mean Cmax 69 ng/mL. Another formulation reported 93 ng/mL. Tmax ~0.75h. t1/2 ~1.3h.",
+    "source": "DailyMed mercaptopurine tablet label section 12.3 (https://www.dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=c3b5b8b0-bc5c-4ce9-bbdc-febba60c2658&type=display)",
+    "notes": "Single 50 mg oral tablet dose in fasted healthy adults: mean Cmax 69 ng/mL. The separate PURIXAN suspension label reports a 93 ng/mL median, not the scored tablet mean.",
     "status": "confirmed"
   },
   {

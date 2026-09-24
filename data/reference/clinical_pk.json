@@ -1888,13 +1888,14 @@
     "lamivudine": {
       "name": "lamivudine",
       "tier": "gold",
-      "source": "FDA label (Epivir); Moore et al., AAC 2012",
-      "dose_mg": 150,
+      "source": "DailyMed lamivudine tablet label, Table 7: single 300 mg oral dose in HIV-1-infected adults with creatinine clearance >60 mL/min (N=6), mean parent-plasma Cmax 2.6 +/- 0.5 mcg/mL; https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=2d7db3b2-9b3c-3031-e063-6294a90a342c",
+      "dose_mg": 300,
       "route": "oral",
       "pk_params": {
-        "cmax_mg_L": 1.4
+        "cmax_mg_L": 2.6
       },
-      "smiles": "Nc1ccn([C@@H]2CS[C@H](CO)O2)c(=O)n1"
+      "smiles": "Nc1ccn([C@@H]2CS[C@H](CO)O2)c(=O)n1",
+      "correction_note": "2026-09-24: replaced the prior 150 mg/1.40 mcg/mL label value, which came from 150 mg twice-daily treatment with other antiretrovirals rather than a single dose."
     },
     "lamotrigine": {
       "name": "lamotrigine",
@@ -2152,13 +2153,14 @@
     "mercaptopurine": {
       "name": "mercaptopurine",
       "tier": "gold",
-      "source": "FDA label (Purinethol/Purixan); single 50mg dose fasted healthy adults",
+      "source": "DailyMed mercaptopurine tablet label, section 12.3: single 50 mg oral tablet dose in fasted healthy adults, mean parent-plasma Cmax 69 ng/mL; https://www.dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=c3b5b8b0-bc5c-4ce9-bbdc-febba60c2658&type=display",
       "dose_mg": 50,
       "route": "oral",
       "pk_params": {
         "cmax_mg_L": 0.069
       },
-      "smiles": "S=c1nc[nH]c2nc[nH]c12"
+      "smiles": "S=c1nc[nH]c2nc[nH]c12",
+      "correction_note": "2026-09-24: retained the tablet mean of 69 ng/mL and separated it from PURIXAN suspension's 93 ng/mL median."
     },
     "metaxalone": {
       "name": "metaxalone",

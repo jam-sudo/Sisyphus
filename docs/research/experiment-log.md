@@ -10,6 +10,23 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Replace lamivudine repeated-dose label arm; separate mercaptopurine formulations
+
+Lamivudine's scored 150 mg / 1.40 µg/mL peak was incorrectly called a single
+dose; the label reports it during twice-daily combination therapy. We replaced
+it with the label's directly reported single 300 mg / 2.6 µg/mL normal-renal
+stratum. Mercaptopurine's scored 69 ng/mL mean belongs to the tablet label;
+the separate 93 ng/mL median belongs to PURIXAN suspension. See [source
+adjudication](../validation/development_lamivudine_mercaptopurine_2026-09-24.md).
+
+On the unchanged **N=74** repeatedly used development set, Meta AAFE
+**2.8841 → 2.8812** (conditional bootstrap CI **2.3378–3.6002**), Engine
+**3.9096**, direct ML **3.2687**. Fitted models were unchanged. The minor score
+movement is a reference correction, not an independent accuracy improvement.
+Colima was not used.
+
+---
+
 ## 2026-09-24 (cont.) — Correct ketorolac salt dose and exact peak; locate brincidofovir control arm
 
 The ketorolac 10 mg input was tromethamine salt mass while its SMILES is the

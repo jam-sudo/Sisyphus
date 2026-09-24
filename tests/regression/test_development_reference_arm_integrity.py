@@ -233,6 +233,12 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert next(row for row in fda_rows if row["drug_name"] == "ketorolac")["cmax_mg_L"] == pytest.approx(0.87)
     assert refs["brincidofovir"].cmax_obs == pytest.approx(0.251)
     assert "CMX001-120" in data["drugs"]["brincidofovir"]["source"]
+    assert refs["lamivudine"].dose_mg == 300.0
+    assert refs["lamivudine"].cmax_obs == pytest.approx(2.6)
+    assert "Table 7" in data["drugs"]["lamivudine"]["source"]
+    assert refs["mercaptopurine"].cmax_obs == pytest.approx(0.069)
+    assert "tablet" in data["drugs"]["mercaptopurine"]["source"]
+    assert next(row for row in fda_rows if row["drug_name"] == "mercaptopurine")["source"].startswith("DailyMed PURIXAN oral suspension")
     assert refs["phenytoin"].dose_mg == pytest.approx(300 * 252.27 / 274.25, rel=1e-6)
     assert refs["phenytoin"].cmax_obs == pytest.approx(2.32)
     assert refs["phenytoin"].auc_obs == pytest.approx(108.99)

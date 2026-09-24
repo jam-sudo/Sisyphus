@@ -135,9 +135,9 @@
     "cmax_mg_L": 2.6,
     "cmax_unit_original": "mcg/mL",
     "cmax_value_original": 2.6,
-    "source": "DailyMed SPL",
-    "context": "300mg single oral dose, normal renal function: Cmax 2.6 ± 0.5 mcg/mL.",
-    "status": "extracted"
+    "source": "DailyMed lamivudine tablet label Table 7 (https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=2d7db3b2-9b3c-3031-e063-6294a90a342c)",
+    "context": "Single 300 mg oral dose in HIV-1-infected adults with creatinine clearance >60 mL/min (N=6): mean Cmax 2.6 ± 0.5 mcg/mL.",
+    "status": "corrected"
   },
   {
     "drug_name": "leflunomide",
@@ -185,9 +185,9 @@
     "cmax_mg_L": 0.093,
     "cmax_unit_original": "ng/mL",
     "cmax_value_original": 93.0,
-    "source": "DailyMed SPL",
-    "context": "50mg single oral dose, healthy adults: Cmax 93 ng/mL (40-204 ng/mL).",
-    "status": "extracted"
+    "source": "DailyMed PURIXAN oral suspension label section 12.3 (https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9fd27952-7787-47d9-b6cf-7af2dc38217b)",
+    "context": "Single 50 mg oral suspension dose in fasted healthy adults: median Cmax 93 ng/mL (range 40-204 ng/mL). The scored tablet mean is separately 69 ng/mL.",
+    "status": "corrected"
   },
   {
     "drug_name": "nilotinib",

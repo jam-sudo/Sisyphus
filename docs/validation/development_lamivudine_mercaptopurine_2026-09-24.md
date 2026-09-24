@@ -1,0 +1,10 @@
+# Lamivudine and mercaptopurine development-reference checks (2026-09-24)
+
+These were the next two alphabetic scored gold rows without source URLs, selected before looking at their model errors. The benchmark has already informed development and is not an external holdout.
+
+| Drug | Primary-source finding | Action |
+| --- | --- | --- |
+| Lamivudine | The [DailyMed lamivudine tablet label](https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=2d7db3b2-9b3c-3031-e063-6294a90a342c) attributes the old **150 mg / 1.40 µg/mL** geometric mean to **12 HIV-1-infected adults taking 150 mg twice daily with other antiretrovirals**. Table 7 instead gives a **single oral 300 mg dose** in the normal-renal-function stratum of HIV-1-infected adults (**N=6**, creatinine clearance >60 mL/min), with mean Cmax **2.6 ± 0.5 µg/mL**. The label does not state fasting status for Table 7. | Replaced the falsely described single-dose 150 mg arm with the directly reported single-dose 300 mg arm; retained the same parent SMILES. |
+| Mercaptopurine | The [DailyMed tablet label](https://www.dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=c3b5b8b0-bc5c-4ce9-bbdc-febba60c2658&type=display) reports **mean 69 ng/mL** after one **50 mg oral tablet** dose under fasting conditions in healthy adults. The separate [PURIXAN oral-suspension label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9fd27952-7787-47d9-b6cf-7af2dc38217b) reports **median 93 ng/mL** (range 40–204) after a 50 mg fasted dose. These are different formulations and summary statistics. | Kept the scored tablet mean and clarified its source. Labeled the distinct 93 ng/mL extraction as a suspension median. |
+
+After reference-only regeneration, the scored development set remains **N=74**. Meta AAFE moves **2.8841 → 2.8812** (conditional bootstrap CI **2.3378–3.6002**); Engine is **3.9096**, direct ML **3.2687**. The paired Meta/ML AAFE ratio is **0.8815** (CI **0.7686–1.0043**, crossing 1). Fitted models are unchanged. This small score movement comes from a corrected label and does not demonstrate improved model accuracy or independent generalization.
