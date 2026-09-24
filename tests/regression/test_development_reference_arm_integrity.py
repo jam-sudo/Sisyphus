@@ -168,7 +168,7 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert data["drugs"]["indomethacin"]["tier"] == "gold"
     assert refs["indomethacin"].dose_mg == 50.0
     assert refs["indomethacin"].cmax_obs == 3.107
-    assert refs["ketoconazole"].cmax_obs == 3.5
+    assert refs["ketoconazole"].cmax_obs == 4.22
     assert refs["levofloxacin"].dose_mg == 500.0
     assert refs["levofloxacin"].cmax_obs == 5.1
     assert refs["metronidazole"].cmax_obs == 13.0

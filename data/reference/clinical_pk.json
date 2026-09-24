@@ -1828,15 +1828,15 @@
     "ketoconazole": {
       "name": "ketoconazole",
       "tier": "gold",
-      "source": "DailyMed ketoconazole tablet label, Pharmacokinetics: single oral 200 mg tablet taken with a meal, mean parent Cmax approximately 3.5 mcg/mL; https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=369f31da-d3c3-49b8-956f-f70598760164",
+      "source": "Huang et al., Antimicrob Agents Chemother 1986;30:206-210, Table 2: single oral 200 mg ketoconazole tablet, 23 healthy young men after an overnight fast; arithmetic mean parent-plasma Cmax 4.22 +/- 2.47 mcg/mL. Standard lunch was about 3-4 h postdose, so this arm does not meet the stricter External Holdout V1 >=4 h postdose fast criterion. https://doi.org/10.1128/AAC.30.2.206; https://e-lactancia.org/media/papers/Ketoconazol-FKAntAgChem1986.pdf",
       "dose_mg": 200.0,
       "route": "oral",
       "smiles": "CC(=O)N1CCN(c2ccc(OCC3COC(Cn4ccnc4)(c4ccc(Cl)cc4Cl)O3)cc2)CC1",
       "pk_params": {
-        "cmax_mg_L": 3.5
+        "cmax_mg_L": 4.22
       },
       "in_holdout": true,
-      "correction_note": "2026-09-24: replaced unsourced secondary 3.0 mg/L with label-reported approximately 3.5 mg/L after a single 200 mg fed tablet; removed synthetic curve. Food context remains a benchmark limitation."
+      "correction_note": "2026-09-24: replaced approximate fed-label 3.5 mg/L with the original study's exact fasted 200 mg tablet arm (4.22 mg/L, N=23). The 3-4 h postdose lunch remains a limitation against the stricter external-primary rule; no synthetic curve."
     },
     "ketoprofen": {
       "name": "ketoprofen",

@@ -1,33 +1,33 @@
 {
   "computed_at": "2026-09-24-audited_reference",
   "source_cache": "data/training/4track_holdout_predictions.json",
-  "source_cache_sha256": "83ebc98f4051c72d5a7388959238a580c0ea5fa64b6e5c6059b476a0976226dd",
-  "context": "Outcome-blind primary-source indomethacin reference replacement; repeatedly accessed development benchmark, not external validation.",
+  "source_cache_sha256": "a5415f69f9db1883690be20ead017c6c48966b4e0c4a782f19a8859d8ef06104",
+  "context": "Outcome-blind primary-source ketoconazole reference replacement; repeatedly accessed development benchmark, not external validation.",
   "method": "bootstrap on abs(log10(fold))",
   "n_bootstrap": 10000,
   "seed": 20260422,
   "overall": {
     "n": 73,
     "engine": {
-      "aafe": 3.8619,
-      "ci_95_low": 2.979,
-      "ci_95_high": 5.0739,
+      "aafe": 3.8718,
+      "ci_95_low": 2.9856,
+      "ci_95_high": 5.0866,
       "n": 73,
       "pct_2fold": 38.4,
       "pct_3fold": 50.7
     },
     "ml": {
-      "aafe": 3.2466,
-      "ci_95_low": 2.6006,
-      "ci_95_high": 4.0718,
+      "aafe": 3.2549,
+      "ci_95_low": 2.6029,
+      "ci_95_high": 4.0922,
       "n": 73,
       "pct_2fold": 43.8,
       "pct_3fold": 58.9
     },
     "meta": {
-      "aafe": 2.8322,
-      "ci_95_low": 2.298,
-      "ci_95_high": 3.5446,
+      "aafe": 2.8395,
+      "ci_95_low": 2.3011,
+      "ci_95_high": 3.5561,
       "n": 73,
       "pct_2fold": 46.6,
       "pct_3fold": 65.8
@@ -42,25 +42,25 @@
   "in_domain": {
     "n": 60,
     "engine": {
-      "aafe": 3.8388,
-      "ci_95_low": 3.0096,
-      "ci_95_high": 4.9925,
+      "aafe": 3.8508,
+      "ci_95_low": 3.0179,
+      "ci_95_high": 5.0117,
       "n": 60,
       "pct_2fold": 35.0,
       "pct_3fold": 48.3
     },
     "ml": {
-      "aafe": 3.0512,
-      "ci_95_low": 2.4092,
-      "ci_95_high": 3.9124,
+      "aafe": 3.0607,
+      "ci_95_low": 2.4129,
+      "ci_95_high": 3.9231,
       "n": 60,
       "pct_2fold": 46.7,
       "pct_3fold": 61.7
     },
     "meta": {
-      "aafe": 2.9057,
-      "ci_95_low": 2.3361,
-      "ci_95_high": 3.6849,
+      "aafe": 2.9148,
+      "ci_95_low": 2.342,
+      "ci_95_high": 3.7015,
       "n": 60,
       "pct_2fold": 43.3,
       "pct_3fold": 65.0

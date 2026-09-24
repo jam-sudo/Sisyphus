@@ -10,6 +10,24 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Match ketoconazole to an original fasted tablet arm
+
+The scored ketoconazole 200 mg / approximately 3.5 mg/L value came from a fed
+regulatory-label summary. [Huang et al. 1986](https://doi.org/10.1128/AAC.30.2.206),
+Table 2, reports a single overnight-fasted 200 mg tablet arm in 23 healthy men
+with arithmetic mean parent-plasma Cmax **4.22 ± 2.47 mg/L**. We replaced the
+development reference with this exact arm; fitted model weights are unchanged.
+The study provided lunch about 3–4 hours after dosing, so the arm still does
+not meet External Holdout V1's stricter ≥4-hour postdose fasting rule. See the
+[source adjudication](../validation/development_ketoconazole_fasted_arm_2026-09-24.md).
+
+On the same N=73 consumed development set, Meta AAFE **2.8322 → 2.8395**
+(conditional bootstrap CI **2.3011–3.5561**), Engine **3.8718**, direct ML
+**3.2549**. The score moves because the observed label changed, not because
+the model changed. This is not external validation. Colima was not used.
+
+---
+
 ## 2026-09-24 (cont.) — Replace secondary indomethacin arm with regulatory primary data
 
 The scored indomethacin 25 mg / 1.54 mg/L value could be traced only to

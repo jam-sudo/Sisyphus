@@ -19,7 +19,10 @@ used for system selection, so these results are not external validation.
 **Later source resolution:** The indomethacin silver-arm decision above was
 superseded by the [regulatory primary-arm review](development_indomethacin_primary_arm_2026-09-24.md).
 The current scored arm is 50 mg / 3.107 mg/L from a fasted INDOCID capsule
-study. The metrics below describe this earlier audit state.
+study. The ketoconazole fed-label decision above was likewise superseded by
+the [original fasted-tablet study review](development_ketoconazole_fasted_arm_2026-09-24.md):
+the current scored arm is 200 mg / 4.22 mg/L. The metrics below describe this
+earlier audit state.
 
 After regeneration, the scored development cohort is **N=85**: Meta AAFE
 **2.9079** (conditional compound-bootstrap 95% CI **2.3839–3.5930**), Engine
