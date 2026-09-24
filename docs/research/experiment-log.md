@@ -10,6 +10,26 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Correct three scored salt doses and quinine source arm
+
+The methylphenidate and levocetirizine labels report hydrochloride and
+dihydrochloride dose masses, while the model inputs are parent SMILES. Their
+parent-equivalent doses are now 17.296957 and 4.210697 mg, respectively.
+QUALAQUIN Table 1 directly reports 3.2 mg/L after one 648 mg sulfate dose
+in 23 healthy adults; the corresponding parent dose is 538 mg. This replaces
+the unsupported 600 mg / 5.4 mg/L pair, and an upstream 6.8 mg/L extraction
+was identified as seven-day steady state. See
+[`development_parent_dose_followup_2026-09-24.md`](../validation/development_parent_dose_followup_2026-09-24.md).
+
+The public-profile N=79 development cache is now Meta AAFE **2.9348**
+(conditional bootstrap 95% CI **2.3989–3.6527**), Engine **3.8747**,
+direct ML **3.2882**, and in-domain Meta **3.0194** (N=65). Paired Meta/ML
+ratio **0.8925** (CI **0.7890–1.0048**). The development-residual 90%
+band remains ±10.24× and covers 72/79. Fitted models did not change;
+these data corrections are not independent validation or a model gain.
+
+---
+
 ## 2026-09-24 (cont.) — Remove obsolete 2.698 probe-test pins
 
 A full-suite run (1,451 collected) found seven failures in old probe-isolation

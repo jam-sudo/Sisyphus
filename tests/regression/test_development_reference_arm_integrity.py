@@ -41,9 +41,9 @@ def test_adjudicated_holdout_arms_match_scored_cache():
         assert name not in refs
     assert refs["clopidogrel"].dose_mg == 300.0
     assert refs["clopidogrel"].cmax_obs == 0.0145
-    assert refs["levocetirizine"].dose_mg == 5.0
+    assert refs["levocetirizine"].dose_mg == pytest.approx(5 * 388.9 / 461.8, rel=1e-6)
     assert refs["levocetirizine"].cmax_obs == 0.27
-    assert refs["methylphenidate"].dose_mg == 20.0
+    assert refs["methylphenidate"].dose_mg == pytest.approx(20 * 233.31 / 269.77, rel=1e-6)
     assert refs["methylphenidate"].cmax_obs == 0.0091
     assert refs["paroxetine"].dose_mg == 25.0
     assert refs["paroxetine"].cmax_obs == 0.0055
@@ -55,6 +55,9 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert refs["carbamazepine"].cmax_obs == 1.9
     assert refs["zonisamide"].dose_mg == 300.0
     assert refs["zonisamide"].cmax_obs == 3.42
+    assert refs["quinine"].dose_mg == 538.0
+    assert refs["quinine"].cmax_obs == 3.2
+    assert refs["quinine"].auc_obs is None
     assert refs["oxybutynin"].dose_mg == 5.0
     assert refs["oxybutynin"].cmax_obs == 0.0082
     assert refs["oxybutynin"].auc_obs is None

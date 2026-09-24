@@ -271,12 +271,12 @@
   },
   {
     "drug_name": "quinine",
-    "dose_mg": 648.0,
-    "cmax_mg_L": 6.8,
+    "dose_mg": 538.0,
+    "cmax_mg_L": 3.2,
     "cmax_unit_original": "mcg/mL",
-    "cmax_value_original": 6.8,
-    "source": "DailyMed SPL",
-    "context": "648mg (2 capsules) single oral dose: Cmax 6.8 mcg/mL. No age difference in Cmax.",
+    "cmax_value_original": 3.2,
+    "source": "DailyMed QUALAQUIN label Section 12.3 Table 1; https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1f66fba7-4026-4504-918d-4c88f2835cc0",
+    "context": "Single 648 mg quinine sulfate oral dose in 23 healthy subjects: parent Cmax 3.2 +/- 0.7 mcg/mL. Two capsules provide 538 mg quinine parent. The former 6.8 mcg/mL is a steady-state value after 648 mg three times daily for 7 days.",
     "status": "extracted"
   },
   {

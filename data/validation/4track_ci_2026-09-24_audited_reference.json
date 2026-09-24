@@ -1,33 +1,33 @@
 {
   "computed_at": "2026-09-24-audited_reference",
   "source_cache": "data/training/4track_holdout_predictions.json",
-  "source_cache_sha256": "9acb5b9bd22808b689e0077c71ce09df68ed0e9c90d45304e927379ba5177c64",
-  "context": "Salt-equivalent and observed-arm corrections; no independent holdout",
+  "source_cache_sha256": "edf56df16d0be0bca2b4436df19b08956937676fc9527dc451b13c44c3e7d617",
+  "context": "Scored salt-equivalent and quinine source-arm corrections; no independent holdout",
   "method": "bootstrap on abs(log10(fold))",
   "n_bootstrap": 10000,
   "seed": 20260422,
   "overall": {
     "n": 79,
     "engine": {
-      "aafe": 3.8794,
-      "ci_95_low": 3.0549,
-      "ci_95_high": 5.0146,
+      "aafe": 3.8747,
+      "ci_95_low": 3.0516,
+      "ci_95_high": 5.0058,
       "n": 79,
       "pct_2fold": 36.7,
       "pct_3fold": 48.1
     },
     "ml": {
-      "aafe": 3.3044,
-      "ci_95_low": 2.6769,
-      "ci_95_high": 4.1441,
+      "aafe": 3.2882,
+      "ci_95_low": 2.6643,
+      "ci_95_high": 4.1237,
       "n": 79,
       "pct_2fold": 44.3,
       "pct_3fold": 57.0
     },
     "meta": {
-      "aafe": 2.9492,
-      "ci_95_low": 2.4077,
-      "ci_95_high": 3.6756,
+      "aafe": 2.9348,
+      "ci_95_low": 2.3989,
+      "ci_95_high": 3.6527,
       "n": 79,
       "pct_2fold": 49.4,
       "pct_3fold": 65.8
@@ -42,25 +42,25 @@
   "in_domain": {
     "n": 65,
     "engine": {
-      "aafe": 3.9014,
-      "ci_95_low": 3.0969,
-      "ci_95_high": 4.9988,
+      "aafe": 3.8956,
+      "ci_95_low": 3.094,
+      "ci_95_high": 4.9908,
       "n": 65,
       "pct_2fold": 33.8,
       "pct_3fold": 44.6
     },
     "ml": {
-      "aafe": 3.1743,
-      "ci_95_low": 2.5273,
-      "ci_95_high": 4.0444,
+      "aafe": 3.1554,
+      "ci_95_low": 2.51,
+      "ci_95_high": 4.0221,
       "n": 65,
       "pct_2fold": 47.7,
       "pct_3fold": 58.5
     },
     "meta": {
-      "aafe": 3.0375,
-      "ci_95_low": 2.4449,
-      "ci_95_high": 3.8443,
+      "aafe": 3.0194,
+      "ci_95_low": 2.4329,
+      "ci_95_high": 3.8259,
       "n": 65,
       "pct_2fold": 47.7,
       "pct_3fold": 63.1

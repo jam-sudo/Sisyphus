@@ -2000,14 +2000,14 @@
     "levocetirizine": {
       "name": "levocetirizine",
       "tier": "gold",
-      "source": "DailyMed XYZAL label Section 12.3: after a single 5 mg oral levocetirizine dihydrochloride tablet in adults, typical parent-plasma Cmax 270 ng/mL; the prior 450 ng/mL was from 5 mg in children age 6-11, not 30 mg adults; https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1673f7ff-0c7c-4403-86cf-c05eb1475222",
-      "dose_mg": 5.0,
+      "source": "DailyMed XYZAL label Section 12.3: after a single 5 mg oral levocetirizine dihydrochloride tablet in adults, typical parent-plasma Cmax 270 ng/mL; the prior 450 ng/mL was from 5 mg in children age 6-11, not 30 mg adults; https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1673f7ff-0c7c-4403-86cf-c05eb1475222 PubChem parent/salt molecular weights 388.9/461.8 g/mol convert the stated 5 mg dihydrochloride tablet dose to 4.210697 mg parent; https://pubchem.ncbi.nlm.nih.gov/compound/1549000; https://pubchem.ncbi.nlm.nih.gov/compound/Levocetirizine-Dihydrochloride",
+      "dose_mg": 4.210697,
       "route": "oral",
       "pk_params": {
         "cmax_mg_L": 0.27
       },
       "smiles": "C1CN(CCN1CCOCC(=O)O)[C@H](C2=CC=CC=C2)C3=CC=C(C=C3)Cl",
-      "correction_note": "2026-09-24: replaced mismatched 30 mg / pediatric 450 ng/mL arm with directly reported adult single 5 mg / 270 ng/mL parent arm; marketed dose is dihydrochloride salt."
+      "correction_note": "2026-09-24: replaced mismatched 30 mg / pediatric 450 ng/mL arm with directly reported adult single 5 mg / 270 ng/mL parent arm; marketed dose is dihydrochloride salt. 2026-09-24: converted 5 mg dihydrochloride mass to 4.210697 mg parent-equivalent model input."
     },
     "levofloxacin": {
       "name": "levofloxacin",
@@ -2236,8 +2236,8 @@
     "methylphenidate": {
       "name": "methylphenidate",
       "tier": "gold",
-      "source": "DailyMed methylphenidate hydrochloride oral solution label Section 12.3: single 20 mg oral solution under fasting conditions in healthy volunteers gave mean parent Cmax 9.1 ng/mL and AUC 46.7 ng h/mL; the prior row used 72 mg with these 20 mg values; https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=57fd619e-687d-403c-a77a-3dc3a1bab65a",
-      "dose_mg": 20.0,
+      "source": "DailyMed methylphenidate hydrochloride oral solution label Section 12.3: single 20 mg oral solution under fasting conditions in healthy volunteers gave mean parent Cmax 9.1 ng/mL and AUC 46.7 ng h/mL; the prior row used 72 mg with these 20 mg values; https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=57fd619e-687d-403c-a77a-3dc3a1bab65a PubChem parent/salt molecular weights 233.31/269.77 g/mol convert the stated 20 mg hydrochloride dose to 17.296957 mg parent; https://pubchem.ncbi.nlm.nih.gov/compound/Methylphenidate; https://pubchem.ncbi.nlm.nih.gov/compound/Methylphenidate-Hydrochloride",
+      "dose_mg": 17.296957,
       "route": "oral",
       "pk_params": {
         "cmax_mg_L": 0.0091,
@@ -2245,7 +2245,7 @@
         "thalf_h": 2.7
       },
       "smiles": "COC(=O)C(C1CCCCN1)C2=CC=CC=C2",
-      "correction_note": "2026-09-24: replaced mismatched 72 mg arm with directly reported single 20 mg fasted oral-solution arm; marketed dose is hydrochloride salt."
+      "correction_note": "2026-09-24: replaced mismatched 72 mg arm with directly reported single 20 mg fasted oral-solution arm; marketed dose is hydrochloride salt. 2026-09-24: converted 20 mg hydrochloride mass to 17.296957 mg parent-equivalent model input."
     },
     "metoclopramide": {
       "name": "metoclopramide",
@@ -3000,13 +3000,14 @@
     "quinine": {
       "name": "quinine",
       "tier": "gold",
-      "source": "FDA label (Qualaquin); single 600mg dose healthy volunteers",
-      "dose_mg": 600,
+      "source": "DailyMed QUALAQUIN label, Clinical Pharmacology Table 1: 23 healthy subjects after one oral 648 mg quinine sulfate capsule dose (8.7 mg/kg), mean parent plasma Cmax 3.2 +/- 0.7 mcg/mL and AUC0-12 28.0 mcg*h/mL; each 324 mg sulfate capsule is equivalent to 269 mg quinine free base, so two capsules provide 538 mg parent; meal state not specified for this table. https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1f66fba7-4026-4504-918d-4c88f2835cc0",
+      "dose_mg": 538.0,
       "route": "oral",
       "pk_params": {
-        "cmax_mg_L": 5.4
+        "cmax_mg_L": 3.2
       },
-      "smiles": "C=C[C@H]1C[N@@]2CC[C@H]1C[C@H]2[C@H](O)c1ccnc2ccc(OC)cc12"
+      "smiles": "C=C[C@H]1C[N@@]2CC[C@H]1C[C@H]2[C@H](O)c1ccnc2ccc(OC)cc12",
+      "correction_note": "2026-09-24: replaced unsupported 600 mg / 5.4 mg/L pair with the directly tabulated 648 mg sulfate / 3.2 mg/L healthy single-dose arm; converted two capsules to 538 mg quinine parent equivalent."
     },
     "quizartinib": {
       "name": "quizartinib",

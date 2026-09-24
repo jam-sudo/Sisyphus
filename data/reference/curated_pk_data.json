@@ -271,12 +271,12 @@
   },
   {
     "drug_name": "quinine",
-    "dose_mg": 600,
-    "cmax_mg_L": 5.4,
-    "cmax_value_original": 5.4,
-    "cmax_unit_original": "mg/L",
-    "source": "FDA label (Qualaquin); single 600mg dose healthy volunteers",
-    "notes": "600mg quinine sulfate single dose fasted healthy volunteers. Cmax 5.3-5.6 mg/L (mean 5.4). Tmax ~1.4-2.1h.",
+    "dose_mg": 538,
+    "cmax_mg_L": 3.2,
+    "cmax_value_original": 3.2,
+    "cmax_unit_original": "mcg/mL",
+    "source": "DailyMed QUALAQUIN label Section 12.3 Table 1; https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1f66fba7-4026-4504-918d-4c88f2835cc0",
+    "notes": "Single 648 mg quinine sulfate oral dose in 23 healthy subjects; Cmax 3.2 +/- 0.7 mcg/mL. Each 324 mg sulfate capsule equals 269 mg quinine free base, so model input is 538 mg parent. Meal state is unspecified. Table AUC0-12 is partial and is not a generic AUC target.",
     "status": "confirmed"
   },
   {
