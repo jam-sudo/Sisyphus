@@ -149,7 +149,6 @@ Sisyphus/
 - `scripts/run_chain_benchmark.py`: IVIVE chain benchmark
 - `scripts/run_loocv_validation.py`: LOOCV validation
 - `scripts/run_loocv_weights.py`: LOOCV weight optimization
-- `scripts/run_ablation.py`: DrugBank feature ablation study
 - `scripts/run_mechanism_audit.py`: Mechanism audit script
 - `scripts/run_ugt_sensitivity.py`: UGT sensitivity analysis
 - `scripts/extract_drugbank.py`: Extract data from DrugBank XML

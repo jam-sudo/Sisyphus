@@ -33,9 +33,14 @@ logger = logging.getLogger(__name__)
 
 def run_with_drugbank(enabled: bool) -> dict:
     """Run holdout benchmark with DrugBank enrichment toggled."""
+    from sisyphus.resources import get_resource_config
+
+    if get_resource_config().profile != "licensed_research":
+        raise ValueError("DrugBank ablation requires SISYPHUS_PROFILE=licensed_research")
     # Reset all caches to ensure clean state
-    from sisyphus.predict.drugbank import DrugBankConfig, DrugBankLookup, _reset_singleton
     from sisyphus.predict import adme
+    from sisyphus.predict.drugbank import DrugBankConfig, DrugBankLookup, _reset_singleton
+
     adme._model_cache.clear()
 
     from sisyphus.predict import chemistry

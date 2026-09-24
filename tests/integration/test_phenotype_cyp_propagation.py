@@ -30,13 +30,13 @@ import pytest
 
 from sisyphus.pipeline.predict import predict
 from sisyphus.predict.drugbank import (
-    _DEFAULT_DATA_DIR as _DRUGBANK_DIR,
-)
-from sisyphus.predict.drugbank import (
     _reset_singleton,
 )
+from sisyphus.resources import get_resource_config
 
-_drugbank_present = (_DRUGBANK_DIR / "drugs.csv").exists()
+_drugbank_present = (
+    get_resource_config().data("drugbank", required=False) / "drugs.csv"
+).exists()
 _skip_no_drugbank = pytest.mark.skipif(
     not _drugbank_present,
     reason=(

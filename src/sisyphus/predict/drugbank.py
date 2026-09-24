@@ -31,9 +31,6 @@ _CYP_NORMALIZATION: dict[str, str] = {
     # biologically different enzyme and overstate PGx/DDI resolution.
 }
 
-_DEFAULT_DATA_DIR = get_resource_config().data("drugbank", required=False)
-
-
 @dataclass
 class DrugBankConfig:
     """Feature flags for individual enrichment toggle (ablation support)."""
@@ -51,7 +48,13 @@ class DrugBankLookup:
         config: Feature flags for ablation.
     """
 
-    def __init__(self, data_dir: Path = _DEFAULT_DATA_DIR, config: DrugBankConfig | None = None):
+    def __init__(self, data_dir: Path | None = None, config: DrugBankConfig | None = None):
+        if data_dir is None:
+            resources = get_resource_config()
+            data_dir = resources.data(
+                "drugbank" if resources.profile == "licensed_research" else "__disabled_drugbank__",
+                required=False,
+            )
         self._data_dir = data_dir
         self._config = config or DrugBankConfig()
         self._loaded = False
@@ -251,19 +254,17 @@ def drugbank_lookup(config: DrugBankConfig | None = None) -> DrugBankLookup:
 
         resources = get_resource_config()
         if resources.profile == "licensed_research":
-            data_dir = resources.data("drugbank", required=False)
             active_config = config or DrugBankConfig()
         else:
             # Public results must not change merely because a gitignored,
             # licensed export happens to exist on one developer's machine.
-            data_dir = resources.data("__disabled_drugbank__", required=False)
             active_config = config or DrugBankConfig(
                 enable_enzyme_fm=False,
                 enable_fup=False,
                 enable_pka=False,
                 enable_logp=False,
             )
-        _INSTANCE = DrugBankLookup(data_dir=data_dir, config=active_config)
+        _INSTANCE = DrugBankLookup(config=active_config)
     elif config is not None:
         logger.warning("drugbank_lookup() singleton already initialized, config argument ignored")
     return _INSTANCE
