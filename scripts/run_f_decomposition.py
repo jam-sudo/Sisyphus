@@ -1,18 +1,14 @@
 #!/usr/bin/env python3
 """Engine bioavailability-F decomposition via IV-vs-oral, with measured fup+CLint.
 
-Reproduces the 2026-06-02 finding (experiment-log.md): with fup and CLint held at
-their measured values (so clearance is NOT the free variable), the engine
-systematically UNDER-CALLS oral bioavailability F. F is estimated as the ratio of
-oral to IV exposure at matched dose: engine_F = oral AUC_0t / iv AUC_0t.
+Rechecks the 2026-06-02 directional finding (experiment-log.md): with fup and
+CLint held at their measured values, compare engine F to approximate literature
+estimates. The production ``compute_f_engine`` path converges the matched
+oral/IV exposure ratio.
 
-CAVEATS (the finding is directional, not a calibrated measurement):
-  - Literature F values below are approximate, well-established ballparks (oral
-    bioavailability) for these drugs — NOT a curated, citation-checked dataset.
-  - AUC_0t (0-24 h), not AUC_inf — a systematic ratio across all drugs, but it can
-    bias long-half-life drugs.
-So: the DIRECTION (engine under-calls F for ~all drugs) is robust; the magnitude
-(median engine-F / literature-F) is preliminary pending verified-F curation.
+CAVEAT: Literature F values below are approximate oral-bioavailability
+ballparks, NOT a curated, citation-checked dataset. Both direction and
+magnitude remain provisional pending verified-F curation.
 
 Usage: python scripts/run_f_decomposition.py
 """
@@ -63,18 +59,25 @@ def main() -> int:
             print(f"{name:<15} skip (missing smiles/dose)")
             continue
         m = MeasuredADMEInput(fup=fup, clint=clint)
-        oral = predict(smiles, dose, route="oral", measured_adme=m).engine_pk
-        iv = predict(smiles, dose, route="iv", measured_adme=m).engine_pk
-        eng_f = (oral.auc_0t.mean / iv.auc_0t.mean) if (iv and iv.auc_0t.mean > 0) else float("nan")
+        eng_f = predict(
+            smiles, dose, route="oral", measured_adme=m, compute_f_engine=True
+        ).engine_f
+        if eng_f is None:
+            print(f"{name:<15} skip (engine F did not converge)")
+            continue
+        if not 0 < eng_f <= 1:
+            raise ValueError(f"Non-physical engine F for {name}: {eng_f}")
         r = eng_f / lit_f
         ratios.append(r)
         print(f"{name:<15}{eng_f:>7.2f}{lit_f:>7.2f}{r:>9.2f}")
 
-    print(f"\nmedian engine-F / literature-F = {np.nanmedian(ratios):.2f}  "
+    if not ratios:
+        raise RuntimeError("No converged engine-F estimates")
+    print(f"\nmedian engine-F / literature-F = {np.median(ratios):.2f}  "
           f"(<1 => engine under-calls F; N={len(ratios)})")
     print(f"under-calls (ratio<1): {sum(1 for r in ratios if r < 1)}/{len(ratios)}")
-    print("\nDirectional finding (literature-F approximate, AUC_0t): the engine "
-          "systematically under-predicts bioavailability F. See experiment-log.md 2026-06-02.")
+    print("\nIn this approximate 10-drug probe, engine F is below the literature "
+          "estimates. See experiment-log.md 2026-06-02 and 2026-09-24.")
     return 0
 
 

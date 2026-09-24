@@ -10,6 +10,21 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Recheck F diagnosis with the current converged exposure path
+
+`scripts/run_f_decomposition.py` still calculated F from separate 24-hour oral
+and IV AUCs, while production `predict(compute_f_engine=True)` now continues
+both trajectories until their AUC ratio converges. The diagnostic now calls
+that production path. On the current local environment, its ten illustrative
+measured-fup/CLint drugs give median engine-F/literature-F **0.51**, versus
+**0.49** from the old 24-hour calculation on the same stack; all ten ratios
+remain below one, although diclofenac is **0.98**. The literature F values are
+still approximate and not citation-curated, so this is a directional model
+diagnostic, not a validated absolute-F benchmark. Model code, fitted weights,
+and the Cmax headline did not change. Colima was not used.
+
+---
+
 ## 2026-09-24 (cont.) — Match ketoconazole to an original fasted tablet arm
 
 The scored ketoconazole 200 mg / approximately 3.5 mg/L value came from a fed
