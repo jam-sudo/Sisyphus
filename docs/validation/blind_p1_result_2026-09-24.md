@@ -51,6 +51,16 @@ identify the large errors in this pilot. The model's nominal 90% development-
 residual interval covered six of eight observations, missing usnoflast and
 DFV890. Eight observations are too few to estimate interval coverage reliably.
 
+A post-label structural-neighbor check used Morgan radius-2, 2,048-bit
+fingerprints against the 1,028-row public Cmax training snapshot. Six P1
+compounds had nearest-neighbor Tanimoto similarity ≤0.30, but splitting at
+this exploratory cutoff gave nearly identical Meta AAFE: 6.56 for those six
+versus 6.72 for the other two. The same split on the repeatedly used 73-drug
+development set gave 4.18 (21 drugs) versus 2.43 (52 drugs). Thus structural
+novelty may contribute to development-set error, but this cutoff does not
+explain the P1 failures and is not a justified new applicability gate. It was
+examined after seeing P1 labels and provides no fresh validation evidence.
+
 **No arm supplies protocol-compliant V1 final-test evidence.** The source
 review was AI-assisted and single-agent; none has two independent human checks.
 Immediate release was inferred for seven conventional tablets, capsules, or
