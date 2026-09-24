@@ -685,13 +685,17 @@ def predict(
     # The residual band is empirical development evidence, not valid split
     # conformal calibration: one component model saw part of the calibration
     # corpus during fitting. It applies only to the unchanged, SMILES-only oral
-    # path. Parameter MC is retained separately and is never overwritten.
+    # path with all four tracks and the default Kp method. Parameter MC is
+    # retained separately and is never overwritten.
     _q90 = _development_residual_q90_meta()
     residual_cmax_90ci: tuple[float, float] | None = None
     residual_applicable = (
         route == "oral"
+        and _RESOURCES.profile == "public"
         and measured_adme is None
         and not phenotypes
+        and kp_method == "rodgers_rowland"
+        and {name for name, _ in cmax_prediction.tracks} == {"engine", "ml", "clf", "vdss"}
         and _q90 is not None
         and final_pk.cmax.mean > 0
     )

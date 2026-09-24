@@ -7,7 +7,12 @@ field when requested.
 
 import json
 import pathlib
+from dataclasses import replace
+from importlib import import_module
 
+import numpy as np
+
+from sisyphus.core import SimResult
 from sisyphus.pipeline.predict import predict
 
 _CAFFEINE = "CN1C=NC2=C1C(=O)N(C(=O)N2C)C"
@@ -40,3 +45,36 @@ def test_parameter_mc_is_not_overwritten_by_residual_band():
     assert cmax.parameter_interval_90 is not None
     assert cmax.residual_interval_90 != cmax.parameter_interval_90
     assert cmax.interval_90 == cmax.residual_interval_90
+
+
+def test_residual_band_is_omitted_for_nondefault_partition_method():
+    result = predict(_CAFFEINE, 100.0, "oral", kp_method="berezhkovskiy")
+    assert result.cmax_prediction.residual_interval_90 is None
+    assert result.cmax_prediction.interval_source is None
+
+
+def test_residual_band_is_omitted_after_engine_fallback(monkeypatch):
+    import sisyphus.engine.solver as solver
+
+    monkeypatch.setattr(
+        solver,
+        "solve",
+        lambda *args, **kwargs: SimResult(
+            time_h=np.array([0.0]), concentrations={}, amounts={},
+            mass_balance_error=0.0, solver_success=False,
+        ),
+    )
+    result = predict(_CAFFEINE, 100.0)
+    assert result.engine_pk is None
+    assert result.cmax_prediction.residual_interval_90 is None
+    assert result.cmax_prediction.interval_source is None
+
+
+def test_residual_band_is_omitted_for_licensed_profile(monkeypatch):
+    pipeline = import_module("sisyphus.pipeline.predict")
+    monkeypatch.setattr(
+        pipeline, "_RESOURCES", replace(pipeline._RESOURCES, profile="licensed_research")
+    )
+    result = pipeline.predict(_CAFFEINE, 100.0)
+    assert result.cmax_prediction.residual_interval_90 is None
+    assert result.cmax_prediction.interval_source is None
