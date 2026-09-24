@@ -27,19 +27,19 @@
       "reason": "No independently curated outcome-blinded external cohort is available for the current system."
     },
     "retrospective_development_benchmark": {
-      "n_compounds": 98,
-      "meta_aafe": 2.807838786321181,
+      "n_compounds": 94,
+      "meta_aafe": 2.7286365362156624,
       "bootstrap_95_ci": [
-        2.3531,
-        3.3845
+        2.2766,
+        3.2947
       ],
       "classification": "repeatedly used for system selection; shipped-model fitted sources are SHA-pinned but this is not independent system validation",
       "source": "data/training/4track_holdout_predictions.json",
       "paired_meta_ml": {
-        "ratio": 0.8781,
-        "ci_95_low": 0.7855,
-        "ci_95_high": 0.9763,
-        "n": 98
+        "ratio": 0.855,
+        "ci_95_low": 0.7648,
+        "ci_95_high": 0.9529,
+        "n": 94
       }
     },
     "consumed_temporal_challenge": {

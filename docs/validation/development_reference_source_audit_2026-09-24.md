@@ -1,9 +1,9 @@
 # Development Cmax reference source audit — 2026-09-24
 
 This is an audit of the repeatedly used development benchmark, not an
-independent model evaluation. Twelve scored rows used an estimated label, cited
+independent model evaluation. Eighteen scored rows used an estimated label, cited
 the wrong analyte/arm, or lacked support for the stated Cmax. The rule was
-applied to all twelve rows before re-scoring; no model weights or fitted
+applied to all eighteen rows before re-scoring; no model weights or fitted
 artifacts changed.
 
 | Drug | Previous benchmark label | Source finding | Current disposition |
@@ -20,12 +20,18 @@ artifacts changed.
 | Adefovir dipivoxil | 10 mg, 0.0184 mg/L | The [adefovir dipivoxil label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e047f3b2-feae-4c5e-9d07-1fefb4c0ec25) identifies **18.4 ng/mL as adefovir** after a single 10 mg prodrug dose in 14 hepatitis B patients. | Parent Cmax quarantined. |
 | Prasugrel | 60 mg, 0.631 mg/L | [Cui et al. 2012](https://pmc.ncbi.nlm.nih.gov/articles/PMC4011359/), Table 2, identifies **631 ng/mL as active metabolite Pras-AM** after a single 60 mg prasugrel loading dose. The previous citation gave the wrong journal and year. | Parent Cmax quarantined. |
 | Tenofovir disoproxil | 300 mg, 0.38 mg/L | The [VIREAD label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=33fd6418-fbdc-42ca-a50d-ce2a476a5418), Table 13, identifies **0.38 µg/mL as tenofovir**, measured at steady state in eight HIV-1-infected adolescents receiving 300 mg tenofovir disoproxil fumarate daily. | Parent single-dose Cmax quarantined. |
+| Abiraterone | 500 mg, 0.073 mg/L | The [abiraterone acetate label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=445e70a1-25bd-8fc1-e063-6394a90a1a43) reports **abiraterone** Cmax 73 ng/mL after single **abiraterone acetate** 500 mg in fasted healthy subjects. The recorded input structure is abiraterone, not the administered acetate ester. | Parent-structure/dose mismatch quarantined. |
+| Atovaquone | 750 mg, 8.8 mg/L | The [atovaquone suspension label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=03ddcc33-729c-4d46-ae6b-2ee47978ba16) reports **8.8 ± 3.7 µg/mL** after **repeated 500 mg daily** in fasting HIV-1-infected volunteers; it separately reports a single 750 mg food-effect AUC study. | Claimed single 750 mg Cmax quarantined. |
+| Darunavir ethanolate | 100 mg, 1.2 mg/L | The [darunavir label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=632293b0-d220-444e-8a5b-2ee8c225b66d) describes darunavir PK with **100 mg ritonavir** as a booster, but does not document the row's 100 mg darunavir / 1.2 mg/L arm. | Cmax quarantined pending an exact source with co-medication context. |
+| Tamsulosin | 1 mg, 0.0101 mg/L | The [tamsulosin label](https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=00097e78-9c04-4e62-8260-ddb50e9a6a93&type=display), Table 2, gives **10.1 ± 4.8 ng/mL** after **0.4 mg once daily with a light breakfast** in 23 healthy volunteers. | Claimed single 1 mg Cmax quarantined. |
+| Levocetirizine | 30 mg, 0.45 mg/L | The [XYZAL label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1673f7ff-0c7c-4403-86cf-c05eb1475222) attributes **450 ng/mL** to **5 mg in children**, while it separately reports **270 ng/mL** after a **single 5 mg adult** tablet. | Replaced with adult 5 mg / 0.270 mg/L arm; dihydrochloride dose basis recorded. |
+| Methylphenidate | 72 mg, 0.0091 mg/L | The [methylphenidate oral-solution label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=57fd619e-687d-403c-a77a-3dc3a1bab65a) reports **9.1 ng/mL** and AUC **46.7 ng·h/mL** after a **single 20 mg fasted oral solution**, not 72 mg. | Replaced with 20 mg / 0.0091 mg/L arm; hydrochloride dose basis recorded. |
 
-The scored benchmark is now **N=98** from the unchanged 107-compound split.
-Meta AAFE is **2.8078** (compound bootstrap 95% CI **2.3531–3.3845**), versus
-**2.7830** (2.3321–3.3626) for the prior N=101 cache. Three additional
-metabolite labels were excluded; this is a change in label integrity, not model
-quality. Both cohorts
+The scored benchmark is now **N=94** from the unchanged 107-compound split.
+Meta AAFE is **2.7286** (compound bootstrap 95% CI **2.2766–3.2947**), versus
+**2.8078** (2.3531–3.3845) for the prior N=98 cache. Four unsupported
+references were excluded and two exact arms replaced; this is a change in label
+integrity, not model quality. Both cohorts
 have repeatedly informed system development.
 
 The engine observes `venous_blood`, whose compartment concentration is amount
