@@ -22,6 +22,10 @@ def test_active_fitted_rows_exclude_current_development_compounds() -> None:
     drugs = json.loads((ROOT / "data/reference/clinical_pk.json").read_text())["drugs"]
     assert len(holdout) == 107
     holdout_keys = {ik14(drugs[name]["smiles"]) for name in holdout}
+    holdout_keys.update(
+        ik14(drugs[name]["prior_reference_smiles"])
+        for name in holdout if drugs[name].get("prior_reference_smiles")
+    )
     holdout_names = {_name_key(name) for name in holdout}
     assert None not in holdout_keys
 

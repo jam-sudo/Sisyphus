@@ -346,8 +346,8 @@
     "cmax_unit_original": "ng/mL",
     "cmax_value_original": 176.0,
     "source": "PubChem (ella label)",
-    "context": "30mg single oral dose: Cmax 176 ± 89 ng/mL. Tmax 60-90 min.",
-    "status": "extracted"
+    "context": "Superseded: 30 mg ella is ulipristal acetate ester, and 176 ng/mL is the acetate analyte. The old ulipristal structure was a different molecule; see clinical_pk.json:ulipristal (historical split key).",
+    "status": "superseded"
   },
   {
     "drug_name": "upadacitinib",

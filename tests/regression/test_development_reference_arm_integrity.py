@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 
 import pytest
+from rdkit import Chem
+from rdkit.Chem import rdMolDescriptors
 
 from sisyphus.validation.reference import load_reference
 
@@ -61,9 +63,21 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert refs["ranitidine"].cmax_obs == 0.4506
     assert refs["selegiline"].dose_mg == pytest.approx(10 * 187.28 / 223.74, rel=1e-6)
     assert refs["selegiline"].cmax_obs == 0.003093
+    assert "ulipristal acetate" not in refs  # historical split key is retained
+    assert data["drugs"]["ulipristal"]["name"] == "ulipristal acetate"
+    assert refs["ulipristal"].dose_mg == 30.0
+    assert refs["ulipristal"].cmax_obs == 0.176
+    ester = Chem.MolFromSmiles(refs["ulipristal"].smiles)
+    assert rdMolDescriptors.CalcMolFormula(ester) == "C30H37NO4"
+    assert Chem.MolToInchiKey(ester) == "OOLLAFOLCSJHRE-ZHAKMVSLSA-N"
+    prior = Chem.MolFromSmiles(data["drugs"]["ulipristal"]["prior_reference_smiles"])
+    assert rdMolDescriptors.CalcMolFormula(prior) == "C28H35NO3"
+    curated_rows = json.loads((ROOT / "data/reference/curated_pk_data.json").read_text())
+    assert next(row for row in curated_rows if row["drug_name"] == "ulipristal")["cmax_mg_L"] is None
     fda_rows = json.loads((ROOT / "data/reference/fda_extraction_results.json").read_text())
     assert next(row for row in fda_rows if row["drug_name"] == "hydroxyzine")["status"] != "extracted"
     assert next(row for row in fda_rows if row["drug_name"] == "selegiline")["status"] != "extracted"
+    assert next(row for row in fda_rows if row["drug_name"] == "ulipristal")["status"] != "extracted"
     assert refs["trazodone"].dose_mg == pytest.approx(100 * 371.864 / 408.33, rel=1e-6)
     assert refs["trazodone"].cmax_obs == 1.5469
     assert "bioavailability_pct" not in data["drugs"]["fluvoxamine"]["pk_params"]

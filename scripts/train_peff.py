@@ -77,15 +77,15 @@ def build_holdout_keys(holdout_names: list[str], clinical_pk: dict) -> dict:
         entry = drugs.get(name) or drugs.get(name.replace(" ", "_"))
         if entry is None:
             continue
-        smiles = entry.get("smiles", "")
-        if not smiles:
-            continue
-        csmi = _canonical_smiles(smiles)
-        if csmi:
-            canonical_smiles.add(csmi)
-        ik = _inchikey_prefix(smiles)
-        if ik:
-            inchikey_prefixes.add(ik)
+        for smiles in (entry.get("smiles"), entry.get("prior_reference_smiles")):
+            if not smiles:
+                continue
+            csmi = _canonical_smiles(smiles)
+            if csmi:
+                canonical_smiles.add(csmi)
+            ik = _inchikey_prefix(smiles)
+            if ik:
+                inchikey_prefixes.add(ik)
 
     log.info(
         "Holdout keys: %d canonical SMILES, %d InChIKey prefixes, %d names",

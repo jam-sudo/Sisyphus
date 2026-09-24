@@ -3724,15 +3724,17 @@
       "smiles": "Cc1nnc2n1-c1ccc(Cl)cc1C(c1ccccc1Cl)=NC2"
     },
     "ulipristal": {
-      "name": "ulipristal",
+      "name": "ulipristal acetate",
       "tier": "gold",
-      "source": "FDA label (ella); single 30mg dose fasted healthy female volunteers",
+      "source": "DailyMed ella label Section 12.3 Table 2: single fasted 30 mg ulipristal acetate tablet in 20 healthy women, ulipristal acetate parent plasma arithmetic mean Cmax 176 +/- 89 ng/mL; https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=2bf93d23-cddd-4613-9066-5b5fa090404b; PubChem CID 130904 ester structure: https://pubchem.ncbi.nlm.nih.gov/compound/130904",
       "dose_mg": 30,
       "route": "oral",
       "pk_params": {
         "cmax_mg_L": 0.176
       },
-      "smiles": "CC(=O)[C@@]1(O)CC[C@H]2[C@@H]3CCC4=CC(=O)CCC4=C3[C@@H](c3ccc(N(C)C)cc3)C[C@@]21C"
+      "smiles": "CC(=O)[C@]1(CC[C@@H]2[C@@]1(C[C@@H](C3=C4CCC(=O)C=C4CC[C@@H]23)C5=CC=C(C=C5)N(C)C)C)OC(=O)C",
+      "prior_reference_smiles": "CC(=O)[C@@]1(O)CC[C@H]2[C@@H]3CCC4=CC(=O)CCC4=C3[C@@H](c3ccc(N(C)C)cc3)C[C@@]21C",
+      "correction_note": "2026-09-24: the historical split key ulipristal is retained, but its scored molecule is ulipristal acetate C30H37NO4. The prior ulipristal C28H35NO3 reference structure was not administered or measured; retain it only as a training-exclusion key to preserve fitted-row provenance. Acetate is a covalent ester, not a counterion; retain the 30 mg ester dose and label Cmax without salt-to-parent conversion."
     },
     "upadacitinib": {
       "name": "upadacitinib",

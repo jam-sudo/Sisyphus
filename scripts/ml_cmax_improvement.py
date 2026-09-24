@@ -50,9 +50,10 @@ def load_holdout_ik():
     ik_set = set()
     for n in names:
         e = drugs.get(n) or drugs.get(n.replace(" ", "_"))
-        if e and e.get("smiles"):
-            ik = _ik14(e["smiles"])
-            if ik: ik_set.add(ik)
+        if e:
+            for smiles in (e.get("smiles"), e.get("prior_reference_smiles")):
+                ik = _ik14(smiles)
+                if ik: ik_set.add(ik)
     return ik_set
 
 def load_holdout_names() -> set[str]:

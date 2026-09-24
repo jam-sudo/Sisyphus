@@ -73,10 +73,11 @@ def test_no_holdout_drug_survives_mmpk_filters():
     ho_ik = set()
     for n in ref_names:
         e = clinical.get(n) or clinical.get(n.replace(" ", "_"))
-        if e and e.get("smiles"):
-            k = ik14(e["smiles"])
-            if k:
-                ho_ik.add(k)
+        if e:
+            for smiles in (e.get("smiles"), e.get("prior_reference_smiles")):
+                k = ik14(smiles)
+                if k:
+                    ho_ik.add(k)
 
     leaks: dict[str, set[str]] = {}
     for path in _MMPK:

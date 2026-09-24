@@ -47,12 +47,15 @@ def training_rows() -> tuple[list[tuple[str, str, float]], int]:
         entry = clinical.get(name) or clinical.get(name.replace(" ", "_"))
         if not entry or not entry.get("smiles"):
             continue
-        mol = Chem.MolFromSmiles(entry["smiles"])
-        if mol:
-            structures.add(Chem.MolToSmiles(mol, isomericSmiles=True))
-        key = ik14(entry["smiles"])
-        if key:
-            keys.add(key)
+        for smiles in (entry["smiles"], entry.get("prior_reference_smiles")):
+            if not smiles:
+                continue
+            mol = Chem.MolFromSmiles(smiles)
+            if mol:
+                structures.add(Chem.MolToSmiles(mol, isomericSmiles=True))
+            key = ik14(smiles)
+            if key:
+                keys.add(key)
 
     rows = []
     seen = set()

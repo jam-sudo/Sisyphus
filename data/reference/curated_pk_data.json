@@ -342,12 +342,12 @@
   {
     "drug_name": "ulipristal",
     "dose_mg": 30,
-    "cmax_mg_L": 0.176,
+    "cmax_mg_L": null,
     "cmax_value_original": 176,
     "cmax_unit_original": "ng/mL",
     "source": "FDA label (ella); single 30mg dose fasted healthy female volunteers",
-    "notes": "30mg single dose fasted. Cmax 176 +/- 89 ng/mL at ~1h. t1/2 ~32h. Food decreases Cmax 40-45%. Selective progesterone receptor modulator for emergency contraception.",
-    "status": "confirmed"
+    "notes": "Superseded: the ella 30 mg / 176 ng/mL arm administers and measures ulipristal acetate ester (C30H37NO4), not ulipristal (C28H35NO3). Corrected scored record is clinical_pk.json:ulipristal (historical split key).",
+    "status": "superseded"
   },
   {
     "drug_name": "upadacitinib",

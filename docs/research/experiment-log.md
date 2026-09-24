@@ -10,6 +10,22 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Correct ulipristal acetate molecular identity
+
+The FDA ella 30 mg / 176 ng/mL arm administers and measures ulipristal
+**acetate**, a covalent ester. The prior scored `ulipristal` SMILES was the
+different non-acetate molecule. The reference now uses the PubChem acetate
+structure, retains the actual 30 mg ester dose and observed Cmax, and occupies
+the same development-split slot. See [identity adjudication](../validation/development_covalent_ester_identity_followup_2026-09-24.md).
+
+With fitted models unchanged, N=79 development Meta AAFE moves from **2.9040**
+to **2.8940** (conditional CI **2.3695–3.6057**), Engine **3.8023**, direct
+ML **3.3043**, and in-domain Meta **3.0056** (N=64). The conditional paired
+Meta/ML ratio is **0.8758** (CI **0.7703–0.9925**); repeated system selection
+still precludes an independent superiority claim.
+
+---
+
 ## 2026-09-24 (cont.) — Rescreen salt strengths and exact source arms
 
 Primary labels and study reports corrected parent-equivalent doses for
