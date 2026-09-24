@@ -113,6 +113,11 @@ def main() -> None:
         log.error("morphine not found in holdout reference")
         sys.exit(1)
     ref = refs[0]
+    if ref.dose_mg != MORPHINE_DOSE_MG:
+        raise ValueError(
+            "The 30 mg morphine SBI posterior does not match the current "
+            f"{ref.dose_mg:g} mg reference; retrain before comparing."
+        )
     cmax_obs = float(ref.cmax_obs)
     x_obs = float(np.log10(cmax_obs))
 

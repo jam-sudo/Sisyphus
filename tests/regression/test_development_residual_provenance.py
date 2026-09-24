@@ -27,8 +27,8 @@ def test_development_residual_artifact_is_current_and_explicit_about_skips():
     assert set(artifact["model_artifact_sha256"]) == expected_paths
     for path, digest in artifact["model_artifact_sha256"].items():
         assert digest == _sha(ROOT / path)
-    assert artifact["n_training_reference"] == 67
-    assert artifact["n_calibration_meta"] == 63
+    assert artifact["n_training_reference"] == 66
+    assert artifact["n_calibration_meta"] == 62
     assert {row["name"] for row in artifact["skipped_training_reference"]} == {
         "amoxicillin", "atenolol", "metformin", "verapamil"
     }

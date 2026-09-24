@@ -58,11 +58,11 @@ BASE_SEED = 42
 DRUGS = {
     "morphine": {
         "smiles": "CN1CC[C@]23[C@@H]4[C@H]1CC5=C2C(=C(C=C5)O)O[C@H]3[C@H](C=C4)O",
-        "dose_mg": 30.0,
-        "cmax_obs": 0.01865,
-        "cmax_engine": 0.03736,
+        "dose_mg": 22.5,
+        "cmax_obs": 0.0285,
+        "cmax_engine": 0.08175695813870397,
         "compound_type": "base",
-        "fold_error": 2.00,
+        "fold_error": 2.87,
     },
     "amantadine": {
         "smiles": "C1C2CC3CC1CC(C2)(C3)N",

@@ -20694,56 +20694,16 @@
     },
     "morphine": {
       "name": "morphine",
-      "tier": "platinum",
-      "source": "PK-DB (Bell1985, PMID: 2857025)",
-      "dose_mg": 30.0,
+      "tier": "gold",
+      "source": "Atrux-Tallau et al., Pharmacokinetics of Morphine Sulfate Orodispersible Tablets and Bioequivalence with Immediate-Release Oral Morphine Sulfate Formulations in Healthy Adult Subjects Under Fasting Conditions (2022), pivotal Sevredol reference tablets 3 x 10 mg, n=80, arithmetic mean Cmax 28.5 +/- 11.9 ng/mL; PMCID: PMC9705466, https://pmc.ncbi.nlm.nih.gov/articles/PMC9705466/",
+      "dose_mg": 22.5,
       "route": "oral",
       "pk_params": {
-        "cmax_mg_L": 0.01865,
-        "thalf_h": 2.0
+        "cmax_mg_L": 0.0285,
+        "thalf_h": 9.61
       },
-      "ct_curve": {
-        "time_h": [
-          0.0,
-          0.05,
-          0.1,
-          0.5,
-          1.0,
-          2.0,
-          3.0,
-          4.0,
-          5.0,
-          6.0,
-          8.0
-        ],
-        "conc_mg_L": [
-          0.0,
-          0.015394,
-          0.030552,
-          0.042483,
-          0.043903,
-          0.034223,
-          0.025645,
-          0.019744,
-          0.016363,
-          0.008416,
-          0.000197
-        ],
-        "sd_mg_L": [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ]
-      },
-      "smiles": "CN1CC[C@]23[C@@H]4[C@H]1CC5=C2C(=C(C=C5)O)O[C@H]3[C@H](C=C4)O"
+      "smiles": "CN1CC[C@]23[C@@H]4[C@H]1CC5=C2C(=C(C=C5)O)O[C@H]3[C@H](C=C4)O",
+      "correction_note": "2026-09-24: prior PMID 2857025 studied buccal vs intramuscular morphine, not swallowed oral; prior 0.01865 mg/L Cmax and synthetic curve were not a valid 30-mg oral IR reference. 30 mg morphine sulfate tablets = 22.5 mg morphine base (DailyMed morphine sulfate tablet label)."
     },
     "moxifloxacin": {
       "name": "moxifloxacin",

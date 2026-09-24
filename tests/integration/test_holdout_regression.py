@@ -28,8 +28,11 @@ def _aafe(preds: list[dict]) -> float:
     not HOLDOUT_JSON.exists(),
     reason=f"{HOLDOUT_JSON.name} not present — regeneration required",
 )
-def test_cached_holdout_aafe_is_2p734() -> None:
-    """Cached predictions file: Meta AAFE is the current development headline 2.734 (±0.020).
+def test_cached_holdout_aafe_is_2p716() -> None:
+    """Cached predictions file: Meta AAFE is the current development headline 2.716 (±0.020).
+
+    Correcting the morphine reference to a fasted oral IR source moved the
+    cache from 2.734 to 2.716 on 2026-09-24.
 
     Excluding a newly identified pravastatin CLint training collision moved
     the locked Linux cache from 2.762 to 2.734 on 2026-09-23.
@@ -115,7 +118,7 @@ def test_cached_holdout_aafe_is_2p734() -> None:
     0.005 was an artifact of the B-03.x cycle's coincidentally tiny delta.
     See spec amendment 2026-05-27.
 
-    If this fails outside ±0.020 of 2.734, the cache has been regenerated
+    If this fails outside ±0.020 of 2.716, the cache has been regenerated
     with a behavior change or the numerics stack drifted materially.
     Investigate."""
     with HOLDOUT_JSON.open() as f:
@@ -129,4 +132,4 @@ def test_cached_holdout_aafe_is_2p734() -> None:
         if isinstance(data, dict) and "drugs" in data:
             preds = data["drugs"]
         aafe = _aafe(preds)
-    assert abs(aafe - 2.734) < 0.020, f"AAFE drifted: {aafe:.4f}"
+    assert abs(aafe - 2.716) < 0.020, f"AAFE drifted: {aafe:.4f}"

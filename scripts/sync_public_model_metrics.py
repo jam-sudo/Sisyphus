@@ -13,10 +13,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 CACHE = ROOT / "data" / "training" / "4track_holdout_predictions.json"
-CI = ROOT / "data" / "validation" / "4track_ci_2026-09-23_public_models_pinned.json"
+CI = ROOT / "data" / "validation" / "4track_ci_2026-09-24_morphine_reference.json"
 MODEL_CARD = ROOT / "data" / "model_card.json"
 WEB_BENCHMARK = ROOT / "web" / "public" / "data" / "benchmark.json"
 WEB_CONSOLE = ROOT / "web" / "public" / "data" / "console_data.json"
+RESIDUAL_INTERVAL = ROOT / "data" / "validation" / "development_residual_interval.json"
 
 
 def _write(path: Path, value: dict, *, pretty: bool = True) -> None:
@@ -87,8 +88,10 @@ def main() -> None:
 
     _write(MODEL_CARD, model_card)
     model_card_sha = sha256(MODEL_CARD.read_bytes()).hexdigest()
+    residual_interval_sha = sha256(RESIDUAL_INTERVAL.read_bytes()).hexdigest()
     for drug in console["drugs"]:
         drug["artifactProvenance"]["data/model_card.json"] = model_card_sha
+        drug["artifactProvenance"]["data/validation/development_residual_interval.json"] = residual_interval_sha
     _write(WEB_BENCHMARK, benchmark, pretty=False)
     _write(WEB_CONSOLE, console, pretty=False)
     print("Synchronized model card and web metrics from", CACHE.relative_to(ROOT))
