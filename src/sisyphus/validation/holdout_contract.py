@@ -191,6 +191,18 @@ def verify_frozen_file(root: Path, freeze: dict[str, Any], stem: str) -> str:
     return actual
 
 
+def verify_audit_report(path: Path, expected_sha: str, manifest_sha: str) -> str:
+    actual = sha256_file(path)
+    if actual != expected_sha:
+        raise ValueError("Audit-report SHA256 does not match the committed value")
+    report = json.loads(path.read_text())
+    if report.get("pass") is not True:
+        raise ValueError("External holdout audit report did not pass")
+    if report.get("manifest_sha256") != manifest_sha:
+        raise ValueError("Audit report was not produced from this exact manifest")
+    return actual
+
+
 def verify_training_membership(
     root: Path, freeze: dict[str, Any], expected_paths: set[str] | None = None
 ) -> str:

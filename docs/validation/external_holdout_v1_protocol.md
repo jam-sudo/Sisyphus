@@ -415,6 +415,7 @@ python scripts/predict_external_holdout_manifest.py /holdout/manifest.json \
 python scripts/score_external_holdout.py /holdout/blinded_predictions.json \
   --labels /labels/unblinded.json \
   --manifest /holdout/manifest.json --manifest-sha256 <sha256> \
+  --audit-report /holdout/audit.json --audit-report-sha256 <audit_sha256> \
   --predictions-sha256 <predictions_sha256> --labels-sha256 <labels_sha256> \
   --out /holdout/final_score.json
 ```

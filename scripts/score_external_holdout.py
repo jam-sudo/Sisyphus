@@ -23,6 +23,7 @@ from sisyphus.validation.holdout_contract import (
     source_record_hash,
     validate_payload,
     validate_source_quotas,
+    verify_audit_report,
     verify_source_plan,
 )
 
@@ -239,12 +240,14 @@ def statistic_sensitivity(rows: list[dict], seed: int, n_boot: int) -> dict:
     return {"groups": result, "mixed_statistic_compounds": mixed}
 
 
-def score(rows: list[dict], seed: int, n_boot: int) -> dict:
+def score(rows: list[dict], seed: int, n_boot: int, n_target: int) -> dict:
     primary = [row for row in rows if row.get("primary_eligible") is True]
     if not primary:
         raise ValueError("No primary-eligible rows")
     if n_boot <= 0:
         raise ValueError("n_boot must be positive")
+    if n_target not in (120, 260):
+        raise ValueError("Frozen n_target must be 120 or 260")
     meta = _compound_errors(primary, "meta_cmax_mg_l")
     ml = _compound_errors(primary, "ml_cmax_mg_l")
     if len(meta) != len(ml):
@@ -302,7 +305,7 @@ def score(rows: list[dict], seed: int, n_boot: int) -> dict:
             np.median([np.mean(v) for v in by_compound_width.values()])
         )
 
-    ratio_limit = 0.85 if len(meta) == 120 else 0.90
+    ratio_limit = 0.85 if n_target == 120 else 0.90
     superiority = bool(ratio <= ratio_limit and ratio_ci[1] < 1.0)
     release_gate = bool(
         superiority
@@ -344,6 +347,8 @@ def main() -> None:
     parser.add_argument("--labels", type=Path, required=True)
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--manifest-sha256", required=True)
+    parser.add_argument("--audit-report", type=Path, required=True)
+    parser.add_argument("--audit-report-sha256", required=True)
     parser.add_argument("--predictions-sha256", required=True)
     parser.add_argument("--labels-sha256", required=True)
     parser.add_argument("--out", type=Path, required=True)
@@ -372,6 +377,11 @@ def main() -> None:
         raise ValueError("Blinded label content differs from the pre-prediction commitment")
     if payload.get("manifest_sha256") != actual_sha:
         raise ValueError("predictions manifest_sha256 is missing or does not match")
+    audit_sha = verify_audit_report(
+        args.audit_report, args.audit_report_sha256, actual_sha
+    )
+    if payload.get("audit_report_sha256") != audit_sha:
+        raise ValueError("Prediction audit_report_sha256 does not match frozen audit")
     if payload.get("cycle_id") != manifest.get("cycle_id"):
         raise ValueError("predictions cycle_id does not match manifest")
     if labels.get("manifest_sha256") != actual_sha:
@@ -401,7 +411,7 @@ def main() -> None:
     validate_results_against_manifest(
         rows, manifest, source_plan["source_windows"], source_plan["curators"]
     )
-    report = score(rows, freeze["random_seed"], 100000)
+    report = score(rows, freeze["random_seed"], 100000, manifest["n_target"])
     report["manifest_sha256"] = actual_sha
     report["label_content_sha256"] = source_plan["label_content_sha256"]
     report["predictions_sha256"] = actual_predictions_sha

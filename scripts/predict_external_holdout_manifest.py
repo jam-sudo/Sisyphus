@@ -18,6 +18,7 @@ from pathlib import Path
 from sisyphus.validation.holdout_contract import (
     sha256_file,
     validate_payload,
+    verify_audit_report,
     verify_frozen_file,
     verify_source_plan,
     verify_training_membership,
@@ -85,14 +86,9 @@ def main() -> None:
         raise ValueError("Manifest must declare labels_blinded=true")
     verify_source_plan(args.manifest, manifest)
 
-    actual_audit_sha = _sha256(args.audit_report)
-    if actual_audit_sha != args.audit_report_sha256:
-        raise ValueError("Audit-report SHA256 does not match the committed value")
-    audit_report = json.loads(args.audit_report.read_text())
-    if audit_report.get("pass") is not True:
-        raise ValueError("External holdout audit report did not pass")
-    if audit_report.get("manifest_sha256") != actual_manifest_sha:
-        raise ValueError("Audit report was not produced from this exact manifest")
+    actual_audit_sha = verify_audit_report(
+        args.audit_report, args.audit_report_sha256, actual_manifest_sha
+    )
 
     freeze = manifest["freeze"]
     if freeze["resource_profile"] != "public":

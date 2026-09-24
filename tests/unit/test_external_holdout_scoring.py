@@ -80,7 +80,7 @@ def test_score_weights_compounds_not_arms():
             "ml_cmax_mg_l": 4.0,
         },
     ]
-    result = scorer.score(rows, seed=7, n_boot=1000)
+    result = scorer.score(rows, seed=7, n_boot=1000, n_target=260)
     assert result["n_compounds"] == 2
     assert result["n_arms"] == 3
     assert result["meta_aafe"] == pytest.approx(2.0)
@@ -127,7 +127,7 @@ def test_score_rejects_nonpositive_observation():
         }
     ]
     with pytest.raises(ValueError, match="Non-positive"):
-        scorer.score(rows, seed=7, n_boot=10)
+        scorer.score(rows, seed=7, n_boot=10, n_target=260)
 
 
 @pytest.mark.parametrize("n, expected", [(120, False), (260, True)])
@@ -144,9 +144,11 @@ def test_superiority_uses_preregistered_cohort_margin(n, expected):
         }
         for i in range(n)
     ]
-    result = scorer.score(rows, seed=7, n_boot=100)
+    result = scorer.score(rows, seed=7, n_boot=100, n_target=n)
     assert result["meta_superiority_gate"] is expected
     assert result["meta_ml_ratio_limit"] == (0.85 if n == 120 else 0.90)
+    with pytest.raises(ValueError, match="n_target"):
+        scorer.score(rows, seed=7, n_boot=10, n_target=121)
 
 
 def test_manifest_validation_rejects_arm_input_drift():
@@ -350,7 +352,7 @@ def test_full_synthetic_holdout_contract_and_scoring():
     validate_payload(labels, "external_holdout_v1_labels.schema.json")
     joined = scorer.join_predictions_and_labels(payload["rows"], labels)
     scorer.validate_results_against_manifest(joined, manifest)
-    result = scorer.score(joined, seed=7, n_boot=100)
+    result = scorer.score(joined, seed=7, n_boot=100, n_target=120)
     assert result["n_compounds"] == 120
     assert result["cmax_statistic_sensitivity"]["groups"]["arithmetic_mean"]["n_compounds"] == 120
 
@@ -547,6 +549,9 @@ def test_cli_uses_frozen_seed_and_bootstrap_count(tmp_path, monkeypatch):
     manifest["source_plan_sha256"] = sha256_file(plan_path)
     manifest_path.write_text(json.dumps(manifest))
     manifest_sha = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+    audit_path = tmp_path / "audit.json"
+    audit_path.write_text(json.dumps({"pass": True, "manifest_sha256": manifest_sha}))
+    predictions["audit_report_sha256"] = sha256_file(audit_path)
     predictions["manifest_sha256"] = manifest_sha
     labels["manifest_sha256"] = manifest_sha
     predictions_path.write_text(json.dumps(predictions))
@@ -560,6 +565,8 @@ def test_cli_uses_frozen_seed_and_bootstrap_count(tmp_path, monkeypatch):
             "--labels", str(labels_path),
             "--manifest", str(manifest_path),
             "--manifest-sha256", manifest_sha,
+            "--audit-report", str(audit_path),
+            "--audit-report-sha256", sha256_file(audit_path),
             "--predictions-sha256", hashlib.sha256(predictions_path.read_bytes()).hexdigest(),
             "--labels-sha256", hashlib.sha256(labels_path.read_bytes()).hexdigest(),
             "--out", str(output_path),
@@ -569,6 +576,28 @@ def test_cli_uses_frozen_seed_and_bootstrap_count(tmp_path, monkeypatch):
     report = json.loads(output_path.read_text())
     assert (report["seed"], report["n_bootstrap"]) == (7, 100000)
     assert report["label_content_sha256"] == plan["label_content_sha256"]
+
+    audit_path.write_text(json.dumps({"pass": False, "manifest_sha256": manifest_sha}))
+    sys.argv[sys.argv.index("--audit-report-sha256") + 1] = sha256_file(audit_path)
+    with pytest.raises(ValueError, match="did not pass"):
+        scorer.main()
+    audit_path.write_text(json.dumps({"pass": True, "manifest_sha256": manifest_sha}))
+    sys.argv[sys.argv.index("--audit-report-sha256") + 1] = sha256_file(audit_path)
+
+    predictions["audit_report_sha256"] = "0" * 64
+    predictions_path.write_text(json.dumps(predictions))
+    sys.argv[sys.argv.index("--predictions-sha256") + 1] = sha256_file(predictions_path)
+    labels["predictions_sha256"] = sha256_file(predictions_path)
+    labels_path.write_text(json.dumps(labels))
+    sys.argv[sys.argv.index("--labels-sha256") + 1] = sha256_file(labels_path)
+    with pytest.raises(ValueError, match="Prediction audit_report_sha256"):
+        scorer.main()
+    predictions["audit_report_sha256"] = sha256_file(audit_path)
+    predictions_path.write_text(json.dumps(predictions))
+    sys.argv[sys.argv.index("--predictions-sha256") + 1] = sha256_file(predictions_path)
+    labels["predictions_sha256"] = sha256_file(predictions_path)
+    labels_path.write_text(json.dumps(labels))
+    sys.argv[sys.argv.index("--labels-sha256") + 1] = sha256_file(labels_path)
 
     predictions["rows"][0]["meta_cmax_mg_l"] = 1.7
     predictions_path.write_text(json.dumps(predictions))
