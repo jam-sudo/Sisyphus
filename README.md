@@ -146,9 +146,9 @@ simulation across candidate doses.
 
 ### Experimental engine-as-prior posterior PK (MIPD module)
 
-The `mipd/` module repositions the mechanistic engine from a one-shot SMILES&rarr;C<sub>max</sub> oracle into a **structural prior that any sparse measured observation sharply updates**. The dominant structural error of an a-priori PBPK prediction is bioavailability F (formulation, salt/crystal form, food, particle size, transporter genetics — none of which is in the SMILES); the engine gets the *structure* (dose-response, distribution kinetics, accumulation) right while getting F-*magnitude* wrong, so a single measured anchor collapses the residual error.
+The `mipd/` module explores using the mechanistic engine as a structural prior updated by measured concentrations. Bioavailability F is one candidate latent because formulation, salt or crystal form, food, particle size, and transporter genetics are absent from the SMILES input. The current experiments do not show that one observation identifies F or corrects all sources of structural error.
 
-True F can be treated experimentally as a latent with a wide prior centered on the engine's emergent F<sub>engine</sub>, then updated from measured data by sampling/importance-resampling (SIR). This research path is not part of the validated SMILES-only Cmax product contract, and its posterior intervals have not been independently shown to be clinically calibrated.
+True F can be treated experimentally as a latent with a wide prior centered on the engine's emergent F<sub>engine</sub>, then updated from measured data by sampling/importance-resampling (SIR). This research path is not part of the supported structure-only Cmax path, and its posterior intervals have not been independently shown to be clinically calibrated.
 
 The module provides an a-priori-to-posterior path (`predict_posterior`), steady-state IV trough TDM with a renal-clearance latent (`predict_tdm`, vancomycin/aminoglycoside scope), patient covariate individualization (creatinine clearance via measured CrCl or a Cockcroft-Gault estimate; body weight and age via a physiology-generator graph swap), and target-attainment dose recommendation (`recommend_dose`) over the resulting posterior.
 
@@ -369,9 +369,9 @@ Three drugs were simulated at clinical dosing regimens and compared against FDA-
 
 ### Experimental TDM regression checks
 
-Bayesian update was validated in two stages: a single-drug functional test, then a multi-drug benchmark across diverse pharmacokinetic profiles. The tables below report the **Importance Sampling** baseline (legacy); production now uses a dispatched SBI/IS/IBIS router (`data/sbi/method_routing.json`) with 12/13 production drugs routing to SBI after SBC-gate validation. SBI provides millisecond-scale inference with equivalent or better CV reduction; detailed SBC + per-drug coverage reports are tracked separately.
+Bayesian update was tested with a single-drug functional check and a multi-drug synthetic-observation benchmark. The tables below report the **Importance Sampling** baseline (legacy); the experimental SBI/IS/IBIS router (`data/sbi/method_routing.json`) sends 12/13 configured drugs to SBI after simulation-based calibration checks. The reported SBI inference is millisecond-scale and reduced posterior CV in those tests; detailed calibration and per-drug coverage reports are tracked separately. These checks do not establish clinical TDM validity.
 
-**Single-drug validation** (midazolam, 5 mg PO, one observation at t = 1 h, 10% assay CV):
+**Single-drug functional check** (midazolam, 5 mg PO, one observation at t = 1 h, 10% assay CV):
 
 | Metric | Prior | Posterior |
 |--------|:-----:|:---------:|
@@ -397,13 +397,13 @@ Timepoint sensitivity analysis (morphine, single observation): t = 1.0 h (near T
 
 | Operation | Time | Configuration |
 |-----------|:----:|------|
-| Full prediction (SMILES &rarr; C<sub>max</sub>) | 414 ms | Deterministic, single core |
+| Full prediction (SMILES &rarr; C<sub>max</sub>) | 414 ms | Prior warm-run benchmark, deterministic, single core |
 | ODE solve (full fidelity) | 106 ms | LSODA, rtol=10<sup>&minus;8</sup>, atol=10<sup>&minus;10</sup> |
 | ODE solve (MC fast path) | 33 ms | LSODA, rtol=10<sup>&minus;4</sup>, atol=10<sup>&minus;6</sup> |
 | MC N=1,000 | 33.5 s | Pure Python RHS (no JIT compilation) |
 | RHS evaluation | 31 &mu;s | 54 flux specs per call |
 
-Single-patient deterministic prediction completes in &lt;500 ms, compatible with interactive clinical decision support workflows. MC propagation at N=1,000 requires ~34 s due to pure Python ODE evaluation; JIT compilation (e.g., via Numba) is an optimization path not yet pursued.
+The prior warm-run benchmark supports interactive research screening, but first-call model loading and hardware can change latency. A local macOS/Python 3.10 caffeine check on 2026-09-23 took 1.11 s on the first call and 0.16&ndash;0.17 s on five warm calls. MC propagation at N=1,000 required ~34 s in the prior benchmark due to pure Python ODE evaluation; JIT compilation (e.g., via Numba) is an optimization path not yet pursued.
 
 ### Test suite
 
@@ -640,7 +640,7 @@ models/                  # Pre-trained XGBoost models (committed; ~31MB)
 
 ## Predecessor
 
-Sisyphus inherits validated data assets from [Omega PBPK](https://github.com/jam-sudo/Omega) (591 commits) but not its architecture:
+Sisyphus inherits curated data assets from [Omega PBPK](https://github.com/jam-sudo/Omega) (591 commits) but not its architecture:
 
 | Inherited (data) | Not inherited (architecture) |
 |-------------------|------------------------------|
