@@ -1,6 +1,6 @@
 """ML model wrappers for direct PK prediction.
 
-Wraps the pre-trained XGBoost Cmax v2 model (1,128 MMPK drugs, 2057 features).
+Wraps the pinned public Omega XGBoost Cmax model (1,028 drugs, 2057 features).
 The model predicts log10(Cmax_ug_mL / dose_mg).
 Cmax (mg/L) = 10^prediction * dose_mg (since ug/mL == mg/L).
 """
@@ -24,7 +24,7 @@ _MODEL_DIR = get_resource_config().models_dir
 class PKPredictor:
     """XGBoost-based direct Cmax predictor.
 
-    Uses the v2 model trained on 1,128 MMPK drugs.
+    Uses the public Omega model trained on 1,028 holdout-excluded drugs.
     Input: SMILES string + dose_mg
     Output: Cmax Distribution
 
@@ -51,8 +51,8 @@ class PKPredictor:
             dose_mg: Dose in mg.
 
         Returns:
-            Distribution with cv=0.5 (50% prediction uncertainty,
-            reflecting ~0.65 RMSE in log space from cross-validation).
+            Distribution with a heuristic cv=0.5; this is not a calibrated
+            predictive interval. The final meta interval is separate.
 
         Raises:
             ValueError: If the SMILES string is invalid.

@@ -61,6 +61,17 @@ novelty may contribute to development-set error, but this cutoff does not
 explain the P1 failures and is not a justified new applicability gate. It was
 examined after seeing P1 labels and provides no fresh validation evidence.
 
+The two largest underpredictions also have source-reported exposure data.
+[Usnoflast Table 1](https://doi.org/10.1002/cpdd.1162) gives 100 mg
+AUC0–t **92.3 mg·h/L** and median Tmax **1 h**; the frozen engine predicts
+AUC0–24 **1.301 mg·h/L** and Tmax **2.16 h**. [DFV890 Table 3](https://doi.org/10.1111/cts.13789)
+gives 100 mg crystalline-suspension AUC0–last **72.2 mg·h/L** and median Tmax
+**2 h**; the engine predicts AUC0–24 **0.358 mg·h/L** and Tmax **1.35 h**.
+The AUC observation horizons differ from 24 h, so these are directional
+comparisons, not formal AUC fold errors. They show a broader exposure deficit
+alongside the Cmax deficit; changing peak timing alone cannot explain it.
+These post-label observations must not be used to fit a P1-specific correction.
+
 **No arm supplies protocol-compliant V1 final-test evidence.** The source
 review was AI-assisted and single-agent; none has two independent human checks.
 Immediate release was inferred for seven conventional tablets, capsules, or
