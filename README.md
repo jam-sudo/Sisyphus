@@ -8,7 +8,7 @@
 
 **Preprint:** [Yoon, J. M. (2026). *Sisyphus: A Topology-Compiled Physiologically Based Pharmacokinetic Platform with Structure-Only Input and Bayesian Parameter Refinement.* ChemRxiv.](https://doi.org/10.26434/chemrxiv.15004452/v1) &mdash; DOI [10.26434/chemrxiv.15004452/v1](https://doi.org/10.26434/chemrxiv.15004452/v1)
 
-The published v1 preprint and archived `Sisyphus_Preprint.pdf` report an older AAFE of 2.698. The current code's source-screened development benchmark is 2.8319 on 73 scored compounds; the value comes from a different model and reference set. Use the validation section below for current evidence.
+The published v1 preprint and archived `Sisyphus_Preprint.pdf` report an older AAFE of 2.698. The current code's source-screened development benchmark is 2.8322 on 73 scored compounds; the value comes from a different model and reference set. Use the validation section below for current evidence.
 
 ---
 
@@ -311,9 +311,9 @@ $$AAFE = 10^{\operatorname{mean}\left(\left|\log_{10}\frac{C_{max,pred}}{C_{max,
 | Track | AAFE | 95% CI | %2-fold | %3-fold | N |
 |---|:-:|:-:|:-:|:-:|:-:|
 | **Meta-learner (production)** | **2.832**† | [2.30, 3.54] | 46.6% | 65.8% | 73 |
-| Engine only | 3.861 | [2.98, 5.07] | 38.4% | 50.7% | 73 |
-| ML only | 3.246 | [2.60, 4.07] | 45.2% | 58.9% | 73 |
-| Meta, in-domain | 2.905 | [2.34, 3.68] | 43.3% | 65.0% | 60 |
+| Engine only | 3.862 | [2.98, 5.07] | 38.4% | 50.7% | 73 |
+| ML only | 3.247 | [2.60, 4.07] | 43.8% | 58.9% | 73 |
+| Meta, in-domain | 2.906 | [2.34, 3.68] | 43.3% | 65.0% | 60 |
 
 The paired compound-bootstrap Meta/ML AAFE ratio is **0.872** (95% CI
 **0.760–0.996**, 10,000 resamples, seed 20260422). This conditional interval

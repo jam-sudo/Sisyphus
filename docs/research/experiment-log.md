@@ -10,6 +10,24 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Replace secondary indomethacin arm with regulatory primary data
+
+The scored indomethacin 25 mg / 1.54 mg/L value could be traced only to
+DrugBank's summary, not its original study. A [Health Canada product
+monograph](https://pdf.hres.ca/dpd_pm/00073611.PDF), section 14.2, reports a
+single fasted 50 mg dose as two INDOCID 25 mg capsules in 12 healthy adult men.
+The reference product's parent-plasma Cmax arithmetic mean is 3107 ng/mL
+(3.107 mg/L; CV 35.3%). We used that exact arm and upgraded its provenance to
+gold. The original 25 mg value may still be valid for another formulation; it
+is no longer the scored arm. See the [source adjudication](../validation/development_indomethacin_primary_arm_2026-09-24.md).
+
+The N=73 repeatedly accessed development Meta AAFE is **2.8322** (conditional
+bootstrap 95% CI **2.2980–3.5446**), Engine **3.8619**, direct ML **3.2466**.
+The slight score movement follows the changed reference and dose; no model
+weights changed, and this is not external validation. Colima was not used.
+
+---
+
 ## 2026-09-24 (cont.) — Quarantine progesterone repeat-dose peak; correct rifabutin label statistics
 
 The PROMETRIUM 100 mg / 17.3 ng/mL mean followed five daily doses, not a

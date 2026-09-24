@@ -1721,16 +1721,16 @@
     },
     "indomethacin": {
       "name": "indomethacin",
-      "tier": "silver",
-      "source": "DrugBank [A177871] reports mean parent Cmax 1.54 +/- 0.76 mcg/mL after a single 25 mg oral dose in fasting subjects; original study not recovered. US indomethacin capsule label independently reports approximately 1 mcg/mL after a single 25 mg capsule, showing formulation/study variation; https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5b05b8bc-4df0-4175-bf53-72129fb21b50",
-      "dose_mg": 25.0,
+      "tier": "gold",
+      "source": "Health Canada APO-INDOMETHACIN product monograph, section 14.2 comparative bioavailability, pp. 32-34: 12 fasted healthy adult men received a single 50 mg oral dose as two INDOCID 25 mg capsules; reference-product parent indomethacin plasma Cmax arithmetic mean 3107.0 ng/mL (CV 35.3%). https://pdf.hres.ca/dpd_pm/00073611.PDF",
+      "dose_mg": 50.0,
       "route": "oral",
       "smiles": "COc1ccc2c(c1)c(CC(=O)O)c(C)n2C(=O)c1ccc(Cl)cc1",
       "pk_params": {
-        "cmax_mg_L": 1.54
+        "cmax_mg_L": 3.107
       },
       "in_holdout": true,
-      "correction_note": "2026-09-24: exact 1.54 mg/L value remains secondary-source only, so downgraded to silver; its 25 mg oral arm is plausible but not primary-verified. Removed synthetic curve."
+      "correction_note": "2026-09-24: replaced the secondary-only 25 mg / 1.54 mg/L arm with the explicit fasted single-dose INDOCID reference-product arm in the Health Canada comparative bioavailability table (50 mg / 3.107 mg/L). The original 25 mg study remains unrecovered."
     },
     "irbesartan": {
       "name": "irbesartan",

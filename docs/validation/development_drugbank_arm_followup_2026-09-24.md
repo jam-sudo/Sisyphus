@@ -16,6 +16,11 @@ used for system selection, so these results are not external validation.
 | Levofloxacin | [Table 10 of the US tablet label](https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=f14cf651-a213-4a4f-adb9-f628562af27c&type=display) gives **5.1 ± 0.8 mcg/mL** after a single **500 mg oral tablet** in healthy males. Its **6.2 ± 1.0 mcg/mL** value is after a **500 mg IV infusion**. | Correct the route collision from 6.2 to 5.1 mg/L and remove the synthetic curve. |
 | Metronidazole | The [Pfizer Canada product monograph](https://webfiles.pfizer.com/file/a1878dae-540b-4649-8912-3273916d4577) reports peak parent plasma concentration **about 13 mg/L** after a single **500 mg oral dose**; Figure 1 uses nine female subjects. | Keep 13 mg/L, specify original source and population, and remove the synthetic curve. |
 
+**Later source resolution:** The indomethacin silver-arm decision above was
+superseded by the [regulatory primary-arm review](development_indomethacin_primary_arm_2026-09-24.md).
+The current scored arm is 50 mg / 3.107 mg/L from a fasted INDOCID capsule
+study. The metrics below describe this earlier audit state.
+
 After regeneration, the scored development cohort is **N=85**: Meta AAFE
 **2.9079** (conditional compound-bootstrap 95% CI **2.3839–3.5930**), Engine
 **3.9551**, direct ML **3.3040**. The descriptive in-domain slice is N=69,
