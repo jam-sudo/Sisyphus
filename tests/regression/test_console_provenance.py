@@ -21,8 +21,12 @@ def test_console_presets_use_current_resources():
         provenance = drug["artifactProvenance"]
         assert drug["residualIntervalSource"] == "development_empirical_residual"
         assert drug["meta"]["cmax"] > 0
-        assert math.isclose(drug["residualInterval90"][0], drug["meta"]["cmax"] / half_width, rel_tol=1e-5)
-        assert math.isclose(drug["residualInterval90"][1], drug["meta"]["cmax"] * half_width, rel_tol=1e-5)
+        assert math.isclose(
+            drug["residualInterval90"][0], drug["meta"]["cmax"] / half_width, rel_tol=1e-5
+        )
+        assert math.isclose(
+            drug["residualInterval90"][1], drug["meta"]["cmax"] * half_width, rel_tol=1e-5
+        )
         for path, digest in provenance.items():
             if path == "resource_profile":
                 assert digest == "public"
@@ -48,6 +52,31 @@ def test_model_card_interval_matches_current_cache():
     assert dev["paired_meta_ml"] == ci["overall"]["paired_meta_ml"]
     console = json.loads((ROOT / "web/public/data/console_data.json").read_text())
     assert console["benchmark"]["paired_meta_ml"] == ci["overall"]["paired_meta_ml"]
+    readme = (ROOT / "README.md").read_text()
+    assert f"benchmark is {cache['overall']['meta']['aafe']:.4f} on" in readme
+    meta = cache["overall"]["meta"]
+    meta_ci = ci["overall"]["meta"]
+    assert (
+        f"Meta AAFE is {meta['aafe']:.3f} [bootstrap 95% CI "
+        f"{meta_ci['ci_95_low']:.2f}&ndash;{meta_ci['ci_95_high']:.2f}"
+    ) in readme
+    for scope, track, title in (
+        ("overall", "meta", "**Meta-learner (production)**"),
+        ("overall", "engine", "Engine only"),
+        ("overall", "ml", "ML only"),
+        ("in_domain", "meta", "Meta, in-domain"),
+    ):
+        metrics = cache[scope][track]
+        bounds = ci[scope][track]
+        point = f"{metrics['aafe']:.3f}"
+        if scope == "overall" and track == "meta":
+            point = f"**{point}**†"
+        row = (
+            f"| {title} | {point} | "
+            f"[{bounds['ci_95_low']:.2f}, {bounds['ci_95_high']:.2f}] | "
+            f"{metrics['pct_2fold']:.1f}% | {metrics['pct_3fold']:.1f}% | {bounds['n']} |"
+        )
+        assert row in readme
 
 
 def test_paired_ratio_resamples_compounds_together():
