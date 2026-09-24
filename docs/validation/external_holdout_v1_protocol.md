@@ -337,6 +337,22 @@ structure/name exclusion union, leaving five provisional structure-clean
 leads. This is not a verified eligibility count, and an unresolved name does
 not prove that its structure is novel.
 
+A separate metadata-only cross-check on 2026-09-24 queried result-posted,
+healthy-volunteer records with a `Cmax` outcome title and a `fasted` text hit.
+The API query was `AREA[OutcomeMeasureTitle](Cmax) AND
+AREA[HealthyVolunteers](true) AND AREA[HasResults](true) AND fasted`.
+The API's field projection included titles, intervention names/types,
+eligibility text, summary text, and results-posting date, but no numeric outcome
+fields. Of 379 records, 200 first posted results in 2020–2026; 85 of those had
+exactly one non-placebo drug intervention. Requiring oral, single-dose, and
+fasting mentions in the protocol text left seven records. PubChem resolved five
+names; the production-corpus name/structure screen found one hit and four
+provisional nonhits, while two names did not resolve. These seven are only
+development source leads: the text mentions may describe different arms,
+PubChem's first name match needs identity review, and overlap with the earlier
+75-record screen was not established. They must not be counted as additional
+eligible or blinded final-test compounds.
+
 The PMDA [English review-report index](https://www.pmda.go.jp/english/review-services/reviews/approved-information/drugs/0001.html)
 (snapshot SHA256
 `11568ed9c0bafb86d94fcc2959a4a9694556cc694a174db6cc10157b1a111e59`)
