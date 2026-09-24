@@ -135,3 +135,10 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     osp = {row["drug_name"]: row for row in json.loads((ROOT / "data/reference/osp_observed.json").read_text())}
     assert not {"cabozantinib", "felodipine", "itraconazole", "ruxolitinib", "verapamil"} & osp.keys()
     assert osp["erythromycin"]["study"] == "DiSanto 1981"
+    assert refs["acamprosate"].dose_mg == 600.0
+    assert refs["acamprosate"].cmax_obs == pytest.approx(0.18)
+    assert data["drugs"]["acamprosate"]["tier"] == "silver"
+    assert refs["phenytoin"].dose_mg == pytest.approx(300 * 252.27 / 274.25, rel=1e-6)
+    assert refs["phenytoin"].cmax_obs == pytest.approx(2.32)
+    assert refs["phenytoin"].auc_obs == pytest.approx(108.99)
+    assert "ct_curve" not in data["drugs"]["phenytoin"]

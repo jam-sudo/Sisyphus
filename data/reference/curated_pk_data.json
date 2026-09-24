@@ -1,13 +1,13 @@
 [
   {
     "drug_name": "acamprosate",
-    "dose_mg": 666,
+    "dose_mg": 600.0,
     "cmax_mg_L": 0.18,
     "cmax_value_original": 180,
     "cmax_unit_original": "ng/mL",
-    "source": "Saivin et al., Clin Pharmacokinet 1998; FDA label (Campral)",
-    "notes": "Single 666mg dose (2x333mg tablets) in healthy volunteers. Delayed-release tablets. Cmax 162-212 ng/mL range across studies, 180 ng/mL mean used.",
-    "status": "confirmed"
+    "source": "2010 narrative review (https://pmc.ncbi.nlm.nih.gov/articles/PMC2853976/); DailyMed acamprosate calcium label (https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ae6e79c0-a307-4888-b647-1b7be4cb9127)",
+    "notes": "Two 333 mg calcium-salt delayed-release tablets provide 600 mg acamprosate parent equivalent. Review-reported single-dose Cmax 180 ng/mL in healthy volunteers; exact original numeric study arm and meal state not established.",
+    "status": "secondary_source"
   },
   {
     "drug_name": "alvimopan",

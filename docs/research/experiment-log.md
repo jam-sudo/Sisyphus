@@ -10,6 +10,28 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Correct acamprosate and phenytoin parent-dose references
+
+The acamprosate label specifies 300 mg parent equivalent per 333 mg
+calcium-salt tablet, so the two-tablet model dose changed from 666 to
+600 mg. Its review-reported 0.18 mg/L single-dose peak remains, but the
+reference is silver until the original numeric arm is retrieved. A primary
+phenytoin study directly reports 2.32 mg/L after 300 mg phenytoin sodium;
+the parent-equivalent model dose is 275.956 mg. This replaces an untraceable
+5 mg/L range midpoint and removes an unmatched half-life and synthetic curve.
+See
+[`development_salt_equivalent_reference_followup_2026-09-24.md`](../validation/development_salt_equivalent_reference_followup_2026-09-24.md).
+
+The N=79 public-profile development cache now has Meta AAFE **2.9492**
+(conditional 95% compound-bootstrap CI **2.4077–3.6756**), Engine
+**3.8794**, direct ML **3.3044**, and in-domain Meta **3.0375** (N=65).
+The paired Meta/ML ratio is **0.8925** (CI **0.7890–1.0048**); the
+development-residual interval still has a 10.24× half-width and covers
+72/79 (91.1%). Fitted models did not change. The shift from 2.9276 is a
+source correction, not an independent accuracy result.
+
+---
+
 ## 2026-09-24 (cont.) — Repair OSP molecule and dose provenance
 
 Source-level inspection of all 21 selected OSP rows exposed an extractor
