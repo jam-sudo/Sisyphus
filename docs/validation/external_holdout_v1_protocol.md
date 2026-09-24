@@ -364,10 +364,22 @@ PubChem's first name match needs identity review, and overlap with the earlier
 eligible or blinded final-test compounds.
 Protocol text supports fasted single oral-dose investigation for
 `NCT05635461` (CVN424), `NCT04504435` (GSK3494245), and `NCT04208321`
-(VT-1598), but the exact posted arms and absolute parent-plasma Cmax still need
-source review. The fourth provisional nonhit, `NCT05627518` (linaprazan
-glurate), reports only Cmax *ratios* in its outcome titles, so it does not
-establish an absolute Cmax label for this benchmark.
+(VT-1598). A [registry-results review](https://clinicaltrials.gov/study/NCT05635461)
+on 2026-09-24 confirmed two distinct 150 mg, fasted, single-dose CVN424 arms:
+geometric-mean parent-plasma Cmax was 812.9 ng/mL for suspension (N=30) and
+231.1 ng/mL for tablet (N=26). The [posted protocol](https://cdn.clinicaltrials.gov/large-docs/61/NCT05635461/Prot_000.pdf)
+specifies at least 10 hours of fasting before dosing and four hours afterward;
+it does not explicitly establish immediate release or the active-moiety dose
+basis. These are two arms of **one compound**, not two independent cohort
+members. Because the model-development agent inspected the numeric results,
+CVN424 is permanently development-only, regardless of later eligibility review.
+The other two named studies still need arm-level source review. The four named
+leads and 20 more intervention names displayed in a broader reproducibility
+screen are indexed in `data/validation/ctgov_modeler_seen_identities_2026-09-24.json`
+for final-test and reserve exclusion. The fourth provisional nonhit,
+`NCT05627518` (linaprazan glurate), reports only Cmax *ratios* in its
+outcome titles, so it does not establish an absolute Cmax label for this
+benchmark.
 
 The PMDA [English review-report index](https://www.pmda.go.jp/english/review-services/reviews/approved-information/drugs/0001.html)
 (snapshot SHA256
