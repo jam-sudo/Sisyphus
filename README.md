@@ -8,7 +8,7 @@
 
 **Preprint:** [Yoon, J. M. (2026). *Sisyphus: A Topology-Compiled Physiologically Based Pharmacokinetic Platform with Structure-Only Input and Bayesian Parameter Refinement.* ChemRxiv.](https://doi.org/10.26434/chemrxiv.15004452/v1) &mdash; DOI [10.26434/chemrxiv.15004452/v1](https://doi.org/10.26434/chemrxiv.15004452/v1)
 
-The published v1 preprint and archived `Sisyphus_Preprint.pdf` report an older AAFE of 2.698. The current code's source-audited development benchmark is 2.8678 on 86 scored compounds; the value comes from a different model and reference set. Use the validation section below for current evidence.
+The published v1 preprint and archived `Sisyphus_Preprint.pdf` report an older AAFE of 2.698. The current code's source-audited development benchmark is 2.8675 on 86 scored compounds; the value comes from a different model and reference set. Use the validation section below for current evidence.
 
 ---
 
@@ -310,18 +310,18 @@ $$AAFE = 10^{\operatorname{mean}\left(\left|\log_{10}\frac{C_{max,pred}}{C_{max,
 
 | Track | AAFE | 95% CI | %2-fold | %3-fold | N |
 |---|:-:|:-:|:-:|:-:|:-:|
-| **Meta-learner (production)** | **2.868**† | [2.36, 3.52] | 47.7% | 65.1% | 86 |
-| Engine only | 3.797 | [3.02, 4.87] | 36.0% | 50.0% | 86 |
-| ML only | 3.320 | [2.71, 4.09] | 38.4% | 57.0% | 86 |
-| Meta, in-domain | 2.849 | [2.32, 3.57] | 47.1% | 64.3% | 70 |
+| **Meta-learner (production)** | **2.868**† | [2.36, 3.52] | 48.8% | 65.1% | 86 |
+| Engine only | 3.837 | [3.06, 4.91] | 34.9% | 50.0% | 86 |
+| ML only | 3.322 | [2.71, 4.08] | 39.5% | 57.0% | 86 |
+| Meta, in-domain | 2.849 | [2.32, 3.57] | 48.6% | 64.3% | 70 |
 
-The paired compound-bootstrap Meta/ML AAFE ratio is **0.864** (95% CI
-**0.774–0.963**, 10,000 resamples, seed 20260422). This conditional interval
+The paired compound-bootstrap Meta/ML AAFE ratio is **0.863** (95% CI
+**0.773–0.962**, 10,000 resamples, seed 20260422). This conditional interval
 excludes 1, but repeated use of the cohort for system selection means it does
 not establish independent superiority over direct ML. The in-domain ratio is
-0.915 (0.817–1.025).
+0.915 (0.816–1.024).
 
-> **Reproducibility (2026-09-24).** The table uses public-only TDC fup, Peff, hepatocyte CLint, and Lombardo VDss plus Omega Cmax retrains. Earlier morphine and digoxin reference corrections were followed by an arm-level audit. The current cache excludes unsupported leflunomide and sirolimus arms plus seven prodrug-metabolite labels (adefovir dipivoxil, fesoterodine, molnupiravir, prasugrel, tenofovir disoproxil, valacyclovir, valganciclovir), excludes unsupported abiraterone, atovaquone, clozapine, darolutamide, darunavir, glasdegib, itraconazole, pomalidomide, ranolazine, sonidegib, tamsulosin, and vilazodone arms, and uses directly reported paroxetine, nilotinib, clopidogrel, levocetirizine, methylphenidate, and norethindrone parent arms. Per-drug predictions are in `data/training/4track_holdout_predictions.json`; bootstrap intervals are in `data/validation/4track_ci_2026-09-24_audited_reference.json`. Their fitted datasets contain 1,557 fup, 874 Peff, 1,028 Cmax, 995 CLint, and 1,055 VDss hash-pinned rows. †This repeatedly used development set and its conditional bootstrap CI do not establish independent generalization. Earlier benchmark lineage and numerics-drift measurements are in `docs/research/experiment-log.md`.
+> **Reproducibility (2026-09-24).** The table uses public-only TDC fup, Peff, hepatocyte CLint, and Lombardo VDss plus Omega Cmax retrains. Earlier morphine and digoxin reference corrections were followed by an arm-level audit. The current cache excludes unsupported leflunomide and sirolimus arms plus seven prodrug-metabolite labels (adefovir dipivoxil, fesoterodine, molnupiravir, prasugrel, tenofovir disoproxil, valacyclovir, valganciclovir), excludes unsupported abiraterone, atovaquone, clozapine, darolutamide, darunavir, glasdegib, itraconazole, pomalidomide, ranolazine, sonidegib, tamsulosin, and vilazodone arms, and uses directly reported paroxetine, nilotinib, clopidogrel, levocetirizine, methylphenidate, norethindrone, carbamazepine, zonisamide, and oxybutynin parent arms. Per-drug predictions are in `data/training/4track_holdout_predictions.json`; bootstrap intervals are in `data/validation/4track_ci_2026-09-24_audited_reference.json`. Their fitted datasets contain 1,557 fup, 874 Peff, 1,028 Cmax, 995 CLint, and 1,055 VDss hash-pinned rows. †This repeatedly used development set and its conditional bootstrap CI do not establish independent generalization. Earlier benchmark lineage and numerics-drift measurements are in `docs/research/experiment-log.md`.
 
 The 4-track meta-learner combines mechanistic PBPK (Engine), data-driven XGBoost C<sub>max</sub> (ML), a closed-form CL/F analytical (CLF), and a conditional VDss analytical track. Weights are compound-type-adaptive and were LOOCV-selected on the original N=107 cohort: base compounds blend Engine 0.60 / ML 0.40; other compounds use Engine 0.35 / ML 0.50 / CLF 0.15, with VDss 0.20 added when applicability criteria are satisfied. The current in-domain N=73 slice is descriptive only: applicability flags have not demonstrated reliable error stratification, and neither slice is independent evidence.
 

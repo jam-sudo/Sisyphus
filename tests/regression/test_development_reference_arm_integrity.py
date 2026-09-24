@@ -47,3 +47,10 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert refs["nilotinib"].cmax_obs == 0.615
     assert refs["norethindrone"].dose_mg == 0.35
     assert refs["norethindrone"].cmax_obs == 0.004817
+    assert refs["carbamazepine"].dose_mg == 200.0
+    assert refs["carbamazepine"].cmax_obs == 1.9
+    assert refs["zonisamide"].dose_mg == 300.0
+    assert refs["zonisamide"].cmax_obs == 3.42
+    assert refs["oxybutynin"].dose_mg == 5.0
+    assert refs["oxybutynin"].cmax_obs == 0.0082
+    assert refs["oxybutynin"].auc_obs is None

@@ -7,7 +7,7 @@
   "n_training_reference": 56,
   "skipped_training_reference": [],
   "generated_from": "scripts/calibrate_conformal.py",
-  "source_cache_sha256": "2a65395a78f6dde53c712a5f122c915e87ddf8b7ce9697697e04e9e468ea7d91",
+  "source_cache_sha256": "1f69ae2a60bfd2b8a0f990a502245e2a612f01a5454bfb7d7f8e9fa850bf29b0",
   "model_artifact_sha256": {
     "models/direct_pk/xgboost_cmax.json": "14391eb0881cb3ec83ab2f81592c5fe75da7c949290ec438fddc2d7136f792a0",
     "models/direct_pk/xgboost_clf.json": "2c83f5bf90a47c11150f07380e686cda3bea67cf1b44d9500895cdaf4a8da6a1",
@@ -52,7 +52,7 @@
       "0.05": 1.0
     },
     "ml": {
-      "0.5": 0.4651,
+      "0.5": 0.4767,
       "0.2": 0.7907,
       "0.1": 0.8372,
       "0.05": 1.0

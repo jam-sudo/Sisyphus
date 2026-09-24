@@ -1,9 +1,9 @@
 # Development Cmax reference source audit — 2026-09-24
 
 This is an audit of the repeatedly used development benchmark, not an
-independent model evaluation. Twenty-seven scored rows used an estimated label, cited
+independent model evaluation. Thirty scored rows used an estimated label, cited
 the wrong analyte/arm, or lacked support for the stated Cmax. The rule was
-applied to all twenty-seven rows before re-scoring; no model weights or fitted
+applied to all thirty rows before re-scoring; no model weights or fitted
 artifacts changed.
 
 | Drug | Previous benchmark label | Source finding | Current disposition |
@@ -35,13 +35,17 @@ artifacts changed.
 | Glasdegib | 150 mg, 1.252 mg/L | The [DAURISMO label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=204a6f7e-c9a4-472b-abd2-9527bda64d17) reports **1252 ng/mL at 100 mg once daily steady state** in patients with cancer. | Claimed single 150 mg Cmax quarantined. |
 | Vilazodone | 80 mg, 0.156 mg/L | The [vilazodone label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f917f30d-f2a7-43eb-836f-53eaa2a31cb0) reports **156 ng/mL at 40 mg once daily steady state** under fed conditions. | Claimed single 80 mg Cmax quarantined. |
 | Pomalidomide | 4 mg, 0.0531 mg/L | The [POMALYST label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=2b25ef01-5c9e-11e1-b86c-0800200c9a66) reports **53.1 ng/mL at 5 mg daily steady state** in Kaposi sarcoma patients. | Claimed single 4 mg Cmax quarantined. |
+| Carbamazepine | 200 mg, 1.0 mg/L | The [carbamazepine ER label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=33ed4e35-8be2-d0ea-e063-6394a90a06a6) directly reports parent Cmax **1.9 ± 0.3 µg/mL** after a **single 200 mg oral extended-release** dose. The former 1.0 mg/L arm was not identifiable. | Replaced with exact 200 mg / 1.9 mg/L ER arm. |
+| Zonisamide | 300 mg, 2.0 mg/L | The [PMDA review](https://www.pmda.go.jp/files/000235932.pdf), study RR-764-00605, reports parent Cmax **3.42 µg/mL** after single **300 mg zonisamide alone** in healthy adults; 3.37 µg/mL was the cimetidine coadministration arm. The FDA label's 2–5 µg/mL range covers **200–400 mg** and does not identify 2.0 µg/mL with a 300 mg arm. | Replaced with exact 300 mg / 3.42 mg/L unboosted arm. |
+| Oxybutynin | 5 mg, 0.008 mg/L | [Douchamps et al. 1988](https://pubmed.ncbi.nlm.nih.gov/3234461/), Table 2, directly reports parent Cmax **8.2 ng/mL** and terminal half-life **2.44 h** after a **single 5 mg oral tablet** in 18 healthy volunteers. The old 13.2 h half-life and synthetic 0.0056 mg·h/L AUC did not describe this arm. | Corrected to 0.0082 mg/L, sourced half-life, and removed synthetic AUC and curve. |
 
 The scored benchmark is now **N=86** from the unchanged 107-compound split.
-Meta AAFE is **2.8678** (compound bootstrap 95% CI **2.3591–3.5168**), versus
-**2.7842** (2.3030–3.4144) for the prior N=89 cache. Three more
-steady-state references were excluded and the norethindrone arm was corrected;
-this is a change in label integrity, not model quality. Both cohorts have
-repeatedly informed system development.
+Meta AAFE is **2.8675** (compound bootstrap 95% CI **2.3606–3.5165**), versus
+**2.7842** (2.3030–3.4144) for the N=89 cache. Three more
+steady-state references were excluded; the norethindrone, carbamazepine,
+zonisamide, and oxybutynin arms were corrected. This is a change in label
+integrity, not model quality. Both cohorts have repeatedly informed system
+development.
 
 The engine observes `venous_blood`, whose compartment concentration is amount
 divided by whole-blood volume. Production blood:plasma ratio estimates are
