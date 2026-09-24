@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-09-23
+last_updated: 2026-09-24
 parent: ../../README.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -7,6 +7,30 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 # Experiment Log
 
 Reverse-chronological. The project README carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
+
+---
+
+## 2026-09-24 — Reconcile the source-screened development benchmark
+
+The current public-profile cache at `e430461` scores **86** of the original
+107 development compounds after source, analyte, dose, formulation, and
+structure adjudication. It yields Meta AAFE **2.8852** (conditional
+compound-bootstrap 95% CI **2.3761–3.5348**), Engine **3.9023**, and direct ML
+**3.3002**. The descriptive in-domain Meta slice is **2.8705** (N=70). The
+nominal 90% development-residual half-width is **10.24×**, with **79/86**
+coverage on this repeatedly accessed cohort. The fitted model weights did not
+change during the latest reference repairs; the scored labels and one
+salt-to-parent dose mapping did. The current figures are not directly
+comparable to the former 2.743/N=107 table as model gains or losses.
+
+The current cache and its matching bootstrap artifact are
+`data/training/4track_holdout_predictions.json` and
+`data/validation/4track_ci_2026-09-24_audited_reference.json`. Individual
+source decisions are recorded in the dated `docs/validation/development_*`
+audits. The local Claude Code guidance had still presented the 2026-07-03
+2.743/N=107 table as current; its metrics and limitations were reconciled
+against these artifacts. Neither the cohort nor its conditional CI establishes
+independent external accuracy or superiority over direct ML.
 
 ---
 
