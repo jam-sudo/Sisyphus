@@ -122,6 +122,20 @@ An acquisition feasibility check on the FDA's [1985–2025 NME compilation](http
 (retrieved 2026-09-23) found 682 NDA rows with any route field marked oral, of
 which 132 were approved in 2020–2025. These are raw product counts, not unique,
 eligible, decontaminated compounds; they are an upper bound for that FDA source.
+In a label-blind exact-name screen of the same XLSX (SHA256
+`0dd3e4683901e3b8c41ee6bd0f54bac1c33eaae95f1fae8679e6b3b0b45502cd`)
+against the repository exclusion-name union at `ed0380a`, all 682 rows had
+distinct active-ingredient/moiety strings after lowercasing and removing
+non-alphanumeric characters. Of these, 473 matched an existing name and 209
+did not: 12 of 132 approved in 2020–2025 and 197 of 550 approved earlier.
+The route screen includes one mixed injection/oral/rectal entry, and 36
+ingredient strings contain a comma or `and`, so some rows may represent
+combinations. The 209 nonmatches are only an optimistic discovery pool:
+synonyms, salts, combinations, structure-level collisions, non-IR products,
+and missing eligible fasted single-dose Cmax arms still need review. FDA's
+recent-approval subset is especially small; even the full 1985–2025 source
+cannot establish the N=260 test cohort from this name screen alone. No Cmax
+values were read.
 The 900-identity inventory therefore needs older and investigational drugs plus
 non-FDA sources, with duplicates across agencies collapsed before allocation.
 EMA's [Article 57 product data](https://www.ema.europa.eu/en/human-regulatory-overview/post-authorisation/data-medicines-iso-idmp-standards-post-authorisation/public-data-article-57-database)
