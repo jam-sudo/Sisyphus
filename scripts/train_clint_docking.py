@@ -21,6 +21,7 @@ from rdkit.Chem.Scaffolds.MurckoScaffold import MurckoScaffoldSmiles
 from sklearn.metrics import mean_absolute_error, r2_score
 
 from sisyphus.descriptors import compute_features
+from sisyphus.validation.docking_cache import load_matching_cache
 from sisyphus.validation.identity import ik14
 
 RDLogger.DisableLog("rdApp.*")
@@ -45,14 +46,6 @@ DOCK_FEATURE_NAMES = [
 ]
 
 
-def inchikey_14(smiles: str) -> str:
-    mol = Chem.MolFromSmiles(smiles)
-    if mol is None:
-        import hashlib
-        return hashlib.md5(smiles.encode()).hexdigest()[:14]
-    return Chem.inchi.MolToInchiKey(mol)[:14]
-
-
 def load_holdout_ik14() -> set[str]:
     """Load salt-insensitive holdout structures to exclude from training."""
     with open(HOLDOUT_JSON) as f:
@@ -75,14 +68,11 @@ def load_holdout_ik14() -> set[str]:
 
 def load_docking_features(smiles: str, cache_dir: Path, cyps: list[str]) -> dict[str, float]:
     """Load docking features from cache for a SMILES."""
-    key14 = inchikey_14(smiles)
     features = {}
 
     for cyp in cyps:
-        cache_path = cache_dir / f"{key14}_{cyp}.json"
-        if cache_path.exists():
-            with open(cache_path) as f:
-                data = json.load(f)
+        data = load_matching_cache(cache_dir, smiles, cyp)
+        if data is not None:
             for feat_name in DOCK_FEATURE_NAMES:
                 val = data.get(feat_name, float("nan"))
                 if val is None:

@@ -10,6 +10,24 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-23 (cont.) — Reject stale stereoisomer docking poses
+
+Experimental Vina/DiffDock caches were named by the first 14 InChIKey
+characters, which omit stereochemistry. After the reference identity cleanup,
+the docking benchmark could silently reuse a pose generated for an
+unspecified or different isomer. Cache readers now verify canonical isomeric
+SMILES stored in each JSON record before using its features; the batch writers
+save new poses under full-InChIKey plus canonical-isomeric-SMILES-hash filenames
+so isomers and distinct tautomers can coexist. Legacy
+14-character files remain readable when their stored structure matches. A
+synthetic opposite-enantiomer regression test passes, and four existing
+non-isomeric DiffDock records (morphine, azithromycin, tamoxifen, darolutamide)
+are rejected for their corrected reference inputs. They require re-docking
+before any new docking-enriched evaluation; none of these experimental docking
+features enter the shipped Cmax benchmark.
+
+---
+
 ## 2026-09-23 (cont.) — Development-reference stereochemistry adjudication
 
 The 107-name [PubChem PUG REST](https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest)
@@ -47,8 +65,8 @@ chemical identity without improving the model's predictive accuracy; the
 direct-ML Morgan fingerprint does not encode chirality, and the corrected
 curated registry routes retained the same drug-specific parameters. The
 experimental docking caches for some of these drugs still carry prior
-non-isomeric inputs and must be structure-checked or re-docked before use in
-any future docking-based evaluation.
+non-isomeric inputs; the subsequent cache-identity guard rejects them until
+they are re-docked.
 
 ---
 

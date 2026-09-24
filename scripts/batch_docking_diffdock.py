@@ -21,6 +21,9 @@ import requests
 from rdkit import Chem, RDLogger
 from rdkit.Chem import AllChem
 
+from sisyphus.validation.docking_cache import cache_path as docking_cache_path
+from sisyphus.validation.docking_cache import load_matching_cache
+
 RDLogger.DisableLog("rdApp.*")
 
 logger = logging.getLogger(__name__)
@@ -272,11 +275,10 @@ def main():
 
         for i, drug in enumerate(drugs):
             key14 = inchikey_14(drug["smiles"])
-            cache_path = CACHE_DIR / f"{key14}_{cyp}.json"
-
-            if cache_path.exists():
+            if load_matching_cache(CACHE_DIR, drug["smiles"], cyp) is not None:
                 cached += 1
                 continue
+            output_path = docking_cache_path(CACHE_DIR, drug["smiles"], cyp)
 
             sdf = drug_sdfs.get(drug["smiles"])
             if sdf is None:
@@ -310,7 +312,7 @@ def main():
                 **features,
             }
 
-            with open(cache_path, "w") as f:
+            with open(output_path, "w") as f:
                 json.dump(entry, f, indent=2)
 
             success += 1

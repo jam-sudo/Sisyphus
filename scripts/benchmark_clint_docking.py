@@ -14,7 +14,9 @@ from pathlib import Path
 
 import numpy as np
 import xgboost as xgb
-from rdkit import Chem, RDLogger
+from rdkit import RDLogger
+
+from sisyphus.validation.docking_cache import load_matching_cache
 
 RDLogger.DisableLog("rdApp.*")
 
@@ -35,14 +37,6 @@ def load_docking_meta() -> dict:
         return json.load(f)
 
 
-def inchikey_14(smiles: str) -> str:
-    mol = Chem.MolFromSmiles(smiles)
-    if mol is None:
-        import hashlib
-        return hashlib.md5(smiles.encode()).hexdigest()[:14]
-    return Chem.inchi.MolToInchiKey(mol)[:14]
-
-
 DOCK_FEATURE_NAMES = [
     "docking_score",
     "heme_fe_distance_min",
@@ -53,13 +47,10 @@ DOCK_FEATURE_NAMES = [
 
 def get_docking_features(smiles: str, cyps: list[str], cache_dir: Path) -> np.ndarray:
     """Get docking features for a SMILES from cache."""
-    key14 = inchikey_14(smiles)
     features = []
     for cyp in cyps:
-        cache_path = cache_dir / f"{key14}_{cyp}.json"
-        if cache_path.exists():
-            with open(cache_path) as f:
-                data = json.load(f)
+        data = load_matching_cache(cache_dir, smiles, cyp)
+        if data is not None:
             for fn in DOCK_FEATURE_NAMES:
                 val = data.get(fn, float("nan"))
                 features.append(float(val) if val is not None else float("nan"))
@@ -70,8 +61,8 @@ def get_docking_features(smiles: str, cyps: list[str], cache_dir: Path) -> np.nd
 
 def patch_clint_predictor(meta: dict):
     """Monkey-patch the CLint predictor to use docking-enriched model."""
-    from sisyphus.predict import adme
     from sisyphus.descriptors import compute_features
+    from sisyphus.predict import adme
 
     # Load enriched model
     model_path = ROOT / "models" / "adme" / "xgboost_clint_docking.json"

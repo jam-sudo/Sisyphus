@@ -22,6 +22,9 @@ import numpy as np
 from rdkit import Chem, RDLogger
 from rdkit.Chem import AllChem, Descriptors
 
+from sisyphus.validation.docking_cache import cache_path as docking_cache_path
+from sisyphus.validation.docking_cache import load_matching_cache
+
 RDLogger.DisableLog("rdApp.*")
 
 logger = logging.getLogger(__name__)
@@ -232,11 +235,10 @@ def load_drug_list() -> list[dict]:
 def dock_single(drug: dict, cyp: str, metadata: dict, exhaustiveness: int) -> dict | None:
     """Dock one drug against one CYP. Returns cache entry or None."""
     key14 = inchikey_14(drug["smiles"])
-    cache_path = CACHE_DIR / f"{key14}_{cyp}.json"
-
-    if cache_path.exists():
-        with open(cache_path) as f:
-            return json.load(f)
+    cached = load_matching_cache(CACHE_DIR, drug["smiles"], cyp)
+    if cached is not None:
+        return cached
+    output_path = docking_cache_path(CACHE_DIR, drug["smiles"], cyp)
 
     # Prepare ligand
     ligand_pdbqt = smiles_to_pdbqt(drug["smiles"])
@@ -271,7 +273,7 @@ def dock_single(drug: dict, cyp: str, metadata: dict, exhaustiveness: int) -> di
         **features,
     }
 
-    with open(cache_path, "w") as f:
+    with open(output_path, "w") as f:
         json.dump(entry, f, indent=2)
 
     return entry
@@ -309,10 +311,7 @@ def main():
         t0 = time.time()
 
         for i, drug in enumerate(drugs):
-            key14 = inchikey_14(drug["smiles"])
-            cache_path = CACHE_DIR / f"{key14}_{cyp}.json"
-
-            if cache_path.exists():
+            if load_matching_cache(CACHE_DIR, drug["smiles"], cyp) is not None:
                 cached += 1
                 if (i + 1) % 100 == 0:
                     elapsed = time.time() - t0
