@@ -242,6 +242,9 @@ def verify_training_membership(
             raise ValueError(f"Training membership source SHA256 mismatch: {row['path']}")
     for model_path in _PRODUCTION_FITTED_MODELS:
         metadata = json.loads(resolve_frozen_path(root, model_path).read_text())
+        artifact_path = model_path.replace(".meta.json", ".json")
+        if sha256_file(resolve_frozen_path(root, artifact_path)) != metadata.get("artifact_sha256"):
+            raise ValueError(f"Production model artifact SHA256 mismatch: {artifact_path}")
         if (
             model_path == "models/adme/xgboost_fup_v2.meta.json"
             and sha256_file(resolve_frozen_path(root, "models/adme/xgboost_fup_v2.json"))

@@ -272,12 +272,16 @@ def test_training_membership_refuses_missing_or_modified_source(tmp_path, monkey
     for model_path in _PRODUCTION_FITTED_MODELS:
         metadata_path = tmp_path / model_path
         metadata_path.parent.mkdir(parents=True, exist_ok=True)
-        metadata_path.write_text(json.dumps({"trained_on": {
-            "dataset_path": "data/training/example.csv",
-            "sha256": sha256_file(source_path),
-        }}))
+        artifact_path = tmp_path / model_path.replace(".meta.json", ".json")
+        artifact_path.write_text("placeholder")
+        metadata_path.write_text(json.dumps({
+            "artifact_sha256": sha256_file(artifact_path),
+            "trained_on": {
+                "dataset_path": "data/training/example.csv",
+                "sha256": sha256_file(source_path),
+            },
+        }))
     fup_artifact = tmp_path / "models/adme/xgboost_fup_v2.json"
-    fup_artifact.write_text("placeholder")
     freeze = {
         "training_membership_path": "data/validation/training_membership_sources_v1.json",
         "training_membership_sha256": sha256_file(inventory_path),
@@ -285,25 +289,36 @@ def test_training_membership_refuses_missing_or_modified_source(tmp_path, monkey
     assert verify_training_membership(
         tmp_path, freeze, {"data/training/example.csv"}
     ) == sha256_file(inventory_path)
+    cmax_artifact = tmp_path / _PRODUCTION_FITTED_MODELS[0].replace(".meta.json", ".json")
+    cmax_artifact.write_text("changed")
+    with pytest.raises(ValueError, match="Production model artifact SHA256 mismatch"):
+        verify_training_membership(tmp_path, freeze, {"data/training/example.csv"})
+    cmax_artifact.write_text("placeholder")
     cmax_meta = tmp_path / _PRODUCTION_FITTED_MODELS[0]
     cmax_meta.write_text(json.dumps({"trained_on": {
         "dataset_path": "mmpk_clean.csv (Omega)", "sha256": "unknown_legacy",
-    }}))
+    }, "artifact_sha256": sha256_file(cmax_artifact)}))
     with pytest.raises(ValueError, match="Unverifiable production model training source"):
         verify_training_membership(tmp_path, freeze, {"data/training/example.csv"})
     cmax_meta.write_text(json.dumps({"trained_on": {
         "dataset_path": "data/training/example.csv", "sha256": "0" * 64,
-    }}))
+    }, "artifact_sha256": sha256_file(cmax_artifact)}))
     with pytest.raises(ValueError, match="Production model training source SHA256 mismatch"):
         verify_training_membership(tmp_path, freeze, {"data/training/example.csv"})
     cmax_meta.write_text(json.dumps({"trained_on": {
         "dataset_path": "data/training/example.csv", "sha256": sha256_file(source_path),
-    }}))
+    }, "artifact_sha256": sha256_file(cmax_artifact)}))
     fup_artifact.write_bytes((ROOT / "models/adme/xgboost_fup_v2.json").read_bytes())
+    fup_meta = tmp_path / "models/adme/xgboost_fup_v2.meta.json"
+    fup_data = json.loads(fup_meta.read_text())
+    fup_data["artifact_sha256"] = sha256_file(fup_artifact)
+    fup_meta.write_text(json.dumps(fup_data))
     monkeypatch.setattr(contract, "_DRUGBANK_FUP_ARTIFACT_SHA256", sha256_file(fup_artifact))
     with pytest.raises(ValueError, match="DrugBank targets outside the public profile"):
         verify_training_membership(tmp_path, freeze, {"data/training/example.csv"})
     fup_artifact.write_text("placeholder")
+    fup_data["artifact_sha256"] = sha256_file(fup_artifact)
+    fup_meta.write_text(json.dumps(fup_data))
     source_path.write_text("modified")
     with pytest.raises(ValueError, match="source SHA256 mismatch"):
         verify_training_membership(tmp_path, freeze, {"data/training/example.csv"})
