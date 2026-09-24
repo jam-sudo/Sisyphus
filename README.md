@@ -412,6 +412,18 @@ and two independent human curators were unavailable. No P1 arm qualifies for
 External Holdout V1. See the [P1 diagnostic](docs/validation/blind_p1_result_2026-09-24.md)
 for the freeze chain, source cells, sensitivity, and limitations.
 
+### AI-assisted P2 FDA acquisition check
+
+A separate Claude worker consecutively screened all **248 oral FDA NME rows
+from 2015–2025** against the repository exclusion union and strict original-arm
+criteria. No new eligible compound remained, so no predictions were run.
+Repository name collisions removed 235 rows; the two structure-clean parents
+that reached original-source arm review lacked stated post-dose meal timing and
+explicit immediate-release evidence. This is a single-agent acquisition check,
+not External Holdout V1 evidence; the [P2 screen](docs/validation/blind_p2_fda_acquisition_2026-09-24.md)
+records ordered attrition and limitations. A qualifying external cohort needs
+other source windows and independent human curation.
+
 ### Experimental multi-dose regression checks
 
 Three drugs were simulated at clinical dosing regimens and compared against FDA-label steady-state C<sub>max</sub> values:
