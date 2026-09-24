@@ -17,6 +17,7 @@ from sisyphus.validation.holdout_contract import (
     source_record_hash,
     validate_payload,
     validate_source_quotas,
+    verify_parent_prediction,
     verify_training_membership,
 )
 
@@ -76,6 +77,22 @@ def test_primary_eligibility_is_derived(field, value, reason):
     arm[field] = value
     assert not is_primary_eligible(arm)
     assert reason in primary_ineligibility_reasons(arm)
+
+
+def test_external_primary_rejects_active_metabolite_runtime_target():
+    registry = json.loads((ROOT / "data/sbi/prodrug_activation_registry.json").read_text())
+    active_smiles = next(
+        smiles for smiles, entry in registry.items()
+        if entry["observation_species"] == "active"
+    )
+    parent_smiles = next(
+        smiles for smiles, entry in registry.items()
+        if entry["observation_species"] == "parent"
+    )
+    with pytest.raises(ValueError, match="active metabolite.*parent Cmax"):
+        verify_parent_prediction(active_smiles, "candidate-active")
+    verify_parent_prediction(parent_smiles, "candidate-parent")
+    verify_parent_prediction("CCO", "candidate-unregistered")
 
 
 def test_source_record_hash_binds_metadata_but_not_outcome():

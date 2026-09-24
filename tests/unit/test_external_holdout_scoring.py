@@ -500,6 +500,16 @@ def test_cli_uses_frozen_seed_and_bootstrap_count(tmp_path, monkeypatch):
     output_path = tmp_path / "score.json"
     manifest_path.write_text(json.dumps(manifest))
     verify_source_plan(manifest_path, manifest, lambda smiles: smiles)
+    registry = json.loads((ROOT / "data/sbi/prodrug_activation_registry.json").read_text())
+    active_smiles = next(
+        smiles for smiles, entry in registry.items()
+        if entry["observation_species"] == "active"
+    )
+    original_smiles = manifest["compounds"][0]["smiles"]
+    manifest["compounds"][0]["smiles"] = active_smiles
+    with pytest.raises(ValueError, match="active metabolite.*parent Cmax"):
+        verify_source_plan(manifest_path, manifest)
+    manifest["compounds"][0]["smiles"] = original_smiles
     verified[0].pop("synonyms")
     verified_path = tmp_path / "verified_shortlist.json"
     verified_path.write_text(json.dumps(verified))

@@ -37,6 +37,8 @@ _RESOURCES = get_resource_config()
 _DEVELOPMENT_RESIDUAL_INTERVAL = _RESOURCES.data(
     "validation", "development_residual_interval.json", required=False
 )
+PRIMARY_SIMULATION_HORIZON_H = 24.0
+PRIMARY_OBSERVATION_NODE = "venous_blood"
 
 
 @functools.lru_cache(maxsize=1)
@@ -55,7 +57,9 @@ def _development_residual_q90_meta() -> float | None:
         return None
 
 
-def _resolve_observation_node(drug: DrugOnGraph, base_node: str = "venous_blood") -> str:
+def _resolve_observation_node(
+    drug: DrugOnGraph, base_node: str = PRIMARY_OBSERVATION_NODE
+) -> str:
     """Resolve which graph node to read PK from, accounting for active species.
 
     Returns ``base_node + ACTIVE_SUFFIX`` if the drug has an active metabolite
@@ -443,12 +447,17 @@ def predict(
             regimen = DosingRegimen.single_iv(
                 dose_mg=drug.dose_mg, duration_h=infusion_duration_h
             )
-            sim_result = solve_regimen(compiled, params, regimen, t_total_h=24.0)
+            sim_result = solve_regimen(
+                compiled, params, regimen, t_total_h=PRIMARY_SIMULATION_HORIZON_H
+            )
         else:
             y0 = np.zeros(compiled.n_states)
             admin_idx = compiled.state_index[drug.administration_node]
             y0[admin_idx] = drug.dose_mg
-            sim_result = solve(compiled, params, y0, t_span=(0, 24), t_min_h=t_min_h)
+            sim_result = solve(
+                compiled, params, y0,
+                t_span=(0, PRIMARY_SIMULATION_HORIZON_H), t_min_h=t_min_h,
+            )
 
         if sim_result.solver_success:
             _obs_node = _resolve_observation_node(drug)

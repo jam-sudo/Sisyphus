@@ -129,6 +129,19 @@ def is_primary_eligible(label_arm: dict[str, Any]) -> bool:
     return not primary_ineligibility_reasons(label_arm)
 
 
+def verify_parent_prediction(smiles: str, candidate_id: str) -> None:
+    """Reject compounds whose runtime Cmax refers to an active metabolite."""
+
+    from sisyphus.predict.registry import lookup_active_metabolite
+
+    routed = lookup_active_metabolite(smiles)
+    if routed is not None and routed[1] != "parent":
+        raise ValueError(
+            f"{candidate_id}: prediction observes an active metabolite, "
+            "but the primary label requires parent Cmax"
+        )
+
+
 def validate_source_quotas(manifest: dict[str, Any]) -> dict[str, float]:
     """Enforce preregistered primary-compound source quotas from blinded fields."""
 
@@ -385,4 +398,6 @@ def verify_source_plan(
         allocation["final_test"]
     ):
         raise ValueError("Manifest contains a compound outside the frozen final-test allocation")
+    for compound in manifest["compounds"]:
+        verify_parent_prediction(compound["smiles"], compound["candidate_id"])
     return plan

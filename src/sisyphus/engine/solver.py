@@ -16,6 +16,10 @@ from sisyphus.engine.compiler import CompiledODE, ResolvedParams
 # Used by route-aware Cmax extraction to skip the deterministic t=0 spike
 # (see docs/_internal/specs/2026-04-22-iv-cmax-observation-design.md §5).
 _IV_CMAX_DELAY_H = 5.0 / 60.0
+DETERMINISTIC_SOLVER_METHOD = "LSODA"
+DETERMINISTIC_RTOL = 1e-8
+DETERMINISTIC_ATOL = 1e-10
+DETERMINISTIC_OUTPUT_POINTS = 500
 
 
 def solve(
@@ -56,16 +60,16 @@ def solve(
                  np.linspace(t_min_h, t_span[1], 499)]
             )
         else:
-            t_eval = np.linspace(t_span[0], t_span[1], 500)
+            t_eval = np.linspace(t_span[0], t_span[1], DETERMINISTIC_OUTPUT_POINTS)
 
     sol = solve_ivp(
         rhs,
         t_span,
         y0,
-        method="LSODA",
+        method=DETERMINISTIC_SOLVER_METHOD,
         t_eval=t_eval,
-        rtol=1e-8,
-        atol=1e-10,
+        rtol=DETERMINISTIC_RTOL,
+        atol=DETERMINISTIC_ATOL,
     )
 
     # Build named concentration and amount dicts

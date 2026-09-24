@@ -16,6 +16,7 @@ import subprocess
 from pathlib import Path
 
 from sisyphus.validation.holdout_contract import (
+    resolve_frozen_path,
     sha256_file,
     validate_payload,
     verify_audit_report,
@@ -63,6 +64,37 @@ def _verify_resource_root() -> None:
 
     if get_resource_config("public").root.resolve() != ROOT.resolve():
         raise ValueError("External holdout resources must come from the frozen checkout")
+
+
+def _verify_runtime_settings(path: Path) -> None:
+    """Ensure the hashed protocol settings describe the actual prediction path."""
+
+    from sisyphus.engine import solver
+    from sisyphus.pipeline.predict import (
+        PRIMARY_OBSERVATION_NODE,
+        PRIMARY_SIMULATION_HORIZON_H,
+    )
+
+    expected = {
+        "profile": "external_holdout_v1_primary",
+        "route": "oral",
+        "dose_regimen": "single",
+        "simulation_horizon_h": PRIMARY_SIMULATION_HORIZON_H,
+        "observation_node": PRIMARY_OBSERVATION_NODE,
+        "deterministic_solver": {
+            "method": solver.DETERMINISTIC_SOLVER_METHOD,
+            "rtol": solver.DETERMINISTIC_RTOL,
+            "atol": solver.DETERMINISTIC_ATOL,
+            "output_points": solver.DETERMINISTIC_OUTPUT_POINTS,
+            "t_min_h": 0.0,
+        },
+        "monte_carlo_samples": 0,
+        "measured_adme": False,
+        "phenotypes": False,
+        "strict": True,
+    }
+    if json.loads(path.read_text()) != expected:
+        raise ValueError("Frozen solver settings do not match the runtime prediction path")
 
 
 def main() -> None:
@@ -117,6 +149,7 @@ def main() -> None:
         )
 
     _verify_resource_root()
+    _verify_runtime_settings(resolve_frozen_path(ROOT, freeze["solver_settings_path"]))
 
     # Imports happen after profile/freeze checks so runtime resources cannot be
     # initialized under a different profile first.
