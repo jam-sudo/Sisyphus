@@ -10,6 +10,25 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Quarantine penicillamine midpoint; verify three silver arms
+
+The penicillamine 250 mg / 1.5 mg/L label was an invented midpoint of a
+published 1–2 mg/L range, so it was removed from scoring. The FDA extraction's
+2.0 mg/L endpoint was quarantined too. Lenacapavir 23.4 ng/mL, lorlatinib
+501.3 ng/mL, and vonoprazan 25.0 ng/mL match original single-dose control arms;
+their exact provenance and two wrong journal/author attributions were corrected.
+The lenacapavir FDA extraction's 73.8 ng/mL belonged to a combined-regimen
+population-PK context and was quarantined. See
+[source adjudication](../validation/development_four_silver_arms_2026-09-24.md).
+
+The scored development set moves **N=77 → 76**; Meta AAFE **2.9301 → 2.9539**
+(conditional bootstrap CI **2.3914–3.7036**), Engine **3.8928**, direct ML
+**3.3483**. The paired Meta/ML ratio CI **0.7730–1.0041** crosses 1. Fitted
+models were unchanged; this is not independent external validation. Colima was
+not used.
+
+---
+
 ## 2026-09-24 (cont.) — Verify three legacy silver arms against original sources
 
 Wang et al. 2016 Table 2 confirms apixaban's 5 mg healthy-control Cmax at

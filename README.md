@@ -8,7 +8,7 @@
 
 **Preprint:** [Yoon, J. M. (2026). *Sisyphus: A Topology-Compiled Physiologically Based Pharmacokinetic Platform with Structure-Only Input and Bayesian Parameter Refinement.* ChemRxiv.](https://doi.org/10.26434/chemrxiv.15004452/v1) &mdash; DOI [10.26434/chemrxiv.15004452/v1](https://doi.org/10.26434/chemrxiv.15004452/v1)
 
-The published v1 preprint and archived `Sisyphus_Preprint.pdf` report an older AAFE of 2.698. The current code's source-screened development benchmark is 2.9301 on 77 scored compounds; the value comes from a different model and reference set. Use the validation section below for current evidence.
+The published v1 preprint and archived `Sisyphus_Preprint.pdf` report an older AAFE of 2.698. The current code's source-screened development benchmark is 2.9539 on 76 scored compounds; the value comes from a different model and reference set. Use the validation section below for current evidence.
 
 ---
 
@@ -16,7 +16,7 @@ Sisyphus is an oral structure-only C<sub>max</sub> prediction system with a sepa
 
 The production output is C<sub>max</sub> for a canonical parent SMILES and positive oral dose. Engine-derived T<sub>max</sub>, AUC, half-life, multi-dose simulation, TDM, MIPD, DDI, PGx, and PK/PD are experimental research outputs and are not covered by the C<sub>max</sub> accuracy claim. Residual/model-error and parameter-Monte-Carlo intervals are exposed separately.
 
-**Intended use.** Sisyphus targets oral structure-only Cmax prediction (canonical parent SMILES + dose) when measured ADME is unavailable. On the repeatedly accessed retrospective **development benchmark**, Meta AAFE is 2.930 [bootstrap 95% CI 2.38&ndash;3.65, N=77 scored]. This is not an independent holdout result: the original 107-compound cohort has informed repeated system-selection decisions. A source-adjudicated diagnostic P0 pilot on 18 compounds, scored with an earlier model, found Meta AAFE **3.34**, compared with **3.01** for direct ML; its labels were AI-assisted, historical VDss training membership is unverified, and it does not establish Meta superiority. The current system has **no unconsumed independently curated external holdout AAFE**. Error of this scale and the wide development-residual interval (&divide;&times;~10.24-fold; 90.9% coverage on the repeatedly used development set) restrict the tool to **screening, ranking, and uncertainty-aware triage**, not dose setting.
+**Intended use.** Sisyphus targets oral structure-only Cmax prediction (canonical parent SMILES + dose) when measured ADME is unavailable. On the repeatedly accessed retrospective **development benchmark**, Meta AAFE is 2.954 [bootstrap 95% CI 2.39&ndash;3.70, N=76 scored]. This is not an independent holdout result: the original 107-compound cohort has informed repeated system-selection decisions. A source-adjudicated diagnostic P0 pilot on 18 compounds, scored with an earlier model, found Meta AAFE **3.34**, compared with **3.01** for direct ML; its labels were AI-assisted, historical VDss training membership is unverified, and it does not establish Meta superiority. The current system has **no unconsumed independently curated external holdout AAFE**. Error of this scale and the wide development-residual interval (&divide;&times;~10.24-fold; 90.8% coverage on the repeatedly used development set) restrict the tool to **screening, ranking, and uncertainty-aware triage**, not dose setting.
 
 ```
 $ sisyphus predict --smiles "Cn1c(=O)c2c(ncn2C)n(C)c1=O" --dose 100
@@ -304,20 +304,20 @@ Mass balance error &lt; 10<sup>&minus;12</sup> for all simulations. **Lesson:** 
 
 ### Retrospective development benchmark (SMILES &rarr; C<sub>max</sub>)
 
-Retrospective evaluation on a Murcko scaffold-stratified development split (107 compounds, seed=42; 77 currently have source-supported scored Cmax). All seven active fitted models now have SHA-pinned public training snapshots with compound-level exclusions, but this cohort has been used for repeated weight, track, routing, and mechanism feedback and therefore is not an independent system holdout. It integrates observed concentration&ndash;time profiles from OSP, curated literature PK data, and FDA DailyMed labels, with mixed formulations and populations. Performance is reported using AAFE with bootstrap confidence intervals conditional on the selected system; those intervals do not include adaptive model-selection bias:
+Retrospective evaluation on a Murcko scaffold-stratified development split (107 compounds, seed=42; 76 currently have source-supported scored Cmax). All seven active fitted models now have SHA-pinned public training snapshots with compound-level exclusions, but this cohort has been used for repeated weight, track, routing, and mechanism feedback and therefore is not an independent system holdout. It integrates observed concentration&ndash;time profiles from OSP, curated literature PK data, and FDA DailyMed labels, with mixed formulations and populations. Performance is reported using AAFE with bootstrap confidence intervals conditional on the selected system; those intervals do not include adaptive model-selection bias:
 
 $$AAFE = 10^{\operatorname{mean}\left(\left|\log_{10}\frac{C_{max,pred}}{C_{max,obs}}\right|\right)}$$
 
 | Track | AAFE | 95% CI | %2-fold | %3-fold | N |
 |---|:-:|:-:|:-:|:-:|:-:|
-| **Meta-learner (production)** | **2.930**† | [2.38, 3.65] | 45.5% | 64.9% | 77 |
-| Engine only | 3.863 | [3.01, 5.06] | 37.7% | 50.6% | 77 |
-| ML only | 3.349 | [2.70, 4.20] | 42.9% | 57.1% | 77 |
+| **Meta-learner (production)** | **2.954**† | [2.39, 3.70] | 44.7% | 64.5% | 76 |
+| Engine only | 3.893 | [3.02, 5.11] | 38.2% | 50.0% | 76 |
+| ML only | 3.348 | [2.68, 4.22] | 43.4% | 57.9% | 76 |
 | Meta, in-domain | 3.056 | [2.43, 3.89] | 41.9% | 62.9% | 62 |
 
-The paired compound-bootstrap Meta/ML AAFE ratio is **0.875** (95% CI
-**0.766–0.993**, 10,000 resamples, seed 20260422). This conditional interval
-falls below 1 but does not account for repeated system selection. The development
+The paired compound-bootstrap Meta/ML AAFE ratio is **0.882** (95% CI
+**0.773–1.004**, 10,000 resamples, seed 20260422). This conditional interval
+crosses 1 and does not account for repeated system selection. The development
 data cannot establish independent Meta superiority. The in-domain ratio is
 0.961 (0.845–1.092).
 
@@ -360,7 +360,7 @@ On the 2026-07-05 system, the temporal cohort was directionally worse than its s
 
 The same-machine re-score moved Meta AAFE 3.208 → 3.286 and Engine AAFE 4.302 → 4.551, while the direct ML track was bit-identical. This supports an absorption/first-pass error diagnosis but does not establish a statistically separated generalization gap. †Compound bootstrap, 100,000 resamples of absolute log-fold error, seed 20260422; diagnostic because the set is consumed. Current artifact: `data/validation/prospective_N28_current_engine_2026-07-05.json`.
 
-**Adaptive-selection caveat.** N=107 has been used for dozens of configuration feedback cycles (track weights, routing, and meta variants), including inspection of the public-only fup, Peff, Cmax, CLint, and VDss candidates. The historical 2.85–3.10 selection-bias sensitivity range has not been recalibrated for this model. The current scored N=77 bootstrap CI ([2.38, 3.65], point estimate 2.930) does not account for adaptive search. The attempted 2026Q2 N50 was invalidated after 21/50 repository-corpus collisions and must not be cited. The replacement strategy is the outcome-blinded N=260 protocol in `docs/validation/external_holdout_v1_protocol.md` (N=120 resource-limited fallback; its combined release gate has about 80% pass probability only near a 19% true improvement).
+**Adaptive-selection caveat.** N=107 has been used for dozens of configuration feedback cycles (track weights, routing, and meta variants), including inspection of the public-only fup, Peff, Cmax, CLint, and VDss candidates. The historical 2.85–3.10 selection-bias sensitivity range has not been recalibrated for this model. The current scored N=76 bootstrap CI ([2.39, 3.70], point estimate 2.954) does not account for adaptive search. The attempted 2026Q2 N50 was invalidated after 21/50 repository-corpus collisions and must not be cited. The replacement strategy is the outcome-blinded N=260 protocol in `docs/validation/external_holdout_v1_protocol.md` (N=120 resource-limited fallback; its combined release gate has about 80% pass probability only near a 19% true improvement).
 
 ### Historical diagnostic P0 source-adjudicated pilot
 

@@ -14,11 +14,14 @@ ROOT = Path(__file__).resolve().parents[2]
 
 def test_adjudicated_holdout_arms_match_scored_cache():
     data = json.loads((ROOT / "data/reference/clinical_pk.json").read_text())
+    assert data["metadata"]["n_with_cmax"] == sum(
+        "cmax_mg_L" in drug.get("pk_params", {}) for drug in data["drugs"].values()
+    )
     assert {name for name, drug in data["drugs"].items() if "ct_curve" in drug} == {"simvastatin"}
     assert data["drugs"]["codeine"]["tier"] == "gold"
     refs = {row.name: row for row in load_reference() if row.in_holdout}
     cache = json.loads((ROOT / "data/training/4track_holdout_predictions.json").read_text())
-    assert cache["n_holdout"] == data["metadata"]["holdout_with_cmax"] == len(refs) == 77
+    assert cache["n_holdout"] == data["metadata"]["holdout_with_cmax"] == len(refs) == 76
     assert {row["name"] for row in cache["drugs"]} == set(refs)
     for name in ("cimetidine", "mefenamic acid"):
         assert data["drugs"][name]["tier"] == "unverified"
@@ -35,6 +38,15 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert refs["sildenafil"].cmax_obs == pytest.approx(0.271)
     assert data["drugs"]["sildenafil"]["pk_params"]["thalf_h"] == pytest.approx(2.96)
     assert "bioavailability_pct" not in data["drugs"]["sildenafil"]["pk_params"]
+    assert data["drugs"]["penicillamine"]["tier"] == "unverified"
+    assert not data["drugs"]["penicillamine"]["pk_params"]
+    assert "penicillamine" not in refs
+    assert refs["lenacapavir"].cmax_obs == pytest.approx(0.0234)
+    assert "normal-hepatic-function matched controls" in data["drugs"]["lenacapavir"]["source"]
+    assert refs["lorlatinib"].cmax_obs == pytest.approx(0.5013)
+    assert "Hibma et al." in data["drugs"]["lorlatinib"]["source"]
+    assert refs["vonoprazan"].cmax_obs == pytest.approx(0.025)
+    assert "Clin Transl Gastroenterol" in data["drugs"]["vonoprazan"]["source"]
     for row in cache["drugs"]:
         assert row["obs"] == refs[row["name"]].cmax_obs
         assert not any(word in data["drugs"][row["name"]]["source"].lower()
@@ -90,6 +102,10 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     curated_rows = json.loads((ROOT / "data/reference/curated_pk_data.json").read_text())
     assert next(row for row in curated_rows if row["drug_name"] == "ulipristal")["cmax_mg_L"] is None
     fda_rows = json.loads((ROOT / "data/reference/fda_extraction_results.json").read_text())
+    for name in ("penicillamine", "lenacapavir"):
+        row = next(row for row in fda_rows if row["drug_name"] == name)
+        assert row["status"] == "unverified"
+        assert row["cmax_mg_L"] is None
     assert next(row for row in fda_rows if row["drug_name"] == "hydroxyzine")["status"] != "extracted"
     assert next(row for row in fda_rows if row["drug_name"] == "selegiline")["status"] != "extracted"
     assert next(row for row in fda_rows if row["drug_name"] == "ulipristal")["status"] != "extracted"

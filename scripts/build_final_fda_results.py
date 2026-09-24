@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
-"""Build the final FDA extraction results from all passes + manual corrections.
-
-All values verified against DailyMed SPL, EMA SmPC, or published literature.
-"""
+"""Historical FDA extraction snapshot; refuse to overwrite later source adjudications."""
 
 import json
+from pathlib import Path
 
 results = [
     {
@@ -160,12 +158,12 @@ results = [
     {
         "drug_name": "lenacapavir",
         "dose_mg": 300.0,
-        "cmax_mg_L": 0.0738,
+        "cmax_mg_L": None,
         "cmax_unit_original": "ng/mL",
-        "cmax_value_original": 73.8,
-        "source": "DailyMed SPL (Sunlenca)",
-        "context": "Oral 300mg Day 1: Cmax 73.8 ng/mL geometric mean.",
-        "status": "extracted"
+        "cmax_value_original": None,
+        "source": "DailyMed SPL (Sunlenca); Yeztugo Table 9",
+        "context": "The former 73.8 ng/mL is a model-estimated first-six-month exposure under a combined oral plus subcutaneous regimen in the Yeztugo label, not single oral 300 mg Cmax. The matched single-dose control arm is 23.4 ng/mL in AAC 2024 Table 2.",
+        "status": "unverified"
     },
     {
         "drug_name": "lopinavir",
@@ -220,12 +218,12 @@ results = [
     {
         "drug_name": "penicillamine",
         "dose_mg": 250.0,
-        "cmax_mg_L": 2.0,
+        "cmax_mg_L": None,
         "cmax_unit_original": "mg/L",
-        "cmax_value_original": 2.0,
+        "cmax_value_original": None,
         "source": "DailyMed SPL (Cuprimine)",
-        "context": "Peak plasma concentration 2.0 mg/L with wide inter-individual variation. 250mg dose.",
-        "status": "extracted"
+        "context": "The label gives only an approximate 1-2 mg/L peak range after oral 250 mg, not an observed 2.0 mg/L cohort mean.",
+        "status": "unverified"
     },
     {
         "drug_name": "pilocarpine",
@@ -394,16 +392,19 @@ assert len(results) == 38, f"Expected 38 drugs, got {len(results)}"
 drug_names = [r["drug_name"] for r in results]
 assert len(set(drug_names)) == 38, "Duplicate drug names!"
 
-# Check all have cmax_mg_L
+# Checked values are numeric; quarantined rows retain their source context.
 for r in results:
-    assert r["cmax_mg_L"] is not None, f"{r['drug_name']} has no cmax_mg_L"
-    assert r["cmax_mg_L"] > 0, f"{r['drug_name']} has cmax_mg_L <= 0"
     assert r["dose_mg"] is not None, f"{r['drug_name']} has no dose_mg"
-    assert r["status"] == "extracted", f"{r['drug_name']} status is {r['status']}"
+    assert r["status"] in {"extracted", "unverified"}
+    assert (r["cmax_mg_L"] is not None and r["cmax_mg_L"] > 0) == (r["status"] == "extracted")
 
 # Write
-with open("/home/jam/Sisyphus/data/reference/fda_extraction_results.json", "w") as f:
+output = Path(__file__).resolve().parents[1] / "data/reference/fda_extraction_results.json"
+if not output.exists() or json.loads(output.read_text()) != results:
+    raise SystemExit("Refusing to overwrite newer source-adjudicated fda_extraction_results.json")
+with output.open("w") as f:
     json.dump(results, f, indent=2, ensure_ascii=False)
+    f.write("\n")
 
 # Print summary table
 print(f"\n{'Drug':<20} {'Dose':>6} {'Cmax orig':>12} {'Unit':<10} {'Cmax mg/L':>12} {'Source':<35}")
@@ -412,9 +413,9 @@ for r in results:
     d = f"{r['dose_mg']:.0f}" if r["dose_mg"] else "?"
     v = f"{r['cmax_value_original']}" if r["cmax_value_original"] else "?"
     u = r["cmax_unit_original"] or "?"
-    ml = f"{r['cmax_mg_L']:.6f}"
+    ml = f"{r['cmax_mg_L']:.6f}" if r["cmax_mg_L"] is not None else "?"
     s = r["source"][:33]
     print(f"{r['drug_name']:<20} {d:>6} {v:>12} {u:<10} {ml:>12} {s:<35}")
 
-print(f"\nTotal: {len(results)} drugs | All extracted: YES")
-print(f"Output: /home/jam/Sisyphus/data/reference/fda_extraction_results.json")
+print(f"\nTotal: {len(results)} drugs | Extracted: {sum(r['status'] == 'extracted' for r in results)}")
+print(f"Output: {output}")

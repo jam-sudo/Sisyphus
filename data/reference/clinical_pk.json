@@ -2,8 +2,8 @@
   "metadata": {
     "created": "2026-03-26",
     "n_drugs": 331,
-    "n_with_cmax": 116,
-    "holdout_with_cmax": 77,
+    "n_with_cmax": 115,
+    "holdout_with_cmax": 76,
     "sources": {
       "original": 293,
       "osp_new": 8,
@@ -1954,7 +1954,7 @@
     "lenacapavir": {
       "name": "lenacapavir",
       "tier": "silver",
-      "source": "Phase 1 PK study, healthy subjects with normal hepatic function; AAC 2024",
+      "source": "Antimicrob Agents Chemother 2024, Table 2, DOI 10.1128/aac.01344-23: single oral 300 mg, normal-hepatic-function matched controls (n=10), geometric mean parent-plasma Cmax 23.4 ng/mL; https://journals.asm.org/doi/10.1128/aac.01344-23",
       "dose_mg": 300,
       "route": "oral",
       "pk_params": {
@@ -2096,7 +2096,7 @@
     "lorlatinib": {
       "name": "lorlatinib",
       "tier": "silver",
-      "source": "Chen et al., CPT Pharmacometrics Syst Pharmacol 2021; bioavailability study in healthy participants",
+      "source": "Hibma et al., Cancer Chemother Pharmacol 2022, Table 2: single oral 100 mg, 11 healthy men, geometric mean parent-plasma Cmax 501.3 ng/mL; https://doi.org/10.1007/s00280-021-04368-1",
       "dose_mg": 100,
       "route": "oral",
       "pk_params": {
@@ -2705,14 +2705,13 @@
     },
     "penicillamine": {
       "name": "penicillamine",
-      "tier": "silver",
-      "source": "Netter et al., Clin Pharmacokinet 1987; Bergstrom et al., J Rheumatol 1983",
+      "tier": "unverified",
+      "source": "Netter et al., Clin Pharmacokinet 1987 and Cuprimine DailyMed label give only an approximate 1-2 mg/L range after 250 mg oral dose; https://pubmed.ncbi.nlm.nih.gov/3319347/; https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=80e736d3-2017-4d68-94b4-38255c3c59c6",
       "dose_mg": 250,
       "route": "oral",
-      "pk_params": {
-        "cmax_mg_L": 1.5
-      },
-      "smiles": "CC(C)(S)[C@@H](N)C(=O)O"
+      "pk_params": {},
+      "smiles": "CC(C)(S)[C@@H](N)C(=O)O",
+      "correction_note": "2026-09-24: quarantined invented 1.5 mg/L midpoint; the separate observed 500 mg / 3.05 mg/L fasted arm is already in exploratory MMPK training and is not a replacement holdout label."
     },
     "perampanel": {
       "name": "perampanel",
@@ -3845,7 +3844,7 @@
     "vonoprazan": {
       "name": "vonoprazan",
       "tier": "silver",
-      "source": "Sakurai et al., Clin Pharmacol Ther 2015; single 20mg dose Japanese healthy males",
+      "source": "Sakurai et al., Clin Transl Gastroenterol 2015, Table 2: single oral 20 mg, Japanese healthy men (n=7), arithmetic mean parent-plasma Cmax 25.0 ± 5.6 ng/mL; https://doi.org/10.1038/ctg.2015.18",
       "dose_mg": 20,
       "route": "oral",
       "pk_params": {

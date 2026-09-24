@@ -155,8 +155,8 @@
     "cmax_mg_L": 0.0234,
     "cmax_value_original": 23.4,
     "cmax_unit_original": "ng/mL",
-    "source": "Phase 1 PK study, healthy subjects with normal hepatic function; AAC 2024",
-    "notes": "300mg single oral dose healthy subjects. Geometric mean Cmax 23.4 ng/mL. Tmax ~4h. Very low oral bioavailability (6-10%). Long-acting drug primarily used SC.",
+    "source": "Antimicrob Agents Chemother 2024, Table 2; https://doi.org/10.1128/aac.01344-23",
+    "notes": "300 mg single oral dose, normal-hepatic-function matched controls (n=10). Geometric mean parent-plasma Cmax 23.4 ng/mL; median Tmax 4 h.",
     "status": "confirmed"
   },
   {
@@ -175,7 +175,7 @@
     "cmax_mg_L": 0.5013,
     "cmax_value_original": 501.3,
     "cmax_unit_original": "ng/mL",
-    "source": "Chen et al., CPT Pharmacometrics Syst Pharmacol 2021; bioavailability study in healthy participants",
+    "source": "Hibma et al., Cancer Chemother Pharmacol 2022, Table 2; https://doi.org/10.1007/s00280-021-04368-1",
     "notes": "100mg single oral dose in healthy participants. Geometric mean Cmax 501.3 ng/mL (CV 38%). Absolute bioavailability 81%. Tmax ~1.2h.",
     "status": "confirmed"
   },
@@ -212,12 +212,12 @@
   {
     "drug_name": "penicillamine",
     "dose_mg": 250,
-    "cmax_mg_L": 1.5,
-    "cmax_value_original": 1.5,
+    "cmax_mg_L": null,
+    "cmax_value_original": null,
     "cmax_unit_original": "mg/L",
-    "source": "Netter et al., Clin Pharmacokinet 1987; Bergstrom et al., J Rheumatol 1983",
-    "notes": "250mg single dose healthy volunteers. Cmax 1-2 mg/L (midpoint 1.5 used). Tmax 1-3h. Bioavailability 50-70%.",
-    "status": "confirmed"
+    "source": "Netter et al., Clin Pharmacokinet 1987; Cuprimine DailyMed label; https://pubmed.ncbi.nlm.nih.gov/3319347/",
+    "notes": "250 mg oral dose: approximate 1-2 mg/L peak range only. The former 1.5 mg/L midpoint is not an observed cohort Cmax; do not score it.",
+    "status": "uncertain"
   },
   {
     "drug_name": "pilocarpine",
@@ -375,8 +375,8 @@
     "cmax_mg_L": 0.025,
     "cmax_value_original": 25.0,
     "cmax_unit_original": "ng/mL",
-    "source": "Sakurai et al., Clin Pharmacol Ther 2015; single 20mg dose Japanese healthy males",
-    "notes": "20mg single dose fasted healthy subjects. Cmax 25.0 +/- 5.6 ng/mL (Japanese), 23.0 +/- 6.4 ng/mL (UK). Using Japanese study value. Tmax ~1.5-2h. t1/2 ~7.7h. No significant food effect.",
+    "source": "Sakurai et al., Clin Transl Gastroenterol 2015, Table 2; https://doi.org/10.1038/ctg.2015.18",
+    "notes": "20 mg single oral dose, Japanese healthy men (n=7): arithmetic mean parent-plasma Cmax 25.0 +/- 5.6 ng/mL. The UK arm is separate.",
     "status": "confirmed"
   }
 ]

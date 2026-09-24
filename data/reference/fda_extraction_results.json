@@ -152,12 +152,12 @@
   {
     "drug_name": "lenacapavir",
     "dose_mg": 300.0,
-    "cmax_mg_L": 0.0738,
+    "cmax_mg_L": null,
     "cmax_unit_original": "ng/mL",
-    "cmax_value_original": 73.8,
-    "source": "DailyMed SPL (Sunlenca)",
-    "context": "Oral 300mg Day 1: Cmax 73.8 ng/mL geometric mean.",
-    "status": "extracted"
+    "cmax_value_original": null,
+    "source": "DailyMed SPL (Sunlenca); Yeztugo Table 9",
+    "context": "The former 73.8 ng/mL is a model-estimated first-six-month exposure under a combined oral plus subcutaneous regimen in the Yeztugo label, not single oral 300 mg Cmax. The matched single-dose control arm is 23.4 ng/mL in AAC 2024 Table 2.",
+    "status": "unverified"
   },
   {
     "drug_name": "lopinavir",
@@ -212,12 +212,12 @@
   {
     "drug_name": "penicillamine",
     "dose_mg": 250.0,
-    "cmax_mg_L": 2.0,
+    "cmax_mg_L": null,
     "cmax_unit_original": "mg/L",
-    "cmax_value_original": 2.0,
+    "cmax_value_original": null,
     "source": "DailyMed SPL (Cuprimine)",
-    "context": "Peak plasma concentration 2.0 mg/L with wide inter-individual variation. 250mg dose.",
-    "status": "extracted"
+    "context": "The label gives only an approximate 1-2 mg/L peak range after oral 250 mg, not an observed 2.0 mg/L cohort mean.",
+    "status": "unverified"
   },
   {
     "drug_name": "pilocarpine",
