@@ -148,6 +148,19 @@ identities are now development-only and pinned in
 `data/validation/p2_modeler_seen_identities_2026-09-24.json`; the exclusion
 audit checks their names, study-code aliases, and parent structures. P2 was
 AI-assisted and does not satisfy the independent-curation requirement.
+An outcome-blind feasibility screen of the same FDA XLSX on 2026-09-24 found
+434 oral NDA rows from 1985–2014. Of these, 261 matched the current repository
+exclusion-name union exactly and 15 nonmatching ingredient strings were
+multi-component or ambiguous. For the remaining 158 single-name rows, a
+first-result [PubChem PUG REST](https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest)
+name-to-InChIKey lookup resolved 150: five matched an excluded InChIKey-14,
+145 were provisional structure nonhits, and eight lookups failed. Most of the
+provisional nonhits (131/145) are from 1985–2004. This is only an optimistic
+identity pool: first-result name resolution can be wrong, and none of the
+rows was checked for a matching original healthy-adult fasted single-dose IR
+parent-plasma Cmax arm, post-dose meal timing, or dose basis. No numeric Cmax
+was read. Older FDA packages therefore merit source-availability triage but
+cannot yet be counted as eligible compounds.
 The 900-identity inventory therefore needs older and investigational drugs plus
 non-FDA sources, with duplicates across agencies collapsed before allocation.
 EMA's [Article 57 product data](https://www.ema.europa.eu/en/human-regulatory-overview/post-authorisation/data-medicines-iso-idmp-standards-post-authorisation/public-data-article-57-database)
