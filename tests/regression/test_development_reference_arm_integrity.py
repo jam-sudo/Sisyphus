@@ -49,8 +49,21 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert refs["fluvoxamine"].cmax_obs == 0.017
     assert refs["hydroxyzine"].dose_mg == pytest.approx(25 * 374.9 / 447.83, rel=1e-6)
     assert refs["hydroxyzine"].cmax_obs == 0.03
+    assert refs["carbinoxamine"].dose_mg == pytest.approx(8 * 290.79 / 406.86, rel=1e-6)
+    assert refs["carbinoxamine"].cmax_obs == 0.024
+    assert refs["montelukast"].dose_mg == 10.0
+    assert refs["montelukast"].cmax_obs == 0.35
+    assert refs["pravastatin"].dose_mg == 19.01
+    assert refs["pravastatin"].cmax_obs == 0.0265
+    assert refs["quizartinib"].dose_mg == 26.5
+    assert refs["quizartinib"].cmax_obs == 0.102
+    assert refs["ranitidine"].dose_mg == 150.0
+    assert refs["ranitidine"].cmax_obs == 0.4506
+    assert refs["selegiline"].dose_mg == pytest.approx(10 * 187.28 / 223.74, rel=1e-6)
+    assert refs["selegiline"].cmax_obs == 0.003093
     fda_rows = json.loads((ROOT / "data/reference/fda_extraction_results.json").read_text())
     assert next(row for row in fda_rows if row["drug_name"] == "hydroxyzine")["status"] != "extracted"
+    assert next(row for row in fda_rows if row["drug_name"] == "selegiline")["status"] != "extracted"
     assert refs["trazodone"].dose_mg == pytest.approx(100 * 371.864 / 408.33, rel=1e-6)
     assert refs["trazodone"].cmax_obs == 1.5469
     assert "bioavailability_pct" not in data["drugs"]["fluvoxamine"]["pk_params"]

@@ -51,12 +51,12 @@
   },
   {
     "drug_name": "carbinoxamine",
-    "dose_mg": 8,
+    "dose_mg": 5.717741,
     "cmax_mg_L": 0.024,
     "cmax_value_original": 24,
     "cmax_unit_original": "ng/mL",
-    "source": "FDA BPCA review; Wendt 1995",
-    "notes": "8mg carbinoxamine maleate oral solution. Cmax ~24 ng/mL. Limited published PK data for single-dose IR.",
+    "source": "DailyMed Carbinoxamine Maleate tablets/solution label; https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=9d11b197-cfdc-4b9b-9935-2920ccb6e522",
+    "notes": "Single 8 mg carbinoxamine maleate oral solution (5.717741 mg parent equivalent); approximate parent-plasma Cmax 24 ng/mL. Exact N and meal state unspecified.",
     "status": "confirmed"
   },
   {
@@ -281,12 +281,12 @@
   },
   {
     "drug_name": "quizartinib",
-    "dose_mg": 30,
-    "cmax_mg_L": 0.0993,
-    "cmax_value_original": 99.3,
+    "dose_mg": 26.5,
+    "cmax_mg_L": 0.102,
+    "cmax_value_original": 102.0,
     "cmax_unit_original": "ng/mL",
-    "source": "Faucette et al., Clin Pharmacol Drug Dev 2020; food effect study",
-    "notes": "30mg single dose fasted healthy volunteers. Geometric mean Cmax 99.3 ng/mL (CV 25.5%). Tmax ~4h. Bioavailability 71%. t1/2 long (days).",
+    "source": "Li et al. 2020 Table 2; https://pmc.ncbi.nlm.nih.gov/articles/PMC7027461/",
+    "notes": "Single 30 mg quizartinib dihydrochloride tablet (=26.5 mg parent) in 34 fasted healthy subjects; arithmetic mean parent-plasma Cmax 102.0 ng/mL. 99.3 ng/mL is the geometric mean.",
     "status": "confirmed"
   },
   {
@@ -321,12 +321,12 @@
   },
   {
     "drug_name": "selegiline",
-    "dose_mg": 10,
-    "cmax_mg_L": 0.001,
-    "cmax_value_original": 1.0,
+    "dose_mg": 8.37043,
+    "cmax_mg_L": 0.003093,
+    "cmax_value_original": 3.093,
     "cmax_unit_original": "ng/mL",
-    "source": "FDA label (Eldepryl); Heinonen et al., Clin Pharmacol Ther 1997",
-    "notes": "10mg oral tablet (2x5mg). Parent drug Cmax ~1 ng/mL. Very low due to extensive first-pass (~10% bioavailability). Metabolites (methamphetamine, amphetamine) reach 4-20x higher levels.",
+    "source": "FDA Zelapar NDA 21-479 clinical pharmacology review, study Z/SEL/96/008; https://www.accessdata.fda.gov/drugsatfda_docs/nda/2006/021479s000_ClinPharmR_P2.pdf",
+    "notes": "Single 10 mg Eldepryl HCl (8.370430 mg parent) fasted in 12 healthy volunteers; mean parent-plasma Cmax 3.093 ng/mL. Previous approximately 1 ng/mL claim was untraceable.",
     "status": "confirmed"
   },
   {

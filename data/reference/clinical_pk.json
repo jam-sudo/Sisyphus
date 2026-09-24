@@ -552,14 +552,15 @@
     },
     "carbinoxamine": {
       "name": "carbinoxamine",
-      "tier": "gold",
-      "source": "FDA BPCA review; Wendt 1995",
-      "dose_mg": 8,
+      "tier": "silver",
+      "source": "DailyMed Carbinoxamine Maleate tablets/solution label, one 8 mg maleate solution dose in healthy volunteers, approximate parent-plasma Cmax 24 ng/mL; https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=9d11b197-cfdc-4b9b-9935-2920ccb6e522",
+      "dose_mg": 5.717741,
       "route": "oral",
       "pk_params": {
         "cmax_mg_L": 0.024
       },
-      "smiles": "CN(C)CCOC(c1ccc(Cl)cc1)c1ccccn1"
+      "smiles": "CN(C)CCOC(c1ccc(Cl)cc1)c1ccccn1",
+      "correction_note": "2026-09-24: 8 mg is carbinoxamine maleate strength, not free base; source does not report exact N or meal state."
     },
     "carglumic acid": {
       "name": "carglumic acid",
@@ -2366,7 +2367,7 @@
     "montelukast": {
       "name": "montelukast",
       "tier": "silver",
-      "source": "PubMed 8692739, 10mg fasted healthy volunteers IR single dose",
+      "source": "Cheng et al. 1996 PMID 8692739, single 10 mg montelukast tablet (10.4 mg sodium salt = 10 mg parent), female healthy-volunteer arm N=6 (meal state not stated in abstract) parent-plasma arithmetic mean Cmax 350 ng/mL; https://pubmed.ncbi.nlm.nih.gov/8692739/",
       "dose_mg": 10.0,
       "route": "oral",
       "pk_params": {
@@ -2847,16 +2848,17 @@
     "pravastatin": {
       "name": "pravastatin",
       "tier": "silver",
-      "source": "FDA Pravachol label, 20mg fasted healthy volunteers single dose",
+      "source": "DailyMed Pravastatin Sodium label, single 20 mg sodium-salt tablet fasted, parent-plasma geometric mean Cmax 26.5 ng/mL; https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?setid=cf6f7031-33b9-40d3-bc87-32f1b6af98f2&type=pdf",
       "smiles_correction_history": "The 2026-05-02 replacement was incorrect: GOSGZXISMCZCDW has formula C23H38O7. Restored PubChem CID 54687 pravastatin (TUZYXOIXSAXUGO, C23H36O7) on 2026-09-23; FDA Pravachol sodium is C23H35NaO7.",
-      "dose_mg": 20.0,
+      "dose_mg": 19.01,
       "route": "oral",
       "pk_params": {
         "thalf_h": 1.8,
         "bioavailability_pct": 17.0,
-        "cmax_mg_L": 0.025
+        "cmax_mg_L": 0.0265
       },
-      "smiles": "CC[C@H](C)C(=O)O[C@H]1C[C@@H](C=C2[C@H]1[C@H]([C@H](C=C2)C)CC[C@H](C[C@H](CC(=O)O)O)O)O"
+      "smiles": "CC[C@H](C)C(=O)O[C@H]1C[C@@H](C=C2[C@H]1[C@H]([C@H](C=C2)C)CC[C@H](C[C@H](CC(=O)O)O)O)O",
+      "correction_note": "2026-09-24: label states 20 mg sodium salt is equivalent to 19.01 mg parent; prior 25 ng/mL was not the label value."
     },
     "prednisolone": {
       "name": "prednisolone",
@@ -3013,13 +3015,14 @@
     "quizartinib": {
       "name": "quizartinib",
       "tier": "silver",
-      "source": "Faucette et al., Clin Pharmacol Drug Dev 2020; food effect study",
-      "dose_mg": 30,
+      "source": "Li et al. 2020 Table 2, one 30 mg quizartinib dihydrochloride tablet (= 26.5 mg free base), healthy fasted arm N=34, parent-plasma arithmetic mean Cmax 102.0 ng/mL; https://pmc.ncbi.nlm.nih.gov/articles/PMC7027461/",
+      "dose_mg": 26.5,
       "route": "oral",
       "pk_params": {
-        "cmax_mg_L": 0.0993
+        "cmax_mg_L": 0.102
       },
-      "smiles": "CC(C)(C)c1cc(NC(=O)Nc2ccc(-c3cn4c(n3)sc3cc(OCCN5CCOCC5)ccc34)cc2)no1"
+      "smiles": "CC(C)(C)c1cc(NC(=O)Nc2ccc(-c3cn4c(n3)sc3cc(OCCN5CCOCC5)ccc34)cc2)no1",
+      "correction_note": "2026-09-24: prior 99.3 ng/mL was the fasted geometric mean; Table 2 arithmetic mean is 102.0 ng/mL. Prior author attribution to Faucette was incorrect."
     },
     "ramelteon": {
       "name": "ramelteon",
@@ -3049,15 +3052,14 @@
     "ranitidine": {
       "name": "ranitidine",
       "tier": "silver",
-      "source": "FDA Zantac label, 150mg fasted healthy volunteers single dose",
+      "source": "Gschwend et al. 2007 PMID 17688076, reference ranitidine HCl 150 mg film-coated tablet in healthy men, single-dose two-period crossover, parent-plasma Cmax 450.6 ng/mL; https://pubmed.ncbi.nlm.nih.gov/17688076/; DailyMed tablet strength 168 mg HCl = 150 mg ranitidine parent: https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=a4be3f71-31f6-4559-82f0-aa11168af779&type=display",
       "dose_mg": 150.0,
       "route": "oral",
       "pk_params": {
-        "thalf_h": 2.5,
-        "bioavailability_pct": 48.0,
-        "cmax_mg_L": 0.44
+        "cmax_mg_L": 0.4506
       },
-      "smiles": "CNC(=C[N+](=O)[O-])NCCSCC1=CC=C(O1)CN(C)C"
+      "smiles": "CNC(=C[N+](=O)[O-])NCCSCC1=CC=C(O1)CN(C)C",
+      "correction_note": "2026-09-24: replaced 440 ng/mL, the lower endpoint of a label range, with a directly reported reference-product arm; removed generic half-life and bioavailability not tied to that arm. Meal state and N are not in the abstract."
     },
     "ranolazine": {
       "name": "ranolazine",
@@ -3226,13 +3228,14 @@
     "selegiline": {
       "name": "selegiline",
       "tier": "gold",
-      "source": "FDA label (Eldepryl); Heinonen et al., Clin Pharmacol Ther 1997",
-      "dose_mg": 10,
+      "source": "FDA Zelapar NDA 21-479 clinical pharmacology review, study Z/SEL/96/008: single 10 mg Eldepryl HCl (two 5 mg swallowed tablets), fasted healthy volunteers N=12, parent-plasma mean Cmax 3.093 ng/mL; https://www.accessdata.fda.gov/drugsatfda_docs/nda/2006/021479s000_ClinPharmR_P2.pdf",
+      "dose_mg": 8.37043,
       "route": "oral",
       "pk_params": {
-        "cmax_mg_L": 0.001
+        "cmax_mg_L": 0.003093
       },
-      "smiles": "C#CCN(C)[C@H](C)Cc1ccccc1"
+      "smiles": "C#CCN(C)[C@H](C)Cc1ccccc1",
+      "correction_note": "2026-09-24: replaced untraceable approximately 1 ng/mL source claim with the exact FDA-reviewed fasted arm and converted HCl strength to parent dose."
     },
     "serdexmethylphenidate": {
       "name": "serdexmethylphenidate",

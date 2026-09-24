@@ -51,12 +51,12 @@
   },
   {
     "drug_name": "carbinoxamine",
-    "dose_mg": 8.0,
+    "dose_mg": 5.717741,
     "cmax_mg_L": 0.024,
     "cmax_unit_original": "ng/mL",
     "cmax_value_original": 24.0,
-    "source": "DailyMed SPL",
-    "context": "Single dose of 8mg carbinoxamine in healthy volunteers: Cmax 24 ng/mL, Tmax 1.5-5h.",
+    "source": "DailyMed Carbinoxamine Maleate tablets/solution label; https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=9d11b197-cfdc-4b9b-9935-2920ccb6e522",
+    "context": "Single 8 mg maleate oral solution (=5.717741 mg carbinoxamine parent), approximate parent-plasma Cmax 24 ng/mL; exact N and meal state unspecified.",
     "status": "extracted"
   },
   {
@@ -326,8 +326,8 @@
     "cmax_unit_original": "ng/mL",
     "cmax_value_original": 1.0,
     "source": "DailyMed SPL",
-    "context": "Single 10mg oral dose: maximum plasma concentration of selegiline ~1 ng/mL. Metabolites 4-20x higher.",
-    "status": "extracted"
+    "context": "Untraceable approximately 1 ng/mL for a nominal single 10 mg oral dose; replaced by FDA-reviewed Z/SEL/96/008 10 mg Eldepryl HCl fasted arm, mean parent-plasma Cmax 3.093 ng/mL.",
+    "status": "superseded"
   },
   {
     "drug_name": "sirolimus",

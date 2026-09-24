@@ -10,6 +10,25 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Rescreen salt strengths and exact source arms
+
+Primary labels and study reports corrected parent-equivalent doses for
+carbinoxamine (5.717741 mg), pravastatin (19.01 mg), quizartinib (26.5 mg),
+and selegiline (8.370430 mg). The matched Cmax values for pravastatin,
+quizartinib, ranitidine, and selegiline are now 26.5, 102.0, 450.6, and
+3.093 ng/mL respectively. Montelukast's unchanged 350 ng/mL was identified
+as the female oral arm (meal state unspecified in the abstract). Carbinoxamine was lowered to silver because the
+label does not specify exact N or food state and its 8 mg maleate basis is
+inferred. See [source adjudication](../validation/development_salt_arm_rescreen_2026-09-24.md).
+
+With the fitted model unchanged and N=79, development Meta AAFE moves from
+**2.9312** to **2.9040** (conditional bootstrap CI **2.3784–3.6157**),
+Engine **3.8150**, direct ML **3.2381**, and in-domain Meta **2.9741**.
+The paired Meta/ML ratio remains **0.8968** (CI **0.7922–1.0106**),
+including 1. This is a reference correction, not external validation.
+
+---
+
 ## 2026-09-24 (cont.) — Audit implicit salt doses and two unmatched peaks
 
 Four scored references used administered salt mass with parent SMILES even
