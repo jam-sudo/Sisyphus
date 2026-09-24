@@ -418,8 +418,10 @@ A separate Claude worker consecutively screened all **248 oral FDA NME rows
 from 2015–2025** against the repository exclusion union and strict original-arm
 criteria. No new eligible compound remained, so no predictions were run.
 Repository name collisions removed 235 rows; the two structure-clean parents
-that reached original-source arm review lacked stated post-dose meal timing and
-explicit immediate-release evidence. This is a single-agent acquisition check,
+that reached original-source arm review lacked stated post-dose meal timing.
+A follow-up found an explicit oral-solution arm for one parent but no matching
+post-dose fasting statement; both exposed identities are now excluded from a
+future blinded cohort. This is a single-agent acquisition check,
 not External Holdout V1 evidence; the [P2 screen](docs/validation/blind_p2_fda_acquisition_2026-09-24.md)
 records ordered attrition and limitations. A qualifying external cohort needs
 other source windows and independent human curation.

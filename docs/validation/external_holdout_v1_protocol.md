@@ -141,6 +141,13 @@ and missing eligible fasted single-dose Cmax arms still need review. FDA's
 recent-approval subset is especially small; even the full 1985–2025 source
 cannot establish the N=260 test cohort from this name screen alone. No Cmax
 values were read.
+A later [P2 source-window screen](blind_p2_fda_acquisition_2026-09-24.md)
+consecutively reviewed all 248 oral NDA rows approved in 2015–2025 and found
+zero arms meeting the strict primary criteria. Its two source-reviewed parent
+identities are now development-only and pinned in
+`data/validation/p2_modeler_seen_identities_2026-09-24.json`; the exclusion
+audit checks their names, study-code aliases, and parent structures. P2 was
+AI-assisted and does not satisfy the independent-curation requirement.
 The 900-identity inventory therefore needs older and investigational drugs plus
 non-FDA sources, with duplicates across agencies collapsed before allocation.
 EMA's [Article 57 product data](https://www.ema.europa.eu/en/human-regulatory-overview/post-authorisation/data-medicines-iso-idmp-standards-post-authorisation/public-data-article-57-database)

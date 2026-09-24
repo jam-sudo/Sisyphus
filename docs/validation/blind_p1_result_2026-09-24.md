@@ -46,7 +46,7 @@ crosses 1; the pilot establishes neither Meta superiority nor inferiority in a
 target population. The open-access/fasting-phrase discovery process is
 nonconsecutive and chemically selective. The cohort is small and mixes
 arithmetic and geometric source means.
-All eight predictions were marked structurally in-domain; that flag did not
+All eight predictions had no rule-based applicability warning flags; that check did not
 identify the large errors in this pilot. The model's nominal 90% development-
 residual interval covered six of eight observations, missing usnoflast and
 DFV890. Eight observations are too few to estimate interval coverage reliably.

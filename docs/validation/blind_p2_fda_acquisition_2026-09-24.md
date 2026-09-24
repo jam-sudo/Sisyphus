@@ -39,6 +39,8 @@ The pass corrected two details in the raw screening log without changing either 
 
 The follow-up is still single-curator AI evidence, not External Holdout V1. Its full source-location report and empty manifests remain under `/tmp/sisyphus_p2_followup_20260924/`; SHA256: `report.md` `5b2e702c9e25bdb15f31a91a51e7514452f1a074078b2b249cf37dd9e47a4e3e`, `inputs.json` `37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570`, `labels.json` `f98e0e513381cd8ed5bfc02ae018718b88eac424c70246a142a030107812996d`. No prediction was run. Both supervised worker terminals were released after completion.
 
+The model-development agent has now seen these two identities and their source review. Their parent structures, names, and study-code aliases are pinned in [`p2_modeler_seen_identities_2026-09-24.json`](../../data/validation/p2_modeler_seen_identities_2026-09-24.json), which the external-holdout exclusion audit indexes automatically. They cannot be reused in a blinded final or reserve cohort.
+
 ## Source-window coverage
 
 | Approval year | rows screened |
