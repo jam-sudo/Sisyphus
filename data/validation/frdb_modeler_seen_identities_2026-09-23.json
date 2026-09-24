@@ -1,0 +1,341 @@
+{
+  "classification": "modeler_seen_identity_screen_development_only",
+  "source": "NIH NCATS Inxight Drugs FRDB v. 2024-12-30",
+  "source_archive_sha256": "647b80d9cdac4a0517ce649570517dc1aff40545bdc84617ec9f1a56405f9c7a",
+  "screened_at": "2026-09-23",
+  "screen_basis": "Metadata-only screen for adult healthy fasted single-dose oral human plasma records with nonempty dose and Cmax fields, then repository structure/name exclusion. Numeric Cmax values were not inspected or used.",
+  "n_source_rows_after_screen": 74,
+  "n_modeler_seen_compound_identities": 28,
+  "final_holdout_eligible": false,
+  "reason": "The model-development agent saw these identities before a final model freeze; do not use them in the blinded external-test or reserve cohorts.",
+  "candidates": [
+    {
+      "compound_id": "8395",
+      "name": "AMISELIMOD",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "CCCCCCCOc1ccc(CCC(N)(CO)CO)cc1C(F)(F)F"
+        }
+      ]
+    },
+    {
+      "compound_id": "45778",
+      "name": "AZD-5069",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "CC(Oc1cc(NS(=O)(=O)N2CCC2)nc(SCc2cccc(F)c2F)n1)C(O)CO"
+        }
+      ]
+    },
+    {
+      "compound_id": "410",
+      "name": "CADRALAZINE",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "CCOC(=O)NNc1ccc(N(CC)CC(C)O)nn1"
+        }
+      ]
+    },
+    {
+      "compound_id": "8508",
+      "name": "CGP-36742",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "CCCCP(=O)(O)CCCN"
+        }
+      ]
+    },
+    {
+      "compound_id": "8613",
+      "name": "EQUOL, (-)-",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "Oc1ccc([C@H]2COc3cc(O)ccc3C2)cc1"
+        }
+      ]
+    },
+    {
+      "compound_id": "30199",
+      "name": "FLUMATINIB",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "Cc1ncc(NC(=O)c2ccc(CN3CCN(C)CC3)c(C(F)(F)F)c2)cc1Nc1nccc(-c2cccnc2)n1"
+        },
+        {
+          "kind": "analyte",
+          "smiles": "Cc1ncc(NC(=O)c2ccc(CN3CCNCC3)c(C(F)(F)F)c2)cc1Nc1nccc(-c2cccnc2)n1"
+        }
+      ]
+    },
+    {
+      "compound_id": "46682",
+      "name": "GLYCOCYAMINE",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "N=C(N)NCC(=O)O"
+        }
+      ]
+    },
+    {
+      "compound_id": "1809",
+      "name": "IMIDAPRIL",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "CCOC(=O)[C@H](CCc1ccccc1)N[C@@H](C)C(=O)N1C(=O)N(C)C[C@H]1C(=O)O"
+        },
+        {
+          "kind": "analyte",
+          "smiles": "C[C@H](N[C@@H](CCc1ccccc1)C(=O)O)C(=O)N1C(=O)N(C)C[C@H]1C(=O)O"
+        }
+      ]
+    },
+    {
+      "compound_id": "33230",
+      "name": "LAPPACONITINE",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "CCN1C[C@]2(OC(=O)c3ccccc3N)CC[C@H](OC)[C@]34C1[C@@H](CC23)[C@@]1(O)C[C@H](OC)[C@H]2CC4[C@]1(O)[C@H]2OC"
+        },
+        {
+          "kind": "analyte",
+          "smiles": "CCN1C[C@]2(OC(=O)c3ccccc3NC(C)=O)CC[C@H](OC)[C@@]34[C@@H]2C[C@@H]([C@@H]13)[C@@]1(O)C[C@H](OC)[C@H]2C[C@@H]4[C@]1(O)[C@H]2OC"
+        }
+      ]
+    },
+    {
+      "compound_id": "1609",
+      "name": "LEVOBUNOLOL",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "CC(C)(C)NCC(O)COc1cccc2c1CCCC2O"
+        },
+        {
+          "kind": "analyte",
+          "smiles": "CC(C)(C)NC[C@H](O)COc1cccc2c1CCCC2=O"
+        }
+      ]
+    },
+    {
+      "compound_id": "861",
+      "name": "LYCOPENE",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "CC(C)=CCC/C(C)=C/C=C/C(C)=C/C=C/C(C)=C/C=C/C=C(C)/C=C/C=C(C)/C=C/C=C(\\C)CCC=C(C)C"
+        }
+      ]
+    },
+    {
+      "compound_id": "9657",
+      "name": "MAVOGLURANT",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "COC(=O)N1CC[C@@H]2[C@H]1CCC[C@@]2(O)C#Cc1cccc(C)c1"
+        }
+      ]
+    },
+    {
+      "compound_id": "2059",
+      "name": "MEBEVERINE",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "CCN(CCCC(=O)O)C(C)Cc1ccc(O)cc1"
+        },
+        {
+          "kind": "analyte",
+          "smiles": "CCN(CCCC(=O)O)C(C)Cc1ccc(OC)cc1"
+        },
+        {
+          "kind": "analyte",
+          "smiles": "CCN(CCCCO)C(C)Cc1ccc(OC)cc1"
+        }
+      ]
+    },
+    {
+      "compound_id": "8784",
+      "name": "MERICITABINE",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "C[C@@]1(F)[C@H](O)[C@@H](CO)O[C@H]1n1ccc(=O)[nH]c1=O"
+        },
+        {
+          "kind": "analyte",
+          "smiles": "C[C@@]1(F)[C@H](O)[C@@H](CO)O[C@H]1n1ccc(N)nc1=O"
+        }
+      ]
+    },
+    {
+      "compound_id": "35399",
+      "name": "MK-0557",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "O=C1O[C@]2(CC[C@H](C(=O)Nc3ccn(-c4ccccc4F)n3)CC2)c2cnccc21"
+        }
+      ]
+    },
+    {
+      "compound_id": "45878",
+      "name": "MK-1064",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "COc1ccc(CNC(=O)c2cc(-c3cncc(Cl)c3)cnc2-c2ccccn2)nc1OC"
+        }
+      ]
+    },
+    {
+      "compound_id": "59591",
+      "name": "MK-8353",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "CSC1(C(=O)Nc2ccc3[nH]nc(-c4ccc(OC(C)C)nc4)c3c2)CCN(CC(=O)N2CC=C(c3ccc(-c4ncn(C)n4)cc3)CC2)C1"
+        }
+      ]
+    },
+    {
+      "compound_id": "6867",
+      "name": "NORMORPHINE",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "Oc1ccc2c3c1O[C@H]1[C@@H](O)C=C[C@H]4[C@@H](C2)NCC[C@@]341"
+        }
+      ]
+    },
+    {
+      "compound_id": "59670",
+      "name": "PARSACLISIB",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "CCOc1c([C@H](C)n2nc(C)c3c(N)ncnc32)cc(Cl)c(F)c1[C@@H]1CNC(=O)C1"
+        }
+      ]
+    },
+    {
+      "compound_id": "706",
+      "name": "PROPENTOFYLLINE",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "CC(=O)CCCCn1c(=O)c2c(ncn2CC(C)O)n(C)c1=O"
+        },
+        {
+          "kind": "analyte",
+          "smiles": "CCCn1cnc2c1c(=O)n(CCCCC(C)=O)c(=O)n2C"
+        }
+      ]
+    },
+    {
+      "compound_id": "10239",
+      "name": "SELISISTAT",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "NC(=O)C1CCCc2c1[nH]c1ccc(Cl)cc21"
+        }
+      ]
+    },
+    {
+      "compound_id": "1164",
+      "name": "SIBUTRAMINE HYDROCHLORIDE",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "CC(C)CC(N)C1(c2ccc(Cl)cc2)CCC1"
+        },
+        {
+          "kind": "analyte",
+          "smiles": "CNC(CC(C)C)C1(c2ccc(Cl)cc2)CCC1"
+        }
+      ]
+    },
+    {
+      "compound_id": "190",
+      "name": "STIBOCAPTATE",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "O=C(O)[C@@H](S)[C@@H](S)C(=O)O"
+        }
+      ]
+    },
+    {
+      "compound_id": "2744",
+      "name": "TEPOXALIN",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "COc1ccc(-n2nc(CCC(=O)N(C)O)cc2-c2ccc(Cl)cc2)cc1"
+        },
+        {
+          "kind": "analyte",
+          "smiles": "COc1ccc(-n2nc(CCC(=O)O)cc2-c2ccc(Cl)cc2)cc1"
+        }
+      ]
+    },
+    {
+      "compound_id": "43705",
+      "name": "TETRANDRINE",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "COc1cc2c3cc1Oc1c(OC)c(OC)cc4c1[C@@H](Cc1ccc(O)c(c1)Oc1ccc(cc1)C[C@@H]3N(C)CC2)N(C)CC4"
+        },
+        {
+          "kind": "analyte",
+          "smiles": "COc1ccc2cc1Oc1ccc(cc1)C[C@H]1c3cc(c(OC)cc3CCN1C)Oc1c(OC)c(OC)cc3c1[C@H](C2)N(C)CC3"
+        }
+      ]
+    },
+    {
+      "compound_id": "43770",
+      "name": "THEANINE",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "CCN"
+        },
+        {
+          "kind": "analyte",
+          "smiles": "CCNC(=O)CC[C@H](N)C(=O)O"
+        }
+      ]
+    },
+    {
+      "compound_id": "44414",
+      "name": "TRIETHYLAMINE",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "CCN(CC)CC"
+        }
+      ]
+    },
+    {
+      "compound_id": "2191",
+      "name": "UNITHIOL",
+      "structures": [
+        {
+          "kind": "analyte",
+          "smiles": "O=S(=O)([O-])CC(S)CS.[Na+]"
+        }
+      ]
+    }
+  ]
+}

@@ -180,6 +180,19 @@ still be checked by two curators. FRDB alone cannot provide the N=260 final
 cohort or the ≥70% regulatory-source quota. The screen neither read nor used
 observed Cmax values for model assessment.
 
+A stricter metadata-only re-screen on 2026-09-23 required an exact adult,
+healthy, fasted, single-dose, oral, plasma record with nonempty dose/Cmax
+fields and excluded currently indexed repository names and structures. It left
+74 rows for 28 FRDB compound IDs; only imidapril had a regulatory-domain
+source URL, and several other rows still name metabolites rather than the
+administered parent. The model-development agent saw these 28 identities during
+triage, so they are **development-only** and excluded from the final-test and
+reserve pools by the 28 names and 40 analyte/administered structures in
+`data/validation/frdb_modeler_seen_identities_2026-09-23.json`.
+No numeric Cmax outcomes were inspected. This narrower count does not revise
+the earlier 190-ID optimistic discovery count because the screens impose
+different metadata conditions and repository snapshots.
+
 A second [EPA publication data extract](https://github.com/USEPA/clinical-nonclinical-concordance)
 (`cmax_auc_dataextraction.xlsx`, SHA256
 `2600cc6014911097d53c086341279f14b27c267b56b4e6bf8edb36a644ddb950`)
