@@ -229,6 +229,40 @@ Original-source licensing and Cmax values would need separate verification.
 PK-DB therefore cannot currently supply the primary N=120 or N=260 cohort by
 itself.
 
+The [Open Systems Pharmacology observed-data workbook](https://github.com/Open-Systems-Pharmacology/Database-for-observed-data/blob/master/ObsDataPK_OSP.xlsx)
+(retrieved 2026-09-23; XLSX SHA256
+`e77e3c99c059f97ea45785508f7b0cbb52382306b8257737c9cd1ac83d83e86b`)
+was also screened using only Cmax-field presence and study metadata, without
+inspecting numeric outcomes. Its `PK-Parameter` sheet has 895 rows with a Cmax
+field across 34 distinct normalized analyte names. Joining to `Studies` by ID,
+then requiring human, oral, plasma, fasted, a single administration at time zero,
+and a recorded post-dose fast of at least four hours leaves 122 rows across 19
+names. Only eight rows across **two** names avoid an exact normalized-name hit
+in the repository exclusion union. This case-insensitive screen accepts `PO`
+and `po` as oral and `Fasted` and `fasted` as fasted. The two nonmatches are
+unverified leads, not eligible compounds: structure, parent analyte, dose
+basis, formulation, and original-source evidence remain unchecked. Even the
+34-name pre-exclusion ceiling is below N=120, so this workbook can only be a
+supplementary discovery source.
+
+The separate [Geci et al. high-throughput PBK study](https://link.springer.com/article/10.1007/s00204-024-03764-9)
+reports 2,235 human concentration-time profiles for 210 compounds. Its
+[profile-source supplement](https://media.springernature.com/original/springer-static/esm/art%3A10.1007%2Fs00204-024-03764-9/MediaObjects/204_2024_3764_MOESM3_ESM.xlsx)
+(SHA256 `1981f68dfbb8cd38687fe6d0aa8f94a31589b174b0f3b3c06abbd5c690745788`)
+lists 1,486 rows marked oral (`PO`) across 192 normalized compound names.
+Twenty-two of these names avoid an exact repository exclusion-name hit. The
+[compound-structure supplement](https://media.springernature.com/original/springer-static/esm/art%3A10.1007%2Fs00204-024-03764-9/MediaObjects/204_2024_3764_MOESM2_ESM.xlsx)
+(SHA256 `09ce7f809c18ff2caaa9d27ea3bf4a9372c0677ad22c8ae05c555bb8efcd06b6`)
+has 209 compound rows; 176 oral names join exactly after normalization. Only
+**nine** joined oral compounds avoid both a name and InChIKey-14 structure hit
+in the repository exclusion union. These are provisional discovery leads,
+not verified primary cases. The supplements are an identity/source index and
+compound-property table, not a ready-to-score dose/Cmax table; original
+studies, eligibility, and numeric outcomes would need separate curation. No
+numeric Cmax outcomes were inspected in this screen. These aggregate counts
+were obtained from the supplements retrieved 2026-09-23 and cannot establish
+the N=120 cohort.
+
 The repository's DrugBank `pk_data.csv` is narrative PK text, not the separately
 licensed structured Cmax table. A value-blind screen of its absorption records
 (`pk_data.csv` SHA256 `8a0c7d11da7bd1e91cddc4fb2bb6291f584b5481f0d3949ff22949f71ade9d5f`;
