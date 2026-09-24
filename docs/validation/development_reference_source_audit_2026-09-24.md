@@ -1,9 +1,9 @@
 # Development Cmax reference source audit — 2026-09-24
 
 This is an audit of the repeatedly used development benchmark, not an
-independent model evaluation. Nine scored rows used an estimated label, cited
+independent model evaluation. Twelve scored rows used an estimated label, cited
 the wrong analyte/arm, or lacked support for the stated Cmax. The rule was
-applied to all nine rows before re-scoring; no model weights or fitted
+applied to all twelve rows before re-scoring; no model weights or fitted
 artifacts changed.
 
 | Drug | Previous benchmark label | Source finding | Current disposition |
@@ -17,12 +17,15 @@ artifacts changed.
 | Molnupiravir | 800 mg, 2.33 mg/L | The [LAGEVRIO label](https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=1b0da643-ab23-4a0b-a9ec-a434522446d0), Table 2, identifies **2330 ng/mL as NHC**, measured after **multiple** 800 mg doses every 12 h in patients. | Parent single-dose Cmax quarantined. |
 | Valacyclovir | 1000 mg, 4.03 mg/L | The [valacyclovir label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=4ab809f3-8898-463c-b55a-f452c87d0779), Table 4, identifies **4.03 mcg/mL and AUC 14.4 mcg·h/mL as acyclovir** after adult **1 g valacyclovir**, based on historical estimates. The dose matches, but the analyte does not. | Parent Cmax and AUC quarantined. |
 | Valganciclovir | 900 mg, 5.8 mg/L | The [valganciclovir label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=85177859-e0f5-6d83-17f3-29cae1db96c3), Table 10, reports **ganciclovir** after 900 mg valganciclovir once daily with food; parent valganciclovir Cmax is approximately **3%** of ganciclovir Cmax. The 5.8 mg/L value is not a supported parent value. | Parent Cmax quarantined. |
+| Adefovir dipivoxil | 10 mg, 0.0184 mg/L | The [adefovir dipivoxil label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e047f3b2-feae-4c5e-9d07-1fefb4c0ec25) identifies **18.4 ng/mL as adefovir** after a single 10 mg prodrug dose in 14 hepatitis B patients. | Parent Cmax quarantined. |
+| Prasugrel | 60 mg, 0.631 mg/L | [Cui et al. 2012](https://pmc.ncbi.nlm.nih.gov/articles/PMC4011359/), Table 2, identifies **631 ng/mL as active metabolite Pras-AM** after a single 60 mg prasugrel loading dose. The previous citation gave the wrong journal and year. | Parent Cmax quarantined. |
+| Tenofovir disoproxil | 300 mg, 0.38 mg/L | The [VIREAD label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=33fd6418-fbdc-42ca-a50d-ce2a476a5418), Table 13, identifies **0.38 µg/mL as tenofovir**, measured at steady state in eight HIV-1-infected adolescents receiving 300 mg tenofovir disoproxil fumarate daily. | Parent single-dose Cmax quarantined. |
 
-The scored benchmark is now **N=101** from the unchanged 107-compound split.
-Meta AAFE is **2.7830** (compound bootstrap 95% CI **2.3321–3.3626**), versus
-**2.6950** (2.2968–3.1599) for the prior N=105 cache. The corrected
-clopidogrel reference and four excluded metabolite labels account for the
-change; this is a change in label integrity, not model quality. Both cohorts
+The scored benchmark is now **N=98** from the unchanged 107-compound split.
+Meta AAFE is **2.8078** (compound bootstrap 95% CI **2.3531–3.3845**), versus
+**2.7830** (2.3321–3.3626) for the prior N=101 cache. Three additional
+metabolite labels were excluded; this is a change in label integrity, not model
+quality. Both cohorts
 have repeatedly informed system development.
 
 The engine observes `venous_blood`, whose compartment concentration is amount
