@@ -1,5 +1,10 @@
 # Development-reference PMID screen — 2026-09-24
 
+The counts and 14.4-fold interval below record this screen's intermediate
+state. The later [calibration reference audit](development_calibration_reference_audit_2026-09-24.md)
+supersedes them with 142 Cmax rows, 53 training records, and an 8.30-fold
+development diagnostic interval.
+
 This is a source-integrity check of the 173 `clinical_pk.json` rows carrying
 Cmax at the start of this screen, not an independent evaluation. Ten rows had a PMID in
 their `source` field. The original 14 identifiers were resolved against the

@@ -87,7 +87,7 @@ assert(root.textContent.includes("Cmax") || root.querySelector(".statcell"), "en
 assert(root.querySelector("svg.chart"), "concentration-time chart renders");
 assert(root.textContent.includes("in domain"), "AD badge renders");
 assert(!root.textContent.includes("split-conformal"), "no invalid conformal claim renders");
-assert(!root.textContent.includes("external holdout"), "N=107 is not labeled external holdout");
+assert(!root.textContent.includes("external holdout"), "development set is not labeled external holdout");
 assert(document.querySelector('input[type="number"]')?.disabled, "preset dose cannot be rescaled");
 assert(root.textContent.includes("Dose/AUC"), "24h exposure proxy is labeled without CL/F claim");
 assert(document.querySelector(".btn-run")?.textContent.includes("View prediction"), "preset action identifies frozen prediction");
@@ -118,11 +118,12 @@ for (const w of WF) {
   assert(ok && tabCount > 0, `workflow "${w}" renders all ${tabCount} tab(s)`);
 }
 
-// benchmark scatter has 107 points
+// benchmark scatter reflects the current development cache
 await clickNav("benchmark");
 await clickTab(0);
 const circles = document.querySelectorAll(".content svg.chart circle");
-assert(circles.length >= 100, `benchmark scatter renders ${circles.length} points (≥100)`);
+const expectedPoints = JSON.parse(data).benchmark.scatter.length;
+assert(circles.length === expectedPoints, `benchmark scatter renders ${circles.length} points (${expectedPoints} expected)`);
 
 if (process.env.SMOKE_LIVE_RACE) {
   await clickNav("predict");

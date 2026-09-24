@@ -8,7 +8,7 @@ Two supported workflows, driven by real model artifacts:
 
 | Workflow      | What it shows                                                              |
 | ------------- | ------------------------------------------------------------------------- |
-| `predict`     | SMILES → C(t) curve (real ODE), 4-track meta-learner, body graph, conformal 90% PI, pipeline log |
+| `predict`     | SMILES → C(t) curve (real ODE), 4-track meta-learner, body graph, development-residual 90% interval, pipeline log |
 | `benchmark`   | N=107 retrospective development scatter + per-track AAFE; explicitly not an independent holdout |
 
 ## Stack
@@ -52,8 +52,8 @@ interface:
 - **Live tier:** when `VITE_API_URL` is configured, the same client calls the
   FastAPI core for arbitrary SMILES.
 
-Curves use the matching ODE single-dose response. The conformal 90% PI
-(÷×~13) and its development-set calibration caveat are surfaced. Regimen,
+Curves use the matching ODE single-dose response. The empirical development
+90% residual interval (÷×~8.3) and its calibration caveat are surfaced. Regimen,
 TDM, DDI, and dose-adjustment workflows are deliberately outside this console.
 
 ## Deploy (GitHub Pages — sisyphus-pbpk.io/app/)

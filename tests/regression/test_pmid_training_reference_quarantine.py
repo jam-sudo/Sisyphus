@@ -46,3 +46,20 @@ def test_pmid_training_arms_are_quarantined():
         bool(row.get("pk_params", {}).get("cmax_mg_L"))
         for row in data["drugs"].values()
     )
+
+
+def test_residual_led_training_reference_audit():
+    data = json.loads(REFERENCE.read_text())
+    refs = {row.name: row for row in load_reference(REFERENCE)}
+    for name in ("lanthanum carbonate", "cefpodoxime proxetil", "serdexmethylphenidate"):
+        row = data["drugs"][name]
+        assert row["tier"] == "unverified"
+        assert row["pk_params"] == {}
+        assert "ct_curve" not in row
+        assert name not in refs
+    for name, dose, cmax in (("primaquine", 30, 0.127), ("flutamide", 250, 0.0252)):
+        row = data["drugs"][name]
+        assert row["pk_params"] == {"cmax_mg_L": cmax}
+        assert "ct_curve" not in row
+        assert refs[name].dose_mg == pytest.approx(dose)
+        assert refs[name].cmax_obs == pytest.approx(cmax)
