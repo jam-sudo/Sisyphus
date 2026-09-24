@@ -10,6 +10,20 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Remove obsolete 2.698 probe-test pins
+
+A full-suite run (1,451 collected) found seven failures in old probe-isolation
+tests. They asserted the historical 2.698 development AAFE or spawned a
+subprocess targeting a test name removed during source-audited regeneration.
+The current cache is 2.9492/N=79, and its aggregate is already checked by
+`tests/integration/test_holdout_regression.py`. Probe-isolation checks now use
+the existing before/after cache byte comparison; redundant subprocess runs
+and number-only assertions were removed. The mechanism and prediction-layer
+isolation assertions remain. This changes tests only, not model output.
+The follow-up full suite passed: **1,428 passed, 25 skipped, 3 xfailed**.
+
+---
+
 ## 2026-09-24 (cont.) — Bind external-test manifest names to frozen identities
 
 The V1 source-plan contract already bound candidate IDs, structures, and the

@@ -172,14 +172,11 @@ def test_g_layering_pkpd_does_not_import_validation():
         f"pkpd imports a validation module: {[m for m in mods if 'validation' in m]}"
 
 
-def test_g_headline_isolation():
-    import json
+def test_g_cr_symbols_not_in_prediction_path():
     import pathlib
 
     root = pathlib.Path(__file__).resolve().parents[2]
-    d = json.loads((root / "data" / "training" / "4track_holdout_predictions.json").read_text())
-    assert abs(d["overall"]["meta"]["aafe"] - 2.698) < 5e-3
-    # predict/pipeline must not import the CR symbols (headline path unaffected)
+    # predict/pipeline must not import the CR symbols.
     for sub in ("predict", "pipeline"):
         for f in (root / "src" / "sisyphus" / sub).glob("*.py"):
             txt = f.read_text()

@@ -2,11 +2,9 @@
 assertions only (signs/inequalities/tolerances), not pinned floats. Thresholds reflect
 the measured, a-priori-pinned (untuned) signal; a genuine miss is an honest-negative."""
 import importlib.util
-import json
 from pathlib import Path
 
 import numpy as np
-import pytest
 
 _ROOT = Path(__file__).resolve().parents[2]
 
@@ -70,18 +68,3 @@ def test_g_nac_monotone_protective():
     out = probe.nac_test()
     maxh = [r["maxH"] for r in out]                          # gsh0 scale 1.0,1.5,3.0
     assert maxh[0] >= maxh[1] >= maxh[2]                     # more pool -> less hazard
-
-
-def test_headline_isolation_unchanged():
-    # The 4-track holdout cache must be untouched by anything in this probe.
-    p = _ROOT / "data" / "training" / "4track_holdout_predictions.json"
-    d = json.loads(p.read_text())
-    assert abs(d["overall"]["meta"]["aafe"] - 2.698) < 5e-3
-
-
-@pytest.mark.parametrize("name", ["test_cached_holdout_aafe_is_2p698",
-                                  "test_mm_headline_bit_identity"])
-def test_headline_pins_exist(name):
-    # Guard: the canonical headline pins still exist in the suite (regenerated, not removed).
-    found = list(_ROOT.glob("tests/**/*.py"))
-    assert any(name in f.read_text() for f in found), f"{name} pin missing"

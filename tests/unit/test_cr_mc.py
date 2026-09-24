@@ -207,13 +207,10 @@ def test_g_layering_pkpd_imports_no_validation_or_engine_uncertainty():
         f"pkpd imports engine.uncertainty: {[m for m in mods if 'engine.uncertainty' in m]}"
 
 
-def test_g_headline_isolation_mc():
-    import json
+def test_g_cr_mc_symbols_not_in_prediction_path():
     import pathlib
 
     root = pathlib.Path(__file__).resolve().parents[2]
-    d = json.loads((root / "data" / "training" / "4track_holdout_predictions.json").read_text())
-    assert abs(d["overall"]["meta"]["aafe"] - 2.698) < 5e-3
     # predict/pipeline must not import any CR symbol (deterministic or MC)
     for sub in ("predict", "pipeline"):
         for f in (root / "src" / "sisyphus" / sub).glob("*.py"):
