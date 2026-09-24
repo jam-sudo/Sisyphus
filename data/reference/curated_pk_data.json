@@ -12,12 +12,12 @@
   {
     "drug_name": "alvimopan",
     "dose_mg": 12,
-    "cmax_mg_L": 0.01098,
-    "cmax_value_original": 10.98,
+    "cmax_mg_L": null,
+    "cmax_value_original": null,
     "cmax_unit_original": "ng/mL",
-    "source": "FDA label (Entereg); Capto et al., Clin Pharmacol 2007",
-    "notes": "12mg oral capsule. Cmax ~10.98 ng/mL from multiple-dose study. Very low bioavailability (6%). Single dose data limited; value from BID dosing to Day 5.",
-    "status": "uncertain"
+    "source": "DailyMed alvimopan capsule label Section 12.3 (https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=59ef406b-79db-4efd-b993-08b937ac682b)",
+    "notes": "The reported 10.98 +/- 6.43 ng/mL parent peak follows 12 mg twice daily for five days. It is not an observed single-dose arm and cannot be scored as such.",
+    "status": "unverified"
   },
   {
     "drug_name": "atovaquone",
@@ -81,12 +81,12 @@
   },
   {
     "drug_name": "donepezil",
-    "dose_mg": 5,
+    "dose_mg": 4.56,
     "cmax_mg_L": 0.0077,
     "cmax_value_original": 7.7,
     "cmax_unit_original": "ng/mL",
-    "source": "Tiseo et al., Br J Clin Pharmacol 1998; FDA label (Aricept)",
-    "notes": "5mg single dose healthy volunteers. Cmax 7.7 +/- 1.2 ng/mL. Long half-life ~70h.",
+    "source": "Tiseo et al. 1998 matched healthy-control arm (https://pubmed.ncbi.nlm.nih.gov/9839768/); ARICEPT 5 mg SmPC (https://www.medicines.org.uk/emc/product/3776/smpc)",
+    "notes": "One 5 mg donepezil hydrochloride tablet in 11 healthy controls: parent plasma Cmax 7.7 +/- 1.2 ng/mL. Model parent free-base dose is 4.56 mg per ARICEPT SmPC.",
     "status": "confirmed"
   },
   {
@@ -105,8 +105,8 @@
     "cmax_mg_L": 0.113,
     "cmax_value_original": 113,
     "cmax_unit_original": "ng/mL",
-    "source": "Phase I study in healthy Chinese volunteers; FDA label (Fruzaqla)",
-    "notes": "5mg single dose healthy volunteers. Cmax 113 ng/mL at Tmax ~2h. Linear PK 1-6mg. t1/2 ~42h.",
+    "source": "Original 14C-fruquintinib phase I mass-balance study (https://pubmed.ncbi.nlm.nih.gov/28730290/)",
+    "notes": "One 5 mg radiolabeled oral suspension dose in six fasted healthy Chinese men: parent plasma Cmax 113 ng/mL at Tmax 2 h. This was not the marketed capsule formulation.",
     "status": "confirmed"
   },
   {

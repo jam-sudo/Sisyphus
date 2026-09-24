@@ -12,12 +12,12 @@
   {
     "drug_name": "alvimopan",
     "dose_mg": 12.0,
-    "cmax_mg_L": 0.0105,
+    "cmax_mg_L": null,
     "cmax_unit_original": "ng/mL",
-    "cmax_value_original": 10.5,
-    "source": "DailyMed SPL (Entereg)",
-    "context": "12mg single oral capsule: Cmax ~10.5 ng/mL. Median Tmax 2h. F~6% due to P-gp efflux.",
-    "status": "extracted"
+    "cmax_value_original": null,
+    "source": "DailyMed alvimopan capsule label Section 12.3 (https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=59ef406b-79db-4efd-b993-08b937ac682b)",
+    "context": "The label gives 10.98 ng/mL after 12 mg twice daily for five days; the previously extracted ~10.5 ng/mL single-dose claim is not supported by this source.",
+    "status": "unverified"
   },
   {
     "drug_name": "atovaquone",

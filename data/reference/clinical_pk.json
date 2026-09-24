@@ -2,8 +2,8 @@
   "metadata": {
     "created": "2026-03-26",
     "n_drugs": 331,
-    "n_with_cmax": 114,
-    "holdout_with_cmax": 75,
+    "n_with_cmax": 113,
+    "holdout_with_cmax": 74,
     "sources": {
       "original": 293,
       "osp_new": 8,
@@ -145,14 +145,13 @@
     },
     "alvimopan": {
       "name": "alvimopan",
-      "tier": "gold",
-      "source": "FDA label (Entereg); Capto et al., Clin Pharmacol 2007",
+      "tier": "unverified",
+      "source": "DailyMed alvimopan capsule label Section 12.3 reports parent Cmax 10.98 +/- 6.43 ng/mL after 12 mg twice daily for 5 days, not after one 12 mg dose; https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=59ef406b-79db-4efd-b993-08b937ac682b",
       "dose_mg": 12,
       "route": "oral",
-      "pk_params": {
-        "cmax_mg_L": 0.01098
-      },
-      "smiles": "C[C@H]1CN(C[C@H](Cc2ccccc2)C(=O)NCC(=O)O)CC[C@@]1(C)c1cccc(O)c1"
+      "pk_params": {},
+      "smiles": "C[C@H]1CN(C[C@H](Cc2ccccc2)C(=O)NCC(=O)O)CC[C@@]1(C)c1cccc(O)c1",
+      "correction_note": "2026-09-24: quarantined a five-day twice-daily peak misclassified as a single-dose Cmax. No source-verified, training-disjoint single-dose replacement has been identified."
     },
     "amantadine": {
       "name": "amantadine",
@@ -1034,13 +1033,14 @@
     "donepezil": {
       "name": "donepezil",
       "tier": "gold",
-      "source": "Tiseo et al., Br J Clin Pharmacol 1998; FDA label (Aricept)",
-      "dose_mg": 5,
+      "source": "Tiseo et al. 1998 renal-impairment study, age/sex-matched healthy-control arm (N=11): one oral 5 mg donepezil hydrochloride tablet, parent plasma arithmetic mean Cmax 7.7 +/- 1.2 ng/mL; ARICEPT 5 mg SmPC gives 4.56 mg donepezil free-base equivalent; https://pubmed.ncbi.nlm.nih.gov/9839768/; https://www.medicines.org.uk/emc/product/3776/smpc",
+      "dose_mg": 4.56,
       "route": "oral",
       "pk_params": {
         "cmax_mg_L": 0.0077
       },
-      "smiles": "COc1cc2c(cc1OC)C(=O)C(CC1CCN(Cc3ccccc3)CC1)C2"
+      "smiles": "COc1cc2c(cc1OC)C(=O)C(CC1CCN(Cc3ccccc3)CC1)C2",
+      "correction_note": "2026-09-24: converted the original 5 mg hydrochloride tablet strength to the regulator-stated 4.56 mg parent-equivalent model dose."
     },
     "doxazosin": {
       "name": "doxazosin",
@@ -1500,13 +1500,14 @@
     "fruquintinib": {
       "name": "fruquintinib",
       "tier": "gold",
-      "source": "Phase I study in healthy Chinese volunteers; FDA label (Fruzaqla)",
+      "source": "Original phase I mass-balance study in six fasted healthy Chinese men: one 5 mg 14C-fruquintinib oral suspension dose, parent plasma mean Cmax 113 ng/mL; the study formulation was a suspension, not the marketed capsule; https://pubmed.ncbi.nlm.nih.gov/28730290/",
       "dose_mg": 5,
       "route": "oral",
       "pk_params": {
         "cmax_mg_L": 0.113
       },
-      "smiles": "CNC(=O)c1c(C)oc2cc(Oc3ncnc4cc(OC)c(OC)cc34)ccc12"
+      "smiles": "CNC(=O)c1c(C)oc2cc(Oc3ncnc4cc(OC)c(OC)cc34)ccc12",
+      "correction_note": "2026-09-24: verified the unchanged 113 ng/mL value against the original single-dose parent-plasma arm and specified its radiolabeled oral-suspension formulation."
     },
     "furosemide": {
       "name": "furosemide",

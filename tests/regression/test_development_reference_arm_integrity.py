@@ -21,7 +21,7 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert data["drugs"]["codeine"]["tier"] == "gold"
     refs = {row.name: row for row in load_reference() if row.in_holdout}
     cache = json.loads((ROOT / "data/training/4track_holdout_predictions.json").read_text())
-    assert cache["n_holdout"] == data["metadata"]["holdout_with_cmax"] == len(refs) == 75
+    assert cache["n_holdout"] == data["metadata"]["holdout_with_cmax"] == len(refs) == 74
     assert {row["name"] for row in cache["drugs"]} == set(refs)
     for name in ("cimetidine", "mefenamic acid"):
         assert data["drugs"][name]["tier"] == "unverified"
@@ -220,6 +220,14 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert "acamprosate" not in refs
     assert data["drugs"]["acamprosate"]["tier"] == "unverified"
     assert next(row for row in curated_rows if row["drug_name"] == "acamprosate")["cmax_mg_L"] is None
+    assert data["drugs"]["alvimopan"]["tier"] == "unverified"
+    assert not data["drugs"]["alvimopan"]["pk_params"]
+    assert "alvimopan" not in refs
+    assert next(row for row in curated_rows if row["drug_name"] == "alvimopan")["cmax_mg_L"] is None
+    assert next(row for row in fda_rows if row["drug_name"] == "alvimopan")["cmax_mg_L"] is None
+    assert refs["donepezil"].dose_mg == pytest.approx(4.56)
+    assert refs["donepezil"].cmax_obs == pytest.approx(0.0077)
+    assert "oral suspension" in data["drugs"]["fruquintinib"]["source"]
     assert refs["phenytoin"].dose_mg == pytest.approx(300 * 252.27 / 274.25, rel=1e-6)
     assert refs["phenytoin"].cmax_obs == pytest.approx(2.32)
     assert refs["phenytoin"].auc_obs == pytest.approx(108.99)

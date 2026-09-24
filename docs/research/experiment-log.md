@@ -10,6 +10,23 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Quarantine alvimopan repeat-dose peak; align donepezil dose basis
+
+The alvimopan label's 10.98 ng/mL peak follows 12 mg twice daily for five days,
+so it was removed from the single-dose development score. The donepezil
+healthy-control 7.7 ng/mL peak remains, with the 5 mg hydrochloride tablet
+converted to 4.56 mg free-base model input. Fruquintinib's unchanged 113 ng/mL
+peak comes from a fasted radiolabeled oral suspension, now named explicitly.
+See [source adjudication](../validation/development_alvimopan_donepezil_fruquintinib_2026-09-24.md).
+
+The scored development set moves **N=75 → 74**; Meta AAFE **2.8626 → 2.8657**
+(conditional bootstrap CI **2.3255–3.5723**), Engine **3.8887**, direct ML
+**3.2511**. The paired Meta/ML ratio CI **0.7686–1.0043** crosses 1; the
+10.24-fold residual band covers **68/74** (91.9%). Fitted models were unchanged;
+no independent external validation was done. Colima was not used.
+
+---
+
 ## 2026-09-24 (cont.) — Quarantine acamprosate peak; repair three primary citations
 
 The review-reported acamprosate 180 ng/mL peak has no identified original arm;
