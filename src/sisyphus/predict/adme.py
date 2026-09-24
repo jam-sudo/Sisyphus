@@ -31,7 +31,6 @@ _MODEL_DIR = get_resource_config().model("adme")
 # Default CVs for prediction uncertainty (hand-set scalars informed by Omega's
 # observed prediction spread; not derived from a conformal procedure)
 # ---------------------------------------------------------------------------
-_FUP_CV = 0.5  # fup prediction has ~50% CV
 _CLINT_CV = 1.0  # CLint prediction is the weakest link (R²=0.24)
 _PEFF_CV = 0.4  # permeability
 _SOLUBILITY_CV = 0.5  # solubility
@@ -164,31 +163,15 @@ def _load_model(filename: str) -> xgb.XGBRegressor:
 # Individual ADME predictors
 # ---------------------------------------------------------------------------
 
-_FUP_V2_PATH = _MODEL_DIR / "xgboost_fup_v2.json"
 _FUP_CV_V2 = 0.40  # from 5-fold CV: AAFE=2.40, R²=0.41
 
 
-def _predict_fup_v1(features: np.ndarray) -> Distribution:
-    """v1: log10-space model. Output clamped to [0.001, 1.0]."""
-    model = _load_model("xgboost_fup.json")
-    log_fup = float(model.predict(features)[0])
-    fup = float(np.clip(10**log_fup, 0.001, 1.0))
-    return Distribution(mean=fup, cv=_FUP_CV)
-
-
-def _predict_fup_v2(features: np.ndarray) -> Distribution:
-    """v2: logit-space model, sigmoid inverse. Output in (0, 1) guaranteed."""
+def _predict_fup(features: np.ndarray) -> Distribution:
+    """Use the public, fitted-source-pinned logit model; fail if it is missing."""
     model = _load_model("xgboost_fup_v2.json")
     logit_fup = float(model.predict(features)[0])
     fup = float(1.0 / (1.0 + np.exp(-logit_fup)))
     return Distribution(mean=fup, cv=_FUP_CV_V2)
-
-
-def _predict_fup(features: np.ndarray) -> Distribution:
-    """Auto-select fup model: v2 if available, v1 fallback."""
-    if _FUP_V2_PATH.exists():
-        return _predict_fup_v2(features)
-    return _predict_fup_v1(features)
 
 
 def _predict_clint(features: np.ndarray) -> Distribution:

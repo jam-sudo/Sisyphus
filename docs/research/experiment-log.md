@@ -10,6 +10,16 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-23 (cont.) — Fail closed when the public fup model is missing
+
+The ordinary prediction path previously loaded the unverified legacy fup v1
+artifact if the pinned public fup v2 file was absent. It now requires v2 and
+raises the existing path-rich missing-model error. The shipped v2 prediction
+path is unchanged; a regression test checks that the presence of v1 cannot
+silently rescue a missing v2.
+
+---
+
 ## 2026-09-23 (cont.) — Remove a pravastatin collision from CLint fitting
 
 The corrected pravastatin parent structure exposed `CHEMBL1144` in the
