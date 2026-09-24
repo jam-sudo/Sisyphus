@@ -157,15 +157,16 @@
     },
     "amantadine": {
       "name": "amantadine",
-      "tier": "silver",
-      "source": "DailyMed label, 100mg fasted healthy volunteers single dose",
-      "dose_mg": 100.0,
+      "tier": "gold",
+      "source": "DailyMed amantadine hydrochloride tablet label, Clinical Pharmacology: single 100 mg hydrochloride soft-gel capsule in 24 healthy adult men yielded parent plasma Cmax 0.22 +/- 0.03 mcg/mL and half-life 17 +/- 4 h; meal state not stated for this arm. PubChem parent/HCl molecular weights 151.25/187.71 g/mol give 80.576421 mg parent-equivalent dose. https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5ae327cf-8946-4682-9025-64653673e367; https://pubchem.ncbi.nlm.nih.gov/compound/Amantadine; https://pubchem.ncbi.nlm.nih.gov/compound/Amantadine-Hydrochloride",
+      "dose_mg": 80.576421,
       "route": "oral",
       "pk_params": {
-        "thalf_h": 16.0,
+        "thalf_h": 17.0,
         "cmax_mg_L": 0.22
       },
-      "smiles": "C1C2CC3CC1CC(C2)(C3)N"
+      "smiles": "C1C2CC3CC1CC(C2)(C3)N",
+      "correction_note": "2026-09-24: converted 100 mg hydrochloride capsule to 80.576421 mg amantadine parent; replaced cross-study 16 h half-life with the matched arm's 17 h. Fasting claim was not supported by the cited label."
     },
     "amiodarone": {
       "name": "amiodarone",
@@ -1489,16 +1490,15 @@
     },
     "fluvoxamine": {
       "name": "fluvoxamine",
-      "tier": "silver",
-      "source": "PubMed 8499580, 50mg fasted healthy volunteers single dose",
-      "dose_mg": 50.0,
+      "tier": "gold",
+      "source": "Van Harten et al., Biopharm Drug Dispos 1991;12:571-576, Table 1: 12 healthy volunteers received one 50 mg fluvoxamine maleate immediate-release tablet after overnight fast; arithmetic mean parent plasma Cmax 17 ng/mL. PubChem parent/maleate molecular weights 318.33/434.4 g/mol give 36.640193 mg parent-equivalent model dose. https://pubmed.ncbi.nlm.nih.gov/1801963/; https://pillbuys.com/research/Fluvoxamine/8.pdf; https://pubchem.ncbi.nlm.nih.gov/compound/fluvoxamine; https://pubchem.ncbi.nlm.nih.gov/compound/fluvoxamine-maleate",
+      "dose_mg": 36.640193,
       "route": "oral",
       "pk_params": {
-        "thalf_h": 16.3,
-        "bioavailability_pct": 84.0,
-        "cmax_mg_L": 0.015
+        "cmax_mg_L": 0.017
       },
-      "smiles": "COCCCC/C(=N\\OCCN)/C1=CC=C(C=C1)C(F)(F)F"
+      "smiles": "COCCCC/C(=N\\OCCN)/C1=CC=C(C=C1)C(F)(F)F",
+      "correction_note": "2026-09-24: replaced unsupported 15 ng/mL with primary fasted-tablet Table 1 mean 17 ng/mL and converted 50 mg maleate to parent mass. Removed unmatched half-life and 84% bioavailability; the paper says absolute bioavailability was unknown."
     },
     "fruquintinib": {
       "name": "fruquintinib",
@@ -1659,13 +1659,14 @@
     "hydroxyzine": {
       "name": "hydroxyzine",
       "tier": "silver",
-      "source": "Atarax product information (GSK); Simons et al., J Clin Pharmacol 1984",
-      "dose_mg": 25,
+      "source": "Swedish Medical Products Agency Hydroxyzine Orifarm SmPC sections 2 and 5.2: each 25 mg tablet contains 25 mg hydroxyzine dihydrochloride; a single 25 mg oral dose in adults typically gives parent plasma Cmax 30 ng/mL. Approximate label summary, without an identified exact numeric study arm or meal state. PubChem parent MW 374.9 g/mol and product-label salt MW 447.83 g/mol give 20.928701 mg parent-equivalent dose. https://docetp.mpa.se/LMF/Hydroxyzine%20Orifarm%20film-coated%20tablet%20ENG%20SmPC_09001bee807a397d.pdf; https://pubchem.ncbi.nlm.nih.gov/compound/Hydroxyzine; https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=7534a3bb-b4cd-415f-8612-53b37dc6d55f",
+      "dose_mg": 20.928701,
       "route": "oral",
       "pk_params": {
         "cmax_mg_L": 0.03
       },
-      "smiles": "OCCOCCN1CCN(C(c2ccccc2)c2ccc(Cl)cc2)CC1"
+      "smiles": "OCCOCCN1CCN(C(c2ccccc2)c2ccc(Cl)cc2)CC1",
+      "correction_note": "2026-09-24: converted the 25 mg hydroxyzine dihydrochloride tablet to 20.928701 mg parent input; Cmax remains approximate and silver."
     },
     "ibrutinib": {
       "name": "ibrutinib",
@@ -3685,14 +3686,15 @@
     },
     "trazodone": {
       "name": "trazodone",
-      "tier": "silver",
-      "source": "PubMed 1438031, 100mg IR fasted healthy volunteers single dose",
-      "dose_mg": 100.0,
+      "tier": "gold",
+      "source": "Kale and Agrawal, Front Pharmacol 2015;6:224, Table 1: single 100 mg trazodone hydrochloride immediate-release reference tablet under fed conditions in healthy adults, arithmetic mean parent plasma Cmax 1546.9 +/- 315.4 ng/mL. NIST parent MW 371.864 and DailyMed hydrochloride MW 408.33 g/mol give 91.069478 mg parent-equivalent dose. https://www.frontiersin.org/journals/pharmacology/articles/10.3389/fphar.2015.00224/full; https://webbook.nist.gov/cgi/cbook.cgi?ID=19794-93-5; https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=66da652a-72b4-c17f-e053-2a91aa0a8d69",
+      "dose_mg": 91.069478,
       "route": "oral",
       "pk_params": {
-        "cmax_mg_L": 1.62
+        "cmax_mg_L": 1.5469
       },
-      "smiles": "O=c1n(CCCN2CCN(c3cccc(Cl)c3)CC2)nc2ccccn12"
+      "smiles": "O=c1n(CCCN2CCN(c3cccc(Cl)c3)CC2)nc2ccccn12",
+      "correction_note": "2026-09-24: prior Nilsen and Dale 1992 abstract reports fasted/fed serum Cmax 1.88/1.47 mg/L, not the row's 1.62 mg/L plasma. Replaced with directly tabulated fed single-dose parent plasma Cmax and converted hydrochloride mass to parent."
     },
     "tretinoin": {
       "name": "tretinoin",

@@ -111,13 +111,13 @@
   },
   {
     "drug_name": "hydroxyzine",
-    "dose_mg": 25.0,
-    "cmax_mg_L": 0.072,
+    "dose_mg": 20.928701,
+    "cmax_mg_L": 0.03,
     "cmax_unit_original": "ng/mL",
-    "cmax_value_original": 72.0,
-    "source": "Literature (Simons et al. 1984)",
-    "context": "Single 25mg oral dose in healthy adults, mean Cmax ~72 ng/mL, Tmax 2.1h, t1/2 20h. No Cmax in FDA label.",
-    "status": "extracted"
+    "cmax_value_original": 30.0,
+    "source": "Swedish regulator Hydroxyzine Orifarm SmPC; https://docetp.mpa.se/LMF/Hydroxyzine%20Orifarm%20film-coated%20tablet%20ENG%20SmPC_09001bee807a397d.pdf",
+    "context": "Superseded misattribution: Simons et al. 1984 reported mean serum Cmax 72.5 ng/mL after 0.7 mg/kg (mean 39 mg), not 25 mg. The SmPC gives typical plasma Cmax 30 ng/mL after a single 25 mg dihydrochloride tablet, equivalent to 20.928701 mg parent; not an FDA extraction.",
+    "status": "superseded"
   },
   {
     "drug_name": "ketorolac",

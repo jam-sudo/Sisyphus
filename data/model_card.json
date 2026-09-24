@@ -28,17 +28,17 @@
     },
     "retrospective_development_benchmark": {
       "n_compounds": 79,
-      "meta_aafe": 2.9442107721387814,
+      "meta_aafe": 2.9311787215685428,
       "bootstrap_95_ci": [
-        2.4084,
-        3.6653
+        2.3983,
+        3.6464
       ],
       "classification": "repeatedly used for system selection; shipped-model fitted sources are SHA-pinned but this is not independent system validation",
       "source": "data/training/4track_holdout_predictions.json",
       "paired_meta_ml": {
-        "ratio": 0.8925,
-        "ci_95_low": 0.789,
-        "ci_95_high": 1.0048,
+        "ratio": 0.8968,
+        "ci_95_low": 0.7922,
+        "ci_95_high": 1.0106,
         "n": 79
       }
     },

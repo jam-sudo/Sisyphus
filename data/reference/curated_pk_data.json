@@ -111,12 +111,12 @@
   },
   {
     "drug_name": "hydroxyzine",
-    "dose_mg": 25,
+    "dose_mg": 20.928701,
     "cmax_mg_L": 0.03,
     "cmax_value_original": 30,
     "cmax_unit_original": "ng/mL",
-    "source": "Atarax product information (GSK); Simons et al., J Clin Pharmacol 1984",
-    "notes": "25mg single dose healthy adults. Cmax ~30 ng/mL at Tmax ~2h. Higher Cmax (~72.5 ng/mL) reported at 0.7 mg/kg (~50mg).",
+    "source": "Swedish Medical Products Agency Hydroxyzine Orifarm SmPC sections 2 and 5.2; https://docetp.mpa.se/LMF/Hydroxyzine%20Orifarm%20film-coated%20tablet%20ENG%20SmPC_09001bee807a397d.pdf",
+    "notes": "A 25 mg hydroxyzine dihydrochloride tablet corresponds to 20.928701 mg parent; the SmPC gives typical adult single-dose parent plasma Cmax 30 ng/mL but does not identify the exact numeric study arm or meal state. Simons et al. 1984 instead reported 72.5 ng/mL serum after 0.7 mg/kg (mean 39 mg).",
     "status": "confirmed"
   },
   {

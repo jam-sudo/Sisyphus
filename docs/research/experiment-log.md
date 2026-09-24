@@ -10,6 +10,26 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Audit implicit salt doses and two unmatched peaks
+
+Four scored references used administered salt mass with parent SMILES even
+though their source descriptions did not flag the mismatch: amantadine,
+fluvoxamine, hydroxyzine, and trazodone. Parent-equivalent input doses are
+now 80.576421, 36.640193, 20.928701, and 91.069478 mg. Primary sources
+also changed fluvoxamine Cmax from an untraceable 15 to 17 ng/mL and replaced
+trazodone's attributed 1.62 mg/L peak (not in the cited serum study) with a
+directly tabulated fed plasma tablet arm at 1.5469 mg/L. An unsupported
+fluvoxamine 84% absolute bioavailability was removed. See
+[`development_implicit_salt_followup_2026-09-24.md`](../validation/development_implicit_salt_followup_2026-09-24.md).
+
+With unchanged fitted models and N=79, development Meta AAFE moves from
+**2.9442** to **2.9312** (conditional bootstrap CI **2.3983–3.6464**),
+Engine **3.8694**, direct ML **3.2683**, and in-domain Meta **3.0149**.
+The paired Meta/ML ratio is **0.8968** (CI **0.7922–1.0106**), including 1.
+These are reference corrections, not independent validation or model gains.
+
+---
+
 ## 2026-09-24 (cont.) — Replace ambiguous codeine phosphate arm with FDA tablet arm
 
 The FDA review for NDA 202245 reports a single fasted 30 mg codeine sulfate

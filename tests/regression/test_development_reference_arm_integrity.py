@@ -43,6 +43,17 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert refs["clopidogrel"].cmax_obs == 0.0145
     assert refs["codeine"].dose_mg == pytest.approx(30 * 2 * 299.3642 / 750.85, rel=1e-6)
     assert refs["codeine"].cmax_obs == 0.0714
+    assert refs["amantadine"].dose_mg == pytest.approx(100 * 151.25 / 187.71, rel=1e-6)
+    assert refs["amantadine"].cmax_obs == 0.22
+    assert refs["fluvoxamine"].dose_mg == pytest.approx(50 * 318.33 / 434.4, rel=1e-6)
+    assert refs["fluvoxamine"].cmax_obs == 0.017
+    assert refs["hydroxyzine"].dose_mg == pytest.approx(25 * 374.9 / 447.83, rel=1e-6)
+    assert refs["hydroxyzine"].cmax_obs == 0.03
+    fda_rows = json.loads((ROOT / "data/reference/fda_extraction_results.json").read_text())
+    assert next(row for row in fda_rows if row["drug_name"] == "hydroxyzine")["status"] != "extracted"
+    assert refs["trazodone"].dose_mg == pytest.approx(100 * 371.864 / 408.33, rel=1e-6)
+    assert refs["trazodone"].cmax_obs == 1.5469
+    assert "bioavailability_pct" not in data["drugs"]["fluvoxamine"]["pk_params"]
     assert refs["levocetirizine"].dose_mg == pytest.approx(5 * 388.9 / 461.8, rel=1e-6)
     assert refs["levocetirizine"].cmax_obs == 0.27
     assert refs["methylphenidate"].dose_mg == pytest.approx(20 * 233.31 / 269.77, rel=1e-6)
