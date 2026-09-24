@@ -51,15 +51,21 @@ def test_pmid_training_arms_are_quarantined():
 def test_residual_led_training_reference_audit():
     data = json.loads(REFERENCE.read_text())
     refs = {row.name: row for row in load_reference(REFERENCE)}
-    for name in ("lanthanum carbonate", "cefpodoxime proxetil", "serdexmethylphenidate"):
+    for name in (
+        "lanthanum carbonate", "cefpodoxime proxetil", "serdexmethylphenidate",
+        "carglumic acid", "belzutifan", "pazopanib",
+    ):
         row = data["drugs"][name]
         assert row["tier"] == "unverified"
         assert row["pk_params"] == {}
         assert "ct_curve" not in row
         assert name not in refs
-    for name, dose, cmax in (("primaquine", 30, 0.127), ("flutamide", 250, 0.0252)):
+    for name, dose, cmax in (
+        ("primaquine", 30, 0.127), ("flutamide", 250, 0.0252),
+        ("carisoprodol", 350, 1.8), ("atorvastatin", 40, 0.01705),
+    ):
         row = data["drugs"][name]
-        assert row["pk_params"] == {"cmax_mg_L": cmax}
+        assert row["pk_params"]["cmax_mg_L"] == pytest.approx(cmax)
         assert "ct_curve" not in row
         assert refs[name].dose_mg == pytest.approx(dose)
         assert refs[name].cmax_obs == pytest.approx(cmax)

@@ -61,7 +61,7 @@ export function PredictView({ drug, s, tab, running }: { drug: Drug; s: AppState
           <div style={{ height: 14 }} />
           <StatLine
             items={[
-              { k: "C<sub>max</sub>", v: fmt(cmax), u: "mg/L", ci: residualPi ? "development residual 90% band " + fmt(residualPi[0]) + "–" + fmt(residualPi[1]) : "no validated interval for this track" },
+              { k: "C<sub>max</sub>", v: fmt(cmax), u: "mg/L", ci: residualPi ? "nominal 90% development residual band " + fmt(residualPi[0]) + "–" + fmt(residualPi[1]) : "no validated interval for this track" },
               { k: "T<sub>max</sub>", v: fmt(drug.meta.tmax), u: "h" },
               { k: "t½", v: fmt(drug.meta.thalf), u: "h" },
               { k: "AUC<sub>0–t</sub>", v: fmt(auc), u: "mg·h/L" },
@@ -72,7 +72,7 @@ export function PredictView({ drug, s, tab, running }: { drug: Drug; s: AppState
             {headlineDiffersFromCurve
               ? <>Dashed line = the <span style={{ fontStyle: "normal" }}>{s.method}</span> C<sub>max</sub> ({fmt(displayed)} mg/L), the production estimate. </>
               : null}
-            The Meta band is an empirical development-residual interval, not an independent conformal guarantee.
+            The Meta band is an empirical development-residual interval. Its observed coverage was 73.3% on the repeatedly used development set; it has no independent calibration guarantee.
           </div>
         </div>
         <div className="stack">

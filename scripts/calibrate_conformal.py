@@ -82,6 +82,8 @@ def main():
     print("Running predict() on train set (calibration; Invariant #5: not holdout)...")
     train, n_ok, n_tot, skipped = _collect_train()
     print(f"  train predicted: {n_ok}/{n_tot}")
+    if skipped:
+        raise RuntimeError(f"Calibration predictions failed for {len(skipped)} training references: {skipped}")
 
     holdout = _holdout_arrays()
     artifact = {
@@ -94,6 +96,8 @@ def main():
         "skipped_training_reference": skipped,
         "generated_from": "scripts/calibrate_conformal.py",
         "source_cache_sha256": _sha(_HOLDOUT_CACHE),
+        "calibration_reference_sha256": _sha(_ROOT / "data/reference/clinical_pk.json"),
+        "holdout_membership_sha256": _sha(_ROOT / "data/reference/holdout.json"),
         "model_artifact_sha256": {
             path.replace(".meta.json", ".json"): _sha(
                 _ROOT / path.replace(".meta.json", ".json")

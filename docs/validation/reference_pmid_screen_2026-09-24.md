@@ -2,8 +2,8 @@
 
 The counts and 14.4-fold interval below record this screen's intermediate
 state. The later [calibration reference audit](development_calibration_reference_audit_2026-09-24.md)
-supersedes them with 142 Cmax rows, 53 training records, and an 8.30-fold
-development diagnostic interval.
+supersedes them with 139 Cmax rows, 50 training records, and a 5.34-fold
+development diagnostic interval (73.3% consumed-development coverage).
 
 This is a source-integrity check of the 173 `clinical_pk.json` rows carrying
 Cmax at the start of this screen, not an independent evaluation. Ten rows had a PMID in

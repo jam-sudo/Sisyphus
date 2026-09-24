@@ -277,6 +277,13 @@ def verify_development_residual_interval(root: Path) -> float:
         or artifact.get("source_cache_sha256") != sha256_file(
             root / "data/training/4track_holdout_predictions.json"
         )
+        or artifact.get("calibration_reference_sha256") != sha256_file(
+            root / "data/reference/clinical_pk.json"
+        )
+        or artifact.get("holdout_membership_sha256") != sha256_file(
+            root / "data/reference/holdout.json"
+        )
+        or artifact.get("skipped_training_reference") != []
     ):
         raise ValueError("Development residual interval source is not current")
     expected_models = {

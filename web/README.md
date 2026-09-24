@@ -53,7 +53,7 @@ interface:
   FastAPI core for arbitrary SMILES.
 
 Curves use the matching ODE single-dose response. The empirical development
-90% residual interval (÷×~8.3) and its calibration caveat are surfaced. Regimen,
+90% residual interval (÷×~5.34; 73.3% coverage on the repeatedly used development set) and its calibration caveat are surfaced. Regimen,
 TDM, DDI, and dose-adjustment workflows are deliberately outside this console.
 
 ## Deploy (GitHub Pages — sisyphus-pbpk.io/app/)

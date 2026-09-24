@@ -24,6 +24,12 @@ def test_development_residual_artifact_is_current_and_explicit_about_skips():
     assert artifact["source_cache_sha256"] == _sha(
         ROOT / "data/training/4track_holdout_predictions.json"
     )
+    assert artifact["calibration_reference_sha256"] == _sha(
+        ROOT / "data/reference/clinical_pk.json"
+    )
+    assert artifact["holdout_membership_sha256"] == _sha(
+        ROOT / "data/reference/holdout.json"
+    )
     expected_paths = {path.replace(".meta.json", ".json") for path in _PRODUCTION_FITTED_MODELS}
     assert set(artifact["model_artifact_sha256"]) == expected_paths
     for path, digest in artifact["model_artifact_sha256"].items():
