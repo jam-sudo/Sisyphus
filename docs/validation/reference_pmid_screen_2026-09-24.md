@@ -1,10 +1,10 @@
 # Development-reference PMID screen — 2026-09-24
 
-This is a source-integrity check of the 175 `clinical_pk.json` rows still carrying
-Cmax, not an independent evaluation. Thirteen retained rows have a PMID in
+This is a source-integrity check of the 173 `clinical_pk.json` rows still carrying
+Cmax, not an independent evaluation. Ten retained rows have a PMID in
 their `source` field. The original 14 identifiers were resolved against the
 [NCBI PubMed ESummary API](https://www.ncbi.nlm.nih.gov/books/NBK25499/), then
-the morphine and Bækdal sources were checked against the original publications.
+the suspect sources were checked against the original publications.
 
 The `morphine` row claimed oral 30 mg, Cmax 18.65 ng/mL and cited
 [Bell 1985, PMID 2857025](https://pubmed.ncbi.nlm.nih.gov/2857025/). That study
@@ -33,16 +33,25 @@ development Meta AAFE from 2.7161 to 2.6976 solely through label correction.
 The new [bootstrap artifact](../../data/validation/4track_ci_2026-09-24_digoxin_reference.json)
 remains consumed development evidence; it is not a fresh model-performance gain.
 
-The other PMID citations resolve to real papers, but that alone does not verify
-each row's dose, formulation, route, analyte or Cmax arm. The highest priority
-for original-table adjudication is
-[theophylline/Becker 1984](https://pubmed.ncbi.nlm.nih.gov/6700656/)
-(paper titled as a caffeine study),
-[metformin/Khomitskaya 2018](https://pubmed.ncbi.nlm.nih.gov/29548719/)
-(extended-release combination comparison), and
-[verapamil/Rebello 2011](https://pubmed.ncbi.nlm.nih.gov/20413453/)
-(aliskiren interaction study). These are **triage flags**, not findings that
-those rows are wrong. They are in the training/reference side.
+Three further training/reference citations were adjudicated. [Becker
+1984](https://pubmed.ncbi.nlm.nih.gov/6700656/) administered oral theophylline
+at **5 mg/kg to 8–18-year-old patients with asthma** and reported mean peak
+**8.4 mg/L**; it does not document the repository's fixed 300 mg / 8.7247 mg/L
+healthy-adult pair. [Khomitskaya
+2018](https://pubmed.ncbi.nlm.nih.gov/29548719/) studied **fed 1000 mg metformin
+XR** (two 500 mg tablets) with dapagliflozin, not a 500 mg single-agent
+immediate-release arm. The exact 500 mg / 1.03 mg/L value was instead located
+in the [DailyMed immediate-release tablet label](https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=32ebd0fc-1491-451f-9258-61b315c0f499&type=display),
+Table 1: fasting healthy adults, N=24, mean Cmax 1.03 mg/L. We restored this
+reference at **389.926 mg metformin base** (500 mg HCl × 129.167/165.63), with
+an explicit oral route and no synthetic curve. [Rebello
+2011](https://pubmed.ncbi.nlm.nih.gov/20413453/) gave **verapamil 240 mg/day for
+eight days** with aliskiren and analyzed R/S isomers at steady state, not a
+single 80 mg parent Cmax. The theophylline and verapamil Cmax values and
+synthetic curves were quarantined, leaving 173 Cmax rows. The development-residual
+artifact was recomputed on 61 of 63 remaining training references; its nominal
+90% half-width remains about 11.1-fold. The other PMID citations still need
+arm-level verification before treating their presence as proof of validity.
 
 After morphine correction, a public-profile 107-compound rerun had zero skips;
 the other 106 predictions matched the previous cache to 1e-8 relative. The

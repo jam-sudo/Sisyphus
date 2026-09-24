@@ -4,7 +4,7 @@
   "interval": "multiplicative: pred /\u00f7 10**q",
   "calibration_set": "partially_in_sample_development",
   "n_calibration_meta": 61,
-  "n_training_reference": 65,
+  "n_training_reference": 63,
   "skipped_training_reference": [
     {
       "name": "amoxicillin",
@@ -12,14 +12,6 @@
     },
     {
       "name": "atenolol",
-      "reason": "route must be 'oral' or 'iv', got 'unknown'"
-    },
-    {
-      "name": "metformin",
-      "reason": "route must be 'oral' or 'iv', got 'unknown'"
-    },
-    {
-      "name": "verapamil",
       "reason": "route must be 'oral' or 'iv', got 'unknown'"
     }
   ],
@@ -37,7 +29,7 @@
   "validity": "not split-conformal; fitted components saw calibration outcomes",
   "tracks": {
     "meta": {
-      "0.5": 0.4180626339517891,
+      "0.5": 0.42339028909343224,
       "0.2": 0.8172763325645924,
       "0.1": 1.0456928364003168,
       "0.05": 1.40338132867449
