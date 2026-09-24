@@ -1,9 +1,9 @@
 # Development-reference PMID screen — 2026-09-24
 
 The counts and 14.4-fold interval below record this screen's intermediate
-state. The later [source-context screen](development_source_context_screen_2026-09-24.md)
-supersedes them with 130 Cmax rows, 41 training records, and a 5.34-fold
-development diagnostic interval (73.3% consumed-development coverage).
+state. The later [dose and specimen screen](development_matrix_dose_screen_2026-09-24.md)
+supersedes them with 127 Cmax rows, 38 training records, and a 5.45-fold
+development diagnostic interval (75.6% consumed-development coverage).
 
 This is a source-integrity check of the 173 `clinical_pk.json` rows carrying
 Cmax at the start of this screen, not an independent evaluation. Ten rows had a PMID in

@@ -48,7 +48,7 @@ def test_pmid_training_arms_are_quarantined():
     )
 
 
-def test_residual_led_training_reference_audit():
+def test_audited_training_reference_arms():
     data = json.loads(REFERENCE.read_text())
     refs = {row.name: row for row in load_reference(REFERENCE)}
     for name in (
@@ -56,6 +56,7 @@ def test_residual_led_training_reference_audit():
         "carglumic acid", "belzutifan", "pazopanib",
         "benzhydrocodone", "dimethyl", "guanfacine er", "naproxen", "oseltamivir",
         "atazanavir", "butalbital", "cefixime", "efavirenz",
+        "paricalcitol", "vorasidenib", "entecavir",
     ):
         row = data["drugs"][name]
         assert row["tier"] == "unverified"
@@ -67,6 +68,9 @@ def test_residual_led_training_reference_audit():
         ("carisoprodol", 350, 1.8), ("atorvastatin", 40, 0.01705),
         ("naproxen oral", 500, 64.3),
         ("clarithromycin", 500, 1.77),
+        ("hydroxychloroquine", 155, 0.0503),
+        ("isotretinoin", 80, 0.301),
+        ("tranexamic acid", 1300, 13.83),
     ):
         row = data["drugs"][name]
         assert row["pk_params"]["cmax_mg_L"] == pytest.approx(cmax)

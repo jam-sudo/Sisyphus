@@ -1,5 +1,8 @@
 # Development training source-context screen — 2026-09-24
 
+The subsequent [dose and specimen screen](development_matrix_dose_screen_2026-09-24.md)
+supersedes the counts and interval figures below.
+
 After the residual-led audit, this screen checked training records by their
 **names, administered drugs, formulations, analytes, and cited label contexts**,
 without selecting them by prediction error. The following eleven records had
