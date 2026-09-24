@@ -423,13 +423,14 @@
     "brincidofovir": {
       "name": "brincidofovir",
       "tier": "gold",
-      "source": "FDA label (Tembexa); PK study in healthy volunteers",
+      "source": "FDA Tembexa clinical-pharmacology review, Study CMX001-120 Table 4-30: unboosted reference period, 100 mg oral brincidofovir in healthy adults fasted about 10 h before and 4 h after dose; N=25 parent-plasma geometric mean Cmax 251 ng/mL (geometric CV 41.5%). Wire et al. 2017 conference abstract identifies the oral formulation as a tablet; https://www.accessdata.fda.gov/drugsatfda_docs/nda/2021/214460Orig1s000,%20214461Orig1s000ClinPharmR.pdf; https://pmc.ncbi.nlm.nih.gov/articles/PMC5631843/",
       "dose_mg": 100,
       "route": "oral",
       "pk_params": {
         "cmax_mg_L": 0.251
       },
-      "smiles": "CCCCCCCCCCCCCCCCOCCCOP(=O)(O)CO[C@H](CO)Cn1ccc(N)nc1=O"
+      "smiles": "CCCCCCCCCCCCCCCCOCCCOP(=O)(O)CO[C@H](CO)Cn1ccc(N)nc1=O",
+      "correction_note": "2026-09-24: retained the exact 251 ng/mL unboosted control peak and replaced the generic label attribution with its source study, fasting window, statistic and N."
     },
     "budesonide": {
       "name": "budesonide",
@@ -1033,14 +1034,14 @@
     "donepezil": {
       "name": "donepezil",
       "tier": "gold",
-      "source": "Tiseo et al. 1998 renal-impairment study, age/sex-matched healthy-control arm (N=11): one oral 5 mg donepezil hydrochloride tablet, parent plasma arithmetic mean Cmax 7.7 +/- 1.2 ng/mL; ARICEPT 5 mg SmPC gives 4.56 mg donepezil free-base equivalent; https://pubmed.ncbi.nlm.nih.gov/9839768/; https://www.medicines.org.uk/emc/product/3776/smpc",
+      "source": "Tiseo et al. 1998 renal-impairment study, age/sex-matched healthy-control arm (N=11): one oral 5 mg donepezil hydrochloride dose, parent plasma mean Cmax 7.7 +/- 1.2 ng/mL; ARICEPT 5 mg SmPC gives 4.56 mg donepezil free-base equivalent; https://pubmed.ncbi.nlm.nih.gov/9839768/; https://www.medicines.org.uk/emc/product/3776/smpc",
       "dose_mg": 4.56,
       "route": "oral",
       "pk_params": {
         "cmax_mg_L": 0.0077
       },
       "smiles": "COc1cc2c(cc1OC)C(=O)C(CC1CCN(Cc3ccccc3)CC1)C2",
-      "correction_note": "2026-09-24: converted the original 5 mg hydrochloride tablet strength to the regulator-stated 4.56 mg parent-equivalent model dose."
+      "correction_note": "2026-09-24: converted the original 5 mg hydrochloride dose to the regulator-stated 4.56 mg parent-equivalent model dose."
     },
     "doxazosin": {
       "name": "doxazosin",
@@ -1851,13 +1852,14 @@
     "ketorolac": {
       "name": "ketorolac",
       "tier": "gold",
-      "source": "FDA label (Toradol); Jung et al., Biopharm Drug Dispos 1988",
-      "dose_mg": 10,
+      "source": "DailyMed ketorolac tromethamine tablet label, Table 1: 10 mg oral tromethamine single-dose column, pooled normal fasted volunteers (oral-study N=77), observed parent-plasma mean Cmax 0.87 +/- 0.22 mcg/mL. FDA chemistry review gives ketorolac free acid/tromethamine MW 255.27/376.41, so parent-equivalent dose is 6.781701 mg. Jung et al. 1988 Eur J Clin Pharmacol abstract separately reports an approximate 0.8 mcg/mL after 10 mg tromethamine in 15 volunteers; https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a41b9710-a1ec-41be-8417-b03c5d802ae2; https://www.accessdata.fda.gov/drugsatfda_docs/nda/2010/022382Orig1s000ChemR.pdf; https://pubmed.ncbi.nlm.nih.gov/3264245/",
+      "dose_mg": 6.781701,
       "route": "oral",
       "pk_params": {
-        "cmax_mg_L": 0.8
+        "cmax_mg_L": 0.87
       },
-      "smiles": "O=C(c1ccccc1)c1ccc2n1CCC2C(=O)O"
+      "smiles": "O=C(c1ccccc1)c1ccc2n1CCC2C(=O)O",
+      "correction_note": "2026-09-24: replaced the approximate cross-study 0.8 mcg/mL with the label's exact single-dose 0.87 mcg/mL and converted 10 mg tromethamine to 6.781701 mg free acid. Corrected Jung et al. journal attribution."
     },
     "labetalol": {
       "name": "labetalol",

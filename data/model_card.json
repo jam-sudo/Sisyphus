@@ -28,10 +28,10 @@
     },
     "retrospective_development_benchmark": {
       "n_compounds": 74,
-      "meta_aafe": 2.8657089521951242,
+      "meta_aafe": 2.8840552461434896,
       "bootstrap_95_ci": [
-        2.3255,
-        3.5723
+        2.3413,
+        3.6063
       ],
       "classification": "repeatedly used for system selection; shipped-model fitted sources are SHA-pinned but this is not independent system validation",
       "source": "data/training/4track_holdout_predictions.json",

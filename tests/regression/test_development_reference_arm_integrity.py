@@ -228,6 +228,11 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert refs["donepezil"].dose_mg == pytest.approx(4.56)
     assert refs["donepezil"].cmax_obs == pytest.approx(0.0077)
     assert "oral suspension" in data["drugs"]["fruquintinib"]["source"]
+    assert refs["ketorolac"].dose_mg == pytest.approx(10 * 255.27 / 376.41, rel=1e-6)
+    assert refs["ketorolac"].cmax_obs == pytest.approx(0.87)
+    assert next(row for row in fda_rows if row["drug_name"] == "ketorolac")["cmax_mg_L"] == pytest.approx(0.87)
+    assert refs["brincidofovir"].cmax_obs == pytest.approx(0.251)
+    assert "CMX001-120" in data["drugs"]["brincidofovir"]["source"]
     assert refs["phenytoin"].dose_mg == pytest.approx(300 * 252.27 / 274.25, rel=1e-6)
     assert refs["phenytoin"].cmax_obs == pytest.approx(2.32)
     assert refs["phenytoin"].auc_obs == pytest.approx(108.99)

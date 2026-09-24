@@ -121,13 +121,13 @@
   },
   {
     "drug_name": "ketorolac",
-    "dose_mg": 10.0,
-    "cmax_mg_L": 1.05,
+    "dose_mg": 6.781701,
+    "cmax_mg_L": 0.87,
     "cmax_unit_original": "mcg/mL",
-    "cmax_value_original": 1.05,
-    "source": "DailyMed SPL",
-    "context": "10mg oral single dose (steady-state QID): Cmax 1.05 mcg/mL.",
-    "status": "extracted"
+    "cmax_value_original": 0.87,
+    "source": "DailyMed ketorolac tromethamine tablet label Table 1 (https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a41b9710-a1ec-41be-8417-b03c5d802ae2)",
+    "context": "Single 10 mg oral tromethamine salt dose in fasted normal volunteers: observed parent-plasma Cmax 0.87 +/- 0.22 mcg/mL. Free-acid equivalent 6.781701 mg (255.27/376.41 MW ratio). The prior 1.05 mcg/mL is simulated steady-state QID, not a single-dose peak.",
+    "status": "corrected"
   },
   {
     "drug_name": "lamivudine",

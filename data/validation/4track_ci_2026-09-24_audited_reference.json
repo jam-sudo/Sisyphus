@@ -1,33 +1,33 @@
 {
   "computed_at": "2026-09-24-audited_reference",
   "source_cache": "data/training/4track_holdout_predictions.json",
-  "source_cache_sha256": "c6024593d00490029fb24bb0f0867a236104cc517b0969e17e220cce84d6ebd8",
-  "context": "Source-adjudicated development N=74 after alvimopan multi-dose quarantine and donepezil dose-basis correction; repeatedly accessed, not independent external validation.",
+  "source_cache_sha256": "37ba381a54a8f90a8e104f4806e7ef5f4df3b225060d37eaddcda024dca239db",
+  "context": "Source-adjudicated development N=74 after ketorolac tromethamine parent-dose and exact peak correction, brincidofovir study-arm provenance, and prior quarantines; repeatedly accessed, not independent external validation.",
   "method": "bootstrap on abs(log10(fold))",
   "n_bootstrap": 10000,
   "seed": 20260422,
   "overall": {
     "n": 74,
     "engine": {
-      "aafe": 3.8887,
-      "ci_95_low": 3.0115,
-      "ci_95_high": 5.0865,
+      "aafe": 3.9136,
+      "ci_95_low": 3.0252,
+      "ci_95_high": 5.1201,
       "n": 74,
       "pct_2fold": 37.8,
       "pct_3fold": 50.0
     },
     "ml": {
-      "aafe": 3.2511,
-      "ci_95_low": 2.6132,
-      "ci_95_high": 4.068,
+      "aafe": 3.2719,
+      "ci_95_low": 2.6309,
+      "ci_95_high": 4.1052,
       "n": 74,
       "pct_2fold": 44.6,
       "pct_3fold": 58.1
     },
     "meta": {
-      "aafe": 2.8657,
-      "ci_95_low": 2.3255,
-      "ci_95_high": 3.5723,
+      "aafe": 2.8841,
+      "ci_95_low": 2.3413,
+      "ci_95_high": 3.6063,
       "n": 74,
       "pct_2fold": 45.9,
       "pct_3fold": 64.9
@@ -42,25 +42,25 @@
   "in_domain": {
     "n": 61,
     "engine": {
-      "aafe": 3.8715,
-      "ci_95_low": 3.0213,
-      "ci_95_high": 5.049,
+      "aafe": 3.9016,
+      "ci_95_low": 3.0402,
+      "ci_95_high": 5.0841,
       "n": 61,
       "pct_2fold": 34.4,
       "pct_3fold": 47.5
     },
     "ml": {
-      "aafe": 3.0595,
-      "ci_95_low": 2.4303,
-      "ci_95_high": 3.8969,
+      "aafe": 3.0833,
+      "ci_95_low": 2.444,
+      "ci_95_high": 3.9328,
       "n": 61,
       "pct_2fold": 47.5,
       "pct_3fold": 60.7
     },
     "meta": {
-      "aafe": 2.9462,
-      "ci_95_low": 2.3779,
-      "ci_95_high": 3.7287,
+      "aafe": 2.9691,
+      "ci_95_low": 2.3937,
+      "ci_95_high": 3.7708,
       "n": 61,
       "pct_2fold": 42.6,
       "pct_3fold": 63.9

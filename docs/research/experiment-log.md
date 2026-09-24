@@ -10,6 +10,25 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Correct ketorolac salt dose and exact peak; locate brincidofovir control arm
+
+The ketorolac 10 mg input was tromethamine salt mass while its SMILES is the
+free acid. The label's observed single-dose peak is 0.87 µg/mL; the separate
+1.05 µg/mL FDA-extraction value was simulated steady state. The parent-equivalent
+input is now 6.781701 mg. Brincidofovir's unchanged 251 ng/mL was traced to
+the fasted, unboosted 100 mg control period of FDA Study CMX001-120. A read-only
+Claude Code source review confirmed the previous three-drug batch and exposed
+two over-specific donepezil wording claims, which were removed. See [source
+adjudication](../validation/development_ketorolac_brincidofovir_2026-09-24.md).
+
+On the unchanged **N=74** development set, Meta AAFE **2.8657 → 2.8841**
+(conditional bootstrap CI **2.3413–3.6063**), Engine **3.9136**, direct ML
+**3.2719**. The paired Meta/ML ratio CI **0.7686–1.0043** still crosses 1.
+Fitted models were unchanged; this is not independent external validation.
+Colima was not used.
+
+---
+
 ## 2026-09-24 (cont.) — Quarantine alvimopan repeat-dose peak; align donepezil dose basis
 
 The alvimopan label's 10.98 ng/mL peak follows 12 mg twice daily for five days,

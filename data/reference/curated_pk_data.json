@@ -35,8 +35,8 @@
     "cmax_mg_L": 0.251,
     "cmax_value_original": 251,
     "cmax_unit_original": "ng/mL",
-    "source": "FDA label (Tembexa); PK study in healthy volunteers",
-    "notes": "100mg oral tablet. Cmax 251 ng/mL, AUCinf 1394 ng*h/mL. Oral bioavailability ~13%. Newer drug (FDA approved 2021 for smallpox).",
+    "source": "FDA Tembexa clinical-pharmacology review, Study CMX001-120 Table 4-30 (https://www.accessdata.fda.gov/drugsatfda_docs/nda/2021/214460Orig1s000,%20214461Orig1s000ClinPharmR.pdf); Wire et al. 2017 (https://pmc.ncbi.nlm.nih.gov/articles/PMC5631843/)",
+    "notes": "Unboosted 100 mg oral tablet reference period in 26 healthy adults, fasted ~10 h before and 4 h after dose: N=25 parent-plasma geometric mean Cmax 251 ng/mL (GCV 41.5%) and AUCinf 1394 ng*h/mL. The cyclosporine coadministration peak is 910 ng/mL.",
     "status": "confirmed"
   },
   {
@@ -86,7 +86,7 @@
     "cmax_value_original": 7.7,
     "cmax_unit_original": "ng/mL",
     "source": "Tiseo et al. 1998 matched healthy-control arm (https://pubmed.ncbi.nlm.nih.gov/9839768/); ARICEPT 5 mg SmPC (https://www.medicines.org.uk/emc/product/3776/smpc)",
-    "notes": "One 5 mg donepezil hydrochloride tablet in 11 healthy controls: parent plasma Cmax 7.7 +/- 1.2 ng/mL. Model parent free-base dose is 4.56 mg per ARICEPT SmPC.",
+    "notes": "One oral 5 mg donepezil hydrochloride dose in 11 healthy controls: parent plasma mean Cmax 7.7 +/- 1.2 ng/mL. Model parent free-base dose is 4.56 mg per ARICEPT SmPC.",
     "status": "confirmed"
   },
   {
@@ -121,12 +121,12 @@
   },
   {
     "drug_name": "ketorolac",
-    "dose_mg": 10,
-    "cmax_mg_L": 0.8,
-    "cmax_value_original": 0.8,
+    "dose_mg": 6.781701,
+    "cmax_mg_L": 0.87,
+    "cmax_value_original": 0.87,
     "cmax_unit_original": "mcg/mL",
-    "source": "FDA label (Toradol); Jung et al., Biopharm Drug Dispos 1988",
-    "notes": "10mg oral tablet single dose. Cmax ~0.8 mcg/mL at Tmax ~0.9h. Oral bioavailability 80-100%.",
+    "source": "DailyMed ketorolac tromethamine tablet label Table 1 (https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a41b9710-a1ec-41be-8417-b03c5d802ae2); FDA chemistry review (https://www.accessdata.fda.gov/drugsatfda_docs/nda/2010/022382Orig1s000ChemR.pdf)",
+    "notes": "Single 10 mg oral ketorolac tromethamine dose in pooled normal fasted volunteers: parent-plasma Cmax 0.87 +/- 0.22 mcg/mL. Parent free-acid equivalent input is 10*255.27/376.41 = 6.781701 mg; 1.05 mcg/mL is simulated steady-state QID.",
     "status": "confirmed"
   },
   {
