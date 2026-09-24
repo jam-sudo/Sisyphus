@@ -2,5 +2,5 @@ import type { WorkflowCfg } from "../../types";
 
 export const WORKFLOWS: WorkflowCfg[] = [
   { id: "predict", label: "predict", desc: "structure → Cmax", tabs: ["Cmax + Engine", "Tracks", "Body Graph", "Log"] },
-  { id: "benchmark", label: "benchmark", desc: "development evidence", tabs: ["Development N=89", "Temporal challenge", "Tracks"] },
+  { id: "benchmark", label: "benchmark", desc: "development evidence", tabs: ["Development N=86", "Temporal challenge", "Tracks"] },
 ];

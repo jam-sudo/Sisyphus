@@ -1,9 +1,9 @@
 # Development Cmax reference source audit — 2026-09-24
 
 This is an audit of the repeatedly used development benchmark, not an
-independent model evaluation. Twenty-three scored rows used an estimated label, cited
+independent model evaluation. Twenty-seven scored rows used an estimated label, cited
 the wrong analyte/arm, or lacked support for the stated Cmax. The rule was
-applied to all twenty-three rows before re-scoring; no model weights or fitted
+applied to all twenty-seven rows before re-scoring; no model weights or fitted
 artifacts changed.
 
 | Drug | Previous benchmark label | Source finding | Current disposition |
@@ -31,13 +31,17 @@ artifacts changed.
 | Clozapine | 75 mg, 0.413 mg/L | The [clozapine ODT label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9ae4b8e4-d8b1-4f01-bb4c-cd1cea90b219) identifies **413 ng/mL as steady-state Cmax** after **100 mg twice daily**. | Claimed single 75 mg Cmax quarantined. |
 | Ranolazine | 500 mg, 2.6 mg/L | The [ranolazine ER label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0cf58732-c242-49b0-8e3f-248778b4458d) identifies **2600 ng/mL as steady-state Cmax** after **1000 mg twice daily**. | Claimed single 500 mg Cmax quarantined. |
 | Itraconazole | 200 mg, 0.5 mg/L | The [itraconazole capsule label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e564067e-e469-4c51-9076-75f89f5c5cdf) identifies **0.5 µg/mL as steady-state Cmax** after **100 mg once daily** for about 15 days; 200 mg once daily gives 1.1 µg/mL. | Claimed single 200 mg Cmax quarantined. |
+| Norethindrone | 5 mg, 0.02619 mg/L | The [norethindrone acetate label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d0a94321-eb60-4aa6-a429-f0156f9f8e01) reports **26.19 ng/mL norethindrone** after **5 mg norethindrone acetate**, whereas the stored structure is norethindrone. The [norethindrone tablet label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=35b5ddb5-1729-4588-b2a2-ead56d78b6f9) directly reports **4817 pg/mL** after a single **0.35 mg norethindrone** tablet in 12 fasted healthy women. | Replaced with exact parent 0.35 mg / 0.004817 mg/L arm; female population explicit. |
+| Glasdegib | 150 mg, 1.252 mg/L | The [DAURISMO label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=204a6f7e-c9a4-472b-abd2-9527bda64d17) reports **1252 ng/mL at 100 mg once daily steady state** in patients with cancer. | Claimed single 150 mg Cmax quarantined. |
+| Vilazodone | 80 mg, 0.156 mg/L | The [vilazodone label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f917f30d-f2a7-43eb-836f-53eaa2a31cb0) reports **156 ng/mL at 40 mg once daily steady state** under fed conditions. | Claimed single 80 mg Cmax quarantined. |
+| Pomalidomide | 4 mg, 0.0531 mg/L | The [POMALYST label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=2b25ef01-5c9e-11e1-b86c-0800200c9a66) reports **53.1 ng/mL at 5 mg daily steady state** in Kaposi sarcoma patients. | Claimed single 4 mg Cmax quarantined. |
 
-The scored benchmark is now **N=89** from the unchanged 107-compound split.
-Meta AAFE is **2.7842** (compound bootstrap 95% CI **2.3030–3.4144**), versus
-**2.7286** (2.2766–3.2947) for the prior N=94 cache. Five mismatched
-steady-state references were excluded; this is a change in label integrity,
-not model quality. Both cohorts
-have repeatedly informed system development.
+The scored benchmark is now **N=86** from the unchanged 107-compound split.
+Meta AAFE is **2.8678** (compound bootstrap 95% CI **2.3591–3.5168**), versus
+**2.7842** (2.3030–3.4144) for the prior N=89 cache. Three more
+steady-state references were excluded and the norethindrone arm was corrected;
+this is a change in label integrity, not model quality. Both cohorts have
+repeatedly informed system development.
 
 The engine observes `venous_blood`, whose compartment concentration is amount
 divided by whole-blood volume. Production blood:plasma ratio estimates are

@@ -1,6 +1,6 @@
 /* ============================================================
    BenchmarkView — retrospective development evidence. The scatter and per-track
-   AAFE are the source-audited N=89 development-benchmark results
+   AAFE are the source-audited N=86 development-benchmark results
    (data/training/4track_holdout_predictions.json).
    ============================================================ */
 import type { ConsoleData } from "../../types";
