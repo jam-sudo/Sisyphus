@@ -90,6 +90,10 @@ def test_audited_training_reference_arms():
         ("indapamide", 5, 0.04779),
         ("fluoxetine", 20, 0.0132),
         ("ezetimibe", 10, 0.00348),
+        ("ibuprofen", 400, 32.92),
+        ("metoclopramide", 10, 0.028),
+        ("furosemide", 40, 1.10971),
+        ("terbinafine", 250, 1.0),
     ):
         row = data["drugs"][name]
         assert row["pk_params"]["cmax_mg_L"] == pytest.approx(cmax)
@@ -108,7 +112,14 @@ def test_audited_training_reference_arms():
     assert data["drugs"]["lofexidine"]["pk_params"]["bioavailability_pct"] == pytest.approx(72)
     assert data["drugs"]["indapamide"]["pk_params"]["auc_mg_h_L"] == pytest.approx(0.91952)
     assert data["drugs"]["ezetimibe"]["pk_params"]["auc_mg_h_L"] == pytest.approx(0.06862)
+    assert data["drugs"]["ibuprofen"]["pk_params"]["auc_mg_h_L"] == pytest.approx(117.38)
+    assert data["drugs"]["metoclopramide"]["pk_params"]["auc_mg_h_L"] == pytest.approx(0.268)
+    assert data["drugs"]["furosemide"]["pk_params"]["auc_mg_h_L"] == pytest.approx(2.609)
+    assert "thalf_h" not in data["drugs"]["terbinafine"]["pk_params"]
+    assert "auc_mg_h_L" not in data["drugs"]["terbinafine"]["pk_params"]
+    assert "thalf_h" not in data["drugs"]["metoclopramide"]["pk_params"]
     assert "@" in data["drugs"]["ezetimibe"]["smiles"]
+    assert "/C=C/" in data["drugs"]["terbinafine"]["smiles"]
     assert "auc_mg_h_L" not in data["drugs"]["fluconazole"]["pk_params"]
 
 
@@ -133,5 +144,12 @@ def test_spurious_sertraline_training_duplicate_removed():
                 row["name"] == "ezetimibe"
                 and row["dose_mg"] == "10.0"
                 and row["cmax_mg_L"] == "0.0034"
+                for row in csv.DictReader(handle)
+            )
+        with (ROOT / "data/training" / name).open(newline="") as handle:
+            assert not any(
+                row["name"] == "terbinafine"
+                and row["dose_mg"] == "250.0"
+                and row["cmax_mg_L"] == "1.0"
                 for row in csv.DictReader(handle)
             )

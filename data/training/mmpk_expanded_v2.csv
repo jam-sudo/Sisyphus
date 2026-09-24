@@ -3798,7 +3798,6 @@ sonidegib,Cc1c(C(=O)Nc2ccc(N3CC(C)OC(C)C3)nc2)cccc1-c1ccc(OC(F)(F)F)cc1,200.0,1.
 tamoxifen,CCC(=C(c1ccccc1)c1ccc(OCCN(C)C)cc1)c1ccccc1,20.0,0.04,-2.6989700043360187,1,,120.0,,,tablet,False,True
 temozolomide,Cn1nnc2c(C(N)=O)ncn2c1=O,150.0,7.5,-1.3010299956639813,1,,1.8,,,tablet,False,True
 tenofovir disoproxil,CC(C)OC(=O)OCOP(=O)(COC(C)Cn1cnc2c(N)ncnc21)OCOC(=O)OC(C)C,300.0,0.38,-2.8973376581028525,1,,17.0,,,tablet,False,True
-terbinafine,CN(CC=CC#CC(C)(C)C)Cc1cccc2ccccc12,250.0,1.0,-2.3979400086720375,1,,36.0,,,tablet,False,False
 tranexamic acid,NCC1CCC(C(=O)O)CC1,650.0,13.83,-1.6720911765335449,1,,2.0,,,tablet,False,False
 valganciclovir,CC(C)C(N)C(=O)OCC(CO)OCn1cnc2c(=O)[nH]c(N)nc21,900.0,58.0,-1.1908145158763876,1,,73.0,,,tablet,False,True
 zolpidem,Cc1ccc(-c2nc3ccc(C)cn3c2CC(=O)N(C)C)cc1,12.5,0.134,-1.9698052146432488,1,,2.8,,,tablet,False,True

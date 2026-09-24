@@ -8,7 +8,7 @@
   "skipped_training_reference": [],
   "generated_from": "scripts/calibrate_conformal.py",
   "source_cache_sha256": "fcf55297345e5df009e7647191c9de03ffbe705cbaf70d9762f7efb13abdd843",
-  "calibration_reference_sha256": "6beab60359bf3769da6abc383a358b29b66c2a9ef88d6c4f699f8bc508e59688",
+  "calibration_reference_sha256": "f4dc802eb94f8a821571aadb89951b2405681d751fa529ffb69406c4a0e9f180",
   "holdout_membership_sha256": "8c5d1b0c42247749767ac3a7da3bd61573e0f9bf45f503347a70f87b6b3ad02a",
   "model_artifact_sha256": {
     "models/direct_pk/xgboost_cmax.json": "14391eb0881cb3ec83ab2f81592c5fe75da7c949290ec438fddc2d7136f792a0",
@@ -22,7 +22,7 @@
   "validity": "not split-conformal; fitted components saw calibration outcomes",
   "tracks": {
     "meta": {
-      "0.5": 0.3285846937234829,
+      "0.5": 0.3464964370292309,
       "0.2": 0.7004223922814669,
       "0.1": 1.0103533304289622,
       "0.05": 1.6054910003038634
@@ -42,7 +42,7 @@
   },
   "consumed_development_benchmark_coverage": {
     "meta": {
-      "0.5": 0.5116,
+      "0.5": 0.5349,
       "0.2": 0.7326,
       "0.1": 0.9186,
       "0.05": 0.9767
