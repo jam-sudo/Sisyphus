@@ -10,6 +10,25 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Quarantine four mismatched development PK arms
+
+Original label review found that lopinavir 9.8 mg/L was ritonavir-boosted
+fed steady-state patient exposure, pilocarpine 15 ng/mL followed repeated
+dosing, and temozolomide 7.5 mg/L followed 150 mg/m² rather than a measured
+260 mg fixed dose. The 75 mg / 35.5 ng/mL venlafaxine arm could not be traced
+to an identified primary study; the cited label gives a different steady-state
+arm. All four are excluded pending exact-arm evidence. See
+[`development_additional_arm_followup_2026-09-24.md`](../validation/development_additional_arm_followup_2026-09-24.md).
+
+The public-profile development cache now scores **N=81**: Meta AAFE **2.8927**
+(conditional bootstrap 95% CI **2.3617–3.5990**), Engine **3.9166**, direct ML
+**3.2648**, and descriptive in-domain Meta **2.9015** (N=67). The nominal 90%
+development-residual half-width remains **10.24×**, covering **74/81 (91.4%)**
+on this consumed cohort. No fitted model changed; the difference from the
+preceding N=85 result is a reference/cohort correction, not a model gain.
+
+---
+
 ## 2026-09-24 (cont.) — Correct the levofloxacin route and ketoconazole food arm
 
 The DrugBank follow-up identified a route collision: **6.2 mg/L** is the

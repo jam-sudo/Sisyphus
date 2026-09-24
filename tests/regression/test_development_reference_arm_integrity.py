@@ -14,7 +14,7 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     data = json.loads((ROOT / "data/reference/clinical_pk.json").read_text())
     refs = {row.name: row for row in load_reference() if row.in_holdout}
     cache = json.loads((ROOT / "data/training/4track_holdout_predictions.json").read_text())
-    assert cache["n_holdout"] == data["metadata"]["holdout_with_cmax"] == len(refs) == 85
+    assert cache["n_holdout"] == data["metadata"]["holdout_with_cmax"] == len(refs) == 81
     assert {row["name"] for row in cache["drugs"]} == set(refs)
     for row in cache["drugs"]:
         assert row["obs"] == refs[row["name"]].cmax_obs
@@ -97,3 +97,8 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert refs["metronidazole"].cmax_obs == 13.0
     for name in ("indomethacin", "ketoconazole", "levofloxacin", "metronidazole"):
         assert "ct_curve" not in data["drugs"][name]
+    for name in ("lopinavir", "pilocarpine", "temozolomide", "venlafaxine"):
+        assert data["drugs"][name]["tier"] == "unverified"
+        assert not data["drugs"][name]["pk_params"]
+        assert "ct_curve" not in data["drugs"][name]
+        assert name not in refs

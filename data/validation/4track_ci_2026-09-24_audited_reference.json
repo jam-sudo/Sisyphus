@@ -1,75 +1,75 @@
 {
   "computed_at": "2026-09-24-audited_reference",
   "source_cache": "data/training/4track_holdout_predictions.json",
-  "source_cache_sha256": "18a8c73de736309b388934c95eb3c0f86127542f48e04d4d9c3d92a8c9df42df",
-  "context": "Public-profile development benchmark after regulatory arm verification of eight DrugBank-sourced references; repeatedly accessed cohort, not independent external validation.",
+  "source_cache_sha256": "882fe475a7c96150eea4b67f5d275f83552e74d7bec8e9c0d847400223c0b3ee",
+  "context": "Source-screened consumed development benchmark after exact-arm quarantine; not independent validation.",
   "method": "bootstrap on abs(log10(fold))",
   "n_bootstrap": 10000,
   "seed": 20260422,
   "overall": {
-    "n": 85,
+    "n": 81,
     "engine": {
-      "aafe": 3.9551,
-      "ci_95_low": 3.1411,
-      "ci_95_high": 5.0505,
-      "n": 85,
-      "pct_2fold": 35.3,
-      "pct_3fold": 48.2
+      "aafe": 3.9166,
+      "ci_95_low": 3.0899,
+      "ci_95_high": 5.0458,
+      "n": 81,
+      "pct_2fold": 35.8,
+      "pct_3fold": 48.1
     },
     "ml": {
-      "aafe": 3.304,
-      "ci_95_low": 2.6977,
-      "ci_95_high": 4.0867,
-      "n": 85,
-      "pct_2fold": 41.2,
-      "pct_3fold": 57.6
+      "aafe": 3.2648,
+      "ci_95_low": 2.6481,
+      "ci_95_high": 4.052,
+      "n": 81,
+      "pct_2fold": 43.2,
+      "pct_3fold": 58.0
     },
     "meta": {
-      "aafe": 2.9079,
-      "ci_95_low": 2.3839,
-      "ci_95_high": 3.593,
-      "n": 85,
-      "pct_2fold": 49.4,
-      "pct_3fold": 64.7
+      "aafe": 2.8927,
+      "ci_95_low": 2.3617,
+      "ci_95_high": 3.599,
+      "n": 81,
+      "pct_2fold": 50.6,
+      "pct_3fold": 65.4
     },
     "paired_meta_ml": {
-      "ratio": 0.8801,
-      "ci_95_low": 0.7866,
-      "ci_95_high": 0.9798,
-      "n": 85
+      "ratio": 0.886,
+      "ci_95_low": 0.7896,
+      "ci_95_high": 0.9894,
+      "n": 81
     }
   },
   "in_domain": {
-    "n": 69,
+    "n": 67,
     "engine": {
-      "aafe": 3.7668,
-      "ci_95_low": 3.0123,
-      "ci_95_high": 4.7737,
-      "n": 69,
-      "pct_2fold": 34.8,
-      "pct_3fold": 47.8
+      "aafe": 3.8324,
+      "ci_95_low": 3.06,
+      "ci_95_high": 4.9089,
+      "n": 67,
+      "pct_2fold": 34.3,
+      "pct_3fold": 46.3
     },
     "ml": {
-      "aafe": 3.0915,
-      "ci_95_low": 2.4735,
-      "ci_95_high": 3.911,
-      "n": 69,
-      "pct_2fold": 46.4,
-      "pct_3fold": 59.4
+      "aafe": 3.0926,
+      "ci_95_low": 2.4628,
+      "ci_95_high": 3.9333,
+      "n": 67,
+      "pct_2fold": 47.8,
+      "pct_3fold": 59.7
     },
     "meta": {
-      "aafe": 2.8981,
-      "ci_95_low": 2.3445,
-      "ci_95_high": 3.6419,
-      "n": 69,
-      "pct_2fold": 49.3,
-      "pct_3fold": 63.8
+      "aafe": 2.9015,
+      "ci_95_low": 2.325,
+      "ci_95_high": 3.6699,
+      "n": 67,
+      "pct_2fold": 50.7,
+      "pct_3fold": 64.2
     },
     "paired_meta_ml": {
-      "ratio": 0.9375,
-      "ci_95_low": 0.8386,
-      "ci_95_high": 1.047,
-      "n": 69
+      "ratio": 0.9382,
+      "ci_95_low": 0.8363,
+      "ci_95_high": 1.0521,
+      "n": 67
     }
   }
 }
