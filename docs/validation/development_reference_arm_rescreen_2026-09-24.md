@@ -1,5 +1,8 @@
 # Additional development training arm screen — 2026-09-24
 
+Later calibration numbers after six additional source corrections are in the
+[label rescreen](development_reference_label_rescreen_2026-09-24.md).
+
 Five remaining training names were checked against original studies or regulatory
 labels without selecting by model error. These changes repair dose, formulation,
 population, and analyte provenance; fitted production models and the 86-compound

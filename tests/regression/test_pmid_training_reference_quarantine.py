@@ -77,6 +77,12 @@ def test_audited_training_reference_arms():
         ("pregabalin", 300, 7.42008),
         ("sertraline", 50, 0.01139),
         ("tramadol", 87.852, 0.308),
+        ("cyclobenzaprine", 8.829433, 0.007),
+        ("desloratadine", 5, 0.0020581),
+        ("entacapone", 200, 1.2),
+        ("fluconazole", 400, 6.72),
+        ("gabapentin", 300, 3.22369),
+        ("glycopyrrolate", 2, 0.000318),
     ):
         row = data["drugs"][name]
         assert row["pk_params"]["cmax_mg_L"] == pytest.approx(cmax)
@@ -85,6 +91,8 @@ def test_audited_training_reference_arms():
         assert refs[name].cmax_obs == pytest.approx(cmax)
     for name in ("pregabalin", "sertraline"):
         assert "@" in data["drugs"][name]["smiles"]
+    assert data["drugs"]["glycopyrrolate"]["pk_params"]["auc_mg_h_L"] == pytest.approx(0.00181)
+    assert "auc_mg_h_L" not in data["drugs"]["fluconazole"]["pk_params"]
 
 
 def test_spurious_sertraline_training_duplicate_removed():
