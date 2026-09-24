@@ -98,7 +98,7 @@ jobs:
         run: |
           docker run -d --rm -p 127.0.0.1:7860:7860 --name sisyphus-api-ci sisyphus-api:ci
           trap 'docker stop sisyphus-api-ci' EXIT
-          curl --retry 30 --retry-connrefused --retry-delay 1 --fail --silent --show-error http://127.0.0.1:7860/health
+          curl --retry 30 --retry-all-errors --retry-delay 1 --fail --silent --show-error http://127.0.0.1:7860/health
           curl --fail --silent --show-error -X POST http://127.0.0.1:7860/predict \
             -H 'Content-Type: application/json' \
             -d '{"smiles":"CCO","dose_mg":100}' -o /tmp/sisyphus-predict.json
