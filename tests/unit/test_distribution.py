@@ -37,6 +37,15 @@ class TestDistribution:
         with pytest.raises(ValueError):
             Distribution(mean=1.0, cv=-0.1)
 
+    @pytest.mark.parametrize(
+        ("mean", "cv"),
+        [(float("nan"), 0.0), (float("inf"), 0.0), (1.0, float("nan")),
+         (1.0, float("inf"))],
+    )
+    def test_nonfinite_parameter_raises(self, mean, cv):
+        with pytest.raises(ValueError, match="must be finite"):
+            Distribution(mean=mean, cv=cv)
+
     def test_invalid_dist_type_raises(self):
         with pytest.raises(ValueError):
             Distribution(mean=1.0, dist_type="banana")

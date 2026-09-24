@@ -273,13 +273,10 @@ def _estimate_peff_heuristic(profile: MolecularProfile) -> Distribution:
 
 
 def _estimate_peff(profile: MolecularProfile) -> Distribution:
-    """Estimate Peff: XGBoost model if available, logP heuristic fallback."""
+    """Use the trained Peff model when present; fall back only if absent."""
     if _PEFF_MODEL_PATH.exists():
-        try:
-            features = compute_features(profile.smiles)
-            return _predict_peff_xgb(features.reshape(1, -1))
-        except Exception as exc:
-            logger.warning("Peff XGBoost prediction failed, using heuristic: %s", exc)
+        features = compute_features(profile.smiles)
+        return _predict_peff_xgb(features.reshape(1, -1))
     return _estimate_peff_heuristic(profile)
 
 
@@ -305,9 +302,8 @@ def _estimate_solubility(profile: MolecularProfile) -> Distribution:
 def predict_adme(profile: MolecularProfile) -> ADMEProperties:
     """Predict ADME properties from molecular profile.
 
-    Uses trained XGBoost models (fup, CLint, RBP, VDss) with prediction
-    intervals derived from conformal calibration.  Peff and solubility
-    are estimated from logP heuristics (no XGBoost model available).
+    Uses trained XGBoost models for fup, CLint, VDss, and Peff when present.
+    RBP uses the population default; solubility uses a logP heuristic.
 
     Args:
         profile: MolecularProfile from chemistry module.

@@ -18,6 +18,7 @@ Types defined:
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass, field
 
 import numpy as np
@@ -54,6 +55,8 @@ class Distribution:
     _VALID_DIST_TYPES = frozenset({"lognormal", "normal", "uniform"})
 
     def __post_init__(self) -> None:
+        if not math.isfinite(self.mean) or not math.isfinite(self.cv):
+            raise ValueError("Distribution mean and cv must be finite")
         if self.cv < 0:
             raise ValueError(f"cv must be non-negative, got {self.cv}")
         if self.dist_type not in self._VALID_DIST_TYPES:
