@@ -10,6 +10,24 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Remove synthetic reference concentration curves
+
+The clinical reference file contained 166 `ct_curve` arrays. Removed 159
+normalized 1 mg/L exponential templates, five other unmeasured analytical
+profiles, and a codeine curve with two unlabelled concentrations per time
+point from a study comparing immediate-release and sustained-release arms.
+The reported first-dose codeine IR Cmax remains, but its tier is now silver
+because fasting and base-equivalent dose normalization cannot be established
+from the abstract. Only the unscored non-template simvastatin curve remains,
+pending arm-level review. See
+[`development_reference_curve_followup_2026-09-24.md`](../validation/development_reference_curve_followup_2026-09-24.md).
+
+The benchmark loader never reads these curves. N=79 Meta AAFE remains
+**2.9492**; the reference-hash-linked interval artifact was regenerated.
+This is data-integrity work, not an external validation result.
+
+---
+
 ## 2026-09-24 (cont.) — Correct acamprosate and phenytoin parent-dose references
 
 The acamprosate label specifies 300 mg parent equivalent per 333 mg

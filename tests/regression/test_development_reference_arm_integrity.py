@@ -12,6 +12,8 @@ ROOT = Path(__file__).resolve().parents[2]
 
 def test_adjudicated_holdout_arms_match_scored_cache():
     data = json.loads((ROOT / "data/reference/clinical_pk.json").read_text())
+    assert {name for name, drug in data["drugs"].items() if "ct_curve" in drug} == {"simvastatin"}
+    assert data["drugs"]["codeine"]["tier"] == "silver"
     refs = {row.name: row for row in load_reference() if row.in_holdout}
     cache = json.loads((ROOT / "data/training/4track_holdout_predictions.json").read_text())
     assert cache["n_holdout"] == data["metadata"]["holdout_with_cmax"] == len(refs) == 79
