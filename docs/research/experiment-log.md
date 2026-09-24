@@ -10,6 +10,24 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Correct one Omega Cmax unit and rebuild public artifacts
+
+The pinned Omega row for a single 600 mg felbamate study stored 0.0089 mg/L.
+[Primary-source adjudication](../validation/development_felbamate_source_correction_2026-09-24.md)
+supports 8.9 mg/L: the paper reports a peak of 8.9 on a µg/mL scale, and its
+600 mg dose, AUC, and CL/F are inconsistent with an ng/mL interpretation by
+three orders of magnitude. The raw Omega snapshot remains pinned; the public
+fitted-row recipe applies one guarded correction and the direct Cmax model was
+retrained without changing features or hyperparameters.
+
+Five-fold row CV AAFE moved **3.275 → 3.237**. On the same 73-compound
+repeatedly accessed development set, direct ML AAFE moved **3.255 → 3.377**
+and Meta AAFE **2.839 → 2.885** (conditional bootstrap 95% CI 2.337–3.611).
+The development-residual 90% Meta half-width is 9.49× with 89.0% consumed-set
+coverage. The higher development AAFE is reported rather than used to reject
+a source-backed label correction. These diagnostics provide no new external
+generalization evidence; External Holdout V1 remains unscored.
+
 ## 2026-09-24 (cont.) — Retract the ten-drug absolute-F diagnosis
 
 [Source audit](../validation/f_reference_source_audit_2026-09-24.md) found that

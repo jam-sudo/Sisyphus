@@ -24,10 +24,14 @@ def test_public_vdss_fitted_rows_and_artifact_are_pinned():
     fitted = pd.read_csv(DATASET)
     assert sha256(SOURCE) == SOURCE_SHA
     assert len(expected) == len(fitted) == 1055
+    # Canonical SMILES string ordering can shift across RDKit versions.
+    fitted = fitted.sort_values("drug_id").reset_index(drop=True)
+    expected = expected.sort_values("drug_id").reset_index(drop=True)
+    assert fitted["drug_id"].is_unique and expected["drug_id"].is_unique
+    assert fitted["drug_id"].tolist() == expected["drug_id"].tolist()
     assert [ik14(s) for s in fitted["canonical_smiles"]] == [
         ik14(s) for s in expected["canonical_smiles"]
     ]
-    assert fitted["drug_id"].tolist() == expected["drug_id"].tolist()
     np.testing.assert_allclose(fitted["Y"], expected["Y"], atol=2e-13, rtol=0)
 
     metadata = json.loads(META.read_text())

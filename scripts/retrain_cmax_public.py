@@ -42,6 +42,13 @@ def training_rows() -> list[dict[str, str]]:
     rows = [row for row in source if not is_holdout(row["smiles"], row["name"], keys)]
     if (len(source), len(rows)) != (1128, 1028):
         raise ValueError(f"Unexpected Omega source/clean row counts: {len(source)}/{len(rows)}")
+    # Richens et al. 1997, Table 1: 600 mg young low-dose Cmax is 8.9 µg/mL.
+    # The archived Omega row divided by 1000 as if that value were ng/mL.
+    felbamate = [row for row in rows if row["name"] == "felbamate"]
+    if len(felbamate) != 1 or not np.isclose(float(felbamate[0]["cmax_mg_L"]), 0.0089):
+        raise ValueError("Felbamate source row changed; re-adjudicate its units")
+    felbamate[0]["cmax_mg_L"] = "8.9"
+    felbamate[0]["log_cmax_per_dose"] = str(float(np.log10(8.9 / 600)))
     return rows
 
 
@@ -79,7 +86,7 @@ def main() -> None:
         n_drugs_excluded=100,
         holdout_version="N=107 (data/reference/holdout.json)",
         holdout_metric={"name": "five_fold_cv_aafe", "value": cv_aafe, "r2": cv_r2},
-        retrained_reason="Pin public Omega fitted rows and replace unknown legacy Cmax source",
+        retrained_reason="Correct felbamate 600 mg Cmax unit in pinned public Omega fitted rows",
     )
     META.write_text(json.dumps(metadata, indent=2) + "\n")
     print(f"N={len(fitted)} CV_AAFE={cv_aafe:.3f} CV_R2={cv_r2:.3f}")

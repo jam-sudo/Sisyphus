@@ -1,8 +1,8 @@
 {
-  "computed_at": "2026-09-24-audited_reference",
+  "computed_at": "2026-09-24-felbamate_unit",
   "source_cache": "data/training/4track_holdout_predictions.json",
-  "source_cache_sha256": "a5415f69f9db1883690be20ead017c6c48966b4e0c4a782f19a8859d8ef06104",
-  "context": "Outcome-blind primary-source ketoconazole reference replacement; repeatedly accessed development benchmark, not external validation.",
+  "source_cache_sha256": "1d3e487447ecdea7f514974ecf669d1afc38fb6fbc6068ca003132ea2edd0ad5",
+  "context": "Development benchmark after source-backed felbamate Cmax unit correction; not independent validation",
   "method": "bootstrap on abs(log10(fold))",
   "n_bootstrap": 10000,
   "seed": 20260422,
@@ -17,25 +17,25 @@
       "pct_3fold": 50.7
     },
     "ml": {
-      "aafe": 3.2549,
-      "ci_95_low": 2.6029,
-      "ci_95_high": 4.0922,
+      "aafe": 3.3773,
+      "ci_95_low": 2.6908,
+      "ci_95_high": 4.2514,
       "n": 73,
-      "pct_2fold": 43.8,
-      "pct_3fold": 58.9
+      "pct_2fold": 39.7,
+      "pct_3fold": 56.2
     },
     "meta": {
-      "aafe": 2.8395,
-      "ci_95_low": 2.3011,
-      "ci_95_high": 3.5561,
+      "aafe": 2.8846,
+      "ci_95_low": 2.337,
+      "ci_95_high": 3.6113,
       "n": 73,
-      "pct_2fold": 46.6,
-      "pct_3fold": 65.8
+      "pct_2fold": 45.2,
+      "pct_3fold": 64.4
     },
     "paired_meta_ml": {
-      "ratio": 0.8724,
-      "ci_95_low": 0.7601,
-      "ci_95_high": 0.9956,
+      "ratio": 0.8541,
+      "ci_95_low": 0.7455,
+      "ci_95_high": 0.9753,
       "n": 73
     }
   },
@@ -50,25 +50,25 @@
       "pct_3fold": 48.3
     },
     "ml": {
-      "aafe": 3.0607,
-      "ci_95_low": 2.4129,
-      "ci_95_high": 3.9231,
-      "n": 60,
-      "pct_2fold": 46.7,
-      "pct_3fold": 61.7
-    },
-    "meta": {
-      "aafe": 2.9148,
-      "ci_95_low": 2.342,
-      "ci_95_high": 3.7015,
+      "aafe": 3.1441,
+      "ci_95_low": 2.4533,
+      "ci_95_high": 4.0902,
       "n": 60,
       "pct_2fold": 43.3,
-      "pct_3fold": 65.0
+      "pct_3fold": 60.0
+    },
+    "meta": {
+      "aafe": 2.9645,
+      "ci_95_low": 2.3776,
+      "ci_95_high": 3.7847,
+      "n": 60,
+      "pct_2fold": 41.7,
+      "pct_3fold": 63.3
     },
     "paired_meta_ml": {
-      "ratio": 0.9523,
-      "ci_95_low": 0.8362,
-      "ci_95_high": 1.0823,
+      "ratio": 0.9429,
+      "ci_95_low": 0.83,
+      "ci_95_high": 1.0676,
       "n": 60
     }
   }
