@@ -182,6 +182,10 @@ def test_spurious_sertraline_training_duplicate_removed():
                     ("azacitidine", "300.0", "0.145"),
                     ("tamoxifen", "20.0", "0.04"),
                 }
-                and (row["name"] == "alosetron" or "@" not in row["canon_smiles"] and "/" not in row["canon_smiles"])
+                and (
+                    row["name"] == "alosetron"
+                    or "@" not in row["canon_smiles"]
+                    and "/" not in row["canon_smiles"]
+                )
                 for row in csv.DictReader(handle)
             )

@@ -100,15 +100,16 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     prior = Chem.MolFromSmiles(data["drugs"]["ulipristal"]["prior_reference_smiles"])
     assert rdMolDescriptors.CalcMolFormula(prior) == "C28H35NO3"
     curated_rows = json.loads((ROOT / "data/reference/curated_pk_data.json").read_text())
-    assert next(row for row in curated_rows if row["drug_name"] == "ulipristal")["cmax_mg_L"] is None
+    assert next(row for row in curated_rows if row["drug_name"] == "ulipristal")[
+        "cmax_mg_L"
+    ] is None
     fda_rows = json.loads((ROOT / "data/reference/fda_extraction_results.json").read_text())
     for name in ("penicillamine", "lenacapavir"):
         row = next(row for row in fda_rows if row["drug_name"] == name)
         assert row["status"] == "unverified"
         assert row["cmax_mg_L"] is None
-    assert next(row for row in fda_rows if row["drug_name"] == "hydroxyzine")["status"] != "extracted"
-    assert next(row for row in fda_rows if row["drug_name"] == "selegiline")["status"] != "extracted"
-    assert next(row for row in fda_rows if row["drug_name"] == "ulipristal")["status"] != "extracted"
+    for name in ("hydroxyzine", "selegiline", "ulipristal"):
+        assert next(row for row in fda_rows if row["drug_name"] == name)["status"] != "extracted"
     assert refs["trazodone"].dose_mg == pytest.approx(100 * 371.864 / 408.33, rel=1e-6)
     assert refs["trazodone"].cmax_obs == 1.5469
     assert "bioavailability_pct" not in data["drugs"]["fluvoxamine"]["pk_params"]
@@ -189,7 +190,9 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert refs["diclofenac"].dose_mg == pytest.approx(25 * 296.1 / 318.1)
     assert refs["diclofenac"].cmax_obs == 1.0
     assert refs["zolpidem"].dose_mg == 10.0
-    for name in ("azithromycin", "ciprofloxacin", "colchicine", "diclofenac", "moxifloxacin", "zolpidem"):
+    for name in (
+        "azithromycin", "ciprofloxacin", "colchicine", "diclofenac", "moxifloxacin", "zolpidem"
+    ):
         assert "ct_curve" not in data["drugs"][name]
     assert refs["budesonide"].auc_obs == pytest.approx(0.01413)
     assert data["drugs"]["budesonide"]["pk_params"].get("thalf_h") is None
@@ -199,14 +202,20 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert refs["dapagliflozin"].dose_mg == 10.0
     assert refs["dapagliflozin"].cmax_obs == pytest.approx(0.136)
     assert "Table 1" in data["drugs"]["dapagliflozin"]["source"]
-    assert next(row for row in curated_rows if row["drug_name"] == "dapagliflozin")["cmax_mg_L"] is None
-    assert next(row for row in fda_rows if row["drug_name"] == "dapagliflozin")["status"] != "extracted"
+    assert next(row for row in curated_rows if row["drug_name"] == "dapagliflozin")[
+        "cmax_mg_L"
+    ] is None
+    assert next(row for row in fda_rows if row["drug_name"] == "dapagliflozin")[
+        "status"
+    ] != "extracted"
     assert refs["etodolac"].cmax_obs == pytest.approx(14.0)
     assert "bioavailability_pct" not in data["drugs"]["etodolac"]["pk_params"]
     assert refs["ramelteon"].auc_obs == pytest.approx(0.0187)
     assert data["drugs"]["rivaroxaban"]["pk_params"]["thalf_h"] == pytest.approx(7.57)
     assert "bioavailability_pct" not in data["drugs"]["rivaroxaban"]["pk_params"]
-    for name in ("budesonide", "dalfampridine", "dapagliflozin", "etodolac", "ramelteon", "rivaroxaban"):
+    for name in (
+        "budesonide", "dalfampridine", "dapagliflozin", "etodolac", "ramelteon", "rivaroxaban"
+    ):
         assert "ct_curve" not in data["drugs"][name]
     assert refs["cabozantinib"].dose_mg == 140.0
     assert refs["cabozantinib"].cmax_obs == pytest.approx(0.554)
@@ -214,13 +223,20 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert refs["ruxolitinib"].dose_mg == 25.0
     assert refs["ruxolitinib"].cmax_obs == pytest.approx(0.4627)
     assert refs["ruxolitinib"].auc_obs == pytest.approx(1.630)
-    osp = {row["drug_name"]: row for row in json.loads((ROOT / "data/reference/osp_observed.json").read_text())}
-    assert not {"cabozantinib", "felodipine", "itraconazole", "ruxolitinib", "verapamil"} & osp.keys()
+    osp = {
+        row["drug_name"]: row
+        for row in json.loads((ROOT / "data/reference/osp_observed.json").read_text())
+    }
+    assert not {
+        "cabozantinib", "felodipine", "itraconazole", "ruxolitinib", "verapamil"
+    } & osp.keys()
     assert osp["erythromycin"]["study"] == "DiSanto 1981"
     assert data["drugs"]["acamprosate"]["dose_mg"] == 600.0
     assert "acamprosate" not in refs
     assert data["drugs"]["acamprosate"]["tier"] == "unverified"
-    assert next(row for row in curated_rows if row["drug_name"] == "acamprosate")["cmax_mg_L"] is None
+    assert next(row for row in curated_rows if row["drug_name"] == "acamprosate")[
+        "cmax_mg_L"
+    ] is None
     assert data["drugs"]["alvimopan"]["tier"] == "unverified"
     assert not data["drugs"]["alvimopan"]["pk_params"]
     assert "alvimopan" not in refs
@@ -231,7 +247,9 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert "oral suspension" in data["drugs"]["fruquintinib"]["source"]
     assert refs["ketorolac"].dose_mg == pytest.approx(10 * 255.27 / 376.41, rel=1e-6)
     assert refs["ketorolac"].cmax_obs == pytest.approx(0.87)
-    assert next(row for row in fda_rows if row["drug_name"] == "ketorolac")["cmax_mg_L"] == pytest.approx(0.87)
+    assert next(row for row in fda_rows if row["drug_name"] == "ketorolac")[
+        "cmax_mg_L"
+    ] == pytest.approx(0.87)
     assert refs["brincidofovir"].cmax_obs == pytest.approx(0.251)
     assert "CMX001-120" in data["drugs"]["brincidofovir"]["source"]
     assert refs["lamivudine"].dose_mg == 300.0
@@ -239,15 +257,23 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert "Table 7" in data["drugs"]["lamivudine"]["source"]
     assert refs["mercaptopurine"].cmax_obs == pytest.approx(0.069)
     assert "tablet" in data["drugs"]["mercaptopurine"]["source"]
-    assert next(row for row in fda_rows if row["drug_name"] == "mercaptopurine")["source"].startswith("DailyMed PURIXAN oral suspension")
+    assert next(row for row in fda_rows if row["drug_name"] == "mercaptopurine")[
+        "source"
+    ].startswith("DailyMed PURIXAN oral suspension")
     assert data["drugs"]["progesterone"]["tier"] == "unverified"
     assert not data["drugs"]["progesterone"]["pk_params"]
     assert "progesterone" not in refs
-    assert next(row for row in curated_rows if row["drug_name"] == "progesterone")["cmax_mg_L"] is None
-    assert next(row for row in fda_rows if row["drug_name"] == "progesterone")["status"] == "unverified"
+    assert next(row for row in curated_rows if row["drug_name"] == "progesterone")[
+        "cmax_mg_L"
+    ] is None
+    assert next(row for row in fda_rows if row["drug_name"] == "progesterone")[
+        "status"
+    ] == "unverified"
     assert refs["rifabutin"].dose_mg == 300.0
     assert refs["rifabutin"].cmax_obs == pytest.approx(0.375)
-    assert next(row for row in fda_rows if row["drug_name"] == "rifabutin")["cmax_value_original"] == 375
+    assert next(row for row in fda_rows if row["drug_name"] == "rifabutin")[
+        "cmax_value_original"
+    ] == 375
     assert refs["phenytoin"].dose_mg == pytest.approx(300 * 252.27 / 274.25, rel=1e-6)
     assert refs["phenytoin"].cmax_obs == pytest.approx(2.32)
     assert refs["phenytoin"].auc_obs == pytest.approx(108.99)

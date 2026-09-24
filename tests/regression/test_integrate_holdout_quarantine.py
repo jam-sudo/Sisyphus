@@ -19,8 +19,9 @@ def test_integration_preserves_quarantined_references(tmp_path, monkeypatch):
 
     data = json.loads((tmp_path / "clinical_pk_v2.json").read_text())
     assert data["metadata"]["holdout_with_cmax"] == 73
-    for name in ("acamprosate", "alvimopan", "cimetidine", "mefenamic acid", "atovaquone", "leflunomide",
-                 "lopinavir", "penicillamine", "pilocarpine", "prasugrel",
-                 "sirolimus", "venlafaxine"):
+    for name in (
+        "acamprosate", "alvimopan", "cimetidine", "mefenamic acid", "atovaquone", "leflunomide",
+        "lopinavir", "penicillamine", "pilocarpine", "prasugrel", "sirolimus", "venlafaxine",
+    ):
         assert data["drugs"][name]["tier"] == "unverified"
         assert not data["drugs"][name]["pk_params"]

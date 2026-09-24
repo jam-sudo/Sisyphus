@@ -5,10 +5,10 @@ from pathlib import Path
 
 import pytest
 
-from sisyphus.validation.reference import load_reference
 from scripts.evaluate_tdm_ci_coverage import DRUGS as CI_DRUGS
 from scripts.run_tdm_benchmark import DRUGS as TDM_DRUGS
 from scripts.verify_tdm_ci_floor import CASES as FLOOR_CASES
+from sisyphus.validation.reference import load_reference
 
 ROOT = Path(__file__).resolve().parents[2]
 REFERENCE = ROOT / "data/reference/clinical_pk.json"

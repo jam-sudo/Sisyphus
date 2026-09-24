@@ -91,7 +91,9 @@ def main() -> None:
     residual_interval_sha = sha256(RESIDUAL_INTERVAL.read_bytes()).hexdigest()
     for drug in console["drugs"]:
         drug["artifactProvenance"]["data/model_card.json"] = model_card_sha
-        drug["artifactProvenance"]["data/validation/development_residual_interval.json"] = residual_interval_sha
+        drug["artifactProvenance"]["data/validation/development_residual_interval.json"] = (
+            residual_interval_sha
+        )
     _write(WEB_BENCHMARK, benchmark, pretty=False)
     _write(WEB_CONSOLE, console, pretty=False)
     print("Synchronized model card and web metrics from", CACHE.relative_to(ROOT))
