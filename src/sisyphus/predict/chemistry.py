@@ -340,26 +340,24 @@ def compute_profile(smiles: str) -> MolecularProfile:
         and db_logp is None
         and _LOGP_CORR_PATH.exists()
     ):
-        try:
+        if not hasattr(compute_profile, "_logp_model"):
             import xgboost as xgb
-            if not hasattr(compute_profile, "_logp_model"):
-                from sisyphus.ml.registry import verify_model_artifact
 
-                verify_model_artifact(_LOGP_CORR_PATH)
-                m = xgb.XGBRegressor()
-                m.load_model(str(_LOGP_CORR_PATH))
-                compute_profile._logp_model = m  # type: ignore[attr-defined]
-                logger.info(
-                    "logp_correction: enriched (gitignored artifact present at %s); "
-                    "predictions will differ from public-clone state by O(1-5%%)",
-                    _LOGP_CORR_PATH,
-                )
-            import numpy as np
-            corr_features = np.array([[logp, mw, tpsa, float(hbd), float(hba), float(rotatable_bonds)]])  # noqa: E501
-            correction = float(compute_profile._logp_model.predict(corr_features)[0])  # type: ignore[attr-defined]
-            logp = logp + correction
-        except Exception as e:
-            logger.warning("logP correction failed: %s", e)
+            from sisyphus.ml.registry import verify_model_artifact
+
+            verify_model_artifact(_LOGP_CORR_PATH)
+            m = xgb.XGBRegressor()
+            m.load_model(str(_LOGP_CORR_PATH))
+            compute_profile._logp_model = m  # type: ignore[attr-defined]
+            logger.info(
+                "logp_correction: enriched (gitignored artifact present at %s); "
+                "predictions will differ from public-clone state by O(1-5%%)",
+                _LOGP_CORR_PATH,
+            )
+        import numpy as np
+        corr_features = np.array([[logp, mw, tpsa, float(hbd), float(hba), float(rotatable_bonds)]])  # noqa: E501
+        correction = float(compute_profile._logp_model.predict(corr_features)[0])  # type: ignore[attr-defined]
+        logp = logp + correction
 
     # pKa: DrugBank ChemAxon → fallback SMARTS
     # NOTE: XGBoost pKa model (R²=0.79, MAE=1.6) was tested but reverted.

@@ -89,6 +89,8 @@ def validate_manifest(manifest: dict[str, Any]) -> list[str]:
         for key in REQUIRED_FEATURE_SCHEMA:
             if key not in feat:
                 warnings.append(f"feature_schema field missing: {key}")
+    else:
+        warnings.append("feature_schema must be an object")
 
     return warnings
 
@@ -107,6 +109,24 @@ def compute_feature_hash_v1() -> str:
     from sisyphus.descriptors import compute_features
 
     feats = compute_features(CANONICAL_SMILES)
+    return hashlib.sha256(feats.tobytes()).hexdigest()
+
+
+def compute_feature_hash_logp_corr_6() -> str:
+    """Fingerprint the six Crippen-correction inputs on canonical caffeine."""
+    import numpy as np
+    from rdkit import Chem
+    from rdkit.Chem import Descriptors
+
+    mol = Chem.MolFromSmiles(CANONICAL_SMILES)
+    feats = np.array([[
+        Descriptors.MolLogP(mol),
+        Descriptors.MolWt(mol),
+        Descriptors.TPSA(mol),
+        float(Descriptors.NumHDonors(mol)),
+        float(Descriptors.NumHAcceptors(mol)),
+        float(Descriptors.NumRotatableBonds(mol)),
+    ]])
     return hashlib.sha256(feats.tobytes()).hexdigest()
 
 
@@ -153,8 +173,14 @@ def verify_model_artifact(model_json_path: Path | str) -> dict[str, Any]:
             f"manifest={manifest['artifact_sha256']}, actual={actual_artifact_sha}"
         )
     feature_schema = manifest.get("feature_schema", {})
-    if feature_schema.get("name") == "compute_features_v1":
-        warning = check_feature_hash(manifest, _current_feature_hash_v1())
-        if warning:
-            raise ValueError(f"Feature-schema drift for {path}: {warning}")
+    name = feature_schema.get("name")
+    if name == "compute_features_v1":
+        expected = _current_feature_hash_v1()
+    elif name == "logp_corr_6":
+        expected = compute_feature_hash_logp_corr_6()
+    else:
+        raise ValueError(f"Unknown feature schema for {path}: {name}")
+    warning = check_feature_hash(manifest, expected)
+    if warning:
+        raise ValueError(f"Feature-schema drift for {path}: {warning}")
     return manifest

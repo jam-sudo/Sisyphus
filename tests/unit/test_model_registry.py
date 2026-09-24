@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import hashlib
+import json
 from pathlib import Path
 
 import pytest
@@ -9,6 +11,7 @@ import pytest
 from sisyphus.ml.registry import (
     CANONICAL_SMILES,
     check_feature_hash,
+    compute_feature_hash_logp_corr_6,
     compute_feature_hash_v1,
     load_manifest,
     manifest_path_for,
@@ -113,6 +116,9 @@ def test_logp_correction_uses_separate_feature_schema():
     feat = manifest["feature_schema"]
     assert feat["name"] == "logp_corr_6"
     assert feat["n_features"] == 6
+    current = compute_feature_hash_logp_corr_6()
+    if current == LOCKFILE_LOGP6_HASH:
+        assert feat["sha256"] == current
     # Distinct from compute_features_v1 hash
     v1 = compute_feature_hash_v1()
     assert feat["sha256"] != v1
@@ -132,6 +138,23 @@ def test_runtime_verifier_rejects_missing_manifest(tmp_path):
     fake_model = tmp_path / "nonexistent.json"
     with pytest.raises(ValueError, match="manifest unavailable"):
         verify_model_artifact(fake_model)
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "message"),
+    [("sha256", "0" * 64, "Feature-schema drift"),
+     ("name", "unregistered_features", "Unknown feature schema")],
+)
+def test_runtime_verifier_rejects_logp_feature_drift(tmp_path, field, value, message):
+    model = tmp_path / "logp_correction.json"
+    model.write_bytes(b"{}")
+    manifest = load_manifest(MODELS_ADME / model.name)
+    assert manifest is not None
+    manifest["artifact_sha256"] = hashlib.sha256(model.read_bytes()).hexdigest()
+    manifest["feature_schema"][field] = value
+    manifest_path_for(model).write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match=message):
+        verify_model_artifact(model)
 
 
 # ---------------------------------------------------------------------------
