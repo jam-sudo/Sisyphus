@@ -1,75 +1,75 @@
 {
   "computed_at": "2026-09-24-audited_reference",
   "source_cache": "data/training/4track_holdout_predictions.json",
-  "source_cache_sha256": "a34e49267a4ab169b54be1141c4e05a78b15a7b60e871051663f7edd1b74f19d",
-  "context": "Public-profile deterministic state; source and salt-dose corrections through clomipramine; repeatedly accessed development cohort, not independent external validation",
+  "source_cache_sha256": "b4dfecb13000785567414f5c5811ffba46341e785a7779ea0b4a7a57a91a9552",
+  "context": "Public-profile development benchmark after source review of clonidine, pindolol, sumatriptan, and bexagliflozin; repeatedly accessed cohort, not independent external validation.",
   "method": "bootstrap on abs(log10(fold))",
   "n_bootstrap": 10000,
   "seed": 20260422,
   "overall": {
-    "n": 86,
+    "n": 85,
     "engine": {
-      "aafe": 3.9023,
-      "ci_95_low": 3.1068,
-      "ci_95_high": 4.995,
-      "n": 86,
-      "pct_2fold": 34.9,
-      "pct_3fold": 48.8
+      "aafe": 3.9571,
+      "ci_95_low": 3.1436,
+      "ci_95_high": 5.0494,
+      "n": 85,
+      "pct_2fold": 34.1,
+      "pct_3fold": 48.2
     },
     "ml": {
-      "aafe": 3.3002,
-      "ci_95_low": 2.6891,
-      "ci_95_high": 4.0703,
-      "n": 86,
-      "pct_2fold": 40.7,
-      "pct_3fold": 58.1
+      "aafe": 3.3056,
+      "ci_95_low": 2.7002,
+      "ci_95_high": 4.0866,
+      "n": 85,
+      "pct_2fold": 41.2,
+      "pct_3fold": 57.6
     },
     "meta": {
-      "aafe": 2.8852,
-      "ci_95_low": 2.3761,
-      "ci_95_high": 3.5348,
-      "n": 86,
-      "pct_2fold": 48.8,
-      "pct_3fold": 65.1
+      "aafe": 2.9093,
+      "ci_95_low": 2.3885,
+      "ci_95_high": 3.5929,
+      "n": 85,
+      "pct_2fold": 48.2,
+      "pct_3fold": 64.7
     },
     "paired_meta_ml": {
-      "ratio": 0.8742,
-      "ci_95_low": 0.7837,
-      "ci_95_high": 0.9732,
-      "n": 86
+      "ratio": 0.8801,
+      "ci_95_low": 0.7866,
+      "ci_95_high": 0.9798,
+      "n": 85
     }
   },
   "in_domain": {
-    "n": 70,
+    "n": 69,
     "engine": {
-      "aafe": 3.7077,
-      "ci_95_low": 2.971,
-      "ci_95_high": 4.6807,
-      "n": 70,
-      "pct_2fold": 34.3,
-      "pct_3fold": 48.6
+      "aafe": 3.7691,
+      "ci_95_low": 3.0154,
+      "ci_95_high": 4.7736,
+      "n": 69,
+      "pct_2fold": 33.3,
+      "pct_3fold": 47.8
     },
     "ml": {
-      "aafe": 3.0901,
-      "ci_95_low": 2.4944,
-      "ci_95_high": 3.8841,
-      "n": 70,
-      "pct_2fold": 45.7,
-      "pct_3fold": 60.0
+      "aafe": 3.0933,
+      "ci_95_low": 2.4774,
+      "ci_95_high": 3.9111,
+      "n": 69,
+      "pct_2fold": 46.4,
+      "pct_3fold": 59.4
     },
     "meta": {
-      "aafe": 2.8705,
-      "ci_95_low": 2.3384,
-      "ci_95_high": 3.5953,
-      "n": 70,
-      "pct_2fold": 48.6,
-      "pct_3fold": 64.3
+      "aafe": 2.8998,
+      "ci_95_low": 2.351,
+      "ci_95_high": 3.6406,
+      "n": 69,
+      "pct_2fold": 47.8,
+      "pct_3fold": 63.8
     },
     "paired_meta_ml": {
-      "ratio": 0.9289,
-      "ci_95_low": 0.8312,
-      "ci_95_high": 1.0375,
-      "n": 70
+      "ratio": 0.9375,
+      "ci_95_low": 0.8386,
+      "ci_95_high": 1.047,
+      "n": 69
     }
   }
 }

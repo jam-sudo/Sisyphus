@@ -14,7 +14,7 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     data = json.loads((ROOT / "data/reference/clinical_pk.json").read_text())
     refs = {row.name: row for row in load_reference() if row.in_holdout}
     cache = json.loads((ROOT / "data/training/4track_holdout_predictions.json").read_text())
-    assert cache["n_holdout"] == data["metadata"]["holdout_with_cmax"] == len(refs) == 86
+    assert cache["n_holdout"] == data["metadata"]["holdout_with_cmax"] == len(refs) == 85
     assert {row["name"] for row in cache["drugs"]} == set(refs)
     for row in cache["drugs"]:
         assert row["obs"] == refs[row["name"]].cmax_obs
@@ -77,3 +77,15 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     for name in ("alosetron", "azacitidine", "clomipramine", "tamoxifen"):
         assert "ct_curve" not in data["drugs"][name]
         assert "thalf_h" not in data["drugs"][name]["pk_params"]
+    assert data["drugs"]["clonidine"]["tier"] == "unverified"
+    assert data["drugs"]["clonidine"]["dose_mg"] == 0.087
+    assert not data["drugs"]["clonidine"]["pk_params"]
+    assert "clonidine" not in refs
+    assert refs["pindolol"].cmax_obs == 0.0331
+    assert "thalf_h" not in data["drugs"]["pindolol"]["pk_params"]
+    assert refs["sumatriptan"].dose_mg == 25.0
+    assert refs["sumatriptan"].cmax_obs == 0.018
+    assert refs["bexagliflozin"].dose_mg == 20.0
+    assert refs["bexagliflozin"].cmax_obs == 0.134
+    for name in ("clonidine", "pindolol", "sumatriptan", "bexagliflozin"):
+        assert "ct_curve" not in data["drugs"][name]

@@ -10,9 +10,33 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
-## 2026-09-24 — Reconcile the source-screened development benchmark
+## 2026-09-24 (cont.) — Recheck secondary DrugBank PK arms against regulatory sources
 
-The current public-profile cache at `e430461` scores **86** of the original
+The 100 mcg clonidine / 400.72 pg/mL arm remains traceable only to a
+secondary DrugBank statement, so it is quarantined pending the exact primary
+PK record. Its tablet is clonidine hydrochloride (0.087 mg parent equivalent),
+and the prior 0.33 h entry was a distribution half-life, not terminal
+elimination. The 5 mg pindolol parent Cmax of 33.1 ng/mL is confirmed by a
+Health Canada monograph, but its previous 8 h half-life describes inactive
+metabolites. The FDA tablet label reports 18 ng/mL after 25 mg oral
+sumatriptan, replacing the secondary 16.5 ng/mL. The FDA bexagliflozin
+integrated review confirms the fasted single 20 mg / 134 ng/mL arm. Synthetic
+curves were removed from all four records. See
+[`development_drugbank_arm_followup_2026-09-24.md`](../validation/development_drugbank_arm_followup_2026-09-24.md).
+
+The regenerated public-profile cache now scores **N=85**. Meta AAFE is
+**2.9093** (conditional bootstrap 95% CI **2.3885–3.5929**), Engine
+**3.9571**, direct ML **3.3056**, and descriptive in-domain Meta **2.8998**
+(N=69). The unchanged development-residual 90% half-width is **10.24×**,
+covering **78/85 (91.8%)** of the repeatedly used cohort. The higher AAFE
+versus N=86 is a label/cohort correction, not a model change or independent
+performance result.
+
+---
+
+## 2026-09-24 — Reconcile the then-current source-screened development benchmark
+
+The public-profile cache at `e430461` scored **86** of the original
 107 development compounds after source, analyte, dose, formulation, and
 structure adjudication. It yields Meta AAFE **2.8852** (conditional
 compound-bootstrap 95% CI **2.3761–3.5348**), Engine **3.9023**, and direct ML
@@ -23,7 +47,7 @@ change during the latest reference repairs; the scored labels and one
 salt-to-parent dose mapping did. The current figures are not directly
 comparable to the former 2.743/N=107 table as model gains or losses.
 
-The current cache and its matching bootstrap artifact are
+The cache and its matching bootstrap artifact were
 `data/training/4track_holdout_predictions.json` and
 `data/validation/4track_ci_2026-09-24_audited_reference.json`. Individual
 source decisions are recorded in the dated `docs/validation/development_*`
