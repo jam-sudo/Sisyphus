@@ -204,7 +204,15 @@ def verify_frozen_file(root: Path, freeze: dict[str, Any], stem: str) -> str:
     return actual
 
 
-def verify_audit_report(path: Path, expected_sha: str, manifest_sha: str) -> str:
+def _recompute_audit_report(manifest_path: Path) -> dict[str, Any]:
+    import runpy
+
+    audit = runpy.run_path(str(ROOT / "scripts/audit_external_holdout_manifest.py"))["audit"]
+    return audit(manifest_path.resolve())
+
+
+def verify_audit_report(path: Path, expected_sha: str, manifest_path: Path) -> str:
+    manifest_sha = sha256_file(manifest_path)
     actual = sha256_file(path)
     if actual != expected_sha:
         raise ValueError("Audit-report SHA256 does not match the committed value")
@@ -213,6 +221,9 @@ def verify_audit_report(path: Path, expected_sha: str, manifest_sha: str) -> str
         raise ValueError("External holdout audit report did not pass")
     if report.get("manifest_sha256") != manifest_sha:
         raise ValueError("Audit report was not produced from this exact manifest")
+    fresh = _recompute_audit_report(manifest_path)
+    if path.read_bytes() != (json.dumps(fresh, indent=2) + "\n").encode():
+        raise ValueError("Audit report does not reproduce from the frozen checkout")
     return actual
 
 

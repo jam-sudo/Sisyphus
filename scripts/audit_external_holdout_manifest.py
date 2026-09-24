@@ -48,6 +48,12 @@ def _norm_name(value: str) -> str:
 
 def _walk_json(value, source: str, structures: dict[str, set[str]], names: dict[str, set[str]]):
     if isinstance(value, dict):
+        for collection in ("drugs", "per_drug"):
+            entries = value.get(collection)
+            if isinstance(entries, dict):
+                for name in entries:
+                    if isinstance(name, str) and name.strip():
+                        names.setdefault(_norm_name(name), set()).add(source)
         for key in ("name", "drug_name", "compound", "drug"):
             name = value.get(key)
             if isinstance(name, str) and name.strip():

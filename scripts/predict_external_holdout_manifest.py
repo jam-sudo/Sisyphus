@@ -120,7 +120,7 @@ def main() -> None:
     verify_source_plan(args.manifest, manifest)
 
     actual_audit_sha = verify_audit_report(
-        args.audit_report, args.audit_report_sha256, actual_manifest_sha
+        args.audit_report, args.audit_report_sha256, args.manifest
     )
 
     freeze = manifest["freeze"]

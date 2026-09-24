@@ -378,7 +378,7 @@ def main() -> None:
     if payload.get("manifest_sha256") != actual_sha:
         raise ValueError("predictions manifest_sha256 is missing or does not match")
     audit_sha = verify_audit_report(
-        args.audit_report, args.audit_report_sha256, actual_sha
+        args.audit_report, args.audit_report_sha256, args.manifest
     )
     if payload.get("audit_report_sha256") != audit_sha:
         raise ValueError("Prediction audit_report_sha256 does not match frozen audit")

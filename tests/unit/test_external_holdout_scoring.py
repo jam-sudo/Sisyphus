@@ -10,6 +10,7 @@ from pathlib import Path
 
 import pytest
 
+from sisyphus.validation import holdout_contract as contract
 from sisyphus.validation.holdout_contract import (
     label_content_sha256,
     sha256_file,
@@ -50,6 +51,35 @@ def test_contamination_audit_checks_declared_synonyms_and_relations():
         {"olddrug": {"training::synonym"}},
     )
     assert hits == {"training::related", "training::synonym"}
+
+
+def test_contamination_audit_indexes_drug_name_keys():
+    path = ROOT / "scripts" / "audit_external_holdout_manifest.py"
+    spec = importlib.util.spec_from_file_location("audit_external_holdout_manifest", path)
+    assert spec and spec.loader
+    audit = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(audit)
+    structures, names = {}, {}
+    audit._walk_json(
+        {"drugs": {"Unseen Drug": {"smiles": "CC"}}, "per_drug": {"Old Drug": {}}},
+        "synthetic.json", structures, names,
+    )
+    assert names["unseendrug"] == names["olddrug"] == {"synthetic.json"}
+
+
+def test_audit_report_must_reproduce_from_frozen_checkout(tmp_path, monkeypatch):
+    manifest_path = tmp_path / "manifest.json"
+    manifest_path.write_text("{}")
+    manifest_sha = sha256_file(manifest_path)
+    forged = {"pass": True, "manifest_sha256": manifest_sha, "hard_collision_count": 1}
+    audit_path = tmp_path / "audit.json"
+    audit_path.write_text(json.dumps(forged, indent=2) + "\n")
+    monkeypatch.setattr(
+        contract, "_recompute_audit_report",
+        lambda _: {**forged, "hard_collision_count": 0},
+    )
+    with pytest.raises(ValueError, match="does not reproduce"):
+        contract.verify_audit_report(audit_path, sha256_file(audit_path), manifest_path)
 
 
 def test_score_weights_compounds_not_arms():
@@ -582,7 +612,9 @@ def test_cli_uses_frozen_seed_and_bootstrap_count(tmp_path, monkeypatch):
     manifest_path.write_text(json.dumps(manifest))
     manifest_sha = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
     audit_path = tmp_path / "audit.json"
-    audit_path.write_text(json.dumps({"pass": True, "manifest_sha256": manifest_sha}))
+    synthetic_audit = {"pass": True, "manifest_sha256": manifest_sha}
+    monkeypatch.setattr(contract, "_recompute_audit_report", lambda _: synthetic_audit)
+    audit_path.write_text(json.dumps(synthetic_audit, indent=2) + "\n")
     predictions["audit_report_sha256"] = sha256_file(audit_path)
     predictions["manifest_sha256"] = manifest_sha
     labels["manifest_sha256"] = manifest_sha
@@ -613,7 +645,7 @@ def test_cli_uses_frozen_seed_and_bootstrap_count(tmp_path, monkeypatch):
     sys.argv[sys.argv.index("--audit-report-sha256") + 1] = sha256_file(audit_path)
     with pytest.raises(ValueError, match="did not pass"):
         scorer.main()
-    audit_path.write_text(json.dumps({"pass": True, "manifest_sha256": manifest_sha}))
+    audit_path.write_text(json.dumps(synthetic_audit, indent=2) + "\n")
     sys.argv[sys.argv.index("--audit-report-sha256") + 1] = sha256_file(audit_path)
 
     predictions["audit_report_sha256"] = "0" * 64
