@@ -29,7 +29,15 @@ AI-assisted diagnostic acquisition; **not** two-human V1 validation. No Sisyphus
 | excluded_criteria_not_met | 2 |
 | eligible | 0 |
 
-Two structure-clean parents reached arm-level source review. Both failed: no post-dose food-free interval was stated for any single-agent fasted arm, and the sources did not explicitly state immediate release.
+Two structure-clean parents reached arm-level source review. Both failed because the examined sources did not state a post-dose food-free interval for the single-agent fasted arms. A later source check found one explicitly documented oral-solution arm, but no qualifying meal-timing evidence for it.
+
+## Follow-up source check
+
+A second AI-assisted pass re-examined exactly these two entries against the original [NDA 209195 clinical-pharmacology review](https://www.accessdata.fda.gov/drugsatfda_docs/nda/2017/209195Orig1s000ClinPharmR.pdf), [NDA 206038 clinical-pharmacology review](https://www.accessdata.fda.gov/drugsatfda_docs/nda/2015/206038Orig1s000ClinPharmR.pdf), matching EMA reports, ClinicalTrials.gov records, and the original lumacaftor PK publication. It found **0 additional eligible arms**. The searched public sources did not establish a ≥4 h post-dose food-free interval for either single-agent arm; searches by the cited study identifiers found no matching ClinicalTrials.gov registration. This is an absence of qualifying public evidence, not proof that the studies lacked a post-dose fast.
+
+The pass corrected two details in the raw screening log without changing either exclusion: the voxilaprevir first-in-human study is `GS-US-338-1120` (not `GS-US-338-1118`), and its Part B Cohort 9 Day 8 arm used an explicit **100 mL oral solution** (review p. 69), satisfying the formulation limb. The 4 h post-dose fast on pp. 117–118 belongs to a fixed-dose-combination arm and cannot be transferred to that single-agent solution arm. For lumacaftor, the cited single-agent arm used an aqueous **suspension**, not a solution (review p. 117), and neither it nor the alternative tablet publication states the required post-dose interval.
+
+The follow-up is still single-curator AI evidence, not External Holdout V1. Its full source-location report and empty manifests remain under `/tmp/sisyphus_p2_followup_20260924/`; SHA256: `report.md` `5b2e702c9e25bdb15f31a91a51e7514452f1a074078b2b249cf37dd9e47a4e3e`, `inputs.json` `37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570`, `labels.json` `f98e0e513381cd8ed5bfc02ae018718b88eac424c70246a142a030107812996d`. No prediction was run. Both supervised worker terminals were released after completion.
 
 ## Source-window coverage
 
