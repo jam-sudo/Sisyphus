@@ -1,33 +1,33 @@
 {
   "computed_at": "2026-09-24-audited_reference",
   "source_cache": "data/training/4track_holdout_predictions.json",
-  "source_cache_sha256": "cba369aba52b75b862768a1bf7571ee5076abbeb404fd87eb3ded708863a6795",
-  "context": "Corrected ulipristal acetate covalent ester identity while retaining historical ulipristal split key and prior-structure training exclusion; no change to fitted models.",
+  "source_cache_sha256": "8e7d3559ce6bfdab2397e7690820b1644b9460fd84c891f79f477dbfd1177da2",
+  "context": "Replaced dapagliflozin digitized mean-profile peak with Kasichayanula 2011 Table 1 fasted 10 mg geometric mean individual Cmax 136 ng/mL; no fitted-model or cohort change.",
   "method": "bootstrap on abs(log10(fold))",
   "n_bootstrap": 10000,
   "seed": 20260422,
   "overall": {
     "n": 79,
     "engine": {
-      "aafe": 3.8023,
-      "ci_95_low": 2.9775,
-      "ci_95_high": 4.938,
+      "aafe": 3.8076,
+      "ci_95_low": 2.9801,
+      "ci_95_high": 4.9526,
       "n": 79,
       "pct_2fold": 38.0,
       "pct_3fold": 50.6
     },
     "ml": {
-      "aafe": 3.3043,
-      "ci_95_low": 2.6834,
-      "ci_95_high": 4.1328,
+      "aafe": 3.3089,
+      "ci_95_low": 2.687,
+      "ci_95_high": 4.1362,
       "n": 79,
       "pct_2fold": 43.0,
       "pct_3fold": 58.2
     },
     "meta": {
-      "aafe": 2.894,
-      "ci_95_low": 2.3695,
-      "ci_95_high": 3.6057,
+      "aafe": 2.898,
+      "ci_95_low": 2.3757,
+      "ci_95_high": 3.6106,
       "n": 79,
       "pct_2fold": 46.8,
       "pct_3fold": 65.8
@@ -42,25 +42,25 @@
   "in_domain": {
     "n": 64,
     "engine": {
-      "aafe": 3.87,
-      "ci_95_low": 3.043,
-      "ci_95_high": 5.0131,
+      "aafe": 3.8766,
+      "ci_95_low": 3.0478,
+      "ci_95_high": 5.0219,
       "n": 64,
       "pct_2fold": 34.4,
       "pct_3fold": 46.9
     },
     "ml": {
-      "aafe": 3.1345,
-      "ci_95_low": 2.4785,
-      "ci_95_high": 4.0029,
+      "aafe": 3.1399,
+      "ci_95_low": 2.4836,
+      "ci_95_high": 4.0056,
       "n": 64,
       "pct_2fold": 46.9,
       "pct_3fold": 60.9
     },
     "meta": {
-      "aafe": 3.0056,
-      "ci_95_low": 2.4144,
-      "ci_95_high": 3.806,
+      "aafe": 3.0107,
+      "ci_95_low": 2.4186,
+      "ci_95_high": 3.8116,
       "n": 64,
       "pct_2fold": 43.8,
       "pct_3fold": 64.1

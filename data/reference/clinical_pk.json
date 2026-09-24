@@ -850,14 +850,14 @@
     "dapagliflozin": {
       "name": "dapagliflozin",
       "tier": "silver",
-      "source": "Open Systems Pharmacology Dapagliflozin-Model, Kasichayanula 2011a, single fasted oral 10 mg IR in 14 healthy subjects: 121.809 ng/mL is digitized mean-profile maximum, not mean individual Cmax; local provenance data/reference/osp_observed.json",
+      "source": "Kasichayanula et al., Diabetes Obes Metab 2011;13:770-773, Table 1: 14 healthy adults received a single fasted oral 10 mg dapagliflozin dose; parent-plasma individual Cmax geometric mean 136 ng/mL (CV 22%); doi:10.1111/j.1463-1326.2011.01397.x; https://doi.org/10.1111/j.1463-1326.2011.01397.x",
       "dose_mg": 10.0,
       "route": "oral",
       "pk_params": {
-        "cmax_mg_L": 0.121809
+        "cmax_mg_L": 0.136
       },
       "smiles": "CCOc1ccc(Cc2cc([C@@H]3O[C@H](CO)[C@@H](O)[C@H](O)[C@H]3O)ccc2Cl)cc1",
-      "correction_note": "2026-09-24: identified value as OSP digitized mean-profile peak, not an FDA-label reported individual Cmax mean; removed unmatched generic half-life and synthetic curve. Remains silver development data pending original study-table check."
+      "correction_note": "2026-09-24: replaced the OSP digitized mean-profile maximum of 121.809 ng/mL with the original study's directly tabulated fasted parent Cmax geometric mean of 136 ng/mL. Retain silver because formulation and post-dose meal timing are not established for external-primary eligibility. The historical OSP value is not a mean of individual Cmax."
     },
     "darifenacin": {
       "name": "darifenacin",

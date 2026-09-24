@@ -10,6 +10,21 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Replace dapagliflozin profile peak with original-table Cmax
+
+The original fasted 10 mg, N=14 study Table 1 reports parent-plasma individual
+Cmax geometric mean **136 ng/mL**. The prior **121.809 ng/mL** came from the
+maximum of an OSP-digitized mean concentration profile, a different estimator.
+The upstream approximate 165 ng/mL midpoint and 158 ng/mL steady-state row are
+superseded. See [source adjudication](../validation/development_dapagliflozin_table_followup_2026-09-24.md).
+
+With fitted models and N=79 unchanged, development Meta AAFE moves from
+**2.8940** to **2.8980** (conditional CI **2.3757–3.6106**), Engine **3.8076**,
+direct ML **3.3089**, and in-domain Meta **3.0107** (N=64). This is a reference
+correction, not an independent accuracy result or model change.
+
+---
+
 ## 2026-09-24 (cont.) — Correct ulipristal acetate molecular identity
 
 The FDA ella 30 mg / 176 ng/mL arm administers and measures ulipristal

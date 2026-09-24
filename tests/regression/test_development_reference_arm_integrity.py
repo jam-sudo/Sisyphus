@@ -164,6 +164,11 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert refs["dalfampridine"].cmax_obs == pytest.approx(0.0427)
     assert "thalf_h" not in data["drugs"]["dalfampridine"]["pk_params"]
     assert "bioavailability_pct" not in data["drugs"]["dalfampridine"]["pk_params"]
+    assert refs["dapagliflozin"].dose_mg == 10.0
+    assert refs["dapagliflozin"].cmax_obs == pytest.approx(0.136)
+    assert "Table 1" in data["drugs"]["dapagliflozin"]["source"]
+    assert next(row for row in curated_rows if row["drug_name"] == "dapagliflozin")["cmax_mg_L"] is None
+    assert next(row for row in fda_rows if row["drug_name"] == "dapagliflozin")["status"] != "extracted"
     assert refs["etodolac"].cmax_obs == pytest.approx(14.0)
     assert "bioavailability_pct" not in data["drugs"]["etodolac"]["pk_params"]
     assert refs["ramelteon"].auc_obs == pytest.approx(0.0187)

@@ -76,8 +76,8 @@
     "cmax_unit_original": "ng/mL",
     "cmax_value_original": 158.0,
     "source": "EMA SmPC (Forxiga) section 5.2",
-    "context": "Geometric mean steady-state Cmax following once daily 10mg doses were 158 ng/mL (fasted). Bioavailability 78%.",
-    "status": "extracted"
+    "context": "Superseded for the scored single-dose arm: 158 ng/mL is a steady-state geometric mean after daily 10 mg, not the fasted single-dose Cmax. The matched study Table 1 reports 136 ng/mL (clinical_pk.json:dapagliflozin).",
+    "status": "superseded"
   },
   {
     "drug_name": "donepezil",

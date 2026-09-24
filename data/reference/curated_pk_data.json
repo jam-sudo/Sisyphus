@@ -72,12 +72,12 @@
   {
     "drug_name": "dapagliflozin",
     "dose_mg": 10,
-    "cmax_mg_L": 0.165,
+    "cmax_mg_L": null,
     "cmax_value_original": 165,
     "cmax_unit_original": "ng/mL",
     "source": "Kasichayanula et al., Clin Pharmacokinet 2014; bioequivalence studies",
-    "notes": "10mg single dose fasted healthy volunteers. Cmax ~161-168 ng/mL across BE studies, midpoint 165 used. Oral bioavailability 78%.",
-    "status": "confirmed"
+    "notes": "Superseded: 165 ng/mL was an approximate midpoint across other studies, not an exact observed arm. The scored 10 mg fasted N=14 arm is directly tabulated as geometric mean Cmax 136 ng/mL in Kasichayanula et al. 2011 Table 1 (clinical_pk.json:dapagliflozin).",
+    "status": "superseded"
   },
   {
     "drug_name": "donepezil",
