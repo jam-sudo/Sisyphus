@@ -21,6 +21,20 @@ underprediction on average in this selected cohort. The complete result and
 reproducible scorer are `data/validation/self_run_p0_results.json` and
 `scripts/score_self_run_p0.py`.
 
+A post-hoc fitted-set audit found that VERLUKAST and GARENOXACIN, two of the
+18 scored compounds (8 arms), occur in the current TDC Lombardo VDss fitted
+snapshot (SHA256
+`778851b9dad82c2eb3d948b7ffb3ae829ce5fd529395b7d0599d4c86e02e5e54`).
+The historical VDss artifact at `618106b` used to score P0 describes its source
+as `TDC VDss_Lombardo` but records the fitted-row SHA256 as `unknown_legacy`;
+its exact training membership cannot be reconstructed. This is **possible,
+not proven, training overlap** for P0. Excluding both compounds after unsealing
+gives Meta AAFE 2.90 (95% bootstrap CI 2.20–3.86), direct-ML AAFE 2.61, and
+a paired ratio of 1.11 (0.91–1.37) across 16 compounds and 50 arms. Both
+tracks improve on this selected subset, while the relative conclusion stays
+unchanged. This sensitivity does not replace the original 18-compound result
+or establish an independent cohort.
+
 The pre-unseal protocol also requested a same-source-statistic sensitivity.
 Only compounds whose *every included arm* has the same Cmax statistic enter
 each group; the primary 18-compound result above remains unchanged.

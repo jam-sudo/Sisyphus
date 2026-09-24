@@ -39,5 +39,6 @@ def test_active_fitted_rows_exclude_current_development_compounds() -> None:
                 key = ik14(row[smiles_column])
                 assert key is not None, (fitted, row)
                 assert key not in holdout_keys, (model, row)
-                if row.get("name"):
-                    assert _name_key(row["name"]) not in holdout_names, (model, row)
+                for name in (row.get("name"), row.get("drug_id")):
+                    if name:
+                        assert _name_key(name) not in holdout_names, (model, row)
