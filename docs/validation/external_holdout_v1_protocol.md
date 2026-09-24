@@ -100,6 +100,8 @@ The label-free, blinded-label, and frozen-prediction contracts are pinned in
 `data/reference/external_holdout_v1_predictions.schema.json`. Every executable
 stage validates these schemas. Primary eligibility is recomputed from the label
 metadata at scoring; the manifest boolean is never trusted by itself.
+The manifest candidate name must exactly match the hashed verified shortlist,
+so changing it to an alias cannot bypass name-only prior-use exclusions.
 The dose-basis and post-dose meal requirements were added on 2026-09-23 after
 diagnostic P0 exposed a possible verlukast-sodium ambiguity and fasted-study
 meal-timing ambiguity. No V1 cohort or predictions had been frozen; P0 remains

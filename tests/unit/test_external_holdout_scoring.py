@@ -518,6 +518,10 @@ def test_cli_uses_frozen_seed_and_bootstrap_count(tmp_path, monkeypatch):
     output_path = tmp_path / "score.json"
     manifest_path.write_text(json.dumps(manifest))
     verify_source_plan(manifest_path, manifest, lambda smiles: smiles)
+    manifest["compounds"][0]["name"] = "unseen alias"
+    with pytest.raises(ValueError, match="Manifest name differs"):
+        verify_source_plan(manifest_path, manifest, lambda smiles: smiles)
+    manifest["compounds"][0]["name"] = "compound-0"
     registry = json.loads((ROOT / "data/sbi/prodrug_activation_registry.json").read_text())
     active_smiles = next(
         smiles for smiles, entry in registry.items()

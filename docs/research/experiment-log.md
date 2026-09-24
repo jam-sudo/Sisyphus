@@ -10,6 +10,19 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Bind external-test manifest names to frozen identities
+
+The V1 source-plan contract already bound candidate IDs, structures, and the
+verified inventory names, but it did not require each manifest name to match
+its verified-shortlist name. The contamination audit looked up historical
+name-only exclusions using the manifest name, so an alternate name could
+hide a prior-use hit when the repository lacked that drug's structure.
+`verify_source_plan()` now rejects a manifest/shortlist name mismatch before
+audit, prediction, or scoring. A mutation of the existing synthetic frozen
+cohort verifies the rejection. No external cohort has been acquired or scored.
+
+---
+
 ## 2026-09-24 (cont.) — Remove synthetic reference concentration curves
 
 The clinical reference file contained 166 `ct_curve` arrays. Removed 159

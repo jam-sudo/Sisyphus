@@ -440,5 +440,8 @@ def verify_source_plan(
     ):
         raise ValueError("Manifest contains a compound outside the frozen final-test allocation")
     for compound in manifest["compounds"]:
-        verify_parent_prediction(compound["smiles"], compound["candidate_id"])
+        cid = compound["candidate_id"]
+        if compound["name"] != verified[cid]["name"]:
+            raise ValueError(f"Manifest name differs from verified shortlist: {cid}")
+        verify_parent_prediction(compound["smiles"], cid)
     return plan
