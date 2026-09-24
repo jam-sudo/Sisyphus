@@ -54,7 +54,7 @@ BASE_SEED = 42
 
 DRUGS = {
     "morphine": {
-        "smiles": "CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O",
+        "smiles": "CN1CC[C@]23[C@@H]4[C@H]1CC5=C2C(=C(C=C5)O)O[C@H]3[C@H](C=C4)O",
         "dose_mg": 30.0,
         "cmax_obs": 0.01865,
         "cmax_engine": 0.03736,

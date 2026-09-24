@@ -10,6 +10,48 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-23 (cont.) — Development-reference stereochemistry adjudication
+
+The 107-name [PubChem PUG REST](https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest)
+audit found 24 same-connectivity entries whose
+local SMILES omitted stereochemistry present in the PubChem name record. We
+updated 21 reference SMILES to the corresponding isomeric parent structure;
+the exact full InChIKeys are pinned in
+`tests/regression/test_development_stereochemistry.py`. For darolutamide and
+valganciclovir, the PubChem representation specifies only the center fixed in
+the [Nubeqa FDA label](https://www.accessdata.fda.gov/drugsatfda_docs/label/2019/212099Orig1s000lbl.pdf)
+and [Valcyte FDA label](https://www.accessdata.fda.gov/drugsatfda_docs/label/2001/21304lbl.pdf),
+respectively; the other center remains unspecified as those products contain
+stereoisomer mixtures. We did **not** substitute PubChem's single-isomer record
+for itraconazole or ketoconazole: the
+[Sporanox FDA label](https://www.accessdata.fda.gov/drugsatfda_docs/label/2026/020083s072lbl.pdf)
+describes four itraconazole diastereomers, and the
+[FDA levoketoconazole review](https://www.accessdata.fda.gov/drugsatfda_docs/nda/2022/214133Orig1s000MultidisciplineR.pdf)
+describes ketoconazole as a cis-enantiomer pair. Ranitidine was also retained
+without E/Z assignment because its
+[FDA GSRS substance record](https://precision.fda.gov/ginas/app/ui/substances/c153f07c-d3be-4e27-83f7-027ecac7bf37)
+does not define an E/Z center.
+
+The hepatic-fu registry SMILES for five affected drugs and the UGT2B7/UGT1A9
+registries for morphine, bexagliflozin, and glasdegib now match their full
+reference keys. Non-CYP UGT routing intentionally requires a full InChIKey:
+an unspecified stereoisomer is not silently assigned the drug-specific
+metabolic fraction. The old UGT integration test checked only that the solver
+ran; three of its named seed structures failed to enter their asserted UGT
+paths. It now asserts the registry match before prediction.
+
+The locked Linux rerun completed all 107 predictions with zero skips. Engine,
+direct-ML, and Meta outputs were bit-identical to the preceding committed
+cache for every drug (overall AAFE 3.8339, 3.0356, and 2.7625). This repairs
+chemical identity without improving the model's predictive accuracy; the
+direct-ML Morgan fingerprint does not encode chirality, and the corrected
+curated registry routes retained the same drug-specific parameters. The
+experimental docking caches for some of these drugs still carry prior
+non-isomeric inputs and must be structure-checked or re-docked before use in
+any future docking-based evaluation.
+
+---
+
 ## 2026-09-23 (cont.) — Pravastatin structure correction reverses the May identity claim
 
 A name-to-structure audit of all 107 development drugs against PubChem found

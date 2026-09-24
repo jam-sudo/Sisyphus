@@ -43,7 +43,7 @@ from sisyphus.regimen.types import DosingRegimen
 CASES = [
     # Easy controls — these were covered in the n=2000 baseline; floor must
     # not destroy them.
-    ("morphine",   "CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O", 30.0, 0.01865, "S1_1h",      [1.0]),
+    ("morphine",   "CN1CC[C@]23[C@@H]4[C@H]1CC5=C2C(=C(C=C5)O)O[C@H]3[C@H](C=C4)O", 30.0, 0.01865, "S1_1h",      [1.0]),
     ("amantadine", "C1C2CC3CC1CC(C2)(C3)N",                     100.0, 0.22,    "S1_1h",      [1.0]),
     ("clozapine",  "CN1CCN(CC1)C2=NC3=C(C=CC(=C3)Cl)NC4=CC=CC=C42", 75.0, 0.413, "S1_1h",     [1.0]),
     # Hard cases — failed in baseline.

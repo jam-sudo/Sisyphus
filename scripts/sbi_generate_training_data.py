@@ -30,7 +30,7 @@ from sisyphus.sbi.simulator import EngineSimulator  # noqa: E402
 
 # Default: morphine (well-characterized holdout drug with existing IBIS benchmark)
 DEFAULT_DRUG = "morphine"
-DEFAULT_SMILES = "CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O"
+DEFAULT_SMILES = "CN1CC[C@]23[C@@H]4[C@H]1CC5=C2C(=C(C=C5)O)O[C@H]3[C@H](C=C4)O"
 DEFAULT_DOSE_MG = 30.0
 DEFAULT_ROUTE = "oral"
 

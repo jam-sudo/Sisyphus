@@ -67,6 +67,8 @@
   },
   "applicability": {
     "confidence_calibrated": false,
+    "stereoisomer_discrimination_validated": false,
+    "stereochemistry_note": "The direct-ML track uses Morgan fingerprints without chirality and cannot distinguish same-connectivity stereoisomers; curated full-InChIKey registries may distinguish them, but stereoisomer-specific Cmax accuracy has not been validated.",
     "ad_flags_are": "structural applicability indicators, not validated error probabilities"
   }
 }

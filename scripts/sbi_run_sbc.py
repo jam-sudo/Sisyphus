@@ -29,7 +29,7 @@ from sisyphus.sbi.priors import build_box_prior  # noqa: E402
 from sisyphus.sbi.sbc import run_sbc  # noqa: E402
 from sisyphus.sbi.simulator import EngineSimulator  # noqa: E402
 
-DEFAULT_SMILES = "CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O"  # morphine
+DEFAULT_SMILES = "CN1CC[C@]23[C@@H]4[C@H]1CC5=C2C(=C(C=C5)O)O[C@H]3[C@H](C=C4)O"  # morphine
 DEFAULT_DOSE_MG = 30.0
 DEFAULT_ROUTE = "oral"
 
