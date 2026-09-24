@@ -306,7 +306,7 @@ def score(rows: list[dict], seed: int, n_boot: int, n_target: int) -> dict:
         )
 
     ratio_limit = 0.85 if n_target == 120 else 0.90
-    superiority = bool(ratio <= ratio_limit and ratio_ci[1] < 1.0)
+    superiority = bool(len(meta) == n_target and ratio <= ratio_limit and ratio_ci[1] < 1.0)
     release_gate = bool(
         superiority
         and 0.8 <= bias <= 1.25

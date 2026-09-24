@@ -86,6 +86,24 @@ def test_score_weights_compounds_not_arms():
     assert result["meta_aafe"] == pytest.approx(2.0)
     assert result["ml_aafe"] == pytest.approx(2.0 * 2**0.5)
     assert result["meta_ml_aafe_ratio"] == pytest.approx(2**-0.5)
+    assert result["meta_superiority_gate"] is False  # 2 compounds cannot pass an N=260 gate
+
+
+def test_score_cannot_claim_superiority_below_frozen_sample_size():
+    scorer = _module()
+    rows = [{
+        "candidate_id": "a",
+        "primary_eligible": True,
+        "observed_cmax_mg_l": 1.0,
+        "cmax_statistic": "arithmetic_mean",
+        "meta_cmax_mg_l": 1.0,
+        "ml_cmax_mg_l": 2.0,
+    }]
+    result = scorer.score(rows, seed=7, n_boot=10, n_target=120)
+    assert result["meta_ml_aafe_ratio"] == pytest.approx(0.5)
+    assert result["paired_ratio_95_ci"][1] < 1.0
+    assert result["meta_superiority_gate"] is False
+    assert result["production_release_gate"] is False
 
 
 def test_statistic_sensitivity_omits_mixed_compounds_and_counts_small_groups():
