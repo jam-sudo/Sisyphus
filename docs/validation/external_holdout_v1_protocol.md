@@ -178,6 +178,30 @@ not a shortcut to an eligible cohort. The 2026 open [PK-DataBase](https://github
 contains human PK descriptors but no Cmax field in its principal tables, so
 it cannot supply outcome labels for this protocol.
 
+The separate [PK-DB](https://pk-db.com/api/v1/swagger/) REST service was screened
+without reading outcome values on 2026-09-23. Its statistics endpoint reported
+819 studies and 138,411 outputs (snapshot SHA256
+`f84432ad22afac3c9eab398224bc42344384fa05b4d4970507b50740d925483e`),
+while the public studies endpoint returned 803 records, only 88 marked with an
+`open` licence (studies snapshot SHA256
+`f1a308a686d1acd39a73bcc3f47dada70b4bfa45a221b5eec3a9a4d867c5b979`).
+The substance-statistics endpoint returned 800 names; 136 had both a nonzero
+intervention count and a nonzero output count. Only 37 of those 136 avoided an
+exact normalized-name hit in the repository exclusion union produced by
+`scripts/audit_external_holdout_manifest.py` (substance snapshot SHA256
+`abb6310c681a5574d9bb80a72168aefa2d96eb36c817b5d291da731421337842`).
+Normalization lowercased names and removed non-alphanumeric characters. These
+37 are an optimistic **discovery count**, not verified novel compounds: aliases,
+metabolites, isotopic tracers, nonoral routes, and structure-level collisions
+remain unresolved, and aggregate substance counts do not establish a matching
+Cmax arm. Moreover, `GET /outputs/?page_size=1` and
+`GET /pkdata/timecourses/?page_size=1` both returned HTTP 200 with zero rows on
+that date, despite the nonzero statistics; see the related
+[PK-DB API issue](https://github.com/matthiaskoenig/pkdb/issues/758).
+Original-source licensing and Cmax values would need separate verification.
+PK-DB therefore cannot currently supply the primary N=120 or N=260 cohort by
+itself.
+
 The repository's DrugBank `pk_data.csv` is narrative PK text, not the separately
 licensed structured Cmax table. A value-blind screen of its absorption records
 (`pk_data.csv` SHA256 `8a0c7d11da7bd1e91cddc4fb2bb6291f584b5481f0d3949ff22949f71ade9d5f`;
