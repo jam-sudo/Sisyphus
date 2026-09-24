@@ -24,7 +24,7 @@ $ sisyphus predict --smiles "Cn1c(=O)c2c(ncn2C)n(C)c1=O" --dose 100
 Drug: Cn1c(=O)c2c(ncn2C)n(C)c1=O
 Method: hybrid
 Execution: ok (public profile)
-Applicability: structurally in scope (confidence is not calibrated)
+Applicability: no rule-based warning flags (confidence is not calibrated)
 Final oral Cmax: <value> mg/L
 Development empirical residual 90% interval: <low>–<high> mg/L
 ```
@@ -235,7 +235,7 @@ print(result.cmax_prediction.cmax.mean)       # authoritative Meta Cmax
 print(result.cmax_prediction.interval_90)     # residual/conformal interval
 print(result.engine_simulation.endpoints)     # coherent engine-only endpoints
 print(result.execution_status)                # "ok" / explicit fallback status
-print(result.in_applicability_domain)         # structural flag, not confidence
+print(result.in_applicability_domain)         # rule-based flags, not calibrated accuracy
 ```
 
 ### Engine-only mode (known compound parameters)

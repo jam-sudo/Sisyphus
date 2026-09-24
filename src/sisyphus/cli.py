@@ -193,7 +193,7 @@ def _run_predict(args: argparse.Namespace) -> None:
     print(f"Execution: {result.execution_status} ({result.resource_profile} profile)")
     print(
         "Applicability: "
-        + ("structurally in scope" if result.in_applicability_domain else "flagged")
+        + ("no rule-based warning flags" if result.in_applicability_domain else "flagged")
         + " (confidence is not calibrated)"
     )
     print(f"Final oral Cmax: {result.pk.cmax.mean:.4f} mg/L")

@@ -61,6 +61,17 @@ novelty may contribute to development-set error, but this cutoff does not
 explain the P1 failures and is not a justified new applicability gate. It was
 examined after seeing P1 labels and provides no fresh validation evidence.
 
+As a separate internal check, a five-fold Murcko-scaffold split of the pinned
+1,028-row public direct-Cmax training table (707 scaffold groups, seed 42,
+shuffled groups assigned round-robin) gave out-of-fold AAFE **3.34** with the
+shipped XGBoost settings. Grouping by the *observed* dose-normalized Cmax,
+the highest tenth was underpredicted by a geometric mean **4.61-fold**, while
+the lowest tenth was overpredicted **13.82-fold**. These retrospective,
+outcome-defined strata cannot identify high- or low-exposure drugs at inference
+time. They do show strong regression toward the training-set center, consistent
+with some P1 errors, and argue against treating rule-based applicability flags
+as a calibrated accuracy signal.
+
 The two largest underpredictions also have source-reported exposure data.
 [Usnoflast Table 1](https://doi.org/10.1002/cpdd.1162) gives 100 mg
 AUC0–t **92.3 mg·h/L** and median Tmax **1 h**; the frozen engine predicts
