@@ -1,6 +1,4 @@
-"""Regression: 107-holdout Meta AAFE must not drift after physiology
-infrastructure changes. Enforces spec Gate A (mean-path equivalence).
-"""
+"""Guard the current scored development benchmark against accidental numeric drift."""
 from __future__ import annotations
 
 import json
@@ -28,100 +26,8 @@ def _aafe(preds: list[dict]) -> float:
     not HOLDOUT_JSON.exists(),
     reason=f"{HOLDOUT_JSON.name} not present — regeneration required",
 )
-def test_cached_holdout_aafe_is_2p698() -> None:
-    """Cached predictions file: Meta AAFE is the current development headline 2.698 (±0.020).
-
-    Correcting the morphine reference to a fasted oral IR source moved the
-    cache from 2.734 to 2.716 on 2026-09-24. Correcting the digoxin
-    reference later that day moved it to 2.698.
-
-    Excluding a newly identified pravastatin CLint training collision moved
-    the locked Linux cache from 2.762 to 2.734 on 2026-09-23.
-
-    2026-09-23 public-only Lombardo VDss retrain moved the locked Linux cache
-    from 2.687 to 2.761; correcting pravastatin's parent structure moved it to
-    2.762. The preceding hepatocyte CLint retrain moved it from
-    2.661 to 2.687, after Omega Cmax moved it from 2.660 to 2.661.
-    This is development data.
-
-    2026-09-23 public-only TDC fup retrain removed unpinned DrugBank target
-    exposure; the locked Linux cache moved from 2.743 to 2.676. This remains
-    repeatedly used development data, not external validation.
-
-    2026-07-03 UGT single-path fm fix: build_drug_on_graph double-allocated UGT tags
-    (present in both ugt_enzymes and non_cyp_fractions), ~8x-suppressing CYP for the 8
-    B-02 UGT substrates (0.85/0.15 → 0.983/0.017). Routing each tag through one fm
-    mechanism moved the headline 2.735 → **2.743** (Δ +0.00748, within the bootstrap CI;
-    sign is stack-dependent — a local macOS re-run moved it −0.001). Predict-layer,
-    deterministic, no model retraining.
-
-    2026-07-02 CLF leak-free canonical regen: the CL/F-track training builder gained a
-    structural InChIKey-14 holdout key (PR #90) removing 5 name-evading stereo/salt
-    holdout collisions; a leak-free CLF/VDF retrain moved the headline 2.731 → **2.735**
-    (Δ +0.00427, within the bootstrap CI — the sign is stack-dependent, i.e. the leak
-    effect is at the retrain-noise floor). A baseline same-stack retrain reproduced the
-    committed 2.731 to ±0.00004, so the Δ is cleanly attributable to the leak fix.
-
-    2026-06-10 batch regen (canonical CI stack): the stale FLUX-1 cache (2.784, which
-    predated the oxybutynin merge) was regenerated on origin/main (oxybutynin holdout-
-    reference fix, already merged via PR #68) + paracellular absorption — headline
-    2.784 → **2.731**. Same-stack attribution: oxybutynin −0.026 (label correction,
-    was un-repinned) + paracellular −0.031 (engine −5%); both within the bootstrap CI
-    (half-width ~0.42). in_domain.n is 81. Prior lineage: FLUX-1 (2026-06-04) took the
-    cache 2.698 → 2.784 (correct physics; the wrong formula was load-bearing as
-    calibration — see experiment-log 2026-06-04).
-
-
-    Baseline updated 2026-05-27 (B-02 Phase 2 UGT public registry activation;
-    spec docs/_internal/specs/2026-05-26-B02-ugt-public-registry-design.md).
-
-    B-02 activates UGT2B7 + UGT1A9 paths via 2 literature-curated substrate
-    registries (8 seed drugs: morphine, codeine, ketorolac, indomethacin via
-    UGT2B7; dapagliflozin, etodolac, bexagliflozin, glasdegib via UGT1A9).
-    YAML adds UGT2B7 (2.43e6 pmol) + UGT1A9 (8.10e5 pmol) abundances to liver.
-    No DrugBank dependency.
-
-    Gate-D 99-of-107 bit-identical verified (only the 8 seeds shift; all 99
-    non-seed drugs match the pre-B-02 same-numerics-stack cache to <1e-8).
-    Gate-A Meta Δ = +0.0067 (b02=2.6983 vs main-same-numerics=2.6916), which
-    is 1.6% of the bootstrap CI half-width [2.3151, 3.1690] — well within
-    sampling noise. See data/validation/4track_ci_2026-05-27_B02.json.
-
-    Secondary finding (DE-38, dead-ends.md): morphine engine FE 1.90 -> 2.94
-    and codeine 1.98 -> 2.71 (worsened) because UGT2B7 effective CL is lower
-    than the CYP-default allocation it replaced. 6 of 8 seeds improved
-    (under-predicted drugs moved toward observation); 2 of 8 worsened
-    (over-predicted drugs moved away). Net Meta increase reflects the
-    mass-balance of these per-drug movements. Phase 2.x follow-up = B-13
-    (UGT2B7 abundance + IVIVE recalibration).
-
-    B-13 (corrected, 2026-05-29; spec 2026-05-27-B13-gut-ugt-expansion-design):
-    adds gut-wall UGT2B7 = 3.6e3 pmol (Al-Majdoub 2021 CPT 109:1136 / Couto 2020
-    DMD 48:245, median 0.60 pmol/mg total-mucosal x 6000) and DROPS gut UGT1A9
-    (not expressed in human small intestine — Oda 2012 isoform-specific antibody).
-    The spec's original fallback citations (Bhatt 2019 DMD 47:498; Akabane 2012
-    DMD 40:1310) were CONFABULATED and removed; see DE-39. Gate-D: 103/107
-    bit-identical, only the 4 UGT2B7 gut-paired seeds shift (all DOWN, <0.12%);
-    Meta 2.69828 -> 2.69825 (delta -2.7e-05). Gut UGT2B7 is ~0.15% of hepatic
-    (2.43e6), so this does NOT fix morphine's over-prediction (DE-38) — that
-    needs a hepatic UGT2B7 IVIVE differential (deferred). B-13 ships as an
-    enzyme-level gut-wall correctness term, not a morphine fix.
-
-    Cache regenerated under same numerics stack as preceding versions:
-      Meta AAFE  2.698  (overall N=107, %2-fold 46.7, %3-fold 61.7)
-      Engine     3.831
-      ML         3.010  (bit-identical — ML model artifacts unchanged)
-      In-domain  2.760  (N=79; 2 drugs flipped AD-flag under engine recompute)
-
-    Tolerance widened to 0.020 (4x the prior 0.005 heuristic) to reflect the
-    amended Gate-A criterion: bootstrap CI half-width is the statistical
-    noise floor (~0.43 for Meta overall), of which 0.020 is ~5%. The prior
-    0.005 was an artifact of the B-03.x cycle's coincidentally tiny delta.
-    See spec amendment 2026-05-27.
-
-    If this fails outside ±0.020 of 2.698, the cache has been regenerated
-    with a behavior change or the numerics stack drifted materially.
-    Investigate."""
+def test_cached_development_aafe_is_2p783() -> None:
+    """Source-audited N=101 cache baseline; see the reference audit for lineage."""
     with HOLDOUT_JSON.open() as f:
         data = json.load(f)
     # Primary path: use pre-computed AAFE stored in the file
@@ -133,4 +39,5 @@ def test_cached_holdout_aafe_is_2p698() -> None:
         if isinstance(data, dict) and "drugs" in data:
             preds = data["drugs"]
         aafe = _aafe(preds)
-    assert abs(aafe - 2.698) < 0.020, f"AAFE drifted: {aafe:.4f}"
+    assert data["n_holdout"] == 101
+    assert abs(aafe - 2.783) < 0.020, f"AAFE drifted: {aafe:.4f}"

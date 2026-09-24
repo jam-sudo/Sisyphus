@@ -70,15 +70,16 @@ def load_holdout_inchikeys() -> set[str]:
     The name/flag filters miss holdout compounds whose training-row name differs
     by spelling, salt form, or stereo descriptor (e.g. valaciclovir vs
     valacyclovir, darunavir vs darunavir ethanolate). InChIKey-14 matches on the
-    connectivity block, closing that gap. SMILES come from clinical_pk.json via
-    the reference loader.
+    connectivity block, closing that gap. Use the full assigned holdout split:
+    the scored reference loader drops drugs whose Cmax has been quarantined.
     """
-    from sisyphus.validation.reference import load_reference
-
+    with (ROOT / "data" / "reference" / "clinical_pk.json").open() as f:
+        drugs = json.load(f)["drugs"]
     keys: set[str] = set()
-    for r in load_reference():
-        if r.in_holdout and r.smiles:
-            k = _inchikey14(r.smiles)
+    for name in load_holdout_drugs():
+        smiles = drugs.get(name, {}).get("smiles")
+        if smiles:
+            k = _inchikey14(smiles)
             if k:
                 keys.add(k)
     logger.info("Holdout InChIKey-14 keys loaded: %d", len(keys))

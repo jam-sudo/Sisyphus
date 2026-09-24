@@ -177,7 +177,7 @@ export function App() {
       return;
     }
     setTab(0);
-    setToast(wf === "benchmark" ? "showing development benchmark · N=105" : "showing frozen prediction · " + (activeDrug?.name ?? ""));
+    setToast(wf === "benchmark" ? `showing development benchmark · N=${data?.benchmark.n_development ?? "?"}` : "showing frozen prediction · " + (activeDrug?.name ?? ""));
     setTimeout(() => setToast(null), 1900);
   }
 
