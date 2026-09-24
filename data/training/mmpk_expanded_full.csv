@@ -3759,8 +3759,6 @@ varenicline,c1cnc2cc3c(cc2n1)C1CNCC3C1,1.0,0.0055342569510278,-2.256940680789049
 varenicline,c1cnc2cc3c(cc2n1)C1CNCC3C1,2.0,0.0098899999999999,-2.305833704066802,1,3.0,19.3,222.0,,tablet,False,False
 varenicline,c1cnc2cc3c(cc2n1)C1CNCC3C1,3.0,0.0107999999999999,-2.4436974992327127,1,3.13,20.5,223.0,,solution,False,False
 adefovir dipivoxil,CC(C)(C)C(=O)OCOP(=O)(COCCn1cnc2c(N)ncnc21)OCOC(=O)C(C)(C)C,10.0,0.0233,-2.632644078973981,1,,,,59.0,tablet,False,True
-alosetron,Cc1[nH]cnc1CN1CCc2c(c3ccccc3n2C)C1=O,4.0,0.005,-2.9030899869919438,1,,1.5,,50.0,tablet,False,True
-azacitidine,Nc1ncn(C2OC(CO)C(O)C2O)c(=O)n1,300.0,0.145,-3.3157532524846878,1,,0.5,,11.0,tablet,False,True
 azithromycin,CCC1OC(=O)C(C)C(OC2CC(C)(OC)C(O)C(C)O2)C(C)C(OC2OC(C)CC(N(C)C)C2O)C(C)(O)CC(C)CN(C)C(C)C(O)C1(C)O,500.0,0.5,-3.0,1,,68.0,,,tablet,False,True
 carglumic acid,NC(=O)NC(CCC(=O)O)C(=O)O,100.0,8.613,-1.0648455527838316,1,,31.0,,10.0,tablet,False,False
 cefixime,C=CC1=C(C(=O)O)N2C(=O)C(NC(=O)C(=NOCC(=O)O)c3csc(N)n3)C2SC1,200.0,3.7,-1.732828271596986,1,,11.5,,,tablet,False,False
@@ -3793,7 +3791,6 @@ serdexmethylphenidate,COC(=O)C(c1ccccc1)C1CCCCN1C(=O)OC[n+]1cccc(C(=O)NC(CO)C(=O
 sirolimus,COC1CC2CCC(C)C(O)(O2)C(=O)C(=O)N2CCCCC2C(=O)OC(C(C)CC2CCC(O)C(OC)C2)CC(=O)C(C)C=C(C)C(O)C(OC)C(=O)C(C)CC(C)C=CC=CC=C1C,20.0,0.0144,-3.1426675035687315,1,,,,27.0,tablet,False,True
 sodium oxybate,O=C([O-])CCCO.[Na+],25.0,66.0,0.42160392686983106,1,,0.5,,,tablet,False,False
 sonidegib,Cc1c(C(=O)Nc2ccc(N3CC(C)OC(C)C3)nc2)cccc1-c1ccc(OC(F)(F)F)cc1,200.0,1.03,-2.2881927709588092,1,,672.0,,,tablet,False,True
-tamoxifen,CCC(=C(c1ccccc1)c1ccc(OCCN(C)C)cc1)c1ccccc1,20.0,0.04,-2.6989700043360187,1,,120.0,,,tablet,False,True
 temozolomide,Cn1nnc2c(C(N)=O)ncn2c1=O,150.0,7.5,-1.3010299956639813,1,,1.8,,,tablet,False,True
 tenofovir disoproxil,CC(C)OC(=O)OCOP(=O)(COC(C)Cn1cnc2c(N)ncnc21)OCOC(=O)OC(C)C,300.0,0.38,-2.8973376581028525,1,,17.0,,,tablet,False,True
 tranexamic acid,NCC1CCC(C(=O)O)CC1,650.0,13.83,-1.6720911765335449,1,,2.0,,,tablet,False,False

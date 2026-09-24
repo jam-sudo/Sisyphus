@@ -66,3 +66,14 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert refs["febuxostat"].cmax_obs == pytest.approx(1.82)
     assert refs["febuxostat"].auc_obs == pytest.approx(4.61)
     assert "ct_curve" not in data["drugs"]["febuxostat"]
+    assert refs["clomipramine"].dose_mg == pytest.approx(50 * 314.852 / 351.31, rel=1e-6)
+    for name, dose, cmax in (
+        ("alosetron", 1, 0.005),
+        ("azacitidine", 300, 0.145),
+        ("tamoxifen", 20, 0.04),
+    ):
+        assert refs[name].dose_mg == dose
+        assert refs[name].cmax_obs == cmax
+    for name in ("alosetron", "azacitidine", "clomipramine", "tamoxifen"):
+        assert "ct_curve" not in data["drugs"][name]
+        assert "thalf_h" not in data["drugs"][name]["pk_params"]

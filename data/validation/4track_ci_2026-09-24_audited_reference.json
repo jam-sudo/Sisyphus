@@ -1,33 +1,33 @@
 {
   "computed_at": "2026-09-24-audited_reference",
   "source_cache": "data/training/4track_holdout_predictions.json",
-  "source_cache_sha256": "6dec357f6aa2664e603d5ea59d36ddd23f03d6ab11074d7ca2a212435dac48a5",
-  "context": "Public-profile deterministic state; cetirizine and febuxostat single-dose source corrections; repeatedly accessed development cohort, not independent external validation",
+  "source_cache_sha256": "a34e49267a4ab169b54be1141c4e05a78b15a7b60e871051663f7edd1b74f19d",
+  "context": "Public-profile deterministic state; source and salt-dose corrections through clomipramine; repeatedly accessed development cohort, not independent external validation",
   "method": "bootstrap on abs(log10(fold))",
   "n_bootstrap": 10000,
   "seed": 20260422,
   "overall": {
     "n": 86,
     "engine": {
-      "aafe": 3.8974,
-      "ci_95_low": 3.1002,
-      "ci_95_high": 4.9876,
+      "aafe": 3.9023,
+      "ci_95_low": 3.1068,
+      "ci_95_high": 4.995,
       "n": 86,
       "pct_2fold": 34.9,
       "pct_3fold": 48.8
     },
     "ml": {
-      "aafe": 3.296,
-      "ci_95_low": 2.6843,
-      "ci_95_high": 4.0618,
+      "aafe": 3.3002,
+      "ci_95_low": 2.6891,
+      "ci_95_high": 4.0703,
       "n": 86,
       "pct_2fold": 40.7,
       "pct_3fold": 58.1
     },
     "meta": {
-      "aafe": 2.8815,
-      "ci_95_low": 2.3723,
-      "ci_95_high": 3.5325,
+      "aafe": 2.8852,
+      "ci_95_low": 2.3761,
+      "ci_95_high": 3.5348,
       "n": 86,
       "pct_2fold": 48.8,
       "pct_3fold": 65.1
@@ -42,25 +42,25 @@
   "in_domain": {
     "n": 70,
     "engine": {
-      "aafe": 3.7019,
-      "ci_95_low": 2.9637,
-      "ci_95_high": 4.6713,
+      "aafe": 3.7077,
+      "ci_95_low": 2.971,
+      "ci_95_high": 4.6807,
       "n": 70,
       "pct_2fold": 34.3,
       "pct_3fold": 48.6
     },
     "ml": {
-      "aafe": 3.0853,
-      "ci_95_low": 2.4919,
-      "ci_95_high": 3.8735,
+      "aafe": 3.0901,
+      "ci_95_low": 2.4944,
+      "ci_95_high": 3.8841,
       "n": 70,
       "pct_2fold": 45.7,
       "pct_3fold": 60.0
     },
     "meta": {
-      "aafe": 2.866,
-      "ci_95_low": 2.3346,
-      "ci_95_high": 3.5894,
+      "aafe": 2.8705,
+      "ci_95_low": 2.3384,
+      "ci_95_high": 3.5953,
       "n": 70,
       "pct_2fold": 48.6,
       "pct_3fold": 64.3

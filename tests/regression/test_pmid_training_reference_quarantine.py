@@ -174,3 +174,14 @@ def test_spurious_sertraline_training_duplicate_removed():
                 and row["cmax_mg_L"] == "0.311"
                 for row in csv.DictReader(handle)
             )
+        with (ROOT / "data/training" / name).open(newline="") as handle:
+            assert not any(
+                (row["name"], row["dose_mg"], row["cmax_mg_L"])
+                in {
+                    ("alosetron", "4.0", "0.005"),
+                    ("azacitidine", "300.0", "0.145"),
+                    ("tamoxifen", "20.0", "0.04"),
+                }
+                and (row["name"] == "alosetron" or "@" not in row["canon_smiles"] and "/" not in row["canon_smiles"])
+                for row in csv.DictReader(handle)
+            )
