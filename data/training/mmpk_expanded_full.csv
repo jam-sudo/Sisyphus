@@ -3765,7 +3765,6 @@ azithromycin,CCC1OC(=O)C(C)C(OC2CC(C)(OC)C(O)C(C)O2)C(C)C(OC2OC(C)CC(N(C)C)C2O)C
 carglumic acid,NC(=O)NC(CCC(=O)O)C(=O)O,100.0,8.613,-1.0648455527838316,1,,31.0,,10.0,tablet,False,False
 cefixime,C=CC1=C(C(=O)O)N2C(=O)C(NC(=O)C(=NOCC(=O)O)c3csc(N)n3)C2SC1,200.0,3.7,-1.732828271596986,1,,11.5,,,tablet,False,False
 cefpodoxime proxetil,COCC1=C(C(=O)OC(C)OC(=O)OC(C)C)N2C(=O)C(NC(=O)C(=NOC)c3csc(N)n3)C2SC1,100.0,3.1,-1.5086383061657274,1,,3.5,,,tablet,False,False
-cetirizine,O=C(O)COCCN1CCN(C(c2ccccc2)c2ccc(Cl)cc2)CC1,5.0,0.311,-1.2062096153091812,1,,,,,tablet,False,True
 ciprofloxacin,O=C(O)c1cn(C2CC2)c2cc(N3CCNCC3)c(F)cc2c1=O,50.0,2.97,-1.2262135550188065,1,,4.0,,70.0,tablet,False,True
 ciprofolxacin,O=C(O)c1cn(C2CC2)c2cc(N3CCC(NN4CCNCC4)C3)c(F)cc2c1=O,50.0,2.97,-1.2262135550188065,1,,4.0,,70.0,tablet,False,False
 clarithromycin,CCC1OC(=O)C(C)C(OC2CC(C)(OC)C(O)C(C)O2)C(C)C(OC2OC(C)CC(N(C)C)C2O)C(C)(OC)CC(C)C(=O)C(C)C(O)C1(C)O,500.0,0.8,-2.7958800173440754,1,,3.0,,,tablet,False,False

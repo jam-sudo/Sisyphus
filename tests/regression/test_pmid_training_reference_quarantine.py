@@ -167,3 +167,10 @@ def test_spurious_sertraline_training_duplicate_removed():
                 and row["cmax_mg_L"] == "0.0449"
                 for row in csv.DictReader(handle)
             )
+        with (ROOT / "data/training" / name).open(newline="") as handle:
+            assert not any(
+                row["name"] == "cetirizine"
+                and row["dose_mg"] == "5.0"
+                and row["cmax_mg_L"] == "0.311"
+                for row in csv.DictReader(handle)
+            )

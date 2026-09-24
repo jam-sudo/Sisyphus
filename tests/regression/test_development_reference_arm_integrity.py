@@ -3,6 +3,8 @@
 import json
 from pathlib import Path
 
+import pytest
+
 from sisyphus.validation.reference import load_reference
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -57,3 +59,10 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert refs["dasatinib"].dose_mg == 100.0
     assert refs["dasatinib"].cmax_obs == 0.2246
     assert refs["dasatinib"].auc_obs is None
+    assert refs["cetirizine"].dose_mg == pytest.approx(10 * 388.89 / 461.82, rel=1e-6)
+    assert refs["cetirizine"].cmax_obs == pytest.approx(0.266)
+    assert refs["cetirizine"].auc_obs == pytest.approx(2.526)
+    assert refs["febuxostat"].dose_mg == 40.0
+    assert refs["febuxostat"].cmax_obs == pytest.approx(1.82)
+    assert refs["febuxostat"].auc_obs == pytest.approx(4.61)
+    assert "ct_curve" not in data["drugs"]["febuxostat"]

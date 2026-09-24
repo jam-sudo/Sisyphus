@@ -7,8 +7,8 @@
   "n_training_reference": 36,
   "skipped_training_reference": [],
   "generated_from": "scripts/calibrate_conformal.py",
-  "source_cache_sha256": "fcf55297345e5df009e7647191c9de03ffbe705cbaf70d9762f7efb13abdd843",
-  "calibration_reference_sha256": "1dc0749c8e9aaf2fb105d8453d0e7744fe4a1a910e2c18725eaf68ccdea8cbb4",
+  "source_cache_sha256": "6dec357f6aa2664e603d5ea59d36ddd23f03d6ab11074d7ca2a212435dac48a5",
+  "calibration_reference_sha256": "cbb46985d14551770734a3a55ed9ace6ddf705de6005bad208add84937a60f8e",
   "holdout_membership_sha256": "8c5d1b0c42247749767ac3a7da3bd61573e0f9bf45f503347a70f87b6b3ad02a",
   "model_artifact_sha256": {
     "models/direct_pk/xgboost_cmax.json": "14391eb0881cb3ec83ab2f81592c5fe75da7c949290ec438fddc2d7136f792a0",
@@ -42,7 +42,7 @@
   },
   "consumed_development_benchmark_coverage": {
     "meta": {
-      "0.5": 0.5581,
+      "0.5": 0.5465,
       "0.2": 0.7326,
       "0.1": 0.9186,
       "0.05": 0.9767
