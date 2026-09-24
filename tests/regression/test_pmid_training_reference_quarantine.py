@@ -86,6 +86,10 @@ def test_audited_training_reference_arms():
         ("abacavir", 600, 4.26),
         ("pantoprazole", 40, 2.5),
         ("propranolol", 80, 0.0495),
+        ("lofexidine", 0.36, 0.00082),
+        ("indapamide", 5, 0.04779),
+        ("fluoxetine", 20, 0.0132),
+        ("ezetimibe", 10, 0.00348),
     ):
         row = data["drugs"][name]
         assert row["pk_params"]["cmax_mg_L"] == pytest.approx(cmax)
@@ -101,6 +105,10 @@ def test_audited_training_reference_arms():
     assert data["drugs"]["pantoprazole"]["pk_params"]["thalf_h"] == pytest.approx(1)
     assert "bioavailability_pct" not in data["drugs"]["propranolol"]["pk_params"]
     assert data["drugs"]["glycopyrrolate"]["pk_params"]["auc_mg_h_L"] == pytest.approx(0.00181)
+    assert data["drugs"]["lofexidine"]["pk_params"]["bioavailability_pct"] == pytest.approx(72)
+    assert data["drugs"]["indapamide"]["pk_params"]["auc_mg_h_L"] == pytest.approx(0.91952)
+    assert data["drugs"]["ezetimibe"]["pk_params"]["auc_mg_h_L"] == pytest.approx(0.06862)
+    assert "@" in data["drugs"]["ezetimibe"]["smiles"]
     assert "auc_mg_h_L" not in data["drugs"]["fluconazole"]["pk_params"]
 
 
@@ -118,5 +126,12 @@ def test_spurious_sertraline_training_duplicate_removed():
                 row["name"] == "abacavir"
                 and row["dose_mg"] == "600.0"
                 and row["cmax_mg_L"] == "3.67"
+                for row in csv.DictReader(handle)
+            )
+        with (ROOT / "data/training" / name).open(newline="") as handle:
+            assert not any(
+                row["name"] == "ezetimibe"
+                and row["dose_mg"] == "10.0"
+                and row["cmax_mg_L"] == "0.0034"
                 for row in csv.DictReader(handle)
             )

@@ -3778,7 +3778,6 @@ dasatinib,Cc1nc(Nc2ncc(C(=O)Nc3c(C)cccc3Cl)s2)cc(N2CCN(CCO)CC2)n1,100.0,0.0822,-
 efavirenz,O=C1Nc2ccc(Cl)cc2C(C#CC2CC2)(C(F)(F)F)O1,300.0,6.57,-1.6595558851598817,1,,52.0,,93.0,tablet,False,False
 entacapone,CCN(CC)C(=O)C(C#N)=Cc1cc(O)c(O)c([N+](=O)[O-])c1,200.0,1.2,-2.2218487496163566,1,,0.4,,35.0,tablet,False,False
 entecavir,C=C1C(CO)C(O)CC1n1cnc2c(=O)[nH]c(N)nc21,1.0,0.0042,-2.3767507096020997,1,,128.0,,100.0,tablet,False,False
-ezetimibe,O=C1C(CCC(O)c2ccc(F)cc2)C(c2ccc(O)cc2)N1c1ccc(F)cc1,10.0,0.0034,-3.468521082957745,1,,22.0,,,tablet,False,False
 fesoterodine,CC(C)C(=O)Oc1ccc(CO)cc1C(CCN(C(C)C)C(C)C)c1ccccc1,8.0,0.00189,-3.6266281828186995,1,,4.0,,52.0,tablet,False,False
 flutamide,CC(C)C(=O)Nc1ccc([N+](=O)[O-])c(C(F)(F)F)c1,200.0,0.0252,-3.899629454882437,1,,6.0,,,tablet,False,False
 glasdegib,CN1CCC(NC(=O)Nc2ccc(C#N)cc2)CC1c1nc2ccccc2[nH]1,150.0,1.252,-2.0784869301812705,1,,17.4,,77.0,tablet,False,True
