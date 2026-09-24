@@ -86,6 +86,9 @@ def main() -> None:
         notes.append(notice)
 
     _write(MODEL_CARD, model_card)
+    model_card_sha = sha256(MODEL_CARD.read_bytes()).hexdigest()
+    for drug in console["drugs"]:
+        drug["artifactProvenance"]["data/model_card.json"] = model_card_sha
     _write(WEB_BENCHMARK, benchmark, pretty=False)
     _write(WEB_CONSOLE, console, pretty=False)
     print("Synchronized model card and web metrics from", CACHE.relative_to(ROOT))

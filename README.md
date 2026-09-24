@@ -8,7 +8,7 @@
 
 **Preprint:** [Yoon, J. M. (2026). *Sisyphus: A Topology-Compiled Physiologically Based Pharmacokinetic Platform with Structure-Only Input and Bayesian Parameter Refinement.* ChemRxiv.](https://doi.org/10.26434/chemrxiv.15004452/v1) &mdash; DOI [10.26434/chemrxiv.15004452/v1](https://doi.org/10.26434/chemrxiv.15004452/v1)
 
-The published v1 preprint and archived `Sisyphus_Preprint.pdf` report an older AAFE of 2.698. The current code and development benchmark report 2.762; use the validation section below for current evidence.
+The published v1 preprint and archived `Sisyphus_Preprint.pdf` report an older AAFE of 2.698. The current code and development benchmark report 2.734; use the validation section below for current evidence.
 
 ---
 
@@ -16,7 +16,7 @@ Sisyphus is an oral structure-only C<sub>max</sub> prediction system with a sepa
 
 The production output is C<sub>max</sub> for a canonical parent SMILES and positive oral dose. Engine-derived T<sub>max</sub>, AUC, half-life, multi-dose simulation, TDM, MIPD, DDI, PGx, and PK/PD are experimental research outputs and are not covered by the C<sub>max</sub> accuracy claim. Residual/model-error and parameter-Monte-Carlo intervals are exposed separately.
 
-**Intended use.** Sisyphus targets oral structure-only Cmax prediction (canonical parent SMILES + dose) when measured ADME is unavailable. On the repeatedly accessed retrospective **development benchmark**, Meta AAFE is 2.762 [bootstrap 95% CI 2.36&ndash;3.24, N=107]. This is not an independent holdout result: the cohort has informed repeated system-selection decisions. A source-adjudicated diagnostic P0 pilot on 18 previously unused compounds, scored with an earlier model, found Meta AAFE **3.34**, compared with **3.01** for direct ML; its labels were AI-assisted and it does not establish Meta superiority. The current system has **no unconsumed independently curated external holdout AAFE**. Error of this scale and the wide development-residual interval (&divide;&times;~11.0-fold) restrict the tool to **screening, ranking, and uncertainty-aware triage**, not dose setting.
+**Intended use.** Sisyphus targets oral structure-only Cmax prediction (canonical parent SMILES + dose) when measured ADME is unavailable. On the repeatedly accessed retrospective **development benchmark**, Meta AAFE is 2.734 [bootstrap 95% CI 2.34&ndash;3.21, N=107]. This is not an independent holdout result: the cohort has informed repeated system-selection decisions. A source-adjudicated diagnostic P0 pilot on 18 previously unused compounds, scored with an earlier model, found Meta AAFE **3.34**, compared with **3.01** for direct ML; its labels were AI-assisted and it does not establish Meta superiority. The current system has **no unconsumed independently curated external holdout AAFE**. Error of this scale and the wide development-residual interval (&divide;&times;~11.1-fold) restrict the tool to **screening, ranking, and uncertainty-aware triage**, not dose setting.
 
 ```
 $ sisyphus predict --smiles "Cn1c(=O)c2c(ncn2C)n(C)c1=O" --dose 100
@@ -310,17 +310,18 @@ $$AAFE = 10^{\operatorname{mean}\left(\left|\log_{10}\frac{C_{max,pred}}{C_{max,
 
 | Track | AAFE | 95% CI | %2-fold | %3-fold | N |
 |---|:-:|:-:|:-:|:-:|:-:|
-| **Meta-learner (production)** | **2.762**† | [2.36, 3.24] | 47.7% | 62.6% | 107 |
-| Engine only | 3.834 | [3.19, 4.65] | 34.6% | 44.9% | 107 |
+| **Meta-learner (production)** | **2.734**† | [2.34, 3.21] | 46.7% | 64.5% | 107 |
+| Engine only | 3.741 | [3.12, 4.54] | 32.7% | 49.5% | 107 |
 | ML only | 3.036 | [2.57, 3.61] | 43.9% | 58.9% | 107 |
-| Meta, in-domain | 2.813 | [2.35, 3.38] | 46.9% | 60.5% | 81 |
+| Meta, in-domain | 2.795 | [2.34, 3.35] | 45.7% | 61.7% | 81 |
 
-The paired compound-bootstrap Meta/ML AAFE ratio is **0.910** (95% CI
-**0.821–1.006**, 10,000 resamples, seed 20260422). Its interval crosses 1;
-the apparent Meta advantage on this repeatedly used set does not establish
-superiority over direct ML. The in-domain ratio is 0.936 (0.831–1.047).
+The paired compound-bootstrap Meta/ML AAFE ratio is **0.901** (95% CI
+**0.811–0.995**, 10,000 resamples, seed 20260422). This conditional interval
+excludes 1, but repeated use of the cohort for system selection means it does
+not establish independent superiority over direct ML. The in-domain ratio is
+0.930 (0.827–1.043).
 
-> **Reproducibility (2026-09-23).** The table uses public-only TDC fup, Peff, hepatocyte CLint, and Lombardo VDss plus Omega Cmax retrains. The pravastatin parent SMILES was corrected against PubChem CID 54687 and the FDA Pravachol formula; the 107-drug cache was regenerated in a Linux/Python 3.10 image with locked dependencies. The other 106 drug predictions matched the preceding Linux cache exactly. Per-drug predictions are in `data/training/4track_holdout_predictions.json`; bootstrap intervals are in `data/validation/4track_ci_2026-09-23_public_models_pinned.json`. Their fitted datasets contain 1,557 fup, 874 Peff, 1,028 Cmax, 996 CLint, and 1,055 VDss hash-pinned rows. †This repeatedly used N=107 set and its conditional bootstrap CI do not establish independent generalization. Earlier benchmark lineage and numerics-drift measurements are in `docs/research/experiment-log.md`.
+> **Reproducibility (2026-09-23).** The table uses public-only TDC fup, Peff, hepatocyte CLint, and Lombardo VDss plus Omega Cmax retrains. After correcting the pravastatin parent structure, we found its matching CHEMBL1144 row in the CLint fitted snapshot and retrained CLint without it. The 107-drug cache was regenerated in a Linux/Python 3.10 image with locked dependencies. Per-drug predictions are in `data/training/4track_holdout_predictions.json`; bootstrap intervals are in `data/validation/4track_ci_2026-09-23_public_models_pinned.json`. Their fitted datasets contain 1,557 fup, 874 Peff, 1,028 Cmax, 995 CLint, and 1,055 VDss hash-pinned rows. †This repeatedly used N=107 set and its conditional bootstrap CI do not establish independent generalization. Earlier benchmark lineage and numerics-drift measurements are in `docs/research/experiment-log.md`.
 
 The 4-track meta-learner combines mechanistic PBPK (Engine), data-driven XGBoost C<sub>max</sub> (ML), a closed-form CL/F analytical (CLF), and a conditional VDss analytical track. Weights are compound-type-adaptive and were LOOCV-selected on N=107: base compounds blend Engine 0.60 / ML 0.40; other compounds use Engine 0.35 / ML 0.50 / CLF 0.15, with VDss 0.20 added when applicability criteria are satisfied. The in-domain N=81 slice is descriptive only: applicability flags have not demonstrated reliable error stratification, and neither slice is independent evidence.
 
@@ -338,7 +339,7 @@ On the 2026-07-05 system, the temporal cohort was directionally worse than its s
 
 The same-machine re-score moved Meta AAFE 3.208 → 3.286 and Engine AAFE 4.302 → 4.551, while the direct ML track was bit-identical. This supports an absorption/first-pass error diagnosis but does not establish a statistically separated generalization gap. †Compound bootstrap, 100,000 resamples of absolute log-fold error, seed 20260422; diagnostic because the set is consumed. Current artifact: `data/validation/prospective_N28_current_engine_2026-07-05.json`.
 
-**Adaptive-selection caveat.** N=107 has been used for dozens of configuration feedback cycles (track weights, routing, and meta variants), including inspection of the public-only fup, Peff, Cmax, CLint, and VDss candidates. The historical 2.85–3.10 selection-bias sensitivity range has not been recalibrated for this model. The current bootstrap CI ([2.36, 3.24], point estimate 2.762) does not account for adaptive search. The attempted 2026Q2 N50 was invalidated after 21/50 repository-corpus collisions and must not be cited. The replacement strategy is the outcome-blinded N=260 protocol in `docs/validation/external_holdout_v1_protocol.md` (N=120 resource-limited fallback; its combined release gate has about 80% pass probability only near a 19% true improvement).
+**Adaptive-selection caveat.** N=107 has been used for dozens of configuration feedback cycles (track weights, routing, and meta variants), including inspection of the public-only fup, Peff, Cmax, CLint, and VDss candidates. The historical 2.85–3.10 selection-bias sensitivity range has not been recalibrated for this model. The current bootstrap CI ([2.34, 3.21], point estimate 2.734) does not account for adaptive search. The attempted 2026Q2 N50 was invalidated after 21/50 repository-corpus collisions and must not be cited. The replacement strategy is the outcome-blinded N=260 protocol in `docs/validation/external_holdout_v1_protocol.md` (N=120 resource-limited fallback; its combined release gate has about 80% pass probability only near a 19% true improvement).
 
 ### Historical diagnostic P0 source-adjudicated pilot
 
@@ -411,7 +412,7 @@ The full test suite covers graph construction, ODE compilation, flux functions, 
 
 **Expected failures (3):** Rosuvastatin and atorvastatin still miss their ECM-forced Cmax gates; the separate axial PGx test deliberately retains a strict expected failure because its well-stirred analytic oracle does not apply to parallel-tube extraction. Fluvastatin now passes its numerical gate, but ECM remains marked not applicable for it in production. Three prodrug clinical gates are skipped in the public clone because their conditional disposition data are absent.
 
-**Test status.** The current public-only fup/Peff/Cmax/CLint/VDss benchmark is pinned by `test_cached_holdout_aafe_is_2p762`; historical benchmark changes and resolved failures are recorded in `docs/research/experiment-log.md`. The cached headline is reproducible with `scripts/run_engine_benchmark.py` on the pinned Linux stack.
+**Test status.** The current public-only fup/Peff/Cmax/CLint/VDss benchmark is pinned by `test_cached_holdout_aafe_is_2p734`; historical benchmark changes and resolved failures are recorded in `docs/research/experiment-log.md`. The cached headline is reproducible with `scripts/run_engine_benchmark.py` on the pinned Linux stack.
 
 ## Architecture
 

@@ -51,16 +51,16 @@ def test_production_clint_meta_declares_hepatocyte_only() -> None:
     )
     assert sha256(SOURCE) == SOURCE_SHA
     assert meta["trained_on"]["sha256"] == sha256(DATASET)
-    assert sha256(DATASET) == "300f5be5d0ada5fad88d94f9dc60c0c13ab77b122fed2494e06d764b43f6cd07"
-    assert meta["trained_on"]["n_drugs_clean"] == 996
+    assert sha256(DATASET) == "dbf2b750b58a68af02b01cfe90a370630908c311c8436f65818bbc08fcfaaa94"
+    assert meta["trained_on"]["n_drugs_clean"] == 995
     assert meta["artifact_sha256"] == sha256(MODEL)
-    assert sha256(MODEL) == "1fdafa7c2e287dd9e4f44f68b97e5ace80a6837f97ef17bed3c01daeff610401"
+    assert sha256(MODEL) == "0ca4ee7e88367dfb3ad55f94adc8eaa025cdd40b5a308e584b89e05555d3ff42"
 
 
 def test_production_clint_fitted_rows_match_filtered_source() -> None:
     expected = training_rows()
     fitted = pd.read_csv(DATASET)
-    assert len(expected) == len(fitted) == 996
+    assert len(expected) == len(fitted) == 995
     assert [ik14(s) for s in fitted["canonical_smiles"]] == [
         ik14(s) for s in expected["canonical_smiles"]
     ]

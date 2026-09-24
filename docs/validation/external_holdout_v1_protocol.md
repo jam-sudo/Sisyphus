@@ -404,11 +404,14 @@ is now trained from the exact 1,028-row fitted CSV, SHA256
 `5668d3747e11d03d8c3d57c03ff0842ed3aa330f4c938386e47c05e1e318c919`,
 and its model SHA256 is
 `14391eb0881cb3ec83ab2f81592c5fe75da7c949290ec438fddc2d7136f792a0`.
-The single-assay TDC hepatocyte CLint replacement is pinned to its 996-row
+The single-assay TDC hepatocyte CLint replacement is pinned to its 995-row
 fitted CSV (SHA256
-`300f5be5d0ada5fad88d94f9dc60c0c13ab77b122fed2494e06d764b43f6cd07`)
+`dbf2b750b58a68af02b01cfe90a370630908c311c8436f65818bbc08fcfaaa94`)
 and model artifact (SHA256
-`1fdafa7c2e287dd9e4f44f68b97e5ace80a6837f97ef17bed3c01daeff610401`).
+`0ca4ee7e88367dfb3ad55f94adc8eaa025cdd40b5a308e584b89e05555d3ff42`).
+Its previous 996-row fitted snapshot contained `CHEMBL1144`, which matches the
+corrected pravastatin reference structure; that row was removed before this
+retrain.
 The public VDss replacement uses [TDC's Lombardo data file](https://dataverse.harvard.edu/api/access/datafile/4267387)
 (raw SHA256 `00bb7e0dea19f78c4c1887e27ecf476135d9de2ef5ecc26d7c645c37bd9cb7af`),
 with 1,055 fitted rows (CSV SHA256

@@ -50,7 +50,7 @@ def training_rows() -> pd.DataFrame:
     clean = dedup[~dedup.apply(
         lambda row: is_holdout(row["canonical_smiles"], row["drug_id"], keys), axis=1
     )].reset_index(drop=True)
-    if (len(raw), len(dedup), len(clean)) != (1213, 1020, 996):
+    if (len(raw), len(dedup), len(clean)) != (1213, 1020, 995):
         raise ValueError(
             f"Unexpected hepatocyte raw/unique/clean counts: {len(raw)}/{len(dedup)}/{len(clean)}"
         )
@@ -86,7 +86,7 @@ def main() -> None:
         n_drugs_original=1213,
         n_drugs_excluded=1213 - len(fitted),
         n_duplicate_rows=193,
-        n_holdout_structures_excluded=24,
+        n_holdout_structures_excluded=25,
         holdout_version="N=107 (data/reference/holdout.json)",
         holdout_metric={"name": "five_fold_scaffold_cv_r2", "value": cv_r2,
                         "aafe": cv_aafe},

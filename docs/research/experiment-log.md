@@ -10,6 +10,30 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-23 (cont.) — Remove a pravastatin collision from CLint fitting
+
+The corrected pravastatin parent structure exposed `CHEMBL1144` in the
+production hepatocyte CLint fitted CSV. The structure was absent from the
+original N=107 exclusion because the previous reference SMILES encoded a
+different molecule. The full regression suite caught the mismatch: the
+current source filter returned 995 rows while the shipped snapshot held 996.
+No other active fitted-model snapshot contained this structure.
+
+Removed that row and retrained CLint in the locked Linux/Python 3.10 container:
+995 fitted structures, CSV SHA256
+`dbf2b750b58a68af02b01cfe90a370630908c311c8436f65818bbc08fcfaaa94`,
+model SHA256
+`0ca4ee7e88367dfb3ad55f94adc8eaa025cdd40b5a308e584b89e05555d3ff42`.
+Five-fold scaffold CV R² is 0.215 and CLint AAFE is 2.557. The locked Linux
+N=107 development cache moved Meta AAFE 2.7625→2.7342 and Engine AAFE
+3.8339→3.7409; direct ML stayed 3.0356. The paired Meta/ML ratio is 0.901
+[conditional 95% bootstrap 0.811–0.995]. This is a correction of a fitted-row
+collision, **not** independent evidence of superiority: N=107 remains a
+repeatedly used development set. The development residual band and web console
+were regenerated from the corrected model. Colima was stopped after the run.
+
+---
+
 ## 2026-09-23 (cont.) — Reject stale stereoisomer docking poses
 
 Experimental Vina/DiffDock caches were named by the first 14 InChIKey

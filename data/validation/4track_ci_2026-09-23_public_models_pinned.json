@@ -1,20 +1,20 @@
 {
-  "computed_at": "2026-09-23-pravastatin_identity_corrected",
+  "computed_at": "2026-09-23-public_models_clint_decontaminated",
   "source_cache": "data/training/4track_holdout_predictions.json",
-  "source_cache_sha256": "8e9079edf4c937855efae74094350065c0586d193af3c38678ecef7ce92f0c7d",
-  "context": "Public fitted models; corrected PubChem CID 54687 pravastatin parent structure; Linux locked-dependency benchmark; repeatedly used development set",
+  "source_cache_sha256": "6383246ea8f764de1558e77c6e77e2daff1eec69c7debcae66865ff3230b14d6",
+  "context": "Public models after exclusion of pravastatin from hepatocyte CLint fitting; development benchmark only",
   "method": "bootstrap on abs(log10(fold))",
   "n_bootstrap": 10000,
   "seed": 20260422,
   "overall": {
     "n": 107,
     "engine": {
-      "aafe": 3.8339,
-      "ci_95_low": 3.1946,
-      "ci_95_high": 4.6512,
+      "aafe": 3.7409,
+      "ci_95_low": 3.117,
+      "ci_95_high": 4.5362,
       "n": 107,
-      "pct_2fold": 34.6,
-      "pct_3fold": 44.9
+      "pct_2fold": 32.7,
+      "pct_3fold": 49.5
     },
     "ml": {
       "aafe": 3.0356,
@@ -25,29 +25,29 @@
       "pct_3fold": 58.9
     },
     "meta": {
-      "aafe": 2.7625,
-      "ci_95_low": 2.3638,
-      "ci_95_high": 3.2443,
+      "aafe": 2.7342,
+      "ci_95_low": 2.3449,
+      "ci_95_high": 3.2076,
       "n": 107,
-      "pct_2fold": 47.7,
-      "pct_3fold": 62.6
+      "pct_2fold": 46.7,
+      "pct_3fold": 64.5
     },
     "paired_meta_ml": {
-      "ratio": 0.91,
-      "ci_95_low": 0.8209,
-      "ci_95_high": 1.0061,
+      "ratio": 0.9007,
+      "ci_95_low": 0.8113,
+      "ci_95_high": 0.995,
       "n": 107
     }
   },
   "in_domain": {
     "n": 81,
     "engine": {
-      "aafe": 3.7285,
-      "ci_95_low": 3.0809,
-      "ci_95_high": 4.5315,
+      "aafe": 3.7109,
+      "ci_95_low": 3.0537,
+      "ci_95_high": 4.5304,
       "n": 81,
-      "pct_2fold": 33.3,
-      "pct_3fold": 42.0
+      "pct_2fold": 32.1,
+      "pct_3fold": 46.9
     },
     "ml": {
       "aafe": 3.0045,
@@ -58,17 +58,17 @@
       "pct_3fold": 58.0
     },
     "meta": {
-      "aafe": 2.8134,
-      "ci_95_low": 2.3515,
-      "ci_95_high": 3.3779,
+      "aafe": 2.7952,
+      "ci_95_low": 2.3379,
+      "ci_95_high": 3.3466,
       "n": 81,
-      "pct_2fold": 46.9,
-      "pct_3fold": 60.5
+      "pct_2fold": 45.7,
+      "pct_3fold": 61.7
     },
     "paired_meta_ml": {
-      "ratio": 0.9364,
-      "ci_95_low": 0.8306,
-      "ci_95_high": 1.0469,
+      "ratio": 0.9303,
+      "ci_95_low": 0.8265,
+      "ci_95_high": 1.0434,
       "n": 81
     }
   }

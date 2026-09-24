@@ -24,29 +24,29 @@
     }
   ],
   "generated_from": "scripts/calibrate_conformal.py",
-  "source_cache_sha256": "8e9079edf4c937855efae74094350065c0586d193af3c38678ecef7ce92f0c7d",
+  "source_cache_sha256": "6383246ea8f764de1558e77c6e77e2daff1eec69c7debcae66865ff3230b14d6",
   "model_artifact_sha256": {
     "models/direct_pk/xgboost_cmax.json": "14391eb0881cb3ec83ab2f81592c5fe75da7c949290ec438fddc2d7136f792a0",
     "models/direct_pk/xgboost_clf.json": "2c83f5bf90a47c11150f07380e686cda3bea67cf1b44d9500895cdaf4a8da6a1",
     "models/direct_pk/xgboost_vdf.json": "2fa38e6ea51206f02e71d131979dacc645cd700350ae57c46da0967b90ea761e",
     "models/adme/xgboost_fup_v2.json": "b0731734730746866646a2628dded73d74254eb06ef1a6c7b457bf273d867096",
-    "models/adme/xgboost_clint.json": "1fdafa7c2e287dd9e4f44f68b97e5ace80a6837f97ef17bed3c01daeff610401",
+    "models/adme/xgboost_clint.json": "0ca4ee7e88367dfb3ad55f94adc8eaa025cdd40b5a308e584b89e05555d3ff42",
     "models/adme/xgboost_vdss.json": "29f84cbff97da197ae516fccb2d91aff972f9bae661a8b2bde39786a984c1c35",
     "models/adme/xgboost_peff.json": "1566e5b7c9ced4c2c1ce6f0d7e693b0190ae7306a8f632a9486c1658dab6e1e7"
   },
   "validity": "not split-conformal; fitted components saw calibration outcomes",
   "tracks": {
     "meta": {
-      "0.5": 0.42264048521432906,
-      "0.2": 0.7652207487084266,
-      "0.1": 1.0406605719154565,
-      "0.05": 1.3935003014674388
+      "0.5": 0.4233902890934367,
+      "0.2": 0.8172763325645924,
+      "0.1": 1.0456928364003164,
+      "0.05": 1.4033813286743122
     },
     "engine": {
-      "0.5": 0.676263474766591,
-      "0.2": 1.3217013664842636,
-      "0.1": 1.9095672791160139,
-      "0.05": 2.2019979421867077
+      "0.5": 0.6355779902577432,
+      "0.2": 1.4245920847043858,
+      "0.1": 1.6960030676234745,
+      "0.05": 2.143385740858874
     },
     "ml": {
       "0.5": 0.4196845253515349,
@@ -57,14 +57,14 @@
   },
   "consumed_development_benchmark_coverage": {
     "meta": {
-      "0.5": 0.6075,
-      "0.2": 0.8037,
+      "0.5": 0.6168,
+      "0.2": 0.8411,
       "0.1": 0.9346,
       "0.05": 0.9813
     },
     "engine": {
-      "0.5": 0.5981,
-      "0.2": 0.9439,
+      "0.5": 0.6075,
+      "0.2": 0.9626,
       "0.1": 0.9907,
       "0.05": 1.0
     },
