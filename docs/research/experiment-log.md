@@ -10,6 +10,30 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Resolve generic-label development PK arms
+
+Eight scored references labeled only “FDA label (analytical model from PK
+params)” were checked against original labels, independent of prediction
+error. Ciprofloxacin and moxifloxacin had copied repeated-dose Cmax values;
+azithromycin had an unsupported AUC; diclofenac had the wrong 25 mg peak and
+unconverted sodium-salt dose; zolpidem's 12.5 mg tartrate dose was not converted
+to its label-stated 10 mg parent base. Colchicine's half-life came from a
+different arm. Isosorbide mononitrate selected an unidentified lower range
+endpoint, and losartan used a 7-day patient arm; both are quarantined.
+Synthetic curves were removed. See
+[`development_generic_label_arm_followup_2026-09-24.md`](../validation/development_generic_label_arm_followup_2026-09-24.md).
+
+The public-profile development cache now scores **N=79**: Meta AAFE
+**2.9320** (conditional bootstrap 95% CI **2.3897–3.6737**), Engine
+**3.9716**, direct ML **3.2605**, and descriptive in-domain Meta **2.9497**
+(N=65). The conditional paired Meta/ML AAFE ratio **0.8992** has 95% CI
+**0.7975–1.0106**, now including 1. The nominal 90% development-residual
+half-width remains **10.24×**, covering **72/79 (91.1%)** on the consumed
+cohort. No fitted model changed; differences from earlier reports are label,
+input-dose, and cohort corrections.
+
+---
+
 ## 2026-09-24 (cont.) — Quarantine four mismatched development PK arms
 
 Original label review found that lopinavir 9.8 mg/L was ritonavir-boosted

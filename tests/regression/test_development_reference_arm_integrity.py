@@ -14,7 +14,7 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     data = json.loads((ROOT / "data/reference/clinical_pk.json").read_text())
     refs = {row.name: row for row in load_reference() if row.in_holdout}
     cache = json.loads((ROOT / "data/training/4track_holdout_predictions.json").read_text())
-    assert cache["n_holdout"] == data["metadata"]["holdout_with_cmax"] == len(refs) == 81
+    assert cache["n_holdout"] == data["metadata"]["holdout_with_cmax"] == len(refs) == 79
     assert {row["name"] for row in cache["drugs"]} == set(refs)
     for row in cache["drugs"]:
         assert row["obs"] == refs[row["name"]].cmax_obs
@@ -102,3 +102,15 @@ def test_adjudicated_holdout_arms_match_scored_cache():
         assert not data["drugs"][name]["pk_params"]
         assert "ct_curve" not in data["drugs"][name]
         assert name not in refs
+    for name in ("isosorbide mononitrate", "losartan"):
+        assert data["drugs"][name]["tier"] == "unverified"
+        assert not data["drugs"][name]["pk_params"]
+        assert "ct_curve" not in data["drugs"][name]
+        assert name not in refs
+    assert refs["ciprofloxacin"].cmax_obs == 2.4
+    assert refs["moxifloxacin"].cmax_obs == 3.1
+    assert refs["diclofenac"].dose_mg == pytest.approx(25 * 296.1 / 318.1)
+    assert refs["diclofenac"].cmax_obs == 1.0
+    assert refs["zolpidem"].dose_mg == 10.0
+    for name in ("azithromycin", "ciprofloxacin", "colchicine", "diclofenac", "moxifloxacin", "zolpidem"):
+        assert "ct_curve" not in data["drugs"][name]

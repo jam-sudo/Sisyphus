@@ -72,7 +72,7 @@ export function PredictView({ drug, s, tab, running }: { drug: Drug; s: AppState
             {headlineDiffersFromCurve
               ? <>Dashed line = the <span style={{ fontStyle: "normal" }}>{s.method}</span> C<sub>max</sub> ({fmt(displayed)} mg/L), the production estimate. </>
               : null}
-            The Meta band is an empirical development-residual interval. Its observed coverage was 91.4% on the repeatedly used development set; it has no independent calibration guarantee.
+            The Meta band is an empirical development-residual interval. Its observed coverage was 91.1% on the repeatedly used development set; it has no independent calibration guarantee.
           </div>
         </div>
         <div className="stack">
