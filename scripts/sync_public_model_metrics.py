@@ -13,7 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 CACHE = ROOT / "data" / "training" / "4track_holdout_predictions.json"
-CI = ROOT / "data" / "validation" / "4track_ci_2026-09-24_morphine_reference.json"
+CI = ROOT / "data" / "validation" / "4track_ci_2026-09-24_digoxin_reference.json"
 MODEL_CARD = ROOT / "data" / "model_card.json"
 WEB_BENCHMARK = ROOT / "web" / "public" / "data" / "benchmark.json"
 WEB_CONSOLE = ROOT / "web" / "public" / "data" / "console_data.json"

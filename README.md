@@ -8,7 +8,7 @@
 
 **Preprint:** [Yoon, J. M. (2026). *Sisyphus: A Topology-Compiled Physiologically Based Pharmacokinetic Platform with Structure-Only Input and Bayesian Parameter Refinement.* ChemRxiv.](https://doi.org/10.26434/chemrxiv.15004452/v1) &mdash; DOI [10.26434/chemrxiv.15004452/v1](https://doi.org/10.26434/chemrxiv.15004452/v1)
 
-The published v1 preprint and archived `Sisyphus_Preprint.pdf` report an older AAFE of 2.698. The current code and development benchmark report 2.716; use the validation section below for current evidence.
+The published v1 preprint and archived `Sisyphus_Preprint.pdf` report an older AAFE of 2.698. The current code's development benchmark is 2.6976 after source corrections; the similar rounded value comes from a different model and reference set. Use the validation section below for current evidence.
 
 ---
 
@@ -16,7 +16,7 @@ Sisyphus is an oral structure-only C<sub>max</sub> prediction system with a sepa
 
 The production output is C<sub>max</sub> for a canonical parent SMILES and positive oral dose. Engine-derived T<sub>max</sub>, AUC, half-life, multi-dose simulation, TDM, MIPD, DDI, PGx, and PK/PD are experimental research outputs and are not covered by the C<sub>max</sub> accuracy claim. Residual/model-error and parameter-Monte-Carlo intervals are exposed separately.
 
-**Intended use.** Sisyphus targets oral structure-only Cmax prediction (canonical parent SMILES + dose) when measured ADME is unavailable. On the repeatedly accessed retrospective **development benchmark**, Meta AAFE is 2.716 [bootstrap 95% CI 2.33&ndash;3.18, N=107]. This is not an independent holdout result: the cohort has informed repeated system-selection decisions. A source-adjudicated diagnostic P0 pilot on 18 compounds, scored with an earlier model, found Meta AAFE **3.34**, compared with **3.01** for direct ML; its labels were AI-assisted, historical VDss training membership is unverified, and it does not establish Meta superiority. The current system has **no unconsumed independently curated external holdout AAFE**. Error of this scale and the wide development-residual interval (&divide;&times;~11.1-fold) restrict the tool to **screening, ranking, and uncertainty-aware triage**, not dose setting.
+**Intended use.** Sisyphus targets oral structure-only Cmax prediction (canonical parent SMILES + dose) when measured ADME is unavailable. On the repeatedly accessed retrospective **development benchmark**, Meta AAFE is 2.698 [bootstrap 95% CI 2.31&ndash;3.17, N=107]. This is not an independent holdout result: the cohort has informed repeated system-selection decisions. A source-adjudicated diagnostic P0 pilot on 18 compounds, scored with an earlier model, found Meta AAFE **3.34**, compared with **3.01** for direct ML; its labels were AI-assisted, historical VDss training membership is unverified, and it does not establish Meta superiority. The current system has **no unconsumed independently curated external holdout AAFE**. Error of this scale and the wide development-residual interval (&divide;&times;~11.1-fold) restrict the tool to **screening, ranking, and uncertainty-aware triage**, not dose setting.
 
 ```
 $ sisyphus predict --smiles "Cn1c(=O)c2c(ncn2C)n(C)c1=O" --dose 100
@@ -310,9 +310,9 @@ $$AAFE = 10^{\operatorname{mean}\left(\left|\log_{10}\frac{C_{max,pred}}{C_{max,
 
 | Track | AAFE | 95% CI | %2-fold | %3-fold | N |
 |---|:-:|:-:|:-:|:-:|:-:|
-| **Meta-learner (production)** | **2.716**† | [2.33, 3.18] | 47.7% | 65.4% | 107 |
-| Engine only | 3.716 | [3.10, 4.50] | 32.7% | 50.5% | 107 |
-| ML only | 3.016 | [2.55, 3.59] | 44.9% | 58.9% | 107 |
+| **Meta-learner (production)** | **2.698**† | [2.31, 3.17] | 48.6% | 65.4% | 107 |
+| Engine only | 3.742 | [3.11, 4.57] | 32.7% | 50.5% | 107 |
+| ML only | 2.995 | [2.53, 3.57] | 44.9% | 59.8% | 107 |
 | Meta, in-domain | 2.771 | [2.32, 3.32] | 46.9% | 63.0% | 81 |
 
 The paired compound-bootstrap Meta/ML AAFE ratio is **0.901** (95% CI
@@ -321,7 +321,7 @@ excludes 1, but repeated use of the cohort for system selection means it does
 not establish independent superiority over direct ML. The in-domain ratio is
 0.930 (0.827–1.043).
 
-> **Reproducibility (2026-09-24).** The table uses public-only TDC fup, Peff, hepatocyte CLint, and Lombardo VDss plus Omega Cmax retrains. The previous cache came from a locked Linux/Python 3.10 run. After correcting the morphine reference to a documented fasted single-dose oral IR tablet arm, we reran all 107 predictions in the public profile; the other 106 predictions matched the previous cache to 1e-8 relative. Per-drug predictions are in `data/training/4track_holdout_predictions.json`; bootstrap intervals are in `data/validation/4track_ci_2026-09-24_morphine_reference.json`. Their fitted datasets contain 1,557 fup, 874 Peff, 1,028 Cmax, 995 CLint, and 1,055 VDss hash-pinned rows. †This repeatedly used N=107 set and its conditional bootstrap CI do not establish independent generalization. Earlier benchmark lineage and numerics-drift measurements are in `docs/research/experiment-log.md`.
+> **Reproducibility (2026-09-24).** The table uses public-only TDC fup, Peff, hepatocyte CLint, and Lombardo VDss plus Omega Cmax retrains. The previous cache came from a locked Linux/Python 3.10 run. After correcting the morphine reference to a documented fasted single-dose oral IR tablet arm, we reran all 107 predictions in the public profile; the other 106 predictions matched the previous cache to 1e-8 relative. The subsequent digoxin correction changed only its observed Cmax, since dose and structure were unchanged. Per-drug predictions are in `data/training/4track_holdout_predictions.json`; bootstrap intervals are in `data/validation/4track_ci_2026-09-24_digoxin_reference.json`. Their fitted datasets contain 1,557 fup, 874 Peff, 1,028 Cmax, 995 CLint, and 1,055 VDss hash-pinned rows. †This repeatedly used N=107 set and its conditional bootstrap CI do not establish independent generalization. Earlier benchmark lineage and numerics-drift measurements are in `docs/research/experiment-log.md`.
 
 The 4-track meta-learner combines mechanistic PBPK (Engine), data-driven XGBoost C<sub>max</sub> (ML), a closed-form CL/F analytical (CLF), and a conditional VDss analytical track. Weights are compound-type-adaptive and were LOOCV-selected on N=107: base compounds blend Engine 0.60 / ML 0.40; other compounds use Engine 0.35 / ML 0.50 / CLF 0.15, with VDss 0.20 added when applicability criteria are satisfied. The in-domain N=81 slice is descriptive only: applicability flags have not demonstrated reliable error stratification, and neither slice is independent evidence.
 
@@ -339,7 +339,7 @@ On the 2026-07-05 system, the temporal cohort was directionally worse than its s
 
 The same-machine re-score moved Meta AAFE 3.208 → 3.286 and Engine AAFE 4.302 → 4.551, while the direct ML track was bit-identical. This supports an absorption/first-pass error diagnosis but does not establish a statistically separated generalization gap. †Compound bootstrap, 100,000 resamples of absolute log-fold error, seed 20260422; diagnostic because the set is consumed. Current artifact: `data/validation/prospective_N28_current_engine_2026-07-05.json`.
 
-**Adaptive-selection caveat.** N=107 has been used for dozens of configuration feedback cycles (track weights, routing, and meta variants), including inspection of the public-only fup, Peff, Cmax, CLint, and VDss candidates. The historical 2.85–3.10 selection-bias sensitivity range has not been recalibrated for this model. The current bootstrap CI ([2.33, 3.18], point estimate 2.716) does not account for adaptive search. The attempted 2026Q2 N50 was invalidated after 21/50 repository-corpus collisions and must not be cited. The replacement strategy is the outcome-blinded N=260 protocol in `docs/validation/external_holdout_v1_protocol.md` (N=120 resource-limited fallback; its combined release gate has about 80% pass probability only near a 19% true improvement).
+**Adaptive-selection caveat.** N=107 has been used for dozens of configuration feedback cycles (track weights, routing, and meta variants), including inspection of the public-only fup, Peff, Cmax, CLint, and VDss candidates. The historical 2.85–3.10 selection-bias sensitivity range has not been recalibrated for this model. The current bootstrap CI ([2.31, 3.17], point estimate 2.698) does not account for adaptive search. The attempted 2026Q2 N50 was invalidated after 21/50 repository-corpus collisions and must not be cited. The replacement strategy is the outcome-blinded N=260 protocol in `docs/validation/external_holdout_v1_protocol.md` (N=120 resource-limited fallback; its combined release gate has about 80% pass probability only near a 19% true improvement).
 
 ### Historical diagnostic P0 source-adjudicated pilot
 
@@ -368,7 +368,7 @@ Three drugs were simulated at clinical dosing regimens and compared against FDA-
 | Metformin | 500 mg BID | 2.39 | 1.0 | 2.39 |
 | Warfarin | 5 mg QD | 0.21 | 1.4 | 0.15 |
 
-(Regenerated on the current engine — post-FLUX-1 + paracellular — via `scripts/verify_v2.py`; supersedes the pre-FLUX-1 values.) Atorvastatin and metformin are each over-predicted by ~2.4×, and warfarin (f<sub>u</sub> = 0.01, highly protein-bound) is severely under-predicted, reflecting the partition model&rsquo;s known limitation for very highly bound acids. Predicted accumulation ratios tracked the theoretical values (metformin 1.11 vs 1.35; atorvastatin 1.50 vs 1.44; warfarin 1.81 vs 2.94) and steady-state detection operated correctly in all cases. This is a solver-mechanics and limitation-exposure exercise rather than a multi-dose accuracy claim: each compound&rsquo;s single-dose error propagates into its steady-state estimate.
+(Regenerated on the current engine — post-FLUX-1 + paracellular — via `scripts/verify_v2.py`; supersedes the pre-FLUX-1 values.) Atorvastatin and metformin are each over-predicted by ~2.4×. The historical warfarin comparison suggested severe under-prediction, but its cited Cmax source was later quarantined for a dose/analyte mismatch, so that comparison is not current accuracy evidence. Predicted accumulation ratios tracked the theoretical values (metformin 1.11 vs 1.35; atorvastatin 1.50 vs 1.44; warfarin 1.81 vs 2.94) and steady-state detection operated correctly in all cases. This is a solver-mechanics and limitation-exposure exercise rather than a multi-dose accuracy claim: each compound&rsquo;s single-dose error propagates into its steady-state estimate.
 
 ### Experimental TDM regression checks
 
@@ -416,7 +416,7 @@ The full test suite covers graph construction, ODE compilation, flux functions, 
 
 **Expected failures (3):** Rosuvastatin and atorvastatin still miss their ECM-forced Cmax gates; the separate axial PGx test deliberately retains a strict expected failure because its well-stirred analytic oracle does not apply to parallel-tube extraction. Fluvastatin now passes its numerical gate, but ECM remains marked not applicable for it in production. Three prodrug clinical gates are skipped in the public clone because their conditional disposition data are absent.
 
-**Test status.** The current public-only fup/Peff/Cmax/CLint/VDss benchmark is pinned by `test_cached_holdout_aafe_is_2p716`; historical benchmark changes and resolved failures are recorded in `docs/research/experiment-log.md`. The cached headline is reproducible with `scripts/run_engine_benchmark.py` on the pinned Linux stack.
+**Test status.** The current public-only fup/Peff/Cmax/CLint/VDss benchmark is pinned by `test_cached_holdout_aafe_is_2p698`; historical benchmark changes and resolved failures are recorded in `docs/research/experiment-log.md`. The cached headline is reproducible with `scripts/run_engine_benchmark.py` on the pinned Linux stack.
 
 ## Architecture
 

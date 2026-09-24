@@ -29,7 +29,7 @@ def test_model_card_interval_matches_current_cache():
     cache_path = ROOT / "data/training/4track_holdout_predictions.json"
     cache = json.loads(cache_path.read_text())
     ci = json.loads(
-        (ROOT / "data/validation/4track_ci_2026-09-24_morphine_reference.json").read_text()
+        (ROOT / "data/validation/4track_ci_2026-09-24_digoxin_reference.json").read_text()
     )
     card = json.loads((ROOT / "data/model_card.json").read_text())
     dev = card["current_evidence"]["retrospective_development_benchmark"]

@@ -1,0 +1,75 @@
+{
+  "computed_at": "2026-09-24-digoxin_reference",
+  "source_cache": "data/training/4track_holdout_predictions.json",
+  "source_cache_sha256": "7e5446851f0a8e0f82d9bc8626640dcd9b026e8bb83cd2e592425117f9d302d1",
+  "context": "Digoxin development-reference correction to original 0.5 mg unboosted arm; all model predictions retained because dose and structure are unchanged. Consumed development evidence, not independent validation.",
+  "method": "bootstrap on abs(log10(fold))",
+  "n_bootstrap": 10000,
+  "seed": 20260422,
+  "overall": {
+    "n": 107,
+    "engine": {
+      "aafe": 3.7415,
+      "ci_95_low": 3.107,
+      "ci_95_high": 4.569,
+      "n": 107,
+      "pct_2fold": 32.7,
+      "pct_3fold": 50.5
+    },
+    "ml": {
+      "aafe": 2.995,
+      "ci_95_low": 2.5341,
+      "ci_95_high": 3.5689,
+      "n": 107,
+      "pct_2fold": 44.9,
+      "pct_3fold": 59.8
+    },
+    "meta": {
+      "aafe": 2.6976,
+      "ci_95_low": 2.3097,
+      "ci_95_high": 3.1656,
+      "n": 107,
+      "pct_2fold": 48.6,
+      "pct_3fold": 65.4
+    },
+    "paired_meta_ml": {
+      "ratio": 0.9007,
+      "ci_95_low": 0.8113,
+      "ci_95_high": 0.995,
+      "n": 107
+    }
+  },
+  "in_domain": {
+    "n": 81,
+    "engine": {
+      "aafe": 3.6784,
+      "ci_95_low": 3.0288,
+      "ci_95_high": 4.49,
+      "n": 81,
+      "pct_2fold": 32.1,
+      "pct_3fold": 48.1
+    },
+    "ml": {
+      "aafe": 2.9782,
+      "ci_95_low": 2.4595,
+      "ci_95_high": 3.6392,
+      "n": 81,
+      "pct_2fold": 45.7,
+      "pct_3fold": 58.0
+    },
+    "meta": {
+      "aafe": 2.7707,
+      "ci_95_low": 2.3219,
+      "ci_95_high": 3.3203,
+      "n": 81,
+      "pct_2fold": 46.9,
+      "pct_3fold": 63.0
+    },
+    "paired_meta_ml": {
+      "ratio": 0.9303,
+      "ci_95_low": 0.8265,
+      "ci_95_high": 1.0434,
+      "n": 81
+    }
+  }
+}

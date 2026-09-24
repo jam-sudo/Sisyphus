@@ -1,10 +1,10 @@
 # Development-reference PMID screen — 2026-09-24
 
-This is a source-integrity check of the 176 `clinical_pk.json` rows with Cmax,
-not an independent evaluation. Fourteen rows have a PMID in their `source`
-field. Their identifiers were resolved against the [NCBI PubMed ESummary
-API](https://www.ncbi.nlm.nih.gov/books/NBK25499/), then the morphine source
-and replacement arm were checked in the original publications.
+This is a source-integrity check of the 175 `clinical_pk.json` rows still carrying
+Cmax, not an independent evaluation. Thirteen retained rows have a PMID in
+their `source` field. The original 14 identifiers were resolved against the
+[NCBI PubMed ESummary API](https://www.ncbi.nlm.nih.gov/books/NBK25499/), then
+the morphine and Bækdal sources were checked against the original publications.
 
 The `morphine` row claimed oral 30 mg, Cmax 18.65 ng/mL and cited
 [Bell 1985, PMID 2857025](https://pubmed.ncbi.nlm.nih.gov/2857025/). That study
@@ -20,28 +20,38 @@ equivalence of 30 mg sulfate to 22.5 mg morphine. The old synthetic curve was
 removed. This is a reference correction on a **consumed development compound**,
 not new independent evidence.
 
-The other 13 PMIDs resolve to real papers, but their citation alone does not
-verify the row's dose, formulation, route, analyte or Cmax arm. The highest
-priority for original-table adjudication is
+The cited [Bækdal 2019 study](https://link.springer.com/content/pdf/10.1007/s40262-019-00756-2.pdf)
+gave digoxin alone as one 500 μg oral dose in healthy adults. Its
+[supplementary table 2c](https://media.springernature.com/original/springer-static/esm/art:10.1007%2Fs40262-019-00756-2/MediaObjects/40262_2019_756_MOESM1_ESM.pdf)
+reports geometric-mean Cmax **3.11 ng/mL** (N=31), not the stored 1.5 ng/mL;
+the digoxin reference is now 0.00311 mg/L and its synthetic curve was removed.
+The same paper gave **25 mg racemic warfarin** and measured S-/R-warfarin
+separately. It does not support the repository's 10 mg / 1.2783 mg/L total-parent
+pair, so that Cmax and its synthetic curve were quarantined pending a matching
+primary source. This leaves 175 Cmax rows and changes the 107-compound
+development Meta AAFE from 2.7161 to 2.6976 solely through label correction.
+The new [bootstrap artifact](../../data/validation/4track_ci_2026-09-24_digoxin_reference.json)
+remains consumed development evidence; it is not a fresh model-performance gain.
+
+The other PMID citations resolve to real papers, but that alone does not verify
+each row's dose, formulation, route, analyte or Cmax arm. The highest priority
+for original-table adjudication is
 [theophylline/Becker 1984](https://pubmed.ncbi.nlm.nih.gov/6700656/)
 (paper titled as a caffeine study),
 [metformin/Khomitskaya 2018](https://pubmed.ncbi.nlm.nih.gov/29548719/)
 (extended-release combination comparison), and
 [verapamil/Rebello 2011](https://pubmed.ncbi.nlm.nih.gov/20413453/)
-(aliskiren interaction study). The [digoxin and warfarin
-rows](https://pubmed.ncbi.nlm.nih.gov/30945118/) cite a semaglutide interaction
-study; verify the unboosted comparator arm before treating their recorded Cmax
-as primary. These are **triage flags**, not findings that the other rows are
-wrong. Digoxin is also in the 107-compound development cohort; the remaining
-flagged examples above are in its training/reference side.
+(aliskiren interaction study). These are **triage flags**, not findings that
+those rows are wrong. They are in the training/reference side.
 
 After morphine correction, a public-profile 107-compound rerun had zero skips;
 the other 106 predictions matched the previous cache to 1e-8 relative. The
-development Meta AAFE changed from 2.7342 to 2.7161. The new [prediction
-cache](../../data/training/4track_holdout_predictions.json) and [compound
-bootstrap](../../data/validation/4track_ci_2026-09-24_morphine_reference.json)
-are still repeatedly accessed development evidence. No independent external
-Cmax claim follows from this correction.
+development Meta AAFE changed from 2.7342 to 2.7161. That intermediate
+[compound bootstrap](../../data/validation/4track_ci_2026-09-24_morphine_reference.json)
+is retained for lineage; the current [prediction
+cache](../../data/training/4track_holdout_predictions.json) includes the later
+digoxin correction. All these figures are repeatedly accessed development
+evidence. No independent external Cmax claim follows from either correction.
 
 Legacy morphine TDM/SBI reports and the five-drug synthetic-observation
 aggregate used the superseded 30 mg / 18.65 ng/mL pair. Their morphine rows,

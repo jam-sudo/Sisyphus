@@ -1,7 +1,7 @@
 """Integration test: B-02 Phase 2 UGT registry routing and prediction.
 
 Verifies the mechanism, not specific Cmax values (those are pinned by
-test_cached_holdout_aafe_is_2p716).
+test_cached_holdout_aafe_is_2p698).
 
 For each of 8 seed drugs:
   1. The intended UGT registry recognizes the exact structure.
