@@ -50,8 +50,28 @@ eight days** with aliskiren and analyzed R/S isomers at steady state, not a
 single 80 mg parent Cmax. The theophylline and verapamil Cmax values and
 synthetic curves were quarantined, leaving 173 Cmax rows. The development-residual
 artifact was recomputed on 61 of 63 remaining training references; its nominal
-90% half-width remains about 11.1-fold. The other PMID citations still need
-arm-level verification before treating their presence as proof of validity.
+90% half-width remained about 11.1-fold at that checkpoint.
+
+Five more development citations failed arm-level checks. [Prescott
+1993](https://pubmed.ncbi.nlm.nih.gov/9114910/) gave **20 mg/kg** paracetamol
+to vegetarians and non-vegetarians, whose mean Cmax values were **11.7** and
+**15.6 mg/L**, not the recorded fixed 1000 mg / 15.18 mg/L pair.
+[Andersson 2001](https://pubmed.ncbi.nlm.nih.gov/11510629/) is an esomeprazole
+drug-interaction **review**, not an amoxicillin PK study. [Kosuge
+2001](https://pubmed.ncbi.nlm.nih.gov/11560871/) used **2 mg diazepam** with
+and without diltiazem, not 10 mg. [Donzelli
+2014](https://pubmed.ncbi.nlm.nih.gov/24218006/) studied a low-dose Basel
+cocktail; the [author's dissertation](https://edoc.unibas.ch/38839/1/PhD%20Thesis%20M.%20Donzelli.pdf)
+identifies **12.5 mg extended-release metoprolol**, not 100 mg.
+[Gorski 2003](https://pubmed.ncbi.nlm.nih.gov/12966371/) used **3–8 mg
+isotope-labeled oral midazolam** alongside an intravenous dose before and after
+rifampin, not a fixed 2 mg oral arm. Without exact replacement primary arms,
+these five Cmax labels and their synthetic curves were quarantined. There are
+now **168 Cmax rows**. The development-residual artifact uses **57 of 58**
+remaining training references (atenolol has an unknown route); its nominal
+90% half-width is now **14.4-fold**. The N=107 development benchmark is
+unchanged because these five were training references. The remaining PMID
+citations still require arm-level verification.
 
 After morphine correction, a public-profile 107-compound rerun had zero skips;
 the other 106 predictions matched the previous cache to 1e-8 relative. The

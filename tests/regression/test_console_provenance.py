@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+import math
 from pathlib import Path
 
 from scripts.bootstrap_4track_ci import paired_meta_ml_ratio
@@ -12,12 +13,16 @@ ROOT = Path(__file__).resolve().parents[2]
 def test_console_presets_use_current_resources():
     payload = json.loads((ROOT / "web/public/data/console_data.json").read_text())
     cache = json.loads((ROOT / "data/training/4track_holdout_predictions.json").read_text())
+    interval = json.loads((ROOT / "data/validation/development_residual_interval.json").read_text())
+    half_width = 10 ** interval["tracks"]["meta"]["0.1"]
     assert payload["benchmark"]["overall"] == cache["overall"]
     assert len(payload["drugs"]) == 8
     for drug in payload["drugs"]:
         provenance = drug["artifactProvenance"]
         assert drug["residualIntervalSource"] == "development_empirical_residual"
         assert drug["meta"]["cmax"] > 0
+        assert math.isclose(drug["residualInterval90"][0], drug["meta"]["cmax"] / half_width, rel_tol=1e-5)
+        assert math.isclose(drug["residualInterval90"][1], drug["meta"]["cmax"] * half_width, rel_tol=1e-5)
         for path, digest in provenance.items():
             if path == "resource_profile":
                 assert digest == "public"

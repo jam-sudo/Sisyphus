@@ -13,13 +13,19 @@ REFERENCE = ROOT / "data/reference/clinical_pk.json"
 
 def test_pmid_training_arms_are_quarantined():
     data = json.loads(REFERENCE.read_text())
-    for name in ("theophylline", "verapamil"):
+    for name in (
+        "acetaminophen", "amoxicillin", "diazepam", "metoprolol",
+        "midazolam", "theophylline", "verapamil",
+    ):
         row = data["drugs"][name]
         assert row["tier"] == "unverified"
         assert not row["pk_params"]
         assert "ct_curve" not in row
     refs = {row.name: row for row in load_reference(REFERENCE)}
-    assert not {"theophylline", "verapamil"} & {
+    assert not {
+        "acetaminophen", "amoxicillin", "diazepam", "metoprolol",
+        "midazolam", "theophylline", "verapamil",
+    } & {
         row.name for row in refs.values()
     }
     metformin = data["drugs"]["metformin"]
