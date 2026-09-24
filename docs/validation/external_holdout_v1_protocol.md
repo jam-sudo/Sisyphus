@@ -4,8 +4,11 @@
 
 Measure the frozen system's independent structure-only Cmax accuracy and decide
 whether the PBPK/meta stack adds enough value over the direct ML track to justify
-its production complexity. N=107 is development data for this purpose; N=28 is
-already consumed; the 2026Q2 N50 is invalidated.
+its production complexity. N=107 is development data for this purpose; N=28 and
+the AI-assisted blind P1 N=8 diagnostic are already consumed; the 2026Q2 N50
+is invalidated. P1 identities and structures are indexed in
+`data/validation/blind_p1_labels_2026-09-24.json` and
+`data/validation/blind_p1_inputs_2026-09-24.json` for final-cohort exclusion.
 
 ## Frozen primary estimand
 
