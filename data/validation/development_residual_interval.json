@@ -8,7 +8,7 @@
   "skipped_training_reference": [],
   "generated_from": "scripts/calibrate_conformal.py",
   "source_cache_sha256": "fcf55297345e5df009e7647191c9de03ffbe705cbaf70d9762f7efb13abdd843",
-  "calibration_reference_sha256": "5bff8aa3d04b9299c842dd5ab3ca8907bc2d7ccfbf0229fe7b7722f49dbb7d03",
+  "calibration_reference_sha256": "782a93db6197f6c5c9957d68842123af0458e05b9e4f10879d0e4ca9cb9be982",
   "holdout_membership_sha256": "8c5d1b0c42247749767ac3a7da3bd61573e0f9bf45f503347a70f87b6b3ad02a",
   "model_artifact_sha256": {
     "models/direct_pk/xgboost_cmax.json": "14391eb0881cb3ec83ab2f81592c5fe75da7c949290ec438fddc2d7136f792a0",
@@ -22,7 +22,7 @@
   "validity": "not split-conformal; fitted components saw calibration outcomes",
   "tracks": {
     "meta": {
-      "0.5": 0.26384115887285337,
+      "0.5": 0.3285846937234829,
       "0.2": 0.7004223922814669,
       "0.1": 1.0103533304289622,
       "0.05": 1.6054910003038634
@@ -34,15 +34,15 @@
       "0.05": 1.7929130806302982
     },
     "ml": {
-      "0.5": 0.26680793689976445,
-      "0.2": 0.4212134175239819,
+      "0.5": 0.28893987806097243,
+      "0.2": 0.4451454997706077,
       "0.1": 0.8461426806132407,
       "0.05": 1.1727488603292069
     }
   },
   "consumed_development_benchmark_coverage": {
     "meta": {
-      "0.5": 0.407,
+      "0.5": 0.5116,
       "0.2": 0.7326,
       "0.1": 0.9186,
       "0.05": 0.9767
@@ -54,8 +54,8 @@
       "0.05": 0.9767
     },
     "ml": {
-      "0.5": 0.3721,
-      "0.2": 0.5349,
+      "0.5": 0.3837,
+      "0.2": 0.5581,
       "0.1": 0.7907,
       "0.05": 0.8721
     }

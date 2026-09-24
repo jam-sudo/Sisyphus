@@ -3758,7 +3758,6 @@ varenicline,c1cnc2cc3c(cc2n1)C1CNCC3C1,0.5,0.0024399999999999,-2.311580177997289
 varenicline,c1cnc2cc3c(cc2n1)C1CNCC3C1,1.0,0.0055342569510278,-2.2569406807890493,2,3.0,16.0,103.0,,tablet,False,False
 varenicline,c1cnc2cc3c(cc2n1)C1CNCC3C1,2.0,0.0098899999999999,-2.305833704066802,1,3.0,19.3,222.0,,tablet,False,False
 varenicline,c1cnc2cc3c(cc2n1)C1CNCC3C1,3.0,0.0107999999999999,-2.4436974992327127,1,3.13,20.5,223.0,,solution,False,False
-abacavir,Nc1nc(NC2CC2)c2ncn(C3C=CC(CO)C3)c2n1,600.0,3.67,-2.213485186131554,1,,14.0,,,tablet,False,False
 adefovir dipivoxil,CC(C)(C)C(=O)OCOP(=O)(COCCn1cnc2c(N)ncnc21)OCOC(=O)C(C)(C)C,10.0,0.0233,-2.632644078973981,1,,,,59.0,tablet,False,True
 alosetron,Cc1[nH]cnc1CN1CCc2c(c3ccccc3n2C)C1=O,4.0,0.005,-2.9030899869919438,1,,1.5,,50.0,tablet,False,True
 amphetamine,CC(N)Cc1ccccc1,18.8,0.0449,-2.621911508260357,1,,11.0,,,tablet,False,False
@@ -3791,7 +3790,7 @@ moxifloxacin,COc1c(N2CC3CCCNC3C2)c(F)cc2c(=O)c(C(=O)O)cn(C3CC3)c12,400.0,4.1,-1.
 norethindrone,C#CC1(O)CCC2C3CCC4=CC(=O)CCC4C3CCC21C,5.0,0.02619,-2.2808345059107866,1,,8.51,,,tablet,False,True
 omeprazole,COc1ccc2nc(S(=O)Cc3ncc(C)c(OC)c3C)[nH]c2c1,40.0,0.539,-1.8704712261412237,1,,0.5,,76.0,tablet,False,False
 oseltamivir,CCOC(=O)C1=CC(OC(CC)CC)C(NC(C)=O)C(N)C1,30.0,0.065,-2.664207898076807,1,,1.0,,,tablet,False,False
-pantoprazole,COc1ccnc(CS(=O)c2nc3ccc(OC(F)F)cc3[nH]2)c1OC,40.0,2.5,-1.2041199826559248,1,,3.5,,77.0,tablet,False,False
+pantoprazole,COc1ccnc(CS(=O)c2nc3ccc(OC(F)F)cc3[nH]2)c1OC,40.0,2.5,-1.2041199826559248,1,,1.0,,77.0,enteric-coated tablet,False,False
 posaconazole,CCC(C(C)O)n1ncn(-c2ccc(N3CCN(c4ccc(OCC5COC(Cn6cncn6)(c6ccc(F)cc6F)C5)cc4)CC3)cc2)c1=O,600.0,0.014,-4.632023214705406,1,,,,54.0,tablet,False,True
 serdexmethylphenidate,COC(=O)C(c1ccccc1)C1CCCCN1C(=O)OC[n+]1cccc(C(=O)NC(CO)C(=O)[O-])c1,52.3,0.014,-3.572373653189036,1,,5.7,,,tablet,False,False
 sirolimus,COC1CC2CCC(C)C(O)(O2)C(=O)C(=O)N2CCCCC2C(=O)OC(C(C)CC2CCC(O)C(OC)C2)CC(=O)C(C)C=C(C)C(O)C(OC)C(=O)C(C)CC(C)C=CC=CC=C1C,20.0,0.0144,-3.1426675035687315,1,,,,27.0,tablet,False,True
