@@ -18,8 +18,15 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert data["drugs"]["codeine"]["tier"] == "gold"
     refs = {row.name: row for row in load_reference() if row.in_holdout}
     cache = json.loads((ROOT / "data/training/4track_holdout_predictions.json").read_text())
-    assert cache["n_holdout"] == data["metadata"]["holdout_with_cmax"] == len(refs) == 79
+    assert cache["n_holdout"] == data["metadata"]["holdout_with_cmax"] == len(refs) == 77
     assert {row["name"] for row in cache["drugs"]} == set(refs)
+    for name in ("cimetidine", "mefenamic acid"):
+        assert data["drugs"][name]["tier"] == "unverified"
+        assert not data["drugs"][name]["pk_params"]
+        assert name not in refs
+    assert refs["probenecid"].cmax_obs == pytest.approx(35.3)
+    assert "mean-profile maximum" in data["drugs"]["alprazolam"]["source"]
+    assert "mean-profile maximum" in data["drugs"]["triazolam"]["source"]
     for row in cache["drugs"]:
         assert row["obs"] == refs[row["name"]].cmax_obs
         assert not any(word in data["drugs"][row["name"]]["source"].lower()

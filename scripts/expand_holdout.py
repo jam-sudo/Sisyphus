@@ -200,12 +200,13 @@ class OSPObservation:
     source: str
     study: str
     route: str = "oral"
-    formulation: str = "IR"
+    formulation: str = "unspecified"
     population: str = "healthy"
     fed_state: str = "fasted"
     cmax_extraction: str = "profile_max"
     quality_tier: str = "medium"
     n_subjects: int | None = None
+    data_type: str = "unspecified"
 
 
 def extract_osp_repo(repo_name: str, clone_dir: Path, drugbank: dict) -> list[OSPObservation]:
@@ -334,7 +335,9 @@ def extract_osp_repo(repo_name: str, clone_dir: Path, drugbank: dict) -> list[OS
             tmax_obs=round(tmax, 3) if tmax is not None else None,
             source=f"OSP/{repo_name}/{json_file.name}",
             study=str(study_id),
+            formulation=(props.get("Formulation", "").strip().strip(".") or "unspecified"),
             n_subjects=int(n_subjects) if n_subjects else None,
+            data_type=props.get("Data type", "unspecified").strip().lower(),
         ))
 
     return results
@@ -360,10 +363,14 @@ def extract_all_osp(drugbank: dict) -> list[OSPObservation]:
 
 def select_best_osp(observations: list[OSPObservation]) -> dict[str, OSPObservation]:
     """For each drug, select the best single observation.
-    Prefer: largest N, then median Cmax among similar-dose studies.
+    Exclude individual curves, then use the most represented dose and its
+    median profile maximum. This is a source-selection heuristic, not a
+    direct estimate of mean individual Cmax.
     """
     by_drug: dict[str, list[OSPObservation]] = {}
     for obs in observations:
+        if obs.data_type == "individual" or obs.n_subjects == 1:
+            continue
         by_drug.setdefault(obs.drug_name, []).append(obs)
 
     best = {}

@@ -9,12 +9,13 @@
     "source": "OSP/Alprazolam-Model/Alprazolam-Model.json",
     "study": "Juhl 1984",
     "route": "oral",
-    "formulation": "IR",
+    "formulation": "unspecified",
     "population": "healthy",
     "fed_state": "fasted",
     "cmax_extraction": "profile_max",
     "quality_tier": "medium",
-    "n_subjects": 17
+    "n_subjects": 17,
+    "data_type": "aggregated"
   },
   {
     "drug_name": "atazanavir",
@@ -60,12 +61,13 @@
     "source": "OSP/Cimetidine-Model/Cimetidine-Model.json",
     "study": "Grahnen 1979",
     "route": "oral",
-    "formulation": "IR",
+    "formulation": "200 mg Tagamet tablets (2 tablets)",
     "population": "healthy",
     "fed_state": "fasted",
     "cmax_extraction": "profile_max",
     "quality_tier": "medium",
-    "n_subjects": 1
+    "n_subjects": 1,
+    "data_type": "individual"
   },
   {
     "drug_name": "dapagliflozin",
@@ -162,12 +164,13 @@
     "source": "OSP/Mefenamic-acid-Model/Mefenamic_acid-Model.json",
     "study": "Mahadik 2012",
     "route": "oral",
-    "formulation": "IR",
+    "formulation": "capsule",
     "population": "healthy",
     "fed_state": "fasted",
     "cmax_extraction": "profile_max",
     "quality_tier": "medium",
-    "n_subjects": 12
+    "n_subjects": 12,
+    "data_type": "aggregated"
   },
   {
     "drug_name": "midazolam",
@@ -230,12 +233,13 @@
     "source": "OSP/Probenecid-Model/Probenecid-Model.json",
     "study": "Selen 1982",
     "route": "oral",
-    "formulation": "IR",
+    "formulation": "tablet",
     "population": "healthy",
     "fed_state": "fasted",
     "cmax_extraction": "profile_max",
     "quality_tier": "medium",
-    "n_subjects": 5
+    "n_subjects": 5,
+    "data_type": "aggregated"
   },
   {
     "drug_name": "sildenafil",
@@ -264,11 +268,12 @@
     "source": "OSP/Triazolam-Model/Triazolam-Model.json",
     "study": "Kroboth 1995",
     "route": "oral",
-    "formulation": "IR",
+    "formulation": "Halcion tablet",
     "population": "healthy",
     "fed_state": "fasted",
     "cmax_extraction": "profile_max",
     "quality_tier": "medium",
-    "n_subjects": 12
+    "n_subjects": 12,
+    "data_type": "aggregated"
   }
 ]

@@ -2,8 +2,8 @@
   "metadata": {
     "created": "2026-03-26",
     "n_drugs": 331,
-    "n_with_cmax": 118,
-    "holdout_with_cmax": 79,
+    "n_with_cmax": 116,
+    "holdout_with_cmax": 77,
     "sources": {
       "original": 293,
       "osp_new": 8,
@@ -136,13 +136,14 @@
     "alprazolam": {
       "name": "alprazolam",
       "tier": "silver",
-      "source": "OSP observed data",
+      "source": "Juhl et al. 1984 healthy matched-control 1 mg oral arm, digitized aggregate concentration-time Fig. 1 via OSP Alprazolam-Model observed record 741 (N=17); 0.014003 mg/L is the mean-profile maximum, not mean individual Cmax; the original abstract reports 17.2 with an inconsistent micrograms/mL unit and calls the matrix serum, so no unit correction is inferred without the full text; fasting and unspecified formulation are OSP metadata only; https://pubmed.ncbi.nlm.nih.gov/6143766/; https://github.com/Open-Systems-Pharmacology/Alprazolam-Model/blob/master/Alprazolam-Model.json",
       "dose_mg": 1.0,
       "route": "oral",
       "pk_params": {
         "cmax_mg_L": 0.014003
       },
-      "smiles": "Cc1nnc2n1-c1ccc(Cl)cc1C(c1ccccc1)=NC2"
+      "smiles": "Cc1nnc2n1-c1ccc(Cl)cc1C(c1ccccc1)=NC2",
+      "correction_note": "2026-09-24: made OSP profile-max provenance and primary-abstract unit/matrix ambiguity explicit; retained silver provisional curve value."
     },
     "alvimopan": {
       "name": "alvimopan",
@@ -646,14 +647,13 @@
     },
     "cimetidine": {
       "name": "cimetidine",
-      "tier": "silver",
-      "source": "OSP observed data",
+      "tier": "unverified",
+      "source": "Grahnen et al. 1979 Fig. 2 via OSP Cimetidine-Model observed record 1213: 400 mg oral Tagamet, but the 2.348425 mg/L peak is one individual (N=1), not a cohort summary; original full-text cohort Cmax unavailable; https://pubmed.ncbi.nlm.nih.gov/520401/; https://github.com/Open-Systems-Pharmacology/Cimetidine-Model/blob/master/Cimetidine-Model.json",
       "dose_mg": 400.0,
       "route": "oral",
-      "pk_params": {
-        "cmax_mg_L": 2.348425
-      },
-      "smiles": "CN/C(=N/C#N)NCCSCc1nc[nH]c1C"
+      "pk_params": {},
+      "smiles": "CN/C(=N/C#N)NCCSCc1nc[nH]c1C",
+      "correction_note": "2026-09-24: quarantined individual-subject OSP curve maximum from cohort development benchmark; requires tabulated cohort Cmax."
     },
     "cinacalcet": {
       "name": "cinacalcet",
@@ -2118,14 +2118,13 @@
     },
     "mefenamic acid": {
       "name": "mefenamic acid",
-      "tier": "silver",
-      "source": "OSP observed data",
+      "tier": "unverified",
+      "source": "Mahadik et al. 2012 Fig. 3 via OSP Mefenamic-acid-Model observed record 548: 250 mg oral capsule, N=12 aggregate profile; 2.173397 mg/L is an isolated digitized mean-profile maximum, while original abstract does not report matching dose, food state or Cmax; https://pubmed.ncbi.nlm.nih.gov/22275128/; https://github.com/Open-Systems-Pharmacology/Mefenamic-acid-Model/blob/master/Mefenamic_acid-Model.json",
       "dose_mg": 250.0,
       "route": "oral",
-      "pk_params": {
-        "cmax_mg_L": 2.173397
-      },
-      "smiles": "Cc1cccc(Nc2ccccc2C(=O)O)c1C"
+      "pk_params": {},
+      "smiles": "Cc1cccc(Nc2ccccc2C(=O)O)c1C",
+      "correction_note": "2026-09-24: quarantined unverified digitized profile peak pending original full-text tabulated cohort Cmax and arm confirmation."
     },
     "meloxicam": {
       "name": "meloxicam",
@@ -2900,13 +2899,14 @@
     "probenecid": {
       "name": "probenecid",
       "tier": "silver",
-      "source": "OSP observed data",
+      "source": "Selen et al. 1982 original study abstract: mean peak parent plasma concentration 35.3 micrograms/mL after a single 0.5 g oral dose in overnight-fasted healthy male volunteers; 1 microgram/mL = 1 mg/L; N=5 and tablet formulation come from OSP Probenecid-Model observed record 16901, not the abstract; https://pubmed.ncbi.nlm.nih.gov/7175716/; https://github.com/Open-Systems-Pharmacology/Probenecid-Model/blob/main/Probenecid-Model.json",
       "dose_mg": 500.0,
       "route": "oral",
       "pk_params": {
-        "cmax_mg_L": 32.9
+        "cmax_mg_L": 35.3
       },
-      "smiles": "CCCN(CCC)S(=O)(=O)c1ccc(C(=O)O)cc1"
+      "smiles": "CCCN(CCC)S(=O)(=O)c1ccc(C(=O)O)cc1",
+      "correction_note": "2026-09-24: replaced 32.9 mg/L digitized mean-profile maximum with the original abstract mean peak of 35.3 mg/L; retained silver pending full-text N/formulation check."
     },
     "progesterone": {
       "name": "progesterone",
@@ -3715,13 +3715,14 @@
     "triazolam": {
       "name": "triazolam",
       "tier": "silver",
-      "source": "OSP observed data",
+      "source": "Kroboth et al. 1995 Fig. 1 via OSP Triazolam-Model observed record 711: digitized aggregate mean-profile maximum 0.001483 mg/L after 0.25 mg oral tablet, N=12; original abstract confirms 12 men and single oral marketed tablet, but does not report Cmax or fasting; https://pubmed.ncbi.nlm.nih.gov/7593708/; https://github.com/Open-Systems-Pharmacology/Triazolam-Model/blob/master/Triazolam-Model.json",
       "dose_mg": 0.25,
       "route": "oral",
       "pk_params": {
         "cmax_mg_L": 0.001483
       },
-      "smiles": "Cc1nnc2n1-c1ccc(Cl)cc1C(c1ccccc1Cl)=NC2"
+      "smiles": "Cc1nnc2n1-c1ccc(Cl)cc1C(c1ccccc1Cl)=NC2",
+      "correction_note": "2026-09-24: made OSP digitized-profile estimator and primary-abstract limitations explicit; retained silver provisional value."
     },
     "ulipristal": {
       "name": "ulipristal acetate",

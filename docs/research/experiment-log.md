@@ -10,6 +10,28 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Quarantine two OSP profile peaks and correct probenecid
+
+An outcome-blind second AI source review found that the scored cimetidine OSP
+curve came from one person, not a cohort, and that the mefenamic-acid
+mean-profile peak could not be verified from its original abstract. Both are
+now unverified. The probenecid original abstract reports a 35.3 mg/L mean
+peak after 500 mg, replacing the digitized mean-profile peak of 32.9 mg/L.
+Alprazolam and triazolam retain provisional profile maxima with explicit
+provenance and caveats. The OSP importer now excludes individual curves from
+cohort selection. A dry run also found the integration script could restore
+seven previously quarantined labels from curated/manual/FDA files; it now
+honors the `unverified` tier across every import. See
+[source adjudication](../validation/development_osp_silver_profile_followup_2026-09-24.md).
+
+With unchanged fitted models, the scored development set moves from N=79 to
+N=77; Meta AAFE **2.8980 → 2.9299** (conditional CI **2.3833–3.6509**),
+Engine **3.8627**, direct ML **3.3487**, and in-domain Meta **3.0557**
+(N=62). This reflects corrected reference scope, not a model change or
+independent validation. Colima was not used.
+
+---
+
 ## 2026-09-24 (cont.) — Replace dapagliflozin profile peak with original-table Cmax
 
 The original fasted 10 mg, N=14 study Table 1 reports parent-plasma individual
