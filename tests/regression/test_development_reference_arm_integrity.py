@@ -54,3 +54,6 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert refs["oxybutynin"].dose_mg == 5.0
     assert refs["oxybutynin"].cmax_obs == 0.0082
     assert refs["oxybutynin"].auc_obs is None
+    assert refs["dasatinib"].dose_mg == 100.0
+    assert refs["dasatinib"].cmax_obs == 0.2246
+    assert refs["dasatinib"].auc_obs is None
