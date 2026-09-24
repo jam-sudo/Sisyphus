@@ -750,15 +750,15 @@
     },
     "codeine": {
       "name": "codeine",
-      "tier": "silver",
-      "source": "Band et al., J Clin Pharmacol 1994 (PMID 7983238): crossover study of immediate-release codeine phosphate and sustained-release codeine; reported first-dose IR parent plasma Cmax 138.8 ng/mL after the stated 60 mg IR dose. Fasting state and the exact base-equivalent normalization of that nominal dose are not established from the abstract. https://pubmed.ncbi.nlm.nih.gov/7983238/",
-      "dose_mg": 60.0,
+      "tier": "gold",
+      "source": "FDA NDA 202245 clinical pharmacology review, study S30-T30-PVFS Table 1: one 30 mg codeine sulfate immediate-release tablet in 36 overnight-fasted healthy volunteers gave arithmetic mean parent-plasma Cmax 71.4 +/- 21.2 ng/mL. Codeine sulfate is a trihydrate with MW 750.85 g/mol for two codeine molecules; NIST parent MW 299.3642 g/mol. The 30 mg sulfate tablet therefore gives 23.922024 mg parent-equivalent model input. https://www.accessdata.fda.gov/drugsatfda_docs/nda/2011/202245Orig1s000ClinPharmR.pdf; https://doi.usp.org/USPNF/USPNF_M19640_04_01.html; https://webbook.nist.gov/cgi/cbook.cgi?ID=C76573&Mask=3600&Units=CAL",
+      "dose_mg": 23.922024,
       "route": "oral",
       "pk_params": {
-        "cmax_mg_L": 0.139
+        "cmax_mg_L": 0.0714
       },
       "smiles": "COc1ccc2c3c1O[C@H]1[C@@H](O)C=C[C@H]4[C@@H](C2)N(C)CC[C@@]341",
-      "correction_note": "2026-09-24: removed a 26-point curve with two concentrations at every time (mixed IR/SR profiles); retained directly reported first-dose IR Cmax but downgraded from platinum because full arm-level dose-equivalence provenance is unavailable."
+      "correction_note": "2026-09-24: removed a 26-point curve with two concentrations at every time (mixed IR/SR profiles); the retained Band 1994 first-dose IR value was silver because dose-equivalence provenance was unavailable. Replaced that arm with the FDA-review fasted single-dose tablet arm and converted sulfate trihydrate mass to parent mass."
     },
     "colchicine": {
       "name": "colchicine",

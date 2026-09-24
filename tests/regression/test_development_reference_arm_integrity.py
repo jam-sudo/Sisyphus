@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 def test_adjudicated_holdout_arms_match_scored_cache():
     data = json.loads((ROOT / "data/reference/clinical_pk.json").read_text())
     assert {name for name, drug in data["drugs"].items() if "ct_curve" in drug} == {"simvastatin"}
-    assert data["drugs"]["codeine"]["tier"] == "silver"
+    assert data["drugs"]["codeine"]["tier"] == "gold"
     refs = {row.name: row for row in load_reference() if row.in_holdout}
     cache = json.loads((ROOT / "data/training/4track_holdout_predictions.json").read_text())
     assert cache["n_holdout"] == data["metadata"]["holdout_with_cmax"] == len(refs) == 79
@@ -41,6 +41,8 @@ def test_adjudicated_holdout_arms_match_scored_cache():
         assert name not in refs
     assert refs["clopidogrel"].dose_mg == 300.0
     assert refs["clopidogrel"].cmax_obs == 0.0145
+    assert refs["codeine"].dose_mg == pytest.approx(30 * 2 * 299.3642 / 750.85, rel=1e-6)
+    assert refs["codeine"].cmax_obs == 0.0714
     assert refs["levocetirizine"].dose_mg == pytest.approx(5 * 388.9 / 461.8, rel=1e-6)
     assert refs["levocetirizine"].cmax_obs == 0.27
     assert refs["methylphenidate"].dose_mg == pytest.approx(20 * 233.31 / 269.77, rel=1e-6)

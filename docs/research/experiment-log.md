@@ -10,6 +10,25 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Replace ambiguous codeine phosphate arm with FDA tablet arm
+
+The FDA review for NDA 202245 reports a single fasted 30 mg codeine sulfate
+immediate-release tablet arm in 36 healthy volunteers: parent Cmax
+71.4 ng/mL. Using the review's sulfate-trihydrate identity and USP/NIST
+molecular weights, the parent-equivalent model dose is 23.922024 mg. This
+replaces the silver 1994 codeine phosphate 60 mg / 138.8 ng/mL arm whose
+base-equivalent normalization and fasting state could not be confirmed from
+the abstract. See
+[`development_codeine_fda_arm_followup_2026-09-24.md`](../validation/development_codeine_fda_arm_followup_2026-09-24.md).
+
+With unchanged fitted models and N=79 scored, development Meta AAFE moves
+from **2.9348** to **2.9442** (conditional bootstrap CI **2.4084–3.6653**),
+Engine **3.8818**, direct ML **3.2988**, and in-domain Meta **3.0312**
+(N=65). This is a source correction that worsens the development number,
+not an independent model performance estimate.
+
+---
+
 ## 2026-09-24 (cont.) — Correct three scored salt doses and quinine source arm
 
 The methylphenidate and levocetirizine labels report hydrochloride and
