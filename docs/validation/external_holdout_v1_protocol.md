@@ -352,6 +352,12 @@ development source leads: the text mentions may describe different arms,
 PubChem's first name match needs identity review, and overlap with the earlier
 75-record screen was not established. They must not be counted as additional
 eligible or blinded final-test compounds.
+Protocol text supports fasted single oral-dose investigation for
+`NCT05635461` (CVN424), `NCT04504435` (GSK3494245), and `NCT04208321`
+(VT-1598), but the exact posted arms and absolute parent-plasma Cmax still need
+source review. The fourth provisional nonhit, `NCT05627518` (linaprazan
+glurate), reports only Cmax *ratios* in its outcome titles, so it does not
+establish an absolute Cmax label for this benchmark.
 
 The PMDA [English review-report index](https://www.pmda.go.jp/english/review-services/reviews/approved-information/drugs/0001.html)
 (snapshot SHA256
