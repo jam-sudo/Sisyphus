@@ -10,6 +10,28 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Finish generic-label arm source audit
+
+Six remaining scored generic-label rows were checked against primary reports.
+Budesonide's old AUC and half-life came from pediatric oral and intravenous
+arms, respectively; dalfampridine's 7.6 h half-life was a sulfate metabolite,
+while 96% was relative tablet-to-solution bioavailability. Etodolac's old
+peak came from serum while the benchmark requires plasma. Rivaroxaban's old
+half-life and bioavailability did not match the 10 mg source arm. Ramelteon's
+matching AUC was added. Dapagliflozin's OSP value was explicitly marked as a
+digitized mean-profile peak. All six synthetic curves were removed. See
+[`development_remaining_generic_label_followup_2026-09-24.md`](../validation/development_remaining_generic_label_followup_2026-09-24.md).
+
+The regenerated public-profile development cache still scores **N=79**:
+Meta AAFE **2.9272** (conditional bootstrap 95% CI **2.3869–3.6662**),
+Engine **3.9652**, direct ML **3.2553**, and descriptive in-domain Meta
+**2.9439** (N=65). The paired Meta/ML ratio is **0.8992**
+(CI **0.7975–1.0106**, includes 1). The nominal 90% development-residual
+half-width is **10.24×**, covering **72/79 (91.1%)** on the consumed
+cohort. No fitted model changed and no independent validation was added.
+
+---
+
 ## 2026-09-24 (cont.) — Resolve generic-label development PK arms
 
 Eight scored references labeled only “FDA label (analytical model from PK

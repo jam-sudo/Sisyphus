@@ -114,3 +114,15 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert refs["zolpidem"].dose_mg == 10.0
     for name in ("azithromycin", "ciprofloxacin", "colchicine", "diclofenac", "moxifloxacin", "zolpidem"):
         assert "ct_curve" not in data["drugs"][name]
+    assert refs["budesonide"].auc_obs == pytest.approx(0.01413)
+    assert data["drugs"]["budesonide"]["pk_params"].get("thalf_h") is None
+    assert refs["dalfampridine"].cmax_obs == pytest.approx(0.0427)
+    assert "thalf_h" not in data["drugs"]["dalfampridine"]["pk_params"]
+    assert "bioavailability_pct" not in data["drugs"]["dalfampridine"]["pk_params"]
+    assert refs["etodolac"].cmax_obs == pytest.approx(14.0)
+    assert "bioavailability_pct" not in data["drugs"]["etodolac"]["pk_params"]
+    assert refs["ramelteon"].auc_obs == pytest.approx(0.0187)
+    assert data["drugs"]["rivaroxaban"]["pk_params"]["thalf_h"] == pytest.approx(7.57)
+    assert "bioavailability_pct" not in data["drugs"]["rivaroxaban"]["pk_params"]
+    for name in ("budesonide", "dalfampridine", "dapagliflozin", "etodolac", "ramelteon", "rivaroxaban"):
+        assert "ct_curve" not in data["drugs"][name]

@@ -40,4 +40,4 @@ def test_cached_development_aafe_is_2p932() -> None:
             preds = data["drugs"]
         aafe = _aafe(preds)
     assert data["n_holdout"] == 79
-    assert abs(aafe - 2.932) < 0.020, f"AAFE drifted: {aafe:.4f}"
+    assert abs(aafe - 2.927) < 0.020, f"AAFE drifted: {aafe:.4f}"
