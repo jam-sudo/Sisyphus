@@ -12,7 +12,7 @@ Run with the locked Python environment from the repo root:
 
 Outputs:
     web/public/data/console_data.json   -- the full console payload
-    web/public/data/benchmark.json      -- copy of the N=107 development cache
+    web/public/data/benchmark.json      -- copy of the development cache
 """
 
 from __future__ import annotations
@@ -209,7 +209,7 @@ def main():
         "read from CmaxPrediction.",
         "The curve, Tmax, AUC, half-life, solver status, and mass balance are read from the "
         "same EngineSimulation; no second solve or curve rescaling is performed.",
-        "N=107 is a repeatedly accessed development benchmark, not an independent holdout.",
+        "This repeatedly accessed development benchmark is not an independent holdout.",
     ]
 
     log.info("loading benchmark cache ...")

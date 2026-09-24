@@ -9,7 +9,6 @@ from pathlib import Path
 
 from sisyphus.validation.holdout_contract import _PRODUCTION_FITTED_MODELS, sha256_file
 from sisyphus.validation.identity import ik14
-from sisyphus.validation.reference import load_reference
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -19,10 +18,11 @@ def _name_key(name: str) -> str:
 
 
 def test_active_fitted_rows_exclude_current_development_compounds() -> None:
-    holdout = [row for row in load_reference() if row.in_holdout]
+    holdout = json.loads((ROOT / "data/reference/holdout.json").read_text())["holdout"]
+    drugs = json.loads((ROOT / "data/reference/clinical_pk.json").read_text())["drugs"]
     assert len(holdout) == 107
-    holdout_keys = {ik14(row.smiles) for row in holdout}
-    holdout_names = {_name_key(row.name) for row in holdout}
+    holdout_keys = {ik14(drugs[name]["smiles"]) for name in holdout}
+    holdout_names = {_name_key(name) for name in holdout}
     assert None not in holdout_keys
 
     for model in _PRODUCTION_FITTED_MODELS:

@@ -1,6 +1,6 @@
 /* ============================================================
    BenchmarkView — retrospective development evidence. The scatter and per-track
-   AAFE are the REAL N=107 development-benchmark results
+   AAFE are the source-audited N=105 development-benchmark results
    (data/training/4track_holdout_predictions.json).
    ============================================================ */
 import type { ConsoleData } from "../../types";
@@ -50,7 +50,7 @@ export function BenchmarkView({ tab, data }: { tab: number; data: ConsoleData })
           </div>
           <div className="panel">
             <Caveat>
-              Paired Meta/ML AAFE ratio: <b>{f2(b.paired_meta_ml.ratio)}</b> (95% bootstrap CI {f2(b.paired_meta_ml.ci_95_low)}–{f2(b.paired_meta_ml.ci_95_high)}). The interval includes 1. N=107 has informed ~47 system-selection cycles and is a development benchmark; its interval also excludes adaptive-selection bias. An outcome-blinded external set is still required.
+              Paired Meta/ML AAFE ratio: <b>{f2(b.paired_meta_ml.ratio)}</b> (95% bootstrap CI {f2(b.paired_meta_ml.ci_95_low)}–{f2(b.paired_meta_ml.ci_95_high)}). The original N=107 cohort informed ~47 system-selection cycles; this audited N={b.n_development} subset is development evidence, and its interval excludes adaptive-selection bias. An outcome-blinded external set is still required.
             </Caveat>
           </div>
         </div>
@@ -102,7 +102,7 @@ export function BenchmarkView({ tab, data }: { tab: number; data: ConsoleData })
       <div className="panel">
         <h5>The weakest link</h5>
         <Caveat>
-          The XGBoost CL<sub>int</sub> model plateaus at R² ≈ <b>0.24</b> across many documented approaches. More architecture search on N=107 is not independent evidence; progress requires cleaner clinical targets, an outcome-blinded holdout, and a pre-registered hypothesis.
+          The XGBoost CL<sub>int</sub> model plateaus at R² ≈ <b>0.24</b> across many documented approaches. More architecture search on this consumed cohort is not independent evidence; progress requires cleaner clinical targets, an outcome-blinded holdout, and a pre-registered hypothesis.
         </Caveat>
       </div>
     </div>

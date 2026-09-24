@@ -7,7 +7,7 @@
     "oral_dose_mg"
   ],
   "intended_use": "screening, ranking, and uncertainty-aware triage",
-  "evaluation_context": "healthy adults, single oral dose, immediate-release, fasted-state reference records",
+  "evaluation_context": "retrospective oral Cmax records with heterogeneous dosing, formulations, food states, and populations",
   "unobserved_inputs": [
     "formulation and release mechanism",
     "salt or solid-state form",
@@ -27,19 +27,19 @@
       "reason": "No independently curated outcome-blinded external cohort is available for the current system."
     },
     "retrospective_development_benchmark": {
-      "n_compounds": 107,
-      "meta_aafe": 2.6976121459119446,
+      "n_compounds": 105,
+      "meta_aafe": 2.694997454343072,
       "bootstrap_95_ci": [
-        2.3097,
-        3.1656
+        2.2968,
+        3.1599
       ],
       "classification": "repeatedly used for system selection; shipped-model fitted sources are SHA-pinned but this is not independent system validation",
       "source": "data/training/4track_holdout_predictions.json",
       "paired_meta_ml": {
-        "ratio": 0.9007,
-        "ci_95_low": 0.8113,
-        "ci_95_high": 0.995,
-        "n": 107
+        "ratio": 0.8896,
+        "ci_95_low": 0.8005,
+        "ci_95_high": 0.9855,
+        "n": 105
       }
     },
     "consumed_temporal_challenge": {

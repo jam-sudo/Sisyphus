@@ -111,3 +111,7 @@ the corrected reference; `sbi_compare_ibis.py` rejects the old 30 mg posterior
 against the current 22.5 mg reference. A Cmax summary is not itself a measured
 concentration at t=1 h, so the old comparison never established clinical
 posterior accuracy.
+
+Subsequent non-PMID holdout-arm adjudication reduced the scored development
+cache from N=107 to N=105; see the [development-reference source audit](development_reference_source_audit_2026-09-24.md)
+for the current headline and its distinct bootstrap artifact.

@@ -13,7 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 CACHE = ROOT / "data" / "training" / "4track_holdout_predictions.json"
-CI = ROOT / "data" / "validation" / "4track_ci_2026-09-24_digoxin_reference.json"
+CI = ROOT / "data" / "validation" / "4track_ci_2026-09-24_audited_reference.json"
 MODEL_CARD = ROOT / "data" / "model_card.json"
 WEB_BENCHMARK = ROOT / "web" / "public" / "data" / "benchmark.json"
 WEB_CONSOLE = ROOT / "web" / "public" / "data" / "console_data.json"
@@ -82,7 +82,7 @@ def main() -> None:
     console["constants"].pop("HOLDOUT_AAFE", None)
     console["constants"].pop("INDOMAIN_AAFE", None)
     notes = console.setdefault("meta_info", {}).setdefault("notes", [])
-    notice = "N=107 is a repeatedly accessed development benchmark, not an independent holdout."
+    notice = "This repeatedly accessed development benchmark is not an independent holdout."
     if notice not in notes:
         notes.append(notice)
 

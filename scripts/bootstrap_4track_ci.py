@@ -4,8 +4,7 @@
 Reads `data/training/4track_holdout_predictions.json` (the cached per-drug
 predictions produced by `scripts/run_engine_benchmark.py`) and writes
 `data/validation/4track_ci_<date>_<tag>.json` with point estimates + CIs
-for Engine / ML / Meta on the overall N=107 holdout AND the in-domain
-subset.
+for Engine / ML / Meta on the scored development cohort and in-domain subset.
 
 Method (matches `scripts/run_n50_benchmark.py::_aafe_with_ci`):
     AAFE = 10 ^ mean(abs(log10(fold)))
@@ -121,7 +120,7 @@ def main() -> None:
 
     report = {
         "computed_at": f"{date}-{args.tag}",
-        "source_cache": str(args.cache.relative_to(ROOT)),
+        "source_cache": str(args.cache.resolve().relative_to(ROOT)),
         "source_cache_sha256": hashlib.sha256(args.cache.read_bytes()).hexdigest(),
         "context": args.context,
         "method": "bootstrap on abs(log10(fold))",

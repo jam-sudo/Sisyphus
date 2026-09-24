@@ -134,7 +134,7 @@ export function RailInputs({
           <input className="num" value="10,000" readOnly />
         </div>
         <div className="note" style={{ marginTop: 18, fontSize: 11.5 }}>
-          N=107 is a repeatedly accessed development benchmark. The temporal N=28 set is consumed. Neither is an independent holdout for the current system.
+          The source-audited N=105 is a repeatedly accessed development benchmark. The temporal N=28 set is consumed. Neither is an independent holdout for the current system.
         </div>
       </div>
     );

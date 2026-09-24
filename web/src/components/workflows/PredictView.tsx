@@ -130,7 +130,7 @@ export function PredictView({ drug, s, tab, running }: { drug: Drug; s: AppState
           </div>
           <div className="divider" style={{ margin: "16px 0" }} />
           <p className="note" style={{ margin: 0 }}>
-              Available mechanistic Engine, direct XGBoost C<sub>max</sub> (ML), closed-form CL/F, and conditional VDss tracks use partly different signals. The compound-type-adaptive weights were selected on the N=107 development benchmark and therefore require confirmation on a new blinded holdout.
+              Available mechanistic Engine, direct XGBoost C<sub>max</sub> (ML), closed-form CL/F, and conditional VDss tracks use partly different signals. The compound-type-adaptive weights were selected on the original N=107 development cohort and therefore require confirmation on a new blinded holdout.
           </p>
         </div>
         <div className="stack">
@@ -150,7 +150,7 @@ export function PredictView({ drug, s, tab, running }: { drug: Drug; s: AppState
           <div className="panel">
             <h5>Decorrelation</h5>
             <p className="note" style={{ margin: 0, fontSize: 12 }}>
-              Development-set performance does not establish that the blend is optimal. Further weight tuning on N=107 risks adaptive overfitting; improvements should be judged once on the preregistered external holdout.
+              Development-set performance does not establish that the blend is optimal. Further weight tuning on this consumed cohort risks adaptive overfitting; improvements should be judged once on the preregistered external holdout.
             </p>
           </div>
         </div>
