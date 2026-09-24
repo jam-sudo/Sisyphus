@@ -1,69 +1,69 @@
 {
   "computed_at": "2026-09-24-audited_reference",
   "source_cache": "data/training/4track_holdout_predictions.json",
-  "source_cache_sha256": "57025da27d1a2f2abc055e82b384554a2c0c9d1466ae2130ce8004fdedb1bf0e",
-  "context": "Source-audited generic FDA-label development arms; no independent holdout",
+  "source_cache_sha256": "0705a8ec5409a6664ec5024a6153e104936966e36a345200077b4bab2d0bf30d",
+  "context": "OSP source identity and dosing audit; no independent holdout",
   "method": "bootstrap on abs(log10(fold))",
   "n_bootstrap": 10000,
   "seed": 20260422,
   "overall": {
     "n": 79,
     "engine": {
-      "aafe": 3.9652,
-      "ci_95_low": 3.1197,
-      "ci_95_high": 5.1104,
+      "aafe": 3.9184,
+      "ci_95_low": 3.0915,
+      "ci_95_high": 5.052,
       "n": 79,
       "pct_2fold": 35.4,
       "pct_3fold": 48.1
     },
     "ml": {
-      "aafe": 3.2553,
-      "ci_95_low": 2.6287,
-      "ci_95_high": 4.0837,
+      "aafe": 3.2802,
+      "ci_95_low": 2.6488,
+      "ci_95_high": 4.12,
       "n": 79,
       "pct_2fold": 45.6,
-      "pct_3fold": 58.2
+      "pct_3fold": 57.0
     },
     "meta": {
-      "aafe": 2.9272,
-      "ci_95_low": 2.3869,
-      "ci_95_high": 3.6662,
+      "aafe": 2.9276,
+      "ci_95_low": 2.3845,
+      "ci_95_high": 3.6603,
       "n": 79,
       "pct_2fold": 50.6,
       "pct_3fold": 65.8
     },
     "paired_meta_ml": {
-      "ratio": 0.8992,
-      "ci_95_low": 0.7975,
-      "ci_95_high": 1.0106,
+      "ratio": 0.8925,
+      "ci_95_low": 0.789,
+      "ci_95_high": 1.0048,
       "n": 79
     }
   },
   "in_domain": {
     "n": 65,
     "engine": {
-      "aafe": 3.8877,
-      "ci_95_low": 3.0755,
-      "ci_95_high": 4.986,
+      "aafe": 3.949,
+      "ci_95_low": 3.1385,
+      "ci_95_high": 5.0369,
       "n": 65,
-      "pct_2fold": 33.8,
-      "pct_3fold": 46.2
+      "pct_2fold": 32.3,
+      "pct_3fold": 44.6
     },
     "ml": {
-      "aafe": 3.0765,
-      "ci_95_low": 2.4427,
-      "ci_95_high": 3.9285,
+      "aafe": 3.1461,
+      "ci_95_low": 2.4971,
+      "ci_95_high": 4.0136,
       "n": 65,
-      "pct_2fold": 50.8,
-      "pct_3fold": 60.0
+      "pct_2fold": 49.2,
+      "pct_3fold": 58.5
     },
     "meta": {
-      "aafe": 2.9439,
-      "ci_95_low": 2.3673,
-      "ci_95_high": 3.7449,
+      "aafe": 3.0105,
+      "ci_95_low": 2.4207,
+      "ci_95_high": 3.8239,
       "n": 65,
-      "pct_2fold": 50.8,
-      "pct_3fold": 64.6
+      "pct_2fold": 49.2,
+      "pct_3fold": 63.1
     },
     "paired_meta_ml": {
       "ratio": 0.9569,

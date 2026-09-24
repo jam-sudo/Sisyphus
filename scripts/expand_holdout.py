@@ -261,6 +261,8 @@ def extract_osp_repo(repo_name: str, clone_dir: Path, drugbank: dict) -> list[OS
         props = {p["Name"]: p["Value"] for p in od.get("ExtendedProperties", [])}
 
         # Filter: human, oral, plasma, fasted, single dose
+        if props.get("Molecule", "").strip().casefold() != drug_raw.casefold():
+            continue
         if props.get("Species", "").lower() != "human":
             continue
         route = props.get("Route", "").upper()
@@ -271,6 +273,10 @@ def extract_osp_repo(repo_name: str, clone_dir: Path, drugbank: dict) -> list[OS
             continue
         compartment = props.get("Compartment", "").lower()
         if "plasma" not in compartment:
+            continue
+        try:
+            float(props.get("Times of Administration [h]"))
+        except (TypeError, ValueError):
             continue
 
         # Parse dose

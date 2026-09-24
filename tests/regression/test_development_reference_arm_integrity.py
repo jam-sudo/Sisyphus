@@ -126,3 +126,12 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert "bioavailability_pct" not in data["drugs"]["rivaroxaban"]["pk_params"]
     for name in ("budesonide", "dalfampridine", "dapagliflozin", "etodolac", "ramelteon", "rivaroxaban"):
         assert "ct_curve" not in data["drugs"][name]
+    assert refs["cabozantinib"].dose_mg == 140.0
+    assert refs["cabozantinib"].cmax_obs == pytest.approx(0.554)
+    assert refs["erythromycin"].cmax_obs == pytest.approx(1.014211)
+    assert refs["ruxolitinib"].dose_mg == 25.0
+    assert refs["ruxolitinib"].cmax_obs == pytest.approx(0.4627)
+    assert refs["ruxolitinib"].auc_obs == pytest.approx(1.630)
+    osp = {row["drug_name"]: row for row in json.loads((ROOT / "data/reference/osp_observed.json").read_text())}
+    assert not {"cabozantinib", "felodipine", "itraconazole", "ruxolitinib", "verapamil"} & osp.keys()
+    assert osp["erythromycin"]["study"] == "DiSanto 1981"

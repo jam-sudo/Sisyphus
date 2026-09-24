@@ -10,6 +10,29 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Repair OSP molecule and dose provenance
+
+Source-level inspection of all 21 selected OSP rows exposed an extractor
+root cause: it filtered oral fasted plasma profiles without matching the
+observed molecule to the model's target or confirming a single dose.
+The scored cabozantinib row was rifampicin, the ruxolitinib row was
+midazolam, and erythromycin was a repeated-dose profile. The first two
+were replaced with directly reported FDA single-dose parent arms;
+erythromycin was replaced with an explicitly profile-derived single-dose
+arm. Five invalid OSP catalog rows were removed, and the extractor now
+guards both properties. See
+[`development_osp_identity_and_dose_followup_2026-09-24.md`](../validation/development_osp_identity_and_dose_followup_2026-09-24.md).
+
+The public-profile development cache remains N=79: Meta AAFE **2.9276**
+(conditional bootstrap 95% CI **2.3845–3.6603**), Engine **3.9184**,
+direct ML **3.2802**, in-domain Meta **3.0105** (N=65). Paired Meta/ML
+ratio **0.8925** (CI **0.7890–1.0048**) includes 1. The nominal 90%
+development-residual half-width is **10.24×**, covering **72/79 (91.1%)**
+of the consumed cohort. Fitted models did not change; this is not
+independent external validation.
+
+---
+
 ## 2026-09-24 (cont.) — Finish generic-label arm source audit
 
 Six remaining scored generic-label rows were checked against primary reports.
