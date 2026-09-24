@@ -5,7 +5,7 @@ Reuses the 12 source-cited measured drugs from scripts/measured_adme_poc.py and
 the observed Cmax / SMILES / dose from data/reference/clinical_pk.json. Calls the
 PRODUCTION predict(measured_adme=...) API and reads result.engine_pk (the clean
 engine-only surface). Reports SMILES-only vs measured AAFE SIDE BY SIDE — this is
-SEPARATE from the 2.698 headline and is never merged into it.
+SEPARATE from the scored Cmax headline and is never merged into it.
 
 Usage: python scripts/run_measured_adme_benchmark.py
 """
@@ -34,14 +34,16 @@ _MEASURED = [
 ]
 _OUTLIERS = {"montelukast", "abiraterone"}
 
-# Approximate literature oral bioavailability F — well-established ballparks, NOT
-# a citation-curated dataset (same provenance/caveat as scripts/run_f_decomposition.py
-# lit_F). Used to demonstrate the measured-F routing channel; the measured-F column
-# is illustrative, not a calibrated benchmark.
+# Regulatory-label human absolute-F means. The other eight former values were
+# approximate, context-mismatched, or confused absorption/relative BA with F.
+# This remains an illustrative routing check, not an external validation set.
 _LIT_F = {
-    "alprazolam": 0.90, "carbamazepine": 0.80, "clozapine": 0.55, "diclofenac": 0.55,
-    "sildenafil": 0.40, "etodolac": 1.00, "quinine": 0.80, "febuxostat": 0.85,
-    "dasatinib": 0.25, "clopidogrel": 0.50,
+    # DailyMed PK Table 1, absolute F 55% in seven healthy adults (CV 40%).
+    # https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a65aa738-8ce2-4276-8e54-5ecf4f461d3a
+    "diclofenac": 0.55,
+    # VIAGRA label §12.3, mean absolute F 41% (individual range 25–63%).
+    # https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ae2079a2-f3a9-4739-9611-0742b71e4761
+    "sildenafil": 0.41,
 }
 
 
@@ -55,8 +57,8 @@ def main() -> int:
 
     drugs = json.loads(CLINICAL_PK.read_text())["drugs"]
     rows = []
-    fe_s, fe_m, fe_mf = [], [], []
-    fe_s_clean, fe_m_clean, fe_mf_clean = [], [], []
+    fe_s, fe_m, fe_mf, fe_m_paired = [], [], [], []
+    fe_s_clean, fe_m_clean = [], []
 
     for name, fup, clint in _MEASURED:
         rec = drugs.get(name)
@@ -88,11 +90,10 @@ def main() -> int:
         fe_m.append(f_m)
         if f_mf is not None:
             fe_mf.append(f_mf)
+            fe_m_paired.append(f_m)
         if name not in _OUTLIERS:
             fe_s_clean.append(f_s)
             fe_m_clean.append(f_m)
-            if f_mf is not None:
-                fe_mf_clean.append(f_mf)
 
     hdr = (f"\n{'drug':<16}{'obs':>10}{'eng_smiles':>12}{'eng_meas':>12}"
            f"{'eng_m+F':>12}{'FE_s':>7}{'FE_m':>7}{'FE_m+F':>8}")
@@ -104,14 +105,13 @@ def main() -> int:
         print(f"{name:<16}{obs:>10.4f}{c_s:>12.4f}{c_m:>12.4f}{mf_c}"
               f"{f_s:>7.2f}{f_m:>7.2f}{mf_fe}{flag}")
     print(f"\nN={len(rows)} engine-only AAFE  SMILES={_aafe(fe_s):.3f}  "
-          f"measured(fup+clint)={_aafe(fe_m):.3f}  "
-          f"measured(fup+clint+F)={_aafe(fe_mf):.3f} [N={len(fe_mf)}]")
+          f"measured(fup+clint)={_aafe(fe_m):.3f}")
     print(f"N={len(fe_s_clean)} (excl montelukast/abiraterone)  "
-          f"SMILES={_aafe(fe_s_clean):.3f}  measured={_aafe(fe_m_clean):.3f}  "
-          f"measured+F={_aafe(fe_mf_clean):.3f} [N={len(fe_mf_clean)}]")
-    print("\nNOTE: the +F column uses APPROXIMATE literature oral-F ballparks (see _LIT_F "
-          "docstring) — illustrative of the measured-F channel, not a calibrated benchmark.")
-    print("SEPARATE from the 2.698 headline — do not merge into 4track_holdout_predictions.json.")
+          f"SMILES={_aafe(fe_s_clean):.3f}  measured={_aafe(fe_m_clean):.3f}")
+    print(f"N={len(fe_mf)} label-backed F examples only  "
+          f"measured={_aafe(fe_m_paired):.3f}  measured+F={_aafe(fe_mf):.3f}")
+    print("\nNOTE: the +F examples are too few and context-mismatched for an accuracy claim.")
+    print("SEPARATE from the scored headline — do not merge into 4track_holdout_predictions.json.")
     return 0
 
 

@@ -72,6 +72,19 @@ Population-level AAFE 1.7 is **unreachable from SMILES alone** under the current
 
 ## 8. Novel-drug failure mode — bioavailability (F), not CLint (2026-06-01)
 
+**2026-09-24 correction:** The dated F diagnosis below is a research hypothesis,
+not a verified root cause. Its ten "literature F" anchors were not a valid
+human absolute-F cohort; the [source audit](../validation/f_reference_source_audit_2026-09-24.md)
+retains only three unmatched label references, with engine/reference ratios
+0.98, 0.42, and 0.20–0.23. The asserted 10/10 systematic under-call and
+0.46–0.51 median are withdrawn. Moreover, literature oral **CL/F** cannot be
+equated with systemic **CL**, so that comparison does not isolate F from
+clearance. Prospective Cmax underprediction and absorption-scalar experiments
+remain observed results, but their physiological attribution and the claim that
+measured F is the only remaining lever need a matched oral/IV human cohort.
+The following dated paragraphs preserve the original reasoning and should be
+read under this correction.
+
 The 2026-06-01 prospective expansion (N=28; prospective Meta AAFE 3.21 > retrospective 2.698) exposed a failure mode the CLint-centric story above does **not** capture. The engine's worst prospective errors are catastrophic **under**-predictions of low-clearance, high-exposure 2025 NMEs (mirdametinib 30×, sevabertinib 18×). An IV-vs-oral decomposition localises the error:
 
 - Engine **CL_systemic is ≈ correct** (mirdametinib 4.8 vs literature CL/F 4.6 L/h; the drug *is* low-clearance and the engine knows it).
@@ -113,6 +126,11 @@ A full layered analysis (`layered-analysis-and-leap-2026-06-08.md`) ran four can
 **(a) The Cmax label-noise floor is AAFE ≈ 1.18, not ~2.** §1/§2 and dead-ends.md line 32 framed the residual as "≈ experimental + formulation + inter-patient variability." Quantified from **14 clean same-drug/same-dose study replicates** in `mmpk_expanded_full.csv` (between-study geomean fold 1.261 → σ_label 0.090; external anchor FDA intra-subject Cmax CV 21.7%±8.8%), the label-noise floor is **AAFE 1.18 (band 1.18–1.5)** — only **3–16%** of the model's error variance (σ_total=0.557 at AAFE 2.784). A *perfect* model would still score AAFE 2.56–2.75. So **Sisyphus is model-limited, not label-limited**: ~0.70 AAFE of genuine model-side headroom exists down to the OrBiTo floor (2.08). The "information-channel ceiling" framing is true *operationally* (the headroom is unreachable from SMILES) but **not** because the labels are noise-saturated. *(Confidence: high on direction, medium on the 1.18 point — N=14 replicates.)* Corollary: a handful of holdout reference Cmax are mis-curated (oxybutynin 0.001→0.008 mg/L, ~8× FDA single-dose; selegiline ~2×) — correctness fixes, small/bidirectional net AAFE effect.
 
 **(b) The binding wall is bioavailability-F blindness, shared across all four tracks (W2).** This is the unifying mechanism behind the decorrelation-gate failures. Four candidate tracks were tested at the gate this session: dose-number (DE-45, =logP), renal-secretion (DE-46, no signal), and a **measured-ADME ML regressor** (DE-47) — the last at high power (N=93), provenance-clean, and it **failed the gate decisively** (residual r=+0.69/+0.78/+0.79 vs engine/ml/meta). The reason: the dominant recoverable error is the engine's `fa·Fg·Fh` map, which is wrong in a **bidirectional per-drug way** (base over-extraction ⊕ acid under-extraction; the §8/DE-42 split) and is **shared** across tracks. Any new track lacking an F mechanism re-makes the same directional errors on the same drugs → correlated residuals. **The error, not the input, is what must decorrelate** — and F-error is everywhere. F is recoverable *in principle* (the field reaches F AAFE 1.75 with expert input, §9) but in Sisyphus it cannot be learned from SMILES (DE-28, circular), recalibrated (DE-42, `ka` linear), propagated through the engine (DE-43, meta-damped), or regressed as a track (DE-47). The only symmetry-breaking inputs are **measured and F-orthogonal**. Practical consequence: the SMILES input space is **decorrelation-exhausted** (VDss was the last orthogonal axis); a higher SMILES-only number requires a new measured F-orthogonal data modality. **The measured-input regime has no reweight lever either (DE-48, 2026-06-08):** measured-regime engine up-weighting/routing was gate-tested and *degrades* accuracy — on a representative N=93 set the engine-measured AAFE is ~3.84, *worse* than the meta (2.78); the meta correctly damps the engine even with measured inputs (DE-43 in the measured regime). The widely-cited "engine-measured 2.33" (§3) is a hand-curated clean-10 artifact; on a representative set it is ~3.84. The **only** surviving measured lever is a new F-orthogonal *data modality* (measured solubility/permeability/transporter kinetics / measured F), not any reweight or regressor track.
+
+**2026-09-24 qualification:** The failed routing/regression experiments above
+remain valid negative tests for those specific candidates. Their proposed
+common explanation—F error across all four tracks—is not independently
+established by the available human absolute-F references; see §8 correction.
 
 ---
 

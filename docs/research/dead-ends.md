@@ -1,11 +1,19 @@
 ---
-last_updated: 2026-06-03
+last_updated: 2026-09-24
 charter: Authoritative list of failed Sisyphus experiments. Read before proposing any accuracy improvement.
 ---
 
 # Dead Ends — Do Not Retry
 
 Every experiment here was run, reverted, and documented. **Before proposing any accuracy improvement, open this file and search for the approach.** New track proposals must first pass the error-decorrelation gate described in [diagnosis.md §4](./diagnosis.md).
+
+**2026-09-24 correction:** The ten-drug "literature F" values used to explain
+DE-41/42 mixed absolute F with other endpoints and contexts. The 10/10
+under-call and median engine/reference 0.46–0.51 are withdrawn; see the
+[source audit](../validation/f_reference_source_audit_2026-09-24.md). The
+recorded scalar-intervention Cmax scores and linearity of the tested `ka`
+term remain experiment results, but a general human F-bias mechanism is not
+established. Also, oral CL/F cannot be treated as systemic CL when inferring F.
 
 **Canonical count:** 43 enumerated experiments below. Narrative references in commit messages or prose (e.g. "#35 error cancellation", "14번째 시도", "누적 33 methods") use **informal** numbering that counts early exploration attempts separately; those narrative numbers are **not authoritative** and do not match the table count below. When in doubt, cite the table entry (`DE-NN`).
 
@@ -26,7 +34,7 @@ Every experiment here was run, reverted, and documented. **Before proposing any 
 | Direct CL/F + t½ predictors | DE-27, DE-28 | CL/F R²=0.232 + t½ variants all negative; falsifies "IVIVE bypass" as the reason VDss worked |
 | Hepatic intracellular fu correction (PPB-targeted) | DE-37 | Phase A infra shipped; primary literature corpus paywall-locked, 4 PPB candidates dispositioned ceiling_accepted, Meta AAFE shift 0.0% |
 | UGT path / abundance / IVIVE interventions | DE-36, DE-38, DE-39, DE-40 | four consecutive metric-neutral UGT cycles; no per-substrate hepatocyte-basis scaling factor exists; ΔMeta AAFE ≤ 0.003 |
-| Absorption / first-pass bioavailability-F recalibration | DE-41, DE-42, DE-43 | engine F under-call is bidirectional first-pass dispersion (not absorption); the absorption knob is linear = a flat scalar; and the fixed-weight meta damps **any** engine recalibration to ~18% pass-through on **both** the retrospective and prospective sets — the engine is not a headline lever on any benchmark |
+| Absorption / first-pass bioavailability-F recalibration | DE-41, DE-42, DE-43 | tested uniform `ka` scaling did not improve the scored meta; the ten-drug F-bias attribution is withdrawn pending matched human absolute-F data |
 
 **Root cause (shared across categories):** Cmax residuals are not learnable from molecular structure (CV R² < 0). Remaining error ≈ experimental variability + formulation + inter-patient variability. SMILES → Cmax carries a fundamental information-channel ceiling.
 

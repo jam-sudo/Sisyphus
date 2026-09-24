@@ -10,6 +10,25 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Retract the ten-drug absolute-F diagnosis
+
+[Source audit](../validation/f_reference_source_audit_2026-09-24.md) found that
+the earlier ten-reference table mixed human absolute F with absorption,
+relative F, animal values, and context-mismatched patient data. Therefore the
+10/10 F under-call, median engine/reference ratio 0.46–0.51, and N=10 measured-F
+Cmax gain are **withdrawn as validation claims**; dated entries below record
+the historical experiments only. Three regulatory-label human absolute-F
+references remain as illustrative unmatched diagnostics: diclofenac 0.98,
+sildenafil 0.42, quinine 0.20–0.23 (engine/reference). On the two label-backed
+point-F examples, the paired measured-input engine AAFE is 4.083 without F and
+2.619 with F; N=2 cannot establish an accuracy effect. The separate N=10
+measured-fup/CLint probe scores 5.968 versus 6.708 SMILES-only in the current
+local environment. Neither probe is an external Cmax validation. Also, comparing
+predicted systemic CL to literature CL/F cannot isolate F: CL/F is apparent
+oral clearance, not measured systemic CL. No production model changed.
+
+---
+
 ## 2026-09-24 (cont.) — Recheck F diagnosis with the current converged exposure path
 
 `scripts/run_f_decomposition.py` still calculated F from separate 24-hour oral
