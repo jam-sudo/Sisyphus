@@ -17,6 +17,7 @@ def test_pmid_training_arms_are_quarantined():
     for name in (
         "acetaminophen", "amoxicillin", "diazepam", "metoprolol",
         "midazolam", "theophylline", "verapamil", "atenolol", "caffeine",
+        "amphetamine", "felodipine",
     ):
         row = data["drugs"][name]
         assert row["tier"] == "unverified"
@@ -26,6 +27,7 @@ def test_pmid_training_arms_are_quarantined():
     assert not {
         "acetaminophen", "amoxicillin", "diazepam", "metoprolol",
         "midazolam", "theophylline", "verapamil", "atenolol", "caffeine",
+        "amphetamine", "felodipine",
     } & {
         row.name for row in refs.values()
     }
@@ -94,6 +96,8 @@ def test_audited_training_reference_arms():
         ("metoclopramide", 10, 0.028),
         ("furosemide", 40, 1.10971),
         ("terbinafine", 250, 1.0),
+        ("nifedipine", 10, 0.0789),
+        ("pitavastatin", 2, 0.10609),
     ):
         row = data["drugs"][name]
         assert row["pk_params"]["cmax_mg_L"] == pytest.approx(cmax)
@@ -121,6 +125,9 @@ def test_audited_training_reference_arms():
     assert "@" in data["drugs"]["ezetimibe"]["smiles"]
     assert "/C=C/" in data["drugs"]["terbinafine"]["smiles"]
     assert "auc_mg_h_L" not in data["drugs"]["fluconazole"]["pk_params"]
+    assert "thalf_h" not in data["drugs"]["nifedipine"]["pk_params"]
+    assert data["drugs"]["pitavastatin"]["pk_params"]["auc_mg_h_L"] == pytest.approx(0.32125)
+    assert data["drugs"]["pitavastatin"]["pk_params"]["thalf_h"] == pytest.approx(9.52)
 
 
 def test_spurious_sertraline_training_duplicate_removed():
@@ -151,5 +158,12 @@ def test_spurious_sertraline_training_duplicate_removed():
                 row["name"] == "terbinafine"
                 and row["dose_mg"] == "250.0"
                 and row["cmax_mg_L"] == "1.0"
+                for row in csv.DictReader(handle)
+            )
+        with (ROOT / "data/training" / name).open(newline="") as handle:
+            assert not any(
+                row["name"] == "amphetamine"
+                and row["dose_mg"] == "18.8"
+                and row["cmax_mg_L"] == "0.0449"
                 for row in csv.DictReader(handle)
             )
