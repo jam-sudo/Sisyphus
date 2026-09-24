@@ -95,6 +95,7 @@ $$\frac{dA_{tissue}}{dt} = PS \cdot (C_{u,vasc} - C_{u,tissue})$$
 $$k_a = \frac{2.88 \cdot P_{eff} \cdot f_{ka}}{r}$$
 
 where $P_{eff}$ is effective permeability (&times;10<sup>&minus;4</sup> cm/s), $f_{ka}$ is the segment-specific absorption fraction, and $r$ is particle radius (&mu;m).
+The coefficient 2.88 is an empirical absorption-scale parameter for these numerical input units; it carries the units needed to produce h<sup>&minus;1</sup> and is not a dimensionless cm/s-to-&mu;m/h conversion. Its transferability across formulations has not been independently established.
 
 **Tissue:plasma partition coefficients** are computed via the Rodgers &amp; Rowland method (Rodgers &amp; Rowland, 2005, 2006), with the Berezhkovskiy correction for acids (Berezhkovskiy, 2004).
 

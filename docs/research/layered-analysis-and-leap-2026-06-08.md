@@ -64,10 +64,12 @@ The sections below preserve the dated experiments. Their causal and ceiling inte
 - **FLUX-1 (E-cap-at-0.5 double-count) and RBP (`fu_b=fup/Rb`) fixes are in-tree and verified canonical**
   (`E = fu_b·CLint/(Q+fu_b·CLint)`, →1.0). These were the two known textbook deviations; both closed.
 - **Open structural items (correctness, meta-damped unless surfaced as a new track):**
-  - **D-1 — `ActiveTransportFluxSpec` Michaelis-Menten output has no MW/time unit closure** (`flux.py:726-736`;
-    the code comment admits "rate is in arbitrary units… IVIVE handles unit conversion"). **Latent but
-    load-bearing**: it is the class through which any OAT/OCT/MATE renal-secretion or gut-P-gp track must flow.
-    Genuine bug; fix is a dedicated transporter `ivive_scaling` with explicit `×MW×60/1e6`.
+  - **D-1 — `ActiveTransportFluxSpec` has no independently pinned absolute-magnitude convention** (`flux.py`).
+    Its current `abundance × ivive_scaling` magnitude is calibration-bundled; the
+    direction, mass conservation, and solver parity were subsequently checked.
+    No production graph uses this edge. A transporter-specific Jmax/abundance
+    basis and validation are needed before changing its scale; see the later
+    [inspection](experiment-log.md).
   - **D-2 — gut first-pass uses full villous blood flow** (58.5 L/h), not the permeability-limited **Qgut**
     (Yang 2007, ~3–18 L/h). Systematically under-extracts gut CYP3A; currently calibration-entangled (the
     ×0.652 gut-CYP3A re-anchor compensates). Touch with care (DE-42 bidirectional-first-pass contributor).
@@ -156,7 +158,8 @@ channel*, which by definition is not SMILES.
 ### V.1 Leap A — Correctness as the product (ship; durable; not headline)
 Per correctness-over-benchmark. Concrete, ready:
 - **Reference-data fixes** (oxybutynin ~8×, selegiline 2×) — primary-source-adjudicated.
-- **D-1 transporter-MM unit closure** — a real latent bug; prerequisite for any transporter physics.
+- **D-1 transporter scale** — a later inspection reclassified this as an
+  unvalidated design convention, not a confirmed production bug.
 - **ECM/OATP albumin-mediated uptake re-anchor** — the one un-foreclosed *mechanistic* lever (Li/Benet 2020,
   ~1.9–2.0 fold, no empirical scaling), already FLUX-1-deferred (the xfailed pravastatin/pitavastatin
   statins). Production-breadth value; near-zero on the 107-holdout (only pravastatin, inviolable).
@@ -210,7 +213,7 @@ four tracks AND the pH-solubility term (not logP) carries the signal.
 |---|---|---|---|---|
 | ~~—~~ | ~~Measured-regime routing~~ — **❌ FALSIFIED (DE-48): degrades accuracy, do not build** | — | gate FAILED: engine-measured N=93 ~3.84 > meta 2.78; meta correctly damps the engine | — |
 | 1 | **Reference fix: oxybutynin** (0.001→0.008; FDA single-dose ~8× error) + flag **selegiline** (uncertain — defensible ~0.002, but 0.001 within the noisy low tail; leave or annotate) | Correctness (Leap A) | primary-source only, never toward the model; **needs holdout-reference sign-off + CI regen** (touches the inviolable yardstick) | S |
-| 2 | **D-1 transporter-MM unit closure** | Correctness (Leap A) | identity-blind random-rename invariance; **latent — 0 production YAML uses `active_transport`, zero blast radius**; coordinate with in-flight paracellular work (flux.py is dirty) | S |
+| 2 | **D-1 transporter scale** (superseded) | Design/validation | Define a measured Jmax and transporter-abundance basis before changing the latent `active_transport` scale; no production graph uses this edge. | — |
 | 3 | **Per-subclass advisory flags** (acid/high-PPB, high-first-pass base) | Product honesty (Leap C) | zero AAFE effect; pure reporting | S |
 | 4 | **ECM/OATP albumin-uptake re-anchor** (un-xfail the statins) | Correctness/breadth (Leap A) | non-holdout OATP substrate for re-anchor; holdout bit-identical | M |
 | 5 | **pKa-aware pH-solubility dose-number gate** | Falsification (Leap V.5) | pre-registered |r|<0.5 AND pH-term carries signal; else → next DE | S |
