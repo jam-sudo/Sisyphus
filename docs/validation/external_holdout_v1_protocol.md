@@ -161,6 +161,16 @@ rows was checked for a matching original healthy-adult fasted single-dose IR
 parent-plasma Cmax arm, post-dose meal timing, or dose basis. No numeric Cmax
 was read. Older FDA packages therefore merit source-availability triage but
 cannot yet be counted as eligible compounds.
+An AI-assisted, outcome-blind feasibility sample of 12 identities from the
+1995–2004 provisional pool (deterministically selected from an 84-identity
+single-name subset; sample SHA256
+`07cea48b428ab877438d9531ca328141eea6d931c0e2d6736d37f33755c5dd47`)
+found original FDA review PDFs for eight. None established all five required
+arm-design conditions from those reviews alone; two established four, with
+parent-moiety dose basis unresolved. No numeric Cmax was recorded. This
+single-AI-curator source check is a feasibility diagnostic, not independent
+eligibility adjudication or a V1 cohort. Its report SHA256 is
+`a7e5b1998bc941657ea2ed52a97caeaea8ce8d7b8224765d63b6be88881bdff1`.
 The 900-identity inventory therefore needs older and investigational drugs plus
 non-FDA sources, with duplicates across agencies collapsed before allocation.
 EMA's [Article 57 product data](https://www.ema.europa.eu/en/human-regulatory-overview/post-authorisation/data-medicines-iso-idmp-standards-post-authorisation/public-data-article-57-database)
