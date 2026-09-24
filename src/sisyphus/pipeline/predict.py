@@ -271,8 +271,8 @@ def predict(
             Default False keeps the SMILES-only path bit-identical (no extra
             solve, ``engine_f`` is None). Used by the engine-as-prior MIPD F
             latent so callers need not re-derive F_engine via a probe call.
-        strict: Fail on unavailable engine/ML paths and unsupported phenotype
-            inputs instead of returning a fallback result. Intended for CI,
+        strict: Fail on unavailable engine/ML/analytical tracks and unsupported
+            phenotype inputs instead of returning a fallback result. Intended for CI,
             benchmark generation, and audited deployments.
 
     Returns:
@@ -614,6 +614,9 @@ def predict(
             logger.info("VDss analytical: Cmax=%.4f mg/L (VDss=%.2f L/kg)",
                         vdss_cmax_val, adme.vdss.mean)
         except Exception as e:
+            if strict:
+                raise
+            warnings_list.append(f"VDss analytical failed: {e}")
             logger.warning("VDss analytical failed: %s", e)
 
     # ── Step 4: Meta-learner ─────────────────────────────────────────────

@@ -263,6 +263,37 @@ def verify_training_membership(
     return inventory_sha
 
 
+def verify_development_residual_interval(root: Path) -> float:
+    """Require the primary residual band to belong to the frozen model stack."""
+
+    path = root / "data/validation/development_residual_interval.json"
+    artifact = json.loads(path.read_text())
+    if (
+        artifact.get("method") != "development_empirical_residual_quantile"
+        or artifact.get("calibration_set") != "partially_in_sample_development"
+        or artifact.get("source_cache_sha256") != sha256_file(
+            root / "data/training/4track_holdout_predictions.json"
+        )
+    ):
+        raise ValueError("Development residual interval source is not current")
+    expected_models = {
+        model_path.replace(".meta.json", ".json") for model_path in _PRODUCTION_FITTED_MODELS
+    }
+    recorded_models = artifact.get("model_artifact_sha256")
+    if not isinstance(recorded_models, dict) or set(recorded_models) != expected_models:
+        raise ValueError("Development residual interval model inventory is incomplete")
+    for model_path, digest in recorded_models.items():
+        if digest != sha256_file(root / model_path):
+            raise ValueError(f"Development residual interval model hash mismatch: {model_path}")
+    try:
+        q = float(artifact["tracks"]["meta"]["0.1"])
+    except (KeyError, TypeError, ValueError) as exc:
+        raise ValueError("Development residual interval lacks a 90% Meta quantile") from exc
+    if not math.isfinite(q) or q <= 0:
+        raise ValueError("Development residual interval 90% Meta quantile is invalid")
+    return q
+
+
 def verify_source_plan(
     manifest_path: Path,
     manifest: dict[str, Any],

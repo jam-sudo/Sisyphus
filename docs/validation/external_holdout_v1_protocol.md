@@ -426,7 +426,8 @@ python scripts/score_external_holdout.py /holdout/blinded_predictions.json \
 The prediction runner refuses a non-public profile, dirty worktree, git/source
 tree mismatch, dependency-lock mismatch, artifact-inventory mismatch, training-
 membership mismatch, feature-schema mismatch, solver-settings mismatch, audit
-failure, container-digest mismatch, or resources outside the frozen checkout.
+failure, container-digest mismatch, stale development-residual interval sources,
+or resources outside the frozen checkout.
 The scorer refuses any candidate, arm,
 dose, route, derived eligibility, source-record hash, source quota, execution
 status, interval source, cycle, freeze field, or precommitted file-hash mismatch

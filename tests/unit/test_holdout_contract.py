@@ -17,6 +17,7 @@ from sisyphus.validation.holdout_contract import (
     source_record_hash,
     validate_payload,
     validate_source_quotas,
+    verify_development_residual_interval,
     verify_parent_prediction,
     verify_training_membership,
 )
@@ -212,6 +213,39 @@ def test_public_training_membership_sources_are_complete_and_hash_pinned():
     assert verify_training_membership(ROOT, freeze, expected) == freeze[
         "training_membership_sha256"
     ]
+
+
+def test_residual_interval_preflight_rejects_stale_sources(tmp_path, monkeypatch):
+    cache = tmp_path / "data/training/4track_holdout_predictions.json"
+    cache.parent.mkdir(parents=True)
+    cache.write_text("cache")
+    model = tmp_path / "models/example.json"
+    model.parent.mkdir()
+    model.write_text("model")
+    monkeypatch.setattr(contract, "_PRODUCTION_FITTED_MODELS", ("models/example.meta.json",))
+    artifact_path = tmp_path / "data/validation/development_residual_interval.json"
+    artifact_path.parent.mkdir()
+    artifact = {
+        "method": "development_empirical_residual_quantile",
+        "calibration_set": "partially_in_sample_development",
+        "source_cache_sha256": sha256_file(cache),
+        "model_artifact_sha256": {"models/example.json": sha256_file(model)},
+        "tracks": {"meta": {"0.1": 1.0}},
+    }
+    artifact_path.write_text(json.dumps(artifact))
+    assert verify_development_residual_interval(tmp_path) == 1.0
+    cache.write_text("changed")
+    with pytest.raises(ValueError, match="source is not current"):
+        verify_development_residual_interval(tmp_path)
+    cache.write_text("cache")
+    model.write_text("changed")
+    with pytest.raises(ValueError, match="model hash mismatch"):
+        verify_development_residual_interval(tmp_path)
+    model.write_text("model")
+    artifact["tracks"]["meta"]["0.1"] = float("nan")
+    artifact_path.write_text(json.dumps(artifact))
+    with pytest.raises(ValueError, match="quantile is invalid"):
+        verify_development_residual_interval(tmp_path)
 
 
 def test_clf_and_vdf_manifests_pin_their_co_committed_training_source():

@@ -20,6 +20,7 @@ from sisyphus.validation.holdout_contract import (
     sha256_file,
     validate_payload,
     verify_audit_report,
+    verify_development_residual_interval,
     verify_frozen_file,
     verify_source_plan,
     verify_training_membership,
@@ -150,6 +151,7 @@ def main() -> None:
 
     _verify_resource_root()
     _verify_runtime_settings(resolve_frozen_path(ROOT, freeze["solver_settings_path"]))
+    verify_development_residual_interval(ROOT)
 
     # Imports happen after profile/freeze checks so runtime resources cannot be
     # initialized under a different profile first.

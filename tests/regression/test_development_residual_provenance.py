@@ -5,7 +5,10 @@ import json
 import math
 from pathlib import Path
 
-from sisyphus.validation.holdout_contract import _PRODUCTION_FITTED_MODELS
+from sisyphus.validation.holdout_contract import (
+    _PRODUCTION_FITTED_MODELS,
+    verify_development_residual_interval,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -30,3 +33,4 @@ def test_development_residual_artifact_is_current_and_explicit_about_skips():
         "amoxicillin", "atenolol", "metformin", "verapamil"
     }
     assert math.isfinite(artifact["tracks"]["meta"]["0.1"])
+    assert verify_development_residual_interval(ROOT) == artifact["tracks"]["meta"]["0.1"]

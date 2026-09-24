@@ -1,9 +1,12 @@
 """Unit tests for pipeline/predict.py — end-to-end SMILES -> PredictionResult."""
 
+from dataclasses import replace
+from importlib import import_module
+
 import numpy as np
 import pytest
 
-from sisyphus.core import PredictionResult
+from sisyphus.core import Distribution, PredictionResult
 
 
 class TestPipeline:
@@ -77,6 +80,20 @@ class TestPipeline:
         monkeypatch.setattr(solver, "solve", failed_solve)
         with pytest.raises(RuntimeError, match="ODE solver did not converge"):
             predict("CCO", 10.0, strict=True)
+
+    def test_strict_vdss_failure_raises_instead_of_dropping_track(self, monkeypatch):
+        pipeline = import_module("sisyphus.pipeline.predict")
+        adme_module = import_module("sisyphus.predict.adme")
+        predict_adme = adme_module.predict_adme
+
+        def invalid_vdss(profile):
+            return replace(predict_adme(profile), vdss=Distribution(mean=0.0))
+
+        monkeypatch.setattr(adme_module, "predict_adme", invalid_vdss)
+        with pytest.raises(ZeroDivisionError):
+            pipeline.predict("CCO", 10.0, strict=True)
+        result = pipeline.predict("CCO", 10.0)
+        assert any("VDss analytical failed" in warning for warning in result.warnings)
 
     def test_result_has_ad_flags(self):
         """PredictionResult carries applicability domain flags."""
