@@ -2,12 +2,12 @@
   {
     "drug_name": "acamprosate",
     "dose_mg": 600.0,
-    "cmax_mg_L": 0.18,
-    "cmax_value_original": 180,
+    "cmax_mg_L": null,
+    "cmax_value_original": null,
     "cmax_unit_original": "ng/mL",
-    "source": "2010 narrative review (https://pmc.ncbi.nlm.nih.gov/articles/PMC2853976/); DailyMed acamprosate calcium label (https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ae6e79c0-a307-4888-b647-1b7be4cb9127)",
-    "notes": "Two 333 mg calcium-salt delayed-release tablets provide 600 mg acamprosate parent equivalent. Review-reported single-dose Cmax 180 ng/mL in healthy volunteers; exact original numeric study arm and meal state not established.",
-    "status": "secondary_source"
+    "source": "2010 narrative review (https://pmc.ncbi.nlm.nih.gov/articles/PMC2853976/); FDA Campral medical review (https://www.accessdata.fda.gov/drugsatfda_docs/nda/2004/21-431_Campral_Medr_P1.pdf); Luo et al. 2015 (https://pubmed.ncbi.nlm.nih.gov/26360834/)",
+    "notes": "Two 333 mg calcium-salt delayed-release tablets provide 600 mg acamprosate parent equivalent. The review's 180 ng/mL value has no identified original arm; the FDA review reports approximately 94 ng/mL for a potentially different arm. The original Luo et al. fasted 244.64 ng/mL reference arm already contributes to a historical MMPK training aggregate, so it is not a fresh holdout replacement.",
+    "status": "unverified"
   },
   {
     "drug_name": "alvimopan",
@@ -235,8 +235,8 @@
     "cmax_mg_L": 0.0547,
     "cmax_value_original": 54.7,
     "cmax_unit_original": "ng/mL",
-    "source": "Narasimhan et al., Cancer Chemother Pharmacol 2015; food effect study",
-    "notes": "45mg single dose fasted healthy subjects. Geometric mean Cmax 54.7 ng/mL. Tmax ~6h. t1/2 ~24h. No food effect.",
+    "source": "Narasimhan et al., J Clin Pharm Ther 2013;38:440-444, DOI 10.1111/jcpt.12082; https://pubmed.ncbi.nlm.nih.gov/23888935/",
+    "notes": "45 mg single dose, fasted healthy subjects. Geometric mean parent-plasma Cmax 54.7 ng/mL. The FDA label's 73 ng/mL is a different steady-state patient arm. This 54.7 ng/mL arm also contributes to an MMPK training aggregate.",
     "status": "confirmed"
   },
   {
@@ -245,8 +245,8 @@
     "cmax_mg_L": 0.151,
     "cmax_value_original": 151,
     "cmax_unit_original": "ng/mL",
-    "source": "Courtney et al., AAC 2004; single 400mg oral suspension fasted",
-    "notes": "400mg oral suspension single dose fasted healthy volunteers. Mean Cmax 151 ng/mL (CV 58%). Absorption highly pH- and food-dependent. Fed Cmax >4x fasted.",
+    "source": "Krishna et al., Antimicrob Agents Chemother 2009;53:958-966, DOI 10.1128/AAC.01034-08, Table 2 Part 1; https://pmc.ncbi.nlm.nih.gov/articles/PMC2650585/",
+    "notes": "400 mg oral suspension, single dose after 10 h fast, without acidic beverage or esomeprazole, healthy volunteers (n=12). Arithmetic mean parent-plasma Cmax 151 ng/mL (CV 58%). A separate Part 3 fasted arm reports 181 ng/mL.",
     "status": "confirmed"
   },
   {
@@ -355,8 +355,8 @@
     "cmax_mg_L": 0.026,
     "cmax_value_original": 26.0,
     "cmax_unit_original": "ng/mL",
-    "source": "Mohamed et al., Clin Pharmacokinet 2020; Phase I healthy volunteers ER formulation",
-    "notes": "15mg extended-release single dose fasted healthy volunteers. Mean Cmax 26.0 ng/mL (SD 9.7). ER formulation is marketed form. IR Cmax would be higher but 15mg IR not studied. Tmax 2-4h for ER. t1/2 ~6-15h.",
+    "source": "Mohamed et al., Clin Pharmacol Drug Dev 2019, DOI 10.1002/cpdd.462, Table 1; https://pmc.ncbi.nlm.nih.gov/articles/PMC6585649/",
+    "notes": "15 mg extended-release single dose in 11 fasted healthy volunteers. Mean parent-plasma Cmax 26.0 ng/mL (SD 9.7). The label's 31.6 ng/mL is a different study arm.",
     "status": "confirmed"
   },
   {

@@ -235,8 +235,8 @@
     "cmax_mg_L": 0.073,
     "cmax_unit_original": "ng/mL",
     "cmax_value_original": 73.0,
-    "source": "PubChem (Iclusig label)",
-    "context": "45mg single oral dose: Cmax ~73 ng/mL. Tmax ~6h.",
+    "source": "DailyMed ICLUSIG label, section 12.3; https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=16d804b6-4957-43ee-b18c-3b36ec37c5ac",
+    "context": "45 mg once daily at presumed steady state in patients with advanced hematologic malignancies: mean Cmax 73 ng/mL (CV 74%). Not a healthy-volunteer single-dose value.",
     "status": "extracted"
   },
   {

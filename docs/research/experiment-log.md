@@ -10,6 +10,26 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Quarantine acamprosate peak; repair three primary citations
+
+The review-reported acamprosate 180 ng/mL peak has no identified original arm;
+the FDA review gives a different approximate single-dose value. The directly
+observed Luo et al. 2015 fasted arm is already incorporated in the exploratory
+MMPK training aggregate, so it was not substituted as a nominal holdout.
+Ponatinib, posaconazole, and upadacitinib keep their verified Cmax values but
+now cite their actual original studies and exact arms. The ponatinib FDA
+extraction now identifies its 73 ng/mL value as cancer-patient steady state.
+See [source adjudication](../validation/development_four_more_silver_arms_2026-09-24.md).
+
+The scored development set moves **N=76 → 75**; Meta AAFE **2.9539 → 2.8626**
+(conditional bootstrap CI **2.3284–3.5706**), Engine **3.8252**, direct ML
+**3.2418**. The paired Meta/ML ratio CI **0.7735–1.0075** crosses 1. Nominal
+90% residual-band coverage is **69/75**, with the same 10.24-fold half-width.
+Fitted models were unchanged; no independent external validation was done.
+Colima was not used.
+
+---
+
 ## 2026-09-24 (cont.) — Quarantine penicillamine midpoint; verify three silver arms
 
 The penicillamine 250 mg / 1.5 mg/L label was an invented midpoint of a
