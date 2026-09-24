@@ -78,3 +78,20 @@ def test_residual_band_is_omitted_for_licensed_profile(monkeypatch):
     result = pipeline.predict(_CAFFEINE, 100.0)
     assert result.cmax_prediction.residual_interval_90 is None
     assert result.cmax_prediction.interval_source is None
+
+
+def test_stale_residual_artifact_is_not_displayed(monkeypatch):
+    pipeline = import_module("sisyphus.pipeline.predict")
+    from sisyphus.validation import holdout_contract
+
+    def stale_artifact(root):
+        raise ValueError("model hash mismatch")
+
+    monkeypatch.setattr(holdout_contract, "verify_development_residual_interval", stale_artifact)
+    pipeline._development_residual_q90_meta.cache_clear()
+    try:
+        result = pipeline.predict(_CAFFEINE, 100.0)
+        assert result.cmax_prediction.residual_interval_90 is None
+        assert result.cmax_prediction.interval_source is None
+    finally:
+        pipeline._development_residual_q90_meta.cache_clear()

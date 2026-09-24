@@ -8,7 +8,6 @@ calls them in the right order and combines results.
 from __future__ import annotations
 
 import functools
-import json
 import logging
 import math
 import numbers
@@ -34,9 +33,6 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 _RESOURCES = get_resource_config()
-_DEVELOPMENT_RESIDUAL_INTERVAL = _RESOURCES.data(
-    "validation", "development_residual_interval.json", required=False
-)
 PRIMARY_SIMULATION_HORIZON_H = 24.0
 PRIMARY_OBSERVATION_NODE = "venous_blood"
 
@@ -47,13 +43,14 @@ def _development_residual_q90_meta() -> float | None:
 
     The underlying residuals are not independent of every fitted component, so
     this artifact is deliberately not described as split conformal. Returns None
-    when the artifact is absent or unreadable.
+    when the artifact is absent or no longer matches the model stack.
     """
+    from sisyphus.validation.holdout_contract import verify_development_residual_interval
+
     try:
-        art = json.loads(_DEVELOPMENT_RESIDUAL_INTERVAL.read_text())
-        q = float(art["tracks"]["meta"]["0.1"])
-        return q if np.isfinite(q) else None
-    except Exception:
+        return verify_development_residual_interval(_RESOURCES.root)
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        logger.warning("Development residual interval unavailable: %s", exc)
         return None
 
 
