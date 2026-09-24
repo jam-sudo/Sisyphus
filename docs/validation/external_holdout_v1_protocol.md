@@ -207,6 +207,16 @@ not a shortcut to an eligible cohort. The 2026 open [PK-DataBase](https://github
 contains human PK descriptors but no Cmax field in its principal tables, so
 it cannot supply outcome labels for this protocol.
 
+The [PKRxiv source paper](https://doi.org/10.1002/cpt.70206) reports 11
+available study datasets as of September 2025, covering only five distinct
+drugs (efavirenz, nitazoxanide/tizoxanide, dolutegravir, nevirapine, and
+rilpivirine). Its Table 2 predominantly describes pregnant or postpartum
+populations; the one adult-only study concerns nitazoxanide/tizoxanide.
+Dataset access also requires registration and approval of a request. These
+metadata alone cannot establish an eligible parent-plasma, healthy-adult,
+fasted single-dose arm, and the five-drug ceiling rules out PKRxiv as a
+standalone N=120 or N=260 source. No concentration outcomes were inspected.
+
 The separate [PK-DB](https://pk-db.com/api/v1/swagger/) REST service was screened
 without reading outcome values on 2026-09-23. Its statistics endpoint reported
 819 studies and 138,411 outputs (snapshot SHA256
