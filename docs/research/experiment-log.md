@@ -125,7 +125,7 @@ free acid. The label's observed single-dose peak is 0.87 µg/mL; the separate
 1.05 µg/mL FDA-extraction value was simulated steady state. The parent-equivalent
 input is now 6.781701 mg. Brincidofovir's unchanged 251 ng/mL was traced to
 the fasted, unboosted 100 mg control period of FDA Study CMX001-120. A read-only
-Claude Code source review confirmed the previous three-drug batch and exposed
+second-model AI source review confirmed the previous three-drug batch and exposed
 two over-specific donepezil wording claims, which were removed. See [source
 adjudication](../validation/development_ketorolac_brincidofovir_2026-09-24.md).
 
@@ -561,7 +561,7 @@ The cache and its matching bootstrap artifact were
 `data/training/4track_holdout_predictions.json` and
 `data/validation/4track_ci_2026-09-24_audited_reference.json`. Individual
 source decisions are recorded in the dated `docs/validation/development_*`
-audits. The local Claude Code guidance had still presented the 2026-07-03
+audits. The local AI guidance had still presented the 2026-07-03
 2.743/N=107 table as current; its metrics and limitations were reconciled
 against these artifacts. Neither the cohort nor its conditional CI establishes
 independent external accuracy or superiority over direct ML.

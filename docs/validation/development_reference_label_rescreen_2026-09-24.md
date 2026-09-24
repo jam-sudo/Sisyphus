@@ -23,7 +23,7 @@ number establishes prospective coverage. The [V1 independent validation
 protocol](external_holdout_v1_protocol.md) remains unmet because no untouched,
 source-adjudicated external cohort exists.
 
-A supervised read-only Claude Code source re-read (`run_049f1a65ffe4`,
+A supervised read-only AI source re-read (`run_049f1a65ffe4`,
 `ctx_6b934194c915`) confirmed the six Cmax values and found the author-name
 error corrected above, the cyclobenzaprine salt-basis inference, and the
 entacapone half-life range issue. This is a second AI check, not the protocol's

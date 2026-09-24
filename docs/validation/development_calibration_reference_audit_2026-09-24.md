@@ -36,7 +36,7 @@ precommitted [V1 protocol](external_holdout_v1_protocol.md).
 
 The calibration generator now fails rather than silently dropping a training
 prediction, and the runtime checks hashes of both the calibration reference
-file and the holdout-membership file. A separate read-only Claude Code review
+file and the holdout-membership file. A separate read-only AI review
 confirmed the first five source decisions and reproduced the former 8.30×
 intermediate result; that review is an additional error check, **not** a
 blinded external cohort or independent human source verification.
