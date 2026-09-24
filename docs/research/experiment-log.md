@@ -10,6 +10,35 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-23 (cont.) — Public-only direct Cmax retrain
+
+The former direct Cmax model's base score matched the mean log-Cmax-per-dose
+target from the recovered Omega source after three-key exclusion, but a pinned
+Linux refit did not reproduce its trees or predictions (maximum fitted-row
+prediction difference 0.191 log10). Replaced it with a reproducible model
+using the recorded hyperparameters and all 1,028 non-holdout rows from the
+1,128-row source. Source SHA256:
+`e7228d14bdfdfc6c790177207779630c1e5655c19d451528c87b80e2e9de9c3d`;
+fitted CSV SHA256:
+`5668d3747e11d03d8c3d57c03ff0842ed3aa330f4c938386e47c05e1e318c919`;
+model SHA256:
+`14391eb0881cb3ec83ab2f81592c5fe75da7c949290ec438fddc2d7136f792a0`.
+Five-fold training CV: Cmax AAFE 3.275 and R² 0.374.
+
+On the pinned Linux stack, repeatedly used N=107 development Meta AAFE moved
+2.660 → 2.661, direct ML 2.998 → 2.990, and Engine stayed 3.624. Meta
+twofold coverage moved 49.5% → 50.5%; its conditional bootstrap interval is
+[2.28, 3.13]. In-domain Meta AAFE moved 2.727 → 2.712 (N=81). The current
+cache is `data/training/4track_holdout_predictions.json`; the conditional
+bootstrap artifact is
+`data/validation/4track_ci_2026-09-23_fup_peff_cmax_public.json`.
+This is development-set re-scoring, not independent improvement.
+
+The partially in-sample Meta 90% residual half-width grew from ×/÷10.72 to
+×/÷12.16; 63 of 67 training references were usable. Eight static web
+presets were regenerated. Two active fitted models still lack exact training
+source hashes, and no unconsumed independently curated outcome cohort exists.
+
 ## 2026-09-23 (cont.) — Public-only Peff retrain
 
 The shipped Peff model's base score matched the mean target from the committed

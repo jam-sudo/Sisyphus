@@ -28,11 +28,12 @@ def _aafe(preds: list[dict]) -> float:
     not HOLDOUT_JSON.exists(),
     reason=f"{HOLDOUT_JSON.name} not present — regeneration required",
 )
-def test_cached_holdout_aafe_is_2p660() -> None:
-    """Cached predictions file: Meta AAFE is the public-clone headline 2.660 (±0.020).
+def test_cached_holdout_aafe_is_2p661() -> None:
+    """Cached predictions file: Meta AAFE is the public-clone headline 2.661 (±0.020).
 
-    2026-09-23 public-only TDC Peff retrain pinned the fitted rows and moved
-    the locked Linux cache from 2.676 to 2.660. This is development data.
+    2026-09-23 public-only Omega Cmax retrain pinned fitted rows and moved the
+    locked Linux cache from 2.660 to 2.661. The preceding TDC Peff retrain
+    moved it from 2.676 to 2.660. This is development data.
 
     2026-09-23 public-only TDC fup retrain removed unpinned DrugBank target
     exposure; the locked Linux cache moved from 2.743 to 2.676. This remains
@@ -109,7 +110,7 @@ def test_cached_holdout_aafe_is_2p660() -> None:
     0.005 was an artifact of the B-03.x cycle's coincidentally tiny delta.
     See spec amendment 2026-05-27.
 
-    If this fails outside ±0.020 of 2.660, the cache has been regenerated
+    If this fails outside ±0.020 of 2.661, the cache has been regenerated
     with a behavior change or the numerics stack drifted materially.
     Investigate."""
     with HOLDOUT_JSON.open() as f:
@@ -123,4 +124,4 @@ def test_cached_holdout_aafe_is_2p660() -> None:
         if isinstance(data, dict) and "drugs" in data:
             preds = data["drugs"]
         aafe = _aafe(preds)
-    assert abs(aafe - 2.660) < 0.020, f"AAFE drifted: {aafe:.4f}"
+    assert abs(aafe - 2.661) < 0.020, f"AAFE drifted: {aafe:.4f}"

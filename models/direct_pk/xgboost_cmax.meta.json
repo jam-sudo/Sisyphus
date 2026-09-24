@@ -1,11 +1,12 @@
 {
-  "version": "v3_clean",
-  "artifact_sha256": "b99c283d206cee4c0b2a13f34a1c4a54af2da0379d7bd27651e197f68d792ead",
+  "version": "v3_public_omega",
+  "artifact_sha256": "14391eb0881cb3ec83ab2f81592c5fe75da7c949290ec438fddc2d7136f792a0",
   "target": "log10(cmax_mg_L / dose_mg)",
   "trained_on": {
-    "dataset_path": "mmpk_clean.csv (Omega) with N=107 holdout 3-key exclusion",
-    "sha256": "unknown_legacy",
-    "n_drugs_clean": 1028
+    "dataset_path": "data/training/cmax_omega_public_clean.csv",
+    "sha256": "5668d3747e11d03d8c3d57c03ff0842ed3aa330f4c938386e47c05e1e318c919",
+    "n_drugs_clean": 1028,
+    "source_sha256": "e7228d14bdfdfc6c790177207779630c1e5655c19d451528c87b80e2e9de9c3d"
   },
   "feature_schema": {
     "name": "compute_features_v1",
@@ -13,14 +14,14 @@
     "sha256": "b41dddd78533661b8f4aed86bdb7c5f55d15ed3cd2ad20b39e9100557eda631e",
     "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, MolMR). See src/sisyphus/descriptors.py::compute_features."
   },
-  "trained_at": "2026-04-04T15:05:09-0400",
+  "trained_at": "2026-09-23T23:47:02.285618+00:00",
   "n_drugs_original": 1128,
   "n_drugs_excluded": 100,
-  "holdout_version": "N=107 (2026-03-26 expansion)",
+  "holdout_version": "N=107 (data/reference/holdout.json)",
   "holdout_metric": {
-    "name": "AAFE",
-    "value": 3.057072489371974,
-    "pct_2fold": 42.05607476635514
+    "name": "five_fold_cv_aafe",
+    "value": 3.2746301995299425,
+    "r2": 0.37353932279151403
   },
   "hyperparameters": {
     "n_estimators": 200,
@@ -35,5 +36,5 @@
     "n_jobs": 4,
     "verbosity": 0
   },
-  "retrained_reason": "Fix holdout data leakage (76 current holdout drugs in original training)"
+  "retrained_reason": "Pin public Omega fitted rows and replace unknown legacy Cmax source"
 }

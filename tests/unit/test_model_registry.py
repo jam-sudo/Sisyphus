@@ -125,7 +125,7 @@ def test_logp_correction_uses_separate_feature_schema():
 
 def test_runtime_verifier_accepts_shipped_model():
     manifest = verify_model_artifact(MODELS_DIRECT_PK / "xgboost_cmax.json")
-    assert manifest["version"] == "v3_clean"
+    assert manifest["version"] == "v3_public_omega"
 
 
 def test_runtime_verifier_rejects_missing_manifest(tmp_path):

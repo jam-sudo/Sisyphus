@@ -12,6 +12,17 @@ track `pyproject.toml`.
 
 ## [Unreleased]
 
+### Public-only Cmax training source pinned (2026-09-23)
+
+- Rebuilt direct Cmax from 1,028 SHA-pinned Omega rows after excluding 100
+  development compounds. Two active fitted models still lack exact training
+  source hashes.
+- Refreshed the repeatedly used N=107 development benchmark on pinned Linux:
+  Meta AAFE 2.661 (bootstrap 95% CI 2.28–3.13); direct ML AAFE 2.990. This
+  does not establish independent generalization.
+- Recomputed the partially in-sample residual band (90% Meta half-width
+  ×/÷12.16) and all eight web console presets for the new model.
+
 ### Public-only Peff training source pinned (2026-09-23)
 
 - Rebuilt Peff from 874 hash-pinned TDC Caco2_Wang rows and replaced its

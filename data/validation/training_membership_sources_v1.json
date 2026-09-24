@@ -9,6 +9,7 @@
     {"path": "data/caco2_wang.tab", "sha256": "447d9f1af487c06b080145a2361dbe45af5b27afc83e1a975dd29b9ea535d6ab"},
     {"path": "data/training/peff_tdc_public_clean.csv", "sha256": "46a5a7c4f48b6d6f4f501fdca049c1fe25cadf115658bda504d2e41d2092a06c"},
     {"path": "data/training/omega_mmpk_clean.csv", "sha256": "e7228d14bdfdfc6c790177207779630c1e5655c19d451528c87b80e2e9de9c3d"},
+    {"path": "data/training/cmax_omega_public_clean.csv", "sha256": "5668d3747e11d03d8c3d57c03ff0842ed3aa330f4c938386e47c05e1e318c919"},
     {"path": "data/training/mmpk_expanded_full.csv", "sha256": "2ce5408fcddc9d4f89b07db8f372119c9027ec5078855a67f2e9d50944bbd34f"},
     {"path": "data/training/mmpk_expanded_v2.csv", "sha256": "18b063f07cb23fee7ef716bf803e8ab7b55af1564a8eb8dbc137cf9b8458e036"},
     {"path": "data/training/mmpk_pbpk_features.csv", "sha256": "7ae7f86da723f4773381a5fe04a2de18b91fd58462cf9625c79ca279b78a5ba4"},

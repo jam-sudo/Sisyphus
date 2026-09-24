@@ -169,6 +169,7 @@ def test_public_training_membership_sources_are_complete_and_hash_pinned():
         "data/caco2_wang.tab",
         "data/training/peff_tdc_public_clean.csv",
         "data/training/omega_mmpk_clean.csv",
+        "data/training/cmax_omega_public_clean.csv",
         "data/training/mmpk_expanded_full.csv",
         "data/training/mmpk_expanded_v2.csv",
         "data/training/mmpk_pbpk_features.csv",

@@ -24,11 +24,11 @@
     "independent_external_holdout": {
       "status": "not_available",
       "aafe": null,
-      "reason": "No outcome-blinded set remains unconsumed, and three active fitted models still lack SHA-pinned training membership."
+      "reason": "No outcome-blinded set remains unconsumed, and two active fitted models still lack SHA-pinned training membership."
     },
     "retrospective_development_benchmark": {
       "n_compounds": 107,
-      "meta_aafe": 2.6596265854736374,
+      "meta_aafe": 2.6609428411869804,
       "bootstrap_95_ci": [
         2.2818,
         3.1231
@@ -43,7 +43,7 @@
         2.45,
         4.48
       ],
-      "classification": "consumed; historical 2026-07-05 system, not re-scored after the public-only fup and Peff retrains",
+      "classification": "consumed; historical 2026-07-05 system, not re-scored after the public-only fup, Peff, and Cmax retrains",
       "source": "data/validation/prospective_N28_current_engine_2026-07-05.json"
     },
     "invalidated_n50_2026q2": {

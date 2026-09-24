@@ -71,6 +71,7 @@ HARD_SOURCES: list[tuple[str, str, str | None, str]] = [
     ("data/training/peff_tdc_public_clean.csv", "canonical_smiles", "drug_id", ","),
     # Upstream Omega source for the shipped Cmax model; includes pre-exclusion rows.
     ("data/training/omega_mmpk_clean.csv", "smiles", "name", ","),
+    ("data/training/cmax_omega_public_clean.csv", "smiles", "name", ","),
     ("data/training/mmpk_expanded_full.csv", "canon_smiles", "name", ","),
     ("data/training/mmpk_expanded_v2.csv", "canon_smiles", "name", ","),
     ("data/training/mmpk_pbpk_features.csv", "smiles", "name", ","),

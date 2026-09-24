@@ -343,13 +343,15 @@ The inventory includes the [Omega `mmpk_clean.csv` source at commit
 `08a45047`](https://github.com/jam-sudo/Omega/blob/08a45047a2b5dcdca8c9a8f36ff1fe3b50ed3d6d/data/ml/clinical/mmpk_clean.csv),
 SHA256 `e7228d14bdfdfc6c790177207779630c1e5655c19d451528c87b80e2e9de9c3d`.
 Its 1,128 rows yield the documented 100 exclusions and 1,028 remaining rows
-under the current 107-compound holdout and three-key matching. This recovers a
-conservative Cmax exclusion source, not the exact fitted snapshot: retraining
+under the current 107-compound holdout and three-key matching. Retraining
 with the recorded hyperparameters and current feature code did not reproduce
-the shipped model's tree dump or predictions. The shipped Cmax metadata still
-has `sha256: unknown_legacy`; two other active fitted models also lack exact
-source hashes. CL/F, Vd/F, fup v2, and Peff are pinned to their training CSVs.
-It therefore does not prove exact model-training membership. The audit and
+the former shipped model's trees or predictions. The public Cmax replacement
+is now trained from the exact 1,028-row fitted CSV, SHA256
+`5668d3747e11d03d8c3d57c03ff0842ed3aa330f4c938386e47c05e1e318c919`,
+and its model SHA256 is
+`14391eb0881cb3ec83ab2f81592c5fe75da7c949290ec438fddc2d7136f792a0`.
+Two other active fitted models still lack exact source hashes. CL/F, Vd/F,
+fup v2, Peff, and Cmax are pinned to their training CSVs. The audit and
 prediction runner fail closed until each production fitted model names a
 repository-relative, hash-matched training dataset included in the pinned
 inventory. Recovering those datasets or reproducibly retraining the models is
