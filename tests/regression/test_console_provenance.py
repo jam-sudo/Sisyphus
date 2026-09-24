@@ -4,6 +4,8 @@ import hashlib
 import json
 from pathlib import Path
 
+from scripts.bootstrap_4track_ci import paired_meta_ml_ratio
+
 ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -37,3 +39,17 @@ def test_model_card_interval_matches_current_cache():
         ci["overall"]["meta"]["ci_95_low"],
         ci["overall"]["meta"]["ci_95_high"],
     ]
+    assert ci["overall"]["paired_meta_ml"] == paired_meta_ml_ratio(cache["drugs"])
+    assert dev["paired_meta_ml"] == ci["overall"]["paired_meta_ml"]
+    console = json.loads((ROOT / "web/public/data/console_data.json").read_text())
+    assert console["benchmark"]["paired_meta_ml"] == ci["overall"]["paired_meta_ml"]
+
+
+def test_paired_ratio_resamples_compounds_together():
+    rows = [
+        {"obs": 1.0, "meta": 2.0, "ml": 4.0},
+        {"obs": 1.0, "meta": 4.0, "ml": 8.0},
+    ]
+    assert paired_meta_ml_ratio(rows, n_bootstrap=100) == {
+        "ratio": 0.5, "ci_95_low": 0.5, "ci_95_high": 0.5, "n": 2,
+    }

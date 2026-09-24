@@ -42,6 +42,7 @@ def main() -> None:
         ci["overall"]["meta"]["ci_95_low"],
         ci["overall"]["meta"]["ci_95_high"],
     ]
+    dev["paired_meta_ml"] = ci["overall"]["paired_meta_ml"]
 
     benchmark = {
         "classification": "retrospective_development_benchmark_not_independent_holdout",
@@ -67,6 +68,7 @@ def main() -> None:
         "n_development": cache["n_holdout"],
         "overall": cache["overall"],
         "in_domain": cache["in_domain"],
+        "paired_meta_ml": ci["overall"]["paired_meta_ml"],
         "scatter": scatter,
     }
     console["constants"].update(

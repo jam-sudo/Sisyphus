@@ -57,6 +57,27 @@ def pct_within_n_fold(folds: list[float], n: float) -> float | None:
     return float(round(100.0 * (log_abs <= np.log10(n)).mean(), 1))
 
 
+def paired_meta_ml_ratio(rows: list[dict], n_bootstrap: int = N_BOOTSTRAP) -> dict:
+    """Bootstrap the paired compound-level Meta/ML AAFE ratio."""
+
+    delta = np.asarray([
+        abs(np.log(row["meta"] / row["obs"]))
+        - abs(np.log(row["ml"] / row["obs"]))
+        for row in rows
+    ])
+    if not len(delta) or not np.all(np.isfinite(delta)):
+        raise ValueError("Paired Meta/ML benchmark requires finite positive predictions")
+    rng = np.random.default_rng(SEED)
+    indices = rng.integers(0, len(delta), size=(n_bootstrap, len(delta)))
+    boot = np.exp(delta[indices].mean(axis=1))
+    return {
+        "ratio": round(float(np.exp(delta.mean())), 4),
+        "ci_95_low": round(float(np.percentile(boot, 2.5)), 4),
+        "ci_95_high": round(float(np.percentile(boot, 97.5)), 4),
+        "n": len(delta),
+    }
+
+
 def _track_summary(rows: list[dict], track_key: str) -> dict:
     # Accept either compact key ("eng_fold", 107-holdout cache) or verbose
     # ("engine_fold", prospective N=15 cache) for the engine track.
@@ -111,12 +132,14 @@ def main() -> None:
             "engine": _track_summary(drugs, "eng"),
             "ml":     _track_summary(drugs, "ml"),
             "meta":   _track_summary(drugs, "meta"),
+            "paired_meta_ml": paired_meta_ml_ratio(drugs),
         },
         "in_domain": {
             "n": len(in_domain),
             "engine": _track_summary(in_domain, "eng"),
             "ml":     _track_summary(in_domain, "ml"),
             "meta":   _track_summary(in_domain, "meta"),
+            "paired_meta_ml": paired_meta_ml_ratio(in_domain),
         },
     }
 

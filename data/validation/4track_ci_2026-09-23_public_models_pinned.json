@@ -31,6 +31,12 @@
       "n": 107,
       "pct_2fold": 47.7,
       "pct_3fold": 62.6
+    },
+    "paired_meta_ml": {
+      "ratio": 0.9235,
+      "ci_95_low": 0.836,
+      "ci_95_high": 1.017,
+      "n": 107
     }
   },
   "in_domain": {
@@ -58,6 +64,12 @@
       "n": 81,
       "pct_2fold": 46.9,
       "pct_3fold": 60.5
+    },
+    "paired_meta_ml": {
+      "ratio": 0.9547,
+      "ci_95_low": 0.8543,
+      "ci_95_high": 1.0604,
+      "n": 81
     }
   }
 }

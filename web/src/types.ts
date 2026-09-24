@@ -104,6 +104,7 @@ export interface BenchmarkData {
   classification: "retrospective_development_benchmark";
   overall: { engine: TrackBlock; ml: TrackBlock; meta: TrackBlock };
   in_domain: { n: number; engine: TrackBlock; ml: TrackBlock; meta: TrackBlock };
+  paired_meta_ml: { ratio: number; ci_95_low: number; ci_95_high: number; n: number };
   scatter: ScatterPoint[];
 }
 

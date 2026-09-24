@@ -50,7 +50,7 @@ export function BenchmarkView({ tab, data }: { tab: number; data: ConsoleData })
           </div>
           <div className="panel">
             <Caveat>
-              N=107 has informed ~47 system-selection cycles and is therefore a <b>development benchmark</b>, not an independent holdout. Its bootstrap interval does not include adaptive-selection bias. The attempted N50 was invalidated; an outcome-blinded external set is still required.
+              Paired Meta/ML AAFE ratio: <b>{f2(b.paired_meta_ml.ratio)}</b> (95% bootstrap CI {f2(b.paired_meta_ml.ci_95_low)}–{f2(b.paired_meta_ml.ci_95_high)}). The interval includes 1. N=107 has informed ~47 system-selection cycles and is a development benchmark; its interval also excludes adaptive-selection bias. An outcome-blinded external set is still required.
             </Caveat>
           </div>
         </div>

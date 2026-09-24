@@ -315,6 +315,11 @@ $$AAFE = 10^{\operatorname{mean}\left(\left|\log_{10}\frac{C_{max,pred}}{C_{max,
 | ML only | 2.990 | [2.54, 3.55] | 44.9% | 59.8% | 107 |
 | Meta, in-domain | 2.812 | [2.35, 3.38] | 46.9% | 60.5% | 81 |
 
+The paired compound-bootstrap Meta/ML AAFE ratio is **0.923** (95% CI
+**0.836–1.017**, 10,000 resamples, seed 20260422). Its interval crosses 1;
+the apparent Meta advantage on this repeatedly used set does not establish
+superiority over direct ML. The in-domain ratio is 0.955 (0.854–1.060).
+
 > **Reproducibility (2026-09-23).** The table comes from public-only TDC fup, Peff, hepatocyte CLint, and Lombardo VDss plus Omega Cmax retrains on the pinned Linux/Python 3.10 dependency image. Per-drug predictions are in `data/training/4track_holdout_predictions.json`; bootstrap intervals are in `data/validation/4track_ci_2026-09-23_public_models_pinned.json`. Their fitted datasets contain 1,557 fup, 874 Peff, 1,028 Cmax, 996 CLint, and 1,055 VDss hash-pinned rows. Different OS or numerics stacks can shift predictions; the three-decimal figures above are the Linux run. †This repeatedly used N=107 set and its conditional bootstrap CI do not establish independent generalization. Earlier benchmark lineage and numerics-drift measurements are in `docs/research/experiment-log.md`.
 
 The 4-track meta-learner combines mechanistic PBPK (Engine), data-driven XGBoost C<sub>max</sub> (ML), a closed-form CL/F analytical (CLF), and a conditional VDss analytical track. Weights are compound-type-adaptive and were LOOCV-selected on N=107: base compounds blend Engine 0.60 / ML 0.40; other compounds use Engine 0.35 / ML 0.50 / CLF 0.15, with VDss 0.20 added when applicability criteria are satisfied. The in-domain N=81 slice is descriptive only: applicability flags have not demonstrated reliable error stratification, and neither slice is independent evidence.
