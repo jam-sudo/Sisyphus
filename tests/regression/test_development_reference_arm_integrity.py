@@ -27,6 +27,14 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert refs["probenecid"].cmax_obs == pytest.approx(35.3)
     assert "mean-profile maximum" in data["drugs"]["alprazolam"]["source"]
     assert "mean-profile maximum" in data["drugs"]["triazolam"]["source"]
+    assert refs["apixaban"].cmax_obs == pytest.approx(0.126)
+    assert "Wang et al." in data["drugs"]["apixaban"]["source"]
+    assert "thalf_h" not in data["drugs"]["apixaban"]["pk_params"]
+    assert refs["famotidine"].cmax_obs == pytest.approx(0.073)
+    assert "auc_mg_h_L" not in data["drugs"]["famotidine"]["pk_params"]
+    assert refs["sildenafil"].cmax_obs == pytest.approx(0.271)
+    assert data["drugs"]["sildenafil"]["pk_params"]["thalf_h"] == pytest.approx(2.96)
+    assert "bioavailability_pct" not in data["drugs"]["sildenafil"]["pk_params"]
     for row in cache["drugs"]:
         assert row["obs"] == refs[row["name"]].cmax_obs
         assert not any(word in data["drugs"][row["name"]]["source"].lower()

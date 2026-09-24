@@ -10,6 +10,25 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Verify three legacy silver arms against original sources
+
+Wang et al. 2016 Table 2 confirms apixaban's 5 mg healthy-control Cmax at
+126 ng/mL, but not the generic 12 h half-life, 50% bioavailability, or the
+prior fasted claim.
+The famotidine 20 mg control Cmax of 73 ng/mL is supported by DailyMed;
+its previous 580 ng·h/mL AUC belongs to a pediatric 0.5 mg/kg arm, and
+its 2.5 h half-life was taken from the bottom of a general range. Nichols et
+al. 2002 Table 3 reports sildenafil 50 mg Cmax 271 ng/mL (previously rounded
+to 270) and same-arm half-life 2.96 h; the 41% bioavailability belongs to a
+separate oral/IV study. See [source adjudication](../validation/development_three_legacy_silver_arms_2026-09-24.md).
+
+With fitted models and N=77 unchanged, development Meta AAFE moves from
+**2.9299** to **2.9301** (conditional bootstrap CI **2.3833–3.6510**), Engine
+**3.8628**, direct ML **3.3486**, and in-domain Meta **3.0559** (N=62).
+This is a reference correction, not independent validation.
+
+---
+
 ## 2026-09-24 (cont.) — Quarantine two OSP profile peaks and correct probenecid
 
 An outcome-blind second AI source review found that the scored cimetidine OSP

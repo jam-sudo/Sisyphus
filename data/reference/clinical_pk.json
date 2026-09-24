@@ -238,15 +238,14 @@
     "apixaban": {
       "name": "apixaban",
       "tier": "silver",
-      "source": "PMC6769096, healthy volunteers, 5mg fasted IR single dose",
+      "source": "Wang et al., J Clin Pharmacol 2016, Table 2: healthy normal-renal-function control group (N=8) after a single oral 5 mg apixaban dose, parent plasma Cmax geometric mean 126 ng/mL (CV 29%); fasting state and formulation not stated in the article; https://doi.org/10.1002/jcph.628",
       "dose_mg": 5.0,
       "route": "oral",
       "pk_params": {
-        "thalf_h": 12.0,
-        "bioavailability_pct": 50.0,
         "cmax_mg_L": 0.126
       },
-      "smiles": "COC1=CC=C(C=C1)N2C3=C(CCN(C3=O)C4=CC=C(C=C4)N5CCCCC5=O)C(=N2)C(=O)N"
+      "smiles": "COC1=CC=C(C=C1)N2C3=C(CCN(C3=O)C4=CC=C(C=C4)N5CCCCC5=O)C(=N2)C(=O)N",
+      "correction_note": "2026-09-24: replaced secondary review citation with the original exact 5 mg healthy-control arm; removed generic 12 h half-life and 50% bioavailability not tied to that arm (Table 2 reports a variable 20 h mean, including an outlier)."
     },
     "aripiprazole": {
       "name": "aripiprazole",
@@ -1326,15 +1325,14 @@
     "famotidine": {
       "name": "famotidine",
       "tier": "silver",
-      "source": "FDA Pepcid label, 20mg fasted healthy volunteers single dose",
+      "source": "DailyMed famotidine tablet label Section 12.3 Drug Interaction Studies: in 8 healthy subjects given a single oral 20 mg famotidine dose without probenecid, serum parent Cmax was 73 ng/mL; meal state not reported. The associated AUC0-10 was 424 ng*h/mL (not 580 ng*h/mL); https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=044a510f-33df-4484-8f07-d821f52b9376",
       "dose_mg": 20.0,
       "route": "oral",
       "pk_params": {
-        "auc_mg_h_L": 0.58,
-        "thalf_h": 2.5,
         "cmax_mg_L": 0.073
       },
-      "smiles": "C1=C(N=C(S1)N=C(N)N)CSCCC(=NS(=O)(=O)N)N"
+      "smiles": "C1=C(N=C(S1)N=C(N)N)CSCCC(=NS(=O)(=O)N)N",
+      "correction_note": "2026-09-24: removed 0.58 mg*h/L AUC copied from a pediatric 0.5 mg/kg arm and 2.5 h half-life copied from the lower bound of a general 2.5-3.5 h range; exact 20 mg control AUC0-10 is 0.424 mg*h/L, but the generic AUC field does not encode its horizon."
     },
     "febuxostat": {
       "name": "febuxostat",
@@ -3262,15 +3260,15 @@
     "sildenafil": {
       "name": "sildenafil",
       "tier": "silver",
-      "source": "PMC1874258, 50mg fasted healthy males IR single dose",
+      "source": "Nichols et al., Br J Clin Pharmacol 2002, Table 3: fasted 50 mg oral sildenafil citrate tablet in healthy men (N=32) in the dose-proportionality crossover study; parent plasma individual Cmax geometric mean 271 ng/mL and harmonic mean half-life 2.96 h; the same article reports 41% absolute bioavailability from a separate N=12 oral/IV study, not this arm; https://doi.org/10.1046/j.0306-5251.2001.00027.x",
       "dose_mg": 50.0,
       "route": "oral",
       "pk_params": {
-        "thalf_h": 2.9,
-        "bioavailability_pct": 41.0,
-        "cmax_mg_L": 0.27
+        "cmax_mg_L": 0.271,
+        "thalf_h": 2.96
       },
-      "smiles": "CCCC1=NN(C2=C1N=C(NC2=O)C3=C(C=CC(=C3)S(=O)(=O)N4CCN(CC4)C)OCC)C"
+      "smiles": "CCCC1=NN(C2=C1N=C(NC2=O)C3=C(C=CC(=C3)S(=O)(=O)N4CCN(CC4)C)OCC)C",
+      "correction_note": "2026-09-24: replaced rounded 270 ng/mL with exact Table 3 271 ng/mL, aligned half-life to the same arm, and removed cross-study 41% bioavailability."
     },
     "silodosin": {
       "name": "silodosin",
