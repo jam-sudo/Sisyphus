@@ -7,8 +7,8 @@
   "n_training_reference": 36,
   "skipped_training_reference": [],
   "generated_from": "scripts/calibrate_conformal.py",
-  "source_cache_sha256": "cfe96eaa71ddf62dc3e1181e06197fd2b84e9fd352a52efbada71ebbe922d804",
-  "calibration_reference_sha256": "ace77059f24462b5525fedb07001742410d0bffad7e2af2910357515fab49a6d",
+  "source_cache_sha256": "2d8f921216cd60e687cfc20b7a89b09d28e1471d70762bc983852cc03d290f74",
+  "calibration_reference_sha256": "6e6c215cb8e14783532523c7351a8966c27e1d45ebd535e4f23e384e1cdbb358",
   "holdout_membership_sha256": "8c5d1b0c42247749767ac3a7da3bd61573e0f9bf45f503347a70f87b6b3ad02a",
   "model_artifact_sha256": {
     "models/direct_pk/xgboost_cmax.json": "14391eb0881cb3ec83ab2f81592c5fe75da7c949290ec438fddc2d7136f792a0",
@@ -42,22 +42,22 @@
   },
   "consumed_development_benchmark_coverage": {
     "meta": {
-      "0.5": 0.527,
-      "0.2": 0.7568,
-      "0.1": 0.9189,
-      "0.05": 0.973
+      "0.5": 0.5342,
+      "0.2": 0.7671,
+      "0.1": 0.9178,
+      "0.05": 0.9726
     },
     "engine": {
-      "0.5": 0.5811,
-      "0.2": 0.9189,
-      "0.1": 0.9459,
-      "0.05": 0.973
+      "0.5": 0.589,
+      "0.2": 0.9178,
+      "0.1": 0.9452,
+      "0.05": 0.9726
     },
     "ml": {
-      "0.5": 0.4459,
-      "0.2": 0.5811,
-      "0.1": 0.7838,
-      "0.05": 0.8649
+      "0.5": 0.4521,
+      "0.2": 0.589,
+      "0.1": 0.7808,
+      "0.05": 0.863
     }
   }
 }

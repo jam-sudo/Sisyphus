@@ -262,12 +262,12 @@
   {
     "drug_name": "progesterone",
     "dose_mg": 100,
-    "cmax_mg_L": 0.0173,
-    "cmax_value_original": 17.3,
+    "cmax_mg_L": null,
+    "cmax_value_original": null,
     "cmax_unit_original": "ng/mL",
-    "source": "FDA label (Prometrium); postmenopausal women fasted",
-    "notes": "Micronized progesterone (Prometrium) 100mg capsule. FDA label reports Cmax 17.3 ng/mL. Endogenous progesterone levels confound measurement. Tmax ~3h. Food enhances absorption 2x.",
-    "status": "confirmed"
+    "source": "DailyMed PROMETRIUM capsule label Table 1 (https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=cf73c385-5173-4b54-af23-069581c5d560&type=display)",
+    "notes": "The reported 17.3 +/- 21.9 ng/mL follows five daily 100 mg oral doses in postmenopausal women, not a single dose; the label does not state fasting for this arm. No assay-compatible matched single-dose replacement adjudicated.",
+    "status": "unverified"
   },
   {
     "drug_name": "quinine",
@@ -305,8 +305,8 @@
     "cmax_mg_L": 0.375,
     "cmax_value_original": 375,
     "cmax_unit_original": "ng/mL",
-    "source": "FDA label (Mycobutin); single 300mg dose 9 healthy adults",
-    "notes": "300mg single dose 9 healthy adult volunteers. Mean Cmax 375 +/- 267 ng/mL (range 141-1033). High variability. Tmax 3.3h. Absorption >53%.",
+    "source": "DailyMed MYCOBUTIN capsule label Clinical Pharmacology/Absorption (https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=b8351a60-1000-4656-90ae-1fa666030dd4&type=display)",
+    "notes": "Single 300 mg oral dose in nine healthy adults: mean parent-plasma Cmax 375 +/- 267 ng/mL (range 141-1033), mean Tmax 3.3 +/- 0.9 h. Fasting is not stated for this arm.",
     "status": "confirmed"
   },
   {

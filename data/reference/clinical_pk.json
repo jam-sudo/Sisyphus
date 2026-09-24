@@ -2,8 +2,8 @@
   "metadata": {
     "created": "2026-03-26",
     "n_drugs": 331,
-    "n_with_cmax": 113,
-    "holdout_with_cmax": 74,
+    "n_with_cmax": 112,
+    "holdout_with_cmax": 73,
     "sources": {
       "original": 293,
       "osp_new": 8,
@@ -2910,14 +2910,13 @@
     },
     "progesterone": {
       "name": "progesterone",
-      "tier": "gold",
-      "source": "FDA label (Prometrium); postmenopausal women fasted",
+      "tier": "unverified",
+      "source": "DailyMed PROMETRIUM capsule label Table 1: 17.3 +/- 21.9 ng/mL after five daily oral 100 mg doses in postmenopausal women, not a single-dose peak; fasting for this arm is not stated. No assay-compatible matched single-dose replacement adjudicated; https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=cf73c385-5173-4b54-af23-069581c5d560&type=display",
       "dose_mg": 100,
       "route": "oral",
-      "pk_params": {
-        "cmax_mg_L": 0.0173
-      },
-      "smiles": "CC(=O)[C@H]1CC[C@H]2[C@@H]3CCC4=CC(=O)CC[C@]4(C)[C@H]3CC[C@]12C"
+      "pk_params": {},
+      "smiles": "CC(=O)[C@H]1CC[C@H]2[C@@H]3CCC4=CC(=O)CC[C@]4(C)[C@H]3CC[C@]12C",
+      "correction_note": "2026-09-24: quarantined the repeatedly dosed label peak from the single-dose development benchmark. A separate single-dose Utrogestan oral arm in FDA CRINONE review Study 005323 has discordant progesterone assay results and a different formulation; it was not substituted."
     },
     "propafenone": {
       "name": "propafenone",
@@ -3098,13 +3097,14 @@
     "rifabutin": {
       "name": "rifabutin",
       "tier": "gold",
-      "source": "FDA label (Mycobutin); single 300mg dose 9 healthy adults",
+      "source": "DailyMed MYCOBUTIN capsule label, Clinical Pharmacology/Absorption: single 300 mg oral rifabutin dose in nine healthy adults, mean parent-plasma Cmax 375 +/- 267 ng/mL (range 141-1033); https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=b8351a60-1000-4656-90ae-1fa666030dd4&type=display",
       "dose_mg": 300,
       "route": "oral",
       "pk_params": {
         "cmax_mg_L": 0.375
       },
-      "smiles": "CO[C@H]1/C=C/O[C@@]2(C)Oc3c(C)c(O)c4c(c3C2=O)C2=NC3(CCN(CC(C)C)CC3)NC2=C(NC(=O)/C(C)=C\\C=C\\[C@H](C)[C@H](O)[C@@H](C)[C@@H](O)[C@@H](C)[C@H](OC(C)=O)[C@@H]1C)C4=O"
+      "smiles": "CO[C@H]1/C=C/O[C@@]2(C)Oc3c(C)c(O)c4c(c3C2=O)C2=NC3(CCN(CC(C)C)CC3)NC2=C(NC(=O)/C(C)=C\\C=C\\[C@H](C)[C@H](O)[C@@H](C)[C@@H](O)[C@@H](C)[C@H](OC(C)=O)[C@@H]1C)C4=O",
+      "correction_note": "2026-09-24: retained the directly reported single-dose mean and corrected the separate FDA extraction's N and SD."
     },
     "rifampin": {
       "name": "rifampin",

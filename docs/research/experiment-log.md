@@ -10,6 +10,27 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Quarantine progesterone repeat-dose peak; correct rifabutin label statistics
+
+The PROMETRIUM 100 mg / 17.3 ng/mL mean followed five daily doses, not a
+single dose, and its fasting status was not stated. The scored progesterone
+row and a separately wrong 200 mg FDA extraction were quarantined. Rifabutin's
+single 300 mg / 375 ng/mL mean was retained; its FDA extraction had the wrong
+subject count and SD. See [source
+adjudication](../validation/development_progesterone_rifabutin_2026-09-24.md).
+The obsolete static FDA builder, which only failed on the adjudicated artifact,
+was removed along with its dedicated overwrite-guard test.
+
+On the reduced **N=73** repeatedly used development set, Meta AAFE
+**2.8812 → 2.8319** (conditional bootstrap CI **2.2980–3.5442**), Engine
+**3.8614**, direct ML **3.2462**. The paired Meta/ML ratio interval
+**0.7601–0.9956** is below 1 only conditional on the selected system and
+source exclusions; it is not independent superiority evidence. The score
+improves because a high-error row was removed, not because the model changed.
+Colima was not used.
+
+---
+
 ## 2026-09-24 (cont.) — Replace lamivudine repeated-dose label arm; separate mercaptopurine formulations
 
 Lamivudine's scored 150 mg / 1.40 µg/mL peak was incorrectly called a single

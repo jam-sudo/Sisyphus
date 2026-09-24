@@ -261,13 +261,13 @@
   },
   {
     "drug_name": "progesterone",
-    "dose_mg": 200.0,
-    "cmax_mg_L": 0.0173,
+    "dose_mg": 100.0,
+    "cmax_mg_L": null,
     "cmax_unit_original": "ng/mL",
-    "cmax_value_original": 17.3,
-    "source": "DailyMed SPL (Prometrium)",
-    "context": "Prometrium 200mg single oral capsule: Cmax 17.3 ± 6.5 ng/mL, Tmax 2-3h. Micronized progesterone.",
-    "status": "extracted"
+    "cmax_value_original": null,
+    "source": "DailyMed PROMETRIUM capsule label Table 1 (https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=cf73c385-5173-4b54-af23-069581c5d560&type=display)",
+    "context": "The prior 200 mg single-dose attribution is false. The label's 17.3 +/- 21.9 ng/mL mean follows five daily oral 100 mg doses in postmenopausal women; fasting is not stated. Not a scored single-dose Cmax.",
+    "status": "unverified"
   },
   {
     "drug_name": "quinine",
@@ -303,11 +303,11 @@
     "drug_name": "rifabutin",
     "dose_mg": 300.0,
     "cmax_mg_L": 0.375,
-    "cmax_unit_original": "mcg/mL",
-    "cmax_value_original": 0.375,
-    "source": "DailyMed SPL (Mycobutin)",
-    "context": "300mg single oral dose: Cmax 0.375 ± 0.168 mcg/mL (=375 ng/mL). 10 healthy volunteers.",
-    "status": "extracted"
+    "cmax_unit_original": "ng/mL",
+    "cmax_value_original": 375,
+    "source": "DailyMed MYCOBUTIN capsule label Clinical Pharmacology/Absorption (https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=b8351a60-1000-4656-90ae-1fa666030dd4&type=display)",
+    "context": "Single 300 mg oral dose in nine healthy adults: mean parent-plasma Cmax 375 +/- 267 ng/mL (range 141-1033), mean Tmax 3.3 +/- 0.9 h. The previous N=10 and SD 168 ng/mL were transcription errors.",
+    "status": "corrected"
   },
   {
     "drug_name": "rivaroxaban",

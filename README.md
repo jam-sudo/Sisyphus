@@ -8,7 +8,7 @@
 
 **Preprint:** [Yoon, J. M. (2026). *Sisyphus: A Topology-Compiled Physiologically Based Pharmacokinetic Platform with Structure-Only Input and Bayesian Parameter Refinement.* ChemRxiv.](https://doi.org/10.26434/chemrxiv.15004452/v1) &mdash; DOI [10.26434/chemrxiv.15004452/v1](https://doi.org/10.26434/chemrxiv.15004452/v1)
 
-The published v1 preprint and archived `Sisyphus_Preprint.pdf` report an older AAFE of 2.698. The current code's source-screened development benchmark is 2.8812 on 74 scored compounds; the value comes from a different model and reference set. Use the validation section below for current evidence.
+The published v1 preprint and archived `Sisyphus_Preprint.pdf` report an older AAFE of 2.698. The current code's source-screened development benchmark is 2.8319 on 73 scored compounds; the value comes from a different model and reference set. Use the validation section below for current evidence.
 
 ---
 
@@ -16,7 +16,7 @@ Sisyphus is an oral structure-only C<sub>max</sub> prediction system with a sepa
 
 The production output is C<sub>max</sub> for a canonical parent SMILES and positive oral dose. Engine-derived T<sub>max</sub>, AUC, half-life, multi-dose simulation, TDM, MIPD, DDI, PGx, and PK/PD are experimental research outputs and are not covered by the C<sub>max</sub> accuracy claim. Residual/model-error and parameter-Monte-Carlo intervals are exposed separately.
 
-**Intended use.** Sisyphus targets oral structure-only Cmax prediction (canonical parent SMILES + dose) when measured ADME is unavailable. On the repeatedly accessed retrospective **development benchmark**, Meta AAFE is 2.881 [bootstrap 95% CI 2.34&ndash;3.60, N=74 scored]. This is not an independent holdout result: the original 107-compound cohort has informed repeated system-selection decisions. A source-adjudicated diagnostic P0 pilot on 18 compounds, scored with an earlier model, found Meta AAFE **3.34**, compared with **3.01** for direct ML; its labels were AI-assisted, historical VDss training membership is unverified, and it does not establish Meta superiority. The current system has **no unconsumed independently curated external holdout AAFE**. Error of this scale and the wide development-residual interval (&divide;&times;~10.24-fold; 91.9% coverage on the repeatedly used development set) restrict the tool to **screening, ranking, and uncertainty-aware triage**, not dose setting.
+**Intended use.** Sisyphus targets oral structure-only Cmax prediction (canonical parent SMILES + dose) when measured ADME is unavailable. On the repeatedly accessed retrospective **development benchmark**, Meta AAFE is 2.832 [bootstrap 95% CI 2.30&ndash;3.54, N=73 scored]. This is not an independent holdout result: the original 107-compound cohort has informed repeated system-selection decisions. A source-adjudicated diagnostic P0 pilot on 18 compounds, scored with an earlier model, found Meta AAFE **3.34**, compared with **3.01** for direct ML; its labels were AI-assisted, historical VDss training membership is unverified, and it does not establish Meta superiority. The current system has **no unconsumed independently curated external holdout AAFE**. Error of this scale and the wide development-residual interval (&divide;&times;~10.24-fold; 91.8% coverage on the repeatedly used development set) restrict the tool to **screening, ranking, and uncertainty-aware triage**, not dose setting.
 
 ```
 $ sisyphus predict --smiles "Cn1c(=O)c2c(ncn2C)n(C)c1=O" --dose 100
@@ -304,22 +304,23 @@ Mass balance error &lt; 10<sup>&minus;12</sup> for all simulations. **Lesson:** 
 
 ### Retrospective development benchmark (SMILES &rarr; C<sub>max</sub>)
 
-Retrospective evaluation on a Murcko scaffold-stratified development split (107 compounds, seed=42; 74 currently have source-supported scored Cmax). All seven active fitted models now have SHA-pinned public training snapshots with compound-level exclusions, but this cohort has been used for repeated weight, track, routing, and mechanism feedback and therefore is not an independent system holdout. It integrates observed concentration&ndash;time profiles from OSP, curated literature PK data, and FDA DailyMed labels, with mixed formulations and populations. Performance is reported using AAFE with bootstrap confidence intervals conditional on the selected system; those intervals do not include adaptive model-selection bias:
+Retrospective evaluation on a Murcko scaffold-stratified development split (107 compounds, seed=42; 73 currently have source-supported scored Cmax). All seven active fitted models now have SHA-pinned public training snapshots with compound-level exclusions, but this cohort has been used for repeated weight, track, routing, and mechanism feedback and therefore is not an independent system holdout. It integrates observed concentration&ndash;time profiles from OSP, curated literature PK data, and FDA DailyMed labels, with mixed formulations and populations. Performance is reported using AAFE with bootstrap confidence intervals conditional on the selected system; those intervals do not include adaptive model-selection bias:
 
 $$AAFE = 10^{\operatorname{mean}\left(\left|\log_{10}\frac{C_{max,pred}}{C_{max,obs}}\right|\right)}$$
 
 | Track | AAFE | 95% CI | %2-fold | %3-fold | N |
 |---|:-:|:-:|:-:|:-:|:-:|
-| **Meta-learner (production)** | **2.881**† | [2.34, 3.60] | 45.9% | 64.9% | 74 |
-| Engine only | 3.910 | [3.02, 5.12] | 37.8% | 50.0% | 74 |
-| ML only | 3.269 | [2.63, 4.10] | 44.6% | 58.1% | 74 |
-| Meta, in-domain | 2.966 | [2.39, 3.77] | 42.6% | 63.9% | 61 |
+| **Meta-learner (production)** | **2.832**† | [2.30, 3.54] | 46.6% | 65.8% | 73 |
+| Engine only | 3.861 | [2.98, 5.07] | 38.4% | 50.7% | 73 |
+| ML only | 3.246 | [2.60, 4.07] | 45.2% | 58.9% | 73 |
+| Meta, in-domain | 2.905 | [2.34, 3.68] | 43.3% | 65.0% | 60 |
 
-The paired compound-bootstrap Meta/ML AAFE ratio is **0.882** (95% CI
-**0.769–1.004**, 10,000 resamples, seed 20260422). This conditional interval
-crosses 1 and does not account for repeated system selection. The development
-data cannot establish independent Meta superiority. The in-domain ratio is
-0.963 (0.847–1.092).
+The paired compound-bootstrap Meta/ML AAFE ratio is **0.872** (95% CI
+**0.760–0.996**, 10,000 resamples, seed 20260422). This conditional interval
+is below 1, but does not account for repeated system selection or the later
+source-based removal of a high-error row. The development data cannot
+establish independent Meta superiority. The in-domain ratio is
+0.952 (0.836–1.082).
 
 A reference-curve audit removed 165 synthetic or arm-mixed concentration
 profiles, including seven attached to scored development drugs; see
@@ -355,10 +356,13 @@ FDA review control arm; see
 The subsequent check replaced lamivudine's repeated-dose source with a matched
 single-dose arm and separated mercaptopurine tablet and suspension results; see
 [`development_lamivudine_mercaptopurine_2026-09-24.md`](docs/validation/development_lamivudine_mercaptopurine_2026-09-24.md).
+The next check quarantined progesterone's five-day peak and corrected
+rifabutin label statistics; see
+[`development_progesterone_rifabutin_2026-09-24.md`](docs/validation/development_progesterone_rifabutin_2026-09-24.md).
 
 > **Reproducibility (2026-09-24).** The table uses public-only TDC fup, Peff, hepatocyte CLint, and Lombardo VDss plus Omega Cmax retrains. Earlier morphine and digoxin reference corrections were followed by an arm-level audit. The current cache excludes unsupported leflunomide and sirolimus arms plus seven prodrug-metabolite labels (adefovir dipivoxil, fesoterodine, molnupiravir, prasugrel, tenofovir disoproxil, valacyclovir, valganciclovir), excludes unsupported abiraterone, atovaquone, clonidine, clozapine, darolutamide, darunavir, glasdegib, itraconazole, pomalidomide, ranolazine, sonidegib, tamsulosin, and vilazodone arms, and uses directly reported paroxetine, nilotinib, clopidogrel, levocetirizine, methylphenidate, norethindrone, carbamazepine, zonisamide, oxybutynin, dasatinib, pindolol, bexagliflozin, sumatriptan, ketoconazole, levofloxacin, and metronidazole parent arms, plus directly measured single-dose cetirizine and febuxostat fasting arms instead of accumulation-adjusted steady-state estimates; the clomipramine label dose is converted from hydrochloride to parent mass. Indomethacin's exact 25 mg Cmax remains secondary-source only and is marked silver pending original-study retrieval. Lopinavir, pilocarpine, temozolomide, and venlafaxine are also excluded after exact-arm review; see `docs/validation/development_additional_arm_followup_2026-09-24.md`. A further generic-label screen corrected azithromycin, ciprofloxacin, diclofenac, moxifloxacin, and zolpidem, and excluded isosorbide mononitrate and losartan; see `docs/validation/development_generic_label_arm_followup_2026-09-24.md`. The remaining six generic-label rows had mixed-arm parameters and synthetic curves repaired; see `docs/validation/development_remaining_generic_label_followup_2026-09-24.md`. An OSP source-identity audit corrected cabozantinib, ruxolitinib, and erythromycin; see `docs/validation/development_osp_identity_and_dose_followup_2026-09-24.md`. Acamprosate and phenytoin parent-equivalent doses and phenytoin observed Cmax were corrected; see `docs/validation/development_salt_equivalent_reference_followup_2026-09-24.md`. Per-drug predictions are in `data/training/4track_holdout_predictions.json`; bootstrap intervals are in `data/validation/4track_ci_2026-09-24_audited_reference.json`. Their fitted datasets contain 1,557 fup, 874 Peff, 1,028 Cmax, 995 CLint, and 1,055 VDss hash-pinned rows. †This repeatedly used development set and its conditional bootstrap CI do not establish independent generalization. Earlier benchmark lineage and numerics-drift measurements are in `docs/research/experiment-log.md`.
 
-The 4-track meta-learner combines mechanistic PBPK (Engine), data-driven XGBoost C<sub>max</sub> (ML), a closed-form CL/F analytical (CLF), and a conditional VDss analytical track. Weights are compound-type-adaptive and were LOOCV-selected on the original N=107 cohort: base compounds blend Engine 0.60 / ML 0.40; other compounds use Engine 0.35 / ML 0.50 / CLF 0.15, with VDss 0.20 added when applicability criteria are satisfied. The current in-domain N=61 slice is descriptive only: applicability flags have not demonstrated reliable error stratification, and neither slice is independent evidence.
+The 4-track meta-learner combines mechanistic PBPK (Engine), data-driven XGBoost C<sub>max</sub> (ML), a closed-form CL/F analytical (CLF), and a conditional VDss analytical track. Weights are compound-type-adaptive and were LOOCV-selected on the original N=107 cohort: base compounds blend Engine 0.60 / ML 0.40; other compounds use Engine 0.35 / ML 0.50 / CLF 0.15, with VDss 0.20 added when applicability criteria are satisfied. The current in-domain N=60 slice is descriptive only: applicability flags have not demonstrated reliable error stratification, and neither slice is independent evidence.
 
 **Consumed temporal challenge** (FDA NMEs approved 2024–2025, single-active-ingredient oral small molecules, production-clean at construction, re-scored on the 2026-07-05 engine, N=28). These are historical predictions made before the public-only fup, Peff, Cmax, CLint, and VDss retrains; the set has informed diagnosis and is no longer independent evidence for the current system:
 
@@ -374,7 +378,7 @@ On the 2026-07-05 system, the temporal cohort was directionally worse than its s
 
 The same-machine re-score moved Meta AAFE 3.208 → 3.286 and Engine AAFE 4.302 → 4.551, while the direct ML track was bit-identical. This supports an absorption/first-pass error diagnosis but does not establish a statistically separated generalization gap. †Compound bootstrap, 100,000 resamples of absolute log-fold error, seed 20260422; diagnostic because the set is consumed. Current artifact: `data/validation/prospective_N28_current_engine_2026-07-05.json`.
 
-**Adaptive-selection caveat.** N=107 has been used for dozens of configuration feedback cycles (track weights, routing, and meta variants), including inspection of the public-only fup, Peff, Cmax, CLint, and VDss candidates. The historical 2.85–3.10 selection-bias sensitivity range has not been recalibrated for this model. The current scored N=74 bootstrap CI ([2.34, 3.60], point estimate 2.881) does not account for adaptive search. The attempted 2026Q2 N50 was invalidated after 21/50 repository-corpus collisions and must not be cited. The replacement strategy is the outcome-blinded N=260 protocol in `docs/validation/external_holdout_v1_protocol.md` (N=120 resource-limited fallback; its combined release gate has about 80% pass probability only near a 19% true improvement).
+**Adaptive-selection caveat.** N=107 has been used for dozens of configuration feedback cycles (track weights, routing, and meta variants), including inspection of the public-only fup, Peff, Cmax, CLint, and VDss candidates. The historical 2.85–3.10 selection-bias sensitivity range has not been recalibrated for this model. The current scored N=73 bootstrap CI ([2.30, 3.54], point estimate 2.832) does not account for adaptive search. The attempted 2026Q2 N50 was invalidated after 21/50 repository-corpus collisions and must not be cited. The replacement strategy is the outcome-blinded N=260 protocol in `docs/validation/external_holdout_v1_protocol.md` (N=120 resource-limited fallback; its combined release gate has about 80% pass probability only near a 19% true improvement).
 
 ### Historical diagnostic P0 source-adjudicated pilot
 

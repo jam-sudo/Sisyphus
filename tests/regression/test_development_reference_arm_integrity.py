@@ -21,7 +21,7 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert data["drugs"]["codeine"]["tier"] == "gold"
     refs = {row.name: row for row in load_reference() if row.in_holdout}
     cache = json.loads((ROOT / "data/training/4track_holdout_predictions.json").read_text())
-    assert cache["n_holdout"] == data["metadata"]["holdout_with_cmax"] == len(refs) == 74
+    assert cache["n_holdout"] == data["metadata"]["holdout_with_cmax"] == len(refs) == 73
     assert {row["name"] for row in cache["drugs"]} == set(refs)
     for name in ("cimetidine", "mefenamic acid"):
         assert data["drugs"][name]["tier"] == "unverified"
@@ -239,6 +239,14 @@ def test_adjudicated_holdout_arms_match_scored_cache():
     assert refs["mercaptopurine"].cmax_obs == pytest.approx(0.069)
     assert "tablet" in data["drugs"]["mercaptopurine"]["source"]
     assert next(row for row in fda_rows if row["drug_name"] == "mercaptopurine")["source"].startswith("DailyMed PURIXAN oral suspension")
+    assert data["drugs"]["progesterone"]["tier"] == "unverified"
+    assert not data["drugs"]["progesterone"]["pk_params"]
+    assert "progesterone" not in refs
+    assert next(row for row in curated_rows if row["drug_name"] == "progesterone")["cmax_mg_L"] is None
+    assert next(row for row in fda_rows if row["drug_name"] == "progesterone")["status"] == "unverified"
+    assert refs["rifabutin"].dose_mg == 300.0
+    assert refs["rifabutin"].cmax_obs == pytest.approx(0.375)
+    assert next(row for row in fda_rows if row["drug_name"] == "rifabutin")["cmax_value_original"] == 375
     assert refs["phenytoin"].dose_mg == pytest.approx(300 * 252.27 / 274.25, rel=1e-6)
     assert refs["phenytoin"].cmax_obs == pytest.approx(2.32)
     assert refs["phenytoin"].auc_obs == pytest.approx(108.99)
