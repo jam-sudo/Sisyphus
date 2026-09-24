@@ -1,5 +1,6 @@
 """Unsupported PMID-linked arms stay out; re-sourced metformin stays in."""
 
+import csv
 import json
 from pathlib import Path
 
@@ -71,9 +72,27 @@ def test_audited_training_reference_arms():
         ("hydroxychloroquine", 155, 0.0503),
         ("isotretinoin", 80, 0.301),
         ("tranexamic acid", 1300, 13.83),
+        ("aspirin", 500, 4.4),
+        ("metaxalone", 400, 0.983),
+        ("pregabalin", 300, 7.42008),
+        ("sertraline", 50, 0.01139),
+        ("tramadol", 87.852, 0.308),
     ):
         row = data["drugs"][name]
         assert row["pk_params"]["cmax_mg_L"] == pytest.approx(cmax)
         assert "ct_curve" not in row
         assert refs[name].dose_mg == pytest.approx(dose)
         assert refs[name].cmax_obs == pytest.approx(cmax)
+    for name in ("pregabalin", "sertraline"):
+        assert "@" in data["drugs"][name]["smiles"]
+
+
+def test_spurious_sertraline_training_duplicate_removed():
+    for name in ("mmpk_expanded_full.csv", "mmpk_expanded_v2.csv"):
+        with (ROOT / "data/training" / name).open(newline="") as handle:
+            assert not any(
+                row["name"] == "sertraline"
+                and row["dose_mg"] == "50.0"
+                and row["cmax_mg_L"] == "0.165"
+                for row in csv.DictReader(handle)
+            )

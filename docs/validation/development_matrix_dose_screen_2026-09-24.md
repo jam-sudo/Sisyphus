@@ -1,5 +1,9 @@
 # Development training dose and specimen screen — 2026-09-24
 
+The subsequent [additional arm screen](development_reference_arm_rescreen_2026-09-24.md)
+supersedes the interval figures below; the reference and training counts remain
+127 and 38.
+
 This pass selected eight remaining training records by drug name, without
 consulting their model residuals. It checked dose, formulation, specimen,
 analyte, population, and dosing schedule against primary labels. Six records

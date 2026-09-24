@@ -3794,7 +3794,6 @@ oseltamivir,CCOC(=O)C1=CC(OC(CC)CC)C(NC(C)=O)C(N)C1,30.0,0.065,-2.66420789807680
 pantoprazole,COc1ccnc(CS(=O)c2nc3ccc(OC(F)F)cc3[nH]2)c1OC,40.0,2.5,-1.2041199826559248,1,,3.5,,77.0,tablet,False,False
 posaconazole,CCC(C(C)O)n1ncn(-c2ccc(N3CCN(c4ccc(OCC5COC(Cn6cncn6)(c6ccc(F)cc6F)C5)cc4)CC3)cc2)c1=O,600.0,0.014,-4.632023214705406,1,,,,54.0,tablet,False,True
 serdexmethylphenidate,COC(=O)C(c1ccccc1)C1CCCCN1C(=O)OC[n+]1cccc(C(=O)NC(CO)C(=O)[O-])c1,52.3,0.014,-3.572373653189036,1,,5.7,,,tablet,False,False
-sertraline,CNC1CCC(c2ccc(Cl)c(Cl)c2)c2ccccc21,50.0,0.165,-2.4814860601221125,1,,26.0,,,tablet,False,False
 sirolimus,COC1CC2CCC(C)C(O)(O2)C(=O)C(=O)N2CCCCC2C(=O)OC(C(C)CC2CCC(O)C(OC)C2)CC(=O)C(C)C=C(C)C(O)C(OC)C(=O)C(C)CC(C)C=CC=CC=C1C,20.0,0.0144,-3.1426675035687315,1,,,,27.0,tablet,False,True
 sodium oxybate,O=C([O-])CCCO.[Na+],25.0,66.0,0.42160392686983106,1,,0.5,,,tablet,False,False
 sonidegib,Cc1c(C(=O)Nc2ccc(N3CC(C)OC(C)C3)nc2)cccc1-c1ccc(OC(F)(F)F)cc1,200.0,1.03,-2.2881927709588092,1,,672.0,,,tablet,False,True

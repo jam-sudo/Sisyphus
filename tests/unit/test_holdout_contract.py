@@ -222,6 +222,11 @@ def test_residual_interval_preflight_rejects_stale_sources(tmp_path, monkeypatch
     model = tmp_path / "models/example.json"
     model.parent.mkdir()
     model.write_text("model")
+    reference = tmp_path / "data/reference/clinical_pk.json"
+    reference.parent.mkdir(parents=True)
+    reference.write_text("reference")
+    membership = tmp_path / "data/reference/holdout.json"
+    membership.write_text("membership")
     monkeypatch.setattr(contract, "_PRODUCTION_FITTED_MODELS", ("models/example.meta.json",))
     artifact_path = tmp_path / "data/validation/development_residual_interval.json"
     artifact_path.parent.mkdir()
@@ -229,6 +234,9 @@ def test_residual_interval_preflight_rejects_stale_sources(tmp_path, monkeypatch
         "method": "development_empirical_residual_quantile",
         "calibration_set": "partially_in_sample_development",
         "source_cache_sha256": sha256_file(cache),
+        "calibration_reference_sha256": sha256_file(reference),
+        "holdout_membership_sha256": sha256_file(membership),
+        "skipped_training_reference": [],
         "model_artifact_sha256": {"models/example.json": sha256_file(model)},
         "tracks": {"meta": {"0.1": 1.0}},
     }
