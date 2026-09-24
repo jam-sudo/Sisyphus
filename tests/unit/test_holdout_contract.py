@@ -177,6 +177,7 @@ def test_public_training_membership_sources_are_complete_and_hash_pinned():
         "data/training/bioavailability_v1.csv",
         "data/training/clint_expanded_v2.csv",
         "data/training/clint_merged_v3_biogen.csv",
+        "data/training/clint_tdc_public_clean.csv",
         "data/training/vdss_v2_training.csv",
         "data/training/clearance_hepatocyte_az.tab",
     }

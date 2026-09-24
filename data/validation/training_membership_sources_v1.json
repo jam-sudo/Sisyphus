@@ -17,6 +17,7 @@
     {"path": "data/training/bioavailability_v1.csv", "sha256": "a45516a972d18d3a1ab3c0b4151d4075262d8bf80a4b9d001e34f62aab8f93ad"},
     {"path": "data/training/clint_expanded_v2.csv", "sha256": "c68b935bb04660d7d1df1747d9a1987d5fa0c9b408f0aa8818a76bc2483e91c1"},
     {"path": "data/training/clint_merged_v3_biogen.csv", "sha256": "380fa1748fdf6abfd54c02368e25ad1911368802b59ab0a3b7cfef840d4d9ff4"},
+    {"path": "data/training/clint_tdc_public_clean.csv", "sha256": "300f5be5d0ada5fad88d94f9dc60c0c13ab77b122fed2494e06d764b43f6cd07"},
     {"path": "data/training/vdss_v2_training.csv", "sha256": "9be8627b9e982b0cfd813d885f675f5d71733db3ac2109189bf0f4af7af01da2"},
     {"path": "data/training/clearance_hepatocyte_az.tab", "sha256": "2c217f46600c22e107b72faa2bfb1d9bf799213aee47b601f6e0d6d73b68f274"}
   ]

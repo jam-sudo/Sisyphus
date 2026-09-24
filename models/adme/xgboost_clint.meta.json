@@ -1,10 +1,12 @@
 {
-  "version": "v1",
-  "artifact_sha256": "2cd4d814ac82d5fc544f84bf668505bea1ca359da1f37e9269943054b6dbafe3",
+  "version": "v1_public_hepatocyte",
+  "artifact_sha256": "1fdafa7c2e287dd9e4f44f68b97e5ace80a6837f97ef17bed3c01daeff610401",
   "target": "log10(CLint uL/min/10^6 cells); floored at 0.1",
   "trained_on": {
-    "dataset_path": "TDC Hepatocyte_AZ",
-    "sha256": "unknown_legacy"
+    "dataset_path": "data/training/clint_tdc_public_clean.csv",
+    "sha256": "300f5be5d0ada5fad88d94f9dc60c0c13ab77b122fed2494e06d764b43f6cd07",
+    "n_drugs_clean": 996,
+    "source_sha256": "2c217f46600c22e107b72faa2bfb1d9bf799213aee47b601f6e0d6d73b68f274"
   },
   "feature_schema": {
     "name": "compute_features_v1",
@@ -12,14 +14,26 @@
     "sha256": "b41dddd78533661b8f4aed86bdb7c5f55d15ed3cd2ad20b39e9100557eda631e",
     "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, MolMR). See src/sisyphus/descriptors.py::compute_features."
   },
-  "trained_at": "unknown_legacy",
+  "trained_at": "2026-09-24T00:10:49.092240+00:00",
   "n_drugs_original": 1213,
-  "n_drugs_excluded": null,
-  "holdout_version": "unknown_legacy",
+  "n_drugs_excluded": 217,
+  "holdout_version": "N=107 (data/reference/holdout.json)",
   "holdout_metric": {
-    "name": "scaffold_cv_r2",
-    "value": 0.24
+    "name": "five_fold_scaffold_cv_r2",
+    "value": 0.21446712963770564,
+    "aafe": 2.5702311479019717
   },
-  "hyperparameters": {},
-  "retrained_reason": "Weakest predictor in pipeline (R^2=0.24 intrinsic to hepatocyte assay noise). 14+ improvement attempts failed \u2014 see docs/research/dead-ends.md"
+  "hyperparameters": {
+    "n_estimators": 500,
+    "max_depth": 6,
+    "learning_rate": 0.1,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "random_state": 42,
+    "n_jobs": 4,
+    "verbosity": 0
+  },
+  "retrained_reason": "Pin single-assay TDC hepatocyte fitted rows and replace unknown legacy source",
+  "n_duplicate_rows": 193,
+  "n_holdout_structures_excluded": 24
 }

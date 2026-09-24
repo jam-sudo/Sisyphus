@@ -350,8 +350,13 @@ is now trained from the exact 1,028-row fitted CSV, SHA256
 `5668d3747e11d03d8c3d57c03ff0842ed3aa330f4c938386e47c05e1e318c919`,
 and its model SHA256 is
 `14391eb0881cb3ec83ab2f81592c5fe75da7c949290ec438fddc2d7136f792a0`.
-Two other active fitted models still lack exact source hashes. CL/F, Vd/F,
-fup v2, Peff, and Cmax are pinned to their training CSVs. The audit and
+The single-assay TDC hepatocyte CLint replacement is pinned to its 996-row
+fitted CSV (SHA256
+`300f5be5d0ada5fad88d94f9dc60c0c13ab77b122fed2494e06d764b43f6cd07`)
+and model artifact (SHA256
+`1fdafa7c2e287dd9e4f44f68b97e5ace80a6837f97ef17bed3c01daeff610401`).
+Only the active VDss model still lacks an exact source hash. CL/F, Vd/F,
+fup v2, Peff, Cmax, and CLint are pinned to their training CSVs. The audit and
 prediction runner fail closed until each production fitted model names a
 repository-relative, hash-matched training dataset included in the pinned
 inventory. Recovering those datasets or reproducibly retraining the models is

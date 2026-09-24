@@ -12,6 +12,16 @@ track `pyproject.toml`.
 
 ## [Unreleased]
 
+### Public-only hepatocyte CLint training source pinned (2026-09-23)
+
+- Rebuilt the single-assay CLint model from 996 SHA-pinned TDC hepatocyte
+  compounds after deduplication and 107-compound development exclusion. Only
+  the active VDss model still lacks an exact training-source hash.
+- On the repeatedly used N=107 development set, Meta AAFE worsened from 2.661
+  to 2.687 and Engine AAFE from 3.624 to 3.821. The partially in-sample Meta
+  residual band widened to ×/÷12.39 at nominal 90%. These are development
+  diagnostics, not independent validation.
+
 ### Public-only Cmax training source pinned (2026-09-23)
 
 - Rebuilt direct Cmax from 1,028 SHA-pinned Omega rows after excluding 100

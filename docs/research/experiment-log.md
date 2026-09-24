@@ -10,6 +10,34 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-23 (cont.) — Public-only hepatocyte CLint retrain
+
+The single-assay TDC Clearance_Hepatocyte_AZ source has 1,213 measurements
+over 1,020 unique canonical structures. Averaging duplicate assay values and
+excluding 24 structures matched to the repeatedly used N=107 development set
+leaves 996 fitted compounds. Raw source SHA256:
+`2c217f46600c22e107b72faa2bfb1d9bf799213aee47b601f6e0d6d73b68f274`;
+fitted CSV SHA256:
+`300f5be5d0ada5fad88d94f9dc60c0c13ab77b122fed2494e06d764b43f6cd07`;
+model SHA256:
+`1fdafa7c2e287dd9e4f44f68b97e5ace80a6837f97ef17bed3c01daeff610401`.
+Five-fold Murcko-scaffold CV on those rows yielded R² 0.214 and CLint AAFE
+2.570. The former production model did not have an exact fitted-row snapshot.
+
+Replacing it worsened the repeatedly used N=107 development Meta AAFE from
+2.661 to 2.687 and Engine AAFE from 3.624 to 3.821; direct ML stayed 2.990.
+The conditional Meta bootstrap interval is [2.30, 3.16], and in-domain Meta
+AAFE is 2.746 (N=81). The cache is
+`data/training/4track_holdout_predictions.json`; its bootstrap artifact is
+`data/validation/4track_ci_2026-09-23_fup_peff_cmax_clint_public.json`.
+This regression is reported without adjusting the blend on N=107.
+
+The partially in-sample Meta residual interval widened from ×/÷12.16 to
+×/÷12.39 at nominal 90%, with 63/67 training references usable. The
+current static web presets were regenerated. Only the active VDss model
+still lacks an exact fitted-source hash; no unconsumed independently curated
+outcome cohort exists.
+
 ## 2026-09-23 (cont.) — Public-only direct Cmax retrain
 
 The former direct Cmax model's base score matched the mean log-Cmax-per-dose

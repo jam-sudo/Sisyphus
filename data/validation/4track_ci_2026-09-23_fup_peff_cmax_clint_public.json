@@ -1,0 +1,62 @@
+{
+  "computed_at": "2026-09-23-fup_peff_cmax_clint_public",
+  "source_cache": "data/training/4track_holdout_predictions.json",
+  "context": "Public-only fup, Peff, Cmax, and hepatocyte CLint retrains; repeated development N=107, not independent validation",
+  "method": "bootstrap on abs(log10(fold))",
+  "n_bootstrap": 10000,
+  "seed": 20260422,
+  "overall": {
+    "n": 107,
+    "engine": {
+      "aafe": 3.8207,
+      "ci_95_low": 3.1842,
+      "ci_95_high": 4.6329,
+      "n": 107,
+      "pct_2fold": 34.6,
+      "pct_3fold": 44.9
+    },
+    "ml": {
+      "aafe": 2.9899,
+      "ci_95_low": 2.5362,
+      "ci_95_high": 3.5474,
+      "n": 107,
+      "pct_2fold": 44.9,
+      "pct_3fold": 59.8
+    },
+    "meta": {
+      "aafe": 2.6867,
+      "ci_95_low": 2.3035,
+      "ci_95_high": 3.1562,
+      "n": 107,
+      "pct_2fold": 51.4,
+      "pct_3fold": 62.6
+    }
+  },
+  "in_domain": {
+    "n": 81,
+    "engine": {
+      "aafe": 3.7115,
+      "ci_95_low": 3.0606,
+      "ci_95_high": 4.5187,
+      "n": 81,
+      "pct_2fold": 33.3,
+      "pct_3fold": 42.0
+    },
+    "ml": {
+      "aafe": 2.9449,
+      "ci_95_low": 2.4404,
+      "ci_95_high": 3.5952,
+      "n": 81,
+      "pct_2fold": 45.7,
+      "pct_3fold": 59.3
+    },
+    "meta": {
+      "aafe": 2.7456,
+      "ci_95_low": 2.2972,
+      "ci_95_high": 3.2943,
+      "n": 81,
+      "pct_2fold": 48.1,
+      "pct_3fold": 60.5
+    }
+  }
+}
