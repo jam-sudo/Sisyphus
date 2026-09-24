@@ -1,14 +1,13 @@
 """Invariant #5 guard: no holdout drug may enter the ML Cmax (MMPK) training set.
 
-A holdout drug leaks into the MMPK corpus only if it survives BOTH filters in
-``scripts/ml_cmax_improvement.py::load_mmpk_data`` — an ``in_holdout=False`` row
-AND a ``canon_smiles`` InChIKey-14 absent from the holdout key set (built from
-clinical_pk SMILES). Salt normalization is required: clopidogrel bisulfate and
+A holdout drug leaks into the MMPK corpus only if it bypasses the holdout flag,
+name, and InChIKey-14 filters in ``load_mmpk_data``. Salt normalization is
+required: clopidogrel bisulfate and
 sumatriptan (Onzetra Xsail) otherwise have different IK14s from their free
-forms. Pravastatin slipped both (connectivity-level SMILES
-mismatch: clinical_pk ``GOSGZXISMCZCDW`` vs MMPK ``TUZYXOIXSAXUGO``) until its
-``in_holdout`` flag was corrected and a name-based exclusion added. These tests
-pin the invariant and catch any future SMILES-representation drift.
+forms. Pravastatin previously had a wrong reference structure
+(``GOSGZXISMCZCDW`` versus the MMPK ``TUZYXOIXSAXUGO``); the flag and name
+exclusion were corrected then, and the reference structure is corrected now.
+These tests pin the invariant against future identity drift.
 """
 from __future__ import annotations
 

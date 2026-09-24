@@ -14,8 +14,8 @@
         "cv": 0.25
       },
       "source": "Varma 2014 JPET Table 2",
-      "smiles": "CC[C@@H](C)C(=O)O[C@@H]1C[C@@H](O)C=C2[C@@H](CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H](C)CC[C@@H]21",
-      "inchikey": "GOSGZXISMCZCDW-LYANWTNHSA-N",
+      "smiles": "CC[C@H](C)C(=O)O[C@H]1C[C@@H](C=C2[C@H]1[C@H]([C@H](C=C2)C)CC[C@H](C[C@H](CC(=O)O)O)O)O",
+      "inchikey": "TUZYXOIXSAXUGO-PZAWKZKUSA-N",
       "ecm_applicable": true
     },
     "rosuvastatin": {

@@ -63,8 +63,8 @@ _STATIN_CASES: dict[str, dict] = {
         "route": "oral",
         "cmax_obs": 0.045,
         "smiles": (
-            "CC[C@@H](C)C(=O)O[C@@H]1C[C@H](C=C2[C@@H]1CC[C@H]"
-            "([C@@H]2CC[C@H](C[C@H](CC(=O)O)O)O)C)O"
+            "CC[C@H](C)C(=O)O[C@H]1C[C@@H](C=C2[C@H]1"
+            "[C@H]([C@H](C=C2)C)CC[C@H](C[C@H](CC(=O)O)O)O)O"
         ),
         "source": "FDA label (pravastatin 40 mg)",
     },

@@ -171,6 +171,8 @@ def fit_pk(real_tmax, real_thalf):
 # Benchmark embedding
 # ===========================================================================
 def load_benchmark():
+    from bootstrap_4track_ci import paired_meta_ml_ratio
+
     bench = json.loads(BENCH_SRC.read_text())
     # copy verbatim to web/public/data
     OUT_BENCH.write_text(json.dumps(bench))
@@ -191,6 +193,7 @@ def load_benchmark():
         "classification": "retrospective_development_benchmark",
         "overall": overall,
         "in_domain": in_domain,
+        "paired_meta_ml": paired_meta_ml_ratio(bench["drugs"]),
         "scatter": scatter,
     }
 

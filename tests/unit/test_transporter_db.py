@@ -36,8 +36,8 @@ def test_build_drug_on_graph_carries_transporter_kinetics():
     from sisyphus.predict.ivive import build_drug_on_graph
 
     pravastatin_smiles = (
-        "CC[C@@H](C)C(=O)O[C@@H]1C[C@H](C=C2[C@@H]1CC[C@H]"
-        "([C@@H]2CC[C@H](C[C@H](CC(=O)O)O)O)C)O"
+        "CC[C@H](C)C(=O)O[C@H]1C[C@@H](C=C2[C@H]1"
+        "[C@H]([C@H](C=C2)C)CC[C@H](C[C@H](CC(=O)O)O)O)O"
     )
     profile = compute_profile(pravastatin_smiles)
     adme = predict_adme(profile)

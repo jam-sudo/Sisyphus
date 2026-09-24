@@ -24,7 +24,7 @@
     }
   ],
   "generated_from": "scripts/calibrate_conformal.py",
-  "source_cache_sha256": "05e53440f8a391dcf2e3a7f68063c06626ecb8ffbc190361a1ed5bf0ebe08958",
+  "source_cache_sha256": "8e9079edf4c937855efae74094350065c0586d193af3c38678ecef7ce92f0c7d",
   "model_artifact_sha256": {
     "models/direct_pk/xgboost_cmax.json": "14391eb0881cb3ec83ab2f81592c5fe75da7c949290ec438fddc2d7136f792a0",
     "models/direct_pk/xgboost_clf.json": "2c83f5bf90a47c11150f07380e686cda3bea67cf1b44d9500895cdaf4a8da6a1",
@@ -37,16 +37,16 @@
   "validity": "not split-conformal; fitted components saw calibration outcomes",
   "tracks": {
     "meta": {
-      "0.5": 0.42264048521432884,
+      "0.5": 0.42264048521432906,
       "0.2": 0.7652207487084266,
       "0.1": 1.0406605719154565,
       "0.05": 1.3935003014674388
     },
     "engine": {
-      "0.5": 0.6762634747665909,
-      "0.2": 1.3217013664842638,
+      "0.5": 0.676263474766591,
+      "0.2": 1.3217013664842636,
       "0.1": 1.9095672791160139,
-      "0.05": 2.201997942183437
+      "0.05": 2.2019979421867077
     },
     "ml": {
       "0.5": 0.4196845253515349,
@@ -69,8 +69,8 @@
       "0.05": 1.0
     },
     "ml": {
-      "0.5": 0.5327,
-      "0.2": 0.8411,
+      "0.5": 0.5234,
+      "0.2": 0.8318,
       "0.1": 0.8785,
       "0.05": 0.9533
     }

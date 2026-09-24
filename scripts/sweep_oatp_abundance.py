@@ -41,7 +41,13 @@ _OUT = ROOT / "data" / "validation" / "oatp_abundance_sweep.json"
 
 # (name, smiles, dose, observed_cmax or None)
 _CANARIES = [
-    ("pravastatin",  "CC[C@@H](C)C(=O)O[C@@H]1C[C@H](C=C2[C@@H]1CC[C@H]([C@@H]2CC[C@H](C[C@H](CC(=O)O)O)O)C)O", 40.0, 0.045),
+    (
+        "pravastatin",
+        "CC[C@H](C)C(=O)O[C@H]1C[C@@H](C=C2[C@H]1"
+        "[C@H]([C@H](C=C2)C)CC[C@H](C[C@H](CC(=O)O)O)O)O",
+        40.0,
+        0.045,
+    ),
     ("rosuvastatin", "CC(C)C1=NC(=NC(=C1C=CC(CC(CC(=O)O)O)O)C2=CC=C(C=C2)F)N(C)S(=O)(=O)C", 20.0, 0.0066),
 ]
 

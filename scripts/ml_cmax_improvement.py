@@ -128,8 +128,8 @@ def load_mmpk_data():
     mmpk = mmpk[~mmpk["in_holdout"]].reset_index(drop=True)
     # Name-based holdout exclusion (defense-in-depth): catches reference drugs
     # whose MMPK canon_smiles yields a different InChIKey-14 than their
-    # clinical_pk SMILES, so the ho_ik filter below would miss them (e.g.
-    # pravastatin: clinical_pk GOSGZXISMCZCDW vs MMPK TUZYXOIXSAXUGO).
+    # clinical_pk SMILES, so the ho_ik filter below would miss them. This
+    # happened with pravastatin before its reference structure was corrected.
     mmpk = mmpk[~mmpk["name"].str.lower().isin(ho_names)].reset_index(drop=True)
 
     # Per-drug: take median entry

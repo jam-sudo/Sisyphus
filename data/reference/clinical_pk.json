@@ -24818,7 +24818,7 @@
       "name": "pravastatin",
       "tier": "silver",
       "source": "FDA Pravachol label, 20mg fasted healthy volunteers single dose",
-      "smiles_corrected_2026-05-02": "Connectivity error in original SMILES (extra ring double bond, InChIKey block 1 TUZYXOIXSAXUGO) replaced with PubChem CID 54687 canonical (block 1 GOSGZXISMCZCDW). Issue #25.",
+      "smiles_correction_history": "The 2026-05-02 replacement was incorrect: GOSGZXISMCZCDW has formula C23H38O7. Restored PubChem CID 54687 pravastatin (TUZYXOIXSAXUGO, C23H36O7) on 2026-09-23; FDA Pravachol sodium is C23H35NaO7.",
       "dose_mg": 20.0,
       "route": "oral",
       "pk_params": {
@@ -24932,7 +24932,7 @@
           0.031273
         ]
       },
-      "smiles": "CC[C@@H](C)C(=O)O[C@@H]1C[C@@H](O)C=C2[C@@H](CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H](C)CC[C@@H]21"
+      "smiles": "CC[C@H](C)C(=O)O[C@H]1C[C@@H](C=C2[C@H]1[C@H]([C@H](C=C2)C)CC[C@H](C[C@H](CC(=O)O)O)O)O"
     },
     "prednisolone": {
       "name": "prednisolone",

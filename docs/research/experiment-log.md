@@ -10,6 +10,37 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-23 (cont.) — Pravastatin structure correction reverses the May identity claim
+
+A name-to-structure audit of all 107 development drugs against PubChem found
+four InChIKey connectivity mismatches. Atovaquone and rifabutin are alternate
+tautomers; darunavir ethanolate's model input omits ethanol as intended for the
+parent active moiety. Pravastatin was a real structural error. The May 2 log
+entry and commit `7042a96` incorrectly identified `GOSGZXISMCZCDW`
+(C23H38O7) as PubChem CID 54687. [PubChem CID 54687](https://pubchem.ncbi.nlm.nih.gov/compound/54687)
+identifies pravastatin as `TUZYXOIXSAXUGO` (C23H36O7), consistent with the
+[FDA Pravachol label](https://www.accessdata.fda.gov/drugsatfda_docs/label/2007/019898s060lbl.pdf)
+formula C23H35NaO7 for its sodium salt. The reference SMILES and both
+pravastatin transporter/clearance registry keys were corrected; old `GOS...`
+input no longer routes as pravastatin. The model weights and observed Cmax were
+unchanged.
+
+The audit also found 24 records whose local SMILES leave stereochemistry
+unspecified where the PubChem name record specifies it. Some drug names denote
+mixtures, so these require compound-by-compound source adjudication before any
+further structure replacement.
+
+The locked-dependency Linux rerun changed only pravastatin among 107 drugs;
+the other 106 predictions matched the preceding cache exactly. Its Engine,
+direct-ML, and Meta Cmax moved 0.03210→0.04642, 0.01660→0.00328, and
+0.03255→0.01821 mg/L. The repeatedly used development AAFE became Engine
+3.834, direct ML 3.036, Meta 2.762 (prior 3.821, 2.990, 2.761). The paired
+Meta/ML ratio is 0.910 [95% compound bootstrap 0.821–1.006], still crossing
+1. The cache, bootstrap artifact, residual-band provenance, model card, and
+web console were refreshed. This fixes identity, not independent validation.
+
+---
+
 ## 2026-09-23 (cont.) — Public-only VDss retrain and complete fitted-source inventory
 
 Downloaded the official TDC VDss_Lombardo Dataverse file ID 4267387 (1,130

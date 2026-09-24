@@ -30,8 +30,8 @@ from sisyphus.pipeline.predict import predict
 from tests._artifact_helpers import skip_if_local_artifacts
 
 _PRAVA_SMILES = (
-    "CC[C@@H](C)C(=O)O[C@@H]1C[C@H](C=C2[C@@H]1CC[C@H]"
-    "([C@@H]2CC[C@H](C[C@H](CC(=O)O)O)O)C)O"
+    "CC[C@H](C)C(=O)O[C@H]1C[C@@H](C=C2[C@H]1"
+    "[C@H]([C@H](C=C2)C)CC[C@H](C[C@H](CC(=O)O)O)O)O"
 )
 _FLUVA_SMILES = (
     "CC(C)N1C2=CC=CC=C2C(=C1/C=C/[C@H](O)C[C@H](O)CC(=O)O)"

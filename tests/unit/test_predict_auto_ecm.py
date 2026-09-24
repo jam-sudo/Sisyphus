@@ -18,12 +18,11 @@ from unittest.mock import patch
 from sisyphus.predict.transporter_db import find_oatp1b1_substrate_name
 
 _PRAVASTATIN_CANONICAL = (
-    "CC[C@@H](C)C(=O)O[C@@H]1C[C@@H](O)C=C2[C@@H]"
-    "(CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H](C)CC[C@@H]21"
+    "CC[C@H](C)C(=O)O[C@H]1C[C@@H](C=C2[C@H]1"
+    "[C@H]([C@H](C=C2)C)CC[C@H](C[C@H](CC(=O)O)O)O)O"
 )
 _PRAVASTATIN_VARIANT = (
-    "CC[C@@H](C)C(=O)O[C@@H]1C[C@H](C=C2[C@@H]1CC[C@H]"
-    "([C@@H]2CC[C@H](C[C@H](CC(=O)O)O)O)C)O"
+    "CCC(C)C(=O)OC1CC(C=C2C1C(C(C=C2)C)CCC(CC(CC(=O)O)O)O)O"
 )
 _CAFFEINE = "Cn1c(=O)c2c(ncn2C)n(C)c1=O"
 _MORPHINE = "CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O"
@@ -119,7 +118,7 @@ class TestPredictAutoEcmWiring:
 
         from sisyphus.pipeline.predict import predict
         with patch("sisyphus.predict.ivive.build_drug_on_graph", side_effect=spy):
-            result = predict(_PRAVASTATIN_VARIANT, dose_mg=40.0)
+            result = predict(_PRAVASTATIN_CANONICAL, dose_mg=40.0)
         assert captured, "expected build_drug_on_graph to be invoked"
         assert all(c["transporter_kinetics"] is not None for c in captured), (
             "expected every build_drug_on_graph call to receive auto-loaded kinetics"
@@ -142,7 +141,7 @@ class TestPredictAutoEcmWiring:
         value depends on graph realization details that we don't lock here.
         """
         from sisyphus.pipeline.predict import predict
-        result = predict(_PRAVASTATIN_VARIANT, dose_mg=40.0)
+        result = predict(_PRAVASTATIN_CANONICAL, dose_mg=40.0)
         assert result.pk.cmax.mean > 0.020, (
             f"expected pravastatin Cmax > 0.02 mg/L with auto-ECM, got {result.pk.cmax.mean:.4f}"
         )

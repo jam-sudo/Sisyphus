@@ -13,8 +13,8 @@
   "overrides": [
     {
       "drug": "pravastatin",
-      "smiles": "CC[C@@H](C)C(=O)O[C@@H]1C[C@@H](O)C=C2[C@@H](CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H](C)CC[C@@H]21",
-      "inchikey": "GOSGZXISMCZCDW-LYANWTNHSA-N",
+      "smiles": "CC[C@H](C)C(=O)O[C@H]1C[C@@H](C=C2[C@H]1[C@H]([C@H](C=C2)C)CC[C@H](C[C@H](CC(=O)O)O)O)O",
+      "inchikey": "TUZYXOIXSAXUGO-PZAWKZKUSA-N",
       "metabolic_fraction": 0.0,
       "literature": [
         "Hatorp 2002: pravastatin hepatic uptake is OATP1B1/2-mediated; minimal CYP3A4/2C9 contribution.",

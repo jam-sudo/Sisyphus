@@ -1,74 +1,74 @@
 {
-  "computed_at": "2026-09-23-public_models_pinned",
+  "computed_at": "2026-09-23-pravastatin_identity_corrected",
   "source_cache": "data/training/4track_holdout_predictions.json",
-  "source_cache_sha256": "05e53440f8a391dcf2e3a7f68063c06626ecb8ffbc190361a1ed5bf0ebe08958",
-  "context": "All seven active fitted models have SHA-pinned public training sources; repeated development N=107, not independent validation",
+  "source_cache_sha256": "8e9079edf4c937855efae74094350065c0586d193af3c38678ecef7ce92f0c7d",
+  "context": "Public fitted models; corrected PubChem CID 54687 pravastatin parent structure; Linux locked-dependency benchmark; repeatedly used development set",
   "method": "bootstrap on abs(log10(fold))",
   "n_bootstrap": 10000,
   "seed": 20260422,
   "overall": {
     "n": 107,
     "engine": {
-      "aafe": 3.8207,
-      "ci_95_low": 3.1842,
-      "ci_95_high": 4.6329,
+      "aafe": 3.8339,
+      "ci_95_low": 3.1946,
+      "ci_95_high": 4.6512,
       "n": 107,
       "pct_2fold": 34.6,
       "pct_3fold": 44.9
     },
     "ml": {
-      "aafe": 2.9899,
-      "ci_95_low": 2.5362,
-      "ci_95_high": 3.5474,
+      "aafe": 3.0356,
+      "ci_95_low": 2.5678,
+      "ci_95_high": 3.6083,
       "n": 107,
-      "pct_2fold": 44.9,
-      "pct_3fold": 59.8
+      "pct_2fold": 43.9,
+      "pct_3fold": 58.9
     },
     "meta": {
-      "aafe": 2.7611,
-      "ci_95_low": 2.3618,
-      "ci_95_high": 3.2434,
+      "aafe": 2.7625,
+      "ci_95_low": 2.3638,
+      "ci_95_high": 3.2443,
       "n": 107,
       "pct_2fold": 47.7,
       "pct_3fold": 62.6
     },
     "paired_meta_ml": {
-      "ratio": 0.9235,
-      "ci_95_low": 0.836,
-      "ci_95_high": 1.017,
+      "ratio": 0.91,
+      "ci_95_low": 0.8209,
+      "ci_95_high": 1.0061,
       "n": 107
     }
   },
   "in_domain": {
     "n": 81,
     "engine": {
-      "aafe": 3.7115,
-      "ci_95_low": 3.0606,
-      "ci_95_high": 4.5187,
+      "aafe": 3.7285,
+      "ci_95_low": 3.0809,
+      "ci_95_high": 4.5315,
       "n": 81,
       "pct_2fold": 33.3,
       "pct_3fold": 42.0
     },
     "ml": {
-      "aafe": 2.9449,
-      "ci_95_low": 2.4404,
-      "ci_95_high": 3.5952,
+      "aafe": 3.0045,
+      "ci_95_low": 2.4845,
+      "ci_95_high": 3.6652,
       "n": 81,
-      "pct_2fold": 45.7,
-      "pct_3fold": 59.3
+      "pct_2fold": 44.4,
+      "pct_3fold": 58.0
     },
     "meta": {
-      "aafe": 2.8115,
-      "ci_95_low": 2.3491,
-      "ci_95_high": 3.3764,
+      "aafe": 2.8134,
+      "ci_95_low": 2.3515,
+      "ci_95_high": 3.3779,
       "n": 81,
       "pct_2fold": 46.9,
       "pct_3fold": 60.5
     },
     "paired_meta_ml": {
-      "ratio": 0.9547,
-      "ci_95_low": 0.8543,
-      "ci_95_high": 1.0604,
+      "ratio": 0.9364,
+      "ci_95_low": 0.8306,
+      "ci_95_high": 1.0469,
       "n": 81
     }
   }
