@@ -1,0 +1,3258 @@
+{
+  "screened_at": "2026-09-24",
+  "scope": "PubChem name-to-structure triage of clinical_pk.json; not independent Cmax validation",
+  "clinical_pk_sha256_before_correction": "366f605002b467a1f708534077a2b78cf3cb8e09f9785262f03b2ecf8b243ce1",
+  "pubchem_property_url_template": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/{lookup_name}/property/InChIKey,MolecularFormula,SMILES/JSON",
+  "records": [
+    {
+      "name": "abacavir",
+      "status": "ok",
+      "local_inchikey_before_correction": "MCGSCOLBFJQGHM-UHFFFAOYSA-N",
+      "lookup_name": "abacavir",
+      "pubchem_cid": 441300,
+      "pubchem_inchikey": "MCGSCOLBFJQGHM-SCZZXKLOSA-N",
+      "local_formula_before_correction": "C14H18N6O",
+      "pubchem_formula": "C14H18N6O"
+    },
+    {
+      "name": "abiraterone",
+      "status": "ok",
+      "local_inchikey_before_correction": "GZOSMCIZMLWJML-VJLLXTKPSA-N",
+      "lookup_name": "abiraterone",
+      "pubchem_cid": 132971,
+      "pubchem_inchikey": "GZOSMCIZMLWJML-VJLLXTKPSA-N",
+      "local_formula_before_correction": "C24H31NO",
+      "pubchem_formula": "C24H31NO"
+    },
+    {
+      "name": "acamprosate",
+      "status": "ok",
+      "local_inchikey_before_correction": "AFCGFAGUEYAMAO-UHFFFAOYSA-N",
+      "lookup_name": "acamprosate",
+      "pubchem_cid": 71158,
+      "pubchem_inchikey": "AFCGFAGUEYAMAO-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C5H11NO4S",
+      "pubchem_formula": "C5H11NO4S"
+    },
+    {
+      "name": "acebutolol",
+      "status": "ok",
+      "local_inchikey_before_correction": "GOEMGAFJFRBGGG-UHFFFAOYSA-N",
+      "lookup_name": "acebutolol",
+      "pubchem_cid": 1978,
+      "pubchem_inchikey": "GOEMGAFJFRBGGG-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C18H28N2O4",
+      "pubchem_formula": "C18H28N2O4"
+    },
+    {
+      "name": "acetaminophen",
+      "status": "ok",
+      "local_inchikey_before_correction": "RZVAJINKPMORJF-UHFFFAOYSA-N",
+      "lookup_name": "acetaminophen",
+      "pubchem_cid": 1983,
+      "pubchem_inchikey": "RZVAJINKPMORJF-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C8H9NO2",
+      "pubchem_formula": "C8H9NO2"
+    },
+    {
+      "name": "acitretin",
+      "status": "ok",
+      "local_inchikey_before_correction": "IHUNBGSDBOWDMA-UHFFFAOYSA-N",
+      "lookup_name": "acitretin",
+      "pubchem_cid": 5284513,
+      "pubchem_inchikey": "IHUNBGSDBOWDMA-AQFIFDHZSA-N",
+      "local_formula_before_correction": "C21H26O3",
+      "pubchem_formula": "C21H26O3"
+    },
+    {
+      "name": "adagrasib",
+      "status": "ok",
+      "local_inchikey_before_correction": "PEMUGDMSUDYLHU-UHFFFAOYSA-N",
+      "lookup_name": "adagrasib",
+      "pubchem_cid": 138611145,
+      "pubchem_inchikey": "PEMUGDMSUDYLHU-ZEQRLZLVSA-N",
+      "local_formula_before_correction": "C32H35ClFN7O2",
+      "pubchem_formula": "C32H35ClFN7O2"
+    },
+    {
+      "name": "adefovir dipivoxil",
+      "status": "ok",
+      "local_inchikey_before_correction": "WOZSCQDILHKSGG-UHFFFAOYSA-N",
+      "lookup_name": "adefovir dipivoxil",
+      "pubchem_cid": 60871,
+      "pubchem_inchikey": "WOZSCQDILHKSGG-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C20H32N5O8P",
+      "pubchem_formula": "C20H32N5O8P"
+    },
+    {
+      "name": "alogliptin",
+      "status": "ok",
+      "local_inchikey_before_correction": "ZSBOMTDTBDDKMP-UHFFFAOYSA-N",
+      "lookup_name": "alogliptin",
+      "pubchem_cid": 11450633,
+      "pubchem_inchikey": "ZSBOMTDTBDDKMP-OAHLLOKOSA-N",
+      "local_formula_before_correction": "C18H21N5O2",
+      "pubchem_formula": "C18H21N5O2"
+    },
+    {
+      "name": "alosetron",
+      "status": "ok",
+      "local_inchikey_before_correction": "JSWZEAMFRNKZNL-UHFFFAOYSA-N",
+      "lookup_name": "alosetron",
+      "pubchem_cid": 2099,
+      "pubchem_inchikey": "JSWZEAMFRNKZNL-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C17H18N4O",
+      "pubchem_formula": "C17H18N4O"
+    },
+    {
+      "name": "alprazolam",
+      "status": "ok",
+      "local_inchikey_before_correction": "VREFGVBLTWBCJP-UHFFFAOYSA-N",
+      "lookup_name": "alprazolam",
+      "pubchem_cid": 2118,
+      "pubchem_inchikey": "VREFGVBLTWBCJP-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C17H13ClN4",
+      "pubchem_formula": "C17H13ClN4"
+    },
+    {
+      "name": "alvimopan",
+      "status": "ok",
+      "local_inchikey_before_correction": "UPNUIXSCZBYVBB-JVFUWBCBSA-N",
+      "lookup_name": "alvimopan",
+      "pubchem_cid": 5488548,
+      "pubchem_inchikey": "UPNUIXSCZBYVBB-JVFUWBCBSA-N",
+      "local_formula_before_correction": "C25H32N2O4",
+      "pubchem_formula": "C25H32N2O4"
+    },
+    {
+      "name": "amantadine",
+      "status": "ok",
+      "local_inchikey_before_correction": "DKNWSYNQZKUICI-UHFFFAOYSA-N",
+      "lookup_name": "amantadine",
+      "pubchem_cid": 2130,
+      "pubchem_inchikey": "DKNWSYNQZKUICI-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C10H17N",
+      "pubchem_formula": "C10H17N"
+    },
+    {
+      "name": "amiodarone",
+      "status": "ok",
+      "local_inchikey_before_correction": "IYIKLHRQXLHMJQ-UHFFFAOYSA-N",
+      "lookup_name": "amiodarone",
+      "pubchem_cid": 2157,
+      "pubchem_inchikey": "IYIKLHRQXLHMJQ-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C25H29I2NO3",
+      "pubchem_formula": "C25H29I2NO3"
+    },
+    {
+      "name": "amlodipine valsartan",
+      "status": "ok",
+      "local_inchikey_before_correction": "QWCYQCQLAZCPHO-UHFFFAOYSA-N",
+      "lookup_name": "amlodipine valsartan",
+      "pubchem_cid": 11354874,
+      "pubchem_inchikey": "QWCYQCQLAZCPHO-FTBISJDPSA-N",
+      "local_formula_before_correction": "C44H54ClN7O8",
+      "pubchem_formula": "C44H54ClN7O8"
+    },
+    {
+      "name": "amlodipine,valsartan",
+      "status": "no_local_smiles"
+    },
+    {
+      "name": "amoxicillin",
+      "status": "ok",
+      "local_inchikey_before_correction": "LSQZJLSUYDQPKJ-UHFFFAOYSA-N",
+      "lookup_name": "amoxicillin",
+      "pubchem_cid": 33613,
+      "pubchem_inchikey": "LSQZJLSUYDQPKJ-NJBDSQKTSA-N",
+      "local_formula_before_correction": "C16H19N3O5S",
+      "pubchem_formula": "C16H19N3O5S"
+    },
+    {
+      "name": "amphetamine",
+      "status": "ok",
+      "local_inchikey_before_correction": "KWTSXDURSIMDCE-UHFFFAOYSA-N",
+      "lookup_name": "amphetamine",
+      "pubchem_cid": 3007,
+      "pubchem_inchikey": "KWTSXDURSIMDCE-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C9H13N",
+      "pubchem_formula": "C9H13N"
+    },
+    {
+      "name": "anastrozole",
+      "status": "ok",
+      "local_inchikey_before_correction": "YBBLVLTVTVSKRW-UHFFFAOYSA-N",
+      "lookup_name": "anastrozole",
+      "pubchem_cid": 2187,
+      "pubchem_inchikey": "YBBLVLTVTVSKRW-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C17H19N5",
+      "pubchem_formula": "C17H19N5"
+    },
+    {
+      "name": "apixaban",
+      "status": "ok",
+      "local_inchikey_before_correction": "QNZCBYKSOIHPEH-UHFFFAOYSA-N",
+      "lookup_name": "apixaban",
+      "pubchem_cid": 10182969,
+      "pubchem_inchikey": "QNZCBYKSOIHPEH-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C25H25N5O4",
+      "pubchem_formula": "C25H25N5O4"
+    },
+    {
+      "name": "aripiprazole",
+      "status": "ok",
+      "local_inchikey_before_correction": "CEUORZQYGODEFX-UHFFFAOYSA-N",
+      "lookup_name": "aripiprazole",
+      "pubchem_cid": 60795,
+      "pubchem_inchikey": "CEUORZQYGODEFX-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C23H27Cl2N3O2",
+      "pubchem_formula": "C23H27Cl2N3O2"
+    },
+    {
+      "name": "aspirin",
+      "status": "ok",
+      "local_inchikey_before_correction": "BSYNRYMUTXBXSQ-UHFFFAOYSA-N",
+      "lookup_name": "aspirin",
+      "pubchem_cid": 2244,
+      "pubchem_inchikey": "BSYNRYMUTXBXSQ-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C9H8O4",
+      "pubchem_formula": "C9H8O4"
+    },
+    {
+      "name": "atazanavir",
+      "status": "ok",
+      "local_inchikey_before_correction": "AXRYRYVKAWYZBR-UHFFFAOYSA-N",
+      "lookup_name": "atazanavir",
+      "pubchem_cid": 148192,
+      "pubchem_inchikey": "AXRYRYVKAWYZBR-GASGPIRDSA-N",
+      "local_formula_before_correction": "C38H52N6O7",
+      "pubchem_formula": "C38H52N6O7"
+    },
+    {
+      "name": "atenolol",
+      "status": "ok",
+      "local_inchikey_before_correction": "METKIMKYRPQLGS-UHFFFAOYSA-N",
+      "lookup_name": "atenolol",
+      "pubchem_cid": 2249,
+      "pubchem_inchikey": "METKIMKYRPQLGS-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C14H22N2O3",
+      "pubchem_formula": "C14H22N2O3"
+    },
+    {
+      "name": "atomoxetine",
+      "status": "ok",
+      "local_inchikey_before_correction": "VHGCDTVCOLNTBX-UHFFFAOYSA-N",
+      "lookup_name": "atomoxetine",
+      "pubchem_cid": 54841,
+      "pubchem_inchikey": "VHGCDTVCOLNTBX-QGZVFWFLSA-N",
+      "local_formula_before_correction": "C17H21NO",
+      "pubchem_formula": "C17H21NO"
+    },
+    {
+      "name": "atorvastatin",
+      "status": "ok",
+      "local_inchikey_before_correction": "XUKUURHRXDUEBC-UHFFFAOYSA-N",
+      "lookup_name": "atorvastatin",
+      "pubchem_cid": 60823,
+      "pubchem_inchikey": "XUKUURHRXDUEBC-KAYWLYCHSA-N",
+      "local_formula_before_correction": "C33H35FN2O5",
+      "pubchem_formula": "C33H35FN2O5"
+    },
+    {
+      "name": "atorvastatin,",
+      "status": "no_local_smiles"
+    },
+    {
+      "name": "atovaquone",
+      "status": "ok",
+      "local_inchikey_before_correction": "KUCQYCKVKVOKAY-CTYIDZIISA-N",
+      "lookup_name": "atovaquone",
+      "pubchem_cid": 74989,
+      "pubchem_inchikey": "BSJMWHQBCZFXBR-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C22H19ClO3",
+      "pubchem_formula": "C22H19ClO3"
+    },
+    {
+      "name": "avanafil",
+      "status": "ok",
+      "local_inchikey_before_correction": "WEAJZXNPAWBCOA-UHFFFAOYSA-N",
+      "lookup_name": "avanafil",
+      "pubchem_cid": 9869929,
+      "pubchem_inchikey": "WEAJZXNPAWBCOA-INIZCTEOSA-N",
+      "local_formula_before_correction": "C23H26ClN7O3",
+      "pubchem_formula": "C23H26ClN7O3"
+    },
+    {
+      "name": "azacitidine",
+      "status": "ok",
+      "local_inchikey_before_correction": "NMUSYJAQQFHJEW-KVTDHHQDSA-N",
+      "lookup_name": "azacitidine",
+      "pubchem_cid": 9444,
+      "pubchem_inchikey": "NMUSYJAQQFHJEW-KVTDHHQDSA-N",
+      "local_formula_before_correction": "C8H12N4O5",
+      "pubchem_formula": "C8H12N4O5"
+    },
+    {
+      "name": "azithromycin",
+      "status": "ok",
+      "local_inchikey_before_correction": "MQTOSJVFKKJCRP-BICOPXKESA-N",
+      "lookup_name": "azithromycin",
+      "pubchem_cid": 447043,
+      "pubchem_inchikey": "MQTOSJVFKKJCRP-BICOPXKESA-N",
+      "local_formula_before_correction": "C38H72N2O12",
+      "pubchem_formula": "C38H72N2O12"
+    },
+    {
+      "name": "belumosudil",
+      "status": "ok",
+      "local_inchikey_before_correction": "GKHIVNAUVKXIIY-UHFFFAOYSA-N",
+      "lookup_name": "belumosudil",
+      "pubchem_cid": 11950170,
+      "pubchem_inchikey": "GKHIVNAUVKXIIY-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C26H24N6O2",
+      "pubchem_formula": "C26H24N6O2"
+    },
+    {
+      "name": "belzutifan",
+      "status": "ok",
+      "local_inchikey_before_correction": "LOMMPXLFBTZENJ-UHFFFAOYSA-N",
+      "lookup_name": "belzutifan",
+      "pubchem_cid": 117947097,
+      "pubchem_inchikey": "LOMMPXLFBTZENJ-ZACQAIPSSA-N",
+      "local_formula_before_correction": "C17H12F3NO4S",
+      "pubchem_formula": "C17H12F3NO4S"
+    },
+    {
+      "name": "benzhydrocodone",
+      "status": "ok",
+      "local_inchikey_before_correction": "VPMRSLWWUXNYRY-UHFFFAOYSA-N",
+      "lookup_name": "benzhydrocodone",
+      "pubchem_cid": 49836084,
+      "pubchem_inchikey": "VPMRSLWWUXNYRY-PJCFOSJUSA-N",
+      "local_formula_before_correction": "C25H25NO4",
+      "pubchem_formula": "C25H25NO4"
+    },
+    {
+      "name": "bexagliflozin",
+      "status": "ok",
+      "local_inchikey_before_correction": "BTCRKOKVYTVOLU-SJSRKZJXSA-N",
+      "lookup_name": "bexagliflozin",
+      "pubchem_cid": 25195624,
+      "pubchem_inchikey": "BTCRKOKVYTVOLU-SJSRKZJXSA-N",
+      "local_formula_before_correction": "C24H29ClO7",
+      "pubchem_formula": "C24H29ClO7"
+    },
+    {
+      "name": "brincidofovir",
+      "status": "ok",
+      "local_inchikey_before_correction": "WXJFKKQWPMNTIM-VWLOTQADSA-N",
+      "lookup_name": "brincidofovir",
+      "pubchem_cid": 483477,
+      "pubchem_inchikey": "WXJFKKQWPMNTIM-VWLOTQADSA-N",
+      "local_formula_before_correction": "C27H52N3O7P",
+      "pubchem_formula": "C27H52N3O7P"
+    },
+    {
+      "name": "budesonide",
+      "status": "ok",
+      "local_inchikey_before_correction": "VOVIALXJUBGFJZ-KWVAZRHASA-N",
+      "lookup_name": "budesonide",
+      "pubchem_cid": 5281004,
+      "pubchem_inchikey": "VOVIALXJUBGFJZ-KWVAZRHASA-N",
+      "local_formula_before_correction": "C25H34O6",
+      "pubchem_formula": "C25H34O6"
+    },
+    {
+      "name": "bumetanide",
+      "status": "ok",
+      "local_inchikey_before_correction": "MAEIEVLCKWDQJH-UHFFFAOYSA-N",
+      "lookup_name": "bumetanide",
+      "pubchem_cid": 2471,
+      "pubchem_inchikey": "MAEIEVLCKWDQJH-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C17H20N2O5S",
+      "pubchem_formula": "C17H20N2O5S"
+    },
+    {
+      "name": "busulfan",
+      "status": "ok",
+      "local_inchikey_before_correction": "COVZYZSDYWQREU-UHFFFAOYSA-N",
+      "lookup_name": "busulfan",
+      "pubchem_cid": 2478,
+      "pubchem_inchikey": "COVZYZSDYWQREU-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C6H14O6S2",
+      "pubchem_formula": "C6H14O6S2"
+    },
+    {
+      "name": "butal",
+      "status": "ok",
+      "local_inchikey_before_correction": "ZTQSAGDEMFDKMZ-UHFFFAOYSA-N",
+      "lookup_name": "butal",
+      "pubchem_cid": 261,
+      "pubchem_inchikey": "ZTQSAGDEMFDKMZ-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C4H8O",
+      "pubchem_formula": "C4H8O"
+    },
+    {
+      "name": "butalbital",
+      "status": "ok",
+      "local_inchikey_before_correction": "UZVHFVZFNXBMQJ-UHFFFAOYSA-N",
+      "lookup_name": "butalbital",
+      "pubchem_cid": 2481,
+      "pubchem_inchikey": "UZVHFVZFNXBMQJ-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C11H16N2O3",
+      "pubchem_formula": "C11H16N2O3"
+    },
+    {
+      "name": "cabozantinib",
+      "status": "ok",
+      "local_inchikey_before_correction": "ONIQOQHATWINJY-UHFFFAOYSA-N",
+      "lookup_name": "cabozantinib",
+      "pubchem_cid": 25102847,
+      "pubchem_inchikey": "ONIQOQHATWINJY-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C28H24FN3O5",
+      "pubchem_formula": "C28H24FN3O5"
+    },
+    {
+      "name": "caffeine",
+      "status": "ok",
+      "local_inchikey_before_correction": "RYYVLZVUVIJVGH-UHFFFAOYSA-N",
+      "lookup_name": "caffeine",
+      "pubchem_cid": 2519,
+      "pubchem_inchikey": "RYYVLZVUVIJVGH-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C8H10N4O2",
+      "pubchem_formula": "C8H10N4O2"
+    },
+    {
+      "name": "calcium",
+      "status": "ok",
+      "local_inchikey_before_correction": "OYPRJOBELJOOCE-UHFFFAOYSA-N",
+      "lookup_name": "calcium",
+      "pubchem_cid": 5460341,
+      "pubchem_inchikey": "OYPRJOBELJOOCE-UHFFFAOYSA-N",
+      "local_formula_before_correction": "Ca",
+      "pubchem_formula": "Ca"
+    },
+    {
+      "name": "carbamazepine",
+      "status": "ok",
+      "local_inchikey_before_correction": "FFGPTBGBLSHEPO-UHFFFAOYSA-N",
+      "lookup_name": "carbamazepine",
+      "pubchem_cid": 2554,
+      "pubchem_inchikey": "FFGPTBGBLSHEPO-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C15H12N2O",
+      "pubchem_formula": "C15H12N2O"
+    },
+    {
+      "name": "carbidopa",
+      "status": "ok",
+      "local_inchikey_before_correction": "TZFNLOMSOLWIDK-UHFFFAOYSA-N",
+      "lookup_name": "carbidopa",
+      "pubchem_cid": 34359,
+      "pubchem_inchikey": "TZFNLOMSOLWIDK-JTQLQIEISA-N",
+      "local_formula_before_correction": "C10H14N2O4",
+      "pubchem_formula": "C10H14N2O4"
+    },
+    {
+      "name": "carbinoxamine",
+      "status": "ok",
+      "local_inchikey_before_correction": "OJFSXZCBGQGRNV-UHFFFAOYSA-N",
+      "lookup_name": "carbinoxamine",
+      "pubchem_cid": 2564,
+      "pubchem_inchikey": "OJFSXZCBGQGRNV-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C16H19ClN2O",
+      "pubchem_formula": "C16H19ClN2O"
+    },
+    {
+      "name": "carglumic acid",
+      "status": "ok",
+      "local_inchikey_before_correction": "LCQLHJZYVOQKHU-UHFFFAOYSA-N",
+      "lookup_name": "carglumic acid",
+      "pubchem_cid": 121396,
+      "pubchem_inchikey": "LCQLHJZYVOQKHU-VKHMYHEASA-N",
+      "local_formula_before_correction": "C6H10N2O5",
+      "pubchem_formula": "C6H10N2O5"
+    },
+    {
+      "name": "carisoprodol",
+      "status": "ok",
+      "local_inchikey_before_correction": "OFZCIYFFPZCNJE-UHFFFAOYSA-N",
+      "lookup_name": "carisoprodol",
+      "pubchem_cid": 2576,
+      "pubchem_inchikey": "OFZCIYFFPZCNJE-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C12H24N2O4",
+      "pubchem_formula": "C12H24N2O4"
+    },
+    {
+      "name": "carvedilol",
+      "status": "ok",
+      "local_inchikey_before_correction": "OGHNVEJMJSYVRP-UHFFFAOYSA-N",
+      "lookup_name": "carvedilol",
+      "pubchem_cid": 2585,
+      "pubchem_inchikey": "OGHNVEJMJSYVRP-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C24H26N2O4",
+      "pubchem_formula": "C24H26N2O4"
+    },
+    {
+      "name": "cefixime",
+      "status": "ok",
+      "local_inchikey_before_correction": "OKBVVJOGVLARMR-UHFFFAOYSA-N",
+      "lookup_name": "cefixime",
+      "pubchem_cid": 5362065,
+      "pubchem_inchikey": "OKBVVJOGVLARMR-QSWIMTSFSA-N",
+      "local_formula_before_correction": "C16H15N5O7S2",
+      "pubchem_formula": "C16H15N5O7S2"
+    },
+    {
+      "name": "cefpodoxime proxetil",
+      "status": "ok",
+      "local_inchikey_before_correction": "LTINZAODLRIQIX-UHFFFAOYSA-N",
+      "lookup_name": "cefpodoxime proxetil",
+      "pubchem_cid": 6526396,
+      "pubchem_inchikey": "LTINZAODLRIQIX-FBXRGJNPSA-N",
+      "local_formula_before_correction": "C21H27N5O9S2",
+      "pubchem_formula": "C21H27N5O9S2"
+    },
+    {
+      "name": "cefprozil",
+      "status": "ok",
+      "local_inchikey_before_correction": "WDLWHQDACQUCJR-UHFFFAOYSA-N",
+      "lookup_name": "cefprozil",
+      "pubchem_cid": 62977,
+      "pubchem_inchikey": "WDLWHQDACQUCJR-PBFPGSCMSA-N",
+      "local_formula_before_correction": "C18H19N3O5S",
+      "pubchem_formula": "C18H19N3O5S"
+    },
+    {
+      "name": "cetirizine",
+      "status": "ok",
+      "local_inchikey_before_correction": "ZKLPARSLTMPFCP-UHFFFAOYSA-N",
+      "lookup_name": "cetirizine",
+      "pubchem_cid": 2678,
+      "pubchem_inchikey": "ZKLPARSLTMPFCP-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C21H25ClN2O3",
+      "pubchem_formula": "C21H25ClN2O3"
+    },
+    {
+      "name": "cimetidine",
+      "status": "ok",
+      "local_inchikey_before_correction": "AQIXAKUUQRKLND-UHFFFAOYSA-N",
+      "lookup_name": "cimetidine",
+      "pubchem_cid": 2756,
+      "pubchem_inchikey": "AQIXAKUUQRKLND-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C10H16N6S",
+      "pubchem_formula": "C10H16N6S"
+    },
+    {
+      "name": "cinacalcet",
+      "status": "ok",
+      "local_inchikey_before_correction": "VDHAWDNDOKGFTD-UHFFFAOYSA-N",
+      "lookup_name": "cinacalcet",
+      "pubchem_cid": 156419,
+      "pubchem_inchikey": "VDHAWDNDOKGFTD-MRXNPFEDSA-N",
+      "local_formula_before_correction": "C22H22F3N",
+      "pubchem_formula": "C22H22F3N"
+    },
+    {
+      "name": "ciprofloxacin",
+      "status": "ok",
+      "local_inchikey_before_correction": "MYSWGUAQZAJSOK-UHFFFAOYSA-N",
+      "lookup_name": "ciprofloxacin",
+      "pubchem_cid": 2764,
+      "pubchem_inchikey": "MYSWGUAQZAJSOK-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C17H18FN3O3",
+      "pubchem_formula": "C17H18FN3O3"
+    },
+    {
+      "name": "citalopram",
+      "status": "ok",
+      "local_inchikey_before_correction": "WSEQXVZVJXJVFP-UHFFFAOYSA-N",
+      "lookup_name": "citalopram",
+      "pubchem_cid": 2771,
+      "pubchem_inchikey": "WSEQXVZVJXJVFP-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C20H21FN2O",
+      "pubchem_formula": "C20H21FN2O"
+    },
+    {
+      "name": "clarithromycin",
+      "status": "ok",
+      "local_inchikey_before_correction": "AGOYDEPGAOXOCK-UHFFFAOYSA-N",
+      "lookup_name": "clarithromycin",
+      "pubchem_cid": 84029,
+      "pubchem_inchikey": "AGOYDEPGAOXOCK-KCBOHYOISA-N",
+      "local_formula_before_correction": "C38H69NO13",
+      "pubchem_formula": "C38H69NO13"
+    },
+    {
+      "name": "clomipramine",
+      "status": "ok",
+      "local_inchikey_before_correction": "GDLIGKIOYRNHDA-UHFFFAOYSA-N",
+      "lookup_name": "clomipramine",
+      "pubchem_cid": 2801,
+      "pubchem_inchikey": "GDLIGKIOYRNHDA-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C19H23ClN2",
+      "pubchem_formula": "C19H23ClN2"
+    },
+    {
+      "name": "clonidine",
+      "status": "ok",
+      "local_inchikey_before_correction": "GJSURZIOUXUGAL-UHFFFAOYSA-N",
+      "lookup_name": "clonidine",
+      "pubchem_cid": 2803,
+      "pubchem_inchikey": "GJSURZIOUXUGAL-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C9H9Cl2N3",
+      "pubchem_formula": "C9H9Cl2N3"
+    },
+    {
+      "name": "clopidogrel",
+      "status": "ok",
+      "local_inchikey_before_correction": "GKTWGGQPFAXNFI-HNNXBMFYSA-N",
+      "lookup_name": "clopidogrel",
+      "pubchem_cid": 60606,
+      "pubchem_inchikey": "GKTWGGQPFAXNFI-HNNXBMFYSA-N",
+      "local_formula_before_correction": "C16H16ClNO2S",
+      "pubchem_formula": "C16H16ClNO2S"
+    },
+    {
+      "name": "clozapine",
+      "status": "ok",
+      "local_inchikey_before_correction": "QZUDBNBUXVUHMW-UHFFFAOYSA-N",
+      "lookup_name": "clozapine",
+      "pubchem_cid": 135398737,
+      "pubchem_inchikey": "QZUDBNBUXVUHMW-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C18H19ClN4",
+      "pubchem_formula": "C18H19ClN4"
+    },
+    {
+      "name": "codeine",
+      "status": "ok",
+      "local_inchikey_before_correction": "OROGSEYTTFOCAN-DNJOTXNNSA-N",
+      "lookup_name": "codeine",
+      "pubchem_cid": 5284371,
+      "pubchem_inchikey": "OROGSEYTTFOCAN-DNJOTXNNSA-N",
+      "local_formula_before_correction": "C18H21NO3",
+      "pubchem_formula": "C18H21NO3"
+    },
+    {
+      "name": "colchicine",
+      "status": "ok",
+      "local_inchikey_before_correction": "IAKHMKGGTNLKSZ-INIZCTEOSA-N",
+      "lookup_name": "colchicine",
+      "pubchem_cid": 6167,
+      "pubchem_inchikey": "IAKHMKGGTNLKSZ-INIZCTEOSA-N",
+      "local_formula_before_correction": "C22H25NO6",
+      "pubchem_formula": "C22H25NO6"
+    },
+    {
+      "name": "crizotinib",
+      "status": "ok",
+      "local_inchikey_before_correction": "KTEIFNKAUNYNJU-UHFFFAOYSA-N",
+      "lookup_name": "crizotinib",
+      "pubchem_cid": 11626560,
+      "pubchem_inchikey": "KTEIFNKAUNYNJU-GFCCVEGCSA-N",
+      "local_formula_before_correction": "C21H22Cl2FN5O",
+      "pubchem_formula": "C21H22Cl2FN5O"
+    },
+    {
+      "name": "cyclobenzaprine",
+      "status": "ok",
+      "local_inchikey_before_correction": "JURKNVYFZMSNLP-UHFFFAOYSA-N",
+      "lookup_name": "cyclobenzaprine",
+      "pubchem_cid": 2895,
+      "pubchem_inchikey": "JURKNVYFZMSNLP-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C20H21N",
+      "pubchem_formula": "C20H21N"
+    },
+    {
+      "name": "cyclophosphamide",
+      "status": "ok",
+      "local_inchikey_before_correction": "CMSMOCZEIVJLDB-UHFFFAOYSA-N",
+      "lookup_name": "cyclophosphamide",
+      "pubchem_cid": 2907,
+      "pubchem_inchikey": "CMSMOCZEIVJLDB-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C7H15Cl2N2O2P",
+      "pubchem_formula": "C7H15Cl2N2O2P"
+    },
+    {
+      "name": "cyclosporine",
+      "status": "ok",
+      "local_inchikey_before_correction": "PMATZTZNYRCHOR-UHFFFAOYSA-N",
+      "lookup_name": "cyclosporine",
+      "pubchem_cid": 5284373,
+      "pubchem_inchikey": "PMATZTZNYRCHOR-CGLBZJNRSA-N",
+      "local_formula_before_correction": "C62H111N11O12",
+      "pubchem_formula": "C62H111N11O12"
+    },
+    {
+      "name": "d_amphetamine",
+      "status": "http_error",
+      "local_inchikey_before_correction": "KWTSXDURSIMDCE-MRVPVSSYSA-N",
+      "lookup_name": "d-amphetamine",
+      "pubchem_cid": 5826,
+      "pubchem_inchikey": "KWTSXDURSIMDCE-QMMMGPOBSA-N",
+      "local_formula_before_correction": "C9H13N",
+      "pubchem_formula": "C9H13N"
+    },
+    {
+      "name": "dalfampridine",
+      "status": "ok",
+      "local_inchikey_before_correction": "NUKYPUAOHBNCPY-UHFFFAOYSA-N",
+      "lookup_name": "dalfampridine",
+      "pubchem_cid": 1727,
+      "pubchem_inchikey": "NUKYPUAOHBNCPY-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C5H6N2",
+      "pubchem_formula": "C5H6N2"
+    },
+    {
+      "name": "dapagliflozin",
+      "status": "ok",
+      "local_inchikey_before_correction": "JVHXJTBJCFBINQ-ADAARDCZSA-N",
+      "lookup_name": "dapagliflozin",
+      "pubchem_cid": 9887712,
+      "pubchem_inchikey": "JVHXJTBJCFBINQ-ADAARDCZSA-N",
+      "local_formula_before_correction": "C21H25ClO6",
+      "pubchem_formula": "C21H25ClO6"
+    },
+    {
+      "name": "darifenacin",
+      "status": "ok",
+      "local_inchikey_before_correction": "HXGBXQDTNZMWGS-UHFFFAOYSA-N",
+      "lookup_name": "darifenacin",
+      "pubchem_cid": 444031,
+      "pubchem_inchikey": "HXGBXQDTNZMWGS-RUZDIDTESA-N",
+      "local_formula_before_correction": "C28H30N2O2",
+      "pubchem_formula": "C28H30N2O2"
+    },
+    {
+      "name": "darolutamide",
+      "status": "ok",
+      "local_inchikey_before_correction": "BLIJXOOIHRSQRB-PXYINDEMSA-N",
+      "lookup_name": "darolutamide",
+      "pubchem_cid": 67171867,
+      "pubchem_inchikey": "BLIJXOOIHRSQRB-PXYINDEMSA-N",
+      "local_formula_before_correction": "C19H19ClN6O2",
+      "pubchem_formula": "C19H19ClN6O2"
+    },
+    {
+      "name": "darunavir",
+      "status": "ok",
+      "local_inchikey_before_correction": "CJBJHOAVZSMMDJ-UHFFFAOYSA-N",
+      "lookup_name": "darunavir",
+      "pubchem_cid": 213039,
+      "pubchem_inchikey": "CJBJHOAVZSMMDJ-HEXNFIEUSA-N",
+      "local_formula_before_correction": "C27H37N3O7S",
+      "pubchem_formula": "C27H37N3O7S"
+    },
+    {
+      "name": "darunavir ethanolate",
+      "status": "ok",
+      "local_inchikey_before_correction": "CJBJHOAVZSMMDJ-UHFFFAOYSA-N",
+      "lookup_name": "darunavir ethanolate",
+      "pubchem_cid": 23725083,
+      "pubchem_inchikey": "QWSHKNICRJHQCY-VBTXLZOXSA-N",
+      "local_formula_before_correction": "C27H37N3O7S",
+      "pubchem_formula": "C29H43N3O8S"
+    },
+    {
+      "name": "dasatinib",
+      "status": "ok",
+      "local_inchikey_before_correction": "ZBNZXTGUTAYRHI-UHFFFAOYSA-N",
+      "lookup_name": "dasatinib",
+      "pubchem_cid": 3062316,
+      "pubchem_inchikey": "ZBNZXTGUTAYRHI-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C22H26ClN7O2S",
+      "pubchem_formula": "C22H26ClN7O2S"
+    },
+    {
+      "name": "desloratadine",
+      "status": "ok",
+      "local_inchikey_before_correction": "JAUOIFJMECXRGI-UHFFFAOYSA-N",
+      "lookup_name": "desloratadine",
+      "pubchem_cid": 124087,
+      "pubchem_inchikey": "JAUOIFJMECXRGI-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C19H19ClN2",
+      "pubchem_formula": "C19H19ClN2"
+    },
+    {
+      "name": "desmopressin",
+      "status": "ok",
+      "local_inchikey_before_correction": "NFLWUMRGJYTJIN-UHFFFAOYSA-N",
+      "lookup_name": "desmopressin",
+      "pubchem_cid": 5311065,
+      "pubchem_inchikey": "NFLWUMRGJYTJIN-PNIOQBSNSA-N",
+      "local_formula_before_correction": "C46H64N14O12S2",
+      "pubchem_formula": "C46H64N14O12S2"
+    },
+    {
+      "name": "dextroamphetamine",
+      "status": "ok",
+      "local_inchikey_before_correction": "KWTSXDURSIMDCE-UHFFFAOYSA-N",
+      "lookup_name": "dextroamphetamine",
+      "pubchem_cid": 5826,
+      "pubchem_inchikey": "KWTSXDURSIMDCE-QMMMGPOBSA-N",
+      "local_formula_before_correction": "C9H13N",
+      "pubchem_formula": "C9H13N"
+    },
+    {
+      "name": "diazepam",
+      "status": "ok",
+      "local_inchikey_before_correction": "AAOVKJBEBIDNHE-UHFFFAOYSA-N",
+      "lookup_name": "diazepam",
+      "pubchem_cid": 3016,
+      "pubchem_inchikey": "AAOVKJBEBIDNHE-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C16H13ClN2O",
+      "pubchem_formula": "C16H13ClN2O"
+    },
+    {
+      "name": "diclofenac",
+      "status": "ok",
+      "local_inchikey_before_correction": "DCOPUUMXTXDBNB-UHFFFAOYSA-N",
+      "lookup_name": "diclofenac",
+      "pubchem_cid": 3033,
+      "pubchem_inchikey": "DCOPUUMXTXDBNB-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C14H11Cl2NO2",
+      "pubchem_formula": "C14H11Cl2NO2"
+    },
+    {
+      "name": "digoxin",
+      "status": "ok",
+      "local_inchikey_before_correction": "LTMHDMANZUZIPE-PUGKRICDSA-N",
+      "lookup_name": "digoxin",
+      "pubchem_cid": 2724385,
+      "pubchem_inchikey": "LTMHDMANZUZIPE-PUGKRICDSA-N",
+      "local_formula_before_correction": "C41H64O14",
+      "pubchem_formula": "C41H64O14"
+    },
+    {
+      "name": "diltiazem",
+      "status": "ok",
+      "local_inchikey_before_correction": "HSUGRBWQSSZJOP-UHFFFAOYSA-N",
+      "lookup_name": "diltiazem",
+      "pubchem_cid": 39186,
+      "pubchem_inchikey": "HSUGRBWQSSZJOP-RTWAWAEBSA-N",
+      "local_formula_before_correction": "C22H26N2O4S",
+      "pubchem_formula": "C22H26N2O4S"
+    },
+    {
+      "name": "dimethyl",
+      "status": "ok",
+      "local_inchikey_before_correction": "OTMSDBZUPAUEDD-UHFFFAOYSA-N",
+      "lookup_name": "dimethyl",
+      "pubchem_cid": 6324,
+      "pubchem_inchikey": "OTMSDBZUPAUEDD-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C2H6",
+      "pubchem_formula": "C2H6"
+    },
+    {
+      "name": "diphenoxylate",
+      "status": "ok",
+      "local_inchikey_before_correction": "HYPPXZBJBPSRLK-UHFFFAOYSA-N",
+      "lookup_name": "diphenoxylate",
+      "pubchem_cid": 13505,
+      "pubchem_inchikey": "HYPPXZBJBPSRLK-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C30H32N2O2",
+      "pubchem_formula": "C30H32N2O2"
+    },
+    {
+      "name": "diroximel",
+      "status": "no_local_smiles"
+    },
+    {
+      "name": "donepezil",
+      "status": "ok",
+      "local_inchikey_before_correction": "ADEBPBSSDYVVLD-UHFFFAOYSA-N",
+      "lookup_name": "donepezil",
+      "pubchem_cid": 3152,
+      "pubchem_inchikey": "ADEBPBSSDYVVLD-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C24H29NO3",
+      "pubchem_formula": "C24H29NO3"
+    },
+    {
+      "name": "doxazosin",
+      "status": "ok",
+      "local_inchikey_before_correction": "RUZYUOTYCVRMRZ-UHFFFAOYSA-N",
+      "lookup_name": "doxazosin",
+      "pubchem_cid": 3157,
+      "pubchem_inchikey": "RUZYUOTYCVRMRZ-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C23H25N5O5",
+      "pubchem_formula": "C23H25N5O5"
+    },
+    {
+      "name": "doxepin",
+      "status": "ok",
+      "local_inchikey_before_correction": "ODQWQRRAPPTVAG-UHFFFAOYSA-N",
+      "lookup_name": "doxepin",
+      "pubchem_cid": 3158,
+      "pubchem_inchikey": "ODQWQRRAPPTVAG-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C19H21NO",
+      "pubchem_formula": "C19H21NO"
+    },
+    {
+      "name": "doxycycline",
+      "status": "ok",
+      "local_inchikey_before_correction": "SGKRLCUYIXIAHR-UHFFFAOYSA-N",
+      "lookup_name": "doxycycline",
+      "pubchem_cid": 54671203,
+      "pubchem_inchikey": "SGKRLCUYIXIAHR-AKNGSSGZSA-N",
+      "local_formula_before_correction": "C22H24N2O8",
+      "pubchem_formula": "C22H24N2O8"
+    },
+    {
+      "name": "droxidopa",
+      "status": "ok",
+      "local_inchikey_before_correction": "QXWYKJLNLSIPIN-UHFFFAOYSA-N",
+      "lookup_name": "droxidopa",
+      "pubchem_cid": 92974,
+      "pubchem_inchikey": "QXWYKJLNLSIPIN-JGVFFNPUSA-N",
+      "local_formula_before_correction": "C9H11NO5",
+      "pubchem_formula": "C9H11NO5"
+    },
+    {
+      "name": "efavirenz",
+      "status": "ok",
+      "local_inchikey_before_correction": "XPOQHMRABVBWPR-UHFFFAOYSA-N",
+      "lookup_name": "efavirenz",
+      "pubchem_cid": 64139,
+      "pubchem_inchikey": "XPOQHMRABVBWPR-ZDUSSCGKSA-N",
+      "local_formula_before_correction": "C14H9ClF3NO2",
+      "pubchem_formula": "C14H9ClF3NO2"
+    },
+    {
+      "name": "eletriptan",
+      "status": "ok",
+      "local_inchikey_before_correction": "PWVXXGRKLHYWKM-UHFFFAOYSA-N",
+      "lookup_name": "eletriptan",
+      "pubchem_cid": 77993,
+      "pubchem_inchikey": "PWVXXGRKLHYWKM-LJQANCHMSA-N",
+      "local_formula_before_correction": "C22H26N2O2S",
+      "pubchem_formula": "C22H26N2O2S"
+    },
+    {
+      "name": "eletriptan hbr",
+      "status": "ok",
+      "local_inchikey_before_correction": "UTINOWOSWSPFLJ-UHFFFAOYSA-N",
+      "lookup_name": "eletriptan hbr",
+      "pubchem_cid": 656631,
+      "pubchem_inchikey": "UTINOWOSWSPFLJ-FSRHSHDFSA-N",
+      "local_formula_before_correction": "C22H27BrN2O2S",
+      "pubchem_formula": "C22H27BrN2O2S"
+    },
+    {
+      "name": "empagliflozin",
+      "status": "ok",
+      "local_inchikey_before_correction": "OBWASQILIWPZMG-UHFFFAOYSA-N",
+      "lookup_name": "empagliflozin",
+      "pubchem_cid": 11949646,
+      "pubchem_inchikey": "OBWASQILIWPZMG-QZMOQZSNSA-N",
+      "local_formula_before_correction": "C23H27ClO7",
+      "pubchem_formula": "C23H27ClO7"
+    },
+    {
+      "name": "encorafenib",
+      "status": "ok",
+      "local_inchikey_before_correction": "CMJCXYNUCSMDBY-UHFFFAOYSA-N",
+      "lookup_name": "encorafenib",
+      "pubchem_cid": 50922675,
+      "pubchem_inchikey": "CMJCXYNUCSMDBY-ZDUSSCGKSA-N",
+      "local_formula_before_correction": "C22H27ClFN7O4S",
+      "pubchem_formula": "C22H27ClFN7O4S"
+    },
+    {
+      "name": "entacapone",
+      "status": "ok",
+      "local_inchikey_before_correction": "JRURYQJSLYLRLN-UHFFFAOYSA-N",
+      "lookup_name": "entacapone",
+      "pubchem_cid": 5281081,
+      "pubchem_inchikey": "JRURYQJSLYLRLN-BJMVGYQFSA-N",
+      "local_formula_before_correction": "C14H15N3O5",
+      "pubchem_formula": "C14H15N3O5"
+    },
+    {
+      "name": "entecavir",
+      "status": "ok",
+      "local_inchikey_before_correction": "QDGZDCVAUDNJFG-UHFFFAOYSA-N",
+      "lookup_name": "entecavir",
+      "pubchem_cid": 135398508,
+      "pubchem_inchikey": "QDGZDCVAUDNJFG-FXQIFTODSA-N",
+      "local_formula_before_correction": "C12H15N5O3",
+      "pubchem_formula": "C12H15N5O3"
+    },
+    {
+      "name": "eplerenone",
+      "status": "ok",
+      "local_inchikey_before_correction": "JUKPWJGBANNWMW-UHFFFAOYSA-N",
+      "lookup_name": "eplerenone",
+      "pubchem_cid": 443872,
+      "pubchem_inchikey": "JUKPWJGBANNWMW-VWBFHTRKSA-N",
+      "local_formula_before_correction": "C24H30O6",
+      "pubchem_formula": "C24H30O6"
+    },
+    {
+      "name": "erdafitinib",
+      "status": "ok",
+      "local_inchikey_before_correction": "OLAHOMJCDNXHFI-UHFFFAOYSA-N",
+      "lookup_name": "erdafitinib",
+      "pubchem_cid": 67462786,
+      "pubchem_inchikey": "OLAHOMJCDNXHFI-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C25H30N6O2",
+      "pubchem_formula": "C25H30N6O2"
+    },
+    {
+      "name": "erlotinib",
+      "status": "ok",
+      "local_inchikey_before_correction": "AAKJLRGGTJKAMG-UHFFFAOYSA-N",
+      "lookup_name": "erlotinib",
+      "pubchem_cid": 176870,
+      "pubchem_inchikey": "AAKJLRGGTJKAMG-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C22H23N3O4",
+      "pubchem_formula": "C22H23N3O4"
+    },
+    {
+      "name": "erythromycin",
+      "status": "ok",
+      "local_inchikey_before_correction": "ULGZDMOVFRHVEP-RWJQBGPGSA-N",
+      "lookup_name": "erythromycin",
+      "pubchem_cid": 12560,
+      "pubchem_inchikey": "ULGZDMOVFRHVEP-RWJQBGPGSA-N",
+      "local_formula_before_correction": "C37H67NO13",
+      "pubchem_formula": "C37H67NO13"
+    },
+    {
+      "name": "escitalopram",
+      "status": "ok",
+      "local_inchikey_before_correction": "WSEQXVZVJXJVFP-UHFFFAOYSA-N",
+      "lookup_name": "escitalopram",
+      "pubchem_cid": 146570,
+      "pubchem_inchikey": "WSEQXVZVJXJVFP-FQEVSTJZSA-N",
+      "local_formula_before_correction": "C20H21FN2O",
+      "pubchem_formula": "C20H21FN2O"
+    },
+    {
+      "name": "esomeprazole magnesium",
+      "status": "ok",
+      "local_inchikey_before_correction": "KWORUUGOSLYAGD-UHFFFAOYSA-N",
+      "lookup_name": "esomeprazole magnesium",
+      "pubchem_cid": 9568613,
+      "pubchem_inchikey": "KWORUUGOSLYAGD-YPPDDXJESA-N",
+      "local_formula_before_correction": "C34H36MgN6O6S2",
+      "pubchem_formula": "C34H36MgN6O6S2"
+    },
+    {
+      "name": "esomeprazole magnesium delayed release",
+      "status": "no_local_smiles"
+    },
+    {
+      "name": "estazolam",
+      "status": "ok",
+      "local_inchikey_before_correction": "CDCHDCWJMGXXRH-UHFFFAOYSA-N",
+      "lookup_name": "estazolam",
+      "pubchem_cid": 3261,
+      "pubchem_inchikey": "CDCHDCWJMGXXRH-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C16H11ClN4",
+      "pubchem_formula": "C16H11ClN4"
+    },
+    {
+      "name": "etodolac",
+      "status": "ok",
+      "local_inchikey_before_correction": "NNYBQONXHNTVIJ-UHFFFAOYSA-N",
+      "lookup_name": "etodolac",
+      "pubchem_cid": 3308,
+      "pubchem_inchikey": "NNYBQONXHNTVIJ-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C17H21NO3",
+      "pubchem_formula": "C17H21NO3"
+    },
+    {
+      "name": "everolimus",
+      "status": "ok",
+      "local_inchikey_before_correction": "HKVAMNSJSFKALM-UHFFFAOYSA-N",
+      "lookup_name": "everolimus",
+      "pubchem_cid": 6442177,
+      "pubchem_inchikey": "HKVAMNSJSFKALM-GKUWKFKPSA-N",
+      "local_formula_before_correction": "C53H83NO14",
+      "pubchem_formula": "C53H83NO14"
+    },
+    {
+      "name": "exemestane",
+      "status": "ok",
+      "local_inchikey_before_correction": "BFYIZQONLCFLEV-UHFFFAOYSA-N",
+      "lookup_name": "exemestane",
+      "pubchem_cid": 60198,
+      "pubchem_inchikey": "BFYIZQONLCFLEV-DAELLWKTSA-N",
+      "local_formula_before_correction": "C20H24O2",
+      "pubchem_formula": "C20H24O2"
+    },
+    {
+      "name": "ezetimibe",
+      "status": "ok",
+      "local_inchikey_before_correction": "OLNTVTPDXPETLC-UHFFFAOYSA-N",
+      "lookup_name": "ezetimibe",
+      "pubchem_cid": 150311,
+      "pubchem_inchikey": "OLNTVTPDXPETLC-XPWALMASSA-N",
+      "local_formula_before_correction": "C24H21F2NO3",
+      "pubchem_formula": "C24H21F2NO3"
+    },
+    {
+      "name": "famciclovir",
+      "status": "ok",
+      "local_inchikey_before_correction": "GGXKWVWZWMLJEH-UHFFFAOYSA-N",
+      "lookup_name": "famciclovir",
+      "pubchem_cid": 3324,
+      "pubchem_inchikey": "GGXKWVWZWMLJEH-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C14H19N5O4",
+      "pubchem_formula": "C14H19N5O4"
+    },
+    {
+      "name": "famotidine",
+      "status": "ok",
+      "local_inchikey_before_correction": "XUFQPHANEAPEMJ-UHFFFAOYSA-N",
+      "lookup_name": "famotidine",
+      "pubchem_cid": 5702160,
+      "pubchem_inchikey": "XUFQPHANEAPEMJ-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C8H15N7O2S3",
+      "pubchem_formula": "C8H15N7O2S3"
+    },
+    {
+      "name": "febuxostat",
+      "status": "ok",
+      "local_inchikey_before_correction": "BQSJTQLCZDPROO-UHFFFAOYSA-N",
+      "lookup_name": "febuxostat",
+      "pubchem_cid": 134018,
+      "pubchem_inchikey": "BQSJTQLCZDPROO-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C16H16N2O3S",
+      "pubchem_formula": "C16H16N2O3S"
+    },
+    {
+      "name": "felodipine",
+      "status": "ok",
+      "local_inchikey_before_correction": "RZTAMFZIAATZDJ-UHFFFAOYSA-N",
+      "lookup_name": "felodipine",
+      "pubchem_cid": 3333,
+      "pubchem_inchikey": "RZTAMFZIAATZDJ-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C18H19Cl2NO4",
+      "pubchem_formula": "C18H19Cl2NO4"
+    },
+    {
+      "name": "fenofibrate",
+      "status": "ok",
+      "local_inchikey_before_correction": "YMTINGFKWWXKFG-UHFFFAOYSA-N",
+      "lookup_name": "fenofibrate",
+      "pubchem_cid": 3339,
+      "pubchem_inchikey": "YMTINGFKWWXKFG-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C20H21ClO4",
+      "pubchem_formula": "C20H21ClO4"
+    },
+    {
+      "name": "fenofibric acid",
+      "status": "ok",
+      "local_inchikey_before_correction": "MQOBSOSZFYZQOK-UHFFFAOYSA-N",
+      "lookup_name": "fenofibric acid",
+      "pubchem_cid": 64929,
+      "pubchem_inchikey": "MQOBSOSZFYZQOK-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C17H15ClO4",
+      "pubchem_formula": "C17H15ClO4"
+    },
+    {
+      "name": "fesoterodine",
+      "status": "ok",
+      "local_inchikey_before_correction": "DCCSDBARQIPTGU-HSZRJFAPSA-N",
+      "lookup_name": "fesoterodine",
+      "pubchem_cid": 6918558,
+      "pubchem_inchikey": "DCCSDBARQIPTGU-HSZRJFAPSA-N",
+      "local_formula_before_correction": "C26H37NO3",
+      "pubchem_formula": "C26H37NO3"
+    },
+    {
+      "name": "finasteride",
+      "status": "ok",
+      "local_inchikey_before_correction": "DBEPLOCGEIEOCV-UHFFFAOYSA-N",
+      "lookup_name": "finasteride",
+      "pubchem_cid": 57363,
+      "pubchem_inchikey": "DBEPLOCGEIEOCV-WSBQPABSSA-N",
+      "local_formula_before_correction": "C23H36N2O2",
+      "pubchem_formula": "C23H36N2O2"
+    },
+    {
+      "name": "fingolimod",
+      "status": "ok",
+      "local_inchikey_before_correction": "KKGQTZUTZRNORY-UHFFFAOYSA-N",
+      "lookup_name": "fingolimod",
+      "pubchem_cid": 107970,
+      "pubchem_inchikey": "KKGQTZUTZRNORY-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C19H33NO2",
+      "pubchem_formula": "C19H33NO2"
+    },
+    {
+      "name": "flecainide",
+      "status": "ok",
+      "local_inchikey_before_correction": "DJBNUMBKLMJRSA-UHFFFAOYSA-N",
+      "lookup_name": "flecainide",
+      "pubchem_cid": 3356,
+      "pubchem_inchikey": "DJBNUMBKLMJRSA-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C17H20F6N2O3",
+      "pubchem_formula": "C17H20F6N2O3"
+    },
+    {
+      "name": "flecainide tablet",
+      "status": "no_local_smiles"
+    },
+    {
+      "name": "fluconazole",
+      "status": "ok",
+      "local_inchikey_before_correction": "RFHAOTPXVQNOHP-UHFFFAOYSA-N",
+      "lookup_name": "fluconazole",
+      "pubchem_cid": 3365,
+      "pubchem_inchikey": "RFHAOTPXVQNOHP-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C13H12F2N6O",
+      "pubchem_formula": "C13H12F2N6O"
+    },
+    {
+      "name": "fluoxetine",
+      "status": "ok",
+      "local_inchikey_before_correction": "RTHCYVBBDHJXIQ-UHFFFAOYSA-N",
+      "lookup_name": "fluoxetine",
+      "pubchem_cid": 3386,
+      "pubchem_inchikey": "RTHCYVBBDHJXIQ-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C17H18F3NO",
+      "pubchem_formula": "C17H18F3NO"
+    },
+    {
+      "name": "flutamide",
+      "status": "ok",
+      "local_inchikey_before_correction": "MKXKFYHWDHIYRV-UHFFFAOYSA-N",
+      "lookup_name": "flutamide",
+      "pubchem_cid": 3397,
+      "pubchem_inchikey": "MKXKFYHWDHIYRV-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C11H11F3N2O3",
+      "pubchem_formula": "C11H11F3N2O3"
+    },
+    {
+      "name": "fluvastatin",
+      "status": "ok",
+      "local_inchikey_before_correction": "FJLGEFLZQAZZCD-UHFFFAOYSA-N",
+      "lookup_name": "fluvastatin",
+      "pubchem_cid": 1548972,
+      "pubchem_inchikey": "FJLGEFLZQAZZCD-JUFISIKESA-N",
+      "local_formula_before_correction": "C24H26FNO4",
+      "pubchem_formula": "C24H26FNO4"
+    },
+    {
+      "name": "fluvoxamine",
+      "status": "ok",
+      "local_inchikey_before_correction": "CJOFXWAVKWHTFT-XSFVSMFZSA-N",
+      "lookup_name": "fluvoxamine",
+      "pubchem_cid": 5324346,
+      "pubchem_inchikey": "CJOFXWAVKWHTFT-XSFVSMFZSA-N",
+      "local_formula_before_correction": "C15H21F3N2O2",
+      "pubchem_formula": "C15H21F3N2O2"
+    },
+    {
+      "name": "fruquintinib",
+      "status": "ok",
+      "local_inchikey_before_correction": "BALLNEJQLSTPIO-UHFFFAOYSA-N",
+      "lookup_name": "fruquintinib",
+      "pubchem_cid": 44480399,
+      "pubchem_inchikey": "BALLNEJQLSTPIO-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C21H19N3O5",
+      "pubchem_formula": "C21H19N3O5"
+    },
+    {
+      "name": "furosemide",
+      "status": "ok",
+      "local_inchikey_before_correction": "ZZUFCTLCJUWOSV-UHFFFAOYSA-N",
+      "lookup_name": "furosemide",
+      "pubchem_cid": 3440,
+      "pubchem_inchikey": "ZZUFCTLCJUWOSV-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C12H11ClN2O5S",
+      "pubchem_formula": "C12H11ClN2O5S"
+    },
+    {
+      "name": "gabapentin",
+      "status": "ok",
+      "local_inchikey_before_correction": "UGJMXCAKCUNAIE-UHFFFAOYSA-N",
+      "lookup_name": "gabapentin",
+      "pubchem_cid": 3446,
+      "pubchem_inchikey": "UGJMXCAKCUNAIE-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C9H17NO2",
+      "pubchem_formula": "C9H17NO2"
+    },
+    {
+      "name": "galantamine",
+      "status": "ok",
+      "local_inchikey_before_correction": "ASUTZQLVASHGKV-UHFFFAOYSA-N",
+      "lookup_name": "galantamine",
+      "pubchem_cid": 9651,
+      "pubchem_inchikey": "ASUTZQLVASHGKV-JDFRZJQESA-N",
+      "local_formula_before_correction": "C17H21NO3",
+      "pubchem_formula": "C17H21NO3"
+    },
+    {
+      "name": "gaunfacine",
+      "status": "ok",
+      "local_inchikey_before_correction": "DGFYECXYGUIODH-UHFFFAOYSA-N",
+      "lookup_name": "gaunfacine",
+      "pubchem_cid": 71401,
+      "pubchem_inchikey": "DGFYECXYGUIODH-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C9H10Cl3N3O",
+      "pubchem_formula": "C9H10Cl3N3O"
+    },
+    {
+      "name": "gefitinib",
+      "status": "ok",
+      "local_inchikey_before_correction": "XGALLCVXEZPNRQ-UHFFFAOYSA-N",
+      "lookup_name": "gefitinib",
+      "pubchem_cid": 123631,
+      "pubchem_inchikey": "XGALLCVXEZPNRQ-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C22H24ClFN4O3",
+      "pubchem_formula": "C22H24ClFN4O3"
+    },
+    {
+      "name": "gepirone",
+      "status": "ok",
+      "local_inchikey_before_correction": "QOIGKGMMAGJZNZ-UHFFFAOYSA-N",
+      "lookup_name": "gepirone",
+      "pubchem_cid": 55191,
+      "pubchem_inchikey": "QOIGKGMMAGJZNZ-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C19H29N5O2",
+      "pubchem_formula": "C19H29N5O2"
+    },
+    {
+      "name": "glasdegib",
+      "status": "ok",
+      "local_inchikey_before_correction": "SFNSLLSYNZWZQG-VQIMIIECSA-N",
+      "lookup_name": "glasdegib",
+      "pubchem_cid": 25166913,
+      "pubchem_inchikey": "SFNSLLSYNZWZQG-VQIMIIECSA-N",
+      "local_formula_before_correction": "C21H22N6O",
+      "pubchem_formula": "C21H22N6O"
+    },
+    {
+      "name": "glycopyrrolate",
+      "status": "ok",
+      "local_inchikey_before_correction": "VPNYRYCIDCJBOM-UHFFFAOYSA-M",
+      "lookup_name": "glycopyrrolate",
+      "pubchem_cid": 11693,
+      "pubchem_inchikey": "VPNYRYCIDCJBOM-UHFFFAOYSA-M",
+      "local_formula_before_correction": "C19H28BrNO3",
+      "pubchem_formula": "C19H28BrNO3"
+    },
+    {
+      "name": "guanfacine er",
+      "status": "ok",
+      "local_inchikey_before_correction": "DGFYECXYGUIODH-UHFFFAOYSA-N",
+      "lookup_name": "guanfacine er",
+      "pubchem_cid": 71401,
+      "pubchem_inchikey": "DGFYECXYGUIODH-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C9H10Cl3N3O",
+      "pubchem_formula": "C9H10Cl3N3O"
+    },
+    {
+      "name": "hydrocodone polistirex",
+      "status": "ok",
+      "local_inchikey_before_correction": "LLPOLZWFYMWNKH-UHFFFAOYSA-N",
+      "lookup_name": "hydrocodone polistirex",
+      "pubchem_cid": 5284569,
+      "pubchem_inchikey": "LLPOLZWFYMWNKH-CMKMFDCUSA-N",
+      "local_formula_before_correction": "C18H21NO3",
+      "pubchem_formula": "C18H21NO3"
+    },
+    {
+      "name": "hydromorphone",
+      "status": "ok",
+      "local_inchikey_before_correction": "WVLOADHCBXTIJK-UHFFFAOYSA-N",
+      "lookup_name": "hydromorphone",
+      "pubchem_cid": 5284570,
+      "pubchem_inchikey": "WVLOADHCBXTIJK-YNHQPCIGSA-N",
+      "local_formula_before_correction": "C17H19NO3",
+      "pubchem_formula": "C17H19NO3"
+    },
+    {
+      "name": "hydroxychloroquine",
+      "status": "ok",
+      "local_inchikey_before_correction": "XXSMGPRMXLTPCZ-UHFFFAOYSA-N",
+      "lookup_name": "hydroxychloroquine",
+      "pubchem_cid": 3652,
+      "pubchem_inchikey": "XXSMGPRMXLTPCZ-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C18H26ClN3O",
+      "pubchem_formula": "C18H26ClN3O"
+    },
+    {
+      "name": "hydroxyzine",
+      "status": "ok",
+      "local_inchikey_before_correction": "ZQDWXGKKHFNSQK-UHFFFAOYSA-N",
+      "lookup_name": "hydroxyzine",
+      "pubchem_cid": 3658,
+      "pubchem_inchikey": "ZQDWXGKKHFNSQK-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C21H27ClN2O2",
+      "pubchem_formula": "C21H27ClN2O2"
+    },
+    {
+      "name": "ibrutinib",
+      "status": "ok",
+      "local_inchikey_before_correction": "XYFPWWZEPKGCCK-UHFFFAOYSA-N",
+      "lookup_name": "ibrutinib",
+      "pubchem_cid": 24821094,
+      "pubchem_inchikey": "XYFPWWZEPKGCCK-GOSISDBHSA-N",
+      "local_formula_before_correction": "C25H24N6O2",
+      "pubchem_formula": "C25H24N6O2"
+    },
+    {
+      "name": "ibuprofen",
+      "status": "ok",
+      "local_inchikey_before_correction": "HEFNNWSXXWATRW-UHFFFAOYSA-N",
+      "lookup_name": "ibuprofen",
+      "pubchem_cid": 3672,
+      "pubchem_inchikey": "HEFNNWSXXWATRW-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C13H18O2",
+      "pubchem_formula": "C13H18O2"
+    },
+    {
+      "name": "imatinib oral",
+      "status": "ok",
+      "local_inchikey_before_correction": "YLMAHDNUQAMNNX-UHFFFAOYSA-N",
+      "lookup_name": "imatinib oral",
+      "pubchem_cid": 123596,
+      "pubchem_inchikey": "YLMAHDNUQAMNNX-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C30H35N7O4S",
+      "pubchem_formula": "C30H35N7O4S"
+    },
+    {
+      "name": "indapamide",
+      "status": "ok",
+      "local_inchikey_before_correction": "NDDAHWYSQHTHNT-UHFFFAOYSA-N",
+      "lookup_name": "indapamide",
+      "pubchem_cid": 3702,
+      "pubchem_inchikey": "NDDAHWYSQHTHNT-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C16H16ClN3O3S",
+      "pubchem_formula": "C16H16ClN3O3S"
+    },
+    {
+      "name": "indomethacin",
+      "status": "ok",
+      "local_inchikey_before_correction": "CGIGDMFJXJATDK-UHFFFAOYSA-N",
+      "lookup_name": "indomethacin",
+      "pubchem_cid": 3715,
+      "pubchem_inchikey": "CGIGDMFJXJATDK-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C19H16ClNO4",
+      "pubchem_formula": "C19H16ClNO4"
+    },
+    {
+      "name": "irbesartan",
+      "status": "ok",
+      "local_inchikey_before_correction": "YOSHYTLCDANDAN-UHFFFAOYSA-N",
+      "lookup_name": "irbesartan",
+      "pubchem_cid": 3749,
+      "pubchem_inchikey": "YOSHYTLCDANDAN-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C25H28N6O",
+      "pubchem_formula": "C25H28N6O"
+    },
+    {
+      "name": "isosorbide dinitrate",
+      "status": "ok",
+      "local_inchikey_before_correction": "MOYKHGMNXAOIAT-UHFFFAOYSA-N",
+      "lookup_name": "isosorbide dinitrate",
+      "pubchem_cid": 6883,
+      "pubchem_inchikey": "MOYKHGMNXAOIAT-JGWLITMVSA-N",
+      "local_formula_before_correction": "C6H8N2O8",
+      "pubchem_formula": "C6H8N2O8"
+    },
+    {
+      "name": "isosorbide mononitrate",
+      "status": "ok",
+      "local_inchikey_before_correction": "YWXYYJSYQOXTPL-SLPGGIOYSA-N",
+      "lookup_name": "isosorbide mononitrate",
+      "pubchem_cid": 27661,
+      "pubchem_inchikey": "YWXYYJSYQOXTPL-SLPGGIOYSA-N",
+      "local_formula_before_correction": "C6H9NO6",
+      "pubchem_formula": "C6H9NO6"
+    },
+    {
+      "name": "isotretinoin",
+      "status": "ok",
+      "local_inchikey_before_correction": "SHGAZHPCJJPHSC-UHFFFAOYSA-N",
+      "lookup_name": "isotretinoin",
+      "pubchem_cid": 5282379,
+      "pubchem_inchikey": "SHGAZHPCJJPHSC-XFYACQKRSA-N",
+      "local_formula_before_correction": "C20H28O2",
+      "pubchem_formula": "C20H28O2"
+    },
+    {
+      "name": "itraconazole",
+      "status": "ok",
+      "local_inchikey_before_correction": "VHVPQPYKVGDNFY-UHFFFAOYSA-N",
+      "lookup_name": "itraconazole",
+      "pubchem_cid": 55283,
+      "pubchem_inchikey": "VHVPQPYKVGDNFY-ZPGVKDDISA-N",
+      "local_formula_before_correction": "C35H38Cl2N8O4",
+      "pubchem_formula": "C35H38Cl2N8O4"
+    },
+    {
+      "name": "ivabradine",
+      "status": "ok",
+      "local_inchikey_before_correction": "ACRHBAYQBXXRTO-UHFFFAOYSA-N",
+      "lookup_name": "ivabradine",
+      "pubchem_cid": 132999,
+      "pubchem_inchikey": "ACRHBAYQBXXRTO-OAQYLSRUSA-N",
+      "local_formula_before_correction": "C27H36N2O5",
+      "pubchem_formula": "C27H36N2O5"
+    },
+    {
+      "name": "ivacaftor",
+      "status": "ok",
+      "local_inchikey_before_correction": "PURKAOJPTOLRMP-UHFFFAOYSA-N",
+      "lookup_name": "ivacaftor",
+      "pubchem_cid": 16220172,
+      "pubchem_inchikey": "PURKAOJPTOLRMP-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C24H28N2O3",
+      "pubchem_formula": "C24H28N2O3"
+    },
+    {
+      "name": "ixazomib",
+      "status": "ok",
+      "local_inchikey_before_correction": "MXAYKZJJDUDWDS-UHFFFAOYSA-N",
+      "lookup_name": "ixazomib",
+      "pubchem_cid": 25183872,
+      "pubchem_inchikey": "MXAYKZJJDUDWDS-LBPRGKRZSA-N",
+      "local_formula_before_correction": "C14H19BCl2N2O4",
+      "pubchem_formula": "C14H19BCl2N2O4"
+    },
+    {
+      "name": "ketoconazole",
+      "status": "ok",
+      "local_inchikey_before_correction": "XMAYWYJOQHXEEK-UHFFFAOYSA-N",
+      "lookup_name": "ketoconazole",
+      "pubchem_cid": 47576,
+      "pubchem_inchikey": "XMAYWYJOQHXEEK-ZEQKJWHPSA-N",
+      "local_formula_before_correction": "C26H28Cl2N4O4",
+      "pubchem_formula": "C26H28Cl2N4O4"
+    },
+    {
+      "name": "ketoprofen",
+      "status": "ok",
+      "local_inchikey_before_correction": "DKYWVDODHFEZIM-UHFFFAOYSA-N",
+      "lookup_name": "ketoprofen",
+      "pubchem_cid": 3825,
+      "pubchem_inchikey": "DKYWVDODHFEZIM-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C16H14O3",
+      "pubchem_formula": "C16H14O3"
+    },
+    {
+      "name": "ketorolac",
+      "status": "ok",
+      "local_inchikey_before_correction": "OZWKMVRBQXNZKK-UHFFFAOYSA-N",
+      "lookup_name": "ketorolac",
+      "pubchem_cid": 3826,
+      "pubchem_inchikey": "OZWKMVRBQXNZKK-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C15H13NO3",
+      "pubchem_formula": "C15H13NO3"
+    },
+    {
+      "name": "labetalol",
+      "status": "ok",
+      "local_inchikey_before_correction": "SGUAFYQXFOLMHL-UHFFFAOYSA-N",
+      "lookup_name": "labetalol",
+      "pubchem_cid": 3869,
+      "pubchem_inchikey": "SGUAFYQXFOLMHL-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C19H24N2O3",
+      "pubchem_formula": "C19H24N2O3"
+    },
+    {
+      "name": "lacosamide",
+      "status": "ok",
+      "local_inchikey_before_correction": "VPPJLAIAVCUEMN-UHFFFAOYSA-N",
+      "lookup_name": "lacosamide",
+      "pubchem_cid": 219078,
+      "pubchem_inchikey": "VPPJLAIAVCUEMN-GFCCVEGCSA-N",
+      "local_formula_before_correction": "C13H18N2O3",
+      "pubchem_formula": "C13H18N2O3"
+    },
+    {
+      "name": "lamivudine",
+      "status": "ok",
+      "local_inchikey_before_correction": "JTEGQNOMFQHVDC-NKWVEPMBSA-N",
+      "lookup_name": "lamivudine",
+      "pubchem_cid": 60825,
+      "pubchem_inchikey": "JTEGQNOMFQHVDC-NKWVEPMBSA-N",
+      "local_formula_before_correction": "C8H11N3O3S",
+      "pubchem_formula": "C8H11N3O3S"
+    },
+    {
+      "name": "lamotrigine",
+      "status": "ok",
+      "local_inchikey_before_correction": "PYZRQGJRPPTADH-UHFFFAOYSA-N",
+      "lookup_name": "lamotrigine",
+      "pubchem_cid": 3878,
+      "pubchem_inchikey": "PYZRQGJRPPTADH-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C9H7Cl2N5",
+      "pubchem_formula": "C9H7Cl2N5"
+    },
+    {
+      "name": "lamotrigine er",
+      "status": "ok",
+      "local_inchikey_before_correction": "PYZRQGJRPPTADH-UHFFFAOYSA-N",
+      "lookup_name": "lamotrigine er",
+      "pubchem_cid": 3878,
+      "pubchem_inchikey": "PYZRQGJRPPTADH-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C9H7Cl2N5",
+      "pubchem_formula": "C9H7Cl2N5"
+    },
+    {
+      "name": "lanthanum carbonate",
+      "status": "ok",
+      "local_inchikey_before_correction": "NZPIUJUFIFZSPW-UHFFFAOYSA-H",
+      "lookup_name": "lanthanum carbonate",
+      "pubchem_cid": 168924,
+      "pubchem_inchikey": "NZPIUJUFIFZSPW-UHFFFAOYSA-H",
+      "local_formula_before_correction": "C3La2O9",
+      "pubchem_formula": "C3La2O9"
+    },
+    {
+      "name": "larotrectinib",
+      "status": "ok",
+      "local_inchikey_before_correction": "NYNZQNWKBKUAII-UHFFFAOYSA-N",
+      "lookup_name": "larotrectinib",
+      "pubchem_cid": 46188928,
+      "pubchem_inchikey": "NYNZQNWKBKUAII-KBXCAEBGSA-N",
+      "local_formula_before_correction": "C21H22F2N6O2",
+      "pubchem_formula": "C21H22F2N6O2"
+    },
+    {
+      "name": "leflunomide",
+      "status": "ok",
+      "local_inchikey_before_correction": "VHOGYURTWQBHIL-UHFFFAOYSA-N",
+      "lookup_name": "leflunomide",
+      "pubchem_cid": 3899,
+      "pubchem_inchikey": "VHOGYURTWQBHIL-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C12H9F3N2O2",
+      "pubchem_formula": "C12H9F3N2O2"
+    },
+    {
+      "name": "lenacapavir",
+      "status": "ok",
+      "local_inchikey_before_correction": "BRYXUCLEHAUSDY-WEWMWRJBSA-N",
+      "lookup_name": "lenacapavir",
+      "pubchem_cid": 133082658,
+      "pubchem_inchikey": "BRYXUCLEHAUSDY-WEWMWRJBSA-N",
+      "local_formula_before_correction": "C39H32ClF10N7O5S2",
+      "pubchem_formula": "C39H32ClF10N7O5S2"
+    },
+    {
+      "name": "letermovir",
+      "status": "ok",
+      "local_inchikey_before_correction": "FWYSMLBETOMXAG-UHFFFAOYSA-N",
+      "lookup_name": "letermovir",
+      "pubchem_cid": 45138674,
+      "pubchem_inchikey": "FWYSMLBETOMXAG-QHCPKHFHSA-N",
+      "local_formula_before_correction": "C29H28F4N4O4",
+      "pubchem_formula": "C29H28F4N4O4"
+    },
+    {
+      "name": "levetiracetam",
+      "status": "ok",
+      "local_inchikey_before_correction": "HPHUVLMMVZITSG-UHFFFAOYSA-N",
+      "lookup_name": "levetiracetam",
+      "pubchem_cid": 5284583,
+      "pubchem_inchikey": "HPHUVLMMVZITSG-LURJTMIESA-N",
+      "local_formula_before_correction": "C8H14N2O2",
+      "pubchem_formula": "C8H14N2O2"
+    },
+    {
+      "name": "levetiracetam oral",
+      "status": "ok",
+      "local_inchikey_before_correction": "HPHUVLMMVZITSG-UHFFFAOYSA-N",
+      "lookup_name": "levetiracetam oral",
+      "pubchem_cid": 5284583,
+      "pubchem_inchikey": "HPHUVLMMVZITSG-LURJTMIESA-N",
+      "local_formula_before_correction": "C8H14N2O2",
+      "pubchem_formula": "C8H14N2O2"
+    },
+    {
+      "name": "levocetirizine",
+      "status": "ok",
+      "local_inchikey_before_correction": "ZKLPARSLTMPFCP-OAQYLSRUSA-N",
+      "lookup_name": "levocetirizine",
+      "pubchem_cid": 1549000,
+      "pubchem_inchikey": "ZKLPARSLTMPFCP-OAQYLSRUSA-N",
+      "local_formula_before_correction": "C21H25ClN2O3",
+      "pubchem_formula": "C21H25ClN2O3"
+    },
+    {
+      "name": "levofloxacin",
+      "status": "ok",
+      "local_inchikey_before_correction": "GSDSWSVVBLHKDQ-JTQLQIEISA-N",
+      "lookup_name": "levofloxacin",
+      "pubchem_cid": 149096,
+      "pubchem_inchikey": "GSDSWSVVBLHKDQ-JTQLQIEISA-N",
+      "local_formula_before_correction": "C18H20FN3O4",
+      "pubchem_formula": "C18H20FN3O4"
+    },
+    {
+      "name": "levonorgestrel",
+      "status": "ok",
+      "local_inchikey_before_correction": "WWYNJERNGUHSAO-UHFFFAOYSA-N",
+      "lookup_name": "levonorgestrel",
+      "pubchem_cid": 13109,
+      "pubchem_inchikey": "WWYNJERNGUHSAO-XUDSTZEESA-N",
+      "local_formula_before_correction": "C21H28O2",
+      "pubchem_formula": "C21H28O2"
+    },
+    {
+      "name": "levorphanol",
+      "status": "ok",
+      "local_inchikey_before_correction": "JAQUASYNZVUNQP-UHFFFAOYSA-N",
+      "lookup_name": "levorphanol",
+      "pubchem_cid": 5359272,
+      "pubchem_inchikey": "JAQUASYNZVUNQP-USXIJHARSA-N",
+      "local_formula_before_correction": "C17H23NO",
+      "pubchem_formula": "C17H23NO"
+    },
+    {
+      "name": "lofexidine",
+      "status": "ok",
+      "local_inchikey_before_correction": "KSMAGQUYOIHWFS-UHFFFAOYSA-N",
+      "lookup_name": "lofexidine",
+      "pubchem_cid": 30668,
+      "pubchem_inchikey": "KSMAGQUYOIHWFS-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C11H12Cl2N2O",
+      "pubchem_formula": "C11H12Cl2N2O"
+    },
+    {
+      "name": "loperamide",
+      "status": "ok",
+      "local_inchikey_before_correction": "RDOIQAHITMMDAJ-UHFFFAOYSA-N",
+      "lookup_name": "loperamide",
+      "pubchem_cid": 3955,
+      "pubchem_inchikey": "RDOIQAHITMMDAJ-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C29H33ClN2O2",
+      "pubchem_formula": "C29H33ClN2O2"
+    },
+    {
+      "name": "lopinavir",
+      "status": "ok",
+      "local_inchikey_before_correction": "KJHKTHWMRKYKJE-SUGCFTRWSA-N",
+      "lookup_name": "lopinavir",
+      "pubchem_cid": 92727,
+      "pubchem_inchikey": "KJHKTHWMRKYKJE-SUGCFTRWSA-N",
+      "local_formula_before_correction": "C37H48N4O5",
+      "pubchem_formula": "C37H48N4O5"
+    },
+    {
+      "name": "lorazepam",
+      "status": "ok",
+      "local_inchikey_before_correction": "DIWRORZWFLOCLC-UHFFFAOYSA-N",
+      "lookup_name": "lorazepam",
+      "pubchem_cid": 3958,
+      "pubchem_inchikey": "DIWRORZWFLOCLC-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C15H10Cl2N2O2",
+      "pubchem_formula": "C15H10Cl2N2O2"
+    },
+    {
+      "name": "lorlatinib",
+      "status": "ok",
+      "local_inchikey_before_correction": "IIXWYSCJSQVBQM-LLVKDONJSA-N",
+      "lookup_name": "lorlatinib",
+      "pubchem_cid": 71731823,
+      "pubchem_inchikey": "IIXWYSCJSQVBQM-LLVKDONJSA-N",
+      "local_formula_before_correction": "C21H19FN6O2",
+      "pubchem_formula": "C21H19FN6O2"
+    },
+    {
+      "name": "losartan",
+      "status": "ok",
+      "local_inchikey_before_correction": "PSIFNNKUMBGKDQ-UHFFFAOYSA-N",
+      "lookup_name": "losartan",
+      "pubchem_cid": 3961,
+      "pubchem_inchikey": "PSIFNNKUMBGKDQ-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C22H23ClN6O",
+      "pubchem_formula": "C22H23ClN6O"
+    },
+    {
+      "name": "mefenamic acid",
+      "status": "ok",
+      "local_inchikey_before_correction": "HYYBABOKPJLUIN-UHFFFAOYSA-N",
+      "lookup_name": "mefenamic acid",
+      "pubchem_cid": 4044,
+      "pubchem_inchikey": "HYYBABOKPJLUIN-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C15H15NO2",
+      "pubchem_formula": "C15H15NO2"
+    },
+    {
+      "name": "meloxicam",
+      "status": "ok",
+      "local_inchikey_before_correction": "ZRVUJXDFFKFLMG-UHFFFAOYSA-N",
+      "lookup_name": "meloxicam",
+      "pubchem_cid": 54677470,
+      "pubchem_inchikey": "ZRVUJXDFFKFLMG-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C14H13N3O4S2",
+      "pubchem_formula": "C14H13N3O4S2"
+    },
+    {
+      "name": "meperidine",
+      "status": "ok",
+      "local_inchikey_before_correction": "XADCESSVHJOZHK-UHFFFAOYSA-N",
+      "lookup_name": "meperidine",
+      "pubchem_cid": 4058,
+      "pubchem_inchikey": "XADCESSVHJOZHK-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C15H21NO2",
+      "pubchem_formula": "C15H21NO2"
+    },
+    {
+      "name": "mercaptopurine",
+      "status": "ok",
+      "local_inchikey_before_correction": "GLVAUDGFNGKCSF-UHFFFAOYSA-N",
+      "lookup_name": "mercaptopurine",
+      "pubchem_cid": 667490,
+      "pubchem_inchikey": "GLVAUDGFNGKCSF-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C5H4N4S",
+      "pubchem_formula": "C5H4N4S"
+    },
+    {
+      "name": "metaxalone",
+      "status": "ok",
+      "local_inchikey_before_correction": "IMWZZHHPURKASS-UHFFFAOYSA-N",
+      "lookup_name": "metaxalone",
+      "pubchem_cid": 15459,
+      "pubchem_inchikey": "IMWZZHHPURKASS-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C12H15NO3",
+      "pubchem_formula": "C12H15NO3"
+    },
+    {
+      "name": "metformin",
+      "status": "ok",
+      "local_inchikey_before_correction": "XZWYZXLIPXDOLR-UHFFFAOYSA-N",
+      "lookup_name": "metformin",
+      "pubchem_cid": 4091,
+      "pubchem_inchikey": "XZWYZXLIPXDOLR-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C4H11N5",
+      "pubchem_formula": "C4H11N5"
+    },
+    {
+      "name": "metformin er 500 mg",
+      "status": "ok",
+      "local_inchikey_before_correction": "OETHQSJEHLVLGH-UHFFFAOYSA-N",
+      "lookup_name": "metformin er 500 mg",
+      "pubchem_cid": 14219,
+      "pubchem_inchikey": "OETHQSJEHLVLGH-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C4H12ClN5",
+      "pubchem_formula": "C4H12ClN5"
+    },
+    {
+      "name": "methazolamide",
+      "status": "ok",
+      "local_inchikey_before_correction": "FLOSMHQXBMRNHR-UHFFFAOYSA-N",
+      "lookup_name": "methazolamide",
+      "pubchem_cid": 4100,
+      "pubchem_inchikey": "FLOSMHQXBMRNHR-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C5H8N4O3S2",
+      "pubchem_formula": "C5H8N4O3S2"
+    },
+    {
+      "name": "methotrexate",
+      "status": "ok",
+      "local_inchikey_before_correction": "FBOZXECLQNJBKD-UHFFFAOYSA-N",
+      "lookup_name": "methotrexate",
+      "pubchem_cid": 126941,
+      "pubchem_inchikey": "FBOZXECLQNJBKD-ZDUSSCGKSA-N",
+      "local_formula_before_correction": "C20H22N8O5",
+      "pubchem_formula": "C20H22N8O5"
+    },
+    {
+      "name": "methylergonovine",
+      "status": "ok",
+      "local_inchikey_before_correction": "UNBRKDKAWYKMIV-UHFFFAOYSA-N",
+      "lookup_name": "methylergonovine",
+      "pubchem_cid": 8226,
+      "pubchem_inchikey": "UNBRKDKAWYKMIV-QWQRMKEZSA-N",
+      "local_formula_before_correction": "C20H25N3O2",
+      "pubchem_formula": "C20H25N3O2"
+    },
+    {
+      "name": "methylphenidate",
+      "status": "ok",
+      "local_inchikey_before_correction": "DUGOZIWVEXMGBE-UHFFFAOYSA-N",
+      "lookup_name": "methylphenidate",
+      "pubchem_cid": 4158,
+      "pubchem_inchikey": "DUGOZIWVEXMGBE-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C14H19NO2",
+      "pubchem_formula": "C14H19NO2"
+    },
+    {
+      "name": "metoclopramide",
+      "status": "ok",
+      "local_inchikey_before_correction": "TTWJBBZEZQICBI-UHFFFAOYSA-N",
+      "lookup_name": "metoclopramide",
+      "pubchem_cid": 4168,
+      "pubchem_inchikey": "TTWJBBZEZQICBI-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C14H22ClN3O2",
+      "pubchem_formula": "C14H22ClN3O2"
+    },
+    {
+      "name": "metoprolol",
+      "status": "ok",
+      "local_inchikey_before_correction": "IUBSYMUCCVWXPE-UHFFFAOYSA-N",
+      "lookup_name": "metoprolol",
+      "pubchem_cid": 4171,
+      "pubchem_inchikey": "IUBSYMUCCVWXPE-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C15H25NO3",
+      "pubchem_formula": "C15H25NO3"
+    },
+    {
+      "name": "metronidazole",
+      "status": "ok",
+      "local_inchikey_before_correction": "VAOCPAMSLUNLGC-UHFFFAOYSA-N",
+      "lookup_name": "metronidazole",
+      "pubchem_cid": 4173,
+      "pubchem_inchikey": "VAOCPAMSLUNLGC-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C6H9N3O3",
+      "pubchem_formula": "C6H9N3O3"
+    },
+    {
+      "name": "mexiletine",
+      "status": "ok",
+      "local_inchikey_before_correction": "VLPIATFUUWWMKC-UHFFFAOYSA-N",
+      "lookup_name": "mexiletine",
+      "pubchem_cid": 4178,
+      "pubchem_inchikey": "VLPIATFUUWWMKC-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C11H17NO",
+      "pubchem_formula": "C11H17NO"
+    },
+    {
+      "name": "midazolam",
+      "status": "ok",
+      "local_inchikey_before_correction": "DDLIGBOFAVUZHB-UHFFFAOYSA-N",
+      "lookup_name": "midazolam",
+      "pubchem_cid": 4192,
+      "pubchem_inchikey": "DDLIGBOFAVUZHB-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C18H13ClFN3",
+      "pubchem_formula": "C18H13ClFN3"
+    },
+    {
+      "name": "midodrine",
+      "status": "ok",
+      "local_inchikey_before_correction": "PTKSEFOSCHHMPD-UHFFFAOYSA-N",
+      "lookup_name": "midodrine",
+      "pubchem_cid": 4195,
+      "pubchem_inchikey": "PTKSEFOSCHHMPD-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C12H18N2O4",
+      "pubchem_formula": "C12H18N2O4"
+    },
+    {
+      "name": "milnacipran",
+      "status": "ok",
+      "local_inchikey_before_correction": "GJJFMKBJSRMPLA-UHFFFAOYSA-N",
+      "lookup_name": "milnacipran",
+      "pubchem_cid": 65833,
+      "pubchem_inchikey": "GJJFMKBJSRMPLA-HIFRSBDPSA-N",
+      "local_formula_before_correction": "C15H22N2O",
+      "pubchem_formula": "C15H22N2O"
+    },
+    {
+      "name": "minocycline extended-release",
+      "status": "no_local_smiles"
+    },
+    {
+      "name": "mirtazapine",
+      "status": "ok",
+      "local_inchikey_before_correction": "RONZAEMNMFQXRA-UHFFFAOYSA-N",
+      "lookup_name": "mirtazapine",
+      "pubchem_cid": 4205,
+      "pubchem_inchikey": "RONZAEMNMFQXRA-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C17H19N3",
+      "pubchem_formula": "C17H19N3"
+    },
+    {
+      "name": "molnupiravir",
+      "status": "ok",
+      "local_inchikey_before_correction": "HTNPEHXGEKVIHG-QCNRFFRDSA-N",
+      "lookup_name": "molnupiravir",
+      "pubchem_cid": 145996610,
+      "pubchem_inchikey": "HTNPEHXGEKVIHG-QCNRFFRDSA-N",
+      "local_formula_before_correction": "C13H19N3O7",
+      "pubchem_formula": "C13H19N3O7"
+    },
+    {
+      "name": "montelukast",
+      "status": "ok",
+      "local_inchikey_before_correction": "UCHDWCPVSPXUMX-TZIWLTJVSA-N",
+      "lookup_name": "montelukast",
+      "pubchem_cid": 5281040,
+      "pubchem_inchikey": "UCHDWCPVSPXUMX-TZIWLTJVSA-N",
+      "local_formula_before_correction": "C35H36ClNO3S",
+      "pubchem_formula": "C35H36ClNO3S"
+    },
+    {
+      "name": "morphine",
+      "status": "ok",
+      "local_inchikey_before_correction": "BQJCRHHNABKAKU-KBQPJGBKSA-N",
+      "lookup_name": "morphine",
+      "pubchem_cid": 5288826,
+      "pubchem_inchikey": "BQJCRHHNABKAKU-KBQPJGBKSA-N",
+      "local_formula_before_correction": "C17H19NO3",
+      "pubchem_formula": "C17H19NO3"
+    },
+    {
+      "name": "moxifloxacin",
+      "status": "ok",
+      "local_inchikey_before_correction": "FABPRXSRWADJSP-MEDUHNTESA-N",
+      "lookup_name": "moxifloxacin",
+      "pubchem_cid": 152946,
+      "pubchem_inchikey": "FABPRXSRWADJSP-MEDUHNTESA-N",
+      "local_formula_before_correction": "C21H24FN3O4",
+      "pubchem_formula": "C21H24FN3O4"
+    },
+    {
+      "name": "nabumetone",
+      "status": "ok",
+      "local_inchikey_before_correction": "BLXXJMDCKKHMKV-UHFFFAOYSA-N",
+      "lookup_name": "nabumetone",
+      "pubchem_cid": 4409,
+      "pubchem_inchikey": "BLXXJMDCKKHMKV-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C15H16O2",
+      "pubchem_formula": "C15H16O2"
+    },
+    {
+      "name": "naproxen",
+      "status": "ok",
+      "local_inchikey_before_correction": "CMWTZPSULFXXJA-UHFFFAOYSA-N",
+      "lookup_name": "naproxen",
+      "pubchem_cid": 156391,
+      "pubchem_inchikey": "CMWTZPSULFXXJA-VIFPVBQESA-N",
+      "local_formula_before_correction": "C14H14O3",
+      "pubchem_formula": "C14H14O3"
+    },
+    {
+      "name": "naproxen oral",
+      "status": "ok",
+      "local_inchikey_before_correction": "CMWTZPSULFXXJA-UHFFFAOYSA-N",
+      "lookup_name": "naproxen oral",
+      "pubchem_cid": 156391,
+      "pubchem_inchikey": "CMWTZPSULFXXJA-VIFPVBQESA-N",
+      "local_formula_before_correction": "C14H14O3",
+      "pubchem_formula": "C14H14O3"
+    },
+    {
+      "name": "nateglinide",
+      "status": "ok",
+      "local_inchikey_before_correction": "OELFLUMRDSZNSF-UHFFFAOYSA-N",
+      "lookup_name": "nateglinide",
+      "pubchem_cid": 5311309,
+      "pubchem_inchikey": "OELFLUMRDSZNSF-OFLPRAFFSA-N",
+      "local_formula_before_correction": "C19H27NO3",
+      "pubchem_formula": "C19H27NO3"
+    },
+    {
+      "name": "nebivolol",
+      "status": "ok",
+      "local_inchikey_before_correction": "KOHIRBRYDXPAMZ-UHFFFAOYSA-N",
+      "lookup_name": "nebivolol",
+      "pubchem_cid": 71301,
+      "pubchem_inchikey": "KOHIRBRYDXPAMZ-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C22H25F2NO4",
+      "pubchem_formula": "C22H25F2NO4"
+    },
+    {
+      "name": "nefazodone",
+      "status": "ok",
+      "local_inchikey_before_correction": "VRBKIVRKKCLPHA-UHFFFAOYSA-N",
+      "lookup_name": "nefazodone",
+      "pubchem_cid": 4449,
+      "pubchem_inchikey": "VRBKIVRKKCLPHA-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C25H32ClN5O2",
+      "pubchem_formula": "C25H32ClN5O2"
+    },
+    {
+      "name": "nevirapine",
+      "status": "ok",
+      "local_inchikey_before_correction": "NQDJXKOVJZTUJA-UHFFFAOYSA-N",
+      "lookup_name": "nevirapine",
+      "pubchem_cid": 4463,
+      "pubchem_inchikey": "NQDJXKOVJZTUJA-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C15H14N4O",
+      "pubchem_formula": "C15H14N4O"
+    },
+    {
+      "name": "nicardipine",
+      "status": "ok",
+      "local_inchikey_before_correction": "ZBBHBTPTTSWHBA-UHFFFAOYSA-N",
+      "lookup_name": "nicardipine",
+      "pubchem_cid": 4474,
+      "pubchem_inchikey": "ZBBHBTPTTSWHBA-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C26H29N3O6",
+      "pubchem_formula": "C26H29N3O6"
+    },
+    {
+      "name": "nifedipine",
+      "status": "ok",
+      "local_inchikey_before_correction": "HYIMSNHJOBLJNT-UHFFFAOYSA-N",
+      "lookup_name": "nifedipine",
+      "pubchem_cid": 4485,
+      "pubchem_inchikey": "HYIMSNHJOBLJNT-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C17H18N2O6",
+      "pubchem_formula": "C17H18N2O6"
+    },
+    {
+      "name": "nilotinib",
+      "status": "ok",
+      "local_inchikey_before_correction": "HHZIURLSWUIHRB-UHFFFAOYSA-N",
+      "lookup_name": "nilotinib",
+      "pubchem_cid": 644241,
+      "pubchem_inchikey": "HHZIURLSWUIHRB-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C28H22F3N7O",
+      "pubchem_formula": "C28H22F3N7O"
+    },
+    {
+      "name": "norethindrone",
+      "status": "ok",
+      "local_inchikey_before_correction": "VIKNJXKGJWUCNN-XGXHKTLJSA-N",
+      "lookup_name": "norethindrone",
+      "pubchem_cid": 6230,
+      "pubchem_inchikey": "VIKNJXKGJWUCNN-XGXHKTLJSA-N",
+      "local_formula_before_correction": "C20H26O2",
+      "pubchem_formula": "C20H26O2"
+    },
+    {
+      "name": "ofloxacin",
+      "status": "ok",
+      "local_inchikey_before_correction": "GSDSWSVVBLHKDQ-UHFFFAOYSA-N",
+      "lookup_name": "ofloxacin",
+      "pubchem_cid": 4583,
+      "pubchem_inchikey": "GSDSWSVVBLHKDQ-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C18H20FN3O4",
+      "pubchem_formula": "C18H20FN3O4"
+    },
+    {
+      "name": "olanzapine",
+      "status": "ok",
+      "local_inchikey_before_correction": "KVWDHTXUZHCGIO-UHFFFAOYSA-N",
+      "lookup_name": "olanzapine",
+      "pubchem_cid": 135398745,
+      "pubchem_inchikey": "KVWDHTXUZHCGIO-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C17H20N4S",
+      "pubchem_formula": "C17H20N4S"
+    },
+    {
+      "name": "olmesartan medoxomil",
+      "status": "ok",
+      "local_inchikey_before_correction": "UQGKUQLKSCSZGY-UHFFFAOYSA-N",
+      "lookup_name": "olmesartan medoxomil",
+      "pubchem_cid": 130881,
+      "pubchem_inchikey": "UQGKUQLKSCSZGY-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C29H30N6O6",
+      "pubchem_formula": "C29H30N6O6"
+    },
+    {
+      "name": "olmesartan medoxomil-hydrochlorothiazide",
+      "status": "ok",
+      "local_inchikey_before_correction": "CJPRWUSPLWISJM-UHFFFAOYSA-N",
+      "lookup_name": "olmesartan medoxomil-hydrochlorothiazide",
+      "pubchem_cid": 9940864,
+      "pubchem_inchikey": "CJPRWUSPLWISJM-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C36H38ClN9O10S2",
+      "pubchem_formula": "C36H38ClN9O10S2"
+    },
+    {
+      "name": "omaveloxolone",
+      "status": "ok",
+      "local_inchikey_before_correction": "RJCWBNBKOKFWNY-UHFFFAOYSA-N",
+      "lookup_name": "omaveloxolone",
+      "pubchem_cid": 71811910,
+      "pubchem_inchikey": "RJCWBNBKOKFWNY-IDPLTSGASA-N",
+      "local_formula_before_correction": "C33H44F2N2O3",
+      "pubchem_formula": "C33H44F2N2O3"
+    },
+    {
+      "name": "omeprazole",
+      "status": "ok",
+      "local_inchikey_before_correction": "SUBDBMMJDZJVOS-UHFFFAOYSA-N",
+      "lookup_name": "omeprazole",
+      "pubchem_cid": 4594,
+      "pubchem_inchikey": "SUBDBMMJDZJVOS-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C17H19N3O3S",
+      "pubchem_formula": "C17H19N3O3S"
+    },
+    {
+      "name": "ondansetron",
+      "status": "ok",
+      "local_inchikey_before_correction": "FELGMEQIXOGIFQ-UHFFFAOYSA-N",
+      "lookup_name": "ondansetron",
+      "pubchem_cid": 4595,
+      "pubchem_inchikey": "FELGMEQIXOGIFQ-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C18H19N3O",
+      "pubchem_formula": "C18H19N3O"
+    },
+    {
+      "name": "oseltamivir",
+      "status": "ok",
+      "local_inchikey_before_correction": "VSZGPKBBMSAYNT-UHFFFAOYSA-N",
+      "lookup_name": "oseltamivir",
+      "pubchem_cid": 65028,
+      "pubchem_inchikey": "VSZGPKBBMSAYNT-RRFJBIMHSA-N",
+      "local_formula_before_correction": "C16H28N2O4",
+      "pubchem_formula": "C16H28N2O4"
+    },
+    {
+      "name": "oxaprozin",
+      "status": "ok",
+      "local_inchikey_before_correction": "OFPXSFXSNFPTHF-UHFFFAOYSA-N",
+      "lookup_name": "oxaprozin",
+      "pubchem_cid": 4614,
+      "pubchem_inchikey": "OFPXSFXSNFPTHF-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C18H15NO3",
+      "pubchem_formula": "C18H15NO3"
+    },
+    {
+      "name": "oxybutynin",
+      "status": "ok",
+      "local_inchikey_before_correction": "XIQVNETUBQGFHX-UHFFFAOYSA-N",
+      "lookup_name": "oxybutynin",
+      "pubchem_cid": 4634,
+      "pubchem_inchikey": "XIQVNETUBQGFHX-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C22H31NO3",
+      "pubchem_formula": "C22H31NO3"
+    },
+    {
+      "name": "paliperidone",
+      "status": "ok",
+      "local_inchikey_before_correction": "PMXMIIMHBWHSKN-UHFFFAOYSA-N",
+      "lookup_name": "paliperidone",
+      "pubchem_cid": 115237,
+      "pubchem_inchikey": "PMXMIIMHBWHSKN-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C23H27FN4O3",
+      "pubchem_formula": "C23H27FN4O3"
+    },
+    {
+      "name": "pantoprazole",
+      "status": "ok",
+      "local_inchikey_before_correction": "IQPSEEYGBUAQFF-UHFFFAOYSA-N",
+      "lookup_name": "pantoprazole",
+      "pubchem_cid": 4679,
+      "pubchem_inchikey": "IQPSEEYGBUAQFF-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C16H15F2N3O4S",
+      "pubchem_formula": "C16H15F2N3O4S"
+    },
+    {
+      "name": "paricalcitol",
+      "status": "ok",
+      "local_inchikey_before_correction": "BPKAHTKRCLCHEA-UHFFFAOYSA-N",
+      "lookup_name": "paricalcitol",
+      "pubchem_cid": 5281104,
+      "pubchem_inchikey": "BPKAHTKRCLCHEA-UBFJEZKGSA-N",
+      "local_formula_before_correction": "C27H44O3",
+      "pubchem_formula": "C27H44O3"
+    },
+    {
+      "name": "paroxetine",
+      "status": "ok",
+      "local_inchikey_before_correction": "AHOUBRCZNHFOSL-YOEHRIQHSA-N",
+      "lookup_name": "paroxetine",
+      "pubchem_cid": 43815,
+      "pubchem_inchikey": "AHOUBRCZNHFOSL-YOEHRIQHSA-N",
+      "local_formula_before_correction": "C19H20FNO3",
+      "pubchem_formula": "C19H20FNO3"
+    },
+    {
+      "name": "pazopanib",
+      "status": "ok",
+      "local_inchikey_before_correction": "CUIHSIWYWATEQL-UHFFFAOYSA-N",
+      "lookup_name": "pazopanib",
+      "pubchem_cid": 10113978,
+      "pubchem_inchikey": "CUIHSIWYWATEQL-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C21H23N7O2S",
+      "pubchem_formula": "C21H23N7O2S"
+    },
+    {
+      "name": "penicillamine",
+      "status": "ok",
+      "local_inchikey_before_correction": "VVNCNSJFMMFHPL-VKHMYHEASA-N",
+      "lookup_name": "penicillamine",
+      "pubchem_cid": 5852,
+      "pubchem_inchikey": "VVNCNSJFMMFHPL-VKHMYHEASA-N",
+      "local_formula_before_correction": "C5H11NO2S",
+      "pubchem_formula": "C5H11NO2S"
+    },
+    {
+      "name": "perampanel",
+      "status": "ok",
+      "local_inchikey_before_correction": "PRMWGUBFXWROHD-UHFFFAOYSA-N",
+      "lookup_name": "perampanel",
+      "pubchem_cid": 9924495,
+      "pubchem_inchikey": "PRMWGUBFXWROHD-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C23H15N3O",
+      "pubchem_formula": "C23H15N3O"
+    },
+    {
+      "name": "phenytoin",
+      "status": "ok",
+      "local_inchikey_before_correction": "CXOFVDLJLONNDW-UHFFFAOYSA-N",
+      "lookup_name": "phenytoin",
+      "pubchem_cid": 1775,
+      "pubchem_inchikey": "CXOFVDLJLONNDW-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C15H12N2O2",
+      "pubchem_formula": "C15H12N2O2"
+    },
+    {
+      "name": "pilocarpine",
+      "status": "ok",
+      "local_inchikey_before_correction": "QCHFTSOMWOSFHM-WPRPVWTQSA-N",
+      "lookup_name": "pilocarpine",
+      "pubchem_cid": 5910,
+      "pubchem_inchikey": "QCHFTSOMWOSFHM-WPRPVWTQSA-N",
+      "local_formula_before_correction": "C11H16N2O2",
+      "pubchem_formula": "C11H16N2O2"
+    },
+    {
+      "name": "pindolol",
+      "status": "ok",
+      "local_inchikey_before_correction": "JZQKKSLKJUAGIC-UHFFFAOYSA-N",
+      "lookup_name": "pindolol",
+      "pubchem_cid": 4828,
+      "pubchem_inchikey": "JZQKKSLKJUAGIC-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C14H20N2O2",
+      "pubchem_formula": "C14H20N2O2"
+    },
+    {
+      "name": "pitavastatin",
+      "status": "ok",
+      "local_inchikey_before_correction": "VGYFMXBACGZSIL-MCBHFWOFSA-N",
+      "lookup_name": "pitavastatin",
+      "pubchem_cid": 5282452,
+      "pubchem_inchikey": "VGYFMXBACGZSIL-MCBHFWOFSA-N",
+      "local_formula_before_correction": "C25H24FNO4",
+      "pubchem_formula": "C25H24FNO4"
+    },
+    {
+      "name": "pomalidomide",
+      "status": "ok",
+      "local_inchikey_before_correction": "UVSMNLNDYGZFPF-UHFFFAOYSA-N",
+      "lookup_name": "pomalidomide",
+      "pubchem_cid": 134780,
+      "pubchem_inchikey": "UVSMNLNDYGZFPF-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C13H11N3O4",
+      "pubchem_formula": "C13H11N3O4"
+    },
+    {
+      "name": "ponatinib",
+      "status": "ok",
+      "local_inchikey_before_correction": "PHXJVRSECIGDHY-UHFFFAOYSA-N",
+      "lookup_name": "ponatinib",
+      "pubchem_cid": 24826799,
+      "pubchem_inchikey": "PHXJVRSECIGDHY-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C29H27F3N6O",
+      "pubchem_formula": "C29H27F3N6O"
+    },
+    {
+      "name": "posaconazole",
+      "status": "ok",
+      "local_inchikey_before_correction": "RAGOYPUPXAKGKH-XAKZXMRKSA-N",
+      "lookup_name": "posaconazole",
+      "pubchem_cid": 468595,
+      "pubchem_inchikey": "RAGOYPUPXAKGKH-XAKZXMRKSA-N",
+      "local_formula_before_correction": "C37H42F2N8O4",
+      "pubchem_formula": "C37H42F2N8O4"
+    },
+    {
+      "name": "pralsetinib",
+      "status": "ok",
+      "local_inchikey_before_correction": "GBLBJPZSROAGMF-UHFFFAOYSA-N",
+      "lookup_name": "pralsetinib",
+      "pubchem_cid": 129073603,
+      "pubchem_inchikey": "GBLBJPZSROAGMF-SIYOEGHHSA-N",
+      "local_formula_before_correction": "C27H32FN9O2",
+      "pubchem_formula": "C27H32FN9O2"
+    },
+    {
+      "name": "pramipexole",
+      "status": "ok",
+      "local_inchikey_before_correction": "FASDKYOPVNHBLU-UHFFFAOYSA-N",
+      "lookup_name": "pramipexole",
+      "pubchem_cid": 119570,
+      "pubchem_inchikey": "FASDKYOPVNHBLU-ZETCQYMHSA-N",
+      "local_formula_before_correction": "C10H17N3S",
+      "pubchem_formula": "C10H17N3S"
+    },
+    {
+      "name": "prasugrel",
+      "status": "ok",
+      "local_inchikey_before_correction": "DTGLZDAWLRGWQN-UHFFFAOYSA-N",
+      "lookup_name": "prasugrel",
+      "pubchem_cid": 6918456,
+      "pubchem_inchikey": "DTGLZDAWLRGWQN-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C20H20FNO3S",
+      "pubchem_formula": "C20H20FNO3S"
+    },
+    {
+      "name": "pravastatin",
+      "status": "ok",
+      "local_inchikey_before_correction": "TUZYXOIXSAXUGO-PZAWKZKUSA-N",
+      "lookup_name": "pravastatin",
+      "pubchem_cid": 54687,
+      "pubchem_inchikey": "TUZYXOIXSAXUGO-PZAWKZKUSA-N",
+      "local_formula_before_correction": "C23H36O7",
+      "pubchem_formula": "C23H36O7"
+    },
+    {
+      "name": "prednisolone",
+      "status": "ok",
+      "local_inchikey_before_correction": "OIGNJSKKLXVSLS-UHFFFAOYSA-N",
+      "lookup_name": "prednisolone",
+      "pubchem_cid": 5755,
+      "pubchem_inchikey": "OIGNJSKKLXVSLS-VWUMJDOOSA-N",
+      "local_formula_before_correction": "C21H28O5",
+      "pubchem_formula": "C21H28O5"
+    },
+    {
+      "name": "pregabalin",
+      "status": "ok",
+      "local_inchikey_before_correction": "AYXYPKUFHZROOJ-UHFFFAOYSA-N",
+      "lookup_name": "pregabalin",
+      "pubchem_cid": 5486971,
+      "pubchem_inchikey": "AYXYPKUFHZROOJ-ZETCQYMHSA-N",
+      "local_formula_before_correction": "C8H17NO2",
+      "pubchem_formula": "C8H17NO2"
+    },
+    {
+      "name": "primaquine",
+      "status": "ok",
+      "local_inchikey_before_correction": "INDBQLZJXZLFIT-UHFFFAOYSA-N",
+      "lookup_name": "primaquine",
+      "pubchem_cid": 4908,
+      "pubchem_inchikey": "INDBQLZJXZLFIT-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C15H21N3O",
+      "pubchem_formula": "C15H21N3O"
+    },
+    {
+      "name": "probenecid",
+      "status": "ok",
+      "local_inchikey_before_correction": "DBABZHXKTCFAPX-UHFFFAOYSA-N",
+      "lookup_name": "probenecid",
+      "pubchem_cid": 4911,
+      "pubchem_inchikey": "DBABZHXKTCFAPX-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C13H19NO4S",
+      "pubchem_formula": "C13H19NO4S"
+    },
+    {
+      "name": "progesterone",
+      "status": "ok",
+      "local_inchikey_before_correction": "RJKFOVLPORLFTN-LEKSSAKUSA-N",
+      "lookup_name": "progesterone",
+      "pubchem_cid": 5994,
+      "pubchem_inchikey": "RJKFOVLPORLFTN-LEKSSAKUSA-N",
+      "local_formula_before_correction": "C21H30O2",
+      "pubchem_formula": "C21H30O2"
+    },
+    {
+      "name": "propafenone",
+      "status": "ok",
+      "local_inchikey_before_correction": "JWHAUXFOSRPERK-UHFFFAOYSA-N",
+      "lookup_name": "propafenone",
+      "pubchem_cid": 4932,
+      "pubchem_inchikey": "JWHAUXFOSRPERK-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C21H27NO3",
+      "pubchem_formula": "C21H27NO3"
+    },
+    {
+      "name": "propranolol",
+      "status": "ok",
+      "local_inchikey_before_correction": "AQHHHDLHHXJYJD-UHFFFAOYSA-N",
+      "lookup_name": "propranolol",
+      "pubchem_cid": 4946,
+      "pubchem_inchikey": "AQHHHDLHHXJYJD-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C16H21NO2",
+      "pubchem_formula": "C16H21NO2"
+    },
+    {
+      "name": "prucalopride",
+      "status": "ok",
+      "local_inchikey_before_correction": "ZPMNHBXQOOVQJL-UHFFFAOYSA-N",
+      "lookup_name": "prucalopride",
+      "pubchem_cid": 3052762,
+      "pubchem_inchikey": "ZPMNHBXQOOVQJL-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C18H26ClN3O3",
+      "pubchem_formula": "C18H26ClN3O3"
+    },
+    {
+      "name": "pyrazinamide",
+      "status": "ok",
+      "local_inchikey_before_correction": "IPEHBUMCGVEMRF-UHFFFAOYSA-N",
+      "lookup_name": "pyrazinamide",
+      "pubchem_cid": 1046,
+      "pubchem_inchikey": "IPEHBUMCGVEMRF-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C5H5N3O",
+      "pubchem_formula": "C5H5N3O"
+    },
+    {
+      "name": "pyridostigmine",
+      "status": "ok",
+      "local_inchikey_before_correction": "RVOLLAQWKVFTGE-UHFFFAOYSA-N",
+      "lookup_name": "pyridostigmine",
+      "pubchem_cid": 4991,
+      "pubchem_inchikey": "RVOLLAQWKVFTGE-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C9H13N2O2+",
+      "pubchem_formula": "C9H13N2O2+"
+    },
+    {
+      "name": "quetiapine",
+      "status": "ok",
+      "local_inchikey_before_correction": "URKOMYMAXPYINW-UHFFFAOYSA-N",
+      "lookup_name": "quetiapine",
+      "pubchem_cid": 5002,
+      "pubchem_inchikey": "URKOMYMAXPYINW-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C21H25N3O2S",
+      "pubchem_formula": "C21H25N3O2S"
+    },
+    {
+      "name": "quetiapine er",
+      "status": "no_local_smiles"
+    },
+    {
+      "name": "quinine",
+      "status": "ok",
+      "local_inchikey_before_correction": "LOUPRKONTZGTKE-WZBLMQSHSA-N",
+      "lookup_name": "quinine",
+      "pubchem_cid": 3034034,
+      "pubchem_inchikey": "LOUPRKONTZGTKE-WZBLMQSHSA-N",
+      "local_formula_before_correction": "C20H24N2O2",
+      "pubchem_formula": "C20H24N2O2"
+    },
+    {
+      "name": "quizartinib",
+      "status": "ok",
+      "local_inchikey_before_correction": "CVWXJKQAOSCOAB-UHFFFAOYSA-N",
+      "lookup_name": "quizartinib",
+      "pubchem_cid": 24889392,
+      "pubchem_inchikey": "CVWXJKQAOSCOAB-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C29H32N6O4S",
+      "pubchem_formula": "C29H32N6O4S"
+    },
+    {
+      "name": "ramelteon",
+      "status": "ok",
+      "local_inchikey_before_correction": "YLXDSYKOBKBWJQ-LBPRGKRZSA-N",
+      "lookup_name": "ramelteon",
+      "pubchem_cid": 208902,
+      "pubchem_inchikey": "YLXDSYKOBKBWJQ-LBPRGKRZSA-N",
+      "local_formula_before_correction": "C16H21NO2",
+      "pubchem_formula": "C16H21NO2"
+    },
+    {
+      "name": "ramipril",
+      "status": "ok",
+      "local_inchikey_before_correction": "HDACQVRGBOVJII-UHFFFAOYSA-N",
+      "lookup_name": "ramipril",
+      "pubchem_cid": 5362129,
+      "pubchem_inchikey": "HDACQVRGBOVJII-JBDAPHQKSA-N",
+      "local_formula_before_correction": "C23H32N2O5",
+      "pubchem_formula": "C23H32N2O5"
+    },
+    {
+      "name": "ranitidine",
+      "status": "ok",
+      "local_inchikey_before_correction": "VMXUWOKSQNHOCA-UHFFFAOYSA-N",
+      "lookup_name": "ranitidine",
+      "pubchem_cid": 3001055,
+      "pubchem_inchikey": "VMXUWOKSQNHOCA-UKTHLTGXSA-N",
+      "local_formula_before_correction": "C13H22N4O3S",
+      "pubchem_formula": "C13H22N4O3S"
+    },
+    {
+      "name": "ranolazine",
+      "status": "ok",
+      "local_inchikey_before_correction": "XKLMZUWKNUAPSZ-UHFFFAOYSA-N",
+      "lookup_name": "ranolazine",
+      "pubchem_cid": 56959,
+      "pubchem_inchikey": "XKLMZUWKNUAPSZ-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C24H33N3O4",
+      "pubchem_formula": "C24H33N3O4"
+    },
+    {
+      "name": "rasagiline",
+      "status": "ok",
+      "local_inchikey_before_correction": "RUOKEQAAGRXIBM-UHFFFAOYSA-N",
+      "lookup_name": "rasagiline",
+      "pubchem_cid": 3052776,
+      "pubchem_inchikey": "RUOKEQAAGRXIBM-GFCCVEGCSA-N",
+      "local_formula_before_correction": "C12H13N",
+      "pubchem_formula": "C12H13N"
+    },
+    {
+      "name": "relugolix",
+      "status": "ok",
+      "local_inchikey_before_correction": "AOMXMOCNKJTRQP-UHFFFAOYSA-N",
+      "lookup_name": "relugolix",
+      "pubchem_cid": 10348973,
+      "pubchem_inchikey": "AOMXMOCNKJTRQP-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C29H27F2N7O5S",
+      "pubchem_formula": "C29H27F2N7O5S"
+    },
+    {
+      "name": "rifabutin",
+      "status": "ok",
+      "local_inchikey_before_correction": "ATEBXHFBFRCZMA-VXTBVIBXSA-N",
+      "lookup_name": "rifabutin",
+      "pubchem_cid": 135398743,
+      "pubchem_inchikey": "ZWBTYMGEBZUQTK-PVLSIAFMSA-N",
+      "local_formula_before_correction": "C46H62N4O11",
+      "pubchem_formula": "C46H62N4O11"
+    },
+    {
+      "name": "rifampin",
+      "status": "ok",
+      "local_inchikey_before_correction": "JQXXHWHPUNPDRT-UHFFFAOYSA-N",
+      "lookup_name": "rifampin",
+      "pubchem_cid": 135398735,
+      "pubchem_inchikey": "JQXXHWHPUNPDRT-WLSIYKJHSA-N",
+      "local_formula_before_correction": "C43H58N4O12",
+      "pubchem_formula": "C43H58N4O12"
+    },
+    {
+      "name": "rilpivirine",
+      "status": "ok",
+      "local_inchikey_before_correction": "YIBOMRUWOWDFLG-UHFFFAOYSA-N",
+      "lookup_name": "rilpivirine",
+      "pubchem_cid": 6451164,
+      "pubchem_inchikey": "YIBOMRUWOWDFLG-ONEGZZNKSA-N",
+      "local_formula_before_correction": "C22H18N6",
+      "pubchem_formula": "C22H18N6"
+    },
+    {
+      "name": "risedronate",
+      "status": "ok",
+      "local_inchikey_before_correction": "IIDJRNMFWXDHID-UHFFFAOYSA-N",
+      "lookup_name": "risedronate",
+      "pubchem_cid": 5245,
+      "pubchem_inchikey": "IIDJRNMFWXDHID-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C7H11NO7P2",
+      "pubchem_formula": "C7H11NO7P2"
+    },
+    {
+      "name": "risperidone",
+      "status": "ok",
+      "local_inchikey_before_correction": "RAPZEAPATHNIPO-UHFFFAOYSA-N",
+      "lookup_name": "risperidone",
+      "pubchem_cid": 5073,
+      "pubchem_inchikey": "RAPZEAPATHNIPO-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C23H27FN4O2",
+      "pubchem_formula": "C23H27FN4O2"
+    },
+    {
+      "name": "ritlecitinib",
+      "status": "ok",
+      "local_inchikey_before_correction": "CBRJPFGIXUFMTM-UHFFFAOYSA-N",
+      "lookup_name": "ritlecitinib",
+      "pubchem_cid": 118115473,
+      "pubchem_inchikey": "CBRJPFGIXUFMTM-WDEREUQCSA-N",
+      "local_formula_before_correction": "C15H19N5O",
+      "pubchem_formula": "C15H19N5O"
+    },
+    {
+      "name": "rivaroxaban",
+      "status": "ok",
+      "local_inchikey_before_correction": "KGFYHTZWPPHNLQ-AWEZNQCLSA-N",
+      "lookup_name": "rivaroxaban",
+      "pubchem_cid": 9875401,
+      "pubchem_inchikey": "KGFYHTZWPPHNLQ-AWEZNQCLSA-N",
+      "local_formula_before_correction": "C19H18ClN3O5S",
+      "pubchem_formula": "C19H18ClN3O5S"
+    },
+    {
+      "name": "ropinirole",
+      "status": "ok",
+      "local_inchikey_before_correction": "UHSKFQJFRQCDBE-UHFFFAOYSA-N",
+      "lookup_name": "ropinirole",
+      "pubchem_cid": 5095,
+      "pubchem_inchikey": "UHSKFQJFRQCDBE-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C16H24N2O",
+      "pubchem_formula": "C16H24N2O"
+    },
+    {
+      "name": "rosuvastatin",
+      "status": "ok",
+      "local_inchikey_before_correction": "BPRHUIZQVSMCRT-UHFFFAOYSA-N",
+      "lookup_name": "rosuvastatin",
+      "pubchem_cid": 446157,
+      "pubchem_inchikey": "BPRHUIZQVSMCRT-VEUZHWNKSA-N",
+      "local_formula_before_correction": "C22H28FN3O6S",
+      "pubchem_formula": "C22H28FN3O6S"
+    },
+    {
+      "name": "ruxolitinib",
+      "status": "ok",
+      "local_inchikey_before_correction": "HFNKQEVNSGCOJV-OAHLLOKOSA-N",
+      "lookup_name": "ruxolitinib",
+      "pubchem_cid": 25126798,
+      "pubchem_inchikey": "HFNKQEVNSGCOJV-OAHLLOKOSA-N",
+      "local_formula_before_correction": "C17H18N6",
+      "pubchem_formula": "C17H18N6"
+    },
+    {
+      "name": "rydapt",
+      "status": "ok",
+      "local_inchikey_before_correction": "BMGQWWVMWDBQGC-UHFFFAOYSA-N",
+      "lookup_name": "rydapt",
+      "pubchem_cid": 9829523,
+      "pubchem_inchikey": "BMGQWWVMWDBQGC-IIFHNQTCSA-N",
+      "local_formula_before_correction": "C35H30N4O4",
+      "pubchem_formula": "C35H30N4O4"
+    },
+    {
+      "name": "selegiline",
+      "status": "ok",
+      "local_inchikey_before_correction": "MEZLKOACVSPNER-GFCCVEGCSA-N",
+      "lookup_name": "selegiline",
+      "pubchem_cid": 26757,
+      "pubchem_inchikey": "MEZLKOACVSPNER-GFCCVEGCSA-N",
+      "local_formula_before_correction": "C13H17N",
+      "pubchem_formula": "C13H17N"
+    },
+    {
+      "name": "serdexmethylphenidate",
+      "status": "ok",
+      "local_inchikey_before_correction": "UBZPNQRBUOBBLN-UHFFFAOYSA-N",
+      "lookup_name": "serdexmethylphenidate",
+      "pubchem_cid": 134823895,
+      "pubchem_inchikey": "UBZPNQRBUOBBLN-PWRODBHTSA-N",
+      "local_formula_before_correction": "C25H29N3O8",
+      "pubchem_formula": "C25H29N3O8"
+    },
+    {
+      "name": "sertraline",
+      "status": "ok",
+      "local_inchikey_before_correction": "VGKDLMBJGBXTGI-UHFFFAOYSA-N",
+      "lookup_name": "sertraline",
+      "pubchem_cid": 68617,
+      "pubchem_inchikey": "VGKDLMBJGBXTGI-SJCJKPOMSA-N",
+      "local_formula_before_correction": "C17H17Cl2N",
+      "pubchem_formula": "C17H17Cl2N"
+    },
+    {
+      "name": "sildenafil",
+      "status": "ok",
+      "local_inchikey_before_correction": "BNRNXUUZRGQAQC-UHFFFAOYSA-N",
+      "lookup_name": "sildenafil",
+      "pubchem_cid": 135398744,
+      "pubchem_inchikey": "BNRNXUUZRGQAQC-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C22H30N6O4S",
+      "pubchem_formula": "C22H30N6O4S"
+    },
+    {
+      "name": "silodosin",
+      "status": "ok",
+      "local_inchikey_before_correction": "PNCPYILNMDWPEY-UHFFFAOYSA-N",
+      "lookup_name": "silodosin",
+      "pubchem_cid": 5312125,
+      "pubchem_inchikey": "PNCPYILNMDWPEY-QGZVFWFLSA-N",
+      "local_formula_before_correction": "C25H32F3N3O4",
+      "pubchem_formula": "C25H32F3N3O4"
+    },
+    {
+      "name": "simvastatin",
+      "status": "no_local_smiles"
+    },
+    {
+      "name": "sirolimus",
+      "status": "ok",
+      "local_inchikey_before_correction": "QFJCIRLUMZQUOT-HPLJOQBZSA-N",
+      "lookup_name": "sirolimus",
+      "pubchem_cid": 5284616,
+      "pubchem_inchikey": "QFJCIRLUMZQUOT-HPLJOQBZSA-N",
+      "local_formula_before_correction": "C51H79NO13",
+      "pubchem_formula": "C51H79NO13"
+    },
+    {
+      "name": "sitagliptin",
+      "status": "ok",
+      "local_inchikey_before_correction": "MFFMDFFZMYYVKS-UHFFFAOYSA-N",
+      "lookup_name": "sitagliptin",
+      "pubchem_cid": 4369359,
+      "pubchem_inchikey": "MFFMDFFZMYYVKS-SECBINFHSA-N",
+      "local_formula_before_correction": "C16H15F6N5O",
+      "pubchem_formula": "C16H15F6N5O"
+    },
+    {
+      "name": "sodium oxybate",
+      "status": "ok",
+      "local_inchikey_before_correction": "XYGBKMMCQDZQOZ-UHFFFAOYSA-M",
+      "lookup_name": "sodium oxybate",
+      "pubchem_cid": 23663870,
+      "pubchem_inchikey": "XYGBKMMCQDZQOZ-UHFFFAOYSA-M",
+      "local_formula_before_correction": "C4H7NaO3",
+      "pubchem_formula": "C4H7NaO3"
+    },
+    {
+      "name": "solifenacin",
+      "status": "ok",
+      "local_inchikey_before_correction": "FBOUYBDGKBSUES-UHFFFAOYSA-N",
+      "lookup_name": "solifenacin",
+      "pubchem_cid": 154059,
+      "pubchem_inchikey": "FBOUYBDGKBSUES-VXKWHMMOSA-N",
+      "local_formula_before_correction": "C23H26N2O2",
+      "pubchem_formula": "C23H26N2O2"
+    },
+    {
+      "name": "sonidegib",
+      "status": "ok",
+      "local_inchikey_before_correction": "VZZJRYRQSPEMTK-CALCHBBNSA-N",
+      "lookup_name": "sonidegib",
+      "pubchem_cid": 24775005,
+      "pubchem_inchikey": "VZZJRYRQSPEMTK-CALCHBBNSA-N",
+      "local_formula_before_correction": "C26H26F3N3O3",
+      "pubchem_formula": "C26H26F3N3O3"
+    },
+    {
+      "name": "spironolactone",
+      "status": "ok",
+      "local_inchikey_before_correction": "LXMSZDCAJNLERA-UHFFFAOYSA-N",
+      "lookup_name": "spironolactone",
+      "pubchem_cid": 5833,
+      "pubchem_inchikey": "LXMSZDCAJNLERA-ZHYRCANASA-N",
+      "local_formula_before_correction": "C24H32O4S",
+      "pubchem_formula": "C24H32O4S"
+    },
+    {
+      "name": "sulfasalazine",
+      "status": "ok",
+      "local_inchikey_before_correction": "NCEXYHBECQHGNR-UHFFFAOYSA-N",
+      "lookup_name": "sulfasalazine",
+      "pubchem_cid": 5339,
+      "pubchem_inchikey": "NCEXYHBECQHGNR-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C18H14N4O5S",
+      "pubchem_formula": "C18H14N4O5S"
+    },
+    {
+      "name": "sulindac",
+      "status": "ok",
+      "local_inchikey_before_correction": "MLKXDPUZXIRXEP-UHFFFAOYSA-N",
+      "lookup_name": "sulindac",
+      "pubchem_cid": 1548887,
+      "pubchem_inchikey": "MLKXDPUZXIRXEP-MFOYZWKCSA-N",
+      "local_formula_before_correction": "C20H17FO3S",
+      "pubchem_formula": "C20H17FO3S"
+    },
+    {
+      "name": "sumatriptan",
+      "status": "ok",
+      "local_inchikey_before_correction": "KQKPFRSPSRPDEB-UHFFFAOYSA-N",
+      "lookup_name": "sumatriptan",
+      "pubchem_cid": 5358,
+      "pubchem_inchikey": "KQKPFRSPSRPDEB-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C14H21N3O2S",
+      "pubchem_formula": "C14H21N3O2S"
+    },
+    {
+      "name": "tacrolimus",
+      "status": "ok",
+      "local_inchikey_before_correction": "QJJXYPPXXYFBGM-UHFFFAOYSA-N",
+      "lookup_name": "tacrolimus",
+      "pubchem_cid": 445643,
+      "pubchem_inchikey": "QJJXYPPXXYFBGM-LFZNUXCKSA-N",
+      "local_formula_before_correction": "C44H69NO12",
+      "pubchem_formula": "C44H69NO12"
+    },
+    {
+      "name": "tafenoquine",
+      "status": "ok",
+      "local_inchikey_before_correction": "LBHLFPGPEGDCJG-UHFFFAOYSA-N",
+      "lookup_name": "tafenoquine",
+      "pubchem_cid": 115358,
+      "pubchem_inchikey": "LBHLFPGPEGDCJG-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C24H28F3N3O3",
+      "pubchem_formula": "C24H28F3N3O3"
+    },
+    {
+      "name": "tamoxifen",
+      "status": "ok",
+      "local_inchikey_before_correction": "NKANXQFJJICGDU-QPLCGJKRSA-N",
+      "lookup_name": "tamoxifen",
+      "pubchem_cid": 2733526,
+      "pubchem_inchikey": "NKANXQFJJICGDU-QPLCGJKRSA-N",
+      "local_formula_before_correction": "C26H29NO",
+      "pubchem_formula": "C26H29NO"
+    },
+    {
+      "name": "tamsulosin",
+      "status": "ok",
+      "local_inchikey_before_correction": "DRHKJLXJIQTDTD-OAHLLOKOSA-N",
+      "lookup_name": "tamsulosin",
+      "pubchem_cid": 129211,
+      "pubchem_inchikey": "DRHKJLXJIQTDTD-OAHLLOKOSA-N",
+      "local_formula_before_correction": "C20H28N2O5S",
+      "pubchem_formula": "C20H28N2O5S"
+    },
+    {
+      "name": "telmisartan",
+      "status": "ok",
+      "local_inchikey_before_correction": "RMMXLENWKUUMAY-UHFFFAOYSA-N",
+      "lookup_name": "telmisartan",
+      "pubchem_cid": 65999,
+      "pubchem_inchikey": "RMMXLENWKUUMAY-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C33H30N4O2",
+      "pubchem_formula": "C33H30N4O2"
+    },
+    {
+      "name": "temazepam",
+      "status": "ok",
+      "local_inchikey_before_correction": "SEQDDYPDSLOBDC-UHFFFAOYSA-N",
+      "lookup_name": "temazepam",
+      "pubchem_cid": 5391,
+      "pubchem_inchikey": "SEQDDYPDSLOBDC-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C16H13ClN2O2",
+      "pubchem_formula": "C16H13ClN2O2"
+    },
+    {
+      "name": "temozolomide",
+      "status": "ok",
+      "local_inchikey_before_correction": "BPEGJWRSRHCHSN-UHFFFAOYSA-N",
+      "lookup_name": "temozolomide",
+      "pubchem_cid": 5394,
+      "pubchem_inchikey": "BPEGJWRSRHCHSN-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C6H6N6O2",
+      "pubchem_formula": "C6H6N6O2"
+    },
+    {
+      "name": "tenofovir disoproxil",
+      "status": "ok",
+      "local_inchikey_before_correction": "JFVZFKDSXNQEJW-CQSZACIVSA-N",
+      "lookup_name": "tenofovir disoproxil",
+      "pubchem_cid": 5481350,
+      "pubchem_inchikey": "JFVZFKDSXNQEJW-CQSZACIVSA-N",
+      "local_formula_before_correction": "C19H30N5O10P",
+      "pubchem_formula": "C19H30N5O10P"
+    },
+    {
+      "name": "terazosin",
+      "status": "ok",
+      "local_inchikey_before_correction": "VCKUSRYTPJJLNI-UHFFFAOYSA-N",
+      "lookup_name": "terazosin",
+      "pubchem_cid": 5401,
+      "pubchem_inchikey": "VCKUSRYTPJJLNI-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C19H25N5O4",
+      "pubchem_formula": "C19H25N5O4"
+    },
+    {
+      "name": "terbinafine",
+      "status": "ok",
+      "local_inchikey_before_correction": "DOMXUEMWDBAQBQ-UHFFFAOYSA-N",
+      "lookup_name": "terbinafine",
+      "pubchem_cid": 1549008,
+      "pubchem_inchikey": "DOMXUEMWDBAQBQ-WEVVVXLNSA-N",
+      "local_formula_before_correction": "C21H25N",
+      "pubchem_formula": "C21H25N"
+    },
+    {
+      "name": "theophylline",
+      "status": "ok",
+      "local_inchikey_before_correction": "ZFXYFBGIUFBOJW-UHFFFAOYSA-N",
+      "lookup_name": "theophylline",
+      "pubchem_cid": 2153,
+      "pubchem_inchikey": "ZFXYFBGIUFBOJW-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C7H8N4O2",
+      "pubchem_formula": "C7H8N4O2"
+    },
+    {
+      "name": "ticagrelor",
+      "status": "ok",
+      "local_inchikey_before_correction": "OEKWJQXRCDYSHL-UHFFFAOYSA-N",
+      "lookup_name": "ticagrelor",
+      "pubchem_cid": 9871419,
+      "pubchem_inchikey": "OEKWJQXRCDYSHL-FNOIDJSQSA-N",
+      "local_formula_before_correction": "C23H28F2N6O4S",
+      "pubchem_formula": "C23H28F2N6O4S"
+    },
+    {
+      "name": "tizanidine",
+      "status": "ok",
+      "local_inchikey_before_correction": "XFYDIVBRZNQMJC-UHFFFAOYSA-N",
+      "lookup_name": "tizanidine",
+      "pubchem_cid": 5487,
+      "pubchem_inchikey": "XFYDIVBRZNQMJC-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C9H8ClN5S",
+      "pubchem_formula": "C9H8ClN5S"
+    },
+    {
+      "name": "tizanidne",
+      "status": "no_local_smiles"
+    },
+    {
+      "name": "topiramate",
+      "status": "ok",
+      "local_inchikey_before_correction": "KJADKKWYZYXHBB-UHFFFAOYSA-N",
+      "lookup_name": "topiramate",
+      "pubchem_cid": 5284627,
+      "pubchem_inchikey": "KJADKKWYZYXHBB-XBWDGYHZSA-N",
+      "local_formula_before_correction": "C12H21NO8S",
+      "pubchem_formula": "C12H21NO8S"
+    },
+    {
+      "name": "topiramate spinkle",
+      "status": "ok",
+      "local_inchikey_before_correction": "KJADKKWYZYXHBB-UHFFFAOYSA-N",
+      "lookup_name": "topiramate spinkle",
+      "pubchem_cid": 5284627,
+      "pubchem_inchikey": "KJADKKWYZYXHBB-XBWDGYHZSA-N",
+      "local_formula_before_correction": "C12H21NO8S",
+      "pubchem_formula": "C12H21NO8S"
+    },
+    {
+      "name": "torsemide",
+      "status": "ok",
+      "local_inchikey_before_correction": "NGBFQHCMQULJNZ-UHFFFAOYSA-N",
+      "lookup_name": "torsemide",
+      "pubchem_cid": 41781,
+      "pubchem_inchikey": "NGBFQHCMQULJNZ-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C16H20N4O3S",
+      "pubchem_formula": "C16H20N4O3S"
+    },
+    {
+      "name": "tramadol",
+      "status": "ok",
+      "local_inchikey_before_correction": "TVYLLZQTGLZFBW-UHFFFAOYSA-N",
+      "lookup_name": "tramadol",
+      "pubchem_cid": 33741,
+      "pubchem_inchikey": "TVYLLZQTGLZFBW-ZBFHGGJFSA-N",
+      "local_formula_before_correction": "C16H25NO2",
+      "pubchem_formula": "C16H25NO2"
+    },
+    {
+      "name": "trametinib",
+      "status": "ok",
+      "local_inchikey_before_correction": "LIRYPHYGHXZJBZ-UHFFFAOYSA-N",
+      "lookup_name": "trametinib",
+      "pubchem_cid": 11707110,
+      "pubchem_inchikey": "LIRYPHYGHXZJBZ-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C26H23FIN5O4",
+      "pubchem_formula": "C26H23FIN5O4"
+    },
+    {
+      "name": "trandolapril",
+      "status": "ok",
+      "local_inchikey_before_correction": "VXFJYXUZANRPDJ-UHFFFAOYSA-N",
+      "lookup_name": "trandolapril",
+      "pubchem_cid": 5484727,
+      "pubchem_inchikey": "VXFJYXUZANRPDJ-WTNASJBWSA-N",
+      "local_formula_before_correction": "C24H34N2O5",
+      "pubchem_formula": "C24H34N2O5"
+    },
+    {
+      "name": "tranexamic acid",
+      "status": "ok",
+      "local_inchikey_before_correction": "GYDJEQRTZSCIOI-UHFFFAOYSA-N",
+      "lookup_name": "tranexamic acid",
+      "pubchem_cid": 5526,
+      "pubchem_inchikey": "GYDJEQRTZSCIOI-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C8H15NO2",
+      "pubchem_formula": "C8H15NO2"
+    },
+    {
+      "name": "trazodone",
+      "status": "ok",
+      "local_inchikey_before_correction": "PHLBKPHSAVXXEF-UHFFFAOYSA-N",
+      "lookup_name": "trazodone",
+      "pubchem_cid": 5533,
+      "pubchem_inchikey": "PHLBKPHSAVXXEF-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C19H22ClN5O",
+      "pubchem_formula": "C19H22ClN5O"
+    },
+    {
+      "name": "tretinoin",
+      "status": "ok",
+      "local_inchikey_before_correction": "SHGAZHPCJJPHSC-UHFFFAOYSA-N",
+      "lookup_name": "tretinoin",
+      "pubchem_cid": 444795,
+      "pubchem_inchikey": "SHGAZHPCJJPHSC-YCNIQYBTSA-N",
+      "local_formula_before_correction": "C20H28O2",
+      "pubchem_formula": "C20H28O2"
+    },
+    {
+      "name": "triazolam",
+      "status": "ok",
+      "local_inchikey_before_correction": "JOFWLTCLBGQGBO-UHFFFAOYSA-N",
+      "lookup_name": "triazolam",
+      "pubchem_cid": 5556,
+      "pubchem_inchikey": "JOFWLTCLBGQGBO-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C17H12Cl2N4",
+      "pubchem_formula": "C17H12Cl2N4"
+    },
+    {
+      "name": "ulipristal",
+      "status": "ok",
+      "local_inchikey_before_correction": "HKDLNTKNLJPAIY-WKWWZUSTSA-N",
+      "lookup_name": "ulipristal",
+      "pubchem_cid": 13559281,
+      "pubchem_inchikey": "HKDLNTKNLJPAIY-WKWWZUSTSA-N",
+      "local_formula_before_correction": "C28H35NO3",
+      "pubchem_formula": "C28H35NO3"
+    },
+    {
+      "name": "upadacitinib",
+      "status": "ok",
+      "local_inchikey_before_correction": "WYQFJHHDOKWSHR-MNOVXSKESA-N",
+      "lookup_name": "upadacitinib",
+      "pubchem_cid": 58557659,
+      "pubchem_inchikey": "WYQFJHHDOKWSHR-MNOVXSKESA-N",
+      "local_formula_before_correction": "C17H19F3N6O",
+      "pubchem_formula": "C17H19F3N6O"
+    },
+    {
+      "name": "valacyclovir",
+      "status": "ok",
+      "local_inchikey_before_correction": "HDOVUKNUBWVHOX-QMMMGPOBSA-N",
+      "lookup_name": "valacyclovir",
+      "pubchem_cid": 135398742,
+      "pubchem_inchikey": "HDOVUKNUBWVHOX-QMMMGPOBSA-N",
+      "local_formula_before_correction": "C13H20N6O4",
+      "pubchem_formula": "C13H20N6O4"
+    },
+    {
+      "name": "valganciclovir",
+      "status": "ok",
+      "local_inchikey_before_correction": "WPVFJKSGQUFQAP-GKAPJAKFSA-N",
+      "lookup_name": "valganciclovir",
+      "pubchem_cid": 135413535,
+      "pubchem_inchikey": "WPVFJKSGQUFQAP-GKAPJAKFSA-N",
+      "local_formula_before_correction": "C14H22N6O5",
+      "pubchem_formula": "C14H22N6O5"
+    },
+    {
+      "name": "valganciclovir powder,",
+      "status": "no_local_smiles"
+    },
+    {
+      "name": "valsartan",
+      "status": "ok",
+      "local_inchikey_before_correction": "ACWBQPMHZXGDFX-UHFFFAOYSA-N",
+      "lookup_name": "valsartan",
+      "pubchem_cid": 60846,
+      "pubchem_inchikey": "ACWBQPMHZXGDFX-QFIPXVFZSA-N",
+      "local_formula_before_correction": "C24H29N5O3",
+      "pubchem_formula": "C24H29N5O3"
+    },
+    {
+      "name": "venlafaxine",
+      "status": "ok",
+      "local_inchikey_before_correction": "PNVNVHUZROJLTJ-UHFFFAOYSA-N",
+      "lookup_name": "venlafaxine",
+      "pubchem_cid": 5656,
+      "pubchem_inchikey": "PNVNVHUZROJLTJ-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C17H27NO2",
+      "pubchem_formula": "C17H27NO2"
+    },
+    {
+      "name": "verapamil",
+      "status": "ok",
+      "local_inchikey_before_correction": "SGTNSNPWRIOYBX-UHFFFAOYSA-N",
+      "lookup_name": "verapamil",
+      "pubchem_cid": 2520,
+      "pubchem_inchikey": "SGTNSNPWRIOYBX-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C27H38N2O4",
+      "pubchem_formula": "C27H38N2O4"
+    },
+    {
+      "name": "vericiguat",
+      "status": "ok",
+      "local_inchikey_before_correction": "QZFHIXARHDBPBY-UHFFFAOYSA-N",
+      "lookup_name": "vericiguat",
+      "pubchem_cid": 54674461,
+      "pubchem_inchikey": "QZFHIXARHDBPBY-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C19H16F2N8O2",
+      "pubchem_formula": "C19H16F2N8O2"
+    },
+    {
+      "name": "vibegron",
+      "status": "ok",
+      "local_inchikey_before_correction": "DJXRIQMCROIRCZ-UHFFFAOYSA-N",
+      "lookup_name": "vibegron",
+      "pubchem_cid": 44472635,
+      "pubchem_inchikey": "DJXRIQMCROIRCZ-XOEOCAAJSA-N",
+      "local_formula_before_correction": "C26H28N4O3",
+      "pubchem_formula": "C26H28N4O3"
+    },
+    {
+      "name": "vilazodone",
+      "status": "ok",
+      "local_inchikey_before_correction": "SGEGOXDYSFKCPT-UHFFFAOYSA-N",
+      "lookup_name": "vilazodone",
+      "pubchem_cid": 6918314,
+      "pubchem_inchikey": "SGEGOXDYSFKCPT-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C26H27N5O2",
+      "pubchem_formula": "C26H27N5O2"
+    },
+    {
+      "name": "vonoprazan",
+      "status": "ok",
+      "local_inchikey_before_correction": "BFDBKMOZYNOTPK-UHFFFAOYSA-N",
+      "lookup_name": "vonoprazan",
+      "pubchem_cid": 15981397,
+      "pubchem_inchikey": "BFDBKMOZYNOTPK-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C17H16FN3O2S",
+      "pubchem_formula": "C17H16FN3O2S"
+    },
+    {
+      "name": "vorasidenib",
+      "status": "ok",
+      "local_inchikey_before_correction": "QCZAWDGAVJMPTA-UHFFFAOYSA-N",
+      "lookup_name": "vorasidenib",
+      "pubchem_cid": 117817422,
+      "pubchem_inchikey": "QCZAWDGAVJMPTA-RNFRBKRXSA-N",
+      "local_formula_before_correction": "C14H13ClF6N6",
+      "pubchem_formula": "C14H13ClF6N6"
+    },
+    {
+      "name": "vortioxetine",
+      "status": "ok",
+      "local_inchikey_before_correction": "YQNWZWMKLDQSAC-UHFFFAOYSA-N",
+      "lookup_name": "vortioxetine",
+      "pubchem_cid": 9966051,
+      "pubchem_inchikey": "YQNWZWMKLDQSAC-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C18H22N2S",
+      "pubchem_formula": "C18H22N2S"
+    },
+    {
+      "name": "warfarin",
+      "status": "ok",
+      "local_inchikey_before_correction": "PJVWKTKQMONHTI-UHFFFAOYSA-N",
+      "lookup_name": "warfarin",
+      "pubchem_cid": 54678486,
+      "pubchem_inchikey": "PJVWKTKQMONHTI-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C19H16O4",
+      "pubchem_formula": "C19H16O4"
+    },
+    {
+      "name": "zaleplon",
+      "status": "ok",
+      "local_inchikey_before_correction": "HUNXMJYCHXQEGX-UHFFFAOYSA-N",
+      "lookup_name": "zaleplon",
+      "pubchem_cid": 5719,
+      "pubchem_inchikey": "HUNXMJYCHXQEGX-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C17H15N5O",
+      "pubchem_formula": "C17H15N5O"
+    },
+    {
+      "name": "ziprasidone",
+      "status": "ok",
+      "local_inchikey_before_correction": "MVWVFYHBGMAFLY-UHFFFAOYSA-N",
+      "lookup_name": "ziprasidone",
+      "pubchem_cid": 60854,
+      "pubchem_inchikey": "MVWVFYHBGMAFLY-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C21H21ClN4OS",
+      "pubchem_formula": "C21H21ClN4OS"
+    },
+    {
+      "name": "zolpidem",
+      "status": "ok",
+      "local_inchikey_before_correction": "ZAFYATHCZYHLPB-UHFFFAOYSA-N",
+      "lookup_name": "zolpidem",
+      "pubchem_cid": 5732,
+      "pubchem_inchikey": "ZAFYATHCZYHLPB-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C19H21N3O",
+      "pubchem_formula": "C19H21N3O"
+    },
+    {
+      "name": "zonisamide",
+      "status": "ok",
+      "local_inchikey_before_correction": "UBQNRHZMVUUOMG-UHFFFAOYSA-N",
+      "lookup_name": "zonisamide",
+      "pubchem_cid": 5734,
+      "pubchem_inchikey": "UBQNRHZMVUUOMG-UHFFFAOYSA-N",
+      "local_formula_before_correction": "C8H8N2O3S",
+      "pubchem_formula": "C8H8N2O3S"
+    }
+  ]
+}
