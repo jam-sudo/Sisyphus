@@ -21,3 +21,19 @@ def test_console_presets_use_current_resources():
                 assert digest == "public"
             else:
                 assert digest == hashlib.sha256((ROOT / path).read_bytes()).hexdigest(), path
+
+
+def test_model_card_interval_matches_current_cache():
+    cache_path = ROOT / "data/training/4track_holdout_predictions.json"
+    cache = json.loads(cache_path.read_text())
+    ci = json.loads(
+        (ROOT / "data/validation/4track_ci_2026-09-23_public_models_pinned.json").read_text()
+    )
+    card = json.loads((ROOT / "data/model_card.json").read_text())
+    dev = card["current_evidence"]["retrospective_development_benchmark"]
+    assert ci["source_cache_sha256"] == hashlib.sha256(cache_path.read_bytes()).hexdigest()
+    assert dev["meta_aafe"] == cache["overall"]["meta"]["aafe"]
+    assert dev["bootstrap_95_ci"] == [
+        ci["overall"]["meta"]["ci_95_low"],
+        ci["overall"]["meta"]["ci_95_high"],
+    ]

@@ -178,6 +178,8 @@ def test_public_training_membership_sources_are_complete_and_hash_pinned():
         "data/training/clint_expanded_v2.csv",
         "data/training/clint_merged_v3_biogen.csv",
         "data/training/clint_tdc_public_clean.csv",
+        "data/vdss_lombardo.tab",
+        "data/training/vdss_tdc_public_clean.csv",
         "data/training/vdss_v2_training.csv",
         "data/training/clearance_hepatocyte_az.tab",
     }
@@ -185,6 +187,14 @@ def test_public_training_membership_sources_are_complete_and_hash_pinned():
     assert {row["path"] for row in membership["sources"]} == expected
     for row in membership["sources"]:
         assert sha256_file(ROOT / row["path"]) == row["sha256"]
+    inventory_path = "data/validation/training_membership_sources_v1.json"
+    freeze = {
+        "training_membership_path": inventory_path,
+        "training_membership_sha256": sha256_file(ROOT / inventory_path),
+    }
+    assert verify_training_membership(ROOT, freeze, expected) == freeze[
+        "training_membership_sha256"
+    ]
 
 
 def test_clf_and_vdf_manifests_pin_their_co_committed_training_source():

@@ -12,6 +12,18 @@ track `pyproject.toml`.
 
 ## [Unreleased]
 
+### Public-only VDss training source pinned (2026-09-23)
+
+- Rebuilt VDss from 1,055 SHA-pinned public TDC Lombardo compounds after
+  duplicate and development-set exclusion. All seven active fitted models now
+  name exact public training snapshots.
+- On the repeatedly used N=107 development set, Meta AAFE worsened from 2.687
+  to 2.761; Engine and direct ML were unchanged. This is not an independent
+  validation result, and no unconsumed independently curated external cohort
+  is available.
+- Bound the current bootstrap interval to its prediction-cache hash and synced
+  the model-card interval from that artifact to prevent stale evidence.
+
 ### Public-only hepatocyte CLint training source pinned (2026-09-23)
 
 - Rebuilt the single-assay CLint model from 996 SHA-pinned TDC hepatocyte

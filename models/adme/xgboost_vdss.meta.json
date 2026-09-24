@@ -1,10 +1,13 @@
 {
-  "version": "v1",
-  "artifact_sha256": "3978e65f253fcd0e0e64f6c4a2fd37b0c55538c319810b2857a475a2d66ff38c",
+  "version": "v1_public_lombardo",
+  "artifact_sha256": "29f84cbff97da197ae516fccb2d91aff972f9bae661a8b2bde39786a984c1c35",
   "target": "log10(VDss L/kg)",
   "trained_on": {
-    "dataset_path": "TDC VDss_Lombardo",
-    "sha256": "unknown_legacy"
+    "dataset_path": "data/training/vdss_tdc_public_clean.csv",
+    "sha256": "778851b9dad82c2eb3d948b7ffb3ae829ce5fd529395b7d0599d4c86e02e5e54",
+    "n_drugs_clean": 1055,
+    "source_sha256": "00bb7e0dea19f78c4c1887e27ecf476135d9de2ef5ecc26d7c645c37bd9cb7af",
+    "source_url": "https://dataverse.harvard.edu/api/access/datafile/4267387"
   },
   "feature_schema": {
     "name": "compute_features_v1",
@@ -12,14 +15,27 @@
     "sha256": "b41dddd78533661b8f4aed86bdb7c5f55d15ed3cd2ad20b39e9100557eda631e",
     "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, MolMR). See src/sisyphus/descriptors.py::compute_features."
   },
-  "trained_at": "unknown_legacy",
-  "n_drugs_original": null,
-  "n_drugs_excluded": null,
-  "holdout_version": "unknown_legacy",
+  "trained_at": "2026-09-24T00:34:09.260867+00:00",
+  "n_drugs_original": 1130,
+  "n_drugs_excluded": 75,
+  "holdout_version": "N=107 (data/reference/holdout.json)",
   "holdout_metric": {
-    "name": "scaffold_cv_r2",
-    "value": null
+    "name": "five_fold_scaffold_cv_spearman",
+    "value": 0.7227310683284829,
+    "r2": 0.49862847324055326,
+    "aafe": 2.2239289771241086
   },
-  "hyperparameters": {},
-  "retrained_reason": "v1 baseline; v2 (xgboost_vdss_v2) uses DrugBank VDss and is currently dev-tooling only"
+  "hyperparameters": {
+    "n_estimators": 300,
+    "max_depth": 6,
+    "learning_rate": 0.1,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "random_state": 42,
+    "n_jobs": 4,
+    "verbosity": 0
+  },
+  "retrained_reason": "Pin public TDC Lombardo fitted rows and replace unknown legacy source",
+  "n_duplicate_rows": 19,
+  "n_holdout_structures_excluded": 56
 }

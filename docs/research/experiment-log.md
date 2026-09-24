@@ -10,6 +10,38 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-23 (cont.) — Public-only VDss retrain and complete fitted-source inventory
+
+Downloaded the official TDC VDss_Lombardo Dataverse file ID 4267387 (1,130
+measurements, SHA256
+`00bb7e0dea19f78c4c1887e27ecf476135d9de2ef5ecc26d7c645c37bd9cb7af`).
+Canonical deduplication removed 19 rows and three-key exclusion removed 56
+development structures, leaving 1,055 fitted compounds. Fitted CSV SHA256:
+`778851b9dad82c2eb3d948b7ffb3ae829ce5fd529395b7d0599d4c86e02e5e54`;
+model SHA256:
+`29f84cbff97da197ae516fccb2d91aff972f9bae661a8b2bde39786a984c1c35`.
+Five-fold Murcko-scaffold CV: Spearman 0.723, R² 0.499, VDss AAFE 2.224.
+All seven active fitted models now have SHA-pinned public fitted-source
+snapshots. This establishes a reproducible membership inventory, not an
+independent Cmax accuracy estimate.
+
+On the repeatedly used N=107 development set, Meta AAFE worsened 2.687 →
+2.761; Engine remained 3.821 and direct ML 2.990. In-domain Meta AAFE moved
+2.746 → 2.812 (N=81). The conditional Meta bootstrap CI is [2.36, 3.24].
+Current predictions are in `data/training/4track_holdout_predictions.json`,
+with cache-bound intervals in
+`data/validation/4track_ci_2026-09-23_public_models_pinned.json`. We did not
+adjust blend weights based on this development result. All 107 Meta predictions
+changed: 66 absolute log-errors worsened and 41 improved, so the aggregate
+regression is distributed rather than caused by one outlier.
+
+The partially in-sample Meta 90% residual half-width moved ×/÷12.39 →
+×/÷10.98 (63/67 training references usable); this is not split-conformal
+coverage. The model-card CI sync now rejects a bootstrap artifact whose
+source-cache hash differs from the current prediction cache. The eight static
+web presets were regenerated. An outcome-blinded, independently curated
+external cohort is still absent.
+
 ## 2026-09-23 (cont.) — Public-only hepatocyte CLint retrain
 
 The single-assay TDC Clearance_Hepatocyte_AZ source has 1,213 measurements

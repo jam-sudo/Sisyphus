@@ -2,7 +2,7 @@
   "schema_version": 1,
   "profile": "public",
   "identity_key": "largest-organic-fragment InChIKey-14",
-  "description": "Conservative public corpus exclusion inputs, not proof of exact shipped-model training membership. External audit also requires each production model's training dataset to be present and hash-pinned here. Licensed DrugBank data are excluded from the public profile.",
+  "description": "Public raw corpora and exact SHA-pinned fitted-row snapshots for every active production model. Model metadata binds each artifact to its fitted snapshot; raw corpora are additional conservative exclusion inputs. Licensed DrugBank data are excluded from the public profile.",
   "sources": [
     {"path": "data/ppbr_az.tab", "sha256": "54c9520f4b6e04419b18bab7335583c3865d86fc53db40f74c2cff1577c8ec1b"},
     {"path": "data/training/fup_tdc_public_clean.csv", "sha256": "e2c70c83707b2031904a351be76ce61899557a4b14316b9429c4a77fd2eac742"},
@@ -18,6 +18,8 @@
     {"path": "data/training/clint_expanded_v2.csv", "sha256": "c68b935bb04660d7d1df1747d9a1987d5fa0c9b408f0aa8818a76bc2483e91c1"},
     {"path": "data/training/clint_merged_v3_biogen.csv", "sha256": "380fa1748fdf6abfd54c02368e25ad1911368802b59ab0a3b7cfef840d4d9ff4"},
     {"path": "data/training/clint_tdc_public_clean.csv", "sha256": "300f5be5d0ada5fad88d94f9dc60c0c13ab77b122fed2494e06d764b43f6cd07"},
+    {"path": "data/vdss_lombardo.tab", "sha256": "00bb7e0dea19f78c4c1887e27ecf476135d9de2ef5ecc26d7c645c37bd9cb7af"},
+    {"path": "data/training/vdss_tdc_public_clean.csv", "sha256": "778851b9dad82c2eb3d948b7ffb3ae829ce5fd529395b7d0599d4c86e02e5e54"},
     {"path": "data/training/vdss_v2_training.csv", "sha256": "9be8627b9e982b0cfd813d885f675f5d71733db3ac2109189bf0f4af7af01da2"},
     {"path": "data/training/clearance_hepatocyte_az.tab", "sha256": "2c217f46600c22e107b72faa2bfb1d9bf799213aee47b601f6e0d6d73b68f274"}
   ]

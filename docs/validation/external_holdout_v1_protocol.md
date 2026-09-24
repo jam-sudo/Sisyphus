@@ -355,13 +355,16 @@ fitted CSV (SHA256
 `300f5be5d0ada5fad88d94f9dc60c0c13ab77b122fed2494e06d764b43f6cd07`)
 and model artifact (SHA256
 `1fdafa7c2e287dd9e4f44f68b97e5ace80a6837f97ef17bed3c01daeff610401`).
-Only the active VDss model still lacks an exact source hash. CL/F, Vd/F,
-fup v2, Peff, Cmax, and CLint are pinned to their training CSVs. The audit and
-prediction runner fail closed until each production fitted model names a
-repository-relative, hash-matched training dataset included in the pinned
-inventory. Recovering those datasets or reproducibly retraining the models is
-a prerequisite to an external V1 freeze; changing the metadata string alone
-does not establish provenance.
+The public VDss replacement uses [TDC's Lombardo data file](https://dataverse.harvard.edu/api/access/datafile/4267387)
+(raw SHA256 `00bb7e0dea19f78c4c1887e27ecf476135d9de2ef5ecc26d7c645c37bd9cb7af`),
+with 1,055 fitted rows (CSV SHA256
+`778851b9dad82c2eb3d948b7ffb3ae829ce5fd529395b7d0599d4c86e02e5e54`)
+and model SHA256
+`29f84cbff97da197ae516fccb2d91aff972f9bae661a8b2bde39786a984c1c35`.
+All seven active fitted models now name repository-relative, hash-matched
+training snapshots in the public inventory. The source-membership prerequisite
+is met; an external V1 freeze still requires an untouched candidate cohort,
+independent source adjudication, a sealed manifest, and one-time outcome opening.
 
 ## Freeze and one-time execution
 

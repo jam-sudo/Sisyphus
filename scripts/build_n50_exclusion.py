@@ -80,6 +80,8 @@ HARD_SOURCES: list[tuple[str, str, str | None, str]] = [
     ("data/training/clint_expanded_v2.csv", "canon_smiles", None, ","),
     ("data/training/clint_merged_v3_biogen.csv", "smiles", None, ","),
     ("data/training/clint_tdc_public_clean.csv", "canonical_smiles", "drug_id", ","),
+    ("data/vdss_lombardo.tab", "X", "ID", "\t"),
+    ("data/training/vdss_tdc_public_clean.csv", "canonical_smiles", "drug_id", ","),
     ("data/training/vdss_v2_training.csv", "canonical_smiles", "name", ","),
 ]
 # TDC hepatocyte is positional (col0 = ChEMBL id, col1 = SMILES, tab-delimited).

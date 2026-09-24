@@ -15,11 +15,13 @@ where the bootstrap resamples `abs(log10(fold))` with replacement,
 
 Usage:
     python scripts/bootstrap_4track_ci.py
-    python scripts/bootstrap_4track_ci.py --tag v0.4 --out data/validation/4track_ci_2026-05-12_v0.4.json
+    python scripts/bootstrap_4track_ci.py --tag v0.4 \
+        --out data/validation/4track_ci_2026-05-12_v0.4.json
 """
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 
@@ -79,7 +81,10 @@ def main() -> None:
                    help="artifact tag (date suffix is auto)")
     p.add_argument("--out", type=Path, default=None,
                    help="output JSON path (default: data/validation/4track_ci_<date>_<tag>.json)")
-    p.add_argument("--context", default="public-clone deterministic state (no DrugBank, no logp_correction); audit-driven honesty regen.",
+    p.add_argument("--context", default=(
+        "public-clone deterministic state (no DrugBank, no logp_correction); "
+        "audit-driven honesty regen."
+    ),
                    help="prose context for the artifact")
     p.add_argument("--date", default=None,
                    help="date stamp YYYY-MM-DD (default: today)")
@@ -96,6 +101,7 @@ def main() -> None:
     report = {
         "computed_at": f"{date}-{args.tag}",
         "source_cache": str(args.cache.relative_to(ROOT)),
+        "source_cache_sha256": hashlib.sha256(args.cache.read_bytes()).hexdigest(),
         "context": args.context,
         "method": "bootstrap on abs(log10(fold))",
         "n_bootstrap": N_BOOTSTRAP,
@@ -122,8 +128,11 @@ def main() -> None:
         print(f"\n{slice_name} (N={s['n']}):")
         for track in ("engine", "ml", "meta"):
             t = s[track]
-            print(f"  {track:6s}  AAFE={t['aafe']:.4f}  CI=[{t['ci_95_low']:.4f}, {t['ci_95_high']:.4f}]  "
-                  f"%2-fold={t['pct_2fold']}  %3-fold={t['pct_3fold']}")
+            print(
+                f"  {track:6s}  AAFE={t['aafe']:.4f}  "
+                f"CI=[{t['ci_95_low']:.4f}, {t['ci_95_high']:.4f}]  "
+                f"%2-fold={t['pct_2fold']}  %3-fold={t['pct_3fold']}"
+            )
 
 
 if __name__ == "__main__":
