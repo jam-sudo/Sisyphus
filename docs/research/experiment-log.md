@@ -10,6 +10,30 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Correct two salt doses and rebuild CL/F–Vd/F from screened source
+
+An independent Claude Code source check found that the fitted lisdexamfetamine
+30 mg and zofenopril 60 mg doses were dimesylate and calcium-salt masses,
+respectively. Parent-equivalent doses were applied to the Cmax recipe and the
+exploratory MMPK arms, using regulatory equivalences; the two stale PBPK-feature
+rows were removed. The [source follow-up](../validation/development_salt_dose_and_clf_screen_followup_2026-09-24.md)
+also records five candidate names whose original numeric tables remained
+inaccessible. These are not independently verified labels.
+
+Rebuilding `clf_training.csv` from the already screened MMPK source exposed
+120 stale rows previously left in CL/F–Vd/F: 114 administered/analyte
+mismatches and six blood-matrix entries. Fitted CL/F and Vd/F counts changed
+**1009 → 901** and **936 → 832**; row-CV R² changed **0.1973 → 0.2060**
+and **0.3686 → 0.3439**. Direct Cmax remains N=907, with scaffold-CV AAFE
+**3.3240 → 3.3382**. On the consumed N=73 development benchmark, direct ML
+AAFE changed **3.1205 → 3.0737** and Meta **2.8544 → 2.8546**
+(conditional 95% bootstrap CI **2.3270–3.5539**); paired Meta/ML ratio
+**0.9287** (CI **0.8167–1.0530**). The empirical 90% residual interval is
+/×**10.20**, covering **66/73 (90.4%)** development labels. None establishes
+external accuracy.
+
+---
+
 ## 2026-09-24 (cont.) — Quarantine dolasetron active-metabolite training labels
 
 The pinned Omega workbook labels seven oral dolasetron arms as parent Cmax,

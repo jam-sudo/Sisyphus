@@ -259,7 +259,7 @@ def test_residual_interval_preflight_rejects_stale_sources(tmp_path, monkeypatch
 def test_clf_and_vdf_manifests_pin_their_co_committed_training_source():
     source = "data/training/clf_training.csv"
     digest = sha256_file(ROOT / source)
-    for model, count in (("xgboost_clf", 1009), ("xgboost_vdf", 936)):
+    for model, count in (("xgboost_clf", 901), ("xgboost_vdf", 832)):
         metadata = json.loads((ROOT / f"models/direct_pk/{model}.meta.json").read_text())
         assert metadata["trained_on"] == {
             "dataset_path": source, "sha256": digest, "n_drugs_clean": count,

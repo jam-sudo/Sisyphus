@@ -552,9 +552,12 @@ holdout separation and source screening, including analyte, matrix, and unit
 adjudication. Retraining with the recorded hyperparameters and current feature
 code did not reproduce the former shipped model's trees or predictions. The
 current public Cmax model is trained from the 907-row fitted CSV, SHA256
-`a849aea93ed41e7ce7c359aa3e6d57c803842e6d5188026d3d8a67285afbbf6d`,
+`d35d556443a8bc75ccf925c9e31a26d5d8644379e458fd1c0e265b19e43d3ebc`,
 and its model SHA256 is
-`e10b563f39079116ed0ff1b0fb9f667793e5e99b2f54b028ff2d030e9765b6a0`.
+`7430d602fb196a71c3c087a8cc3448d7feaa4d74e0175de9bb23084ab70bfe33`.
+Its fitted lisdexamfetamine and zofenopril doses use parent-equivalent mass;
+the CL/F and Vd/F models were rebuilt from the screened Omega source, fitting
+901 and 832 rows respectively. See the [dose and source-screen follow-up](development_salt_dose_and_clf_screen_followup_2026-09-24.md).
 The single-assay TDC hepatocyte CLint replacement is pinned to its 995-row
 fitted CSV (SHA256
 `dbf2b750b58a68af02b01cfe90a370630908c311c8436f65818bbc08fcfaaa94`)

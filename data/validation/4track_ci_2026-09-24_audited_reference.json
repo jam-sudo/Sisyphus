@@ -1,8 +1,8 @@
 {
-  "computed_at": "2026-09-25-audited_reference",
+  "computed_at": "2026-09-25-v0.4",
   "source_cache": "data/training/4track_holdout_predictions.json",
-  "source_cache_sha256": "82680e5026d4e44e0272e35062260e02424be4faf2e1f2bcae5b5e817377e05f",
-  "context": "Dolasetron active-metabolite label quarantine; repeatedly accessed N=73 development evidence, not independent validation",
+  "source_cache_sha256": "0d99b1d07099c0921f7cc0c433710798ace9518df2d2a874bd76745166091b06",
+  "context": "public-clone deterministic state (no DrugBank, no logp_correction); audit-driven honesty regen.",
   "method": "bootstrap on abs(log10(fold))",
   "n_bootstrap": 10000,
   "seed": 20260422,
@@ -17,25 +17,25 @@
       "pct_3fold": 50.7
     },
     "ml": {
-      "aafe": 3.1205,
-      "ci_95_low": 2.5183,
-      "ci_95_high": 3.8891,
+      "aafe": 3.0737,
+      "ci_95_low": 2.4815,
+      "ci_95_high": 3.8332,
       "n": 73,
-      "pct_2fold": 42.5,
-      "pct_3fold": 58.9
+      "pct_2fold": 43.8,
+      "pct_3fold": 60.3
     },
     "meta": {
-      "aafe": 2.8544,
-      "ci_95_low": 2.3225,
-      "ci_95_high": 3.5553,
+      "aafe": 2.8546,
+      "ci_95_low": 2.327,
+      "ci_95_high": 3.5539,
       "n": 73,
       "pct_2fold": 42.5,
-      "pct_3fold": 64.4
+      "pct_3fold": 63.0
     },
     "paired_meta_ml": {
-      "ratio": 0.9147,
-      "ci_95_low": 0.805,
-      "ci_95_high": 1.0355,
+      "ratio": 0.9287,
+      "ci_95_low": 0.8167,
+      "ci_95_high": 1.053,
       "n": 73
     }
   },
@@ -50,25 +50,25 @@
       "pct_3fold": 48.3
     },
     "ml": {
-      "aafe": 2.8953,
-      "ci_95_low": 2.3038,
-      "ci_95_high": 3.6645,
+      "aafe": 2.8705,
+      "ci_95_low": 2.289,
+      "ci_95_high": 3.6497,
       "n": 60,
       "pct_2fold": 45.0,
-      "pct_3fold": 61.7
+      "pct_3fold": 63.3
     },
     "meta": {
-      "aafe": 2.8958,
-      "ci_95_low": 2.3376,
-      "ci_95_high": 3.6608,
+      "aafe": 2.899,
+      "ci_95_low": 2.3383,
+      "ci_95_high": 3.6674,
       "n": 60,
       "pct_2fold": 38.3,
       "pct_3fold": 63.3
     },
     "paired_meta_ml": {
-      "ratio": 1.0002,
-      "ci_95_low": 0.8929,
-      "ci_95_high": 1.1261,
+      "ratio": 1.0099,
+      "ci_95_low": 0.9027,
+      "ci_95_high": 1.1357,
       "n": 60
     }
   }
