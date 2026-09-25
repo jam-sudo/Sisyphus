@@ -27,6 +27,14 @@ from sisyphus.validation.holdout_contract import (
 )
 
 ROOT = Path(__file__).resolve().parent.parent
+# ponytail: common terminal salts only; curators must verify rarer aliases and tautomers.
+SALT_SUFFIX = re.compile(
+    r"\s+(?:acetate|benzoate|besylate|calcium|carbonate|chloride|citrate|"
+    r"fumarate|hydrobromide|hydrochloride|lactate|magnesium|maleate|"
+    r"mesylate|nitrate|phosphate|potassium|sodium|succinate|sulfate|"
+    r"tartrate|tosylate)$",
+    re.IGNORECASE,
+)
 
 
 def _load_exclusion_module():
@@ -43,7 +51,7 @@ EXCLUSION = _load_exclusion_module()
 
 
 def _norm_name(value: str) -> str:
-    return re.sub(r"[^a-z0-9]", "", value.lower())
+    return re.sub(r"[^a-z0-9]", "", SALT_SUFFIX.sub("", value.strip()).lower())
 
 
 def _walk_json(value, source: str, structures: dict[str, set[str]], names: dict[str, set[str]]):

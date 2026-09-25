@@ -53,6 +53,22 @@ def test_contamination_audit_checks_declared_synonyms_and_relations():
     assert hits == {"training::related", "training::synonym"}
 
 
+def test_contamination_audit_catches_salt_parent_name_when_structures_differ():
+    path = ROOT / "scripts" / "audit_external_holdout_manifest.py"
+    spec = importlib.util.spec_from_file_location("audit_external_holdout_manifest", path)
+    assert spec and spec.loader
+    audit = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(audit)
+    hits = audit._candidate_exclusion_hits(
+        "rabeprazole sodium",
+        audit.EXCLUSION.ik14("CCC"),
+        {"synonyms": [], "related_structures": []},
+        {},
+        {"rabeprazole": {"training::parent"}},
+    )
+    assert hits == {"training::parent"}
+
+
 def test_contamination_audit_indexes_drug_name_keys():
     path = ROOT / "scripts" / "audit_external_holdout_manifest.py"
     spec = importlib.util.spec_from_file_location("audit_external_holdout_manifest", path)

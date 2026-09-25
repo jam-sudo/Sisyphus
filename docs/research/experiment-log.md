@@ -10,6 +10,20 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Correct older FDA holdout identity screen
+
+The FDA 1985–2014 feasibility screen's 145 provisional structure nonhits were
+overstated: raw PubChem InChIKeys for salts were compared with salt-stripped
+repository keys. Re-screening the same 158 exact-name nonmatches resolved 150;
+repository `ik14()` normalization found 131 exclusion hits, and parent-name
+matching removed three more, leaving at most 16 provisional identity nonhits
+and eight unresolved lookups. Ten of the 12 previously source-reviewed sample
+members are structure hits, one is a salt-parent name hit, and one remains
+unresolved. The external-holdout audit now catches common salt-name aliases;
+no Cmax was scored and no V1 cohort was established.
+
+---
+
 ## 2026-09-24 (cont.) — Chiral fingerprint ablation after label correction
 
 On the corrected 1,028-row Cmax training table, a paired five-fold Murcko
