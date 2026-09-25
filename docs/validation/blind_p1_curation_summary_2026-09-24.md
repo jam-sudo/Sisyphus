@@ -1,5 +1,15 @@
 # Blind Cmax pilot P1 — label-free curation summary (2026-09-24)
 
+**Second-pass correction:** `arm_05a` was labelled as parent-plasma Cmax but
+its [original report](https://doi.org/10.1016/S1473-3099(21)00252-8) measured
+whole blood. The eight-arm inclusion and attrition counts below describe the
+first-pass historical screen; at most seven arms have a plasma Cmax label, and
+`arm_08a` has additional dose/statistic uncertainty. The
+[source re-review](../../data/validation/blind_p1_source_second_pass_2026-09-24.json)
+and [corrected diagnostic](blind_p1_result_2026-09-24.md) supersede the
+first-pass eligibility claim. The sealed labels and predictions remain
+unchanged so their original hashes stay auditable.
+
 ## Status and scope
 
 This is an **AI-assisted diagnostic pilot**, produced by a single automated agent.

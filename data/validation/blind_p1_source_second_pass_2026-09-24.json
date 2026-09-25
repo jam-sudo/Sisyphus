@@ -1,0 +1,629 @@
+{
+  "task_id": "task_bdd960ab1fcf",
+  "review": "independent second-pass source review, 2026-09-24",
+  "method": "Extracted text + tables from local PMC JATS XML; located arm, protocol and Cmax evidence in the source before comparing with label fields. Curator verification text was not relied on. No model predictions were used or produced. Supplementary files were not available locally and were not consulted.",
+  "verdict_legend": {
+    "pass_with_uncertainty": "no failed check; one or more items not explicitly stated in the source (mostly IR labelling / salt basis)",
+    "uncertain": "no failed check but material ambiguity in the source affecting label use",
+    "fail": "at least one check contradicted by the source"
+  },
+  "inputs": {
+    "labels_path": "/tmp/sisyphus_blind_p1_20260924/labels.json",
+    "labels_sha256": "942fcc598b8749a5869a52d607d272e9be4b65cee7e89a74c70b1295bf9c6936",
+    "n_arms": 8
+  },
+  "summary": {
+    "verdict_counts": {
+      "pass_with_uncertainty": 6,
+      "fail": 1,
+      "uncertain": 1
+    },
+    "numeric_transcription_matches": 8,
+    "check_status_counts": {
+      "healthy_adults": {
+        "pass": 8
+      },
+      "single_unboosted_oral": {
+        "pass": 8
+      },
+      "postdose_fast_ge_4h": {
+        "pass": 8
+      },
+      "ir_or_solution": {
+        "uncertain": 7,
+        "pass": 1
+      },
+      "parent_plasma_cmax": {
+        "pass": 7,
+        "fail": 1
+      },
+      "dose_basis_parent": {
+        "uncertain": 8
+      },
+      "statistic_units": {
+        "pass": 7,
+        "uncertain": 1
+      },
+      "numeric_transcription": {
+        "pass": 8
+      }
+    }
+  },
+  "arms": [
+    {
+      "arm_id": "arm_01a",
+      "source_pmcid": "PMC10087697",
+      "source_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10087697/",
+      "local_source": "/tmp/sisyphus_blind_p1_20260924/src/PMC10087697.xml",
+      "source_location": "PMC10087697 (local src/PMC10087697.xml); Methods 'Study 1' para; Table 1 (SAD PK), 100 mg column",
+      "verdict": "pass_with_uncertainty",
+      "checks": {
+        "healthy_adults": {
+          "status": "pass",
+          "evidence": "'single-dose ... study of ZYIL1 in healthy human subjects', aged 18-55; limitations: healthy adult males"
+        },
+        "single_unboosted_oral": {
+          "status": "pass",
+          "evidence": "'Participants received a single oral dose of ZYIL1'; no co-administered booster found"
+        },
+        "postdose_fast_ge_4h": {
+          "status": "pass",
+          "evidence": "'after fasting for at least 10 hours; no food was allowed until 4 hours after dosing'"
+        },
+        "ir_or_solution": {
+          "status": "uncertain",
+          "evidence": "'active pharmaceutical ingredient in capsule'; no MR language, but not explicitly labelled immediate-release"
+        },
+        "parent_plasma_cmax": {
+          "status": "pass",
+          "evidence": "LC-MS/MS of ZYIL1 in plasma; metabolites quantified separately (<2% of parent)"
+        },
+        "dose_basis_parent": {
+          "status": "uncertain",
+          "evidence": "Source gives dose as compound name + mg with no salt/free-base/equivalence statement (grep for salt/HCl/mesylate/free base/equivalent: 0 hits); source cannot confirm parent-moiety basis. Label relies on external DB records, not the source."
+        },
+        "statistic_units": {
+          "status": "pass",
+          "evidence": "Table 1 footnote: mean (SD); Cmax in ug/mL (= mg/L); N=6 for Cmax (footnote a)"
+        },
+        "numeric_transcription": {
+          "status": "pass",
+          "evidence": "Table 1 100 mg column Cmax value independently read; matches label after ug/mL->mg/L (1:1); statistic and N match"
+        }
+      },
+      "failed_checks": [],
+      "uncertain_checks": [
+        "ir_or_solution",
+        "dose_basis_parent"
+      ],
+      "notes": [
+        "Label drug_name alias does not appear in the source (source uses code ZYIL1 only); code-to-INN mapping not verifiable from the source."
+      ]
+    },
+    {
+      "arm_id": "arm_02a",
+      "source_pmcid": "PMC11101992",
+      "source_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11101992/",
+      "local_source": "/tmp/sisyphus_blind_p1_20260924/src/PMC11101992.xml",
+      "source_location": "PMC11101992 (local XML); Methods 'Formulations' + Part A para + fasting para; Table 3 Part A '100 mg CS' column",
+      "verdict": "pass_with_uncertainty",
+      "checks": {
+        "healthy_adults": {
+          "status": "pass",
+          "evidence": "'healthy subjects' aged 18-64, BMI 18.5-30"
+        },
+        "single_unboosted_oral": {
+          "status": "pass",
+          "evidence": "Part A: 'a single oral dose of DFV890 (... 100 ... mg CS ...) under fasting conditions'; no booster"
+        },
+        "postdose_fast_ge_4h": {
+          "status": "pass",
+          "evidence": "'In Part A, fasting continued for 4 h after study drug administration' (>=8 h predose fast)"
+        },
+        "ir_or_solution": {
+          "status": "uncertain",
+          "evidence": "Crystalline suspension (not solution); not MR, but source states 'solubility/dissolution-limited absorption of the crystalline suspension at dose levels >=100 mg' and less-than-dose-proportional Cmax (slope 0.518)"
+        },
+        "parent_plasma_cmax": {
+          "status": "pass",
+          "evidence": "'Pharmacokinetic parameters for DFV890 in plasma', validated LC-MS/MS"
+        },
+        "dose_basis_parent": {
+          "status": "uncertain",
+          "evidence": "Source gives dose as compound name + mg with no salt/free-base/equivalence statement (grep for salt/HCl/mesylate/free base/equivalent: 0 hits); source cannot confirm parent-moiety basis. Label relies on external DB records, not the source."
+        },
+        "statistic_units": {
+          "status": "pass",
+          "evidence": "Table 3 header 'geomean (CV%)', ng/mL, N=6"
+        },
+        "numeric_transcription": {
+          "status": "pass",
+          "evidence": "Table 3 Part A 100 mg CS Cmax independently read; matches label after ng/mL->mg/L (/1000)"
+        }
+      },
+      "failed_checks": [],
+      "uncertain_checks": [
+        "ir_or_solution",
+        "dose_basis_parent"
+      ],
+      "notes": [
+        "Arm-selection ambiguity: the same report has two other fasted single 100 mg arms (Part A 100 mg SDD suspension, N=6; Part D 100 mg CS fasted, N=5) with different Cmax; label chose Part A CS. Choice is defensible but not unique.",
+        "Dose at onset of dissolution-limited absorption; engine comparison may be formulation-sensitive."
+      ]
+    },
+    {
+      "arm_id": "arm_03a",
+      "source_pmcid": "PMC11413051",
+      "source_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11413051/",
+      "local_source": "/tmp/sisyphus_blind_p1_20260924/src/PMC11413051.xml",
+      "source_location": "PMC11413051 (local XML); Methods 'Fed-fasted study (EC5026-1-03)' paras; Table 7 'Fasted' column; Table 8",
+      "verdict": "pass_with_uncertainty",
+      "checks": {
+        "healthy_adults": {
+          "status": "pass",
+          "evidence": "'healthy male and female volunteers', aged 18-70"
+        },
+        "single_unboosted_oral": {
+          "status": "pass",
+          "evidence": "'single-dose, fed-fasted, crossover study ... single oral 8 mg dose of EC5026'; no booster"
+        },
+        "postdose_fast_ge_4h": {
+          "status": "pass",
+          "evidence": "'The study subjects did not consume any food for at least 4 h after the dose' (>=10 h overnight fast)"
+        },
+        "ir_or_solution": {
+          "status": "uncertain",
+          "evidence": "'HME solid tablets suitable for commercial use' (hot-melt extrusion; enabling formulation); no MR language, not explicitly labelled IR"
+        },
+        "parent_plasma_cmax": {
+          "status": "pass",
+          "evidence": "validated LC-MS/MS assay for EC5026 in human plasma"
+        },
+        "dose_basis_parent": {
+          "status": "uncertain",
+          "evidence": "Source gives dose as compound name + mg with no salt/free-base/equivalence statement (grep for salt/HCl/mesylate/free base/equivalent: 0 hits); source cannot confirm parent-moiety basis. Label relies on external DB records, not the source."
+        },
+        "statistic_units": {
+          "status": "pass",
+          "evidence": "Table 7 note: geometric mean (geometric CV); ng/mL; Fasted N=13, n=13"
+        },
+        "numeric_transcription": {
+          "status": "pass",
+          "evidence": "Table 7 Fasted Cmax independently read; matches label after ng/mL->mg/L; N matches"
+        }
+      },
+      "failed_checks": [],
+      "uncertain_checks": [
+        "ir_or_solution",
+        "dose_basis_parent"
+      ],
+      "notes": [
+        "Crossover: sequence A received fasted dose in period 2 after a ~3-week period-1 follow-up (t1/2 ~2.8 d); carryover not reported.",
+        "Alternative 8 mg arm exists in the same report (SAD study, PEG solution-in-capsule, Table 5) with a different Cmax; SAD post-dose fasting language not checked because it was not the labelled arm."
+      ]
+    },
+    {
+      "arm_id": "arm_04a",
+      "source_pmcid": "PMC12184692",
+      "source_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12184692/",
+      "local_source": "/tmp/sisyphus_blind_p1_20260924/src/PMC12184692.xml",
+      "source_location": "PMC12184692 (local XML); Methods (subjects, design, fasting para); Table 1 (SAD PK) 40 mg column",
+      "verdict": "pass_with_uncertainty",
+      "checks": {
+        "healthy_adults": {
+          "status": "pass",
+          "evidence": "men/women 18-45, BMI 19-24, 'healthy' by comprehensive exam; healthy Chinese subjects"
+        },
+        "single_unboosted_oral": {
+          "status": "pass",
+          "evidence": "SAD 2-80 mg single oral tablet; CYP3A inhibitors/inducers excluded"
+        },
+        "postdose_fast_ge_4h": {
+          "status": "pass",
+          "evidence": "'fast for at least 10 h ... 4 h and 10 h after administration, subjects ate the standard meal' -- first postdose food at 4 h; inferred from meal schedule, no explicit 'no food until' wording"
+        },
+        "ir_or_solution": {
+          "status": "uncertain",
+          "evidence": "'Fazamorexant tablets'; no MR language, not explicitly labelled IR"
+        },
+        "parent_plasma_cmax": {
+          "status": "pass",
+          "evidence": "'Plasma Pharmacokinetic Parameters of Fazamorexant'"
+        },
+        "dose_basis_parent": {
+          "status": "uncertain",
+          "evidence": "Source gives dose as compound name + mg with no salt/free-base/equivalence statement (grep for salt/HCl/mesylate/free base/equivalent: 0 hits); source cannot confirm parent-moiety basis. Label relies on external DB records, not the source."
+        },
+        "statistic_units": {
+          "status": "pass",
+          "evidence": "Table 1 note: arithmetic mean±SD (%CV); ng/mL; 40 mg N=8"
+        },
+        "numeric_transcription": {
+          "status": "pass",
+          "evidence": "Table 1 40 mg Cmax independently read; matches label after ng/mL->mg/L; N matches"
+        }
+      },
+      "failed_checks": [],
+      "uncertain_checks": [
+        "ir_or_solution",
+        "dose_basis_parent"
+      ],
+      "notes": []
+    },
+    {
+      "arm_id": "arm_05a",
+      "source_pmcid": "PMC8612936",
+      "source_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8612936/",
+      "local_source": "/tmp/sisyphus_blind_p1_20260924/src/PMC8612936.xml",
+      "source_location": "PMC8612936 (local XML); Methods (single ascending dose para; assay para); Results PK para; Table 3 SAD 400 mg column",
+      "verdict": "fail",
+      "checks": {
+        "healthy_adults": {
+          "status": "pass",
+          "evidence": "healthy adults 18-55; Table 1 note: 100% of participants were male"
+        },
+        "single_unboosted_oral": {
+          "status": "pass",
+          "evidence": "'a single oral dose of M5717 or placebo capsules'; no booster"
+        },
+        "postdose_fast_ge_4h": {
+          "status": "pass",
+          "evidence": "'after fasting for at least 8 h; no food was allowed until 4 h after dosing'"
+        },
+        "ir_or_solution": {
+          "status": "uncertain",
+          "evidence": "'capsules'; no MR language, not explicitly labelled IR"
+        },
+        "parent_plasma_cmax": {
+          "status": "fail",
+          "evidence": "Matrix is WHOLE BLOOD, not plasma: 'M5717 concentration in whole blood was determined using LC-MS/MS'; 'M5717 whole-blood concentrations peaked approximately 2 h after dosing'. Label analyte 'parent drug in plasma' is contradicted by the source."
+        },
+        "dose_basis_parent": {
+          "status": "uncertain",
+          "evidence": "Source gives dose as compound name + mg with no salt/free-base/equivalence statement (grep for salt/HCl/mesylate/free base/equivalent: 0 hits); source cannot confirm parent-moiety basis. Label relies on external DB records, not the source."
+        },
+        "statistic_units": {
+          "status": "pass",
+          "evidence": "Table 3 note: geometric means (CV%); ng/mL; N=6"
+        },
+        "numeric_transcription": {
+          "status": "pass",
+          "evidence": "Table 3 SAD 400 mg Cmax independently read; numerically matches label after ng/mL->mg/L, but the value is a whole-blood Cmax"
+        }
+      },
+      "failed_checks": [
+        "parent_plasma_cmax"
+      ],
+      "uncertain_checks": [
+        "ir_or_solution",
+        "dose_basis_parent"
+      ],
+      "notes": [
+        "Label population says 'men and women'; source reports no women enrolled (all male). Minor metadata error."
+      ]
+    },
+    {
+      "arm_id": "arm_06a",
+      "source_pmcid": "PMC10582670",
+      "source_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10582670/",
+      "local_source": "/tmp/sisyphus_blind_p1_20260924/src/PMC10582670.xml",
+      "source_location": "PMC10582670 (local XML); Methods 'Study design' + 'Study drug, dose selection, and dose administration'; Table 3 SAD row '75 mg, fasted'",
+      "verdict": "pass_with_uncertainty",
+      "checks": {
+        "healthy_adults": {
+          "status": "pass",
+          "evidence": "male/female 18-55, BMI 18-30, healthy by history/exam/labs/ECG"
+        },
+        "single_unboosted_oral": {
+          "status": "pass",
+          "evidence": "SAD stage single oral GDC-8264; fasted period precedes the food-effect re-dose (washout >=5 half-lives); no booster"
+        },
+        "postdose_fast_ge_4h": {
+          "status": "pass",
+          "evidence": "'after an overnight fast of at least 8 h. In the SAD stage, subjects fasted for an additional 4 h after dosing'"
+        },
+        "ir_or_solution": {
+          "status": "uncertain",
+          "evidence": "'a tablet formulation was used for the 75-225-mg doses'; no MR language, not explicitly labelled IR"
+        },
+        "parent_plasma_cmax": {
+          "status": "pass",
+          "evidence": "GDC-8264 concentrations in plasma by HPLC-MS/MS"
+        },
+        "dose_basis_parent": {
+          "status": "uncertain",
+          "evidence": "Source gives dose as compound name + mg with no salt/free-base/equivalence statement (grep for salt/HCl/mesylate/free base/equivalent: 0 hits); source cannot confirm parent-moiety basis. Label relies on external DB records, not the source."
+        },
+        "statistic_units": {
+          "status": "pass",
+          "evidence": "Table 3 note: geometric mean (geometric CV%); ng/mL; n=5"
+        },
+        "numeric_transcription": {
+          "status": "pass",
+          "evidence": "Table 3 '75 mg, fasted' Cmax independently read; matches label after ng/mL->mg/L; n matches"
+        }
+      },
+      "failed_checks": [],
+      "uncertain_checks": [
+        "ir_or_solution",
+        "dose_basis_parent"
+      ],
+      "notes": [
+        "Label trial_registration says 'not stated in report', but source states EudraCT 2019-002613-19. Metadata discrepancy only."
+      ]
+    },
+    {
+      "arm_id": "arm_07a",
+      "source_pmcid": "PMC12856969",
+      "source_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12856969/",
+      "local_source": "/tmp/sisyphus_blind_p1_20260924/src/PMC12856969.xml",
+      "source_location": "PMC12856969 (local XML); Methods Part 1 + formulation/fasting para; Table 1 (Part 1 SAD) 4.0 mg row + footnote",
+      "verdict": "pass_with_uncertainty",
+      "checks": {
+        "healthy_adults": {
+          "status": "pass",
+          "evidence": "Part 1: healthy, 18-55, BMI 18-32, nonsmokers"
+        },
+        "single_unboosted_oral": {
+          "status": "pass",
+          "evidence": "'a single, oral dose of ALG-055009 (0.1 ... 4.0 mg) or placebo administered in a fasted state'; no booster"
+        },
+        "postdose_fast_ge_4h": {
+          "status": "pass",
+          "evidence": "'In Part 1 ... participants fasted >=10 h overnight before dosing and until 4 h post dose'"
+        },
+        "ir_or_solution": {
+          "status": "pass",
+          "evidence": "'ALG-055009 ... used in Parts 1 and 2 were supplied as a solution' (diluent 60% PEG400)"
+        },
+        "parent_plasma_cmax": {
+          "status": "pass",
+          "evidence": "ALG-055009 in plasma by LC-MS/MS"
+        },
+        "dose_basis_parent": {
+          "status": "uncertain",
+          "evidence": "Source gives dose as compound name + mg with no salt/free-base/equivalence statement (grep for salt/HCl/mesylate/free base/equivalent: 0 hits); source cannot confirm parent-moiety basis. Label relies on external DB records, not the source."
+        },
+        "statistic_units": {
+          "status": "pass",
+          "evidence": "Table 1 title: geometric mean (% geometric CV); ng/mL; footnote 'N, 6/cohort'"
+        },
+        "numeric_transcription": {
+          "status": "pass",
+          "evidence": "Table 1 4.0 mg Cmax independently read; matches label after ng/mL->mg/L; N matches"
+        }
+      },
+      "failed_checks": [],
+      "uncertain_checks": [
+        "dose_basis_parent"
+      ],
+      "notes": [
+        "Second peak ~12 h (possible enterohepatic recirculation) reported; does not affect Cmax transcription."
+      ]
+    },
+    {
+      "arm_id": "arm_08a",
+      "source_pmcid": "PMC12163317",
+      "source_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12163317/",
+      "local_source": "/tmp/sisyphus_blind_p1_20260924/src/PMC12163317.xml",
+      "source_location": "PMC12163317 (local XML); Methods (test formulation, design, fasting para); Results disposition para; Table 2 Fasted column; Table 3",
+      "verdict": "uncertain",
+      "checks": {
+        "healthy_adults": {
+          "status": "pass",
+          "evidence": "healthy male/female 18-65 (enrolled 35-57), BMI 18-28"
+        },
+        "single_unboosted_oral": {
+          "status": "pass",
+          "evidence": "two-period crossover, single oral 180 mg per period, washout >=19 d (t1/2 ~65-71 h); no booster"
+        },
+        "postdose_fast_ge_4h": {
+          "status": "pass",
+          "evidence": "'overnight fast lasting at least 10 h ... remained and fasted for an additional 4 h post-dose'"
+        },
+        "ir_or_solution": {
+          "status": "uncertain",
+          "evidence": "capsule; no MR language, not explicitly labelled IR"
+        },
+        "parent_plasma_cmax": {
+          "status": "pass",
+          "evidence": "TQB3616 in K2-EDTA plasma by LC-MS/MS"
+        },
+        "dose_basis_parent": {
+          "status": "uncertain",
+          "evidence": "Source gives dose as compound name + mg with no salt/free-base/equivalence statement (grep for salt/HCl/mesylate/free base/equivalent: 0 hits); source cannot confirm parent-moiety basis. Label relies on external DB records, not the source. Additionally the dose amount itself is internally inconsistent: test formulation 'Specification: 5 mg/capsule' vs repeated 'a 180 mg TQB3616 capsule'."
+        },
+        "statistic_units": {
+          "status": "uncertain",
+          "evidence": "Table 2: 'Mean ± SD (N = 16)' header with 'Fasted (n = 11)'; footnotes define N=PK set, n=statistical analysis -- arithmetic mean over n=11 most likely but header/footnote are ambiguous; ng/mL"
+        },
+        "numeric_transcription": {
+          "status": "pass",
+          "evidence": "Table 2 Fasted Cmax independently read (also in Results text); matches label after ng/mL->mg/L; n=11 matches"
+        }
+      },
+      "failed_checks": [],
+      "uncertain_checks": [
+        "ir_or_solution",
+        "dose_basis_parent",
+        "statistic_units"
+      ],
+      "notes": [
+        "5 of 16 subjects excluded from the fasted PK set for vomiting within 2x median Tmax; the fasted Cmax is a post-exclusion subset (possible bias).",
+        "Fasted Cmax is highly variable (SD ~62% of mean); the LS geometric mean in Table 3 (n=11) is much lower than the arithmetic mean.",
+        "Figure caption says 'Mean blood concentration' but the assay and tables are plasma; treated as a caption wording issue."
+      ]
+    }
+  ],
+  "discrepancies_and_uncertainties": [
+    {
+      "arm_id": "arm_01a",
+      "type": "uncertainty",
+      "check": "ir_or_solution",
+      "detail": "'active pharmaceutical ingredient in capsule'; no MR language, but not explicitly labelled immediate-release"
+    },
+    {
+      "arm_id": "arm_01a",
+      "type": "uncertainty",
+      "check": "dose_basis_parent",
+      "detail": "Source gives dose as compound name + mg with no salt/free-base/equivalence statement (grep for salt/HCl/mesylate/free base/equivalent: 0 hits); source cannot confirm parent-moiety basis. Label relies on external DB records, not the source."
+    },
+    {
+      "arm_id": "arm_01a",
+      "type": "note",
+      "check": null,
+      "detail": "Label drug_name alias does not appear in the source (source uses code ZYIL1 only); code-to-INN mapping not verifiable from the source."
+    },
+    {
+      "arm_id": "arm_02a",
+      "type": "uncertainty",
+      "check": "ir_or_solution",
+      "detail": "Crystalline suspension (not solution); not MR, but source states 'solubility/dissolution-limited absorption of the crystalline suspension at dose levels >=100 mg' and less-than-dose-proportional Cmax (slope 0.518)"
+    },
+    {
+      "arm_id": "arm_02a",
+      "type": "uncertainty",
+      "check": "dose_basis_parent",
+      "detail": "Source gives dose as compound name + mg with no salt/free-base/equivalence statement (grep for salt/HCl/mesylate/free base/equivalent: 0 hits); source cannot confirm parent-moiety basis. Label relies on external DB records, not the source."
+    },
+    {
+      "arm_id": "arm_02a",
+      "type": "note",
+      "check": null,
+      "detail": "Arm-selection ambiguity: the same report has two other fasted single 100 mg arms (Part A 100 mg SDD suspension, N=6; Part D 100 mg CS fasted, N=5) with different Cmax; label chose Part A CS. Choice is defensible but not unique."
+    },
+    {
+      "arm_id": "arm_02a",
+      "type": "note",
+      "check": null,
+      "detail": "Dose at onset of dissolution-limited absorption; engine comparison may be formulation-sensitive."
+    },
+    {
+      "arm_id": "arm_03a",
+      "type": "uncertainty",
+      "check": "ir_or_solution",
+      "detail": "'HME solid tablets suitable for commercial use' (hot-melt extrusion; enabling formulation); no MR language, not explicitly labelled IR"
+    },
+    {
+      "arm_id": "arm_03a",
+      "type": "uncertainty",
+      "check": "dose_basis_parent",
+      "detail": "Source gives dose as compound name + mg with no salt/free-base/equivalence statement (grep for salt/HCl/mesylate/free base/equivalent: 0 hits); source cannot confirm parent-moiety basis. Label relies on external DB records, not the source."
+    },
+    {
+      "arm_id": "arm_03a",
+      "type": "note",
+      "check": null,
+      "detail": "Crossover: sequence A received fasted dose in period 2 after a ~3-week period-1 follow-up (t1/2 ~2.8 d); carryover not reported."
+    },
+    {
+      "arm_id": "arm_03a",
+      "type": "note",
+      "check": null,
+      "detail": "Alternative 8 mg arm exists in the same report (SAD study, PEG solution-in-capsule, Table 5) with a different Cmax; SAD post-dose fasting language not checked because it was not the labelled arm."
+    },
+    {
+      "arm_id": "arm_04a",
+      "type": "uncertainty",
+      "check": "ir_or_solution",
+      "detail": "'Fazamorexant tablets'; no MR language, not explicitly labelled IR"
+    },
+    {
+      "arm_id": "arm_04a",
+      "type": "uncertainty",
+      "check": "dose_basis_parent",
+      "detail": "Source gives dose as compound name + mg with no salt/free-base/equivalence statement (grep for salt/HCl/mesylate/free base/equivalent: 0 hits); source cannot confirm parent-moiety basis. Label relies on external DB records, not the source."
+    },
+    {
+      "arm_id": "arm_05a",
+      "type": "discrepancy",
+      "check": "parent_plasma_cmax",
+      "detail": "Matrix is WHOLE BLOOD, not plasma: 'M5717 concentration in whole blood was determined using LC-MS/MS'; 'M5717 whole-blood concentrations peaked approximately 2 h after dosing'. Label analyte 'parent drug in plasma' is contradicted by the source."
+    },
+    {
+      "arm_id": "arm_05a",
+      "type": "uncertainty",
+      "check": "ir_or_solution",
+      "detail": "'capsules'; no MR language, not explicitly labelled IR"
+    },
+    {
+      "arm_id": "arm_05a",
+      "type": "uncertainty",
+      "check": "dose_basis_parent",
+      "detail": "Source gives dose as compound name + mg with no salt/free-base/equivalence statement (grep for salt/HCl/mesylate/free base/equivalent: 0 hits); source cannot confirm parent-moiety basis. Label relies on external DB records, not the source."
+    },
+    {
+      "arm_id": "arm_05a",
+      "type": "note",
+      "check": null,
+      "detail": "Label population says 'men and women'; source reports no women enrolled (all male). Minor metadata error."
+    },
+    {
+      "arm_id": "arm_06a",
+      "type": "uncertainty",
+      "check": "ir_or_solution",
+      "detail": "'a tablet formulation was used for the 75-225-mg doses'; no MR language, not explicitly labelled IR"
+    },
+    {
+      "arm_id": "arm_06a",
+      "type": "uncertainty",
+      "check": "dose_basis_parent",
+      "detail": "Source gives dose as compound name + mg with no salt/free-base/equivalence statement (grep for salt/HCl/mesylate/free base/equivalent: 0 hits); source cannot confirm parent-moiety basis. Label relies on external DB records, not the source."
+    },
+    {
+      "arm_id": "arm_06a",
+      "type": "note",
+      "check": null,
+      "detail": "Label trial_registration says 'not stated in report', but source states EudraCT 2019-002613-19. Metadata discrepancy only."
+    },
+    {
+      "arm_id": "arm_07a",
+      "type": "uncertainty",
+      "check": "dose_basis_parent",
+      "detail": "Source gives dose as compound name + mg with no salt/free-base/equivalence statement (grep for salt/HCl/mesylate/free base/equivalent: 0 hits); source cannot confirm parent-moiety basis. Label relies on external DB records, not the source."
+    },
+    {
+      "arm_id": "arm_07a",
+      "type": "note",
+      "check": null,
+      "detail": "Second peak ~12 h (possible enterohepatic recirculation) reported; does not affect Cmax transcription."
+    },
+    {
+      "arm_id": "arm_08a",
+      "type": "uncertainty",
+      "check": "ir_or_solution",
+      "detail": "capsule; no MR language, not explicitly labelled IR"
+    },
+    {
+      "arm_id": "arm_08a",
+      "type": "uncertainty",
+      "check": "dose_basis_parent",
+      "detail": "Source gives dose as compound name + mg with no salt/free-base/equivalence statement (grep for salt/HCl/mesylate/free base/equivalent: 0 hits); source cannot confirm parent-moiety basis. Label relies on external DB records, not the source. Additionally the dose amount itself is internally inconsistent: test formulation 'Specification: 5 mg/capsule' vs repeated 'a 180 mg TQB3616 capsule'."
+    },
+    {
+      "arm_id": "arm_08a",
+      "type": "uncertainty",
+      "check": "statistic_units",
+      "detail": "Table 2: 'Mean ± SD (N = 16)' header with 'Fasted (n = 11)'; footnotes define N=PK set, n=statistical analysis -- arithmetic mean over n=11 most likely but header/footnote are ambiguous; ng/mL"
+    },
+    {
+      "arm_id": "arm_08a",
+      "type": "note",
+      "check": null,
+      "detail": "5 of 16 subjects excluded from the fasted PK set for vomiting within 2x median Tmax; the fasted Cmax is a post-exclusion subset (possible bias)."
+    },
+    {
+      "arm_id": "arm_08a",
+      "type": "note",
+      "check": null,
+      "detail": "Fasted Cmax is highly variable (SD ~62% of mean); the LS geometric mean in Table 3 (n=11) is much lower than the arithmetic mean."
+    },
+    {
+      "arm_id": "arm_08a",
+      "type": "note",
+      "check": null,
+      "detail": "Figure caption says 'Mean blood concentration' but the assay and tables are plasma; treated as a caption wording issue."
+    }
+  ],
+  "report_sha256_note": "SHA256 of this file is recorded in report.json.sha256 (a file cannot contain its own hash)."
+}

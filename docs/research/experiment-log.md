@@ -10,6 +10,24 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Retract the whole-blood arm from P1 plasma diagnostics
+
+An independent Claude Code source re-review of all eight consumed P1 arms
+found that `arm_05a`'s original M5717 report measured Cmax in **whole blood**,
+while the sealed label and first-pass P1 result called it plasma. The numeric
+table transcription was correct, but the analyte matrix disqualifies that arm
+from a plasma benchmark. The old N=8 AAFE is retained as a historical,
+invalid-for-plasma calculation. On the frozen predictions, excluding that arm
+gives N=7 Meta **6.629**, direct ML **5.249**, paired AAFE ratio **1.263**
+(95% CI **0.903–1.750**). Excluding the additionally dose/statistic-uncertain
+`arm_08a` gives N=6 Meta **6.563**, direct ML **5.844**, ratio **1.123**
+(95% CI **0.827–1.480**). All remaining arms still lack explicit parent-moiety
+dose-basis evidence; this remains a consumed AI-assisted diagnostic, not V1.
+See [source review](../../data/validation/blind_p1_source_second_pass_2026-09-24.json)
+and [corrected calculations](../../data/validation/blind_p1_matrix_correction_2026-09-24.json).
+
+---
+
 ## 2026-09-24 (cont.) — Re-screen PMDA index identities after salt correction
 
 On the pinned 2020–2025 PMDA English index (174 rows, 152 distinct names), the

@@ -398,15 +398,17 @@ This is diagnostic development evidence, not independent External Holdout V1
 or a clinical release gate. See the [P0 result](docs/validation/self_run_p0_result.md)
 for hashes, exclusions, and remaining source uncertainty.
 
-### AI-assisted blind P1 diagnostic (current public model)
+### AI-assisted blind P1 diagnostic (earlier public model)
 
 Eight previously unseen compounds were source-screened by a separate Claude
 Code worker, and anonymous inputs/predictions were committed before their
 Cmax labels were opened. On this small, nonconsecutive, **development-grade**
-set, Meta AAFE was **6.60** (95% compound-bootstrap CI 3.40–12.54), versus
-**5.01** (2.37–11.96) for direct ML; the paired Meta/ML ratio was **1.32**
-(0.96–1.76). The values are a serious error signal, not a population accuracy
-estimate or a proof of track inferiority. Immediate-release and active-moiety
+set, a second source review found one of the eight labels was **whole-blood**
+Cmax, not plasma. Excluding that arm, frozen-prediction Meta AAFE is **6.63**
+(95% compound-bootstrap CI 3.10–13.84, N=7), versus **5.25** (2.22–13.97)
+for direct ML; the paired Meta/ML ratio is **1.26** (0.90–1.75). These
+post-label diagnostic values are a serious error signal, not a population
+accuracy estimate or a proof of track inferiority. Immediate-release and active-moiety
 dose evidence is incomplete, one paper has an inconsistent capsule strength,
 and two independent human curators were unavailable. No P1 arm qualifies for
 External Holdout V1. See the [P1 diagnostic](docs/validation/blind_p1_result_2026-09-24.md)

@@ -1,5 +1,25 @@
 # AI-assisted blind P1 diagnostic — 2026-09-24
 
+**Source correction (second pass, 2026-09-24):** The original
+[M5717 report](https://doi.org/10.1016/S1473-3099(21)00252-8) measured
+`arm_05a` Cmax in **whole blood**, although the sealed P1 label called it
+plasma. The historical N=8 table below is therefore invalid as a parent-plasma
+diagnostic. The [second-pass source review](../../data/validation/blind_p1_source_second_pass_2026-09-24.json)
+checked all eight arms; numeric transcription matched 8/8, but dose-basis
+evidence remained uncertain for 8/8 and immediate release was explicit only
+for the oral-solution arm. The [corrected calculations](../../data/validation/blind_p1_matrix_correction_2026-09-24.json)
+preserve the sealed labels and predictions. Their results are:
+
+| Consumed development sensitivity | N | Meta AAFE (95% CI) | Direct ML AAFE (95% CI) | Paired ratio (95% CI) |
+| --- | ---: | ---: | ---: | ---: |
+| Plasma-matrix arms; exclude `arm_05a` | 7 | 6.63 (3.10–13.84) | 5.25 (2.22–13.97) | 1.26 (0.90–1.75) |
+| Also exclude dose/statistic-uncertain `arm_08a` | 6 | 6.56 (2.73–15.34) | 5.84 (2.17–17.34) | 1.12 (0.83–1.48) |
+
+These are post-label diagnostic sensitivities, not a replacement blinded test.
+The N=7 row still includes `arm_08a` and the unresolved dose-basis/formulation
+questions; even the N=6 row does not meet External Holdout V1's independent
+curation criteria.
+
 This is a **consumed development-grade diagnostic**, not the independently
 curated External Holdout V1. One Claude Code worker collected eight previously
 unseen compound arms while the modeling agent remained blind to their Cmax
@@ -18,14 +38,15 @@ was changed. The label SHA256 still matches the pre-prediction commitment.
 | [DFV890 crystalline suspension, 100 mg](https://doi.org/10.1111/cts.13789) | 4.670 | 0.335 | 0.352 |
 | [EC5026 fasted HME tablet, 8 mg](https://doi.org/10.1111/cts.70033) | 0.0350 | 0.0284 | 0.0446 |
 | [Fazamorexant, 40 mg](https://doi.org/10.2147/DDDT.S501111) | 1.570 | 0.158 | 0.186 |
-| [Cabamiquine / M5717, 400 mg](https://doi.org/10.1016/S1473-3099(21)00252-8) | 0.146 | 0.937 | 0.529 |
+| [Cabamiquine / M5717, 400 mg](https://doi.org/10.1016/S1473-3099(21)00252-8) (whole blood; excluded from corrected analysis) | 0.146 | 0.937 | 0.529 |
 | [Flizasertib / GDC-8264, 75 mg](https://doi.org/10.1111/cts.13607) | 0.783 | 0.301 | 0.498 |
 | [ALG-055009 oral solution, 4 mg](https://doi.org/10.1002/cpdd.1606) | 0.0922 | 0.0169 | 0.0299 |
 | [Culmerciclib / TQB3616, 180 mg](https://doi.org/10.3389/fphar.2025.1586368) | 0.06039 | 0.425 | 0.166 |
 
 The modeling agent rechecked each selected dose/Cmax cell against the original
 paper's table in the Europe PMC full-text XML, including the μg/mL-to-mg/L
-and ng/mL-to-mg/L conversions. All eight copied central values matched. Input
+and ng/mL-to-mg/L conversions. All eight copied central values matched; this
+did not verify their specimen matrices. Input
 and label SMILES have identical full InChIKeys. A repeat of the repository's
 name/connectivity exclusion lookup found no prior hit after excluding this
 newly committed P1 artifact itself. The eight compounds are now modeler-seen
