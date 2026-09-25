@@ -10,6 +10,18 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Chiral fingerprint ablation after label correction
+
+On the corrected 1,028-row Cmax training table, a paired five-fold Murcko
+scaffold CV compared the shipped 2,048-bit radius-2 Morgan fingerprint with
+the same fingerprint using `includeChirality=True`; the nine descriptors and
+XGBoost hyperparameters were unchanged. Feature-vector uniqueness rose from
+1,003 to 1,025, but AAFE moved **3.310 → 3.334**. The chiral/baseline AAFE
+ratio was **1.007** (95% scaffold-group bootstrap CI **0.986–1.030**; 10,000
+resamples, seed 20260924). The interval spans parity and the point estimate
+is worse. Do not change the production feature schema on this evidence.
+This internal CV is not an external Cmax validation.
+
 ## 2026-09-24 (cont.) — Correct one Omega Cmax unit and rebuild public artifacts
 
 The pinned Omega row for a single 600 mg felbamate study stored 0.0089 mg/L.

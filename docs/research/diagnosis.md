@@ -5,7 +5,7 @@ charter: Historical Cmax accuracy hypotheses and tests, with current corrections
 
 # Accuracy Diagnosis
 
-**Current status (2026-09-24):** The source-screened, repeatedly used development N=73 has Meta AAFE **2.8395** (conditional 95% bootstrap CI **2.3011–3.5561**). The earlier-model, AI-assisted P0 N=18 scored **3.343**. Neither is an independent external accuracy estimate. Historical experiments below show many tested changes failed to improve the selected benchmark; they do not prove a universal architecture ceiling, an intrinsic CLint limit, or F as the dominant human PK error. The current [F source audit](../validation/f_reference_source_audit_2026-09-24.md) invalidated the ten-drug absolute-F calibration premise. An untouched, source-verified external cohort is still required for a new accuracy claim.
+**Current status (2026-09-24):** The source-screened, repeatedly used development N=73 has Meta AAFE **2.8846** (conditional 95% bootstrap CI **2.3370–3.6113**) after the [felbamate unit correction](../validation/development_felbamate_source_correction_2026-09-24.md). The earlier-model, AI-assisted P0 N=18 scored **3.343**. Neither is an independent external accuracy estimate. Historical experiments below show many tested changes failed to improve the selected benchmark; they do not prove a universal architecture ceiling, an intrinsic CLint limit, or F as the dominant human PK error. The current [F source audit](../validation/f_reference_source_audit_2026-09-24.md) invalidated the ten-drug absolute-F calibration premise. An untouched, source-verified external cohort is still required for a new accuracy claim.
 
 Before proposing an accuracy intervention, review the tested candidates in [dead-ends.md](./dead-ends.md) and specify how a new test differs.
 
@@ -102,7 +102,7 @@ The 2026-06-01 prospective expansion (N=28; prospective Meta AAFE 3.21 > retrosp
 
 ## 9. External benchmark context
 
-An earlier comparison with the IMI OrBiTo expert-harmonised PBPK evaluation was used to claim that Sisyphus had reached a commercial accuracy ceiling. That claim is unsupported: the study populations, input curation, endpoints, and evaluation sets differ, while Sisyphus's current 2.8395 AAFE is from repeatedly used development data. The earlier-model P0 pilot scored 3.343 and also lacks independent curation. Published PBPK results provide context for study design, not a matched head-to-head rank or a bound on achievable error. Independent source-verified evaluation remains necessary.
+An earlier comparison with the IMI OrBiTo expert-harmonised PBPK evaluation was used to claim that Sisyphus had reached a commercial accuracy ceiling. That claim is unsupported: the study populations, input curation, endpoints, and evaluation sets differ, while Sisyphus's current 2.8846 AAFE is from repeatedly used development data. The earlier-model P0 pilot scored 3.343 and also lacks independent curation. Published PBPK results provide context for study design, not a matched head-to-head rank or a bound on achievable error. Independent source-verified evaluation remains necessary.
 
 ---
 
