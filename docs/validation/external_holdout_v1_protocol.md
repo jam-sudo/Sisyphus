@@ -318,6 +318,19 @@ numeric Cmax outcomes were inspected in this screen. These aggregate counts
 were obtained from the supplements retrieved 2026-09-23 and cannot establish
 the N=120 cohort.
 
+An August 2026 [independently curated PK profile preprint](https://doi.org/10.21203/rs.3.rs-10671182/v1) provides a [machine-readable profile workbook](https://assets-eu.researchsquare.com/files/rs-10671182/v1/f955dcbc93c11dc357534b7e.xlsx) (retrieved 2026-09-25; SHA256
+`d5862a94c6441a87d8e11795f0f2842b97f87325fbf00b8d9929cc0450115ae3`).
+An outcome-blind count grouped its 2,117 data rows by compound, structure, dose,
+species, and route, recovering the paper's 180 distinct cases. Of those, 48
+human immediate-release tablet (`IRT`) and 10 human immediate-release solution
+(`IRS`) cases represent only 25 distinct compounds. The repository's current
+InChIKey-14 exclusion union hits 21 of those compounds, leaving **four
+provisional structure nonhits** before name-alias, health-status, fasting,
+post-dose meal, dose-basis, and original-study checks. The workbook has no
+per-row fasting or study-population column. This new source is a possible
+supplementary discovery lead, not a standalone N=120 cohort; no observed
+concentrations or endpoint values were inspected.
+
 The independently maintained [e-Drug3D collection](https://chemoinfo.ipmc.cnrs.fr/edrug3d.html)
 has a downloadable [PK table](https://chemoinfo.ipmc.cnrs.fr/DOWNLOAD/MOLDB/e-Drug3D_2197_PK.txt)
 (SHA256 `39a89a1e49f91397773275699757933f0470563f6d137301e8397b82e98e766c`)
