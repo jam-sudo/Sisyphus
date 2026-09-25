@@ -564,6 +564,10 @@ def test_cli_uses_frozen_seed_and_bootstrap_count(tmp_path, monkeypatch):
     output_path = tmp_path / "score.json"
     manifest_path.write_text(json.dumps(manifest))
     verify_source_plan(manifest_path, manifest, lambda smiles: smiles)
+    manifest["compounds"][0]["smiles"] = "C.[Na+]"
+    with pytest.raises(ValueError, match="Manifest structure differs from verified parent"):
+        verify_source_plan(manifest_path, manifest)
+    manifest["compounds"][0]["smiles"] = "C"
     manifest["compounds"][0]["name"] = "unseen alias"
     with pytest.raises(ValueError, match="Manifest name differs"):
         verify_source_plan(manifest_path, manifest, lambda smiles: smiles)
@@ -575,7 +579,7 @@ def test_cli_uses_frozen_seed_and_bootstrap_count(tmp_path, monkeypatch):
     )
     original_smiles = manifest["compounds"][0]["smiles"]
     manifest["compounds"][0]["smiles"] = active_smiles
-    with pytest.raises(ValueError, match="active metabolite.*parent Cmax"):
+    with pytest.raises(ValueError, match="Manifest structure differs from verified parent"):
         verify_source_plan(manifest_path, manifest)
     manifest["compounds"][0]["smiles"] = original_smiles
     verified[0].pop("synonyms")
@@ -652,10 +656,20 @@ def test_cli_uses_frozen_seed_and_bootstrap_count(tmp_path, monkeypatch):
             "--out", str(output_path),
         ],
     )
+    monkeypatch.setattr(
+        scorer,
+        "verify_frozen_checkout",
+        lambda root, freeze: {
+            "git_sha": freeze["git_sha"],
+            "source_tree_sha256": freeze["source_tree_sha256"],
+            "container_digest": freeze["container_digest"],
+        },
+    )
     scorer.main()
     report = json.loads(output_path.read_text())
     assert (report["seed"], report["n_bootstrap"]) == (7, 100000)
     assert report["label_content_sha256"] == plan["label_content_sha256"]
+    assert report["scorer_git_sha"] == manifest["freeze"]["git_sha"]
     original_score = output_path.read_bytes()
     with pytest.raises(FileExistsError, match="Score output already exists"):
         scorer.main()

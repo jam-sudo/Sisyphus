@@ -24,8 +24,11 @@ from sisyphus.validation.holdout_contract import (
     validate_payload,
     validate_source_quotas,
     verify_audit_report,
+    verify_frozen_checkout,
     verify_source_plan,
 )
+
+ROOT = Path(__file__).resolve().parent.parent
 
 
 def _compound_errors(rows: list[dict], key: str) -> np.ndarray:
@@ -361,16 +364,17 @@ def main() -> None:
         raise ValueError(
             f"Manifest hash mismatch: expected {args.manifest_sha256}, got {actual_sha}"
         )
+    manifest = json.loads(args.manifest.read_text())
+    validate_payload(manifest, "external_holdout_v1_manifest.schema.json")
+    runtime = verify_frozen_checkout(ROOT, manifest["freeze"])
     actual_predictions_sha = hashlib.sha256(args.predictions.read_bytes()).hexdigest()
     if actual_predictions_sha != args.predictions_sha256:
         raise ValueError("Predictions SHA256 does not match the committed value")
     actual_labels_sha = hashlib.sha256(args.labels.read_bytes()).hexdigest()
     if actual_labels_sha != args.labels_sha256:
         raise ValueError("Labels SHA256 does not match the custodian value")
-    manifest = json.loads(args.manifest.read_text())
     payload = json.loads(args.predictions.read_text())
     labels = json.loads(args.labels.read_text())
-    validate_payload(manifest, "external_holdout_v1_manifest.schema.json")
     source_plan = verify_source_plan(args.manifest, manifest)
     validate_source_quotas(manifest)
     validate_payload(payload, "external_holdout_v1_predictions.schema.json")
@@ -418,6 +422,9 @@ def main() -> None:
     report["label_content_sha256"] = source_plan["label_content_sha256"]
     report["predictions_sha256"] = actual_predictions_sha
     report["labels_sha256"] = actual_labels_sha
+    report["scorer_git_sha"] = runtime["git_sha"]
+    report["scorer_source_tree_sha256"] = runtime["source_tree_sha256"]
+    report["scorer_container_digest"] = runtime["container_digest"]
     with args.out.open("x") as output:
         output.write(json.dumps(report, indent=2) + "\n")
     print(json.dumps(report, indent=2))

@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -21,8 +23,48 @@ from sisyphus.validation.holdout_contract import (
     verify_parent_prediction,
     verify_training_membership,
 )
+from sisyphus.validation.identity import canonical_single_fragment_smiles, ik14
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+def test_exact_holdout_structure_distinguishes_salt_and_stereo():
+    parent = "CC(=O)Oc1ccccc1C(=O)O"
+    sodium = "CC(=O)Oc1ccccc1C(=O)[O-].[Na+]"
+    left, right = "C[C@H](N)C(=O)O", "C[C@@H](N)C(=O)O"
+    assert ik14(parent) == ik14(sodium)
+    assert canonical_single_fragment_smiles(parent)
+    assert canonical_single_fragment_smiles(sodium) is None
+    assert ik14(left) == ik14(right)
+    assert canonical_single_fragment_smiles(left) != canonical_single_fragment_smiles(right)
+
+
+def test_frozen_checkout_rejects_changed_scorer_tree(tmp_path, monkeypatch):
+    def git(*args):
+        return subprocess.check_output(["git", *args], cwd=tmp_path).strip()
+
+    git("init", "-q")
+    (tmp_path / "requirements-lock.txt").write_text("pinned\n")
+    (tmp_path / "score.py").write_text("frozen\n")
+    git("add", ".")
+    git("-c", "user.name=Test", "-c", "user.email=test@example.org", "commit", "-qm", "freeze")
+    digest = hashlib.sha256()
+    for raw_path in git("ls-files", "-z").split(b"\0"):
+        if raw_path:
+            digest.update(raw_path + b"\0")
+            digest.update(hashlib.sha256((tmp_path / raw_path.decode()).read_bytes()).digest())
+    container = "sha256:" + "1" * 64
+    freeze = {
+        "git_sha": git("rev-parse", "HEAD").decode(),
+        "source_tree_sha256": digest.hexdigest(),
+        "dependency_lock_sha256": sha256_file(tmp_path / "requirements-lock.txt"),
+        "container_digest": container,
+    }
+    monkeypatch.setenv("SISYPHUS_CONTAINER_DIGEST", container)
+    assert contract.verify_frozen_checkout(tmp_path, freeze)["git_sha"] == freeze["git_sha"]
+    (tmp_path / "score.py").write_text("modified\n")
+    with pytest.raises(ValueError, match="clean worktree"):
+        contract.verify_frozen_checkout(tmp_path, freeze)
 
 
 def _label_arm() -> dict:

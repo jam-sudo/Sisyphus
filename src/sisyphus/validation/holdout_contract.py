@@ -5,7 +5,9 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import os
 import re
+import subprocess
 from collections import Counter
 from collections.abc import Callable
 from datetime import date
@@ -13,6 +15,8 @@ from pathlib import Path
 from typing import Any
 
 from jsonschema import Draft202012Validator, FormatChecker
+
+from sisyphus.validation.identity import canonical_single_fragment_smiles
 
 ROOT = Path(__file__).resolve().parents[3]
 SCHEMA_DIR = ROOT / "data" / "reference"
@@ -204,6 +208,43 @@ def verify_frozen_file(root: Path, freeze: dict[str, Any], stem: str) -> str:
     return actual
 
 
+def verify_frozen_checkout(root: Path, freeze: dict[str, Any]) -> dict[str, str]:
+    """Bind each executable holdout stage to the frozen checkout and container."""
+
+    def git(*args: str) -> str:
+        return subprocess.check_output(
+            ["git", *args], text=True, stderr=subprocess.STDOUT, cwd=root
+        ).strip()
+
+    head = git("rev-parse", "HEAD")
+    if head != freeze["git_sha"]:
+        raise ValueError(f"Git SHA mismatch: manifest={freeze['git_sha']}, current={head}")
+    if git("status", "--porcelain"):
+        raise ValueError("External holdout execution requires a clean worktree")
+    digest = hashlib.sha256()
+    for raw_path in subprocess.check_output(["git", "ls-files", "-z"], cwd=root).split(b"\0"):
+        if raw_path:
+            digest.update(raw_path)
+            digest.update(b"\0")
+            digest.update(hashlib.sha256((root / raw_path.decode()).read_bytes()).digest())
+    source_tree_sha = digest.hexdigest()
+    if source_tree_sha != freeze["source_tree_sha256"]:
+        raise ValueError("Tracked source-tree SHA256 does not match the manifest")
+    dependency_sha = sha256_file(root / "requirements-lock.txt")
+    if dependency_sha != freeze["dependency_lock_sha256"]:
+        raise ValueError("Dependency-lock SHA256 does not match the manifest")
+    container_digest = os.environ.get("SISYPHUS_CONTAINER_DIGEST")
+    if not container_digest:
+        raise ValueError("SISYPHUS_CONTAINER_DIGEST must be set by the frozen container")
+    if container_digest != freeze["container_digest"]:
+        raise ValueError(
+            f"Container digest mismatch: manifest={freeze['container_digest']}, "
+            f"runtime={container_digest}"
+        )
+    return {"git_sha": head, "source_tree_sha256": source_tree_sha,
+            "dependency_lock_sha256": dependency_sha, "container_digest": container_digest}
+
+
 def _recompute_audit_report(manifest_path: Path) -> dict[str, Any]:
     import runpy
 
@@ -371,6 +412,7 @@ def verify_source_plan(
             for window in windows
         ):
             raise ValueError(f"Inventory source is outside frozen windows: {cid}")
+    exact_structures = {}
     for cid, row in verified.items():
         if (
             row.get("name") != inventory[cid]["name"]
@@ -397,6 +439,10 @@ def verify_source_plan(
             )
         ):
             raise ValueError(f"Verified synonyms or related structures are invalid: {cid}")
+        exact = canonical_single_fragment_smiles(row["smiles"])
+        if exact is None:
+            raise ValueError(f"Verified structure is not a single parent fragment: {cid}")
+        exact_structures[cid] = exact
     if structure_key is not None:
         seen: dict[str, str] = {}
         for cid, row in verified.items():
@@ -454,5 +500,7 @@ def verify_source_plan(
         cid = compound["candidate_id"]
         if compound["name"] != verified[cid]["name"]:
             raise ValueError(f"Manifest name differs from verified shortlist: {cid}")
+        if canonical_single_fragment_smiles(compound["smiles"]) != exact_structures[cid]:
+            raise ValueError(f"Manifest structure differs from verified parent structure: {cid}")
         verify_parent_prediction(compound["smiles"], cid)
     return plan

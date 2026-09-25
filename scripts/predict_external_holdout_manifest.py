@@ -12,7 +12,6 @@ import argparse
 import hashlib
 import json
 import os
-import subprocess
 from pathlib import Path
 
 from sisyphus.validation.holdout_contract import (
@@ -21,6 +20,7 @@ from sisyphus.validation.holdout_contract import (
     validate_payload,
     verify_audit_report,
     verify_development_residual_interval,
+    verify_frozen_checkout,
     verify_frozen_file,
     verify_source_plan,
     verify_training_membership,
@@ -33,31 +33,10 @@ def _sha256(path: Path) -> str:
     return sha256_file(path)
 
 
-def _git(args: list[str]) -> str:
-    return subprocess.check_output(
-        ["git", *args], text=True, stderr=subprocess.STDOUT, cwd=ROOT
-    ).strip()
-
-
 def _inventory_sha(values: tuple[tuple[str, str], ...]) -> str:
     return hashlib.sha256(
         json.dumps(dict(values), sort_keys=True, separators=(",", ":")).encode()
     ).hexdigest()
-
-
-def _source_tree_sha256() -> str:
-    paths = subprocess.check_output(
-        ["git", "ls-files", "-z"], cwd=ROOT
-    ).split(b"\0")
-    digest = hashlib.sha256()
-    for raw_path in paths:
-        if not raw_path:
-            continue
-        path = ROOT / raw_path.decode()
-        digest.update(raw_path)
-        digest.update(b"\0")
-        digest.update(hashlib.sha256(path.read_bytes()).digest())
-    return digest.hexdigest()
 
 
 def _verify_resource_root() -> None:
@@ -128,28 +107,14 @@ def main() -> None:
     freeze = manifest["freeze"]
     if freeze["resource_profile"] != "public":
         raise ValueError("Frozen manifest resource profile must be public")
-    head = _git(["rev-parse", "HEAD"])
-    if head != freeze["git_sha"]:
-        raise ValueError(f"Git SHA mismatch: manifest={freeze['git_sha']}, current={head}")
-    if _git(["status", "--porcelain"]):
-        raise ValueError("External holdout execution requires a clean worktree")
-    source_tree_sha = _source_tree_sha256()
-    if source_tree_sha != freeze["source_tree_sha256"]:
-        raise ValueError("Tracked source-tree SHA256 does not match the manifest")
-    dependency_sha = _sha256(ROOT / "requirements-lock.txt")
-    if dependency_sha != freeze["dependency_lock_sha256"]:
-        raise ValueError("Dependency-lock SHA256 does not match the manifest")
+    runtime = verify_frozen_checkout(ROOT, freeze)
+    head = runtime["git_sha"]
+    source_tree_sha = runtime["source_tree_sha256"]
+    dependency_sha = runtime["dependency_lock_sha256"]
     training_membership_sha = verify_training_membership(ROOT, freeze)
     feature_schema_sha = verify_frozen_file(ROOT, freeze, "feature_schema")
     solver_settings_sha = verify_frozen_file(ROOT, freeze, "solver_settings")
-    container_digest = os.environ.get("SISYPHUS_CONTAINER_DIGEST")
-    if not container_digest:
-        raise ValueError("SISYPHUS_CONTAINER_DIGEST must be set by the frozen container")
-    if container_digest != freeze["container_digest"]:
-        raise ValueError(
-            f"Container digest mismatch: manifest={freeze['container_digest']}, "
-            f"runtime={container_digest}"
-        )
+    container_digest = runtime["container_digest"]
 
     _verify_resource_root()
     _verify_runtime_settings(resolve_frozen_path(ROOT, freeze["solver_settings_path"]))

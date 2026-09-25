@@ -508,6 +508,11 @@ Before model freeze, canonicalize both candidate and corpus structures using:
 - normalized generic names and synonyms;
 - explicit parent/prodrug/active-metabolite relations.
 
+The manifest input SMILES must also match the verified shortlist as an exact
+canonical isomeric single-fragment structure. The salt-stripped, stereo-insensitive
+InChIKey-14 is used only for exclusion and duplicate-family checks; it cannot
+authorize a different structure to be passed to prediction.
+
 Each verified-shortlist record must include `synonyms` and
 `related_structures` (each relation has a type, SMILES, and source citation;
 empty arrays require curator review). The audit rejects a declared synonym or
@@ -600,7 +605,9 @@ clean checkout read-only at `/repo` and the private holdout directory at
 `sha256:` container identifier in the manifest, verify it again immediately
 before each run, and pass that value as `SISYPHUS_CONTAINER_DIGEST`. A published
 image may instead be pinned and verified by its registry digest. The runner
-also checks the mounted checkout's git SHA and source-tree hash.
+also checks the mounted checkout's git SHA and source-tree hash. The container
+trusts only `/repo` as a Git safe directory, allowing a read-only host-owned
+checkout to be inspected by container root.
 
 ```bash
 docker build -f scripts/Dockerfile.holdout -t sisyphus-holdout:v1 .
@@ -636,8 +643,11 @@ tree mismatch, dependency-lock mismatch, artifact-inventory mismatch, training-
 membership mismatch, feature-schema mismatch, solver-settings mismatch, audit
 failure, container-digest mismatch, stale development-residual interval sources,
 resources outside the frozen checkout, or an existing prediction output file.
-The scorer also refuses an existing score output file, preserving the first
-scoring record. It refuses any candidate, arm,
+The scorer independently rechecks the same clean checkout, source-tree,
+dependency-lock, and container freeze before reading labels, and records its
+own Git, source-tree, and container identifiers in the score report. It also
+refuses an existing score output file, preserving the first scoring record.
+It refuses any candidate, arm,
 dose, route, derived eligibility, source-record hash, source quota, execution
 status, interval source, cycle, freeze field, or precommitted file-hash mismatch
 before reading the estimand.

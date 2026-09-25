@@ -4,7 +4,8 @@ FROM python:3.10-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
       git libxrender1 libxext6 libgomp1 \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && git config --system --add safe.directory /repo
 
 COPY requirements-lock.txt /tmp/requirements-lock.txt
 RUN python -m pip install --no-cache-dir -r /tmp/requirements-lock.txt
