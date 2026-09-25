@@ -1,8 +1,8 @@
 {
   "computed_at": "2026-09-24-audited_reference",
   "source_cache": "data/training/4track_holdout_predictions.json",
-  "source_cache_sha256": "a4a65e7068fa372ba3c5776e5ef8819bb207c1df1b904cfa03e7f9b2cfb9e58f",
-  "context": "Public-only fitted models; source-screened retrospective N=73 development cohort after five blood-matrix and 114 administered/analyte-mismatched Cmax training-row quarantines.",
+  "source_cache_sha256": "48c8ca269313b83c5e1de1c33672ba57ddaecb4f288fe1d9b35ca6591c87c49f",
+  "context": "Public-only development benchmark after voclosporin whole-blood Cmax quarantine; not independent validation.",
   "method": "bootstrap on abs(log10(fold))",
   "n_bootstrap": 10000,
   "seed": 20260422,
@@ -17,25 +17,25 @@
       "pct_3fold": 50.7
     },
     "ml": {
-      "aafe": 3.0418,
-      "ci_95_low": 2.4665,
-      "ci_95_high": 3.7689,
+      "aafe": 3.0343,
+      "ci_95_low": 2.4413,
+      "ci_95_high": 3.7883,
       "n": 73,
-      "pct_2fold": 41.1,
-      "pct_3fold": 57.5
+      "pct_2fold": 43.8,
+      "pct_3fold": 58.9
     },
     "meta": {
-      "aafe": 2.8496,
-      "ci_95_low": 2.3286,
-      "ci_95_high": 3.5305,
+      "aafe": 2.8405,
+      "ci_95_low": 2.3135,
+      "ci_95_high": 3.5387,
       "n": 73,
-      "pct_2fold": 41.1,
+      "pct_2fold": 42.5,
       "pct_3fold": 65.8
     },
     "paired_meta_ml": {
-      "ratio": 0.9368,
-      "ci_95_low": 0.8208,
-      "ci_95_high": 1.0653,
+      "ratio": 0.9361,
+      "ci_95_low": 0.8266,
+      "ci_95_high": 1.0569,
       "n": 73
     }
   },
@@ -50,25 +50,25 @@
       "pct_3fold": 48.3
     },
     "ml": {
-      "aafe": 2.9155,
-      "ci_95_low": 2.3145,
-      "ci_95_high": 3.7052,
+      "aafe": 2.9026,
+      "ci_95_low": 2.2953,
+      "ci_95_high": 3.704,
       "n": 60,
-      "pct_2fold": 43.3,
+      "pct_2fold": 46.7,
       "pct_3fold": 61.7
     },
     "meta": {
-      "aafe": 2.9388,
-      "ci_95_low": 2.375,
-      "ci_95_high": 3.7085,
+      "aafe": 2.9038,
+      "ci_95_low": 2.3398,
+      "ci_95_high": 3.6794,
       "n": 60,
-      "pct_2fold": 36.7,
-      "pct_3fold": 65.0
+      "pct_2fold": 38.3,
+      "pct_3fold": 63.3
     },
     "paired_meta_ml": {
-      "ratio": 1.008,
-      "ci_95_low": 0.8933,
-      "ci_95_high": 1.1421,
+      "ratio": 1.0004,
+      "ci_95_low": 0.8934,
+      "ci_95_high": 1.1253,
       "n": 60
     }
   }

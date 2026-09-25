@@ -21,8 +21,8 @@ def test_public_cmax_fitted_rows_and_artifact_are_pinned():
         fitted = list(csv.DictReader(handle))
     assert sha256(SOURCE) == SOURCE_SHA
     assert fitted == training_rows()
-    assert len(fitted) == 909
-    blood_names = {"indapamide", "cyclosporine", "everolimus", "tacrolimus", "pimecrolimus"}
+    assert len(fitted) == 908
+    blood_names = {"indapamide", "cyclosporine", "everolimus", "tacrolimus", "pimecrolimus", "voclosporin"}
     assert not any(row["name"] in blood_names for row in fitted)
     with (ROOT / "data/validation/cmax_administered_analyte_mismatch_v1.csv").open(newline="") as handle:
         mismatched_names = {row["name"] for row in csv.DictReader(handle)}
@@ -38,7 +38,7 @@ def test_public_cmax_fitted_rows_and_artifact_are_pinned():
     metadata = json.loads(META.read_text())
     assert metadata["trained_on"]["dataset_path"] == str(DATASET.relative_to(ROOT))
     assert metadata["trained_on"]["sha256"] == sha256(DATASET)
-    assert sha256(DATASET) == "89e494cd4fa78b37eed03c0cbf59d696acd935b124f44b69c30ae6b7591d4dbc"
-    assert metadata["trained_on"]["n_drugs_clean"] == 909
+    assert sha256(DATASET) == "f8fbfde1c07fbc22f2cd6e3f72304f429ed14745261a65b29de1ac8545013694"
+    assert metadata["trained_on"]["n_drugs_clean"] == 908
     assert metadata["artifact_sha256"] == sha256(MODEL)
-    assert sha256(MODEL) == "9841367537dcd3fdcc38e9bdd4b4b08e401b6858493cf5f237fb0d9edbb337e4"
+    assert sha256(MODEL) == "c776768146b0746a70e31af4446e25ba1245139b09b2d5497fb09d93ecd2b0e1"
