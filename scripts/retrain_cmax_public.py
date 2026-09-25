@@ -42,13 +42,20 @@ def training_rows() -> list[dict[str, str]]:
     rows = [row for row in source if not is_holdout(row["smiles"], row["name"], keys)]
     if (len(source), len(rows)) != (1128, 1028):
         raise ValueError(f"Unexpected Omega source/clean row counts: {len(source)}/{len(rows)}")
-    # Grebow et al. 1982 measured whole blood, not the model's plasma target.
-    indapamide = [row for row in rows if row["name"] == "indapamide"]
-    if (len(indapamide) != 1 or float(indapamide[0]["dose_mg"]) != 5
-            or int(indapamide[0]["n_studies"]) != 2
-            or not np.isclose(float(indapamide[0]["cmax_mg_L"]), np.sqrt(263 * 231) / 1000)):
-        raise ValueError("Indapamide source row changed; re-adjudicate its matrix")
-    rows.remove(indapamide[0])
+    # Each source aggregate includes whole blood, not the model's plasma target.
+    blood_rows = {
+        "indapamide": (5, 2, np.sqrt(263 * 231) / 1000),
+        "cyclosporine": (372.5, 1, 1.22),
+        "everolimus": (2, 3, (17.9 * 17.1 * 16.7) ** (1 / 3) / 1000),
+        "tacrolimus": (5, 2, np.sqrt(27.23 * 40.62) / 1000),
+    }
+    for name, (dose, studies, cmax) in blood_rows.items():
+        matched = [row for row in rows if row["name"] == name]
+        if (len(matched) != 1 or float(matched[0]["dose_mg"]) != dose
+                or int(matched[0]["n_studies"]) != studies
+                or not np.isclose(float(matched[0]["cmax_mg_L"]), cmax)):
+            raise ValueError(f"{name} source row changed; re-adjudicate its matrix")
+        rows.remove(matched[0])
     # Richens et al. 1997, Table 1: 600 mg young low-dose Cmax is 8.9 µg/mL.
     # The archived Omega row divided by 1000 as if that value were ng/mL.
     felbamate = [row for row in rows if row["name"] == "felbamate"]
@@ -90,10 +97,10 @@ def main() -> None:
                     "sha256": sha256(DATASET), "n_drugs_clean": len(fitted),
                     "source_sha256": SOURCE_SHA},
         n_drugs_original=1128,
-        n_drugs_excluded=101,
+        n_drugs_excluded=104,
         holdout_version="N=107 (data/reference/holdout.json)",
         holdout_metric={"name": "five_fold_cv_aafe", "value": cv_aafe, "r2": cv_r2},
-        retrained_reason="Correct felbamate units and quarantine indapamide whole-blood Cmax",
+        retrained_reason="Correct felbamate units and quarantine four blood-matrix Cmax labels",
     )
     META.write_text(json.dumps(metadata, indent=2) + "\n")
     print(f"N={len(fitted)} CV_AAFE={cv_aafe:.3f} CV_R2={cv_r2:.3f}")

@@ -1,0 +1,15 @@
+# Immunosuppressant Cmax training-matrix adjudication (2026-09-24)
+
+The pinned [Omega Cmax snapshot](https://github.com/jam-sudo/Omega/blob/08a45047a2b5dcdca8c9a8f36ff1fe3b50ed3d6d/data/ml/clinical/mmpk_clean.csv) aggregates study arms from its [source workbook](https://github.com/jam-sudo/Omega/blob/08a45047a2b5dcdca8c9a8f36ff1fe3b50ed3d6d/data/external/mmpk/approved.xlsx). The direct model's target is parent **plasma** Cmax. These three source aggregates include whole-blood observations:
+
+| Aggregate | Workbook rows and source observations | Original-source matrix evidence |
+|---|---|---|
+| Cyclosporine 372.5 mg, 1.220 mg/L (`n_studies=1`) | Row 1038: 1220 ng/mL | [PMID 11103750](https://pubmed.ncbi.nlm.nih.gov/11103750/) explicitly describes blood cyclosporine concentrations. |
+| Everolimus 2 mg, 0.0172261624 mg/L (`n_studies=3`) | Rows 1599–1601: 17.9, 17.1, 16.7 ng/mL; geometric mean 17.226 ng/mL | [PMID 11837553](https://pubmed.ncbi.nlm.nih.gov/11837553/) explicitly identifies the 17.9 ng/mL peak as blood Cmax. The other two arms attributed to [PMID 11831546](https://pubmed.ncbi.nlm.nih.gov/11831546/) have not been separately matrix-adjudicated. The aggregate mixes at least one confirmed blood arm, so it is unsuitable as a plasma-only label. |
+| Tacrolimus 5 mg, 0.0332578201 mg/L (`n_studies=2`) | Rows 3800 and 3803: 27.23 and 40.62 ng/mL; geometric mean 33.258 ng/mL | Both [Någård et al.](https://pmc.ncbi.nlm.nih.gov/articles/PMC9871843/) and [Mohanty et al.](https://pmc.ncbi.nlm.nih.gov/articles/PMC7041308/) explicitly measured whole blood. |
+
+The fitted-row recipe checks each aggregate's identity, dose, study count, and Cmax before exclusion. The original Omega file remains byte-pinned for provenance and conservative training-membership screening. We did not infer plasma Cmax from blood with an assumed partition factor or substitute the repeatedly used development references as training labels.
+
+The exploratory `mmpk_expanded_full.csv` and `mmpk_expanded_v2.csv` each lost eight rows (three cyclosporine, two everolimus, three tacrolimus), and `mmpk_pbpk_features.csv` lost one row per drug. These exploratory rows were quarantined pending plasma-specific arm adjudication; their individual matrix identities are not all independently established. Historical out-of-fold predictions remain historical output, not fitted input to the shipped model.
+
+Including the earlier [indapamide quarantine](development_indapamide_training_matrix_2026-09-24.md), the shipped Cmax model now fits **1,024** rows. Relative to the immediately preceding 1,027-row model, five-fold Cmax CV AAFE changed **3.2584 → 3.2447**. On the repeatedly accessed N=73 development set, direct ML AAFE changed **3.1917 → 3.3845** and Meta AAFE **2.8468 → 2.9033**. The conditional paired Meta/ML AAFE ratio is **0.8578** (bootstrap 95% CI **0.7488–0.9773**). The development degradation is retained in the public benchmark; neither CV nor this consumed set is independent external validation.
