@@ -1,10 +1,10 @@
 {
   "version": "v3_public_omega",
-  "artifact_sha256": "3c76e9e9d44a831737a8e26b5dfe0b86f46e06e6092df25497d35606c3015c49",
+  "artifact_sha256": "1086b5db09c061c6a8282e92e32c221af22a5efefbaad4c24ca08a64c30e05f7",
   "target": "log10(cmax_mg_L / dose_mg)",
   "trained_on": {
     "dataset_path": "data/training/cmax_omega_public_clean.csv",
-    "sha256": "4571eb544c0b59def3b71f24037a0176520c303b598037cfa417ad81e1b93de2",
+    "sha256": "7e3cc2d389e8d43cfcd5ace8807358d5150751ac659af2da9c6061c6ca6e5d1a",
     "n_drugs_clean": 906,
     "source_sha256": "e7228d14bdfdfc6c790177207779630c1e5655c19d451528c87b80e2e9de9c3d",
     "source_workbooks": [
@@ -24,14 +24,14 @@
     "sha256": "b41dddd78533661b8f4aed86bdb7c5f55d15ed3cd2ad20b39e9100557eda631e",
     "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, MolMR). See src/sisyphus/descriptors.py::compute_features."
   },
-  "trained_at": "2026-09-25T05:56:25.122325+00:00",
+  "trained_at": "2026-09-25T06:30:11.224595+00:00",
   "n_drugs_original": 1128,
   "n_drugs_excluded": 222,
   "holdout_version": "N=107 (data/reference/holdout.json)",
   "holdout_metric": {
     "name": "five_fold_scaffold_cv_aafe",
-    "value": 3.393230501505666,
-    "r2": 0.3316937127695335
+    "value": 3.383900554102514,
+    "r2": 0.3345894495177715
   },
   "hyperparameters": {
     "n_estimators": 200,
@@ -46,5 +46,5 @@
     "n_jobs": 4,
     "verbosity": 0
   },
-  "retrained_reason": "Correct felbamate units, eight salt-dose labels, and paired givinostat salt-dose/concentration masses; quarantine six blood-matrix, 114 administered/analyte-mismatched, one dolasetron-metabolite, and one methenamine concentration-basis label"
+  "retrained_reason": "Correct felbamate units, nine salt-dose labels, and paired givinostat salt-dose/concentration masses; quarantine six blood-matrix, 114 administered/analyte-mismatched, one dolasetron-metabolite, and one methenamine concentration-basis label"
 }

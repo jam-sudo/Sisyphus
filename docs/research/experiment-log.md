@@ -10,6 +10,12 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-25 (cont.) — Benazepril hydrochloride dose-basis correction
+
+The [source follow-up](../validation/development_benazepril_dose_basis_2026-09-25.md) reconciled Omega's 10 mg benazepril hydrochloride capsule with the parent SMILES and a regulatory salt-strength convention. Its fitted dose became 9.20898 mg parent equivalent; Cmax/AUC were retained, and the stale PBPK-feature row was removed. The original numeric article table and capsule batch record were unavailable, so those source details remain workbook-based. Fitted counts remain 906/900/831. Direct Cmax scaffold-CV AAFE changed **3.3932 → 3.3839**. On the consumed N=73, direct ML changed **3.0024 → 3.1085**, Meta **2.7965 → 2.8485** (conditional CI **2.3195–3.5466**), and the paired Meta/ML ratio is **0.9164** (CI **0.8099–1.0350**). The dose correction is retained despite the development regression; none of these values is independent accuracy evidence.
+
+---
+
 ## 2026-09-25 (cont.) — Almitrine bismesylate dose-basis correction
 
 The [original single-dose study](../validation/development_almitrine_dose_basis_2026-09-25.md) explicitly reports 25/50/100/200 mg **bismesylate** capsules while measuring parent almitrine in plasma. All four exploratory doses and the fitted 25 mg aggregate were converted to parent mass using ChEBI's 477.563/669.777 molecular-weight ratio; the stale PBPK-feature row was removed. Fitted counts remain 906/900/831. Direct Cmax scaffold-CV AAFE changed **3.3827 → 3.3932**. On consumed N=73, direct ML changed **2.9925 → 3.0024**, Meta **2.8053 → 2.7965** (conditional CI **2.2672–3.4882**), and the paired Meta/ML ratio is **0.9314** (CI **0.8232–1.0537**). This is data-integrity work, not an external accuracy result.

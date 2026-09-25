@@ -1000,7 +1000,7 @@ cilazapril,CCOC(=O)[C@H](CCc1ccccc1)N[C@H]1CCCN2CCC[C@@H](C(=O)O)N2C1=O,0.5,0.01
 cilazapril,CCOC(=O)[C@H](CCc1ccccc1)N[C@H]1CCCN2CCC[C@@H](C(=O)O)N2C1=O,1.0,0.0338999999999999,-1.469800301796918,1,1.1,18.5,111.0,,tablet,False,False
 cilazapril,CCOC(=O)[C@H](CCc1ccccc1)N[C@H]1CCCN2CCC[C@@H](C(=O)O)N2C1=O,2.5,0.0827,-1.4804344991194909,1,1.1,13.4,272.0,,tablet,False,False
 cilazapril,CCOC(=O)[C@H](CCc1ccccc1)N[C@H]1CCCN2CCC[C@@H](C(=O)O)N2C1=O,5.0,0.182,-1.438898616350944,1,1.0,13.8,519.0,,tablet,False,False
-benazepril,CCOC(=O)[C@H](CCc1ccccc1)N[C@H]1CCc2ccccc2N(CC(=O)O)C1=O,10.0,0.1354099999999999,-1.8683492619104587,1,0.5,0.6,135.41,,capsule,False,False
+benazepril,CCOC(=O)[C@H](CCc1ccccc1)N[C@H]1CCc2ccccc2N(CC(=O)O)C1=O,9.208976917736898,0.1354099999999999,-1.8325606463242936,1,0.5,0.6,135.41,,capsule,False,False
 Temocapril,CCOC(=O)[C@H](CCc1ccccc1)N[C@H]1CS[C@H](c2cccs2)CN(CC(=O)O)C1=O,20.0,0.1239999999999999,-2.207608310501746,1,1.0,0.8,141.0,,tablet,False,False
 flumazenil,CCOC(=O)c1ncn2c1CN(C)C(=O)c1cc(F)ccc1-2,30.0,0.24683,-2.084723311503291,1,0.62,1.2,,65.2,,False,False
 bilastine,CCOCCn1c(C2CCN(CCc3ccc(C(C)(C)C(=O)O)cc3)CC2)nc2ccccc21,10.0,0.15313,-1.8149397174786075,1,1.4,13.86,681.1,,tablet,False,False

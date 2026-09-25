@@ -557,12 +557,12 @@ holdout separation and source screening, including analyte, matrix, and unit
 adjudication. Retraining with the recorded hyperparameters and current feature
 code did not reproduce the former shipped model's trees or predictions. The
 current public Cmax model is trained from the 906-row fitted CSV, SHA256
-`4571eb544c0b59def3b71f24037a0176520c303b598037cfa417ad81e1b93de2`,
+`7e3cc2d389e8d43cfcd5ace8807358d5150751ac659af2da9c6061c6ca6e5d1a`,
 and its model SHA256 is
-`3c76e9e9d44a831737a8e26b5dfe0b86f46e06e6092df25497d35606c3015c49`.
-Eight source-adjudicated fitted salt doses use parent-equivalent mass;
+`1086b5db09c061c6a8282e92e32c221af22a5efefbaad4c24ca08a64c30e05f7`.
+Nine source-adjudicated fitted salt doses use parent-equivalent mass;
 the CL/F and Vd/F models were rebuilt from the screened Omega source, fitting
-900 and 831 rows respectively. Givinostat's paired salt-dose and concentration masses were also normalized without changing the fitted Cmax/dose target or CL/F values. See the [first dose and source-screen follow-up](development_salt_dose_and_clf_screen_followup_2026-09-24.md), [additional salt-dose follow-up](development_additional_salt_dose_followup_2026-09-24.md), [methenamine quarantine](development_methenamine_label_quarantine_2026-09-24.md), [Acoramidis dose-basis correction](development_acoramidis_dose_basis_2026-09-25.md), [almitrine dose-basis correction](development_almitrine_dose_basis_2026-09-25.md), and [Givinostat paired-mass correction](development_givinostat_mass_basis_2026-09-25.md).
+900 and 831 rows respectively. Givinostat's paired salt-dose and concentration masses were also normalized without changing the fitted Cmax/dose target or CL/F values. See the [first dose and source-screen follow-up](development_salt_dose_and_clf_screen_followup_2026-09-24.md), [additional salt-dose follow-up](development_additional_salt_dose_followup_2026-09-24.md), [methenamine quarantine](development_methenamine_label_quarantine_2026-09-24.md), [Acoramidis dose-basis correction](development_acoramidis_dose_basis_2026-09-25.md), [almitrine dose-basis correction](development_almitrine_dose_basis_2026-09-25.md), [benazepril dose-basis correction](development_benazepril_dose_basis_2026-09-25.md), and [Givinostat paired-mass correction](development_givinostat_mass_basis_2026-09-25.md).
 The single-assay TDC hepatocyte CLint replacement is pinned to its 995-row
 fitted CSV (SHA256
 `dbf2b750b58a68af02b01cfe90a370630908c311c8436f65818bbc08fcfaaa94`)
