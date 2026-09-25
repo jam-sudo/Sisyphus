@@ -4,7 +4,7 @@ Usage::
 
     sisyphus predict --smiles "CC(=O)Oc1ccccc1C(=O)O" --dose 500
     sisyphus simulate --smiles "CN(C)C(=N)NC(=N)N" --dose 500 --interval 12 --doses 14
-    sisyphus tdm --smiles "Clc1ccc2c(c1)..." --dose 5 --obs "1.0:0.015"
+    sisyphus tdm --help
     sisyphus benchmark --development-set
 """
 
@@ -127,7 +127,7 @@ def main() -> None:
     da_parser.add_argument("--phenotype", default=None, help="CYP phenotype spec (e.g. 'CYP2D6:PM'). See tdm --phenotype.")  # noqa: E501
     da_parser.add_argument("--dose-min", type=float, default=None, help="Minimum allowed dose (mg). Default: 0.1× current dose.")  # noqa: E501
     da_parser.add_argument("--dose-max", type=float, default=None, help="Maximum allowed dose (mg). Default: 10× current dose.")  # noqa: E501
-    da_parser.add_argument("--round-increment", type=float, default=None, help="Dose rounding increment (mg). Default: 10% of current dose magnitude.")  # noqa: E501
+    da_parser.add_argument("--round-increment", type=float, default=None, help="Dose rounding increment (mg). Default: 10%% of current dose magnitude.")  # noqa: E501
     da_parser.add_argument("--verbose", "-v", action="store_true")
 
     # benchmark command
@@ -139,7 +139,7 @@ def main() -> None:
         "--holdout",
         dest="holdout",
         action="store_true",
-        help="Run the repeatedly accessed N=107 development set",
+        help="Run the repeatedly accessed development set",
     )
     bench_parser.add_argument("--max-drugs", type=int, default=None, help="Limit number of drugs")
     bench_parser.add_argument(

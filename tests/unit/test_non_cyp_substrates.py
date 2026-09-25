@@ -92,7 +92,7 @@ def test_lookup_ugt1a9_substrate_dapagliflozin():
 def test_lookup_ugt2b7_non_substrate_returns_none():
     """A non-substrate SMILES (midazolam) must return None."""
     from sisyphus.predict.non_cyp_substrates import lookup_ugt2b7_substrate
-    midazolam = "c1ccc2c(c1)C(=NC(=O)N2)c1ccccc1F"
+    midazolam = "CC1=NC=C2N1C3=C(C=C(C=C3)Cl)C(=NC2)C4=CC=CC=C4F"
     assert lookup_ugt2b7_substrate(midazolam) is None
 
 
@@ -115,5 +115,5 @@ def test_get_non_cyp_fractions_dapagliflozin():
 def test_get_non_cyp_fractions_non_substrate_returns_empty():
     """A non-substrate SMILES must return an empty dict (no UGT path)."""
     from sisyphus.predict.non_cyp_substrates import get_non_cyp_fractions
-    midazolam = "c1ccc2c(c1)C(=NC(=O)N2)c1ccccc1F"
+    midazolam = "CC1=NC=C2N1C3=C(C=C(C=C3)Cl)C(=NC2)C4=CC=CC=C4F"
     assert get_non_cyp_fractions(midazolam) == {}

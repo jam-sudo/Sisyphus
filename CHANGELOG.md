@@ -12,6 +12,17 @@ track `pyproject.toml`.
 
 ## [Unreleased]
 
+### Console preset identity correction (2026-09-25)
+
+- Corrected a mislabeled midazolam preset that encoded a different molecule,
+  restored morphine stereochemistry, and regenerated their displayed predictions.
+  Updated the README examples and the deployed `app/data` mirror; the latter
+  now carries the current N=73 development benchmark. Preset identities and
+  source/deployed parity are regression-checked.
+- Fixed `dose-adjust --help` crashing on an unescaped percent sign and removed
+  an obsolete N=107 CLI benchmark label; all subcommand help screens now have a
+  regression check.
+
 ### Development reference identity correction (2026-09-25)
 
 - Restored source-supported stereochemistry for atorvastatin, clarithromycin,

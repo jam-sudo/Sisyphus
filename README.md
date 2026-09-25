@@ -205,19 +205,19 @@ The oral `predict` command is the production-facing interface. The other command
 sisyphus predict --smiles "Cn1c(=O)c2c(ncn2C)n(C)c1=O" --dose 100
 
 # Multi-dose regimen simulation (atorvastatin 40 mg QD × 14 days)
-sisyphus simulate --smiles "CC(C)c1n(CC(O)CC(O)CC(=O)O)c(=O)..." \
+sisyphus simulate --smiles "CC(C)C1=C(C(=C(N1CC[C@H](C[C@H](CC(=O)O)O)O)C2=CC=C(C=C2)F)C3=CC=CC=C3)C(=O)NC4=CC=CC=C4" \
     --dose 40 --interval 24 --doses 14
 
 # TDM Bayesian update (midazolam 5 mg, observed 0.015 mg/L at t=1 h)
-sisyphus tdm --smiles "c1ccc2c(c1)C(=NC(=O)N2)c1ccccc1F" \
+sisyphus tdm --smiles "CC1=NC=C2N1C3=C(C=C(C=C3)Cl)C(=NC2)C4=CC=CC=C4F" \
     --dose 5 --obs "1.0:0.015"
 
 # DDI prediction (midazolam + ketoconazole inhibition)
-sisyphus ddi --smiles "c1ccc2c(c1)C(=NC(=O)N2)c1ccccc1F" \
+sisyphus ddi --smiles "CC1=NC=C2N1C3=C(C=C(C=C3)Cl)C(=NC2)C4=CC=CC=C4F" \
     --dose 5 --inhibitor ketoconazole
 
 # MIPD dose recommendation (target Css,max = 0.02 mg/L)
-sisyphus dose-adjust --smiles "c1ccc2c(c1)C(=NC(=O)N2)c1ccccc1F" \
+sisyphus dose-adjust --smiles "CC1=NC=C2N1C3=C(C=C(C=C3)Cl)C(=NC2)C4=CC=CC=C4F" \
     --dose 5 --obs "1.0:0.015" --target-css 0.02
 
 # Holdout benchmark (add --compute-pi for empirical 90% PI coverage; diagnostic only)

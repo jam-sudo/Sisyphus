@@ -6,7 +6,7 @@ import math
 from pathlib import Path
 
 from rdkit import Chem
-from rdkit.Chem import inchi
+from rdkit.Chem import Descriptors, inchi, rdMolDescriptors
 
 from scripts.bootstrap_4track_ci import paired_meta_ml_ratio
 
@@ -14,6 +14,10 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def test_console_presets_use_current_resources():
+    for name in ("console_data.json", "benchmark.json"):
+        assert (ROOT / "app/data" / name).read_bytes() == (
+            ROOT / "web/public/data" / name
+        ).read_bytes()
     payload = json.loads((ROOT / "web/public/data/console_data.json").read_text())
     cache = json.loads((ROOT / "data/training/4track_holdout_predictions.json").read_text())
     interval = json.loads((ROOT / "data/validation/development_residual_interval.json").read_text())
@@ -21,10 +25,15 @@ def test_console_presets_use_current_resources():
     assert payload["benchmark"]["overall"] == cache["overall"]
     assert len(payload["drugs"]) == 8
     assert next(drug for drug in payload["drugs"] if drug["id"] == "metformin")["dose"] == 389.93
-    atorvastatin = next(drug for drug in payload["drugs"] if drug["id"] == "atorvastatin")
-    assert inchi.MolToInchiKey(Chem.MolFromSmiles(atorvastatin["smiles"])) == (
-        "XUKUURHRXDUEBC-KAYWLYCHSA-N"
-    )
+    reference = json.loads((ROOT / "data/reference/clinical_pk.json").read_text())["drugs"]
+    subscripts = str.maketrans("₀₁₂₃₄₅₆₇₈₉", "0123456789")
+    for drug in payload["drugs"]:
+        mol = Chem.MolFromSmiles(drug["smiles"])
+        assert mol is not None, drug["id"]
+        ref_mol = Chem.MolFromSmiles(reference[drug["id"]]["smiles"])
+        assert inchi.MolToInchiKey(mol) == inchi.MolToInchiKey(ref_mol), drug["id"]
+        assert rdMolDescriptors.CalcMolFormula(mol) == drug["formula"].translate(subscripts)
+        assert abs(Descriptors.MolWt(mol) - drug["mw"]) < 0.02
     for drug in payload["drugs"]:
         provenance = drug["artifactProvenance"]
         assert drug["residualIntervalSource"] == "development_empirical_residual"

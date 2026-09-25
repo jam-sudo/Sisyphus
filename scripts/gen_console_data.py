@@ -58,7 +58,7 @@ DRUGS = [
     },
     {
         "id": "midazolam", "name": "Midazolam", "dose": 5, "route": "oral",
-        "smiles": "c1ccc2c(c1)C(=NC(=O)N2)c1ccccc1F",
+        "smiles": "CC1=NC=C2N1C3=C(C=C(C=C3)Cl)C(=NC2)C4=CC=CC=C4F",
         "formula": "C₁₈H₁₃ClFN₃", "mw": 325.77,
         "primaryEnzyme": "CYP3A4", "enzymeFraction": {"CYP3A4": 0.93},
     },
@@ -76,7 +76,7 @@ DRUGS = [
     },
     {
         "id": "atorvastatin", "name": "Atorvastatin", "dose": 40, "route": "oral",
-        "smiles": "CC(C)C1=C(C(=C(N1CC[C@H](C[C@H](CC(=O)O)O)O)C2=CC=C(C=C2)F)C3=CC=CC=C3)C(=O)NC4=CC=CC=C4",
+        "smiles": "CC(C)C1=C(C(=C(N1CC[C@H](C[C@H](CC(=O)O)O)O)C2=CC=C(C=C2)F)C3=CC=CC=C3)C(=O)NC4=CC=CC=C4",  # noqa: E501
         "formula": "C₃₃H₃₅FN₂O₅", "mw": 558.64,
         "primaryEnzyme": "CYP3A4", "enzymeFraction": {"CYP3A4": 0.8},
     },
@@ -88,7 +88,7 @@ DRUGS = [
     },
     {
         "id": "morphine", "name": "Morphine", "dose": 10, "route": "oral",
-        "smiles": "CN1CCC23c4c5ccc(O)c4OC2C(O)C=CC3C1C5",
+        "smiles": "CN1CC[C@]23[C@@H]4[C@H]1CC5=C2C(=C(C=C5)O)O[C@H]3[C@H](C=C4)O",
         "formula": "C₁₇H₁₉NO₃", "mw": 285.34,
         "primaryEnzyme": "UGT2B7", "enzymeFraction": {"UGT2B7": 0.9},
     },

@@ -59,7 +59,7 @@ def test_ugt1a9_path_activated(drug, case):
 
 def test_non_substrate_unchanged():
     """Midazolam (CYP3A4 substrate, no UGT) must not crash predict()."""
-    midazolam = "c1ccc2c(c1)C(=NC(=O)N2)c1ccccc1F"
+    midazolam = "CC1=NC=C2N1C3=C(C=C(C=C3)Cl)C(=NC2)C4=CC=CC=C4F"
     result = predict(midazolam, dose_mg=5.0)
     assert result.engine_pk is not None
     assert result.pk.cmax.mean > 0, "midazolam Cmax should be positive"
