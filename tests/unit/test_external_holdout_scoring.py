@@ -656,6 +656,11 @@ def test_cli_uses_frozen_seed_and_bootstrap_count(tmp_path, monkeypatch):
     report = json.loads(output_path.read_text())
     assert (report["seed"], report["n_bootstrap"]) == (7, 100000)
     assert report["label_content_sha256"] == plan["label_content_sha256"]
+    original_score = output_path.read_bytes()
+    with pytest.raises(FileExistsError, match="Score output already exists"):
+        scorer.main()
+    assert output_path.read_bytes() == original_score
+    output_path.unlink()
 
     audit_path.write_text(json.dumps({"pass": False, "manifest_sha256": manifest_sha}))
     sys.argv[sys.argv.index("--audit-report-sha256") + 1] = sha256_file(audit_path)

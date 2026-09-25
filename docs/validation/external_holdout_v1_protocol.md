@@ -633,7 +633,8 @@ tree mismatch, dependency-lock mismatch, artifact-inventory mismatch, training-
 membership mismatch, feature-schema mismatch, solver-settings mismatch, audit
 failure, container-digest mismatch, stale development-residual interval sources,
 resources outside the frozen checkout, or an existing prediction output file.
-The scorer refuses any candidate, arm,
+The scorer also refuses an existing score output file, preserving the first
+scoring record. It refuses any candidate, arm,
 dose, route, derived eligibility, source-record hash, source quota, execution
 status, interval source, cycle, freeze field, or precommitted file-hash mismatch
 before reading the estimand.

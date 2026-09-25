@@ -353,6 +353,8 @@ def main() -> None:
     parser.add_argument("--labels-sha256", required=True)
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
+    if args.out.exists():
+        raise FileExistsError(f"Score output already exists: {args.out}")
 
     actual_sha = hashlib.sha256(args.manifest.read_bytes()).hexdigest()
     if actual_sha != args.manifest_sha256:
@@ -416,7 +418,8 @@ def main() -> None:
     report["label_content_sha256"] = source_plan["label_content_sha256"]
     report["predictions_sha256"] = actual_predictions_sha
     report["labels_sha256"] = actual_labels_sha
-    args.out.write_text(json.dumps(report, indent=2) + "\n")
+    with args.out.open("x") as output:
+        output.write(json.dumps(report, indent=2) + "\n")
     print(json.dumps(report, indent=2))
 
 
