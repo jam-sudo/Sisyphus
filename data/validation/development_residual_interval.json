@@ -7,13 +7,13 @@
   "n_training_reference": 36,
   "skipped_training_reference": [],
   "generated_from": "scripts/calibrate_conformal.py",
-  "source_cache_sha256": "09911a5e0de4bfe02cacf47dbe059eb1dfd4c7998c834cdb4389e17fcd92eaa0",
+  "source_cache_sha256": "c2ea2adb9a39f43a2821524e4f885d806fe902ce822fab94a12ce29aeb08ee57",
   "calibration_reference_sha256": "e8ff034384860c192f52a99af543c295b7ba432acfa9acbaf907bb313a59ada7",
   "holdout_membership_sha256": "8c5d1b0c42247749767ac3a7da3bd61573e0f9bf45f503347a70f87b6b3ad02a",
   "model_artifact_sha256": {
-    "models/direct_pk/xgboost_cmax.json": "1086b5db09c061c6a8282e92e32c221af22a5efefbaad4c24ca08a64c30e05f7",
-    "models/direct_pk/xgboost_clf.json": "d4bbc1f77558bfcbddca8e2a9565fa83d52855c0179af15e3ee6ba9448cb2774",
-    "models/direct_pk/xgboost_vdf.json": "48f46b0f4a555aca098f9e40b264f52d7e4ac802600650059b839351d4c70682",
+    "models/direct_pk/xgboost_cmax.json": "b1ee34bc6254a6d5803648e6a584936b45ebbbdac7bb95791aaefe35cd943f93",
+    "models/direct_pk/xgboost_clf.json": "c9c4c4eb22e886418a24da615407c475400fec0f751ea96977549a938ba5956b",
+    "models/direct_pk/xgboost_vdf.json": "8a0ca56b1d8461e6f2865f2f3930ce0931d2538a407d8811c734dad2abcb90d7",
     "models/adme/xgboost_fup_v2.json": "b0731734730746866646a2628dded73d74254eb06ef1a6c7b457bf273d867096",
     "models/adme/xgboost_clint.json": "0ca4ee7e88367dfb3ad55f94adc8eaa025cdd40b5a308e584b89e05555d3ff42",
     "models/adme/xgboost_vdss.json": "29f84cbff97da197ae516fccb2d91aff972f9bae661a8b2bde39786a984c1c35",
@@ -22,10 +22,10 @@
   "validity": "not split-conformal; fitted components saw calibration outcomes",
   "tracks": {
     "meta": {
-      "0.5": 0.38533690202312043,
-      "0.2": 0.6911375949864319,
-      "0.1": 1.0240685187237981,
-      "0.05": 1.64050693744106
+      "0.5": 0.40088957606049713,
+      "0.2": 0.7157496206798114,
+      "0.1": 0.9937978750197616,
+      "0.05": 1.6202451371131414
     },
     "engine": {
       "0.5": 0.6178446874388239,
@@ -34,17 +34,17 @@
       "0.05": 1.7929130806302982
     },
     "ml": {
-      "0.5": 0.2956306532653272,
-      "0.2": 0.5682050211384293,
-      "0.1": 0.6858275509515581,
-      "0.05": 1.2448790635762772
+      "0.5": 0.29798603130977486,
+      "0.2": 0.512668879252955,
+      "0.1": 0.7981898165384111,
+      "0.05": 1.3424587812123856
     }
   },
   "consumed_development_benchmark_coverage": {
     "meta": {
-      "0.5": 0.5479,
-      "0.2": 0.7534,
-      "0.1": 0.9178,
+      "0.5": 0.5342,
+      "0.2": 0.7671,
+      "0.1": 0.9041,
       "0.05": 0.9863
     },
     "engine": {
@@ -54,10 +54,10 @@
       "0.05": 0.9726
     },
     "ml": {
-      "0.5": 0.411,
-      "0.2": 0.6438,
-      "0.1": 0.6986,
-      "0.05": 0.9178
+      "0.5": 0.3836,
+      "0.2": 0.6164,
+      "0.1": 0.7945,
+      "0.05": 0.9726
     }
   }
 }

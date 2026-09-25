@@ -1,8 +1,8 @@
 {
-  "computed_at": "2026-09-25-benazepril",
+  "computed_at": "2026-09-25-orphenadrine",
   "source_cache": "data/training/4track_holdout_predictions.json",
-  "source_cache_sha256": "09911a5e0de4bfe02cacf47dbe059eb1dfd4c7998c834cdb4389e17fcd92eaa0",
-  "context": "Benazepril hydrochloride source-dose correction; repeatedly accessed development cohort",
+  "source_cache_sha256": "c2ea2adb9a39f43a2821524e4f885d806fe902ce822fab94a12ce29aeb08ee57",
+  "context": "Orphenadrine hydrochloride source-dose correction; repeatedly accessed development cohort",
   "method": "bootstrap on abs(log10(fold))",
   "n_bootstrap": 10000,
   "seed": 20260422,
@@ -17,25 +17,25 @@
       "pct_3fold": 50.7
     },
     "ml": {
-      "aafe": 3.1085,
-      "ci_95_low": 2.5074,
-      "ci_95_high": 3.8708,
+      "aafe": 3.078,
+      "ci_95_low": 2.4906,
+      "ci_95_high": 3.8272,
       "n": 73,
-      "pct_2fold": 41.1,
+      "pct_2fold": 38.4,
       "pct_3fold": 57.5
     },
     "meta": {
-      "aafe": 2.8485,
-      "ci_95_low": 2.3195,
-      "ci_95_high": 3.5466,
+      "aafe": 2.8273,
+      "ci_95_low": 2.2979,
+      "ci_95_high": 3.5289,
       "n": 73,
       "pct_2fold": 43.8,
-      "pct_3fold": 64.4
+      "pct_3fold": 67.1
     },
     "paired_meta_ml": {
-      "ratio": 0.9164,
-      "ci_95_low": 0.8099,
-      "ci_95_high": 1.035,
+      "ratio": 0.9186,
+      "ci_95_low": 0.8081,
+      "ci_95_high": 1.0419,
       "n": 73
     }
   },
@@ -50,25 +50,25 @@
       "pct_3fold": 48.3
     },
     "ml": {
-      "aafe": 2.9254,
-      "ci_95_low": 2.3211,
-      "ci_95_high": 3.7242,
-      "n": 60,
-      "pct_2fold": 43.3,
-      "pct_3fold": 61.7
-    },
-    "meta": {
-      "aafe": 2.8959,
-      "ci_95_low": 2.3389,
-      "ci_95_high": 3.6669,
+      "aafe": 2.9005,
+      "ci_95_low": 2.3008,
+      "ci_95_high": 3.6849,
       "n": 60,
       "pct_2fold": 40.0,
-      "pct_3fold": 63.3
+      "pct_3fold": 60.0
+    },
+    "meta": {
+      "aafe": 2.8947,
+      "ci_95_low": 2.3344,
+      "ci_95_high": 3.6615,
+      "n": 60,
+      "pct_2fold": 40.0,
+      "pct_3fold": 65.0
     },
     "paired_meta_ml": {
-      "ratio": 0.9899,
-      "ci_95_low": 0.8818,
-      "ci_95_high": 1.1166,
+      "ratio": 0.998,
+      "ci_95_low": 0.8859,
+      "ci_95_high": 1.1289,
       "n": 60
     }
   }

@@ -111,6 +111,7 @@ def training_rows() -> list[dict[str, str]]:
         ("Acoramidis", 50.0, 50.0 * 292.13 / 328.77, 2.11, 1),
         ("almitrine", 25.0, 25.0 * 477.563 / 669.777, 0.0389, 1),
         ("benazepril", 10.0, 10.0 * 424.497 / 460.96, 0.13541, 1),
+        ("orphenadrine", 100.0, 100.0 * 269.388 / 305.84, 0.14688, 1),
     ):
         matched = [row for row in rows if row["name"] == name]
         if (len(matched) != 1 or float(matched[0]["dose_mg"]) != source_dose
@@ -175,7 +176,7 @@ def main() -> None:
         holdout_version="N=107 (data/reference/holdout.json)",
         holdout_metric={"name": "five_fold_scaffold_cv_aafe", "value": cv_aafe, "r2": cv_r2},
         retrained_reason=(
-            "Correct felbamate units, nine salt-dose labels, and paired "
+            "Correct felbamate units, ten salt-dose labels, and paired "
             "givinostat salt-dose/concentration masses; "
             "quarantine six blood-matrix, 114 administered/analyte-mismatched, "
             "one dolasetron-metabolite, and one methenamine concentration-basis label"

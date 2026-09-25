@@ -10,6 +10,12 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-25 (cont.) — Orphenadrine hydrochloride dose-basis correction
+
+The [original study and Omega workbook](../validation/development_orphenadrine_dose_basis_2026-09-25.md) identify a 100 mg orphenadrine hydrochloride tablet with parent orphenadrine measured in plasma. The fitted dose and single exploratory arm now use 88.08135 mg parent equivalent; Cmax and AUC were retained, and the stale PBPK-feature row was removed. The original numeric article table remained unavailable. Fitted counts stay 906/900/831. Direct Cmax scaffold-CV AAFE changed **3.3839 → 3.3889**. On consumed N=73, direct ML changed **3.1085 → 3.0780**, Meta **2.8485 → 2.8273** (conditional CI **2.2979–3.5289**), and the paired Meta/ML ratio is **0.9186** (CI **0.8081–1.0419**). This is dose-integrity work, not external validation.
+
+---
+
 ## 2026-09-25 (cont.) — Benazepril hydrochloride dose-basis correction
 
 The [source follow-up](../validation/development_benazepril_dose_basis_2026-09-25.md) reconciled Omega's 10 mg benazepril hydrochloride capsule with the parent SMILES and a regulatory salt-strength convention. Its fitted dose became 9.20898 mg parent equivalent; Cmax/AUC were retained, and the stale PBPK-feature row was removed. The original numeric article table and capsule batch record were unavailable, so those source details remain workbook-based. Fitted counts remain 906/900/831. Direct Cmax scaffold-CV AAFE changed **3.3932 → 3.3839**. On the consumed N=73, direct ML changed **3.0024 → 3.1085**, Meta **2.7965 → 2.8485** (conditional CI **2.3195–3.5466**), and the paired Meta/ML ratio is **0.9164** (CI **0.8099–1.0350**). The dose correction is retained despite the development regression; none of these values is independent accuracy evidence.

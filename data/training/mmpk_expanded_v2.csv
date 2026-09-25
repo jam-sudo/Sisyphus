@@ -2351,7 +2351,7 @@ tolvaptan,Cc1ccccc1C(=O)Nc1ccc(C(=O)N2CCC[C@@H](O)c3cc(Cl)ccc32)c(C)c1,300.0,0.9
 tolvaptan,Cc1ccccc1C(=O)Nc1ccc(C(=O)N2CCC[C@@H](O)c3cc(Cl)ccc32)c(C)c1,360.0,0.996,-2.5580431623435884,1,3.5,10.1,13200.0,,tablet,False,False
 tolvaptan,Cc1ccccc1C(=O)Nc1ccc(C(=O)N2CCC[C@@H](O)c3cc(Cl)ccc32)c(C)c1,420.0,1.301,-2.5089719938363144,1,4.0,12.5,25800.0,,tablet,False,False
 tolvaptan,Cc1ccccc1C(=O)Nc1ccc(C(=O)N2CCC[C@@H](O)c3cc(Cl)ccc32)c(C)c1,480.0,1.073,-2.650641515409636,1,3.5,9.9,25700.0,,tablet,False,False
-orphenadrine,Cc1ccccc1C(OCCN(C)C)c1ccccc1,100.0,0.1468799999999999,-2.8330373361428327,1,3.0,14.97,2030.03,,tablet,False,False
+orphenadrine,Cc1ccccc1C(OCCN(C)C)c1ccccc1,88.0813497253466,0.1468799999999999,-2.7779212971221834,1,3.0,14.97,2030.03,,tablet,False,False
 metolazone,Cc1ccccc1N1C(=O)c2cc(S(N)(=O)=O)c(Cl)cc2NC1C,0.5,0.0075357149627623,-1.821845541361256,2,1.59,7.035,42.355,,tablet,False,False
 metolazone,Cc1ccccc1N1C(=O)c2cc(S(N)(=O)=O)c(Cl)cc2NC1C,1.0,0.0169033132846788,-1.772028159278781,2,1.515,7.59,108.155,,tablet,False,False
 metolazone,Cc1ccccc1N1C(=O)c2cc(S(N)(=O)=O)c(Cl)cc2NC1C,2.0,0.0326003680960813,-1.7878074918784217,2,1.75,7.51,175.34,,tablet,False,False

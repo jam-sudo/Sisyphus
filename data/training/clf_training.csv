@@ -716,7 +716,7 @@ mexiletine,Cc1cccc(C)c1OCC(C)N,5,9.6329,0.9838,1.20,False,False,8.3066,0.9194,Fa
 meclizine,Cc1cccc(CN2CCN(C(c3ccccc3)c3ccc(Cl)cc3)CC2)c1,1,10.5066,1.0215,1.00,False,False,4.7393,0.6757,False
 torasemide,Cc1cccc(Nc2ccncc2S(=O)(=O)NC(=O)NC(C)C)c1,2,0.7170,-0.1445,1.10,False,False,0.2049,-0.6884,False
 tolvaptan,Cc1ccccc1C(=O)Nc1ccc(C(=O)N2CCC[C@@H](O)c3cc(Cl)ccc32)c(C)c1,12,4.6254,0.6652,1.68,False,False,3.4425,0.5369,False
-orphenadrine,Cc1ccccc1C(OCCN(C)C)c1ccccc1,1,11.7287,1.0692,1.00,False,False,15.2016,1.1819,False
+orphenadrine,Cc1ccccc1C(OCCN(C)C)c1ccccc1,1,10.3308,1.0141,1.00,False,False,13.3897,1.1268,False
 metolazone,Cc1ccccc1N1C(=O)c2cc(S(N)(=O)=O)c(Cl)cc2NC1C,3,2.5614,0.4085,1.28,False,False,1.6353,0.2136,False
 nevirapine,Cc1ccnc2c1NC(=O)c1cccnc1N2C1CC1,6,0.3476,-0.4589,2.46,False,False,1.2996,0.1138,False
 tiagabine,Cc1ccsc1C(=CCCN1CCC[C@@H](C(=O)O)C1)c1sccc1C,5,2.2850,0.3589,1.33,False,False,1.4083,0.1487,False
