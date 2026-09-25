@@ -26,3 +26,23 @@ benchmark remains **86** scored compounds. The nominal 90% Meta half-width is
 The latter is diagnostic, not an independent coverage estimate or a calibrated
 90% guarantee. No new blinded external cohort was created; see the
 [V1 protocol](external_holdout_v1_protocol.md).
+
+## Arm-level source follow-up (2026-09-25)
+
+The exploratory acetylsalicylic-acid rows at 100, 300, and 500 mg match the
+**parent ASA** oral Cmax values in [Nagelschmitz et al., Table 1](https://pmc.ncbi.nlm.nih.gov/articles/PMC3964022/):
+1.01, 3.01, and 4.84 mg/L, respectively. Table 2 reports the different,
+higher **salicylic-acid metabolite** values. The fitted 75 mg soft-gel row is
+from [Loprete et al.](https://pubmed.ncbi.nlm.nih.gov/24132773/), whose abstract
+confirms a single-dose healthy-volunteer study with plasma ASA measurement,
+but does not report its 0.971 mg/L Cmax; that numeric value remains unverified
+against the original table.
+
+The two other fitted ezetimibe source arms have compatible analyte and design
+descriptions in their original abstracts. [Wada et al.](https://pubmed.ncbi.nlm.nih.gov/37021410/)
+studied a single fasted 10 mg dose in healthy volunteers and measured EZE
+separately from its glucuronide and total EZE. [Bae et al.](https://pubmed.ncbi.nlm.nih.gov/20865252/)
+studied a single 10 mg dose in healthy volunteers and measured unchanged
+ezetimibe separately from its glucuronide. Neither accessible abstract gives
+the workbook's 5.98 or 3.65 ng/mL arm value, so neither numeric label is
+independently verified. No data or model weights changed in this follow-up.
