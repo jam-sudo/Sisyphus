@@ -5,6 +5,9 @@ import json
 import math
 from pathlib import Path
 
+from rdkit import Chem
+from rdkit.Chem import inchi
+
 from scripts.bootstrap_4track_ci import paired_meta_ml_ratio
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -18,6 +21,10 @@ def test_console_presets_use_current_resources():
     assert payload["benchmark"]["overall"] == cache["overall"]
     assert len(payload["drugs"]) == 8
     assert next(drug for drug in payload["drugs"] if drug["id"] == "metformin")["dose"] == 389.93
+    atorvastatin = next(drug for drug in payload["drugs"] if drug["id"] == "atorvastatin")
+    assert inchi.MolToInchiKey(Chem.MolFromSmiles(atorvastatin["smiles"])) == (
+        "XUKUURHRXDUEBC-KAYWLYCHSA-N"
+    )
     for drug in payload["drugs"]:
         provenance = drug["artifactProvenance"]
         assert drug["residualIntervalSource"] == "development_empirical_residual"

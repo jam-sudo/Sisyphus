@@ -313,8 +313,8 @@
         "auc_mg_h_L": 0.10255,
         "thalf_h": 13.28
       },
-      "smiles": "CC(C)C1=C(C(=C(N1CCC(CC(CC(=O)O)O)O)C2=CC=C(C=C2)F)C3=CC=CC=C3)C(=O)NC4=CC=CC=C4",
-      "correction_note": "2026-09-24: replaced untraceable 5.3 ng/mL and 17.6 ng*h/mL values with directly reported originator-arm arithmetic means: parent Cmax 17.05 ng/mL and AUC0-t 102.55 ng*h/mL after 40 mg oral; removed synthetic curve."
+      "smiles": "CC(C)C1=C(C(=C(N1CC[C@H](C[C@H](CC(=O)O)O)O)C2=CC=C(C=C2)F)C3=CC=CC=C3)C(=O)NC4=CC=CC=C4",
+      "correction_note": "2026-09-24: replaced untraceable 5.3 ng/mL and 17.6 ng*h/mL values with directly reported originator-arm arithmetic means: parent Cmax 17.05 ng/mL and AUC0-t 102.55 ng*h/mL after 40 mg oral; removed synthetic curve. 2026-09-25: specified marketed atorvastatin stereochemistry (PubChem CID 60823; DailyMed atorvastatin calcium description)."
     },
     "atorvastatin,": {
       "name": "atorvastatin,",
@@ -699,8 +699,8 @@
       "pk_params": {
         "cmax_mg_L": 1.77
       },
-      "smiles": "CCC1C(C(C(C(=O)C(CC(C(C(C(C(C(=O)O1)C)OC2CC(C(C(O2)C)O)(C)OC)C)OC3C(C(CC(O3)C)N(C)C)O)(C)OC)C)C)O)(C)O",
-      "correction_note": "2026-09-24: replaced unsupported 0.8 mg/L with directly tabulated mean parent Cmax 1.77 mg/L after single fasted 500 mg oral dose; removed unsupported half-life and synthetic curve."
+      "smiles": "CC[C@@H]1[C@@]([C@@H]([C@H](C(=O)[C@@H](C[C@@]([C@@H]([C@H]([C@@H]([C@H](C(=O)O1)C)O[C@H]2C[C@@]([C@H]([C@@H](O2)C)O)(C)OC)C)O[C@H]3[C@@H]([C@H](C[C@H](O3)C)N(C)C)O)(C)OC)C)C)O)(C)O",
+      "correction_note": "2026-09-24: replaced unsupported 0.8 mg/L with directly tabulated mean parent Cmax 1.77 mg/L after single fasted 500 mg oral dose; removed unsupported half-life and synthetic curve. 2026-09-25: specified clarithromycin stereochemistry (PubChem CID 84029)."
     },
     "clomipramine": {
       "name": "clomipramine",
@@ -1154,8 +1154,8 @@
         "cmax_mg_L": 1.2,
         "bioavailability_pct": 35.0
       },
-      "smiles": "CCN(CC)C(=O)C(=CC1=CC(=C(C(=C1)O)O)[N+](=O)[O-])C#N",
-      "correction_note": "2026-09-24: single-dose approximate Cmax and oral bioavailability confirmed against exact label arm; removed the 0.4 h lower bound of the 0.4-0.7 h beta half-life range (gamma phase 2.4 h) and analytical synthetic curve, which is not an observed concentration-time series."
+      "smiles": "CCN(CC)C(=O)/C(=C/C1=CC(=C(C(=C1)O)O)[N+](=O)[O-])/C#N",
+      "correction_note": "2026-09-24: single-dose approximate Cmax and oral bioavailability confirmed against exact label arm; removed the 0.4 h lower bound of the 0.4-0.7 h beta half-life range (gamma phase 2.4 h) and analytical synthetic curve, which is not an observed concentration-time series. 2026-09-25: specified administered (E)-entacapone geometry (PubChem CID 5281081; DailyMed entacapone description)."
     },
     "entecavir": {
       "name": "entecavir",
@@ -1777,8 +1777,8 @@
         "auc_mg_h_L": 3.703,
         "thalf_h": 21.0
       },
-      "smiles": "CC1=C(C(CCC1)(C)C)C=CC(=CC=CC(=CC(=O)O)C)C",
-      "correction_note": "2026-09-24: replaced pediatric 573.25 ng/mL Cmax with adult fasted 301 ng/mL and radiolabel-blood 90 h half-life with parent-plasma 21 h; removed synthetic curve."
+      "smiles": "CC1=C(C(CCC1)(C)C)/C=C/C(=C/C=C/C(=C\\C(=O)O)/C)/C",
+      "correction_note": "2026-09-24: replaced pediatric 573.25 ng/mL Cmax with adult fasted 301 ng/mL and radiolabel-blood 90 h half-life with parent-plasma 21 h; removed synthetic curve. 2026-09-25: specified 13-cis-isotretinoin geometry (PubChem CID 5282379; DailyMed isotretinoin description)."
     },
     "itraconazole": {
       "name": "itraconazole",
@@ -2431,8 +2431,8 @@
         "cmax_mg_L": 64.3,
         "thalf_h": 16.8
       },
-      "smiles": "CC(C1=CC2=C(C=C1)C=C(C=C2)OC)C(=O)O",
-      "correction_note": "2026-09-24: retained exact 500 mg oral-suspension single-dose parent Cmax 64.3 mg/L; corrected half-life to 16.8 h and removed synthetic curve."
+      "smiles": "C[C@@H](C1=CC2=C(C=C1)C=C(C=C2)OC)C(=O)O",
+      "correction_note": "2026-09-24: retained exact 500 mg oral-suspension single-dose parent Cmax 64.3 mg/L; corrected half-life to 16.8 h and removed synthetic curve. 2026-09-25: specified administered (S)-naproxen stereochemistry (PubChem CID 156391; DailyMed naproxen description)."
     },
     "nateglinide": {
       "name": "nateglinide",

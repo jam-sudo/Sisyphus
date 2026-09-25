@@ -8,7 +8,7 @@
   "skipped_training_reference": [],
   "generated_from": "scripts/calibrate_conformal.py",
   "source_cache_sha256": "50f3d658d128370870b6d6e8cc2646bcfc64cbc01b7bfa84c578a3aa83033f69",
-  "calibration_reference_sha256": "e8ff034384860c192f52a99af543c295b7ba432acfa9acbaf907bb313a59ada7",
+  "calibration_reference_sha256": "74adfc1da32cf23ef1414ebdfd0075825e12f702f8144b984e5526537f967839",
   "holdout_membership_sha256": "8c5d1b0c42247749767ac3a7da3bd61573e0f9bf45f503347a70f87b6b3ad02a",
   "model_artifact_sha256": {
     "models/direct_pk/xgboost_cmax.json": "9c5d11043b69fc13ac8a7b961dc1ece5036f923a5ff923464d7e9391ed5183ce",

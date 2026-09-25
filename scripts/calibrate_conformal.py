@@ -1,7 +1,7 @@
 """Reproduce the legacy development-residual Cmax interval artifact.
 
 This is not a valid split-conformal calibration: the direct ML component saw
-part of the calibration outcomes during fitting, and N=107 coverage is consumed
+part of the calibration outcomes during fitting, and development coverage is consumed
 development evidence. Writes data/validation/development_residual_interval.json.
 
 Do not use this script to claim independent coverage. A replacement must create

@@ -1,6 +1,6 @@
 """Pin source-adjudicated stereochemistry in the development reference set.
 
-Keys come from PubChem name records checked on 2026-09-23. The three
+Keys come from PubChem name records checked through 2026-09-25. The four
 exceptions are mixtures or FDA-unspecified E/Z structures, so choosing a
 single PubChem stereoisomer would misrepresent their reference formulations.
 """
@@ -13,20 +13,25 @@ from rdkit.Chem import inchi
 
 ROOT = Path(__file__).resolve().parents[2]
 EXPECTED = {
+    "atorvastatin": "XUKUURHRXDUEBC-KAYWLYCHSA-N",
     "azacitidine": "NMUSYJAQQFHJEW-KVTDHHQDSA-N",
     "azithromycin": "MQTOSJVFKKJCRP-BICOPXKESA-N",
     "bexagliflozin": "BTCRKOKVYTVOLU-SJSRKZJXSA-N",
+    "clarithromycin": "AGOYDEPGAOXOCK-KCBOHYOISA-N",
     "clopidogrel": "GKTWGGQPFAXNFI-HNNXBMFYSA-N",
     "colchicine": "IAKHMKGGTNLKSZ-INIZCTEOSA-N",
     "darolutamide": "BLIJXOOIHRSQRB-PXYINDEMSA-N",
+    "entacapone": "JRURYQJSLYLRLN-BJMVGYQFSA-N",
     "fesoterodine": "DCCSDBARQIPTGU-HSZRJFAPSA-N",
     "fluvoxamine": "CJOFXWAVKWHTFT-XSFVSMFZSA-N",
     "glasdegib": "SFNSLLSYNZWZQG-VQIMIIECSA-N",
     "isosorbide mononitrate": "YWXYYJSYQOXTPL-SLPGGIOYSA-N",
+    "isotretinoin": "SHGAZHPCJJPHSC-XFYACQKRSA-N",
     "levocetirizine": "ZKLPARSLTMPFCP-OAQYLSRUSA-N",
     "molnupiravir": "HTNPEHXGEKVIHG-QCNRFFRDSA-N",
     "morphine": "BQJCRHHNABKAKU-KBQPJGBKSA-N",
     "moxifloxacin": "FABPRXSRWADJSP-MEDUHNTESA-N",
+    "naproxen oral": "CMWTZPSULFXXJA-VIFPVBQESA-N",
     "norethindrone": "VIKNJXKGJWUCNN-XGXHKTLJSA-N",
     "sonidegib": "VZZJRYRQSPEMTK-CALCHBBNSA-N",
     "tamoxifen": "NKANXQFJJICGDU-QPLCGJKRSA-N",
@@ -35,7 +40,7 @@ EXPECTED = {
     "valacyclovir": "HDOVUKNUBWVHOX-QMMMGPOBSA-N",
     "valganciclovir": "WPVFJKSGQUFQAP-GKAPJAKFSA-N",
 }
-MIXTURE_EXCEPTIONS = {"itraconazole", "ketoconazole", "ranitidine"}
+MIXTURE_EXCEPTIONS = {"itraconazole", "ketoconazole", "ranitidine", "tramadol"}
 
 
 def test_development_structures_and_registries_share_stereo_identity():
@@ -45,7 +50,7 @@ def test_development_structures_and_registries_share_stereo_identity():
         assert molecule is not None
         assert inchi.MolToInchiKey(molecule) == key, name
 
-    assert len(EXPECTED) == 21
+    assert len(EXPECTED) == 26
     for name in MIXTURE_EXCEPTIONS:
         assert not any(marker in clinical[name]["smiles"] for marker in ("@", "/", "\\"))
 

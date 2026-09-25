@@ -76,7 +76,7 @@ DRUGS = [
     },
     {
         "id": "atorvastatin", "name": "Atorvastatin", "dose": 40, "route": "oral",
-        "smiles": "CC(C)c1c(C(=O)Nc2ccccc2)c(-c2ccccc2)c(-c2ccc(F)cc2)n1CCC(O)CC(O)CC(=O)O",
+        "smiles": "CC(C)C1=C(C(=C(N1CC[C@H](C[C@H](CC(=O)O)O)O)C2=CC=C(C=C2)F)C3=CC=CC=C3)C(=O)NC4=CC=CC=C4",
         "formula": "C₃₃H₃₅FN₂O₅", "mw": 558.64,
         "primaryEnzyme": "CYP3A4", "enzymeFraction": {"CYP3A4": 0.8},
     },

@@ -12,6 +12,16 @@ track `pyproject.toml`.
 
 ## [Unreleased]
 
+### Development reference identity correction (2026-09-25)
+
+- Restored source-supported stereochemistry for atorvastatin, clarithromycin,
+  entacapone, isotretinoin, and naproxen in `clinical_pk.json`; doses and PK
+  observations are unchanged. Pinned their full InChIKeys in the reference
+  regression check.
+- Regenerated the development residual interval provenance and web presets;
+  a stale reference hash had disabled runtime Cmax intervals. The interval
+  remains development-derived and is not independently calibrated.
+
 ### Scientific interpretation correction (2026-09-25)
 
 - Reconciled the failed-experiment summary with the later human-F source audit and
