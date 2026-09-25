@@ -10,6 +10,18 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Pin both Omega Cmax source workbooks
+
+The current 908-row direct Cmax fit reconciles to 899 numerical aggregates in
+Omega's original `approved.xlsx`, eight in `approved_2024.xlsx`, and one
+separately corrected felbamate row. The 2024 supplement was missing from the
+model's upstream-source metadata. Both pinned workbook URLs and SHA256 values
+are now recorded; see the [coverage audit](../validation/development_omega_cmax_workbook_coverage_2026-09-24.md).
+The fitted CSV and model bytes are unchanged. This improves reproducibility,
+not external accuracy evidence.
+
+---
+
 ## 2026-09-24 (cont.) — Quarantine voclosporin whole-blood Cmax training label
 
 The pinned Omega workbook's voclosporin 0.25–4.5 mg/kg Cmax values match the

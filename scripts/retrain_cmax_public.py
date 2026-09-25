@@ -22,6 +22,12 @@ from sisyphus.descriptors import compute_features  # noqa: E402
 
 SOURCE = ROOT / "data/training/omega_mmpk_clean.csv"
 SOURCE_SHA = "e7228d14bdfdfc6c790177207779630c1e5655c19d451528c87b80e2e9de9c3d"
+SOURCE_WORKBOOKS = [
+    {"url": "https://github.com/jam-sudo/Omega/blob/08a45047a2b5dcdca8c9a8f36ff1fe3b50ed3d6d/data/external/mmpk/approved.xlsx",
+     "sha256": "4521a2d89dde71c9e9381ab0a920e84dfc69c714860de377cd73b338572026d2"},
+    {"url": "https://github.com/jam-sudo/Omega/blob/08a45047a2b5dcdca8c9a8f36ff1fe3b50ed3d6d/data/external/mmpk/approved_2024.xlsx",
+     "sha256": "bfdc1bac564dcf3a29f2f8021f69c4f6e087a687bea329433ccd47d233b4d32f"},
+]
 MISMATCH = ROOT / "data/validation/cmax_administered_analyte_mismatch_v1.csv"
 MISMATCH_SHA = "09dca8c11133045cb75d9351b940311064b6b36dbaa2f95c3d5bd1b9de236fff"
 DATASET = ROOT / "data/training/cmax_omega_public_clean.csv"
@@ -114,7 +120,7 @@ def main() -> None:
         trained_at=datetime.now(timezone.utc).isoformat(),
         trained_on={"dataset_path": str(DATASET.relative_to(ROOT)),
                     "sha256": sha256(DATASET), "n_drugs_clean": len(fitted),
-                    "source_sha256": SOURCE_SHA},
+                    "source_sha256": SOURCE_SHA, "source_workbooks": SOURCE_WORKBOOKS},
         n_drugs_original=1128,
         n_drugs_excluded=220,
         holdout_version="N=107 (data/reference/holdout.json)",

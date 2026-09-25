@@ -6,7 +6,17 @@
     "dataset_path": "data/training/cmax_omega_public_clean.csv",
     "sha256": "f8fbfde1c07fbc22f2cd6e3f72304f429ed14745261a65b29de1ac8545013694",
     "n_drugs_clean": 908,
-    "source_sha256": "e7228d14bdfdfc6c790177207779630c1e5655c19d451528c87b80e2e9de9c3d"
+    "source_sha256": "e7228d14bdfdfc6c790177207779630c1e5655c19d451528c87b80e2e9de9c3d",
+    "source_workbooks": [
+      {
+        "url": "https://github.com/jam-sudo/Omega/blob/08a45047a2b5dcdca8c9a8f36ff1fe3b50ed3d6d/data/external/mmpk/approved.xlsx",
+        "sha256": "4521a2d89dde71c9e9381ab0a920e84dfc69c714860de377cd73b338572026d2"
+      },
+      {
+        "url": "https://github.com/jam-sudo/Omega/blob/08a45047a2b5dcdca8c9a8f36ff1fe3b50ed3d6d/data/external/mmpk/approved_2024.xlsx",
+        "sha256": "bfdc1bac564dcf3a29f2f8021f69c4f6e087a687bea329433ccd47d233b4d32f"
+      }
+    ]
   },
   "feature_schema": {
     "name": "compute_features_v1",

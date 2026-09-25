@@ -11,6 +11,7 @@ from scripts.retrain_cmax_public import (
     ROOT,
     SOURCE,
     SOURCE_SHA,
+    SOURCE_WORKBOOKS,
     sha256,
     training_rows,
 )
@@ -40,6 +41,7 @@ def test_public_cmax_fitted_rows_and_artifact_are_pinned():
     assert metadata["trained_on"]["sha256"] == sha256(DATASET)
     assert sha256(DATASET) == "f8fbfde1c07fbc22f2cd6e3f72304f429ed14745261a65b29de1ac8545013694"
     assert metadata["trained_on"]["n_drugs_clean"] == 908
+    assert metadata["trained_on"]["source_workbooks"] == SOURCE_WORKBOOKS
     assert metadata["artifact_sha256"] == sha256(MODEL)
     assert sha256(MODEL) == "c776768146b0746a70e31af4446e25ba1245139b09b2d5497fb09d93ecd2b0e1"
     assert metadata["holdout_metric"]["name"] == "five_fold_scaffold_cv_aafe"
