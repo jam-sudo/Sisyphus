@@ -833,7 +833,7 @@ elacestrant,CCNCCc1ccc(CN(CC)c2cc(OC)ccc2[C@@H]2CCc3cc(O)ccc3C2)cc1,1.0,6.000000
 dexfenfluramine,CCN[C@@H](C)Cc1cccc(C(F)(F)F)c1,30.0,0.0273,-3.0409586076789066,1,False
 diphenoxylate,CCOC(=O)C1(c2ccccc2)CCN(CCC(C#N)(c2ccccc2)c2ccccc2)CC1,5.0,0.0095,-2.721246399047171,1,False
 felodipine,CCOC(=O)C1=C(C)NC(C)=C(C(=O)OC)C1c1cccc(Cl)c1Cl,5.0,0.00553,-2.9562448730313204,1,False
-Givinostat,CCN(CC)Cc1ccc2cc(COC(=O)Nc3ccc(C(=O)NO)cc3)ccc2c1,50.0,0.05299999999999999,-2.97469413473523,1,False
+Givinostat,CCN(CC)Cc1ccc2cc(COC(=O)Nc3ccc(C(=O)NO)cc3)ccc2c1,44.3,0.046957999999999986,-2.97469413473523,1,False
 hydroxychloroquine,CCN(CCO)CCCC(C)Nc1ccnc2cc(Cl)ccc12,155.0,0.04600000000000002,-3.527573866488717,1,True
 amisulpride,CCN1CCCC1CNC(=O)c1cc(S(=O)(=O)CC)c(N)cc1OC,200.0,0.671,-2.474307475494989,1,False
 sultopride,CCN1CCCC1CNC(=O)c1cc(S(=O)(=O)CC)ccc1OC,50.0,0.33,-2.1804560644581312,1,False

@@ -117,6 +117,16 @@ def training_rows() -> list[dict[str, str]]:
             raise ValueError(f"{name} source row changed; re-adjudicate its dose basis")
         matched[0]["dose_mg"] = str(parent_dose)
         matched[0]["log_cmax_per_dose"] = str(float(np.log10(cmax / parent_dose)))
+    # Furlan 2011 Table 2 gives 53 ng/mL = 111 nmol/L, a salt-mass basis.
+    # The sponsor's later ITF2357 protocol defines capsule mg as HCl monohydrate.
+    givinostat = [row for row in rows if row["name"] == "Givinostat"]
+    if (len(givinostat) != 1 or float(givinostat[0]["dose_mg"]) != 50
+            or int(givinostat[0]["n_studies"]) != 1
+            or not np.isclose(float(givinostat[0]["cmax_mg_L"]), 0.053)):
+        raise ValueError("Givinostat source row changed; re-adjudicate its mass basis")
+    givinostat[0]["dose_mg"] = str(50 * 8.86 / 10)
+    givinostat[0]["cmax_mg_L"] = str(float(givinostat[0]["cmax_mg_L"]) * 8.86 / 10)
+    # Both source masses share the salt basis, so Cmax/dose is unchanged.
     # Richens et al. 1997, Table 1: 600 mg young low-dose Cmax is 8.9 µg/mL.
     # The archived Omega row divided by 1000 as if that value were ng/mL.
     felbamate = [row for row in rows if row["name"] == "felbamate"]
@@ -163,7 +173,8 @@ def main() -> None:
         holdout_version="N=107 (data/reference/holdout.json)",
         holdout_metric={"name": "five_fold_scaffold_cv_aafe", "value": cv_aafe, "r2": cv_r2},
         retrained_reason=(
-            "Correct felbamate units and seven source-adjudicated salt-dose labels; "
+            "Correct felbamate units, seven salt-dose labels, and paired "
+            "givinostat salt-dose/concentration masses; "
             "quarantine six blood-matrix, 114 administered/analyte-mismatched, "
             "one dolasetron-metabolite, and one methenamine concentration-basis label"
         ),

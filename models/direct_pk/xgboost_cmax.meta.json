@@ -4,7 +4,7 @@
   "target": "log10(cmax_mg_L / dose_mg)",
   "trained_on": {
     "dataset_path": "data/training/cmax_omega_public_clean.csv",
-    "sha256": "b5dfec4ba452bf408981038205d0556bbf929bf3365fffcf714737dccc34d8cf",
+    "sha256": "a39e03c26298e2c3af41152e5025f2ad71cac30f879d858258abc96aa9054117",
     "n_drugs_clean": 906,
     "source_sha256": "e7228d14bdfdfc6c790177207779630c1e5655c19d451528c87b80e2e9de9c3d",
     "source_workbooks": [
@@ -24,7 +24,7 @@
     "sha256": "b41dddd78533661b8f4aed86bdb7c5f55d15ed3cd2ad20b39e9100557eda631e",
     "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, MolMR). See src/sisyphus/descriptors.py::compute_features."
   },
-  "trained_at": "2026-09-25T04:27:24.090855+00:00",
+  "trained_at": "2026-09-25T04:50:16.697854+00:00",
   "n_drugs_original": 1128,
   "n_drugs_excluded": 222,
   "holdout_version": "N=107 (data/reference/holdout.json)",
@@ -46,5 +46,5 @@
     "n_jobs": 4,
     "verbosity": 0
   },
-  "retrained_reason": "Correct felbamate units and seven source-adjudicated salt-dose labels; quarantine six blood-matrix, 114 administered/analyte-mismatched, one dolasetron-metabolite, and one methenamine concentration-basis label"
+  "retrained_reason": "Correct felbamate units, seven salt-dose labels, and paired givinostat salt-dose/concentration masses; quarantine six blood-matrix, 114 administered/analyte-mismatched, one dolasetron-metabolite, and one methenamine concentration-basis label"
 }

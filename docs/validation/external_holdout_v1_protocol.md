@@ -552,12 +552,12 @@ holdout separation and source screening, including analyte, matrix, and unit
 adjudication. Retraining with the recorded hyperparameters and current feature
 code did not reproduce the former shipped model's trees or predictions. The
 current public Cmax model is trained from the 906-row fitted CSV, SHA256
-`b5dfec4ba452bf408981038205d0556bbf929bf3365fffcf714737dccc34d8cf`,
+`a39e03c26298e2c3af41152e5025f2ad71cac30f879d858258abc96aa9054117`,
 and its model SHA256 is
 `9f208986df039551e8170fb90a1af883bcea87bc2d359d6d9ac65362a54ab011`.
 Seven source-adjudicated fitted salt doses use parent-equivalent mass;
 the CL/F and Vd/F models were rebuilt from the screened Omega source, fitting
-900 and 831 rows respectively. See the [first dose and source-screen follow-up](development_salt_dose_and_clf_screen_followup_2026-09-24.md), [additional salt-dose follow-up](development_additional_salt_dose_followup_2026-09-24.md), [methenamine quarantine](development_methenamine_label_quarantine_2026-09-24.md), and [Acoramidis dose-basis correction](development_acoramidis_dose_basis_2026-09-25.md).
+900 and 831 rows respectively. Givinostat's paired salt-dose and concentration masses were also normalized without changing the fitted Cmax/dose target or CL/F values. See the [first dose and source-screen follow-up](development_salt_dose_and_clf_screen_followup_2026-09-24.md), [additional salt-dose follow-up](development_additional_salt_dose_followup_2026-09-24.md), [methenamine quarantine](development_methenamine_label_quarantine_2026-09-24.md), [Acoramidis dose-basis correction](development_acoramidis_dose_basis_2026-09-25.md), and [Givinostat paired-mass correction](development_givinostat_mass_basis_2026-09-25.md).
 The single-assay TDC hepatocyte CLint replacement is pinned to its 995-row
 fitted CSV (SHA256
 `dbf2b750b58a68af02b01cfe90a370630908c311c8436f65818bbc08fcfaaa94`)

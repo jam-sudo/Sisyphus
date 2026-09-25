@@ -43,7 +43,7 @@ def test_public_cmax_fitted_rows_and_artifact_are_pinned():
                 salt_names = {
                     "lisdexamfetamine", "zofenopril", "metformin", "bupropion",
                     "pyridostigmine", "trospium", "methenamine",
-                    "Acoramidis",
+                    "Acoramidis", "Givinostat",
                 }
                 assert not any(row["name"] in salt_names for row in rows)
     with (ROOT / "data/training/clf_training.csv").open(newline="") as handle:
@@ -63,11 +63,29 @@ def test_public_cmax_fitted_rows_and_artifact_are_pinned():
     felbamate = next(row for row in fitted if row["name"] == "felbamate")
     assert float(felbamate["cmax_mg_L"]) == 8.9
     assert math.isclose(float(felbamate["log_cmax_per_dose"]), math.log10(8.9 / 600))
+    givinostat = next(row for row in fitted if row["name"] == "Givinostat")
+    assert math.isclose(float(givinostat["dose_mg"]), 50 * 8.86 / 10)
+    assert math.isclose(float(givinostat["cmax_mg_L"]), 0.053 * 8.86 / 10)
+    assert math.isclose(
+        float(givinostat["log_cmax_per_dose"]),
+        math.log10(float(givinostat["cmax_mg_L"]) / float(givinostat["dose_mg"])),
+    )
+    for name in ("mmpk_expanded_full.csv", "mmpk_expanded_v2.csv"):
+        with (ROOT / "data/training" / name).open(newline="") as handle:
+            arms = [row for row in csv.DictReader(handle) if row["name"] == "Givinostat"]
+        assert len(arms) == 5
+        for row, (dose, cmax, auc) in zip(
+            arms, ((50, 53, 359), (100, 99, 671), (200, 236, 1346),
+                   (400, 526.3, 2503), (600, 542, 3543)), strict=True
+        ):
+            assert math.isclose(float(row["dose_mg"]), dose * 0.886)
+            assert math.isclose(float(row["cmax_mg_L"]), cmax * 0.886 / 1000)
+            assert math.isclose(float(row["auc_ng_h_ml"]), auc * 0.886)
 
     metadata = json.loads(META.read_text())
     assert metadata["trained_on"]["dataset_path"] == str(DATASET.relative_to(ROOT))
     assert metadata["trained_on"]["sha256"] == sha256(DATASET)
-    assert sha256(DATASET) == "b5dfec4ba452bf408981038205d0556bbf929bf3365fffcf714737dccc34d8cf"
+    assert sha256(DATASET) == "a39e03c26298e2c3af41152e5025f2ad71cac30f879d858258abc96aa9054117"
     assert metadata["trained_on"]["n_drugs_clean"] == 906
     assert metadata["trained_on"]["source_workbooks"] == SOURCE_WORKBOOKS
     assert metadata["artifact_sha256"] == sha256(MODEL)

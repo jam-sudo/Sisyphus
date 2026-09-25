@@ -10,6 +10,12 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-25 (cont.) — Givinostat paired salt-mass normalization
+
+The [source follow-up](../validation/development_givinostat_mass_basis_2026-09-25.md) reconciled Furlan et al. 2011 Table 2's mass and molar Cmax/AUC values with the FDA hydrochloride-monohydrate equivalence and a later Italfarmaco ITF2357 capsule protocol. All five exploratory arms and the fitted aggregate now use paired parent-mass dose, Cmax, and AUC; the stale PBPK-feature row was removed. The 2011 capsule batch and assay calibration records remain unavailable, so the dose convention is source-linked inference. The Cmax/dose targets, derived CL/F table, Cmax model hash, development benchmark, and interval are unchanged.
+
+---
+
 ## 2026-09-25 — Acoramidis hydrochloride dose-basis correction
 
 The [source adjudication](../validation/development_acoramidis_dose_basis_2026-09-25.md) uses the PMDA's AG10-001 study record and the original article's dose-normalized Cmax and AUC to show that its 50 mg arm is hydrochloride mass but the fitted structure requires 44.4277 mg free-acid equivalent. The 50 mg fitted aggregate and four exploratory arms were corrected; the stale PBPK-feature row was removed. Cmax/CLF/VDF fitted counts remain 906/900/831. Direct Cmax scaffold-CV AAFE changed **3.3699 → 3.3827**. On consumed N=73, Meta AAFE changed **2.8158 → 2.8053** (conditional CI **2.2829–3.4882**), and direct ML **2.9848 → 2.9925**. The paired Meta/ML AAFE ratio is **0.9374** (CI **0.8255–1.0625**). These small shifts are version bookkeeping, not external evidence.
