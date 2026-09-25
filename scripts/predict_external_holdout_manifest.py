@@ -106,6 +106,8 @@ def main() -> None:
     parser.add_argument("--audit-report-sha256", required=True)
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
+    if args.out.exists():
+        raise FileExistsError(f"Prediction output already exists: {args.out}")
 
     if os.environ.get("SISYPHUS_PROFILE", "public") != "public":
         raise ValueError("External holdout execution requires SISYPHUS_PROFILE=public")
@@ -221,7 +223,8 @@ def main() -> None:
         "rows": rows,
     }
     validate_payload(payload, "external_holdout_v1_predictions.schema.json")
-    args.out.write_text(json.dumps(payload, indent=2) + "\n")
+    with args.out.open("x") as output:
+        output.write(json.dumps(payload, indent=2) + "\n")
     print(f"Wrote {len(rows)} blinded predictions to {args.out}")
 
 
