@@ -547,14 +547,14 @@ and must not be used to regenerate the public artifact.
 The inventory includes the [Omega `mmpk_clean.csv` source at commit
 `08a45047`](https://github.com/jam-sudo/Omega/blob/08a45047a2b5dcdca8c9a8f36ff1fe3b50ed3d6d/data/ml/clinical/mmpk_clean.csv),
 SHA256 `e7228d14bdfdfc6c790177207779630c1e5655c19d451528c87b80e2e9de9c3d`.
-Its 1,128 rows yield the documented 100 exclusions and 1,028 remaining rows
-under the current 107-compound holdout and three-key matching. Retraining
-with the recorded hyperparameters and current feature code did not reproduce
-the former shipped model's trees or predictions. The public Cmax replacement
-is now trained from the exact 1,028-row fitted CSV, SHA256
-`5668d3747e11d03d8c3d57c03ff0842ed3aa330f4c938386e47c05e1e318c919`,
+Its 1,128 rows now yield 221 documented exclusions and 907 fitted rows after
+holdout separation and source screening, including analyte, matrix, and unit
+adjudication. Retraining with the recorded hyperparameters and current feature
+code did not reproduce the former shipped model's trees or predictions. The
+current public Cmax model is trained from the 907-row fitted CSV, SHA256
+`a849aea93ed41e7ce7c359aa3e6d57c803842e6d5188026d3d8a67285afbbf6d`,
 and its model SHA256 is
-`14391eb0881cb3ec83ab2f81592c5fe75da7c949290ec438fddc2d7136f792a0`.
+`e10b563f39079116ed0ff1b0fb9f667793e5e99b2f54b028ff2d030e9765b6a0`.
 The single-assay TDC hepatocyte CLint replacement is pinned to its 995-row
 fitted CSV (SHA256
 `dbf2b750b58a68af02b01cfe90a370630908c311c8436f65818bbc08fcfaaa94`)
