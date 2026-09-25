@@ -43,6 +43,7 @@ def test_public_cmax_fitted_rows_and_artifact_are_pinned():
                 salt_names = {
                     "lisdexamfetamine", "zofenopril", "metformin", "bupropion",
                     "pyridostigmine", "trospium", "methenamine",
+                    "Acoramidis",
                 }
                 assert not any(row["name"] in salt_names for row in rows)
     with (ROOT / "data/training/clf_training.csv").open(newline="") as handle:
@@ -52,6 +53,7 @@ def test_public_cmax_fitted_rows_and_artifact_are_pinned():
         ("lisdexamfetamine", 30 * 263.385 / 455.60), ("zofenopril", 57.3),
         ("metformin", 389.93), ("bupropion", 100 * 239.74 / 276.20),
         ("pyridostigmine", 120 * 181.21 / 261.12), ("trospium", 60 * 392.51 / 427.96),
+        ("Acoramidis", 50 * 292.13 / 328.77),
     ):
         row = next(row for row in fitted if row["name"] == name)
         assert math.isclose(float(row["dose_mg"]), dose)
@@ -65,18 +67,18 @@ def test_public_cmax_fitted_rows_and_artifact_are_pinned():
     metadata = json.loads(META.read_text())
     assert metadata["trained_on"]["dataset_path"] == str(DATASET.relative_to(ROOT))
     assert metadata["trained_on"]["sha256"] == sha256(DATASET)
-    assert sha256(DATASET) == "1ca357073594f42447ae90f950d142498b60eccc1211a5099fae589f0466f010"
+    assert sha256(DATASET) == "b5dfec4ba452bf408981038205d0556bbf929bf3365fffcf714737dccc34d8cf"
     assert metadata["trained_on"]["n_drugs_clean"] == 906
     assert metadata["trained_on"]["source_workbooks"] == SOURCE_WORKBOOKS
     assert metadata["artifact_sha256"] == sha256(MODEL)
-    assert sha256(MODEL) == "94ba3382cc496cec0fb0ad58096c3878b0de9683ad6170145256eb3373933931"
+    assert sha256(MODEL) == "9f208986df039551e8170fb90a1af883bcea87bc2d359d6d9ac65362a54ab011"
     assert metadata["holdout_metric"]["name"] == "five_fold_scaffold_cv_aafe"
-    assert math.isclose(metadata["holdout_metric"]["value"], 3.3699223457697474)
+    assert math.isclose(metadata["holdout_metric"]["value"], 3.382722659199057)
 
     clf_dataset = ROOT / "data/training/clf_training.csv"
     for model_name, expected_n, expected_hash in (
-        ("clf", 900, "0859f07b9f76ac8dc2ee587fb813ed55dcce01fae5821d479781773484dfbd78"),
-        ("vdf", 831, "417d06c3dc97de49da5f550634a978e4f3af5fac874ce6ae8f32de1b7da8914d"),
+        ("clf", 900, "11369f5d1c1944416424ff762d0e40d70da1a5b72c17d67ab8fab687635e95bd"),
+        ("vdf", 831, "1e23113191dbf138c7f18a0622ca477be25158c730c665d1864dbbec75b68852"),
     ):
         model = ROOT / f"models/direct_pk/xgboost_{model_name}.json"
         meta = json.loads(model.with_suffix(".meta.json").read_text())

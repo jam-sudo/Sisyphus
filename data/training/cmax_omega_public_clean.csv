@@ -576,7 +576,7 @@ bendazac,O=C(O)COc1nn(Cc2ccccc2)c2ccccc12,500.0,41.9,-1.0767559813697236,1,False
 etrasimod,O=C(O)C[C@H]1CCc2c1[nH]c1ccc(OCc3ccc(C4CCCC4)c(C(F)(F)F)c3)cc21,5.0,0.10200000000000002,-1.6903698325741012,1,False
 pitavastatin,O=C(O)C[C@H](O)C[C@H](O)/C=C/c1c(C2CC2)nc2ccccc2c1-c1ccc(F)cc1,4.0,0.23291,-1.2348718559423353,1,False
 ataluren,O=C(O)c1cccc(-c2noc(-c3ccccc3F)n2)c1,1448.0,45.70000000000001,-1.500852361791278,1,False
-Acoramidis,Cc1n[nH]c(C)c1CCCOc1cc(C(=O)O)ccc1F,50.0,2.11,-1.3746875490383261,1,False
+Acoramidis,Cc1n[nH]c(C)c1CCCOc1cc(C(=O)O)ccc1F,44.42771542415671,2.11,-1.3233715260910095,1,False
 paritaprevir,Cc1cnc(C(=O)N[C@H]2CCCCC/C=C\[C@@H]3C[C@@]3(C(=O)NS(=O)(=O)C3CC3)NC(=O)[C@@H]3C[C@@H](Oc4nc5ccccc5c5ccccc45)CN3C2=O)cn1,300.0,0.12000000000000001,-3.3979400086720375,1,False
 thiamine,Cc1ncc(C[n+]2csc(CCO)c2C)c(N)n1,50.0,0.009370000000000005,-3.72723041344824,1,False
 tafamidis,O=C(O)c1ccc2nc(-c3cc(Cl)cc(Cl)c3)oc2c1,400.0,20.36,-1.2932822176632413,1,False

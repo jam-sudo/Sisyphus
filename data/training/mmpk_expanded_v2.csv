@@ -2414,10 +2414,10 @@ fedratinib,Cc1cnc(Nc2ccc(OCCN3CCCC3)cc2)nc1Nc1cccc(S(=O)(=O)NC(C)(C)C)c1,680.0,1
 rupatadine,Cc1cncc(CN2CCC(=C3c4ccc(Cl)cc4CCc4cccnc43)CC2)c1,10.0,0.0044049971623146,-3.356054367022987,2,0.7350000000000001,5.48,13.595,,tablet,False,False
 rupatadine,Cc1cncc(CN2CCC(=C3c4ccc(Cl)cc4CCc4cccnc43)CC2)c1,20.0,0.0081269920634881,-3.3911001600264417,2,0.9,6.945,26.06,,tablet,False,False
 rupatadine,Cc1cncc(CN2CCC(=C3c4ccc(Cl)cc4CCc4cccnc43)CC2)c1,40.0,0.0178122149099992,-3.351342064937061,2,0.785,6.92,56.225,,tablet,False,False
-Acoramidis,Cc1n[nH]c(C)c1CCCOc1cc(C(=O)O)ccc1F,50.0,2.11,-1.374687549038326,1,0.8,25.2,28600.0,,tablet,False,False
-Acoramidis,Cc1n[nH]c(C)c1CCCOc1cc(C(=O)O)ccc1F,150.0,3.5400000000000005,-1.6270879970298933,1,0.8,27.6,50600.0,,tablet,False,False
-Acoramidis,Cc1n[nH]c(C)c1CCCOc1cc(C(=O)O)ccc1F,300.0,4.51,-1.822944712841702,1,0.8,21.5,52800.0,,tablet,False,False
-Acoramidis,Cc1n[nH]c(C)c1CCCOc1cc(C(=O)O)ccc1F,800.0,11.500000000000004,-1.842392146638332,1,1.0,27.5,123000.0,,tablet,False,False
+Acoramidis,Cc1n[nH]c(C)c1CCCOc1cc(C(=O)O)ccc1F,44.4277154241567,2.11,-1.3233715260910095,1,0.8,25.2,28600.0,,tablet,False,False
+Acoramidis,Cc1n[nH]c(C)c1CCCOc1cc(C(=O)O)ccc1F,133.2831462724701,3.5400000000000005,-1.5757719740825766,1,0.8,27.6,50600.0,,tablet,False,False
+Acoramidis,Cc1n[nH]c(C)c1CCCOc1cc(C(=O)O)ccc1F,266.5662925449402,4.51,-1.7716286898943854,1,0.8,21.5,52800.0,,tablet,False,False
+Acoramidis,Cc1n[nH]c(C)c1CCCOc1cc(C(=O)O)ccc1F,710.8434467865072,11.500000000000004,-1.791076123691015,1,1.0,27.5,123000.0,,tablet,False,False
 febuxostat,Cc1nc(-c2ccc(OCC(C)C)c(C#N)c2)sc1C(=O)O,10.0,0.34,-1.4685210829577449,1,1.0,1.5,730.0,,tablet,False,False
 febuxostat,Cc1nc(-c2ccc(OCC(C)C)c(C#N)c2)sc1C(=O)O,20.0,1.11,-1.2557070168773237,1,1.0,3.2,2180.0,,tablet,False,False
 febuxostat,Cc1nc(-c2ccc(OCC(C)C)c(C#N)c2)sc1C(=O)O,30.0,1.12,-1.4279032320494809,1,0.5,9.2,2550.0,,tablet,False,False

@@ -732,7 +732,7 @@ acipimox,Cc1cnc(C(=O)O)c[n+]1[O-],3,3.5345,0.5483,1.18,False,False,0.5150,-0.288
 meloxicam,Cc1cnc(NC(=O)C2=C(O)c3ccccc3S(=O)(=O)N2C)s1,2,0.0872,-1.0596,1.03,False,True,0.1602,-0.7954,False
 fedratinib,Cc1cnc(Nc2ccc(OCCN3CCCC3)cc2)nc1Nc1cccc(S(=O)(=O)NC(C)(C)C)c1,8,10.6955,1.0292,6.44,True,False,45.7633,1.6605,True
 rupatadine,Cc1cncc(CN2CCC(=C3c4ccc(Cl)cc4CCc4cccnc43)CC2)c1,3,175.6654,2.2447,1.08,False,False,97.4894,1.9890,True
-Acoramidis,Cc1n[nH]c(C)c1CCCOc1cc(C(=O)O)ccc1F,4,0.8857,-0.0527,3.72,True,False,1.9420,0.2882,False
+Acoramidis,Cc1n[nH]c(C)c1CCCOc1cc(C(=O)O)ccc1F,4,0.7870,-0.1040,3.72,True,False,1.7255,0.2369,False
 roxadustat,Cc1nc(C(=O)NCC(=O)O)c(O)c2ccc(Oc3ccccc3)cc12,4,0.3644,-0.4384,1.17,False,False,0.3071,-0.5127,False
 Brecanavir,Cc1nc(COc2ccc(C[C@H](NC(=O)O[C@H]3CO[C@H]4OCC[C@H]43)[C@H](O)CN(CC(C)C)S(=O)(=O)c3ccc4c(c3)OCO4)cc2)cs1,6,1087.3602,3.0364,5.05,True,True,175.4374,2.2441,True
 Pritelivir,Cc1nc(N(C)C(=O)Cc2ccc(-c3ccccn3)cc2)sc1S(N)(=O)=O,12,0.2679,-0.5720,2.18,False,False,1.5183,0.1814,False

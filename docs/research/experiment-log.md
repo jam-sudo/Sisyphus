@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-09-24
+last_updated: 2026-09-25
 parent: ../../README.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -7,6 +7,12 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 # Experiment Log
 
 Reverse-chronological. The project README carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
+
+---
+
+## 2026-09-25 — Acoramidis hydrochloride dose-basis correction
+
+The [source adjudication](../validation/development_acoramidis_dose_basis_2026-09-25.md) uses the PMDA's AG10-001 study record and the original article's dose-normalized Cmax and AUC to show that its 50 mg arm is hydrochloride mass but the fitted structure requires 44.4277 mg free-acid equivalent. The 50 mg fitted aggregate and four exploratory arms were corrected; the stale PBPK-feature row was removed. Cmax/CLF/VDF fitted counts remain 906/900/831. Direct Cmax scaffold-CV AAFE changed **3.3699 → 3.3827**. On consumed N=73, Meta AAFE changed **2.8158 → 2.8053** (conditional CI **2.2829–3.4882**), and direct ML **2.9848 → 2.9925**. The paired Meta/ML AAFE ratio is **0.9374** (CI **0.8255–1.0625**). These small shifts are version bookkeeping, not external evidence.
 
 ---
 

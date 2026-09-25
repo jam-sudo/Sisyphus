@@ -552,12 +552,12 @@ holdout separation and source screening, including analyte, matrix, and unit
 adjudication. Retraining with the recorded hyperparameters and current feature
 code did not reproduce the former shipped model's trees or predictions. The
 current public Cmax model is trained from the 906-row fitted CSV, SHA256
-`1ca357073594f42447ae90f950d142498b60eccc1211a5099fae589f0466f010`,
+`b5dfec4ba452bf408981038205d0556bbf929bf3365fffcf714737dccc34d8cf`,
 and its model SHA256 is
-`94ba3382cc496cec0fb0ad58096c3878b0de9683ad6170145256eb3373933931`.
-Six source-adjudicated fitted salt doses use parent-equivalent mass;
+`9f208986df039551e8170fb90a1af883bcea87bc2d359d6d9ac65362a54ab011`.
+Seven source-adjudicated fitted salt doses use parent-equivalent mass;
 the CL/F and Vd/F models were rebuilt from the screened Omega source, fitting
-900 and 831 rows respectively. See the [first dose and source-screen follow-up](development_salt_dose_and_clf_screen_followup_2026-09-24.md) and [additional salt-dose follow-up](development_additional_salt_dose_followup_2026-09-24.md), and [methenamine quarantine](development_methenamine_label_quarantine_2026-09-24.md).
+900 and 831 rows respectively. See the [first dose and source-screen follow-up](development_salt_dose_and_clf_screen_followup_2026-09-24.md), [additional salt-dose follow-up](development_additional_salt_dose_followup_2026-09-24.md), [methenamine quarantine](development_methenamine_label_quarantine_2026-09-24.md), and [Acoramidis dose-basis correction](development_acoramidis_dose_basis_2026-09-25.md).
 The single-assay TDC hepatocyte CLint replacement is pinned to its 995-row
 fitted CSV (SHA256
 `dbf2b750b58a68af02b01cfe90a370630908c311c8436f65818bbc08fcfaaa94`)

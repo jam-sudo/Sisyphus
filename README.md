@@ -8,7 +8,7 @@
 
 **Preprint:** [Yoon, J. M. (2026). *Sisyphus: A Topology-Compiled Physiologically Based Pharmacokinetic Platform with Structure-Only Input and Bayesian Parameter Refinement.* ChemRxiv.](https://doi.org/10.26434/chemrxiv.15004452/v1) &mdash; DOI [10.26434/chemrxiv.15004452/v1](https://doi.org/10.26434/chemrxiv.15004452/v1)
 
-The published v1 preprint and archived `Sisyphus_Preprint.pdf` report an older AAFE of 2.698. The current code's source-screened development benchmark is 2.8158 on 73 scored compounds; the value comes from a different model and reference set. Use the validation section below for current evidence.
+The published v1 preprint and archived `Sisyphus_Preprint.pdf` report an older AAFE of 2.698. The current code's source-screened development benchmark is 2.8053 on 73 scored compounds; the value comes from a different model and reference set. Use the validation section below for current evidence.
 
 ---
 
@@ -16,7 +16,7 @@ Sisyphus is an oral structure-only C<sub>max</sub> prediction system with a sepa
 
 The production output is C<sub>max</sub> for a canonical parent SMILES and positive oral dose. Engine-derived T<sub>max</sub>, AUC, half-life, multi-dose simulation, TDM, MIPD, DDI, PGx, and PK/PD are experimental research outputs and are not covered by the C<sub>max</sub> accuracy claim. Residual/model-error and parameter-Monte-Carlo intervals are exposed separately.
 
-**Intended use.** Sisyphus targets oral structure-only Cmax prediction (canonical parent SMILES + parent-active-moiety dose) when measured ADME is unavailable. On the repeatedly accessed retrospective **development benchmark**, Meta AAFE is 2.816 [bootstrap 95% CI 2.29&ndash;3.50, N=73 scored]. This is not an independent holdout result: the original 107-compound cohort has informed repeated system-selection decisions. A source-adjudicated diagnostic P0 pilot on 18 compounds, scored with an earlier model, found Meta AAFE **3.34**, compared with **3.01** for direct ML; its labels were AI-assisted, historical VDss training membership is unverified, and it does not establish Meta superiority. The current system has **no unconsumed independently curated external holdout AAFE**. Error of this scale and the wide development-residual interval (&divide;&times;~9.61-fold; 90.4% coverage on the repeatedly used development set) restrict the tool to **screening, ranking, and uncertainty-aware triage**, not dose setting.
+**Intended use.** Sisyphus targets oral structure-only Cmax prediction (canonical parent SMILES + parent-active-moiety dose) when measured ADME is unavailable. On the repeatedly accessed retrospective **development benchmark**, Meta AAFE is 2.805 [bootstrap 95% CI 2.28&ndash;3.49, N=73 scored]. This is not an independent holdout result: the original 107-compound cohort has informed repeated system-selection decisions. A source-adjudicated diagnostic P0 pilot on 18 compounds, scored with an earlier model, found Meta AAFE **3.34**, compared with **3.01** for direct ML; its labels were AI-assisted, historical VDss training membership is unverified, and it does not establish Meta superiority. The current system has **no unconsumed independently curated external holdout AAFE**. Error of this scale and the wide development-residual interval (&divide;&times;~9.91-fold; 90.4% coverage on the repeatedly used development set) restrict the tool to **screening, ranking, and uncertainty-aware triage**, not dose setting.
 
 For a 500 mg metformin hydrochloride tablet, pass **389.93 mg** with the parent metformin SMILES; the [product label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=552ad61d-bafd-478d-e063-6294a90a02f9) states that active-moiety equivalence.
 
@@ -313,10 +313,10 @@ $$AAFE = 10^{\operatorname{mean}\left(\left|\log_{10}\frac{C_{max,pred}}{C_{max,
 
 | Track | AAFE | 95% CI | %2-fold | %3-fold | N |
 |---|:-:|:-:|:-:|:-:|:-:|
-| **Meta-learner (production)** | **2.816**† | [2.29, 3.50] | 42.5% | 64.4% | 73 |
+| **Meta-learner (production)** | **2.805**† | [2.28, 3.49] | 42.5% | 64.4% | 73 |
 | Engine only | 3.872 | [2.99, 5.09] | 38.4% | 50.7% | 73 |
-| ML only | 2.985 | [2.41, 3.71] | 47.9% | 58.9% | 73 |
-| Meta, in-domain | 2.872 | [2.32, 3.63] | 38.3% | 63.3% | 60 |
+| ML only | 2.992 | [2.43, 3.70] | 45.2% | 60.3% | 73 |
+| Meta, in-domain | 2.871 | [2.32, 3.62] | 38.3% | 63.3% | 60 |
 
 The paired compound-bootstrap Meta/ML AAFE ratio is **0.943** (95% CI
 **0.832–1.070**, 10,000 resamples, seed 20260422). This conditional interval
