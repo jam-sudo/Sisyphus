@@ -17,6 +17,7 @@ def test_console_presets_use_current_resources():
     half_width = 10 ** interval["tracks"]["meta"]["0.1"]
     assert payload["benchmark"]["overall"] == cache["overall"]
     assert len(payload["drugs"]) == 8
+    assert next(drug for drug in payload["drugs"] if drug["id"] == "metformin")["dose"] == 389.93
     for drug in payload["drugs"]:
         provenance = drug["artifactProvenance"]
         assert drug["residualIntervalSource"] == "development_empirical_residual"

@@ -147,7 +147,7 @@ promethazine,CC(CN1c2ccccc2Sc2ccccc21)N(C)C,1,32.9772,1.5182,1.00,False,False,53
 phenylpropanolamine,CC(N)C(O)c1ccccc1,3,9.7695,0.9899,1.08,False,False,3.3903,0.5302,False
 rimantadine,CC(N)C12CC3CC(CC(C3)C1)C2,2,6.1567,0.7893,1.40,False,False,15.1009,1.1790,False
 pinacidil,CC(N/C(=N/c1ccncc1)NC#N)C(C)(C)C,1,14.3673,1.1574,1.00,False,False,2.5376,0.4044,False
-bupropion,CC(NC(C)(C)C)C(=O)c1cccc(Cl)c1,5,36.9609,1.5677,1.16,False,False,34.7525,1.5410,False
+bupropion,CC(NC(C)(C)C)C(=O)c1cccc(Cl)c1,5,32.0818,1.5063,1.16,False,False,30.1650,1.4795,False
 bicalutamide,CC(O)(CS(=O)(=O)c1ccc(F)cc1)C(=O)Nc1ccc(C#N)c(C(F)(F)F)c1,2,0.0601,-1.2212,1.28,False,True,0.8427,-0.0743,False
 Tecarfarin,CC(OC(=O)c1ccc(Cc2c(O)c3ccccc3oc2=O)cc1)(C(F)(F)F)C(F)(F)F,11,1.3888,0.1426,3.28,True,False,4.1870,0.6219,False
 lofexidine,CC(Oc1c(Cl)cccc1Cl)C1=NCCN1,3,7.6928,0.8861,1.57,False,False,8.7027,0.9397,False
@@ -372,10 +372,10 @@ enoxacin,CCn1cc(C(=O)O)c(=O)c2cc(F)c(N3CCNCC3)nc21,5,5.8246,0.7653,2.11,False,Fa
 rosoxacin,CCn1cc(C(=O)O)c(=O)c2ccc(-c3ccncc3)cc21,1,2.0385,0.3093,1.00,False,False,0.6283,-0.2018,False
 nalidixic acid,CCn1cc(C(=O)O)c(=O)c2ccc(C)nc21,1,1.7107,0.2332,1.00,False,False,0.3184,-0.4970,False
 cinoxacin,CCn1nc(C(=O)O)c(=O)c2cc3c(cc21)OCO3,1,2.4986,0.3977,1.00,False,False,0.3440,-0.4635,False
-metformin,CN(C)C(=N)NC(=N)N,5,19.4484,1.2889,1.77,False,False,10.3411,1.0146,False
+metformin,CN(C)C(=N)NC(=N)N,5,15.1670,1.1809,1.77,False,False,8.0646,0.9066,False
 loperamide,CN(C)C(=O)C(CCN1CCC(O)(c2ccc(Cl)cc2)CC1)(c1ccccc1)c1ccccc1,3,63.2374,1.8010,1.19,False,False,87.1731,1.9404,True
 cariprazine,CN(C)C(=O)N[C@H]1CC[C@H](CCN2CCN(c3cccc(Cl)c3Cl)CC2)CC1,1,17.6803,1.2475,1.00,False,False,,,False
-pyridostigmine,CN(C)C(=O)Oc1ccc[n+](C)c1,1,158.2203,2.1993,1.00,False,False,24.1098,1.3822,False
+pyridostigmine,CN(C)C(=O)Oc1ccc[n+](C)c1,1,109.8005,2.0406,1.00,False,False,16.7315,1.2235,False
 neostigmine,CN(C)C(=O)Oc1cccc([N+](C)(C)C)c1,1,722.2302,2.8587,1.00,False,True,53.7765,1.7306,True
 ribociclib,CN(C)C(=O)c1cc2cnc(Nc3ccc(N4CCNCC4)cn3)nc2n1C1CCCC1,2,14.9927,1.1759,1.06,False,False,47.1484,1.6735,True
 zimelidine,CN(C)C/C=C(/c1ccc(Br)cc1)c1cccnc1,2,25.0217,1.3983,1.30,False,False,13.2357,1.1217,False
@@ -933,7 +933,7 @@ deferasirox,O=C(O)c1ccc(-n2nc(-c3ccccc3O)nc2-c2ccccc2O)cc1,2,0.7933,-0.1006,1.82
 ataluren,O=C(O)c1cccc(-c2noc(-c3ccccc3F)n2)c1,10,1.4333,0.1564,1.79,False,False,0.4472,-0.3495,False
 Cilofexor,O=C(O)c1ccnc(N2CC(O)(c3ccc(OCc4c(-c5c(Cl)cccc5Cl)noc4C4CC4)cc3Cl)C2)c1,4,3.1306,0.4956,3.02,True,False,2.3300,0.3674,False
 solifenacin,O=C(O[C@H]1CN2CCC1CC2)N1CCc2ccccc2[C@@H]1c1ccccc1,7,8.0073,0.9035,2.36,False,False,35.2605,1.5473,False
-trospium,O=C(O[C@H]1C[C@H]2CC[C@@H](C1)[N+]21CCCC1)C(O)(c1ccccc1)c1ccccc1,3,114.6707,2.0595,1.19,False,False,137.7627,2.1391,True
+trospium,O=C(O[C@H]1C[C@H]2CC[C@@H](C1)[N+]21CCCC1)C(O)(c1ccccc1)c1ccccc1,3,105.1719,2.0219,1.19,False,False,126.3512,2.1016,True
 salsalate,O=C(Oc1ccccc1C(=O)O)c1ccccc1O,1,4.5729,0.6602,1.00,False,False,0.3563,-0.4481,False
 Etavopivat,O=C([C@H](CO)c1ccccc1)N1CC2=C(C1)CN(S(=O)(=O)c1cnc3c(c1)OCCO3)C2,4,28.7834,1.4591,1.57,False,False,30.1807,1.4797,False
 olaparib,O=C(c1cc(Cc2n[nH]c(=O)c3ccccc23)ccc1F)N1CCN(C(=O)C2CC2)CC1,1,1.6345,0.2134,1.00,False,False,2.8728,0.4583,False

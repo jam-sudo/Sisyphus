@@ -88,15 +88,19 @@ def training_rows() -> list[dict[str, str]]:
             or not np.isclose(float(dolasetron[0]["cmax_mg_L"]), 0.5781)):
         raise ValueError("Dolasetron source row changed; re-adjudicate its analyte")
     rows.remove(dolasetron[0])
-    # Regulatory labels state 30 mg lisdexamfetamine dimesylate ≈17.3 mg parent,
-    # and 60 mg zofenopril calcium =57.3 mg parent. Keep the pinned source raw.
-    for name, source_dose, parent_dose, cmax in (
-        ("lisdexamfetamine", 30.0, 30.0 * 263.385 / 455.60, 0.0157),
-        ("zofenopril", 60.0, 57.3, 0.09116),
+    # Source-reported salt doses must match the parent structures used at inference.
+    # Cysteamine's source already reports parent mass, so it is not converted.
+    for name, source_dose, parent_dose, cmax, studies in (
+        ("lisdexamfetamine", 30.0, 30.0 * 263.385 / 455.60, 0.0157, 1),
+        ("zofenopril", 60.0, 57.3, 0.09116, 1),
+        ("metformin", 500.0, 389.93, 1.356103882975108, 3),
+        ("bupropion", 100.0, 100.0 * 239.74 / 276.20, 0.13908501027979212, 4),
+        ("pyridostigmine", 120.0, 120.0 * 181.21 / 261.12, 0.052, 1),
+        ("trospium", 60.0, 60.0 * 392.51 / 427.96, 0.014, 1),
     ):
         matched = [row for row in rows if row["name"] == name]
         if (len(matched) != 1 or float(matched[0]["dose_mg"]) != source_dose
-                or int(matched[0]["n_studies"]) != 1
+                or int(matched[0]["n_studies"]) != studies
                 or not np.isclose(float(matched[0]["cmax_mg_L"]), cmax)):
             raise ValueError(f"{name} source row changed; re-adjudicate its dose basis")
         matched[0]["dose_mg"] = str(parent_dose)
@@ -146,7 +150,7 @@ def main() -> None:
         n_drugs_excluded=221,
         holdout_version="N=107 (data/reference/holdout.json)",
         holdout_metric={"name": "five_fold_scaffold_cv_aafe", "value": cv_aafe, "r2": cv_r2},
-        retrained_reason="Correct felbamate units and two salt-dose labels; quarantine six blood-matrix, 114 administered/analyte-mismatched, and one misidentified dolasetron-metabolite Cmax label",
+        retrained_reason="Correct felbamate units and six source-adjudicated salt-dose labels; quarantine six blood-matrix, 114 administered/analyte-mismatched, and one misidentified dolasetron-metabolite Cmax label",
     )
     META.write_text(json.dumps(metadata, indent=2) + "\n")
     print(f"N={len(fitted)} CV_AAFE={cv_aafe:.3f} CV_R2={cv_r2:.3f}")

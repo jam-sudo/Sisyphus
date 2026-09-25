@@ -146,7 +146,7 @@ export function RailInputs({
       <div>
           <div className="row2">
             <div className="field">
-              <label>Dose</label>
+              <label>Dose (parent active moiety)</label>
               <DoseInput s={s} set={set} editable={isCustom} />
             </div>
             <div className="field">

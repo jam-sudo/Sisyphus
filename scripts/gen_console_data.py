@@ -81,7 +81,7 @@ DRUGS = [
         "primaryEnzyme": "CYP3A4", "enzymeFraction": {"CYP3A4": 0.8},
     },
     {
-        "id": "metformin", "name": "Metformin", "dose": 500, "route": "oral",
+        "id": "metformin", "name": "Metformin", "dose": 389.93, "route": "oral",
         "smiles": "CN(C)C(=N)NC(=N)N",
         "formula": "C₄H₁₁N₅", "mw": 129.16,
         "primaryEnzyme": "renal", "enzymeFraction": {},

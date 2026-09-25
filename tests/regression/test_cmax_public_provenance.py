@@ -35,11 +35,15 @@ def test_public_cmax_fitted_rows_and_artifact_are_pinned():
             rows = list(csv.DictReader(handle))
             assert not any(row["name"] in blood_names | mismatched_names | {"dolasetron"} for row in rows)
             if name == "mmpk_pbpk_features.csv":
-                assert not any(row["name"] in {"lisdexamfetamine", "zofenopril"} for row in rows)
+                assert not any(row["name"] in {"lisdexamfetamine", "zofenopril", "metformin", "bupropion", "pyridostigmine", "trospium"} for row in rows)
     with (ROOT / "data/training/clf_training.csv").open(newline="") as handle:
         clf_rows = list(csv.DictReader(handle))
     assert not any(row["name"] in blood_names | mismatched_names | {"dolasetron"} for row in clf_rows)
-    for name, dose in (("lisdexamfetamine", 30 * 263.385 / 455.60), ("zofenopril", 57.3)):
+    for name, dose in (
+        ("lisdexamfetamine", 30 * 263.385 / 455.60), ("zofenopril", 57.3),
+        ("metformin", 389.93), ("bupropion", 100 * 239.74 / 276.20),
+        ("pyridostigmine", 120 * 181.21 / 261.12), ("trospium", 60 * 392.51 / 427.96),
+    ):
         row = next(row for row in fitted if row["name"] == name)
         assert math.isclose(float(row["dose_mg"]), dose)
         assert math.isclose(float(row["log_cmax_per_dose"]), math.log10(float(row["cmax_mg_L"]) / dose))
@@ -50,18 +54,18 @@ def test_public_cmax_fitted_rows_and_artifact_are_pinned():
     metadata = json.loads(META.read_text())
     assert metadata["trained_on"]["dataset_path"] == str(DATASET.relative_to(ROOT))
     assert metadata["trained_on"]["sha256"] == sha256(DATASET)
-    assert sha256(DATASET) == "d35d556443a8bc75ccf925c9e31a26d5d8644379e458fd1c0e265b19e43d3ebc"
+    assert sha256(DATASET) == "c7f771ec43fab0ac001ec00ec9536134baafc36958c8b509346f0bdc50de338e"
     assert metadata["trained_on"]["n_drugs_clean"] == 907
     assert metadata["trained_on"]["source_workbooks"] == SOURCE_WORKBOOKS
     assert metadata["artifact_sha256"] == sha256(MODEL)
-    assert sha256(MODEL) == "7430d602fb196a71c3c087a8cc3448d7feaa4d74e0175de9bb23084ab70bfe33"
+    assert sha256(MODEL) == "c084a39ad3f5fdaa694be10975e76ad91f1b1450738b542813f4a95cf5ab1551"
     assert metadata["holdout_metric"]["name"] == "five_fold_scaffold_cv_aafe"
-    assert math.isclose(metadata["holdout_metric"]["value"], 3.338214776718077)
+    assert math.isclose(metadata["holdout_metric"]["value"], 3.343907668395042)
 
     clf_dataset = ROOT / "data/training/clf_training.csv"
     for model_name, expected_n, expected_hash in (
-        ("clf", 901, "c48ad93f5337658dfadea8923db29536c99faa7dcd8673372ee88d3423e8d636"),
-        ("vdf", 832, "efdebbe4e0876927fb1fdb2c1b25b022eb1290221e81b5335fd3d4a3bd3e9761"),
+        ("clf", 901, "90452ac18696b96c4c41ccd9c66fbed325d2b9f8273f1fdcfb7329e1505e5c9a"),
+        ("vdf", 832, "69cce14f803ffc3a84da38a0c3ebcfca088f9f95f7d784d4c2fa90d04d451a88"),
     ):
         model = ROOT / f"models/direct_pk/xgboost_{model_name}.json"
         meta = json.loads(model.with_suffix(".meta.json").read_text())

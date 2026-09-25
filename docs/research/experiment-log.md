@@ -10,6 +10,12 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Four more source-supported salt-dose corrections
+
+A workbook-wide salt-tag triage identified 269 fitted names requiring source-by-source dose-basis review. The [additional salt-dose follow-up](../validation/development_additional_salt_dose_followup_2026-09-24.md) documents metformin, bupropion, pyridostigmine, and trospium corrections; cysteamine is an explicit counterexample whose original study already reported parent mass. The raw Omega source stayed pinned. Direct Cmax N=907 and CL/F–Vd/F fitted counts 901/832 did not change. Cmax scaffold-CV AAFE changed **3.3382 → 3.3439**; CL/F row-CV R² **0.2060 → 0.2102**, Vd/F **0.3439 → 0.3528**. On the consumed N=73 development benchmark, direct ML AAFE changed **3.0737 → 3.0398**, Meta **2.8546 → 2.8311** (conditional 95% bootstrap CI **2.3057–3.5251**), and the paired Meta/ML ratio is **0.9313** (CI **0.8201–1.0541**). The development-residual half-width is **9.84×**, with **66/73** consumed-label coverage. These figures are not independent accuracy evidence.
+
+---
+
 ## 2026-09-24 (cont.) — Correct two salt doses and rebuild CL/F–Vd/F from screened source
 
 An independent Claude Code source check found that the fitted lisdexamfetamine
