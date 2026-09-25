@@ -10,6 +10,19 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Re-screen PMDA index identities after salt correction
+
+On the pinned 2020–2025 PMDA English index (174 rows, 152 distinct names), the
+current salt-parent name gate found 45 repository hits. Eleven further names
+were ambiguous multi-component strings; of 96 queried single names, PubChem
+resolved 38. Structure normalization found 21 repository hits versus three
+hits from raw PubChem keys, leaving 17 provisional identity nonhits and 58
+unresolved lookups. Fifty-four unresolved names contain recombinant or
+SARS-CoV-2 wording. No clinical arm or Cmax value was inspected, and no new
+independent cohort was established.
+
+---
+
 ## 2026-09-24 (cont.) — Correct older FDA holdout identity screen
 
 The FDA 1985–2014 feasibility screen's 145 provisional structure nonhits were

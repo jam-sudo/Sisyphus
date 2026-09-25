@@ -436,6 +436,17 @@ rate. Route, formulation, fasted single-dose parent Cmax, and report dates
 still require verification in the individual PMDA reviews. PMDA also notes
 that its Japanese originals prevail over the English translations.
 
+A 2026-09-24 re-screen of that pinned index with the corrected salt-parent name
+gate found 45 name hits and 11 ambiguous multi-component strings among the 152
+distinct names. PubChem resolved 38 of the remaining 96 single-name strings:
+21 hit the current repository structure union after normalizing
+`ConnectivitySMILES` with `ik14()` (only three raw PubChem keys hit), leaving
+**17 provisional identity nonhits**. The other 58 lookups returned HTTP 404;
+54 of those names contain recombinant or SARS-CoV-2 wording and are not
+established small-molecule leads. The two screens used different name gates
+and lookup attempts, so their counts are not a before/after eligibility rate.
+No Cmax values or original clinical arms were reviewed in this re-screen.
+
 Allocate those compounds without outcome-based replacement to three disjoint
 roles: 120–150 calibration-development compounds, N=260 final external-test
 compounds, and a sealed reserve cohort. Calibration labels may be opened before
