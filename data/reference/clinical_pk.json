@@ -2001,7 +2001,7 @@
     },
     "levocetirizine": {
       "name": "levocetirizine",
-      "tier": "gold",
+      "tier": "silver",
       "source": "DailyMed XYZAL label Section 12.3: after a single 5 mg oral levocetirizine dihydrochloride tablet in adults, typical parent-plasma Cmax 270 ng/mL; the prior 450 ng/mL was from 5 mg in children age 6-11, not 30 mg adults; https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1673f7ff-0c7c-4403-86cf-c05eb1475222 PubChem parent/salt molecular weights 388.9/461.8 g/mol convert the stated 5 mg dihydrochloride tablet dose to 4.210697 mg parent; https://pubchem.ncbi.nlm.nih.gov/compound/1549000; https://pubchem.ncbi.nlm.nih.gov/compound/Levocetirizine-Dihydrochloride",
       "dose_mg": 4.210697,
       "route": "oral",
@@ -2009,7 +2009,7 @@
         "cmax_mg_L": 0.27
       },
       "smiles": "C1CN(CCN1CCOCC(=O)O)[C@H](C2=CC=CC=C2)C3=CC=C(C=C3)Cl",
-      "correction_note": "2026-09-24: replaced mismatched 30 mg / pediatric 450 ng/mL arm with directly reported adult single 5 mg / 270 ng/mL parent arm; marketed dose is dihydrochloride salt. 2026-09-24: converted 5 mg dihydrochloride mass to 4.210697 mg parent-equivalent model input."
+      "correction_note": "2026-09-24: replaced mismatched 30 mg / pediatric 450 ng/mL arm with directly reported adult single 5 mg / 270 ng/mL parent arm; marketed dose is dihydrochloride salt. 2026-09-24: converted 5 mg dihydrochloride mass to 4.210697 mg parent-equivalent model input. 2026-09-25: downgraded to silver because the label calls 270 ng/mL 'typical' without identifying the summary statistic, sample size, or meal state."
     },
     "levofloxacin": {
       "name": "levofloxacin",
