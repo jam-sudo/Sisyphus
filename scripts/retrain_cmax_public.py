@@ -80,6 +80,14 @@ def training_rows() -> list[dict[str, str]]:
                 or not np.isclose(float(matched[0]["cmax_mg_L"]), float(mismatch["cmax_mg_L"]))):
             raise ValueError(f"{mismatch['name']} source row changed; re-adjudicate administered identity")
         rows.remove(matched[0])
+    # PMID 8453023: oral parent dolasetron was too sparse for PK analysis;
+    # the reported concentration profile is reduced dolasetron (hydrodolasetron).
+    dolasetron = [row for row in rows if row["name"] == "dolasetron"]
+    if (len(dolasetron) != 1 or float(dolasetron[0]["dose_mg"]) != 200
+            or int(dolasetron[0]["n_studies"]) != 1
+            or not np.isclose(float(dolasetron[0]["cmax_mg_L"]), 0.5781)):
+        raise ValueError("Dolasetron source row changed; re-adjudicate its analyte")
+    rows.remove(dolasetron[0])
     # Richens et al. 1997, Table 1: 600 mg young low-dose Cmax is 8.9 µg/mL.
     # The archived Omega row divided by 1000 as if that value were ng/mL.
     felbamate = [row for row in rows if row["name"] == "felbamate"]
@@ -122,10 +130,10 @@ def main() -> None:
                     "sha256": sha256(DATASET), "n_drugs_clean": len(fitted),
                     "source_sha256": SOURCE_SHA, "source_workbooks": SOURCE_WORKBOOKS},
         n_drugs_original=1128,
-        n_drugs_excluded=220,
+        n_drugs_excluded=221,
         holdout_version="N=107 (data/reference/holdout.json)",
         holdout_metric={"name": "five_fold_scaffold_cv_aafe", "value": cv_aafe, "r2": cv_r2},
-        retrained_reason="Correct felbamate units; quarantine six blood-matrix and 114 administered/analyte-mismatched Cmax labels",
+        retrained_reason="Correct felbamate units; quarantine six blood-matrix, 114 administered/analyte-mismatched, and one misidentified dolasetron-metabolite Cmax label",
     )
     META.write_text(json.dumps(metadata, indent=2) + "\n")
     print(f"N={len(fitted)} CV_AAFE={cv_aafe:.3f} CV_R2={cv_r2:.3f}")

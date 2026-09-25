@@ -10,6 +10,29 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Quarantine dolasetron active-metabolite training labels
+
+The pinned Omega workbook labels seven oral dolasetron arms as parent Cmax,
+although their cited source reports that parent plasma concentrations were too
+sparse for PK analysis and analyzes reduced dolasetron instead. The 200 mg
+aggregate (578.1 ng/mL) was removed from the direct Cmax fit, all seven doses
+from both exploratory MMPK snapshots, and the derived PBPK-feature row.
+Because CL/F and Vd/F training used AUC and half-life from the same study, the
+dolasetron row was also removed from their fitted source and both models were
+retrained. The [source adjudication](../validation/development_dolasetron_analyte_followup_2026-09-24.md)
+records the arm and evidence.
+
+Direct Cmax N is **907**; five-fold scaffold CV AAFE changed **3.3652 →
+3.3240**. CL/F and Vd/F fits are N=**1009** and **936**, with five-fold row-CV
+R² **0.1973** and **0.3686**. On the repeatedly accessed development N=73,
+ML AAFE changed **3.0343 → 3.1205** and Meta **2.8405 → 2.8544** (conditional
+95% CI **2.3225–3.5553**); paired Meta/ML ratio **0.9147** (CI
+**0.8050–1.0355**). The 90% development-residual interval is now /×**10.79**,
+covering **67/73 (91.8%)** consumed labels. The development regression is
+retained to remove the wrong target; these results are not independent validation.
+
+---
+
 ## 2026-09-24 (cont.) — Pin both Omega Cmax source workbooks
 
 The current 908-row direct Cmax fit reconciles to 899 numerical aggregates in

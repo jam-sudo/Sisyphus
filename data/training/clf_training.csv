@@ -1041,7 +1041,6 @@ benzoic acid,O=C(O)c1ccccc1,1,6.3766,0.8046,1.00,False,False,,,False
 salicylic acid,O=C(O)c1ccccc1O,5,0.8724,-0.0593,3.97,True,False,0.2015,-0.6957,False
 Cilofexor,O=C(O)c1ccnc(N2CC(O)(c3ccc(OCc4c(-c5c(Cl)cccc5Cl)noc4C4CC4)cc3Cl)C2)c1,4,3.1306,0.4956,3.02,True,False,2.3300,0.3674,False
 pyrazinoic acid,O=C(O)c1cnccn1,1,4.5000,0.6532,1.00,False,False,4.5974,0.6625,False
-dolasetron,O=C(O[C@@H]1C[C@@H]2C[C@H]3C[C@H](C1)N2CC3=O)c1c[nH]c2ccccc12,7,17.2696,1.2373,1.90,False,False,13.1999,1.1206,False
 solifenacin,O=C(O[C@H]1CN2CCC1CC2)N1CCc2ccccc2[C@@H]1c1ccccc1,7,8.0073,0.9035,2.36,False,False,35.2605,1.5473,False
 trospium,O=C(O[C@H]1C[C@H]2CC[C@@H](C1)[N+]21CCCC1)C(O)(c1ccccc1)c1ccccc1,3,114.6707,2.0595,1.19,False,False,137.7627,2.1391,True
 salsalate,O=C(Oc1ccccc1C(=O)O)c1ccccc1O,1,4.5729,0.6602,1.00,False,False,0.3563,-0.4481,False

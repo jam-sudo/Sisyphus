@@ -427,7 +427,6 @@ isoxicam,Cc1cc(NC(=O)C2=C(O)c3ccccc3S(=O)(=O)N2C)no1,200.0,12.2,-1.2146701649892
 riboflavin,Cc1cc2nc3c(=O)[nH]c(=O)nc-3n(C[C@H](O)[C@H](O)[C@H](O)CO)c2cc1C,60.0,0.116,-2.7136932611567253,1,False
 rilpivirine,Cc1cc(/C=C/C#N)cc(C)c1Nc1ccnc(Nc2ccc(C#N)cc2)n1,75.0,0.17,-2.644612342013426,1,False
 etravirine,Cc1cc(C#N)cc(C)c1Oc1nc(Nc2ccc(C#N)cc2)nc(N)c1Br,100.0,0.08900000000000001,-3.050609993355087,1,False
-dolasetron,O=C(O[C@@H]1C[C@@H]2C[C@H]3C[C@H](C1)N2CC3=O)c1c[nH]c2ccccc12,200.0,0.5781000000000001,-2.5390270262888657,1,False
 orphenadrine,Cc1ccccc1C(OCCN(C)C)c1ccccc1,100.0,0.14688,-2.8330373361428327,1,False
 meclizine,Cc1cccc(CN2CCN(C(c3ccccc3)c3ccc(Cl)cc3)CC2)c1,25.0,0.08006999999999999,-2.4944701801648677,1,False
 trospium,O=C(O[C@H]1C[C@H]2CC[C@@H](C1)[N+]21CCCC1)C(O)(c1ccccc1)c1ccccc1,60.0,0.014000000000000007,-3.6320232147054052,1,False

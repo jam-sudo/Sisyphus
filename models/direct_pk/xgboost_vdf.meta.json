@@ -1,10 +1,11 @@
 {
   "version": "v1",
-  "artifact_sha256": "2fa38e6ea51206f02e71d131979dacc645cd700350ae57c46da0967b90ea761e",
+  "artifact_sha256": "88af1a2039a4b194d905730d874f7a740bf185cc7f0019934bc6c4201cfaff77",
   "target": "log10(Vd/F L/kg)",
   "trained_on": {
     "dataset_path": "data/training/clf_training.csv",
-    "sha256": "649e3dde6e49fcb65a1fdb5f636de38a09acd721cdbc552a96a13e89b3e63462"
+    "sha256": "0c113ba89b582346721caa19994cd6916fc66ad90f57ca73a6ac09fc4cd6935a",
+    "n_drugs_clean": 936
   },
   "feature_schema": {
     "name": "compute_features_v1",
@@ -12,14 +13,27 @@
     "sha256": "b41dddd78533661b8f4aed86bdb7c5f55d15ed3cd2ad20b39e9100557eda631e",
     "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, MolMR). See src/sisyphus/descriptors.py::compute_features."
   },
-  "trained_at": "unknown_legacy",
+  "trained_at": "2026-09-25T02:20:43.165596+00:00",
   "n_drugs_original": null,
   "n_drugs_excluded": null,
-  "holdout_version": "unknown_legacy",
+  "holdout_version": "N=107 (data/reference/holdout.json)",
   "holdout_metric": {
-    "name": "scaffold_cv_r2",
-    "value": null
+    "name": "five_fold_cv_r2",
+    "value": 0.3686464806655352
   },
-  "hyperparameters": {},
-  "retrained_reason": "unknown_legacy"
+  "hyperparameters": {
+    "n_estimators": 300,
+    "max_depth": 6,
+    "learning_rate": 0.05,
+    "subsample": 0.8,
+    "colsample_bytree": 0.6,
+    "reg_alpha": 1.0,
+    "reg_lambda": 5.0,
+    "min_child_weight": 5,
+    "random_state": 42,
+    "n_jobs": 4,
+    "verbosity": 0,
+    "tree_method": "hist"
+  },
+  "retrained_reason": "Rebuilt from current holdout-excluded CL/F and Vd/F training data"
 }
