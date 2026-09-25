@@ -1,11 +1,11 @@
 {
   "version": "v3_public_omega",
-  "artifact_sha256": "8e0134b56916db68e51bdf23b89e6dd37249a4c5d0fc93edb8d130008acd9c28",
+  "artifact_sha256": "c587d7ce1b5047ea917b7923b123b462f64a8f19cbb30d786b11160695d04ac6",
   "target": "log10(cmax_mg_L / dose_mg)",
   "trained_on": {
     "dataset_path": "data/training/cmax_omega_public_clean.csv",
-    "sha256": "c81553eb73fb07856b66718badbc3084417a79804243f98b1ec21c79915cc9dc",
-    "n_drugs_clean": 1028,
+    "sha256": "092b4750b68f082845b4014d65f8affcf7328ab898bcfb7ac02251a3b4bd2d52",
+    "n_drugs_clean": 1027,
     "source_sha256": "e7228d14bdfdfc6c790177207779630c1e5655c19d451528c87b80e2e9de9c3d"
   },
   "feature_schema": {
@@ -14,14 +14,14 @@
     "sha256": "b41dddd78533661b8f4aed86bdb7c5f55d15ed3cd2ad20b39e9100557eda631e",
     "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, MolMR). See src/sisyphus/descriptors.py::compute_features."
   },
-  "trained_at": "2026-09-24T23:41:32.370576+00:00",
+  "trained_at": "2026-09-25T00:49:42.396526+00:00",
   "n_drugs_original": 1128,
-  "n_drugs_excluded": 100,
+  "n_drugs_excluded": 101,
   "holdout_version": "N=107 (data/reference/holdout.json)",
   "holdout_metric": {
     "name": "five_fold_cv_aafe",
-    "value": 3.2370844760961823,
-    "r2": 0.37787244731184955
+    "value": 3.2583604311892125,
+    "r2": 0.3756870588419621
   },
   "hyperparameters": {
     "n_estimators": 200,
@@ -36,5 +36,5 @@
     "n_jobs": 4,
     "verbosity": 0
   },
-  "retrained_reason": "Correct felbamate 600 mg Cmax unit in pinned public Omega fitted rows"
+  "retrained_reason": "Correct felbamate units and quarantine indapamide whole-blood Cmax"
 }

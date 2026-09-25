@@ -42,6 +42,13 @@ def training_rows() -> list[dict[str, str]]:
     rows = [row for row in source if not is_holdout(row["smiles"], row["name"], keys)]
     if (len(source), len(rows)) != (1128, 1028):
         raise ValueError(f"Unexpected Omega source/clean row counts: {len(source)}/{len(rows)}")
+    # Grebow et al. 1982 measured whole blood, not the model's plasma target.
+    indapamide = [row for row in rows if row["name"] == "indapamide"]
+    if (len(indapamide) != 1 or float(indapamide[0]["dose_mg"]) != 5
+            or int(indapamide[0]["n_studies"]) != 2
+            or not np.isclose(float(indapamide[0]["cmax_mg_L"]), np.sqrt(263 * 231) / 1000)):
+        raise ValueError("Indapamide source row changed; re-adjudicate its matrix")
+    rows.remove(indapamide[0])
     # Richens et al. 1997, Table 1: 600 mg young low-dose Cmax is 8.9 µg/mL.
     # The archived Omega row divided by 1000 as if that value were ng/mL.
     felbamate = [row for row in rows if row["name"] == "felbamate"]
@@ -83,10 +90,10 @@ def main() -> None:
                     "sha256": sha256(DATASET), "n_drugs_clean": len(fitted),
                     "source_sha256": SOURCE_SHA},
         n_drugs_original=1128,
-        n_drugs_excluded=100,
+        n_drugs_excluded=101,
         holdout_version="N=107 (data/reference/holdout.json)",
         holdout_metric={"name": "five_fold_cv_aafe", "value": cv_aafe, "r2": cv_r2},
-        retrained_reason="Correct felbamate 600 mg Cmax unit in pinned public Omega fitted rows",
+        retrained_reason="Correct felbamate units and quarantine indapamide whole-blood Cmax",
     )
     META.write_text(json.dumps(metadata, indent=2) + "\n")
     print(f"N={len(fitted)} CV_AAFE={cv_aafe:.3f} CV_R2={cv_r2:.3f}")
