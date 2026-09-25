@@ -10,6 +10,12 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-25 (cont.) — Bisoprolol hemifumarate dose-basis correction
+
+The [original source and workbook audit](../validation/development_bisoprolol_dose_basis_2026-09-25.md) reconciled bisoprolol's 5–40 mg hemifumarate tablet arms with parent-structure model inputs. The fitted 10 mg aggregate now uses 8.48673 mg parent; all four exploratory dose arms were converted, measured Cmax/AUC retained, and the stale PBPK-feature row removed. Fitted counts remain 906/900/831. Direct Cmax scaffold-CV AAFE changed **3.3889 → 3.3821**. On consumed N=73, direct ML changed **3.0780 → 3.0490**, Meta **2.8273 → 2.8300** (conditional CI **2.3038–3.5220**), and the paired Meta/ML ratio is **0.9282** (CI **0.8157–1.0533**). The original numeric tables and second study's batch composition remain unavailable. This is dose-integrity work, not external validation.
+
+---
+
 ## 2026-09-25 (cont.) — Orphenadrine hydrochloride dose-basis correction
 
 The [original study and Omega workbook](../validation/development_orphenadrine_dose_basis_2026-09-25.md) identify a 100 mg orphenadrine hydrochloride tablet with parent orphenadrine measured in plasma. The fitted dose and single exploratory arm now use 88.08135 mg parent equivalent; Cmax and AUC were retained, and the stale PBPK-feature row was removed. The original numeric article table remained unavailable. Fitted counts stay 906/900/831. Direct Cmax scaffold-CV AAFE changed **3.3839 → 3.3889**. On consumed N=73, direct ML changed **3.1085 → 3.0780**, Meta **2.8485 → 2.8273** (conditional CI **2.2979–3.5289**), and the paired Meta/ML ratio is **0.9186** (CI **0.8081–1.0419**). This is dose-integrity work, not external validation.
