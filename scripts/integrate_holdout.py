@@ -159,7 +159,7 @@ def main():
         log.info(f"Curated drugs: {len(curated_data)}")
 
         for entry in curated_data:
-            if entry.get("status") == "not_found":
+            if entry.get("status") != "confirmed":
                 continue
             name = entry["drug_name"].lower()
             if name in drugs and drugs[name].get("tier") == "unverified":
@@ -226,7 +226,7 @@ def main():
         log.info(f"Manual curation entries: {len(manual_data)}")
 
         for entry in manual_data:
-            if entry.get("status") == "not_found":
+            if entry.get("status") != "confirmed":
                 continue
             name = entry["drug_name"].lower()
             if name in drugs and drugs[name].get("tier") == "unverified":
