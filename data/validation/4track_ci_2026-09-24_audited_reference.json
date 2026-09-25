@@ -1,8 +1,8 @@
 {
-  "computed_at": "2026-09-25-acoramidis-dose",
+  "computed_at": "2026-09-25-almitrine",
   "source_cache": "data/training/4track_holdout_predictions.json",
-  "source_cache_sha256": "4d82df0bd9ee03ba59e7411e9c2b50cca04ecbbdfadff5225a91403a78512449",
-  "context": "Acoramidis HCl-to-parent dose correction; consumed development diagnostic, not independent validation.",
+  "source_cache_sha256": "bee2530aa0154cf5b100f9f167b9c0c10663ed401167c75d2ec8e50dfa0b4ae9",
+  "context": "Almitrine bismesylate parent-dose correction; repeatedly accessed development benchmark, not independent validation",
   "method": "bootstrap on abs(log10(fold))",
   "n_bootstrap": 10000,
   "seed": 20260422,
@@ -17,25 +17,25 @@
       "pct_3fold": 50.7
     },
     "ml": {
-      "aafe": 2.9925,
-      "ci_95_low": 2.4256,
-      "ci_95_high": 3.6987,
-      "n": 73,
-      "pct_2fold": 45.2,
-      "pct_3fold": 60.3
-    },
-    "meta": {
-      "aafe": 2.8053,
-      "ci_95_low": 2.2829,
-      "ci_95_high": 3.4882,
+      "aafe": 3.0024,
+      "ci_95_low": 2.4227,
+      "ci_95_high": 3.7255,
       "n": 73,
       "pct_2fold": 42.5,
-      "pct_3fold": 64.4
+      "pct_3fold": 57.5
+    },
+    "meta": {
+      "aafe": 2.7965,
+      "ci_95_low": 2.2672,
+      "ci_95_high": 3.4882,
+      "n": 73,
+      "pct_2fold": 43.8,
+      "pct_3fold": 65.8
     },
     "paired_meta_ml": {
-      "ratio": 0.9374,
-      "ci_95_low": 0.8255,
-      "ci_95_high": 1.0625,
+      "ratio": 0.9314,
+      "ci_95_low": 0.8232,
+      "ci_95_high": 1.0537,
       "n": 73
     }
   },
@@ -50,25 +50,25 @@
       "pct_3fold": 48.3
     },
     "ml": {
-      "aafe": 2.8138,
-      "ci_95_low": 2.2474,
-      "ci_95_high": 3.5525,
+      "aafe": 2.8763,
+      "ci_95_low": 2.2734,
+      "ci_95_high": 3.6744,
       "n": 60,
-      "pct_2fold": 48.3,
-      "pct_3fold": 63.3
+      "pct_2fold": 43.3,
+      "pct_3fold": 60.0
     },
     "meta": {
-      "aafe": 2.8713,
-      "ci_95_low": 2.3227,
-      "ci_95_high": 3.6242,
+      "aafe": 2.8611,
+      "ci_95_low": 2.3042,
+      "ci_95_high": 3.6396,
       "n": 60,
-      "pct_2fold": 38.3,
-      "pct_3fold": 63.3
+      "pct_2fold": 40.0,
+      "pct_3fold": 65.0
     },
     "paired_meta_ml": {
-      "ratio": 1.0204,
-      "ci_95_low": 0.9073,
-      "ci_95_high": 1.1534,
+      "ratio": 0.9947,
+      "ci_95_low": 0.8847,
+      "ci_95_high": 1.123,
       "n": 60
     }
   }

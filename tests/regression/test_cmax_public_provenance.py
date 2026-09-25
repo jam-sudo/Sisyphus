@@ -43,7 +43,7 @@ def test_public_cmax_fitted_rows_and_artifact_are_pinned():
                 salt_names = {
                     "lisdexamfetamine", "zofenopril", "metformin", "bupropion",
                     "pyridostigmine", "trospium", "methenamine",
-                    "Acoramidis", "Givinostat",
+                    "Acoramidis", "Givinostat", "almitrine",
                 }
                 assert not any(row["name"] in salt_names for row in rows)
     with (ROOT / "data/training/clf_training.csv").open(newline="") as handle:
@@ -54,6 +54,7 @@ def test_public_cmax_fitted_rows_and_artifact_are_pinned():
         ("metformin", 389.93), ("bupropion", 100 * 239.74 / 276.20),
         ("pyridostigmine", 120 * 181.21 / 261.12), ("trospium", 60 * 392.51 / 427.96),
         ("Acoramidis", 50 * 292.13 / 328.77),
+        ("almitrine", 25 * 477.563 / 669.777),
     ):
         row = next(row for row in fitted if row["name"] == name)
         assert math.isclose(float(row["dose_mg"]), dose)
@@ -72,7 +73,8 @@ def test_public_cmax_fitted_rows_and_artifact_are_pinned():
     )
     for name in ("mmpk_expanded_full.csv", "mmpk_expanded_v2.csv"):
         with (ROOT / "data/training" / name).open(newline="") as handle:
-            arms = [row for row in csv.DictReader(handle) if row["name"] == "Givinostat"]
+            all_rows = list(csv.DictReader(handle))
+            arms = [row for row in all_rows if row["name"] == "Givinostat"]
         assert len(arms) == 5
         for row, (dose, cmax, auc) in zip(
             arms, ((50, 53, 359), (100, 99, 671), (200, 236, 1346),
@@ -81,22 +83,27 @@ def test_public_cmax_fitted_rows_and_artifact_are_pinned():
             assert math.isclose(float(row["dose_mg"]), dose * 0.886)
             assert math.isclose(float(row["cmax_mg_L"]), cmax * 0.886 / 1000)
             assert math.isclose(float(row["auc_ng_h_ml"]), auc * 0.886)
+        almitrine = [row for row in all_rows if row["name"] == "almitrine"]
+        assert len(almitrine) == 4
+        assert all(math.isclose(got, dose * 477.563 / 669.777) for got, dose in zip(
+            sorted(float(row["dose_mg"]) for row in almitrine), (25, 50, 100, 200), strict=True
+        ))
 
     metadata = json.loads(META.read_text())
     assert metadata["trained_on"]["dataset_path"] == str(DATASET.relative_to(ROOT))
     assert metadata["trained_on"]["sha256"] == sha256(DATASET)
-    assert sha256(DATASET) == "a39e03c26298e2c3af41152e5025f2ad71cac30f879d858258abc96aa9054117"
+    assert sha256(DATASET) == "4571eb544c0b59def3b71f24037a0176520c303b598037cfa417ad81e1b93de2"
     assert metadata["trained_on"]["n_drugs_clean"] == 906
     assert metadata["trained_on"]["source_workbooks"] == SOURCE_WORKBOOKS
     assert metadata["artifact_sha256"] == sha256(MODEL)
-    assert sha256(MODEL) == "9f208986df039551e8170fb90a1af883bcea87bc2d359d6d9ac65362a54ab011"
+    assert sha256(MODEL) == "3c76e9e9d44a831737a8e26b5dfe0b86f46e06e6092df25497d35606c3015c49"
     assert metadata["holdout_metric"]["name"] == "five_fold_scaffold_cv_aafe"
-    assert math.isclose(metadata["holdout_metric"]["value"], 3.382722659199057)
+    assert math.isclose(metadata["holdout_metric"]["value"], 3.393230501505666)
 
     clf_dataset = ROOT / "data/training/clf_training.csv"
     for model_name, expected_n, expected_hash in (
-        ("clf", 900, "11369f5d1c1944416424ff762d0e40d70da1a5b72c17d67ab8fab687635e95bd"),
-        ("vdf", 831, "1e23113191dbf138c7f18a0622ca477be25158c730c665d1864dbbec75b68852"),
+        ("clf", 900, "e05633f356932dd127adc5fb04d546efffaf88eb5a3b0d7ca2db05d79e3b5c40"),
+        ("vdf", 831, "37de2a553de297f52cecf1e1a63174115d2940a913a5d6214f7e9104814a118d"),
     ):
         model = ROOT / f"models/direct_pk/xgboost_{model_name}.json"
         meta = json.loads(model.with_suffix(".meta.json").read_text())

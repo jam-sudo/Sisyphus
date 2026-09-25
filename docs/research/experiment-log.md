@@ -10,6 +10,12 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-25 (cont.) — Almitrine bismesylate dose-basis correction
+
+The [original single-dose study](../validation/development_almitrine_dose_basis_2026-09-25.md) explicitly reports 25/50/100/200 mg **bismesylate** capsules while measuring parent almitrine in plasma. All four exploratory doses and the fitted 25 mg aggregate were converted to parent mass using ChEBI's 477.563/669.777 molecular-weight ratio; the stale PBPK-feature row was removed. Fitted counts remain 906/900/831. Direct Cmax scaffold-CV AAFE changed **3.3827 → 3.3932**. On consumed N=73, direct ML changed **2.9925 → 3.0024**, Meta **2.8053 → 2.7965** (conditional CI **2.2672–3.4882**), and the paired Meta/ML ratio is **0.9314** (CI **0.8232–1.0537**). This is data-integrity work, not an external accuracy result.
+
+---
+
 ## 2026-09-25 (cont.) — Givinostat paired salt-mass normalization
 
 The [source follow-up](../validation/development_givinostat_mass_basis_2026-09-25.md) reconciled Furlan et al. 2011 Table 2's mass and molar Cmax/AUC values with the FDA hydrochloride-monohydrate equivalence and a later Italfarmaco ITF2357 capsule protocol. All five exploratory arms and the fitted aggregate now use paired parent-mass dose, Cmax, and AUC; the stale PBPK-feature row was removed. The 2011 capsule batch and assay calibration records remain unavailable, so the dose convention is source-linked inference. The Cmax/dose targets, derived CL/F table, Cmax model hash, development benchmark, and interval are unchanged.

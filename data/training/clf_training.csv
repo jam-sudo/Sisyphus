@@ -32,7 +32,7 @@ cefixime,C=CC1=C(C(=O)O)N2C(=O)[C@@H](NC(=O)/C(=N\OCC(=O)O)c3csc(N)n3)[C@H]2SC1,
 secobarbital,C=CCC1(C(C)CCC)C(=O)NC(=O)NC1=O,1,0.7014,-0.1541,1.00,False,False,1.7537,0.2440,False
 naloxegol,C=CCN1CC[C@]23c4c5ccc(O)c4O[C@H]2[C@@H](OCCOCCOCCOCCOCCOCCOCCOC)CC[C@@]3(O)[C@H]1C5,9,22.4329,1.3509,2.42,False,False,12.0736,1.0818,False
 cabergoline,C=CCN1C[C@H](C(=O)N(CCCN(C)C)C(=O)NCC)C[C@@H]2c3cccc4[nH]cc(c34)C[C@H]21,3,117.8533,2.0713,1.52,False,False,,,False
-almitrine,C=CCNc1nc(NCC=C)nc(N2CCN(C(c3ccc(F)cc3)c3ccc(F)cc3)CC2)n1,4,6.3784,0.8047,1.80,False,False,34.0286,1.5318,False
+almitrine,C=CCNc1nc(NCC=C)nc(N2CCN(C(c3ccc(F)cc3)c3ccc(F)cc3)CC2)n1,4,4.5479,0.6578,1.80,False,False,24.2630,1.3849,False
 oxprenolol,C=CCOc1ccccc1OCC(O)CNC(C)C,4,13.1666,1.1195,1.20,False,False,2.0798,0.3180,False
 asunaprevir,C=C[C@@H]1C[C@]1(NC(=O)[C@@H]1C[C@@H](Oc2ncc(OC)c3ccc(Cl)cc23)CN1C(=O)[C@@H](NC(=O)OC(C)(C)C)C(C)(C)C)C(=O)NS(=O)(=O)C1CC1,7,149.5881,2.1749,3.13,True,True,220.9567,2.3443,True
 lefamulin,C=C[C@]1(C)C[C@@H](OC(=O)CS[C@@H]2CC[C@@H](N)C[C@H]2O)[C@]2(C)C(C)CC[C@]3(CCC(=O)[C@H]32)[C@@H](C)[C@@H]1O,1,18.5288,1.2678,1.00,False,False,16.2829,1.2117,False

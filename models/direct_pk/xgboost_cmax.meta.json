@@ -1,10 +1,10 @@
 {
   "version": "v3_public_omega",
-  "artifact_sha256": "9f208986df039551e8170fb90a1af883bcea87bc2d359d6d9ac65362a54ab011",
+  "artifact_sha256": "3c76e9e9d44a831737a8e26b5dfe0b86f46e06e6092df25497d35606c3015c49",
   "target": "log10(cmax_mg_L / dose_mg)",
   "trained_on": {
     "dataset_path": "data/training/cmax_omega_public_clean.csv",
-    "sha256": "a39e03c26298e2c3af41152e5025f2ad71cac30f879d858258abc96aa9054117",
+    "sha256": "4571eb544c0b59def3b71f24037a0176520c303b598037cfa417ad81e1b93de2",
     "n_drugs_clean": 906,
     "source_sha256": "e7228d14bdfdfc6c790177207779630c1e5655c19d451528c87b80e2e9de9c3d",
     "source_workbooks": [
@@ -24,14 +24,14 @@
     "sha256": "b41dddd78533661b8f4aed86bdb7c5f55d15ed3cd2ad20b39e9100557eda631e",
     "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, MolMR). See src/sisyphus/descriptors.py::compute_features."
   },
-  "trained_at": "2026-09-25T04:50:16.697854+00:00",
+  "trained_at": "2026-09-25T05:56:25.122325+00:00",
   "n_drugs_original": 1128,
   "n_drugs_excluded": 222,
   "holdout_version": "N=107 (data/reference/holdout.json)",
   "holdout_metric": {
     "name": "five_fold_scaffold_cv_aafe",
-    "value": 3.382722659199057,
-    "r2": 0.33208678506766864
+    "value": 3.393230501505666,
+    "r2": 0.3316937127695335
   },
   "hyperparameters": {
     "n_estimators": 200,
@@ -46,5 +46,5 @@
     "n_jobs": 4,
     "verbosity": 0
   },
-  "retrained_reason": "Correct felbamate units, seven salt-dose labels, and paired givinostat salt-dose/concentration masses; quarantine six blood-matrix, 114 administered/analyte-mismatched, one dolasetron-metabolite, and one methenamine concentration-basis label"
+  "retrained_reason": "Correct felbamate units, eight salt-dose labels, and paired givinostat salt-dose/concentration masses; quarantine six blood-matrix, 114 administered/analyte-mismatched, one dolasetron-metabolite, and one methenamine concentration-basis label"
 }
