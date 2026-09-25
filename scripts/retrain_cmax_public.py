@@ -12,11 +12,11 @@ from pathlib import Path
 
 import numpy as np
 import xgboost as xgb
-from sklearn.model_selection import KFold
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 
+from scripts.train_clint_expanded import scaffold_split_indices  # noqa: E402
 from scripts.train_peff import build_holdout_keys, is_holdout  # noqa: E402
 from sisyphus.descriptors import compute_features  # noqa: E402
 
@@ -99,7 +99,8 @@ def main() -> None:
     params = metadata["hyperparameters"]
 
     oof = np.empty_like(y)
-    for train, test in KFold(n_splits=5).split(X):
+    for test in scaffold_split_indices([row["smiles"] for row in fitted]):
+        train = np.setdiff1d(np.arange(len(y)), test)
         model = xgb.XGBRegressor(**params).fit(X[train], y[train])
         oof[test] = model.predict(X[test])
     cv_aafe = float(10 ** np.mean(np.abs(oof - y)))
@@ -117,7 +118,7 @@ def main() -> None:
         n_drugs_original=1128,
         n_drugs_excluded=220,
         holdout_version="N=107 (data/reference/holdout.json)",
-        holdout_metric={"name": "five_fold_cv_aafe", "value": cv_aafe, "r2": cv_r2},
+        holdout_metric={"name": "five_fold_scaffold_cv_aafe", "value": cv_aafe, "r2": cv_r2},
         retrained_reason="Correct felbamate units; quarantine six blood-matrix and 114 administered/analyte-mismatched Cmax labels",
     )
     META.write_text(json.dumps(metadata, indent=2) + "\n")

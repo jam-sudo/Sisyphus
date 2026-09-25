@@ -14,14 +14,14 @@
     "sha256": "b41dddd78533661b8f4aed86bdb7c5f55d15ed3cd2ad20b39e9100557eda631e",
     "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, MolMR). See src/sisyphus/descriptors.py::compute_features."
   },
-  "trained_at": "2026-09-25T01:36:05.713080+00:00",
+  "trained_at": "2026-09-25T01:49:42.777862+00:00",
   "n_drugs_original": 1128,
   "n_drugs_excluded": 220,
   "holdout_version": "N=107 (data/reference/holdout.json)",
   "holdout_metric": {
-    "name": "five_fold_cv_aafe",
-    "value": 3.368613270465702,
-    "r2": 0.34592768578853916
+    "name": "five_fold_scaffold_cv_aafe",
+    "value": 3.3651623946715414,
+    "r2": 0.3655672299022342
   },
   "hyperparameters": {
     "n_estimators": 200,

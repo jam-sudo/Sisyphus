@@ -42,3 +42,5 @@ def test_public_cmax_fitted_rows_and_artifact_are_pinned():
     assert metadata["trained_on"]["n_drugs_clean"] == 908
     assert metadata["artifact_sha256"] == sha256(MODEL)
     assert sha256(MODEL) == "c776768146b0746a70e31af4446e25ba1245139b09b2d5497fb09d93ecd2b0e1"
+    assert metadata["holdout_metric"]["name"] == "five_fold_scaffold_cv_aafe"
+    assert math.isclose(metadata["holdout_metric"]["value"], 3.3651623946715414)

@@ -10,6 +10,28 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Quarantine voclosporin whole-blood Cmax training label
+
+The pinned Omega workbook's voclosporin 0.25–4.5 mg/kg Cmax values match the
+FDA review of study ISA03-10, and the EMA assessment identifies the study's
+concentrations and Cmax as whole blood. The fitted 18.07 mg/32 ng/mL aggregate,
+five exploratory dose rows in each expanded MMPK snapshot, and one derived
+PBPK-feature row were removed; the raw Omega source remains pinned. See the
+[source adjudication](../validation/development_voclosporin_training_matrix_2026-09-24.md)
+and commit `eb1d257`.
+
+The direct Cmax fit now has **908** rows. The former five-fold row CV AAFE moved
+**3.359 → 3.369**. The recipe now reports five-fold Murcko-scaffold CV AAFE
+**3.365** (R² **0.366**, 649 distinct scaffolds), without changing the fitted
+model hash. On the repeatedly used N=73 development set, direct ML AAFE moved
+**3.0418 → 3.0343** and Meta AAFE **2.8496 → 2.8405** (conditional 95%
+bootstrap CI **2.3135–3.5387**); the paired Meta/ML ratio is **0.9361**
+(**0.8266–1.0569**). The development-residual 90% half-width is **9.97×**
+with **67/73 (91.8%)** consumed-set coverage. These are source-screening
+diagnostics, not independent external validation.
+
+---
+
 ## 2026-09-24 (cont.) — Retract the whole-blood arm from P1 plasma diagnostics
 
 An independent Claude Code source re-review of all eight consumed P1 arms
