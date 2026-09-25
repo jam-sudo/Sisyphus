@@ -102,7 +102,7 @@ The 2026-06-01 prospective expansion (N=28; prospective Meta AAFE 3.21 > retrosp
 
 ## 9. External benchmark context
 
-An earlier comparison with the IMI OrBiTo expert-harmonised PBPK evaluation was used to claim that Sisyphus had reached a commercial accuracy ceiling. That claim is unsupported: the study populations, input curation, endpoints, and evaluation sets differ, while Sisyphus's current 2.7965 AAFE is from repeatedly used development data. The earlier-model P0 pilot scored 3.343 and also lacks independent curation. Published PBPK results provide context for study design, not a matched head-to-head rank or a bound on achievable error. Independent source-verified evaluation remains necessary.
+An earlier comparison with the IMI OrBiTo expert-harmonised PBPK evaluation was used to claim that Sisyphus had reached a commercial accuracy ceiling. That claim is unsupported: the study populations, input curation, endpoints, and evaluation sets differ, while Sisyphus's current 2.8300 AAFE is from repeatedly used development data. The earlier-model P0 pilot scored 3.343 and also lacks independent curation. Published PBPK results provide context for study design, not a matched head-to-head rank or a bound on achievable error. Independent source-verified evaluation remains necessary.
 
 ---
 

@@ -12,6 +12,15 @@ track `pyproject.toml`.
 
 ## [Unreleased]
 
+### Scientific interpretation correction (2026-09-25)
+
+- Reconciled the failed-experiment summary with the later human-F source audit and
+  replicate-based label-noise estimate. The tested methods remain negative;
+  neither an intrinsic structure-only Cmax ceiling nor F as the dominant human
+  error has been established.
+- The current source-screened N=73 Meta AAFE is 2.8300 on repeatedly used
+  development data. Independent external accuracy is still unmeasured.
+
 ### Public-only VDss training source pinned (2026-09-23)
 
 - Rebuilt VDss from 1,055 SHA-pinned public TDC Lombardo compounds after

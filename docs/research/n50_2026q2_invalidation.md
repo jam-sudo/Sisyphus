@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-09-23
+last_updated: 2026-09-25
 parent: ./cherry_picking_process_v1.md
 charter: Record that the N50 secondary-holdout cycle 2026Q2 is invalidated as a never-touch generalization instrument. Binding — the 2026Q2 freeze AAFE (5.25) must not be cited as a generalization result.
 ---
@@ -83,14 +83,14 @@ curation is.
 
 The least repository-contaminated number extractable from the existing set —
 drugs clean of the then-classified hard corpora **and** oral (N=24, with
-DrugBank/fup membership unresolved) — is AAFE **≈4.0**, versus
-the 107-holdout on the same local numerics stack (~2.62). That ~1.5× gap is real,
-but it **corroborates the already-documented prospective degradation** (the
-FDA-NME prospective set is AAFE 3.27, root cause = bioavailability-F
-under-prediction on novel chemotypes) rather than adding a new signal: the
-N50-clean drugs are 2024–2026 novel scaffolds (out-of-distribution), while the
-107-holdout is in-distribution held-out, so part of the gap is OOD-vs-IID, not
-pure cherry-picking optimism.
+DrugBank/fup membership unresolved) — was AAFE **≈4.0**, versus
+the 107-compound development set on the same local numerics stack (~2.62).
+This is an observed contrast between selected, non-equivalent cohorts, not a
+generalization estimate or evidence that the difference is caused by a specific
+PK parameter. A separate consumed prospective set also deteriorated, but its
+proposed bioavailability-F explanation was not verified by matched human F
+sources; see [diagnosis §8](diagnosis.md) and the
+[F source audit](../validation/f_reference_source_audit_2026-09-24.md).
 
 ## Corrective actions taken
 
