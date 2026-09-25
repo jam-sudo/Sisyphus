@@ -50,15 +50,9 @@ def load_drugbank_lookup() -> dict[str, dict]:
 
 
 def resolve_smiles(name: str, drugbank: dict) -> dict | None:
-    """Resolve drug name to {smiles, inchikey_14}."""
+    """Resolve an exact DrugBank name to {smiles, inchikey_14}."""
     key = name.strip().lower()
-    if key in drugbank:
-        return drugbank[key]
-    # Partial match
-    for db_name, info in drugbank.items():
-        if key in db_name or db_name in key:
-            return info
-    return None
+    return drugbank.get(key)
 
 
 def main():

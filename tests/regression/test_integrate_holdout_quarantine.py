@@ -6,6 +6,12 @@ import shutil
 from scripts import integrate_holdout
 
 
+def test_drugbank_resolution_rejects_partial_name_match():
+    lookup = {"drug": {"smiles": "CC", "inchikey_14": "OTMSDBZUPAUEDD"}}
+    assert integrate_holdout.resolve_smiles("Drug", lookup) == lookup["drug"]
+    assert integrate_holdout.resolve_smiles("drug hydrochloride", lookup) is None
+
+
 def test_integration_preserves_quarantined_references(tmp_path, monkeypatch):
     source = integrate_holdout.DATA_REF
     for name in (
