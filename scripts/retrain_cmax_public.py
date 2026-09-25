@@ -50,6 +50,7 @@ def training_rows() -> list[dict[str, str]]:
         "cyclosporine": (372.5, 1, 1.22),
         "everolimus": (2, 3, (17.9 * 17.1 * 16.7) ** (1 / 3) / 1000),
         "tacrolimus": (5, 2, np.sqrt(27.23 * 40.62) / 1000),
+        "pimecrolimus": (15, 1, 41.2 / 1000),
     }
     for name, (dose, studies, cmax) in blood_rows.items():
         matched = [row for row in rows if row["name"] == name]
@@ -113,10 +114,10 @@ def main() -> None:
                     "sha256": sha256(DATASET), "n_drugs_clean": len(fitted),
                     "source_sha256": SOURCE_SHA},
         n_drugs_original=1128,
-        n_drugs_excluded=218,
+        n_drugs_excluded=219,
         holdout_version="N=107 (data/reference/holdout.json)",
         holdout_metric={"name": "five_fold_cv_aafe", "value": cv_aafe, "r2": cv_r2},
-        retrained_reason="Correct felbamate units; quarantine four blood-matrix and 114 administered/analyte-mismatched Cmax labels",
+        retrained_reason="Correct felbamate units; quarantine five blood-matrix and 114 administered/analyte-mismatched Cmax labels",
     )
     META.write_text(json.dumps(metadata, indent=2) + "\n")
     print(f"N={len(fitted)} CV_AAFE={cv_aafe:.3f} CV_R2={cv_r2:.3f}")
