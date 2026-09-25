@@ -1,0 +1,115 @@
+name,dose_mg,cmax_mg_L,n_studies,workbook_rows,administered_names,discordant_arms
+(+)-ethotoin,1000.0,29.879999999999995,1,2,ethotoin,1
+(+)-prenylamine,200.0,0.009200000000000002,1,3,prenylamine,1
+(+)-tranylcypromine,20.0,0.014300000000000009,1,4,tranylcypromine,1
+(-)-ethotoin,1000.0,26.07,1,5,ethotoin,1
+(-)-prenylamine,200.0,0.050700000000000016,1,6,prenylamine,1
+(-)-tranylcypromine,20.0,0.056100000000000004,1,7,tranylcypromine,1
+(r)-fenoprofen,600.0,10.8,1,8,fenoprofen,1
+(r)-lercanidipine,20.0,0.001680000000000001,1,9,lercanidipine,1
+(r)-licarbazepine,300.0,0.76287,1,10,oxcarbazepine,1
+(r)-warfarin,25.0,1.5733531072203721,2,13;16,warfarin,2
+(s)-fenoprofen,600.0,35.199999999999996,1,17,fenoprofen,1
+(s)-lercanidipine,20.0,0.0020700000000000007,1,18,lercanidipine,1
+(s)-warfarin,25.0,1.550677271388215,2,20;22,warfarin,2
+1-hydroxytacrine,40.0,0.032299999999999995,1,24,tacrine,1
+"10alpha-methoxy-9,10-dihydrolysergol",30.0,0.03285000000000001,1,25,nicergoline,1
+2-hydroxyflutamide,250.0,1.183934119788766,2,27;29,flutamide,2
+2-pyridylacetic acid,16.0,0.4918190897067743,2,30;31,betahistine,2
+21-desacetyldeflazacort,3.0,0.010399999999999998,1,35,deflazacort,1
+3-hydroxyanagrelide,2.0,0.005030000000000003,1,38,anagrelide,1
+3-methylflavone-8-carboxylic acid (mfca),200.0,11.573223367152297,2,40;41,flavoxate,2
+3alpha-hydroxytibolone,2.5,0.013760886599343807,2,43;44,tibolone,2
+3beta-hydroxytibolone,2.5,0.003784970277294131,2,45;47,tibolone,2
+4-acetylaminoantipyrine,750.0,2.1,1,50,metamizole (dipyrone),1
+4-aminoantipyrine,1500.0,2.32,1,53,metamizole (dipyrone),1
+4-formylaminoantipyrine,750.0,1.61,1,55,metamizole (dipyrone),1
+4-methylaminoantipyrine,750.0,10.6,1,57,metamizole (dipyrone),1
+5-hmt,8.0,0.004491506613248444,3,63;64;65,fesoterodine,3
+6-methoxy-2-naphthylacetic acid,1000.0,22.394418947586026,2,66;68,nabumetone,2
+7-hydroxyamoxapine,50.0,0.01947,1,69,amoxapine,1
+8-hydroxyamoxapine,50.0,0.058039999999999994,1,71,amoxapine,1
+act-333679,0.1,0.0019900000000000013,1,141,selexipag,1
+acyclovir,1000.0,5.185030117413928,4,152;153;154;155,valaciclovir,4
+adefovir,10.0,0.023883048381645094,2,159;160,adefovir dipivoxil,2
+albendazole sulfoxide,400.0,0.576652441562221,3,175;176;180,albendazole,3
+ampicillin,394.0,7.1000000000000005,1,304,bacampicillin,1
+azilsartan,40.0,2.452206530817404,6,459;460;461;462;463;464,azilsartan medoxomil,6
+baloxavir,20.0,0.04339462723808951,3,474;475;476,baloxavir marboxil,3
+beclomethasone 17-monopropionate,4.0,0.0007000000000000002,1,499,beclomethasone dipropionate,1
+benazeprilat,10.0,0.19505,1,513,benazepril,1
+benzoic acid,125.0,0.9489,1,526,trimebutine,1
+candesartan,16.0,0.14445296120190823,2,693;695,candesartan cilexetil,2
+canrenoic acid,100.0,4.126,1,701,potassium canrenoate,1
+canrenone,200.0,0.26126193674454945,3,702;703;704,spironolactone,3
+carebastine,20.0,0.11883337494155417,2,727;728,ebastine,2
+cefditoren,200.0,2.3000000000000003,1,764,cefditoren pivoxil,1
+cefpodoxime,100.0,1.258912136198182,4,785;786;787;788,cefpodoxime proxetil,4
+cefuroxime,500.0,5.365017253045262,4,809;810;813;814,cefuroxime axetil,4
+cidofovir,140.0,0.03110000000000001,1,889,brincidofovir,1
+cilazaprilat,5.0,0.10146950280749385,2,900;903,cilazapril,2
+clofibric acid,500.0,48.72033887992585,3,959;961;962,clofibrate,3
+clopidogrel carboxylic acid,75.0,2.6088600000000004,1,979,clopidogrel,1
+cortisone,5.0,0.015739999999999997,1,1013,cortisone acetate,1
+dabigatran,10.0,0.008300000000000002,1,1050,dabigatran etexilate,1
+deacetylmetipranolol,40.0,0.022,1,1104,metipranolol,1
+deacetylmoxisylyte,120.0,3.0260000000000002,1,1105,moxisylyte,1
+desalkylflurazepam,30.0,0.028270302439132144,2,1124;1125,flurazepam,2
+desethylamodiaquine,200.0,0.05100000000000001,1,1128,amodiaquine,1
+desglymidodrine,2.5,0.005650000000000001,1,1131,midodrine,1
+desmethyldiazepam,15.0,0.2616772821625905,2,1147;1149,clorazepic acid (clorazepate),2
+desvenlafaxine,50.0,0.11691234577271195,3,1153;1154;1156,venlafaxine,2
+dextroamphetamine,30.0,0.032200000000000006,1,1178,lisdexamfetamine,1
+dihydrotetrabenazine (htbz),25.0,0.059624320706849414,4,1251;1252;1253;1254,deutetrabenazine;tetrabenazine,4
+dimethadione,65.3,3.3200000000000003,1,1264,trimethadione,1
+diphenoxylic acid,5.0,0.040100000000000004,1,1270,diphenoxylate,1
+enalaprilat,10.0,0.036752278840909994,2,1452;1453,enalapril,2
+eslicarbazepine,600.0,8.031727177348536,4,1539;1540;1541;1549,eslicarbazepine acetate;oxcarbazepine,4
+estromustine,420.0,0.4533982673103196,2,1561;1562,estramustine phosphate,2
+etonogestrel,0.15,0.0012900000000000006,1,1579,desogestrel,1
+fenofibric acid,67.0,4.09,1,1662,fenofibrate,1
+fludarabine,74.0,0.2790000000000001,1,1748,fludarabine phosphate,1
+fosinoprilat,10.0,0.15500129031721,2,1801;1802,fosinopril,2
+ganciclovir,900.0,6.3990624313253885,2,1851;1853,valganciclovir,2
+isavuconazole,400.0,3.8000000000000003,2,2022;2023,isavuconazonium,2
+licarbazepine,300.0,2.33,1,2221,oxcarbazepine,1
+losartan carboxylic acid (e-3174),50.0,0.30822664704755476,5,2310;2311;2313;2314;2315,losartan,5
+lovastatin acid,80.0,0.004660000000000002,1,2317,lovastatin,1
+mecillinam,200.0,2.829,1,2368,pivmecillinam,1
+melagatran,36.0,0.144713590679814,5,2386;2397;2399;2402;2405,ximelagatran,5
+mesoridazine,25.0,0.16854,1,2433,thioridazine,1
+misoprostol acid,0.4,0.0007344477317432183,3,2577;2578;2579,misoprostol,3
+moexiprilat,15.0,0.018400000000000003,1,2608,moexipril,1
+mycophenolic acid,500.0,15.27225791383186,2,2655;2656,mycophenolate mofetil,2
+n-desmethyl zolmitriptan (183c91),2.5,0.002000000000000001,1,2659,zolmitriptan,1
+n-desmethylclobazam,20.0,0.082,1,2665,clobazam,1
+olmesartan,20.0,0.45541739097228157,2,2838;2840,olmesartan medoxomil,2
+oseltamivir acid,20.0,0.06790000000000002,1,2875,oseltamivir,1
+oxypurinol,200.0,4.10705,1,2908,allopurinol,1
+penciclovir,250.0,1.5899999999999999,1,2963,famciclovir,1
+perindoprilat,4.0,0.004015096511915997,2,2984;2985,perindopril,2
+phenylbutyrate,5000.0,217.99999999999994,1,3010,sodium phenylbutyrate,1
+pyrazinoic acid,1890.0,4.5,1,3230,pyrazinamide,1
+quercetin,16.0,0.0235,1,3240,rutin,1
+quinaprilat,20.0,0.5427154884485005,3,3251;3253;3254,quinapril,3
+r-138727,10.0,0.13278786844228166,3,3275;3279;3281,prasugrel,3
+ramiprilat,5.0,0.004841569425926558,3,3314;3315;3316,ramipril,3
+rhein,50.0,3.1999999999999997,1,3366,diacerein,1
+ro 13-7652,50.0,0.020600000000000004,1,3472,acitretin,1
+roflumilast n-oxide,0.5,0.01350111106539013,2,3485;3490,roflumilast,2
+salicylamide,1500.0,30.899999999999995,1,3569,sodium salicylamide,1
+salicylic acid,1500.0,85.99999999999997,1,3572,salsalate,1
+simvastatin acid,20.0,0.0013398465471905175,4,3653;3654;3655;3656,simvastatin,4
+spiraprilat,3.0,0.025,1,3729,spirapril,1
+sulforidazine,25.0,0.03171000000000001,1,3762,thioridazine,1
+sulindac sulfide,150.0,2.6,1,3767,sulindac,1
+sulindac sulfone,200.0,3.56,1,3769,sulindac,1
+tamatinib (r406),150.0,0.313,1,3816,fostamatinib,1
+tedizolid,200.0,2.1876845871303754,4,3838;3843;3844;3846,tedizolid phosphate,4
+telotristat,500.0,0.61,1,3876,telotristat ethyl,1
+tenofovir,300.0,0.26577675231071574,3,3885;3886;3887,tenofovir disoproxil,3
+teriflunomide,20.0,1.9390719429665317,2,3906;3910,leflunomide,2
+tizoxanide,4000.0,41.999999999999986,1,3991,nitazoxanide,1
+trandolaprilat,1.0,0.0010700000000000004,1,4083,trandolapril,1
+trichloroethanol,1500.0,15.83682,1,4102,chloral hydrate,1
+zofenoprilat,10.0,0.09700000000000002,1,4398,zofenopril,1

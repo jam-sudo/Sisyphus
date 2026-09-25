@@ -22,6 +22,8 @@ from sisyphus.descriptors import compute_features  # noqa: E402
 
 SOURCE = ROOT / "data/training/omega_mmpk_clean.csv"
 SOURCE_SHA = "e7228d14bdfdfc6c790177207779630c1e5655c19d451528c87b80e2e9de9c3d"
+MISMATCH = ROOT / "data/validation/cmax_administered_analyte_mismatch_v1.csv"
+MISMATCH_SHA = "09dca8c11133045cb75d9351b940311064b6b36dbaa2f95c3d5bd1b9de236fff"
 DATASET = ROOT / "data/training/cmax_omega_public_clean.csv"
 MODEL = ROOT / "models/direct_pk/xgboost_cmax.json"
 META = MODEL.with_suffix(".meta.json")
@@ -55,6 +57,20 @@ def training_rows() -> list[dict[str, str]]:
                 or int(matched[0]["n_studies"]) != studies
                 or not np.isclose(float(matched[0]["cmax_mg_L"]), cmax)):
             raise ValueError(f"{name} source row changed; re-adjudicate its matrix")
+        rows.remove(matched[0])
+    if sha256(MISMATCH) != MISMATCH_SHA:
+        raise ValueError("Administered/analyte mismatch ledger changed; re-adjudicate")
+    with MISMATCH.open(newline="") as handle:
+        mismatches = list(csv.DictReader(handle))
+    if len(mismatches) != 114 or len({r["name"] for r in mismatches}) != 114:
+        raise ValueError("Unexpected administered/analyte mismatch ledger")
+    for mismatch in mismatches:
+        matched = [row for row in rows if row["name"] == mismatch["name"]]
+        if (len(matched) != 1
+                or float(matched[0]["dose_mg"]) != float(mismatch["dose_mg"])
+                or int(matched[0]["n_studies"]) != int(mismatch["n_studies"])
+                or not np.isclose(float(matched[0]["cmax_mg_L"]), float(mismatch["cmax_mg_L"]))):
+            raise ValueError(f"{mismatch['name']} source row changed; re-adjudicate administered identity")
         rows.remove(matched[0])
     # Richens et al. 1997, Table 1: 600 mg young low-dose Cmax is 8.9 µg/mL.
     # The archived Omega row divided by 1000 as if that value were ng/mL.
@@ -97,10 +113,10 @@ def main() -> None:
                     "sha256": sha256(DATASET), "n_drugs_clean": len(fitted),
                     "source_sha256": SOURCE_SHA},
         n_drugs_original=1128,
-        n_drugs_excluded=104,
+        n_drugs_excluded=218,
         holdout_version="N=107 (data/reference/holdout.json)",
         holdout_metric={"name": "five_fold_cv_aafe", "value": cv_aafe, "r2": cv_r2},
-        retrained_reason="Correct felbamate units and quarantine four blood-matrix Cmax labels",
+        retrained_reason="Correct felbamate units; quarantine four blood-matrix and 114 administered/analyte-mismatched Cmax labels",
     )
     META.write_text(json.dumps(metadata, indent=2) + "\n")
     print(f"N={len(fitted)} CV_AAFE={cv_aafe:.3f} CV_R2={cv_r2:.3f}")

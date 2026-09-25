@@ -26,8 +26,8 @@ def _aafe(preds: list[dict]) -> float:
     not HOLDOUT_JSON.exists(),
     reason=f"{HOLDOUT_JSON.name} not present — regeneration required",
 )
-def test_cached_development_aafe_is_2p903() -> None:
-    """Source-audited N=73 cache after four blood-matrix quarantines."""
+def test_cached_development_aafe_is_2p854() -> None:
+    """Source-audited N=73 cache after training identity quarantines."""
     with HOLDOUT_JSON.open() as f:
         data = json.load(f)
     # Primary path: use pre-computed AAFE stored in the file
@@ -40,4 +40,4 @@ def test_cached_development_aafe_is_2p903() -> None:
             preds = data["drugs"]
         aafe = _aafe(preds)
     assert data["n_holdout"] == 73
-    assert abs(aafe - 2.903) < 0.020, f"AAFE drifted: {aafe:.4f}"
+    assert abs(aafe - 2.854) < 0.020, f"AAFE drifted: {aafe:.4f}"

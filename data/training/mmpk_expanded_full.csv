@@ -12,7 +12,6 @@ Islatravir,C#C[C@]1(CO)O[C@@H](n2cnc3c(N)nc(F)nc32)C[C@@H]1O,30.0,0.313789999999
 Islatravir,C#C[C@]1(CO)O[C@@H](n2cnc3c(N)nc(F)nc32)C[C@@H]1O,100.0,0.93843,-2.027598117019765,1,0.5,58.9,3431.12,,suspension,False,False
 Islatravir,C#C[C@]1(CO)O[C@@H](n2cnc3c(N)nc(F)nc32)C[C@@H]1O,200.0,1.81233,-2.0427927161586137,1,0.5,61.4,7507.4,,suspension,False,False
 Islatravir,C#C[C@]1(CO)O[C@@H](n2cnc3c(N)nc(F)nc32)C[C@@H]1O,400.0,2.90619,-2.1387359872661142,1,0.5,48.5,14164.36,,suspension,False,False
-etonogestrel,C#C[C@]1(O)CC[C@H]2[C@@H]3CCC4=CC(=O)CC[C@@H]4[C@H]3C(=C)C[C@@]21CC,0.15,0.0012899999999999,-2.0655015487564325,1,1.3,30.6,12.4,79.0,tablet,True,False
 norethisterone (norethindrone),C#C[C@]1(O)CC[C@H]2[C@@H]3CCC4=CC(=O)CC[C@@H]4[C@H]3CC[C@@]21C,0.3,0.0043599999999999,-1.8376347654510763,1,1.0,,,,tablet,False,False
 norethisterone (norethindrone),C#C[C@]1(O)CC[C@H]2[C@@H]3CCC4=CC(=O)CC[C@@H]4[C@H]3CC[C@@]21C,0.5,0.0054999999999999,-1.958607314841775,1,1.0,,,,tablet,False,False
 levonorgestrel,C#C[C@]1(O)CC[C@H]2[C@@H]3CCC4=CC(=O)CC[C@@H]4[C@H]3CC[C@@]21CC,0.75,0.0110620251310508,-1.8312266226137963,2,1.9,23.08,139.43,,tablet,False,False
@@ -21,20 +20,12 @@ danazol,C#C[C@]1(O)CC[C@H]2[C@@H]3CCC4=Cc5oncc5C[C@]4(C)[C@H]3CC[C@@]21C,100.0,0
 danazol,C#C[C@]1(O)CC[C@H]2[C@@H]3CCC4=Cc5oncc5C[C@]4(C)[C@H]3CC[C@@]21C,400.0,0.0695999999999999,-3.759450751717401,1,2.47,9.7,601.0,,capsule,False,False
 tibolone,C#C[C@]1(O)CC[C@H]2[C@@H]3[C@H](C)CC4=C(CCC(=O)C4)[C@H]3CC[C@@]21C,1.25,0.0008999999999999,-3.1426675035687315,1,1.0,,,,tablet,False,False
 tibolone,C#C[C@]1(O)CC[C@H]2[C@@H]3[C@H](C)CC4=C(CCC(=O)C4)[C@H]3CC[C@@]21C,2.5,0.0014696938456699,-3.230713133096572,2,1.55,,,,tablet,False,False
-3alpha-hydroxytibolone,C#C[C@]1(O)CC[C@H]2[C@@H]3[C@H](C)CC4=C(CC[C@@H](O)C4)[C@H]3CC[C@@]21C,1.25,0.0082999999999999,-2.1778319206319825,1,1.2,6.4,27.1,,tablet,True,False
-3alpha-hydroxytibolone,C#C[C@]1(O)CC[C@H]2[C@@H]3[C@H](C)CC4=C(CC[C@@H](O)C4)[C@H]3CC[C@@]21C,2.5,0.0137608865993438,-2.259293592737779,2,1.3,5.51,47.32,,tablet,True,False
-3beta-hydroxytibolone,C#C[C@]1(O)CC[C@H]2[C@@H]3[C@H](C)CC4=C(CC[C@H](O)C4)[C@H]3CC[C@@]21C,1.25,0.0021,-2.7746907182741367,1,1.4,6.2,8.7,,tablet,True,False
-3beta-hydroxytibolone,C#C[C@]1(O)CC[C@H]2[C@@H]3[C@H](C)CC4=C(CC[C@H](O)C4)[C@H]3CC[C@@]21C,2.5,0.0037849702772941,-2.819877535260736,2,1.55,6.005000000000001,15.63,,tablet,True,False
 erlotinib,C#Cc1cccc(Nc2ncnc3cc(OCCOC)c(OCCOC)cc23)c1,150.0,1.233599269314674,-2.084917155589963,4,2.55,14.225,26319.0,59.0,tablet,False,False
 erlotinib,C#Cc1cccc(Nc2ncnc3cc(OCCOC)c(OCCOC)cc23)c1,300.0,1.979,-2.180675460513266,1,2.0,11.7,44317.0,,tablet,False,False
 Icotinib,C#Cc1cccc(Nc2ncnc3cc4c(cc23)OCCOCCOCCO4)c1,100.0,0.728,-2.137868620686963,1,1.0,6.02,3220.0,,tablet,False,False
 Icotinib,C#Cc1cccc(Nc2ncnc3cc4c(cc23)OCCOCCOCCO4)c1,350.0,2.06,-2.2302008239811224,1,0.75,6.47,12300.0,,tablet,False,False
 Icotinib,C#Cc1cccc(Nc2ncnc3cc4c(cc23)OCCOCCOCCO4)c1,600.0,2.8,-2.3309932190414244,1,3.0,7.83,18600.0,,tablet,False,False
 cinnarizine,C(=C/c1ccccc1)\CN1CCN(C(c2ccccc2)c2ccccc2)CC1,25.0,0.03539,-2.8490594460345227,1,2.2,29.48,370.1,,tablet,False,False
-teriflunomide,C/C(O)=C(\C#N)C(=O)Nc1ccc(C(F)(F)F)cc1,10.0,0.8388325220209335,-1.0763247400326024,2,2.75,302.28,299610.0,,tablet,True,False
-teriflunomide,C/C(O)=C(\C#N)C(=O)Nc1ccc(C(F)(F)F)cc1,20.0,1.939071942966532,-1.0134360732001506,2,7.5,267.09000000000003,688350.0,,tablet,True,False
-teriflunomide,C/C(O)=C(\C#N)C(=O)Nc1ccc(C(F)(F)F)cc1,40.0,5.200000000000001,-0.8860566476931632,1,13.0,170.0,1344000.0,,tablet,True,False
-teriflunomide,C/C(O)=C(\C#N)C(=O)Nc1ccc(C(F)(F)F)cc1,60.0,6.7,-0.9520764476828172,1,9.0,252.0,2555000.0,,tablet,True,False
 huperzine a,C/C=C1\[C@H]2C=C(C)C[C@]1(N)c1ccc(=O)[nH]c1C2,0.2,0.0015499999999999,-2.11069829749369,1,0.95,12.09,19.13,,capsule,False,False
 huperzine a,C/C=C1\[C@H]2C=C(C)C[C@]1(N)c1ccc(=O)[nH]c1C2,0.4,0.00256,-2.193820026016113,1,1.0,11.76,40.67,,tablet,False,False
 huperzine a,C/C=C1\[C@H]2C=C(C)C[C@]1(N)c1ccc(=O)[nH]c1C2,0.99,0.0084,-2.0713559085356685,1,1.33,4.8,68.33,,tablet,False,False
@@ -178,14 +169,6 @@ warfarin,CC(=O)CC(c1ccccc1)c1c(O)c2ccccc2oc1=O,25.0,3.01,-0.9193735130781944,1,1
 pentoxifylline,CC(=O)CCCCn1c(=O)c2c(ncn2C)n(C)c1=O,100.0,0.2719999999999999,-2.5654310959658013,1,0.39,0.48,193.0,,solution,False,False
 pentoxifylline,CC(=O)CCCCn1c(=O)c2c(ncn2C)n(C)c1=O,200.0,0.683,-2.4666092919824485,1,0.41,0.39,426.0,,solution,False,False
 pentoxifylline,CC(=O)CCCCn1c(=O)c2c(ncn2C)n(C)c1=O,400.0,1.607,-2.3960441145646176,1,0.29,0.84,1229.0,,solution,False,False
-(s)-warfarin,CC(=O)C[C@@H](c1ccccc1)c1c(O)c2ccccc2oc1=O,7.5,0.329,-1.3578653654417256,1,1.5,39.4,8420.0,,tablet,True,False
-(s)-warfarin,CC(=O)C[C@@H](c1ccccc1)c1c(O)c2ccccc2oc1=O,10.0,0.55,-1.259637310505756,1,1.0,40.0,19900.0,,tablet,True,False
-(s)-warfarin,CC(=O)C[C@@H](c1ccccc1)c1c(O)c2ccccc2oc1=O,20.0,1.127,-1.2491060796178748,1,0.8,42.0,38629.0,,tablet,True,False
-(s)-warfarin,CC(=O)C[C@@H](c1ccccc1)c1c(O)c2ccccc2oc1=O,25.0,1.550677271388215,-1.207418587286083,2,3.0,32.2,49489.0,,tablet,True,False
-(r)-warfarin,CC(=O)C[C@H](c1ccccc1)c1c(O)c2ccccc2oc1=O,7.5,0.375,-1.3010299956639813,1,2.0,49.0,18600.0,,tablet,True,False
-(r)-warfarin,CC(=O)C[C@H](c1ccccc1)c1c(O)c2ccccc2oc1=O,10.0,0.55,-1.259637310505756,1,1.5,47.2,31300.0,,tablet,True,False
-(r)-warfarin,CC(=O)C[C@H](c1ccccc1)c1c(O)c2ccccc2oc1=O,20.0,1.135,-1.2460341341348398,1,1.3,52.8,61716.0,,tablet,True,False
-(r)-warfarin,CC(=O)C[C@H](c1ccccc1)c1c(O)c2ccccc2oc1=O,25.0,1.573353107220372,-1.201113806514353,2,3.0,46.3,73311.0,,tablet,True,False
 ketoconazole,CC(=O)N1CCN(c2ccc(OCC3COC(Cn4ccnc4)(c4ccc(Cl)cc4Cl)O3)cc2)CC1,200.0,4.153155658571088,-1.6826517870699644,3,1.57,2.47,14780.0,,tablet,False,False
 ketoconazole,CC(=O)N1CCN(c2ccc(OCC3COC(Cn4ccnc4)(c4ccc(Cl)cc4Cl)O3)cc2)CC1,400.0,10.189582915899948,-1.5939035836738702,2,1.31,2.95,47265.0,,solution,False,False
 ketoconazole,CC(=O)N1CCN(c2ccc(OCC3COC(Cn4ccnc4)(c4ccc(Cl)cc4Cl)O3)cc2)CC1,600.0,15.1,-1.599174303090474,1,1.87,2.38,74500.0,,tablet,False,False
@@ -201,9 +184,6 @@ Sutezolid,CC(=O)NC[C@H]1CN(c2ccc(N3CCSCC3)c(F)c2)C(=O)O1,600.0,0.782,-2.88494449
 Sutezolid,CC(=O)NC[C@H]1CN(c2ccc(N3CCSCC3)c(F)c2)C(=O)O1,1200.0,1.44,-2.920818753952376,1,1.75,8.48,8020.0,,tablet,False,False
 Sutezolid,CC(=O)NC[C@H]1CN(c2ccc(N3CCSCC3)c(F)c2)C(=O)O1,1800.0,1.55,-3.064940806933014,1,2.5,11.7,14100.0,,tablet,False,False
 acetylcysteine (n-acetylcysteine),CC(=O)N[C@@H](CS)C(=O)O,600.0,2.801996611346988,-2.3306836446566552,2,1.15,17.05,11861.45,,effervescent tablet,False,False
-4-acetylaminoantipyrine,CC(=O)Nc1c(C)n(C)n(-c2ccccc2)c1=O,750.0,2.1,-2.552841968657781,1,11.1,8.83,50300.0,,tablet,True,False
-4-acetylaminoantipyrine,CC(=O)Nc1c(C)n(C)n(-c2ccccc2)c1=O,1500.0,4.700000000000001,-2.503993401119964,1,13.1,9.37,120000.0,,tablet,True,False
-4-acetylaminoantipyrine,CC(=O)Nc1c(C)n(C)n(-c2ccccc2)c1=O,3000.0,8.04,-2.5718652059712115,1,17.9,8.57,222000.0,,tablet,True,False
 acetaminophen (paracetamol),CC(=O)Nc1ccc(O)cc1,0.1,0.0010999999999999,-1.958607314841775,1,0.5,5.8,4.8,88.0,solution,False,False
 acetaminophen (paracetamol),CC(=O)Nc1ccc(O)cc1,500.0,4.3,-2.065501548756432,1,0.75,2.79,15600.0,63.0,tablet,False,False
 acetaminophen (paracetamol),CC(=O)Nc1ccc(O)cc1,1000.0,12.88603895694872,-1.889880560032798,2,0.875,2.605,44200.0,89.0,tablet,False,False
@@ -256,9 +236,6 @@ fenoprofen,CC(C(=O)O)c1cccc(Oc2ccccc2)c1,165.0,17.2,-0.9819554973063574,1,1.3,2.
 fenoprofen,CC(C(=O)O)c1cccc(Oc2ccccc2)c1,300.0,28.3,-1.0253348191953722,1,1.8,2.65,111290.0,,capsule,False,False
 lenacapavir,CC(C)(C#Cc1ccc(-c2ccc(Cl)c3c(NS(C)(=O)=O)nn(CC(F)(F)F)c23)c([C@H](Cc2cc(F)cc(F)c2)NC(=O)Cn2nc(C(F)(F)F)c3c2C(F)(F)[C@@H]2C[C@H]32)n1)S(C)(=O)=O,300.0,0.0214704448020994,-4.145280212933795,2,5.0,316.79999999999995,7385.0,8.0,tablet,False,False
 anastrozole,CC(C)(C#N)c1cc(Cn2cncn2)cc(C(C)(C)C#N)c1,1.0,0.0186593922750118,-1.7291025050647,4,1.25,40.48,759.55,,tablet,False,False
-carebastine,CC(C)(C(=O)O)c1ccc(C(=O)CCCN2CCC(OC(c3ccccc3)c3ccccc3)CC2)cc1,10.0,0.0838642653339311,-2.076423053166863,2,4.405,14.7,1829.415,,tablet,True,False
-carebastine,CC(C)(C(=O)O)c1ccc(C(=O)CCCN2CCC(OC(c3ccccc3)c3ccccc3)CC2)cc1,20.0,0.1188333749415541,-2.2260915641322176,2,5.4,21.435,3521.535,,tablet,True,False
-carebastine,CC(C)(C(=O)O)c1ccc(C(=O)CCCN2CCC(OC(c3ccccc3)c3ccccc3)CC2)cc1,50.0,0.41384,-2.0821375389349925,1,3.79,12.4,8862.8,,,True,False
 fexofenadine,CC(C)(C(=O)O)c1ccc(C(O)CCCN2CCC(C(O)(c3ccccc3)c3ccccc3)CC2)cc1,10.0,0.0456,-2.341035157335565,1,1.17,,222.9,,solution,False,False
 fexofenadine,CC(C)(C(=O)O)c1ccc(C(O)CCCN2CCC(C(O)(c3ccccc3)c3ccccc3)CC2)cc1,20.0,0.0644173889567095,-2.4920268781712167,2,1.215,16.2,415.65,,solution,False,False
 fexofenadine,CC(C)(C(=O)O)c1ccc(C(O)CCCN2CCC(C(O)(c3ccccc3)c3ccccc3)CC2)cc1,40.0,0.1763999999999999,-2.3555614105321614,1,1.0,,866.1,,solution,False,False
@@ -345,8 +322,6 @@ Venglustat,CC(C)(NC(=O)O[C@@H]1CN2CCC1CC2)c1csc(-c2ccc(F)cc2)n1,25.0,0.0799,-2.4
 Venglustat,CC(C)(NC(=O)O[C@@H]1CN2CCC1CC2)c1csc(-c2ccc(F)cc2)n1,50.0,0.173,-2.4609239012072237,1,4.0,28.5,6800.0,,capsule,False,False
 Venglustat,CC(C)(NC(=O)O[C@@H]1CN2CCC1CC2)c1csc(-c2ccc(F)cc2)n1,100.0,0.372,-2.4294570601181027,1,3.0,27.6,14100.0,,capsule,False,False
 Venglustat,CC(C)(NC(=O)O[C@@H]1CN2CCC1CC2)c1csc(-c2ccc(F)cc2)n1,150.0,0.52,-2.460087915420882,1,4.0,26.4,19900.0,,capsule,False,False
-2-hydroxyflutamide,CC(C)(O)C(=O)Nc1ccc([N+](=O)[O-])c(C(F)(F)F)c1,250.0,1.183934119788766,-2.3246124720015504,2,2.075,6.315,8428.5,,capsule,True,False
-2-hydroxyflutamide,CC(C)(O)C(=O)Nc1ccc([N+](=O)[O-])c(C(F)(F)F)c1,500.0,2.33,-2.33161408331,1,4.0,12.13,24050.0,,,True,False
 enasidenib,CC(C)(O)CNc1nc(Nc2ccnc(C(F)(F)F)c2)nc(-c2cccc(C(F)(F)F)n2)n1,50.0,0.4651859843116514,-2.031343383034136,2,3.99,22.05,19950.0,,tablet,False,False
 enasidenib,CC(C)(O)CNc1nc(Nc2ccnc(C(F)(F)F)c2)nc(-c2cccc(C(F)(F)F)n2)n1,100.0,0.8037984822080718,-2.094852818210271,2,3.495,22.5,45100.0,,tablet,False,False
 enasidenib,CC(C)(O)CNc1nc(Nc2ccnc(C(F)(F)F)c2)nc(-c2cccc(C(F)(F)F)n2)n1,300.0,1.9008945262691457,-2.198163234608609,2,11.95,28.0,166500.0,,tablet,False,False
@@ -355,15 +330,9 @@ Mavatrep,CC(C)(O)c1ccccc1-c1ccc2nc(/C=C/c3ccc(C(F)(F)F)cc3)[nH]c2c1,25.0,0.16740
 Mavatrep,CC(C)(O)c1ccccc1-c1ccc2nc(/C=C/c3ccc(C(F)(F)F)cc3)[nH]c2c1,50.0,0.3310045316910329,-2.179136064714569,2,2.375,115.295,19823.5,,capsule,False,False
 montelukast,CC(C)(O)c1ccccc1CC[C@@H](SCC1(CC(=O)O)CC1)c1cccc(/C=C/c2ccc3ccc(Cl)cc3n2)c1,4.0,0.19604,-1.3097152974873705,1,2.75,4.04,1170.45,,granule,False,False
 montelukast,CC(C)(O)c1ccccc1CC[C@@H](SCC1(CC(=O)O)CC1)c1cccc(/C=C/c2ccc3ccc(Cl)cc3n2)c1,10.0,0.3883646160032477,-1.4107603456398436,4,3.565,4.415,2485.735,66.0,tablet,False,False
-fenofibric acid,CC(C)(Oc1ccc(C(=O)c2ccc(Cl)cc2)cc1)C(=O)O,67.0,4.09,-1.2143514946934846,1,6.29,16.59,75980.0,,capsule,True,False
-fenofibric acid,CC(C)(Oc1ccc(C(=O)c2ccc(Cl)cc2)cc1)C(=O)O,200.0,10.13,-1.2954205503037008,1,6.21,19.8,171890.0,,capsule,True,False
-fenofibric acid,CC(C)(Oc1ccc(C(=O)c2ccc(Cl)cc2)cc1)C(=O)O,201.0,9.490000000000002,-1.3259298449931962,1,4.4,17.8,149100.0,,capsule,True,False
 ciprofibrate,CC(C)(Oc1ccc(C2CC2(Cl)Cl)cc1)C(=O)O,100.0,24.000000000000007,-0.6197887582883939,1,1.3,81.0,1370000.0,,tablet,False,False
 bezafibrate,CC(C)(Oc1ccc(CCNC(=O)c2ccc(Cl)cc2)cc1)C(=O)O,200.0,7.390000000000001,-1.4323855572691555,1,2.0,1.97,22740.0,,tablet,False,False
 bezafibrate,CC(C)(Oc1ccc(CCNC(=O)c2ccc(Cl)cc2)cc1)C(=O)O,300.0,10.589999999999998,-1.4522252946121776,1,2.0,2.16,38230.0,,tablet,False,False
-clofibric acid,CC(C)(Oc1ccc(Cl)cc1)C(=O)O,500.0,48.72033887992586,-1.0112597039154283,3,5.0,15.4,1310120.0,,capsule,True,False
-clofibric acid,CC(C)(Oc1ccc(Cl)cc1)C(=O)O,1000.0,88.79999999999998,-1.051587034221399,1,5.0,17.94,2827150.0,,tablet,True,False
-clofibric acid,CC(C)(Oc1ccc(Cl)cc1)C(=O)O,2000.0,151.19999999999996,-1.1214782044987937,1,5.0,16.08,4598490.0,,tablet,True,False
 penicillamine,CC(C)(S)[C@@H](N)C(=O)O,500.0,3.05,-2.214670164989233,1,3.8,2.1,14700.0,,tablet,False,False
 Verinurad,CC(C)(Sc1ccncc1-c1ccc(C#N)c2ccccc12)C(=O)O,2.0,0.0363999999999999,-1.739928612014925,1,0.5,12.1,45.0,,tablet,False,False
 Verinurad,CC(C)(Sc1ccncc1-c1ccc(C#N)c2ccccc12)C(=O)O,5.0,0.0729,-1.836242476018044,1,0.63,14.2,121.0,,tablet,False,False
@@ -416,18 +385,10 @@ selexipag,CC(C)N(CCCCOCC(=O)NS(C)(=O)=O)c1cnc(-c2ccccc2)c(-c2ccccc2)n1,0.2,0.003
 selexipag,CC(C)N(CCCCOCC(=O)NS(C)(=O)=O)c1cnc(-c2ccccc2)c(-c2ccccc2)n1,0.4,0.0058893123537472,-1.8319954025522884,2,1.0,0.95,11.675,49.4,tablet,False,False
 selexipag,CC(C)N(CCCCOCC(=O)NS(C)(=O)=O)c1cnc(-c2ccccc2)c(-c2ccccc2)n1,0.6,0.0111899999999999,-1.7293211638552937,1,1.0,1.9,23.27,,,False,False
 selexipag,CC(C)N(CCCCOCC(=O)NS(C)(=O)=O)c1cnc(-c2ccccc2)c(-c2ccccc2)n1,0.8,0.0115299999999999,-1.8412606796972448,1,1.0,2.3,24.97,,,False,False
-act-333679,CC(C)N(CCCCOCC(=O)O)c1cnc(-c2ccccc2)c(-c2ccccc2)n1,0.1,0.00199,-1.7011469235902932,1,2.5,9.8,12.6,,,True,False
-act-333679,CC(C)N(CCCCOCC(=O)O)c1cnc(-c2ccccc2)c(-c2ccccc2)n1,0.2,0.0040999999999999,-1.6882461389442458,1,2.75,12.6,26.33,,,True,False
-act-333679,CC(C)N(CCCCOCC(=O)O)c1cnc(-c2ccccc2)c(-c2ccccc2)n1,0.4,0.00818,-1.6893066876566394,1,2.25,9.8,53.65,,,True,False
-act-333679,CC(C)N(CCCCOCC(=O)O)c1cnc(-c2ccccc2)c(-c2ccccc2)n1,0.6,0.0124699999999999,-1.6822847969051011,1,2.5,9.4,78.85,,,True,False
-act-333679,CC(C)N(CCCCOCC(=O)O)c1cnc(-c2ccccc2)c(-c2ccccc2)n1,0.8,0.0143699999999999,-1.745633218857718,1,2.25,10.7,93.3,,,True,False
 pramiracetam,CC(C)N(CCNC(=O)CN1CCCC1=O)C(C)C,400.0,2.71,-2.1690907004535567,1,2.3,5.0,20990.0,,capsule,False,False
 pramiracetam,CC(C)N(CCNC(=O)CN1CCCC1=O)C(C)C,800.0,5.4,-2.170696227168975,1,2.78,4.7,40090.0,,capsule,False,False
 pramiracetam,CC(C)N(CCNC(=O)CN1CCCC1=O)C(C)C,1200.0,6.13,-2.2917207715292096,1,3.2,6.5,63180.0,,capsule,False,False
 pramiracetam,CC(C)N(CCNC(=O)CN1CCCC1=O)C(C)C,1600.0,8.98,-2.2508436459886205,1,3.2,4.5,87560.0,,capsule,False,False
-5-hmt,CC(C)N(CC[C@H](c1ccccc1)c1cc(CO)ccc1O)C(C)C,4.0,0.0021,-3.279840696594043,1,5.0,7.6,23.8,52.0,ER,True,False
-5-hmt,CC(C)N(CC[C@H](c1ccccc1)c1cc(CO)ccc1O)C(C)C,8.0,0.0044915066132484,-3.2506979435236616,3,5.0,7.83,50.8,52.0,tablet ER,True,False
-5-hmt,CC(C)N(CC[C@H](c1ccccc1)c1cc(CO)ccc1O)C(C)C,12.0,0.0063999999999999,-3.2730012720637376,1,5.0,9.3,80.1,52.0,ER,True,False
 clofazimine,CC(C)N=c1cc2n(-c3ccc(Cl)cc3)c3ccccc3nc-2cc1Nc1ccc(Cl)cc1,200.0,0.21871,-2.9611613550793296,1,12.0,,8331.49,,capsule,False,False
 proguanil,CC(C)NC(=N)NC(=N)Nc1ccc(Cl)cc1,200.0,0.1881781071219497,-3.0264609000009712,2,3.15,15.685,3822.5,,tablet,False,False
 belumosudil,CC(C)NC(=O)COc1cccc(-c2nc(Nc3ccc4[nH]ncc4c3)c3ccccc3n2)c1,200.0,1.829562789302406,-2.0386826769057853,2,2.5,7.215,8515.0,63.7,tablet,False,False
@@ -581,17 +542,11 @@ Acoziborole,CC1(C)OB(O)c2cc(NC(=O)c3ccc(F)cc3C(F)(F)F)ccc21,800.0,17.0,-1.672641
 Acoziborole,CC1(C)OB(O)c2cc(NC(=O)c3ccc(F)cc3C(F)(F)F)ccc21,960.0,19.200000000000003,-1.6989700043360187,1,72.0,409.0,7979000.0,,capsule,False,False
 Acoziborole,CC1(C)OB(O)c2cc(NC(=O)c3ccc(F)cc3C(F)(F)F)ccc21,1000.0,22.5,-1.6478174818886375,1,72.0,349.0,6886000.0,,capsule,False,False
 Acoziborole,CC1(C)OB(O)c2cc(NC(=O)c3ccc(F)cc3C(F)(F)F)ccc21,1200.0,22.8,-1.7212463990471711,1,72.0,364.0,8574000.0,,capsule,False,False
-dimethadione,CC1(C)OC(=O)NC1=O,65.3,3.32,-1.2937750975710376,1,66.0,245.1,1509000.0,,powder,True,False
-dimethadione,CC1(C)OC(=O)NC1=O,130.6,6.090000000000001,-1.3313258843061797,1,66.0,204.2,1991000.0,,powder,True,False
-dimethadione,CC1(C)OC(=O)NC1=O,261.2,12.830000000000002,-1.3087465162281078,1,66.0,160.0,3667000.0,,powder,True,False
 topiramate,CC1(C)O[C@@H]2[C@@H](CO[C@@]3(COS(N)(=O)=O)OC(C)(C)O[C@@H]23)O1,100.0,1.73,-1.7619538968712043,1,1.75,18.7,45000.0,,tablet,False,False
 topiramate,CC1(C)O[C@@H]2[C@@H](CO[C@@]3(COS(N)(=O)=O)OC(C)(C)O[C@@H]23)O1,200.0,3.68,-1.7351821769904636,1,1.42,23.0,119400.0,,tablet,False,False
 topiramate,CC1(C)O[C@@H]2[C@@H](CO[C@@]3(COS(N)(=O)=O)OC(C)(C)O[C@@H]23)O1,400.0,7.699999999999999,-1.7155692661554804,1,3.5,23.0,267600.0,,tablet,False,False
 topiramate,CC1(C)O[C@@H]2[C@@H](CO[C@@]3(COS(N)(=O)=O)OC(C)(C)O[C@@H]23)O1,800.0,18.38,-1.6387444799418511,1,4.33,22.0,578400.0,,tablet,False,False
 topiramate,CC1(C)O[C@@H]2[C@@H](CO[C@@]3(COS(N)(=O)=O)OC(C)(C)O[C@@H]23)O1,1200.0,28.730000000000004,-1.6208456200556771,1,3.75,20.0,898800.0,,tablet,False,False
-mecillinam,CC1(C)S[C@@H]2[C@H](N=CN3CCCCCC3)C(=O)N2[C@H]1C(=O)O,200.0,2.829,-1.8493970482069904,1,1.0,1.17,6255.0,30.0,tablet,True,False
-mecillinam,CC1(C)S[C@@H]2[C@H](N=CN3CCCCCC3)C(=O)N2[C@H]1C(=O)O,400.0,3.619,-2.043471408219763,1,1.33,1.4,9073.0,30.0,tablet,True,False
-mecillinam,CC1(C)S[C@@H]2[C@H](N=CN3CCCCCC3)C(=O)N2[C@H]1C(=O)O,600.0,4.512,-2.123782159408358,1,1.33,1.43,12527.0,30.0,tablet,True,False
 cyclacillin,CC1(C)S[C@@H]2[C@H](NC(=O)C3(N)CCCCC3)C(=O)N2[C@H]1C(=O)O,250.0,5.405034689990435,-1.665141523033388,2,0.5,0.655,6405.0,,tablet,False,False
 cyclacillin,CC1(C)S[C@@H]2[C@H](NC(=O)C3(N)CCCCC3)C(=O)N2[C@H]1C(=O)O,500.0,14.489999999999998,-1.5379016188648442,1,0.5,0.63,17060.0,,tablet,False,False
 cyclacillin,CC1(C)S[C@@H]2[C@H](NC(=O)C3(N)CCCCC3)C(=O)N2[C@H]1C(=O)O,1000.0,31.800000000000008,-1.4975728800155672,1,0.5,0.7,39860.0,,tablet,False,False
@@ -607,10 +562,6 @@ amoxicillin,CC1(C)S[C@@H]2[C@H](NC(=O)[C@H](N)c3ccc(O)cc3)C(=O)N2[C@H]1C(=O)O,75
 amoxicillin,CC1(C)S[C@@H]2[C@H](NC(=O)[C@H](N)c3ccc(O)cc3)C(=O)N2[C@H]1C(=O)O,1000.0,13.37,-1.873868592738016,1,2.25,1.28,46100.0,,tablet,False,False
 amoxicillin,CC1(C)S[C@@H]2[C@H](NC(=O)[C@H](N)c3ccc(O)cc3)C(=O)N2[C@H]1C(=O)O,1500.0,17.899999999999995,-1.9232382280757885,1,1.75,1.6,53900.0,,tablet,False,False
 amoxicillin,CC1(C)S[C@@H]2[C@H](NC(=O)[C@H](N)c3ccc(O)cc3)C(=O)N2[C@H]1C(=O)O,3000.0,27.733733971465156,-2.034112909338272,2,2.0,1.485,87250.0,45.0,tablet,False,False
-ampicillin,CC1(C)S[C@@H]2[C@H](NC(=O)[C@H](N)c3ccccc3)C(=O)N2[C@H]1C(=O)O,394.0,7.1,-1.744237873106499,1,0.5,1.1,10900.0,,tablet,True,False
-ampicillin,CC1(C)S[C@@H]2[C@H](NC(=O)[C@H](N)c3ccccc3)C(=O)N2[C@H]1C(=O)O,787.0,11.3,-1.8428962888756448,1,0.88,1.1,20900.0,,tablet,True,False
-ampicillin,CC1(C)S[C@@H]2[C@H](NC(=O)[C@H](N)c3ccccc3)C(=O)N2[C@H]1C(=O)O,1575.0,17.7,-1.9493072917638128,1,1.5,1.3,38800.0,,tablet,True,False
-ampicillin,CC1(C)S[C@@H]2[C@H](NC(=O)[C@H](N)c3ccccc3)C(=O)N2[C@H]1C(=O)O,3150.0,26.2,-2.080009262469855,1,1.5,1.4,65700.0,,tablet,True,False
 memantine,CC12CC3CC(C)(C1)CC(N)(C3)C2,5.0,0.0062,-2.906578314837765,1,5.7,66.86,540.05,100.0,,False,False
 memantine,CC12CC3CC(C)(C1)CC(N)(C3)C2,10.0,0.0115999999999999,-2.9355420107730814,1,6.0,63.57,932.07,100.0,,False,False
 memantine,CC12CC3CC(C)(C1)CC(N)(C3)C2,20.0,0.0253399999999999,-2.8972233851165585,1,6.89,62.06,1853.29,100.0,,False,False
@@ -638,8 +589,6 @@ Azelnidipine,CC1=C(C(=O)OC(C)C)C(c2cccc([N+](=O)[O-])c2)C(C(=O)OC2CN(C(c3ccccc3)
 sulindac,CC1=C(CC(=O)O)c2cc(F)ccc2/C1=C\c1ccc([S+](C)[O-])cc1,150.0,3.8,-1.5963076624388712,1,2.0,,14870.0,,tablet,False,False
 sulindac,CC1=C(CC(=O)O)c2cc(F)ccc2/C1=C\c1ccc([S+](C)[O-])cc1,200.0,7.440000000000001,-1.4294570601181025,1,1.65,6.61,34400.0,,tablet,False,False
 sulindac,CC1=C(CC(=O)O)c2cc(F)ccc2/C1=C\c1ccc([S+](C)[O-])cc1,300.0,11.400000000000004,-1.4202164033831897,1,1.67,2.95,35850.0,,tablet,False,False
-sulindac sulfone,CC1=C(CC(=O)O)c2cc(F)ccc2C1=Cc1ccc(S(C)(=O)=O)cc1,150.0,3.2000000000000006,-1.6709412807357753,1,4.0,,25140.0,,tablet,True,False
-sulindac sulfone,CC1=C(CC(=O)O)c2cc(F)ccc2C1=Cc1ccc(S(C)(=O)=O)cc1,200.0,3.56,-1.749579997691106,1,2.1,14.81,57350.0,,tablet,True,False
 lutein,CC1=C[C@H](O)CC(C)(C)[C@H]1/C=C/C(C)=C/C=C/C(C)=C/C=C/C=C(C)/C=C/C=C(C)/C=C/C1=C(C)C[C@@H](O)CC1(C)C,19.91,0.42098,-1.674809796248654,1,16.0,,29297.63,,solution,False,False
 eltrombopag,CC1=NN(c2ccc(C)c(C)c2)C(=O)/C1=N\Nc1cccc(-c2cccc(C(=O)O)c2)c1O,25.0,2.55,-0.9913998282380824,1,3.0,20.5,34200.0,,tablet,False,False
 eltrombopag,CC1=NN(c2ccc(C)c(C)c2)C(=O)/C1=N\Nc1cccc(-c2cccc(C(=O)O)c2)c1O,50.0,5.752652004132838,-0.9391019013440648,3,3.0,25.8,66000.0,,,False,False
@@ -651,10 +600,6 @@ edaravone,CC1=NN(c2ccccc2)C(=O)C1,120.0,1.735,-1.8398817669207324,1,0.4,5.1,2259
 edaravone,CC1=NN(c2ccccc2)C(=O)C1,200.0,4.933,-1.60791888020184,1,0.4,9.1,6313.0,,suspension,False,False
 edaravone,CC1=NN(c2ccccc2)C(=O)C1,300.0,5.426,-1.7426414652940851,1,0.8,9.1,9121.0,,suspension,False,False
 diazoxide,CC1=NS(=O)(=O)c2cc(Cl)ccc2N1,100.0,4.99,-1.30189945437661,1,4.0,27.0,230000.0,91.0,capsule,False,False
-21-desacetyldeflazacort,CC1=N[C@]2(C(=O)CO)[C@@H](C[C@H]3[C@@H]4CCC5=CC(=O)C=C[C@]5(C)[C@H]4[C@@H](O)C[C@@]32C)O1,3.0,0.0103999999999999,-2.4600879154208823,1,1.3,2.3,38.5,,suspension,True,False
-21-desacetyldeflazacort,CC1=N[C@]2(C(=O)CO)[C@@H](C[C@H]3[C@@H]4CCC5=CC(=O)C=C[C@]5(C)[C@H]4[C@@H](O)C[C@@]32C)O1,6.0,0.0198,-2.4814860601221125,1,1.4,1.9,64.9,,suspension,True,False
-21-desacetyldeflazacort,CC1=N[C@]2(C(=O)CO)[C@@H](C[C@H]3[C@@H]4CCC5=CC(=O)C=C[C@]5(C)[C@H]4[C@@H](O)C[C@@]32C)O1,30.0,0.116,-2.412663265492744,1,1.3,1.3,280.0,,tablet,True,False
-21-desacetyldeflazacort,CC1=N[C@]2(C(=O)CO)[C@@H](C[C@H]3[C@@H]4CCC5=CC(=O)C=C[C@]5(C)[C@H]4[C@@H](O)C[C@@]32C)O1,36.0,0.1326,-2.433758976698533,1,1.5,2.4,411.7,,suspension,True,False
 ofloxacin,CC1COc2c(N3CCN(C)CC3)c(F)cc3c(=O)c(C(=O)O)cn1c23,100.0,1.32,-1.8794260687941504,1,1.64,5.08,8660.0,,tablet,False,False
 ofloxacin,CC1COc2c(N3CCN(C)CC3)c(F)cc3c(=O)c(C(=O)O)cn1c23,200.0,1.74,-2.0604807473813813,1,1.53,5.61,13610.0,,tablet,False,False
 ofloxacin,CC1COc2c(N3CCN(C)CC3)c(F)cc3c(=O)c(C(=O)O)cn1c23,300.0,3.0048421802252894,-1.9992995877177395,3,1.43,5.65,21500.0,,tablet,False,False
@@ -680,10 +625,6 @@ ramelteon,CCC(=O)NCC[C@@H]1CCc2ccc3c(c21)CCO3,64.0,0.0259,-3.392880209902635,1,0
 tasimelteon,CCC(=O)NC[C@@H]1C[C@H]1c1cccc2c1CCO2,5.0,0.068,-1.8664610916297824,1,0.5,1.2,102.0,,,False,False
 tasimelteon,CCC(=O)NC[C@@H]1C[C@H]1c1cccc2c1CCO2,20.0,0.2359595014589781,-1.9281925257539347,7,0.5,1.31,366.1,38.33,capsule,False,False
 dextropropoxyphene,CCC(=O)O[C@](Cc1ccccc1)(c1ccccc1)[C@H](C)CN(C)C,65.0,0.0526032318398784,-3.091900929464242,2,2.15,13.95,410.0,,capsule,False,False
-beclomethasone 17-monopropionate,CCC(=O)O[C@]1(C(=O)CO)[C@@H](C)C[C@H]2[C@@H]3CCC4=CC(=O)C=C[C@]4(C)[C@@]3(Cl)[C@@H](O)C[C@@]21C,4.0,0.0007,-3.7569619513137056,1,4.0,8.8,10.16,41.0,suspension,True,False
-simvastatin acid,CCC(C)(C)C(=O)O[C@H]1C[C@@H](C)C=C2C=C[C@H](C)[C@H](CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H]21,20.0,0.0013398465471905,-4.173974934257831,4,4.46,6.05,13.4,,tablet,True,False
-simvastatin acid,CCC(C)(C)C(=O)O[C@H]1C[C@@H](C)C=C2C=C[C@H](C)[C@H](CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H]21,40.0,0.0027909811174917,-4.156303093068242,4,5.0,3.55,21.485,,tablet,True,False
-simvastatin acid,CCC(C)(C)C(=O)O[C@H]1C[C@@H](C)C=C2C=C[C@H](C)[C@H](CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H]21,80.0,0.0045825756949558,-4.241980339624984,2,3.9,6.7,54.65,,tablet,True,False
 simvastatin,CCC(C)(C)C(=O)O[C@H]1C[C@@H](C)C=C2C=C[C@H](C)[C@H](CC[C@@H]3C[C@@H](O)CC(=O)O3)[C@H]21,20.0,0.0032928799198274,-3.783454101911432,4,1.875,5.4,14.75,5.0,tablet,False,False
 simvastatin,CCC(C)(C)C(=O)O[C@H]1C[C@@H](C)C=C2C=C[C@H](C)[C@H](CC[C@@H]3C[C@@H](O)CC(=O)O3)[C@H]21,40.0,0.0088592141198895,-3.654664792977375,5,1.9,4.81,36.2,5.0,tablet,False,False
 simvastatin,CCC(C)(C)C(=O)O[C@H]1C[C@@H](C)C=C2C=C[C@H](C)[C@H](CC[C@@H]3C[C@@H](O)CC(=O)O3)[C@H]21,80.0,0.0181931305717295,-3.643182550542791,2,1.4,6.85,98.4,5.0,tablet,False,False
@@ -693,18 +634,7 @@ Dalcetrapib,CCC(CC)CC1(C(=O)Nc2ccccc2SC(=O)C(C)C)CCCCC1,2700.0,6.51,-2.617782775
 Dalcetrapib,CCC(CC)CC1(C(=O)Nc2ccccc2SC(=O)C(C)C)CCCCC1,3300.0,7.620000000000001,-2.636558968538287,1,5.0,20.4,76500.0,,tablet,False,False
 Dalcetrapib,CCC(CC)CC1(C(=O)Nc2ccccc2SC(=O)C(C)C)CCCCC1,3900.0,8.62,-2.6555573412017863,1,6.0,18.6,87400.0,,tablet,False,False
 Dalcetrapib,CCC(CC)CC1(C(=O)Nc2ccccc2SC(=O)C(C)C)CCCCC1,4500.0,8.26,-2.736232466454961,1,6.0,19.2,88400.0,,tablet,False,False
-oseltamivir acid,CCC(CC)O[C@@H]1C=C(C(=O)O)C[C@H](N)[C@H]1NC(C)=O,20.0,0.0679,-2.46916022138348,1,4.9,6.7,754.0,80.0,capsule,True,False
-oseltamivir acid,CCC(CC)O[C@@H]1C=C(C(=O)O)C[C@H](N)[C@H]1NC(C)=O,50.0,0.154,-2.511449283499556,1,4.4,6.8,1656.0,80.0,capsule,True,False
-oseltamivir acid,CCC(CC)O[C@@H]1C=C(C(=O)O)C[C@H](N)[C@H]1NC(C)=O,100.0,0.25,-2.6020599913279625,1,3.7,8.2,2698.0,80.0,capsule,True,False
-oseltamivir acid,CCC(CC)O[C@@H]1C=C(C(=O)O)C[C@H](N)[C@H]1NC(C)=O,200.0,0.56,-2.552841968657781,1,4.7,7.7,6487.0,80.0,capsule,True,False
-oseltamivir acid,CCC(CC)O[C@@H]1C=C(C(=O)O)C[C@H](N)[C@H]1NC(C)=O,500.0,1.682,-2.4731440128741253,1,3.7,6.9,18131.0,80.0,capsule,True,False
-oseltamivir acid,CCC(CC)O[C@@H]1C=C(C(=O)O)C[C@H](N)[C@H]1NC(C)=O,1000.0,3.955000000000001,-2.402853512166305,1,3.8,6.9,40646.0,80.0,capsule,True,False
 methysergide,CCC(CO)NC(=O)[C@@H]1C=C2c3cccc4c3c(cn4C)C[C@H]2N(C)C1,2.0,0.00177,-3.0530567293021744,1,1.0,1.03,3.32,13.0,,False,False
-benzoic acid,CCC(COC(=O)c1cc(OC)c(OC)c(OC)c1)(NC)c1ccccc1,125.0,0.9489,-2.119689566372671,1,1.75,8.73,3676.37,,tablet,True,False
-benzoic acid,CCC(COC(=O)c1cc(OC)c(OC)c(OC)c1)(NC)c1ccccc1,250.0,2.09902,-2.075923432000901,1,1.03,8.4,7482.51,,tablet,True,False
-benzoic acid,CCC(COC(=O)c1cc(OC)c(OC)c(OC)c1)(NC)c1ccccc1,375.0,2.06467,-2.259180620273673,1,1.25,9.54,8825.94,,tablet,True,False
-benzoic acid,CCC(COC(=O)c1cc(OC)c(OC)c(OC)c1)(NC)c1ccccc1,500.0,2.4529,-2.309290161116769,1,1.5,12.49,13425.25,,tablet,True,False
-benzoic acid,CCC(COC(=O)c1cc(OC)c(OC)c(OC)c1)(NC)c1ccccc1,1000.0,4.681640000000001,-2.3296019849205845,1,2.0,11.07,28397.48,,tablet,True,False
 trimebutine,CCC(COC(=O)c1cc(OC)c(OC)c(OC)c1)(c1ccccc1)N(C)C,125.0,0.0181399999999999,-3.83827273028398,1,1.0,3.25,30.33,,tablet,False,False
 trimebutine,CCC(COC(=O)c1cc(OC)c(OC)c(OC)c1)(c1ccccc1)N(C)C,250.0,0.05229,-3.679521366842382,1,1.0,3.62,88.32,,tablet,False,False
 trimebutine,CCC(COC(=O)c1cc(OC)c(OC)c(OC)c1)(c1ccccc1)N(C)C,375.0,0.02351,-4.20277863860278,1,1.0,8.92,89.04,,tablet,False,False
@@ -749,9 +679,6 @@ valproic acid,CCCC(CCC)C(=O)O,500.0,62.220000000000006,-0.9050399975633342,1,3.4
 budesonide,CCCC1O[C@@H]2C[C@H]3[C@@H]4CCC5=CC(=O)C=C[C@]5(C)[C@H]4[C@@H](O)C[C@]3(C)[C@]2(C(=O)CO)O1,3.0,0.00082,-3.563307402335946,1,1.75,4.69,4.65,16.7,capsule,False,False
 valsartan,CCCCC(=O)N(Cc1ccc(-c2ccccc2-c2nn[nH]n2)cc1)[C@H](C(=O)O)C(C)C,80.0,1.6928832210167364,-1.6744629864832818,2,2.75,6.795,10320.645,23.0,capsule,False,False
 valsartan,CCCCC(=O)N(Cc1ccc(-c2ccccc2-c2nn[nH]n2)cc1)[C@H](C(=O)O)C(C)C,160.0,4.571810010597553,-1.5440318084093931,2,3.49,4.9,28308.4,,tablet,False,False
-misoprostol acid,CCCCC(C)(O)C/C=C/[C@H]1[C@H](O)CC(=O)[C@@H]1CCCCCCC(=O)O,0.4,0.0007344477317432,-2.736099097427985,3,0.33,0.7,0.42,,tablet,True,False
-misoprostol acid,CCCCC(C)(O)C/C=C/[C@H]1[C@H](O)CC(=O)[C@@H]1CCCCCCC(=O)O,0.6,0.0020499999999999,-2.466397389327889,1,0.4,0.68,1.7,,tablet,True,False
-misoprostol acid,CCCCC(C)(O)C/C=C/[C@H]1[C@H](O)CC(=O)[C@@H]1CCCCCCC(=O)O,0.8,0.00268,-2.474955192963155,1,0.34,1.04,2.02,,tablet,True,False
 butobarbital,CCCCC1(CC)C(=O)NC(=O)NC1=O,200.0,3.5000000000000004,-1.7569619513137056,1,1.0,37.36,,,capsule,False,False
 odevixibat,CCCCC1(CCCC)CN(c2ccccc2)c2cc(SC)c(OCC(=O)N[C@@H](C(=O)N[C@@H](CC)C(=O)O)c3ccc(O)cc3)cc2S(=O)(=O)N1,7.2,0.00047,-4.185234638495551,1,3.0,2.36,2.19,,capsule,False,False
 maralixibat,CCCCC1(CCCC)CS(=O)(=O)c2ccc(N(C)C)cc2[C@@H](c2ccc(OCc3ccc(C[N+]45CCN(CC4)CC5)cc3)cc2)[C@H]1O,30.0,0.00165,-4.259637310505756,1,0.75,1.6,3.43,,solution,False,False
@@ -827,10 +754,6 @@ Fimasartan,CCCCc1nc(C)c(CC(=S)N(C)C)c(=O)n1Cc1ccc(-c2ccccc2-c2nnn[nH]2)cc1,60.0,
 Fimasartan,CCCCc1nc(C)c(CC(=S)N(C)C)c(=O)n1Cc1ccc(-c2ccccc2-c2nnn[nH]2)cc1,120.0,0.136,-2.9456423376774072,1,2.0,9.33,783.0,,tablet,False,False
 Fimasartan,CCCCc1nc(C)c(CC(=S)N(C)C)c(=O)n1Cc1ccc(-c2ccccc2-c2nnn[nH]2)cc1,240.0,0.227,-3.0241853845184834,1,2.5,10.1,1116.0,,tablet,False,False
 Fimasartan,CCCCc1nc(C)c(CC(=S)N(C)C)c(=O)n1Cc1ccc(-c2ccccc2-c2nnn[nH]2)cc1,480.0,0.601,-2.9023667653728475,1,0.5,16.2,2448.0,,tablet,False,False
-losartan carboxylic acid (e-3174),CCCCc1nc(Cl)c(C(=O)O)n1Cc1ccc(-c2ccccc2-c2nn[nH]n2)cc1,25.0,0.1889,-2.121708050750204,1,3.7,3.8,1348.9,,capsule,True,False
-losartan carboxylic acid (e-3174),CCCCc1nc(Cl)c(C(=O)O)n1Cc1ccc(-c2ccccc2-c2nn[nH]n2)cc1,50.0,0.3082266470475548,-2.210099822369409,5,3.7,4.8,2578.4,,tablet,True,False
-losartan carboxylic acid (e-3174),CCCCc1nc(Cl)c(C(=O)O)n1Cc1ccc(-c2ccccc2-c2nn[nH]n2)cc1,100.0,1.2108,-1.9169275877154648,1,2.0,4.17,5958.2,,capsule,True,False
-losartan carboxylic acid (e-3174),CCCCc1nc(Cl)c(C(=O)O)n1Cc1ccc(-c2ccccc2-c2nn[nH]n2)cc1,200.0,2.219,-1.954872693431973,1,2.5,4.37,10861.4,,capsule,True,False
 losartan,CCCCc1nc(Cl)c(CO)n1Cc1ccc(-c2ccccc2-c2nn[nH]n2)cc1,25.0,0.0845,-2.4710832997223453,1,0.8,2.48,201.3,,capsule,False,True
 losartan,CCCCc1nc(Cl)c(CO)n1Cc1ccc(-c2ccccc2-c2nn[nH]n2)cc1,50.0,0.2306510490682339,-2.336014570089288,5,1.2,2.37,455.2,35.8,capsule,False,True
 losartan,CCCCc1nc(Cl)c(CO)n1Cc1ccc(-c2ccccc2-c2nn[nH]n2)cc1,100.0,0.8005,-2.096638663744681,1,0.7,1.51,1069.1,,capsule,False,True
@@ -921,21 +844,11 @@ clindamycin,CCC[C@@H]1C[C@@H](C(=O)N[C@@H]([C@H]2O[C@H](SC)[C@H](O)[C@@H](O)[C@H
 telaprevir,CCC[C@H](NC(=O)[C@@H]1[C@H]2CCC[C@H]2CN1C(=O)[C@@H](NC(=O)[C@@H](NC(=O)c1cnccn1)C1CCCCC1)C(C)(C)C)C(=O)C(=O)NC1CC1,500.0,0.2126052680438563,-3.3713959828409714,2,3.625,5.205,1580.0,,tablet,False,False
 telaprevir,CCC[C@H](NC(=O)[C@@H]1[C@H]2CCC[C@H]2CN1C(=O)[C@@H](NC(=O)[C@@H](NC(=O)c1cnccn1)C1CCCCC1)C(C)(C)C)C(=O)C(=O)NC1CC1,750.0,0.3991741474594766,-3.273898856976926,2,4.5,6.390000000000001,3940.0,,tablet,False,False
 telaprevir,CCC[C@H](NC(=O)[C@@H]1[C@H]2CCC[C@H]2CN1C(=O)[C@@H](NC(=O)[C@@H](NC(=O)c1cnccn1)C1CCCCC1)C(C)(C)C)C(=O)C(=O)NC1CC1,1250.0,0.470438093695653,-3.424407531547161,2,4.25,7.85,4495.0,,tablet,False,False
-perindoprilat,CCC[C@H](N[C@@H](C)C(=O)N1[C@H](C(=O)O)C[C@@H]2CCCC[C@@H]21)C(=O)O,4.0,0.0040150965119159,-2.9983640023387186,2,5.8,23.16,109.21,,tablet,True,False
-perindoprilat,CCC[C@H](N[C@@H](C)C(=O)N1[C@H](C(=O)O)C[C@@H]2CCCC[C@@H]21)C(=O)O,8.0,0.0110999999999999,-2.857767008205286,1,3.0,30.0,145.0,,tablet,True,False
 perindopril,CCC[C@H](N[C@@H](C)C(=O)N1[C@H](C(=O)O)C[C@@H]2CCCC[C@@H]21)C(=O)OCC,4.0,0.074036450482178,-1.7326144020595715,2,0.785,1.985,123.77,,tablet,False,False
 perindopril,CCC[C@H](N[C@@H](C)C(=O)N1[C@H](C(=O)O)C[C@@H]2CCCC[C@@H]21)C(=O)OCC,8.0,0.1639999999999999,-1.6882461389442458,1,0.9,,304.0,94.4,tablet,False,False
-albendazole sulfoxide,CCC[S+]([O-])c1ccc2[nH]c(NC(=O)OC)nc2c1,400.0,0.576652441562221,-2.841145856145241,3,4.1,16.7,5441.3,,tablet,True,False
-albendazole sulfoxide,CCC[S+]([O-])c1ccc2[nH]c(NC(=O)OC)nc2c1,800.0,0.8369850954467468,-2.980372262598285,2,3.4,12.05,7450.0,,tablet,True,False
-albendazole sulfoxide,CCC[S+]([O-])c1ccc2[nH]c(NC(=O)OC)nc2c1,1200.0,1.157795629634177,-3.015549340158128,2,3.8,11.35,11450.0,,tablet,True,False
 propylthiouracil,CCCc1cc(=O)[nH]c(=S)[nH]1,50.0,1.62,-1.4894549897933878,1,0.69,1.22,4190.0,,tablet,False,False
 propylthiouracil,CCCc1cc(=O)[nH]c(=S)[nH]1,100.0,3.117,-1.5062631977231602,1,0.83,1.49,8223.0,,tablet,False,False
 propylthiouracil,CCCc1cc(=O)[nH]c(=S)[nH]1,200.0,6.88,-1.4634415574284698,1,1.0,1.15,17190.0,,tablet,False,False
-olmesartan,CCCc1nc(C(C)(C)O)c(C(=O)O)n1Cc1ccc(-c2ccccc2-c2nnn[nH]2)cc1,10.0,0.224,-1.6497519816658373,1,2.4,11.8,1631.0,,tablet,True,False
-olmesartan,CCCc1nc(C(C)(C)O)c(C(=O)O)n1Cc1ccc(-c2ccccc2-c2nnn[nH]2)cc1,20.0,0.4554173909722815,-1.6426203847140493,2,2.25,15.1,2995.0,25.6,tablet,True,False
-olmesartan,CCCc1nc(C(C)(C)O)c(C(=O)O)n1Cc1ccc(-c2ccccc2-c2nnn[nH]2)cc1,40.0,0.752,-1.7258421507363202,1,1.4,13.0,5163.0,,tablet,True,False
-olmesartan,CCCc1nc(C(C)(C)O)c(C(=O)O)n1Cc1ccc(-c2ccccc2-c2nnn[nH]2)cc1,80.0,1.095,-1.8636758678158063,1,2.0,13.2,9159.0,,tablet,True,False
-olmesartan,CCCc1nc(C(C)(C)O)c(C(=O)O)n1Cc1ccc(-c2ccccc2-c2nnn[nH]2)cc1,160.0,2.1,-1.8819006879220053,1,2.8,14.7,19905.0,,tablet,True,False
 vardenafil,CCCc1nc(C)c2c(=O)nc(-c3cc(S(=O)(=O)N4CCN(CC)CC4)ccc3OCC)[nH]n12,10.0,0.014993331851193,-2.824101846551488,2,0.87,2.545,39.29,15.0,tablet,False,False
 vardenafil,CCCc1nc(C)c2c(=O)nc(-c3cc(S(=O)(=O)N4CCN(CC)CC4)ccc3OCC)[nH]n12,20.0,0.0244344314804574,-2.9130277569763843,3,0.75,3.3,69.8,15.0,tablet,False,False
 vardenafil,CCCc1nc(C)c2c(=O)nc(-c3cc(S(=O)(=O)N4CCN(CC)CC4)ccc3OCC)[nH]n12,40.0,0.0508,-2.896196279044043,1,0.68,4.79,164.0,15.0,tablet,False,False
@@ -1009,8 +922,6 @@ hydroxychloroquine,CCN(CCO)CCCC(C)Nc1ccnc2cc(Cl)ccc12,200.0,0.0342999999999999,-
 pemigatinib,CCN1C(=O)N(c2c(F)c(OC)cc(OC)c2F)Cc2cnc3[nH]c(CN4CCOCC4)cc3c21,4.5,0.0292999999999999,-2.1863448934212344,1,2.0,12.1,347.1,,tablet,False,False
 pemigatinib,CCN1C(=O)N(c2c(F)c(OC)cc(OC)c2F)Cc2cnc3[nH]c(CN4CCOCC4)cc3c21,9.0,0.052755483868699,-2.2319748987373056,4,1.0,14.05,587.4449999999999,,tablet,False,False
 pemigatinib,CCN1C(=O)N(c2c(F)c(OC)cc(OC)c2F)Cc2cnc3[nH]c(CN4CCOCC4)cc3c21,13.5,0.0842825881024495,-2.2045959052827846,3,1.1,12.2,804.39,,tablet,False,False
-(+)-ethotoin,CCN1C(=O)N[C@@H](c2ccccc2)C1=O,1000.0,29.880000000000003,-1.5246194068566388,1,1.75,11.5,547410.0,,tablet,True,False
-(-)-ethotoin,CCN1C(=O)N[C@H](c2ccccc2)C1=O,1000.0,26.07,-1.583858968831671,1,1.5,11.6,472690.0,,tablet,True,False
 amisulpride,CCN1CCCC1CNC(=O)c1cc(S(=O)(=O)CC)c(N)cc1OC,50.0,0.0371,-3.129596094720973,1,2.3,10.6,324.8,,,False,False
 amisulpride,CCN1CCCC1CNC(=O)c1cc(S(=O)(=O)CC)c(N)cc1OC,200.0,0.671,-2.474307475494989,1,4.0,13.0,6009.0,,tablet,False,False
 sultopride,CCN1CCCC1CNC(=O)c1cc(S(=O)(=O)CC)ccc1OC,50.0,0.33,-2.1804560644581312,1,1.4,3.6,2000.0,,tablet,False,False
@@ -1035,9 +946,6 @@ elacestrant,CCNCCc1ccc(CN(CC)c2cc(OC)ccc2[C@@H]2CCc3cc(O)ccc3C2)cc1,25.0,0.00179
 elacestrant,CCNCCc1ccc(CN(CC)c2cc(OC)ccc2[C@@H]2CCc3cc(O)ccc3C2)cc1,50.0,0.0033999999999999,-4.167491087293764,1,1.92,29.1,73.3,,capsule,False,False
 elacestrant,CCNCCc1ccc(CN(CC)c2cc(OC)ccc2[C@@H]2CCc3cc(O)ccc3C2)cc1,100.0,0.0118,-3.9281179926938745,1,2.58,28.4,294.0,10.0,capsule,False,False
 elacestrant,CCNCCc1ccc(CN(CC)c2cc(OC)ccc2[C@@H]2CCc3cc(O)ccc3C2)cc1,200.0,0.0314999999999999,-3.802719441874381,1,3.25,27.4,774.0,,capsule,False,False
-desethylamodiaquine,CCNCc1cc(Nc2ccnc3cc(Cl)ccc23)ccc1O,200.0,0.0509999999999999,-3.593459819566045,1,5.5,53.32,3300.0,,tablet,True,False
-desethylamodiaquine,CCNCc1cc(Nc2ccnc3cc(Cl)ccc23)ccc1O,400.0,0.136,-3.468521082957745,1,5.0,63.01,7520.0,,tablet,True,False
-desethylamodiaquine,CCNCc1cc(Nc2ccnc3cc(Cl)ccc23)ccc1O,600.0,0.204,-3.468521082957745,1,3.0,46.21,9200.0,,tablet,True,False
 dexfenfluramine,CCN[C@@H](C)Cc1cccc(C(F)(F)F)c1,30.0,0.0272999999999999,-3.0409586076789066,1,3.0,14.5,509.9,69.0,capsule,False,False
 meperidine,CCOC(=O)C1(c2ccccc2)CCN(C)CC1,50.0,118.17000000000004,0.3735372311927855,1,1.0,,585770.0,,,False,False
 meperidine,CCOC(=O)C1(c2ccccc2)CCN(C)CC1,100.0,0.1679999999999999,-2.774690718274137,1,1.25,4.15,923.0,51.3,solution,False,False
@@ -1171,11 +1079,6 @@ viloxazine,CCOc1ccccc1OCC1CNCCO1,100.0,1.5923,-1.7979751048959622,1,1.59,3.36,10
 viloxazine,CCOc1ccccc1OCC1CNCCO1,300.0,3.599,-1.9209394080667512,1,1.32,4.82,,,,False,False
 tamsulosin,CCOc1ccccc1OCCN[C@H](C)Cc1ccc(OC)c(S(N)(=O)=O)c1,0.2,0.0054193265264237,-1.5670846766590092,2,6.25,11.495,74.91,,capsule ER,False,False
 tamsulosin,CCOc1ccccc1OCCN[C@H](C)Cc1ccc(OC)c(S(N)(=O)=O)c1,0.4,0.0071416111045517,-1.7482637942734518,3,6.98,11.4,117.0,,capsule ER,False,False
-candesartan,CCOc1nc2cccc(C(=O)O)c2n1Cc1ccc(-c2ccccc2-c2nnn[nH]2)cc1,8.0,0.055,-2.1627272974977,1,3.8,6.7,485.0,15.0,tablet,True,False
-candesartan,CCOc1nc2cccc(C(=O)O)c2n1Cc1ccc(-c2ccccc2-c2nnn[nH]2)cc1,12.0,0.0952,-2.1005442976631503,1,3.0,9.3,909.0,15.0,tablet,True,False
-candesartan,CCOc1nc2cccc(C(=O)O)c2n1Cc1ccc(-c2ccccc2-c2nnn[nH]2)cc1,16.0,0.1444529612019082,-2.04439353359951,2,4.5,9.88,1657.55,15.0,tablet,True,False
-candesartan,CCOc1nc2cccc(C(=O)O)c2n1Cc1ccc(-c2ccccc2-c2nnn[nH]2)cc1,32.0,0.2371911254663631,-2.130051542502424,2,5.0,11.7,3536.8,15.0,,True,False
-azilsartan,CCOc1nc2cccc(C(=O)O)c2n1Cc1ccc(-c2ccccc2-c2noc(=O)[nH]2)cc1,40.0,2.4522065308174046,-1.2125029466002384,6,2.125,12.51,19696.085,60.0,,True,False
 finerenone,CCOc1ncc(C)c2c1[C@H](c1ccc(C#N)cc1OC)C(C(N)=O)=C(C)N2,1.25,0.0118,-2.0250280057019308,1,0.75,1.96,28.4,,tablet,False,False
 finerenone,CCOc1ncc(C)c2c1[C@H](c1ccc(C#N)cc1OC)C(C(N)=O)=C(C)N2,2.5,0.0238999999999999,-2.0195421077239,1,0.5,2.02,55.6,,tablet,False,False
 finerenone,CCOc1ncc(C)c2c1[C@H](c1ccc(C#N)cc1OC)C(C(N)=O)=C(C)N2,5.0,0.0435017241037639,-2.060463534647755,2,0.75,2.1100000000000003,107.6,43.5,tablet,False,False
@@ -1228,7 +1131,6 @@ Vaniprevir,CC[C@@H]1C[C@]1(NC(=O)[C@@H]1C[C@@H]2CN1C(=O)[C@H](C(C)(C)C)NC(=O)OCC
 Vaniprevir,CC[C@@H]1C[C@]1(NC(=O)[C@@H]1C[C@@H]2CN1C(=O)[C@H](C(C)(C)C)NC(=O)OCC(C)(C)CCCCc1cccc3c1CN(C3)C(=O)O2)C(=O)NS(=O)(=O)C1CC1,825.0,4.94501,-2.2222867743679044,1,2.0,4.6,12932.13,,,False,False
 topotecan,CC[C@@]1(O)C(=O)OCc2c1cc1n(c2=O)Cc2cc3c(CN(C)C)c(O)ccc3nc2-1,2.6,0.0053691072799302,-2.685071266299208,3,1.13,4.2,20.11,41.23,solution,False,False
 topotecan,CC[C@@]1(O)C(=O)OCc2c1cc1n(c2=O)Cc2cc3c(CN(C)C)c(O)ccc3nc2-1,3.29,0.0086,-2.5826974467064066,1,1.35,4.32,35.82,36.0,solution,False,False
-lovastatin acid,CC[C@H](C)C(=O)O[C@H]1C[C@@H](C)C=C2C=C[C@H](C)[C@H](CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H]21,80.0,0.00466,-4.234704070301944,1,5.0,2.64,33.71,,tablet,True,False
 lovastatin,CC[C@H](C)C(=O)O[C@H]1C[C@@H](C)C=C2C=C[C@H](C)[C@H](CC[C@@H]3C[C@@H](O)CC(=O)O3)[C@H]21,80.0,0.0060699999999999,-4.119901295916686,1,3.5,2.6,43.1,5.0,tablet,False,False
 pravastatin,CC[C@H](C)C(=O)O[C@H]1C[C@H](O)C=C2C=C[C@H](C)[C@H](CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H]21,10.0,0.0113342842738304,-2.9456058990698826,2,1.13,2.4450000000000003,33.92,,tablet,False,True
 pravastatin,CC[C@H](C)C(=O)O[C@H]1C[C@H](O)C=C2C=C[C@H](C)[C@H](CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H]21,19.2,0.0273999999999999,-2.8455506658831617,1,0.88,1.77,66.2,18.0,solution,False,True
@@ -1362,11 +1264,6 @@ medifoxamine,CN(C)CC(Oc1ccccc1)Oc1ccccc1,200.0,0.226,-2.94692155651658,1,0.47,0.
 medifoxamine,CN(C)CC(Oc1ccccc1)Oc1ccccc1,500.0,0.7088501886858746,-2.848415545037052,2,0.935,2.225,1677.615,21.0,capsule,False,False
 medifoxamine,CN(C)CC(Oc1ccccc1)Oc1ccccc1,750.0,1.54,-2.687540542555237,1,1.06,1.33,2690.0,,capsule,False,False
 medifoxamine,CN(C)CC(Oc1ccccc1)Oc1ccccc1,1000.0,1.412,-2.850165303284215,1,1.01,2.15,3789.0,,capsule,False,False
-desvenlafaxine,CN(C)CC(c1ccc(O)cc1)C1(O)CCCCC1,25.0,0.0609999999999999,-2.612610173661271,1,4.0,9.3,1048.0,,tablet,True,False
-desvenlafaxine,CN(C)CC(c1ccc(O)cc1)C1(O)CCCCC1,50.0,0.1169123457727119,-2.631109629890519,3,3.9,10.3,2226.0,80.0,tablet ER,True,False
-desvenlafaxine,CN(C)CC(c1ccc(O)cc1)C1(O)CCCCC1,75.0,0.1679999999999999,-2.6497519816658373,1,4.4,10.7,3297.0,,tablet,True,False
-desvenlafaxine,CN(C)CC(c1ccc(O)cc1)C1(O)CCCCC1,100.0,0.1766,-2.75300930075845,1,7.0,9.9,4931.0,80.0,ER,False,False
-desvenlafaxine,CN(C)CC(c1ccc(O)cc1)C1(O)CCCCC1,150.0,0.325,-2.664207898076807,1,4.6,9.9,5877.0,,tablet,True,False
 olopatadine,CN(C)CC/C=C1/c2ccccc2COc2ccc(CC(=O)O)cc21,5.0,0.06998,-1.853996066189131,1,1.02,5.87,283.46,,tablet,False,False
 olopatadine,CN(C)CC/C=C1/c2ccccc2COc2ccc(CC(=O)O)cc21,80.0,1.523,-1.720390083655901,1,1.0,,4382.0,,tablet,False,False
 brompheniramine,CN(C)CCC(c1ccc(Br)cc1)c1ccccn1,9.46,0.01123,-2.925511380140335,1,3.0,23.14,280.68,,syrup,False,False
@@ -1497,12 +1394,6 @@ azelastine,CN1CCCC(n2nc(Cc3ccc(Cl)cc3)c3ccccc3c2=O)CC1,2.2,0.0015,-3.16633142176
 azelastine,CN1CCCC(n2nc(Cc3ccc(Cl)cc3)c3ccccc3c2=O)CC1,4.4,0.0033,-3.1249387366083,1,4.6,25.5,93.7,,tablet,False,False
 azelastine,CN1CCCC(n2nc(Cc3ccc(Cl)cc3)c3ccccc3c2=O)CC1,8.8,0.0059999999999999,-3.1663314217665253,1,4.6,25.5,208.0,,tablet,False,False
 azelastine,CN1CCCC(n2nc(Cc3ccc(Cl)cc3)c3ccccc3c2=O)CC1,17.6,0.0125,-3.148602654806093,1,4.6,25.5,405.9,,tablet,False,False
-sulforidazine,CN1CCCCC1CCN1c2ccccc2Sc2ccc(S(C)(=O)=O)cc21,25.0,0.03171,-2.8967437666449487,1,4.65,9.42,411.14,,tablet,True,False
-sulforidazine,CN1CCCCC1CCN1c2ccccc2Sc2ccc(S(C)(=O)=O)cc21,50.0,0.05331,-2.972161321811055,1,4.91,10.15,901.17,,tablet,True,False
-sulforidazine,CN1CCCCC1CCN1c2ccccc2Sc2ccc(S(C)(=O)=O)cc21,100.0,0.0899099999999999,-3.046192002334693,1,6.43,10.73,1767.31,,tablet,True,False
-mesoridazine,CN1CCCCC1CCN1c2ccccc2Sc2ccc([S+](C)[O-])cc21,25.0,0.16854,-2.171237019086816,1,2.63,8.79,1612.13,,tablet,True,False
-mesoridazine,CN1CCCCC1CCN1c2ccccc2Sc2ccc([S+](C)[O-])cc21,50.0,0.33402,-2.175197532645437,1,3.32,10.43,3964.31,,tablet,True,False
-mesoridazine,CN1CCCCC1CCN1c2ccccc2Sc2ccc([S+](C)[O-])cc21,100.0,0.51407,-2.288977739868848,1,3.17,12.14,7549.97,,tablet,True,False
 pyrantel,CN1CCCN=C1/C=C/c1cccs1,750.0,0.03756,-4.300335679797627,1,2.05,,96.2,,tablet,False,False
 clemastine,CN1CCC[C@@H]1CCO[C@](C)(c1ccccc1)c1ccc(Cl)cc1,2.0,0.00115,-3.240332155310369,1,4.77,21.3,27.0,39.2,syrup,False,False
 clemastine,CN1CCC[C@@H]1CCO[C@](C)(c1ccccc1)c1ccc(Cl)cc1,4.0,0.00219,-3.261615876487844,1,4.6,,52.1,,tablet,False,False
@@ -1597,13 +1488,6 @@ atomoxetine,CNCC[C@@H](Oc1ccccc1C)c1ccccc1,40.0,0.4208659406509393,-1.9779162102
 duloxetine,CNCC[C@H](Oc1cccc2ccccc12)c1cccs1,15.0,0.01044,-3.157390760389438,1,5.67,9.52,175.39,,enteric-coated tablet,False,False
 duloxetine,CNCC[C@H](Oc1cccc2ccccc12)c1cccs1,30.0,0.0318199999999999,-2.9744210794091,1,5.75,10.19,489.35,,enteric-coated tablet,False,False
 duloxetine,CNCC[C@H](Oc1cccc2ccccc12)c1cccs1,60.0,0.0558799999999999,-3.0308948529415,1,7.33,11.89,1073.99,,enteric-coated tablet,False,False
-n-desmethyl zolmitriptan (183c91),CNCCc1c[nH]c2ccc(C[C@H]3COC(=O)N3)cc12,2.5,0.002,-3.096910013008056,1,,2.32,11.1,,,True,False
-n-desmethyl zolmitriptan (183c91),CNCCc1c[nH]c2ccc(C[C@H]3COC(=O)N3)cc12,5.0,0.0035,-3.154901959985743,1,,2.68,21.8,,,True,False
-n-desmethyl zolmitriptan (183c91),CNCCc1c[nH]c2ccc(C[C@H]3COC(=O)N3)cc12,6.0,0.0051899999999999,-3.062983892535186,1,2.0,2.93,31.79,,tablet,True,False
-n-desmethyl zolmitriptan (183c91),CNCCc1c[nH]c2ccc(C[C@H]3COC(=O)N3)cc12,10.0,0.0077499999999999,-3.11069829749369,1,3.62,2.83,55.2,,tablet,True,False
-n-desmethyl zolmitriptan (183c91),CNCCc1c[nH]c2ccc(C[C@H]3COC(=O)N3)cc12,12.0,0.0065099999999999,-3.265600257479433,1,3.0,3.45,47.4,,tablet,True,False
-n-desmethyl zolmitriptan (183c91),CNCCc1c[nH]c2ccc(C[C@H]3COC(=O)N3)cc12,25.0,0.01741,-3.1571412375547063,1,4.0,2.74,118.71,,tablet,True,False
-n-desmethyl zolmitriptan (183c91),CNCCc1c[nH]c2ccc(C[C@H]3COC(=O)N3)cc12,50.0,0.0327999999999999,-3.18309616062434,1,6.0,4.34,261.99,,tablet,True,False
 phenylephrine,CNC[C@H](O)c1cccc(O)c1,10.0,0.00135,-3.869666231504994,1,0.33,1.89,0.96,38.0,tablet,False,False
 phenylephrine,CNC[C@H](O)c1cccc(O)c1,20.0,0.00296,-3.8297382846050425,1,0.46,1.93,2.35,38.0,tablet,False,False
 phenylephrine,CNC[C@H](O)c1cccc(O)c1,30.0,0.00449,-3.8248749137163394,1,0.5,1.64,3.9,38.0,tablet,False,False
@@ -1638,15 +1522,6 @@ sertraline,CN[C@H]1CC[C@@H](c2ccc(Cl)c(Cl)c2)c2ccccc21,75.0,0.0176,-3.6295485955
 sertraline,CN[C@H]1CC[C@@H](c2ccc(Cl)c(Cl)c2)c2ccccc21,100.0,0.0224655291502337,-3.648483347633157,2,6.5,22.7,638.5,,tablet,False,False
 esketamine (s-ketamine),CN[C@]1(c2ccccc2Cl)CCCCC1=O,14.0,0.0082999999999999,-3.2270499433021644,1,0.7,4.9,17.4,,syrup,False,False
 esketamine (s-ketamine),CN[C@]1(c2ccccc2Cl)CCCCC1=O,21.0,0.0124,-3.228797609571684,1,0.7,6.0,27.2,11.0,syrup,False,False
-4-methylaminoantipyrine,CNc1c(C)n(C)n(-c2ccccc2)c1=O,750.0,10.599999999999998,-1.84975539812693,1,1.37,2.65,48700.0,,tablet,True,False
-4-methylaminoantipyrine,CNc1c(C)n(C)n(-c2ccccc2)c1=O,1000.0,9.85,-2.0065637695023884,1,1.4,2.47,71970.0,,tablet,True,False
-4-methylaminoantipyrine,CNc1c(C)n(C)n(-c2ccccc2)c1=O,1500.0,20.5,-1.8643373979999271,1,1.73,2.89,115500.0,,tablet,True,False
-4-methylaminoantipyrine,CNc1c(C)n(C)n(-c2ccccc2)c1=O,3000.0,41.39999999999999,-1.8601209135987635,1,2.0,3.68,314700.0,,tablet,True,False
-cefditoren,CO/N=C(\C(=O)N[C@@H]1C(=O)N2C(C(=O)O)=C(/C=C\c3scnc3C)CS[C@H]12)c1csc(N)n1,200.0,2.3,-1.9393021596463884,1,2.0,1.33,6980.0,14.0,,True,False
-cefditoren,CO/N=C(\C(=O)N[C@@H]1C(=O)N2C(C(=O)O)=C(/C=C\c3scnc3C)CS[C@H]12)c1csc(N)n1,400.0,3.7,-2.0338582672609675,1,2.0,1.54,12500.0,14.0,,True,False
-cefuroxime,CO/N=C(\C(=O)N[C@@H]1C(=O)N2C(C(=O)O)=C(COC(N)=O)CS[C@H]12)c1ccco1,250.0,4.039999999999999,-1.7915586435614328,1,2.0,1.23,14020.0,,tablet,True,False
-cefuroxime,CO/N=C(\C(=O)N[C@@H]1C(=O)N2C(C(=O)O)=C(COC(N)=O)CS[C@H]12)c1ccco1,500.0,5.365017253045262,-1.9693988814095744,4,2.01,1.3,19400.0,35.8,tablet,True,False
-cefuroxime,CO/N=C(\C(=O)N[C@@H]1C(=O)N2C(C(=O)O)=C(COC(N)=O)CS[C@H]12)c1ccco1,1000.0,11.149887891813078,-1.952729499271581,2,1.85,1.35,39200.0,35.0,tablet,True,False
 gemifloxacin,CO/N=C1\CN(c2nc3c(cc2F)c(=O)c(C(=O)O)cn3C2CC2)CC1CN,20.0,0.1199999999999999,-2.2218487496163566,1,0.5,4.75,650.0,,capsule,False,False
 gemifloxacin,CO/N=C1\CN(c2nc3c(cc2F)c(=O)c(C(=O)O)cn3C2CC2)CC1CN,40.0,0.2,-2.3010299956639813,1,1.0,7.58,1280.0,,capsule,False,False
 gemifloxacin,CO/N=C1\CN(c2nc3c(cc2F)c(=O)c(C(=O)O)cn3C2CC2)CC1CN,80.0,0.44,-2.2596373105057563,1,1.0,5.88,2540.0,,capsule,False,False
@@ -1667,8 +1542,6 @@ nilvadipine,COC(=O)C1=C(C#N)NC(C)=C(C(=O)OC(C)C)C1c1cccc([N+](=O)[O-])c1,4.0,0.0
 nilvadipine,COC(=O)C1=C(C#N)NC(C)=C(C(=O)OC(C)C)C1c1cccc([N+](=O)[O-])c1,6.0,0.00669,-2.9527251326158206,1,1.33,11.4,18.9,14.0,tablet,False,False
 nilvadipine,COC(=O)C1=C(C#N)NC(C)=C(C(=O)OC(C)C)C1c1cccc([N+](=O)[O-])c1,16.0,0.0316999999999999,-2.7030607204381734,1,0.64,15.2,76.3,14.0,solution,False,False
 lercanidipine,COC(=O)C1=C(C)NC(C)=C(C(=O)OC(C)(C)CN(C)CCC(c2ccccc2)c2ccccc2)C1c1cccc([N+](=O)[O-])c1,10.0,0.003,-3.5228787452803374,1,1.78,8.4,12.02,10.0,tablet,False,False
-(r)-lercanidipine,COC(=O)C1=C(C)NC(C)=C(C(=O)OC(C)(C)CN(C)CCC(c2ccccc2)c2ccccc2)[C@@H]1c1cccc([N+](=O)[O-])c1,20.0,0.0016799999999999,-4.075720713938118,1,1.25,7.5,11.24,10.0,tablet,True,False
-(s)-lercanidipine,COC(=O)C1=C(C)NC(C)=C(C(=O)OC(C)(C)CN(C)CCC(c2ccccc2)c2ccccc2)[C@H]1c1cccc([N+](=O)[O-])c1,20.0,0.00207,-3.985059650207064,1,1.25,9.3,13.68,10.0,tablet,True,False
 isradipine,COC(=O)C1=C(C)NC(C)=C(C(=O)OC(C)C)C1c1cccc2nonc12,2.5,0.00246,-3.007004901568658,1,1.17,7.94,8.68,19.0,capsule,False,False
 isradipine,COC(=O)C1=C(C)NC(C)=C(C(=O)OC(C)C)C1c1cccc2nonc12,5.0,0.0053399999999999,-2.9714287473074625,1,1.17,5.86,13.76,19.0,capsule,False,False
 isradipine,COC(=O)C1=C(C)NC(C)=C(C(=O)OC(C)C)C1c1cccc2nonc12,10.0,0.009576152672133,-3.0188089386107984,2,1.395,6.875,31.625,19.0,capsule,False,False
@@ -1741,15 +1614,9 @@ nintedanib,COC(=O)c1ccc2c(c1)NC(=O)/C2=C(\Nc1ccc(N(C)C(=O)CN2CCN(C)CC2)cc1)c1ccc
 ambrisentan,COC(c1ccccc1)(c1ccccc1)[C@H](Oc1nc(C)cc(C)n1)C(=O)O,2.5,0.1789999999999999,-1.1450869776921446,1,2.5,10.0,1439.0,,tablet,False,False
 ambrisentan,COC(c1ccccc1)(c1ccccc1)[C@H](Oc1nc(C)cc(C)n1)C(=O)O,5.0,0.362,-1.1402614338028532,1,2.0,13.6,2945.0,,tablet,False,False
 ambrisentan,COC(c1ccccc1)(c1ccccc1)[C@H](Oc1nc(C)cc(C)n1)C(=O)O,10.0,0.7332554250491975,-1.134744715172893,3,2.08,14.63,6894.0,,tablet,False,False
-"10alpha-methoxy-9,10-dihydrolysergol",COC12C[C@@H](CO)CN(C)C1Cc1c[nH]c3cccc2c13,30.0,0.03285,-2.9605858808238628,1,3.3,9.3,382.91,,capsule,True,False
 idebenone,COC1=C(OC)C(=O)C(CCCCCCCCCCO)=C(C)C1=O,150.0,1.631,-1.963637298015405,1,1.33,3.1,6277.0,,tablet,False,False
 idebenone,COC1=C(OC)C(=O)C(CCCCCCCCCCO)=C(C)C1=O,750.0,5.229,-2.1566426215620447,1,2.43,10.8,32757.0,,tablet,False,False
 griseofulvin,COC1=CC(=O)C[C@@H](C)[C@]12Oc1c(Cl)c(OC)cc(OC)c1C2=O,125.0,1.1,-2.0555173278498318,1,6.0,7.75,17290.0,,tablet,False,False
-cefpodoxime,COCC1=C(C(=O)O)N2C(=O)[C@@H](NC(=O)/C(=N\OC)c3csc(N)n3)[C@H]2SC1,100.0,1.258912136198182,-1.900004579737946,4,2.305,2.265,7150.0,53.3,tablet,True,False
-cefpodoxime,COCC1=C(C(=O)O)N2C(=O)[C@@H](NC(=O)/C(=N\OC)c3csc(N)n3)[C@H]2SC1,200.0,2.3670925196345,-1.9268147626687928,3,2.42,2.5,13100.0,,tablet,True,False
-cefpodoxime,COCC1=C(C(=O)O)N2C(=O)[C@@H](NC(=O)/C(=N\OC)c3csc(N)n3)[C@H]2SC1,400.0,4.114176584406985,-1.987777063233301,3,2.6,2.6,25000.0,,tablet,True,False
-cefpodoxime,COCC1=C(C(=O)O)N2C(=O)[C@@H](NC(=O)/C(=N\OC)c3csc(N)n3)[C@H]2SC1,600.0,5.309999999999999,-2.053056729302175,1,3.3,2.8,35800.0,,tablet,True,False
-cefpodoxime,COCC1=C(C(=O)O)N2C(=O)[C@@H](NC(=O)/C(=N\OC)c3csc(N)n3)[C@H]2SC1,800.0,6.7778683964798265,-2.0719968549540666,2,2.92,3.04,45350.0,,tablet,True,False
 fluvoxamine,COCCCC/C(=N\OCCN)c1ccc(C(F)(F)F)cc1,25.0,0.0088,-3.453457336521869,1,5.0,14.3,209.0,,solution,False,False
 fluvoxamine,COCCCC/C(=N\OCCN)c1ccc(C(F)(F)F)cc1,50.0,0.0169999999999999,-3.468521082957745,1,4.8,15.3,448.0,,solution,False,False
 fluvoxamine,COCCCC/C(=N\OCCN)c1ccc(C(F)(F)F)cc1,100.0,0.0421283752357007,-3.3754252899777413,2,4.25,15.415,872.0,,capsule,False,False
@@ -1810,9 +1677,6 @@ artemether,CO[C@H]1O[C@@H]2O[C@@]3(C)CC[C@H]4[C@H](C)CC[C@@H]([C@H]1C)[C@@]24OO3
 artemether,CO[C@H]1O[C@@H]2O[C@@]3(C)CC[C@H]4[C@H](C)CC[C@@H]([C@H]1C)[C@@]24OO3,200.0,0.31,-2.8096683018297086,1,1.88,2.0,671.0,,tablet,False,False
 artemether,CO[C@H]1O[C@@H]2O[C@@]3(C)CC[C@H]4[C@H](C)CC[C@@H]([C@H]1C)[C@@]24OO3,300.0,0.474,-2.8013429130455774,1,2.0,2.8,2170.0,,tablet,False,False
 pralsetinib,CO[C@]1(C(=O)N[C@@H](C)c2ccc(-n3cc(F)cn3)nc2)CC[C@H](c2nc(C)cc(Nc3cc(C)[nH]n3)n2)CC1,200.0,0.6333340350873305,-2.4993971682186253,2,3.0,15.65,11185.0,,capsule,False,False
-mycophenolic acid,COc1c(C)c2c(c(O)c1C/C=C(\C)CCC(=O)O)C(=O)OC2,500.0,15.272257913831869,-1.515066754638715,2,0.585,16.240000000000002,33281.415,,tablet,True,False
-mycophenolic acid,COc1c(C)c2c(c(O)c1C/C=C(\C)CCC(=O)O)C(=O)OC2,1000.0,26.469999999999995,-1.577246058698652,1,0.81,16.04,62410.0,,capsule,True,False
-mycophenolic acid,COc1c(C)c2c(c(O)c1C/C=C(\C)CCC(=O)O)C(=O)OC2,1500.0,34.0,-1.644612342013426,1,0.99,17.9,101000.0,94.1,capsule,True,False
 mycophenolate mofetil,COc1c(C)c2c(c(O)c1C/C=C(\C)CCC(=O)OCCN1CCOCC1)C(=O)OC2,500.0,0.0029793959119257,-5.224841786807433,2,0.585,2.1100000000000003,2.535,,tablet,False,False
 gatifloxacin,COc1c(N2CCNC(C)C2)c(F)cc2c(=O)c(C(=O)O)cn(C3CC3)c12,400.0,3.918968085996582,-2.008888264500029,5,1.49,6.87,34380.0,90.4,tablet,False,False
 Nemonoxacin,COc1c(N2C[C@@H](C)C[C@H](N)C2)ccc2c(=O)c(C(=O)O)cn(C3CC3)c12,25.0,0.15,-2.2218487496163566,1,0.92,9.71,1190.0,,capsule,False,False
@@ -1843,7 +1707,6 @@ gefapixant,COc1cc(C(C)C)c(Oc2cnc(N)nc2N)cc1S(N)(=O)=O,450.0,3.89,-2.063262912449
 gefapixant,COc1cc(C(C)C)c(Oc2cnc(N)nc2N)cc1S(N)(=O)=O,900.0,5.76,-2.193820026016113,1,1.0,8.09,36100.0,,suspension,False,False
 gefapixant,COc1cc(C(C)C)c(Oc2cnc(N)nc2N)cc1S(N)(=O)=O,1800.0,8.7,-2.315753252484688,1,1.0,8.44,49300.0,,suspension,False,False
 acitretin,COc1cc(C)c(/C=C/C(C)=C/C=C/C(C)=C/C(=O)O)c(C)c1C,50.0,0.245,-2.309803919971486,1,2.8,6.7,1468.0,59.0,capsule,False,False
-ro 13-7652,COc1cc(C)c(/C=C/C(C)=C/C=C/C(C)=C\C(=O)O)c(C)c1C,50.0,0.0205999999999999,-3.385102783966865,1,22.1,59.9,2836.0,,capsule,True,False
 tafenoquine,COc1cc(C)c2c(Oc3cccc(C(F)(F)F)c3)c(OC)cc(NC(C)CCCN)c2n1,200.0,0.13818,-3.1605848073161065,1,12.0,319.41,53507.65,,,False,False
 tafenoquine,COc1cc(C)c2c(Oc3cccc(C(F)(F)F)c3)c(OC)cc(NC(C)CCCN)c2n1,300.0,0.1995999999999999,-3.1769607177683103,1,12.1,375.2,97195.5,,tablet,False,False
 Anacetrapib,COc1cc(F)c(C(C)C)cc1-c1ccc(C(F)(F)F)cc1CN1C(=O)O[C@H](c2cc(C(F)(F)F)cc(C(F)(F)F)c2)[C@@H]1C,2.0,0.0153,-2.1163385648463824,1,4.0,9.3,165.75,,capsule,False,False
@@ -1865,7 +1728,6 @@ primaquine,COc1cc(NC(C)CCCN)c2ncccc2c1,30.0,0.1202331069215131,-2.39709718494322
 primaquine,COc1cc(NC(C)CCCN)c2ncccc2c1,45.0,0.176,-2.407699845961194,1,2.0,6.7,1700.0,96.0,tablet,False,False
 bosutinib,COc1cc(Nc2c(C#N)cnc3cc(OCCCN4CCN(C)CC4)c(OC)cc23)c(Cl)cc1Cl,200.0,0.0168999999999999,-4.073143291050307,1,6.0,41.2,474.0,,,False,False
 bosutinib,COc1cc(Nc2c(C#N)cnc3cc(OCCCN4CCN(C)CC4)c(OC)cc23)c(Cl)cc1Cl,400.0,0.0621,-3.808968391151382,1,3.0,37.3,1150.0,,,False,False
-tamatinib (r406),COc1cc(Nc2ncc(F)c(Nc3ccc4c(n3)NC(=O)C(C)(C)O4)n2)cc(OC)c1OC,150.0,0.3129999999999999,-2.680546921509233,1,1.95,15.5,4430.0,54.6,tablet,True,False
 erdafitinib,COc1cc(OC)cc(N(CCNC(C)C)c2ccc3ncc(-c4cnn(C)c4)nc3c2)c1,4.0,0.138,-1.4621809049267258,1,2.0,59.1,9145.0,,,False,False
 erdafitinib,COc1cc(OC)cc(N(CCNC(C)C)c2ccc3ncc(-c4cnn(C)c4)nc3c2)c1,12.0,0.397,-1.4803907392845097,1,4.0,56.5,27808.0,,tablet,False,False
 etoposide,COc1cc([C@@H]2c3cc4c(cc3[C@@H](O[C@@H]3O[C@@H]5CO[C@@H](C)O[C@H]5[C@H](O)[C@H]3O)[C@H]3COC(=O)[C@H]23)OCO4)cc(OC)c1O,100.0,3.0,-1.5228787452803376,1,2.8,6.6,,76.0,capsule,False,False
@@ -1881,13 +1743,9 @@ donepezil,COc1cc2c(cc1OC)C(=O)C(CC1CCN(Cc3ccccc3)CC1)C2,4.0,0.0068999999999999,-
 donepezil,COc1cc2c(cc1OC)C(=O)C(CC1CCN(Cc3ccccc3)CC1)C2,6.0,0.0115999999999999,-2.7136932611567253,1,3.2,80.1,706.6,,tablet,False,True
 donepezil,COc1cc2c(cc1OC)C(=O)C(CC1CCN(Cc3ccccc3)CC1)C2,10.0,0.0232999999999999,-2.632644078973981,1,2.8,73.2,892.2,,tablet,False,True
 tetrabenazine,COc1cc2c(cc1OC)C1CC(=O)C(CC(C)C)CN1CC2,25.0,0.000693829950348,-4.556686965702532,2,0.825,2.13,1.8,4.9,tablet,False,False
-dihydrotetrabenazine (htbz),COc1cc2c(cc1OC)C1CC(O)C(CC(C)C)CN1CC2,15.0,0.0225,-2.8239087409443187,1,2.3,9.4,273.0,,tablet,True,False
-dihydrotetrabenazine (htbz),COc1cc2c(cc1OC)C1CC(O)C(CC(C)C)CN1CC2,25.0,0.0596243207068494,-2.622516564463656,4,1.125,5.05,288.5,,capsule,True,False
 ivabradine,COc1cc2c(cc1OC)CC(=O)N(CCCN(C)C[C@H]1Cc3cc(OC)c(OC)cc31)CC2,5.0,0.0087,-2.7594507517174,1,0.88,1.9,28.6,40.0,tablet,False,False
 ivabradine,COc1cc2c(cc1OC)CC(=O)N(CCCN(C)C[C@H]1Cc3cc(OC)c(OC)cc31)CC2,10.0,0.0180696070219333,-2.74305129237884,3,0.97,1.9,61.0,40.0,tablet,False,False
 ivabradine,COc1cc2c(cc1OC)CC(=O)N(CCCN(C)C[C@H]1Cc3cc(OC)c(OC)cc31)CC2,20.0,0.0434999999999999,-2.662540738709344,1,0.75,2.1,112.4,40.0,tablet,False,False
-moexiprilat,COc1cc2c(cc1OC)CN(C(=O)[C@H](C)N[C@@H](CCc1ccccc1)C(=O)O)[C@H](C(=O)O)C2,15.0,0.0183999999999999,-2.911273436046145,1,1.67,27.31,72.2,13.0,,True,False
-moexiprilat,COc1cc2c(cc1OC)CN(C(=O)[C@H](C)N[C@@H](CCc1ccccc1)C(=O)O)[C@H](C(=O)O)C2,30.0,0.0708,-2.6270879970298933,1,1.5,,203.0,13.0,capsule,True,False
 valbenazine,COc1cc2c(cc1OC)[C@H]1C[C@@H](OC(=O)[C@@H](N)C(C)C)[C@H](CC(C)C)CN1CC2,1.0,0.00294,-2.5316526695878427,1,1.3,16.0,40.7,49.0,solution,False,False
 valbenazine,COc1cc2c(cc1OC)[C@H]1C[C@@H](OC(=O)[C@@H](N)C(C)C)[C@H](CC(C)C)CN1CC2,2.0,0.0064199999999999,-2.493494967595128,1,1.5,15.0,102.0,49.0,solution,False,False
 valbenazine,COc1cc2c(cc1OC)[C@H]1C[C@@H](OC(=O)[C@@H](N)C(C)C)[C@H](CC(C)C)CN1CC2,5.0,0.0174,-2.4584207560534197,1,0.5,17.0,207.0,49.0,solution,False,False
@@ -1965,8 +1823,6 @@ avanafil,COc1ccc(CNc2nc(N3CCC[C@H]3CO)ncc2C(=O)NCc2ncccn2)cc1Cl,200.0,5.16125,-1
 papaverine,COc1ccc(Cc2nccc3cc(OC)c(OC)cc23)cc1OC,80.0,0.1815,-2.644213357619812,1,1.25,,256.38,23.02,tablet,False,False
 glyburide,COc1ccc(Cl)cc1C(=O)NCCc1ccc(S(=O)(=O)NC(=O)NC2CCCCC2)cc1,1.75,0.0911,-1.2835196717132962,1,1.25,2.0,323.9,,tablet,False,False
 glyburide,COc1ccc(Cl)cc1C(=O)NCCc1ccc(S(=O)(=O)NC(=O)NC2CCCCC2)cc1,5.0,0.1276009012507356,-1.5931162624991586,2,2.865,2.09,586.24,,tablet,False,False
-desglymidodrine,COc1ccc(OC)c(C(O)CN)c1,2.5,0.00565,-2.645891560852599,1,0.8,3.0,23.9,93.0,tablet,True,False
-desglymidodrine,COc1ccc(OC)c(C(O)CN)c1,5.0,0.01044,-2.6802695056697754,1,1.04,0.56,21.66,93.0,tablet,True,False
 midodrine,COc1ccc(OC)c(C(O)CNC(=O)CN)c1,2.5,0.01165,-2.33161408331,1,0.2,3.3,10.3,,tablet,False,False
 midodrine,COc1ccc(OC)c(C(O)CNC(=O)CN)c1,5.0,0.01746,-2.456925764966468,1,1.01,0.66,39.46,,tablet,False,False
 diltiazem,COc1ccc([C@@H]2Sc3ccccc3N(CCN(C)C)C(=O)[C@@H]2OC(C)=O)cc1,60.0,0.0582957974471573,-3.0125140028509656,2,3.45,3.585,392.8,42.0,tablet,False,False
@@ -1997,8 +1853,6 @@ codeine,COc1ccc2c3c1O[C@H]1[C@@H](O)C=C[C@H]4[C@@H](C2)N(C)CC[C@@]341,120.0,0.47
 dihydrocodeine,COc1ccc2c3c1O[C@H]1[C@@H](O)CC[C@H]4[C@@H](C2)N(C)CC[C@@]341,20.0,0.0592034602029306,-2.5286829054423543,2,0.865,3.165,300.085,,tablet,False,False
 dihydrocodeine,COc1ccc2c3c1O[C@H]1[C@@H](O)CC[C@H]4[C@@H](C2)N(C)CC[C@@]341,30.0,0.0718,-2.620996810477362,1,1.6,,331.0,20.6,tablet,False,False
 dihydrocodeine,COc1ccc2c3c1O[C@H]1[C@@H](O)CC[C@H]4[C@@H](C2)N(C)CC[C@@]341,60.0,0.146,-2.6137983945992067,1,1.82,,574.0,19.7,tablet,False,False
-6-methoxy-2-naphthylacetic acid,COc1ccc2cc(CC(=O)O)ccc2c1,500.0,12.75,-1.593459819566045,1,7.5,27.82,633250.0,,tablet,True,False
-6-methoxy-2-naphthylacetic acid,COc1ccc2cc(CC(=O)O)ccc2c1,1000.0,22.39441894758602,-1.649860201409997,2,10.7,23.75,979000.0,,tablet,True,False
 nabumetone,COc1ccc2cc(CCC(C)=O)ccc2c1,500.0,0.56,-2.9507819773298185,1,8.63,26.05,18070.0,,tablet,False,False
 naproxen,COc1ccc2cc([C@H](C)C(=O)O)ccc2c1,250.0,44.3,-0.7515362824489681,1,2.0,17.5,779210.0,95.0,tablet,False,False
 naproxen,COc1ccc2cc([C@H](C)C(=O)O)ccc2c1,500.0,87.3,-0.7579557606304491,1,2.6,17.7,1427800.0,95.0,tablet,False,False
@@ -2062,8 +1916,6 @@ Omarigliptin,CS(=O)(=O)n1cc2c(n1)CN([C@H]1CO[C@H](c3cc(F)ccc3F)[C@@H](N)C1)C2,50
 Omarigliptin,CS(=O)(=O)n1cc2c(n1)CN([C@H]1CO[C@H](c3cc(F)ccc3F)[C@@H](N)C1)C2,100.0,0.88054,-2.0552509106964783,1,0.75,42.6,34624.0,,,False,False
 Omarigliptin,CS(=O)(=O)n1cc2c(n1)CN([C@H]1CO[C@H](c3cc(F)ccc3F)[C@@H](N)C1)C2,200.0,1.53397,-2.1152131295072505,1,1.5,45.2,64546.47,,,False,False
 Omarigliptin,CS(=O)(=O)n1cc2c(n1)CN([C@H]1CO[C@H](c3cc(F)ccc3F)[C@@H](N)C1)C2,400.0,3.70146,-2.0336869308079426,1,1.0,42.5,133475.73,,,False,False
-sulindac sulfide,CSc1ccc(/C=C2/C(C)=C(CC(=O)O)c3cc(F)ccc32)cc1,150.0,2.6,-1.7611179110848634,1,4.0,,13820.0,,tablet,True,False
-sulindac sulfide,CSc1ccc(/C=C2/C(C)=C(CC(=O)O)c3cc(F)ccc32)cc1,200.0,3.58,-1.747146969020107,1,1.9,13.55,41540.0,,tablet,True,False
 fexinidazole,CSc1ccc(OCc2ncc([N+](=O)[O-])n2C)cc1,100.0,0.1299999999999999,-2.8860566476931635,1,3.0,9.0,1287.0,,suspension,False,False
 fexinidazole,CSc1ccc(OCc2ncc([N+](=O)[O-])n2C)cc1,200.0,0.1389999999999999,-3.1580151954098863,1,3.0,12.0,1384.0,,suspension,False,False
 fexinidazole,CSc1ccc(OCc2ncc([N+](=O)[O-])n2C)cc1,400.0,0.171,-3.3690638809358084,1,3.5,15.0,2075.0,,suspension,False,False
@@ -2076,7 +1928,6 @@ fexinidazole,CSc1ccc(OCc2ncc([N+](=O)[O-])n2C)cc1,3600.0,0.715,-3.70199645896620
 thioridazine,CSc1ccc2c(c1)N(CCC1CCCCN1C)c1ccccc1S2,25.0,0.1108299999999999,-2.353282675437172,1,1.77,6.82,554.86,,tablet,False,False
 thioridazine,CSc1ccc2c(c1)N(CCC1CCCCN1C)c1ccccc1S2,50.0,0.1971299999999999,-2.404217282425841,1,1.36,8.24,1084.3,,tablet,False,False
 thioridazine,CSc1ccc2c(c1)N(CCC1CCCCN1C)c1ccccc1S2,100.0,0.3718,-2.4296906145641204,1,1.48,9.25,2639.3,,tablet,False,False
-(r)-fenoprofen,C[C@@H](C(=O)O)c1cccc(Oc2ccccc2)c1,600.0,10.8,-1.744727494896694,1,1.1,0.7,18000.0,,capsule,True,False
 ergometrine,C[C@@H](CO)NC(=O)[C@@H]1C=C2c3cccc4[nH]cc(c34)C[C@H]2N(C)C1,0.2,0.0010399999999999,-2.283996656365201,1,0.57,1.89,2.99,75.6,tablet,False,False
 lisdexamfetamine,C[C@@H](Cc1ccccc1)NC(=O)[C@@H](N)CCCCN,30.0,0.0157,-3.2812216023104286,1,1.1,0.5,23.7,100.0,capsule,False,False
 lisdexamfetamine,C[C@@H](Cc1ccccc1)NC(=O)[C@@H](N)CCCCN,50.0,0.0256,-3.290730039024169,1,1.0,0.6,62.1,100.0,capsule,False,False
@@ -2085,7 +1936,6 @@ lisdexamfetamine,C[C@@H](Cc1ccccc1)NC(=O)[C@@H](N)CCCCN,100.0,0.0638,-3.19517932
 lisdexamfetamine,C[C@@H](Cc1ccccc1)NC(=O)[C@@H](N)CCCCN,150.0,0.0995,-3.178268178309956,1,1.0,0.7,151.7,100.0,capsule,False,False
 lisdexamfetamine,C[C@@H](Cc1ccccc1)NC(=O)[C@@H](N)CCCCN,200.0,0.1277,-3.194839098400566,1,1.0,0.9,214.9,100.0,capsule,False,False
 lisdexamfetamine,C[C@@H](Cc1ccccc1)NC(=O)[C@@H](N)CCCCN,250.0,0.1855999999999999,-3.1293620367891943,1,1.5,0.9,345.8,100.0,capsule,False,False
-(+)-prenylamine,C[C@@H](Cc1ccccc1)NCCC(c1ccccc1)c1ccccc1,200.0,0.0091999999999999,-4.337242168318427,1,2.6,24.0,166.0,,tablet,True,False
 cinacalcet,C[C@@H](NCCCc1cccc(C(F)(F)F)c1)c1cccc2ccccc12,25.0,0.0068220817937049,-3.5640230865731386,2,3.075,24.845,55.785,22.5,tablet,False,False
 cinacalcet,C[C@@H](NCCCc1cccc(C(F)(F)F)c1)c1cccc2ccccc12,50.0,0.0134397867029641,-3.570577628063209,3,5.0,37.1,181.0,22.5,tablet,False,False
 cinacalcet,C[C@@H](NCCCc1cccc(C(F)(F)F)c1)c1cccc2ccccc12,75.0,0.0172,-3.639532816484151,1,6.0,35.3,184.3,22.5,tablet,False,False
@@ -2108,9 +1958,6 @@ aprepitant,C[C@@H](O[C@H]1OCCN(Cc2n[nH]c(=O)[nH]2)[C@H]1c1ccc(F)cc1)c1cc(C(F)(F)
 crizotinib,C[C@@H](Oc1cc(-c2cnn(C3CCNCC3)c2)cnc1N)c1c(Cl)ccc(F)c1Cl,150.0,0.0654999999999999,-3.359849959063898,1,5.0,37.1,1260.0,,tablet,False,False
 crizotinib,C[C@@H](Oc1cc(-c2cnn(C3CCNCC3)c2)cnc1N)c1c(Cl)ccc(F)c1Cl,250.0,0.1086138500696103,-3.3620548001293136,3,5.0,33.1,2321.0,43.0,tablet,False,False
 Savolitinib,C[C@@H](c1ccc2nccn2c1)n1nnc2ncc(-c3cnn(C)c3)nc21,600.0,2.36,-2.405239247413537,1,3.5,6.1,14500.0,68.8,tablet,False,False
-isavuconazole,C[C@@H](c1nc(-c2ccc(C#N)cc2)cs1)[C@](O)(Cn1cncn1)c1cc(F)ccc1F,100.0,0.84,-2.0757207139381184,1,2.4,148.0,45000.0,115.0,,True,False
-isavuconazole,C[C@@H](c1nc(-c2ccc(C#N)cc2)cs1)[C@](O)(Cn1cncn1)c1cc(F)ccc1F,200.0,2.185,-1.9615785543575408,1,2.0,121.0,100050.0,,capsule,True,False
-isavuconazole,C[C@@H](c1nc(-c2ccc(C#N)cc2)cs1)[C@](O)(Cn1cncn1)c1cc(F)ccc1F,400.0,3.8,-2.0222763947111524,2,3.25,111.55,186650.0,98.0,capsule,True,False
 voriconazole,C[C@@H](c1ncncc1F)[C@](O)(Cn1cncn1)c1ccc(F)cc1F,50.0,0.135,-2.5686362358410126,1,0.75,3.67,416.0,39.0,tablet,False,False
 voriconazole,C[C@@H](c1ncncc1F)[C@](O)(Cn1cncn1)c1ccc(F)cc1F,200.0,1.0883023428635985,-2.264280431555054,3,1.7,6.34,7020.0,,tablet,False,False
 voriconazole,C[C@@H](c1ncncc1F)[C@](O)(Cn1cncn1)c1ccc(F)cc1F,400.0,2.9590448458919987,-2.13090844415454,2,1.45,6.88,15126.73,75.2,tablet,False,False
@@ -2178,7 +2025,6 @@ ubrogepant,C[C@@H]1[C@H](c2ccccc2)C[C@H](NC(=O)c2cnc3c(c2)C[C@@]2(C3)C(=O)Nc3ncc
 ubrogepant,C[C@@H]1[C@H](c2ccccc2)C[C@H](NC(=O)c2cnc3c(c2)C[C@@]2(C3)C(=O)Nc3ncccc32)C(=O)N1CC(F)(F)F,400.0,1.02975,-2.589328190699508,1,2.08,5.06,5127.06,,tablet,False,False
 zuranolone,C[C@@]1(O)CC[C@H]2[C@H](CC[C@@H]3[C@@H]2CC[C@]2(C)[C@@H](C(=O)Cn4cc(C#N)cn4)CC[C@@H]32)C1,30.0,0.0183,-3.214670164989233,1,4.0,16.8,380.6,,capsule,False,False
 dexketoprofen,C[C@H](C(=O)O)c1cccc(C(=O)c2ccccc2)c1,25.0,3.4305760294175927,-0.8625729599431073,3,0.5,1.31,4530.0,,tablet,False,False
-(s)-fenoprofen,C[C@H](C(=O)O)c1cccc(Oc2ccccc2)c1,600.0,35.2,-1.231608586905513,1,1.4,2.4,206700.0,,capsule,True,False
 ursodeoxycholic acid,C[C@H](CCC(=O)O)[C@H]1CC[C@H]2[C@@H]3[C@@H](O)C[C@@H]4C[C@H](O)CC[C@]4(C)[C@H]3CC[C@]12C,150.0,1.33477,-2.050684822071482,1,2.0,,4436.15,,tablet,False,False
 ursodeoxycholic acid,C[C@H](CCC(=O)O)[C@H]1CC[C@H]2[C@@H]3[C@@H](O)C[C@@H]4C[C@H](O)CC[C@]4(C)[C@H]3CC[C@]12C,500.0,5.215,-1.981715691573469,1,3.3,,25385.0,,capsule,False,False
 Lecozotan,C[C@H](CN(C(=O)c1ccc(C#N)cc1)c1ccccn1)N1CCN(c2cccc3c2OCCO3)CC1,2.0,0.1414999999999999,-1.1502735558036723,1,0.5,6.2,686.0,,capsule,False,False
@@ -2190,21 +2036,10 @@ isoxsuprine,C[C@H](COc1ccccc1)N[C@H](C)[C@@H](O)c1ccc(O)cc1,90.0,0.1146999999999
 captopril,C[C@H](CS)C(=O)N1CCC[C@H]1C(=O)O,25.0,0.1629,-2.186018924363528,1,0.63,1.11,363.8,70.0,,False,False
 captopril,C[C@H](CS)C(=O)N1CCC[C@H]1C(=O)O,50.0,0.2901,-2.2364222755333545,1,0.79,1.03,536.7,70.0,,False,False
 captopril,C[C@H](CS)C(=O)N1CCC[C@H]1C(=O)O,100.0,0.569945487393312,-2.244166680566844,2,0.91,1.005,723.22,70.0,tablet,False,False
-zofenoprilat,C[C@H](CS)C(=O)N1C[C@@H](Sc2ccccc2)C[C@H]1C(=O)O,10.0,0.0969999999999999,-2.0132282657337552,1,0.4,,108.0,78.0,solution,True,False
-zofenoprilat,C[C@H](CS)C(=O)N1C[C@@H](Sc2ccccc2)C[C@H]1C(=O)O,60.0,0.69201,-1.938038880040412,1,1.25,3.11,1156.39,,tablet,True,False
 zofenopril,C[C@H](CSC(=O)c1ccccc1)C(=O)N1C[C@@H](Sc2ccccc2)C[C@H]1C(=O)O,60.0,0.0911599999999999,-2.818346933875306,1,0.88,0.72,156.92,,tablet,False,False
 silodosin,C[C@H](Cc1cc2c(c(C(N)=O)c1)N(CCCO)CC2)NCCOc1ccccc1OCC(F)(F)F,4.0,0.0266999999999999,-2.175548729963387,1,1.5,4.63,142.9,32.0,capsule,False,False
 silodosin,C[C@H](Cc1cc2c(c(C(N)=O)c1)N(CCCO)CC2)NCCOc1ccccc1OCC(F)(F)F,8.0,0.0484699999999999,-2.2176169672691843,1,1.75,5.32,278.14,32.0,capsule,False,False
 silodosin,C[C@H](Cc1cc2c(c(C(N)=O)c1)N(CCCO)CC2)NCCOc1ccccc1OCC(F)(F)F,12.0,0.09407,-2.10573010202269,1,2.0,5.9,485.01,32.0,capsule,False,False
-(-)-prenylamine,C[C@H](Cc1ccccc1)NCCC(c1ccccc1)c1ccccc1,200.0,0.0507,-3.596022036330645,1,2.4,8.2,502.0,,tablet,True,False
-tenofovir,C[C@H](Cn1cnc2c(N)ncnc21)OCP(=O)(O)O,300.0,0.2657767523107157,-3.052604264511473,3,0.75,20.24,2207.63,25.0,tablet,True,False
-dextroamphetamine,C[C@H](N)Cc1ccccc1,30.0,0.0321999999999999,-2.969265383023832,1,3.5,12.1,597.9,100.0,capsule,True,False
-dextroamphetamine,C[C@H](N)Cc1ccccc1,50.0,0.0446,-3.049635145623877,1,4.0,11.3,818.1,100.0,capsule,True,False
-dextroamphetamine,C[C@H](N)Cc1ccccc1,70.0,0.0693,-3.00436480540245,1,3.78,9.69,1110.0,100.0,capsule,True,False
-dextroamphetamine,C[C@H](N)Cc1ccccc1,100.0,0.0846,-3.0726296369609765,1,4.0,11.1,1548.2,100.0,capsule,True,False
-dextroamphetamine,C[C@H](N)Cc1ccccc1,150.0,0.1266,-3.073657553374345,1,4.0,10.9,2503.4,100.0,capsule,True,False
-dextroamphetamine,C[C@H](N)Cc1ccccc1,200.0,0.1688,-3.073657553374345,1,6.0,11.3,3336.2,100.0,capsule,True,False
-dextroamphetamine,C[C@H](N)Cc1ccccc1,250.0,0.2463,-3.006475596832934,1,6.0,12.4,5132.5,100.0,capsule,True,False
 Taranabant,C[C@H](NC(=O)C(C)(C)Oc1ccc(C(F)(F)F)cn1)[C@@H](Cc1ccc(Cl)cc1)c1cccc(C#N)c1,0.5,0.00192,-2.415668775632469,1,1.0,,,,capsule,False,False
 Taranabant,C[C@H](NC(=O)C(C)(C)Oc1ccc(C(F)(F)F)cn1)[C@@H](Cc1ccc(Cl)cc1)c1cccc(C#N)c1,1.0,0.0031499999999999,-2.5016894462104,1,2.0,,14.55,,capsule,False,False
 Taranabant,C[C@H](NC(=O)C(C)(C)Oc1ccc(C(F)(F)F)cn1)[C@@H](Cc1ccc(Cl)cc1)c1cccc(C#N)c1,2.5,0.0111899999999999,-2.3491099221436875,1,1.6,45.5,63.62,,capsule,False,False
@@ -2229,23 +2064,6 @@ safinamide,C[C@H](NCc1ccc(OCc2cccc(F)c2)cc1)C(N)=O,100.0,0.8202,-2.0860802350485
 safinamide,C[C@H](NCc1ccc(OCc2cccc(F)c2)cc1)C(N)=O,175.0,1.25576,-2.1441314034214787,1,2.83,20.63,32492.0,,capsule,False,False
 safinamide,C[C@H](NCc1ccc(OCc2cccc(F)c2)cc1)C(N)=O,350.0,2.94328,-2.075236464999353,1,1.83,20.22,77803.0,,capsule,False,False
 safinamide,C[C@H](NCc1ccc(OCc2cccc(F)c2)cc1)C(N)=O,700.0,6.31574,-2.044673796906227,1,2.75,23.39,166134.0,,capsule,False,False
-spiraprilat,C[C@H](N[C@@H](CCc1ccccc1)C(=O)O)C(=O)N1CC2(C[C@H]1C(=O)O)SCCS2,1.5,0.01,-2.1760912590556813,1,2.0,,,,,True,False
-spiraprilat,C[C@H](N[C@@H](CCc1ccccc1)C(=O)O)C(=O)N1CC2(C[C@H]1C(=O)O)SCCS2,3.0,0.025,-2.0791812460476247,1,3.0,,,,,True,False
-spiraprilat,C[C@H](N[C@@H](CCc1ccccc1)C(=O)O)C(=O)N1CC2(C[C@H]1C(=O)O)SCCS2,6.0,0.06,-2.0,1,2.5,,,,,True,False
-spiraprilat,C[C@H](N[C@@H](CCc1ccccc1)C(=O)O)C(=O)N1CC2(C[C@H]1C(=O)O)SCCS2,12.0,0.105,-2.057991946977687,1,2.0,,,,,True,False
-enalaprilat,C[C@H](N[C@@H](CCc1ccccc1)C(=O)O)C(=O)N1CCC[C@H]1C(=O)O,10.0,0.0367522788409099,-2.434715727128121,2,3.8,4.415,296.2,40.0,tablet,True,False
-enalaprilat,C[C@H](N[C@@H](CCc1ccccc1)C(=O)O)C(=O)N1CCC[C@H]1C(=O)O,20.0,0.0670299999999999,-2.474760776270255,1,3.25,5.6,566.51,40.0,tablet,True,False
-quinaprilat,C[C@H](N[C@@H](CCc1ccccc1)C(=O)O)C(=O)N1Cc2ccccc2C[C@H]1C(=O)O,0.5,0.004,-2.096910013008056,1,2.0,,115.0,,,True,False
-quinaprilat,C[C@H](N[C@@H](CCc1ccccc1)C(=O)O)C(=O)N1Cc2ccccc2C[C@H]1C(=O)O,2.5,0.0501916327688191,-1.6973086848577938,2,1.94,3.22,311.5,51.7,,True,False
-quinaprilat,C[C@H](N[C@@H](CCc1ccccc1)C(=O)O)C(=O)N1Cc2ccccc2C[C@H]1C(=O)O,5.0,0.1079999999999999,-1.665546248849069,1,1.5,,555.0,,,True,False
-quinaprilat,C[C@H](N[C@@H](CCc1ccccc1)C(=O)O)C(=O)N1Cc2ccccc2C[C@H]1C(=O)O,20.0,0.5427154884485005,-1.5664577796645085,3,1.38,2.485,2159.0,45.9,capsule,True,False
-quinaprilat,C[C@H](N[C@@H](CCc1ccccc1)C(=O)O)C(=O)N1Cc2ccccc2C[C@H]1C(=O)O,40.0,1.456,-1.438898616350944,1,1.38,1.9,4078.0,,capsule,True,False
-ramiprilat,C[C@H](N[C@@H](CCc1ccccc1)C(=O)O)C(=O)N1[C@H](C(=O)O)C[C@@H]2CCC[C@@H]21,2.5,0.0027,-2.96657624451305,1,2.52,,66.2,28.0,capsule,True,False
-ramiprilat,C[C@H](N[C@@H](CCc1ccccc1)C(=O)O)C(=O)N1[C@H](C(=O)O)C[C@@H]2CCC[C@@H]21,5.0,0.0048415694259265,-3.013983840514677,3,4.25,104.0,130.0,,tablet,True,False
-ramiprilat,C[C@H](N[C@@H](CCc1ccccc1)C(=O)O)C(=O)N1[C@H](C(=O)O)C[C@@H]2CCC[C@@H]21,10.0,0.04328,-2.363712747901487,1,2.44,18.81,323.1,,tablet,True,False
-trandolaprilat,C[C@H](N[C@@H](CCc1ccccc1)C(=O)O)C(=O)N1[C@H](C(=O)O)C[C@H]2CCCC[C@@H]21,1.0,0.00107,-2.9706162223147903,1,5.67,121.0,105.0,70.0,capsule,True,False
-trandolaprilat,C[C@H](N[C@@H](CCc1ccccc1)C(=O)O)C(=O)N1[C@H](C(=O)O)C[C@H]2CCCC[C@@H]21,2.0,0.0022499999999999,-2.948847477552619,1,4.75,62.0,91.2,70.0,capsule,True,False
-trandolaprilat,C[C@H](N[C@@H](CCc1ccccc1)C(=O)O)C(=O)N1[C@H](C(=O)O)C[C@H]2CCCC[C@@H]21,4.0,0.0060599999999999,-2.8195873671616765,1,3.58,75.9,143.0,70.0,capsule,True,False
 sapropterin,C[C@H](O)[C@H](O)[C@H]1CNc2nc(N)[nH]c(=O)c2N1,730.0,0.0841,-3.938526864322544,1,2.77,3.67,559.0,,tablet,False,False
 alvimopan,C[C@H]1CN(C[C@H](Cc2ccccc2)C(=O)NCC(=O)O)CC[C@@]1(C)c1cccc(O)c1,6.0,0.0087899999999999,-2.834162375309872,1,1.4,8.4,36.3,6.0,capsule,False,False
 alvimopan,C[C@H]1CN(C[C@H](Cc2ccccc2)C(=O)NCC(=O)O)CC[C@@]1(C)c1cccc(O)c1,12.0,0.0183,-2.816730156317196,1,1.8,8.4,65.5,6.0,capsule,False,False
@@ -2317,12 +2135,6 @@ prednisolone,C[C@]12C=CC(=O)C=C1CC[C@@H]1[C@@H]2[C@@H](O)C[C@@]2(C)[C@H]1CC[C@]2
 prednisolone,C[C@]12C=CC(=O)C=C1CC[C@@H]1[C@@H]2[C@@H](O)C[C@@]2(C)[C@H]1CC[C@]2(O)C(=O)CO,100.0,1.231,-1.909741947068684,1,1.5,4.09,8590.0,,tablet,False,False
 triamcinolone,C[C@]12C=CC(=O)C=C1CC[C@H]1[C@@H]3C[C@@H](O)[C@](O)(C(=O)CO)[C@@]3(C)C[C@H](O)[C@@]12F,5.0,0.0104999999999999,-2.677780705266081,1,1.0,2.6,30.4,22.5,solution,False,False
 dutasteride,C[C@]12C=CC(=O)N[C@@H]1CC[C@@H]1[C@@H]2CC[C@]2(C)[C@@H](C(=O)Nc3cc(C(F)(F)F)ccc3C(F)(F)F)CC[C@@H]12,0.5,0.0028112630613302,-2.250068518124261,2,3.3200000000000003,80.91,69.08,60.0,capsule,False,False
-canrenoic acid,C[C@]12CCC(=O)C=C1C=C[C@@H]1[C@@H]2CC[C@@]2(C)[C@H]1CC[C@@]2(O)CCC(=O)O,100.0,4.126,-1.3844707763628672,1,1.5,4.24,12203.0,,tablet,True,False
-canrenone,C[C@]12CCC(=O)C=C1C=C[C@@H]1[C@@H]2CC[C@@]2(C)[C@H]1CC[C@@]21CCC(=O)O1,100.0,0.1233499999999999,-2.908860846174245,1,3.4,13.35,2001.92,,tablet,True,False
-canrenone,C[C@]12CCC(=O)C=C1C=C[C@@H]1[C@@H]2CC[C@@]2(C)[C@H]1CC[C@@]21CCC(=O)O1,200.0,0.2612619367445494,-2.8839538536975557,3,3.0,12.43,2613.79,25.0,tablet,True,False
-cortisone,C[C@]12CCC(=O)C=C1CC[C@@H]1[C@@H]2C(=O)C[C@@]2(C)[C@H]1CC[C@]2(O)C(=O)CO,5.0,0.01574,-2.501965276312973,1,2.0,6.52,151.09,,tablet,True,False
-cortisone,C[C@]12CCC(=O)C=C1CC[C@@H]1[C@@H]2C(=O)C[C@@]2(C)[C@H]1CC[C@]2(O)C(=O)CO,10.0,0.0183899999999999,-2.735418270761923,1,2.0,4.41,148.58,,tablet,True,False
-cortisone,C[C@]12CCC(=O)C=C1CC[C@@H]1[C@@H]2C(=O)C[C@@]2(C)[C@H]1CC[C@]2(O)C(=O)CO,25.0,0.02217,-3.0521743155575494,1,2.0,4.71,202.48,,tablet,True,False
 methyltestosterone,C[C@]12CCC(=O)C=C1CC[C@@H]1[C@@H]2CC[C@@]2(C)[C@H]1CC[C@]2(C)O,10.0,0.0205699999999999,-2.686765708305276,1,1.0,2.24,55.9,,tablet,False,False
 hydrocortisone,C[C@]12CCC(=O)C=C1CC[C@@H]1[C@@H]2[C@@H](O)C[C@@]2(C)[C@H]1CC[C@]2(O)C(=O)CO,5.0,0.1189999999999999,-1.6234230429434882,1,0.7,1.2,293.0,,suspension,False,False
 hydrocortisone,C[C@]12CCC(=O)C=C1CC[C@@H]1[C@@H]2[C@@H](O)C[C@@]2(C)[C@H]1CC[C@]2(O)C(=O)CO,10.0,0.1866145760652152,-1.7290544374519994,2,0.9,1.4,460.5,,tablet,False,False
@@ -2338,7 +2150,6 @@ dienogest,C[C@]12CCC3=C4CCC(=O)C=C4CC[C@H]3[C@@H]1CC[C@@]2(O)CC#N,2.0,0.05264142
 estetrol,C[C@]12CC[C@@H]3c4ccc(O)cc4CC[C@H]3[C@@H]1[C@@H](O)[C@@H](O)[C@@H]2O,1.0,0.0005499999999999,-3.2596373105057563,1,0.25,,3.7,,solution,False,False
 estetrol,C[C@]12CC[C@@H]3c4ccc(O)cc4CC[C@H]3[C@@H]1[C@@H](O)[C@@H](O)[C@@H]2O,10.0,0.00855,-3.068033885271827,1,0.25,28.42,52.59,,solution,False,False
 estetrol,C[C@]12CC[C@@H]3c4ccc(O)cc4CC[C@H]3[C@@H]1[C@@H](O)[C@@H](O)[C@@H]2O,100.0,0.1583,-2.800519085137644,1,0.5,28.02,649.2,,solution,False,False
-estromustine,C[C@]12CC[C@@H]3c4ccc(OC(=O)N(CCCl)CCCl)cc4CC[C@H]3[C@@H]1CC[C@@H]2O,420.0,0.4533982673103195,-2.966769434287607,2,2.0,15.435,3358.9,43.7,capsule,True,False
 abiraterone,C[C@]12CC[C@H](O)CC1=CC[C@@H]1[C@@H]2CC[C@]2(C)C(c3cccnc3)=CC[C@@H]12,250.0,0.0528339379565824,-3.67502702681197,2,2.1100000000000003,11.42,271.95,,tablet,True,False
 abiraterone,C[C@]12CC[C@H](O)CC1=CC[C@@H]1[C@@H]2CC[C@]2(C)C(c3cccnc3)=CC[C@@H]12,500.0,0.0904599999999999,-3.742513420926119,1,2.0,15.1,494.3,,tablet,True,False
 abiraterone,C[C@]12CC[C@H](O)CC1=CC[C@@H]1[C@@H]2CC[C@]2(C)C(c3cccnc3)=CC[C@@H]12,1000.0,0.1721,-3.76421912967244,1,1.5,16.59,822.4,,tablet,True,False
@@ -2377,7 +2188,6 @@ bazedoxifene,Cc1c(-c2ccc(O)cc2)n(Cc2ccc(OCCN3CCCCCC3)cc2)c2ccc(O)cc12,45.0,0.009
 bazedoxifene,Cc1c(-c2ccc(O)cc2)n(Cc2ccc(OCCN3CCCCCC3)cc2)c2ccc(O)cc12,60.0,0.013,-3.664207898076807,1,1.5,31.0,196.0,,tablet,False,False
 bazedoxifene,Cc1c(-c2ccc(O)cc2)n(Cc2ccc(OCCN3CCCCCC3)cc2)c2ccc(O)cc12,90.0,0.0146999999999999,-3.7869251746911488,1,2.6,34.0,245.0,,tablet,False,False
 bazedoxifene,Cc1c(-c2ccc(O)cc2)n(Cc2ccc(OCCN3CCCCCC3)cc2)c2ccc(O)cc12,120.0,0.0198999999999999,-3.7803281696379183,1,2.0,44.0,430.0,,tablet,False,False
-3-methylflavone-8-carboxylic acid (mfca),Cc1c(-c2ccccc2)oc2c(C(=O)O)cccc2c1=O,200.0,11.5732233671523,-1.2375756604286574,2,1.255,2.65,22280.895,,tablet,True,False
 rimonabant,Cc1c(C(=O)NN2CCCCC2)nn(-c2ccc(Cl)cc2Cl)c1-c1ccc(Cl)cc1,20.0,0.21223,-1.974223221595543,1,3.33,185.25,49113.48,,tablet,False,False
 sonidegib,Cc1c(C(=O)Nc2ccc(N3C[C@@H](C)O[C@@H](C)C3)nc2)cccc1-c1ccc(OC(F)(F)F)cc1,200.0,0.1,-3.3010299956639813,1,3.0,,2740.0,,capsule,False,False
 sonidegib,Cc1c(C(=O)Nc2ccc(N3C[C@@H](C)O[C@@H](C)C3)nc2)cccc1-c1ccc(OC(F)(F)F)cc1,800.0,0.256,-3.494850021680094,1,2.49,280.0,10900.0,,,False,False
@@ -2407,12 +2217,6 @@ Losmapimod,Cc1c(F)cc(C(=O)NC2CC2)cc1-c1ccc(C(=O)NCC(C)(C)C)cn1,2.5,0.01204999999
 Losmapimod,Cc1c(F)cc(C(=O)NC2CC2)cc1-c1ccc(C(=O)NCC(C)(C)C)cn1,7.5,0.0275599999999999,-2.434782050156112,1,4.0,7.9,269.14,,tablet,False,False
 Losmapimod,Cc1c(F)cc(C(=O)NC2CC2)cc1-c1ccc(C(=O)NCC(C)(C)C)cn1,15.0,0.0459,-2.51427857351842,1,3.5,9.44,528.0,62.0,tablet,False,False
 Losmapimod,Cc1c(F)cc(C(=O)NC2CC2)cc1-c1ccc(C(=O)NCC(C)(C)C)cn1,20.0,0.0563899999999999,-2.549827901075628,1,4.0,9.03,682.8,,tablet,False,False
-4-aminoantipyrine,Cc1c(N)c(=O)n(-c2ccccc2)n1C,750.0,1.01,-2.870739889609057,1,3.43,4.12,10600.0,,tablet,True,False
-4-aminoantipyrine,Cc1c(N)c(=O)n(-c2ccccc2)n1C,1500.0,2.32,-2.810603274164781,1,4.6,4.76,29000.0,,tablet,True,False
-4-aminoantipyrine,Cc1c(N)c(=O)n(-c2ccccc2)n1C,3000.0,4.67,-2.8078043741535503,1,6.87,5.35,71700.0,,tablet,True,False
-4-formylaminoantipyrine,Cc1c(NC=O)c(=O)n(-c2ccccc2)n1C,750.0,1.61,-2.66823538735985,1,6.53,9.64,34400.0,,tablet,True,False
-4-formylaminoantipyrine,Cc1c(NC=O)c(=O)n(-c2ccccc2)n1C,1500.0,2.51,-2.7764175375746434,1,8.0,9.98,73300.0,,tablet,True,False
-4-formylaminoantipyrine,Cc1c(NC=O)c(=O)n(-c2ccccc2)n1C,3000.0,3.1,-2.98575956088539,1,8.93,10.29,81000.0,,tablet,True,False
 deferiprone,Cc1c(O)c(=O)ccn1C,1407.5,24.6,-1.7575132964200049,1,0.75,2.13,71666.67,,tablet,False,False
 deferiprone,Cc1c(O)c(=O)ccn1C,2310.0,34.07000000000001,-1.8312398463242667,1,0.82,1.85,95400.0,,tablet,False,False
 deferiprone,Cc1c(O)c(=O)ccn1C,3500.0,54.390000000000015,-1.8085489855351045,1,0.82,1.84,152100.0,,tablet,False,False
@@ -2446,8 +2250,6 @@ sulfamethoxazole,Cc1cc(NS(=O)(=O)c2ccc(N)cc2)no1,1200.0,94.42,-1.104117249952388
 ceritinib,Cc1cc(Nc2ncc(Cl)c(=Nc3ccccc3S(=O)(=O)C(C)C)[nH]2)c(OC(C)C)cc1C1CCNCC1,500.0,0.159,-3.4975728800155674,1,8.0,36.2,6910.0,,capsule,False,False
 ceritinib,Cc1cc(Nc2ncc(Cl)c(=Nc3ccccc3S(=O)(=O)C(C)C)[nH]2)c(OC(C)C)cc1C1CCNCC1,750.0,0.2134994145191035,-3.545664574997736,2,8.01,36.150000000000006,9795.0,,capsule,False,False
 tucatinib,Cc1cc(Nc2ncnc3ccc(NC4=NC(C)(C)CO4)cc23)ccc1Oc1ccn2ncnc2c1,300.0,0.4028786727997867,-2.871946976982617,4,2.0,8.325,2620.0,,,False,False
-deacetylmetipranolol,Cc1cc(OCC(O)CNC(C)C)c(C)c(C)c1O,40.0,0.0219999999999999,-3.2596373105057563,1,1.0,2.99,108.58,,tablet,True,False
-deacetylmoxisylyte,Cc1cc(OCCN(C)C)c(C(C)C)cc1O,120.0,3.026,-1.598312322360457,1,0.67,2.09,4192.0,114.0,tablet,True,False
 olanzapine,Cc1cc2c(s1)Nc1ccccc1N=C2N1CCN(C)CC1,2.5,0.00416,-2.7788466780452947,1,6.9,29.75,161.66,60.0,capsule,False,False
 olanzapine,Cc1cc2c(s1)Nc1ccccc1N=C2N1CCN(C)CC1,5.0,0.007633216884119,-2.816262402083079,2,5.5,33.765,331.045,60.0,capsule,False,False
 olanzapine,Cc1cc2c(s1)Nc1ccccc1N=C2N1CCN(C)CC1,10.0,0.0163,-2.7878123955960423,1,5.29,29.15,641.51,60.0,capsule,False,False
@@ -2562,7 +2364,6 @@ orphenadrine,Cc1ccccc1C(OCCN(C)C)c1ccccc1,100.0,0.1468799999999999,-2.8330373361
 metolazone,Cc1ccccc1N1C(=O)c2cc(S(N)(=O)=O)c(Cl)cc2NC1C,0.5,0.0075357149627623,-1.821845541361256,2,1.59,7.035,42.355,,tablet,False,False
 metolazone,Cc1ccccc1N1C(=O)c2cc(S(N)(=O)=O)c(Cl)cc2NC1C,1.0,0.0169033132846788,-1.772028159278781,2,1.515,7.59,108.155,,tablet,False,False
 metolazone,Cc1ccccc1N1C(=O)c2cc(S(N)(=O)=O)c(Cl)cc2NC1C,2.0,0.0326003680960813,-1.7878074918784217,2,1.75,7.51,175.34,,tablet,False,False
-telotristat,Cc1ccn(-c2cc(Cl)ccc2[C@@H](Oc2cc(-c3ccc(C[C@H](N)C(=O)O)cc3)nc(N)n2)C(F)(F)F)n1,500.0,0.61,-2.913640169325252,1,2.0,5.0,2320.0,,tablet,True,False
 nevirapine,Cc1ccnc2c1NC(=O)c1cccnc1N2C1CC1,2.5,0.0346399999999999,-1.8583621253267288,1,,,,,tablet,False,False
 nevirapine,Cc1ccnc2c1NC(=O)c1cccnc1N2C1CC1,12.5,0.1433399999999999,-1.9405426128745351,1,0.94,40.14,6630.0,,tablet,False,False
 nevirapine,Cc1ccnc2c1NC(=O)c1cccnc1N2C1CC1,25.0,0.39987,-1.7960211859918418,1,1.0,49.32,25160.0,,tablet,False,False
@@ -2794,11 +2595,6 @@ Tanaproget,Cn1c(C#N)ccc1-c1ccc2c(c1)C(C)(C)OC(=S)N2,1.0,0.00199,-2.7011469235902
 Tanaproget,Cn1c(C#N)ccc1-c1ccc2c(c1)C(C)(C)OC(=S)N2,3.0,0.0039299999999999,-2.882728704344236,1,3.4,18.0,45.5,,capsule,False,False
 Tanaproget,Cn1c(C#N)ccc1-c1ccc2c(c1)C(C)(C)OC(=S)N2,7.0,0.0100399999999999,-2.8433643272052564,1,3.7,30.2,134.9,,capsule,False,False
 Tanaproget,Cn1c(C#N)ccc1-c1ccc2c(c1)C(C)(C)OC(=S)N2,15.0,0.01621,-2.966308244207166,1,1.9,16.5,152.9,,capsule,False,False
-dabigatran,Cn1c(CNc2ccc(C(=N)N)cc2)nc2cc(C(=O)N(CCC(=O)O)c3ccccn3)ccc21,10.0,0.0082999999999999,-3.0809219076239263,1,1.25,,,5.0,solution,True,False
-dabigatran,Cn1c(CNc2ccc(C(=N)N)cc2)nc2cc(C(=O)N(CCC(=O)O)c3ccccn3)ccc21,30.0,0.0215,-3.144682794804057,1,1.25,,,5.0,solution,True,False
-dabigatran,Cn1c(CNc2ccc(C(=N)N)cc2)nc2cc(C(=O)N(CCC(=O)O)c3ccccn3)ccc21,100.0,0.0822,-3.085128182459949,1,1.5,7.1,548.0,5.0,solution,True,False
-dabigatran,Cn1c(CNc2ccc(C(=N)N)cc2)nc2cc(C(=O)N(CCC(=O)O)c3ccccn3)ccc21,200.0,0.161,-3.0942041196321317,1,1.5,8.4,1110.0,5.0,solution,True,False
-dabigatran,Cn1c(CNc2ccc(C(=N)N)cc2)nc2cc(C(=O)N(CCC(=O)O)c3ccccn3)ccc21,400.0,0.344,-3.065501548756432,1,1.5,8.9,2380.0,5.0,solution,True,False
 doravirine,Cn1c(Cn2ccc(C(F)(F)F)c(Oc3cc(Cl)cc(C#N)c3)c2=O)n[nH]c1=O,6.0,0.0664599999999999,-1.9555909134409517,1,1.0,11.68,1226.17,64.0,tablet,False,False
 doravirine,Cn1c(Cn2ccc(C(F)(F)F)c(Oc3cc(Cl)cc(C#N)c3)c2=O)n[nH]c1=O,12.0,0.12547,-1.9806413480547636,1,1.0,11.67,2043.62,64.0,tablet,False,False
 doravirine,Cn1c(Cn2ccc(C(F)(F)F)c(Oc3cc(Cl)cc(C#N)c3)c2=O)n[nH]c1=O,25.0,0.1963899999999999,-2.104820638537739,1,5.0,15.67,4772.7,64.0,tablet,False,False
@@ -2829,11 +2625,6 @@ selumetinib,Cn1cnc2c(F)c(Nc3ccc(Br)cc3Cl)c(C(=O)NOCCO)cc21,25.0,0.409,-1.7862167
 selumetinib,Cn1cnc2c(F)c(Nc3ccc(Br)cc3Cl)c(C(=O)NOCCO)cc21,50.0,0.9331489698863734,-1.7290190233599587,2,1.3199999999999998,8.535,2812.0,62.0,capsule,False,False
 selumetinib,Cn1cnc2c(F)c(Nc3ccc(Br)cc3Cl)c(C(=O)NOCCO)cc21,75.0,1.44,-1.7166987712964503,1,1.27,9.27,4480.0,62.0,capsule,False,False
 talazoparib,Cn1ncnc1[C@H]1c2n[nH]c(=O)c3cc(F)cc(c23)N[C@@H]1c1ccc(F)cc1,1.0,0.0076999999999999,-2.113509274827518,1,0.5,76.1,115.8,,solution,False,False
-tedizolid,Cn1nnc(-c2ccc(-c3ccc(N4C[C@H](CO)OC4=O)cc3F)cn2)n1,200.0,2.187684587130375,-1.961045288579886,4,2.75,11.0,26400.0,95.2,tablet,True,False
-tedizolid,Cn1nnc(-c2ccc(-c3ccc(N4C[C@H](CO)OC4=O)cc3F)cn2)n1,400.0,4.421221550657691,-1.9565177130614744,2,2.75,10.95,57943.0,,capsule,True,False
-tedizolid,Cn1nnc(-c2ccc(-c3ccc(N4C[C@H](CO)OC4=O)cc3F)cn2)n1,600.0,6.024616170346457,-1.9982218672546637,2,2.5,10.9,79119.0,,capsule,True,False
-tedizolid,Cn1nnc(-c2ccc(-c3ccc(N4C[C@H](CO)OC4=O)cc3F)cn2)n1,800.0,5.500000000000001,-2.1627272974977,1,4.0,10.6,91800.0,,capsule,True,False
-tedizolid,Cn1nnc(-c2ccc(-c3ccc(N4C[C@H](CO)OC4=O)cc3F)cn2)n1,1200.0,9.500000000000002,-2.101457640758777,1,4.0,10.4,123100.0,,capsule,True,False
 temozolomide,Cn1nnc2c(C(N)=O)ncn2c1=O,259.5,7.500000000000001,-1.5390760987927763,1,1.0,1.8,23400.0,,capsule,False,True
 pexidartinib,FC(F)(F)c1ccc(CNc2ccc(Cc3c[nH]c4ncc(Cl)cc34)cn2)cn1,200.0,2.487,-1.9053542103940453,1,2.5,25.5,44542.0,,,False,False
 pexidartinib,FC(F)(F)c1ccc(CNc2ccc(Cc3c[nH]c4ncc(Cl)cc34)cn2)cn1,400.0,4.657000000000001,-1.933953753395231,1,2.5,26.7,87891.0,,,False,False
@@ -2860,7 +2651,6 @@ Zagociguat,Fc1ccccc1Cc1nc(-c2nc(C(F)(F)F)n[nH]2)cn2ccnc12,10.0,1.190170000000000
 Zagociguat,Fc1ccccc1Cc1nc(-c2nc(C(F)(F)F)n[nH]2)cn2ccnc12,20.0,2.1917,-0.9602488880328092,1,4.0,67.1,194329.0,,tablet,False,False
 Zagociguat,Fc1ccccc1Cc1nc(-c2nc(C(F)(F)F)n[nH]2)cn2ccnc12,30.0,3.36505,-0.9501297330949507,1,4.5,65.7,271998.0,,tablet,False,False
 Zagociguat,Fc1ccccc1Cc1nc(-c2nc(C(F)(F)F)n[nH]2)cn2ccnc12,50.0,5.727439999999999,-0.9410094560695909,1,5.0,57.0,478098.0,,tablet,False,False
-diphenoxylic acid,N#CC(CCN1CCC(C(=O)O)(c2ccccc2)CC1)(c1ccccc1)c1ccccc1,5.0,0.0401,-2.0958256317158366,1,2.0,5.42,339.8,,solution,True,False
 momelotinib,N#CCNC(=O)c1ccc(-c2ccnc(Nc3ccc(N4CCOCC4)cc3)n2)cc1,200.0,0.4837207061099389,-2.6164353175026958,4,4.0,7.5,4815.0,,tablet,False,False
 ruxolitinib,N#CC[C@H](C1CCCC1)n1cc(-c2ncnc3[nH]ccc23)cn1,10.0,0.1862740799724946,-1.729847572951746,3,1.0,3.5,701.59,,tablet,False,False
 ruxolitinib,N#CC[C@H](C1CCCC1)n1cc(-c2ncnc3[nH]ccc23)cn1,25.0,0.3968156914577661,-1.799351171352244,3,0.5,2.7,1231.62,,tablet,False,False
@@ -2896,17 +2686,6 @@ amiloride,N=C(N)NC(=O)c1nc(Cl)c(N)nc1N,10.0,0.0191774346563871,-2.71720948835872
 amiloride,N=C(N)NC(=O)c1nc(Cl)c(N)nc1N,20.0,0.0475,-2.6243363860391145,1,4.0,9.17,,50.0,tablet,False,False
 desmopressin,N=C(N)NCCC[C@@H](NC(=O)[C@@H]1CCCN1C(=O)[C@@H]1CSSCCC(=O)N[C@@H](Cc2ccc(O)cc2)C(=O)N[C@@H](Cc2ccccc2)C(=O)N[C@@H](CCC(N)=O)C(=O)N[C@@H](CC(N)=O)C(=O)N1)C(=O)NCC(N)=O,0.4,3.130495168499707e-05,-4.106446953481715,2,1.25,3.48,0.1255,0.16,tablet,False,False
 desmopressin,N=C(N)NCCC[C@@H](NC(=O)[C@@H]1CCCN1C(=O)[C@@H]1CSSCCC(=O)N[C@@H](Cc2ccc(O)cc2)C(=O)N[C@@H](Cc2ccccc2)C(=O)N[C@@H](CCC(N)=O)C(=O)N[C@@H](CC(N)=O)C(=O)N1)C(=O)NCC(N)=O,0.6,6.000000000000003e-05,-4.0,1,1.0,2.69,0.21,0.16,tablet,False,False
-melagatran,N=C(N)c1ccc(CNC(=O)[C@@H]2CCN2C(=O)[C@H](NCC(=O)O)C2CCCCC2)cc1,5.0,0.01976,-2.4031830640844096,1,1.6,3.3,118.55,,solution,True,False
-melagatran,N=C(N)c1ccc(CNC(=O)[C@@H]2CCN2C(=O)[C@H](NCC(=O)O)C2CCCCC2)cc1,10.0,0.03565,-2.447940465812116,1,1.7,2.4,178.25,,solution,True,False
-melagatran,N=C(N)c1ccc(CNC(=O)[C@@H]2CCN2C(=O)[C@H](NCC(=O)O)C2CCCCC2)cc1,20.0,0.0783546093092168,-2.4069654461844783,2,1.85,2.6,394.085,17.6,solution,True,False
-melagatran,N=C(N)c1ccc(CNC(=O)[C@@H]2CCN2C(=O)[C@H](NCC(=O)O)C2CCCCC2)cc1,24.0,0.0859,-2.4462180778803635,2,2.2,2.95,508.98,,tablet,True,False
-melagatran,N=C(N)c1ccc(CNC(=O)[C@@H]2CCN2C(=O)[C@H](NCC(=O)O)C2CCCCC2)cc1,30.0,0.13272,-2.3541848817033584,1,1.8,2.9,708.71,,solution,True,False
-melagatran,N=C(N)c1ccc(CNC(=O)[C@@H]2CCN2C(=O)[C@H](NCC(=O)O)C2CCCCC2)cc1,36.0,0.144713590679814,-2.395793181257912,5,2.1,3.09,811.79,,tablet,True,False
-melagatran,N=C(N)c1ccc(CNC(=O)[C@@H]2CCN2C(=O)[C@H](NCC(=O)O)C2CCCCC2)cc1,40.0,0.1615,-2.393887464660841,1,1.7,2.9,862.05,,solution,True,False
-melagatran,N=C(N)c1ccc(CNC(=O)[C@@H]2CCN2C(=O)[C@H](NCC(=O)O)C2CCCCC2)cc1,50.0,0.1997964420640805,-2.3983822542082924,5,1.7,2.9,1031.28,19.0,solution,True,False
-melagatran,N=C(N)c1ccc(CNC(=O)[C@@H]2CCN2C(=O)[C@H](NCC(=O)O)C2CCCCC2)cc1,62.5,0.28262,-2.344677125286963,1,1.6,2.8,1462.95,,solution,True,False
-melagatran,N=C(N)c1ccc(CNC(=O)[C@@H]2CCN2C(=O)[C@H](NCC(=O)O)C2CCCCC2)cc1,78.0,0.323,-2.3828920803593774,1,1.6,2.9,1698.33,,solution,True,False
-melagatran,N=C(N)c1ccc(CNC(=O)[C@@H]2CCN2C(=O)[C@H](NCC(=O)O)C2CCCCC2)cc1,98.0,0.43038,-2.3573739944734142,1,1.8,3.0,2406.61,,solution,True,False
 darifenacin,NC(=O)C(c1ccccc1)(c1ccccc1)[C@@H]1CCN(CCc2ccc3c(c2)CCO3)C1,5.0,0.00135,-3.5686362358410126,1,0.9,,3.0,,tablet,False,False
 darifenacin,NC(=O)C(c1ccccc1)(c1ccccc1)[C@@H]1CCN(CCc2ccc3c(c2)CCO3)C1,5.25,0.0059999999999999,-2.9420080530223136,1,,,23.9,,capsule,False,False
 darifenacin,NC(=O)C(c1ccccc1)(c1ccccc1)[C@@H]1CCN(CCc2ccc3c(c2)CCO3)C1,15.0,0.0033899999999999,-3.6458915608525992,1,1.1,3.8,13.2,,tablet,False,False
@@ -2925,15 +2704,6 @@ carbamazepine,NC(=O)N1c2ccccc2C=Cc2ccccc21,100.0,1.01,-1.9956786262173571,1,7.9,
 carbamazepine,NC(=O)N1c2ccccc2C=Cc2ccccc21,200.0,1.72,-2.065501548756432,1,9.6,34.83,118000.0,,tablet,False,True
 carbamazepine,NC(=O)N1c2ccccc2C=Cc2ccccc21,600.0,4.55,-2.1201398537265312,1,12.5,30.54,292000.0,,tablet,False,True
 oxcarbazepine,NC(=O)N1c2ccccc2CC(=O)c2ccccc21,300.0,0.3956789923662868,-2.879778261672716,2,1.25,,1387.505,,tablet,False,False
-licarbazepine,NC(=O)N1c2ccccc2CC(O)c2ccccc21,300.0,2.33,-2.1097653336936437,1,4.0,13.9,56100.0,,tablet,True,False
-licarbazepine,NC(=O)N1c2ccccc2CC(O)c2ccccc21,600.0,5.170000000000001,-2.064660707289701,1,4.0,16.1,135400.0,,tablet,True,False
-(r)-licarbazepine,NC(=O)N1c2ccccc2C[C@@H](O)c2ccccc21,300.0,0.76287,-2.594670718197124,1,3.5,15.8,16249.07,,tablet,True,False
-(r)-licarbazepine,NC(=O)N1c2ccccc2C[C@@H](O)c2ccccc21,600.0,0.99,-2.7825160557860937,1,5.5,11.9,26300.0,,tablet,True,False
-eslicarbazepine,NC(=O)N1c2ccccc2C[C@H](O)c2ccccc21,300.0,2.79718,-2.030400840371213,1,4.0,11.2,61283.65,,tablet,True,False
-eslicarbazepine,NC(=O)N1c2ccccc2C[C@H](O)c2ccccc21,400.0,6.890406374082734,-1.7638151553684749,2,1.75,9.685,117505.0,,tablet,True,False
-eslicarbazepine,NC(=O)N1c2ccccc2C[C@H](O)c2ccccc21,600.0,8.031727177348536,-1.873342302498089,4,3.0,10.5,176399.5,,tablet,True,False
-eslicarbazepine,NC(=O)N1c2ccccc2C[C@H](O)c2ccccc21,800.0,13.008580134593032,-1.7888600903813705,3,3.0,10.29,243600.0,,tablet,True,False
-eslicarbazepine,NC(=O)N1c2ccccc2C[C@H](O)c2ccccc21,1600.0,22.865480532890626,-1.8449396498633504,2,2.4,11.085,577135.0,,tablet,True,False
 hydroxyurea,NC(=O)NO,1107.0,28.32,-1.5920543718609914,1,0.5,3.14,82490.0,,capsule,False,False
 hydroxyurea,NC(=O)NO,2000.0,60.368660000000006,-1.5202184597155026,1,1.22,3.32,285890.74,108.09,capsule,False,False
 felbamate,NC(=O)OCC(COC(N)=O)c1ccccc1,600.0,0.0089,-4.828761243738731,1,3.0,18.6,244.0,,,False,False
@@ -2979,7 +2749,6 @@ samidorphan,NC(=O)c1ccc2c(c1O)[C@]13CCN(CC4CC4)[C@H](C2)[C@]1(O)CCC(=O)C3,18.6,0
 samidorphan,NC(=O)c1ccc2c(c1O)[C@]13CCN(CC4CC4)[C@H](C2)[C@]1(O)CCC(=O)C3,37.2,0.0922999999999999,-2.605341238855986,1,1.0,7.4,772.9,,solution,False,False
 samidorphan,NC(=O)c1ccc2c(c1O)[C@]13CCN(CC4CC4)[C@H](C2)[C@]1(O)CCC(=O)C3,55.7,0.1365,-2.610722543796954,1,1.0,8.3,1340.0,,solution,False,False
 niraparib,NC(=O)c1cccc2cn(-c3ccc([C@@H]4CCCNC4)cc3)nc12,300.0,1.010296491135152,-2.4726724100777484,2,3.755,73.05,38208.05,72.7,capsule,False,False
-salicylamide,NC(=O)c1ccccc1O,1500.0,30.9,-1.6861327796308467,1,0.2,0.52,14639.33,,solution,True,False
 nicotinamide,NC(=O)c1cccnc1,187.5,3.3000000000000003,-1.75448733218585,1,0.3,0.6,3000.0,,powder,False,False
 nicotinamide,NC(=O)c1cccnc1,1000.0,17.097779999999997,-1.767060275358686,1,1.87,1.66,,,tablet,False,False
 nicotinamide,NC(=O)c1cccnc1,1875.0,42.1,-1.6487191762280693,1,0.5,3.5,187100.0,,powder,False,False
@@ -3134,7 +2903,6 @@ Sitafloxacin,N[C@@H]1CN(c2c(F)cc3c(=O)c(C(=O)O)cn([C@@H]4C[C@@H]4F)c3c2Cl)CC12CC
 cycloserine,N[C@@H]1CONC1=O,250.0,19.420000000000005,-1.109690783100051,1,0.86,12.33,283490.0,,capsule,False,False
 cycloserine,N[C@@H]1CONC1=O,500.0,42.92000000000001,-1.0663102910421052,1,0.83,13.27,643290.0,,capsule,False,False
 cycloserine,N[C@@H]1CONC1=O,1000.0,84.75999999999999,-1.071809051961243,1,0.84,13.13,1224010.0,,capsule,False,False
-(+)-tranylcypromine,N[C@@H]1C[C@H]1c1ccccc1,20.0,0.0143,-3.1456939581989194,1,0.8,1.18,26.3,,solution,True,False
 trovafloxacin,N[C@@H]1[C@H]2CN(c3nc4c(cc3F)c(=O)c(C(=O)O)cn4-c3ccc(F)cc3F)C[C@@H]12,30.0,0.2999999999999999,-2.0,1,0.7,,,,powder,False,False
 trovafloxacin,N[C@@H]1[C@H]2CN(c3nc4c(cc3F)c(=O)c(C(=O)O)cn4-c3ccc(F)cc3F)C[C@@H]12,100.0,1.5,-1.8239087409443189,1,0.7,7.2,9800.0,,powder,False,False
 trovafloxacin,N[C@@H]1[C@H]2CN(c3nc4c(cc3F)c(=O)c(C(=O)O)cn4-c3ccc(F)cc3F)C[C@@H]12,200.0,2.054507240191672,-1.9883223195867767,2,1.275,9.85,21440.0,91.0,tablet,False,False
@@ -3151,7 +2919,6 @@ rimegepant,N[C@@H]1c2cccnc2[C@H](OC(=O)N2CCC(n3c(=O)[nH]c4ncccc43)CC2)CC[C@H]1c1
 droxidopa,N[C@H](C(=O)O)[C@H](O)c1ccc(O)c(O)c1,200.0,0.965,-2.3165026823201886,1,2.2,2.1,3193.0,90.0,tablet,False,False
 droxidopa,N[C@H](C(=O)O)[C@H](O)c1ccc(O)c(O)c1,600.0,3.966,-2.17979854051436,1,2.05,2.85,16637.0,90.0,,False,False
 droxidopa,N[C@H](C(=O)O)[C@H](O)c1ccc(O)c(O)c1,2000.0,7.923000000000001,-2.402140339737395,1,2.06,3.35,37711.0,90.0,,False,False
-(-)-tranylcypromine,N[C@H]1C[C@@H]1c1ccccc1,20.0,0.0561,-2.55206713440782,1,1.2,1.72,196.8,,solution,True,False
 ambroxol,Nc1c(Br)cc(Br)cc1CN[C@H]1CC[C@H](O)CC1,15.0,0.0257,-2.7661581357243867,1,3.25,9.09,294.0,,solution,False,False
 ambroxol,Nc1c(Br)cc(Br)cc1CN[C@H]1CC[C@H](O)CC1,30.0,0.0631117640787247,-2.677010935122476,3,2.0,9.53,712.14,,tablet,False,False
 ambroxol,Nc1c(Br)cc(Br)cc1CN[C@H]1CC[C@H](O)CC1,60.0,0.1685,-2.551551345176286,1,1.5,,1353.9,,tablet,False,False
@@ -3159,7 +2926,6 @@ bromfenac,Nc1c(CC(=O)O)cccc1C(=O)c1ccc(Br)cc1,50.0,4.137691745835627,-1.08221187
 tacrine,Nc1c2c(nc3ccccc13)CCCC2,25.0,0.00939,-3.4252744164059266,1,1.5,1.59,29.0,,capsule,False,False
 tacrine,Nc1c2c(nc3ccccc13)CCCC2,40.0,0.0133,-3.4782083503608767,1,1.9,2.3,56.0,,capsule,False,False
 tacrine,Nc1c2c(nc3ccccc13)CCCC2,50.0,0.02217,-3.3532043112215306,1,1.5,2.14,83.2,,capsule,False,False
-1-hydroxytacrine,Nc1c2c(nc3ccccc13)CCCC2O,40.0,0.0322999999999999,-3.0928574689968595,1,1.7,3.2,144.0,,capsule,True,False
 amrinone,Nc1cc(-c2ccncc2)c[nH]c1=O,75.0,0.9515513648773776,-1.8966290268582904,2,0.69,4.125,3600.0,93.0,capsule,False,False
 amrinone,Nc1cc(-c2ccncc2)c[nH]c1=O,150.0,1.62,-1.9665762445130504,1,0.5,4.21,7740.0,,capsule,False,False
 amrinone,Nc1cc(-c2ccncc2)c[nH]c1=O,225.0,2.33,-1.984826597085344,1,0.62,4.18,10810.0,,capsule,False,False
@@ -3182,14 +2948,6 @@ lenalidomide,Nc1cccc2c1CN(C1CCC(=O)NC1=O)C2=O,50.0,0.808,-1.7915586435614326,1,0
 lenalidomide,Nc1cccc2c1CN(C1CCC(=O)NC1=O)C2=O,100.0,1.735,-1.7607005208731077,1,1.5,4.71,5997.0,,capsule,False,False
 lenalidomide,Nc1cccc2c1CN(C1CCC(=O)NC1=O)C2=O,200.0,3.519,-1.7546107288287895,1,0.62,5.16,12111.0,,capsule,False,False
 lenalidomide,Nc1cccc2c1CN(C1CCC(=O)NC1=O)C2=O,400.0,4.586,-1.9406259409340425,1,0.88,8.72,21895.0,,capsule,False,False
-cidofovir,Nc1ccn(C[C@@H](CO)OCP(=O)(O)O)c(=O)n1,3.5,0.00176,-3.2985553765361257,1,9.0,,,,solution,True,False
-cidofovir,Nc1ccn(C[C@@H](CO)OCP(=O)(O)O)c(=O)n1,7.0,0.0034399999999999,-3.308539597442727,1,12.0,,,,solution,True,False
-cidofovir,Nc1ccn(C[C@@H](CO)OCP(=O)(O)O)c(=O)n1,14.0,0.0054099999999999,-3.412930770571669,1,9.15,24.2,195.0,,solution,True,False
-cidofovir,Nc1ccn(C[C@@H](CO)OCP(=O)(O)O)c(=O)n1,28.0,0.0103999999999999,-3.430124692043439,1,9.0,45.5,491.0,,solution,True,False
-cidofovir,Nc1ccn(C[C@@H](CO)OCP(=O)(O)O)c(=O)n1,42.0,0.0121999999999999,-3.5368894597231524,1,15.0,55.6,565.0,,solution,True,False
-cidofovir,Nc1ccn(C[C@@H](CO)OCP(=O)(O)O)c(=O)n1,70.0,0.0183,-3.582646950283827,1,7.0,64.5,1030.0,,solution,True,False
-cidofovir,Nc1ccn(C[C@@H](CO)OCP(=O)(O)O)c(=O)n1,105.0,0.0257999999999999,-3.609569593106708,1,10.0,56.8,1510.0,,solution,True,False
-cidofovir,Nc1ccn(C[C@@H](CO)OCP(=O)(O)O)c(=O)n1,140.0,0.0311,-3.6533676466514007,1,11.5,63.0,1740.0,,solution,True,False
 lamivudine,Nc1ccn([C@@H]2CS[C@H](CO)O2)c(=O)n1,100.0,1.176,-1.92959267825988,1,0.83,4.92,4162.0,,tablet,False,False
 lamivudine,Nc1ccn([C@@H]2CS[C@H](CO)O2)c(=O)n1,150.0,1.53,-1.9913998282380825,1,1.0,7.53,6452.0,,tablet,False,False
 lamivudine,Nc1ccn([C@@H]2CS[C@H](CO)O2)c(=O)n1,300.0,2.64,-2.0555173278498318,1,1.0,5.42,11800.0,,tablet,False,False
@@ -3227,18 +2985,6 @@ Peldesine,Nc1nc(=O)c2[nH]cc(Cc3cccnc3)c2[nH]1,275.0,0.9246,-2.4733788047282,1,1.
 Peldesine,Nc1nc(=O)c2[nH]cc(Cc3cccnc3)c2[nH]1,368.8,0.9505,-2.58883879118013,1,1.4,5.1,3920.1,33.3,capsule,False,False
 folic acid,Nc1nc(=O)c2nc(CNc3ccc(C(=O)N[C@@H](CCC(=O)O)C(=O)O)cc3)cnc2[nH]1,0.4,0.01611,-1.3949644509087444,1,,,84.31,,,False,False
 folic acid,Nc1nc(=O)c2nc(CNc3ccc(C(=O)N[C@@H](CCC(=O)O)C(=O)O)cc3)cnc2[nH]1,2.3,0.133,-1.237876195050507,1,1.0,2.28,433.11,,tablet,False,False
-penciclovir,Nc1nc(=O)c2ncn(CCC(CO)CO)c2[nH]1,125.0,0.84,-2.1726307269461747,1,0.51,2.31,2200.0,,tablet,True,False
-penciclovir,Nc1nc(=O)c2ncn(CCC(CO)CO)c2[nH]1,250.0,1.59,-2.196542884351586,1,0.75,2.17,4260.0,,tablet,True,False
-penciclovir,Nc1nc(=O)c2ncn(CCC(CO)CO)c2[nH]1,500.0,3.34,-2.175223537524454,1,0.75,2.27,9270.0,,tablet,True,False
-penciclovir,Nc1nc(=O)c2ncn(CCC(CO)CO)c2[nH]1,750.0,5.09,-2.1683434810549413,1,0.75,2.16,14100.0,,tablet,True,False
-penciclovir,Nc1nc(=O)c2ncn(CCC(CO)CO)c2[nH]1,1000.0,6.6,-2.1804560644581312,1,0.9,,17900.0,,tablet,True,False
-acyclovir,Nc1nc(=O)c2ncn(COCCO)c2[nH]1,100.0,0.83,-2.0809219076239263,1,0.88,2.76,2280.0,,capsule,True,False
-acyclovir,Nc1nc(=O)c2ncn(COCCO)c2[nH]1,250.0,2.15,-2.065501548756432,1,1.04,2.78,5760.0,,capsule,True,False
-acyclovir,Nc1nc(=O)c2ncn(COCCO)c2[nH]1,300.0,2.01,-2.1739251972991736,1,1.0,2.85,7150.0,,capsule,True,False
-acyclovir,Nc1nc(=O)c2ncn(COCCO)c2[nH]1,500.0,3.28,-2.1830961606243395,1,1.5,2.88,11590.0,,capsule,True,False
-acyclovir,Nc1nc(=O)c2ncn(COCCO)c2[nH]1,750.0,4.170000000000001,-2.2549252084179425,1,1.46,2.88,14110.0,,capsule,True,False
-acyclovir,Nc1nc(=O)c2ncn(COCCO)c2[nH]1,1000.0,5.1850301174139295,-2.2852487166541704,4,1.73,2.705,18846.015,54.2,capsule,True,False
-acyclovir,Nc1nc(=O)c2ncn(COCCO)c2[nH]1,2000.0,6.64364,-2.478623904432695,1,2.07,3.0,28196.04,,tablet,True,False
 emtricitabine,Nc1nc(=O)n([C@@H]2CS[C@H](CO)O2)cc1F,200.0,2.26839,-1.945312271595247,1,1.05,3.38,9372.31,93.0,capsule,False,False
 tioguanine,Nc1nc(=S)c2[nH]cnc2[nH]1,40.0,0.0083599999999999,-3.679853713888946,1,1.22,,23.93,,tablet,False,False
 mirabegron,Nc1nc(CC(=O)Nc2ccc(CCNC[C@H](O)c3ccccc3)cc2)cs1,25.0,0.0098807894421447,-3.403148364016535,2,4.0,43.3,137.9,35.0,OCAS tablet,False,False
@@ -3247,7 +2993,6 @@ mirabegron,Nc1nc(CC(=O)Nc2ccc(CCNC[C@H](O)c3ccccc3)cc2)cs1,100.0,0.0604578201848
 mirabegron,Nc1nc(CC(=O)Nc2ccc(CCNC[C@H](O)c3ccccc3)cc2)cs1,150.0,0.16,-2.9719712763997563,1,4.0,30.7,1176.0,45.2,OCAS tablet,False,False
 cladribine,Nc1nc(Cl)nc2c1ncn2[C@H]1C[C@H](O)[C@@H](CO)O1,10.0,0.0254999999999999,-2.593459819566045,1,0.5,24.0,90.5,40.0,tablet,False,False
 cladribine,Nc1nc(Cl)nc2c1ncn2[C@H]1C[C@H](O)[C@@H](CO)O1,19.6,0.0424,-2.6648902147637434,1,1.08,,146.0,37.2,solution,False,False
-fludarabine,Nc1nc(F)nc2c1ncn2[C@@H]1O[C@H](CO)[C@@H](O)[C@@H]1O,74.0,0.279,-2.423627516457379,1,2.0,9.7,3029.0,58.0,tablet,True,False
 triamterene,Nc1nc(N)c2nc(-c3ccccc3)c(N)nc2n1,50.0,0.026,-3.283996656365201,1,1.5,,,52.0,tablet,False,False
 triamterene,Nc1nc(N)c2nc(-c3ccccc3)c(N)nc2n1,100.0,0.118,-2.9281179926938745,1,1.16,,473.2,,suspension,False,False
 abacavir,Nc1nc(NC2CC2)c2ncn([C@H]3C=C[C@@H](CO)C3)c2n1,100.0,0.58,-2.2365720064370627,1,1.15,0.87,990.0,,caplet,False,False
@@ -3256,8 +3001,6 @@ abacavir,Nc1nc(NC2CC2)c2ncn([C@H]3C=C[C@@H](CO)C3)c2n1,600.0,4.73,-2.10329010964
 abacavir,Nc1nc(NC2CC2)c2ncn([C@H]3C=C[C@@H](CO)C3)c2n1,900.0,8.1,-2.0457574905606752,1,1.6,1.74,25000.0,,caplet,False,False
 abacavir,Nc1nc(NC2CC2)c2ncn([C@H]3C=C[C@@H](CO)C3)c2n1,1200.0,9.62,-2.096006174009812,1,1.56,1.67,32800.0,,caplet,False,False
 leucovorin,Nc1nc2c(c(=O)[nH]1)N(C=O)C(CNc1ccc(C(=O)N[C@@H](CCC(=O)O)C(=O)O)cc1)CN2,75.0,0.64,-2.068881289407813,1,2.4,9.0,7900.0,,tablet,False,False
-ganciclovir,Nc1nc2c(ncn2COC(CO)CO)c(=O)[nH]1,360.0,2.9800000000000004,-2.082086236691032,1,1.03,3.69,10800.0,60.9,solution,True,False
-ganciclovir,Nc1nc2c(ncn2COC(CO)CO)c(=O)[nH]1,900.0,6.3990624313253885,-2.1481261621319545,2,1.91,3.495,27370.0,59.1,tablet,True,False
 riluzole,Nc1nc2ccc(OC(F)(F)F)cc2s1,25.0,0.091,-2.438898616350944,1,1.0,9.7,567.0,,tablet,False,False
 riluzole,Nc1nc2ccc(OC(F)(F)F)cc2s1,50.0,0.17758,-2.449575952683668,1,0.83,10.96,768.15,,tablet,False,False
 riluzole,Nc1nc2ccc(OC(F)(F)F)cc2s1,75.0,0.2469999999999999,-2.4823643101320343,1,0.9,10.6,1340.0,,tablet,False,False
@@ -3265,9 +3008,6 @@ riluzole,Nc1nc2ccc(OC(F)(F)F)cc2s1,100.0,0.369783720571904,-2.4320522122179904,2
 riluzole,Nc1nc2ccc(OC(F)(F)F)cc2s1,150.0,0.557,-2.4302360638819525,1,1.1,10.6,2525.0,,tablet,False,False
 riluzole,Nc1nc2ccc(OC(F)(F)F)cc2s1,250.0,0.889,-2.449038247701824,1,1.3,9.4,3885.0,,tablet,False,False
 azacitidine,Nc1ncn([C@@H]2O[C@H](CO)[C@@H](O)[C@H]2O)c(=O)n1,300.0,0.145,-3.315753252484688,1,1.0,0.5,242.0,,tablet,False,False
-adefovir,Nc1ncnc2c1ncn2CCOCP(=O)(O)O,10.0,0.023883048381645,-2.6219102415780955,2,1.0,7.1,227.5,59.0,tablet,True,False
-adefovir,Nc1ncnc2c1ncn2CCOCP(=O)(O)O,20.0,0.0474,-2.625251653989896,1,0.75,7.4,427.0,59.0,tablet,True,False
-adefovir,Nc1ncnc2c1ncn2CCOCP(=O)(O)O,40.0,0.0835999999999999,-2.679853713888946,1,1.0,7.7,692.0,59.0,tablet,True,False
 lamotrigine,Nc1nnc(-c2cccc(Cl)c2Cl)c(N)n1,25.0,0.29,-1.9355420107730816,1,1.6,23.8,11733.17,98.0,tablet,False,False
 lamotrigine,Nc1nnc(-c2cccc(Cl)c2Cl)c(N)n1,50.0,0.37,-2.130768280269024,1,2.0,28.01,14140.0,98.0,tablet,False,False
 lamotrigine,Nc1nnc(-c2cccc(Cl)c2Cl)c(N)n1,100.0,1.7,-1.769551078621726,1,1.0,31.7,66500.0,98.0,tablet,False,False
@@ -3337,9 +3077,6 @@ Encenicline,O=C(N[C@H]1CN2CCC1CC2)c1cc2cccc(Cl)c2s1,7.0,0.00466,-3.1767121233242
 Encenicline,O=C(N[C@H]1CN2CCC1CC2)c1cc2cccc(Cl)c2s1,20.0,0.0103999999999999,-3.283996656365201,1,5.0,57.0,852.0,,solution,False,False
 Encenicline,O=C(N[C@H]1CN2CCC1CC2)c1cc2cccc(Cl)c2s1,60.0,0.0355999999999999,-3.226701252410769,1,6.0,63.0,2800.0,,solution,False,False
 Encenicline,O=C(N[C@H]1CN2CCC1CC2)c1cc2cccc(Cl)c2s1,180.0,0.1,-3.255272505103306,1,5.0,60.6,8890.0,,solution,False,False
-roflumilast n-oxide,O=C(Nc1c(Cl)c[n+]([O-])cc1Cl)c1ccc(OC(F)F)c(OCC2CC2)c1,0.25,0.0063667102965346,-1.59402491999539,2,4.2,25.4,317.0,,tablet,True,False
-roflumilast n-oxide,O=C(Nc1c(Cl)c[n+]([O-])cc1Cl)c1ccc(OC(F)F)c(OCC2CC2)c1,0.38,0.0088670175369173,-1.632006029216817,2,4.85,26.95,445.0,,tablet,True,False
-roflumilast n-oxide,O=C(Nc1c(Cl)c[n+]([O-])cc1Cl)c1ccc(OC(F)F)c(OCC2CC2)c1,0.5,0.0135011110653901,-1.5686004943808132,2,7.35,28.3,679.5,,tablet,True,False
 roflumilast,O=C(Nc1c(Cl)cncc1Cl)c1ccc(OC(F)F)c(OCC2CC2)c1,0.25,0.0056625082781396,-1.6449311587464712,2,0.625,21.1,29.15,,tablet,False,False
 roflumilast,O=C(Nc1c(Cl)cncc1Cl)c1ccc(OC(F)F)c(OCC2CC2)c1,0.38,0.0069232940136903,-1.7394708212942702,2,0.75,20.25,40.75,,tablet,False,False
 roflumilast,O=C(Nc1c(Cl)cncc1Cl)c1ccc(OC(F)F)c(OCC2CC2)c1,0.5,0.010240849574132,-1.6886340174176402,2,0.975,20.75,62.95,,tablet,False,False
@@ -3354,16 +3091,6 @@ avatrombopag,O=C(Nc1nc(-c2cc(Cl)cs2)c(N2CCN(C3CCCCC3)CC2)s1)c1cnc(N2CCC(C(=O)O)C
 avatrombopag,O=C(Nc1nc(-c2cc(Cl)cs2)c(N2CCN(C3CCCCC3)CC2)s1)c1cnc(N2CCC(C(=O)O)CC2)c(Cl)c1,100.0,0.388,-2.4111682744057927,1,6.5,18.0,11077.5,,suspension,False,False
 filgotinib,O=C(Nc1nc2cccc(-c3ccc(CN4CCS(=O)(=O)CC4)cc3)n2n1)C1CC1,100.0,0.916,-2.0381045263321496,1,1.0,6.2,2330.0,,tablet,False,False
 filgotinib,O=C(Nc1nc2cccc(-c3ccc(CN4CCS(=O)(=O)CC4)cc3)n2n1)C1CC1,200.0,1.737872694765452,-2.0610120359712703,4,1.0,7.41,5230.0,,tablet,False,False
-tizoxanide,O=C(Nc1ncc([N+](=O)[O-])s1)c1ccccc1O,500.0,7.180000000000001,-1.8428455600937184,1,2.25,1.71,30620.0,,suspension,True,False
-tizoxanide,O=C(Nc1ncc([N+](=O)[O-])s1)c1ccccc1O,1000.0,12.300000000000004,-1.910094888560602,1,2.0,1.5,50600.0,,tablet,True,False
-tizoxanide,O=C(Nc1ncc([N+](=O)[O-])s1)c1ccccc1O,2000.0,18.16,-2.041914151478915,1,2.0,2.4,118400.0,,tablet,True,False
-tizoxanide,O=C(Nc1ncc([N+](=O)[O-])s1)c1ccccc1O,3000.0,22.17,-2.1313555616051745,1,3.0,2.8,158700.0,,tablet,True,False
-tizoxanide,O=C(Nc1ncc([N+](=O)[O-])s1)c1ccccc1O,4000.0,42.00000000000001,-1.978810700930062,1,3.5,4.4,354000.0,,tablet,True,False
-r-138727,O=C(O)/C=C1/CN(C(C(=O)C2CC2)c2ccccc2F)CCC1S,2.0,0.0209,-1.9808837095529277,1,0.5,0.7,18.8,,,True,False
-r-138727,O=C(O)/C=C1/CN(C(C(=O)C2CC2)c2ccccc2F)CCC1S,5.0,0.0639999999999999,-1.892790030352132,1,0.5,1.9,70.4,,,True,False
-r-138727,O=C(O)/C=C1/CN(C(C(=O)C2CC2)c2ccccc2F)CCC1S,10.0,0.1327878684422817,-1.876841600489391,3,0.5,4.2,118.0,,tablet,True,False
-r-138727,O=C(O)/C=C1/CN(C(C(=O)C2CC2)c2ccccc2F)CCC1S,20.0,0.3917,-1.7080764241161153,1,0.5,5.8,365.4,,,True,False
-r-138727,O=C(O)/C=C1/CN(C(C(=O)C2CC2)c2ccccc2F)CCC1S,30.0,0.4373908092312868,-1.836251601628635,2,0.625,7.15,519.05,,tablet,True,False
 fenbufen,O=C(O)CCC(=O)c1ccc(-c2ccccc2)cc1,600.0,3.83,-2.194952476415021,1,1.19,10.53,39360.0,,capsule,False,False
 lipoic acid (r-lipoic acid),O=C(O)CCCC[C@@H]1CCSS1,200.0,3.7817,-1.723342922110085,1,0.33,0.7,1774.2,,tablet,False,False
 lipoic acid (r-lipoic acid),O=C(O)CCCC[C@@H]1CCSS1,300.0,5.9269,-1.704293654933751,1,0.33,0.7,3381.7,,tablet,False,False
@@ -3377,9 +3104,7 @@ chlorambucil,O=C(O)CCCc1ccc(N(CCCl)CCCl)cc1,15.0,0.3499999999999999,-1.632023214
 chlorambucil,O=C(O)CCCc1ccc(N(CCCl)CCCl)cc1,40.0,1.4,-1.4559319556497243,1,0.67,0.96,2196.7,85.0,tablet,False,False
 chlorambucil,O=C(O)CCCc1ccc(N(CCCl)CCCl)cc1,60.0,2.06,-1.46428403001449,1,0.45,0.98,2866.7,85.0,tablet,False,False
 chlorambucil,O=C(O)CCCc1ccc(N(CCCl)CCCl)cc1,70.0,1.89,-1.5686362358410126,1,1.22,1.02,3215.8,85.0,tablet,False,False
-phenylbutyrate,O=C(O)CCCc1ccccc1,5000.0,218.0000000000001,-1.3605135107314137,1,1.35,0.77,,,tablet,True,False
 oxaprozin,O=C(O)CCc1nc(-c2ccccc2)c(-c2ccccc2)o1,1200.0,90.77444574328172,-1.121217640199067,2,4.35,50.75,7042000.0,,tablet,False,False
-benazeprilat,O=C(O)CN1C(=O)[C@@H](N[C@@H](CCc2ccccc2)C(=O)O)CCc2ccccc21,10.0,0.19505,-1.7098540453521898,1,1.5,22.3,1262.67,,capsule,True,False
 daprodustat,O=C(O)CNC(=O)C1C(=O)N(C2CCCCC2)C(=O)N(C2CCCCC2)C1=O,4.0,0.0793,-1.7027868040103586,1,1.75,3.25,159.1,,tablet,False,False
 daprodustat,O=C(O)CNC(=O)C1C(=O)N(C2CCCCC2)C(=O)N(C2CCCCC2)C1=O,6.0,0.0973,-1.7900384101152915,1,2.12,1.92,202.0,66.1,tablet,False,False
 daprodustat,O=C(O)CNC(=O)C1C(=O)N(C2CCCCC2)C(=O)N(C2CCCCC2)C1=O,10.0,0.1799999999999999,-1.744727494896694,1,2.0,1.08,501.0,,,False,False
@@ -3423,9 +3148,6 @@ diclofenac,O=C(O)Cc1ccccc1Nc1c(Cl)cccc1Cl,25.0,0.588,-1.6285626825958992,1,0.93,
 diclofenac,O=C(O)Cc1ccccc1Nc1c(Cl)cccc1Cl,50.0,1.0138351937075376,-1.6930026413313637,2,0.71,1.51,1240.95,,tablet,False,True
 diclofenac,O=C(O)Cc1ccccc1Nc1c(Cl)cccc1Cl,100.0,1.9685527678982853,-1.7058529392685209,2,2.0,1.175,6230.0,,tablet,False,True
 diclofenac,O=C(O)Cc1ccccc1Nc1c(Cl)cccc1Cl,150.0,5.699,-1.4202926020818507,1,0.63,1.4,7008.0,,powder,False,True
-2-pyridylacetic acid,O=C(O)Cc1ccccn1,8.0,0.218,-1.5646334933873387,1,1.0,4.1,1143.7,,tablet,True,False
-2-pyridylacetic acid,O=C(O)Cc1ccccn1,16.0,0.4918190897067742,-1.5123146010075692,2,0.945,3.535,2366.4,,tablet,True,False
-2-pyridylacetic acid,O=C(O)Cc1ccccn1,24.0,0.6712,-1.5533592938909622,1,1.13,3.88,3534.3,,tablet,True,False
 Setipiprant,O=C(O)Cn1c2c(c3cc(F)ccc31)CN(C(=O)c1cccc3ccccc13)CC2,5.0,0.0210999999999999,-2.374687549038326,1,4.0,8.2,188.0,,,False,False
 Setipiprant,O=C(O)Cn1c2c(c3cc(F)ccc31)CN(C(=O)c1cccc3ccccc13)CC2,25.0,0.209,-2.077793722560984,1,3.0,8.3,1459.0,,,False,False
 Setipiprant,O=C(O)Cn1c2c(c3cc(F)ccc31)CN(C(=O)c1cccc3ccccc13)CC2,100.0,1.14,-1.9430951486635275,1,2.6,10.0,5444.0,,,False,False
@@ -3433,20 +3155,6 @@ Setipiprant,O=C(O)Cn1c2c(c3cc(F)ccc31)CN(C(=O)c1cccc3ccccc13)CC2,200.0,2.449,-1.
 Setipiprant,O=C(O)Cn1c2c(c3cc(F)ccc31)CN(C(=O)c1cccc3ccccc13)CC2,400.0,4.154,-1.9835934991288824,1,3.0,9.3,18312.0,,,False,False
 Setipiprant,O=C(O)Cn1c2c(c3cc(F)ccc31)CN(C(=O)c1cccc3ccccc13)CC2,1000.0,8.322000000000001,-2.0797722885430714,1,2.6,10.2,34159.0,,,False,False
 Setipiprant,O=C(O)Cn1c2c(c3cc(F)ccc31)CN(C(=O)c1cccc3ccccc13)CC2,2000.0,12.629,-2.19966103241473,1,1.8,10.7,49507.0,,,False,False
-fosinoprilat,O=C(O)[C@@H]1C[C@@H](C2CCCCC2)CN1C(=O)CP(=O)(O)CCCCc1ccccc1,10.0,0.1550012903172099,-1.8096646865051167,2,3.55,17.4,1368.0,22.3,,True,False
-fosinoprilat,O=C(O)[C@@H]1C[C@@H](C2CCCCC2)CN1C(=O)CP(=O)(O)CCCCc1ccccc1,20.0,0.2509999999999999,-1.9013562741829435,1,2.4,,2000.0,,,True,False
-fosinoprilat,O=C(O)[C@@H]1C[C@@H](C2CCCCC2)CN1C(=O)CP(=O)(O)CCCCc1ccccc1,40.0,0.586,-1.834162375309872,1,2.7,,5400.0,,,True,False
-fosinoprilat,O=C(O)[C@@H]1C[C@@H](C2CCCCC2)CN1C(=O)CP(=O)(O)CCCCc1ccccc1,80.0,0.952,-1.9244530386074687,1,3.3,,7400.0,,,True,False
-fosinoprilat,O=C(O)[C@@H]1C[C@@H](C2CCCCC2)CN1C(=O)CP(=O)(O)CCCCc1ccccc1,160.0,2.194,-1.8628833594172325,1,3.0,,15200.0,,,True,False
-fosinoprilat,O=C(O)[C@@H]1C[C@@H](C2CCCCC2)CN1C(=O)CP(=O)(O)CCCCc1ccccc1,320.0,3.1840000000000006,-2.0021769192542744,1,3.5,,24500.0,,,True,False
-fosinoprilat,O=C(O)[C@@H]1C[C@@H](C2CCCCC2)CN1C(=O)CP(=O)(O)CCCCc1ccccc1,640.0,5.597999999999999,-2.058147079853744,1,4.2,,58300.0,,,True,False
-cilazaprilat,O=C(O)[C@H](CCc1ccccc1)N[C@H]1CCCN2CCC[C@@H](C(=O)O)N2C1=O,0.5,0.0054,-1.96657624451305,1,1.8,48.9,115.0,,tablet,True,False
-cilazaprilat,O=C(O)[C@H](CCc1ccccc1)N[C@H]1CCCN2CCC[C@@H](C(=O)O)N2C1=O,1.0,0.0124,-1.9065783148377649,1,1.8,39.8,151.0,,tablet,True,False
-cilazaprilat,O=C(O)[C@H](CCc1ccccc1)N[C@H]1CCCN2CCC[C@@H](C(=O)O)N2C1=O,2.5,0.0377,-1.8215986584662447,1,1.9,38.5,251.0,,tablet,True,False
-cilazaprilat,O=C(O)[C@H](CCc1ccccc1)N[C@H]1CCCN2CCC[C@@H](C(=O)O)N2C1=O,5.0,0.1014695028074938,-1.6926344719647286,2,1.6,33.849999999999994,463.5,,tablet,True,False
-cilazaprilat,O=C(O)[C@H](CCc1ccccc1)N[C@H]1CCCN2CCC[C@@H](C(=O)O)N2C1=O,10.0,0.2386,-1.622329560665677,1,1.6,45.2,870.0,,,True,False
-cilazaprilat,O=C(O)[C@H](CCc1ccccc1)N[C@H]1CCCN2CCC[C@@H](C(=O)O)N2C1=O,20.0,0.5237999999999999,-1.581864501574768,1,1.6,41.2,1690.0,,,True,False
-clopidogrel carboxylic acid,O=C(O)[C@H](c1ccccc1Cl)N1CCc2sccc2C1,75.0,2.60886,-1.4586104893351106,1,0.78,8.89,7229.61,,tablet,True,False
 diflunisal,O=C(O)c1cc(-c2ccc(F)cc2F)ccc1O,250.0,36.318590281011744,-0.8378110257904875,2,2.61,10.29,425805.0,,tablet,False,False
 diflunisal,O=C(O)c1cc(-c2ccc(F)cc2F)ccc1O,500.0,68.84101784546769,-0.861122721393423,2,3.155,11.87,1111610.0,,tablet,False,False
 diflunisal,O=C(O)c1cc(-c2ccc(F)cc2F)ccc1O,750.0,108.1651515045396,-0.8409739004679766,2,3.375,12.9,1804880.0,,tablet,False,False
@@ -3458,7 +3166,6 @@ Tropifexor,O=C(O)c1cc(F)c2nc(N3[C@@H]4CC[C@H]3C[C@@H](OCc3c(-c5ccccc5OC(F)(F)F)n
 Tropifexor,O=C(O)c1cc(F)c2nc(N3[C@@H]4CC[C@H]3C[C@@H](OCc3c(-c5ccccc5OC(F)(F)F)noc3C3CC3)C4)sc2c1,0.3,0.0063999999999999,-1.6709412807357753,1,4.0,15.3,123.0,,,False,False
 Tropifexor,O=C(O)c1cc(F)c2nc(N3[C@@H]4CC[C@H]3C[C@@H](OCc3c(-c5ccccc5OC(F)(F)F)noc3C3CC3)C4)sc2c1,1.0,0.0220999999999999,-1.6556077263148894,1,4.0,21.9,482.0,,,False,False
 Tropifexor,O=C(O)c1cc(F)c2nc(N3[C@@H]4CC[C@H]3C[C@@H](OCc3c(-c5ccccc5OC(F)(F)F)noc3C3CC3)C4)sc2c1,3.0,0.0541999999999999,-1.7431219681812755,1,4.0,16.5,933.0,,,False,False
-rhein,O=C(O)c1cc(O)c2c(c1)C(=O)c1cccc(O)c1C2=O,50.0,3.2000000000000006,-1.1938200260161127,1,2.2,4.3,21300.0,35.0,capsule,True,False
 deferasirox,O=C(O)c1ccc(-n2nc(-c3ccccc3O)nc2-c2ccccc2O)cc1,375.0,9.81958,-1.5819383550510748,1,2.5,8.42,83522.42,70.0,tablet,False,False
 deferasirox,O=C(O)c1ccc(-n2nc(-c3ccccc3O)nc2-c2ccccc2O)cc1,1400.0,31.39968084925861,-1.6492028018123568,3,3.5,14.9,566200.0,,tablet,False,False
 tafamidis,O=C(O)c1ccc2nc(-c3cc(Cl)cc(Cl)c3)oc2c1,400.0,20.360000000000007,-1.2932822176632413,1,2.0,,,,solution,False,False
@@ -3472,12 +3179,6 @@ ataluren,O=C(O)c1cccc(-c2noc(-c3ccccc3F)n2)c1,1448.0,45.7,-1.500852361791278,1,1
 ataluren,O=C(O)c1cccc(-c2noc(-c3ccccc3F)n2)c1,1538.0,47.2,-1.5130143368313245,1,2.5,3.4,325500.0,,suspension,False,False
 ataluren,O=C(O)c1cccc(-c2noc(-c3ccccc3F)n2)c1,2100.0,90.00000000000003,-1.3679767852945943,1,0.9,4.7,482000.0,,suspension,False,False
 ataluren,O=C(O)c1cccc(-c2noc(-c3ccccc3F)n2)c1,3500.0,109.00000000000004,-1.506641546409652,1,0.9,5.3,684000.0,,suspension,False,False
-benzoic acid,O=C(O)c1ccccc1,2796.0,99.7,-1.447842008761988,1,0.5,,104400.0,,solution,True,False
-salicylic acid,O=C(O)c1ccccc1O,100.0,4.19,-1.3777859770337046,1,1.0,1.88,14600.0,,tablet,True,False
-salicylic acid,O=C(O)c1ccccc1O,300.0,13.310000000000002,-1.3529431992449872,1,1.5,2.57,62800.0,,tablet,True,False
-salicylic acid,O=C(O)c1ccccc1O,500.0,22.85000000000001,-1.3400837999301496,1,1.5,2.54,126000.0,,tablet,True,False
-salicylic acid,O=C(O)c1ccccc1O,1000.0,53.86758000000002,-1.268672534687083,1,1.0,2.9,339043.47,,tablet,True,False
-salicylic acid,O=C(O)c1ccccc1O,1500.0,85.99999999999999,-1.2415928078121137,1,5.1,3.8,870000.0,,tablet,True,False
 Cilofexor,O=C(O)c1ccnc(N2CC(O)(c3ccc(OCc4c(-c5c(Cl)cccc5Cl)noc4C4CC4)cc3Cl)C2)c1,10.0,0.304,-1.5171264163912463,1,3.0,5.0,1260.0,,tablet,False,False
 Cilofexor,O=C(O)c1ccnc(N2CC(O)(c3ccc(OCc4c(-c5c(Cl)cccc5Cl)noc4C4CC4)cc3Cl)C2)c1,30.0,0.58,-1.7136932611567253,1,3.0,8.1,2470.0,,tablet,False,False
 Cilofexor,O=C(O)c1ccnc(N2CC(O)(c3ccc(OCc4c(-c5c(Cl)cccc5Cl)noc4C4CC4)cc3Cl)C2)c1,100.0,2.59,-1.586700235918748,1,1.3,10.7,7740.0,,tablet,False,False
@@ -3486,7 +3187,6 @@ ciprofloxacin,O=C(O)c1cn(C2CC2)c2cc(N3CCNCC3)c(F)cc2c1=O,100.0,0.37,-2.431798275
 ciprofloxacin,O=C(O)c1cn(C2CC2)c2cc(N3CCNCC3)c(F)cc2c1=O,250.0,1.44,-2.239577516576788,1,0.78,5.37,5540.0,,tablet,False,True
 ciprofloxacin,O=C(O)c1cn(C2CC2)c2cc(N3CCNCC3)c(F)cc2c1=O,500.0,2.7,-2.2676062401770314,1,1.0,5.7,10700.0,75.1,tablet,False,True
 ciprofloxacin,O=C(O)c1cn(C2CC2)c2cc(N3CCNCC3)c(F)cc2c1=O,750.0,3.8,-2.29527766677489,1,1.0,6.4,16800.0,78.6,tablet,False,True
-pyrazinoic acid,O=C(O)c1cnccn1,1890.0,4.500000000000001,-2.6232492903979003,1,4.9,11.8,100000.0,,tablet,True,False
 dolasetron,O=C(O[C@@H]1C[C@@H]2C[C@H]3C[C@H](C1)N2CC3=O)c1c[nH]c2ccccc12,50.0,0.1166699999999999,-2.6320108064688967,1,1.0,11.48,985.81,86.2,tablet,False,False
 dolasetron,O=C(O[C@@H]1C[C@@H]2C[C@H]3C[C@H](C1)N2CC3=O)c1c[nH]c2ccccc12,100.0,0.23486,-2.6291909434545047,1,1.0,7.15,1040.16,76.2,tablet,False,False
 dolasetron,O=C(O[C@@H]1C[C@@H]2C[C@H]3C[C@H](C1)N2CC3=O)c1c[nH]c2ccccc12,150.0,0.3457099999999999,-2.637379316938769,1,1.0,13.64,2087.14,,tablet,False,False
@@ -3531,8 +3231,6 @@ Soticlestat,O=C(c1cccnc1-c1ccncc1)N1CCC(O)(Cc2ccccc2)CC1,1350.0,7.953,-2.2298027
 sulfinpyrazone,O=C1C(CC[S+]([O-])c2ccccc2)C(=O)N(c2ccccc2)N1c1ccccc1,200.0,12.97,-1.1880900195799011,1,2.4,4.87,,,capsule,False,False
 sulfinpyrazone,O=C1C(CC[S+]([O-])c2ccccc2)C(=O)N(c2ccccc2)N1c1ccccc1,400.0,29.899999999999995,-1.126388803003533,1,2.1,4.0,173910.0,,tablet,False,False
 atovaquone,O=C1C(O)=C([C@H]2CC[C@H](c3ccc(Cl)cc3)CC2)C(=O)c2ccccc21,500.0,1.6454419657297856,-2.4826874348783874,3,5.0,,121000.0,,tablet,False,False
-n-desmethylclobazam,O=C1CC(=O)N(c2ccccc2)c2cc(Cl)ccc2N1,20.0,0.082,-2.3872161432802645,1,48.0,66.2,11451.0,,tablet,True,False
-n-desmethylclobazam,O=C1CC(=O)N(c2ccccc2)c2cc(Cl)ccc2N1,30.0,0.1366,-2.3416705553741486,1,40.0,61.3,23690.0,,tablet,True,False
 buspirone,O=C1CC2(CCCC2)CC(=O)N1CCCCN1CCN(c2ncccn2)CC1,10.0,0.0012389511595793,-3.9069458135135857,3,1.0,2.9,3.755,3.9,solution,False,False
 buspirone,O=C1CC2(CCCC2)CC(=O)N1CCCCN1CCN(c2ncccn2)CC1,20.0,0.0021424285285628,-3.970123652895351,2,0.56,3.25,6.205,,solution,False,False
 buspirone,O=C1CC2(CCCC2)CC(=O)N1CCCCN1CCN(c2ncccn2)CC1,40.0,0.0031999999999999,-4.096910013008056,1,0.5,2.7,9.4,,solution,False,False
@@ -3559,12 +3257,9 @@ nitrofurantoin,O=C1CN(/N=C/c2ccc([N+](=O)[O-])o2)C(=O)N1,50.0,0.4087,-2.08756536
 nitrofurantoin,O=C1CN(/N=C/c2ccc([N+](=O)[O-])o2)C(=O)N1,100.0,0.875,-2.057991946977687,1,2.15,0.78,2210.0,,capsule,False,False
 anagrelide,O=C1CN2Cc3c(ccc(Cl)c3Cl)N=C2N1,1.0,0.00508,-2.2941362877160807,1,1.5,1.7,13.15,,,False,False
 anagrelide,O=C1CN2Cc3c(ccc(Cl)c3Cl)N=C2N1,2.0,0.0113176322612108,-2.247274417172777,2,1.255,1.4,28.97,,capsule,False,False
-desmethyldiazepam,O=C1CN=C(c2ccccc2)c2cc(Cl)ccc2N1,15.0,0.2616772821625905,-1.7583252385926815,2,1.11,69.3,,91.0,capsule,True,False
-desmethyldiazepam,O=C1CN=C(c2ccccc2)c2cc(Cl)ccc2N1,20.0,0.356,-1.749579997691106,1,0.9,67.4,,130.0,tablet,True,False
 halazepam,O=C1CN=C(c2ccccc2)c2cc(Cl)ccc2N1CC(F)(F)F,20.0,0.03034,-2.8190144192132696,1,2.1,21.33,815.76,,tablet,False,False
 nitrazepam,O=C1CN=C(c2ccccc2)c2cc([N+](=O)[O-])ccc2N1,5.0,0.0438159623644899,-2.057337649450285,3,2.0,30.5,1371.0,,tablet,False,False
 clonazepam,O=C1CN=C(c2ccccc2Cl)c2cc([N+](=O)[O-])ccc2N1,2.0,0.014393117467165,-2.1428751258306877,3,2.0,39.0,526.69,90.0,tablet,False,False
-desalkylflurazepam,O=C1CN=C(c2ccccc2F)c2cc(Cl)ccc2N1,30.0,0.0282703024391321,-3.025790800070129,2,19.75,81.15,4247.5,,capsule,True,False
 bromazepam,O=C1CN=C(c2ccccn2)c2cc(Br)ccc2N1,3.0,0.0382805433608249,-1.8941431611181687,2,0.875,33.900000000000006,1378.0,60.0,tablet,False,False
 bromazepam,O=C1CN=C(c2ccccn2)c2cc(Br)ccc2N1,6.0,0.0793061098993025,-1.8788446028726704,4,1.73,26.7,2756.375,60.0,tablet,False,False
 ziprasidone,O=C1Cc2cc(CCN3CCN(c4nsc5ccccc45)CC3)c(Cl)cc2N1,20.0,0.046,-2.638272163982407,1,4.1,4.7,316.0,,capsule,False,False
@@ -3577,8 +3272,6 @@ phenytoin,O=C1NC(=O)C(c2ccccc2)(c2ccccc2)N1,400.0,3.88,-2.0132282657337552,1,8.2
 phenytoin,O=C1NC(=O)C(c2ccccc2)(c2ccccc2)N1,600.0,10.57,-1.7540762630762174,1,6.0,25.0,456000.0,,capsule,False,True
 phenytoin,O=C1NC(=O)C(c2ccccc2)(c2ccccc2)N1,800.0,5.69,-2.1479777205968724,1,12.43,,,84.45,,False,True
 phenytoin,O=C1NC(=O)C(c2ccccc2)(c2ccccc2)N1,1600.0,10.330000000000004,-2.1900196611363043,1,25.43,,,78.03,,False,True
-3-hydroxyanagrelide,O=C1NC2=Nc3ccc(Cl)c(Cl)c3CN2C1O,1.0,0.0082899999999999,-2.081445469449726,1,1.25,3.11,29.17,,,True,False
-3-hydroxyanagrelide,O=C1NC2=Nc3ccc(Cl)c(Cl)c3CN2C1O,2.0,0.0050299999999999,-2.599462010608054,1,2.14,1.79,18.4,,capsule,True,False
 sertindole,O=C1NCCN1CCN1CCC(c2cn(-c3ccc(F)cc3)c3ccc(Cl)cc23)CC1,4.0,0.0024722459424579,-3.2089683185441458,2,9.35,78.2,264.7,,tablet,False,False
 oxazepam,O=C1Nc2ccc(Cl)cc2C(c2ccccc2)=NC1O,15.0,0.3241978408317982,-1.6652811409489785,2,2.325,5.895,,92.8,tablet,False,False
 oxazepam,O=C1Nc2ccc(Cl)cc2C(c2ccccc2)=NC1O,30.0,0.526,-1.756135510565923,1,3.0,10.0,6000.0,,,False,False
@@ -3591,11 +3284,6 @@ lurasidone,O=C1[C@@H]2[C@H]3CC[C@H](C3)[C@@H]2C(=O)N1C[C@@H]1CCCC[C@H]1CN1CCN(c2
 lurasidone,O=C1[C@@H]2[C@H]3CC[C@H](C3)[C@@H]2C(=O)N1C[C@@H]1CCCC[C@H]1CN1CCN(c2nsc3ccccc23)CC1,40.0,0.0523299149626673,-2.8833099623263885,2,1.835,22.25,179.0,,tablet,False,False
 lurasidone,O=C1[C@@H]2[C@H]3CC[C@H](C3)[C@@H]2C(=O)N1C[C@@H]1CCCC[C@H]1CN1CCN(c2nsc3ccccc23)CC1,80.0,0.113,-2.850011543508524,1,1.5,18.1,378.0,,tablet,False,False
 ezetimibe,O=C1[C@H](CC[C@H](O)c2ccc(F)cc2)[C@@H](c2ccc(O)cc2)N1c1ccc(F)cc1,10.0,0.0042350424137815,-3.373142235869512,3,5.0,19.38,70.4,,tablet,False,False
-baloxavir,O=C1c2c(O)c(=O)ccn2N([C@@H]2c3ccccc3SCc3c2ccc(F)c3F)[C@@H]2COCCN12,6.0,0.0109999999999999,-2.736758565225419,1,2.0,90.9,1018.0,,suspension,True,False
-baloxavir,O=C1c2c(O)c(=O)ccn2N([C@@H]2c3ccccc3SCc3c2ccc(F)c3F)[C@@H]2COCCN12,20.0,0.0433946272380894,-2.663594033554536,3,3.5,98.3,2864.0,,tablet,True,False
-baloxavir,O=C1c2c(O)c(=O)ccn2N([C@@H]2c3ccccc3SCc3c2ccc(F)c3F)[C@@H]2COCCN12,40.0,0.1146677810023373,-2.5426185830038746,2,3.5,86.80000000000001,6027.0,,suspension,True,False
-baloxavir,O=C1c2c(O)c(=O)ccn2N([C@@H]2c3ccccc3SCc3c2ccc(F)c3F)[C@@H]2COCCN12,60.0,0.193,-2.49259394137587,1,3.25,75.2,9141.0,,suspension,True,False
-baloxavir,O=C1c2c(O)c(=O)ccn2N([C@@H]2c3ccccc3SCc3c2ccc(F)c3F)[C@@H]2COCCN12,80.0,0.228404465805728,-2.544385395930286,2,3.75,78.35,10708.5,,suspension,True,False
 palonosetron,O=C1c2cccc3c2[C@H](CCC3)CN1[C@@H]1CN2CCC1CC2,0.25,0.00067,-2.571865205971211,1,4.5,41.8,33.1,97.0,capsule,False,False
 palonosetron,O=C1c2cccc3c2[C@H](CCC3)CN1[C@@H]1CN2CCC1CC2,0.5,0.00133,-2.575118363368933,1,4.5,44.6,67.6,97.0,capsule,False,False
 palonosetron,O=C1c2cccc3c2[C@H](CCC3)CN1[C@@H]1CN2CCC1CC2,0.75,0.00199,-2.5762081869819933,1,3.75,42.3,98.0,97.0,capsule,False,False
@@ -3628,7 +3316,6 @@ pretomanid,O=[N+]([O-])c1cn2c(n1)OC[C@@H](OCc1ccc(OC(F)(F)F)cc1)C2,800.0,2.7,-2.
 pretomanid,O=[N+]([O-])c1cn2c(n1)OC[C@@H](OCc1ccc(OC(F)(F)F)cc1)C2,1000.0,3.035127674415032,-2.5178230353539037,2,4.5,20.3,115400.0,,tablet,False,False
 pretomanid,O=[N+]([O-])c1cn2c(n1)OC[C@@H](OCc1ccc(OC(F)(F)F)cc1)C2,1250.0,2.9,-2.6345120151091,1,4.0,18.1,99200.0,,tablet,False,False
 pretomanid,O=[N+]([O-])c1cn2c(n1)OC[C@@H](OCc1ccc(OC(F)(F)F)cc1)C2,1500.0,2.9,-2.7136932611567253,1,4.5,15.6,101200.0,,tablet,False,False
-oxypurinol,O=c1[nH]c(=O)c2cn[nH]c2[nH]1,200.0,4.10705,-1.6875000055953506,1,5.3,20.55,106072.96,,tablet,True,False
 brivudine,O=c1[nH]c(=O)n([C@H]2C[C@H](O)[C@@H](CO)O2)cc1/C=C/Br,125.0,1.82,-1.8368386250229816,1,0.95,18.99,8422.07,,tablet,False,False
 trifluridine,O=c1[nH]c(=O)n([C@H]2C[C@H](O)[C@@H](CO)O2)cc1C(F)(F)F,60.55,0.096,-2.7998429144395027,1,0.6,,248.0,,tablet,False,False
 chlorzoxazone,O=c1[nH]c2cc(Cl)ccc2o1,250.0,3.4500000000000006,-1.8601209135987635,1,2.0,1.21,10100.0,,tablet,False,False
@@ -3637,9 +3324,6 @@ pimozide,O=c1[nH]c2ccccc2n1C1CCN(CCCC(c2ccc(F)cc2)c2ccc(F)cc2)CC1,6.0,0.00500799
 domperidone,O=c1[nH]c2ccccc2n1CCCN1CCC(n2c(=O)[nH]c3cc(Cl)ccc32)CC1,10.0,0.0167616526631475,-2.7756831630863923,2,0.7949999999999999,13.045,69.89,14.0,tablet,False,False
 domperidone,O=c1[nH]c2ccccc2n1CCCN1CCC(n2c(=O)[nH]c3cc(Cl)ccc32)CC1,20.0,0.037183291143369,-2.730682168535075,3,0.8,7.9,215.4,14.0,tablet,False,False
 flibanserin,O=c1[nH]c2ccccc2n1CCN1CCN(c2cccc(C(F)(F)F)c2)CC1,100.0,0.4386397154841316,-2.3578920488218937,2,0.875,10.465,1914.02,33.0,tablet,False,False
-quercetin,O=c1c(O)c(-c2ccc(O)c(O)c2)oc2cc(O)cc(O)c12,16.0,0.0235,-2.8330521203841887,1,6.5,,479.0,,capsule,True,False
-quercetin,O=c1c(O)c(-c2ccc(O)c(O)c2)oc2cc(O)cc(O)c12,40.0,0.0475999999999999,-2.9244530386074694,1,7.4,,793.0,,capsule,True,False
-quercetin,O=c1c(O)c(-c2ccc(O)c(O)c2)oc2cc(O)cc(O)c12,100.0,0.0899,-3.0462403082667717,1,7.5,,1202.0,,capsule,True,False
 Gepotidacin,O=c1ccc2ncc(=O)n3c2n1C[C@H]3CN1CCC(NCc2cc3c(cn2)OCCC3)CC1,100.0,0.1,-3.0,1,3.0,5.97,596.0,,capsule,False,False
 Gepotidacin,O=c1ccc2ncc(=O)n3c2n1C[C@H]3CN1CCC(NCc2cc3c(cn2)OCCC3)CC1,800.0,1.94,-2.6152882570617177,1,1.75,12.4,7440.0,,capsule,False,False
 Gepotidacin,O=c1ccc2ncc(=O)n3c2n1C[C@H]3CN1CCC(NCc2cc3c(cn2)OCCC3)CC1,1500.0,6.919999999999999,-2.335985164598924,1,1.5,16.1,25000.0,,capsule,False,False
@@ -3665,8 +3349,6 @@ mefloquine,OC(c1cc(C(F)(F)F)nc2c(C(F)(F)F)cccc12)C1CCCCN1,750.0,1.12071227351180
 mefloquine,OC(c1cc(C(F)(F)F)nc2c(C(F)(F)F)cccc12)C1CCCCN1,1000.0,1.069,-2.971022294791222,1,12.6,551.52,609800.0,,tablet,False,False
 mazindol,OC1(c2ccc(Cl)cc2)c2ccccc2C2=NCCN21,1.0,0.00252,-2.598599459218456,1,2.64,10.0,35.65,,tablet,False,False
 mazindol,OC1(c2ccc(Cl)cc2)c2ccccc2C2=NCCN21,2.0,0.00507,-2.596022036330645,1,3.27,9.1,72.68,,tablet,False,False
-trichloroethanol,OCC(Cl)(Cl)Cl,500.0,4.631519999999999,-2.033246460558169,1,4.0,8.7,45717.62,,capsule,True,False
-trichloroethanol,OCC(Cl)(Cl)Cl,1500.0,15.83682,-1.9764232784625464,1,4.0,12.8,157770.62,,capsule,True,False
 dipyridamole,OCCN(CCO)c1nc(N2CCCCC2)c2nc(N(CCO)CCO)nc(N3CCCCC3)c2n1,25.0,0.375,-1.8239087409443189,1,1.06,27.7,2102.0,,tablet,False,False
 dipyridamole,OCCN(CCO)c1nc(N2CCCCC2)c2nc(N(CCO)CCO)nc(N3CCCCC3)c2n1,50.0,0.689,-1.860750782428393,1,1.24,25.4,3498.0,,tablet,False,False
 dipyridamole,OCCN(CCO)c1nc(N2CCCCC2)c2nc(N(CCO)CCO)nc(N3CCCCC3)c2n1,100.0,2.388,-1.6219656775426683,1,1.13,20.6,6213.0,,tablet,False,False
@@ -3704,10 +3386,6 @@ triclosan,Oc1cc(Cl)ccc1Oc1ccc(Cl)cc1Cl,4.0,0.2100999999999999,-1.27963393892201,
 fenoldopam,Oc1ccc(C2CNCCc3c2cc(O)c(O)c3Cl)cc1,100.0,0.0632999999999999,-3.198596289982645,1,0.82,,49.88,,capsule,False,False
 lasofoxifene,Oc1ccc2c(c1)CC[C@H](c1ccccc1)[C@@H]2c1ccc(OCCN2CCCC2)cc1,0.25,0.0001933907960581,-3.111504207571797,2,13.7,194.5,45.400000000000006,,tablet,False,False
 lasofoxifene,Oc1ccc2c(c1)CC[C@H](c1ccccc1)[C@@H]2c1ccc(OCCN2CCCC2)cc1,20.0,0.0166699999999999,-3.079094395835976,1,8.0,150.83,2596.3,,solution,False,False
-8-hydroxyamoxapine,Oc1ccc2c(c1)N=C(N1CCNCC1)c1cc(Cl)ccc1O2,25.0,0.0303599999999999,-2.915638241448595,1,5.29,11.3,543.0,,capsule,True,False
-8-hydroxyamoxapine,Oc1ccc2c(c1)N=C(N1CCNCC1)c1cc(Cl)ccc1O2,50.0,0.05804,-2.9352426005703207,1,5.28,16.9,1919.0,,capsule,True,False
-7-hydroxyamoxapine,Oc1ccc2c(c1)Oc1ccc(Cl)cc1C(N1CCNCC1)=N2,25.0,0.00554,-3.654430243943608,1,3.87,3.61,55.0,,capsule,True,False
-7-hydroxyamoxapine,Oc1ccc2c(c1)Oc1ccc(Cl)cc1C(N1CCNCC1)=N2,50.0,0.0194699999999999,-3.4096040528159874,1,4.24,2.67,140.0,,capsule,True,False
 nalbuphine,Oc1ccc2c3c1O[C@H]1[C@@H](O)CC[C@@]4(O)[C@@H](C2)N(CC2CCC2)CC[C@]314,30.0,0.00613,-3.689660780201248,1,0.75,9.96,25.14,,tablet,False,False
 nalbuphine,Oc1ccc2c3c1O[C@H]1[C@@H](O)CC[C@@]4(O)[C@@H](C2)N(CC2CCC2)CC[C@]314,45.0,0.0128203549092839,-3.5453124657368447,2,1.0,6.36,62.22,17.41,tablet,False,False
 nalbuphine,Oc1ccc2c3c1O[C@H]1[C@@H](O)CC[C@@]4(O)[C@@H](C2)N(CC2CCC2)CC[C@]314,60.0,0.0213999999999999,-3.447737477034453,1,0.78,4.65,78.6,11.8,tablet,False,False
