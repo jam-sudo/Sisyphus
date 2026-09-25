@@ -10,6 +10,12 @@ Reverse-chronological. The project README carries only the **current** headline 
 
 ---
 
+## 2026-09-24 (cont.) — Methenamine concentration-basis quarantine
+
+The [source follow-up](../validation/development_methenamine_label_quarantine_2026-09-24.md) found that Omega's 1 g methenamine hippurate tablet is 438.96 mg parent by formula, but its reported serum Cmax and AUC together with the original paper's CL and V imply a shared **1 g concentration/dose basis**. An initial mass-only conversion was challenged by a separate Claude Code read-only audit and retracted before commit. Methenamine was quarantined from Cmax, CL/F, and Vd/F training while the full numeric table and assay basis remain unavailable. Direct Cmax fitted N changed **907 → 906**, CL/F **901 → 900**, Vd/F **832 → 831**; scaffold-CV AAFE changed **3.3439 → 3.3699**. On consumed N=73, Meta AAFE changed **2.8311 → 2.8158** (conditional CI **2.2881–3.5022**) and direct ML **3.0398 → 2.9848**. These shifts are not independent accuracy evidence.
+
+---
+
 ## 2026-09-24 (cont.) — Four more source-supported salt-dose corrections
 
 A workbook-wide salt-tag triage identified 269 fitted names requiring source-by-source dose-basis review. The [additional salt-dose follow-up](../validation/development_additional_salt_dose_followup_2026-09-24.md) documents metformin, bupropion, pyridostigmine, and trospium corrections; cysteamine is an explicit counterexample whose original study already reported parent mass. The raw Omega source stayed pinned. Direct Cmax N=907 and CL/F–Vd/F fitted counts 901/832 did not change. Cmax scaffold-CV AAFE changed **3.3382 → 3.3439**; CL/F row-CV R² **0.2060 → 0.2102**, Vd/F **0.3439 → 0.3528**. On the consumed N=73 development benchmark, direct ML AAFE changed **3.0737 → 3.0398**, Meta **2.8546 → 2.8311** (conditional 95% bootstrap CI **2.3057–3.5251**), and the paired Meta/ML ratio is **0.9313** (CI **0.8201–1.0541**). The development-residual half-width is **9.84×**, with **66/73** consumed-label coverage. These figures are not independent accuracy evidence.

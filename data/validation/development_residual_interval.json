@@ -7,13 +7,13 @@
   "n_training_reference": 36,
   "skipped_training_reference": [],
   "generated_from": "scripts/calibrate_conformal.py",
-  "source_cache_sha256": "cacbf0a244a33aa3e7c247268f2d560a6e21ccab25bf8beaf6d2d1260ecb3604",
+  "source_cache_sha256": "e497273289820b598cd34750df8b3bc6fc8aa2ad0db346383f8335cae0932da5",
   "calibration_reference_sha256": "e8ff034384860c192f52a99af543c295b7ba432acfa9acbaf907bb313a59ada7",
   "holdout_membership_sha256": "8c5d1b0c42247749767ac3a7da3bd61573e0f9bf45f503347a70f87b6b3ad02a",
   "model_artifact_sha256": {
-    "models/direct_pk/xgboost_cmax.json": "c084a39ad3f5fdaa694be10975e76ad91f1b1450738b542813f4a95cf5ab1551",
-    "models/direct_pk/xgboost_clf.json": "90452ac18696b96c4c41ccd9c66fbed325d2b9f8273f1fdcfb7329e1505e5c9a",
-    "models/direct_pk/xgboost_vdf.json": "69cce14f803ffc3a84da38a0c3ebcfca088f9f95f7d784d4c2fa90d04d451a88",
+    "models/direct_pk/xgboost_cmax.json": "94ba3382cc496cec0fb0ad58096c3878b0de9683ad6170145256eb3373933931",
+    "models/direct_pk/xgboost_clf.json": "0859f07b9f76ac8dc2ee587fb813ed55dcce01fae5821d479781773484dfbd78",
+    "models/direct_pk/xgboost_vdf.json": "417d06c3dc97de49da5f550634a978e4f3af5fac874ce6ae8f32de1b7da8914d",
     "models/adme/xgboost_fup_v2.json": "b0731734730746866646a2628dded73d74254eb06ef1a6c7b457bf273d867096",
     "models/adme/xgboost_clint.json": "0ca4ee7e88367dfb3ad55f94adc8eaa025cdd40b5a308e584b89e05555d3ff42",
     "models/adme/xgboost_vdss.json": "29f84cbff97da197ae516fccb2d91aff972f9bae661a8b2bde39786a984c1c35",
@@ -22,10 +22,10 @@
   "validity": "not split-conformal; fitted components saw calibration outcomes",
   "tracks": {
     "meta": {
-      "0.5": 0.39844420252534074,
-      "0.2": 0.7188784772289893,
-      "0.1": 0.9929567202634111,
-      "0.05": 1.609315163614638
+      "0.5": 0.392980640513622,
+      "0.2": 0.6920650984263635,
+      "0.1": 0.9825785758459145,
+      "0.05": 1.6007357064593617
     },
     "engine": {
       "0.5": 0.6178446874388239,
@@ -34,16 +34,16 @@
       "0.05": 1.7929130806302982
     },
     "ml": {
-      "0.5": 0.2646988444500423,
-      "0.2": 0.5685130579426285,
-      "0.1": 0.9011303759256183,
-      "0.05": 1.2809236612020096
+      "0.5": 0.27915914810022713,
+      "0.2": 0.5131155564609018,
+      "0.1": 0.7486264086404619,
+      "0.05": 1.297284420937117
     }
   },
   "consumed_development_benchmark_coverage": {
     "meta": {
       "0.5": 0.5342,
-      "0.2": 0.7808,
+      "0.2": 0.7534,
       "0.1": 0.9041,
       "0.05": 0.9863
     },
@@ -54,10 +54,10 @@
       "0.05": 0.9726
     },
     "ml": {
-      "0.5": 0.3973,
-      "0.2": 0.6712,
-      "0.1": 0.8219,
-      "0.05": 0.9315
+      "0.5": 0.4247,
+      "0.2": 0.6027,
+      "0.1": 0.726,
+      "0.05": 0.9589
     }
   }
 }

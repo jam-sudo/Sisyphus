@@ -1,11 +1,11 @@
 {
   "version": "v3_public_omega",
-  "artifact_sha256": "c084a39ad3f5fdaa694be10975e76ad91f1b1450738b542813f4a95cf5ab1551",
+  "artifact_sha256": "94ba3382cc496cec0fb0ad58096c3878b0de9683ad6170145256eb3373933931",
   "target": "log10(cmax_mg_L / dose_mg)",
   "trained_on": {
     "dataset_path": "data/training/cmax_omega_public_clean.csv",
-    "sha256": "c7f771ec43fab0ac001ec00ec9536134baafc36958c8b509346f0bdc50de338e",
-    "n_drugs_clean": 907,
+    "sha256": "1ca357073594f42447ae90f950d142498b60eccc1211a5099fae589f0466f010",
+    "n_drugs_clean": 906,
     "source_sha256": "e7228d14bdfdfc6c790177207779630c1e5655c19d451528c87b80e2e9de9c3d",
     "source_workbooks": [
       {
@@ -24,14 +24,14 @@
     "sha256": "b41dddd78533661b8f4aed86bdb7c5f55d15ed3cd2ad20b39e9100557eda631e",
     "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, MolMR). See src/sisyphus/descriptors.py::compute_features."
   },
-  "trained_at": "2026-09-25T03:13:35.125093+00:00",
+  "trained_at": "2026-09-25T03:51:07.182165+00:00",
   "n_drugs_original": 1128,
-  "n_drugs_excluded": 221,
+  "n_drugs_excluded": 222,
   "holdout_version": "N=107 (data/reference/holdout.json)",
   "holdout_metric": {
     "name": "five_fold_scaffold_cv_aafe",
-    "value": 3.343907668395042,
-    "r2": 0.34536938279894713
+    "value": 3.3699223457697474,
+    "r2": 0.3348003097249981
   },
   "hyperparameters": {
     "n_estimators": 200,
@@ -46,5 +46,5 @@
     "n_jobs": 4,
     "verbosity": 0
   },
-  "retrained_reason": "Correct felbamate units and six source-adjudicated salt-dose labels; quarantine six blood-matrix, 114 administered/analyte-mismatched, and one misidentified dolasetron-metabolite Cmax label"
+  "retrained_reason": "Correct felbamate units and six source-adjudicated salt-dose labels; quarantine six blood-matrix, 114 administered/analyte-mismatched, one dolasetron-metabolite, and one methenamine concentration-basis label"
 }

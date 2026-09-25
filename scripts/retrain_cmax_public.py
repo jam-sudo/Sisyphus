@@ -78,7 +78,9 @@ def training_rows() -> list[dict[str, str]]:
                 or float(matched[0]["dose_mg"]) != float(mismatch["dose_mg"])
                 or int(matched[0]["n_studies"]) != int(mismatch["n_studies"])
                 or not np.isclose(float(matched[0]["cmax_mg_L"]), float(mismatch["cmax_mg_L"]))):
-            raise ValueError(f"{mismatch['name']} source row changed; re-adjudicate administered identity")
+            raise ValueError(
+                f"{mismatch['name']} source row changed; re-adjudicate administered identity"
+            )
         rows.remove(matched[0])
     # PMID 8453023: oral parent dolasetron was too sparse for PK analysis;
     # the reported concentration profile is reduced dolasetron (hydrodolasetron).
@@ -88,6 +90,15 @@ def training_rows() -> list[dict[str, str]]:
             or not np.isclose(float(dolasetron[0]["cmax_mg_L"]), 0.5781)):
         raise ValueError("Dolasetron source row changed; re-adjudicate its analyte")
     rows.remove(dolasetron[0])
+    # PMID 7076604 reports 1 g hippurate with parent serum peaks, but its
+    # clearance and volume agree with the 1 g basis, not 439 mg parent mass.
+    # The numeric table's concentration basis is unavailable: quarantine it.
+    methenamine = [row for row in rows if row["name"] == "methenamine"]
+    if (len(methenamine) != 1 or float(methenamine[0]["dose_mg"]) != 1000
+            or int(methenamine[0]["n_studies"]) != 2
+            or not np.isclose(float(methenamine[0]["cmax_mg_L"]), 30.246652707365822)):
+        raise ValueError("Methenamine source row changed; re-adjudicate its concentration basis")
+    rows.remove(methenamine[0])
     # Source-reported salt doses must match the parent structures used at inference.
     # Cysteamine's source already reports parent mass, so it is not converted.
     for name, source_dose, parent_dose, cmax, studies in (
@@ -147,10 +158,14 @@ def main() -> None:
                     "sha256": sha256(DATASET), "n_drugs_clean": len(fitted),
                     "source_sha256": SOURCE_SHA, "source_workbooks": SOURCE_WORKBOOKS},
         n_drugs_original=1128,
-        n_drugs_excluded=221,
+        n_drugs_excluded=222,
         holdout_version="N=107 (data/reference/holdout.json)",
         holdout_metric={"name": "five_fold_scaffold_cv_aafe", "value": cv_aafe, "r2": cv_r2},
-        retrained_reason="Correct felbamate units and six source-adjudicated salt-dose labels; quarantine six blood-matrix, 114 administered/analyte-mismatched, and one misidentified dolasetron-metabolite Cmax label",
+        retrained_reason=(
+            "Correct felbamate units and six source-adjudicated salt-dose labels; "
+            "quarantine six blood-matrix, 114 administered/analyte-mismatched, "
+            "one dolasetron-metabolite, and one methenamine concentration-basis label"
+        ),
     )
     META.write_text(json.dumps(metadata, indent=2) + "\n")
     print(f"N={len(fitted)} CV_AAFE={cv_aafe:.3f} CV_R2={cv_r2:.3f}")

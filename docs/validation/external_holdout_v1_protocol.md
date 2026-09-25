@@ -547,17 +547,17 @@ and must not be used to regenerate the public artifact.
 The inventory includes the [Omega `mmpk_clean.csv` source at commit
 `08a45047`](https://github.com/jam-sudo/Omega/blob/08a45047a2b5dcdca8c9a8f36ff1fe3b50ed3d6d/data/ml/clinical/mmpk_clean.csv),
 SHA256 `e7228d14bdfdfc6c790177207779630c1e5655c19d451528c87b80e2e9de9c3d`.
-Its 1,128 rows now yield 221 documented exclusions and 907 fitted rows after
+Its 1,128 rows now yield 222 documented exclusions and 906 fitted rows after
 holdout separation and source screening, including analyte, matrix, and unit
 adjudication. Retraining with the recorded hyperparameters and current feature
 code did not reproduce the former shipped model's trees or predictions. The
-current public Cmax model is trained from the 907-row fitted CSV, SHA256
-`c7f771ec43fab0ac001ec00ec9536134baafc36958c8b509346f0bdc50de338e`,
+current public Cmax model is trained from the 906-row fitted CSV, SHA256
+`1ca357073594f42447ae90f950d142498b60eccc1211a5099fae589f0466f010`,
 and its model SHA256 is
-`c084a39ad3f5fdaa694be10975e76ad91f1b1450738b542813f4a95cf5ab1551`.
+`94ba3382cc496cec0fb0ad58096c3878b0de9683ad6170145256eb3373933931`.
 Six source-adjudicated fitted salt doses use parent-equivalent mass;
 the CL/F and Vd/F models were rebuilt from the screened Omega source, fitting
-901 and 832 rows respectively. See the [first dose and source-screen follow-up](development_salt_dose_and_clf_screen_followup_2026-09-24.md) and [additional salt-dose follow-up](development_additional_salt_dose_followup_2026-09-24.md).
+900 and 831 rows respectively. See the [first dose and source-screen follow-up](development_salt_dose_and_clf_screen_followup_2026-09-24.md) and [additional salt-dose follow-up](development_additional_salt_dose_followup_2026-09-24.md), and [methenamine quarantine](development_methenamine_label_quarantine_2026-09-24.md).
 The single-assay TDC hepatocyte CLint replacement is pinned to its 995-row
 fitted CSV (SHA256
 `dbf2b750b58a68af02b01cfe90a370630908c311c8436f65818bbc08fcfaaa94`)
