@@ -1,0 +1,3813 @@
+{
+  "scored_rows": 516,
+  "arms": {
+    "full_data": {
+      "aafe": 3.28216487979156,
+      "geometric_bias": 0.9460149639935262,
+      "pct_within_2fold": 36.82170542635659,
+      "pct_within_3fold": 55.23255813953488,
+      "r2": 0.3289428521921598,
+      "n": 516
+    },
+    "filtered_data": {
+      "aafe": 3.3964782719200937,
+      "geometric_bias": 1.082723553612685,
+      "pct_within_2fold": 37.4031007751938,
+      "pct_within_3fold": 55.62015503875969,
+      "r2": 0.29358500549712363,
+      "n": 516
+    }
+  },
+  "random_subset_control": {
+    "n_seeds": 10,
+    "size": 516,
+    "per_seed_aafe": [
+      3.483474420700414,
+      3.6280589733312048,
+      3.4978094287962618,
+      3.5080686264220486,
+      3.480083882251369,
+      3.4184181042641733,
+      3.367732487415483,
+      3.6163980036911183,
+      3.404406302586905,
+      3.385841506471531
+    ],
+    "mean_aafe": 3.4790291735930507,
+    "min_aafe": 3.367732487415483,
+    "max_aafe": 3.6280589733312048
+  },
+  "paired_aafe_ratio_filtered_over_full": {
+    "point": 1.0348286561812805,
+    "ci95": [
+      0.9848637114660527,
+      1.0882100491300781
+    ],
+    "n_bootstrap": 2000
+  },
+  "largest_per_drug_changes": [
+    {
+      "name": "haloperidol",
+      "observed_log_cmax_per_dose": -3.5883802940367695,
+      "full_error_log10": 0.3713256885527607,
+      "filtered_error_log10": 1.1967391540526386
+    },
+    {
+      "name": "dihydro-alpha-ergocryptine (alpha-dihydroergocryptine)",
+      "observed_log_cmax_per_dose": -4.8699643060074616,
+      "full_error_log10": 0.41182059491737366,
+      "filtered_error_log10": 1.2309293195114899
+    },
+    {
+      "name": "ebastine",
+      "observed_log_cmax_per_dose": -4.167491087293763,
+      "full_error_log10": 0.8759094565869763,
+      "filtered_error_log10": 1.6784278243543103
+    },
+    {
+      "name": "fidaxomicin",
+      "observed_log_cmax_per_dose": -4.514884692588272,
+      "full_error_log10": 0.4993307413248447,
+      "filtered_error_log10": 1.1744704069284824
+    },
+    {
+      "name": "etilefrine",
+      "observed_log_cmax_per_dose": -3.0338582672609675,
+      "full_error_log10": 0.08713385243552807,
+      "filtered_error_log10": 0.7524518646730769
+    },
+    {
+      "name": "darifenacin",
+      "observed_log_cmax_per_dose": -3.720105019988362,
+      "full_error_log10": 0.9155689157860913,
+      "filtered_error_log10": 1.566240397872273
+    },
+    {
+      "name": "loratadine",
+      "observed_log_cmax_per_dose": -3.113600310021808,
+      "full_error_log10": 0.10103684299605131,
+      "filtered_error_log10": 0.7089996897520328
+    },
+    {
+      "name": "istradefylline",
+      "observed_log_cmax_per_dose": -2.344141541013904,
+      "full_error_log10": 0.017849026212878538,
+      "filtered_error_log10": 0.6012633423902467
+    },
+    {
+      "name": "moxidectin",
+      "observed_log_cmax_per_dose": -2.1268732363854994,
+      "full_error_log10": -0.9269783680761705,
+      "filtered_error_log10": -1.5072860901678453
+    },
+    {
+      "name": "acrivastine",
+      "observed_log_cmax_per_dose": -1.7387371312075066,
+      "full_error_log10": -0.587513660342176,
+      "filtered_error_log10": -1.1517722357816291
+    },
+    {
+      "name": "ceritinib",
+      "observed_log_cmax_per_dose": -3.545664574997736,
+      "full_error_log10": 0.8659477495125065,
+      "filtered_error_log10": 0.3721394800117741
+    },
+    {
+      "name": "flunitrazepam",
+      "observed_log_cmax_per_dose": -2.2320555949549594,
+      "full_error_log10": 0.7932966256480136,
+      "filtered_error_log10": 0.2866970801691928
+    },
+    {
+      "name": "chlorambucil",
+      "observed_log_cmax_per_dose": -1.4559319556497243,
+      "full_error_log10": -0.865383809731135,
+      "filtered_error_log10": -0.32548863284362284
+    },
+    {
+      "name": "hydrocortisone",
+      "observed_log_cmax_per_dose": -1.7290544374519994,
+      "full_error_log10": -0.7490978376334498,
+      "filtered_error_log10": -0.2033232585852931
+    },
+    {
+      "name": "chlormezanone",
+      "observed_log_cmax_per_dose": -1.8616973018337186,
+      "full_error_log10": -0.6993059063266818,
+      "filtered_error_log10": -0.13950838092079798
+    },
+    {
+      "name": "artesunate",
+      "observed_log_cmax_per_dose": -3.2596373105057563,
+      "full_error_log10": 1.1221940064438667,
+      "filtered_error_log10": 0.5451259160050239
+    },
+    {
+      "name": "etrasimod",
+      "observed_log_cmax_per_dose": -1.6903698325741012,
+      "full_error_log10": -1.2049145817172806,
+      "filtered_error_log10": -0.6212265610111039
+    },
+    {
+      "name": "dydrogesterone",
+      "observed_log_cmax_per_dose": -3.5044556624535512,
+      "full_error_log10": 1.151303148949523,
+      "filtered_error_log10": 0.4993694789055776
+    },
+    {
+      "name": "lamotrigine",
+      "observed_log_cmax_per_dose": -1.8736159476193381,
+      "full_error_log10": -0.9106910554019021,
+      "filtered_error_log10": -0.2354441014376687
+    },
+    {
+      "name": "rifaximin",
+      "observed_log_cmax_per_dose": -5.1476406191451245,
+      "full_error_log10": 3.189025792942732,
+      "filtered_error_log10": 2.0840958689315014
+    }
+  ],
+  "per_drug_oof_log10_error": [
+    {
+      "name": "tadalafil",
+      "observed_log_cmax_per_dose": -1.7726419377277944,
+      "full_error_log10": -0.40466376066698095,
+      "filtered_error_log10": -0.07656284094347021,
+      "control_mean_error_log10": -0.6028981518794445
+    },
+    {
+      "name": "gatifloxacin",
+      "observed_log_cmax_per_dose": -2.008888264500029,
+      "full_error_log10": 0.05875827869070305,
+      "filtered_error_log10": -0.18046448627816902,
+      "control_mean_error_log10": -0.08947821060525651
+    },
+    {
+      "name": "tinidazole",
+      "observed_log_cmax_per_dose": -1.7074153159140413,
+      "full_error_log10": -0.5327494408608611,
+      "filtered_error_log10": -0.5537882115365202,
+      "control_mean_error_log10": -0.46238103170406175
+    },
+    {
+      "name": "quazepam",
+      "observed_log_cmax_per_dose": -2.735623741433363,
+      "full_error_log10": 0.1006797793361951,
+      "filtered_error_log10": -0.07263431520726193,
+      "control_mean_error_log10": 0.06600306062434225
+    },
+    {
+      "name": "momelotinib",
+      "observed_log_cmax_per_dose": -2.6164353175026953,
+      "full_error_log10": 0.8485212607247412,
+      "filtered_error_log10": 0.7391354126793921,
+      "control_mean_error_log10": 0.8286654991967262
+    },
+    {
+      "name": "pemigatinib",
+      "observed_log_cmax_per_dose": -2.2319748987373056,
+      "full_error_log10": -0.6503641019645987,
+      "filtered_error_log10": -0.8285915265861807,
+      "control_mean_error_log10": -0.4718787322822866
+    },
+    {
+      "name": "bupropion",
+      "observed_log_cmax_per_dose": -2.795236499802603,
+      "full_error_log10": 0.46952715684605995,
+      "filtered_error_log10": 0.07682266999913612,
+      "control_mean_error_log10": 0.36782055665685087
+    },
+    {
+      "name": "telithromycin",
+      "observed_log_cmax_per_dose": -2.6002729989912465,
+      "full_error_log10": 0.16509018916153462,
+      "filtered_error_log10": -0.3034049413774058,
+      "control_mean_error_log10": -0.07354010563827007
+    },
+    {
+      "name": "bromazepam",
+      "observed_log_cmax_per_dose": -1.8788446028726709,
+      "full_error_log10": -0.029182688425241743,
+      "filtered_error_log10": -0.14213480157679204,
+      "control_mean_error_log10": -0.05601946515864009
+    },
+    {
+      "name": "anastrozole",
+      "observed_log_cmax_per_dose": -1.7291025050647,
+      "full_error_log10": -0.7590736023419162,
+      "filtered_error_log10": -0.9268771282665988,
+      "control_mean_error_log10": -0.8502028576367162
+    },
+    {
+      "name": "meloxicam",
+      "observed_log_cmax_per_dose": -1.0002061352579854,
+      "full_error_log10": -0.5194917693288066,
+      "filtered_error_log10": -0.32866642619678754,
+      "control_mean_error_log10": -0.5107082142979837
+    },
+    {
+      "name": "rizatriptan (mk-462)",
+      "observed_log_cmax_per_dose": -2.556188809978315,
+      "full_error_log10": 0.10056780587370096,
+      "filtered_error_log10": 0.2525989891164988,
+      "control_mean_error_log10": 0.127857363330671
+    },
+    {
+      "name": "salbutamol (albuterol)",
+      "observed_log_cmax_per_dose": -2.4944430012002083,
+      "full_error_log10": -0.07723301465367349,
+      "filtered_error_log10": 0.18522173350001303,
+      "control_mean_error_log10": 0.16300546114588688
+    },
+    {
+      "name": "sitagliptin",
+      "observed_log_cmax_per_dose": -2.379639329542935,
+      "full_error_log10": 0.5689689537189602,
+      "filtered_error_log10": 0.8013370653293728,
+      "control_mean_error_log10": 0.39039328299981335
+    },
+    {
+      "name": "ticagrelor",
+      "observed_log_cmax_per_dose": -2.2888736397817726,
+      "full_error_log10": -0.2769511073037987,
+      "filtered_error_log10": -0.46728638104647446,
+      "control_mean_error_log10": -0.45663591317385466
+    },
+    {
+      "name": "tolbutamide",
+      "observed_log_cmax_per_dose": -0.9833439591115472,
+      "full_error_log10": -0.47942972157540353,
+      "filtered_error_log10": -0.47322154019417795,
+      "control_mean_error_log10": -0.8778046724611763
+    },
+    {
+      "name": "sulfadiazine",
+      "observed_log_cmax_per_dose": -1.4380355243933989,
+      "full_error_log10": -0.07795973965994585,
+      "filtered_error_log10": 0.028462088610012648,
+      "control_mean_error_log10": -0.20341292569510205
+    },
+    {
+      "name": "lornoxicam",
+      "observed_log_cmax_per_dose": -0.9866660356675875,
+      "full_error_log10": -0.5333816289747465,
+      "filtered_error_log10": -0.5420279979551542,
+      "control_mean_error_log10": -0.6147196769560087
+    },
+    {
+      "name": "fedratinib",
+      "observed_log_cmax_per_dose": -2.6378255781620226,
+      "full_error_log10": 0.2229293283909044,
+      "filtered_error_log10": 0.11722382874185655,
+      "control_mean_error_log10": 0.13445031017953957
+    },
+    {
+      "name": "acipimox",
+      "observed_log_cmax_per_dose": -1.8091412433344405,
+      "full_error_log10": 0.29886468731942584,
+      "filtered_error_log10": 0.4088201173502486,
+      "control_mean_error_log10": 0.304255665178923
+    },
+    {
+      "name": "glipizide",
+      "observed_log_cmax_per_dose": -1.072396325826589,
+      "full_error_log10": -0.39799435162549845,
+      "filtered_error_log10": -0.24515314126020304,
+      "control_mean_error_log10": -0.6094339492321574
+    },
+    {
+      "name": "mizolastine",
+      "observed_log_cmax_per_dose": -1.4923765935952547,
+      "full_error_log10": -0.8280884942953703,
+      "filtered_error_log10": -0.8377656660025237,
+      "control_mean_error_log10": -0.7917143545096039
+    },
+    {
+      "name": "temazepam",
+      "observed_log_cmax_per_dose": -1.5814676603478064,
+      "full_error_log10": 0.2750190815132727,
+      "filtered_error_log10": -0.27277061136545044,
+      "control_mean_error_log10": 0.09948553649603031
+    },
+    {
+      "name": "deferasirox",
+      "observed_log_cmax_per_dose": -1.6492028018123568,
+      "full_error_log10": 0.12108693324393638,
+      "filtered_error_log10": -0.1713669518344938,
+      "control_mean_error_log10": 0.05036819182700514
+    },
+    {
+      "name": "almotriptan",
+      "observed_log_cmax_per_dose": -2.4399679726163384,
+      "full_error_log10": 0.13325081525244675,
+      "filtered_error_log10": 0.2969506805936333,
+      "control_mean_error_log10": -0.11687325777611779
+    },
+    {
+      "name": "cefadroxil",
+      "observed_log_cmax_per_dose": -1.4821308933811792,
+      "full_error_log10": -0.6598249591273657,
+      "filtered_error_log10": -0.3332384742183081,
+      "control_mean_error_log10": -0.6722056663913121
+    },
+    {
+      "name": "afatinib",
+      "observed_log_cmax_per_dose": -3.191917981027573,
+      "full_error_log10": 0.4398780716647801,
+      "filtered_error_log10": 0.30896624457737776,
+      "control_mean_error_log10": 0.4360605849017798
+    },
+    {
+      "name": "metformin",
+      "observed_log_cmax_per_dose": -2.4586936902408003,
+      "full_error_log10": 0.07717127317231887,
+      "filtered_error_log10": 0.17669696325105422,
+      "control_mean_error_log10": 0.014643521249711355
+    },
+    {
+      "name": "acetazolamide",
+      "observed_log_cmax_per_dose": -1.1763375454828342,
+      "full_error_log10": -0.7497337407186428,
+      "filtered_error_log10": -1.055556709201614,
+      "control_mean_error_log10": -0.7682586616590421
+    },
+    {
+      "name": "celecoxib",
+      "observed_log_cmax_per_dose": -2.4664659176898027,
+      "full_error_log10": 0.6984223996233965,
+      "filtered_error_log10": 0.7683212433886553,
+      "control_mean_error_log10": 0.8215647493433977
+    },
+    {
+      "name": "etoricoxib",
+      "observed_log_cmax_per_dose": -1.7272911778605624,
+      "full_error_log10": -0.021933365710909758,
+      "filtered_error_log10": -0.31925861919754306,
+      "control_mean_error_log10": -0.1355875738941983
+    },
+    {
+      "name": "clonazepam",
+      "observed_log_cmax_per_dose": -2.1428751258306873,
+      "full_error_log10": 0.5478445796423328,
+      "filtered_error_log10": 0.5314270762853992,
+      "control_mean_error_log10": 0.4237880138807666
+    },
+    {
+      "name": "nitrazepam",
+      "observed_log_cmax_per_dose": -2.057337649450285,
+      "full_error_log10": 0.4436693268871137,
+      "filtered_error_log10": 0.22300089179037297,
+      "control_mean_error_log10": 0.27458632765768254
+    },
+    {
+      "name": "cefprozil",
+      "observed_log_cmax_per_dose": -1.6556177248696569,
+      "full_error_log10": -0.5030448327322719,
+      "filtered_error_log10": -0.19195662834842175,
+      "control_mean_error_log10": -0.607629049803805
+    },
+    {
+      "name": "thalidomide",
+      "observed_log_cmax_per_dose": -2.0192314157013684,
+      "full_error_log10": 0.11241052241370975,
+      "filtered_error_log10": 0.04289040656135379,
+      "control_mean_error_log10": 0.1279391774658949
+    },
+    {
+      "name": "gliclazide",
+      "observed_log_cmax_per_dose": -1.2936866854874427,
+      "full_error_log10": 0.0593954896179969,
+      "filtered_error_log10": -0.07435459144432,
+      "control_mean_error_log10": -0.15771503694374012
+    },
+    {
+      "name": "furosemide",
+      "observed_log_cmax_per_dose": -1.3707669171803725,
+      "full_error_log10": -0.18773599534098984,
+      "filtered_error_log10": -0.2850578632837999,
+      "control_mean_error_log10": -0.14631391434733754
+    },
+    {
+      "name": "irbesartan",
+      "observed_log_cmax_per_dose": -1.9859199844038051,
+      "full_error_log10": -0.47731491702441753,
+      "filtered_error_log10": -0.7526395000780064,
+      "control_mean_error_log10": -0.614294640001102
+    },
+    {
+      "name": "nevirapine",
+      "observed_log_cmax_per_dose": -1.9753029920103327,
+      "full_error_log10": -0.1853813551423773,
+      "filtered_error_log10": -0.20694416985490172,
+      "control_mean_error_log10": -0.0998954318521248
+    },
+    {
+      "name": "finasteride",
+      "observed_log_cmax_per_dose": -2.0526062294381373,
+      "full_error_log10": -0.5228208259207494,
+      "filtered_error_log10": -0.14160191570346425,
+      "control_mean_error_log10": -0.3810609892470129
+    },
+    {
+      "name": "tolvaptan",
+      "observed_log_cmax_per_dose": -2.1138107240520227,
+      "full_error_log10": -0.26352100965159053,
+      "filtered_error_log10": -0.28589397069590206,
+      "control_mean_error_log10": -0.2146480142750038
+    },
+    {
+      "name": "olaparib",
+      "observed_log_cmax_per_dose": -1.6218701225310022,
+      "full_error_log10": -0.6148723739594764,
+      "filtered_error_log10": -0.27716509284680546,
+      "control_mean_error_log10": -0.6248614210099523
+    },
+    {
+      "name": "mirtazapine",
+      "observed_log_cmax_per_dose": -2.6643482982758977,
+      "full_error_log10": -0.44495493773179273,
+      "filtered_error_log10": -0.5420313537474177,
+      "control_mean_error_log10": -0.3999491632338068
+    },
+    {
+      "name": "asciminib",
+      "observed_log_cmax_per_dose": -1.8508701140285906,
+      "full_error_log10": -0.39987971240268383,
+      "filtered_error_log10": -0.37272502833591137,
+      "control_mean_error_log10": -0.3000781243442123
+    },
+    {
+      "name": "loratadine",
+      "observed_log_cmax_per_dose": -3.113600310021808,
+      "full_error_log10": 0.10103684299605131,
+      "filtered_error_log10": 0.7089996897520328,
+      "control_mean_error_log10": 0.16862932079451332
+    },
+    {
+      "name": "ximelagatran",
+      "observed_log_cmax_per_dose": -2.087790094473001,
+      "full_error_log10": -0.6408549918154511,
+      "filtered_error_log10": -0.47221652402675485,
+      "control_mean_error_log10": -0.6010955227831634
+    },
+    {
+      "name": "letrozole",
+      "observed_log_cmax_per_dose": -1.8416451385427393,
+      "full_error_log10": -0.5988787242960059,
+      "filtered_error_log10": -0.5229896137308203,
+      "control_mean_error_log10": -0.5337771722864235
+    },
+    {
+      "name": "perampanel",
+      "observed_log_cmax_per_dose": -1.5996772557669896,
+      "full_error_log10": -0.382951447350381,
+      "filtered_error_log10": -0.29524452386557876,
+      "control_mean_error_log10": -0.4571177691048365
+    },
+    {
+      "name": "ivosidenib",
+      "observed_log_cmax_per_dose": -2.191150803021016,
+      "full_error_log10": -0.4466687255586961,
+      "filtered_error_log10": -0.699274163791118,
+      "control_mean_error_log10": -0.4558478885378219
+    },
+    {
+      "name": "favipiravir",
+      "observed_log_cmax_per_dose": -1.581639644045007,
+      "full_error_log10": -0.1784234081324223,
+      "filtered_error_log10": -0.09799182758890423,
+      "control_mean_error_log10": -0.17399989710413255
+    },
+    {
+      "name": "bicalutamide",
+      "observed_log_cmax_per_dose": -1.723094612006885,
+      "full_error_log10": -0.24564656650568817,
+      "filtered_error_log10": -0.28970846569086883,
+      "control_mean_error_log10": -0.3012076083376585
+    },
+    {
+      "name": "modafinil",
+      "observed_log_cmax_per_dose": -1.6311625556517881,
+      "full_error_log10": -0.046473233265753366,
+      "filtered_error_log10": 0.04125490947258892,
+      "control_mean_error_log10": 0.041689165072564593
+    },
+    {
+      "name": "levetiracetam",
+      "observed_log_cmax_per_dose": -1.4763632238899287,
+      "full_error_log10": -0.7013914166892949,
+      "filtered_error_log10": -0.6237237035240117,
+      "control_mean_error_log10": -0.6644536434616033
+    },
+    {
+      "name": "chlorpropamide",
+      "observed_log_cmax_per_dose": -0.913472853391381,
+      "full_error_log10": -0.4438008444617074,
+      "filtered_error_log10": -0.6470177548239511,
+      "control_mean_error_log10": -0.7156461375067513
+    },
+    {
+      "name": "roxithromycin",
+      "observed_log_cmax_per_dose": -1.3909765169334258,
+      "full_error_log10": -0.9851779058265839,
+      "filtered_error_log10": -1.0058809831428681,
+      "control_mean_error_log10": -1.2440934732246551
+    },
+    {
+      "name": "obeticholic acid",
+      "observed_log_cmax_per_dose": -2.3422307570534344,
+      "full_error_log10": 0.3721118767815228,
+      "filtered_error_log10": 0.5948210557060833,
+      "control_mean_error_log10": 0.3722595532494184
+    },
+    {
+      "name": "norfloxacin",
+      "observed_log_cmax_per_dose": -2.5218565186292135,
+      "full_error_log10": 0.22206613624395954,
+      "filtered_error_log10": 0.5627252777844869,
+      "control_mean_error_log10": 0.4534461935788596
+    },
+    {
+      "name": "ertugliflozin",
+      "observed_log_cmax_per_dose": -1.686155986351905,
+      "full_error_log10": -0.5224364285040521,
+      "filtered_error_log10": -0.7827566151190424,
+      "control_mean_error_log10": -0.694143188433709
+    },
+    {
+      "name": "sofosbuvir",
+      "observed_log_cmax_per_dose": -2.6486945023271313,
+      "full_error_log10": 0.30947827002732664,
+      "filtered_error_log10": 0.21153591773240477,
+      "control_mean_error_log10": 0.20065386197297475
+    },
+    {
+      "name": "bilastine",
+      "observed_log_cmax_per_dose": -1.9204906438220262,
+      "full_error_log10": -1.017537930167842,
+      "filtered_error_log10": -1.135850050605464,
+      "control_mean_error_log10": -1.0460385109555006
+    },
+    {
+      "name": "repaglinide",
+      "observed_log_cmax_per_dose": -1.8836609277604048,
+      "full_error_log10": -0.5429802980544145,
+      "filtered_error_log10": -0.5210362520339067,
+      "control_mean_error_log10": -0.8228891697051104
+    },
+    {
+      "name": "domperidone",
+      "observed_log_cmax_per_dose": -2.7306821685350755,
+      "full_error_log10": -0.10048147625557391,
+      "filtered_error_log10": 0.2727179866350511,
+      "control_mean_error_log10": 0.04717002921470215
+    },
+    {
+      "name": "efavirenz",
+      "observed_log_cmax_per_dose": -2.3727308300381926,
+      "full_error_log10": -0.18786301342189038,
+      "filtered_error_log10": -0.004519364511367918,
+      "control_mean_error_log10": -0.00533318248927328
+    },
+    {
+      "name": "pretomanid",
+      "observed_log_cmax_per_dose": -2.171985893687108,
+      "full_error_log10": -0.5918290324603528,
+      "filtered_error_log10": -0.2297076888476819,
+      "control_mean_error_log10": -0.4193589635287731
+    },
+    {
+      "name": "atogepant",
+      "observed_log_cmax_per_dose": -1.9370094128250712,
+      "full_error_log10": -0.7246293238997823,
+      "filtered_error_log10": -0.40942136567834675,
+      "control_mean_error_log10": -0.6544217042327292
+    },
+    {
+      "name": "ambrisentan",
+      "observed_log_cmax_per_dose": -1.134744715172893,
+      "full_error_log10": -0.4037616734913525,
+      "filtered_error_log10": -0.46663813642775387,
+      "control_mean_error_log10": -0.5014504676273999
+    },
+    {
+      "name": "agomelatine",
+      "observed_log_cmax_per_dose": -3.406301102189732,
+      "full_error_log10": 0.8638122887894633,
+      "filtered_error_log10": 0.7211762280747416,
+      "control_mean_error_log10": 0.996602282075596
+    },
+    {
+      "name": "nifedipine",
+      "observed_log_cmax_per_dose": -1.9421563556925123,
+      "full_error_log10": -0.1114823409780199,
+      "filtered_error_log10": -0.11574311940514392,
+      "control_mean_error_log10": -0.1656835266812975
+    },
+    {
+      "name": "linezolid",
+      "observed_log_cmax_per_dose": -1.7337327731933143,
+      "full_error_log10": -0.6368262039337609,
+      "filtered_error_log10": -0.9983970390472863,
+      "control_mean_error_log10": -0.6732457624588462
+    },
+    {
+      "name": "rolapitant",
+      "observed_log_cmax_per_dose": -2.278721384766368,
+      "full_error_log10": 0.27094512439039153,
+      "filtered_error_log10": 0.2292843387153427,
+      "control_mean_error_log10": -0.024549932715626444
+    },
+    {
+      "name": "lansoprazole",
+      "observed_log_cmax_per_dose": -1.4601397031168093,
+      "full_error_log10": -1.0135155207296263,
+      "filtered_error_log10": -0.8379748350759397,
+      "control_mean_error_log10": -0.9797057634969601
+    },
+    {
+      "name": "crizotinib",
+      "observed_log_cmax_per_dose": -3.3620548001293136,
+      "full_error_log10": 0.8199283829692794,
+      "filtered_error_log10": 0.6793756237987472,
+      "control_mean_error_log10": 0.8539191475871992
+    },
+    {
+      "name": "ivabradine",
+      "observed_log_cmax_per_dose": -2.7430512923788393,
+      "full_error_log10": -0.4855780582833922,
+      "filtered_error_log10": -0.4726541023660338,
+      "control_mean_error_log10": -0.5193222265649475
+    },
+    {
+      "name": "vandetanib",
+      "observed_log_cmax_per_dose": -3.2919697555305105,
+      "full_error_log10": 0.5264479907752615,
+      "filtered_error_log10": 0.4390034469367605,
+      "control_mean_error_log10": 0.5681324037314992
+    },
+    {
+      "name": "riociguat",
+      "observed_log_cmax_per_dose": -1.4420909119252885,
+      "full_error_log10": -0.673250274598149,
+      "filtered_error_log10": -0.880776719986943,
+      "control_mean_error_log10": -0.700620584427861
+    },
+    {
+      "name": "voriconazole",
+      "observed_log_cmax_per_dose": -2.264280431555054,
+      "full_error_log10": 0.6234011581404424,
+      "filtered_error_log10": 0.8966425588591314,
+      "control_mean_error_log10": 0.49663339166476494
+    },
+    {
+      "name": "cefixime",
+      "observed_log_cmax_per_dose": -1.9532779463803982,
+      "full_error_log10": -0.6415833226167942,
+      "filtered_error_log10": -0.6663790932619358,
+      "control_mean_error_log10": -0.6170794001543307
+    },
+    {
+      "name": "fluconazole",
+      "observed_log_cmax_per_dose": -1.6296587374071443,
+      "full_error_log10": -0.6871342275281584,
+      "filtered_error_log10": -0.5030405137677825,
+      "control_mean_error_log10": -0.5454352233548798
+    },
+    {
+      "name": "celiprolol",
+      "observed_log_cmax_per_dose": -2.519503145528832,
+      "full_error_log10": 0.12331321747402235,
+      "filtered_error_log10": 0.08698466332057997,
+      "control_mean_error_log10": -0.030507487939796185
+    },
+    {
+      "name": "chloroquine",
+      "observed_log_cmax_per_dose": -3.457051832006876,
+      "full_error_log10": 0.39181597881168573,
+      "filtered_error_log10": 0.6672778909668371,
+      "control_mean_error_log10": 0.36033411674350946
+    },
+    {
+      "name": "neratinib",
+      "observed_log_cmax_per_dose": -3.6623466963543545,
+      "full_error_log10": 0.8824549669994961,
+      "filtered_error_log10": 1.1735187525524746,
+      "control_mean_error_log10": 0.9231732840313565
+    },
+    {
+      "name": "glyburide",
+      "observed_log_cmax_per_dose": -1.5931162624991584,
+      "full_error_log10": -0.42140056794517755,
+      "filtered_error_log10": -0.0023939818703484494,
+      "control_mean_error_log10": -0.39979096358650446
+    },
+    {
+      "name": "captopril",
+      "observed_log_cmax_per_dose": -2.244166680566844,
+      "full_error_log10": 0.2528036320133773,
+      "filtered_error_log10": 0.39622575878339683,
+      "control_mean_error_log10": 0.31921435236173545
+    },
+    {
+      "name": "oxcarbazepine",
+      "observed_log_cmax_per_dose": -2.879778261672716,
+      "full_error_log10": 0.5552788930051133,
+      "filtered_error_log10": 0.549050207626085,
+      "control_mean_error_log10": 0.6771989779584215
+    },
+    {
+      "name": "tetrabenazine",
+      "observed_log_cmax_per_dose": -4.556686965702532,
+      "full_error_log10": 1.8681264798626884,
+      "filtered_error_log10": 1.8117395322308525,
+      "control_mean_error_log10": 1.7956546704754812
+    },
+    {
+      "name": "molsidomine",
+      "observed_log_cmax_per_dose": -2.162477632022054,
+      "full_error_log10": -0.31709442570194524,
+      "filtered_error_log10": -0.33648930027469914,
+      "control_mean_error_log10": -0.18865821793064397
+    },
+    {
+      "name": "terazosin",
+      "observed_log_cmax_per_dose": -1.727004904656741,
+      "full_error_log10": -0.5779956389376193,
+      "filtered_error_log10": -0.39415107259240445,
+      "control_mean_error_log10": -0.6327659655519993
+    },
+    {
+      "name": "cabotegravir",
+      "observed_log_cmax_per_dose": -0.9520841875308332,
+      "full_error_log10": -1.0233908853298845,
+      "filtered_error_log10": -0.7714123687512102,
+      "control_mean_error_log10": -0.9236859760052385
+    },
+    {
+      "name": "selumetinib",
+      "observed_log_cmax_per_dose": -1.7290190233599587,
+      "full_error_log10": -0.43470539909487527,
+      "filtered_error_log10": -0.3071903215039329,
+      "control_mean_error_log10": -0.2516376004803733
+    },
+    {
+      "name": "gefitinib",
+      "observed_log_cmax_per_dose": -3.476058967255171,
+      "full_error_log10": 0.19467211499076686,
+      "filtered_error_log10": -0.022426359511796612,
+      "control_mean_error_log10": 0.2989568783269485
+    },
+    {
+      "name": "nitrendipine",
+      "observed_log_cmax_per_dose": -3.4203818832935475,
+      "full_error_log10": 0.9060910736621999,
+      "filtered_error_log10": 1.0994559322895192,
+      "control_mean_error_log10": 1.0509586726726674
+    },
+    {
+      "name": "methylprednisolone",
+      "observed_log_cmax_per_dose": -2.166018292111541,
+      "full_error_log10": -0.05335326512417682,
+      "filtered_error_log10": -0.0470785649593819,
+      "control_mean_error_log10": -0.062038913565491516
+    },
+    {
+      "name": "nimesulide",
+      "observed_log_cmax_per_dose": -1.4906622307519963,
+      "full_error_log10": -0.281324134566302,
+      "filtered_error_log10": -0.5239297015447566,
+      "control_mean_error_log10": -0.17663400004100294
+    },
+    {
+      "name": "bedaquiline",
+      "observed_log_cmax_per_dose": -2.019333954911998,
+      "full_error_log10": -1.0893522538129776,
+      "filtered_error_log10": -0.6847232617322891,
+      "control_mean_error_log10": -1.2281053103391617
+    },
+    {
+      "name": "cefaclor",
+      "observed_log_cmax_per_dose": -1.4792483906113953,
+      "full_error_log10": -0.25481654602648307,
+      "filtered_error_log10": -0.16819454628588248,
+      "control_mean_error_log10": -0.3606161137259154
+    },
+    {
+      "name": "hydrochlorothiazide",
+      "observed_log_cmax_per_dose": -2.2312100233604526,
+      "full_error_log10": 0.45410862584610934,
+      "filtered_error_log10": 0.2489693464805698,
+      "control_mean_error_log10": 0.5069722713996982
+    },
+    {
+      "name": "capecitabine",
+      "observed_log_cmax_per_dose": -2.7655571245975215,
+      "full_error_log10": 0.7334755205936152,
+      "filtered_error_log10": 0.429538800699206,
+      "control_mean_error_log10": 0.4742564582652764
+    },
+    {
+      "name": "carvedilol",
+      "observed_log_cmax_per_dose": -2.73559305174115,
+      "full_error_log10": -0.13100388543841524,
+      "filtered_error_log10": 0.4398321817612918,
+      "control_mean_error_log10": -0.18138258950946007
+    },
+    {
+      "name": "eprosartan",
+      "observed_log_cmax_per_dose": -2.3630458553723535,
+      "full_error_log10": 0.22301165661136713,
+      "filtered_error_log10": 0.29979745945255365,
+      "control_mean_error_log10": 0.23375124534885483
+    },
+    {
+      "name": "bendroflumethiazide",
+      "observed_log_cmax_per_dose": -2.2407124341963076,
+      "full_error_log10": 0.271431595229938,
+      "filtered_error_log10": 0.19927838458998437,
+      "control_mean_error_log10": 0.40372409238798856
+    },
+    {
+      "name": "dapsone",
+      "observed_log_cmax_per_dose": -1.7669370647909004,
+      "full_error_log10": -0.10512037310582811,
+      "filtered_error_log10": 0.1364657160283882,
+      "control_mean_error_log10": -0.26082454953176204
+    },
+    {
+      "name": "aminosalicylic acid (para-aminosalicylic acid)",
+      "observed_log_cmax_per_dose": -1.9343701610999553,
+      "full_error_log10": 0.1969274292426555,
+      "filtered_error_log10": 0.2790155420737712,
+      "control_mean_error_log10": 0.26962255339197805
+    },
+    {
+      "name": "minoxidil",
+      "observed_log_cmax_per_dose": -2.1404272026560047,
+      "full_error_log10": -0.4637793593862316,
+      "filtered_error_log10": -0.01219788126733512,
+      "control_mean_error_log10": -0.4791552834966444
+    },
+    {
+      "name": "amrinone",
+      "observed_log_cmax_per_dose": -1.8966290268582906,
+      "full_error_log10": -0.16689736512474163,
+      "filtered_error_log10": 0.023141554324110913,
+      "control_mean_error_log10": -0.10330001977256886
+    },
+    {
+      "name": "ponesimod",
+      "observed_log_cmax_per_dose": -2.264392295309991,
+      "full_error_log10": -0.03645857291510657,
+      "filtered_error_log10": -0.18155415969183997,
+      "control_mean_error_log10": -0.2658367486505804
+    },
+    {
+      "name": "ethosuximide",
+      "observed_log_cmax_per_dose": -1.5943404103292005,
+      "full_error_log10": -0.20650664319863155,
+      "filtered_error_log10": -0.19366494169106319,
+      "control_mean_error_log10": -0.17325697889199088
+    },
+    {
+      "name": "glimepiride",
+      "observed_log_cmax_per_dose": -1.0635607377965586,
+      "full_error_log10": -0.8369699581186636,
+      "filtered_error_log10": -0.6180300577204092,
+      "control_mean_error_log10": -0.7641168935816152
+    },
+    {
+      "name": "rofecoxib",
+      "observed_log_cmax_per_dose": -2.0933832930328644,
+      "full_error_log10": 0.3383784102203644,
+      "filtered_error_log10": 0.08931277263186344,
+      "control_mean_error_log10": 0.2772528098823823
+    },
+    {
+      "name": "valsartan",
+      "observed_log_cmax_per_dose": -1.6744629864832818,
+      "full_error_log10": -0.3078628058293402,
+      "filtered_error_log10": -0.4598503584721625,
+      "control_mean_error_log10": -0.4070114250042973
+    },
+    {
+      "name": "telaprevir",
+      "observed_log_cmax_per_dose": -3.371395982840971,
+      "full_error_log10": 0.39632240686746023,
+      "filtered_error_log10": 0.28097025308938406,
+      "control_mean_error_log10": 0.47631317530007733
+    },
+    {
+      "name": "galantamine",
+      "observed_log_cmax_per_dose": -2.243933078379944,
+      "full_error_log10": -0.3513821395918577,
+      "filtered_error_log10": -0.5201939376875608,
+      "control_mean_error_log10": -0.5560262474104611
+    },
+    {
+      "name": "rivastigmine",
+      "observed_log_cmax_per_dose": -2.2884151695701136,
+      "full_error_log10": -0.40078737750325066,
+      "filtered_error_log10": -0.91871597781453,
+      "control_mean_error_log10": -0.4856483937767493
+    },
+    {
+      "name": "cenobamate",
+      "observed_log_cmax_per_dose": -1.5840151491585206,
+      "full_error_log10": -0.29089603992076407,
+      "filtered_error_log10": -0.364787083583789,
+      "control_mean_error_log10": -0.3700990495261718
+    },
+    {
+      "name": "solriamfetol",
+      "observed_log_cmax_per_dose": -2.232369822830509,
+      "full_error_log10": -0.08798153939788467,
+      "filtered_error_log10": 0.1174568360751378,
+      "control_mean_error_log10": 0.15454093870575303
+    },
+    {
+      "name": "isoniazid",
+      "observed_log_cmax_per_dose": -1.7645009151695632,
+      "full_error_log10": -0.1562888034583665,
+      "filtered_error_log10": 0.17812341368183127,
+      "control_mean_error_log10": -0.08389544570461283
+    },
+    {
+      "name": "gabapentin",
+      "observed_log_cmax_per_dose": -2.016547993435101,
+      "full_error_log10": 0.11885185600681725,
+      "filtered_error_log10": 0.46078796745701256,
+      "control_mean_error_log10": 0.2568737185136838
+    },
+    {
+      "name": "baclofen",
+      "observed_log_cmax_per_dose": -1.8347728201390012,
+      "full_error_log10": 0.017484182977746343,
+      "filtered_error_log10": 0.1723326393604978,
+      "control_mean_error_log10": 0.12975996222503028
+    },
+    {
+      "name": "vemurafenib",
+      "observed_log_cmax_per_dose": -2.3564521228154622,
+      "full_error_log10": 0.36461092580160726,
+      "filtered_error_log10": -0.011884793154386397,
+      "control_mean_error_log10": 0.47202314484915364
+    },
+    {
+      "name": "methocarbamol",
+      "observed_log_cmax_per_dose": -1.8142994376553876,
+      "full_error_log10": -0.5426246193514483,
+      "filtered_error_log10": -0.5952610043154376,
+      "control_mean_error_log10": -0.5423342016802448
+    },
+    {
+      "name": "omeprazole",
+      "observed_log_cmax_per_dose": -1.6430525892353276,
+      "full_error_log10": -1.15814327067373,
+      "filtered_error_log10": -1.1934437639140865,
+      "control_mean_error_log10": -0.9278588420772333
+    },
+    {
+      "name": "zopiclone",
+      "observed_log_cmax_per_dose": -2.1791968521463287,
+      "full_error_log10": -0.28565858036404723,
+      "filtered_error_log10": -0.16865561634427184,
+      "control_mean_error_log10": -0.25720151096707466
+    },
+    {
+      "name": "finerenone",
+      "observed_log_cmax_per_dose": -2.060463534647755,
+      "full_error_log10": -0.0365198981220205,
+      "filtered_error_log10": 0.12165092116051124,
+      "control_mean_error_log10": 0.04514766817741789
+    },
+    {
+      "name": "eplerenone",
+      "observed_log_cmax_per_dose": -1.7551358999278344,
+      "full_error_log10": -0.8193548856709205,
+      "filtered_error_log10": -0.7439254461262428,
+      "control_mean_error_log10": -0.8018134771321022
+    },
+    {
+      "name": "torasemide",
+      "observed_log_cmax_per_dose": -0.8930226232971129,
+      "full_error_log10": -0.5474766824279848,
+      "filtered_error_log10": -0.8902427289520326,
+      "control_mean_error_log10": -0.7521588656936707
+    },
+    {
+      "name": "entrectinib",
+      "observed_log_cmax_per_dose": -2.684141592056168,
+      "full_error_log10": -0.17431692692576561,
+      "filtered_error_log10": -0.35854105564891015,
+      "control_mean_error_log10": -0.20825533482371483
+    },
+    {
+      "name": "bazedoxifene",
+      "observed_log_cmax_per_dose": -3.6989700043360187,
+      "full_error_log10": 0.17556707502998847,
+      "filtered_error_log10": 0.28796116949715156,
+      "control_mean_error_log10": 0.32649356962837706
+    },
+    {
+      "name": "pirenzepine",
+      "observed_log_cmax_per_dose": -3.064926266463295,
+      "full_error_log10": 0.5004099605398329,
+      "filtered_error_log10": 0.4761630294637831,
+      "control_mean_error_log10": 0.650700282843605
+    },
+    {
+      "name": "aliskiren",
+      "observed_log_cmax_per_dose": -3.0442880173118527,
+      "full_error_log10": 0.1435423870475705,
+      "filtered_error_log10": 0.04894933895186737,
+      "control_mean_error_log10": -0.05666074558182421
+    },
+    {
+      "name": "zidovudine",
+      "observed_log_cmax_per_dose": -2.28840322667121,
+      "full_error_log10": -0.31476621455193454,
+      "filtered_error_log10": -0.2663319570446103,
+      "control_mean_error_log10": -0.1626139146709531
+    },
+    {
+      "name": "flunitrazepam",
+      "observed_log_cmax_per_dose": -2.2320555949549594,
+      "full_error_log10": 0.7932966256480136,
+      "filtered_error_log10": 0.2866970801691928,
+      "control_mean_error_log10": 0.45466577056454804
+    },
+    {
+      "name": "piroxicam",
+      "observed_log_cmax_per_dose": -0.9299424740521427,
+      "full_error_log10": -0.509203687027264,
+      "filtered_error_log10": -0.42327369721250574,
+      "control_mean_error_log10": -0.4505537775309567
+    },
+    {
+      "name": "lasmiditan",
+      "observed_log_cmax_per_dose": -2.9727057282908707,
+      "full_error_log10": 0.7547165219767837,
+      "filtered_error_log10": 1.0823922221644668,
+      "control_mean_error_log10": 0.5776984517558366
+    },
+    {
+      "name": "metolazone",
+      "observed_log_cmax_per_dose": -1.7878074918784217,
+      "full_error_log10": -0.4808506692849084,
+      "filtered_error_log10": -0.15221402301415643,
+      "control_mean_error_log10": -0.06267927541360097
+    },
+    {
+      "name": "nisoldipine",
+      "observed_log_cmax_per_dose": -3.736726982469061,
+      "full_error_log10": 1.0326134990401061,
+      "filtered_error_log10": 1.1404323409743102,
+      "control_mean_error_log10": 1.13336184727619
+    },
+    {
+      "name": "pirfenidone",
+      "observed_log_cmax_per_dose": -1.5263750662042321,
+      "full_error_log10": -0.29835723741515263,
+      "filtered_error_log10": -0.4160609136389075,
+      "control_mean_error_log10": -0.512298942642051
+    },
+    {
+      "name": "suvorexant",
+      "observed_log_cmax_per_dose": -2.0311520122613804,
+      "full_error_log10": -0.39387917288876606,
+      "filtered_error_log10": -0.7466883636388881,
+      "control_mean_error_log10": -0.40866428383923603
+    },
+    {
+      "name": "monomethyl fumarate",
+      "observed_log_cmax_per_dose": -2.022505324662732,
+      "full_error_log10": 0.10076109725336924,
+      "filtered_error_log10": 0.26162378150324717,
+      "control_mean_error_log10": 0.2614485319266786
+    },
+    {
+      "name": "sertraline",
+      "observed_log_cmax_per_dose": -3.648483347633157,
+      "full_error_log10": 0.5223787543561795,
+      "filtered_error_log10": 0.9469562289502957,
+      "control_mean_error_log10": 0.6223373887327055
+    },
+    {
+      "name": "metaxalone",
+      "observed_log_cmax_per_dose": -2.6629554039220578,
+      "full_error_log10": 0.5159252887944943,
+      "filtered_error_log10": 0.7226696020345456,
+      "control_mean_error_log10": 0.6437027460317379
+    },
+    {
+      "name": "gemifloxacin",
+      "observed_log_cmax_per_dose": -2.266271101665821,
+      "full_error_log10": 0.1642668120387456,
+      "filtered_error_log10": 0.20406674070390673,
+      "control_mean_error_log10": 0.19893543643983813
+    },
+    {
+      "name": "olanzapine",
+      "observed_log_cmax_per_dose": -2.816262402083079,
+      "full_error_log10": 0.05125347569147731,
+      "filtered_error_log10": 0.4755257745043435,
+      "control_mean_error_log10": 0.1042601962343852
+    },
+    {
+      "name": "ceritinib",
+      "observed_log_cmax_per_dose": -3.545664574997736,
+      "full_error_log10": 0.8659477495125065,
+      "filtered_error_log10": 0.3721394800117741,
+      "control_mean_error_log10": 0.8969148181846869
+    },
+    {
+      "name": "isradipine",
+      "observed_log_cmax_per_dose": -3.018808938610799,
+      "full_error_log10": 0.08429179345393845,
+      "filtered_error_log10": 0.2907341495635576,
+      "control_mean_error_log10": 0.23377549802089392
+    },
+    {
+      "name": "troglitazone",
+      "observed_log_cmax_per_dose": -2.619224005717909,
+      "full_error_log10": 0.38036602117506213,
+      "filtered_error_log10": -0.0804541768840199,
+      "control_mean_error_log10": 0.3937005934902782
+    },
+    {
+      "name": "encorafenib",
+      "observed_log_cmax_per_dose": -1.9856916028523792,
+      "full_error_log10": -0.7301775854563366,
+      "filtered_error_log10": -0.8046216410135876,
+      "control_mean_error_log10": -0.757792989585365
+    },
+    {
+      "name": "tolcapone",
+      "observed_log_cmax_per_dose": -1.5234222931009447,
+      "full_error_log10": -0.07492858942926772,
+      "filtered_error_log10": -0.08266837176264175,
+      "control_mean_error_log10": -0.180718083943733
+    },
+    {
+      "name": "gemfibrozil",
+      "observed_log_cmax_per_dose": -1.2894642517654507,
+      "full_error_log10": -0.5877116753967198,
+      "filtered_error_log10": -0.49476431154326517,
+      "control_mean_error_log10": -0.6131973102004917
+    },
+    {
+      "name": "nizatidine",
+      "observed_log_cmax_per_dose": -2.044559313810999,
+      "full_error_log10": -0.4638289670575313,
+      "filtered_error_log10": -0.2539605359662227,
+      "control_mean_error_log10": -0.5174571971524409
+    },
+    {
+      "name": "pralsetinib",
+      "observed_log_cmax_per_dose": -2.4993971682186253,
+      "full_error_log10": -0.1260362767581813,
+      "filtered_error_log10": -0.4065536164646022,
+      "control_mean_error_log10": -0.10463694566534665
+    },
+    {
+      "name": "clarithromycin",
+      "observed_log_cmax_per_dose": -2.46685045799237,
+      "full_error_log10": 0.247704206313903,
+      "filtered_error_log10": 0.57199805816632,
+      "control_mean_error_log10": 0.19454333623867726
+    },
+    {
+      "name": "prednisolone",
+      "observed_log_cmax_per_dose": -1.5852194718503037,
+      "full_error_log10": -0.6893254824496231,
+      "filtered_error_log10": -0.5062228747225723,
+      "control_mean_error_log10": -0.6144169278956375
+    },
+    {
+      "name": "fidaxomicin",
+      "observed_log_cmax_per_dose": -4.514884692588272,
+      "full_error_log10": 0.4993307413248447,
+      "filtered_error_log10": 1.1744704069284824,
+      "control_mean_error_log10": 0.7133397163538362
+    },
+    {
+      "name": "dutasteride",
+      "observed_log_cmax_per_dose": -2.2500685181242615,
+      "full_error_log10": -0.5732525859254212,
+      "filtered_error_log10": -0.3861731562989563,
+      "control_mean_error_log10": -0.458475998439154
+    },
+    {
+      "name": "rifaximin",
+      "observed_log_cmax_per_dose": -5.1476406191451245,
+      "full_error_log10": 3.189025792942732,
+      "filtered_error_log10": 2.0840958689315014,
+      "control_mean_error_log10": 3.037925503121107
+    },
+    {
+      "name": "pyrimethamine",
+      "observed_log_cmax_per_dose": -2.0946455341200116,
+      "full_error_log10": -0.2876221794267413,
+      "filtered_error_log10": -0.05402108613450496,
+      "control_mean_error_log10": -0.27188331071336247
+    },
+    {
+      "name": "maraviroc",
+      "observed_log_cmax_per_dose": -2.7741835262715044,
+      "full_error_log10": 0.138860478633565,
+      "filtered_error_log10": 0.09055592083327202,
+      "control_mean_error_log10": -0.15090189910538765
+    },
+    {
+      "name": "ripretinib",
+      "observed_log_cmax_per_dose": -2.236574588464791,
+      "full_error_log10": 0.6536619049778527,
+      "filtered_error_log10": 0.5941453558674401,
+      "control_mean_error_log10": 0.5340006691685266
+    },
+    {
+      "name": "lomefloxacin",
+      "observed_log_cmax_per_dose": -1.9954445969338936,
+      "full_error_log10": -0.08796995766205362,
+      "filtered_error_log10": 0.31114798896270224,
+      "control_mean_error_log10": -0.08652223236603329
+    },
+    {
+      "name": "cisapride",
+      "observed_log_cmax_per_dose": -2.46898640023036,
+      "full_error_log10": -0.5357638515396594,
+      "filtered_error_log10": -0.08246146811680788,
+      "control_mean_error_log10": -0.26883649005131716
+    },
+    {
+      "name": "desloratadine",
+      "observed_log_cmax_per_dose": -3.2941733145513443,
+      "full_error_log10": 0.46463115451716464,
+      "filtered_error_log10": 0.6141312861242203,
+      "control_mean_error_log10": 0.4882249140539079
+    },
+    {
+      "name": "methyldopa",
+      "observed_log_cmax_per_dose": -2.2212430036367485,
+      "full_error_log10": 0.14478574159756397,
+      "filtered_error_log10": 0.35990319612637256,
+      "control_mean_error_log10": 0.4034571802915643
+    },
+    {
+      "name": "zafirlukast",
+      "observed_log_cmax_per_dose": -1.524666693302792,
+      "full_error_log10": -1.0382948850663487,
+      "filtered_error_log10": -1.4510005449326817,
+      "control_mean_error_log10": -1.0642026638062778
+    },
+    {
+      "name": "mycophenolate mofetil",
+      "observed_log_cmax_per_dose": -5.224841786807433,
+      "full_error_log10": 2.3954450621065053,
+      "filtered_error_log10": 2.379440976565734,
+      "control_mean_error_log10": 2.647309066241637
+    },
+    {
+      "name": "drospirenone",
+      "observed_log_cmax_per_dose": -1.9463102085977757,
+      "full_error_log10": -0.794935299596194,
+      "filtered_error_log10": -0.6139033572286403,
+      "control_mean_error_log10": -0.9578289763540064
+    },
+    {
+      "name": "dienogest",
+      "observed_log_cmax_per_dose": -1.579702329270625,
+      "full_error_log10": -1.008533048994756,
+      "filtered_error_log10": -1.0790579799487354,
+      "control_mean_error_log10": -0.9152852538897756
+    },
+    {
+      "name": "omadacycline",
+      "observed_log_cmax_per_dose": -2.75238205512598,
+      "full_error_log10": -0.3833291379587367,
+      "filtered_error_log10": 0.2964320333822057,
+      "control_mean_error_log10": -0.2089125005380823
+    },
+    {
+      "name": "nimodipine",
+      "observed_log_cmax_per_dose": -3.2560911714596164,
+      "full_error_log10": 0.5887237131161105,
+      "filtered_error_log10": 0.6350231706661593,
+      "control_mean_error_log10": 0.6188892423672092
+    },
+    {
+      "name": "dofetilide (uk-68,798)",
+      "observed_log_cmax_per_dose": -2.4069175191362926,
+      "full_error_log10": 0.1547669835527965,
+      "filtered_error_log10": 0.4575170941790172,
+      "control_mean_error_log10": 0.0805115647753305
+    },
+    {
+      "name": "cinoxacin",
+      "observed_log_cmax_per_dose": -1.5033877284874553,
+      "full_error_log10": -0.2740146724830037,
+      "filtered_error_log10": -0.20538493081430254,
+      "control_mean_error_log10": -0.23631136103967476
+    },
+    {
+      "name": "hydrocortisone",
+      "observed_log_cmax_per_dose": -1.7290544374519994,
+      "full_error_log10": -0.7490978376334498,
+      "filtered_error_log10": -0.2033232585852931,
+      "control_mean_error_log10": -0.4110416905349086
+    },
+    {
+      "name": "medifoxamine",
+      "observed_log_cmax_per_dose": -2.8484155450370516,
+      "full_error_log10": 0.28993456702496667,
+      "filtered_error_log10": 0.3797239575889315,
+      "control_mean_error_log10": 0.1662757668998447
+    },
+    {
+      "name": "secnidazole",
+      "observed_log_cmax_per_dose": -1.6880283259157447,
+      "full_error_log10": -0.4584987260099145,
+      "filtered_error_log10": -0.5348188973661157,
+      "control_mean_error_log10": -0.42096824419457635
+    },
+    {
+      "name": "paliperidone",
+      "observed_log_cmax_per_dose": -2.099679258763,
+      "full_error_log10": -0.3419372764237676,
+      "filtered_error_log10": -0.41193601757366993,
+      "control_mean_error_log10": -0.24407655865033018
+    },
+    {
+      "name": "risperidone",
+      "observed_log_cmax_per_dose": -2.005402168378402,
+      "full_error_log10": -0.9611970576195228,
+      "filtered_error_log10": -0.6721650751976478,
+      "control_mean_error_log10": -0.8142068776039588
+    },
+    {
+      "name": "allopurinol",
+      "observed_log_cmax_per_dose": -1.986180622149673,
+      "full_error_log10": -0.17144290728453115,
+      "filtered_error_log10": 0.1065052338134913,
+      "control_mean_error_log10": -0.09722509903791843
+    },
+    {
+      "name": "ketoprofen",
+      "observed_log_cmax_per_dose": -0.983147424266074,
+      "full_error_log10": 0.04122595171663557,
+      "filtered_error_log10": -0.2150920214202663,
+      "control_mean_error_log10": -0.03460845966603965
+    },
+    {
+      "name": "oxprenolol",
+      "observed_log_cmax_per_dose": -2.245462825214232,
+      "full_error_log10": -0.4780629373437515,
+      "filtered_error_log10": -0.32426388033691556,
+      "control_mean_error_log10": -0.3949542261010759
+    },
+    {
+      "name": "pimavanserin",
+      "observed_log_cmax_per_dose": -3.2670038896078464,
+      "full_error_log10": 0.8644427018637058,
+      "filtered_error_log10": 0.7686160760397311,
+      "control_mean_error_log10": 0.9352401452535983
+    },
+    {
+      "name": "acetaminophen (paracetamol)",
+      "observed_log_cmax_per_dose": -1.8898805600327981,
+      "full_error_log10": -0.014598109133766801,
+      "filtered_error_log10": 0.1217856627625955,
+      "control_mean_error_log10": -0.021277047999428422
+    },
+    {
+      "name": "oxaprozin",
+      "observed_log_cmax_per_dose": -1.121217640199067,
+      "full_error_log10": -0.4018470923525077,
+      "filtered_error_log10": -0.7853690068346244,
+      "control_mean_error_log10": -0.497256402216552
+    },
+    {
+      "name": "bisoprolol",
+      "observed_log_cmax_per_dose": -2.3686639263113336,
+      "full_error_log10": -0.38828978996674257,
+      "filtered_error_log10": 0.03863944549163145,
+      "control_mean_error_log10": -0.5317774103204411
+    },
+    {
+      "name": "acetylcysteine (n-acetylcysteine)",
+      "observed_log_cmax_per_dose": -2.3306836446566552,
+      "full_error_log10": 0.5284500678820581,
+      "filtered_error_log10": 0.4061180909914941,
+      "control_mean_error_log10": 0.5253607353014917
+    },
+    {
+      "name": "exemestane",
+      "observed_log_cmax_per_dose": -3.289014131527888,
+      "full_error_log10": 0.5922644443330638,
+      "filtered_error_log10": 0.5396135158357493,
+      "control_mean_error_log10": 0.5217556781587476
+    },
+    {
+      "name": "sertindole",
+      "observed_log_cmax_per_dose": -3.2089683185441453,
+      "full_error_log10": 0.4705576072556932,
+      "filtered_error_log10": 0.4779428611619432,
+      "control_mean_error_log10": 0.5394119630677658
+    },
+    {
+      "name": "riluzole",
+      "observed_log_cmax_per_dose": -2.4320522122179904,
+      "full_error_log10": -0.27895037605410433,
+      "filtered_error_log10": 0.11850340888852262,
+      "control_mean_error_log10": -0.06143211795931691
+    },
+    {
+      "name": "megestrol acetate",
+      "observed_log_cmax_per_dose": -3.6090791342769677,
+      "full_error_log10": 1.0046172259365136,
+      "filtered_error_log10": 0.8014383433376366,
+      "control_mean_error_log10": 0.9702954886470847
+    },
+    {
+      "name": "lamotrigine",
+      "observed_log_cmax_per_dose": -1.8736159476193381,
+      "full_error_log10": -0.9106910554019021,
+      "filtered_error_log10": -0.2354441014376687,
+      "control_mean_error_log10": -0.871896132573228
+    },
+    {
+      "name": "didanosine",
+      "observed_log_cmax_per_dose": -2.2222936652916188,
+      "full_error_log10": 0.2544765971916432,
+      "filtered_error_log10": 0.1572375797050709,
+      "control_mean_error_log10": 0.2398853443878406
+    },
+    {
+      "name": "venetoclax",
+      "observed_log_cmax_per_dose": -2.7628918679618724,
+      "full_error_log10": -0.6378401724434011,
+      "filtered_error_log10": -0.5199836699104421,
+      "control_mean_error_log10": -0.464762565288555
+    },
+    {
+      "name": "naloxegol",
+      "observed_log_cmax_per_dose": -2.796431728748245,
+      "full_error_log10": -0.12193446502311733,
+      "filtered_error_log10": -0.4174337898217013,
+      "control_mean_error_log10": -0.1968916927300266
+    },
+    {
+      "name": "aceclofenac",
+      "observed_log_cmax_per_dose": -1.0189707297293786,
+      "full_error_log10": -0.8599649649651404,
+      "filtered_error_log10": -0.9162818175347205,
+      "control_mean_error_log10": -0.8779976826699134
+    },
+    {
+      "name": "rebamipide",
+      "observed_log_cmax_per_dose": -2.6608089776426938,
+      "full_error_log10": 1.2105703921705868,
+      "filtered_error_log10": 1.0706024737745907,
+      "control_mean_error_log10": 1.246991059342065
+    },
+    {
+      "name": "dihydro-alpha-ergocryptine (alpha-dihydroergocryptine)",
+      "observed_log_cmax_per_dose": -4.8699643060074616,
+      "full_error_log10": 0.41182059491737366,
+      "filtered_error_log10": 1.2309293195114899,
+      "control_mean_error_log10": 0.9259787722931669
+    },
+    {
+      "name": "mobocertinib",
+      "observed_log_cmax_per_dose": -3.4684932017083403,
+      "full_error_log10": 0.8446697973962065,
+      "filtered_error_log10": 0.5764784598107573,
+      "control_mean_error_log10": 0.7329996371026275
+    },
+    {
+      "name": "amoxicillin",
+      "observed_log_cmax_per_dose": -2.034112909338272,
+      "full_error_log10": 0.1897136955473786,
+      "filtered_error_log10": 0.02460429956654364,
+      "control_mean_error_log10": 0.019159737131393406
+    },
+    {
+      "name": "flurbiprofen",
+      "observed_log_cmax_per_dose": -0.8736705552496904,
+      "full_error_log10": -0.17455675493097367,
+      "filtered_error_log10": -0.23109807859277787,
+      "control_mean_error_log10": -0.308250986441136
+    },
+    {
+      "name": "cilostazol",
+      "observed_log_cmax_per_dose": -2.1906491686764102,
+      "full_error_log10": -0.4085205624637265,
+      "filtered_error_log10": -0.38273106318088956,
+      "control_mean_error_log10": -0.3435050080356259
+    },
+    {
+      "name": "flibanserin",
+      "observed_log_cmax_per_dose": -2.3578920488218937,
+      "full_error_log10": -0.3704144830842342,
+      "filtered_error_log10": -0.13618515683606525,
+      "control_mean_error_log10": -0.2999783153672544
+    },
+    {
+      "name": "aripiprazole",
+      "observed_log_cmax_per_dose": -2.4056426011660523,
+      "full_error_log10": -0.8537689722439818,
+      "filtered_error_log10": -0.9422804392239623,
+      "control_mean_error_log10": -0.8174176252743774
+    },
+    {
+      "name": "cyclacillin",
+      "observed_log_cmax_per_dose": -1.6651415230333881,
+      "full_error_log10": -0.469539940208189,
+      "filtered_error_log10": -0.09960240110754204,
+      "control_mean_error_log10": -0.3804427860677164
+    },
+    {
+      "name": "praziquantel",
+      "observed_log_cmax_per_dose": -3.6011949238242145,
+      "full_error_log10": 0.8767233547629352,
+      "filtered_error_log10": 1.1101842579306598,
+      "control_mean_error_log10": 0.8648182806433673
+    },
+    {
+      "name": "tibolone",
+      "observed_log_cmax_per_dose": -3.230713133096572,
+      "full_error_log10": 0.9965169470308983,
+      "filtered_error_log10": 1.1907084028719628,
+      "control_mean_error_log10": 0.8331862728594506
+    },
+    {
+      "name": "roflumilast",
+      "observed_log_cmax_per_dose": -1.6886340174176404,
+      "full_error_log10": -0.5601483788988879,
+      "filtered_error_log10": -0.8155135121844104,
+      "control_mean_error_log10": -0.6577470984957505
+    },
+    {
+      "name": "oxazepam",
+      "observed_log_cmax_per_dose": -1.6652811409489783,
+      "full_error_log10": 0.1405950428502234,
+      "filtered_error_log10": -0.05431715235546508,
+      "control_mean_error_log10": -0.015873432014736233
+    },
+    {
+      "name": "levonorgestrel",
+      "observed_log_cmax_per_dose": -1.8312266226137965,
+      "full_error_log10": -0.7814888600979955,
+      "filtered_error_log10": -1.0075342301999242,
+      "control_mean_error_log10": -0.9740016107236058
+    },
+    {
+      "name": "enasidenib",
+      "observed_log_cmax_per_dose": -2.0313433830341356,
+      "full_error_log10": -0.6325569923320753,
+      "filtered_error_log10": -0.7958982761302931,
+      "control_mean_error_log10": -0.5772411878505688
+    },
+    {
+      "name": "mifepristone",
+      "observed_log_cmax_per_dose": -1.7169450026780035,
+      "full_error_log10": -1.11840241133872,
+      "filtered_error_log10": -0.8981315392226312,
+      "control_mean_error_log10": -1.0029450434416862
+    },
+    {
+      "name": "nadolol",
+      "observed_log_cmax_per_dose": -2.7513204688916604,
+      "full_error_log10": 0.029167282093564673,
+      "filtered_error_log10": 0.017021285999814673,
+      "control_mean_error_log10": -0.05494250107904275
+    },
+    {
+      "name": "maribavir",
+      "observed_log_cmax_per_dose": -1.4416828472351948,
+      "full_error_log10": -1.206369368340977,
+      "filtered_error_log10": -0.7806703727507671,
+      "control_mean_error_log10": -0.7879975717330059
+    },
+    {
+      "name": "ospemifene",
+      "observed_log_cmax_per_dose": -1.9673518833210533,
+      "full_error_log10": -0.3450956645915444,
+      "filtered_error_log10": -0.5652373138377602,
+      "control_mean_error_log10": -0.2995552125880654
+    },
+    {
+      "name": "diflunisal",
+      "observed_log_cmax_per_dose": -0.8378110257904875,
+      "full_error_log10": -1.3467425974089755,
+      "filtered_error_log10": -0.9710765751082552,
+      "control_mean_error_log10": -1.2347570093352451
+    },
+    {
+      "name": "lorazepam",
+      "observed_log_cmax_per_dose": -1.956109291095229,
+      "full_error_log10": 0.39761794187495303,
+      "filtered_error_log10": 0.48110724069544863,
+      "control_mean_error_log10": 0.20962005235621528
+    },
+    {
+      "name": "acalabrutinib",
+      "observed_log_cmax_per_dose": -2.2686998489750265,
+      "full_error_log10": -0.41046456066242465,
+      "filtered_error_log10": 0.09241267475017301,
+      "control_mean_error_log10": -0.042191660081064786
+    },
+    {
+      "name": "fluvastatin",
+      "observed_log_cmax_per_dose": -2.1058671916233287,
+      "full_error_log10": 0.1385369742618785,
+      "filtered_error_log10": -0.16439004295003556,
+      "control_mean_error_log10": -0.007747474838615709
+    },
+    {
+      "name": "nicorandil",
+      "observed_log_cmax_per_dose": -1.9141660205626065,
+      "full_error_log10": -0.1907279022431796,
+      "filtered_error_log10": -0.017037106344742092,
+      "control_mean_error_log10": -0.11694223959211758
+    },
+    {
+      "name": "risedronic acid (risedronate)",
+      "observed_log_cmax_per_dose": -3.7827155479829004,
+      "full_error_log10": 1.4830751308839014,
+      "filtered_error_log10": 1.7636325249116114,
+      "control_mean_error_log10": 1.517259205285757
+    },
+    {
+      "name": "deferiprone",
+      "observed_log_cmax_per_dose": -1.8085489855351047,
+      "full_error_log10": 0.20132773976941865,
+      "filtered_error_log10": 0.3707098351063327,
+      "control_mean_error_log10": 0.14875271182676109
+    },
+    {
+      "name": "opicapone",
+      "observed_log_cmax_per_dose": -1.8827287043442356,
+      "full_error_log10": 0.3422029103149997,
+      "filtered_error_log10": 0.08004773510595431,
+      "control_mean_error_log10": 0.1617016042580235
+    },
+    {
+      "name": "rimonabant",
+      "observed_log_cmax_per_dose": -1.9742232215955433,
+      "full_error_log10": -0.6226240741655651,
+      "filtered_error_log10": -0.8419436561510387,
+      "control_mean_error_log10": -0.5422417270586315
+    },
+    {
+      "name": "tolfenamic acid",
+      "observed_log_cmax_per_dose": -1.7033348097384688,
+      "full_error_log10": 0.02825749059326621,
+      "filtered_error_log10": -0.06515860418670205,
+      "control_mean_error_log10": -0.049492822688746774
+    },
+    {
+      "name": "sulfamethazine",
+      "observed_log_cmax_per_dose": -1.3260580013659125,
+      "full_error_log10": -0.1271891881558771,
+      "filtered_error_log10": -0.30913343921636294,
+      "control_mean_error_log10": -0.16700832143758482
+    },
+    {
+      "name": "sulfamethoxazole",
+      "observed_log_cmax_per_dose": -1.1041172499523888,
+      "full_error_log10": -0.2794060950412025,
+      "filtered_error_log10": -0.23694171954529186,
+      "control_mean_error_log10": -0.4080678825511208
+    },
+    {
+      "name": "isoxicam",
+      "observed_log_cmax_per_dose": -1.214670164989233,
+      "full_error_log10": -0.06322135169625276,
+      "filtered_error_log10": 0.060924513744115893,
+      "control_mean_error_log10": -0.018910144163370113
+    },
+    {
+      "name": "riboflavin",
+      "observed_log_cmax_per_dose": -2.7136932611567253,
+      "full_error_log10": 0.059815764437364916,
+      "filtered_error_log10": 0.3344384431940788,
+      "control_mean_error_log10": 0.04483001233165185
+    },
+    {
+      "name": "rilpivirine",
+      "observed_log_cmax_per_dose": -2.644612342013426,
+      "full_error_log10": 0.3532908259764387,
+      "filtered_error_log10": 0.5054250060454084,
+      "control_mean_error_log10": 0.5511818348303512
+    },
+    {
+      "name": "orphenadrine",
+      "observed_log_cmax_per_dose": -2.7779212971221834,
+      "full_error_log10": 0.175339080859366,
+      "filtered_error_log10": 0.4856697102081209,
+      "control_mean_error_log10": -0.03188969893341964
+    },
+    {
+      "name": "meclizine",
+      "observed_log_cmax_per_dose": -2.4944701801648677,
+      "full_error_log10": -0.262219368327564,
+      "filtered_error_log10": -0.03791636120170949,
+      "control_mean_error_log10": -0.35168207775444404
+    },
+    {
+      "name": "salsalate",
+      "observed_log_cmax_per_dose": -1.687540542555237,
+      "full_error_log10": 0.11700321383514423,
+      "filtered_error_log10": -0.0359699612136839,
+      "control_mean_error_log10": 0.12899242587127713
+    },
+    {
+      "name": "fomepizole",
+      "observed_log_cmax_per_dose": -1.5997299260741076,
+      "full_error_log10": -0.6788130693787733,
+      "filtered_error_log10": -0.34811219505016,
+      "control_mean_error_log10": -0.6232426696175732
+    },
+    {
+      "name": "telbivudine",
+      "observed_log_cmax_per_dose": -2.0457574905606752,
+      "full_error_log10": -0.049016994073724174,
+      "filtered_error_log10": -0.16656808240685406,
+      "control_mean_error_log10": -0.04627736194405507
+    },
+    {
+      "name": "halazepam",
+      "observed_log_cmax_per_dose": -2.8190144192132696,
+      "full_error_log10": 0.9181855808648809,
+      "filtered_error_log10": 0.6518708359155401,
+      "control_mean_error_log10": 0.8211086403283818
+    },
+    {
+      "name": "acrivastine",
+      "observed_log_cmax_per_dose": -1.7387371312075066,
+      "full_error_log10": -0.587513660342176,
+      "filtered_error_log10": -1.1517722357816291,
+      "control_mean_error_log10": -0.5872261513776373
+    },
+    {
+      "name": "nitrofurantoin",
+      "observed_log_cmax_per_dose": -2.057991946977687,
+      "full_error_log10": 0.14517089251906867,
+      "filtered_error_log10": 0.15349456195266242,
+      "control_mean_error_log10": 0.12968832377822404
+    },
+    {
+      "name": "sulfinpyrazone",
+      "observed_log_cmax_per_dose": -1.126388803003533,
+      "full_error_log10": -0.6965447516458201,
+      "filtered_error_log10": -0.3968230338113474,
+      "control_mean_error_log10": -0.6506440491693186
+    },
+    {
+      "name": "phentolamine",
+      "observed_log_cmax_per_dose": -2.951752468196026,
+      "full_error_log10": 0.5110409699355278,
+      "filtered_error_log10": 0.6890945874129448,
+      "control_mean_error_log10": 0.3460123263274344
+    },
+    {
+      "name": "avacopan",
+      "observed_log_cmax_per_dose": -2.6989700043360187,
+      "full_error_log10": -0.2976806914647625,
+      "filtered_error_log10": 0.3731285774866535,
+      "control_mean_error_log10": -0.2349748170217083
+    },
+    {
+      "name": "nitisinone (ntbc)",
+      "observed_log_cmax_per_dose": -0.9524470061369564,
+      "full_error_log10": -1.537983587353644,
+      "filtered_error_log10": -1.274109533398566,
+      "control_mean_error_log10": -1.5394359618119569
+    },
+    {
+      "name": "lumiracoxib",
+      "observed_log_cmax_per_dose": -1.699187205881883,
+      "full_error_log10": 0.12729089126091142,
+      "filtered_error_log10": -0.086488081364821,
+      "control_mean_error_log10": 0.016719304175187633
+    },
+    {
+      "name": "pazopanib",
+      "observed_log_cmax_per_dose": -1.1135092748275182,
+      "full_error_log10": -1.1734274851212123,
+      "filtered_error_log10": -1.280963562620602,
+      "control_mean_error_log10": -1.1636103855499842
+    },
+    {
+      "name": "tolazamide",
+      "observed_log_cmax_per_dose": -0.9931062920520997,
+      "full_error_log10": -0.4431621567775512,
+      "filtered_error_log10": -0.45414669676320796,
+      "control_mean_error_log10": -0.9088426367809082
+    },
+    {
+      "name": "ursodeoxycholic acid",
+      "observed_log_cmax_per_dose": -2.050684822071482,
+      "full_error_log10": 0.11158622549860597,
+      "filtered_error_log10": 0.15199042605250002,
+      "control_mean_error_log10": 0.005902994144846296
+    },
+    {
+      "name": "deucravacitinib",
+      "observed_log_cmax_per_dose": -1.9892761346082268,
+      "full_error_log10": -0.17578963077263254,
+      "filtered_error_log10": -0.017916238667530004,
+      "control_mean_error_log10": -0.23789885080055595
+    },
+    {
+      "name": "zofenopril",
+      "observed_log_cmax_per_dose": -2.798350305459052,
+      "full_error_log10": 0.9014274786920842,
+      "filtered_error_log10": 0.8430891941995915,
+      "control_mean_error_log10": 0.6685758899660406
+    },
+    {
+      "name": "silodosin",
+      "observed_log_cmax_per_dose": -2.175548729963387,
+      "full_error_log10": -0.3326488160418619,
+      "filtered_error_log10": -0.14513665669432774,
+      "control_mean_error_log10": -0.4178006076144327
+    },
+    {
+      "name": "deutetrabenazine",
+      "observed_log_cmax_per_dose": -4.966576244513051,
+      "full_error_log10": 2.31995930878307,
+      "filtered_error_log10": 2.2717305680909314,
+      "control_mean_error_log10": 2.2284465333619274
+    },
+    {
+      "name": "zuranolone",
+      "observed_log_cmax_per_dose": -3.214670164989233,
+      "full_error_log10": 1.032492144511938,
+      "filtered_error_log10": 0.9347154931294916,
+      "control_mean_error_log10": 0.9626803235280512
+    },
+    {
+      "name": "safinamide",
+      "observed_log_cmax_per_dose": -2.187298804808312,
+      "full_error_log10": -0.44561144680911946,
+      "filtered_error_log10": -0.16606709332401204,
+      "control_mean_error_log10": -0.3331211742871467
+    },
+    {
+      "name": "triclosan",
+      "observed_log_cmax_per_dose": -1.2796339389220097,
+      "full_error_log10": -1.452202618466296,
+      "filtered_error_log10": -1.4445582035645625,
+      "control_mean_error_log10": -1.3208792093857904
+    },
+    {
+      "name": "vilanterol",
+      "observed_log_cmax_per_dose": -4.055517327849831,
+      "full_error_log10": 0.8582121253657,
+      "filtered_error_log10": 1.2296899676966326,
+      "control_mean_error_log10": 0.7976688266443865
+    },
+    {
+      "name": "cinnarizine",
+      "observed_log_cmax_per_dose": -2.8490594460345227,
+      "full_error_log10": -0.117518322291283,
+      "filtered_error_log10": 0.33114419716367305,
+      "control_mean_error_log10": -0.1432484315060658
+    },
+    {
+      "name": "dolutegravir (s/gsk1394572)",
+      "observed_log_cmax_per_dose": -0.9374180157718368,
+      "full_error_log10": -1.1651243845882706,
+      "filtered_error_log10": -0.9175330082836441,
+      "control_mean_error_log10": -1.0180445591869645
+    },
+    {
+      "name": "huperzine a",
+      "observed_log_cmax_per_dose": -2.071355908535668,
+      "full_error_log10": -0.222664744235328,
+      "filtered_error_log10": 0.09391972365255041,
+      "control_mean_error_log10": -0.1919711655152354
+    },
+    {
+      "name": "Ensartinib",
+      "observed_log_cmax_per_dose": -2.9305785912415314,
+      "full_error_log10": 0.20700729073493962,
+      "filtered_error_log10": -0.20556843100578304,
+      "control_mean_error_log10": 0.07212178887336718
+    },
+    {
+      "name": "levocabastine",
+      "observed_log_cmax_per_dose": -1.8297382846050425,
+      "full_error_log10": -0.6634083733386831,
+      "filtered_error_log10": -0.6671386704273061,
+      "control_mean_error_log10": -0.5188337073154288
+    },
+    {
+      "name": "danazol",
+      "observed_log_cmax_per_dose": -3.7594507517174005,
+      "full_error_log10": 0.7803245367363214,
+      "filtered_error_log10": 1.1523590864494562,
+      "control_mean_error_log10": 0.8720134319618462
+    },
+    {
+      "name": "isosorbide dinitrate",
+      "observed_log_cmax_per_dose": -3.704432900037521,
+      "full_error_log10": 1.3190812421700895,
+      "filtered_error_log10": 1.166877205457443,
+      "control_mean_error_log10": 1.1919471574685514
+    },
+    {
+      "name": "estetrol",
+      "observed_log_cmax_per_dose": -3.2596373105057563,
+      "full_error_log10": 0.3574108624466743,
+      "filtered_error_log10": 0.39368505716408153,
+      "control_mean_error_log10": 0.34689860582435994
+    },
+    {
+      "name": "nitroglycerin",
+      "observed_log_cmax_per_dose": -4.490694061908936,
+      "full_error_log10": 1.8708803812601325,
+      "filtered_error_log10": 1.6581027666666266,
+      "control_mean_error_log10": 1.7298349300958868
+    },
+    {
+      "name": "triamcinolone",
+      "observed_log_cmax_per_dose": -2.6777807052660805,
+      "full_error_log10": 0.11149747925289688,
+      "filtered_error_log10": 0.26376040535458145,
+      "control_mean_error_log10": 0.18777819233425674
+    },
+    {
+      "name": "brivudine",
+      "observed_log_cmax_per_dose": -1.8368386250229816,
+      "full_error_log10": -0.21217761223592957,
+      "filtered_error_log10": -0.19231186096945008,
+      "control_mean_error_log10": -0.34714880173483076
+    },
+    {
+      "name": "methyltestosterone",
+      "observed_log_cmax_per_dose": -2.686765708305276,
+      "full_error_log10": 0.10717777190390887,
+      "filtered_error_log10": -0.3197555166703099,
+      "control_mean_error_log10": 0.06684974608603778
+    },
+    {
+      "name": "milrinone",
+      "observed_log_cmax_per_dose": -1.7198535698615434,
+      "full_error_log10": -0.35589392006765586,
+      "filtered_error_log10": -0.37482673943411093,
+      "control_mean_error_log10": -0.42965355933080884
+    },
+    {
+      "name": "ifosfamide",
+      "observed_log_cmax_per_dose": -1.6963187916716413,
+      "full_error_log10": -0.3369243876496477,
+      "filtered_error_log10": -0.19147582216655445,
+      "control_mean_error_log10": -0.32718273563777656
+    },
+    {
+      "name": "oxandrolone",
+      "observed_log_cmax_per_dose": -1.3908326256979802,
+      "full_error_log10": -1.29829934947597,
+      "filtered_error_log10": -1.2583830725442073,
+      "control_mean_error_log10": -1.2217230450402399
+    },
+    {
+      "name": "betaine",
+      "observed_log_cmax_per_dose": -1.502667581442339,
+      "full_error_log10": -0.6917746907439404,
+      "filtered_error_log10": -0.6765719300475292,
+      "control_mean_error_log10": -0.7589628821578196
+    },
+    {
+      "name": "amitriptylinoxide",
+      "observed_log_cmax_per_dose": -2.014304140310158,
+      "full_error_log10": -1.0187955110265121,
+      "filtered_error_log10": -0.7678289621068344,
+      "control_mean_error_log10": -1.182055327196251
+    },
+    {
+      "name": "betamethasone",
+      "observed_log_cmax_per_dose": -1.9083330424043154,
+      "full_error_log10": -0.7075841634062314,
+      "filtered_error_log10": -0.42856743023667576,
+      "control_mean_error_log10": -0.5637976138380552
+    },
+    {
+      "name": "digitoxin",
+      "observed_log_cmax_per_dose": -1.2696215314123571,
+      "full_error_log10": -1.732094843938595,
+      "filtered_error_log10": -1.964852173879391,
+      "control_mean_error_log10": -1.7158453303124963
+    },
+    {
+      "name": "mazindol",
+      "observed_log_cmax_per_dose": -2.596022036330645,
+      "full_error_log10": 0.15095486904854072,
+      "filtered_error_log10": 0.30682983662361396,
+      "control_mean_error_log10": 0.1359012153314998
+    },
+    {
+      "name": "delamanid",
+      "observed_log_cmax_per_dose": -2.26440110030182,
+      "full_error_log10": -0.5163620489596545,
+      "filtered_error_log10": -0.47011480507842895,
+      "control_mean_error_log10": -0.6120338934420766
+    },
+    {
+      "name": "fluoxymesterone",
+      "observed_log_cmax_per_dose": -2.0969100130080562,
+      "full_error_log10": -0.2862319814682621,
+      "filtered_error_log10": 0.17974866752618368,
+      "control_mean_error_log10": -0.07183641071325741
+    },
+    {
+      "name": "oxymetholone",
+      "observed_log_cmax_per_dose": -3.424812155072339,
+      "full_error_log10": 1.1149142554446536,
+      "filtered_error_log10": 1.1158276370211917,
+      "control_mean_error_log10": 1.1236913016482668
+    },
+    {
+      "name": "prednisone",
+      "observed_log_cmax_per_dose": -2.6108339156354674,
+      "full_error_log10": 0.5347748126233824,
+      "filtered_error_log10": 0.5609104956830748,
+      "control_mean_error_log10": 0.5032435621465452
+    },
+    {
+      "name": "chlorzoxazone",
+      "observed_log_cmax_per_dose": -1.7477539495268817,
+      "full_error_log10": -0.11809530698862125,
+      "filtered_error_log10": 0.03490361726674984,
+      "control_mean_error_log10": -0.06717303239908268
+    },
+    {
+      "name": "trifluridine",
+      "observed_log_cmax_per_dose": -2.7998429144395027,
+      "full_error_log10": 0.6179688776505623,
+      "filtered_error_log10": 0.5409391726029549,
+      "control_mean_error_log10": 0.6615762556565437
+    },
+    {
+      "name": "dicoumarol",
+      "observed_log_cmax_per_dose": -1.1839797712687314,
+      "full_error_log10": -0.6060428403493106,
+      "filtered_error_log10": -0.5866639398213565,
+      "control_mean_error_log10": -0.8190637611027896
+    },
+    {
+      "name": "artenimol (dihydroartemisinin)",
+      "observed_log_cmax_per_dose": -2.7551586498359875,
+      "full_error_log10": 0.23523949280778922,
+      "filtered_error_log10": 0.5773117412666515,
+      "control_mean_error_log10": 0.26317537919084577
+    },
+    {
+      "name": "aztreonam",
+      "observed_log_cmax_per_dose": -3.5528419686577806,
+      "full_error_log10": 1.6483035756371507,
+      "filtered_error_log10": 1.7528976870797166,
+      "control_mean_error_log10": 1.4946626020691882
+    },
+    {
+      "name": "artesunate",
+      "observed_log_cmax_per_dose": -3.2596373105057563,
+      "full_error_log10": 1.1221940064438667,
+      "filtered_error_log10": 0.5451259160050239,
+      "control_mean_error_log10": 0.9851595187195623
+    },
+    {
+      "name": "rufinamide",
+      "observed_log_cmax_per_dose": -2.459461980435898,
+      "full_error_log10": 0.5825315052009126,
+      "filtered_error_log10": 0.7373577886558076,
+      "control_mean_error_log10": 0.569133883092453
+    },
+    {
+      "name": "pyrazinamide",
+      "observed_log_cmax_per_dose": -1.6887508391543329,
+      "full_error_log10": -0.08210756786623596,
+      "filtered_error_log10": -0.18261101253786682,
+      "control_mean_error_log10": -0.1393083811596929
+    },
+    {
+      "name": "ribavirin",
+      "observed_log_cmax_per_dose": -2.8849444973237954,
+      "full_error_log10": 0.4571414577730142,
+      "filtered_error_log10": 0.37672453997211086,
+      "control_mean_error_log10": 0.6646131622560465
+    },
+    {
+      "name": "leucovorin",
+      "observed_log_cmax_per_dose": -2.068881289407813,
+      "full_error_log10": -0.08974693591872507,
+      "filtered_error_log10": 0.3256051701756353,
+      "control_mean_error_log10": -0.07871977861205393
+    },
+    {
+      "name": "nicotinamide",
+      "observed_log_cmax_per_dose": -1.7544873321858503,
+      "full_error_log10": -0.11684662453259453,
+      "filtered_error_log10": 0.07573669799242988,
+      "control_mean_error_log10": -0.014401665845765965
+    },
+    {
+      "name": "tioguanine",
+      "observed_log_cmax_per_dose": -3.679853713888946,
+      "full_error_log10": 1.4198823336551816,
+      "filtered_error_log10": 1.8398448590229184,
+      "control_mean_error_log10": 1.4702493671367796
+    },
+    {
+      "name": "emtricitabine",
+      "observed_log_cmax_per_dose": -1.9453122715952467,
+      "full_error_log10": -0.10635231924032462,
+      "filtered_error_log10": -0.22278212499593986,
+      "control_mean_error_log10": -0.18117640209173436
+    },
+    {
+      "name": "aminocaproic acid",
+      "observed_log_cmax_per_dose": -1.4853194558750182,
+      "full_error_log10": -0.32717744468345344,
+      "filtered_error_log10": -0.22185663341178596,
+      "control_mean_error_log10": -0.3830395376552551
+    },
+    {
+      "name": "gamma-aminobutyric acid",
+      "observed_log_cmax_per_dose": -3.4631071279764667,
+      "full_error_log10": 1.6794361065149799,
+      "filtered_error_log10": 1.7563859413385883,
+      "control_mean_error_log10": 1.6378863166094317
+    },
+    {
+      "name": "capivasertib",
+      "observed_log_cmax_per_dose": -2.8203046166754935,
+      "full_error_log10": 0.638726218924639,
+      "filtered_error_log10": 0.6867284619666312,
+      "control_mean_error_log10": 0.462720199809191
+    },
+    {
+      "name": "triamterene",
+      "observed_log_cmax_per_dose": -2.9281179926938745,
+      "full_error_log10": 0.15450263243386475,
+      "filtered_error_log10": 0.6489541552610132,
+      "control_mean_error_log10": 0.40013704519936777
+    },
+    {
+      "name": "cladribine",
+      "observed_log_cmax_per_dose": -2.593459819566045,
+      "full_error_log10": 0.3342950093853809,
+      "filtered_error_log10": 0.23734137893799323,
+      "control_mean_error_log10": 0.1892434346783496
+    },
+    {
+      "name": "pemoline",
+      "observed_log_cmax_per_dose": -1.7011469235902934,
+      "full_error_log10": -0.27193526120127154,
+      "filtered_error_log10": -0.1518295177930684,
+      "control_mean_error_log10": -0.16443158478678188
+    },
+    {
+      "name": "piracetam",
+      "observed_log_cmax_per_dose": -1.740824372693922,
+      "full_error_log10": -0.32012614496049685,
+      "filtered_error_log10": -0.3136511731892566,
+      "control_mean_error_log10": -0.27560961730775646
+    },
+    {
+      "name": "armodafinil",
+      "observed_log_cmax_per_dose": -1.585026652029182,
+      "full_error_log10": -0.09260913688835948,
+      "filtered_error_log10": -0.004880994150017193,
+      "control_mean_error_log10": -0.004446738550041518
+    },
+    {
+      "name": "lonafarnib",
+      "observed_log_cmax_per_dose": -2.490797477668897,
+      "full_error_log10": -0.7388327541884028,
+      "filtered_error_log10": -0.8198147240217768,
+      "control_mean_error_log10": -0.6012602272566401
+    },
+    {
+      "name": "darifenacin",
+      "observed_log_cmax_per_dose": -3.720105019988362,
+      "full_error_log10": 0.9155689157860913,
+      "filtered_error_log10": 1.566240397872273,
+      "control_mean_error_log10": 0.9523292221444288
+    },
+    {
+      "name": "vorinostat",
+      "observed_log_cmax_per_dose": -3.1007405044014313,
+      "full_error_log10": 0.8641021968300202,
+      "filtered_error_log10": 0.8084097625191071,
+      "control_mean_error_log10": 0.8182476045067171
+    },
+    {
+      "name": "selinexor",
+      "observed_log_cmax_per_dose": -2.1592667653881934,
+      "full_error_log10": 0.021241719993295938,
+      "filtered_error_log10": 0.27275448587769535,
+      "control_mean_error_log10": 0.1416705444180395
+    },
+    {
+      "name": "benznidazole",
+      "observed_log_cmax_per_dose": -1.6575773191777938,
+      "full_error_log10": 0.3190982771245712,
+      "filtered_error_log10": 0.03681771281640467,
+      "control_mean_error_log10": 0.33088999513070516
+    },
+    {
+      "name": "benperidol",
+      "observed_log_cmax_per_dose": -2.914828390263188,
+      "full_error_log10": -0.28066769204272024,
+      "filtered_error_log10": -0.543515115596187,
+      "control_mean_error_log10": -0.1287574108613847
+    },
+    {
+      "name": "haloperidol",
+      "observed_log_cmax_per_dose": -3.5883802940367695,
+      "full_error_log10": 0.3713256885527607,
+      "filtered_error_log10": 1.1967391540526386,
+      "control_mean_error_log10": 0.7249739458083151
+    },
+    {
+      "name": "hydroxyurea",
+      "observed_log_cmax_per_dose": -1.5202184597155026,
+      "full_error_log10": -0.4623809179166385,
+      "filtered_error_log10": -0.6287781318524905,
+      "control_mean_error_log10": -0.523779745946271
+    },
+    {
+      "name": "chlorphenesin carbamate",
+      "observed_log_cmax_per_dose": -1.8626458886292672,
+      "full_error_log10": -0.3849563357207084,
+      "filtered_error_log10": -0.5210547205778862,
+      "control_mean_error_log10": -0.39585810869662996
+    },
+    {
+      "name": "cycloserine",
+      "observed_log_cmax_per_dose": -1.1096907831000515,
+      "full_error_log10": -0.8080365680886081,
+      "filtered_error_log10": -0.8415405773354343,
+      "control_mean_error_log10": -0.9011215709877782
+    },
+    {
+      "name": "carbocisteine",
+      "observed_log_cmax_per_dose": -2.0368420414840744,
+      "full_error_log10": -0.03934223128203884,
+      "filtered_error_log10": -0.04145199728850857,
+      "control_mean_error_log10": 0.06244431065674294
+    },
+    {
+      "name": "tryptophan",
+      "observed_log_cmax_per_dose": -1.4471580313422194,
+      "full_error_log10": -0.45915622246484844,
+      "filtered_error_log10": -0.13900191319208233,
+      "control_mean_error_log10": -0.16618595850687123
+    },
+    {
+      "name": "levodopa",
+      "observed_log_cmax_per_dose": -2.365724305374056,
+      "full_error_log10": 0.2106959621733724,
+      "filtered_error_log10": 0.5283578436202108,
+      "control_mean_error_log10": 0.6422380368537008
+    },
+    {
+      "name": "melphalan",
+      "observed_log_cmax_per_dose": -1.9818822794089999,
+      "full_error_log10": 0.022233789456912456,
+      "filtered_error_log10": 0.07035249997479576,
+      "control_mean_error_log10": -0.005720645891598375
+    },
+    {
+      "name": "lenalidomide",
+      "observed_log_cmax_per_dose": -1.9406259409340423,
+      "full_error_log10": -0.18121668182291573,
+      "filtered_error_log10": -0.20486828170694893,
+      "control_mean_error_log10": -0.2375862725821929
+    },
+    {
+      "name": "droxidopa",
+      "observed_log_cmax_per_dose": -2.3165026823201886,
+      "full_error_log10": 0.09482657109887516,
+      "filtered_error_log10": 0.2521353880086652,
+      "control_mean_error_log10": 0.39893834983498966
+    },
+    {
+      "name": "hydralazine",
+      "observed_log_cmax_per_dose": -2.17436619761735,
+      "full_error_log10": -0.15961865421980814,
+      "filtered_error_log10": 0.3307710504844765,
+      "control_mean_error_log10": 0.0740538454368691
+    },
+    {
+      "name": "delafloxacin",
+      "observed_log_cmax_per_dose": -1.7217037919087261,
+      "full_error_log10": 0.0627181771321148,
+      "filtered_error_log10": 0.009435439400181211,
+      "control_mean_error_log10": 0.01392648249100148
+    },
+    {
+      "name": "folic acid",
+      "observed_log_cmax_per_dose": -1.237876195050507,
+      "full_error_log10": -0.8773906048762508,
+      "filtered_error_log10": -0.8254699524867244,
+      "control_mean_error_log10": -0.8646163519847103
+    },
+    {
+      "name": "lisinopril",
+      "observed_log_cmax_per_dose": -2.2924298239020637,
+      "full_error_log10": 0.27793969633858717,
+      "filtered_error_log10": 0.4388389778403572,
+      "control_mean_error_log10": 0.1400790286330511
+    },
+    {
+      "name": "taurine",
+      "observed_log_cmax_per_dose": -1.6769026641520641,
+      "full_error_log10": -0.2237267370549061,
+      "filtered_error_log10": -0.013624774965367514,
+      "control_mean_error_log10": -0.24330629065903198
+    },
+    {
+      "name": "tranexamic acid",
+      "observed_log_cmax_per_dose": -2.154901959985743,
+      "full_error_log10": 0.46102557429696134,
+      "filtered_error_log10": 0.5634088302555185,
+      "control_mean_error_log10": 0.41895408877755225
+    },
+    {
+      "name": "loracarbef",
+      "observed_log_cmax_per_dose": -1.3463052046849184,
+      "full_error_log10": -0.44135622853499124,
+      "filtered_error_log10": -0.37172691697340676,
+      "control_mean_error_log10": -0.5592350112841673
+    },
+    {
+      "name": "chlorthalidone",
+      "observed_log_cmax_per_dose": -1.1074601953413645,
+      "full_error_log10": -0.6544832641694387,
+      "filtered_error_log10": -0.7536979372117361,
+      "control_mean_error_log10": -0.7703019315812429
+    },
+    {
+      "name": "diclofenamide",
+      "observed_log_cmax_per_dose": -1.9237237445957824,
+      "full_error_log10": 0.08309786244703976,
+      "filtered_error_log10": -0.018534613405926548,
+      "control_mean_error_log10": 0.13338211699797364
+    },
+    {
+      "name": "chlorothiazide",
+      "observed_log_cmax_per_dose": -2.9888526392242025,
+      "full_error_log10": 1.1973275137206625,
+      "filtered_error_log10": 1.130627651240499,
+      "control_mean_error_log10": 1.199793679740102
+    },
+    {
+      "name": "guanfacine",
+      "observed_log_cmax_per_dose": -2.7367585652254185,
+      "full_error_log10": 0.9498899929903111,
+      "filtered_error_log10": 0.9180214159868321,
+      "control_mean_error_log10": 1.00730047158223
+    },
+    {
+      "name": "sulfisoxazole",
+      "observed_log_cmax_per_dose": -1.0457574905606752,
+      "full_error_log10": -0.41703752858910503,
+      "filtered_error_log10": -0.38007072789940777,
+      "control_mean_error_log10": -0.4459170041826719
+    },
+    {
+      "name": "fezolinetant",
+      "observed_log_cmax_per_dose": -2.1898795435413145,
+      "full_error_log10": -0.12619005942499406,
+      "filtered_error_log10": 0.17030633187139266,
+      "control_mean_error_log10": 0.025035745857598712
+    },
+    {
+      "name": "erdosteine",
+      "observed_log_cmax_per_dose": -2.3791701837255124,
+      "full_error_log10": 0.6903517289830807,
+      "filtered_error_log10": 0.47445631463066373,
+      "control_mean_error_log10": 0.6005972428990964
+    },
+    {
+      "name": "etrasimod",
+      "observed_log_cmax_per_dose": -1.6903698325741012,
+      "full_error_log10": -1.2049145817172806,
+      "filtered_error_log10": -0.6212265610111039,
+      "control_mean_error_log10": -0.9755707382571974
+    },
+    {
+      "name": "ataluren",
+      "observed_log_cmax_per_dose": -1.500852361791278,
+      "full_error_log10": -0.09937272918925188,
+      "filtered_error_log10": -0.09565590275034808,
+      "control_mean_error_log10": -0.18000908745036037
+    },
+    {
+      "name": "Acoramidis",
+      "observed_log_cmax_per_dose": -1.3233715260910095,
+      "full_error_log10": -0.5101568733764588,
+      "filtered_error_log10": -1.0426236425949036,
+      "control_mean_error_log10": -0.6295582925392089
+    },
+    {
+      "name": "tafamidis",
+      "observed_log_cmax_per_dose": -1.2932822176632413,
+      "full_error_log10": -0.2654837897601596,
+      "filtered_error_log10": -0.6193526318850986,
+      "control_mean_error_log10": -0.4802622249904147
+    },
+    {
+      "name": "olsalazine",
+      "observed_log_cmax_per_dose": -2.616555378215013,
+      "full_error_log10": 0.884239122645555,
+      "filtered_error_log10": 1.1389918778106551,
+      "control_mean_error_log10": 0.9480190370246748
+    },
+    {
+      "name": "alpelisib",
+      "observed_log_cmax_per_dose": -2.4814860601221125,
+      "full_error_log10": 0.4134976644311945,
+      "filtered_error_log10": 0.6043445844446222,
+      "control_mean_error_log10": 0.41359682271824294
+    },
+    {
+      "name": "talazoparib",
+      "observed_log_cmax_per_dose": -2.113509274827518,
+      "full_error_log10": 0.0038405431380650334,
+      "filtered_error_log10": -0.05956663955541641,
+      "control_mean_error_log10": -0.09787746538015396
+    },
+    {
+      "name": "lipoic acid (r-lipoic acid)",
+      "observed_log_cmax_per_dose": -1.7233429221100853,
+      "full_error_log10": 0.0084793833680199,
+      "filtered_error_log10": -0.32582065783071057,
+      "control_mean_error_log10": -0.0801371904425574
+    },
+    {
+      "name": "fenbufen",
+      "observed_log_cmax_per_dose": -2.194952476415021,
+      "full_error_log10": 0.6085413579076357,
+      "filtered_error_log10": 0.45295738020835596,
+      "control_mean_error_log10": 0.7048736576169559
+    },
+    {
+      "name": "chlorambucil",
+      "observed_log_cmax_per_dose": -1.4559319556497243,
+      "full_error_log10": -0.865383809731135,
+      "filtered_error_log10": -0.32548863284362284,
+      "control_mean_error_log10": -0.7983496844030711
+    },
+    {
+      "name": "doravirine",
+      "observed_log_cmax_per_dose": -2.265755056676937,
+      "full_error_log10": 0.36650383406646325,
+      "filtered_error_log10": 0.19120013648040368,
+      "control_mean_error_log10": 0.5015274994946248
+    },
+    {
+      "name": "gamma-hydroxybutyric acid",
+      "observed_log_cmax_per_dose": -1.6946051989335689,
+      "full_error_log10": -0.0018923606138554483,
+      "filtered_error_log10": 0.023976412846532735,
+      "control_mean_error_log10": -0.04694382803252606
+    },
+    {
+      "name": "avapritinib",
+      "observed_log_cmax_per_dose": -2.785156151952302,
+      "full_error_log10": 0.46052612990335184,
+      "filtered_error_log10": 0.2968386623282786,
+      "control_mean_error_log10": 0.3354253265281075
+    },
+    {
+      "name": "methimazole",
+      "observed_log_cmax_per_dose": -1.6090825475026886,
+      "full_error_log10": -0.7608496271799285,
+      "filtered_error_log10": -0.8368851267526825,
+      "control_mean_error_log10": -0.7755421244333467
+    },
+    {
+      "name": "avatrombopag",
+      "observed_log_cmax_per_dose": -2.2441251443275085,
+      "full_error_log10": -0.5344385935417542,
+      "filtered_error_log10": -0.5093648268333801,
+      "control_mean_error_log10": -0.42960017458118305
+    },
+    {
+      "name": "vibegron",
+      "observed_log_cmax_per_dose": -2.7521903405272647,
+      "full_error_log10": 0.8711535821044132,
+      "filtered_error_log10": 1.2888868937575504,
+      "control_mean_error_log10": 0.6583213338935061
+    },
+    {
+      "name": "amoxapine",
+      "observed_log_cmax_per_dose": -3.311461534510169,
+      "full_error_log10": 0.923763837824378,
+      "filtered_error_log10": 1.0313509368996954,
+      "control_mean_error_log10": 0.8206975841622688
+    },
+    {
+      "name": "econazole",
+      "observed_log_cmax_per_dose": -2.0757207139381184,
+      "full_error_log10": -0.6326099173179851,
+      "filtered_error_log10": -0.757433725988029,
+      "control_mean_error_log10": -0.7253431812874065
+    },
+    {
+      "name": "theophylline",
+      "observed_log_cmax_per_dose": -1.585026652029182,
+      "full_error_log10": -0.30855402309594004,
+      "filtered_error_log10": -0.28072103817162364,
+      "control_mean_error_log10": -0.3385953720301136
+    },
+    {
+      "name": "caffeine",
+      "observed_log_cmax_per_dose": -1.8239087409443189,
+      "full_error_log10": -0.31051070027882566,
+      "filtered_error_log10": -0.30538565450245847,
+      "control_mean_error_log10": -0.30523692899281474
+    },
+    {
+      "name": "dyphylline",
+      "observed_log_cmax_per_dose": -1.8063189704587186,
+      "full_error_log10": -0.19296791957118864,
+      "filtered_error_log10": -0.17478588031032438,
+      "control_mean_error_log10": -0.34278585122325755
+    },
+    {
+      "name": "lutein",
+      "observed_log_cmax_per_dose": -1.674809796248654,
+      "full_error_log10": -1.201870816315433,
+      "filtered_error_log10": -0.9326359206092563,
+      "control_mean_error_log10": -1.1519295626533235
+    },
+    {
+      "name": "edaravone",
+      "observed_log_cmax_per_dose": -2.159057919756901,
+      "full_error_log10": 0.28580528952313644,
+      "filtered_error_log10": 0.35976678587628586,
+      "control_mean_error_log10": 0.2713395879430889
+    },
+    {
+      "name": "diazoxide",
+      "observed_log_cmax_per_dose": -1.3018994543766103,
+      "full_error_log10": -0.7435259606624522,
+      "filtered_error_log10": -0.5328346278453746,
+      "control_mean_error_log10": -0.695376982905952
+    },
+    {
+      "name": "nifurtimox",
+      "observed_log_cmax_per_dose": -3.0601191667411434,
+      "full_error_log10": 0.761708035835992,
+      "filtered_error_log10": 1.2434276489112484,
+      "control_mean_error_log10": 0.7000269082877741
+    },
+    {
+      "name": "beta carotene",
+      "observed_log_cmax_per_dose": -2.2657337017828034,
+      "full_error_log10": -0.6060898474878265,
+      "filtered_error_log10": -0.363422410888095,
+      "control_mean_error_log10": -0.6722009114450409
+    },
+    {
+      "name": "isotretinoin",
+      "observed_log_cmax_per_dose": -2.1051303432547477,
+      "full_error_log10": -0.12962898749476404,
+      "filtered_error_log10": 0.06950560074681311,
+      "control_mean_error_log10": -0.09185136098032931
+    },
+    {
+      "name": "alitretinoin (9-cis-retinoic acid)",
+      "observed_log_cmax_per_dose": -2.306273051076353,
+      "full_error_log10": 0.07151372032684122,
+      "filtered_error_log10": 0.27064830856841837,
+      "control_mean_error_log10": 0.10929134684127595
+    },
+    {
+      "name": "cefradine",
+      "observed_log_cmax_per_dose": -1.424812155072339,
+      "full_error_log10": -0.16686443775450432,
+      "filtered_error_log10": -0.29158071964537347,
+      "control_mean_error_log10": -0.18847593754088132
+    },
+    {
+      "name": "cephalexin",
+      "observed_log_cmax_per_dose": -1.3187587626244128,
+      "full_error_log10": -0.39372285530313844,
+      "filtered_error_log10": -0.2635628812049329,
+      "control_mean_error_log10": -0.5078100077842176
+    },
+    {
+      "name": "sulindac",
+      "observed_log_cmax_per_dose": -1.596307662438871,
+      "full_error_log10": 0.27747657628011857,
+      "filtered_error_log10": 0.07152929635000382,
+      "control_mean_error_log10": 0.025231412362576977
+    },
+    {
+      "name": "phenprocoumon",
+      "observed_log_cmax_per_dose": -0.9763769546535759,
+      "full_error_log10": -0.5865105947467537,
+      "filtered_error_log10": -0.6207634767505379,
+      "control_mean_error_log10": -0.6583645304652901
+    },
+    {
+      "name": "methyprylon",
+      "observed_log_cmax_per_dose": -1.74072475244302,
+      "full_error_log10": -0.14100222776633053,
+      "filtered_error_log10": 0.08130140115517825,
+      "control_mean_error_log10": -0.07997584532004143
+    },
+    {
+      "name": "aminoglutethimide",
+      "observed_log_cmax_per_dose": -1.9273825234547635,
+      "full_error_log10": -0.2686690741404514,
+      "filtered_error_log10": 0.09847837153825956,
+      "control_mean_error_log10": -0.37282294567670626
+    },
+    {
+      "name": "alfentanil",
+      "observed_log_cmax_per_dose": -1.9719712763997563,
+      "full_error_log10": -0.5728375881937495,
+      "filtered_error_log10": -0.6757073372629634,
+      "control_mean_error_log10": -0.5882952183512202
+    },
+    {
+      "name": "trimipramine",
+      "observed_log_cmax_per_dose": -3.5248132450575373,
+      "full_error_log10": 0.33734471630997875,
+      "filtered_error_log10": 0.48883540463395336,
+      "control_mean_error_log10": 0.18416750264115533
+    },
+    {
+      "name": "pinacidil",
+      "observed_log_cmax_per_dose": -2.622693748931801,
+      "full_error_log10": -0.13328602745064533,
+      "filtered_error_log10": 0.2620317654418107,
+      "control_mean_error_log10": 0.03856102989188415
+    },
+    {
+      "name": "promethazine",
+      "observed_log_cmax_per_dose": -3.413412695328245,
+      "full_error_log10": 0.39301097909594507,
+      "filtered_error_log10": 0.5849376968541238,
+      "control_mean_error_log10": 0.35275028268481234
+    },
+    {
+      "name": "nateglinide",
+      "observed_log_cmax_per_dose": -1.3010299956639813,
+      "full_error_log10": -0.8949252808252766,
+      "filtered_error_log10": -0.9674381458918049,
+      "control_mean_error_log10": -0.8499376380602315
+    },
+    {
+      "name": "cobicistat (gs-9350)",
+      "observed_log_cmax_per_dose": -2.909389292171593,
+      "full_error_log10": -0.43332167966068225,
+      "filtered_error_log10": -0.2152974258154674,
+      "control_mean_error_log10": -0.32087966305911975
+    },
+    {
+      "name": "ritonavir",
+      "observed_log_cmax_per_dose": -1.8941493256148565,
+      "full_error_log10": -0.678014256233288,
+      "filtered_error_log10": -0.9181494491043818,
+      "control_mean_error_log10": -0.8962750928345455
+    },
+    {
+      "name": "topiramate",
+      "observed_log_cmax_per_dose": -1.6387444799418511,
+      "full_error_log10": -0.6347559625630317,
+      "filtered_error_log10": -0.8952532941822944,
+      "control_mean_error_log10": -0.7407595808033882
+    },
+    {
+      "name": "tiopronin",
+      "observed_log_cmax_per_dose": -2.1852251765231054,
+      "full_error_log10": 0.38277535409726315,
+      "filtered_error_log10": 0.1816941973666113,
+      "control_mean_error_log10": 0.3463588354090612
+    },
+    {
+      "name": "zileuton",
+      "observed_log_cmax_per_dose": -2.1426675035687315,
+      "full_error_log10": 0.004118414136968784,
+      "filtered_error_log10": 0.35431692144592875,
+      "control_mean_error_log10": 0.0069726898403987825
+    },
+    {
+      "name": "muzolimine",
+      "observed_log_cmax_per_dose": -2.170696227168975,
+      "full_error_log10": -0.07413438119894478,
+      "filtered_error_log10": 0.11729451856606987,
+      "control_mean_error_log10": 0.05783746681207225
+    },
+    {
+      "name": "omaveloxolone",
+      "observed_log_cmax_per_dose": -3.665412228023471,
+      "full_error_log10": 1.1769707607383149,
+      "filtered_error_log10": 1.1983764576072113,
+      "control_mean_error_log10": 1.208112184917392
+    },
+    {
+      "name": "gepirone",
+      "observed_log_cmax_per_dose": -3.028492218288744,
+      "full_error_log10": 0.5534751475184803,
+      "filtered_error_log10": 0.28987503651078983,
+      "control_mean_error_log10": 0.6207481205790883
+    },
+    {
+      "name": "phenobarbital",
+      "observed_log_cmax_per_dose": -1.5850266520291818,
+      "full_error_log10": -0.3697451050966727,
+      "filtered_error_log10": -0.1505695279329764,
+      "control_mean_error_log10": -0.3827741201609123
+    },
+    {
+      "name": "propylthiouracil",
+      "observed_log_cmax_per_dose": -1.4894549897933878,
+      "full_error_log10": -0.5646264501785361,
+      "filtered_error_log10": -0.3054817863678061,
+      "control_mean_error_log10": -0.3770584651207052
+    },
+    {
+      "name": "albendazole",
+      "observed_log_cmax_per_dose": -4.417368560510363,
+      "full_error_log10": 1.5045758778626581,
+      "filtered_error_log10": 1.1361922318513056,
+      "control_mean_error_log10": 1.8626504714066643
+    },
+    {
+      "name": "entacapone",
+      "observed_log_cmax_per_dose": -2.0438315695246367,
+      "full_error_log10": -0.1503102952519746,
+      "filtered_error_log10": -0.12179853263295604,
+      "control_mean_error_log10": -0.22601434531606168
+    },
+    {
+      "name": "enprofylline",
+      "observed_log_cmax_per_dose": -1.8722134205188738,
+      "full_error_log10": -0.09786588226890691,
+      "filtered_error_log10": -0.18017000233268865,
+      "control_mean_error_log10": -0.11212644850349562
+    },
+    {
+      "name": "sparsentan",
+      "observed_log_cmax_per_dose": -1.7588272132299532,
+      "full_error_log10": -1.0048012695886503,
+      "filtered_error_log10": -1.0423450432397734,
+      "control_mean_error_log10": -1.0472632370569122
+    },
+    {
+      "name": "nabilone",
+      "observed_log_cmax_per_dose": -3.0,
+      "full_error_log10": 0.37253546714782715,
+      "filtered_error_log10": 0.7230327129364014,
+      "control_mean_error_log10": 0.3586492061614992
+    },
+    {
+      "name": "primidone",
+      "observed_log_cmax_per_dose": -1.7461620683426122,
+      "full_error_log10": -0.2206543569808741,
+      "filtered_error_log10": -0.2054631595855494,
+      "control_mean_error_log10": -0.23183974077756608
+    },
+    {
+      "name": "carisoprodol",
+      "observed_log_cmax_per_dose": -2.1792413642094712,
+      "full_error_log10": -0.16319018104809713,
+      "filtered_error_log10": -0.09889751175183248,
+      "control_mean_error_log10": -0.20178592899579018
+    },
+    {
+      "name": "meprobamate",
+      "observed_log_cmax_per_dose": -1.7172646273789816,
+      "full_error_log10": -0.4101982365431376,
+      "filtered_error_log10": -0.4768808136763163,
+      "control_mean_error_log10": -0.4357595930876321
+    },
+    {
+      "name": "butobarbital",
+      "observed_log_cmax_per_dose": -1.7569619513137056,
+      "full_error_log10": -0.553126206340103,
+      "filtered_error_log10": -0.25889431470802293,
+      "control_mean_error_log10": -0.4694764756577299
+    },
+    {
+      "name": "odevixibat",
+      "observed_log_cmax_per_dose": -4.185234638495551,
+      "full_error_log10": 1.5907982314063176,
+      "filtered_error_log10": 1.4104739153815373,
+      "control_mean_error_log10": 1.5294959390593634
+    },
+    {
+      "name": "bumetanide",
+      "observed_log_cmax_per_dose": -1.5100415205751654,
+      "full_error_log10": -0.5043859029020075,
+      "filtered_error_log10": -0.29561467411172426,
+      "control_mean_error_log10": -0.4576476121152644
+    },
+    {
+      "name": "benzonatate",
+      "observed_log_cmax_per_dose": -1.9734667354767033,
+      "full_error_log10": -1.1633478587920956,
+      "filtered_error_log10": -1.2822560256774715,
+      "control_mean_error_log10": -1.2642550176437193
+    },
+    {
+      "name": "dronedarone",
+      "observed_log_cmax_per_dose": -4.1904402853647325,
+      "full_error_log10": 1.1794887663522813,
+      "filtered_error_log10": 1.5508421541849229,
+      "control_mean_error_log10": 1.3418276907602404
+    },
+    {
+      "name": "amiodarone",
+      "observed_log_cmax_per_dose": -3.0698663541588824,
+      "full_error_log10": -0.5212588957037885,
+      "filtered_error_log10": 0.4417011091027301,
+      "control_mean_error_log10": -0.2294008186545331
+    },
+    {
+      "name": "fingolimod",
+      "observed_log_cmax_per_dose": -3.1870866433571443,
+      "full_error_log10": 0.620555223603116,
+      "filtered_error_log10": 0.943687023300992,
+      "control_mean_error_log10": 0.4150411502312288
+    },
+    {
+      "name": "lusutrombopag",
+      "observed_log_cmax_per_dose": -1.5917600346881504,
+      "full_error_log10": -1.4295700834911709,
+      "filtered_error_log10": -1.200801257960165,
+      "control_mean_error_log10": -1.2582218931835536
+    },
+    {
+      "name": "dronabinol",
+      "observed_log_cmax_per_dose": -3.3585258894959007,
+      "full_error_log10": -0.1944807595214333,
+      "filtered_error_log10": 0.1552342349091087,
+      "control_mean_error_log10": 0.2061649972000632
+    },
+    {
+      "name": "miglustat",
+      "observed_log_cmax_per_dose": -1.8768019249680012,
+      "full_error_log10": -0.5242293307540447,
+      "filtered_error_log10": -0.42967037651515305,
+      "control_mean_error_log10": -0.6359511563537152
+    },
+    {
+      "name": "lefamulin",
+      "observed_log_cmax_per_dose": -2.5850266520291822,
+      "full_error_log10": -0.030861705133293338,
+      "filtered_error_log10": 0.26568880718054944,
+      "control_mean_error_log10": 0.1950435225278393
+    },
+    {
+      "name": "acenocoumarol",
+      "observed_log_cmax_per_dose": -1.3302880632923326,
+      "full_error_log10": -0.030926693673304584,
+      "filtered_error_log10": -0.03833304762380507,
+      "control_mean_error_log10": -0.027405811543635306
+    },
+    {
+      "name": "almitrine",
+      "observed_log_cmax_per_dose": -2.661090849192959,
+      "full_error_log10": -0.21612620517410663,
+      "filtered_error_log10": 0.12182426288924786,
+      "control_mean_error_log10": -0.2716515080610695
+    },
+    {
+      "name": "asunaprevir",
+      "observed_log_cmax_per_dose": -4.017728766960431,
+      "full_error_log10": 1.1440903754656802,
+      "filtered_error_log10": 1.6272120089953432,
+      "control_mean_error_log10": 1.2639617772524843
+    },
+    {
+      "name": "cyproterone acetate",
+      "observed_log_cmax_per_dose": -2.252588192113577,
+      "full_error_log10": -0.9699514712012425,
+      "filtered_error_log10": -1.187146505228342,
+      "control_mean_error_log10": -0.8407553757346289
+    },
+    {
+      "name": "triflusal",
+      "observed_log_cmax_per_dose": -1.777717172904325,
+      "full_error_log10": 0.020608246131253782,
+      "filtered_error_log10": 0.09272032956631238,
+      "control_mean_error_log10": 0.12793284635098034
+    },
+    {
+      "name": "acetylsalicylic acid",
+      "observed_log_cmax_per_dose": -1.8878420334836952,
+      "full_error_log10": 0.38144526300640025,
+      "filtered_error_log10": 0.3620640975019447,
+      "control_mean_error_log10": 0.4380359750768654
+    },
+    {
+      "name": "spironolactone",
+      "observed_log_cmax_per_dose": -3.324221658325915,
+      "full_error_log10": 0.6050727840430783,
+      "filtered_error_log10": 0.7443626400001095,
+      "control_mean_error_log10": 0.555580281830554
+    },
+    {
+      "name": "dydrogesterone",
+      "observed_log_cmax_per_dose": -3.5044556624535512,
+      "full_error_log10": 1.151303148949523,
+      "filtered_error_log10": 0.4993694789055776,
+      "control_mean_error_log10": 0.8371826655510852
+    },
+    {
+      "name": "pentoxifylline",
+      "observed_log_cmax_per_dose": -2.5654310959658013,
+      "full_error_log10": 0.3818156498751031,
+      "filtered_error_log10": 0.2896880883058892,
+      "control_mean_error_log10": 0.3855518478235589
+    },
+    {
+      "name": "acetylcarnitine",
+      "observed_log_cmax_per_dose": -2.624153563690844,
+      "full_error_log10": 0.1982728931433586,
+      "filtered_error_log10": 0.22704357833928146,
+      "control_mean_error_log10": 0.2631001445776846
+    },
+    {
+      "name": "trametinib",
+      "observed_log_cmax_per_dose": -2.3516399890190685,
+      "full_error_log10": -0.05983876883920791,
+      "filtered_error_log10": -0.025697705149022365,
+      "control_mean_error_log10": -0.04053737819131964
+    },
+    {
+      "name": "cannabidiol",
+      "observed_log_cmax_per_dose": -3.1163385648463824,
+      "full_error_log10": -0.04683987906230902,
+      "filtered_error_log10": 0.16150362679706598,
+      "control_mean_error_log10": 0.0846130151485065
+    },
+    {
+      "name": "norgestrel",
+      "observed_log_cmax_per_dose": -1.455931955649724,
+      "full_error_log10": -1.1567835270620679,
+      "filtered_error_log10": -1.3828288971639966,
+      "control_mean_error_log10": -1.3492962776876782
+    },
+    {
+      "name": "dipyridamole",
+      "observed_log_cmax_per_dose": -1.8239087409443187,
+      "full_error_log10": -0.7693303280406667,
+      "filtered_error_log10": -1.0533004456096364,
+      "control_mean_error_log10": -1.0388438873820975
+    },
+    {
+      "name": "zuclopenthixol",
+      "observed_log_cmax_per_dose": -3.3555614105321614,
+      "full_error_log10": -0.025081003560856185,
+      "filtered_error_log10": 0.32760277901665846,
+      "control_mean_error_log10": 0.1591997972585406
+    },
+    {
+      "name": "miglitol",
+      "observed_log_cmax_per_dose": -1.5860300282519388,
+      "full_error_log10": -0.896525361152358,
+      "filtered_error_log10": -0.8467128058392477,
+      "control_mean_error_log10": -0.9786228438336326
+    },
+    {
+      "name": "osimertinib",
+      "observed_log_cmax_per_dose": -3.1325325121409486,
+      "full_error_log10": 0.3768633951670717,
+      "filtered_error_log10": -0.024156178044598242,
+      "control_mean_error_log10": 0.34782749314375616
+    },
+    {
+      "name": "vigabatrin",
+      "observed_log_cmax_per_dose": -1.443697499232713,
+      "full_error_log10": -0.30160732368904,
+      "filtered_error_log10": -0.4379072914548481,
+      "control_mean_error_log10": -0.3855431924291217
+    },
+    {
+      "name": "cefdinir",
+      "observed_log_cmax_per_dose": -2.0555173278498313,
+      "full_error_log10": -0.4293187736821511,
+      "filtered_error_log10": -0.5055774330449441,
+      "control_mean_error_log10": -0.40813778632405784
+    },
+    {
+      "name": "secobarbital",
+      "observed_log_cmax_per_dose": -2.0845496021883747,
+      "full_error_log10": -0.06559569009372979,
+      "filtered_error_log10": 0.06164234510829658,
+      "control_mean_error_log10": -0.015068057857249073
+    },
+    {
+      "name": "calcifediol (25-hydroxyvitamin d3)",
+      "observed_log_cmax_per_dose": -1.5906305295471805,
+      "full_error_log10": -0.5465538519378048,
+      "filtered_error_log10": -0.5147428530211788,
+      "control_mean_error_log10": -0.5806465762610775
+    },
+    {
+      "name": "ibrutinib",
+      "observed_log_cmax_per_dose": -4.208610143660891,
+      "full_error_log10": 2.255677070617068,
+      "filtered_error_log10": 1.7894254589074734,
+      "control_mean_error_log10": 2.276742353438723
+    },
+    {
+      "name": "ritlecitinib",
+      "observed_log_cmax_per_dose": -2.226067352532355,
+      "full_error_log10": -0.31422395682433457,
+      "filtered_error_log10": -0.044475030661614845,
+      "control_mean_error_log10": -0.30108258700469337
+    },
+    {
+      "name": "pregabalin",
+      "observed_log_cmax_per_dose": -1.4921441283041692,
+      "full_error_log10": -0.34920642711575267,
+      "filtered_error_log10": -0.2941705975716853,
+      "control_mean_error_log10": -0.39455045797283894
+    },
+    {
+      "name": "bromocriptine",
+      "observed_log_cmax_per_dose": -3.8601209135987635,
+      "full_error_log10": 0.2896071883180018,
+      "filtered_error_log10": -0.0003489045164708493,
+      "control_mean_error_log10": 0.4109744044282313
+    },
+    {
+      "name": "dexibuprofen",
+      "observed_log_cmax_per_dose": -1.1788141173911546,
+      "full_error_log10": -0.20172613434071796,
+      "filtered_error_log10": -0.25232821277852313,
+      "control_mean_error_log10": -0.2993426518845106
+    },
+    {
+      "name": "amprenavir",
+      "observed_log_cmax_per_dose": -1.8750612633917,
+      "full_error_log10": -1.1479594809320304,
+      "filtered_error_log10": -0.7088980776574942,
+      "control_mean_error_log10": -0.9436597687509392
+    },
+    {
+      "name": "oxamniquine",
+      "observed_log_cmax_per_dose": -2.7311576943719333,
+      "full_error_log10": 0.2265738587701267,
+      "filtered_error_log10": 0.15716925671934545,
+      "control_mean_error_log10": 0.16520231774687222
+    },
+    {
+      "name": "dihydrotachysterol",
+      "observed_log_cmax_per_dose": -1.6615435063953952,
+      "full_error_log10": -0.5941546976451322,
+      "filtered_error_log10": -0.5885516226176664,
+      "control_mean_error_log10": -0.750330466020529
+    },
+    {
+      "name": "clofazimine",
+      "observed_log_cmax_per_dose": -2.9611613550793296,
+      "full_error_log10": 0.3387329378735191,
+      "filtered_error_log10": 0.7330333986889488,
+      "control_mean_error_log10": 0.31736979872099225
+    },
+    {
+      "name": "metyrapone",
+      "observed_log_cmax_per_dose": -2.306859539324705,
+      "full_error_log10": 0.1306663020200176,
+      "filtered_error_log10": 0.3762565119809551,
+      "control_mean_error_log10": 0.04754683809942417
+    },
+    {
+      "name": "stiripentol",
+      "observed_log_cmax_per_dose": -2.1804560644581312,
+      "full_error_log10": -0.356686689142943,
+      "filtered_error_log10": -0.13473782706713733,
+      "control_mean_error_log10": -0.46114170718646097
+    },
+    {
+      "name": "tiaprofenic acid",
+      "observed_log_cmax_per_dose": -0.8739768820994802,
+      "full_error_log10": -0.171242420077949,
+      "filtered_error_log10": -0.40179509341779274,
+      "control_mean_error_log10": -0.3511744540936046
+    },
+    {
+      "name": "suprofen",
+      "observed_log_cmax_per_dose": -1.0234207813598903,
+      "full_error_log10": 0.0014364425995143648,
+      "filtered_error_log10": -0.09309044434048808,
+      "control_mean_error_log10": -0.053879606261035606
+    },
+    {
+      "name": "ciprofibrate",
+      "observed_log_cmax_per_dose": -0.6197887582883941,
+      "full_error_log10": -1.314535029400815,
+      "filtered_error_log10": -1.2220658140077485,
+      "control_mean_error_log10": -1.4505603151216402
+    },
+    {
+      "name": "bezafibrate",
+      "observed_log_cmax_per_dose": -1.4323855572691555,
+      "full_error_log10": -0.39460218610853004,
+      "filtered_error_log10": 0.05284070310503197,
+      "control_mean_error_log10": -0.3324096149453526
+    },
+    {
+      "name": "glecaprevir",
+      "observed_log_cmax_per_dose": -3.4914702810287133,
+      "full_error_log10": 0.4304220117568627,
+      "filtered_error_log10": 0.8337246812820092,
+      "control_mean_error_log10": 0.6469709791183127
+    },
+    {
+      "name": "ebastine",
+      "observed_log_cmax_per_dose": -4.167491087293763,
+      "full_error_log10": 0.8759094565869763,
+      "filtered_error_log10": 1.6784278243543103,
+      "control_mean_error_log10": 0.8607135385037852
+    },
+    {
+      "name": "bempedoic acid",
+      "observed_log_cmax_per_dose": -1.3726341434072673,
+      "full_error_log10": -0.8814330391336263,
+      "filtered_error_log10": -0.9335825733590901,
+      "control_mean_error_log10": -1.1076771072793783
+    },
+    {
+      "name": "elbasvir",
+      "observed_log_cmax_per_dose": -2.670683494909741,
+      "full_error_log10": 0.29226886401984853,
+      "filtered_error_log10": -0.19287956585075694,
+      "control_mean_error_log10": -0.023826929227374283
+    },
+    {
+      "name": "vericiguat",
+      "observed_log_cmax_per_dose": -1.3045183235098026,
+      "full_error_log10": -1.1762131637643674,
+      "filtered_error_log10": -1.4858750289987424,
+      "control_mean_error_log10": -1.0417966312478877
+    },
+    {
+      "name": "mebendazole",
+      "observed_log_cmax_per_dose": -4.508638306165727,
+      "full_error_log10": 2.6888345914135297,
+      "filtered_error_log10": 2.706029935384782,
+      "control_mean_error_log10": 2.8029638843784648
+    },
+    {
+      "name": "pibrentasvir",
+      "observed_log_cmax_per_dose": -4.176091259055681,
+      "full_error_log10": 0.4803138428264333,
+      "filtered_error_log10": 0.6052730732494069,
+      "control_mean_error_log10": 0.8450745277934741
+    },
+    {
+      "name": "relugolix",
+      "observed_log_cmax_per_dose": -3.2685007708370613,
+      "full_error_log10": 0.8530563967525886,
+      "filtered_error_log10": 0.5732671873867439,
+      "control_mean_error_log10": 0.896407689362757
+    },
+    {
+      "name": "spiramycin",
+      "observed_log_cmax_per_dose": -3.0177287669604316,
+      "full_error_log10": -0.24805025144166803,
+      "filtered_error_log10": 0.7171578021471992,
+      "control_mean_error_log10": -0.001822534042070778
+    },
+    {
+      "name": "artemether",
+      "observed_log_cmax_per_dose": -3.376750709602099,
+      "full_error_log10": 0.5635056515424068,
+      "filtered_error_log10": 0.839993002006274,
+      "control_mean_error_log10": 0.6173710127560907
+    },
+    {
+      "name": "nintedanib",
+      "observed_log_cmax_per_dose": -4.076755981369724,
+      "full_error_log10": 1.2292122649390596,
+      "filtered_error_log10": 1.4719540881354707,
+      "control_mean_error_log10": 1.2379410552222625
+    },
+    {
+      "name": "idebenone",
+      "observed_log_cmax_per_dose": -1.9636372980154055,
+      "full_error_log10": -0.496115976902197,
+      "filtered_error_log10": -0.4123433176004392,
+      "control_mean_error_log10": -0.5416433158838254
+    },
+    {
+      "name": "griseofulvin",
+      "observed_log_cmax_per_dose": -2.0555173278498313,
+      "full_error_log10": -0.43083559268239524,
+      "filtered_error_log10": 0.03049124485727761,
+      "control_mean_error_log10": -0.3487992405248024
+    },
+    {
+      "name": "velpatasvir",
+      "observed_log_cmax_per_dose": -2.348721986001856,
+      "full_error_log10": -0.5333766887723139,
+      "filtered_error_log10": -0.7623681972562006,
+      "control_mean_error_log10": -0.591957373434179
+    },
+    {
+      "name": "regorafenib",
+      "observed_log_cmax_per_dose": -1.8245316762454045,
+      "full_error_log10": 0.043702485037518723,
+      "filtered_error_log10": -0.440185902642535,
+      "control_mean_error_log10": -0.0468272905819882
+    },
+    {
+      "name": "apalutamide",
+      "observed_log_cmax_per_dose": -1.8683278807327317,
+      "full_error_log10": -0.2131097070053054,
+      "filtered_error_log10": -0.280357813008113,
+      "control_mean_error_log10": -0.06424193299560077
+    },
+    {
+      "name": "ketamine",
+      "observed_log_cmax_per_dose": -2.904936741646731,
+      "full_error_log10": 0.503715466317141,
+      "filtered_error_log10": 0.7164945114221215,
+      "control_mean_error_log10": 0.45233440285583715
+    },
+    {
+      "name": "maprotiline",
+      "observed_log_cmax_per_dose": -3.5120136688706065,
+      "full_error_log10": 0.15248178944555768,
+      "filtered_error_log10": 0.32300543293921,
+      "control_mean_error_log10": 0.18714785084692487
+    },
+    {
+      "name": "moxidectin",
+      "observed_log_cmax_per_dose": -2.1268732363854994,
+      "full_error_log10": -0.9269783680761705,
+      "filtered_error_log10": -1.5072860901678453,
+      "control_mean_error_log10": -0.9344343607748398
+    },
+    {
+      "name": "nilvadipine",
+      "observed_log_cmax_per_dose": -3.1307682802690238,
+      "full_error_log10": 0.6895496656907767,
+      "filtered_error_log10": 0.3886132051957816,
+      "control_mean_error_log10": 0.6879112532151908
+    },
+    {
+      "name": "esketamine (s-ketamine)",
+      "observed_log_cmax_per_dose": -3.227049943302164,
+      "full_error_log10": 0.8258286679725741,
+      "filtered_error_log10": 1.0386077130775546,
+      "control_mean_error_log10": 0.7744476045112703
+    },
+    {
+      "name": "nabumetone",
+      "observed_log_cmax_per_dose": -2.9507819773298185,
+      "full_error_log10": 0.5139366747480314,
+      "filtered_error_log10": 0.18598643556651284,
+      "control_mean_error_log10": 0.4509287954908294
+    },
+    {
+      "name": "naproxen",
+      "observed_log_cmax_per_dose": -0.7515362824489682,
+      "full_error_log10": -0.5097095642993839,
+      "filtered_error_log10": -0.7001671467731387,
+      "control_mean_error_log10": -0.5668394242237003
+    },
+    {
+      "name": "avanafil",
+      "observed_log_cmax_per_dose": -1.6176226965318863,
+      "full_error_log10": -0.7283453115094956,
+      "filtered_error_log10": -0.35573486171854096,
+      "control_mean_error_log10": -0.6912546285260972
+    },
+    {
+      "name": "papaverine",
+      "observed_log_cmax_per_dose": -2.644213357619812,
+      "full_error_log10": 0.040942350081970336,
+      "filtered_error_log10": 0.37862125938372815,
+      "control_mean_error_log10": 0.20753411357836926
+    },
+    {
+      "name": "melatonin",
+      "observed_log_cmax_per_dose": -2.9645702618154517,
+      "full_error_log10": 0.3550140636953345,
+      "filtered_error_log10": 0.4891810196432105,
+      "control_mean_error_log10": 0.6770689981969826
+    },
+    {
+      "name": "acemetacin",
+      "observed_log_cmax_per_dose": -2.3889851660191113,
+      "full_error_log10": 0.5749905199467236,
+      "filtered_error_log10": 0.11999059624066888,
+      "control_mean_error_log10": 0.6696856111942822
+    },
+    {
+      "name": "fexinidazole",
+      "observed_log_cmax_per_dose": -3.158015195409886,
+      "full_error_log10": 0.8032359519406476,
+      "filtered_error_log10": 1.0572118201657452,
+      "control_mean_error_log10": 0.8778678217335858
+    },
+    {
+      "name": "lisdexamfetamine",
+      "observed_log_cmax_per_dose": -3.0432289247928903,
+      "full_error_log10": 0.8089109068332956,
+      "filtered_error_log10": 0.8940876131473825,
+      "control_mean_error_log10": 0.7765972738682079
+    },
+    {
+      "name": "bosentan",
+      "observed_log_cmax_per_dose": -1.8896347893086984,
+      "full_error_log10": -0.5625587093027518,
+      "filtered_error_log10": -0.4177737819345877,
+      "control_mean_error_log10": -0.37566946617683605
+    },
+    {
+      "name": "lapatinib",
+      "observed_log_cmax_per_dose": -2.939302159646388,
+      "full_error_log10": 0.20603556762063135,
+      "filtered_error_log10": 0.17859621177041163,
+      "control_mean_error_log10": 0.2283625377210341
+    },
+    {
+      "name": "busulfan",
+      "observed_log_cmax_per_dose": -1.7931741239681502,
+      "full_error_log10": -0.6685508725986222,
+      "filtered_error_log10": -0.46074476221654215,
+      "control_mean_error_log10": -0.5163269040927629
+    },
+    {
+      "name": "vismodegib",
+      "observed_log_cmax_per_dose": -1.7821179157238738,
+      "full_error_log10": 0.06457598266418141,
+      "filtered_error_log10": -0.12113277855102855,
+      "control_mean_error_log10": -0.0929232591647371
+    },
+    {
+      "name": "etoposide",
+      "observed_log_cmax_per_dose": -1.5228787452803376,
+      "full_error_log10": -0.8923202960862395,
+      "filtered_error_log10": -1.1925996749772307,
+      "control_mean_error_log10": -1.1181083410157437
+    },
+    {
+      "name": "valbenazine",
+      "observed_log_cmax_per_dose": -2.5316526695878423,
+      "full_error_log10": -1.044585724195727,
+      "filtered_error_log10": -1.0346965983717524,
+      "control_mean_error_log10": -0.9109035924284541
+    },
+    {
+      "name": "methoxsalen",
+      "observed_log_cmax_per_dose": -2.3516399890190685,
+      "full_error_log10": 0.09550166428151963,
+      "filtered_error_log10": 0.14500284493032334,
+      "control_mean_error_log10": 0.17842219173971063
+    },
+    {
+      "name": "iloperidone",
+      "observed_log_cmax_per_dose": -3.09151498112135,
+      "full_error_log10": 0.45681468281202386,
+      "filtered_error_log10": 0.19537059101514886,
+      "control_mean_error_log10": 0.23996435436658947
+    },
+    {
+      "name": "gefapixant",
+      "observed_log_cmax_per_dose": -2.1456939581989194,
+      "full_error_log10": 0.17557317057837496,
+      "filtered_error_log10": -0.03952556809197416,
+      "control_mean_error_log10": 0.14172729293097497
+    },
+    {
+      "name": "acitretin",
+      "observed_log_cmax_per_dose": -2.309803919971486,
+      "full_error_log10": 0.2257961799507342,
+      "filtered_error_log10": 0.31739218729784113,
+      "control_mean_error_log10": 0.29888157147218797
+    },
+    {
+      "name": "anethole trithione",
+      "observed_log_cmax_per_dose": -4.892790030352131,
+      "full_error_log10": 2.2226294983544506,
+      "filtered_error_log10": 2.1369075287499584,
+      "control_mean_error_log10": 2.2187527407326852
+    },
+    {
+      "name": "astemizole",
+      "observed_log_cmax_per_dose": -4.130768280269024,
+      "full_error_log10": 1.367235641719219,
+      "filtered_error_log10": 1.1427907755387992,
+      "control_mean_error_log10": 1.2475259354127615
+    },
+    {
+      "name": "baricitinib",
+      "observed_log_cmax_per_dose": -1.910094888560602,
+      "full_error_log10": -0.1400657578779967,
+      "filtered_error_log10": -0.08874150956409288,
+      "control_mean_error_log10": -0.14169010365741563
+    },
+    {
+      "name": "reboxetine",
+      "observed_log_cmax_per_dose": -1.513333427374107,
+      "full_error_log10": -0.7008479958131488,
+      "filtered_error_log10": -0.9111727600648578,
+      "control_mean_error_log10": -0.8433933144166645
+    },
+    {
+      "name": "ajmaline",
+      "observed_log_cmax_per_dose": -3.4436974992327127,
+      "full_error_log10": 1.0751357545427713,
+      "filtered_error_log10": 1.0705802907518778,
+      "control_mean_error_log10": 0.8766676892809304
+    },
+    {
+      "name": "tapentadol",
+      "observed_log_cmax_per_dose": -3.0688023913274973,
+      "full_error_log10": 0.5676496374975413,
+      "filtered_error_log10": 0.3287971365820139,
+      "control_mean_error_log10": 0.3795251000295847
+    },
+    {
+      "name": "lovastatin",
+      "observed_log_cmax_per_dose": -4.119901295916686,
+      "full_error_log10": 1.4333494866057732,
+      "filtered_error_log10": 1.6114267075225213,
+      "control_mean_error_log10": 1.655761190669189
+    },
+    {
+      "name": "etilefrine",
+      "observed_log_cmax_per_dose": -3.0338582672609675,
+      "full_error_log10": 0.08713385243552807,
+      "filtered_error_log10": 0.7524518646730769,
+      "control_mean_error_log10": 0.2785810627474179
+    },
+    {
+      "name": "elacestrant",
+      "observed_log_cmax_per_dose": -4.221848749616356,
+      "full_error_log10": 0.5146394009377673,
+      "filtered_error_log10": 0.7507589096810534,
+      "control_mean_error_log10": 0.6457056040551379
+    },
+    {
+      "name": "felodipine",
+      "observed_log_cmax_per_dose": -2.9562448730313204,
+      "full_error_log10": 0.26316373251313196,
+      "filtered_error_log10": 0.31557624243134486,
+      "control_mean_error_log10": 0.3830320587002656
+    },
+    {
+      "name": "Givinostat",
+      "observed_log_cmax_per_dose": -2.97469413473523,
+      "full_error_log10": -0.016452668166991646,
+      "filtered_error_log10": 0.495441319488648,
+      "control_mean_error_log10": 0.10228405191815249
+    },
+    {
+      "name": "amisulpride",
+      "observed_log_cmax_per_dose": -2.474307475494989,
+      "full_error_log10": 0.5157240013357485,
+      "filtered_error_log10": 0.7544099668737734,
+      "control_mean_error_log10": 0.4770505766149844
+    },
+    {
+      "name": "sultopride",
+      "observed_log_cmax_per_dose": -2.1804560644581312,
+      "full_error_log10": 0.16505803894543591,
+      "filtered_error_log10": 0.4471960289432997,
+      "control_mean_error_log10": 0.1972789032413953
+    },
+    {
+      "name": "quinapril",
+      "observed_log_cmax_per_dose": -1.8393814276005263,
+      "full_error_log10": -0.6513719846461778,
+      "filtered_error_log10": -0.6225922395442491,
+      "control_mean_error_log10": -0.7483459283565048
+    },
+    {
+      "name": "trandolapril",
+      "observed_log_cmax_per_dose": -2.804100347590766,
+      "full_error_log10": 0.4897292385819769,
+      "filtered_error_log10": 0.8937283287766791,
+      "control_mean_error_log10": 0.5808678398850775
+    },
+    {
+      "name": "cilazapril",
+      "observed_log_cmax_per_dose": -1.4685210829577449,
+      "full_error_log10": -0.7836206311383245,
+      "filtered_error_log10": -0.5637698525586126,
+      "control_mean_error_log10": -0.8042832488217353
+    },
+    {
+      "name": "iptacopan",
+      "observed_log_cmax_per_dose": -1.6712127996454655,
+      "full_error_log10": -0.6549194978704036,
+      "filtered_error_log10": -0.7495580839147151,
+      "control_mean_error_log10": -0.7177639411916314
+    },
+    {
+      "name": "benazepril",
+      "observed_log_cmax_per_dose": -1.8325606463242936,
+      "full_error_log10": -0.5876492383192611,
+      "filtered_error_log10": -0.2641829373549056,
+      "control_mean_error_log10": -0.37987432500825635
+    },
+    {
+      "name": "oseltamivir (gs4104)",
+      "observed_log_cmax_per_dose": -3.2403321553103694,
+      "full_error_log10": 0.9490938473574886,
+      "filtered_error_log10": 0.9324665356509456,
+      "control_mean_error_log10": 1.098538606249548
+    },
+    {
+      "name": "telotristat ethyl",
+      "observed_log_cmax_per_dose": -5.055517327849831,
+      "full_error_log10": 2.4257694602656024,
+      "filtered_error_log10": 2.5392574191736834,
+      "control_mean_error_log10": 2.3720962167429582
+    },
+    {
+      "name": "trimethadione",
+      "observed_log_cmax_per_dose": -1.7978798419762936,
+      "full_error_log10": -0.14090892965303992,
+      "filtered_error_log10": -0.11391493970858191,
+      "control_mean_error_log10": -0.1332609503935489
+    },
+    {
+      "name": "tenoxicam",
+      "observed_log_cmax_per_dose": -0.8239087409443188,
+      "full_error_log10": -0.7221807890468311,
+      "filtered_error_log10": -0.7121370487743092,
+      "control_mean_error_log10": -0.769781857066698
+    },
+    {
+      "name": "tepotinib",
+      "observed_log_cmax_per_dose": -3.0114410431213843,
+      "full_error_log10": 0.31938915560917724,
+      "filtered_error_log10": 0.5524580986328589,
+      "control_mean_error_log10": 0.5139077455826269
+    },
+    {
+      "name": "cyproheptadine",
+      "observed_log_cmax_per_dose": -2.425968732272281,
+      "full_error_log10": -0.7453207116974454,
+      "filtered_error_log10": -0.3800357919586759,
+      "control_mean_error_log10": -0.7566260200394255
+    },
+    {
+      "name": "methotrexate",
+      "observed_log_cmax_per_dose": -1.7356544929499074,
+      "full_error_log10": 0.17187430438942153,
+      "filtered_error_log10": -0.09888515892082017,
+      "control_mean_error_log10": -0.04579660120063589
+    },
+    {
+      "name": "methsuximide",
+      "observed_log_cmax_per_dose": -2.265445513438636,
+      "full_error_log10": 0.1694972941393198,
+      "filtered_error_log10": 0.08985619039481296,
+      "control_mean_error_log10": -0.0572169116025627
+    },
+    {
+      "name": "chlormezanone",
+      "observed_log_cmax_per_dose": -1.8616973018337186,
+      "full_error_log10": -0.6993059063266818,
+      "filtered_error_log10": -0.13950838092079798,
+      "control_mean_error_log10": -0.6296874666523042
+    },
+    {
+      "name": "pholcodine",
+      "observed_log_cmax_per_dose": -3.2839966563652006,
+      "full_error_log10": 0.39341934008102086,
+      "filtered_error_log10": 0.05287463945846227,
+      "control_mean_error_log10": 0.42303986830215123
+    },
+    {
+      "name": "tropisetron",
+      "observed_log_cmax_per_dose": -3.159893905543242,
+      "full_error_log10": 0.06680837812319806,
+      "filtered_error_log10": 0.5225292796124559,
+      "control_mean_error_log10": 0.3511027211178881
+    },
+    {
+      "name": "scopolamine",
+      "observed_log_cmax_per_dose": -2.9118639112994487,
+      "full_error_log10": 0.2642544390246684,
+      "filtered_error_log10": 0.727907049803477,
+      "control_mean_error_log10": 0.42730833306763705
+    },
+    {
+      "name": "eszopiclone",
+      "observed_log_cmax_per_dose": -1.9188928329163366,
+      "full_error_log10": -0.5459625995940394,
+      "filtered_error_log10": -0.428959635574264,
+      "control_mean_error_log10": -0.5175055301970668
+    },
+    {
+      "name": "thiothixene",
+      "observed_log_cmax_per_dose": -2.8664610916297826,
+      "full_error_log10": 0.09791141091994371,
+      "filtered_error_log10": 0.48968725740126695,
+      "control_mean_error_log10": 0.19287050306014164
+    },
+    {
+      "name": "cariprazine",
+      "observed_log_cmax_per_dose": -3.2316085869055127,
+      "full_error_log10": 0.39896102487853513,
+      "filtered_error_log10": 0.257281737921748,
+      "control_mean_error_log10": 0.2897411161642407
+    },
+    {
+      "name": "pyridostigmine",
+      "observed_log_cmax_per_dose": -3.2045199257051564,
+      "full_error_log10": 0.6354464870607472,
+      "filtered_error_log10": 0.8444599491273976,
+      "control_mean_error_log10": 0.6092267137682059
+    },
+    {
+      "name": "zimelidine",
+      "observed_log_cmax_per_dose": -3.0076674409525355,
+      "full_error_log10": 0.2161215730326136,
+      "filtered_error_log10": 0.40842213112282355,
+      "control_mean_error_log10": 0.3216055818216761
+    },
+    {
+      "name": "chlorpheniramine",
+      "observed_log_cmax_per_dose": -2.6635402661514704,
+      "full_error_log10": -0.25000105083461355,
+      "filtered_error_log10": 0.12452878772739817,
+      "control_mean_error_log10": -0.09293372810359557
+    },
+    {
+      "name": "alectinib",
+      "observed_log_cmax_per_dose": -3.7653140256784714,
+      "full_error_log10": 1.3189546296976364,
+      "filtered_error_log10": 1.240722818174199,
+      "control_mean_error_log10": 1.0767988632105148
+    },
+    {
+      "name": "clotiazepam",
+      "observed_log_cmax_per_dose": -1.4466024898761198,
+      "full_error_log10": -1.2325736022717073,
+      "filtered_error_log10": -1.0691266990429475,
+      "control_mean_error_log10": -1.2755465722805572
+    },
+    {
+      "name": "istradefylline",
+      "observed_log_cmax_per_dose": -2.344141541013904,
+      "full_error_log10": 0.017849026212878538,
+      "filtered_error_log10": 0.6012633423902467,
+      "control_mean_error_log10": 0.07093578387279065
+    },
+    {
+      "name": "enoxacin",
+      "observed_log_cmax_per_dose": -2.214670164989233,
+      "full_error_log10": -0.05467893321633355,
+      "filtered_error_log10": 0.5342968539464472,
+      "control_mean_error_log10": 0.2674324945676325
+    },
+    {
+      "name": "rosoxacin",
+      "observed_log_cmax_per_dose": -1.8210230527068305,
+      "full_error_log10": 0.3195595202590156,
+      "filtered_error_log10": 0.35608286239158393,
+      "control_mean_error_log10": 0.32288846351157896
+    },
+    {
+      "name": "nalidixic acid",
+      "observed_log_cmax_per_dose": -1.5142785735184199,
+      "full_error_log10": -0.24139853047785698,
+      "filtered_error_log10": 0.05426387262883248,
+      "control_mean_error_log10": -0.14263501691279346
+    },
+    {
+      "name": "pipotiazine",
+      "observed_log_cmax_per_dose": -3.0,
+      "full_error_log10": 0.023871660232543945,
+      "filtered_error_log10": 0.1965019702911377,
+      "control_mean_error_log10": 0.10752515792846662
+    },
+    {
+      "name": "lymecycline",
+      "observed_log_cmax_per_dose": -2.148741651280925,
+      "full_error_log10": -1.226033043161824,
+      "filtered_error_log10": -0.7911298983253983,
+      "control_mean_error_log10": -0.8977847569145707
+    },
+    {
+      "name": "methylene blue",
+      "observed_log_cmax_per_dose": -2.146118133876931,
+      "full_error_log10": -0.742121488239158,
+      "filtered_error_log10": -0.8201420609015115,
+      "control_mean_error_log10": -0.6746436897772439
+    },
+    {
+      "name": "altretamine",
+      "observed_log_cmax_per_dose": -2.8585502265995326,
+      "full_error_log10": 0.6061557888096156,
+      "filtered_error_log10": 0.7337664722507777,
+      "control_mean_error_log10": 0.49189711800273095
+    },
+    {
+      "name": "terbinafine",
+      "observed_log_cmax_per_dose": -2.3448615651886175,
+      "full_error_log10": -0.9328627008636285,
+      "filtered_error_log10": -0.7330994028289606,
+      "control_mean_error_log10": -1.0243658203323176
+    },
+    {
+      "name": "revefenacin",
+      "observed_log_cmax_per_dose": -3.187086643357144,
+      "full_error_log10": 0.23458868422018098,
+      "filtered_error_log10": -0.12429660401834441,
+      "control_mean_error_log10": 0.13897088922964151
+    },
+    {
+      "name": "zotepine",
+      "observed_log_cmax_per_dose": -3.6270879970298933,
+      "full_error_log10": 0.45911733968126045,
+      "filtered_error_log10": 0.6385967002617048,
+      "control_mean_error_log10": 0.517813681195848
+    }
+  ],
+  "provenance": {
+    "dataset_sha256": "8cb120b5b1cc6e82b30a78fa28e1ec0315e21490969c201969fa6b3032b7bfee",
+    "source_sha256": "e7228d14bdfdfc6c790177207779630c1e5655c19d451528c87b80e2e9de9c3d",
+    "source_workbooks": [
+      {
+        "url": "https://github.com/jam-sudo/Omega/blob/08a45047a2b5dcdca8c9a8f36ff1fe3b50ed3d6d/data/external/mmpk/approved.xlsx",
+        "sha256": "4521a2d89dde71c9e9381ab0a920e84dfc69c714860de377cd73b338572026d2"
+      },
+      {
+        "url": "https://github.com/jam-sudo/Omega/blob/08a45047a2b5dcdca8c9a8f36ff1fe3b50ed3d6d/data/external/mmpk/approved_2024.xlsx",
+        "sha256": "bfdc1bac564dcf3a29f2f8021f69c4f6e087a687bea329433ccd47d233b4d32f"
+      }
+    ],
+    "ledger_sha256": "841f686f0476c129befb01dbc31a604dec6a93ce9fa380d95436c572c7030aac",
+    "hyperparameters": {
+      "n_estimators": 200,
+      "max_depth": 4,
+      "learning_rate": 0.08,
+      "subsample": 0.8,
+      "colsample_bytree": 0.5,
+      "min_child_weight": 3,
+      "reg_alpha": 0.5,
+      "reg_lambda": 3.0,
+      "random_state": 42,
+      "n_jobs": 4,
+      "verbosity": 0
+    },
+    "n_features": 2057
+  }
+}

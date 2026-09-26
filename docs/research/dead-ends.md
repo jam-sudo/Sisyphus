@@ -24,7 +24,7 @@ The source audit above also leaves shared bioavailability-F error unverified.
 The dated experiments below remain valid as tests of their stated methods, but
 their broad information-theoretic and F-causal interpretations are withdrawn.
 
-**Canonical count:** 43 enumerated experiments below. Narrative references in commit messages or prose (e.g. "#35 error cancellation", "14번째 시도", "누적 33 methods") use **informal** numbering that counts early exploration attempts separately; those narrative numbers are **not authoritative** and do not match the table count below. When in doubt, cite the table entry (`DE-NN`).
+**Canonical count:** 58 enumerated experiments below. Narrative references in commit messages or prose (e.g. "#35 error cancellation", "14번째 시도", "누적 33 methods") use **informal** numbering that counts early exploration attempts separately; those narrative numbers are **not authoritative** and do not match the table count below. When in doubt, cite the table entry (`DE-NN`).
 
 ## 1. Theme summary (14 categories)
 
@@ -44,6 +44,7 @@ their broad information-theoretic and F-causal interpretations are withdrawn.
 | Hepatic intracellular fu correction (PPB-targeted) | DE-37 | Phase A infra shipped; primary literature corpus paywall-locked, 4 PPB candidates dispositioned ceiling_accepted, Meta AAFE shift 0.0% |
 | UGT path / abundance / IVIVE interventions | DE-36, DE-38, DE-39, DE-40 | four consecutive metric-neutral UGT cycles; no per-substrate hepatocyte-basis scaling factor exists; ΔMeta AAFE ≤ 0.003 |
 | Absorption / first-pass bioavailability-F recalibration | DE-41, DE-42, DE-43 | tested uniform `ka` scaling did not improve the scored meta; the ten-drug F-bias attribution is withdrawn pending matched human absolute-F data |
+| Direct Cmax source-metadata filtering | DE-58 | 516/906-row filter worsened matched scaffold-CV AAFE 3.282→3.396; source workbooks lack row-level matrix and fasting evidence |
 
 **Current reading across categories:** The tested replacements and added tracks did not improve the repeatedly used development benchmark. Negative residual CV R² applies to the particular UDE learners and N=160 split; the replicate-based label-noise estimate suggests material model-side error. Neither observation establishes a universal structure-only ceiling or identifies the responsible PK mechanism. Independent source-verified evaluation remains the decision gate.
 
@@ -522,6 +523,12 @@ Artifacts: `scripts/probe_liver_zonation.py`, `tests/integration/test_liver_zona
 **Why it failed — §10.** Neither tested CLint-uncertainty proxy discriminated the actionable Cmax error difference on this development set. That supports stopping this routing proposal at its gate; it does not establish an F-driven cause or rule out every future CLint-derived signal. Per §4 the gate precedes integration, so the uncertainty-aware meta was **not built**.
 
 **Telltale if it returns:** "route the meta by how uncertain the CLint prediction is." The two tested proxies had ρ≈0 on the actionable target; a new proposal needs a distinct, independently evaluated signal. Artifacts: `scripts/clint_uncertainty_gate.py`, `data/validation/clint_uncertainty_gate_2026-07-08.json`.
+
+---
+
+### DE-58 — Direct Cmax source-metadata filter (2026-09-25)
+
+Removing rows with unresolved salt annotations, missing formulation in any source arm, or reported modified release left 516/906 training rows. On the same 516 scored rows and scaffold folds, filtered AAFE was 3.396 versus 3.282 for full-data training (paired ratio 1.035, 95% CI 0.985–1.088); ten equal-size random controls ranged 3.368–3.628. The workbooks lack row-level matrix and fasting evidence, so the filter cannot verify those clinically relevant conditions, and this negative result does not rule out source-verified label corrections. **Telltale:** blanket removal by salt/formulation metadata alone; see [full report](cmax_source_consistency_ablation_2026-09-25.md).
 
 ---
 

@@ -1,0 +1,907 @@
+name,fitted_dose_mg,fitted_cmax_mg_L,log_cmax_per_dose,n_studies,workbook_rows,pmids,salt_forms,dose_mass_basis,formulations,formulation_class,food_context_comment,matrix_evidence,include,exclude_reasons
+tasimelteon,20.0,0.2359595014589781,-1.9281925257539347,7,approved.xlsx:3826 approved.xlsx:3827 approved.xlsx:3828 approved.xlsx:3829 approved.xlsx:3830 approved.xlsx:3831 approved.xlsx:3833,25450415 25658956 25851638,,no_salt_reported,capsule,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+roxadustat,100.0,8.384317297178903,-1.0765322945532851,6,approved.xlsx:3518 approved.xlsx:3519 approved.xlsx:3520 approved.xlsx:3521 approved.xlsx:3522 approved.xlsx:3526,29752643 29966038 33165773 35662878,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+tadalafil,10.0,0.16879441091964625,-1.7726419377277944,6,approved.xlsx:3805 approved.xlsx:3806 approved.xlsx:3807 approved.xlsx:3808 approved.xlsx:3809 approved.xlsx:3810,16869816,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+siponimod,0.25,0.0018466596372557053,-2.1315531518258344,5,approved.xlsx:3659 approved.xlsx:3660 approved.xlsx:3661 approved.xlsx:3662 approved.xlsx:3663,27443658 27841151 31926605,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+gatifloxacin,400.0,3.918968085996581,-2.008888264500029,5,approved.xlsx:1854 approved.xlsx:1855 approved.xlsx:1856 approved.xlsx:1857 approved.xlsx:1858,10850522 10850523 10991830,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+tinidazole,1000.0,19.614836124170495,-1.7074153159140413,5,approved.xlsx:3973 approved.xlsx:3974 approved.xlsx:3975 approved.xlsx:3978 approved.xlsx:3979,19732495,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+mirabegron,100.0,0.06045782018485688,-3.2185475154240697,5,approved.xlsx:2559 approved.xlsx:2560 approved.xlsx:2561 approved.xlsx:2563 approved.xlsx:2565,22943933 23208320,,no_salt_reported,ocas tablet,modified_release,,not_recorded_in_source,False,modified_release_formulation
+atorvastatin,40.0,0.016035221494813127,-3.396985028104305,5,approved.xlsx:420 approved.xlsx:423 approved.xlsx:425 approved.xlsx:427 approved.xlsx:428,23529734 25673568 31997084,calcium,salt_reported_basis_unverified,tablet,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+simvastatin,40.0,0.00885921411988956,-3.6546647929773752,5,approved.xlsx:3636 approved.xlsx:3637 approved.xlsx:3638 approved.xlsx:3640 approved.xlsx:3642,10976543 14979606 25673568,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+loxoprofen,60.0,5.6052073582467905,-1.0295595669269415,5,approved.xlsx:2318 approved.xlsx:2319 approved.xlsx:2320 approved.xlsx:2321 approved.xlsx:2322,16563885 17915642 19296517 27121671,sodium,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+quazepam,20.0,0.03676260299363175,-2.735623741433363,4,approved.xlsx:3235 approved.xlsx:3236 approved.xlsx:3237 approved.xlsx:3238,12680887 14615476 15385836 17286787,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+momelotinib,200.0,0.48372070610993895,-2.6164353175026953,4,approved.xlsx:2614 approved.xlsx:2615 approved.xlsx:2616 approved.xlsx:2617,29283448,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+pemigatinib,9.0,0.05275548386869904,-2.2319748987373056,4,approved.xlsx:2948 approved.xlsx:2949 approved.xlsx:2950 approved.xlsx:2951,34169560,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+bupropion,86.79942070963071,0.13908501027979212,-2.795236499802603,4,approved.xlsx:638 approved.xlsx:639 approved.xlsx:644 approved.xlsx:648,28685396 6432553 6804243,hydrochloride,salt_converted_to_parent,tablet,reported_non_modified,,not_recorded_in_source,True,
+rosuvastatin,40.0,0.06262273948010284,-2.805327929083979,4,approved.xlsx:3508 approved.xlsx:3509 approved.xlsx:3510 approved.xlsx:3511,33428168,calcium,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+telithromycin,800.0,2.00824635784909,-2.6002729989912465,4,approved.xlsx:3864 approved.xlsx:3865 approved.xlsx:3866 approved.xlsx:3868,11120961 12476037 12927950 14973302,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+filgotinib,200.0,1.737872694765452,-2.0610120359712703,4,approved.xlsx:1699 approved.xlsx:1700 approved.xlsx:1701 approved.xlsx:1702,30768860,maleate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+ezogabine (retigabine),200.0,0.6334972280151897,-2.499285276776551,4,approved.xlsx:1608 approved.xlsx:1610 approved.xlsx:1612 approved.xlsx:1614,11831540 12545144 12698305,,no_salt_reported,capsule,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+bromazepam,6.0,0.0793061098993025,-1.8788446028726709,4,approved.xlsx:615 approved.xlsx:616 approved.xlsx:618 approved.xlsx:620,14991686 16175133 2882883,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+desipramine,50.0,0.018343240308200837,-3.4354939487015934,4,approved.xlsx:1132 approved.xlsx:1135 approved.xlsx:1136 approved.xlsx:1137,23221858 24880753 9284850,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+enzalutamide,160.0,4.5548597360319505,-1.5456449749594778,4,approved.xlsx:1485 approved.xlsx:1486 approved.xlsx:1487 approved.xlsx:1488,28251667 30642613,,no_salt_reported,capsule,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+anastrozole,1.0,0.018659392275011823,-1.7291025050647,4,approved.xlsx:320 approved.xlsx:321 approved.xlsx:322 approved.xlsx:323,20629047 22281018 29659187 35485182,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+canagliflozin,300.0,2.8103023683123984,-2.0283682053395125,4,approved.xlsx:682 approved.xlsx:683 approved.xlsx:684 approved.xlsx:688,25500487 27136908 27136910,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+cobimetinib,20.0,0.015378308351100942,-3.1141214309520535,4,approved.xlsx:994 approved.xlsx:995 approved.xlsx:996 approved.xlsx:997,24010577,fumarate,salt_reported_basis_unverified,capsule|tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+stavudine (d4t),40.0,0.9477504670723025,-1.6253659841995522,4,approved.xlsx:3737 approved.xlsx:3738 approved.xlsx:3739 approved.xlsx:3740,15458772 17725180 7780046 9420063,,no_salt_reported,capsule,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+rabeprazole,20.0,0.3664653615865635,-1.7369970643887231,4,approved.xlsx:3282 approved.xlsx:3285 approved.xlsx:3288 approved.xlsx:3289,10363734 10471983 15704613 9701531,,no_salt_reported,enteric-coated tablet,modified_release,,not_recorded_in_source,False,modified_release_formulation
+meloxicam,7.5,0.7496441014900894,-1.0002061352579854,4,approved.xlsx:2412 approved.xlsx:2413 approved.xlsx:2414 approved.xlsx:2415,26774055,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+rizatriptan (mk-462),10.0,0.027785050471777317,-2.556188809978315,4,approved.xlsx:3465 approved.xlsx:3466 approved.xlsx:3467 approved.xlsx:3468,10233200 15954161 16080273,,no_salt_reported,solution|tablet,reported_non_modified,,not_recorded_in_source,True,
+lacosamide,200.0,5.416348383459763,-1.5673234049521516,4,approved.xlsx:2100 approved.xlsx:2102 approved.xlsx:2103 approved.xlsx:2106,22437449 22722651 32567713,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+imipramine,50.0,0.02862088469979494,-3.24228695023369,4,approved.xlsx:1987 approved.xlsx:1990 approved.xlsx:1991 approved.xlsx:1992,3365915 6429693 8333005 8451780,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+ondansetron,8.0,0.03993933714012471,-2.3016891342383063,4,approved.xlsx:2854 approved.xlsx:2855 approved.xlsx:2856 approved.xlsx:2857,10223773 8140047 9545148,,no_salt_reported,solution|tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+salbutamol (albuterol),4.0,0.012812001774054546,-2.4944430012002083,4,approved.xlsx:3565 approved.xlsx:3566 approved.xlsx:3567 approved.xlsx:3568,3653233 3989697,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+rimegepant,75.0,0.6638696869140865,-2.052978424698835,4,approved.xlsx:3406 approved.xlsx:3407 approved.xlsx:3409 approved.xlsx:3412,37073443 37282507,,no_salt_reported,capsule,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+rasagiline,2.0,0.011608015588401873,-2.236272013019935,4,approved.xlsx:3322 approved.xlsx:3325 approved.xlsx:3331 approved.xlsx:3333,18799367 18952510 30218626,mesylate,salt_reported_basis_unverified,tablet,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+erlotinib,150.0,1.233599269314674,-2.084917155589963,4,approved.xlsx:1513 approved.xlsx:1514 approved.xlsx:1515 approved.xlsx:1516,16490804 16609030 32416055,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+sitagliptin,200.0,0.8344314532471622,-2.379639329542935,4,approved.xlsx:3667 approved.xlsx:3668 approved.xlsx:3670 approved.xlsx:3688,16338283 17571284 21284702,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+bromfenac,50.0,4.137691745835626,-1.0822118713338036,4,approved.xlsx:621 approved.xlsx:622 approved.xlsx:623 approved.xlsx:624,9084456 9100997 9100998,sodium,salt_reported_basis_unverified,capsule,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+macitentan,10.0,0.20172185326253728,-1.6952470505367183,4,approved.xlsx:2339 approved.xlsx:2340 approved.xlsx:2341 approved.xlsx:2342,23817130 24122797,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+ticagrelor,100.0,0.5141932369929334,-2.2888736397817726,4,approved.xlsx:3939 approved.xlsx:3947 approved.xlsx:3951 approved.xlsx:3952,20091161 24755129,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+tolbutamide,500.0,51.95484400958552,-0.9833439591115472,4,approved.xlsx:4015 approved.xlsx:4016 approved.xlsx:4017 approved.xlsx:4019,10190649 11116754 11875365 15896241,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+sulfadiazine,500.0,18.236205601242897,-1.4380355243933989,4,approved.xlsx:3745 approved.xlsx:3746 approved.xlsx:3747 approved.xlsx:3748,581498,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+tucatinib,300.0,0.40287867279978673,-2.871946976982617,4,approved.xlsx:4152 approved.xlsx:4153 approved.xlsx:4154 approved.xlsx:4155,35931943 36471222,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+lornoxicam,8.0,0.8249430182572687,-0.9866660356675875,3,approved.xlsx:2297 approved.xlsx:2298 approved.xlsx:2299,15606435 18479176 28176487,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+fedratinib,500.0,1.1511831553468352,-2.6378255781620226,3,approved.xlsx:1645 approved.xlsx:1647 approved.xlsx:1648,24165976 34019108,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+clobazam,20.0,0.3924545204031221,-1.7072406598881178,3,approved.xlsx:953 approved.xlsx:954 approved.xlsx:956,30285275 6107307 7937568,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+acipimox,250.0,3.8797055432471987,-1.8091412433344405,3,approved.xlsx:135 approved.xlsx:136 approved.xlsx:137,23447078 7028536,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+glipizide,5.0,0.42322730457772245,-1.072396325826589,3,approved.xlsx:1901 approved.xlsx:1902 approved.xlsx:1903,19847408 2693502 7572185,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+mizolastine,10.0,0.321827688822039,-1.4923765935952547,3,approved.xlsx:2589 approved.xlsx:2590 approved.xlsx:2591,8803528 9408856,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+temazepam,20.0,0.5242788465935281,-1.5814676603478064,3,approved.xlsx:3880 approved.xlsx:3881 approved.xlsx:3882,2891534 41540 8882243,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+deferasirox,1400.0,31.399680849258612,-1.6492028018123568,3,approved.xlsx:1106 approved.xlsx:1107 approved.xlsx:1108,29328981 31677118,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+eltrombopag,50.0,5.752652004132838,-0.9391019013440647,3,approved.xlsx:1420 approved.xlsx:1422 approved.xlsx:1423,20663991 30171280,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+almotriptan,12.5,0.045388103903797515,-2.4399679726163384,3,approved.xlsx:219 approved.xlsx:221 approved.xlsx:223,10824628 11210405 11422001,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+tegaserod,12.0,0.004988292608793563,-3.381229325167107,3,approved.xlsx:3848 approved.xlsx:3849 approved.xlsx:3850,11421867 18069077,maleate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+cefadroxil,1000.0,32.95103850376143,-1.4821308933811792,3,approved.xlsx:751 approved.xlsx:753 approved.xlsx:756,475366 7073267 8743403,,no_salt_reported,capsule|solution,reported_non_modified,,not_recorded_in_source,True,
+sibutramine,15.0,0.0028738715167826844,-3.717623910984546,3,approved.xlsx:3624 approved.xlsx:3625 approved.xlsx:3626,15576015 19693007 21294141,hydrochloride,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+afatinib,40.0,0.02571236415976231,-3.191917981027573,3,approved.xlsx:165 approved.xlsx:166 approved.xlsx:168,27436099 35771264,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+metformin,389.93,1.356103882975108,-2.4586936902408003,3,approved.xlsx:2442 approved.xlsx:2443 approved.xlsx:2444,22762856 499320 7306436,hydrochloride,salt_converted_to_parent,tablet,reported_non_modified,,not_recorded_in_source,True,
+acetazolamide,250.0,16.657217755207785,-1.1763375454828342,3,approved.xlsx:119 approved.xlsx:120 approved.xlsx:121,7082781,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+celecoxib,200.0,0.6832255170437157,-2.4664659176898027,3,approved.xlsx:815 approved.xlsx:816 approved.xlsx:817,11816012 16149679 37246720,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+frovatriptan,2.5,0.00570473291111446,-2.641704692598699,3,approved.xlsx:1812 approved.xlsx:1813 approved.xlsx:1814,12028321 34262261,succinate,salt_reported_basis_unverified,capsule|tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+etoricoxib,120.0,2.248485380641316,-1.7272911778605624,3,approved.xlsx:1587 approved.xlsx:1588 approved.xlsx:1589,11583479 12638395,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+clonazepam,2.0,0.014393117467165102,-2.1428751258306873,3,approved.xlsx:967 approved.xlsx:968 approved.xlsx:969,1233263 12646763 38041794,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+nitrazepam,5.0,0.04381596236449001,-2.057337649450285,3,approved.xlsx:2784 approved.xlsx:2785 approved.xlsx:2787,17286787 456400 474154,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+axitinib,5.0,0.051255385672370035,-1.9892304986101093,3,approved.xlsx:449 approved.xlsx:450 approved.xlsx:451,19603168 20740300 22644797,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+cefprozil,250.0,5.5248728020237605,-1.6556177248696569,3,approved.xlsx:791 approved.xlsx:792 approved.xlsx:794,2393282 2393283 8222462,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+thalidomide,200.0,1.913368324282755,-2.0192314157013684,3,approved.xlsx:3915 approved.xlsx:3916 approved.xlsx:3919,10579147 11038436 11402635,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+tolterodine,2.0,0.001879625698834387,-3.026958621461573,3,approved.xlsx:4036 approved.xlsx:4037 approved.xlsx:4038,11269570 19269904 23292115,tartrate,salt_reported_basis_unverified,tablet,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+gliclazide,80.0,4.068209423912289,-1.2936866854874427,3,approved.xlsx:1890 approved.xlsx:1891 approved.xlsx:1892,12116051 14534520 37097441,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+buspirone,10.0,0.0012389511595793058,-3.9069458135135857,3,approved.xlsx:649 approved.xlsx:651 approved.xlsx:654,22608068 2860931 9923581,hydrochloride,salt_reported_basis_unverified,solution|tablet,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+furosemide,40.0,1.7033075605577312,-1.3707669171803725,3,approved.xlsx:1820 approved.xlsx:1823 approved.xlsx:1825,12854359 4005391 7143205,,no_salt_reported,solution|tablet,reported_non_modified,,not_recorded_in_source,True,
+irbesartan,300.0,3.0988551061820826,-1.9859199844038051,3,approved.xlsx:2015 approved.xlsx:2016 approved.xlsx:2018,24048950 9549663 9602956,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+timolol,10.0,0.03423782919540408,-2.465493778993254,3,approved.xlsx:3967 approved.xlsx:3969 approved.xlsx:3971,32043 6840172 738350,maleate,salt_reported_basis_unverified,,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+nevirapine,200.0,2.1170299575524787,-1.9753029920103327,3,approved.xlsx:2727 approved.xlsx:2729 approved.xlsx:2734,10701699 21316541 8452345,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+acebutolol,400.0,0.738296177906391,-2.733829371203561,3,approved.xlsx:105 approved.xlsx:106 approved.xlsx:107,16305592 6852547 7248475,hydrochloride,salt_reported_basis_unverified,capsule|tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+eletriptan,30.0,0.07526438531029968,-2.6005317356523756,3,approved.xlsx:1395 approved.xlsx:1396 approved.xlsx:1404,12017346 12017347,hemisulfate|hydrobromide,salt_reported_basis_unverified,solution|tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+finasteride,5.0,0.044295924971702545,-2.0526062294381373,3,approved.xlsx:1711 approved.xlsx:1712 approved.xlsx:1713,15901045 17118604 25465944,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+ambroxol,30.0,0.0631117640787247,-2.6770109351224756,3,approved.xlsx:259 approved.xlsx:260 approved.xlsx:261,14597158 25207547 30378372,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+tolvaptan,30.0,0.23083971564878294,-2.1138107240520227,3,approved.xlsx:4040 approved.xlsx:4045 approved.xlsx:4046,22120090 22257581 23274625,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+olaparib,300.0,7.165576422098047,-1.6218701225310022,3,approved.xlsx:2833 approved.xlsx:2834 approved.xlsx:2835,26242220 30877569 32227355,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+trifluoperazine,5.0,0.0009856620730287757,-3.7052419585365675,3,approved.xlsx:4105 approved.xlsx:4106 approved.xlsx:4107,3137618 6849769,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+mirtazapine,15.0,0.03248949498746152,-2.6643482982758977,3,approved.xlsx:2571 approved.xlsx:2573 approved.xlsx:2574,9248777,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+edoxaban,60.0,0.26583840789396673,-2.3535335230945393,3,approved.xlsx:1371 approved.xlsx:1372 approved.xlsx:1375,20081065 26068927 27121940,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+vorapaxar,40.0,0.4544962827111824,-1.9445296558153515,3,approved.xlsx:4320 approved.xlsx:4321 approved.xlsx:4323,21969227 25138682,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+asciminib,40.0,0.5638841369562785,-1.8508701140285906,3,approved.xlsx:380 approved.xlsx:381 approved.xlsx:382,34115385 34609077,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+loratadine,20.0,0.015396772247574377,-3.113600310021808,3,approved.xlsx:2280 approved.xlsx:2281 approved.xlsx:2284,12852841 16490584 2960701,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+ximelagatran,50.0,0.4084885708511591,-2.087790094473001,3,approved.xlsx:4359 approved.xlsx:4360 approved.xlsx:4361,12739985,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+letrozole,2.5,0.035999367478598575,-1.8416451385427393,3,approved.xlsx:2176 approved.xlsx:2177 approved.xlsx:2178,18807583 9267682 9429742,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+levamlodipine,5.0,0.0028118916017344855,-3.249971429693763,3,approved.xlsx:2186 approved.xlsx:2187 approved.xlsx:2188,28619129 33213527 38705226,besylate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+perampanel,12.0,0.3016504588560529,-1.5996772557669896,3,approved.xlsx:2974 approved.xlsx:2975 approved.xlsx:2976,35596529,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+ivosidenib,250.0,1.6098640626968073,-2.191150803021016,3,approved.xlsx:2062 approved.xlsx:2063 approved.xlsx:2064,31011758,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+favipiravir,200.0,5.240712695529575,-1.581639644045007,3,approved.xlsx:1622 approved.xlsx:1623 approved.xlsx:1624,33606892 33624584,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+milnacipran,50.0,0.13775666000959066,-2.559857399821306,3,approved.xlsx:2542 approved.xlsx:2543 approved.xlsx:2545,26663198 9725493 9725494,hydrochloride,salt_reported_basis_unverified,capsule|tablet,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+bicalutamide,50.0,0.9459657061662258,-1.723094612006885,3,approved.xlsx:552 approved.xlsx:553 approved.xlsx:555,20110037 21353117 22331758,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+sunitinib,50.0,0.02429887207079787,-3.3133838897828727,3,approved.xlsx:3782 approved.xlsx:3783 approved.xlsx:3784,16520665 19779038 20049443,malate,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+zaleplon,20.0,0.051575826968405916,-2.5885837954718007,3,approved.xlsx:4372 approved.xlsx:4375 approved.xlsx:4376,10952475 11192136 9834048,,no_salt_reported,capsule,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+rimantadine,200.0,0.2149408916293914,-2.968710949555488,3,approved.xlsx:3401 approved.xlsx:3402 approved.xlsx:3404,3662473 3665342 3834831,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+flecainide,200.0,0.35144257368219595,-2.755175624972267,3,approved.xlsx:1727 approved.xlsx:1731 approved.xlsx:1732,3094570 3104059 3741720,acetate,salt_reported_basis_unverified,tablet,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+modafinil,200.0,4.675923959713604,-1.6311625556517881,3,approved.xlsx:2601 approved.xlsx:2602 approved.xlsx:2604,10073328 18613861,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+vardenafil,20.0,0.024434431480457427,-2.913027756976384,3,approved.xlsx:4222 approved.xlsx:4225 approved.xlsx:4226,11528196 12638394 19042162,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+labetalol,200.0,0.13472039137745676,-3.1715966598336527,3,approved.xlsx:2087 approved.xlsx:2088 approved.xlsx:2091,23090703 6961762 7104169,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+metoclopramide,10.0,0.041116895037747785,-2.3859796887327827,3,approved.xlsx:2482 approved.xlsx:2483 approved.xlsx:2484,19459829 7286058 9505990,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+levetiracetam,1500.0,50.08734773195037,-1.4763632238899287,3,approved.xlsx:2189 approved.xlsx:2190 approved.xlsx:2192,16861095 17324224 26135593,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+procaterol,0.1,0.0003341084185540104,-2.4761125812744997,3,approved.xlsx:3188 approved.xlsx:3191 approved.xlsx:3192,1467453 8483846,hydrochloride hemihydrate,salt_reported_basis_unverified,solution|tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+topotecan,2.6,0.005369107279930239,-2.685071266299208,3,approved.xlsx:4065 approved.xlsx:4066 approved.xlsx:4067,23354352 24074809 8630291,hydrochloride,salt_reported_basis_unverified,capsule|solution,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+brivaracetam,10.0,0.3069046802717541,-1.5129964885616674,3,approved.xlsx:600 approved.xlsx:602 approved.xlsx:613,17223857 24717838 27346728,,no_salt_reported,capsule|tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+chlorpropamide,250.0,30.511752668608455,-0.913472853391381,3,approved.xlsx:873 approved.xlsx:874 approved.xlsx:875,15845 1623912 17966758,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+roxithromycin,150.0,6.096979602977228,-1.3909765169334258,3,approved.xlsx:3529 approved.xlsx:3530 approved.xlsx:3534,2305423 3360966,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+valdecoxib,20.0,0.28897116205905704,-1.8401754912587336,3,approved.xlsx:4194 approved.xlsx:4196 approved.xlsx:4197,15887009,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+obeticholic acid,10.0,0.045474637203197804,-2.3422307570534344,3,approved.xlsx:2816 approved.xlsx:2817 approved.xlsx:2818,33463088 33469270 34313291,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+lesinurad,400.0,17.94268808316472,-1.3481724839335736,3,approved.xlsx:2165 approved.xlsx:2166 approved.xlsx:2169,27843295 30117757 30748125,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+ixazomib,4.0,0.06624763869595017,-1.7808895882601734,3,approved.xlsx:2065 approved.xlsx:2066 approved.xlsx:2067,26872892 27121262 28783865,,no_salt_reported,capsule,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+norfloxacin,400.0,1.2028278433504025,-2.5218565186292135,3,approved.xlsx:2804 approved.xlsx:2805 approved.xlsx:2806,11180196 17917441 6224683,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+idelalisib,150.0,2.239256917063456,-1.8259873346316797,3,approved.xlsx:1976 approved.xlsx:1977 approved.xlsx:1978,25821156 26526983,,no_salt_reported,,unreported,fed condition,not_recorded_in_source,False,formulation_not_source_reported
+saxagliptin,5.0,0.02538360899214673,-2.294416635042786,3,approved.xlsx:3587 approved.xlsx:3588 approved.xlsx:3589,21651615 22668067 22823746,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+vildagliptin,100.0,0.5099150441597413,-2.292502174737413,3,approved.xlsx:4275 approved.xlsx:4276 approved.xlsx:4277,17656620 17961192,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+abacavir,300.0,2.9835159917153424,-2.002392884704749,3,approved.xlsx:75 approved.xlsx:76 approved.xlsx:77,10049274 10453964 20819295,hemisulfate,salt_reported_basis_unverified,caplet|tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+ertugliflozin,15.0,0.30898348888710386,-1.686155986351905,3,approved.xlsx:1518 approved.xlsx:1521 approved.xlsx:1523,29575530 30224193 30934166,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+sofosbuvir,400.0,0.8981843611113518,-2.6486945023271313,3,approved.xlsx:3690 approved.xlsx:3691 approved.xlsx:3692,30185395 30900816 32053101,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+bilastine,20.0,0.24018138886995385,-1.9204906438220262,3,approved.xlsx:556 approved.xlsx:557 approved.xlsx:559,23529786 27498100 39088184,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+epinastine,20.0,0.013024478085686048,-3.1862696663064645,3,approved.xlsx:1490 approved.xlsx:1491 approved.xlsx:1492,31947890 32302007,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+repaglinide,2.0,0.026143821393901458,-1.8836609277604048,3,approved.xlsx:3355 approved.xlsx:3356 approved.xlsx:3357,12520624 24465043,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+ramipril,5.0,0.01342219533900699,-2.571146449334548,3,approved.xlsx:3307 approved.xlsx:3308 approved.xlsx:3310,29887764 7995323,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+empagliflozin,50.0,0.5570775560151967,-1.9530543427265181,3,approved.xlsx:1431 approved.xlsx:1435 approved.xlsx:1446,23859488 23859534 27121669,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+tivozanib,1.5,0.020964129239101757,-1.8546144306898968,3,approved.xlsx:3983 approved.xlsx:3984 approved.xlsx:3985,27128217 27128461,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+futibatinib,20.0,0.14041589471647908,-2.153613724074302,3,approved.xlsx:1830 approved.xlsx:1831 approved.xlsx:1833,36382853 36404525 37553804,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+sparfloxacin,400.0,1.2159058315234597,-2.5171600499713143,3,approved.xlsx:3714 approved.xlsx:3720 approved.xlsx:3721,10397377 7876398 9916608,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+domperidone,20.0,0.03718329114336906,-2.7306821685350755,3,approved.xlsx:1298 approved.xlsx:1299 approved.xlsx:1302,22418831 24549964 27128456,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+ezetimibe,10.0,0.004235042413781531,-3.373142235869511,3,approved.xlsx:1605 approved.xlsx:1606 approved.xlsx:1607,20865252 36737825 37021410,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+pantoprazole,40.0,2.644252238167657,-1.1797571107037197,3,approved.xlsx:2931 approved.xlsx:2932 approved.xlsx:2933,32711578 33128847 8405016,sodium,salt_reported_basis_unverified,enteric-coated tablet,modified_release,,not_recorded_in_source,False,dose_mass_basis_unverified;modified_release_formulation
+moxonidine,0.2,0.0013390421609688918,-2.174235744277155,3,approved.xlsx:2646 approved.xlsx:2647 approved.xlsx:2648,12236844 1936074 3437071,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+efavirenz,600.0,2.543433694368188,-2.3727308300381926,3,approved.xlsx:1378 approved.xlsx:1379 approved.xlsx:1380,20101064 21255533 31628422,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+lorcaserin,10.0,0.035543605742646575,-2.449238517028683,3,approved.xlsx:2289 approved.xlsx:2290 approved.xlsx:2291,28365033,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+pretomanid,50.0,0.336499257792263,-2.171985893687108,3,approved.xlsx:3157 approved.xlsx:3158 approved.xlsx:3159,19528280 23979737 35595003,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+diltiazem,90.0,0.09359212896775557,-2.9830031830260793,3,approved.xlsx:1257 approved.xlsx:1258 approved.xlsx:1261,7276227 8243504,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+ubrogepant,100.0,0.3303257858978742,-2.481057523081063,3,approved.xlsx:4157 approved.xlsx:4159 approved.xlsx:4160,31628854 38261231,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+atogepant,60.0,0.6936523110495859,-1.9370094128250712,3,approved.xlsx:413 approved.xlsx:414 approved.xlsx:415,33501783 33948911 37424270,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+dexketoprofen,25.0,3.430576029417592,-0.8625729599431073,3,approved.xlsx:1174 approved.xlsx:1175 approved.xlsx:1176,29023869,trometamol,salt_reported_basis_unverified,capsule|tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+eluxadoline,100.0,0.00337698703292163,-4.471470606981229,3,approved.xlsx:1425 approved.xlsx:1426 approved.xlsx:1428,25491493 28719721 29659201,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+ambrisentan,10.0,0.7332554250491975,-1.134744715172893,3,approved.xlsx:252 approved.xlsx:255 approved.xlsx:256,19389876 32472357,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+agomelatine,25.0,0.009809320093657268,-3.406301102189732,3,approved.xlsx:169 approved.xlsx:170 approved.xlsx:171,23918681 26409931 28392509,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+prucalopride,2.0,0.004776786353186926,-2.6218941782254945,3,approved.xlsx:3220 approved.xlsx:3221 approved.xlsx:3222,22943932 23269861 31797570,hydrochloride|succinate,salt_reported_basis_unverified,capsule|tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+tofacitinib,1.0,0.008270391430487698,-2.082473935178057,3,approved.xlsx:4000 approved.xlsx:4008 approved.xlsx:4010,27128212 31713350,,no_salt_reported,powder,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+nifedipine,10.0,0.11424669471769633,-1.9421563556925123,3,approved.xlsx:2752 approved.xlsx:2753 approved.xlsx:2754,11557910 8375129,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+linezolid,600.0,11.07690617700215,-1.7337327731933143,3,approved.xlsx:2232 approved.xlsx:2233 approved.xlsx:2234,23740384 25044219 29712654,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+primaquine,15.0,0.04656064081281292,-2.508072310189763,3,approved.xlsx:3175 approved.xlsx:3176 approved.xlsx:3178,24014905 4027117 4027118,phosphate,salt_reported_basis_unverified,tablet,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+rolapitant,180.0,0.9474386999325534,-2.278721384766368,3,approved.xlsx:3494 approved.xlsx:3495 approved.xlsx:3497,30256537 30624856,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+lansoprazole,30.0,1.039875991994142,-1.4601397031168093,3,approved.xlsx:2121 approved.xlsx:2122 approved.xlsx:2123,12562448 15823771 24683233,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+crizotinib,250.0,0.10861385006961036,-3.3620548001293136,3,approved.xlsx:1017 approved.xlsx:1019 approved.xlsx:1020,24990113 26381275,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+quetiapine,100.0,0.3173048542541023,-2.4985232838414584,3,approved.xlsx:3242 approved.xlsx:3243 approved.xlsx:3244,24240480,fumarate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+aprepitant,125.0,1.287390516671369,-1.9871997073548169,3,approved.xlsx:353 approved.xlsx:355 approved.xlsx:356,16490805 32273684,,no_salt_reported,capsule,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+cinacalcet,50.0,0.013439786702964142,-3.5705776280632087,3,approved.xlsx:913 approved.xlsx:919 approved.xlsx:920,18783302 22503212 26804640,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+laropiprant,40.0,0.9561373577265223,-1.6215397042636042,3,approved.xlsx:2128 approved.xlsx:2129 approved.xlsx:2130,19433974 20337634 20484612,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+ivabradine,10.0,0.018069607021933408,-2.7430512923788393,3,approved.xlsx:2050 approved.xlsx:2051 approved.xlsx:2052,21366652 22765768 24332196,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+vandetanib,300.0,0.15316216590561954,-3.2919697555305105,3,approved.xlsx:4213 approved.xlsx:4214 approved.xlsx:4219,22206795 25117183,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+riociguat,1.0,0.03613342157477518,-1.4420909119252885,3,approved.xlsx:3419 approved.xlsx:3420 approved.xlsx:3421,27096084 27162624,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+voriconazole,200.0,1.0883023428635983,-2.264280431555054,3,approved.xlsx:4325 approved.xlsx:4326 approved.xlsx:4327,21428249 23147034 24925071,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+rosiglitazone,8.0,0.6374215210531341,-1.0986632646649637,3,approved.xlsx:3501 approved.xlsx:3502 approved.xlsx:3503,15001966 18261363 27128003,maleate,salt_reported_basis_unverified,tablet,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+cefixime,400.0,4.454326474412006,-1.9532779463803982,3,approved.xlsx:773 approved.xlsx:774 approved.xlsx:775,3203716 3696837,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+fluconazole,200.0,4.692143203600026,-1.6296587374071443,3,approved.xlsx:1740 approved.xlsx:1741 approved.xlsx:1746,20456743,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+daridorexant,25.0,0.8195877012254393,-1.4843445759389777,2,approved.xlsx:1094 approved.xlsx:1095,34002356 34121345,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+desmopressin,0.4,3.130495168499707e-05,-4.106446953481715,2,approved.xlsx:1150 approved.xlsx:1152,16651830 29404038,acetate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+amiloride,10.0,0.019177434656387177,-2.717209488358725,2,approved.xlsx:267 approved.xlsx:268,3428342,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+celiprolol,100.0,0.30234086723431886,-2.519503145528832,2,approved.xlsx:819 approved.xlsx:820,12621384 15001969,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+chloroquine,300.0,0.10472959467122939,-3.457051832006876,2,approved.xlsx:864 approved.xlsx:865,6849784 8451780,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+neratinib,240.0,0.05222332812067803,-3.6623466963543545,2,approved.xlsx:2723 approved.xlsx:2724,21395644 35624555,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+clomifene (clomiphene),50.0,0.008413750649977698,-3.7739803672211685,2,approved.xlsx:964 approved.xlsx:965,29516347 3091405,citrate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+glyburide,5.0,0.12760090125073573,-1.5931162624991584,2,approved.xlsx:1904 approved.xlsx:1905,16198656 7657854,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+captopril,100.0,0.5699454873933121,-2.244166680566844,2,approved.xlsx:717 approved.xlsx:719,9368913,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+apremilast,20.0,0.2244749429223672,-1.9498621258608864,2,approved.xlsx:346 approved.xlsx:349,24962564 33932093,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+trimetazidine,20.0,0.07354682861959447,-2.434466045217767,2,approved.xlsx:4120 approved.xlsx:4121,17208404 18972871,dihydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+procainamide,1000.0,5.2306787322488075,-2.281441953475961,2,approved.xlsx:3184 approved.xlsx:3186,6091709 8932548,hydrochloride,salt_reported_basis_unverified,capsule,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+oxcarbazepine,300.0,0.3956789923662868,-2.879778261672716,2,approved.xlsx:2891 approved.xlsx:2892,21389120 7859804,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+alverine,120.0,0.008461347410430564,-4.151741719140985,2,approved.xlsx:243 approved.xlsx:244,20564607 33551820,citrate,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+verapamil,80.0,0.06284838900083278,-3.104795837142054,2,approved.xlsx:4251 approved.xlsx:4252,1709224 21716273,hydrochloride,salt_reported_basis_unverified,tablet,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+tetrabenazine,25.0,0.0006938299503480665,-4.556686965702532,2,approved.xlsx:3911 approved.xlsx:3912,23339053 32155315,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+prazosin,1.0,0.007899367063252602,-2.1024077051587877,2,approved.xlsx:3130 approved.xlsx:3132,2441167 8739810,hydrochloride,salt_reported_basis_unverified,capsule|powder,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+molsidomine,2.0,0.01375790681753587,-2.162477632022054,2,approved.xlsx:2612 approved.xlsx:2613,1777378 6548711,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+doxazosin,2.0,0.01503984707369061,-2.1237865753252434,2,approved.xlsx:1320 approved.xlsx:1322,10631624 16235201,mesylate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+terazosin,2.0,0.037499466662874015,-1.727004904656741,2,approved.xlsx:3894 approved.xlsx:3895,2441167 33429127,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+moricizine (en-313),250.0,0.8160882305241266,-2.486202894086887,2,approved.xlsx:2626 approved.xlsx:2629,1804860 7880984,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+cabotegravir,30.0,3.349940297975473,-0.9520841875308332,2,approved.xlsx:662 approved.xlsx:663,30230694 30809978,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+enalapril,10.0,0.06945134987889004,-2.158319308756374,2,approved.xlsx:1450 approved.xlsx:1451,1647954 2543535,maleate,salt_reported_basis_unverified,capsule|tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+selumetinib,50.0,0.9331489698863735,-1.7290190233599587,2,approved.xlsx:3614 approved.xlsx:3615,28019010 35170228,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+gefitinib,250.0,0.0835374167663808,-3.476058967255171,2,approved.xlsx:1871 approved.xlsx:1872,16231967,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+dacomitinib,45.0,0.027442031630329412,-3.214796253199096,2,approved.xlsx:1066 approved.xlsx:1067,28648122 37786330,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+nitrendipine,20.0,0.007597104711664838,-3.4203818832935475,2,approved.xlsx:2788 approved.xlsx:2789,2713213 6085386,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+lacidipine,4.0,0.0029414282245195113,-3.1335017359444355,2,approved.xlsx:2092 approved.xlsx:2093,12489980 7609516,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+amlodipine,10.0,0.005748043145279971,-3.2404799806758273,2,approved.xlsx:287 approved.xlsx:289,2943308 2977393,besylate,salt_reported_basis_unverified,capsule|tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+methylprednisolone,16.0,0.10916959283610067,-2.166018292111541,2,approved.xlsx:2474 approved.xlsx:2476,11049012 9797792,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+flunarizine,5.0,0.02604139013186508,-2.28330584047351,2,approved.xlsx:1752 approved.xlsx:1753,31077435 34472200,hydrochloride,salt_reported_basis_unverified,capsule|tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+lenvatinib,10.0,0.09586448768965496,-2.018342244306944,2,approved.xlsx:2161 approved.xlsx:2163,24548978 25204557,,no_salt_reported,capsule,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+nimesulide,100.0,3.2310060352775576,-1.4906622307519963,2,approved.xlsx:2769 approved.xlsx:2770,16375216 9379354,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+bedaquiline,400.0,3.8258332425760537,-2.019333954911998,2,approved.xlsx:501 approved.xlsx:502,29061739,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+eliglustat,84.0,0.01081665382639196,-3.890186355188801,2,approved.xlsx:1418 approved.xlsx:1419,31924461,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+cefaclor,500.0,16.585234396896535,-1.4792483906113953,2,approved.xlsx:744 approved.xlsx:748,2393282 9017772,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+hydrochlorothiazide,25.0,0.1468013283318649,-2.2312100233604526,2,approved.xlsx:1937 approved.xlsx:1939,31564513 6716243,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+flosequinan,100.0,1.294990347454374,-1.8877334686969571,2,approved.xlsx:1736 approved.xlsx:1737,8207686 8450423,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+piretanide,6.0,0.3269174207655505,-1.263713186515529,2,approved.xlsx:3069 approved.xlsx:3071,6883908 7995323,,no_salt_reported,solution,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+capecitabine,150.0,0.25735590317690404,-2.7655571245975215,2,approved.xlsx:706 approved.xlsx:707,30106362,,no_salt_reported,tablet,reported_non_modified,reference formulation; fed condition; GM,not_recorded_in_source,True,
+halofantrine,500.0,0.37563945479675065,-3.1241988027957106,2,approved.xlsx:1921 approved.xlsx:1922,15206992 2775616,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+carvedilol,50.0,0.0919130023446085,-2.73559305174115,2,approved.xlsx:742 approved.xlsx:743,3428345,,no_salt_reported,capsule|suspension,reported_non_modified,,not_recorded_in_source,True,
+Aprocitentan,25.0,1.4143125538578805,-1.2473946123541582,2,approved_2024.xlsx:7 approved_2024.xlsx:8,30962677 36352054,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+eprosartan,100.0,0.4334651081690428,-2.3630458553723535,2,approved.xlsx:1506 approved.xlsx:1507,9469680 9597557,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+bendroflumethiazide,10.0,0.057449673628315774,-2.2407124341963076,2,approved.xlsx:515 approved.xlsx:518,358763 7056277,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+dextropropoxyphene,65.0,0.05260323183987842,-3.091900929464242,2,approved.xlsx:1185 approved.xlsx:1186,15764408 2590604,hydrochloride,salt_reported_basis_unverified,capsule|tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+dapsone,100.0,1.710263137648707,-1.7669370647909004,2,approved.xlsx:1091 approved.xlsx:1092,3768260 7437265,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+aminosalicylic acid (para-aminosalicylic acid),4000.0,46.52536942357362,-1.9343701610999553,2,approved.xlsx:274 approved.xlsx:275,4829991 8159600,,no_salt_reported,granule|tablet,reported_non_modified,,not_recorded_in_source,True,
+minoxidil,5.0,0.036186185209275655,-2.1404272026560047,2,approved.xlsx:2557 approved.xlsx:2558,2715373 9840212,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+amrinone,75.0,0.9515513648773775,-1.8966290268582906,2,approved.xlsx:313 approved.xlsx:316,6872413 6886991,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+ponesimod,10.0,0.05440110292999584,-2.264392295309991,2,approved.xlsx:3099 approved.xlsx:3102,26525450 26883438,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+ethosuximide,500.0,12.724173843515342,-1.5943404103292005,2,approved.xlsx:1573 approved.xlsx:1574,6423377 8799524,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+trovafloxacin,200.0,2.054507240191672,-1.9883223195867772,2,approved.xlsx:4141 approved.xlsx:4145,10582898 10991830,mesylate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+glimepiride,1.0,0.0863851839148358,-1.0635607377965586,2,approved.xlsx:1895 approved.xlsx:1898,12369756 27121788,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+vinorelbine,138.4,0.13811661739269468,-3.000890156597943,2,approved.xlsx:4284 approved.xlsx:4285,11822766 17541591,ditartrate,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+rofecoxib,25.0,0.2016307268250551,-2.0933832930328644,2,approved.xlsx:3476 approved.xlsx:3477,15497671 17535062,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+valsartan,80.0,1.6928832210167362,-1.6744629864832818,2,approved.xlsx:4205 approved.xlsx:4206,33116410 9174680,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+levothyroxine (l-t4),0.6,0.07515562520530315,-0.9021897584188739,2,approved.xlsx:2218 approved.xlsx:2219,23154888 30153382,sodium,salt_reported_basis_unverified,capsule|tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+clindamycin,600.0,5.530913125334731,-2.0353544133724513,2,approved.xlsx:949 approved.xlsx:950,18623043,hydrochloride,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+telaprevir,500.0,0.21260526804385635,-3.371395982840971,2,approved.xlsx:3855 approved.xlsx:3856,29750017,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+perindopril,4.0,0.07403645048217804,-1.7326144020595717,2,approved.xlsx:2981 approved.xlsx:2983,21650082 2311339,erbumine,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+fosfomycin,3000.0,24.17105707245755,-2.0938256109029654,2,approved.xlsx:1797 approved.xlsx:1799,28630194 8370321,tromethamine,salt_reported_basis_unverified,,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+galantamine,8.0,0.045620170977320997,-2.243933078379944,2,approved.xlsx:1842 approved.xlsx:1844,12211216,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+telmisartan,80.0,0.40814219335912827,-2.2922784929394937,2,approved.xlsx:3870 approved.xlsx:3871,23118328,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+niraparib,300.0,1.010296491135152,-2.4726724100777484,2,approved.xlsx:2778 approved.xlsx:2779,29043410 29322231,tosylate,salt_reported_basis_unverified,capsule,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+rivastigmine,6.0,0.03088418041651746,-2.2884151695701136,2,approved.xlsx:3456 approved.xlsx:3457,11929322 28670911,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+cenobamate,400.0,10.424250572583142,-1.5840151491585206,2,approved.xlsx:827 approved.xlsx:835,32087001 34670008,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+solriamfetol,300.0,1.756917755616352,-2.232369822830509,2,approved.xlsx:3702 approved.xlsx:3705,30598342 32935460,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+isoniazid,300.0,5.159651150998485,-1.7645009151695632,2,approved.xlsx:2025 approved.xlsx:2027,15855489 21980963,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+propafenone,300.0,0.1477883689604835,-3.307480998570502,2,approved.xlsx:3203 approved.xlsx:3205,2379537 3606933,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+alendronic acid (alendronate),70.0,0.03841796975374935,-3.2605636297239045,2,approved.xlsx:182 approved.xlsx:183,19539104 22210034,sodium,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+udenafil,100.0,0.325521919384855,-2.487419762403378,2,approved.xlsx:4162 approved.xlsx:4168,18318773 29537612,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+gabapentin,400.0,3.850454518625041,-2.016547993435101,2,approved.xlsx:1836 approved.xlsx:1838,10219274 10863139,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+baclofen,10.0,0.14629422408283932,-1.8347728201390012,2,approved.xlsx:470 approved.xlsx:471,25028414 27867020,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+vemurafenib,960.0,4.224926034855522,-2.3564521228154622,2,approved.xlsx:4240 approved.xlsx:4241,24374975 30570831,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+methocarbamol,1500.0,23.00338888077146,-1.8142994376553876,2,approved.xlsx:2453 approved.xlsx:2454,19537524 2253675,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+omeprazole,40.0,0.9099287812790624,-1.6430525892353276,2,approved.xlsx:2851 approved.xlsx:2852,17203292 32711578,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+fluocortolone,20.0,0.18608062768595773,-2.031328833317828,2,approved.xlsx:1757 approved.xlsx:1758,3743619 6698661,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+dihydrocodeine,20.0,0.05920346020293071,-2.5286829054423543,2,approved.xlsx:1241 approved.xlsx:1242,21899209 26689716,bitartrate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+guanabenz,16.0,0.0025455844122715707,-3.7983324797206284,2,approved.xlsx:1914 approved.xlsx:1916,6084122 6084123,acetate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+zopiclone,7.5,0.04964373072201563,-2.1791968521463287,2,approved.xlsx:4419 approved.xlsx:4420,16832679 7833227,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+cyclizine,50.0,0.017476904760282942,-3.456505484765225,2,approved.xlsx:1027 approved.xlsx:1028,27444494,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+finerenone,5.0,0.043501724103763996,-2.060463534647755,2,approved.xlsx:1719 approved.xlsx:1723,29779093 35612708,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+eplerenone,100.0,1.7573736085420197,-1.7551358999278344,2,approved.xlsx:1497 approved.xlsx:1498,19806919 26262771,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+torasemide,10.0,1.2793146602771346,-0.8930226232971129,2,approved.xlsx:4069 approved.xlsx:4070,15592327 29403968,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+entrectinib,600.0,1.2416799211552065,-2.684141592056168,2,approved.xlsx:1483 approved.xlsx:1484,33462752,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+mianserin,60.0,0.06273814788468018,-2.9806195567955243,2,approved.xlsx:2511 approved.xlsx:2512,3830718,hydrochloride,salt_reported_basis_unverified,solution|tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+mexiletine,400.0,0.820121942152507,-2.6881815598386543,2,approved.xlsx:2506 approved.xlsx:2508,3964531 7226704,hydrochloride,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+bazedoxifene,10.0,0.002000000000000001,-3.6989700043360187,2,approved.xlsx:488 approved.xlsx:493,28756067,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+pirenzepine,50.0,0.043056997108484,-3.064926266463295,2,approved.xlsx:3065 approved.xlsx:3066,,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+aliskiren,600.0,0.5418302317146949,-3.0442880173118527,2,approved.xlsx:195 approved.xlsx:196,18538111 20192280,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+zidovudine,200.0,1.0295009909660118,-2.28840322667121,2,approved.xlsx:4384 approved.xlsx:4385,1492005 2357867,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+diazepam,10.0,0.22939485608879726,-1.6394163248710967,2,approved.xlsx:1188 approved.xlsx:1190,1505149 4758075,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+flunitrazepam,2.0,0.011721262730610553,-2.2320555949549594,2,approved.xlsx:1754 approved.xlsx:1756,2096104 3392235,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+piroxicam,20.0,2.350106380570888,-0.9299424740521427,2,approved.xlsx:3076 approved.xlsx:3077,20206793 3488542,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+panobinostat,30.0,0.023947860029656105,-3.097854543601019,2,approved.xlsx:2929 approved.xlsx:2930,25253045,,no_salt_reported,,unreported,patients with advanced solid tumors; fed condition; GM; F from fda label (https://www.accessdata.fda.gov/drugsatfda_docs/label/2015/205353s000lbl.pdf),not_recorded_in_source,False,formulation_not_source_reported
+lasmiditan,50.0,0.05324321553024386,-2.9727057282908707,2,approved.xlsx:2135 approved.xlsx:2137,,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+metolazone,2.0,0.03260036809608137,-1.7878074918784217,2,approved.xlsx:2487 approved.xlsx:2490,21387350 29145890,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+nisoldipine,10.0,0.0018334666618185346,-3.736726982469061,2,approved.xlsx:2780 approved.xlsx:2782,2706880 2731403,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+pirfenidone,400.0,11.903780911962384,-1.5263750662042321,2,approved.xlsx:3074 approved.xlsx:3075,17906160 26407124,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+triprolidine,2.5,0.006858571279792905,-2.561706352137996,2,approved.xlsx:4130 approved.xlsx:4131,2355108 32133778,hydrochloride,salt_reported_basis_unverified,syrup|tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+suvorexant,40.0,0.3723128100133006,-2.0311520122613804,2,approved.xlsx:3791 approved.xlsx:3792,29705869 30810914,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+pseudoephedrine,100.0,0.2867490191787934,-2.5424980589226536,2,approved.xlsx:3226 approved.xlsx:3227,3366840,hydrochloride,salt_reported_basis_unverified,capsule|syrup,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+nelfinavir,1250.0,3.6573214242119874,-2.533746882960586,2,approved.xlsx:2718 approved.xlsx:2719,11760223 16172185,mesylate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+monomethyl fumarate,190.0,1.8040487798283062,-2.022505324662732,2,approved.xlsx:2618 approved.xlsx:2619,33797063 36645997,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+sertraline,100.0,0.022465529150233695,-3.648483347633157,2,approved.xlsx:3621 approved.xlsx:3622,8877033 9068936,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+metaxalone,800.0,1.738339437509257,-2.6629554039220578,2,approved.xlsx:2436 approved.xlsx:2437,,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+gemifloxacin,320.0,1.7333205127730993,-2.266271101665821,2,approved.xlsx:1878 approved.xlsx:1881,10817716 24385283,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+olanzapine,5.0,0.007633216884119044,-2.816262402083079,2,approved.xlsx:2830 approved.xlsx:2832,12895191 31595704,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+ceritinib,750.0,0.21349941451910354,-3.545664574997736,2,approved.xlsx:839 approved.xlsx:840,26272586 28424965,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+isradipine,10.0,0.009576152672132998,-3.018808938610799,2,approved.xlsx:2046 approved.xlsx:2047,23813620 2965165,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+daclatasvir,60.0,1.2607127349241776,-1.6775351105590042,2,approved.xlsx:1058 approved.xlsx:1063,25654812 34032204,hydrochloride,salt_reported_basis_unverified,tablet,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+vortioxetine,40.0,0.015257784898208514,-3.418568503339037,2,approved.xlsx:4333 approved.xlsx:4336,22448783 28941196,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+nomifensine,100.0,0.05834106615412511,-3.2340256386249377,2,approved.xlsx:2799 approved.xlsx:2800,3956055 7082545,maleate,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+troglitazone,400.0,0.9612491872558333,-2.619224005717909,2,approved.xlsx:4135 approved.xlsx:4136,9832300,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+encorafenib,50.0,0.5167475205552514,-1.9856916028523792,2,approved.xlsx:1463 approved.xlsx:1464,37837178,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+tolcapone,200.0,5.992495306631453,-1.5234222931009447,2,approved.xlsx:4023 approved.xlsx:4024,7768073 9754991,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+imatinib,400.0,1.6214641531652805,-2.3921526394627257,2,approved.xlsx:1984 approved.xlsx:1986,14747424 25362813,mesylate,salt_reported_basis_unverified,capsule|tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+capmatinib,200.0,1.480675521510368,-2.1305700989639,2,approved.xlsx:713 approved.xlsx:714,34046915 36087217,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+remimazolam,360.0,0.07291481330977954,-3.6934867325980645,2,approved.xlsx:3348 approved.xlsx:3349,32757149,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+grepafloxacin,600.0,1.6410667262485095,-2.56302501043209,2,approved.xlsx:1908 approved.xlsx:1911,10991830 9433650,monohydrochloride sesquihydrate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+gemfibrozil,900.0,46.21449988910408,-1.2894642517654507,2,approved.xlsx:1873 approved.xlsx:1874,16080277 2381138,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+nortriptyline,25.0,0.010798333204712669,-3.364583284283305,2,approved.xlsx:2809 approved.xlsx:2811,12814461 9797795,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+nicardipine,20.0,0.029202739597510373,-2.8356063998227325,2,approved.xlsx:2735 approved.xlsx:2738,2598970 7426117,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+atomoxetine,25.0,0.22383007349326411,-2.048021571364761,2,approved.xlsx:416 approved.xlsx:417,26733750 27816979,hydrochloride,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+nizatidine,150.0,1.3537296628204614,-2.044559313810999,2,approved.xlsx:2796 approved.xlsx:2797,12616667 26197435,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+pralsetinib,200.0,0.6333340350873305,-2.4993971682186253,2,approved.xlsx:3112 approved.xlsx:3113,38675225 38807449,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+clarithromycin,250.0,0.8532760397432944,-2.46685045799237,2,approved.xlsx:940 approved.xlsx:942,1387301 21540108,,no_salt_reported,solution|tablet,reported_non_modified,,not_recorded_in_source,True,
+prednisolone,10.0,0.2598845897701516,-1.5852194718503037,2,approved.xlsx:3133 approved.xlsx:3141,3350994 9505983,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+fidaxomicin,200.0,0.006111464636239009,-4.514884692588272,2,approved.xlsx:1697 approved.xlsx:1698,25972286,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+ethionamide,250.0,2.047574174480622,-2.0867003654023906,2,approved.xlsx:1571 approved.xlsx:1572,24832559,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+dutasteride,0.5,0.002811263061330266,-2.2500685181242615,2,approved.xlsx:1352 approved.xlsx:1353,23636821 27137714,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+rifaximin,400.0,0.002847209159861635,-5.1476406191451245,2,approved.xlsx:3386 approved.xlsx:3387,24836868 25565769,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+rifapentine,600.0,14.550601362143073,-1.6152703077240287,2,approved.xlsx:3381 approved.xlsx:3382,10331734 9773393,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+pyrimethamine,50.0,0.40209110907852713,-2.0946455341200116,2,approved.xlsx:3232 approved.xlsx:3234,31950646,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+maraviroc,300.0,0.5045889416148555,-2.7741835262715044,2,approved.xlsx:2354 approved.xlsx:2355,18333861 19812445,,no_salt_reported,solution|tablet,reported_non_modified,,not_recorded_in_source,True,
+nefazodone,200.0,0.40333608814486216,-2.695362913797706,2,approved.xlsx:2715 approved.xlsx:2716,8522641 8951188,hydrochloride,salt_reported_basis_unverified,capsule,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+ripretinib,50.0,0.28999827585694365,-2.236574588464791,2,approved.xlsx:3424 approved.xlsx:3425,35560823,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+pefloxacin,400.0,4.374598267269807,-1.9611218147282015,2,approved.xlsx:2946 approved.xlsx:2947,24577931 3141343,mesylate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+lomefloxacin,100.0,1.0105444077327825,-1.9954445969338936,2,approved.xlsx:2259 approved.xlsx:2263,2207304 3214495,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+pioglitazone,15.0,0.5807550774638135,-1.4120982435883558,2,approved.xlsx:3052 approved.xlsx:3054,16670899 24835512,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+brigatinib,180.0,0.761054314750268,-2.3738568525974184,2,approved.xlsx:584 approved.xlsx:586,30570839 31287236,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+cisapride,20.0,0.06792718159912128,-2.46898640023036,2,approved.xlsx:931 approved.xlsx:932,10471987,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+ticlopidine,250.0,0.3608545413320997,-2.8406078334346403,2,approved.xlsx:3963 approved.xlsx:3964,12419644 1768571,hydrocholride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+tizanidine,8.0,0.00541472067608293,-3.1695139289788434,2,approved.xlsx:3989 approved.xlsx:3990,17062304,hydrochloride,salt_reported_basis_unverified,capsule|tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+desloratadine,10.0,0.005079566910672599,-3.2941733145513443,2,approved.xlsx:1141 approved.xlsx:1145,12169040 15112863,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+methyldopa,250.0,1.5020936322346887,-2.2212430036367485,2,approved.xlsx:2462 approved.xlsx:2463,11554430,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+estazolam,4.0,0.16202966395077167,-1.392465460052138,2,approved.xlsx:1554 approved.xlsx:1557,12691790 43552,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+zafirlukast,20.0,0.597534936217122,-1.524666693302792,2,approved.xlsx:4365 approved.xlsx:4366,20931329 22108774,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+mycophenolate mofetil,500.0,0.002979395911925771,-5.224841786807433,2,approved.xlsx:2651 approved.xlsx:2652,20399993,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+methylergometrine,0.12,0.0009652460826131336,-2.094543198303159,2,approved.xlsx:2465 approved.xlsx:2466,7582383,maleate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+diphenhydramine,25.0,0.034998714262098274,-2.8538879185826893,2,approved.xlsx:1266 approved.xlsx:1268,9702844,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+drospirenone,1.0,0.01131591799192624,-1.9463102085977757,2,approved.xlsx:1340 approved.xlsx:1342,22680989,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+zolmitriptan (311c90),2.5,0.003541186241925157,-2.8487912404246885,2,approved.xlsx:4404 approved.xlsx:4405,9833595,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+dienogest,2.0,0.05264142855204444,-1.579702329270625,2,approved.xlsx:1216 approved.xlsx:1217,23218856 36718548,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+omadacycline,300.0,0.5305657357952924,-2.75238205512598,2,approved.xlsx:2848 approved.xlsx:2849,27499331 27736760,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+minocycline,100.0,1.1128549321452461,-1.9535614450768042,2,approved.xlsx:2553 approved.xlsx:2554,11393692 19998582,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+rupatadine,40.0,0.017812214909999267,-3.351342064937061,2,approved.xlsx:3539 approved.xlsx:3542,25890211 27632557,fumarate,salt_reported_basis_unverified,tablet,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+metoprolol,50.0,0.0742874148157008,-2.82805475906864,2,approved.xlsx:2492 approved.xlsx:2493,6499900,tartrate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+nimodipine,60.0,0.033270557554690904,-3.2560911714596164,2,approved.xlsx:2771 approved.xlsx:2772,7962672,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+"dofetilide (uk-68,798)",0.5,0.0019590814173994914,-2.4069175191362926,2,approved.xlsx:1278 approved.xlsx:1283,28800211 7768076,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+cinoxacin,500.0,15.688530842625129,-1.5033877284874553,2,approved.xlsx:922 approved.xlsx:923,6653617 7103450,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+rifampicin,600.0,11.529223737962587,-1.7163511831295737,2,approved.xlsx:3378 approved.xlsx:3379,10438182 24841364,,no_salt_reported,capsule,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+loperamide,8.0,0.0015927962832703996,-3.7009297533810783,2,approved.xlsx:2273 approved.xlsx:2274,15496339 25444541,hydrochloride,salt_reported_basis_unverified,capsule|tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+midostaurin,50.0,1.6030375931961172,-1.494026297124612,2,approved.xlsx:2524 approved.xlsx:2525,24085261,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+hydrocortisone,10.0,0.18661457606521525,-1.7290544374519994,2,approved.xlsx:1946 approved.xlsx:1949,7097506 7143223,,no_salt_reported,suspension|tablet,reported_non_modified,,not_recorded_in_source,True,
+medifoxamine,500.0,0.7088501886858747,-2.8484155450370516,2,approved.xlsx:2373 approved.xlsx:2374,2253668 2291875,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+doxylamine,25.0,0.1215138309000255,-2.3133142958265736,2,approved.xlsx:1331 approved.xlsx:1333,23230999 23633146,hydrogen succinate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+cerivastatin,0.3,0.003624224054884025,-1.9179062161586178,2,approved.xlsx:845 approved.xlsx:847,9663814,sodium,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+secnidazole,2000.0,41.02056801166945,-1.6880283259157447,2,approved.xlsx:3595 approved.xlsx:3596,28967984 29125715,,no_salt_reported,granule,reported_non_modified,,not_recorded_in_source,True,
+lemborexant,10.0,0.035687532837112734,-2.447483474803203,2,approved.xlsx:2144 approved.xlsx:2146,32468649 33822479,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+paliperidone,1.0,0.007949150898051942,-2.099679258763,2,approved.xlsx:2919 approved.xlsx:2920,18227146 19825324,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+risperidone,2.0,0.01975276183220969,-2.005402168378402,2,approved.xlsx:3437 approved.xlsx:3438,21194608 22595151,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+benzydamine,50.0,0.5006136234662417,-1.9994673402150196,2,approved.xlsx:535 approved.xlsx:536,1932611,hydrochloride,salt_reported_basis_unverified,solution,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+escitalopram,10.0,0.011180697652651202,-2.9515310965172494,2,approved.xlsx:1532 approved.xlsx:1533,17375980 20650049,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+allopurinol,200.0,2.064663943599539,-1.986180622149673,2,approved.xlsx:207 approved.xlsx:209,27129007 4084669,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+zanubrutinib,320.0,0.5100470566526191,-2.7975397326105718,2,approved.xlsx:4380 approved.xlsx:4381,31875923 37145975,,no_salt_reported,capsule,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+nalbuphine,45.0,0.012820354909283908,-3.545312465736845,2,approved.xlsx:2672 approved.xlsx:2673,3429694,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+ketoprofen,100.0,10.395672176439575,-0.983147424266074,2,approved.xlsx:2079 approved.xlsx:2081,2735334 7439263,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+oxprenolol,80.0,0.45459762427887807,-2.245462825214232,2,approved.xlsx:2894 approved.xlsx:2896,10124 427007,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+pimavanserin,100.0,0.05407494798887929,-3.2670038896078464,2,approved.xlsx:3039 approved.xlsx:3040,17495279,,no_salt_reported,solution|tablet,reported_non_modified,,not_recorded_in_source,True,
+acetaminophen (paracetamol),1000.0,12.886038956948713,-1.8898805600327981,2,approved.xlsx:116 approved.xlsx:117,22524979 862649,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+benoxaprofen,100.0,13.0,-0.8860566476931633,2,approved.xlsx:522 approved.xlsx:523,303114 303115,,no_salt_reported,capsule,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+sotorasib,960.0,6.30987321584198,-2.1822505999782225,2,approved.xlsx:3712 approved.xlsx:3713,36529835 38421129,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+daprodustat,100.0,2.25984291489475,-1.645921748270928,2,approved.xlsx:1086 approved.xlsx:1089,26643993 27128455,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+lomitapide,60.0,0.00690416540937426,-3.9390400627636915,2,approved.xlsx:2269 approved.xlsx:2270,26686567,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+lasofoxifene,0.25,0.0001933907960581374,-3.111504207571797,2,approved.xlsx:2138 approved.xlsx:2139,16397281 16822276,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+mitapivat,120.0,2.372030775517046,-1.7040609266376403,2,approved.xlsx:2582 approved.xlsx:2585,30091852 37596712,sulfate hydrate,salt_reported_basis_unverified,capsule,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+oxaprozin,1200.0,90.77444574328173,-1.121217640199067,2,approved.xlsx:2885 approved.xlsx:2886,3792438 6480879,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+bisoprolol,8.486726817565453,0.03631418455645121,-2.3686639263113336,2,approved.xlsx:562 approved.xlsx:567,23006443 7962671,fumarate,salt_converted_to_parent,tablet,reported_non_modified,,not_recorded_in_source,True,
+raloxifene,60.0,0.00030463092423455615,-5.294377262274213,2,approved.xlsx:3290 approved.xlsx:3291,34984851 37622634,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+flutamide,250.0,0.028301943396169812,-3.9461237506299187,2,approved.xlsx:1774 approved.xlsx:1775,10073738 3169114,,no_salt_reported,capsule,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+ceftibuten (7432-s),200.0,10.689246933250253,-1.2720828858017161,2,approved.xlsx:797 approved.xlsx:802,3360973 7726498,,no_salt_reported,capsule,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+acetylcysteine (n-acetylcysteine),600.0,2.801996611346987,-2.3306836446566552,2,approved.xlsx:124 approved.xlsx:125,33146843,,no_salt_reported,effervescent tablet,reported_non_modified,,not_recorded_in_source,True,
+exemestane,25.0,0.01285067313412025,-3.289014131527888,2,approved.xlsx:1603 approved.xlsx:1604,15014897,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+fexofenadine,60.0,0.20496097189465123,-2.466480078617872,2,approved.xlsx:1676 approved.xlsx:1686,11978146 9818712,hydrochloride,salt_reported_basis_unverified,solution,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+sertindole,4.0,0.0024722459424579924,-3.2089683185441453,2,approved.xlsx:3616 approved.xlsx:3617,9218930 9267685,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+atenolol,50.0,0.3192616481821768,-2.194823252984876,2,approved.xlsx:405 approved.xlsx:408,428185 8098277,,no_salt_reported,solution,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+nebivolol,5.0,0.0015194735930578076,-3.517276847461309,2,approved.xlsx:2710 approved.xlsx:2712,32379356 9131955,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+riluzole,100.0,0.36978372057190406,-2.4320522122179904,2,approved.xlsx:3394 approved.xlsx:3395,9549636,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+megestrol acetate,800.0,0.19679354664215998,-3.6090791342769677,2,approved.xlsx:2384 approved.xlsx:2385,19774117 25028536,,no_salt_reported,suspension,reported_non_modified,,not_recorded_in_source,True,
+Vadadustat,450.0,49.697082409332644,-0.9568816206299491,2,approved_2024.xlsx:28 approved_2024.xlsx:29,33661566 35172045,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+anagrelide,2.0,0.01131763226121083,-2.247274417172777,2,approved.xlsx:317 approved.xlsx:319,19302911,hydrochloride,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+lamotrigine,200.0,2.6755560169803956,-1.8736159476193381,2,approved.xlsx:2116 approved.xlsx:2117,17915637 9056048,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+didanosine,375.0,2.247696153842863,-2.2222936652916188,2,approved.xlsx:1213 approved.xlsx:1215,1510449 1934863,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+venetoclax,100.0,0.17262676501632068,-2.7628918679618724,2,approved.xlsx:4242 approved.xlsx:4243,27029823 34416076,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+naloxegol,25.0,0.03994921776455705,-2.796431728748245,2,approved.xlsx:2692 approved.xlsx:2693,28127938,,no_salt_reported,solution|tablet,reported_non_modified,,not_recorded_in_source,True,
+aceclofenac,100.0,9.572585857541313,-1.0189707297293786,2,approved.xlsx:109 approved.xlsx:110,15083498 18498912,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+palovarotene,10.0,0.0790771774913597,-2.101948840392807,2,approved.xlsx:2927 approved.xlsx:2928,36802022,,no_salt_reported,,unreported,Japanese subjects; fed condition || Non-Japanese subjects; fed condition,not_recorded_in_source,False,formulation_not_source_reported
+rebamipide,100.0,0.21836901863588618,-2.6608089776426938,2,approved.xlsx:3334 approved.xlsx:3335,17536891 20110013,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+dihydro-alpha-ergocryptine (alpha-dihydroergocryptine),20.0,0.00026981475126464126,-4.8699643060074616,2,approved.xlsx:1239 approved.xlsx:1240,11270804 14677372,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+mobocertinib,160.0,0.05440349253494669,-3.4684932017083403,2,approved.xlsx:2593 approved.xlsx:2594,34118178 38789848,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+amoxicillin,3000.0,27.733733971465142,-2.034112909338272,2,approved.xlsx:301 approved.xlsx:302,1425893 4028617,,no_salt_reported,suspension|tablet,reported_non_modified,,not_recorded_in_source,True,
+belumosudil,200.0,1.829562789302406,-2.0386826769057853,2,approved.xlsx:504 approved.xlsx:505,35231159 35881051,mesylate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+proguanil,200.0,0.1881781071219498,-3.0264609000009712,2,approved.xlsx:3199 approved.xlsx:3200,10701981 3440097,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+flurbiprofen,100.0,13.37609808576477,-0.8736705552496904,2,approved.xlsx:1771 approved.xlsx:1772,2611360 3593904,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+Lazertinib,240.0,0.3860854265573877,-2.7935278329525137,2,approved_2024.xlsx:20 approved_2024.xlsx:21,36495784,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+cilostazol,100.0,0.6446898479113813,-2.1906491686764102,2,approved.xlsx:904 approved.xlsx:905,10702883,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+palbociclib,125.0,0.051356012306252904,-3.386318718753819,2,approved.xlsx:2916 approved.xlsx:2918,33037918 34837169,,no_salt_reported,capsule,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+flibanserin,100.0,0.43863971548413166,-2.3578920488218937,2,approved.xlsx:1734 approved.xlsx:1735,30937940,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+aripiprazole,5.0,0.019648409604850973,-2.4056426011660523,2,approved.xlsx:357 approved.xlsx:361,18563956 19070586,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+cyclacillin,250.0,5.405034689990435,-1.6651415230333881,2,approved.xlsx:1022 approved.xlsx:1023,4357182,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+mefloquine,750.0,1.1207122735118056,-2.8255671352439355,2,approved.xlsx:2382 approved.xlsx:2383,3495440 9403285,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+praziquantel,1800.0,0.45089724450255847,-3.6011949238242145,2,approved.xlsx:3123 approved.xlsx:3125,10991886 11959616,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+selexipag,0.4,0.005889312353747255,-1.8319954025522882,2,approved.xlsx:3603 approved.xlsx:3604,25850750 27885399,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+pimozide,6.0,0.005007993610219565,-3.078487484304304,2,approved.xlsx:3045 approved.xlsx:3046,9234859 9951426,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+naldemedine,0.2,0.003030989937297713,-1.8194455011252375,2,approved.xlsx:2676 approved.xlsx:2677,30977959,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+bepotastine,10.0,0.08861230162906279,-2.052505982867305,2,approved.xlsx:537 approved.xlsx:538,24105252 25224876,besilate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+tibolone,2.5,0.0014696938456699071,-3.230713133096572,2,approved.xlsx:3937 approved.xlsx:3938,11899948 12207627,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+roflumilast,0.5,0.010240849574132025,-1.6886340174176404,2,approved.xlsx:3483 approved.xlsx:3484,27306372 30538429,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+oxazepam,15.0,0.32419784083179826,-1.6652811409489783,2,approved.xlsx:2889 approved.xlsx:2890,1867967 3197746,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+sulfasalazine,500.0,4.949060921023301,-2.0044472044950767,2,approved.xlsx:3753 approved.xlsx:3754,28906558,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+levonorgestrel,0.75,0.011062025131050824,-1.8312266226137965,2,approved.xlsx:2216 approved.xlsx:2217,11834229 12169384,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+enasidenib,50.0,0.4651859843116514,-2.0313433830341356,2,approved.xlsx:1456 approved.xlsx:1457,30386625,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+mifepristone,75.0,1.4391837964624254,-1.7169450026780035,2,approved.xlsx:2528 approved.xlsx:2530,18477493 22242458,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+zalcitabine,1.5,0.022561914812355807,-1.822715303941597,2,approved.xlsx:4367 approved.xlsx:4368,8584481 8692740,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+nadolol,80.0,0.14183046217227102,-2.7513204688916604,2,approved.xlsx:2668 approved.xlsx:2669,6839631 8699333,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+tenofovir alafenamide,25.0,0.27691731256821056,-1.955589900460575,2,approved.xlsx:3888 approved.xlsx:3889,34163141 34352149,fumarate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+lurasidone,40.0,0.05232991496266741,-2.8833099623263885,2,approved.xlsx:2326 approved.xlsx:2327,26577488 28695535,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+dabrafenib,150.0,2.468625771557933,-1.7836360004990663,2,approved.xlsx:1054 approved.xlsx:1056,23846776 28879519,mesylate,salt_reported_basis_unverified,capsule,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+ozanimod,1.0,0.0001643167672515499,-3.784318117920506,2,approved.xlsx:2912 approved.xlsx:2915,28398597 29125718,hydrochloride,salt_reported_basis_unverified,capsule,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+methadone,10.0,0.035916569992135945,-2.4447051448503756,2,approved.xlsx:2446 approved.xlsx:2447,12426517 15255797,hydrochloride,salt_reported_basis_unverified,solution,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+terfenadine,60.0,0.001754992877478425,-4.5338758921334215,2,approved.xlsx:3902 approved.xlsx:3903,6113858 9433393,,no_salt_reported,suspension,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+d-sotalol ((+)-sotalol),100.0,0.8533350455711989,-2.0688804179843236,2,approved.xlsx:1046 approved.xlsx:1047,2373132 7996391,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+maribavir,100.0,3.6167388625666628,-1.4416828472351948,2,approved.xlsx:2358 approved.xlsx:2361,12654667 32506738,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+ospemifene,60.0,0.6468437214660123,-1.9673518833210533,2,approved.xlsx:2881 approved.xlsx:2882,23852652,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+saquinavir,600.0,0.009088454214001413,-4.819661226723452,2,approved.xlsx:3585 approved.xlsx:3586,12047481 9578182,mesylate,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+solifenacin,10.0,0.013392535234226562,-2.873137202374551,2,approved.xlsx:3695 approved.xlsx:3701,15293866 15317830,succinate,salt_reported_basis_unverified,capsule|tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+diflunisal,250.0,36.31859028101174,-0.8378110257904875,2,approved.xlsx:1221 approved.xlsx:1223,6663474 7023791,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+rilmenidine,1.0,0.003367862823809784,-2.4726456060309725,2,approved.xlsx:3390 approved.xlsx:3391,2894158,phosphate,salt_reported_basis_unverified,capsule|tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+varenicline,1.0,0.005534256951027847,-2.2569406807890493,2,approved.xlsx:4227 approved.xlsx:4235,16920893 20551220,succinate,salt_reported_basis_unverified,solution|tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+lorazepam,2.0,0.02212690669750293,-1.956109291095229,2,approved.xlsx:2285 approved.xlsx:2286,3138056 31453,,no_salt_reported,capsule|tablet,reported_non_modified,,not_recorded_in_source,True,
+acalabrutinib,100.0,0.538641921873892,-2.2686998489750265,2,approved.xlsx:98 approved.xlsx:99,36029150,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+fluvastatin,40.0,0.3134677016855166,-2.1058671916233287,2,approved.xlsx:1779 approved.xlsx:1780,10952477 11865968,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+nicorandil,5.0,0.060926184846911265,-1.9141660205626065,2,approved.xlsx:2743 approved.xlsx:2744,2525322,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+linagliptin,10.0,0.010407996925441514,-2.9826328447385513,2,approved.xlsx:2226 approved.xlsx:2227,20637971 21053992,,no_salt_reported,tablet,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+risedronic acid (risedronate),30.0,0.0049477267507411936,-3.7827155479829004,2,approved.xlsx:3433 approved.xlsx:3434,10709154 11405286,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+ziprasidone,80.0,0.084,-2.9788107009300617,1,approved.xlsx:4395,18007569,hydrochloride monohydrate,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+deferiprone,3500.0,54.38999999999998,-1.8085489855351047,1,approved.xlsx:1110,28394491,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+opicapone,10.0,0.13100000000000003,-1.8827287043442356,1,approved.xlsx:2859,23248072,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+rimonabant,20.0,0.21223,-1.9742232215955433,1,approved.xlsx:3415,21428241,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+tolfenamic acid,100.0,1.98,-1.7033348097384688,1,approved.xlsx:4032,7238564,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+sulfamethazine,850.0,40.11999999999998,-1.3260580013659125,1,approved.xlsx:3750,759070,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+sulfamethoxazole,1200.0,94.41999999999999,-1.1041172499523888,1,approved.xlsx:3752,20110016,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+isoxicam,200.0,12.2,-1.214670164989233,1,approved.xlsx:2040,3620273,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+riboflavin,60.0,0.116,-2.7136932611567253,1,approved.xlsx:3371,8604671,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+rilpivirine,75.0,0.17,-2.644612342013426,1,approved.xlsx:3393,23720136,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+etravirine,100.0,0.08900000000000001,-3.050609993355087,1,approved.xlsx:1598,18823217,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+orphenadrine,88.0813497253466,0.14688,-2.7779212971221834,1,approved.xlsx:2866,7056281,hydrochloride,salt_converted_to_parent,tablet,reported_non_modified,,not_recorded_in_source,True,
+meclizine,25.0,0.08006999999999999,-2.4944701801648677,1,approved.xlsx:2371,21903894,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+trospium,55.02990933732124,0.014000000000000007,-3.5944707616262215,1,approved.xlsx:4140,15966754,chloride,salt_converted_to_parent,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+salsalate,1500.0,30.799999999999994,-1.687540542555237,1,approved.xlsx:3576,1585407,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+risdiplam,0.6,0.00288,-2.318758762624413,1,approved.xlsx:3430,30302786,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+fomepizole,490.0,12.315899999999996,-1.5997299260741076,1,approved.xlsx:1793,22554311,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+tiagabine,2.0,0.04340000000000001,-1.6635402661514704,1,approved.xlsx:3930,7555975,hydrochloride,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+telbivudine,200.0,1.8,-2.0457574905606752,1,approved.xlsx:3860,16920894,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+tolmetin,81.5,13.0,-0.7972142564331398,1,approved.xlsx:4033,1126116,sodium dihydrate,salt_reported_basis_unverified,solution,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+naltrexone,100.0,0.018270000000000005,-3.7382614526474622,1,approved.xlsx:2702,10071829,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+meclofenamic acid,300.0,15.099999999999996,-1.2981443074264931,1,approved.xlsx:2372,2322633,sodium,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+halazepam,20.0,0.03034,-2.8190144192132696,1,approved.xlsx:1920,1980307,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+acrivastine,4.0,0.073,-1.7387371312075066,1,approved.xlsx:140,2859204,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+nitrofurantoin,100.0,0.875,-2.057991946977687,1,approved.xlsx:2791,18429968,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+dantrolene,100.0,2.7199999999999998,-1.5654310959658013,1,approved.xlsx:1071,8932545,sodium,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+sulfinpyrazone,400.0,29.89999999999999,-1.126388803003533,1,approved.xlsx:3755,6840173,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+phentolamine,60.0,0.06705000000000001,-2.951752468196026,1,approved.xlsx:3006,24452521,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+tocainide,600.0,3.1999999999999997,-2.2730012720637376,1,approved.xlsx:3996,3933983,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+avacopan,1.0,0.002000000000000001,-2.6989700043360187,1,approved.xlsx:437,27768695,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+nitisinone (ntbc),70.0,7.810000000000002,-0.9524470061369564,1,approved.xlsx:2783,11488774,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+lumiracoxib,200.0,3.998,-1.699187205881883,1,approved.xlsx:2323,16602135,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+pazopanib,200.0,15.400000000000004,-1.1135092748275182,1,approved.xlsx:2945,35384398,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+tolazamide,250.0,25.399999999999995,-0.9931062920520997,1,approved.xlsx:4013,7175719,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+ursodeoxycholic acid,150.0,1.33477,-2.050684822071482,1,approved.xlsx:4180,21655991,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+deucravacitinib,40.0,0.4100000000000001,-1.9892761346082268,1,approved.xlsx:1163,36325947,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+isoxsuprine,30.0,0.04582000000000001,-2.816066169866284,1,approved.xlsx:2042,19856793,hydrochloride,salt_reported_basis_unverified,tablet er,modified_release,,not_recorded_in_source,False,dose_mass_basis_unverified;modified_release_formulation
+zofenopril,57.3,0.09116000000000002,-2.798350305459052,1,approved.xlsx:4397,10635443,calcium,salt_converted_to_parent,tablet,reported_non_modified,,not_recorded_in_source,True,
+silodosin,4.0,0.0267,-2.175548729963387,1,approved.xlsx:3633,21804212,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+levamisole,350.0,1.53,-2.359376613532677,1,approved.xlsx:2185,7166176,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+deutetrabenazine,25.0,0.00026999999999999995,-4.966576244513051,1,approved.xlsx:1165,32155315,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+zuranolone,30.0,0.018300000000000007,-3.214670164989233,1,approved.xlsx:4424,37366077,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+safinamide,63.0,0.4093,-2.187298804808312,1,approved.xlsx:3555,15082032,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+fenoldopam,100.0,0.06330000000000001,-3.198596289982645,1,approved.xlsx:1663,2884114,mesylate,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+triclosan,4.0,0.21010000000000004,-1.2796339389220097,1,approved.xlsx:4103,16952905,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+vilanterol,0.5,4.400000000000004e-05,-4.055517327849831,1,approved.xlsx:4266,23043183,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+cinnarizine,25.0,0.03539,-2.8490594460345227,1,approved.xlsx:921,18540159,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+dolutegravir (s/gsk1394572),2.0,0.23100000000000004,-0.9374180157718368,1,approved.xlsx:1296,19884365,,no_salt_reported,suspension,reported_non_modified,,not_recorded_in_source,True,
+ritodrine,10.0,0.0041,-3.3872161432802645,1,approved.xlsx:3443,20863008,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+huperzine a,0.99,0.008400000000000005,-2.071355908535668,1,approved.xlsx:1930,8701751,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+dexamethasone,0.75,0.009,-1.9208187539523753,1,approved.xlsx:1168,3709651,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+Ensartinib,225.0,0.264,-2.9305785912415314,1,approved_2024.xlsx:14,34757657,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+levocabastine,0.5,0.007400000000000003,-1.8297382846050425,1,approved.xlsx:2195,7907347,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+danazol,400.0,0.0696,-3.7594507517174005,1,approved.xlsx:1069,1801964,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+vamorolone,7.0,0.013100000000000007,-2.7278267443584925,1,approved.xlsx:4208,29524454,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+fludrocortisone,0.1,0.00124,-1.9065783148377649,1,approved.xlsx:1749,25611194,acetate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+isosorbide dinitrate,120.0,0.0237,-3.704432900037521,1,approved.xlsx:2029,7272174,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+estetrol,1.0,0.00055,-3.2596373105057563,1,approved.xlsx:1559,18464021,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+nitroglycerin,13.0,0.0004200000000000001,-4.490694061908936,1,approved.xlsx:2792,3147725,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+triamcinolone,5.0,0.010500000000000006,-2.6777807052660805,1,approved.xlsx:4090,7608322,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+brivudine,125.0,1.82,-1.8368386250229816,1,approved.xlsx:614,,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+methyltestosterone,10.0,0.02057,-2.686765708305276,1,approved.xlsx:2478,3958925,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+milrinone,2.13,0.04060000000000001,-1.7198535698615434,1,approved.xlsx:2550,6502494,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+palonosetron,0.25,0.0006700000000000002,-2.571865205971211,1,approved.xlsx:2921,33581259,hydrochloride,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+ifosfamide,2595.0,52.217800000000004,-1.6963187916716413,1,approved.xlsx:1980,1795004,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+tiludronic acid,400.0,2.9999999999999996,-2.1249387366083,1,approved.xlsx:3965,,disodium,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+oxandrolone,10.0,0.4066,-1.3908326256979802,1,approved.xlsx:2884,4729902,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+betaine,3500.0,110.00197000000001,-1.502667581442339,1,approved.xlsx:544,12534635,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+amitriptylinoxide,50.0,0.48380000000000006,-2.014304140310158,1,approved.xlsx:285,4023050,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+diphemanil,250.0,0.040850000000000004,-3.7867479478036032,1,approved.xlsx:1265,1623915,methylsulfate,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+ademetionine (same),500.0,0.93737,-2.727058954280209,1,approved.xlsx:162,34981547,"1,4-butanedisulfonate",salt_reported_basis_unverified,enteric-coated tablet,modified_release,,not_recorded_in_source,False,dose_mass_basis_unverified;modified_release_formulation
+trihexyphenidyl,4.0,0.006680000000000002,-2.7772835288524167,1,approved.xlsx:4113,7658345,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+betamethasone,2.0,0.024700000000000007,-1.9083330424043154,1,approved.xlsx:545,7295883,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+digitoxin,0.56,0.030100000000000005,-1.2696215314123571,1,approved.xlsx:1226,8405017,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+biperiden,4.0,0.003930000000000003,-3.0076674409525355,1,approved.xlsx:561,3588663,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+mazindol,2.0,0.005070000000000001,-2.596022036330645,1,approved.xlsx:2365,19272843,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+sapropterin,730.0,0.08409999999999998,-3.9385268643225437,1,approved.xlsx:3584,20206791,dihydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+delamanid,25.0,0.136,-2.26440110030182,1,approved.xlsx:1123,36692865,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+fluoxymesterone,10.0,0.08000000000000002,-2.0969100130080562,1,approved.xlsx:1764,4009439,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+oxymetholone,50.0,0.0188,-3.424812155072339,1,approved.xlsx:2904,12101054,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+prednisone,10.0,0.024499999999999997,-2.6108339156354674,1,approved.xlsx:3144,3350994,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+chlorzoxazone,400.0,7.15,-1.7477539495268817,1,approved.xlsx:883,17621748,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+trifluridine,60.55,0.09600000000000002,-2.7998429144395027,1,approved.xlsx:4109,28111727,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+procyclidine,10.0,0.116,-1.9355420107730814,1,approved.xlsx:3196,3987788,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+dicoumarol,600.0,39.28,-1.1839797712687314,1,approved.xlsx:1210,61862,,no_salt_reported,powder/solution,reported_non_modified,,not_recorded_in_source,True,
+acarbose,300.0,0.011000000000000005,-4.435728569561437,1,approved.xlsx:104,3286212,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+artenimol (dihydroartemisinin),103.0,0.18100000000000005,-2.7551586498359875,1,approved.xlsx:372,15689069,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+aztreonam,500.0,0.14000000000000004,-3.5528419686577806,1,approved.xlsx:469,6683094,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+artesunate,200.0,0.11000000000000001,-3.2596373105057563,1,approved.xlsx:374,15267037,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+doxycycline,100.0,1.6133,-1.7922848661944335,1,approved.xlsx:1328,17688080,hyclate (CAS 24390-14-5),salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+rufinamide,1200.0,4.166,-2.459461980435898,1,approved.xlsx:3535,26294172,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+pyrazinamide,1890.0,38.699999999999996,-1.6887508391543329,1,approved.xlsx:3229,2737233,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+ribavirin,600.0,0.782,-2.8849444973237954,1,approved.xlsx:3368,,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+guanadrel,25.0,0.042000000000000016,-2.774690718274137,1,approved.xlsx:1917,2715368,sulfate,salt_reported_basis_unverified,,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+leucovorin,75.0,0.64,-2.068881289407813,1,approved.xlsx:2179,11933030,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+samidorphan,11.0,0.0252,-2.639992144376681,1,approved.xlsx:3582,25456560,L-malate,salt_reported_basis_unverified,solution,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+nicotinamide,187.5,3.3,-1.7544873321858503,1,approved.xlsx:2748,7859933,,no_salt_reported,powder,reported_non_modified,,not_recorded_in_source,True,
+tioguanine,40.0,0.00836,-3.679853713888946,1,approved.xlsx:3981,12869078,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+emtricitabine,200.0,2.26839,-1.9453122715952467,1,approved.xlsx:1448,24802019,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+aminocaproic acid,500.0,16.355,-1.4853194558750182,1,approved.xlsx:271,,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+Mavorixafor,50.0,0.159,-2.4975728800155674,1,approved_2024.xlsx:22,17452489,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+gamma-aminobutyric acid,2000.0,0.68853,-3.4631071279764667,1,approved.xlsx:1847,26617516,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+capivasertib,80.0,0.12100000000000001,-2.8203046166754935,1,approved.xlsx:711,37449963,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+triamterene,100.0,0.11800000000000002,-2.9281179926938745,1,approved.xlsx:4091,7166735,,no_salt_reported,suspension,reported_non_modified,,not_recorded_in_source,True,
+cladribine,10.0,0.025500000000000002,-2.593459819566045,1,approved.xlsx:934,,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+pemoline,50.0,0.9950000000000001,-1.7011469235902934,1,approved.xlsx:2956,508551,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+aminolevulinic acid,100.0,4.6499999999999995,-1.3325470471100462,1,approved.xlsx:273,11961050,hydrochloride,salt_reported_basis_unverified,solution,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+piracetam,800.0,14.530000000000001,-1.740824372693922,1,approved.xlsx:3062,24443305,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+moclobemide,150.0,2.109,-1.852014679316195,1,approved.xlsx:2600,2248087,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+armodafinil,50.0,1.3,-1.585026652029182,1,approved.xlsx:363,19133704,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+lonafarnib,100.0,0.32300000000000006,-2.490797477668897,1,approved.xlsx:2272,17966839,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+xamoterol,200.0,0.146,-3.136677139879544,1,approved.xlsx:4356,2904884,fumarate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+darifenacin,20.0,0.0038100000000000005,-3.720105019988362,1,approved.xlsx:1096,16584282,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+bromperidol,10.0,0.00451,-3.3458234581220396,1,approved.xlsx:629,16915578,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+vorinostat,400.0,0.31719,-3.1007405044014313,1,approved.xlsx:4330,,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+selinexor,100.0,0.6930000000000001,-2.1592667653881934,1,approved.xlsx:3610,,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+indoramin,50.0,0.02671,-3.2722961163146462,1,approved.xlsx:2007,3653231,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+benznidazole,100.0,2.2,-1.6575773191777938,1,approved.xlsx:525,28167552,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+benperidol,6.0,0.007299999999999999,-2.914828390263188,1,approved.xlsx:524,7701049,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+haloperidol,5.0,0.0012900000000000006,-3.5883802940367695,1,approved.xlsx:1927,2723140,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+hydroxyurea,2000.0,60.36866,-1.5202184597155026,1,approved.xlsx:1956,9473217,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+felbamate,600.0,8.9,-1.8287612437387308,1,approved.xlsx:1651,9278196,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+chlorphenesin carbamate,250.0,3.43,-1.8626458886292672,1,approved.xlsx:868,20110015,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+cycloserine,250.0,19.419999999999998,-1.1096907831000515,1,approved.xlsx:1033,25869627,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+amifampridine,30.0,0.025500000000000002,-3.070581074285707,1,approved.xlsx:262,25692017,phosphate,salt_reported_basis_unverified,tablet,reported_non_modified,fast acetylators; fed condition,not_recorded_in_source,False,dose_mass_basis_unverified
+carbocisteine,750.0,6.89,-2.0368420414840744,1,approved.xlsx:724,3342289,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+tryptophan,700.0,24.999999999999993,-1.4471580313422194,1,approved.xlsx:4151,6162471,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+levodopa,250.0,1.077,-2.365724305374056,1,approved.xlsx:2200,2775615,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+melphalan,5.0,0.052129999999999996,-1.9818822794089999,1,approved.xlsx:2417,2747308,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+phenazopyridine,200.0,0.065,-3.4881166390211256,1,approved.xlsx:2990,18796223,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+mesalazine (5-asa),1200.0,0.857,-3.1462004241244266,1,approved.xlsx:2429,,,no_salt_reported,enteric-coated tablet,modified_release,,not_recorded_in_source,False,modified_release_formulation
+lenalidomide,400.0,4.586,-1.9406259409340423,1,approved.xlsx:2154,22955172,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+droxidopa,200.0,0.9650000000000001,-2.3165026823201886,1,approved.xlsx:1346,27311027,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+tacrine,25.0,0.009389999999999997,-3.425274416405927,1,approved.xlsx:3796,2598567,hydrochloride,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+hydralazine,25.0,0.16733000000000003,-2.17436619761735,1,approved.xlsx:1934,862310,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+delafloxacin,50.0,0.9490000000000001,-1.7217037919087261,1,approved.xlsx:1120,26581327,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+folic acid,2.3,0.133,-1.237876195050507,1,approved.xlsx:1788,21572389,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+lisinopril,10.0,0.05100000000000001,-2.2924298239020637,1,approved.xlsx:2249,,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+triethylenetetramine,600.0,0.866,-2.840633358366297,1,approved.xlsx:4104,20145262,dihydrochloride,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+cysteamine,1200.0,4.87601,-2.3911166584244214,1,approved.xlsx:1042,10073739,bitartrate,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+taurine,4000.0,84.16999999999994,-1.6769026641520641,1,approved.xlsx:3834,22331997,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+tranexamic acid,1000.0,6.999999999999999,-2.154901959985743,1,approved.xlsx:4085,3437064,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+phenelzine,15.0,0.010140000000000001,-3.170053304058364,1,approved.xlsx:2992,27085800,sulfate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+dihydralazine,20.0,0.04662000000000001,-2.6324577264794233,1,approved.xlsx:1237,552862,sulfate,salt_reported_basis_unverified,suspension,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+loracarbef,200.0,9.009999999999998,-1.3463052046849184,1,approved.xlsx:2278,18348469,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+chlorthalidone,25.0,1.9520000000000002,-1.1074601953413645,1,approved.xlsx:878,4067856,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+diclofenamide,25.0,0.298,-1.9237237445957824,1,approved.xlsx:1203,29762909,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+chlorothiazide,500.0,0.513,-2.9888526392242025,1,approved.xlsx:866,7057375,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+trichlormethiazide,4.0,0.03879,-2.013340211727906,1,approved.xlsx:4100,7286056,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+midazolam,8.0,0.04420000000000001,-2.2576677176428515,1,approved.xlsx:2518,31773427,hydrochloride,salt_reported_basis_unverified,syrup,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+raltegravir,10.0,0.25777,-1.5887676284589305,1,approved.xlsx:3293,17713476,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+guanfacine,3.0,0.005500000000000001,-2.7367585652254185,1,approved.xlsx:1919,3323255,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+sulfisoxazole,1000.0,90.0,-1.0457574905606752,1,approved.xlsx:3759,7120046,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+fezolinetant,12.0,0.07750000000000003,-2.1898795435413145,1,approved.xlsx:1692,26653113,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+dicloxacillin,500.0,24.279999999999998,-1.313721321932799,1,approved.xlsx:1206,26527863,sodium,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+erdosteine,600.0,2.5060000000000002,-2.3791701837255124,1,approved.xlsx:1510,23724654,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+flucloxacillin,750.0,34.499999999999986,-1.3372421683184261,1,approved.xlsx:1739,7622258,sodium monohydrate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+bendazac,500.0,41.9,-1.0767559813697236,1,approved.xlsx:514,3691618,lysine,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+etrasimod,5.0,0.10200000000000002,-1.6903698325741012,1,approved.xlsx:1596,38345530,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+pitavastatin,4.0,0.23291,-1.2348718559423353,1,approved.xlsx:3081,26082816,calcium,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+ataluren,1448.0,45.70000000000001,-1.500852361791278,1,approved.xlsx:393,30629861,,no_salt_reported,suspension,reported_non_modified,,not_recorded_in_source,True,
+Acoramidis,44.42771542415671,2.11,-1.3233715260910095,1,approved_2024.xlsx:2,31172685,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+paritaprevir,300.0,0.12000000000000001,-3.3979400086720375,1,approved.xlsx:2939,26710243,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+thiamine,50.0,0.009370000000000005,-3.72723041344824,1,approved.xlsx:3922,8436160,hydrochloride,salt_reported_basis_unverified,,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+tafamidis,400.0,20.36,-1.2932822176632413,1,approved.xlsx:3812,25546001,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+olsalazine,4000.0,9.67174,-2.616555378215013,1,approved.xlsx:2846,3203708,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+alpelisib,400.0,1.32,-2.4814860601221125,1,approved.xlsx:236,26254025,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+talazoparib,1.0,0.007700000000000003,-2.113509274827518,1,approved.xlsx:3815,30964553,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+lipoic acid (r-lipoic acid),200.0,3.7817,-1.7233429221100853,1,approved.xlsx:2239,,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+fenbufen,600.0,3.8299999999999996,-2.194952476415021,1,approved.xlsx:1656,315314,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+pexidartinib,400.0,4.657,-1.9339537533952311,1,approved.xlsx:2987,36369799,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+chlorambucil,40.0,1.4000000000000001,-1.4559319556497243,1,approved.xlsx:855,3069479,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+doravirine,300.0,1.6269200000000001,-2.265755056676937,1,approved.xlsx:1314,25470746,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+gamma-hydroxybutyric acid,3960.0,79.99999999999997,-1.6946051989335689,1,approved.xlsx:1849,8299669,,no_salt_reported,syrup,reported_non_modified,,not_recorded_in_source,True,
+avapritinib,300.0,0.49200000000000005,-2.785156151952302,1,approved.xlsx:441,38523571,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+methimazole,10.0,0.24599000000000004,-1.6090825475026886,1,approved.xlsx:2451,4042519,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+avatrombopag,3.0,0.017100000000000008,-2.2441251443275085,1,approved.xlsx:445,30203841,,no_salt_reported,suspension,reported_non_modified,,not_recorded_in_source,True,
+finafloxacin,50.0,0.44000000000000006,-2.0555173278498313,1,approved.xlsx:1705,21709093,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+vibegron,75.0,0.1327,-2.7521903405272647,1,approved.xlsx:4260,36104302,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+tecovirimat,2000.0,2.553,-2.893979180859731,1,approved.xlsx:3835,18316519,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+amoxapine,150.0,0.07322000000000002,-3.311461534510169,1,approved.xlsx:293,2490101,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+cloxacillin,250.0,4.8,-1.7166987712964505,1,approved.xlsx:984,,sodium monohydrate,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+econazole,250.0,2.1,-2.0757207139381184,1,approved.xlsx:1363,34913825,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+piperaquine,500.0,0.035100000000000006,-4.153662887870195,1,approved.xlsx:3056,18199893,phosphate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+clotrimazole,1000.0,0.80349,-3.095019523968271,1,approved.xlsx:982,7882513,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+theophylline,250.0,6.499999999999999,-1.585026652029182,1,approved.xlsx:3921,7213528,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+caffeine,100.0,1.5,-1.8239087409443189,1,approved.xlsx:674,21827488,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+alogliptin,800.0,6.993999999999999,-2.058364359018718,1,approved.xlsx:230,18405789,benzoate,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+dyphylline,1000.0,15.619999999999997,-1.8063189704587186,1,approved.xlsx:1357,,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+lutein,19.91,0.42098,-1.674809796248654,1,approved.xlsx:2332,7661123,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+edaravone,30.0,0.20800000000000002,-2.159057919756901,1,approved.xlsx:1368,33704925,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+perhexiline,300.0,0.09944,-3.479560139086074,1,approved.xlsx:2980,3946097,maleate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+diazoxide,100.0,4.989999999999999,-1.3018994543766103,1,approved.xlsx:1192,,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+nifurtimox,862.5,0.751,-3.0601191667411434,1,approved.xlsx:2757,1623911,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+memantine,10.0,0.0116,-2.9355420107730814,1,approved.xlsx:2421,18498913,hydrochloride,salt_reported_basis_unverified,,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+beta carotene,30.0,0.1627,-2.2657337017828034,1,approved.xlsx:542,8852391,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+isotretinoin,40.0,0.314,-2.1051303432547477,1,approved.xlsx:2039,,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+alitretinoin (9-cis-retinoic acid),5.0,0.024700000000000007,-2.306273051076353,1,approved.xlsx:204,9243349,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+cefradine,250.0,9.4,-1.424812155072339,1,approved.xlsx:796,34148297,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+cephalexin,250.0,12.000000000000002,-1.3187587626244128,1,approved.xlsx:837,8743403,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+sulindac,150.0,3.8000000000000003,-1.596307662438871,1,approved.xlsx:3765,4017423,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+trimebutine,125.0,0.018140000000000007,-3.83827273028398,1,approved.xlsx:4114,25224876,3-thiocarbamoylbenzenesulfonate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+phenprocoumon,16.1,1.7,-0.9763769546535759,1,approved.xlsx:3003,2993733,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+methyprylon,300.0,5.449999999999999,-1.74072475244302,1,approved.xlsx:2479,2866242,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+aminoglutethimide,500.0,5.909999999999999,-1.9273825234547635,1,approved.xlsx:272,6101151,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+alfentanil,1.5,0.01600000000000001,-1.9719712763997563,1,approved.xlsx:185,12621385,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+leniolisib,400.0,13.513950000000001,-1.4712776835737158,1,approved.xlsx:2159,30215545,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+methysergide,2.0,0.0017700000000000005,-3.0530567293021744,1,approved.xlsx:2480,3709634,maleate,salt_reported_basis_unverified,,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+voxelotor,1000.0,2.21,-2.6556077263148894,1,approved.xlsx:4350,30743314,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+trimipramine,75.0,0.022400000000000007,-3.5248132450575373,1,approved.xlsx:4128,14520122,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+alimemazine,20.0,0.004550000000000002,-3.6430185990068686,1,approved.xlsx:192,,tartrate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+phenylpropanolamine,25.0,0.11312000000000001,-2.3444006122192134,1,approved.xlsx:3015,2341583,hydrochloride,salt_reported_basis_unverified,powder,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+pinacidil,12.5,0.029800000000000007,-2.622693748931801,1,approved.xlsx:3047,4007251,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+lofexidine,0.36,0.0008200000000000001,-2.6424886483835706,1,approved.xlsx:2252,,hydrochloride,salt_reported_basis_unverified,solution,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+promethazine,50.0,0.0193,-3.413412695328245,1,approved.xlsx:3202,10965395,,no_salt_reported,syrup,reported_non_modified,,not_recorded_in_source,True,
+nateglinide,30.0,1.5,-1.3010299956639813,1,approved.xlsx:2708,11563410,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+propantheline,30.0,0.027090000000000003,-3.0443122496864943,1,approved.xlsx:3208,7389749,bromide,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+cobicistat (gs-9350),50.0,0.06160000000000001,-2.909389292171593,1,approved.xlsx:993,20043009,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+ritonavir,400.0,5.103999999999999,-1.8941493256148565,1,approved.xlsx:3445,12580992,,no_salt_reported,capsule,reported_non_modified,fed condition,not_recorded_in_source,True,
+mavacamten,15.0,0.3954,-1.5790545940780278,1,approved.xlsx:2363,39014868,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+topiramate,800.0,18.379999999999995,-1.6387444799418511,1,approved.xlsx:4060,8930774,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+phenoxymethylpenicillin,400.0,5.14,-1.8910968723326866,1,approved.xlsx:3002,6811219,potassium,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+tiopronin,500.0,3.2639599999999995,-2.1852251765231054,1,approved.xlsx:3982,8405034,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+zileuton,200.0,1.4400000000000002,-2.1426675035687315,1,approved.xlsx:4388,8620676,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+muzolimine,40.0,0.27,-2.170696227168975,1,approved.xlsx:2650,436918,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+omaveloxolone,150.0,0.03241,-3.665412228023471,1,approved.xlsx:2850,38837775,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+nilutamide,100.0,0.8,-2.0969100130080562,1,approved.xlsx:2763,1992598,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+gepirone,20.0,0.018730000000000004,-3.028492218288744,1,approved.xlsx:1883,8103528,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+phenobarbital,0.1,0.0026000000000000016,-1.5850266520291818,1,approved.xlsx:2998,21540108,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+propylthiouracil,50.0,1.62,-1.4894549897933878,1,approved.xlsx:3218,30522550,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+pergolide,0.15,3.8000000000000016e-05,-3.596307662438871,1,approved.xlsx:2979,,mesylate,salt_reported_basis_unverified,,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+pramipexole,0.25,0.0007300000000000004,-2.5346171485515816,1,approved.xlsx:3114,27869754,dihydrochloride monohydrate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+propiverine,10.0,0.05279999999999999,-2.277366077466188,1,approved.xlsx:3209,18626633,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+albendazole,400.0,0.0153,-4.417368560510363,1,approved.xlsx:173,19562329,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+abrocitinib,3.0,0.017100000000000008,-2.2441251443275085,1,approved.xlsx:91,29672897,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+entacapone,200.0,1.8079999999999998,-2.0438315695246367,1,approved.xlsx:1480,8039535,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+diethylcarbamazine,150.0,0.5,-2.4771212547196626,1,approved.xlsx:1219,11865970,citrate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+levomilnacipran,25.0,0.04770000000000002,-2.7194216296319236,1,approved.xlsx:2211,26256429,,no_salt_reported,capsule er,modified_release,,not_recorded_in_source,False,modified_release_formulation
+disulfiram,250.0,0.38,-2.8181564120552274,1,approved.xlsx:1277,6090051,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+lidocaine,66.5,0.12700000000000003,-2.7190179243471477,1,approved.xlsx:2224,16918719,hydrochloride,salt_reported_basis_unverified,solution,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+flurazepam,30.0,0.0021000000000000007,-4.154901959985743,1,approved.xlsx:1766,2584322,hydrochloride,salt_reported_basis_unverified,,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+amodiaquine,200.0,0.01600000000000001,-4.096910013008056,1,approved.xlsx:290,3691624,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+enprofylline,152.0,2.04,-1.8722134205188738,1,approved.xlsx:1473,6510461,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+sparsentan,400.0,6.969999999999998,-1.7588272132299532,1,approved.xlsx:3724,,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+phenylbutazone,100.0,14.169999999999996,-0.8486301497525397,1,approved.xlsx:3009,7463328,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+nabilone,2.0,0.002000000000000001,-3.0,1,approved.xlsx:2666,,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+primidone,500.0,8.97032,-1.7461620683426122,1,approved.xlsx:3179,6519155,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+carisoprodol,350.0,2.31647,-2.1792413642094712,1,approved.xlsx:733,35160309,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+meprobamate,400.0,7.669999999999999,-1.7172646273789816,1,approved.xlsx:2425,690836,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+valproic acid,500.0,62.22000000000001,-0.9050399975633341,1,approved.xlsx:4202,9357093,sodium,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+butobarbital,200.0,3.5000000000000004,-1.7569619513137056,1,approved.xlsx:657,,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+odevixibat,7.2,0.00047000000000000026,-4.185234638495551,1,approved.xlsx:2819,,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+maralixibat,30.0,0.0016500000000000006,-4.259637310505756,1,approved.xlsx:2346,,chloride,salt_reported_basis_unverified,solution,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+bumetanide,1.0,0.0309,-1.5100415205751654,1,approved.xlsx:637,6491914,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+benzonatate,100.0,1.063,-1.9734667354767033,1,approved.xlsx:534,31129533,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+butylscopolamine,10.0,6.199999999999998e-05,-5.2076083105017466,1,approved.xlsx:658,27557455,bromide,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+dronedarone,400.0,0.0258,-4.1904402853647325,1,approved.xlsx:1335,39114542,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+amiodarone,200.0,0.17028000000000004,-3.0698663541588824,1,approved.xlsx:276,17966757,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+ropinirole,1.0,0.001560000000000001,-2.806875401645538,1,approved.xlsx:3499,17055209,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+fingolimod,1.0,0.0006500000000000003,-3.1870866433571443,1,approved.xlsx:1725,15089811,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+lusutrombopag,0.75,0.0192,-1.5917600346881504,1,approved.xlsx:2330,31303281,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+ibandronate,50.0,0.024300000000000006,-3.3133637307377066,1,approved.xlsx:1964,25476995,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+treprostinil,1.0,0.0004900000000000001,-3.309803919971486,1,approved.xlsx:4089,24033615,diolamine,salt_reported_basis_unverified,tablet er,modified_release,,not_recorded_in_source,False,dose_mass_basis_unverified;modified_release_formulation
+dronabinol,5.0,0.00219,-3.3585258894959007,1,approved.xlsx:1334,28138268,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+miglustat,100.0,1.328,-1.8768019249680012,1,approved.xlsx:2541,17720777,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+lefamulin,600.0,1.5599999999999998,-2.5850266520291822,1,approved.xlsx:2141,37760689,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+acenocoumarol,4.0,0.18697,-1.3302880632923326,1,approved.xlsx:112,22773430,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+warfarin,2.0,0.19,-1.0222763947111522,1,approved.xlsx:4354,8786959,sodium,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+cabergoline,0.5,3.2999999999999996e-05,-4.180456064458132,1,approved.xlsx:660,7883840,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+almitrine,17.825447872948754,0.038900000000000004,-2.661090849192959,1,approved.xlsx:213,2566337,bismesylate,salt_converted_to_parent,capsule,reported_non_modified,,not_recorded_in_source,True,
+asunaprevir,10.0,0.0009600000000000006,-4.017728766960431,1,approved.xlsx:390,27121936,,no_salt_reported,suspension,reported_non_modified,,not_recorded_in_source,True,
+fusidic acid,550.0,32.599999999999994,-1.227145089426305,1,approved.xlsx:1828,21546627,sodium,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+cyproterone acetate,2.0,0.011179999999999999,-2.252588192113577,1,approved.xlsx:1040,19728560,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+triflusal,300.0,5.005,-1.777717172904325,1,approved.xlsx:4111,24105106,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+acetylsalicylic acid,75.0,0.9710000000000001,-1.8878420334836952,1,approved.xlsx:131,24132773,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+spironolactone,100.0,0.0474,-3.324221658325915,1,approved.xlsx:3732,18488807,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+dydrogesterone,10.0,0.0031300000000000013,-3.5044556624535512,1,approved.xlsx:1355,,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+pentoxifylline,100.0,0.2720000000000001,-2.5654310959658013,1,approved.xlsx:2967,3958905,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+acetylcarnitine,500.0,1.188,-2.624153563690844,1,approved.xlsx:123,15283472,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+trametinib,2.0,0.008899999999999998,-2.3516399890190685,1,approved.xlsx:4077,23893461,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+cannabidiol,200.0,0.153,-3.1163385648463824,1,approved.xlsx:699,31802404,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+adagrasib,600.0,0.9840000000000001,-2.785156151952302,1,approved.xlsx:156,35167329,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+norgestrel,0.3,0.010500000000000006,-1.455931955649724,1,approved.xlsx:2808,24310360,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+ethinamate,1000.0,5.900000000000001,-2.2291479883578558,1,approved.xlsx:1569,4604053,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+dipyridamole,25.0,0.37500000000000006,-1.8239087409443187,1,approved.xlsx:1272,2825745,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+zuclopenthixol,10.0,0.00441,-3.3555614105321614,1,approved.xlsx:4423,1927573,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+fluphenazine,12.0,0.0023,-3.717453410030032,1,approved.xlsx:1765,8911886,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+miglitol,50.0,1.297,-1.5860300282519388,1,approved.xlsx:2540,17171777,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+migalastat,25.0,0.21050000000000002,-2.0746879085003505,1,approved.xlsx:2531,27121667,hydrochloride,salt_reported_basis_unverified,solution,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+osimertinib,80.0,0.05896000000000002,-3.1325325121409486,1,approved.xlsx:2879,29683562,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+vigabatrin,500.0,17.999999999999996,-1.443697499232713,1,approved.xlsx:4261,8331204,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+cefdinir,100.0,0.88,-2.0555173278498313,1,approved.xlsx:762,22331756,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+nalmefene,18.06,0.016500000000000008,-3.0392338017635807,1,approved.xlsx:2690,,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+secobarbital,244.2,2.0100000000000002,-2.0845496021883747,1,approved.xlsx:3600,4604053,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+calcifediol (25-hydroxyvitamin d3),0.9,0.023100000000000006,-1.5906305295471805,1,approved.xlsx:678,34008842,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+ibrutinib,140.0,0.008660000000000006,-4.208610143660891,1,approved.xlsx:1970,27267254,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+ritlecitinib,50.0,0.29710000000000003,-2.226067352532355,1,approved.xlsx:3440,37691236,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+pregabalin,50.0,1.61,-1.4921441283041692,1,approved.xlsx:3150,20147618,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+bromocriptine,5.0,0.0006900000000000001,-3.8601209135987635,1,approved.xlsx:628,3234463,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+ibuprofen,292.6,31.000000000000004,-0.9749126279550193,1,approved.xlsx:1972,2109643,lysine,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+dexibuprofen,400.0,26.5,-1.1788141173911546,1,approved.xlsx:1173,16909273,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+disopyramide,92.0,2.4,-1.5835765856339492,1,approved.xlsx:1275,687507,phosphate,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+vitamin e (delta-tocotrienol),200.0,1.8181,-2.041412228849647,1,approved.xlsx:4287,27278668,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+pentazocine,100.0,0.045000000000000005,-3.3467874862246565,1,approved.xlsx:2965,923183,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+amprenavir,150.0,2.0,-1.8750612633917,1,approved.xlsx:308,10390223,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+propranolol,224.0,0.16,-3.146128035678238,1,approved.xlsx:3212,7140133,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+oxamniquine,1000.0,1.8571300000000002,-2.7311576943719333,1,approved.xlsx:2883,3104279,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+dihydrotachysterol,1.0,0.021799999999999996,-1.6615435063953952,1,approved.xlsx:1249,7988630,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+ibrexafungerp,300.0,0.29169,-3.0121997142481276,1,approved.xlsx:1965,37971243,citrate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+dihydroergocristine,18.0,0.00028000000000000003,-4.808114473761087,1,approved.xlsx:1245,16379666,mesylate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+pramiracetam,400.0,2.7099999999999995,-2.1690907004535567,1,approved.xlsx:3118,4008675,sulfate,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+clofazimine,200.0,0.21871000000000004,-2.9611613550793296,1,approved.xlsx:958,3559339,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+betaxolol,10.0,0.021600000000000008,-2.665546248849069,1,approved.xlsx:548,2906367,hydrocholride,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+metyrapone,750.0,3.6999999999999997,-2.306859539324705,1,approved.xlsx:2503,,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+pivmecillinam,200.0,0.00010999999999999999,-6.259637310505756,1,approved.xlsx:3084,38691150,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+stiripentol,1000.0,6.6000000000000005,-2.1804560644581312,1,approved.xlsx:3741,24725808,,no_salt_reported,tablet,reported_non_modified,fed condition,not_recorded_in_source,True,
+boceprevir,400.0,0.5570000000000002,-2.856204796154233,1,approved.xlsx:568,22799589,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+indinavir,400.0,2.7498400000000003,-2.162752566275382,1,approved.xlsx:1999,9527781,sulfate,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+carteolol,20.0,0.04590000000000001,-2.63921731012672,1,approved.xlsx:735,6137389,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+tiaprofenic acid,300.0,40.099999999999994,-0.8739768820994802,1,approved.xlsx:3935,2272820,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+suprofen,200.0,18.949999999999992,-1.0234207813598903,1,approved.xlsx:3786,3243932,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+carprofen,100.0,10.199999999999998,-0.9913998282380825,1,approved.xlsx:734,3886707,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+fenoprofen,60.0,6.199999999999999,-0.9857595608853899,1,approved.xlsx:1666,501526,calcium,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+macimorelin,71.4,0.013100000000000007,-3.73642691612041,1,approved.xlsx:2336,32325373,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+ciprofibrate,100.0,23.999999999999993,-0.6197887582883941,1,approved.xlsx:924,2611089,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+bezafibrate,200.0,7.390000000000001,-1.4323855572691555,1,approved.xlsx:551,19007489,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+penbutolol,40.0,0.24547000000000002,-2.212061568720629,1,approved.xlsx:2957,3762014,sulfate,salt_reported_basis_unverified,,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+glecaprevir,200.0,0.0645,-3.4914702810287133,1,approved.xlsx:1889,27863806,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+ivacaftor,150.0,0.9944000000000001,-2.1785301434220927,1,approved.xlsx:2055,28477428,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+ebastine,10.0,0.00068,-4.167491087293763,1,approved.xlsx:1360,32449558,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+bempedoic acid,2.5,0.106,-1.3726341434072673,1,approved.xlsx:508,37477389,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+elbasvir,50.0,0.10673000000000002,-2.670683494909741,1,approved.xlsx:1392,29247332,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+atazanavir,400.0,2.25558,-2.2488017562398728,1,approved.xlsx:404,16503713,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+vericiguat,1.25,0.062,-1.3045183235098026,1,approved.xlsx:4256,33125516,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+cocaine,100.0,0.11499999999999999,-2.939302159646388,1,approved.xlsx:999,29462364,hydrochloride,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+mebendazole,1000.0,0.03100000000000001,-4.508638306165727,1,approved.xlsx:2367,19562329,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+manidipine,10.0,0.003510000000000001,-3.4546928835341757,1,approved.xlsx:2344,14558436,dihydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+pibrentasvir,1.5,0.00010000000000000009,-4.176091259055681,1,approved.xlsx:3033,28464496,,no_salt_reported,tablet,reported_non_modified,fed condition,not_recorded_in_source,True,
+relugolix,360.0,0.194,-3.2685007708370613,1,approved.xlsx:3341,26502357,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+spiramycin,1000.0,0.9600000000000001,-3.0177287669604316,1,approved.xlsx:3726,3182451,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+deserpidine,0.25,0.00017000000000000012,-3.1674910872937634,1,approved.xlsx:1126,19620026,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+artemether,100.0,0.042000000000000016,-3.376750709602099,1,approved.xlsx:369,10456492,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+nintedanib,50.0,0.004190000000000001,-4.076755981369724,1,approved.xlsx:2775,29500603,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+idebenone,150.0,1.631,-1.9636372980154055,1,approved.xlsx:1975,19125241,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+griseofulvin,125.0,1.1,-2.0555173278498313,1,approved.xlsx:1913,18675344,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+velpatasvir,5.0,0.022400000000000007,-2.348721986001856,1,approved.xlsx:4236,28193657,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+duloxetine,30.0,0.03182000000000001,-2.9744210794090997,1,approved.xlsx:1350,23678352,hydrochloride,salt_reported_basis_unverified,enteric-coated tablet,modified_release,,not_recorded_in_source,False,dose_mass_basis_unverified;modified_release_formulation
+phenylephrine,20.0,0.0029600000000000013,-3.8297382846050425,1,approved.xlsx:3011,26267590,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+procarbazine,300.0,0.561,-2.728158393463501,1,approved.xlsx:3187,16317293,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+regorafenib,40.0,0.59914,-1.8245316762454045,1,approved.xlsx:3340,34349503,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+sorafenib,50.0,0.46,-2.036212172654445,1,approved.xlsx:3708,16133532,tosylate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+apalutamide,240.0,3.2499999999999996,-1.8683278807327317,1,approved.xlsx:326,30787101,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+ketamine,35.35,0.044000000000000004,-2.904936741646731,1,approved.xlsx:2068,7097501,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+chlordiazepoxide,50.0,3.1199999999999997,-1.204815410317576,1,approved.xlsx:859,2762375,hydrochloride,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+fluoxetine,20.0,0.02256000000000001,-2.9476909003526766,1,approved.xlsx:1763,15968712,hydrochloride,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+maprotiline,75.0,0.023070000000000004,-3.5120136688706065,1,approved.xlsx:2345,7439244,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+protriptyline,30.0,0.013740000000000007,-3.339134521996131,1,approved.xlsx:3219,639433,hydrochloride,salt_reported_basis_unverified,,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+moxidectin,3.0,0.022400000000000007,-2.1268732363854994,1,approved.xlsx:2634,14517193,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+nilvadipine,2.0,0.0014800000000000006,-3.1307682802690238,1,approved.xlsx:2765,3680562,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+lercanidipine,10.0,0.003000000000000002,-3.5228787452803374,1,approved.xlsx:2164,27232153,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+ephedrine,50.0,0.1378,-2.559720786764412,1,approved.xlsx:1489,11699608,hydrochloride,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+esketamine (s-ketamine),14.0,0.008300000000000002,-3.227049943302164,1,approved.xlsx:1536,22286159,,no_salt_reported,syrup,reported_non_modified,,not_recorded_in_source,True,
+hydrocodone,90.0,0.060600000000000015,-3.1717698852730387,1,approved.xlsx:1943,28948482,,no_salt_reported,tablet er,modified_release,,not_recorded_in_source,False,modified_release_formulation
+nabumetone,500.0,0.56,-2.9507819773298185,1,approved.xlsx:2667,25393072,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+naproxen,250.0,44.29999999999999,-0.7515362824489682,1,approved.xlsx:2705,7439246,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+elagolix,25.0,0.055499999999999994,-2.6536470255493616,1,approved.xlsx:1389,19033369,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+tramadol,100.0,0.29,-2.537602002101044,1,approved.xlsx:4075,15509185,hydrochloride,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+avanafil,50.0,1.206,-1.6176226965318863,1,approved.xlsx:438,20637970,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+papaverine,80.0,0.18150000000000002,-2.644213357619812,1,approved.xlsx:2934,3413033,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+midodrine,2.5,0.011650000000000006,-2.3316140833099994,1,approved.xlsx:2522,,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+melatonin,2.0,0.00217,-2.9645702618154517,1,approved.xlsx:2407,10883420,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+acemetacin,60.0,0.24500000000000002,-2.3889851660191113,1,approved.xlsx:111,1888622,,no_salt_reported,capsule,reported_non_modified,MRT was calculated by NCA; fed condition,not_recorded_in_source,True,
+noscapine,100.0,0.129,-2.889410289700751,1,approved.xlsx:2812,2257866,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+oxycodone,5.0,0.010000000000000004,-2.6989700043360187,1,approved.xlsx:2903,22717418,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+fexinidazole,200.0,0.13900000000000004,-3.158015195409886,1,approved.xlsx:1673,24535888,,no_salt_reported,suspension,reported_non_modified,,not_recorded_in_source,True,
+thioridazine,25.0,0.11083,-2.3532826754371716,1,approved.xlsx:3926,2600782,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+letermovir,240.0,11.0,-1.338818556553381,1,approved.xlsx:2175,35238179,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+ergometrine,0.2,0.0010400000000000006,-2.2839966563652006,1,approved.xlsx:1511,8161717,maleate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+lisdexamfetamine,17.343173836698856,0.015699999999999995,-3.0432289247928903,1,approved.xlsx:2246,26926668,dimesylate,salt_converted_to_parent,capsule,reported_non_modified,,not_recorded_in_source,True,
+bosentan,3.0,0.03867999999999999,-1.8896347893086984,1,approved.xlsx:573,8823230,,no_salt_reported,suspension,reported_non_modified,,not_recorded_in_source,True,
+lapatinib,100.0,0.11499999999999999,-2.939302159646388,1,approved.xlsx:2127,19371315,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+busulfan,2.0,0.032200000000000006,-1.7931741239681502,1,approved.xlsx:656,26736033,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+vismodegib,150.0,2.47727,-1.7821179157238738,1,approved.xlsx:4286,22458643,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+bosutinib,200.0,0.0169,-4.073143291050307,1,approved.xlsx:578,21691746,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+erdafitinib,4.0,0.13800000000000004,-1.4621809049267258,1,approved.xlsx:1509,31673875,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+etoposide,100.0,2.9999999999999996,-1.5228787452803376,1,approved.xlsx:1581,8426216,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+valbenazine,1.0,0.0029400000000000016,-2.5316526695878423,1,approved.xlsx:4188,28839339,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+methoxsalen,40.0,0.17800000000000005,-2.3516399890190685,1,approved.xlsx:2460,16809802,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+pinaverium,50.0,0.0017100000000000004,-4.465973893943865,1,approved.xlsx:3049,21308709,bromide,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+iloperidone,4.0,0.003240000000000001,-3.09151498112135,1,approved.xlsx:1981,23618742,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+gefapixant,10.0,0.07150000000000001,-2.1456939581989194,1,approved.xlsx:1864,38651193,,no_salt_reported,suspension,reported_non_modified,,not_recorded_in_source,True,
+acitretin,50.0,0.24500000000000002,-2.309803919971486,1,approved.xlsx:138,2977392,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+tafenoquine,200.0,0.13818000000000003,-3.1605848073161065,1,approved.xlsx:3813,36500278,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+anethole trithione,75.0,0.0009600000000000006,-4.892790030352131,1,approved.xlsx:324,17586125,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+arzoxifene,10.0,0.0008000000000000003,-4.096910013008056,1,approved.xlsx:378,11283133,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+encainide,25.0,0.06080000000000002,-2.6140364293993024,1,approved.xlsx:1462,1909559,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+formoterol,0.17,9.399999999999997e-05,-3.2573210677785753,1,approved.xlsx:1794,9776436,fumarate,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+astemizole,10.0,0.0007400000000000002,-4.130768280269024,1,approved.xlsx:383,9088588,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+vernakalant,240.0,0.48120000000000007,-2.6978856230437986,1,approved.xlsx:4259,21457140,hydrochloride,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+alfuzosin,1.0,0.0026000000000000016,-2.585026652029182,1,approved.xlsx:189,1358243,hydrochloride,salt_reported_basis_unverified,tablet er,modified_release,,not_recorded_in_source,False,dose_mass_basis_unverified;modified_release_formulation
+baricitinib,2.0,0.024600000000000004,-1.910094888560602,1,approved.xlsx:483,32945153,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+ethambutol,1200.0,2.9320000000000004,-2.6120172800785344,1,approved.xlsx:1566,10527648,dihydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+drotaverine,40.0,0.12185000000000001,-2.516234457807219,1,approved.xlsx:1344,15212193,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+reboxetine,3.0,0.09200000000000001,-1.513333427374107,1,approved.xlsx:3337,7579027,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+viloxazine,100.0,1.5922999999999998,-1.7979751048959622,1,approved.xlsx:4281,7067726,hydrochloride,salt_reported_basis_unverified,,unreported,fed condition; GM,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+levacetylmethadol (laam),40.0,0.06300000000000001,-2.8027194418743804,1,approved.xlsx:2180,9535996,hydrochloride,salt_reported_basis_unverified,solution,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+ajmaline,50.0,0.018,-3.4436974992327127,1,approved.xlsx:172,6144760,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+vinflunine,207.6,0.23500000000000004,-2.946159486904684,1,approved.xlsx:4283,22471295,ditartrate,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+bretylium,100.0,0.0357,-3.447331783887807,1,approved.xlsx:582,7104462,tosylate,salt_reported_basis_unverified,solution,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+methantheline,100.0,0.0251,-3.600326278518962,1,approved.xlsx:2448,22527350,bromide,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+tapentadol,86.0,0.07339999999999999,-3.0688023913274973,1,approved.xlsx:3825,23357834,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+lovastatin,80.0,0.006069999999999999,-4.119901295916686,1,approved.xlsx:2316,18293165,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+fenfluramine,58.0,0.06240000000000002,-2.968243403880513,1,approved.xlsx:1657,30336805,hydrochloride,salt_reported_basis_unverified,solution,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+etilefrine,20.0,0.0185,-3.0338582672609675,1,approved.xlsx:1575,6126364,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+elacestrant,1.0,6.000000000000007e-05,-4.221848749616356,1,approved.xlsx:1386,32661909,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+dexfenfluramine,30.0,0.0273,-3.0409586076789066,1,approved.xlsx:1172,7654489,hydrochloride,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+diphenoxylate,5.0,0.0095,-2.721246399047171,1,approved.xlsx:1269,5026379,hydrochloride,salt_reported_basis_unverified,solution,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+felodipine,5.0,0.00553,-2.9562448730313204,1,approved.xlsx:1654,3593901,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+Givinostat,44.3,0.046957999999999986,-2.97469413473523,1,approved_2024.xlsx:15,21365126,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+hydroxychloroquine,155.0,0.04600000000000002,-3.527573866488717,1,approved.xlsx:1955,2757893,sulfate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+amisulpride,200.0,0.671,-2.474307475494989,1,approved.xlsx:280,37986678,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+sultopride,50.0,0.33,-2.1804560644581312,1,approved.xlsx:3773,4049901,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+sulpiride,100.0,0.08840000000000003,-3.053547734986927,1,approved.xlsx:3771,23585286,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+remoxipride,20.0,0.40469,-1.6939075226746292,1,approved.xlsx:3352,2568653,hydrochloride monohydrate,salt_reported_basis_unverified,solution,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+abemaciclib,200.0,0.10200000000000002,-3.2924298239020637,1,approved.xlsx:80,37337637,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+quinapril,40.0,0.579,-1.8393814276005263,1,approved.xlsx:3249,3350992,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+trandolapril,1.0,0.0015700000000000004,-2.804100347590766,1,approved.xlsx:4079,25864194,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+cilazapril,0.5,0.017000000000000005,-1.4685210829577449,1,approved.xlsx:895,2527533,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+flumazenil,30.0,0.24683000000000002,-2.084723311503291,1,approved.xlsx:1750,2505960,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+emedastine,2.0,0.002000000000000001,-3.0,1,approved.xlsx:1429,11317479,difumarate,salt_reported_basis_unverified,,unreported,,not_recorded_in_source,False,dose_mass_basis_unverified;formulation_not_source_reported
+Seladelpar,10.0,0.07190000000000002,-2.143271109617117,1,approved_2024.xlsx:26,,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+iptacopan,100.0,2.1319999999999997,-1.6712127996454655,1,approved.xlsx:2012,37308298,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+benazepril,9.208976917736898,0.13541,-1.8325606463242936,1,approved.xlsx:512,2758102,hydrochloride,salt_converted_to_parent,capsule,reported_non_modified,,not_recorded_in_source,True,
+oseltamivir (gs4104),20.0,0.011500000000000003,-3.2403321553103694,1,approved.xlsx:2867,10934667,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+telotristat ethyl,500.0,0.004400000000000001,-5.055517327849831,1,approved.xlsx:3877,,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+moexipril,15.0,0.0782,-2.2828845059958334,1,approved.xlsx:2606,11837383,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+trimethadione,65.3,1.04,-1.7978798419762936,1,approved.xlsx:4124,6470930,,no_salt_reported,powder,reported_non_modified,,not_recorded_in_source,True,
+tenoxicam,10.0,1.5,-0.8239087409443188,1,approved.xlsx:3891,3497039,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+ketotifen,2.0,0.00026999999999999995,-3.869666231504994,1,approved.xlsx:2085,1600111,fumarate,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+azatadine,2.0,0.0014000000000000004,-3.154901959985743,1,approved.xlsx:453,21737359,maleate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+tepotinib,500.0,0.48700000000000004,-3.0114410431213843,1,approved.xlsx:3893,32221754,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+azelastine,2.0,0.0010200000000000003,-3.2924298239020637,1,approved.xlsx:457,23675185,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+cyproheptadine,8.0,0.03,-2.425968732272281,1,approved.xlsx:1039,15083941,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+bromhexine,8.0,0.024600000000000004,-2.5121548798885645,1,approved.xlsx:626,20031363,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+methotrexate,5.0,0.09190000000000004,-1.7356544929499074,1,approved.xlsx:2456,36484803,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+lormetazepam,1.0,0.005650000000000001,-2.2479515521805613,1,approved.xlsx:2296,6124982,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+methsuximide,300.0,1.62808,-2.265445513438636,1,approved.xlsx:2461,,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+chlormezanone,200.0,2.7499999999999996,-1.8616973018337186,1,approved.xlsx:861,7451625,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+prochlorperazine,5.0,0.0002600000000000003,-4.2839966563652006,1,approved.xlsx:3194,16291713,maleate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+nefopam,20.0,0.012290000000000002,-3.211478112777527,1,approved.xlsx:2717,12787260,hydrochloride,salt_reported_basis_unverified,solution,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+oxymorphone,5.0,0.0011000000000000003,-3.657577319177794,1,approved.xlsx:2905,15777102,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+hydromorphone,4.0,0.012950000000000005,-2.4897902229106914,1,approved.xlsx:1953,"2445789, 2453226",hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+pholcodine,60.0,0.03120000000000001,-3.2839966563652006,1,approved.xlsx:3025,3190994,,no_salt_reported,syrup,reported_non_modified,,not_recorded_in_source,True,
+ergotamine,2.0,0.00036000000000000024,-3.7447274948966935,1,approved.xlsx:1512,421728,tartrate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+tropisetron,5.0,0.003460000000000001,-3.159893905543242,1,approved.xlsx:4137,11736884,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+scopolamine,0.4,0.0004900000000000001,-2.9118639112994487,1,approved.xlsx:3594,2762223,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+pyrantel,750.0,0.037559999999999996,-4.300335679797627,1,approved.xlsx:3228,7993990,pamoate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+clemastine,2.0,0.0011499999999999998,-3.2403321553103694,1,approved.xlsx:944,8930778,fumarate,salt_reported_basis_unverified,syrup,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+eszopiclone,1.5,0.018080000000000006,-1.9188928329163366,1,approved.xlsx:1564,23038043,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+thiothixene,20.0,0.0272,-2.8664610916297826,1,approved.xlsx:3929,9447478,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+cariprazine,1.5,0.0008800000000000001,-3.2316085869055127,1,approved.xlsx:731,38710207,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+pyridostigmine,83.27665441176471,0.052,-3.2045199257051564,1,approved.xlsx:3231,7439266,bromide,salt_converted_to_parent,tablet,reported_non_modified,,not_recorded_in_source,True,
+neostigmine,30.0,0.005750000000000001,-3.717453410030032,1,approved.xlsx:2721,456409,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+ribociclib,400.0,0.31699999999999995,-3.101000729110211,1,approved.xlsx:3370,33555033,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+zimelidine,100.0,0.09825,-3.0076674409525355,1,approved.xlsx:4390,6228368,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+olopatadine,5.0,0.06998,-1.8539960661891313,1,approved.xlsx:2842,19499962,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+brompheniramine,9.46,0.011230000000000006,-2.925511380140335,1,approved.xlsx:631,6128358,maleate,salt_reported_basis_unverified,syrup,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+chlorpheniramine,8.0,0.017360000000000004,-2.6635402661514704,1,approved.xlsx:869,7106172,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+pheniramine,30.5,0.2235,-2.1350223118788305,1,approved.xlsx:2993,3988394,,no_salt_reported,,unreported,,not_recorded_in_source,False,formulation_not_source_reported
+alectinib,600.0,0.10300000000000004,-3.7653140256784714,1,approved.xlsx:181,27545320,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+clotiazepam,5.0,0.17880000000000004,-1.4466024898761198,1,approved.xlsx:981,2575522,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+istradefylline,40.0,0.18110000000000004,-2.344141541013904,1,approved.xlsx:2048,28881378,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+enoxacin,200.0,1.22,-2.214670164989233,1,approved.xlsx:1469,6389476,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+rosoxacin,300.0,4.53,-1.8210230527068305,1,approved.xlsx:3506,7086661,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+nalidixic acid,1000.0,30.600000000000005,-1.5142785735184199,1,approved.xlsx:2685,7174858,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+pipotiazine,10.0,0.010000000000000004,-3.0,1,approved.xlsx:3061,6125523,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+lymecycline,300.0,2.13,-2.148741651280925,1,approved.xlsx:2333,6487493,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+tetracycline,300.0,2.4999999999999996,-2.079181246047625,1,approved.xlsx:3914,6487493,hydrochloride,salt_reported_basis_unverified,capsule,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+cyclobenzaprine,2.5,0.0021000000000000007,-3.0757207139381184,1,approved.xlsx:1031,11808825,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+methylene blue,500.0,3.5715100000000004,-2.146118133876931,1,approved.xlsx:2464,18810398,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+altretamine,200.0,0.277,-2.8585502265995326,1,approved.xlsx:242,2515524,,no_salt_reported,capsule,reported_non_modified,,not_recorded_in_source,True,
+terbinafine,125.0,0.5650000000000002,-2.3448615651886175,1,approved.xlsx:3899,1543677,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+creatine,5000.0,102.09999999999995,-1.6899442622491088,1,approved.xlsx:1015,12520625,monohydrate,salt_reported_basis_unverified,powder,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+revefenacin,0.2,0.00013000000000000015,-3.187086643357144,1,approved.xlsx:3365,32978223,,no_salt_reported,solution,reported_non_modified,,not_recorded_in_source,True,
+xanthinol,150.0,0.615,-2.3872161432802645,1,approved.xlsx:4358,18718822,nicotinate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+amitriptyline,10.0,0.00596,-3.2247537402597635,1,approved.xlsx:282,25308868,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+doxepin,3.0,0.00059,-3.7062692430775184,1,approved.xlsx:1327,35608048,hydrochloride,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+chlorpromazine,25.0,0.004310000000000001,-3.763462738511306,1,approved.xlsx:870,8157044,hydrochloride,salt_reported_basis_unverified,solution,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
+zotepine,25.0,0.005900000000000002,-3.6270879970298933,1,approved.xlsx:4422,9485566,,no_salt_reported,tablet,reported_non_modified,,not_recorded_in_source,True,
+toremifene,120.0,0.63,-2.279840696594043,1,approved.xlsx:4072,9182842,citrate,salt_reported_basis_unverified,tablet,reported_non_modified,,not_recorded_in_source,False,dose_mass_basis_unverified
