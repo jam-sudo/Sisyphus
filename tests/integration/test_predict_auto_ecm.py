@@ -19,7 +19,7 @@ test. Public-clone deterministic Cmax under the re-anchor (40 mg/2 mg oral,
 realize_means(), no DrugBank/logp_correction enrichment):
 - pravastatin auto-ECM (mf=0): 0.0450 mg/L (FDA 0.045, FE ~1.0)
 - pitavastatin auto-ECM:       0.0022 mg/L (FDA 0.0035, FE ~1.6)
-- fluvastatin no-ECM:          0.0603 mg/L (+paracellular; was 0.0539 pre-PARA)
+- fluvastatin no-ECM:          0.0737 mg/L (2026-09 public retrains; was 0.0603)
 """
 from __future__ import annotations
 
@@ -75,7 +75,7 @@ def test_fluvastatin_no_auto_ecm():
     assert not any("oatp1b1:auto_ecm" in w for w in result.warnings), (
         f"fluvastatin should NOT auto-activate ECM, but got warnings: {result.warnings}"
     )
-    expected = 0.0603  # public-clone; +paracellular absorption (was 0.0539 pre-PARA)
+    expected = 0.0737  # public-clone after 2026-09 public retrains (was 0.0603)
     rel_err = abs(cmax - expected) / expected
     assert rel_err < 0.05, (
         f"fluvastatin Cmax shifted unexpectedly: actual={cmax:.4f}, "

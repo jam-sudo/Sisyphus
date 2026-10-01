@@ -20,6 +20,8 @@ def test_integration_preserves_quarantined_references(tmp_path, monkeypatch):
     ):
         shutil.copyfile(source / name, tmp_path / name)
     monkeypatch.setattr(integrate_holdout, "DATA_REF", tmp_path)
+    # Licensed DrugBank is absent from public clones; output is identical without it.
+    monkeypatch.setattr(integrate_holdout, "load_drugbank_lookup", dict)
 
     integrate_holdout.main()
 
@@ -48,6 +50,8 @@ def test_integration_does_not_restore_uncertain_cmax(tmp_path, monkeypatch):
         clinical["drugs"][name]["pk_params"].pop("cmax_mg_L")
     clinical_path.write_text(json.dumps(clinical))
     monkeypatch.setattr(integrate_holdout, "DATA_REF", tmp_path)
+    # Licensed DrugBank is absent from public clones; output is identical without it.
+    monkeypatch.setattr(integrate_holdout, "load_drugbank_lookup", dict)
 
     integrate_holdout.main()
 
