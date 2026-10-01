@@ -35,7 +35,12 @@ def test_integration_preserves_quarantined_references(tmp_path, monkeypatch):
 
 def test_integration_does_not_restore_uncertain_cmax(tmp_path, monkeypatch):
     source = integrate_holdout.DATA_REF
-    for name in ("holdout.json", "clinical_pk.json", "curated_pk_data.json", "manual_pk_curation.json"):
+    for name in (
+        "holdout.json",
+        "clinical_pk.json",
+        "curated_pk_data.json",
+        "manual_pk_curation.json",
+    ):
         shutil.copyfile(source / name, tmp_path / name)
     clinical_path = tmp_path / "clinical_pk.json"
     clinical = json.loads(clinical_path.read_text())
