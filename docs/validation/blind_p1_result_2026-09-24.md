@@ -21,7 +21,7 @@ questions; even the N=6 row does not meet External Holdout V1's independent
 curation criteria.
 
 This is a **consumed development-grade diagnostic**, not the independently
-curated External Holdout V1. One Claude Code worker collected eight previously
+curated External Holdout V1. One AI-assisted worker collected eight previously
 unseen compound arms while the modeling agent remained blind to their Cmax
 values. The label-free [inputs](../../data/validation/blind_p1_inputs_2026-09-24.json),
 [predictions](../../data/validation/blind_p1_predictions_2026-09-24.json), and

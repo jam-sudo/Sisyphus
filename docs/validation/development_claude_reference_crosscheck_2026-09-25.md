@@ -1,6 +1,6 @@
 # AI-assisted development reference cross-check — 2026-09-25
 
-One Claude Code worker, blind to predictions and prior audit conclusions, compared five `clinical_pk.json` Cmax arms with their cited primary sources. I separately checked the [XYZAL label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1673f7ff-0c7c-4403-86cf-c05eb1475222). The worker's detailed read-only record is local at `/tmp/sisyphus_claude_reference_review_20260925.md`. This is development data QA by AI, not independent external validation or a new holdout score.
+One AI-assisted worker, blind to predictions and prior audit conclusions, compared five `clinical_pk.json` Cmax arms with their cited primary sources. I separately checked the [XYZAL label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1673f7ff-0c7c-4403-86cf-c05eb1475222). The worker's detailed read-only record is local at `/tmp/sisyphus_claude_reference_review_20260925.md`. This is development data QA by AI, not independent external validation or a new holdout score.
 
 | Arm | Source check | Remaining limitation |
 | --- | --- | --- |

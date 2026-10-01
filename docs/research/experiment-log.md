@@ -48,7 +48,7 @@ The [source adjudication](../validation/development_acoramidis_dose_basis_2026-0
 
 ## 2026-09-24 (cont.) — Methenamine concentration-basis quarantine
 
-The [source follow-up](../validation/development_methenamine_label_quarantine_2026-09-24.md) found that Omega's 1 g methenamine hippurate tablet is 438.96 mg parent by formula, but its reported serum Cmax and AUC together with the original paper's CL and V imply a shared **1 g concentration/dose basis**. An initial mass-only conversion was challenged by a separate Claude Code read-only audit and retracted before commit. Methenamine was quarantined from Cmax, CL/F, and Vd/F training while the full numeric table and assay basis remain unavailable. Direct Cmax fitted N changed **907 → 906**, CL/F **901 → 900**, Vd/F **832 → 831**; scaffold-CV AAFE changed **3.3439 → 3.3699**. On consumed N=73, Meta AAFE changed **2.8311 → 2.8158** (conditional CI **2.2881–3.5022**) and direct ML **3.0398 → 2.9848**. These shifts are not independent accuracy evidence.
+The [source follow-up](../validation/development_methenamine_label_quarantine_2026-09-24.md) found that Omega's 1 g methenamine hippurate tablet is 438.96 mg parent by formula, but its reported serum Cmax and AUC together with the original paper's CL and V imply a shared **1 g concentration/dose basis**. An initial mass-only conversion was challenged by a separate AI-assisted read-only audit and retracted before commit. Methenamine was quarantined from Cmax, CL/F, and Vd/F training while the full numeric table and assay basis remain unavailable. Direct Cmax fitted N changed **907 → 906**, CL/F **901 → 900**, Vd/F **832 → 831**; scaffold-CV AAFE changed **3.3439 → 3.3699**. On consumed N=73, Meta AAFE changed **2.8311 → 2.8158** (conditional CI **2.2881–3.5022**) and direct ML **3.0398 → 2.9848**. These shifts are not independent accuracy evidence.
 
 ---
 
@@ -60,7 +60,7 @@ A workbook-wide salt-tag triage identified 269 fitted names requiring source-by-
 
 ## 2026-09-24 (cont.) — Correct two salt doses and rebuild CL/F–Vd/F from screened source
 
-An independent Claude Code source check found that the fitted lisdexamfetamine
+An independent AI-assisted source check found that the fitted lisdexamfetamine
 30 mg and zofenopril 60 mg doses were dimesylate and calcium-salt masses,
 respectively. Parent-equivalent doses were applied to the Cmax recipe and the
 exploratory MMPK arms, using regulatory equivalences; the two stale PBPK-feature
@@ -141,7 +141,7 @@ diagnostics, not independent external validation.
 
 ## 2026-09-24 (cont.) — Retract the whole-blood arm from P1 plasma diagnostics
 
-An independent Claude Code source re-review of all eight consumed P1 arms
+An independent AI-assisted source re-review of all eight consumed P1 arms
 found that `arm_05a`'s original M5717 report measured Cmax in **whole blood**,
 while the sealed label and first-pass P1 result called it plasma. The numeric
 table transcription was correct, but the analyte matrix disqualifies that arm

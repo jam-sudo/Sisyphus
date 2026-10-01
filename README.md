@@ -365,8 +365,8 @@ for hashes, exclusions, and remaining source uncertainty.
 
 ### AI-assisted blind P1 diagnostic (earlier public model)
 
-Eight previously unseen compounds were source-screened by a separate Claude
-Code worker, and anonymous inputs/predictions were committed before their
+Eight previously unseen compounds were source-screened by a separate AI-assisted
+worker, and anonymous inputs/predictions were committed before their
 Cmax labels were opened. On this small, nonconsecutive, **development-grade**
 set, a second source review found one of the eight labels was **whole-blood**
 Cmax, not plasma. Excluding that arm, frozen-prediction Meta AAFE is **6.63**
@@ -381,7 +381,7 @@ for the freeze chain, source cells, sensitivity, and limitations.
 
 ### AI-assisted P2 FDA acquisition check
 
-A separate Claude worker consecutively screened all **248 oral FDA NME rows
+A separate AI-assisted worker consecutively screened all **248 oral FDA NME rows
 from 2015–2025** against the repository exclusion union and strict original-arm
 criteria. No new eligible compound remained, so no predictions were run.
 Repository name collisions removed 235 rows; the two structure-clean parents
