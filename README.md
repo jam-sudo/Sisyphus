@@ -8,7 +8,7 @@
 
 **Preprint:** [Yoon, J. M. (2026). *Sisyphus: A Topology-Compiled Physiologically Based Pharmacokinetic Platform with Structure-Only Input and Bayesian Parameter Refinement.* ChemRxiv.](https://doi.org/10.26434/chemrxiv.15004452/v1) &mdash; DOI [10.26434/chemrxiv.15004452/v1](https://doi.org/10.26434/chemrxiv.15004452/v1)
 
-The published v1 preprint and archived `Sisyphus_Preprint.pdf` report an older AAFE of 2.698. The current code's source-screened development benchmark is 2.8300 on 73 scored compounds; the value comes from a different model and reference set. Use the validation section below for current evidence.
+The published v1 preprint and archived `Sisyphus_Preprint.pdf` report an older AAFE of 2.698. The current code's source-screened development benchmark is 2.830 on 73 scored compounds; the value comes from a different model and reference set. Use the validation section below for current evidence.
 
 ---
 
@@ -106,10 +106,10 @@ The coefficient 2.88 is an empirical absorption-scale parameter for these numeri
 The full pipeline combines mechanistic simulation with data-driven prediction:
 
 1. **SMILES &rarr; molecular profile**: RDKit descriptors, structural pK<sub>a</sub> classification, applicability domain assessment
-2. **ADME prediction**: Pre-trained XGBoost models for f<sub>u,p</sub>, CL<sub>int</sub>, R<sub>B:P</sub>, VD<sub>ss</sub> (trained on TDC datasets; Huang et al., 2021), with DrugBank experimental f<sub>u,p</sub> enrichment where available
+2. **ADME prediction**: Pre-trained XGBoost models for f<sub>u,p</sub>, P<sub>eff</sub>, CL<sub>int</sub>, and VD<sub>ss</sub> (public TDC datasets; Huang et al., 2021); R<sub>B:P</sub> defaults to 1.0. DrugBank experimental enrichment is available only in the opt-in `licensed_research` profile and never affects public results
 3. **IVIVE**: CL<sub>int</sub> decomposition into per-enzyme affinities, Kp calculation
 4. **PBPK simulation**: 34-state ODE system solved via LSODA (Petzold, 1983)
-5. **ML direct prediction**: XGBoost C<sub>max</sub> model (trained on 1,128 drugs from multi-source clinical PK data)
+5. **ML direct prediction**: XGBoost C<sub>max</sub> model (906 hash-pinned public clinical PK rows derived from Omega MMPK data)
 6. **CL/F analytical track**: closed-form 1-compartment C<sub>max</sub> estimate using XGBoost CL/F + V<sub>d</sub> predictions and k<sub>a</sub> from Engine T<sub>max</sub> / Peff. Decorrelates with Engine+ML residuals via different input channels.
 7. **VDss volume proxy**: dose divided by predicted VDss (volume-of-distribution-at-steady-state) for a fixed 70 kg body weight. This is a simple scale estimate, not an absorption/elimination C<sub>max</sub> model. It is included whenever a positive VDss estimate is available; this routing was selected on N=107 and is not an independently validated applicability rule.
 8. **Meta-learner**: Compound-type-adaptive geometric blend of all four tracks with weights selected by LOOCV on the repeatedly accessed N=107 development set. Base compounds: engine 0.60 / ML 0.40 / CLF 0.00; non-base: engine 0.35 / ML 0.50 / CLF 0.15. VDss track weight 0.20 when activated; other weights scaled by ×0.80 so the four-track sum remains unity. These weights are frozen pending blinded external evaluation.
@@ -194,7 +194,7 @@ where $k_{e0}$ is the effect-site equilibration rate constant (h<sup>&minus;1</s
 pip install -e ".[dev,ml]"
 ```
 
-> Pre-trained XGBoost models (f<sub>u,p</sub>, CL<sub>int</sub>, R<sub>B:P</sub>, VD<sub>ss</sub>, C<sub>max</sub>) are required in `models/adme/` and `models/direct_pk/`. Re-training scripts are provided in `scripts/`.
+> Pre-trained XGBoost models (f<sub>u,p</sub>, P<sub>eff</sub>, CL<sub>int</sub>, VD<sub>ss</sub>, C<sub>max</sub>, CL/F, Vd/F) ship in `models/adme/` and `models/direct_pk/`. Re-training scripts are provided in `scripts/`.
 
 ### CLI
 
@@ -324,67 +324,9 @@ does not account for repeated system selection. The development data cannot
 establish independent Meta superiority. The in-domain ratio is
 1.008 (0.898–1.137).
 
-A reference-curve audit removed 165 synthetic or arm-mixed concentration
-profiles, including seven attached to scored development drugs; see
-[`development_reference_curve_followup_2026-09-24.md`](docs/validation/development_reference_curve_followup_2026-09-24.md).
-The subsequent parent-dose and quinine-arm correction is documented in
-[`development_parent_dose_followup_2026-09-24.md`](docs/validation/development_parent_dose_followup_2026-09-24.md).
-The codeine reference was subsequently replaced with a directly matched FDA
-fasted tablet arm; see
-[`development_codeine_fda_arm_followup_2026-09-24.md`](docs/validation/development_codeine_fda_arm_followup_2026-09-24.md).
-The implicit-salt follow-up corrected amantadine, fluvoxamine, hydroxyzine,
-and trazodone; see
-[`development_implicit_salt_followup_2026-09-24.md`](docs/validation/development_implicit_salt_followup_2026-09-24.md).
-The dapagliflozin peak is now the original study's directly tabulated Cmax
-geometric mean rather than a digitized mean-profile maximum; see
-[`development_dapagliflozin_table_followup_2026-09-24.md`](docs/validation/development_dapagliflozin_table_followup_2026-09-24.md).
-The OSP silver-arm follow-up quarantined cimetidine and mefenamic acid, and
-replaced probenecid with the original-study mean peak; see
-[`development_osp_silver_profile_followup_2026-09-24.md`](docs/validation/development_osp_silver_profile_followup_2026-09-24.md).
-The original-source check for apixaban, famotidine, and sildenafil corrected
-mixed-arm parameters and an approximately rounded Cmax; see
-[`development_three_legacy_silver_arms_2026-09-24.md`](docs/validation/development_three_legacy_silver_arms_2026-09-24.md).
-The follow-up on acamprosate, ponatinib, posaconazole, and upadacitinib
-quarantined an untraceable peak and corrected three primary-study citations;
-see [`development_four_more_silver_arms_2026-09-24.md`](docs/validation/development_four_more_silver_arms_2026-09-24.md).
-The next source check quarantined alvimopan's five-day twice-daily peak,
-converted donepezil's hydrochloride tablet strength to parent mass, and
-identified fruquintinib's original oral-suspension arm; see
-[`development_alvimopan_donepezil_fruquintinib_2026-09-24.md`](docs/validation/development_alvimopan_donepezil_fruquintinib_2026-09-24.md).
-The next source check converted ketorolac tromethamine to free-acid dose,
-used the exact single-dose label peak, and identified brincidofovir's unboosted
-FDA review control arm; see
-[`development_ketorolac_brincidofovir_2026-09-24.md`](docs/validation/development_ketorolac_brincidofovir_2026-09-24.md).
-The subsequent check replaced lamivudine's repeated-dose source with a matched
-single-dose arm and separated mercaptopurine tablet and suspension results; see
-[`development_lamivudine_mercaptopurine_2026-09-24.md`](docs/validation/development_lamivudine_mercaptopurine_2026-09-24.md).
-The next check quarantined progesterone's five-day peak and corrected
-rifabutin label statistics; see
-[`development_progesterone_rifabutin_2026-09-24.md`](docs/validation/development_progesterone_rifabutin_2026-09-24.md).
-The direct Cmax model also excludes an indapamide training aggregate traced to
-whole-blood measurements; see
-[`development_indapamide_training_matrix_2026-09-24.md`](docs/validation/development_indapamide_training_matrix_2026-09-24.md).
-The same source-matrix screen quarantined cyclosporine, everolimus, and tacrolimus
-training aggregates; see
-[`development_immunosuppressant_training_matrix_2026-09-24.md`](docs/validation/development_immunosuppressant_training_matrix_2026-09-24.md).
-An administered-drug/analyte identity screen quarantined another 114 Cmax
-aggregates pending exact dose-basis adjudication; see
-[`development_cmax_administered_identity_2026-09-24.md`](docs/validation/development_cmax_administered_identity_2026-09-24.md).
-The pimecrolimus 15 mg label was also traced to blood measurements; see
-[`development_pimecrolimus_training_matrix_2026-09-24.md`](docs/validation/development_pimecrolimus_training_matrix_2026-09-24.md).
-The voclosporin 0.25 mg/kg label and four exploratory doses were traced to
-whole-blood measurements; see
-[`development_voclosporin_training_matrix_2026-09-24.md`](docs/validation/development_voclosporin_training_matrix_2026-09-24.md).
-The dolasetron Cmax, CL/F, and Vd/F training labels were traced to its active
-metabolite rather than measured parent drug; see
-[`development_dolasetron_analyte_followup_2026-09-24.md`](docs/validation/development_dolasetron_analyte_followup_2026-09-24.md).
-The subsequent parent-equivalent lisdexamfetamine and zofenopril dose corrections,
-and CL/F–Vd/F rebuild from the screened Omega source, are documented in
-[`development_salt_dose_and_clf_screen_followup_2026-09-24.md`](docs/validation/development_salt_dose_and_clf_screen_followup_2026-09-24.md).
-Four more source-supported salt-dose corrections and the metformin console preset
-are documented in [`development_additional_salt_dose_followup_2026-09-24.md`](docs/validation/development_additional_salt_dose_followup_2026-09-24.md).
+**Reference and training-label audit (2026-09-24/25).** Before the current scores were produced, every scored development arm and the direct-model training aggregates were re-checked against original sources. The audit removed 165 synthetic or arm-mixed concentration profiles; quarantined untraceable, multi-day, steady-state, prodrug-metabolite, and whole-blood labels; replaced digitized or mixed-arm peaks with directly reported single-dose fasted arms where available; and converted salt-form doses to parent active-moiety mass. Per-compound decisions, sources, and hashes are in the dated `development_*` notes under [`docs/validation/`](docs/validation/), starting from the [reference source audit](docs/validation/development_reference_source_audit_2026-09-24.md). A subsequent metadata-level source-consistency filter for the direct C<sub>max</sub> training set was a no-go (3.5% higher out-of-fold AAFE; [ablation](docs/research/cmax_source_consistency_ablation_2026-09-25.md)), so the production model is unchanged.
 
-> **Reproducibility (2026-09-24).** The table uses public-only TDC fup, Peff, hepatocyte CLint, and Lombardo VDss plus Omega Cmax retrains. Earlier morphine and digoxin reference corrections were followed by an arm-level audit. The current cache excludes unsupported leflunomide and sirolimus arms plus seven prodrug-metabolite labels (adefovir dipivoxil, fesoterodine, molnupiravir, prasugrel, tenofovir disoproxil, valacyclovir, valganciclovir), excludes unsupported abiraterone, atovaquone, clonidine, clozapine, darolutamide, darunavir, glasdegib, itraconazole, pomalidomide, ranolazine, sonidegib, tamsulosin, and vilazodone arms, and uses directly reported paroxetine, nilotinib, clopidogrel, levocetirizine, methylphenidate, norethindrone, carbamazepine, zonisamide, oxybutynin, dasatinib, pindolol, bexagliflozin, sumatriptan, ketoconazole, levofloxacin, and metronidazole parent arms, plus directly measured single-dose cetirizine and febuxostat fasting arms instead of accumulation-adjusted steady-state estimates; the clomipramine label dose is converted from hydrochloride to parent mass. Indomethacin now uses a primary Health Canada fasted 50 mg capsule arm (3.107 mg/L); the former 25 mg value remains unverified. Ketoconazole now uses a primary fasted 200 mg tablet arm (4.22 mg/L) instead of an approximate fed-label value; its 3–4 h postdose meal timing falls short of the external V1 primary rule. Lopinavir, pilocarpine, temozolomide, and venlafaxine are also excluded after exact-arm review; see `docs/validation/development_additional_arm_followup_2026-09-24.md`. A further generic-label screen corrected azithromycin, ciprofloxacin, diclofenac, moxifloxacin, and zolpidem, and excluded isosorbide mononitrate and losartan; see `docs/validation/development_generic_label_arm_followup_2026-09-24.md`. The remaining six generic-label rows had mixed-arm parameters and synthetic curves repaired; see `docs/validation/development_remaining_generic_label_followup_2026-09-24.md`. An OSP source-identity audit corrected cabozantinib, ruxolitinib, and erythromycin; see `docs/validation/development_osp_identity_and_dose_followup_2026-09-24.md`. Acamprosate and phenytoin parent-equivalent doses and phenytoin observed Cmax were corrected; see `docs/validation/development_salt_equivalent_reference_followup_2026-09-24.md`. Per-drug predictions are in `data/training/4track_holdout_predictions.json`; bootstrap intervals are in `data/validation/4track_ci_2026-09-24_audited_reference.json`. Their fitted datasets contain 1,557 fup, 874 Peff, 906 Cmax, 995 CLint, and 1,055 VDss hash-pinned rows; the CL/F and Vd/F tracks fit 900 and 831 rows after screening the Omega source, correcting eight salt-dose labels, and quarantining methenamine for an unresolved concentration basis. †This repeatedly used development set and its conditional bootstrap CI do not establish independent generalization. Earlier benchmark lineage and numerics-drift measurements are in `docs/research/experiment-log.md`.
+> **Reproducibility.** The table uses public-only TDC f<sub>u,p</sub>, P<sub>eff</sub>, hepatocyte CL<sub>int</sub>, and Lombardo VD<sub>ss</sub> models plus Omega-derived C<sub>max</sub>, CL/F, and Vd/F retrains. The fitted datasets contain 1,557 f<sub>u,p</sub>, 874 P<sub>eff</sub>, 906 C<sub>max</sub>, 995 CL<sub>int</sub>, and 1,055 VD<sub>ss</sub> hash-pinned rows; the CL/F and Vd/F tracks fit 900 and 831 rows. Per-drug predictions are in `data/training/4track_holdout_predictions.json`; bootstrap intervals are in `data/validation/4track_ci_2026-09-24_audited_reference.json`. Aggregate AAFE reproduces from a fresh clone with `requirements-lock.txt`; per-drug bit-identity additionally requires the same numerics stack (Python minor version, BLAS, libomp). †This repeatedly used development set and its conditional bootstrap CI do not establish independent generalization. Earlier benchmark lineage and numerics-drift measurements are in `docs/research/experiment-log.md`.
 
 The 4-track meta-learner combines mechanistic PBPK (Engine), data-driven XGBoost C<sub>max</sub> (ML), a closed-form CL/F analytical (CLF), and a conditional VDss analytical track. Weights are compound-type-adaptive and were LOOCV-selected on the original N=107 cohort: base compounds blend Engine 0.60 / ML 0.40; other compounds use Engine 0.35 / ML 0.50 / CLF 0.15, with VDss 0.20 added when applicability criteria are satisfied. The current in-domain N=60 slice is descriptive only: applicability flags have not demonstrated reliable error stratification, and neither slice is independent evidence.
 
@@ -509,7 +451,7 @@ The full test suite covers graph construction, ODE compilation, flux functions, 
 
 **Expected failures (3):** Rosuvastatin and atorvastatin still miss their ECM-forced Cmax gates; the separate axial PGx test deliberately retains a strict expected failure because its well-stirred analytic oracle does not apply to parallel-tube extraction. Fluvastatin now passes its numerical gate, but ECM remains marked not applicable for it in production. Three prodrug clinical gates are skipped in the public clone because their conditional disposition data are absent.
 
-**Test status.** The current public-only fup/Peff/Cmax/CLint/VDss benchmark is pinned by `test_cached_development_aafe_is_2p854`; historical benchmark changes and resolved failures are recorded in `docs/research/experiment-log.md`. The cached headline is reproducible with `scripts/run_engine_benchmark.py` on the pinned public profile.
+**Test status.** The current public-only fup/Peff/Cmax/CLint/VDss benchmark is pinned by `test_cached_development_aafe_is_2p830`; historical benchmark changes and resolved failures are recorded in `docs/research/experiment-log.md`. The cached headline is reproducible with `scripts/run_engine_benchmark.py` on the pinned public profile.
 
 ## Architecture
 
@@ -666,7 +608,7 @@ src/sisyphus/
 │   ├── adme.py          # XGBoost ADME property prediction
 │   ├── ivive.py         # In vitro → in vivo extrapolation, Kp
 │   ├── hepatic_fu_correction.py # hepatic intracellular fu correction registry
-│   ├── drugbank.py      # DrugBank experimental enrichment (fup, logP)
+│   ├── drugbank.py      # DrugBank enrichment (licensed_research profile only)
 │   ├── phenotype.py     # Pharmacogenomic phenotype (e.g., SLCO1B1)
 │   ├── registry.py      # Prodrug activation registry (SMILES-keyed)
 │   ├── cyp_clearance_overrides.py # metabolic_fraction registry (OATP1B1 substrates, ECM)
@@ -785,7 +727,7 @@ Refinement. ChemRxiv. https://doi.org/10.26434/chemrxiv.15004452/v1
 Software (this repository):
 
 ```
-Yoon, J. M. (2026). Sisyphus (0.1.0): Graph-based whole-body PBPK
+Yoon, J. M. (2026). Sisyphus (0.4.0): Graph-based whole-body PBPK
 simulation with native uncertainty propagation.
 https://github.com/jam-sudo/Sisyphus
 ```

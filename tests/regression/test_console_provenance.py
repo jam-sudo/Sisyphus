@@ -70,7 +70,7 @@ def test_model_card_interval_matches_current_cache():
     console = json.loads((ROOT / "web/public/data/console_data.json").read_text())
     assert console["benchmark"]["paired_meta_ml"] == ci["overall"]["paired_meta_ml"]
     readme = (ROOT / "README.md").read_text()
-    assert f"benchmark is {cache['overall']['meta']['aafe']:.4f} on" in readme
+    assert f"benchmark is {cache['overall']['meta']['aafe']:.3f} on" in readme
     meta = cache["overall"]["meta"]
     meta_ci = ci["overall"]["meta"]
     assert (
