@@ -9,7 +9,7 @@ figures below are not current validation evidence. See the [source audit](valida
 
 **Date**: 2026-04-10
 **Branch**: `audit/holdout-leakage-fix` (post-merge with `feat/ude-diffrax`)
-**Scope**: Proof-of-concept for Phase 2 of the breakthrough path (`docs/breakthrough_path.md`): amortized posterior inference over ADME parameters using the Sisyphus engine as an SBI simulator and Neural Posterior Estimation (NPE) as the density estimator.
+**Scope**: Proof-of-concept for Phase 2 of the UDE research roadmap: amortized posterior inference over ADME parameters using the Sisyphus engine as an SBI simulator and Neural Posterior Estimation (NPE) as the density estimator.
 
 ## TL;DR
 

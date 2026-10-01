@@ -121,5 +121,4 @@ A full layered analysis (`layered-analysis-and-leap-2026-06-08.md`) ran four can
 
 - [dead-ends.md](./dead-ends.md) — failed-intervention records and their current corrections.
 - [experiment-log.md](./experiment-log.md) — chronological record of experiments, successes and failures.
-- `docs/breakthrough_path.md` — UDE roadmap (Phase 1 falsified; Phase 2 / 3 pending).
 - `docs/holdout_contamination_audit.md` — the 2026-04-04 leakage discovery and fix (AAFE 2.283 → invalidated).
