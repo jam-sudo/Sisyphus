@@ -24,9 +24,9 @@ The source audit above also leaves shared bioavailability-F error unverified.
 The dated experiments below remain valid as tests of their stated methods, but
 their broad information-theoretic and F-causal interpretations are withdrawn.
 
-**Canonical count:** 58 enumerated experiments below. Narrative references in commit messages or prose (e.g. "#35 error cancellation", "14번째 시도", "누적 33 methods") use **informal** numbering that counts early exploration attempts separately; those narrative numbers are **not authoritative** and do not match the table count below. When in doubt, cite the table entry (`DE-NN`).
+**Canonical count:** 59 enumerated experiments below. Narrative references in commit messages or prose (e.g. "#35 error cancellation", "14번째 시도", "누적 33 methods") use **informal** numbering that counts early exploration attempts separately; those narrative numbers are **not authoritative** and do not match the table count below. When in doubt, cite the table entry (`DE-NN`).
 
-## 1. Theme summary (14 categories)
+## 1. Theme summary (16 categories)
 
 | Category | Representative entries | Headline outcome |
 |---|---|---|
@@ -44,7 +44,8 @@ their broad information-theoretic and F-causal interpretations are withdrawn.
 | Hepatic intracellular fu correction (PPB-targeted) | DE-37 | Phase A infra shipped; primary literature corpus paywall-locked, 4 PPB candidates dispositioned ceiling_accepted, Meta AAFE shift 0.0% |
 | UGT path / abundance / IVIVE interventions | DE-36, DE-38, DE-39, DE-40 | four consecutive metric-neutral UGT cycles; no per-substrate hepatocyte-basis scaling factor exists; ΔMeta AAFE ≤ 0.003 |
 | Absorption / first-pass bioavailability-F recalibration | DE-41, DE-42, DE-43 | tested uniform `ka` scaling did not improve the scored meta; the ten-drug F-bias attribution is withdrawn pending matched human absolute-F data |
-| Direct Cmax source-metadata filtering | DE-58 | 516/906-row filter worsened matched scaffold-CV AAFE 3.282→3.396; source workbooks lack row-level matrix and fasting evidence |
+| CLint label censoring (Tobit/AFT) | DE-58 | censoring moved CLint but end-to-end meta change was noise (−0.0045); engine +0.054 worse |
+| Direct Cmax source-metadata filtering | DE-59 | 516/906-row filter worsened matched scaffold-CV AAFE 3.282→3.396; source workbooks lack row-level matrix and fasting evidence |
 
 **Current reading across categories:** The tested replacements and added tracks did not improve the repeatedly used development benchmark. Negative residual CV R² applies to the particular UDE learners and N=160 split; the replicate-based label-noise estimate suggests material model-side error. Neither observation establishes a universal structure-only ceiling or identifies the responsible PK mechanism. Independent source-verified evaluation remains the decision gate.
 
@@ -526,7 +527,21 @@ Artifacts: `scripts/probe_liver_zonation.py`, `tests/integration/test_liver_zona
 
 ---
 
-### DE-58 — Direct Cmax source-metadata filter (2026-09-25)
+### DE-58 — Censored (Tobit/AFT) CLint regression does not improve end-to-end Cmax (2026-07-08)
+
+**Date:** 2026-07-08
+
+**A deep-research candidate (Svensson et al. 2025, *AI in the Life Sciences* 7:100128), gate-tested and foreclosed.** The CLint training set (`clearance_hepatocyte_az.tab`) is **27.4% censored** — 16.1% left-censored at the assay floor (CLint=3.0), 11.3% right-censored at the ceiling (150) — yet the shipped model (`reg:squarederror` on log10) treats those piles as exact point labels. Hypothesis: honest censoring recovers information at the extremes and improves the CLint input, hence Cmax. **Controlled AFT ablation** isolates the censoring treatment: both arms are XGBoost `survival:aft` (normal distribution = Tobit on log time), identical features/hyperparameters, differing only in label bounds — **AFT-exact** (all points exact) vs **AFT-censored** (floor→left-censored `(0,3.0]`, ceiling→right-censored `[150,+inf)`).
+
+**Result.** *Stage A* — censoring moves CLint materially: median |Δlog10(CLint)|=0.088 (~22%), 52/107 holdout drugs move >26%, max 3.8× (isosorbide mononitrate 6.5→1.8); the movers are predominantly **low-CLint renally-cleared** drugs pushed *below* the naive floor (isosorbide, acamprosate, lamivudine, famotidine) — exactly where hepatic CLint is not the Cmax-binding term. *Stage B* (end-to-end, one local stack): **engine AAFE +0.054 (worse)**, **meta AAFE −0.0045** (trivial noise vs CI half-width ~0.42); per-drug meta 28 better / 34 worse / 45 unchanged = net wash. Sanity: ml bit-identical across arms (CLint-independent); AFT-exact meta (2.634) ≈ shipped (2.622), so the AFT proxy faithfully represents production.
+
+**Why it failed.** This is Svensson's own conclusion realised on our pipeline (censoring lifts *uncertainty/NLL*, not *point accuracy*) and a fresh controlled re-demonstration of three walls at once: **§2 error-cancellation** (a better-motivated CLint breaks the joint balance → engine worse), **§8/DE-42** (the moved drugs are low-CLint renal cases where F, not CLint, binds Cmax), and **DE-43** (the fixed-weight meta damps the engine move, +0.054 → −0.0045). Per §4 the gate precedes integration → not integrated.
+
+**Telltale if it returns:** "model the censored CLint labels honestly (Tobit/AFT/censored-NLL) and Cmax will improve." It will not — censoring improves label uncertainty, not the point CLint that feeds the engine, and the fixed-weight meta damps the resulting engine change to noise. Artifacts: `scripts/clint_censored_regression.py`, `data/validation/clint_censored_regression_2026-07-08.json`.
+
+---
+
+### DE-59 — Direct Cmax source-metadata filter (2026-09-25)
 
 Removing rows with unresolved salt annotations, missing formulation in any source arm, or reported modified release left 516/906 training rows. On the same 516 scored rows and scaffold folds, filtered AAFE was 3.396 versus 3.282 for full-data training (paired ratio 1.035, 95% CI 0.985–1.088); ten equal-size random controls ranged 3.368–3.628. The workbooks lack row-level matrix and fasting evidence, so the filter cannot verify those clinically relevant conditions, and this negative result does not rule out source-verified label corrections. **Telltale:** blanket removal by salt/formulation metadata alone; see [full report](cmax_source_consistency_ablation_2026-09-25.md).
 
