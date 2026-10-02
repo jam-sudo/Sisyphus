@@ -29,23 +29,14 @@ log = logging.getLogger(__name__)
 
 from rdkit import Chem, DataStructs
 from rdkit.Chem import AllChem
-from rdkit.Chem.inchi import MolToInchi, InchiToInchiKey
 from rdkit.Chem.Scaffolds.MurckoScaffold import MurckoScaffoldSmiles
 from sisyphus.descriptors import compute_features
+from sisyphus.validation.identity import ik14
 
 
 # ═══════════════════════════════════════════════════════════════════════════
 # Utilities
 # ═══════════════════════════════════════════════════════════════════════════
-
-def ik14(smi):
-    mol = Chem.MolFromSmiles(smi)
-    if not mol: return None
-    inchi = MolToInchi(mol)
-    if not inchi: return None
-    ik = InchiToInchiKey(inchi)
-    return ik[:14] if ik else None
-
 
 def compute_aafe(pred, obs):
     mask = (pred > 0) & (obs > 0)

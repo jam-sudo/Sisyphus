@@ -6,8 +6,8 @@
   "substrates": [
     {
       "drug": "morphine",
-      "smiles": "CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O",
-      "inchikey": "BQJCRHHNABKAKU-UHFFFAOYSA-N",
+      "smiles": "CN1CC[C@]23[C@@H]4[C@H]1CC5=C2C(=C(C=C5)O)O[C@H]3[C@H](C=C4)O",
+      "inchikey": "BQJCRHHNABKAKU-KBQPJGBKSA-N",
       "metabolic_fraction": 0.85,
       "literature": [
         "Coffman 1997 Drug Metab Dispos 25:1-4",

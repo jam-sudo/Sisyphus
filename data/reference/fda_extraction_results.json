@@ -12,12 +12,12 @@
   {
     "drug_name": "alvimopan",
     "dose_mg": 12.0,
-    "cmax_mg_L": 0.0105,
+    "cmax_mg_L": null,
     "cmax_unit_original": "ng/mL",
-    "cmax_value_original": 10.5,
-    "source": "DailyMed SPL (Entereg)",
-    "context": "12mg single oral capsule: Cmax ~10.5 ng/mL. Median Tmax 2h. F~6% due to P-gp efflux.",
-    "status": "extracted"
+    "cmax_value_original": null,
+    "source": "DailyMed alvimopan capsule label Section 12.3 (https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=59ef406b-79db-4efd-b993-08b937ac682b)",
+    "context": "The label gives 10.98 ng/mL after 12 mg twice daily for five days; the previously extracted ~10.5 ng/mL single-dose claim is not supported by this source.",
+    "status": "unverified"
   },
   {
     "drug_name": "atovaquone",
@@ -51,12 +51,12 @@
   },
   {
     "drug_name": "carbinoxamine",
-    "dose_mg": 8.0,
+    "dose_mg": 5.717741,
     "cmax_mg_L": 0.024,
     "cmax_unit_original": "ng/mL",
     "cmax_value_original": 24.0,
-    "source": "DailyMed SPL",
-    "context": "Single dose of 8mg carbinoxamine in healthy volunteers: Cmax 24 ng/mL, Tmax 1.5-5h.",
+    "source": "DailyMed Carbinoxamine Maleate tablets/solution label; https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=9d11b197-cfdc-4b9b-9935-2920ccb6e522",
+    "context": "Single 8 mg maleate oral solution (=5.717741 mg carbinoxamine parent), approximate parent-plasma Cmax 24 ng/mL; exact N and meal state unspecified.",
     "status": "extracted"
   },
   {
@@ -76,8 +76,8 @@
     "cmax_unit_original": "ng/mL",
     "cmax_value_original": 158.0,
     "source": "EMA SmPC (Forxiga) section 5.2",
-    "context": "Geometric mean steady-state Cmax following once daily 10mg doses were 158 ng/mL (fasted). Bioavailability 78%.",
-    "status": "extracted"
+    "context": "Superseded for the scored single-dose arm: 158 ng/mL is a steady-state geometric mean after daily 10 mg, not the fasted single-dose Cmax. The matched study Table 1 reports 136 ng/mL (clinical_pk.json:dapagliflozin).",
+    "status": "superseded"
   },
   {
     "drug_name": "donepezil",
@@ -111,23 +111,23 @@
   },
   {
     "drug_name": "hydroxyzine",
-    "dose_mg": 25.0,
-    "cmax_mg_L": 0.072,
+    "dose_mg": 20.928701,
+    "cmax_mg_L": 0.03,
     "cmax_unit_original": "ng/mL",
-    "cmax_value_original": 72.0,
-    "source": "Literature (Simons et al. 1984)",
-    "context": "Single 25mg oral dose in healthy adults, mean Cmax ~72 ng/mL, Tmax 2.1h, t1/2 20h. No Cmax in FDA label.",
-    "status": "extracted"
+    "cmax_value_original": 30.0,
+    "source": "Swedish regulator Hydroxyzine Orifarm SmPC; https://docetp.mpa.se/LMF/Hydroxyzine%20Orifarm%20film-coated%20tablet%20ENG%20SmPC_09001bee807a397d.pdf",
+    "context": "Superseded misattribution: Simons et al. 1984 reported mean serum Cmax 72.5 ng/mL after 0.7 mg/kg (mean 39 mg), not 25 mg. The SmPC gives typical plasma Cmax 30 ng/mL after a single 25 mg dihydrochloride tablet, equivalent to 20.928701 mg parent; not an FDA extraction.",
+    "status": "superseded"
   },
   {
     "drug_name": "ketorolac",
-    "dose_mg": 10.0,
-    "cmax_mg_L": 1.05,
+    "dose_mg": 6.781701,
+    "cmax_mg_L": 0.87,
     "cmax_unit_original": "mcg/mL",
-    "cmax_value_original": 1.05,
-    "source": "DailyMed SPL",
-    "context": "10mg oral single dose (steady-state QID): Cmax 1.05 mcg/mL.",
-    "status": "extracted"
+    "cmax_value_original": 0.87,
+    "source": "DailyMed ketorolac tromethamine tablet label Table 1 (https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a41b9710-a1ec-41be-8417-b03c5d802ae2)",
+    "context": "Single 10 mg oral tromethamine salt dose in fasted normal volunteers: observed parent-plasma Cmax 0.87 +/- 0.22 mcg/mL. Free-acid equivalent 6.781701 mg (255.27/376.41 MW ratio). The prior 1.05 mcg/mL is simulated steady-state QID, not a single-dose peak.",
+    "status": "corrected"
   },
   {
     "drug_name": "lamivudine",
@@ -135,9 +135,9 @@
     "cmax_mg_L": 2.6,
     "cmax_unit_original": "mcg/mL",
     "cmax_value_original": 2.6,
-    "source": "DailyMed SPL",
-    "context": "300mg single oral dose, normal renal function: Cmax 2.6 ± 0.5 mcg/mL.",
-    "status": "extracted"
+    "source": "DailyMed lamivudine tablet label Table 7 (https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=2d7db3b2-9b3c-3031-e063-6294a90a342c)",
+    "context": "Single 300 mg oral dose in HIV-1-infected adults with creatinine clearance >60 mL/min (N=6): mean Cmax 2.6 ± 0.5 mcg/mL.",
+    "status": "corrected"
   },
   {
     "drug_name": "leflunomide",
@@ -152,12 +152,12 @@
   {
     "drug_name": "lenacapavir",
     "dose_mg": 300.0,
-    "cmax_mg_L": 0.0738,
+    "cmax_mg_L": null,
     "cmax_unit_original": "ng/mL",
-    "cmax_value_original": 73.8,
-    "source": "DailyMed SPL (Sunlenca)",
-    "context": "Oral 300mg Day 1: Cmax 73.8 ng/mL geometric mean.",
-    "status": "extracted"
+    "cmax_value_original": null,
+    "source": "DailyMed SPL (Sunlenca); Yeztugo Table 9",
+    "context": "The former 73.8 ng/mL is a model-estimated first-six-month exposure under a combined oral plus subcutaneous regimen in the Yeztugo label, not single oral 300 mg Cmax. The matched single-dose control arm is 23.4 ng/mL in AAC 2024 Table 2.",
+    "status": "unverified"
   },
   {
     "drug_name": "lopinavir",
@@ -185,9 +185,9 @@
     "cmax_mg_L": 0.093,
     "cmax_unit_original": "ng/mL",
     "cmax_value_original": 93.0,
-    "source": "DailyMed SPL",
-    "context": "50mg single oral dose, healthy adults: Cmax 93 ng/mL (40-204 ng/mL).",
-    "status": "extracted"
+    "source": "DailyMed PURIXAN oral suspension label section 12.3 (https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9fd27952-7787-47d9-b6cf-7af2dc38217b)",
+    "context": "Single 50 mg oral suspension dose in fasted healthy adults: median Cmax 93 ng/mL (range 40-204 ng/mL). The scored tablet mean is separately 69 ng/mL.",
+    "status": "corrected"
   },
   {
     "drug_name": "nilotinib",
@@ -212,12 +212,12 @@
   {
     "drug_name": "penicillamine",
     "dose_mg": 250.0,
-    "cmax_mg_L": 2.0,
+    "cmax_mg_L": null,
     "cmax_unit_original": "mg/L",
-    "cmax_value_original": 2.0,
+    "cmax_value_original": null,
     "source": "DailyMed SPL (Cuprimine)",
-    "context": "Peak plasma concentration 2.0 mg/L with wide inter-individual variation. 250mg dose.",
-    "status": "extracted"
+    "context": "The label gives only an approximate 1-2 mg/L peak range after oral 250 mg, not an observed 2.0 mg/L cohort mean.",
+    "status": "unverified"
   },
   {
     "drug_name": "pilocarpine",
@@ -235,8 +235,8 @@
     "cmax_mg_L": 0.073,
     "cmax_unit_original": "ng/mL",
     "cmax_value_original": 73.0,
-    "source": "PubChem (Iclusig label)",
-    "context": "45mg single oral dose: Cmax ~73 ng/mL. Tmax ~6h.",
+    "source": "DailyMed ICLUSIG label, section 12.3; https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=16d804b6-4957-43ee-b18c-3b36ec37c5ac",
+    "context": "45 mg once daily at presumed steady state in patients with advanced hematologic malignancies: mean Cmax 73 ng/mL (CV 74%). Not a healthy-volunteer single-dose value.",
     "status": "extracted"
   },
   {
@@ -261,22 +261,22 @@
   },
   {
     "drug_name": "progesterone",
-    "dose_mg": 200.0,
-    "cmax_mg_L": 0.0173,
+    "dose_mg": 100.0,
+    "cmax_mg_L": null,
     "cmax_unit_original": "ng/mL",
-    "cmax_value_original": 17.3,
-    "source": "DailyMed SPL (Prometrium)",
-    "context": "Prometrium 200mg single oral capsule: Cmax 17.3 ± 6.5 ng/mL, Tmax 2-3h. Micronized progesterone.",
-    "status": "extracted"
+    "cmax_value_original": null,
+    "source": "DailyMed PROMETRIUM capsule label Table 1 (https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=cf73c385-5173-4b54-af23-069581c5d560&type=display)",
+    "context": "The prior 200 mg single-dose attribution is false. The label's 17.3 +/- 21.9 ng/mL mean follows five daily oral 100 mg doses in postmenopausal women; fasting is not stated. Not a scored single-dose Cmax.",
+    "status": "unverified"
   },
   {
     "drug_name": "quinine",
-    "dose_mg": 648.0,
-    "cmax_mg_L": 6.8,
+    "dose_mg": 538.0,
+    "cmax_mg_L": 3.2,
     "cmax_unit_original": "mcg/mL",
-    "cmax_value_original": 6.8,
-    "source": "DailyMed SPL",
-    "context": "648mg (2 capsules) single oral dose: Cmax 6.8 mcg/mL. No age difference in Cmax.",
+    "cmax_value_original": 3.2,
+    "source": "DailyMed QUALAQUIN label Section 12.3 Table 1; https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1f66fba7-4026-4504-918d-4c88f2835cc0",
+    "context": "Single 648 mg quinine sulfate oral dose in 23 healthy subjects: parent Cmax 3.2 +/- 0.7 mcg/mL. Two capsules provide 538 mg quinine parent. The former 6.8 mcg/mL is a steady-state value after 648 mg three times daily for 7 days.",
     "status": "extracted"
   },
   {
@@ -303,11 +303,11 @@
     "drug_name": "rifabutin",
     "dose_mg": 300.0,
     "cmax_mg_L": 0.375,
-    "cmax_unit_original": "mcg/mL",
-    "cmax_value_original": 0.375,
-    "source": "DailyMed SPL (Mycobutin)",
-    "context": "300mg single oral dose: Cmax 0.375 ± 0.168 mcg/mL (=375 ng/mL). 10 healthy volunteers.",
-    "status": "extracted"
+    "cmax_unit_original": "ng/mL",
+    "cmax_value_original": 375,
+    "source": "DailyMed MYCOBUTIN capsule label Clinical Pharmacology/Absorption (https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=b8351a60-1000-4656-90ae-1fa666030dd4&type=display)",
+    "context": "Single 300 mg oral dose in nine healthy adults: mean parent-plasma Cmax 375 +/- 267 ng/mL (range 141-1033), mean Tmax 3.3 +/- 0.9 h. The previous N=10 and SD 168 ng/mL were transcription errors.",
+    "status": "corrected"
   },
   {
     "drug_name": "rivaroxaban",
@@ -326,8 +326,8 @@
     "cmax_unit_original": "ng/mL",
     "cmax_value_original": 1.0,
     "source": "DailyMed SPL",
-    "context": "Single 10mg oral dose: maximum plasma concentration of selegiline ~1 ng/mL. Metabolites 4-20x higher.",
-    "status": "extracted"
+    "context": "Untraceable approximately 1 ng/mL for a nominal single 10 mg oral dose; replaced by FDA-reviewed Z/SEL/96/008 10 mg Eldepryl HCl fasted arm, mean parent-plasma Cmax 3.093 ng/mL.",
+    "status": "superseded"
   },
   {
     "drug_name": "sirolimus",
@@ -346,8 +346,8 @@
     "cmax_unit_original": "ng/mL",
     "cmax_value_original": 176.0,
     "source": "PubChem (ella label)",
-    "context": "30mg single oral dose: Cmax 176 ± 89 ng/mL. Tmax 60-90 min.",
-    "status": "extracted"
+    "context": "Superseded: 30 mg ella is ulipristal acetate ester, and 176 ng/mL is the acetate analyte. The old ulipristal structure was a different molecule; see clinical_pk.json:ulipristal (historical split key).",
+    "status": "superseded"
   },
   {
     "drug_name": "upadacitinib",

@@ -108,7 +108,7 @@ def _auc_0inf(graph, drug: DrugOnGraph) -> float:
     res = solve(compiled, params, y0, t_span=(0.0, _T_END_H))
     conc = res.concentrations["venous_blood"]
     time = res.time_h
-    trapz = getattr(np, "trapezoid", np.trapz)  # numpy 2.0+ vs 1.x
+    trapz = np.trapezoid if hasattr(np, "trapezoid") else np.trapz
     auc_0t = float(trapz(conc, time))
     # Terminal log-linear slope from the last _TERMINAL_FRACTION of samples.
     i0 = int(len(time) * (1.0 - _TERMINAL_FRACTION))

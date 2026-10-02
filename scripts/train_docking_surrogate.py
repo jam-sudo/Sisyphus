@@ -20,6 +20,7 @@ from rdkit import Chem, RDLogger
 from sklearn.metrics import r2_score
 
 from sisyphus.descriptors import compute_features
+from sisyphus.validation.docking_cache import load_matching_cache
 
 RDLogger.DisableLog("rdApp.*")
 
@@ -35,14 +36,6 @@ DOCK_FEATURE_NAMES = [
     "pose_centroid_fe_dist",
     "n_heavy_atoms",
 ]
-
-
-def inchikey_14(smiles: str) -> str:
-    mol = Chem.MolFromSmiles(smiles)
-    if mol is None:
-        import hashlib
-        return hashlib.md5(smiles.encode()).hexdigest()[:14]
-    return Chem.inchi.MolToInchiKey(mol)[:14]
 
 
 def load_docking_meta() -> dict:
@@ -70,6 +63,7 @@ def collect_training_data(meta: dict) -> tuple[np.ndarray, np.ndarray, list[str]
     X_list = []
     Y_list = []
     smiles_list = []
+    seen = set()
 
     # Scan cache directory for CYP3A4 (first CYP) to get all docked drugs
     first_cyp = cyps[0]
@@ -81,16 +75,19 @@ def collect_training_data(meta: dict) -> tuple[np.ndarray, np.ndarray, list[str]
             data = json.load(f)
 
         smiles = data["smiles"]
-        key14 = data["inchikey_14"]
+        mol = Chem.MolFromSmiles(smiles)
+        if mol is None:
+            continue
+        canonical = Chem.MolToSmiles(mol, isomericSmiles=True)
+        if canonical in seen:
+            continue
 
         # Check all CYPs are available
         all_cyp_available = True
         dock_vec = []
         for cyp in cyps:
-            cyp_path = cache_dir / f"{key14}_{cyp}.json"
-            if cyp_path.exists():
-                with open(cyp_path) as f:
-                    cyp_data = json.load(f)
+            cyp_data = load_matching_cache(cache_dir, smiles, cyp)
+            if cyp_data is not None:
                 for fn in DOCK_FEATURE_NAMES:
                     val = cyp_data.get(fn, float("nan"))
                     dock_vec.append(float(val) if val is not None else float("nan"))
@@ -114,6 +111,7 @@ def collect_training_data(meta: dict) -> tuple[np.ndarray, np.ndarray, list[str]
         X_list.append(base_feats)
         Y_list.append(dock_vec)
         smiles_list.append(smiles)
+        seen.add(canonical)
 
     X = np.array(X_list, dtype=np.float64)
     Y = np.array(Y_list, dtype=np.float64)

@@ -319,7 +319,7 @@ def concentration_response(
     else:
         params_per_node = [spec.params] * len(nodes)
     fn = spec.response if callable(spec.response) else _CR_RESPONSES[spec.response]
-    trapz = getattr(np, "trapezoid", np.trapz)
+    trapz = np.trapezoid if hasattr(np, "trapezoid") else np.trapz
 
     time = np.asarray(sim_result.time_h, dtype=float)
     out: dict[str, CRNodeResult] = {}

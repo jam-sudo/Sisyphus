@@ -108,21 +108,9 @@ def test_ratio1_oracle_is_noop():
 
 
 def test_headline_isolation_holdout_cache_untouched():
-    """Running the probe leaves the holdout cache byte-identical and the v2.2a + cached
-    2.743 pins passing. Headline untouched by construction."""
-    import subprocess
-    import sys
-
+    """Running the probe leaves the holdout cache byte-identical."""
     cache = ROOT / "data" / "training" / "4track_holdout_predictions.json"
     before = cache.read_bytes()
     p = _probe()
     p.delta_E("CYP3A4", 0.9, 10, 3.0, "pericentral", cltot=100000.0, fup=0.3, mw=300.0)
     assert cache.read_bytes() == before
-    r = subprocess.run(
-        [sys.executable, "-m", "pytest",
-         "tests/regression/test_mm_headline_bit_identity.py",
-         "tests/integration/test_holdout_regression.py::test_cached_holdout_aafe_is_2p743",
-         "-q"],
-        cwd=str(ROOT), capture_output=True, text=True,
-    )
-    assert r.returncode == 0, r.stdout + r.stderr

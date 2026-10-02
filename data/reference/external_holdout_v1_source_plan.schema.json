@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Sisyphus External Holdout V1 acquisition and allocation plan",
+  "type": "object",
+  "required": [
+    "protocol", "cycle_id", "fixed_before_prediction", "inventory_n",
+    "inventory_path", "inventory_sha256", "verified_n",
+    "verified_shortlist_path", "verified_shortlist_sha256",
+    "calibration_n", "final_test_n", "reserve_n", "allocation_path",
+    "allocation_sha256", "exclusion_flow_path", "exclusion_flow_sha256",
+    "source_windows", "curators", "label_content_sha256"
+  ],
+  "properties": {
+    "protocol": {"const": "external_holdout_v1"},
+    "cycle_id": {"type": "string", "minLength": 1},
+    "fixed_before_prediction": {"const": true},
+    "inventory_n": {"type": "integer", "minimum": 900},
+    "inventory_path": {"type": "string", "pattern": "^[A-Za-z0-9_./-]+$"},
+    "inventory_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "verified_n": {"type": "integer", "minimum": 550},
+    "verified_shortlist_path": {"type": "string", "pattern": "^[A-Za-z0-9_./-]+$"},
+    "verified_shortlist_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "calibration_n": {"type": "integer", "minimum": 120, "maximum": 150},
+    "final_test_n": {"enum": [120, 260]},
+    "reserve_n": {"type": "integer", "minimum": 1},
+    "allocation_path": {"type": "string", "pattern": "^[A-Za-z0-9_./-]+$"},
+    "allocation_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "exclusion_flow_path": {"type": "string", "pattern": "^[A-Za-z0-9_./-]+$"},
+    "exclusion_flow_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "label_content_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "source_windows": {
+      "type": "array", "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["source_family", "start_date", "end_date"],
+        "properties": {
+          "source_family": {"type": "string", "minLength": 1},
+          "start_date": {"type": "string", "format": "date"},
+          "end_date": {"type": "string", "format": "date"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "curators": {
+      "type": "array", "minItems": 2, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "additionalProperties": false
+}

@@ -38,9 +38,9 @@ warnings.filterwarnings("ignore", category=UserWarning)
 
 from rdkit import Chem, DataStructs
 from rdkit.Chem import AllChem
-from rdkit.Chem.inchi import MolToInchi, InchiToInchiKey
 from rdkit.Chem.Scaffolds.MurckoScaffold import MurckoScaffoldSmiles
 from sisyphus.descriptors import compute_features
+from sisyphus.validation.identity import ik14
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -80,15 +80,6 @@ def scaffold_split(smiles_list, n_folds=5, seed=42):
     folds = [[] for _ in range(n_folds)]
     for i, sc in enumerate(scs): folds[i % n_folds].extend(s2i[sc])
     return folds
-
-
-def ik14(smi):
-    mol = Chem.MolFromSmiles(smi)
-    if not mol: return None
-    inchi = MolToInchi(mol)
-    if not inchi: return None
-    ik = InchiToInchiKey(inchi)
-    return ik[:14] if ik else None
 
 
 # ═══════════════════════════════════════════════════════════════════════════

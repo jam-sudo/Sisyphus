@@ -16,6 +16,10 @@ from sisyphus.engine.compiler import CompiledODE, ResolvedParams
 # Used by route-aware Cmax extraction to skip the deterministic t=0 spike
 # (see docs/_internal/specs/2026-04-22-iv-cmax-observation-design.md §5).
 _IV_CMAX_DELAY_H = 5.0 / 60.0
+DETERMINISTIC_SOLVER_METHOD = "LSODA"
+DETERMINISTIC_RTOL = 1e-8
+DETERMINISTIC_ATOL = 1e-10
+DETERMINISTIC_OUTPUT_POINTS = 500
 
 
 def solve(
@@ -34,11 +38,12 @@ def solve(
         y0: Initial state vector (amounts in mg).
         t_span: Integration interval ``(t_start, t_end)`` in hours.
         t_eval: Optional time points for output.  If ``None``, 500
-            evenly-spaced points are used.
+            evenly-spaced points are used without an observation delay.
         t_min_h: Minimum observation time in hours.  When > 0 and
             ``t_eval`` is ``None``, injects ``t_min_h`` as a guaranteed
             anchor in ``t_eval`` so windowed Cmax extraction always has
-            a sample at this boundary.  Default ``0.0`` (V2-compatible).
+            a sample at this boundary.  The pre-anchor interval is also
+            sampled for full-interval AUC.  Default ``0.0`` (V2-compatible).
             Ignored when ``t_eval`` is supplied explicitly.
 
     Returns:
@@ -48,22 +53,23 @@ def solve(
 
     if t_eval is None:
         if t_min_h > 0.0:
-            # linspace starts exactly at t_min_h (IEEE 754 exact), so the
-            # anchor is guaranteed without needing a separate prepended copy.
+            # Resolve the fast initial IV distribution for AUC while keeping
+            # t_min_h as an exact Cmax observation anchor.
             t_eval = np.concatenate(
-                [[0.0], np.linspace(t_min_h, t_span[1], 499)]
+                [np.linspace(t_span[0], t_min_h, 21, endpoint=False),
+                 np.linspace(t_min_h, t_span[1], 499)]
             )
         else:
-            t_eval = np.linspace(t_span[0], t_span[1], 500)
+            t_eval = np.linspace(t_span[0], t_span[1], DETERMINISTIC_OUTPUT_POINTS)
 
     sol = solve_ivp(
         rhs,
         t_span,
         y0,
-        method="LSODA",
+        method=DETERMINISTIC_SOLVER_METHOD,
         t_eval=t_eval,
-        rtol=1e-8,
-        atol=1e-10,
+        rtol=DETERMINISTIC_RTOL,
+        atol=DETERMINISTIC_ATOL,
     )
 
     # Build named concentration and amount dicts
@@ -115,7 +121,7 @@ def solve_mc(
 
     Optimized for Monte Carlo sampling:
     - rtol=1e-4, atol=1e-6 (sufficient for Cmax/AUC accuracy across N samples)
-    - No t_eval by default (solver chooses its own adaptive grid)
+    - No t_eval without an observation delay (solver chooses its own adaptive grid)
     - Returns scalars, not full SimResult (avoids dict/array allocation)
 
     Args:
@@ -135,9 +141,12 @@ def solve_mc(
     rhs = compiled.make_rhs(params)
 
     if t_min_h > 0.0:
-        # Same construction as solve(), but coarser grid (100 vs 500 points)
-        # because MC is speed-critical.
-        t_eval = np.concatenate([[0.0], np.linspace(t_min_h, t_span[1], 99)])
+        # Match solve()'s IV grid so Cmax and full-interval AUC use the same
+        # observation anchor and resolve the fast initial distribution.
+        t_eval = np.concatenate(
+            [np.linspace(t_span[0], t_min_h, 21, endpoint=False),
+             np.linspace(t_min_h, t_span[1], 499)]
+        )
     else:
         t_eval = None  # adaptive grid (V2 behavior)
 
@@ -180,7 +189,7 @@ def solve_mc(
         cmax = float(np.max(conc))
         tmax = float(sol.t[np.argmax(conc)])
 
-    _trapz = getattr(np, "trapezoid", np.trapz)  # numpy 2.0+ vs 1.x
+    _trapz = np.trapezoid if hasattr(np, "trapezoid") else np.trapz
     # AUC is full-interval by design: total drug exposure is independent of
     # the Cmax observation window; masking AUC would be clinically incorrect.
     auc = float(_trapz(conc, sol.t))

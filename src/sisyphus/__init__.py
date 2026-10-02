@@ -1,3 +1,5 @@
-"""Sisyphus — graph-based PBPK simulation with native uncertainty."""
+"""Sisyphus — structure-only Cmax prediction with a mechanistic PBPK layer."""
 
-__version__ = "0.1.0"
+from sisyphus._version import __version__
+
+__all__ = ["__version__"]

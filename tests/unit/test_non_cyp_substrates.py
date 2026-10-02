@@ -67,11 +67,16 @@ def test_lru_cache_reuses_loaded_data():
 def test_lookup_ugt2b7_substrate_morphine():
     """Morphine should match the UGT2B7 registry with fm=0.85."""
     from sisyphus.predict.non_cyp_substrates import lookup_ugt2b7_substrate
-    morphine_smiles = "CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O"
+    morphine_smiles = "CN1CC[C@]23[C@@H]4[C@H]1CC5=C2C(=C(C=C5)O)O[C@H]3[C@H](C=C4)O"
     entry = lookup_ugt2b7_substrate(morphine_smiles)
     assert entry is not None, "morphine not found in UGT2B7 registry"
     assert entry["drug"] == "morphine"
     assert entry["metabolic_fraction"] == 0.85
+
+
+def test_ugt2b7_does_not_assign_unspecified_morphine_stereo():
+    from sisyphus.predict.non_cyp_substrates import lookup_ugt2b7_substrate
+    assert lookup_ugt2b7_substrate("CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O") is None
 
 
 def test_lookup_ugt1a9_substrate_dapagliflozin():
@@ -87,14 +92,14 @@ def test_lookup_ugt1a9_substrate_dapagliflozin():
 def test_lookup_ugt2b7_non_substrate_returns_none():
     """A non-substrate SMILES (midazolam) must return None."""
     from sisyphus.predict.non_cyp_substrates import lookup_ugt2b7_substrate
-    midazolam = "c1ccc2c(c1)C(=NC(=O)N2)c1ccccc1F"
+    midazolam = "CC1=NC=C2N1C3=C(C=C(C=C3)Cl)C(=NC2)C4=CC=CC=C4F"
     assert lookup_ugt2b7_substrate(midazolam) is None
 
 
 def test_get_non_cyp_fractions_morphine():
     """get_non_cyp_fractions aggregator should return {'UGT2B7': 0.85} for morphine."""
     from sisyphus.predict.non_cyp_substrates import get_non_cyp_fractions
-    morphine_smiles = "CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O"
+    morphine_smiles = "CN1CC[C@]23[C@@H]4[C@H]1CC5=C2C(=C(C=C5)O)O[C@H]3[C@H](C=C4)O"
     out = get_non_cyp_fractions(morphine_smiles)
     assert out == {"UGT2B7": 0.85}, f"expected single-key UGT2B7=0.85, got {out!r}"
 
@@ -110,5 +115,5 @@ def test_get_non_cyp_fractions_dapagliflozin():
 def test_get_non_cyp_fractions_non_substrate_returns_empty():
     """A non-substrate SMILES must return an empty dict (no UGT path)."""
     from sisyphus.predict.non_cyp_substrates import get_non_cyp_fractions
-    midazolam = "c1ccc2c(c1)C(=NC(=O)N2)c1ccccc1F"
+    midazolam = "CC1=NC=C2N1C3=C(C=C(C=C3)Cl)C(=NC2)C4=CC=CC=C4F"
     assert get_non_cyp_fractions(midazolam) == {}

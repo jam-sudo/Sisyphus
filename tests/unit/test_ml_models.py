@@ -70,7 +70,9 @@ class TestMetaLearner:
         result = ml.combine(engine_pk, ml_pk, dose_mg=2.0, logp=3.0)
         assert result.cmax.mean > 0
         assert isinstance(result.cmax, Distribution)
-        assert result.cmax.cv == 0.3
+        # The meta point estimate no longer carries an arbitrary fixed CV;
+        # residual uncertainty is represented by CmaxPrediction.interval_90.
+        assert result.cmax.cv == 0.0
 
     def test_combine_engine_only(self):
         ml = MetaLearner()

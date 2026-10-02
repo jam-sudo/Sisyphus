@@ -59,6 +59,7 @@ def test_reconstructed_apriori_meta_equals_predict_meta():
 def test_predict_posterior_populates_meta_cmax_centered_on_apriori_meta():
     post = predict_posterior(MIDAZOLAM, DOSE, seed=0)
     assert post.meta_cmax is not None
+    assert post.cmax_90ci is None
     apriori_meta = predict(MIDAZOLAM, DOSE).pk.cmax.mean
     assert post.meta_cmax.point == pytest.approx(apriori_meta, rel=0.20)
 
@@ -135,15 +136,9 @@ def test_meta_blend_drops_engine_track_on_nonpositive_matching_combine(engine_cm
     assert mine == pytest.approx(gold, rel=1e-6)
 
 
-def test_predict_posterior_provides_calibrated_conformal_predictive_interval():
-    """cmax_90ci is the calibrated conformal band; meta_cmax.ci90 is the (narrow)
-    F-parameter-uncertainty band. The predictive interval must be the wider one."""
+def test_predict_posterior_omits_unvalidated_residual_interval():
+    """The SMILES-only residual calibration cannot cover conditioned posteriors."""
     post = predict_posterior(MIDAZOLAM, DOSE, [MeasuredF(0.30, cv=0.08)], seed=0)
-    assert post.cmax_90ci is not None
-    lo, hi = post.cmax_90ci
-    pt = post.meta_cmax.point
-    assert lo < pt < hi
-    # the calibrated predictive interval is much wider than the F-only band,
-    # because structural error (not just F uncertainty) dominates.
-    flo, fhi = post.meta_cmax.ci90
-    assert (hi / lo) > (fhi / flo)
+    assert post.cmax_90ci is None
+    lo, hi = post.meta_cmax.ci90
+    assert lo < post.meta_cmax.point < hi

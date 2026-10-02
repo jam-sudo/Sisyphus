@@ -1,0 +1,711 @@
+{
+  "task_id": "task_5f1a1ed2d329",
+  "reviewed_at": "2026-09-23",
+  "scope": "Candidates 11-20 of frozen P0 manifest; Claude first pass plus coordinator original-source corrections; model predictions not inspected",
+  "method_note": "Eligibility judged from cited original sources and regulatory CTD. FRDB Cmax values were read only after prediction seal and used to map duplicate-dose row IDs to original table cells; they were not used as target labels when an original value differed. AI-assisted draft, not independent human verification. Original-source access and every correction are documented per arm.",
+  "summary": {
+    "candidates": 10,
+    "arms": 35,
+    "arm_verification": {
+      "verified_with_caveat": 15,
+      "ineligible": 6,
+      "unverified": 10,
+      "verified": 4
+    },
+    "candidates_with_any_verified_cmax": [
+      "30759",
+      "2197",
+      "1860",
+      "59566"
+    ],
+    "fully_unverified_candidates": [
+      "7026",
+      "1729",
+      "1542",
+      "2879"
+    ],
+    "fully_ineligible_candidates": [
+      "7875",
+      "2023"
+    ],
+    "protocol_eligible_candidates_confirmed_without_caveat": 1
+  },
+  "unresolved_issues": [
+    "Original full texts remain inaccessible for zenarestat, genistein, phendimetrazine and cloprednol; their cited arms cannot be scored without source verification.",
+    "GIT-027 dosage form/IR status is not reported in accessible original article text, despite readable Cmax for seven arms.",
+    "Phloroglucinol ODT and atabecestat oral suspension require an explicit primary-scope interpretation before scoring; no predictions have been inspected.",
+    "Mozavaptan nominal dose is the hydrochloride-salt amount; this is recorded and has not been converted after prediction seal.",
+    "FRDB frdb_10765 has a Cmax transcription discrepancy (9.83 versus original 9.38 μg/mL); original value must be used."
+  ],
+  "candidates": [
+    {
+      "candidate_id": "30759",
+      "name": "GIT-027",
+      "source_identity": "VGX-1027; Lee et al., Clin Pharmacol Drug Dev 2016;5(2):91-101, doi:10.1002/cpdd.193 (original primary publication)",
+      "arms": [
+        {
+          "arm_id": "frdb_10763",
+          "dose_mg": 1.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/27138022/",
+          "source_access_status": "original_full_article_text_accessed",
+          "original_cmax": 0.05,
+          "original_cmax_unit": "μg/mL",
+          "verification": "verified_with_caveat",
+          "reason": "Original single-dose fasted healthy-adult parent Cmax verified; dosage form and IR status are not identified in the article.",
+          "accessed_via": "https://www.researchgate.net/publication/275219725_Safety_bioavailability_and_pharmacokinetics_of_VGX-1027-A_novel_oral_anti-inflammatory_drug_in_healthy_human_subjects_Safety_bioavailability_and_pharmacokinetics_of_VGX-1027",
+          "healthy_adult": "FOR: original Methods, 94 healthy men and women aged 18–60 years",
+          "fasted": "FOR: original Trial Design, SAD groups 1–6 had no food for 10 h before and 4 h after dosing; group 7 fasted period 1",
+          "single_oral_ir": "CAVEAT: single oral dose, but article text does not name the dosage form or explicitly establish immediate release",
+          "parent_plasma": "FOR: original PK section measures VGX-1027 in plasma; unchanged drug also reported in urine",
+          "cmax_statistic": "arithmetic mean, n=6",
+          "locator": "Original Lee et al. 2016 Table 3, SAD groups 1–6"
+        },
+        {
+          "arm_id": "frdb_10764",
+          "dose_mg": 10.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/27138022/",
+          "source_access_status": "original_full_article_text_accessed",
+          "original_cmax": 1.07,
+          "original_cmax_unit": "μg/mL",
+          "verification": "verified_with_caveat",
+          "reason": "Original single-dose fasted healthy-adult parent Cmax verified; dosage form and IR status are not identified in the article.",
+          "accessed_via": "https://www.researchgate.net/publication/275219725_Safety_bioavailability_and_pharmacokinetics_of_VGX-1027-A_novel_oral_anti-inflammatory_drug_in_healthy_human_subjects_Safety_bioavailability_and_pharmacokinetics_of_VGX-1027",
+          "healthy_adult": "FOR: original Methods, 94 healthy men and women aged 18–60 years",
+          "fasted": "FOR: original Trial Design, SAD groups 1–6 had no food for 10 h before and 4 h after dosing; group 7 fasted period 1",
+          "single_oral_ir": "CAVEAT: single oral dose, but article text does not name the dosage form or explicitly establish immediate release",
+          "parent_plasma": "FOR: original PK section measures VGX-1027 in plasma; unchanged drug also reported in urine",
+          "cmax_statistic": "arithmetic mean, n=6",
+          "locator": "Original Lee et al. 2016 Table 3, SAD groups 1–6"
+        },
+        {
+          "arm_id": "frdb_10765",
+          "dose_mg": 100.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/27138022/",
+          "source_access_status": "original_full_article_text_accessed",
+          "original_cmax": 9.38,
+          "original_cmax_unit": "μg/mL",
+          "verification": "verified_with_caveat",
+          "reason": "Original single-dose fasted healthy-adult parent Cmax verified; dosage form and IR status are not identified in the article.",
+          "accessed_via": "https://www.researchgate.net/publication/275219725_Safety_bioavailability_and_pharmacokinetics_of_VGX-1027-A_novel_oral_anti-inflammatory_drug_in_healthy_human_subjects_Safety_bioavailability_and_pharmacokinetics_of_VGX-1027",
+          "healthy_adult": "FOR: original Methods, 94 healthy men and women aged 18–60 years",
+          "fasted": "FOR: original Trial Design, SAD groups 1–6 had no food for 10 h before and 4 h after dosing; group 7 fasted period 1",
+          "single_oral_ir": "CAVEAT: single oral dose, but article text does not name the dosage form or explicitly establish immediate release",
+          "parent_plasma": "FOR: original PK section measures VGX-1027 in plasma; unchanged drug also reported in urine",
+          "cmax_statistic": "arithmetic mean, n=6",
+          "locator": "Original Lee et al. 2016 Table 3, SAD groups 1–6",
+          "source_discrepancy": "FRDB pk_cmax_value is 9.83 μg/mL; original Table 3 arithmetic mean is 9.38 μg/mL. Use the original value; do not silently copy FRDB."
+        },
+        {
+          "arm_id": "frdb_10766",
+          "dose_mg": 200.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/27138022/",
+          "source_access_status": "original_full_article_text_accessed",
+          "original_cmax": 16.56,
+          "original_cmax_unit": "μg/mL",
+          "verification": "verified_with_caveat",
+          "reason": "Original single-dose fasted healthy-adult parent Cmax verified; dosage form and IR status are not identified in the article.",
+          "accessed_via": "https://www.researchgate.net/publication/275219725_Safety_bioavailability_and_pharmacokinetics_of_VGX-1027-A_novel_oral_anti-inflammatory_drug_in_healthy_human_subjects_Safety_bioavailability_and_pharmacokinetics_of_VGX-1027",
+          "healthy_adult": "FOR: original Methods, 94 healthy men and women aged 18–60 years",
+          "fasted": "FOR: original Trial Design, SAD groups 1–6 had no food for 10 h before and 4 h after dosing; group 7 fasted period 1",
+          "single_oral_ir": "CAVEAT: single oral dose, but article text does not name the dosage form or explicitly establish immediate release",
+          "parent_plasma": "FOR: original PK section measures VGX-1027 in plasma; unchanged drug also reported in urine",
+          "cmax_statistic": "arithmetic mean, n=6",
+          "locator": "Original Lee et al. 2016 Table 3, SAD groups 1–6"
+        },
+        {
+          "arm_id": "frdb_10767",
+          "dose_mg": 400.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/27138022/",
+          "source_access_status": "original_full_article_text_accessed",
+          "original_cmax": 24.6,
+          "original_cmax_unit": "μg/mL",
+          "verification": "verified_with_caveat",
+          "reason": "Original single-dose fasted healthy-adult parent Cmax verified; dosage form and IR status are not identified in the article.",
+          "accessed_via": "https://www.researchgate.net/publication/275219725_Safety_bioavailability_and_pharmacokinetics_of_VGX-1027-A_novel_oral_anti-inflammatory_drug_in_healthy_human_subjects_Safety_bioavailability_and_pharmacokinetics_of_VGX-1027",
+          "healthy_adult": "FOR: original Methods, 94 healthy men and women aged 18–60 years",
+          "fasted": "FOR: original Trial Design, SAD groups 1–6 had no food for 10 h before and 4 h after dosing; group 7 fasted period 1",
+          "single_oral_ir": "CAVEAT: single oral dose, but article text does not name the dosage form or explicitly establish immediate release",
+          "parent_plasma": "FOR: original PK section measures VGX-1027 in plasma; unchanged drug also reported in urine",
+          "cmax_statistic": "arithmetic mean, n=6",
+          "locator": "Original Lee et al. 2016 Table 3, SAD groups 1–6"
+        },
+        {
+          "arm_id": "frdb_10768",
+          "dose_mg": 800.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/27138022/",
+          "source_access_status": "original_full_article_text_accessed",
+          "original_cmax": 44.14,
+          "original_cmax_unit": "μg/mL",
+          "verification": "verified_with_caveat",
+          "reason": "Original single-dose fasted healthy-adult parent Cmax verified; dosage form and IR status are not identified in the article.",
+          "accessed_via": "https://www.researchgate.net/publication/275219725_Safety_bioavailability_and_pharmacokinetics_of_VGX-1027-A_novel_oral_anti-inflammatory_drug_in_healthy_human_subjects_Safety_bioavailability_and_pharmacokinetics_of_VGX-1027",
+          "healthy_adult": "FOR: original Methods, 94 healthy men and women aged 18–60 years",
+          "fasted": "FOR: original Trial Design, SAD groups 1–6 had no food for 10 h before and 4 h after dosing; group 7 fasted period 1",
+          "single_oral_ir": "CAVEAT: single oral dose, but article text does not name the dosage form or explicitly establish immediate release",
+          "parent_plasma": "FOR: original PK section measures VGX-1027 in plasma; unchanged drug also reported in urine",
+          "cmax_statistic": "arithmetic mean, n=6",
+          "locator": "Original Lee et al. 2016 Table 3, SAD groups 1–6"
+        },
+        {
+          "arm_id": "frdb_10769",
+          "dose_mg": 100.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/27138022/",
+          "source_access_status": "original_full_article_text_accessed",
+          "original_cmax": 6.63,
+          "original_cmax_unit": "μg/mL",
+          "verification": "verified_with_caveat",
+          "reason": "Original single-dose fasted healthy-adult parent Cmax verified; dosage form and IR status are not identified in the article.",
+          "accessed_via": "https://www.researchgate.net/publication/275219725_Safety_bioavailability_and_pharmacokinetics_of_VGX-1027-A_novel_oral_anti-inflammatory_drug_in_healthy_human_subjects_Safety_bioavailability_and_pharmacokinetics_of_VGX-1027",
+          "healthy_adult": "FOR: original Methods, 94 healthy men and women aged 18–60 years",
+          "fasted": "FOR: original Trial Design, SAD groups 1–6 had no food for 10 h before and 4 h after dosing; group 7 fasted period 1",
+          "single_oral_ir": "CAVEAT: single oral dose, but article text does not name the dosage form or explicitly establish immediate release",
+          "parent_plasma": "FOR: original PK section measures VGX-1027 in plasma; unchanged drug also reported in urine",
+          "cmax_statistic": "arithmetic mean, n=6",
+          "locator": "Original Lee et al. 2016 Table 4, 100 mg fasted group 7",
+          "arm_mapping_evidence": "FRDB 6.63 μg/mL matches original Table 4 group 7 fasted arm, distinct from Table 3 100 mg group 3."
+        }
+      ]
+    },
+    {
+      "candidate_id": "7875",
+      "name": "LUBIPROSTONE",
+      "source_identity": "AMITIZA US prescribing information 2012 (NDA 021908 s010): regulatory label, secondary to sponsor studies",
+      "arms": [
+        {
+          "arm_id": "frdb_7343",
+          "dose_mg": 0.024,
+          "source_url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2012/021908s010lbl.pdf",
+          "source_access_status": "full_text_accessed",
+          "locator": "PDF page 9, section 12.3 Pharmacokinetics, Absorption",
+          "parent_plasma": "AGAINST: 'Concentrations of lubiprostone in plasma are below the level of quantitation (10 pg/mL)... The Cmax was 41.5 pg/mL' (M3)",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "non_parent_value_for_reference": {
+            "analyte": "M3 (metabolite)",
+            "value": 41.5,
+            "unit": "pg/mL"
+          },
+          "verification": "ineligible",
+          "reason": "Analyte is not the parent drug. Label section 12.3 says lubiprostone plasma concentrations are below LOQ (10 pg/mL) and Cmax cannot be calculated; the 24 mcg single-dose Cmax of 41.5 pg/mL is for metabolite M3. The Absorption paragraph also does not state fasting."
+        }
+      ]
+    },
+    {
+      "candidate_id": "7026",
+      "name": "ZENARESTAT",
+      "source_identity": "FK366; Kanamaru et al., J Clin Pharmacol 1993;33(11):1122-31, doi:10.1002/j.1552-4604.1993.tb01950.x (original primary publication)",
+      "arms": [
+        {
+          "arm_id": "frdb_7160",
+          "dose_mg": 150.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/8300896/",
+          "source_access_status": "abstract_only",
+          "fasted": "FOR (abstract only): 'single oral dose of 150, 300, or 600 mg after fasting'",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "verification": "unverified",
+          "reason": "Full text inaccessible (Wiley 403; not in PMC; no OA copy). The original abstract supports healthy volunteers, single oral 150/300/600 mg 'after fasting', and parent FK366 plasma PK. Formulation/IR, age range and Cmax values are not in the abstract."
+        },
+        {
+          "arm_id": "frdb_7161",
+          "dose_mg": 300.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/8300896/",
+          "source_access_status": "abstract_only",
+          "fasted": "FOR (abstract only): 'single oral dose of 150, 300, or 600 mg after fasting'",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "verification": "unverified",
+          "reason": "Full text inaccessible (Wiley 403; not in PMC; no OA copy). The original abstract supports healthy volunteers, single oral 150/300/600 mg 'after fasting', and parent FK366 plasma PK. Formulation/IR, age range and Cmax values are not in the abstract."
+        },
+        {
+          "arm_id": "frdb_7162",
+          "dose_mg": 600.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/8300896/",
+          "source_access_status": "abstract_only",
+          "fasted": "FOR (abstract only): 'single oral dose of 150, 300, or 600 mg after fasting'",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "verification": "unverified",
+          "reason": "Full text inaccessible (Wiley 403; not in PMC; no OA copy). The original abstract supports healthy volunteers, single oral 150/300/600 mg 'after fasting', and parent FK366 plasma PK. Formulation/IR, age range and Cmax values are not in the abstract."
+        }
+      ]
+    },
+    {
+      "candidate_id": "2197",
+      "name": "PHLOROGLUCINOL",
+      "source_identity": "Li et al., Eur Rev Med Pharmacol Sci 2017;21(8):1990-1998 (original primary BE study)",
+      "arms": [
+        {
+          "arm_id": "frdb_4859",
+          "dose_mg": 160.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/28485775/",
+          "source_access_status": "full_text_accessed",
+          "accessed_via": "https://www.europeanreview.org/wp/wp-content/uploads/1990-1998-Determination-of-phloroglucinol-by-HPLC-MSMS.pdf",
+          "healthy_adult": "FOR: 'healthy male subjects'; 24 enrolled, age 22-32 y (Results)",
+          "fasted": "CAVEAT: abstract only",
+          "single_oral_ir": "CAVEAT: single 160 mg dose, open-label 2-way crossover; ODT vs oral lyophilisate, IR not stated",
+          "parent_plasma": "FOR: HPLC-MS/MS phloroglucinol in human plasma",
+          "original_cmax": 515.6,
+          "original_cmax_unit": "ng/mL",
+          "candidate_values": {
+            "test_ODT": {
+              "value": 515.6,
+              "sd": 134.4,
+              "unit": "ng/mL"
+            },
+            "reference_lyophilized_tablet": {
+              "value": 536.0,
+              "sd": 144.8,
+              "unit": "ng/mL"
+            },
+            "statistic": "mean ± SD, n=24"
+          },
+          "locator": "Table II (journal p.1995)",
+          "verification": "verified_with_caveat",
+          "reason": "Original test ODT arm identified and parent Cmax verified. Fasting appears in the paper abstract; the product is an orally disintegrating tablet, but explicit IR terminology is absent. Primary-scope adjudication remains unresolved.",
+          "cmax_statistic": "mean ± SD 515.6 ± 134.4, n=24",
+          "arm_mapping_evidence": "FRDB pk_cmax_value 515.6 ng/mL matches original Table II test ODT, not reference 536.0; predictions not consulted."
+        }
+      ]
+    },
+    {
+      "candidate_id": "2023",
+      "name": "CITICOLINE",
+      "source_identity": "Sarkar et al., J Pharm Biomed Anal 2012;71:144-7, doi:10.1016/j.jpba.2012.07.003 (original primary publication)",
+      "arms": [
+        {
+          "arm_id": "frdb_4617",
+          "dose_mg": 1000.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/22951317/",
+          "source_access_status": "abstract_only",
+          "parent_plasma": "AGAINST: choline measured",
+          "single_oral_ir": "AGAINST: CR tablets",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "verification": "ineligible",
+          "reason": "The original authors' abstract contradicts two criteria. The analyte is choline ('active metabolite of citicoline'), not the parent, and the formulation is a 'control release (CR) tablet' (test vs reference, 1000 mg). Full text was inaccessible (ScienceDirect 403/captcha), but the abstract contradiction is enough to exclude; test/reference mapping is not needed."
+        },
+        {
+          "arm_id": "frdb_4618",
+          "dose_mg": 1000.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/22951317/",
+          "source_access_status": "abstract_only",
+          "parent_plasma": "AGAINST: choline measured",
+          "single_oral_ir": "AGAINST: CR tablets",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "verification": "ineligible",
+          "reason": "The original authors' abstract contradicts two criteria. The analyte is choline ('active metabolite of citicoline'), not the parent, and the formulation is a 'control release (CR) tablet' (test vs reference, 1000 mg). Full text was inaccessible (ScienceDirect 403/captcha), but the abstract contradiction is enough to exclude; test/reference mapping is not needed."
+        }
+      ]
+    },
+    {
+      "candidate_id": "1729",
+      "name": "GENISTEIN",
+      "source_identity": "two original publications (see arms)",
+      "arms": [
+        {
+          "arm_id": "frdb_3699",
+          "dose_mg": 50.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/11285356/",
+          "source_identity": "Setchell et al., J Nutr 2001;131(4 Suppl):1362S-75S, doi:10.1093/jn/131.4.1362S (original)",
+          "source_access_status": "abstract_only",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "verification": "unverified",
+          "reason": "Full text inaccessible (J Nutr is hosted on ScienceDirect: 403/captcha). Abstract: 19 healthy women given pure genistein as a 'single-bolus dose'. It does not state the dose amount, fasting, vehicle, age, or whether free or total (deconjugated) genistein was measured, and gives no Cmax."
+        },
+        {
+          "arm_id": "frdb_3703",
+          "dose_mg": 30.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/15943224/",
+          "source_identity": "Ullmann et al., Adv Ther 2005;22(1):65-78, doi:10.1007/BF02850186 (original)",
+          "source_access_status": "abstract_only",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "abstract_reported_cmax": {
+            "value": 252.0,
+            "unit": "ng/mL",
+            "statistic": "mean",
+            "locator": "Abstract"
+          },
+          "verification": "unverified",
+          "reason": "Full text inaccessible (Springer paywall; no OA copy). Abstract: 40 healthy volunteers, single oral 30/60/150/300 mg synthetic genistein aglycone (Bonistein), with mean Cmax. It does not state fasting, formulation/IR, analyte form (free vs total) or age range; MeSH includes 'Adolescent', so adult-only cannot be confirmed. The abstract value is recorded for reference only, not verified."
+        },
+        {
+          "arm_id": "frdb_3704",
+          "dose_mg": 60.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/15943224/",
+          "source_identity": "Ullmann et al., Adv Ther 2005;22(1):65-78, doi:10.1007/BF02850186 (original)",
+          "source_access_status": "abstract_only",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "abstract_reported_cmax": {
+            "value": 605.0,
+            "unit": "ng/mL",
+            "statistic": "mean",
+            "locator": "Abstract"
+          },
+          "verification": "unverified",
+          "reason": "Full text inaccessible (Springer paywall; no OA copy). Abstract: 40 healthy volunteers, single oral 30/60/150/300 mg synthetic genistein aglycone (Bonistein), with mean Cmax. It does not state fasting, formulation/IR, analyte form (free vs total) or age range; MeSH includes 'Adolescent', so adult-only cannot be confirmed. The abstract value is recorded for reference only, not verified."
+        },
+        {
+          "arm_id": "frdb_3705",
+          "dose_mg": 150.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/15943224/",
+          "source_identity": "Ullmann et al., Adv Ther 2005;22(1):65-78, doi:10.1007/BF02850186 (original)",
+          "source_access_status": "abstract_only",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "abstract_reported_cmax": {
+            "value": 1518.0,
+            "unit": "ng/mL",
+            "statistic": "mean",
+            "locator": "Abstract"
+          },
+          "verification": "unverified",
+          "reason": "Full text inaccessible (Springer paywall; no OA copy). Abstract: 40 healthy volunteers, single oral 30/60/150/300 mg synthetic genistein aglycone (Bonistein), with mean Cmax. It does not state fasting, formulation/IR, analyte form (free vs total) or age range; MeSH includes 'Adolescent', so adult-only cannot be confirmed. The abstract value is recorded for reference only, not verified."
+        },
+        {
+          "arm_id": "frdb_3706",
+          "dose_mg": 300.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/15943224/",
+          "source_identity": "Ullmann et al., Adv Ther 2005;22(1):65-78, doi:10.1007/BF02850186 (original)",
+          "source_access_status": "abstract_only",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "abstract_reported_cmax": {
+            "value": 1808.0,
+            "unit": "ng/mL",
+            "statistic": "mean",
+            "locator": "Abstract"
+          },
+          "verification": "unverified",
+          "reason": "Full text inaccessible (Springer paywall; no OA copy). Abstract: 40 healthy volunteers, single oral 30/60/150/300 mg synthetic genistein aglycone (Bonistein), with mean Cmax. It does not state fasting, formulation/IR, analyte form (free vs total) or age range; MeSH includes 'Adolescent', so adult-only cannot be confirmed. The abstract value is recorded for reference only, not verified."
+        }
+      ]
+    },
+    {
+      "candidate_id": "1542",
+      "name": "PHENDIMETRAZINE",
+      "source_identity": "Rudolph et al., J Pharm Sci 1983;72(5):519-21, doi:10.1002/jps.2600720510 (original analytical-method paper with a single-dose BA application)",
+      "arms": [
+        {
+          "arm_id": "frdb_3348",
+          "dose_mg": 35.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/6688092",
+          "source_access_status": "abstract_only",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "verification": "unverified",
+          "reason": "Full text inaccessible (ScienceDirect 403/captcha; no OA copy). The abstract mentions only a 'single-dose bioavailability study'; it does not state population, fasting, formulation (35 mg IR or otherwise) or Cmax."
+        }
+      ]
+    },
+    {
+      "candidate_id": "1860",
+      "name": "MOZAVAPTAN",
+      "source_identity": "PMDA approval documents for mozavaptan hydrochloride (2006)",
+      "arms": [
+        {
+          "arm_id": "frdb_4386",
+          "dose_mg": 30.0,
+          "source_url": "https://www.pmda.go.jp/drugs/2006/P200600027/18007800_21800AMZ10369_K115_1.pdf",
+          "source_access_status": "full_text_accessed",
+          "source_type_detail": "K115 = sponsor CTD Module 2.7.6 (summary of individual studies, citing CSR tables): regulatory, the closest available to primary. A102 (https://www.pmda.go.jp/drugs/2006/P200600027/18007800_21800AMZ10369_A102_1.pdf) = PMDA review report: secondary summary, used only as a cross-check.",
+          "single_oral_ir": "FOR: PMDA A102 PDF page 22 describes the 30 mg film-coated tablet used in these studies and reports mean dissolution >90% at 15 minutes; fast-dissolving conventional tablet.",
+          "parent_plasma": "FOR: parent mozavaptan (モザバプタン) row reported separately from metabolites",
+          "dose_caveat": "Dose is expressed as 塩酸モザバプタン (hydrochloride salt) 30 mg tablets; the free-base dose is not stated on these pages, and FRDB dose_mg equals the salt amount",
+          "healthy_adult": "FOR: Japanese healthy adult males, n=8, age 23-30 y (K115 PDF p31, Table 2.7.6-15)",
+          "fasted": "FOR: '絶食下単回経口投与' (K115 PDF p31; A102 PDF p24)",
+          "original_cmax": 2.826,
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "mean ± SD 2.826±1.759, n=8",
+          "locator": "K115 PDF page 33, Table 2.7.6-16 (CSR 5.3.3.1-01 Tables 10.3-2~14); cross-check A102 PDF page 24",
+          "verification": "verified",
+          "reason": "Original sponsor CTD supports fasted single-dose parent-plasma Cmax in healthy adults; PMDA review documents rapid dissolution of the same 30 mg tablet. Dose is reported as mozavaptan hydrochloride nominal mg and retained as such in the frozen prediction.",
+          "p0_eligibility": "eligible"
+        },
+        {
+          "arm_id": "frdb_4387",
+          "dose_mg": 60.0,
+          "source_url": "https://www.pmda.go.jp/drugs/2006/P200600027/18007800_21800AMZ10369_K115_1.pdf",
+          "source_access_status": "full_text_accessed",
+          "source_type_detail": "K115 = sponsor CTD Module 2.7.6 (summary of individual studies, citing CSR tables): regulatory, the closest available to primary. A102 (https://www.pmda.go.jp/drugs/2006/P200600027/18007800_21800AMZ10369_A102_1.pdf) = PMDA review report: secondary summary, used only as a cross-check.",
+          "single_oral_ir": "FOR: PMDA A102 PDF page 22 describes the 30 mg film-coated tablet used in these studies and reports mean dissolution >90% at 15 minutes; fast-dissolving conventional tablet.",
+          "parent_plasma": "FOR: parent mozavaptan (モザバプタン) row reported separately from metabolites",
+          "dose_caveat": "Dose is expressed as 塩酸モザバプタン (hydrochloride salt) 30 mg tablets; the free-base dose is not stated on these pages, and FRDB dose_mg equals the salt amount",
+          "healthy_adult": "FOR: Japanese healthy adult males, n=8, age 23-30 y (K115 PDF p31, Table 2.7.6-15)",
+          "fasted": "FOR: '絶食下単回経口投与' (K115 PDF p31; A102 PDF p24)",
+          "original_cmax": 5.491,
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "mean ± SD 5.491±2.666, n=8",
+          "locator": "K115 PDF page 33, Table 2.7.6-16 (CSR 5.3.3.1-01 Tables 10.3-2~14); cross-check A102 PDF page 24",
+          "verification": "verified",
+          "reason": "Original sponsor CTD supports fasted single-dose parent-plasma Cmax in healthy adults; PMDA review documents rapid dissolution of the same 30 mg tablet. Dose is reported as mozavaptan hydrochloride nominal mg and retained as such in the frozen prediction.",
+          "p0_eligibility": "eligible"
+        },
+        {
+          "arm_id": "frdb_4388",
+          "dose_mg": 90.0,
+          "source_url": "https://www.pmda.go.jp/drugs/2006/P200600027/18007800_21800AMZ10369_K115_1.pdf",
+          "source_access_status": "full_text_accessed",
+          "source_type_detail": "K115 = sponsor CTD Module 2.7.6 (summary of individual studies, citing CSR tables): regulatory, the closest available to primary. A102 (https://www.pmda.go.jp/drugs/2006/P200600027/18007800_21800AMZ10369_A102_1.pdf) = PMDA review report: secondary summary, used only as a cross-check.",
+          "single_oral_ir": "FOR: PMDA A102 PDF page 22 describes the 30 mg film-coated tablet used in these studies and reports mean dissolution >90% at 15 minutes; fast-dissolving conventional tablet.",
+          "parent_plasma": "FOR: parent mozavaptan (モザバプタン) row reported separately from metabolites",
+          "dose_caveat": "Dose is expressed as 塩酸モザバプタン (hydrochloride salt) 30 mg tablets; the free-base dose is not stated on these pages, and FRDB dose_mg equals the salt amount",
+          "healthy_adult": "FOR: Japanese healthy adult males, n=8, age 23-30 y (K115 PDF p31, Table 2.7.6-15)",
+          "fasted": "FOR: '絶食下単回経口投与' (K115 PDF p31; A102 PDF p24)",
+          "original_cmax": 10.079,
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "mean ± SD 10.079±6.225, n=8",
+          "locator": "K115 PDF page 33, Table 2.7.6-16 (CSR 5.3.3.1-01 Tables 10.3-2~14); cross-check A102 PDF page 24",
+          "verification": "verified",
+          "reason": "Original sponsor CTD supports fasted single-dose parent-plasma Cmax in healthy adults; PMDA review documents rapid dissolution of the same 30 mg tablet. Dose is reported as mozavaptan hydrochloride nominal mg and retained as such in the frozen prediction.",
+          "p0_eligibility": "eligible"
+        },
+        {
+          "arm_id": "frdb_4391",
+          "dose_mg": 30.0,
+          "source_url": "https://www.pmda.go.jp/drugs/2006/P200600027/18007800_21800AMZ10369_K115_1.pdf",
+          "source_access_status": "full_text_accessed",
+          "source_type_detail": "K115 = sponsor CTD Module 2.7.6 (summary of individual studies, citing CSR tables): regulatory, the closest available to primary. A102 (https://www.pmda.go.jp/drugs/2006/P200600027/18007800_21800AMZ10369_A102_1.pdf) = PMDA review report: secondary summary, used only as a cross-check.",
+          "single_oral_ir": "FOR: PMDA A102 PDF page 22 describes the 30 mg film-coated tablet used in these studies and reports mean dissolution >90% at 15 minutes; fast-dissolving conventional tablet.",
+          "parent_plasma": "FOR: parent mozavaptan (モザバプタン) row reported separately from metabolites",
+          "dose_caveat": "Dose is expressed as 塩酸モザバプタン (hydrochloride salt) 30 mg tablets; the free-base dose is not stated on these pages, and FRDB dose_mg equals the salt amount",
+          "healthy_adult": "FOR: healthy adult males, PK set n=15, age 23-34 y (K115 PDF p15, Table 2.7.6-4)",
+          "fasted": "FOR: '絶食下' row of Table 2.7.6-5",
+          "original_cmax": 3.747,
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "mean ± SD 3.747±2.114, n=15",
+          "locator": "K115 PDF page 15, Table 2.7.6-5 (CSR 5.3.1.1-01 Table 1); cross-check A102 PDF page 26 (fed/fasted ratio only)",
+          "verification": "verified",
+          "reason": "Original sponsor CTD supports fasted single-dose parent-plasma Cmax in healthy adults; PMDA review documents rapid dissolution of the same 30 mg tablet. Dose is reported as mozavaptan hydrochloride nominal mg and retained as such in the frozen prediction.",
+          "p0_eligibility": "eligible"
+        }
+      ]
+    },
+    {
+      "candidate_id": "2879",
+      "name": "CLOPREDNOL",
+      "source_identity": "Mroszczak et al., J Pharm Sci 1978;67(7):920-3, doi:10.1002/jps.2600670712 (original primary publication)",
+      "arms": [
+        {
+          "arm_id": "frdb_6327",
+          "dose_mg": 2.5,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/660508/",
+          "source_access_status": "abstract_only",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "verification": "unverified",
+          "reason": "Full text inaccessible (ScienceDirect 403/captcha; no OA copy). Abstract: 12-subject crossover of two capsules, a tablet and a solution. The single FRDB arm cannot be mapped to a formulation, and fasting, age, dose and Cmax are not in the abstract."
+        }
+      ]
+    },
+    {
+      "candidate_id": "59566",
+      "name": "ATABECESTAT",
+      "source_identity": "JNJ-54861911 SAD/MAD first-in-human paper, Alzheimers Dement (N Y) 2016, doi:10.1016/j.trci.2016.08.001, PMC5651349 (original primary publication)",
+      "arms": [
+        {
+          "arm_id": "frdb_12979",
+          "dose_mg": 1.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/29067308/",
+          "source_access_status": "full_text_accessed",
+          "accessed_via": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5651349/ + supplementary mmc1.docx (Europe PMC supplementaryFiles)",
+          "fasted": "FOR: Supplement Methods 'single dose ... in fasted state' (SAD Parts 1 and 2); 'either in fasting (SAD study) or fed (MAD study; standard breakfast) state'",
+          "single_oral_ir": "CAVEAT: single dose as oral suspension of free base (1 or 25 mg/mL reconstituted); 'immediate-release' not stated",
+          "parent_plasma": "FOR: LC-MS/MS JNJ-54861911 (parent) in plasma, LLOQ 1 ng/mL",
+          "healthy_adult": "FOR: young healthy men 18-54 y (mean 44.8) and elderly healthy men/women 55-75 y (mean 64.2)",
+          "original_cmax": 6.72,
+          "original_cmax_unit": "ng/mL",
+          "candidate_values": {
+            "young_men_1mg": {
+              "value": 6.72,
+              "sd": 2.09,
+              "unit": "ng/mL",
+              "n": 6
+            },
+            "elderly_1mg": {
+              "value": 5.62,
+              "sd": 1.7,
+              "unit": "ng/mL",
+              "n": 6
+            },
+            "statistic": "mean (SD)"
+          },
+          "locator": "Supplementary Table S3 (mmc1.docx)",
+          "verification": "verified_with_caveat",
+          "reason": "Original supplementary source supports fasted SAD parent plasma Cmax; oral suspension IR scope remains unresolved.",
+          "cmax_statistic": "mean (SD) 6.72 (2.09), n=6",
+          "age_stratum": "young_18_54",
+          "arm_mapping_evidence": "FRDB value exactly matches the young 1 mg source-table column"
+        },
+        {
+          "arm_id": "frdb_12980",
+          "dose_mg": 1.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/29067308/",
+          "source_access_status": "full_text_accessed",
+          "accessed_via": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5651349/ + supplementary mmc1.docx (Europe PMC supplementaryFiles)",
+          "fasted": "FOR: Supplement Methods 'single dose ... in fasted state' (SAD Parts 1 and 2); 'either in fasting (SAD study) or fed (MAD study; standard breakfast) state'",
+          "single_oral_ir": "CAVEAT: single dose as oral suspension of free base (1 or 25 mg/mL reconstituted); 'immediate-release' not stated",
+          "parent_plasma": "FOR: LC-MS/MS JNJ-54861911 (parent) in plasma, LLOQ 1 ng/mL",
+          "healthy_adult": "FOR: young healthy men 18-54 y (mean 44.8) and elderly healthy men/women 55-75 y (mean 64.2)",
+          "original_cmax": 5.62,
+          "original_cmax_unit": "ng/mL",
+          "candidate_values": {
+            "young_men_1mg": {
+              "value": 6.72,
+              "sd": 2.09,
+              "unit": "ng/mL",
+              "n": 6
+            },
+            "elderly_1mg": {
+              "value": 5.62,
+              "sd": 1.7,
+              "unit": "ng/mL",
+              "n": 6
+            },
+            "statistic": "mean (SD)"
+          },
+          "locator": "Supplementary Table S3 (mmc1.docx)",
+          "verification": "verified_with_caveat",
+          "reason": "Original supplementary source supports fasted SAD parent plasma Cmax; oral suspension IR scope remains unresolved.",
+          "cmax_statistic": "mean (SD) 5.62 (1.70), n=6",
+          "age_stratum": "elderly_55_75",
+          "arm_mapping_evidence": "FRDB value exactly matches the elderly 1 mg source-table column"
+        },
+        {
+          "arm_id": "frdb_12981",
+          "dose_mg": 3.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/29067308/",
+          "source_access_status": "full_text_accessed",
+          "accessed_via": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5651349/ + supplementary mmc1.docx (Europe PMC supplementaryFiles)",
+          "fasted": "FOR: Supplement Methods 'single dose ... in fasted state' (SAD Parts 1 and 2); 'either in fasting (SAD study) or fed (MAD study; standard breakfast) state'",
+          "single_oral_ir": "CAVEAT: single dose as oral suspension of free base (1 or 25 mg/mL reconstituted); 'immediate-release' not stated",
+          "parent_plasma": "FOR: LC-MS/MS JNJ-54861911 (parent) in plasma, LLOQ 1 ng/mL",
+          "healthy_adult": "FOR: elderly healthy men and women 55-75 y (mean 64.2)",
+          "age_stratum": "elderly_55_75",
+          "original_cmax": 17.2,
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "mean (SD) 17.2 (3.56), n=6",
+          "locator": "Supplementary Table S3 (mmc1.docx)",
+          "verification": "verified_with_caveat",
+          "reason": "Parent plasma Cmax read from Supplementary Table S3. Caveat: the oral suspension is not labelled IR. Elderly stratum (eligible per coordinator: no upper age cutoff)."
+        },
+        {
+          "arm_id": "frdb_12982",
+          "dose_mg": 10.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/29067308/",
+          "source_access_status": "full_text_accessed",
+          "accessed_via": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5651349/ + supplementary mmc1.docx (Europe PMC supplementaryFiles)",
+          "fasted": "FOR: Supplement Methods 'single dose ... in fasted state' (SAD Parts 1 and 2); 'either in fasting (SAD study) or fed (MAD study; standard breakfast) state'",
+          "single_oral_ir": "CAVEAT: single dose as oral suspension of free base (1 or 25 mg/mL reconstituted); 'immediate-release' not stated",
+          "parent_plasma": "FOR: LC-MS/MS JNJ-54861911 (parent) in plasma, LLOQ 1 ng/mL",
+          "healthy_adult": "FOR: elderly healthy men and women 55-75 y (mean 64.2)",
+          "age_stratum": "elderly_55_75",
+          "original_cmax": 83.9,
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "mean (SD) 83.9 (20.3), n=6",
+          "locator": "Supplementary Table S3 (mmc1.docx)",
+          "verification": "verified_with_caveat",
+          "reason": "Parent plasma Cmax read from Supplementary Table S3. Caveat: the oral suspension is not labelled IR. Elderly stratum (eligible per coordinator: no upper age cutoff)."
+        },
+        {
+          "arm_id": "frdb_12983",
+          "dose_mg": 30.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/29067308/",
+          "source_access_status": "full_text_accessed",
+          "accessed_via": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5651349/ + supplementary mmc1.docx (Europe PMC supplementaryFiles)",
+          "fasted": "FOR: Supplement Methods 'single dose ... in fasted state' (SAD Parts 1 and 2); 'either in fasting (SAD study) or fed (MAD study; standard breakfast) state'",
+          "single_oral_ir": "CAVEAT: single dose as oral suspension of free base (1 or 25 mg/mL reconstituted); 'immediate-release' not stated",
+          "parent_plasma": "FOR: LC-MS/MS JNJ-54861911 (parent) in plasma, LLOQ 1 ng/mL",
+          "healthy_adult": "FOR: elderly healthy men and women 55-75 y (mean 64.2)",
+          "age_stratum": "elderly_55_75",
+          "original_cmax": 148,
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "mean (SD) 148 (29.7), n=6",
+          "locator": "Supplementary Table S3 (mmc1.docx)",
+          "verification": "verified_with_caveat",
+          "reason": "Parent plasma Cmax read from Supplementary Table S3. Caveat: the oral suspension is not labelled IR. Elderly stratum (eligible per coordinator: no upper age cutoff)."
+        },
+        {
+          "arm_id": "frdb_12984",
+          "dose_mg": 90.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/29067308/",
+          "source_access_status": "full_text_accessed",
+          "accessed_via": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5651349/ + supplementary mmc1.docx (Europe PMC supplementaryFiles)",
+          "fasted": "FOR: Supplement Methods 'single dose ... in fasted state' (SAD Parts 1 and 2); 'either in fasting (SAD study) or fed (MAD study; standard breakfast) state'",
+          "single_oral_ir": "CAVEAT: single dose as oral suspension of free base (1 or 25 mg/mL reconstituted); 'immediate-release' not stated",
+          "parent_plasma": "FOR: LC-MS/MS JNJ-54861911 (parent) in plasma, LLOQ 1 ng/mL",
+          "healthy_adult": "FOR: elderly healthy men and women 55-75 y (mean 64.2)",
+          "age_stratum": "elderly_55_75",
+          "original_cmax": 519,
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "mean (SD) 519 (156), n=5",
+          "locator": "Supplementary Table S3 (mmc1.docx)",
+          "verification": "verified_with_caveat",
+          "reason": "Parent plasma Cmax read from Supplementary Table S3. Caveat: the oral suspension is not labelled IR. Elderly stratum (eligible per coordinator: no upper age cutoff)."
+        },
+        {
+          "arm_id": "frdb_12985",
+          "dose_mg": 150.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/29067308/",
+          "source_access_status": "full_text_accessed",
+          "accessed_via": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5651349/ + supplementary mmc1.docx (Europe PMC supplementaryFiles)",
+          "fasted": "FOR: Supplement Methods 'single dose ... in fasted state' (SAD Parts 1 and 2); 'either in fasting (SAD study) or fed (MAD study; standard breakfast) state'",
+          "single_oral_ir": "CAVEAT: single dose as oral suspension of free base (1 or 25 mg/mL reconstituted); 'immediate-release' not stated",
+          "parent_plasma": "FOR: LC-MS/MS JNJ-54861911 (parent) in plasma, LLOQ 1 ng/mL",
+          "healthy_adult": "FOR: elderly healthy men and women 55-75 y (mean 64.2)",
+          "age_stratum": "elderly_55_75",
+          "original_cmax": 906,
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "mean (SD) 906 (451), n=6",
+          "locator": "Supplementary Table S3 (mmc1.docx)",
+          "verification": "verified_with_caveat",
+          "reason": "Parent plasma Cmax read from Supplementary Table S3. Caveat: the oral suspension is not labelled IR. Elderly stratum (eligible per coordinator: no upper age cutoff)."
+        },
+        {
+          "arm_id": "frdb_12993",
+          "dose_mg": 5.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/29067308/",
+          "source_access_status": "full_text_accessed",
+          "fasted": "AGAINST: 'fed (MAD study; standard breakfast)'",
+          "single_oral_ir": "AGAINST: multiple-dose QD for 14 days",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "locator": "Supplement Methods; Table S5 is an image and was not extracted",
+          "verification": "ineligible",
+          "reason": "MAD study: dosed fed (standard breakfast) once daily for 14 days, so not a single fasted dose. Suspension."
+        },
+        {
+          "arm_id": "frdb_12994",
+          "dose_mg": 25.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/29067308/",
+          "source_access_status": "full_text_accessed",
+          "fasted": "AGAINST: 'fed (MAD study; standard breakfast)'",
+          "single_oral_ir": "AGAINST: multiple-dose QD for 14 days",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "locator": "Supplement Methods; Table S5 is an image and was not extracted",
+          "verification": "ineligible",
+          "reason": "MAD study: dosed fed (standard breakfast) once daily for 14 days, so not a single fasted dose. The 25 mg dose was a film-coated tablet."
+        },
+        {
+          "arm_id": "frdb_12995",
+          "dose_mg": 50.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/29067308/",
+          "source_access_status": "full_text_accessed",
+          "fasted": "AGAINST: 'fed (MAD study; standard breakfast)'",
+          "single_oral_ir": "AGAINST: multiple-dose QD for 14 days",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "locator": "Supplement Methods; Table S5 is an image and was not extracted",
+          "verification": "ineligible",
+          "reason": "MAD study: dosed fed (standard breakfast) once daily for 14 days, so not a single fasted dose. Suspension."
+        }
+      ]
+    }
+  ],
+  "coordinator_correction": "GIT-027 full original paper was accessed via ResearchGate article text; phloroglucinol and atabecestat duplicate-dose arms were mapped using FRDB values to source-table cells. PMDA A102 page 22 documents >90% dissolution of the mozavaptan 30 mg film-coated tablet at 15 minutes, establishing immediate release. FRDB frdb_10765 lists 9.83 μg/mL but original Table 3 shows 9.38 μg/mL; original value retained. No predictions inspected."
+}

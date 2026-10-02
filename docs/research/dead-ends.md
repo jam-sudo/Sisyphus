@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-06-03
+last_updated: 2026-09-25
 charter: Authoritative list of failed Sisyphus experiments. Read before proposing any accuracy improvement.
 ---
 
@@ -7,9 +7,26 @@ charter: Authoritative list of failed Sisyphus experiments. Read before proposin
 
 Every experiment here was run, reverted, and documented. **Before proposing any accuracy improvement, open this file and search for the approach.** New track proposals must first pass the error-decorrelation gate described in [diagnosis.md §4](./diagnosis.md).
 
-**Canonical count:** 43 enumerated experiments below. Narrative references in commit messages or prose (e.g. "#35 error cancellation", "14번째 시도", "누적 33 methods") use **informal** numbering that counts early exploration attempts separately; those narrative numbers are **not authoritative** and do not match the table count below. When in doubt, cite the table entry (`DE-NN`).
+**2026-09-24 correction:** The ten-drug "literature F" values used to explain
+DE-41/42 mixed absolute F with other endpoints and contexts. The 10/10
+under-call and median engine/reference 0.46–0.51 are withdrawn; see the
+[source audit](../validation/f_reference_source_audit_2026-09-24.md). The
+recorded scalar-intervention Cmax scores and linearity of the tested `ka`
+term remain experiment results, but a general human F-bias mechanism is not
+established. Also, oral CL/F cannot be treated as systemic CL when inferring F.
 
-## 1. Theme summary (14 categories)
+**2026-09-25 interpretation correction:** Negative CV R² for the tested UDE
+residual learners (N=160) does not prove that all structure-based Cmax residuals
+are unlearnable. Fourteen same-drug/same-dose replicate pairs suggest a
+single-label noise floor near AAFE 1.18 under iid log-error assumptions, not
+enough to explain the historical model error; see [diagnosis §10](diagnosis.md).
+The source audit above also leaves shared bioavailability-F error unverified.
+The dated experiments below remain valid as tests of their stated methods, but
+their broad information-theoretic and F-causal interpretations are withdrawn.
+
+**Canonical count:** 59 enumerated experiments below. Narrative references in commit messages or prose (e.g. "#35 error cancellation", "14번째 시도", "누적 33 methods") use **informal** numbering that counts early exploration attempts separately; those narrative numbers are **not authoritative** and do not match the table count below. When in doubt, cite the table entry (`DE-NN`).
+
+## 1. Theme summary (16 categories)
 
 | Category | Representative entries | Headline outcome |
 |---|---|---|
@@ -26,9 +43,11 @@ Every experiment here was run, reverted, and documented. **Before proposing any 
 | Direct CL/F + t½ predictors | DE-27, DE-28 | CL/F R²=0.232 + t½ variants all negative; falsifies "IVIVE bypass" as the reason VDss worked |
 | Hepatic intracellular fu correction (PPB-targeted) | DE-37 | Phase A infra shipped; primary literature corpus paywall-locked, 4 PPB candidates dispositioned ceiling_accepted, Meta AAFE shift 0.0% |
 | UGT path / abundance / IVIVE interventions | DE-36, DE-38, DE-39, DE-40 | four consecutive metric-neutral UGT cycles; no per-substrate hepatocyte-basis scaling factor exists; ΔMeta AAFE ≤ 0.003 |
-| Absorption / first-pass bioavailability-F recalibration | DE-41, DE-42, DE-43 | engine F under-call is bidirectional first-pass dispersion (not absorption); the absorption knob is linear = a flat scalar; and the fixed-weight meta damps **any** engine recalibration to ~18% pass-through on **both** the retrospective and prospective sets — the engine is not a headline lever on any benchmark |
+| Absorption / first-pass bioavailability-F recalibration | DE-41, DE-42, DE-43 | tested uniform `ka` scaling did not improve the scored meta; the ten-drug F-bias attribution is withdrawn pending matched human absolute-F data |
+| CLint label censoring (Tobit/AFT) | DE-58 | censoring moved CLint but end-to-end meta change was noise (−0.0045); engine +0.054 worse |
+| Direct Cmax source-metadata filtering | DE-59 | 516/906-row filter worsened matched scaffold-CV AAFE 3.282→3.396; source workbooks lack row-level matrix and fasting evidence |
 
-**Root cause (shared across categories):** Cmax residuals are not learnable from molecular structure (CV R² < 0). Remaining error ≈ experimental variability + formulation + inter-patient variability. SMILES → Cmax carries a fundamental information-channel ceiling.
+**Current reading across categories:** The tested replacements and added tracks did not improve the repeatedly used development benchmark. Negative residual CV R² applies to the particular UDE learners and N=160 split; the replicate-based label-noise estimate suggests material model-side error. Neither observation establishes a universal structure-only ceiling or identifies the responsible PK mechanism. Independent source-verified evaluation remains the decision gate.
 
 ---
 
@@ -52,7 +71,7 @@ Engine AAFE 2.861 → 3.090. Revert. **Re-measured 2026-05-13 under current pipe
 Holdout 3.265. N=65 insufficient to learn a full SMILES→Cmax map.
 
 ### DE-06 — MMPK CLint deconvolution
-R²=0.166. Apparent CLint not learnable from molecular features alone.
+R²=0.166 for this apparent-CLint target and tested features; it does not establish general nonlearnability.
 
 ### DE-07 — Transporter scaffolding (pre-Phase-1)
 Quantitative kinetics absent at the time; zero drugs active. Superseded by Phase 1 OATP1B1 (2026-04-15).
@@ -76,7 +95,7 @@ Engine AAFE +0.072, meta +0.077. Individual harms sum. Simultaneous improvement 
 DiffDock CYP3A4 1,114 drugs: CLint CV R² 0.190 → 0.196 (ΔR²=+0.005, noise). Vina: ΔR² = −0.026 (worse). Docking feature importance 0.2–0.4%, top-30 has zero docking features. **Binding affinity ≠ metabolic rate.** Do not retry.
 
 ### DE-14 — Foundation model shootout (MoLFormer / ChemBERTa / Uni-Mol)
-Frozen embedding + Ridge / MLP / XGBoost, every combination. **Morgan FP + XGB R²=0.205 dominates every alternative** (MoLFormer mean 0.184, ChemBERTa 0.170, Uni-Mol 0.083). Ensembling also worsens. CLint R²≈0.20 is a **target-noise** ceiling, not a representation ceiling.
+Frozen embedding + Ridge / MLP / XGBoost, every tested combination. **Morgan FP + XGB R²=0.205 beat the tested alternatives** (MoLFormer mean 0.184, ChemBERTa 0.170, Uni-Mol 0.083). Ensembling also worsened on that split. This does not distinguish assay noise from representation or dataset limits.
 
 ### DE-15 — Direct CL/F 3rd track (IVIVE bypass, 2026-03-27)
 MMPK AUC → CL/F direct prediction (N=1,014), Vd/F inverse (N=940). CL/F XGB CV R²=0.232, Vd/F R²=0.332. Analytical 1-cpt Cmax. 3-track LOOCV: w_clf=0.00 (base / other both). Standalone AAFE=3.133. Meta Δ=−0.005 (noise). Oracle 1.788 across 28/107 drugs but not unlockable with fixed weights. Benet hypothesis ("IVIVE bypass → accuracy gain") **not verified**. Infrastructure retained, w_clf=0.00.
@@ -94,7 +113,7 @@ ALFABET BDE on 978 compounds. BDE_min vs log10(CLint): r=+0.033 (no correlation)
 GNN encoder + MoE(K=3) + 1-comp PK backbone. 3,551 compounds, 1,074 with Cmax. Best AAFE=3.006 (GNN+MoE), worse than Sisyphus ML-only 2.336. 465K parameters vs 1,074 samples (ratio 433:1). **Data scale, not architecture, is the bottleneck.** GNN needs >>5,000 Cmax samples. Branch: `pharos-prototype`.
 
 ### DE-20 — CLint descriptor upgrade (2026-03-30)
-Feature selection top-300 + Optuna: CLint scaffold CV R² 0.279 → 0.399 (+0.120). Holdout Meta AAFE +0.012 (17th error-cancellation regression). Regularization is not the ceiling; data quality is.
+Feature selection top-300 + Optuna: CLint scaffold CV R² 0.279 → 0.399 (+0.120). Development Meta AAFE worsened by 0.012 (17th error-cancellation regression). Better component CV did not transfer in this experiment; the limiting cause was not isolated.
 
 ### DE-21 — Full predict replacement (2026-03-30)
 All ADME models re-optimized simultaneously. CLint +0.033, fup +0.042, VDss +0.057 in R². Engine AAFE +0.165, Meta AAFE +0.023 worse. Partial OR whole replacement fails under the current pipeline.
@@ -124,7 +143,7 @@ DrugBank 527 drugs, XGB (`scripts/train_bioavailability.py`). Standalone + meta 
 `xgboost_clearance_v1.json` + `xgboost_thalf_v1.json`. 6 combinations all negative. `data/validation/post_vdss_negative_results.json`. **Falsifies the interpretation that "VDss's IVIVE bypass" is what made VDss work** — the real reason is clearance-orthogonality (see [diagnosis.md §4](./diagnosis.md)).
 
 ### DE-30 — UDE prototype Phase 1 (Diffrax gradient-through-solver)
-Residual learning. `data/validation/phase1_ude_prototype_result.json` records the falsification. Residual not learnable from molecular structure (CV R² < 0). Phase 2 (amortized SBI) and Phase 3 (flow matching) unexecuted.
+Residual learning. `data/validation/phase1_ude_prototype_result.json` records negative CV R² for the tested learners on N=160 (−0.31 fingerprint, −0.20 physiology). The Phase 1 approach failed its gate; general residual learnability was not tested. Phase 2 (amortized SBI) and Phase 3 (flow matching) were unexecuted.
 
 ### DE-31 — ADME fup override (2026-04-11)
 DrugBank measured fup always preferred over XGBoost prediction (inverting the >5× disagreement fallback). Principled, empirically harmful: Engine AAFE 3.421 → 3.726 (+0.306 — the **34+ error-cancellation failure pattern** reproduced), Meta AAFE 2.695 → 2.728 (+0.033 noise). Revert. Narrative "35th error cancellation failure" entry.
@@ -149,7 +168,7 @@ Distinct from DE-30 (UDE / gradient-through-solver): pre-train an MLP operator t
 - **Gate 1 — operator approximation: PASS.** MLP (128, 64) on 20K synthetic ADME→Cmax pairs, R²=0.9985, fold error 1.09×. Top features: dose 62%, Peff 24%, CLint 7%. Engine is perfectly approximable as a pure function of physiological inputs.
 - **Gate 2 — E2E fine-tuning: FAIL.** Scaffold-CV AAFE 3.544 vs XGBoost 3.369 (+5.2% worse). Error correlation r(E2E, XGB)=0.867 — somewhat orthogonal, but E2E too inaccurate to contribute. The 12-D latent bottleneck through the physics operator over-constrains the model at N=1,239 training samples.
 
-Mechanism: the operator captures engine physics perfectly, but the engine's systematic bias (AAFE 3.42) transfers through unchanged — fine-tuning with N=1,239 cannot correct it via the encoder. Same SMILES information ceiling as DE-05/DE-17/DE-30 reached from a different architectural angle. Branch `feature/neural-operator-surrogate` (commit `b85b18d`); archive tag `archive/neural-operator-surrogate-2026-04-02`. Telltale if it returns: "differentiable surrogate / amortized engine / pre-trained operator + encoder fine-tuning" with N < 5K Cmax training data.
+Mechanism in this experiment: the operator captures engine physics accurately, but the engine's systematic bias (AAFE 3.42) transfers through unchanged; fine-tuning with N=1,239 did not correct it via the tested encoder. This is another small-data failure, not proof of a universal SMILES information ceiling. Branch `feature/neural-operator-surrogate` (commit `b85b18d`); archive tag `archive/neural-operator-surrogate-2026-04-02`. Telltale if it returns: "differentiable surrogate / amortized engine / pre-trained operator + encoder fine-tuning" with N < 5K Cmax training data.
 
 ### DE-36 — UGT fm redistribution re-measurement (2026-05-13)
 **Refresh of a prior unrecorded sensitivity test** that had concluded "UGT fm redistribution degrades Engine AAFE 2.861 → 3.090" (cited as a comment in `src/sisyphus/predict/ivive.py` pre-2026-05-13). That measurement was pre-v0.3.2 + pre-public-only-headline + pre-ECM-auto-activation; current pipeline is materially different. Re-measured under current main + DrugBank-present:
@@ -252,13 +271,13 @@ Artifacts: `data/enzymes/ugt_ivive_sf.json` (all-1.0 audited registry), `src/sis
 
 **Date:** 2026-06-01
 
-**Context:** the 2026-06-01 prospective expansion (N=28, Meta AAFE 3.21 > retrospective 2.698) showed the engine catastrophically under-predicts some 2025 NMEs (mirdametinib 30×, sevabertinib 18×). Root-caused via IV/oral decomposition to **bioavailability (F) under-prediction, not clearance** — engine F = 0.05–0.08 vs implied real F ≈ 1.0, while engine CL_systemic ≈ literature (mirdametinib 4.8 vs 4.6 L/h). See diagnosis.md §8.
+**Context:** the 2026-06-01 prospective expansion (N=28, Meta AAFE 3.21 > retrospective 2.698) showed the engine severely under-predicts some 2025 NMEs (mirdametinib 30×, sevabertinib 18×). The then-proposed F attribution is unverified: the 4.6 L/h mirdametinib literature value is oral CL/F, not systemic CL, and no matched human absolute-F values support the implied real F ≈ 1.0. See [diagnosis §8](diagnosis.md).
 
 **Hypothesis:** the engine's own low predicted-F (or engine↔ML track disagreement) is a predict-time signal of an OOD / unreliable Cmax that the applicability-domain detector could flag, excluding the catastrophic cases from in-domain.
 
 **Result — falsified on the 107-holdout:** corr(engine_F, |log10 fold|) = **−0.037** on the holdout (vs −0.54 on the prospective new-16 — does **not** generalize). Of 21 holdout drugs with engine F<0.10, **17 are within 2-fold** (the engine predicts low F for nearly everything — median 0.18 — and it is co-calibrated). Flagging F<0.08 removes 7 in-domain drugs but only moves in-domain AAFE 2.760→2.732 — it removes *well*-predicted drugs. engine↔ML divergence is also flat (holdout r=−0.033; top-20 vs bottom-20 divergence AAFE 2.48 vs 2.57).
 
-**Why it failed:** the per-drug Cmax error is **not recoverable from the model's own outputs** — consistent with the structural-error ceiling (~30% PI coverage). The F under-prediction is real but near-uniform, so it carries no discriminative OOD signal. The honest lever is measured-F routing or an absorption-model recalibration, not an AD flag.
+**Why it failed:** low predicted F and engine↔ML divergence did not discriminate Cmax error on the tested development cohort. This rejects those two AD flags; it does not prove a structural-error ceiling or a population-level F under-call. Measured-F routing and absorption recalibration require matched source evidence and separate evaluation.
 
 **Telltale if it returns:** "flag low predicted-F / high track-disagreement as out-of-domain." Re-check the holdout correlation (≈0) before building — it looks predictive on a prospective slice but does not generalize.
 
@@ -268,15 +287,15 @@ Artifacts: `data/enzymes/ugt_ivive_sf.json` (all-1.0 audited registry), `src/sis
 
 **Date:** 2026-06-03
 
-**Context:** DE-41 / diagnosis.md §8 left "an absorption-model recalibration" as the one un-tested honest lever for the systematic engine bioavailability-F under-call (median engine-F/lit-F ≈ 0.46, 10/10 measured-fup+CLint PoC drugs). Two measurement-only decompositions tested it (engine `F = fa·Fg·Fh`; runtime monkeypatch only, no tracked file changed; headline Meta 2.698 / engine 3.831 reproduced exactly as controls).
+**Context:** DE-41 / diagnosis.md §8 had proposed absorption-model recalibration for a purported systematic F under-call (the historical 0.46 median and 10/10 anchors were later invalidated by the source audit). Two measurement-only decompositions tested that hypothesis (engine `F = fa·Fg·Fh`; runtime monkeypatch only, no tracked file changed; historical Meta 2.698 / engine 3.831 reproduced exactly as controls).
 
-**Confirmed diagnostic:** the *median* under-call localises to **fa** (fraction absorbed) — fa median bias 0.55 (vs physiological ~0.9), Fg ≈ 1.0, Fh ≈ 1.05 — because `ka = 2.88·Peff·ka_fraction/radius` (~6%/segment) loses the race to gut transit (~3.85/h), so most dose transits to faeces unabsorbed (dasatinib fa 0.16, sildenafil 0.22). Decisive: the non-CYP3A acids (diclofenac/etodolac/febuxostat) have an empty `metabolized_gut` sink (Fg ≈ 1 real) yet suppressed F ⇒ the loss is fa, not first-pass.
+**Internal model diagnostic:** the low predicted F in this engine decomposition is driven mainly by **fa** (fraction absorbed) — model median fa 0.55, Fg ≈ 1.0, Fh ≈ 1.05 — because `ka = 2.88·Peff·ka_fraction/radius` (~6%/segment) loses the race to gut transit (~3.85/h), so much simulated dose transits to faeces unabsorbed (dasatinib fa 0.16, sildenafil 0.22). For the tested non-CYP3A acids (diclofenac/etodolac/febuxostat), the model's `metabolized_gut` sink is empty, so its low F arises from fa rather than simulated gut first-pass. These are model mechanisms, not verified human fa/F errors.
 
 **Why the lever fails:** `ka` enters the ODE **linearly** (`rate = ka·y`), so any uniform multiplier — the `2.88` constant, a villous-amplification factor, a corrected particle radius, or a literature transit-window — is mathematically the *same flat scalar*. It nulls the median (5.25× → engine-F/lit-F 1.0; engine N=107 3.831→3.336) but **cannot reduce per-drug dispersion**: all 4 candidates plateau at geomean fold-error 1.43–1.45 (flat-scalar 1.40, itself inside the ±15% lit-F noise band); the one nonlinear candidate (Peff Caco-2→in-vivo remap) made it *worse* (1.52); engine SITT (195 min) already matches literature (Yu 1996, 199 min). On the full N=107 holdout the best refinement scored engine AAFE **3.405 — worse than the plain scalar (3.336)** — and flipped the engine from 14 to 30 `>3×`-over-predictors (the co-calibration-break signature; un-refit Meta regresses +3%, **meta-regression risk HIGH**).
 
-**The real residual is bidirectional first-pass, not absorption:** once fa→1, the per-drug error splits into two *opposing* modes one knob cannot reconcile — (a) **CYP3A first-pass over-extraction** for bases (alprazolam/carbamazepine/quinine cap at F ≈ 0.5 vs lit 0.8–0.9 even at fa=1; candidate cause: gut-CYP3A abundance scaled-to-midazolam over-extracting non-midazolam substrates) and (b) **well-stirred Fh under-extraction** for high-PPB acids (diclofenac fup=0.003, febuxostat, etodolac overshoot — the DE-37/B-11 hepatic-fu problem). Fixing the bases worsens the acids. Both halves are already data-blocked / co-calibrated.
+**Residual within this intervention:** once model fa→1, the per-drug comparison splits into two *opposing* modes one knob cannot reconcile — (a) candidate **CYP3A first-pass over-extraction** for bases (alprazolam/carbamazepine/quinine cap at F ≈ 0.5 vs purported literature 0.8–0.9 even at fa=1) and (b) candidate **well-stirred Fh under-extraction** for high-PPB acids (diclofenac fup=0.003, febuxostat, etodolac overshoot). Fixing the bases worsens the acids in this experiment. The literature F comparisons have not passed the later matched-source audit, so neither mechanism is established as the human error cause.
 
-**Telltale if it returns:** "recalibrate the absorption constant / villous amplification / particle radius / transit time to fix the engine's low bioavailability F." It nulls the median F on a PoC set but is a flat scalar in disguise (ka is linear), worsens the holdout vs the simpler scalar, and breaks meta co-calibration. The only un-foreclosed F lever is **measured-F routing**; the recoverable structural residual is first-pass (gut/hepatic CYP3A IVIVE ⊕ hepatic-fu for high-PPB acids), not absorption.
+**Telltale if it returns:** "recalibrate the absorption constant / villous amplification / particle radius / transit time to fix the engine's low bioavailability F." It nulls the median comparison on a PoC set but is a flat scalar in disguise (ka is linear), worsens the tested development cohort vs the simpler scalar, and breaks meta co-calibration. Revisit only with matched human F sources and a separate untouched evaluation.
 
 ---
 
@@ -286,13 +305,13 @@ Artifacts: `data/enzymes/ugt_ivive_sf.json` (all-1.0 audited registry), `src/sis
 
 **Context:** DE-42 foreclosed absorption recalibration for the *retrospective* headline. Open question: the *prospective* N=28 set (Meta AAFE 3.21 — the real novel-drug failure, §8) is **not** part of the meta co-calibration, so a first-pass lever foreclosed retrospectively might still net-improve it. A measurement-only test decomposed the prospective catastrophes and measured two levers on **both** benchmarks via the production meta path (runtime monkeypatch only; before-controls bit-exact: retro meta 2.69825 / engine 3.8314).
 
-**Decomposition (production predicted-ADME, `F = fa·Fg·Fh`):** the catastrophic under-predictors (mirdametinib engine 74×, sevabertinib 53×, pirtobrutinib, pacritinib, tovorafenib … mostly kinase inhibitors) are **fa-first, Fg-second** — fa 0.08–0.32 (absorption starved: low Peff, or low RDKit-solubility → `particle_radius=50µm` → `ka ≪` gut transit), then gut-CYP3A Fg 0.37–0.55 (the midazolam-calibrated `gut_wall` CYP3A4 over-extracting). Fh is correct (consistent with §8: CL_systemic correct). The over-predictors (imlunestrant, taletrectinib) are `not_F` (Vdss/distribution, out-of-AD) — a blunt F lever *worsens* them.
+**Model decomposition (production predicted-ADME, `F = fa·Fg·Fh`):** the catastrophic Cmax under-predictors (mirdametinib engine 74×, sevabertinib 53×, pirtobrutinib, pacritinib, tovorafenib … mostly kinase inhibitors) have low predicted fa first and Fg second — fa 0.08–0.32 (low predicted Peff, or low RDKit-solubility → `particle_radius=50µm` → `ka ≪` gut transit), then gut-CYP3A Fg 0.37–0.55. This does not establish that either factor is wrong relative to matched human F. The tested F lever worsened Cmax over-predictions for imlunestrant and taletrectinib.
 
 **Result — both levers fail at the meta:** absorption scalar (5.25×): prospective meta 3.171→3.102 (−0.069) but retro meta 2.698→**2.780** (+0.082) → **net −0.012** (costs the headline more than it gains). Gut-CYP3A 0.5×: prospective meta 3.171→3.151 (−0.020), retro meta neutral (−0.0006) → net +0.020 but **inside the N=28 bootstrap CI** (statistically zero) and **not literature-anchored** (halving a midazolam-calibrated abundance = tuning to Cmax, Invariant #8).
 
-**Why it failed (the unifying mechanism):** both levers move the **engine track** materially on prospective (absorption 4.11→3.75; gut-CYP3A 4.11→4.00; mirdametinib engine fold 58→13 / 58→51) — but the fixed-weight **meta-learner damps this to ~18–19% pass-through, the SAME on prospective as on retrospective.** The meta is robust to engine errors by construction (down-weights outlier engine predictions), which symmetrically prevents engine *improvements* from propagating. **Prospective is NOT exempt from co-calibration** — the engine is structurally not a headline lever on *any* benchmark. Plus the DE-42 bidirectional tension: relieving the catastrophic unders blows up the `not_F` over-predictors (imlunestrant 17×→62× under the absorption scalar).
+**Why it failed on the tested cohorts:** both levers move the **engine track** materially on prospective (absorption 4.11→3.75; gut-CYP3A 4.11→4.00; mirdametinib engine fold 58→13 / 58→51) — but the fixed-weight **meta-learner damps this to ~18–19% pass-through, the SAME on prospective as on retrospective.** The meta down-weights these engine changes under its current weights, limiting the measured headline effect. That result does not bound every future engine or meta intervention. Plus the DE-42 bidirectional tension: relieving the catastrophic under-predictions worsens other drugs (imlunestrant 17×→62× under the absorption scalar).
 
-**Telltale if it returns:** "the prospective / novel-drug set isn't co-calibrated, so an engine F / first-pass / gut-CYP3A recalibration will fix it." It improves the engine track on both sets but the fixed-weight meta mutes it to ~18%; net is neutral-to-negative and within N=28 noise. The only un-foreclosed F lever is per-drug **measured-F routing**, not an engine recalibration.
+**Telltale if it returns:** "the prospective / novel-drug set isn't co-calibrated, so an engine F / first-pass / gut-CYP3A recalibration will fix it." The tested recalibrations improve the engine track on both sets but the fixed-weight meta mutes them to ~18%; net is neutral-to-negative and within N=28 noise. Any future measured-F routing needs matched endpoint sources and independent evaluation.
 
 ---
 
@@ -359,11 +378,11 @@ Artifacts: `docs/research/layered-analysis-and-leap-2026-06-08.md` (Exp 3).
 
 **What was measured (high power, N=93 holdout overlap, clean holdout-excluded train of 1035):** provenance clean (fup/clint literature-measured, not model outputs; cmax_obs is the clinical value — not circular). Track CV AAFE **3.79** (worse than SMILES-ML 3.01 and far worse than engine-measured 2.33). **Decorrelation gate FAIL:** residual r = **+0.685 / +0.784 / +0.787** vs engine/ml/meta (p<1e-13; partial-r controlling for log-obs +0.59/+0.70/+0.70). Even the oracle per-drug min(track, engine) blend = 2.40 > engine-measured 2.33.
 
-**Why it failed (the unifying mechanism — W2):** the dominant error mode is **bioavailability-F blindness, shared across all tracks regardless of input**. A flat regressor has no F (absorption/first-pass/volume) mechanism either, so it re-makes the *same directional errors on the same drugs* (the DE-41 low-F cluster) → correlated residuals. Measured fup/clint were **nearly inert** features (importance 0.045/0.053 vs dose 0.49): measured ADME is only usable *mechanistically* (through the engine), not by a regressor. **The error, not the input, is what must decorrelate** — and F-error is everywhere. This is the fourth gate failure of 2026-06-08 and the empirical heart of the F wall.
+**Why it failed:** the tested flat regressor reproduced correlated Cmax errors, while measured fup/clint had low feature importance (0.045/0.053 vs dose 0.49). This rejects that track and shows its errors did not decorrelate; the source evidence does not identify F as the common cause or rule out other measured-input regressors. This was the fourth gate failure of 2026-06-08.
 
 **Scope caveat:** concerns the MEASURED-INPUT regime only; zero bearing on the SMILES-only 2.784 holdout (measured ADME absent there). The genuine measured-regime lever is **measured-regime routing** (trust the measured-*engine* more when measured ADME is present — an input-availability regime switch, the extension of shipped measured-F routing), NOT a measured-ADME regressor track.
 
-**Telltale if it returns:** "feed measured fup/CLint into a new ML/analytical track so the meta can use them." The regressor shares the F-blindness and fails the gate; route measured inputs to the measured-aware *engine* instead.
+**Telltale if it returns:** "feed measured fup/CLint into a new ML/analytical track so the meta can use them." This regressor failed the decorrelation gate; a new candidate needs a distinct architecture and independent evaluation. The measured-aware engine remains the existing supported path for these inputs.
 
 Artifacts: corpus `data/training/mmpk_pbpk_features.csv`, exclusions `mmpk_sisyphus_holdout_exclusions.json`, per-track residuals `data/training/4track_holdout_predictions.json`; analysis `docs/research/layered-analysis-and-leap-2026-06-08.md` (Exp 4).
 
@@ -418,7 +437,7 @@ Artifacts: `scripts/validate_pgx_cmax_v2b.py`, `tests/integration/test_pgx_arm_s
 
 **Production is NOT affected.** `src/sisyphus/predict/adme.py` loads `models/adme/xgboost_clint.json`, which is **byte-distinct** from the mixed experimental artifacts (`xgboost_clint_expanded.json`, `xgboost_clint_v3_biogen.json`) and whose `xgboost_clint.meta.json` declares `trained_on = TDC Hepatocyte_AZ` (single assay). `train_clint_expanded.py`'s DECISION gate reverted the mixed model when Meta AAFE worsened (DE-11 / DE-16). Guard added: `tests/regression/test_clint_provenance.py`.
 
-**Telltale if it returns:** "merging microsome / ChEMBL / Biogen lifts CLint CV R²" — true on mixed-CV, **false on a hepatocyte-holdout**. To honestly use cross-assay data, apply **per-source assay calibration** (overlap-compound regression, NOT a global median offset) **before** merging; uncalibrated merge adds noise, not signal. The hepatocyte single-assay ceiling (ρ≈0.24 scaffold-CV, the meta's documented R²) is only the *real* limit once the mixing is removed.
+**Telltale if it returns:** "merging microsome / ChEMBL / Biogen lifts CLint CV R²" — true on mixed-CV, **false on a hepatocyte-holdout**. To honestly use cross-assay data, apply **per-source assay calibration** (overlap-compound regression, NOT a global median offset) **before** merging; uncalibrated merge adds noise, not signal. The hepatocyte-only scaffold-CV R²≈0.24 is the current single-assay benchmark, not a proven ceiling.
 
 ---
 
@@ -488,7 +507,7 @@ Artifacts: `scripts/probe_liver_zonation.py`, `tests/integration/test_liver_zona
 
 **Date:** 2026-07-07
 
-**The DE-44 `invivo-F-prior` test, run with placebo controls — killed, richer than predicted.** Applied the structure→F predictor (`xgboost_bioavailability.json`, target log10(F/100), **scaffold-CV R²=−0.09** — noise, DE-28) to the holdout via the measured-F routing at shrinkage w∈{0.25,0.5,1.0}. DE-44 pre-registered "AAFE **rises** +0.02–0.08 → kill." Instead the meta AAFE **fell**: 2.7428 → 2.685 (w=0.25) → **2.646** (w=0.5) → 2.736 (w=1.0) — non-monotonic, the surprise branch. **Placebo controls at w=0.5 resolve it decisively:** REAL per-drug F Δ=**−0.097**, but a **CONSTANT** F (geomean) Δ=**−0.133** and a **SHUFFLED** F (drug↔F match destroyed) Δ=**−0.116** both *reproduce and exceed* it. Per-drug F information is **zero** (real is *worse* than shuffled). **Mechanism:** f_eng geomean 0.148 vs Fpred 0.424, median k=**2.57** (upscale) — the engine systematically under-predicts F, so *any* upward F scalar nulls that median bias → AAFE dips; a constant does it cleanest. This is **DE-42** (flat scalar nulls median F, not dispersion) shown directly on the meta headline. **Triple-dead:** (1) the effect is the placebo-proven flat-scalar artifact, no F signal (re-confirms DE-28/42); (2) the scalar is a holdout-fit median-bias correction = **Invariant #8 forbidden** ("fudge to Cmax loss, any form"); (3) even the best (constant) −0.133 is within the bootstrap CI half-width ~0.42 and does not generalize (the prospective F-under-call differs, DE-54; DE-42's over-tail flip). Artifact `data/validation/pi_fprior_killtests_2026-07-07.json`.
+**The DE-44 `invivo-F-prior` test, run with placebo controls — killed, richer than predicted.** Applied the structure→F predictor (`xgboost_bioavailability.json`, target log10(F/100), **scaffold-CV R²=−0.09** — noise, DE-28) to the holdout via the measured-F routing at shrinkage w∈{0.25,0.5,1.0}. DE-44 pre-registered "AAFE **rises** +0.02–0.08 → kill." Instead the meta AAFE **fell**: 2.7428 → 2.685 (w=0.25) → **2.646** (w=0.5) → 2.736 (w=1.0) — non-monotonic, the surprise branch. **Placebo controls at w=0.5 resolve it decisively:** REAL per-drug F Δ=**−0.097**, but a **CONSTANT** F (geomean) Δ=**−0.133** and a **SHUFFLED** F (drug↔F match destroyed) Δ=**−0.116** both *reproduce and exceed* it. Per-drug F information was not demonstrated (real was *worse* than shuffled). **Mechanism of this intervention:** f_eng geomean 0.148 vs Fpred 0.424, median k=**2.57** (upscale), so any upward scalar on the tested development set could lower Cmax error; this comparison does not establish a human F bias. A constant did it most strongly. This is **DE-42** (flat scalar nulls median Cmax error, not dispersion) shown directly on the meta headline. **Triple-dead:** (1) the effect is the placebo-proven flat-scalar artifact, no demonstrated per-drug F signal (re-confirms DE-28/42); (2) the scalar is a holdout-fit median-bias correction = **Invariant #8 forbidden** ("fudge to Cmax loss, any form"); (3) even the best (constant) −0.133 is within the bootstrap CI half-width ~0.42 and does not establish generalization (the prospective response differs, DE-54; DE-42's over-tail flip). Artifact `data/validation/pi_fprior_killtests_2026-07-07.json`.
 
 **Telltale if it returns:** "an in-vivo F prior improved the holdout AAFE by ~0.10." That drop is a **flat-scalar median-bias null**, not F information — a constant or shuffled F reproduces it, and the scalar is holdout-fit (Invariant #8) and non-generalizing. Any future F-prior must beat its own constant/shuffled placebo before it counts.
 
@@ -502,9 +521,9 @@ Artifacts: `scripts/probe_liver_zonation.py`, `tests/integration/test_liver_zona
 
 **Result (gate = Spearman ρ + bootstrap 95% CI, seed 20260422, N=107).** Core null: **ρ(U_boot, e_eng) = −0.006** [−0.20, +0.18] — CLint epistemic uncertainty does not predict engine error, though the engine *is* the CLint-fed track. Actionable null: **ρ(U, e_eng−e_ml) ≈ +0.12** for **both** proxies (U_boot [−0.07, +0.30], U_ad [−0.07, +0.31]) — CI∋0, no reweighting signal. The one CI-significant term, ρ(U_boot, r_meta) = −0.255 [−0.42, −0.07], is sub-threshold **and wrong-signed** (higher CLint uncertainty ⇒ *lower* meta error — the meta already handles uncertain-CLint drugs well). Confound-clean: ρ(U_boot, obs-magnitude) = +0.002.
 
-**Why it failed — §10.** The binding wall is bioavailability-F blindness, shared across all four tracks and **orthogonal to CLint**; Cmax error is F-driven, so no CLint-derived signal can discriminate it. A perfect CLint-uncertainty router would have nothing to route on. Per §4 the gate precedes integration → the uncertainty-aware meta is **not built**.
+**Why it failed — §10.** Neither tested CLint-uncertainty proxy discriminated the actionable Cmax error difference on this development set. That supports stopping this routing proposal at its gate; it does not establish an F-driven cause or rule out every future CLint-derived signal. Per §4 the gate precedes integration, so the uncertainty-aware meta was **not built**.
 
-**Telltale if it returns:** "route the meta by how uncertain the CLint prediction is." No per-drug CLint uncertainty predicts Cmax error (ρ≈0 on the actionable target for two independent constructions); the discriminating error is F, not CLint. Artifacts: `scripts/clint_uncertainty_gate.py`, `data/validation/clint_uncertainty_gate_2026-07-08.json`.
+**Telltale if it returns:** "route the meta by how uncertain the CLint prediction is." The two tested proxies had ρ≈0 on the actionable target; a new proposal needs a distinct, independently evaluated signal. Artifacts: `scripts/clint_uncertainty_gate.py`, `data/validation/clint_uncertainty_gate_2026-07-08.json`.
 
 ---
 
@@ -519,6 +538,12 @@ Artifacts: `scripts/probe_liver_zonation.py`, `tests/integration/test_liver_zona
 **Why it failed.** This is Svensson's own conclusion realised on our pipeline (censoring lifts *uncertainty/NLL*, not *point accuracy*) and a fresh controlled re-demonstration of three walls at once: **§2 error-cancellation** (a better-motivated CLint breaks the joint balance → engine worse), **§8/DE-42** (the moved drugs are low-CLint renal cases where F, not CLint, binds Cmax), and **DE-43** (the fixed-weight meta damps the engine move, +0.054 → −0.0045). Per §4 the gate precedes integration → not integrated.
 
 **Telltale if it returns:** "model the censored CLint labels honestly (Tobit/AFT/censored-NLL) and Cmax will improve." It will not — censoring improves label uncertainty, not the point CLint that feeds the engine, and the fixed-weight meta damps the resulting engine change to noise. Artifacts: `scripts/clint_censored_regression.py`, `data/validation/clint_censored_regression_2026-07-08.json`.
+
+---
+
+### DE-59 — Direct Cmax source-metadata filter (2026-09-25)
+
+Removing rows with unresolved salt annotations, missing formulation in any source arm, or reported modified release left 516/906 training rows. On the same 516 scored rows and scaffold folds, filtered AAFE was 3.396 versus 3.282 for full-data training (paired ratio 1.035, 95% CI 0.985–1.088); ten equal-size random controls ranged 3.368–3.628. The workbooks lack row-level matrix and fasting evidence, so the filter cannot verify those clinically relevant conditions, and this negative result does not rule out source-verified label corrections. **Telltale:** blanket removal by salt/formulation metadata alone; see [full report](cmax_source_consistency_ablation_2026-09-25.md).
 
 ---
 

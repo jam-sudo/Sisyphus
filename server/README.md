@@ -2,25 +2,29 @@
 
 A small FastAPI service over the **real** Sisyphus engine that powers
 arbitrary-SMILES predictions in the console (the Phase-2 "live tier"). It returns
-a Drug entry in the exact shape the frontend's static data uses, so every view
-works on a freshly-predicted compound.
+a Drug entry compatible with the prediction view. One core call supplies the
+final `CmaxPrediction` and the separate coherent `EngineSimulation`.
 
 ## Endpoints
 
-- `GET /health` → `{status, engine}`
+- `GET /health` → `{status, version, profile, primary_output}`
+- `GET /model-info` → versioned scientific model card and evidence status
 - `POST /predict` `{ "smiles": "...", "dose_mg": 100, "route": "oral", "name": "…?" }`
-  → full Drug entry (meta + conformal PI + 4 tracks + weights + disposition +
-  engine curve + pkfit + real DDI folds + metadata). Invalid SMILES → `400`.
+  → Meta Cmax + residual interval + tracks/weights + source-labelled engine
+  endpoints/curve + artifact provenance. Invalid SMILES → `400`.
 
-Scope: **predict + ddi** are computed live; **simulate** is derived client-side
-from the returned `pkfit`/curve; **tdm/dose-adjust** are out of live scope (the
-response carries a tdm placeholder the TDM view labels "illustrative").
+`disposition.doseOverAuc0t` is dose divided by the engine's 0–24h AUC, not
+terminal CL/F. A failed or missing engine solve returns `500`.
+
+Scope: only structure-only Cmax prediction is supported live. DDI, TDM, and
+dose recommendation are not part of this API contract.
 
 ## Run locally
 
 ```bash
 # from the repo root, with the engine deps available
-pip install -r server/requirements.txt          # fastapi + uvicorn
+pip install -r server/requirements.txt
+pip install -e . --no-deps
 uvicorn server.app:app --port 8000 --workers 1   # http://127.0.0.1:8000
 
 curl -X POST http://127.0.0.1:8000/predict \
@@ -30,14 +34,14 @@ curl -X POST http://127.0.0.1:8000/predict \
 
 Point the frontend at it: `cd web && VITE_API_URL=http://127.0.0.1:8000 npm run dev`.
 
-> Run with **one worker**. The weight-capture path uses a module global (guarded
-> by a lock); a single worker keeps predictions correct under concurrency.
+The server has no global weight-capture state and may use multiple workers,
+subject to memory limits for the loaded ML artifacts.
 
 ## Deploy to Hugging Face Spaces (Docker, free)
 
 1. Create a new **Space** → SDK: **Docker** → blank.
 2. Add a root `Dockerfile` with the contents of [`server/Dockerfile`](./Dockerfile)
-   (it clones this repo, installs deps, and serves on port 7860). Commit/push to
+   (it copies only runtime source and artifacts, installs pinned production deps, and serves on port 7860). Commit/push to
    the Space; HF builds it. First build takes a few minutes (rdkit/xgboost wheels).
 3. Note the Space URL, e.g. `https://<user>-sisyphus.hf.space`. Verify
    `GET <url>/health` returns ok.
@@ -68,7 +72,7 @@ Point the frontend at it: `cd web && VITE_API_URL=http://127.0.0.1:8000 npm run 
   Alternative: run uvicorn with `--proxy-headers --forwarded-allow-ips=<proxy>`.
 
 > The security contract (CORS allow-list + rate-limit key) is gated in CI by the
-> engine-free `server-security` job (`server/tests/`, `server/config.py`).
+> `server-security` job (`server/tests/`, `server/config.py`).
 
 ### Notes / before a public, uncapped deploy
 - The free Space sleeps when idle; the first request after sleep cold-starts

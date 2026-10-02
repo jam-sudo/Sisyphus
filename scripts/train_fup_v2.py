@@ -33,6 +33,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 
 from sisyphus.descriptors import compute_features  # noqa: E402
+from sisyphus.validation.identity import ik14 as _inchikey_prefix  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Logging
@@ -82,23 +83,6 @@ def _canonical_smiles(smiles: str) -> str | None:
     if mol is None:
         return None
     return Chem.MolToSmiles(mol, isomericSmiles=True)
-
-
-def _inchikey_prefix(smiles: str) -> str | None:
-    """Return first 14 characters of InChIKey (connectivity block), or None."""
-    from rdkit import Chem
-    from rdkit.Chem.inchi import MolToInchi, InchiToInchiKey
-
-    mol = Chem.MolFromSmiles(smiles)
-    if mol is None:
-        return None
-    inchi = MolToInchi(mol)
-    if inchi is None:
-        return None
-    ik = InchiToInchiKey(inchi)
-    if ik is None:
-        return None
-    return ik[:14]
 
 
 # ---------------------------------------------------------------------------
@@ -422,6 +406,11 @@ def evaluate_cv(model: xgb.XGBRegressor, X: np.ndarray, y: np.ndarray) -> dict:
 # ---------------------------------------------------------------------------
 
 def main() -> int:
+    # Historical DrugBank recipe; do not overwrite the auditable public model.
+    manifest = OUTPUT_MODEL.with_suffix(".meta.json")
+    if manifest.exists() and json.loads(manifest.read_text()).get("version") == "v2_public_tdc":
+        log.error("Refusing to overwrite public fup v2; use scripts/retrain_fup_public.py")
+        return 1
     log.info("=" * 60)
     log.info("train_fup_v2.py — XGBoost fup v2 training")
     log.info("=" * 60)

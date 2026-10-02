@@ -1,0 +1,458 @@
+{
+  "task_id": "task_a6553d3530e7",
+  "dispatch_id": "ctx_81a9a9ca7db7",
+  "reviewed_at": "2026-09-23",
+  "reviewer": "Claude Code (AI first-pass source audit; not an independent human curator)",
+  "scope": "1-based manifest positions 181-186 of data/validation/self_run_p0_candidates.json, frozen order; 6 candidates, 11 arms (end of the 186-candidate manifest)",
+  "blinding": "self_run_p0_predictions.json and all model outputs were NOT opened. The FRDB snapshot /tmp/sisyphus-frdb-v2024-12-30.zip (SHA256 647b80d9...9c7a, verified) was read with every column containing 'cmax' dropped before any row was printed. Arms were mapped by dose, AUC, t1/2, n, sex, population and annotated-form metadata only. Original-source Cmax values were then read from original tables/text. No observed-vs-predicted comparison was made.",
+  "method_note": "Single AI pass. Full originals read: PMC8167741 (pridinol, MCP full text); PMC3346613 full-text HTML (lersivirine TQT); archived PMDA interview forms for actarit (530263_1149031F1030_1_15F_1F, SHA256 303520b8...f129) and faropenem (730155_6139001R1032_1_012_1F, SHA256 e1bdb676...bc3c) via web.archive.org id_ captures, because both cited info.pmda.go.jp URLs now return 404 (actarit cited revision 14F never archived; faropenem cited revision 011 archived only as a truncated 1 MiB capture). Blocked originals time-boxed: DMD/ScienceDirect (lersivirine ADME, Cloudflare 403 also in a clean Playwright session), Wiley (butriptyline), Karger (sulfamethoxypyridazine). Only PubMed E-utilities (MCP), PMC, Europe PMC, web.archive.org and publisher landing pages were queried. No email, contact identifier or Unpaywall was used; no repository file was modified (transient Playwright logs this session created were removed).",
+  "summary": {
+    "candidates": 6,
+    "arms": 11,
+    "arm_verification": {
+      "ineligible": 1,
+      "unverified": 3,
+      "verified": 1,
+      "verified_with_caveat": 6
+    },
+    "candidates_with_any_verified_cmax": [
+      "2147",
+      "393",
+      "8748",
+      "2063"
+    ],
+    "fully_unverified_candidates": [
+      "732"
+    ],
+    "fully_ineligible_candidates": [],
+    "protocol_eligible_candidates_confirmed_without_caveat": 1,
+    "duplicate_arm_flags": [
+      "frdb_4649 duplicates frdb_4644 (same faropenem 300 mg fasted cohort, identical values)"
+    ]
+  },
+  "unresolved_issues": [
+    "Pridinol (2147): verified; FRDB AUC/t1/2 map to the TEST product MEDIAN values, so the matched Cmax statistic is the median 31.04 ng/mL (mean 30.71, gmean 29.27). Coordinator should fix the statistic convention.",
+    "Actarit (393): verified_with_caveat - cited IF revision 14F unavailable; 15F read. Fasted row n=16 Cmax 2.09 μg/mL. Food-study dosage form implicit (film-coated IR tablet product).",
+    "Lersivirine (8748): frdb_8714 (500 mg [14C] ADME, n=4) unverified - DMD full text blocked; frdb_8715 (2,400 mg TQT, n=48) verified_with_caveat - 8-h fast, plasma, gmean 1727 ng/mL, dosage form unstated.",
+    "Sulfamethoxypyridazine (732): unverified - 1967 Karger paper, no abstract, full text 403; free vs total sulfonamide assay unknown.",
+    "Butriptyline (2875): frdb_6312 ineligible (sustained-release). frdb_6311 unverified - abstract gives conventional-tablet Cmax 46.5 ng/mL but fasting/health status/statistic not confirmable (Wiley 403); manifest dose 75 mg is HCl salt basis (≈66.7 mg base by MW; FRDB annotation's 72.6 mg base looks inconsistent).",
+    "Faropenem (2063): 4 arms verified_with_caveat from IF revision 012 (cited 011 truncated in archive); doses are 力価 (free-acid potency) so no salt correction; frdb_4649 duplicates frdb_4644 and should be counted once; 600 mg arm is supratherapeutic and sub-proportional."
+  ],
+  "candidates": [
+    {
+      "manifest_position_1based": 181,
+      "candidate_id": "2147",
+      "name": "PRIDINOL",
+      "smiles": "OC(CCN1CCCCC1)(c1ccccc1)c1ccccc1",
+      "arms": [
+        {
+          "arm_id": "frdb_4823",
+          "verification": "verified",
+          "reason": "Mapped by AUCinf 197.11 ng·h/mL and t1/2 18 h, which are exactly the TEST-product (Myoson direct) MEDIAN AUC∞ and T1/2 in Table 2 (N=33); FRDB has no row for the reference product (Lyseen). Healthy male+female adults, overnight 8-h fast, single IR tablet (dissolution ≥98% in 15 min), pridinol in plasma by LC-MS/MS.",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8167741/",
+          "source_access_status": "open PMC full text read (Methods, Results, Table 2)",
+          "original_cmax": 31.04,
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "median (range 10.64-55.94), N=33, test product; same arm arithmetic mean 30.71 (SD 9.34), geometric mean 29.27 (CV 33.47%). Reference product: median 27.45, mean 28.76, gmean 27.44 (not an FRDB arm). Statistic choice (median, matching the FRDB AUC/t1/2 mapping) needs coordinator adjudication.",
+          "exact_locator": "Int J Clin Pharmacol Ther 2021;59(6):471-477, Table 2 'Descriptive statistics of pharmacokinetic parameters of pridinol (per-protocol set, N = 33)', Cmax column, Test",
+          "fasting_evidence": "'administered ... 1 tablet ... in the morning after an overnight fasting period of 8 hours (no food ...)'",
+          "formulation_evidence": "'divisible, immediate-release tablets containing 4 mg pridinol mesylate corresponding to 3 mg pridinol'",
+          "dose_evidence": "4 mg pridinol mesylate = 3 mg pridinol base, single dose; manifest 3 mg is free-base basis, matching the free-base SMILES",
+          "uncertainty": "low",
+          "analyte": "pridinol parent",
+          "matrix": "plasma (K2EDTA)",
+          "population": "33 healthy Caucasian adults (17 F / 17 M randomized), 19-55 y",
+          "manifest_dose_mg": 3.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://pubmed.ncbi.nlm.nih.gov/33835016/",
+          "mapping_metadata_used": {
+            "pk_auc_value": "197.11",
+            "pk_auc_units": "ng × h/mL",
+            "pk_auc_type": "∞",
+            "pk_thalf_value": "18",
+            "pk_thalf_units": "h",
+            "pk_population_size": "33",
+            "pk_sex": "FEMALE / MALE",
+            "pk_analyte_pt": "PRIDINOL",
+            "pk_dose_type": "UNKNOWN"
+          }
+        }
+      ]
+    },
+    {
+      "manifest_position_1based": 182,
+      "candidate_id": "393",
+      "name": "ACTARIT",
+      "smiles": "CC(=O)Nc1ccc(CC(=O)O)cc1",
+      "arms": [
+        {
+          "arm_id": "frdb_821",
+          "verification": "verified_with_caveat",
+          "reason": "Mapped by n=16, AUC∞ 4.16 μg·h/mL and t1/2 1.13 h, which match the 絶食時 (fasted) row of the food-effect table (ref. 33); the fed row is n=4 with AUC 4.56 / t1/2 0.86. Healthy adult males, actarit (free acid, no salt) 100 mg, plasma. Caveats: (i) cited IF version (14F) is 404 and not archived, the 2022 revision 15F was read; (ii) dosage form in the food-effect study is not stated in the table (product is a 100 mg film-coated IR tablet); (iii) the IF table lists the fed row values identical to the separate 100 mg dose-escalation study (n=4), a possible transcription artefact in the IF, but the fasted row is internally consistent with FRDB.",
+          "source_url": "https://web.archive.org/web/20240621195015id_/https://www.info.pmda.go.jp/go/interview/1/530263_1149031F1030_1_15F_1F.pdf#page=17",
+          "source_access_status": "Cited PMDA URL (…_1_14F_1F.pdf) returns 404 and has no Wayback capture; read the archived next revision (…_1_15F_1F.pdf, 2022-07 第4版) in full",
+          "original_cmax": 2.09,
+          "original_cmax_unit": "μg/mL",
+          "cmax_statistic": "mean ± SD 2.09 ± 0.70, n=16",
+          "exact_locator": "オークル錠/モーバー錠 (actarit) IF 2022-07 版 PDF p.17 (printed p.13), Ⅶ.1.(4) 食事・併用薬の影響 table, row 絶食時 (FRDB cites 14F version p.18)",
+          "fasting_evidence": "table row label '絶食時' (fasted) vs '食後'; text '食後および絶食時に単回経口投与'",
+          "formulation_evidence": "IF product = 1錠中アクタリット100mg film-coated tablet (フィルムコーティング錠); formulation used in ref. 33 not separately stated",
+          "dose_evidence": "100 mg actarit single oral dose (free acid; no salt form)",
+          "uncertainty": "low-moderate (IF revision substitution; study dosage form implicit)",
+          "analyte": "actarit parent (血漿中アクタリット)",
+          "matrix": "plasma",
+          "population": "16 healthy adult males (健常成人男性)",
+          "manifest_dose_mg": 100.0,
+          "manifest_cmax_unit": "μg/mL",
+          "manifest_source_uri": "https://www.info.pmda.go.jp/go/interview/1/530263_1149031F1030_1_14F_1F.pdf#page=18",
+          "mapping_metadata_used": {
+            "pk_auc_value": "4.16",
+            "pk_auc_units": "μg × h/mL",
+            "pk_auc_type": "∞",
+            "pk_thalf_value": "1.13",
+            "pk_thalf_units": "h",
+            "pk_population_size": "16",
+            "pk_sex": "MALE",
+            "pk_analyte_pt": "ACTARIT",
+            "pk_dose_type": "RECOMMENDED"
+          }
+        }
+      ]
+    },
+    {
+      "manifest_position_1based": 183,
+      "candidate_id": "8748",
+      "name": "LERSIVIRINE",
+      "smiles": "CCc1nn(CCO)c(CC)c1Oc1cc(C#N)cc(C#N)c1",
+      "arms": [
+        {
+          "arm_id": "frdb_8714",
+          "verification": "unverified",
+          "reason": "Human ADME/mass-balance study: single oral 500 mg [14C]lersivirine in 4 healthy males. FRDB n=4, t1/2 5.83 h, AUC∞ 4100 ng·h/mL, fu 0.424 consistent with the abstract design. The abstract confirms plasma measurement of unchanged lersivirine but gives no Cmax value, fasting state or dosage form (radiolabelled ADME doses are often oral solutions/suspensions). Full text (DMD, now hosted by Elsevier/ScienceDirect) blocked by Cloudflare 403 on both dmd.aspetjournals.org and sciencedirect.com; time-boxed.",
+          "source_url": "https://doi.org/10.1124/dmd.109.031252",
+          "source_access_status": "abstract only (PubMed 20124396); full text blocked (403 Cloudflare)",
+          "original_cmax": null,
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "not accessible",
+          "exact_locator": "Drug Metab Dispos 2010;38(5):789-800, abstract; PK table not accessible",
+          "fasting_evidence": "not stated in abstract",
+          "formulation_evidence": "not stated in abstract ([14C]lersivirine, dosage form unknown)",
+          "dose_evidence": "single oral 500 mg [14C]lersivirine (parent, no salt)",
+          "uncertainty": "high (Cmax, fasting, formulation all unverified)",
+          "analyte": "unchanged lersivirine (plus total radioactivity)",
+          "matrix": "plasma (abstract)",
+          "population": "4 healthy adult males",
+          "manifest_dose_mg": 500.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://pubmed.ncbi.nlm.nih.gov/20124396",
+          "mapping_metadata_used": {
+            "pk_auc_value": "4100",
+            "pk_auc_units": "ng × h/mL",
+            "pk_auc_type": "∞",
+            "pk_thalf_value": "5.83",
+            "pk_thalf_units": "h",
+            "pk_population_size": "4",
+            "pk_sex": "MALE",
+            "pk_analyte_pt": "LERSIVIRINE",
+            "pk_annotated_form": "LERSIVIRINE",
+            "pk_funbound_comment": "plasma protein binding of lersivirine is low to moderate (fraction unbound = 0.424)",
+            "pk_dose_type": "UNKNOWN"
+          }
+        },
+        {
+          "arm_id": "frdb_8715",
+          "verification": "verified_with_caveat",
+          "reason": "Mapped by n=48 healthy males and AUC 17,750 ng·h/mL (AUClast, geometric mean) = the Results value. Thorough-QT 3-way crossover; lersivirine 2,400 mg single dose given after an 8-h fast in its own period (moxifloxacin/placebo in other periods, ≥7-day washout, so not a combination). Plasma lersivirine. Caveats: dosage form not stated (text says only 'formulation ... similar' to the SAD study); supratherapeutic dose with sub-proportional exposure noted by authors; Cmax reported as Results-text geometric mean, no PK table.",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3346613/",
+          "source_access_status": "open PMC full-text HTML read",
+          "original_cmax": 1727.0,
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "geometric mean (CV 33%), n=48",
+          "exact_locator": "Antimicrob Agents Chemother 2012;56(5):2408-13, Results 'Lersivirine pharmacokinetics' paragraph (also restated in Discussion)",
+          "fasting_evidence": "'received a single dose of (i) lersivirine (2,400 mg) ... on day 1 (following an 8-h fast)'",
+          "formulation_evidence": "not stated (oral; dosage form/IR status not specified)",
+          "dose_evidence": "2,400 mg lersivirine single oral dose (parent, no salt)",
+          "uncertainty": "low for value; moderate for formulation",
+          "analyte": "lersivirine parent ('maximum plasma lersivirine concentration')",
+          "matrix": "plasma",
+          "population": "48 healthy white adult males, mean age 39 y",
+          "manifest_dose_mg": 2400.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://pubmed.ncbi.nlm.nih.gov/22371898",
+          "mapping_metadata_used": {
+            "pk_auc_value": "17750",
+            "pk_auc_units": "ng × h/mL",
+            "pk_auc_type": "?",
+            "pk_population_size": "48",
+            "pk_sex": "MALE",
+            "pk_analyte_pt": "LERSIVIRINE",
+            "pk_annotated_form": "LERSIVIRINE",
+            "pk_dose_type": "UNKNOWN"
+          }
+        }
+      ]
+    },
+    {
+      "manifest_position_1based": 184,
+      "candidate_id": "732",
+      "name": "SULFAMETHOXYPYRIDAZINE",
+      "smiles": "COc1ccc(NS(=O)(=O)c2ccc(N)cc2)nn1",
+      "arms": [
+        {
+          "arm_id": "frdb_1635",
+          "verification": "unverified",
+          "reason": "1967 food-effect study of three sulfonamides (Macdonald et al.). PubMed has no abstract and the Karger full text returned 403; nothing beyond title/MeSH could be read. FRDB metadata (1 g, fasted, male, no AUC/t1/2/n) cannot be checked against the original; formulation, statistic and whether the reported value is free vs total (acetylated) sulfonamide are unknown, which matters for sulfonamide assays of that era (Bratton-Marshall).",
+          "source_url": "https://doi.org/10.1159/000220510",
+          "source_access_status": "no abstract (PubMed 6081878); Karger full text 403/paywalled",
+          "original_cmax": null,
+          "original_cmax_unit": "mg/L",
+          "cmax_statistic": "not accessible",
+          "exact_locator": "Chemotherapy 1967;12(5):282-5; locator not accessible",
+          "fasting_evidence": "not accessible (title implies fasted vs fed comparison)",
+          "formulation_evidence": "not accessible",
+          "dose_evidence": "1 g per FRDB; not verified in the original",
+          "uncertainty": "high",
+          "analyte": "sulfamethoxypyridazine; free vs total (N4-acetyl) sulfonamide unknown",
+          "matrix": "unknown (FRDB: plasma)",
+          "population": "adult males per MeSH ('Adult','Male'); health status not verified",
+          "manifest_dose_mg": 1000.0,
+          "manifest_cmax_unit": "mg/L",
+          "manifest_source_uri": "https://pubmed.ncbi.nlm.nih.gov/6081878/",
+          "mapping_metadata_used": {
+            "pk_sex": "MALE",
+            "pk_analyte_pt": "SULFAMETHOXYPYRIDAZINE",
+            "pk_dose_type": "UNKNOWN"
+          }
+        }
+      ]
+    },
+    {
+      "manifest_position_1based": 185,
+      "candidate_id": "2875",
+      "name": "BUTRIPTYLINE",
+      "smiles": "CC(CC1c2ccccc2CCc2ccccc21)CN(C)C",
+      "arms": [
+        {
+          "arm_id": "frdb_6311",
+          "verification": "unverified",
+          "reason": "FRDB annotated form 'Butriptyline hydrochloride 25mg tablet' (3 × 25 mg conventional tablets = 75 mg); AUC∞ 638.7, t1/2 19.8 h, n=14. Abstract confirms plasma butriptyline, single oral 75 mg butriptyline HYDROCHLORIDE, conventional (IR) formulation, 14 volunteers, and gives conventional Cmax 46.5 ng/mL. Not upgraded because fasting state and health status are not stated in the abstract and the Wiley full text (tables) is paywalled (403), so the statistic and whether 46.5 is observed vs model-fitted cannot be confirmed. Salt basis: manifest 75 mg is hydrochloride salt; by MW (base 293.45 / HCl 329.9) this is ≈66.7 mg base, which conflicts with the FRDB annotation (24.2 mg base per 25 mg tablet → 72.6 mg).",
+          "source_url": "https://doi.org/10.1002/bdd.2510020204",
+          "source_access_status": "abstract only (PubMed 6894708); Wiley full text 403/paywalled",
+          "original_cmax": 46.5,
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "presumably mean (abstract; not specified)",
+          "exact_locator": "Biopharm Drug Dispos 1981;2(2):123-30, abstract ('decrease in Cmax from 46.5 to 10.3 ng ml-1')",
+          "fasting_evidence": "not stated in abstract",
+          "formulation_evidence": "'conventional' formulation (abstract); FRDB: 25 mg tablets",
+          "dose_evidence": "single oral 75 mg butriptyline hydrochloride (salt basis; ≈66.7 mg base by MW)",
+          "uncertainty": "moderate (fasting/statistic unverified; salt-basis dose correction needed)",
+          "analyte": "butriptyline parent (plasma)",
+          "matrix": "plasma",
+          "population": "14 volunteers (MeSH: adult male); healthy status not explicit in abstract",
+          "manifest_dose_mg": 75.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://pubmed.ncbi.nlm.nih.gov/6894708/",
+          "mapping_metadata_used": {
+            "pk_auc_value": "638.7",
+            "pk_auc_units": "ng × h/mL",
+            "pk_auc_type": "∞",
+            "pk_thalf_value": "19.8",
+            "pk_thalf_units": "h",
+            "pk_population_size": "14",
+            "pk_sex": "MALE",
+            "pk_analyte_pt": "BUTRIPTYLINE",
+            "pk_annotated_form": "Butriptyline hydrochloride 25mg tablet (24.2mg free base)",
+            "pk_dose_type": "UNKNOWN"
+          }
+        },
+        {
+          "arm_id": "frdb_6312",
+          "verification": "ineligible",
+          "reason": "FRDB annotated form 'Butriptyline hydrochloride SR formulation 75mg tablet'; AUC∞ 536.6, t1/2 19.3 h, n=14. Abstract states the SR formulation 'possess[es] sustained release characteristics' (Tmax 7.5 h, Cmax 10.3 ng/mL). Modified-release arm fails the immediate-release criterion.",
+          "source_url": "https://doi.org/10.1002/bdd.2510020204",
+          "source_access_status": "abstract only (PubMed 6894708); Wiley full text 403/paywalled",
+          "original_cmax": 10.3,
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "presumably mean (abstract; not specified); recorded for completeness only",
+          "exact_locator": "Biopharm Drug Dispos 1981;2(2):123-30, abstract",
+          "fasting_evidence": "not stated in abstract",
+          "formulation_evidence": "sustained-release (SR) 75 mg tablet: ineligible",
+          "dose_evidence": "single oral 75 mg butriptyline hydrochloride (salt basis)",
+          "uncertainty": "low for ineligibility",
+          "analyte": "butriptyline parent",
+          "matrix": "plasma",
+          "population": "14 volunteers",
+          "manifest_dose_mg": 75.0,
+          "manifest_cmax_unit": "ng/mL",
+          "manifest_source_uri": "https://pubmed.ncbi.nlm.nih.gov/6894708/",
+          "mapping_metadata_used": {
+            "pk_auc_value": "536.6",
+            "pk_auc_units": "ng × h/mL",
+            "pk_auc_type": "∞",
+            "pk_thalf_value": "19.3",
+            "pk_thalf_units": "h",
+            "pk_population_size": "14",
+            "pk_sex": "MALE",
+            "pk_analyte_pt": "BUTRIPTYLINE",
+            "pk_annotated_form": "Butriptyline hydrochloride SR formulation 75mg tablet (72.6mg free base)",
+            "pk_dose_type": "UNKNOWN"
+          }
+        }
+      ]
+    },
+    {
+      "manifest_position_1based": 186,
+      "candidate_id": "2063",
+      "name": "FAROPENEM",
+      "smiles": "C[C@@H](O)[C@H]1C(=O)N2C(C(=O)O)=C([C@H]3CCCO3)S[C@H]12",
+      "arms": [
+        {
+          "arm_id": "frdb_4643",
+          "original_cmax_unit": "μg/mL",
+          "analyte": "faropenem (parent; assayed as faropenem)",
+          "matrix": "plasma (血漿中濃度)",
+          "population": "6 healthy adults (健康成人), sex not stated in IF",
+          "formulation_evidence": "ファロム錠 (film-coated IR tablet, フィルムコーティング錠), IF cover page",
+          "fasting_evidence": "'空腹時単回経口投与' (fasted single oral dose) in text and table title '(健康成人、空腹時)'",
+          "source_access_status": "Cited IF version 011 is 404 at PMDA; its only Wayback capture (20220123) is truncated at 1 MiB and unreadable. Read the next archived revision (第25版 2022-02, _012_) in full; the page numbers match FRDB (p.33, p.35). Values assumed unchanged between revisions (same ref. 8 study).",
+          "verification": "verified_with_caveat",
+          "reason": "Mapped by dose 150 mg, AUC0-24 3.95 μg·h/mL, t1/2 0.76 h, n=6: the 150 mg row of the fasted single-dose table (ref. 8). Caveat: cited IF revision 011 unreadable (truncated archive); revision 012 read.",
+          "source_url": "https://web.archive.org/web/20220516074151id_/https://www.info.pmda.go.jp/go/interview/1/730155_6139001R1032_1_012_1F.pdf#page=33",
+          "original_cmax": 2.36,
+          "cmax_statistic": "mean ± SD 2.36 ± 1.01, n=6",
+          "exact_locator": "ファロム IF 第25版 (2022-02) PDF p.33 (printed p.28), Ⅶ.1.(3) 1)① '単回経口投与時の各パラメータ(健康成人、空腹時)', row 150mg(力価)",
+          "dose_evidence": "Dose in mg(力価) = potency as faropenem free acid; tablets contain faropenem sodium hydrate labelled '150.0mg（力価）'. Manifest SMILES is the free acid, so dose basis matches; no salt correction.",
+          "uncertainty": "low",
+          "manifest_dose_mg": 150.0,
+          "manifest_cmax_unit": "μg/mL",
+          "manifest_source_uri": "https://www.info.pmda.go.jp/go/interview/1/730155_6139001R1032_1_011_1F.pdf#page=33",
+          "mapping_metadata_used": {
+            "pk_auc_value": "3.95",
+            "pk_auc_units": "μg × h/mL",
+            "pk_auc_type": "t",
+            "pk_auc_hours": "24",
+            "pk_thalf_value": "0.76",
+            "pk_thalf_units": "h",
+            "pk_population_size": "6",
+            "pk_sex": "FEMALE / MALE",
+            "pk_analyte_pt": "FAROPENEM",
+            "pk_dose_type": "RECOMMENDED"
+          }
+        },
+        {
+          "arm_id": "frdb_4644",
+          "original_cmax_unit": "μg/mL",
+          "analyte": "faropenem (parent; assayed as faropenem)",
+          "matrix": "plasma (血漿中濃度)",
+          "population": "6 healthy adults (健康成人), sex not stated in IF",
+          "formulation_evidence": "ファロム錠 (film-coated IR tablet, フィルムコーティング錠), IF cover page",
+          "fasting_evidence": "'空腹時単回経口投与' (fasted single oral dose) in text and table title '(健康成人、空腹時)'",
+          "source_access_status": "Cited IF version 011 is 404 at PMDA; its only Wayback capture (20220123) is truncated at 1 MiB and unreadable. Read the next archived revision (第25版 2022-02, _012_) in full; the page numbers match FRDB (p.33, p.35). Values assumed unchanged between revisions (same ref. 8 study).",
+          "verification": "verified_with_caveat",
+          "reason": "Mapped by 300 mg, AUC0-24 11.73, t1/2 0.85 h, n=6: the 300 mg row of the fasted single-dose table. Caveat: IF revision substitution (012 for 011). Note the same cohort reappears as the fasted row of the food-effect table (frdb_4649).",
+          "source_url": "https://web.archive.org/web/20220516074151id_/https://www.info.pmda.go.jp/go/interview/1/730155_6139001R1032_1_012_1F.pdf#page=33",
+          "original_cmax": 6.24,
+          "cmax_statistic": "mean ± SD 6.24 ± 2.86, n=6",
+          "exact_locator": "ファロム IF 第25版 PDF p.33 (printed p.28), fasted single-dose table, row 300mg(力価)",
+          "dose_evidence": "Dose in mg(力価) = potency as faropenem free acid; tablets contain faropenem sodium hydrate labelled '150.0mg（力価）'. Manifest SMILES is the free acid, so dose basis matches; no salt correction.",
+          "uncertainty": "low",
+          "manifest_dose_mg": 300.0,
+          "manifest_cmax_unit": "μg/mL",
+          "manifest_source_uri": "https://www.info.pmda.go.jp/go/interview/1/730155_6139001R1032_1_011_1F.pdf#page=33",
+          "mapping_metadata_used": {
+            "pk_auc_value": "11.73",
+            "pk_auc_units": "μg × h/mL",
+            "pk_auc_type": "t",
+            "pk_auc_hours": "24",
+            "pk_thalf_value": "0.85",
+            "pk_thalf_units": "h",
+            "pk_population_size": "6",
+            "pk_sex": "FEMALE / MALE",
+            "pk_analyte_pt": "FAROPENEM",
+            "pk_dose_type": "RECOMMENDED"
+          }
+        },
+        {
+          "arm_id": "frdb_4645",
+          "original_cmax_unit": "μg/mL",
+          "analyte": "faropenem (parent; assayed as faropenem)",
+          "matrix": "plasma (血漿中濃度)",
+          "population": "6 healthy adults (健康成人), sex not stated in IF",
+          "formulation_evidence": "ファロム錠 (film-coated IR tablet, フィルムコーティング錠), IF cover page",
+          "fasting_evidence": "'空腹時単回経口投与' (fasted single oral dose) in text and table title '(健康成人、空腹時)'",
+          "source_access_status": "Cited IF version 011 is 404 at PMDA; its only Wayback capture (20220123) is truncated at 1 MiB and unreadable. Read the next archived revision (第25版 2022-02, _012_) in full; the page numbers match FRDB (p.33, p.35). Values assumed unchanged between revisions (same ref. 8 study).",
+          "verification": "verified_with_caveat",
+          "reason": "Mapped by 600 mg, AUC0-24 19.59, t1/2 1.08 h, n=6: the 600 mg row of the fasted single-dose table. Caveats: IF revision substitution; 600 mg exceeds the approved 150-300 mg dose (IF footnote) and Cmax is clearly sub-proportional (2.36 → 6.24 → 7.37).",
+          "source_url": "https://web.archive.org/web/20220516074151id_/https://www.info.pmda.go.jp/go/interview/1/730155_6139001R1032_1_012_1F.pdf#page=33",
+          "original_cmax": 7.37,
+          "cmax_statistic": "mean ± SD 7.37 ± 1.97, n=6",
+          "exact_locator": "ファロム IF 第25版 PDF p.33 (printed p.28), fasted single-dose table, row 600mg(力価)",
+          "dose_evidence": "Dose in mg(力価) = potency as faropenem free acid; tablets contain faropenem sodium hydrate labelled '150.0mg（力価）'. Manifest SMILES is the free acid, so dose basis matches; no salt correction.",
+          "uncertainty": "low",
+          "manifest_dose_mg": 600.0,
+          "manifest_cmax_unit": "μg/mL",
+          "manifest_source_uri": "https://www.info.pmda.go.jp/go/interview/1/730155_6139001R1032_1_011_1F.pdf#page=33",
+          "mapping_metadata_used": {
+            "pk_auc_value": "19.59",
+            "pk_auc_units": "μg × h/mL",
+            "pk_auc_type": "t",
+            "pk_auc_hours": "24",
+            "pk_thalf_value": "1.08",
+            "pk_thalf_units": "h",
+            "pk_population_size": "6",
+            "pk_sex": "FEMALE / MALE",
+            "pk_analyte_pt": "FAROPENEM",
+            "pk_dose_type": "RECOMMENDED"
+          }
+        },
+        {
+          "arm_id": "frdb_4649",
+          "original_cmax_unit": "μg/mL",
+          "analyte": "faropenem (parent; assayed as faropenem)",
+          "matrix": "plasma (血漿中濃度)",
+          "population": "6 healthy adults (健康成人), sex not stated in IF",
+          "formulation_evidence": "ファロム錠 (film-coated IR tablet, フィルムコーティング錠), IF cover page",
+          "fasting_evidence": "'空腹時単回経口投与' (fasted single oral dose) in text and table title '(健康成人、空腹時)'",
+          "source_access_status": "Cited IF version 011 is 404 at PMDA; its only Wayback capture (20220123) is truncated at 1 MiB and unreadable. Read the next archived revision (第25版 2022-02, _012_) in full; the page numbers match FRDB (p.33, p.35). Values assumed unchanged between revisions (same ref. 8 study).",
+          "verification": "verified_with_caveat",
+          "reason": "Mapped by 300 mg, AUC0-24 11.73, t1/2 0.85 h, n=6: the 空腹時 (fasted) row of the food-effect table (ref. 8). All values are identical to frdb_4644, so this is the SAME fasted 300 mg cohort reported twice in the IF, not an independent arm. Recommend counting it once (dedupe with frdb_4644) to avoid double-weighting the compound cluster. Caveat: IF revision substitution.",
+          "source_url": "https://web.archive.org/web/20220516074151id_/https://www.info.pmda.go.jp/go/interview/1/730155_6139001R1032_1_012_1F.pdf#page=35",
+          "original_cmax": 6.24,
+          "cmax_statistic": "mean ± SD 6.24 ± 2.86, n=6 (duplicate of frdb_4644)",
+          "exact_locator": "ファロム IF 第25版 PDF p.35 (printed p.30), Ⅶ.1.(3) 1)③ 食事の影響 '単回経口投与時の各パラメータ(健康成人、空腹時及び食後)', row 空腹時",
+          "dose_evidence": "Dose in mg(力価) = potency as faropenem free acid; tablets contain faropenem sodium hydrate labelled '150.0mg（力価）'. Manifest SMILES is the free acid, so dose basis matches; no salt correction.",
+          "uncertainty": "low (duplicate)",
+          "manifest_dose_mg": 300.0,
+          "manifest_cmax_unit": "μg/mL",
+          "manifest_source_uri": "https://www.info.pmda.go.jp/go/interview/1/730155_6139001R1032_1_011_1F.pdf#page=35",
+          "mapping_metadata_used": {
+            "pk_auc_value": "11.73",
+            "pk_auc_units": "μg × h/mL",
+            "pk_auc_type": "t",
+            "pk_auc_hours": "24",
+            "pk_thalf_value": "0.85",
+            "pk_thalf_units": "h",
+            "pk_population_size": "6",
+            "pk_sex": "FEMALE / MALE",
+            "pk_analyte_pt": "FAROPENEM",
+            "pk_dose_type": "UNKNOWN"
+          }
+        }
+      ]
+    }
+  ],
+  "coordinator_review": {
+    "reviewed_at": "2026-09-23",
+    "scope": "Manifest and source-audit consistency cross-check only; frozen prediction file not opened.",
+    "notes": [
+      "This completes a first-pass source review of all 186 frozen candidates and 452 arms; conditional, unverified and duplicate arms still require final eligibility adjudication before scoring.",
+      "Faropenem frdb_4649 and frdb_4644 appear to be the same fasted 300 mg cohort with identical original Cmax/AUC/t1/2; count once in any scored dataset, with the retained arm ID fixed before opening predictions.",
+      "Pridinol FRDB non-Cmax metadata map to test-product medians, so 31.04 ng/mL is the matched median Cmax; retain the statistic label and assess compatibility with primary scoring convention before unsealing.",
+      "The worker reported no use of email or contact-requiring lookup APIs."
+    ],
+    "source_urls": [
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC8167741/",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC3346613/"
+    ]
+  }
+}

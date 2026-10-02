@@ -12,7 +12,6 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
-from pathlib import Path
 
 import numpy as np
 import xgboost as xgb
@@ -20,18 +19,18 @@ import xgboost as xgb
 from sisyphus.core import Distribution
 from sisyphus.descriptors import compute_features
 from sisyphus.predict.chemistry import MolecularProfile
+from sisyphus.resources import get_resource_config
 
 logger = logging.getLogger(__name__)
 
 # Resolve model directory relative to this source file:
 # src/sisyphus/predict/adme.py -> ../../../../models/adme
-_MODEL_DIR = Path(__file__).resolve().parent.parent.parent.parent / "models" / "adme"
+_MODEL_DIR = get_resource_config().model("adme")
 
 # ---------------------------------------------------------------------------
 # Default CVs for prediction uncertainty (hand-set scalars informed by Omega's
 # observed prediction spread; not derived from a conformal procedure)
 # ---------------------------------------------------------------------------
-_FUP_CV = 0.5  # fup prediction has ~50% CV
 _CLINT_CV = 1.0  # CLint prediction is the weakest link (R²=0.24)
 _PEFF_CV = 0.4  # permeability
 _SOLUBILITY_CV = 0.5  # solubility
@@ -79,10 +78,11 @@ class MeasuredADMEInput:
     vdss only moves the VDss meta-track. A "clean engine-only" measured prediction
     must therefore be read via result.engine_pk (see the measured-input benchmark).
 
-    f_bioavail is measured oral bioavailability F (0 < F <= 1). It is INDEPENDENT
+    f_bioavail is measured absolute oral bioavailability F over total exposure
+    (0 < F <= 1). It is INDEPENDENT
     (not paired) and ORAL-ONLY. The engine's F is emergent (fa*Fg*Fh); a supplied
     F sets the systemic exposure SCALE — predict() computes the engine's own F via
-    an IV-reference solve and scales engine Cmax/AUC by F_measured/F_engine. It does
+    matched oral/IV exposure solves and scales engine Cmax/AUC by F_measured/F_engine. It does
     not set the absorption-rate shape (compose with measured peff for slow
     absorbers). Lands on result.engine_pk; ignored for non-oral routes. See
     docs/_internal/specs/2026-06-03-measured-f-routing-design.md.
@@ -109,7 +109,9 @@ class MeasuredADMEInput:
                 "MeasuredADMEInput: fup and clint must be supplied together or "
                 "both omitted (they co-determine engine CL_int)."
             )
-        if self.f_bioavail is not None and not (0.0 < self.f_bioavail <= 1.0):
+        if self.f_bioavail is not None and not (
+            np.isfinite(self.f_bioavail) and 0.0 < self.f_bioavail <= 1.0
+        ):
             raise ValueError(
                 f"MeasuredADMEInput.f_bioavail must satisfy 0 < F <= 1, "
                 f"got {self.f_bioavail}"
@@ -118,18 +120,18 @@ class MeasuredADMEInput:
             ("fup", self.fup), ("clint", self.clint), ("peff", self.peff),
             ("vdss", self.vdss), ("rbp", self.rbp), ("solubility", self.solubility),
         ):
-            if val is not None and val <= 0:
-                raise ValueError(f"MeasuredADMEInput.{name} must be > 0, got {val}")
+            if val is not None and (not np.isfinite(val) or val <= 0):
+                raise ValueError(f"MeasuredADMEInput.{name} must be finite and > 0, got {val}")
         for name, cv in (
             ("fup_cv", self.fup_cv), ("clint_cv", self.clint_cv),
             ("peff_cv", self.peff_cv), ("vdss_cv", self.vdss_cv),
             ("rbp_cv", self.rbp_cv), ("solubility_cv", self.solubility_cv),
             ("f_bioavail_cv", self.f_bioavail_cv),
         ):
-            if cv < 0.10:
+            if not np.isfinite(cv) or cv < 0.10:
                 raise ValueError(
-                    f"MeasuredADMEInput.{name}={cv} < 0.10; a CV below 10% implies "
-                    "a unit error and collapses the MC envelope."
+                    f"MeasuredADMEInput.{name}={cv} must be finite and >= 0.10; "
+                    "a CV below 10% implies a unit error and collapses the MC envelope."
                 )
 
 
@@ -147,6 +149,9 @@ def _load_model(filename: str) -> xgb.XGBRegressor:
             raise FileNotFoundError(
                 f"ADME model not found: {path}. Expected models in {_MODEL_DIR}"
             )
+        from sisyphus.ml.registry import verify_model_artifact
+
+        verify_model_artifact(path)
         model = xgb.XGBRegressor()
         model.load_model(str(path))
         _model_cache[filename] = model
@@ -158,31 +163,15 @@ def _load_model(filename: str) -> xgb.XGBRegressor:
 # Individual ADME predictors
 # ---------------------------------------------------------------------------
 
-_FUP_V2_PATH = _MODEL_DIR / "xgboost_fup_v2.json"
 _FUP_CV_V2 = 0.40  # from 5-fold CV: AAFE=2.40, R²=0.41
 
 
-def _predict_fup_v1(features: np.ndarray) -> Distribution:
-    """v1: log10-space model. Output clamped to [0.001, 1.0]."""
-    model = _load_model("xgboost_fup.json")
-    log_fup = float(model.predict(features)[0])
-    fup = float(np.clip(10**log_fup, 0.001, 1.0))
-    return Distribution(mean=fup, cv=_FUP_CV)
-
-
-def _predict_fup_v2(features: np.ndarray) -> Distribution:
-    """v2: logit-space model, sigmoid inverse. Output in (0, 1) guaranteed."""
+def _predict_fup(features: np.ndarray) -> Distribution:
+    """Use the public, fitted-source-pinned logit model; fail if it is missing."""
     model = _load_model("xgboost_fup_v2.json")
     logit_fup = float(model.predict(features)[0])
     fup = float(1.0 / (1.0 + np.exp(-logit_fup)))
     return Distribution(mean=fup, cv=_FUP_CV_V2)
-
-
-def _predict_fup(features: np.ndarray) -> Distribution:
-    """Auto-select fup model: v2 if available, v1 fallback."""
-    if _FUP_V2_PATH.exists():
-        return _predict_fup_v2(features)
-    return _predict_fup_v1(features)
 
 
 def _predict_clint(features: np.ndarray) -> Distribution:
@@ -267,13 +256,10 @@ def _estimate_peff_heuristic(profile: MolecularProfile) -> Distribution:
 
 
 def _estimate_peff(profile: MolecularProfile) -> Distribution:
-    """Estimate Peff: XGBoost model if available, logP heuristic fallback."""
+    """Use the trained Peff model when present; fall back only if absent."""
     if _PEFF_MODEL_PATH.exists():
-        try:
-            features = compute_features(profile.smiles)
-            return _predict_peff_xgb(features.reshape(1, -1))
-        except Exception as exc:
-            logger.warning("Peff XGBoost prediction failed, using heuristic: %s", exc)
+        features = compute_features(profile.smiles)
+        return _predict_peff_xgb(features.reshape(1, -1))
     return _estimate_peff_heuristic(profile)
 
 
@@ -299,9 +285,8 @@ def _estimate_solubility(profile: MolecularProfile) -> Distribution:
 def predict_adme(profile: MolecularProfile) -> ADMEProperties:
     """Predict ADME properties from molecular profile.
 
-    Uses trained XGBoost models (fup, CLint, RBP, VDss) with prediction
-    intervals derived from conformal calibration.  Peff and solubility
-    are estimated from logP heuristics (no XGBoost model available).
+    Uses trained XGBoost models for fup, CLint, VDss, and Peff when present.
+    RBP uses the population default; solubility uses a logP heuristic.
 
     Args:
         profile: MolecularProfile from chemistry module.

@@ -1,24 +1,38 @@
 {
-  "version": "v1",
+  "version": "v1_public_tdc",
+  "artifact_sha256": "1566e5b7c9ced4c2c1ce6f0d7e693b0190ae7306a8f632a9486c1658dab6e1e7",
   "target": "log10(Peff x 10^-4 cm/s)",
   "trained_on": {
-    "dataset_path": "TDC Peff",
-    "sha256": "unknown_legacy"
+    "dataset_path": "data/training/peff_tdc_public_clean.csv",
+    "sha256": "46a5a7c4f48b6d6f4f501fdca049c1fe25cadf115658bda504d2e41d2092a06c",
+    "n_drugs_clean": 874,
+    "source_sha256": "447d9f1af487c06b080145a2361dbe45af5b27afc83e1a975dd29b9ea535d6ab"
   },
   "feature_schema": {
     "name": "compute_features_v1",
     "n_features": 2057,
     "sha256": "b41dddd78533661b8f4aed86bdb7c5f55d15ed3cd2ad20b39e9100557eda631e",
-    "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, NumHeavyAtoms). See src/sisyphus/descriptors.py::compute_features."
+    "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, MolMR). See src/sisyphus/descriptors.py::compute_features."
   },
-  "trained_at": "unknown_legacy",
-  "n_drugs_original": null,
-  "n_drugs_excluded": null,
-  "holdout_version": "unknown_legacy",
+  "trained_at": "2026-09-23T23:01:28.912644+00:00",
+  "n_drugs_original": 910,
+  "n_drugs_excluded": 36,
+  "holdout_version": "N=107 (data/reference/holdout.json)",
   "holdout_metric": {
-    "name": "scaffold_cv_r2",
-    "value": null
+    "name": "five_fold_cv_r2",
+    "value": 0.699723445510674,
+    "aafe": 2.1553577329080214,
+    "rmse_log10": 0.4274784865876935
   },
-  "hyperparameters": {},
-  "retrained_reason": "unknown_legacy"
+  "hyperparameters": {
+    "n_estimators": 500,
+    "max_depth": 6,
+    "learning_rate": 0.05,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "random_state": 42,
+    "n_jobs": -1,
+    "verbosity": 0
+  },
+  "retrained_reason": "Pin public TDC fitted rows and replace unknown legacy Peff source"
 }

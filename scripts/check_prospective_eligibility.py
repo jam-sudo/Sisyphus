@@ -18,12 +18,13 @@ PRODUCTION corpora (a hit here = INELIGIBLE):
   - data/reference/clinical_pk.json            (engine reference / anchoring)
   - data/training/clf_training.csv             (-> xgboost_clf.json, CLF track;
                                                  NO holdout/prospective exclusion)
+  - data/training/omega_mmpk_clean.csv         (Omega Cmax source, conservative
+                                                 pre-exclusion superset)
   - data/reference/holdout.json                (train + holdout name lists)
   - data/training/mmpk_sisyphus_holdout_exclusions.json
-  NOTE: the Cmax ML model trains on mmpk_clean.csv (Omega, ~1028 drugs, NOT in
-  this repo, pre-2024) and the ADME/VDss models on TDC public sets (pre-2024);
-  2024-2025 NMEs cannot be in those by construction, so the in-repo gate above
-  is sufficient when combined with an FDA approval-date >= 2024 precondition.
+  NOTE: the Omega source contains 1128 rows before the reported 100 holdout
+  exclusions. Its exact fitted snapshot is unverified, so a source hit is
+  conservatively ineligible; a clean result is not independent validation.
 
 NON-PRODUCTION corpora (hit = informational only, NOT disqualifying):
   mmpk_expanded_full/v2, vdss_v2_training, bioavailability_v1, clint_*,
@@ -44,17 +45,20 @@ import sys
 from pathlib import Path
 
 from rdkit import Chem, RDLogger
-from rdkit.Chem.inchi import InchiToInchiKey, MolToInchi
 
 RDLogger.logger().setLevel(RDLogger.ERROR)
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "src"))
+from sisyphus.validation.identity import ik14 as _ik14  # noqa: E402
+
 TRAINING = ROOT / "data" / "training"
 REFERENCE = ROOT / "data" / "reference"
 
 # (csv filename, name column or None, smiles column or None, is_production)
 _CSV_CORPORA = [
     ("clf_training.csv", "name", "smiles", True),          # -> xgboost_clf (CLF track)
+    ("omega_mmpk_clean.csv", "name", "smiles", True),      # Cmax source superset
     ("mmpk_expanded_full.csv", "name", "canon_smiles", False),
     ("mmpk_expanded_v2.csv", "name", "canon_smiles", False),
     ("clint_expanded_v2.csv", None, "canon_smiles", False),
@@ -71,20 +75,6 @@ _PRODUCTION_JSON = {"clinical_pk", "holdout.train", "holdout.holdout", "mmpk_exc
 def _canon(smiles: str, isomeric: bool) -> str | None:
     mol = Chem.MolFromSmiles(smiles)
     return Chem.MolToSmiles(mol, isomericSmiles=isomeric) if mol else None
-
-
-def _ik14(smiles: str) -> str | None:
-    mol = Chem.MolFromSmiles(smiles)
-    if mol is None:
-        return None
-    try:
-        inchi = MolToInchi(mol)
-        if not inchi:
-            return None
-        ik = InchiToInchiKey(inchi)
-        return ik[:14] if ik else None
-    except Exception:
-        return None
 
 
 def build_index() -> dict:
@@ -124,6 +114,8 @@ def build_index() -> dict:
     for fn, ncol, scol, prod in _CSV_CORPORA:
         p = TRAINING / fn
         if not p.exists():
+            if prod:
+                raise FileNotFoundError(f"Required production corpus missing: {p}")
             continue
         src = f"train:{fn}"
         with open(p, newline="") as f:

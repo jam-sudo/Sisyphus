@@ -20,7 +20,7 @@ from sisyphus.mipd._regimen import _regimen_interval_h
 from sisyphus.mipd.core import Posterior, PosteriorPK, _softmax_resample
 
 # numpy 2.0+ renamed trapz -> trapezoid; match the codebase idiom (pk/nca.py).
-_trapz = getattr(np, "trapezoid", np.trapz)
+_trapz = np.trapezoid if hasattr(np, "trapezoid") else np.trapz
 
 
 @dataclass(frozen=True)

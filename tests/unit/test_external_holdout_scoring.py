@@ -1,0 +1,714 @@
+"""Tests for the pre-registered external-holdout scorer."""
+
+from __future__ import annotations
+
+import hashlib
+import importlib.util
+import json
+import sys
+from pathlib import Path
+
+import pytest
+
+from sisyphus.validation import holdout_contract as contract
+from sisyphus.validation.holdout_contract import (
+    label_content_sha256,
+    sha256_file,
+    source_record_hash,
+    validate_payload,
+    verify_source_plan,
+)
+
+ROOT = Path(__file__).resolve().parent.parent.parent
+
+
+def _module():
+    path = ROOT / "scripts" / "score_external_holdout.py"
+    spec = importlib.util.spec_from_file_location("score_external_holdout", path)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_contamination_audit_checks_declared_synonyms_and_relations():
+    path = ROOT / "scripts" / "audit_external_holdout_manifest.py"
+    spec = importlib.util.spec_from_file_location("audit_external_holdout_manifest", path)
+    assert spec and spec.loader
+    audit = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(audit)
+    related_key = audit.EXCLUSION.ik14("CC")
+    hits = audit._candidate_exclusion_hits(
+        "new drug",
+        audit.EXCLUSION.ik14("CCC"),
+        {
+            "synonyms": ["Old Drug"],
+            "related_structures": [
+                {"relationship": "active_metabolite", "smiles": "CC", "source_ref": "source"}
+            ],
+        },
+        {related_key: {"training::related"}},
+        {"olddrug": {"training::synonym"}},
+    )
+    assert hits == {"training::related", "training::synonym"}
+
+
+def test_contamination_audit_catches_salt_parent_name_when_structures_differ():
+    path = ROOT / "scripts" / "audit_external_holdout_manifest.py"
+    spec = importlib.util.spec_from_file_location("audit_external_holdout_manifest", path)
+    assert spec and spec.loader
+    audit = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(audit)
+    hits = audit._candidate_exclusion_hits(
+        "rabeprazole sodium",
+        audit.EXCLUSION.ik14("CCC"),
+        {"synonyms": [], "related_structures": []},
+        {},
+        {"rabeprazole": {"training::parent"}},
+    )
+    assert hits == {"training::parent"}
+
+
+def test_contamination_audit_indexes_drug_name_keys():
+    path = ROOT / "scripts" / "audit_external_holdout_manifest.py"
+    spec = importlib.util.spec_from_file_location("audit_external_holdout_manifest", path)
+    assert spec and spec.loader
+    audit = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(audit)
+    structures, names = {}, {}
+    audit._walk_json(
+        {"drugs": {"Unseen Drug": {"smiles": "CC"}}, "per_drug": {"Old Drug": {}}},
+        "synthetic.json", structures, names,
+    )
+    assert names["unseendrug"] == names["olddrug"] == {"synthetic.json"}
+
+
+def test_audit_report_must_reproduce_from_frozen_checkout(tmp_path, monkeypatch):
+    manifest_path = tmp_path / "manifest.json"
+    manifest_path.write_text("{}")
+    manifest_sha = sha256_file(manifest_path)
+    forged = {"pass": True, "manifest_sha256": manifest_sha, "hard_collision_count": 1}
+    audit_path = tmp_path / "audit.json"
+    audit_path.write_text(json.dumps(forged, indent=2) + "\n")
+    monkeypatch.setattr(
+        contract, "_recompute_audit_report",
+        lambda _: {**forged, "hard_collision_count": 0},
+    )
+    with pytest.raises(ValueError, match="does not reproduce"):
+        contract.verify_audit_report(audit_path, sha256_file(audit_path), manifest_path)
+
+
+def test_score_weights_compounds_not_arms():
+    scorer = _module()
+    rows = [
+        {
+            "candidate_id": "a",
+            "primary_eligible": True,
+            "observed_cmax_mg_l": 1.0,
+            "cmax_statistic": "arithmetic_mean",
+            "meta_cmax_mg_l": 1.0,
+            "ml_cmax_mg_l": 2.0,
+        },
+        {
+            "candidate_id": "a",
+            "primary_eligible": True,
+            "observed_cmax_mg_l": 2.0,
+            "cmax_statistic": "arithmetic_mean",
+            "meta_cmax_mg_l": 2.0,
+            "ml_cmax_mg_l": 4.0,
+        },
+        {
+            "candidate_id": "b",
+            "primary_eligible": True,
+            "observed_cmax_mg_l": 1.0,
+            "cmax_statistic": "arithmetic_mean",
+            "meta_cmax_mg_l": 4.0,
+            "ml_cmax_mg_l": 4.0,
+        },
+    ]
+    result = scorer.score(rows, seed=7, n_boot=1000, n_target=260)
+    assert result["n_compounds"] == 2
+    assert result["n_arms"] == 3
+    assert result["meta_aafe"] == pytest.approx(2.0)
+    assert result["ml_aafe"] == pytest.approx(2.0 * 2**0.5)
+    assert result["meta_ml_aafe_ratio"] == pytest.approx(2**-0.5)
+    assert result["meta_superiority_gate"] is False  # 2 compounds cannot pass an N=260 gate
+
+
+def test_score_cannot_claim_superiority_below_frozen_sample_size():
+    scorer = _module()
+    rows = [{
+        "candidate_id": "a",
+        "primary_eligible": True,
+        "observed_cmax_mg_l": 1.0,
+        "cmax_statistic": "arithmetic_mean",
+        "meta_cmax_mg_l": 1.0,
+        "ml_cmax_mg_l": 2.0,
+    }]
+    result = scorer.score(rows, seed=7, n_boot=10, n_target=120)
+    assert result["meta_ml_aafe_ratio"] == pytest.approx(0.5)
+    assert result["paired_ratio_95_ci"][1] < 1.0
+    assert result["meta_superiority_gate"] is False
+    assert result["production_release_gate"] is False
+
+
+def test_statistic_sensitivity_omits_mixed_compounds_and_counts_small_groups():
+    scorer = _module()
+    rows = [
+        {
+            "candidate_id": f"c{i}",
+            "cmax_statistic": "arithmetic_mean",
+            "observed_cmax_mg_l": 1.0,
+            "meta_cmax_mg_l": 1.0,
+            "ml_cmax_mg_l": 2.0,
+        }
+        for i in range(20)
+    ]
+    rows.extend([
+        {**rows[0], "candidate_id": "mixed"},
+        {**rows[0], "candidate_id": "mixed", "cmax_statistic": "median"},
+    ])
+    result = scorer.statistic_sensitivity(rows, seed=7, n_boot=100)
+    assert result["mixed_statistic_compounds"] == 1
+    arithmetic = result["groups"]["arithmetic_mean"]
+    assert (arithmetic["n_compounds"], arithmetic["n_arms"]) == (20, 20)
+    assert arithmetic["score"]["meta_ml_aafe_ratio"] == pytest.approx(0.5)
+    assert result["groups"]["median"]["score"] is None
+    assert scorer.statistic_sensitivity(rows[1:], seed=7, n_boot=100)["groups"][
+        "arithmetic_mean"
+    ]["score"] is None
+
+
+def test_score_rejects_nonpositive_observation():
+    scorer = _module()
+    rows = [
+        {
+            "candidate_id": "a",
+            "primary_eligible": True,
+            "observed_cmax_mg_l": 0.0,
+            "meta_cmax_mg_l": 1.0,
+            "ml_cmax_mg_l": 1.0,
+        }
+    ]
+    with pytest.raises(ValueError, match="Non-positive"):
+        scorer.score(rows, seed=7, n_boot=10, n_target=260)
+
+
+@pytest.mark.parametrize("n, expected", [(120, False), (260, True)])
+def test_superiority_uses_preregistered_cohort_margin(n, expected):
+    scorer = _module()
+    rows = [
+        {
+            "candidate_id": f"c{i}",
+            "primary_eligible": True,
+            "observed_cmax_mg_l": 1.0,
+            "cmax_statistic": "arithmetic_mean",
+            "meta_cmax_mg_l": 1.0,
+            "ml_cmax_mg_l": 1 / 0.88,
+        }
+        for i in range(n)
+    ]
+    result = scorer.score(rows, seed=7, n_boot=100, n_target=n)
+    assert result["meta_superiority_gate"] is expected
+    assert result["meta_ml_ratio_limit"] == (0.85 if n == 120 else 0.90)
+    with pytest.raises(ValueError, match="n_target"):
+        scorer.score(rows, seed=7, n_boot=10, n_target=121)
+
+
+def test_manifest_validation_rejects_arm_input_drift():
+    scorer = _module()
+    manifest = {
+        "n_target": 1,
+        "compounds": [
+            {
+                "candidate_id": "a",
+                "arms": [
+                    {
+                        "arm_id": "arm1",
+                        "dose_mg": 10.0,
+                        "route": "oral",
+                        "primary_eligible": True,
+                    }
+                ],
+            }
+        ],
+    }
+    row = {
+        "candidate_id": "a",
+        "arm_id": "arm1",
+        "dose_mg": 20.0,
+        "route": "oral",
+        "primary_eligible": True,
+            "observed_cmax_mg_l": 1.0,
+            "cmax_statistic": "arithmetic_mean",
+            "meta_cmax_mg_l": 1.0,
+        "ml_cmax_mg_l": 1.0,
+        "execution_status": "ok",
+        "interval_source": "development_empirical_residual",
+        "source_record_hash": "0" * 64,
+        "source": {"category": "regulatory", "agency": "FDA"},
+    }
+    with pytest.raises(ValueError, match="Dose mismatch"):
+        scorer.validate_results_against_manifest([row], manifest)
+
+
+def test_label_join_is_exact_and_keeps_outcome_separate():
+    scorer = _module()
+    predictions = [
+        {
+            "candidate_id": "a",
+            "arm_id": "arm1",
+            "dose_mg": 10.0,
+            "route": "oral",
+            "primary_eligible": True,
+            "meta_cmax_mg_l": 1.2,
+            "ml_cmax_mg_l": 1.4,
+        }
+    ]
+    labels = {
+        "records": [
+            {
+                "candidate_id": "a",
+                "arms": [
+                    {
+                        "arm_id": "arm1",
+                        "dose_mg": 10.0,
+                        "route": "oral",
+                        "observed_cmax_mg_l": 1.0,
+                    }
+                ],
+            }
+        ]
+    }
+    joined = scorer.join_predictions_and_labels(predictions, labels)
+    assert "observed_cmax_mg_l" not in predictions[0]
+    assert joined[0]["observed_cmax_mg_l"] == 1.0
+
+
+def _synthetic_contracts(n: int = 120):
+    zero = "0" * 64
+    agencies = ["FDA", "EMA", "PMDA", "HealthCanada"]
+    compounds = []
+    predictions = []
+    records = []
+    for i in range(n):
+        regulatory = i < 84
+        agency = agencies[i % len(agencies)] if regulatory else None
+        category = "regulatory" if regulatory else "peer_reviewed"
+        label = {
+            "arm_id": "arm1",
+            "dose_mg": 10.0,
+            "route": "oral",
+            "dosage_form": "tablet",
+            "release_type": "IR",
+            "food_state": "fasted",
+            "postdose_fast_h": 4.0,
+            "salt_form": None,
+            "dose_basis": "parent_active_moiety",
+            "dose_basis_evidence": "Source table reports 10 mg of parent drug.",
+            "analyte": "parent",
+            "matrix": "plasma",
+            "dose_regimen": "single",
+            "population": {"age_group": "adult", "health_status": "healthy"},
+            "co_medications": [],
+            "observed_cmax_mg_l": 1.0,
+            "cmax_statistic": "arithmetic_mean",
+            "study_n": 12,
+            "source": {
+                "category": category,
+                "agency": agency,
+                "source_family": agency or category,
+                "source_date": "2025-01-01",
+                "citation": f"source {i}",
+                "url_or_doi": f"https://example.test/{i}",
+                "table_or_page": "p. 1",
+            },
+            "verified_by": ["curator-a", "curator-b"],
+        }
+        label["source_record_hash"] = source_record_hash(label)
+        compounds.append(
+            {
+                "candidate_id": f"c{i}",
+                "name": f"compound-{i}",
+                "smiles": "C" * (i + 1),
+                "arms": [
+                    {
+                        "arm_id": "arm1",
+                        "dose_mg": 10.0,
+                        "route": "oral",
+                        "primary_eligible": True,
+                        "source_category": category,
+                        "source_agency": agency,
+                        "source_record_hash": label["source_record_hash"],
+                    }
+                ],
+            }
+        )
+        predictions.append(
+            {
+                "candidate_id": f"c{i}",
+                "arm_id": "arm1",
+                "dose_mg": 10.0,
+                "route": "oral",
+                "primary_eligible": True,
+                "meta_cmax_mg_l": 1.1,
+                "ml_cmax_mg_l": 1.3,
+                "meta_pi90_low_mg_l": 0.1,
+                "meta_pi90_high_mg_l": 10.0,
+                "interval_source": "development_empirical_residual",
+                "execution_status": "ok",
+            }
+        )
+        records.append({"candidate_id": f"c{i}", "arms": [label]})
+
+    manifest = {
+        "protocol": "docs/validation/external_holdout_v1_protocol.md",
+        "cycle_id": "synthetic-v1",
+        "n_target": n,
+        "labels_blinded": True,
+        "source_plan_path": "source-plan.json",
+        "source_plan_sha256": zero,
+        "exclusion_union_sha256": zero,
+        "freeze": {
+            "git_sha": "0" * 40,
+            "source_tree_sha256": zero,
+            "artifact_inventory_sha256": zero,
+            "training_membership_path": "training.json",
+            "training_membership_sha256": zero,
+            "feature_schema_path": "features.json",
+            "feature_schema_sha256": zero,
+            "solver_settings_path": "solver.json",
+            "solver_settings_sha256": zero,
+            "dependency_lock_sha256": zero,
+            "container_digest": "sha256:" + zero,
+            "random_seed": 7,
+            "resource_profile": "public",
+        },
+        "compounds": compounds,
+    }
+    payload = {
+        "cycle_id": "synthetic-v1",
+        "manifest_sha256": zero,
+        "audit_report_sha256": zero,
+        "git_sha": "0" * 40,
+        "source_tree_sha256": zero,
+        "dependency_lock_sha256": zero,
+        "artifact_inventory_sha256": zero,
+        "training_membership_sha256": zero,
+        "feature_schema_sha256": zero,
+        "solver_settings_sha256": zero,
+        "container_digest": "sha256:" + zero,
+        "artifact_provenance": {"resource_profile": "public"},
+        "rows": predictions,
+    }
+    labels = {
+        "cycle_id": "synthetic-v1", "manifest_sha256": zero,
+        "predictions_sha256": zero, "records": records,
+    }
+    return manifest, payload, labels
+
+
+def test_full_synthetic_holdout_contract_and_scoring():
+    scorer = _module()
+    manifest, payload, labels = _synthetic_contracts()
+    validate_payload(manifest, "external_holdout_v1_manifest.schema.json")
+    validate_payload(payload, "external_holdout_v1_predictions.schema.json")
+    validate_payload(labels, "external_holdout_v1_labels.schema.json")
+    joined = scorer.join_predictions_and_labels(payload["rows"], labels)
+    scorer.validate_results_against_manifest(joined, manifest)
+    result = scorer.score(joined, seed=7, n_boot=100, n_target=120)
+    assert result["n_compounds"] == 120
+    assert result["cmax_statistic_sensitivity"]["groups"]["arithmetic_mean"]["n_compounds"] == 120
+
+
+def test_label_schema_requires_original_cmax_statistic():
+    _, _, labels = _synthetic_contracts()
+    del labels["records"][0]["arms"][0]["cmax_statistic"]
+    with pytest.raises(ValueError, match="cmax_statistic"):
+        validate_payload(labels, "external_holdout_v1_labels.schema.json")
+
+
+def test_scorer_rejects_manifest_eligibility_forgery():
+    scorer = _module()
+    manifest, payload, labels = _synthetic_contracts()
+    labels["records"][0]["arms"][0]["food_state"] = "fed"
+    forged = labels["records"][0]["arms"][0]
+    forged["source_record_hash"] = source_record_hash(forged)
+    manifest["compounds"][0]["arms"][0]["source_record_hash"] = forged[
+        "source_record_hash"
+    ]
+    joined = scorer.join_predictions_and_labels(payload["rows"], labels)
+    with pytest.raises(ValueError, match="Derived eligibility mismatch"):
+        scorer.validate_results_against_manifest(joined, manifest)
+
+
+@pytest.mark.parametrize("basis", ["salt_or_solvate_mass", "unknown"])
+def test_scorer_rejects_unverified_dose_basis_even_with_matching_hash(basis):
+    scorer = _module()
+    manifest, predictions, labels = _synthetic_contracts()
+    arm = labels["records"][0]["arms"][0]
+    arm["salt_form"] = "sodium"
+    arm["dose_basis"] = basis
+    arm["dose_basis_evidence"] = "Original reports 10 mg tablet; active-moiety basis unconfirmed."
+    arm["source_record_hash"] = source_record_hash(arm)
+    manifest["compounds"][0]["arms"][0]["source_record_hash"] = arm["source_record_hash"]
+    joined = scorer.join_predictions_and_labels(predictions["rows"], labels)
+    with pytest.raises(ValueError, match="Derived eligibility mismatch"):
+        scorer.validate_results_against_manifest(joined, manifest)
+
+
+def test_scorer_rejects_early_postdose_meal_even_with_matching_hash():
+    scorer = _module()
+    manifest, predictions, labels = _synthetic_contracts()
+    arm = labels["records"][0]["arms"][0]
+    arm["postdose_fast_h"] = 2.0
+    arm["source_record_hash"] = source_record_hash(arm)
+    manifest["compounds"][0]["arms"][0]["source_record_hash"] = arm["source_record_hash"]
+    joined = scorer.join_predictions_and_labels(predictions["rows"], labels)
+    with pytest.raises(ValueError, match="Derived eligibility mismatch"):
+        scorer.validate_results_against_manifest(joined, manifest)
+
+
+def test_scorer_rejects_clinical_source_outside_frozen_window():
+    scorer = _module()
+    manifest, predictions, labels = _synthetic_contracts()
+    arm = labels["records"][0]["arms"][0]
+    arm["source"]["source_date"] = "2019-01-01"
+    arm["source_record_hash"] = source_record_hash(arm)
+    manifest["compounds"][0]["arms"][0]["source_record_hash"] = arm["source_record_hash"]
+    joined = scorer.join_predictions_and_labels(predictions["rows"], labels)
+    windows = [
+        {"source_family": family, "start_date": "2020-01-01", "end_date": "2026-01-01"}
+        for family in ("FDA", "EMA", "PMDA", "HealthCanada", "peer_reviewed")
+    ]
+    with pytest.raises(ValueError, match="outside frozen source window"):
+        scorer.validate_results_against_manifest(joined, manifest, windows)
+
+
+def test_scorer_rejects_verifier_absent_from_source_plan():
+    scorer = _module()
+    manifest, predictions, labels = _synthetic_contracts()
+    arm = labels["records"][0]["arms"][0]
+    arm["verified_by"] = ["curator-a", "stranger"]
+    arm["source_record_hash"] = source_record_hash(arm)
+    manifest["compounds"][0]["arms"][0]["source_record_hash"] = arm["source_record_hash"]
+    joined = scorer.join_predictions_and_labels(predictions["rows"], labels)
+    with pytest.raises(ValueError, match="Unregistered verifier"):
+        scorer.validate_results_against_manifest(
+            joined, manifest, curators=["curator-a", "curator-b"]
+        )
+
+
+def test_cli_uses_frozen_seed_and_bootstrap_count(tmp_path, monkeypatch):
+    scorer = _module()
+    manifest, predictions, labels = _synthetic_contracts()
+    inventory = [
+        {
+            "candidate_id": f"c{i}", "name": f"compound-{i}",
+            "source_family": "FDA", "source_date": "2025-01-01", "source_ref": f"nda-{i}",
+        }
+        for i in range(900)
+    ]
+    verified = [
+        {
+            "candidate_id": f"c{i}", "name": f"compound-{i}",
+            "smiles": "C" * (i + 1), "synonyms": [], "related_structures": [],
+        }
+        for i in range(550)
+    ]
+    allocation = {
+        "calibration": [f"c{i}" for i in range(120, 260)],
+        "final_test": [f"c{i}" for i in range(120)],
+        "reserve": [f"c{i}" for i in range(260, 550)],
+    }
+    flow = [
+        {
+            "candidate_id": f"c{i}",
+            "decision": "verified" if i < 550 else "excluded",
+            "reason": "source ineligible" if i >= 550 else "",
+        }
+        for i in range(900)
+    ]
+    plan = {
+        "protocol": "external_holdout_v1", "cycle_id": "synthetic-v1",
+        "fixed_before_prediction": True, "inventory_n": 900, "verified_n": 550,
+        "calibration_n": 140, "final_test_n": 120, "reserve_n": 290,
+        "label_content_sha256": label_content_sha256(labels),
+        "source_windows": [
+            {"source_family": "FDA", "start_date": "2020-01-01", "end_date": "2026-01-01"},
+            {"source_family": "EMA", "start_date": "2020-01-01", "end_date": "2026-01-01"},
+            {"source_family": "PMDA", "start_date": "2020-01-01", "end_date": "2026-01-01"},
+            {"source_family": "HealthCanada", "start_date": "2020-01-01", "end_date": "2026-01-01"},
+            {
+                "source_family": "peer_reviewed",
+                "start_date": "2020-01-01",
+                "end_date": "2026-01-01",
+            },
+        ],
+        "curators": ["curator-a", "curator-b"],
+    }
+    for stem, contents in (
+        ("inventory", inventory), ("verified_shortlist", verified),
+        ("allocation", allocation), ("exclusion_flow", flow),
+    ):
+        path = tmp_path / f"{stem}.json"
+        path.write_text(json.dumps(contents))
+        plan[f"{stem}_path"] = path.name
+        plan[f"{stem}_sha256"] = sha256_file(path)
+    plan_path = tmp_path / "source-plan.json"
+    plan_path.write_text(json.dumps(plan))
+    manifest["source_plan_sha256"] = sha256_file(plan_path)
+    manifest_path = tmp_path / "manifest.json"
+    predictions_path = tmp_path / "predictions.json"
+    labels_path = tmp_path / "labels.json"
+    output_path = tmp_path / "score.json"
+    manifest_path.write_text(json.dumps(manifest))
+    verify_source_plan(manifest_path, manifest, lambda smiles: smiles)
+    manifest["compounds"][0]["smiles"] = "C.[Na+]"
+    with pytest.raises(ValueError, match="Manifest structure differs from verified parent"):
+        verify_source_plan(manifest_path, manifest)
+    manifest["compounds"][0]["smiles"] = "C"
+    manifest["compounds"][0]["name"] = "unseen alias"
+    with pytest.raises(ValueError, match="Manifest name differs"):
+        verify_source_plan(manifest_path, manifest, lambda smiles: smiles)
+    manifest["compounds"][0]["name"] = "compound-0"
+    registry = json.loads((ROOT / "data/sbi/prodrug_activation_registry.json").read_text())
+    active_smiles = next(
+        smiles for smiles, entry in registry.items()
+        if entry["observation_species"] == "active"
+    )
+    original_smiles = manifest["compounds"][0]["smiles"]
+    manifest["compounds"][0]["smiles"] = active_smiles
+    with pytest.raises(ValueError, match="Manifest structure differs from verified parent"):
+        verify_source_plan(manifest_path, manifest)
+    manifest["compounds"][0]["smiles"] = original_smiles
+    verified[0].pop("synonyms")
+    verified_path = tmp_path / "verified_shortlist.json"
+    verified_path.write_text(json.dumps(verified))
+    plan["verified_shortlist_sha256"] = sha256_file(verified_path)
+    plan_path.write_text(json.dumps(plan))
+    manifest["source_plan_sha256"] = sha256_file(plan_path)
+    with pytest.raises(ValueError, match="synonyms or related structures"):
+        verify_source_plan(manifest_path, manifest)
+    verified[0]["synonyms"] = []
+    verified_path.write_text(json.dumps(verified))
+    plan["verified_shortlist_sha256"] = sha256_file(verified_path)
+    plan_path.write_text(json.dumps(plan))
+    manifest["source_plan_sha256"] = sha256_file(plan_path)
+
+    extra = dict(manifest["compounds"][0])
+    extra.update(candidate_id="c300", smiles="C" * 301)
+    extra["arms"] = [{**extra["arms"][0], "primary_eligible": False}]
+    manifest["compounds"].append(extra)
+    with pytest.raises(ValueError, match="outside the frozen final-test allocation"):
+        verify_source_plan(manifest_path, manifest, lambda smiles: smiles)
+    manifest["compounds"].pop()
+    allocation["calibration"][0] = "c0"
+    allocation_path = tmp_path / "allocation.json"
+    allocation_path.write_text(json.dumps(allocation))
+    plan["allocation_sha256"] = sha256_file(allocation_path)
+    plan_path.write_text(json.dumps(plan))
+    manifest["source_plan_sha256"] = sha256_file(plan_path)
+    with pytest.raises(ValueError, match="partition"):
+        verify_source_plan(manifest_path, manifest)
+    allocation["calibration"][0] = "c120"
+    allocation_path.write_text(json.dumps(allocation))
+    plan["allocation_sha256"] = sha256_file(allocation_path)
+    plan_path.write_text(json.dumps(plan))
+    manifest["source_plan_sha256"] = sha256_file(plan_path)
+    verified[0]["smiles"] = verified[1]["smiles"]
+    verified_path = tmp_path / "verified_shortlist.json"
+    verified_path.write_text(json.dumps(verified))
+    plan["verified_shortlist_sha256"] = sha256_file(verified_path)
+    plan_path.write_text(json.dumps(plan))
+    manifest["source_plan_sha256"] = sha256_file(plan_path)
+    with pytest.raises(ValueError, match="share a salt/stereo family"):
+        verify_source_plan(manifest_path, manifest, lambda smiles: smiles)
+    verified[0]["smiles"] = "C"
+    verified_path.write_text(json.dumps(verified))
+    plan["verified_shortlist_sha256"] = sha256_file(verified_path)
+    plan_path.write_text(json.dumps(plan))
+    manifest["source_plan_sha256"] = sha256_file(plan_path)
+    manifest_path.write_text(json.dumps(manifest))
+    manifest_sha = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+    audit_path = tmp_path / "audit.json"
+    synthetic_audit = {"pass": True, "manifest_sha256": manifest_sha}
+    monkeypatch.setattr(contract, "_recompute_audit_report", lambda _: synthetic_audit)
+    audit_path.write_text(json.dumps(synthetic_audit, indent=2) + "\n")
+    predictions["audit_report_sha256"] = sha256_file(audit_path)
+    predictions["manifest_sha256"] = manifest_sha
+    labels["manifest_sha256"] = manifest_sha
+    predictions_path.write_text(json.dumps(predictions))
+    labels["predictions_sha256"] = sha256_file(predictions_path)
+    labels_path.write_text(json.dumps(labels))
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "score_external_holdout.py", str(predictions_path),
+            "--labels", str(labels_path),
+            "--manifest", str(manifest_path),
+            "--manifest-sha256", manifest_sha,
+            "--audit-report", str(audit_path),
+            "--audit-report-sha256", sha256_file(audit_path),
+            "--predictions-sha256", hashlib.sha256(predictions_path.read_bytes()).hexdigest(),
+            "--labels-sha256", hashlib.sha256(labels_path.read_bytes()).hexdigest(),
+            "--out", str(output_path),
+        ],
+    )
+    monkeypatch.setattr(
+        scorer,
+        "verify_frozen_checkout",
+        lambda root, freeze: {
+            "git_sha": freeze["git_sha"],
+            "source_tree_sha256": freeze["source_tree_sha256"],
+            "container_digest": freeze["container_digest"],
+        },
+    )
+    scorer.main()
+    report = json.loads(output_path.read_text())
+    assert (report["seed"], report["n_bootstrap"]) == (7, 100000)
+    assert report["label_content_sha256"] == plan["label_content_sha256"]
+    assert report["scorer_git_sha"] == manifest["freeze"]["git_sha"]
+    original_score = output_path.read_bytes()
+    with pytest.raises(FileExistsError, match="Score output already exists"):
+        scorer.main()
+    assert output_path.read_bytes() == original_score
+    output_path.unlink()
+
+    audit_path.write_text(json.dumps({"pass": False, "manifest_sha256": manifest_sha}))
+    sys.argv[sys.argv.index("--audit-report-sha256") + 1] = sha256_file(audit_path)
+    with pytest.raises(ValueError, match="did not pass"):
+        scorer.main()
+    audit_path.write_text(json.dumps(synthetic_audit, indent=2) + "\n")
+    sys.argv[sys.argv.index("--audit-report-sha256") + 1] = sha256_file(audit_path)
+
+    predictions["audit_report_sha256"] = "0" * 64
+    predictions_path.write_text(json.dumps(predictions))
+    sys.argv[sys.argv.index("--predictions-sha256") + 1] = sha256_file(predictions_path)
+    labels["predictions_sha256"] = sha256_file(predictions_path)
+    labels_path.write_text(json.dumps(labels))
+    sys.argv[sys.argv.index("--labels-sha256") + 1] = sha256_file(labels_path)
+    with pytest.raises(ValueError, match="Prediction audit_report_sha256"):
+        scorer.main()
+    predictions["audit_report_sha256"] = sha256_file(audit_path)
+    predictions_path.write_text(json.dumps(predictions))
+    sys.argv[sys.argv.index("--predictions-sha256") + 1] = sha256_file(predictions_path)
+    labels["predictions_sha256"] = sha256_file(predictions_path)
+    labels_path.write_text(json.dumps(labels))
+    sys.argv[sys.argv.index("--labels-sha256") + 1] = sha256_file(labels_path)
+
+    predictions["rows"][0]["meta_cmax_mg_l"] = 1.7
+    predictions_path.write_text(json.dumps(predictions))
+    sys.argv[sys.argv.index("--predictions-sha256") + 1] = sha256_file(predictions_path)
+    with pytest.raises(ValueError, match="Custodian prediction commitment"):
+        scorer.main()
+    predictions["rows"][0]["meta_cmax_mg_l"] = 1.1
+    predictions_path.write_text(json.dumps(predictions))
+    sys.argv[sys.argv.index("--predictions-sha256") + 1] = sha256_file(predictions_path)
+
+    labels["records"][0]["arms"][0]["observed_cmax_mg_l"] = 1.7
+    labels_path.write_text(json.dumps(labels))
+    sys.argv[sys.argv.index("--labels-sha256") + 1] = sha256_file(labels_path)
+    with pytest.raises(ValueError, match="pre-prediction commitment"):
+        scorer.main()

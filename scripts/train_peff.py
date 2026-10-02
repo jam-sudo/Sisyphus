@@ -2,7 +2,7 @@
 """train_peff.py — Train XGBoost Peff predictor from TDC Caco2_Wang.
 
 Data source:
-  - TDC Caco2_Wang (~910 compounds): Y = log10(Papp cm/s)
+  - SHA-pinned local TDC Caco2_Wang (910 compounds): Y = log10(Papp cm/s)
 
 Target: log10(Peff [x10^-4 cm/s]) = TDC_Y + 4
   - TDC Y=-5.0 → log10(Peff) = -1.0 → Peff = 0.1 x10^-4 cm/s
@@ -10,7 +10,7 @@ Target: log10(Peff [x10^-4 cm/s]) = TDC_Y + 4
 
 Holdout drugs excluded via canonical SMILES + InChIKey-14 + name matching.
 
-Output: models/adme/xgboost_peff.json
+Outputs: data/training/peff_tdc_public_clean.csv and models/adme/xgboost_peff.json
 
 Usage:
     python3 scripts/train_peff.py
@@ -18,9 +18,11 @@ Usage:
 
 from __future__ import annotations
 
+import hashlib
 import json
 import logging
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
@@ -32,6 +34,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 
 from sisyphus.descriptors import compute_features  # noqa: E402
+from sisyphus.validation.identity import ik14 as _inchikey_prefix  # noqa: E402
 
 logging.basicConfig(
     level=logging.INFO,
@@ -40,6 +43,9 @@ logging.basicConfig(
 )
 log = logging.getLogger(__name__)
 
+SOURCE = ROOT / "data" / "caco2_wang.tab"
+SOURCE_SHA256 = "447d9f1af487c06b080145a2361dbe45af5b27afc83e1a975dd29b9ea535d6ab"
+DATASET = ROOT / "data" / "training" / "peff_tdc_public_clean.csv"
 HOLDOUT_JSON = ROOT / "data" / "reference" / "holdout.json"
 CLINICAL_PK_JSON = ROOT / "data" / "reference" / "clinical_pk.json"
 OUTPUT_MODEL = ROOT / "models" / "adme" / "xgboost_peff.json"
@@ -54,21 +60,6 @@ def _canonical_smiles(smiles: str) -> str | None:
     if mol is None:
         return None
     return Chem.MolToSmiles(mol, isomericSmiles=True)
-
-
-def _inchikey_prefix(smiles: str) -> str | None:
-    from rdkit import Chem
-    from rdkit.Chem.inchi import MolToInchi, InchiToInchiKey
-    mol = Chem.MolFromSmiles(smiles)
-    if mol is None:
-        return None
-    inchi = MolToInchi(mol)
-    if inchi is None:
-        return None
-    ik = InchiToInchiKey(inchi)
-    if ik is None:
-        return None
-    return ik[:14]
 
 
 # ---------------------------------------------------------------------------
@@ -86,15 +77,15 @@ def build_holdout_keys(holdout_names: list[str], clinical_pk: dict) -> dict:
         entry = drugs.get(name) or drugs.get(name.replace(" ", "_"))
         if entry is None:
             continue
-        smiles = entry.get("smiles", "")
-        if not smiles:
-            continue
-        csmi = _canonical_smiles(smiles)
-        if csmi:
-            canonical_smiles.add(csmi)
-        ik = _inchikey_prefix(smiles)
-        if ik:
-            inchikey_prefixes.add(ik)
+        for smiles in (entry.get("smiles"), entry.get("prior_reference_smiles")):
+            if not smiles:
+                continue
+            csmi = _canonical_smiles(smiles)
+            if csmi:
+                canonical_smiles.add(csmi)
+            ik = _inchikey_prefix(smiles)
+            if ik:
+                inchikey_prefixes.add(ik)
 
     log.info(
         "Holdout keys: %d canonical SMILES, %d InChIKey prefixes, %d names",
@@ -125,11 +116,9 @@ def is_holdout(smiles: str, drug_id: str, keys: dict) -> bool:
 
 def load_caco2_wang(holdout_keys: dict) -> pd.DataFrame:
     """Load TDC Caco2_Wang, convert to log10(Peff [x10^-4 cm/s]), exclude holdout."""
-    from tdc.single_pred import ADME
-
-    log.info("Loading TDC Caco2_Wang ...")
-    data = ADME(name="Caco2_Wang")
-    df = data.get_data()
+    if hashlib.sha256(SOURCE.read_bytes()).hexdigest() != SOURCE_SHA256:
+        raise ValueError("Caco2_Wang source SHA256 changed")
+    df = pd.read_csv(SOURCE, sep="\t")
     log.info("Loaded %d rows", len(df))
 
     # Y = log10(Papp cm/s). Convert to log10(Peff [x10^-4 cm/s]) = Y + 4
@@ -262,6 +251,10 @@ def main() -> int:
 
     # Load data
     df = load_caco2_wang(holdout_keys)
+    if len(df) != 874:
+        raise ValueError(f"Unexpected clean Caco2_Wang row count: {len(df)}")
+    df.to_csv(DATASET, index=False, float_format="%.17g")
+    df = pd.read_csv(DATASET)
 
     # Features
     X, y, _ = compute_feature_matrix(df)
@@ -280,6 +273,30 @@ def main() -> int:
     OUTPUT_MODEL.parent.mkdir(parents=True, exist_ok=True)
     model.save_model(str(OUTPUT_MODEL))
     log.info("Model saved to %s", OUTPUT_MODEL)
+    manifest_path = OUTPUT_MODEL.with_suffix(".meta.json")
+    metadata = json.loads(manifest_path.read_text())
+    metadata.update(
+        version="v1_public_tdc",
+        artifact_sha256=hashlib.sha256(OUTPUT_MODEL.read_bytes()).hexdigest(),
+        trained_at=datetime.now(timezone.utc).isoformat(),
+        trained_on={
+            "dataset_path": str(DATASET.relative_to(ROOT)),
+            "sha256": hashlib.sha256(DATASET.read_bytes()).hexdigest(),
+            "n_drugs_clean": len(df),
+            "source_sha256": SOURCE_SHA256,
+        },
+        n_drugs_original=910,
+        n_drugs_excluded=910 - len(df),
+        holdout_version="N=107 (data/reference/holdout.json)",
+        holdout_metric={"name": "five_fold_cv_r2", "value": cv["r2"],
+                        "aafe": cv["aafe"], "rmse_log10": cv["rmse"]},
+        hyperparameters={"n_estimators": 500, "max_depth": 6,
+                         "learning_rate": 0.05, "subsample": 0.8,
+                         "colsample_bytree": 0.8, "random_state": 42,
+                         "n_jobs": -1, "verbosity": 0},
+        retrained_reason="Pin public TDC fitted rows and replace unknown legacy Peff source",
+    )
+    manifest_path.write_text(json.dumps(metadata, indent=2) + "\n")
 
     # Summary
     log.info("=" * 60)

@@ -4,8 +4,7 @@
 Reads `data/training/4track_holdout_predictions.json` (the cached per-drug
 predictions produced by `scripts/run_engine_benchmark.py`) and writes
 `data/validation/4track_ci_<date>_<tag>.json` with point estimates + CIs
-for Engine / ML / Meta on the overall N=107 holdout AND the in-domain
-subset.
+for Engine / ML / Meta on the scored development cohort and in-domain subset.
 
 Method (matches `scripts/run_n50_benchmark.py::_aafe_with_ci`):
     AAFE = 10 ^ mean(abs(log10(fold)))
@@ -15,11 +14,13 @@ where the bootstrap resamples `abs(log10(fold))` with replacement,
 
 Usage:
     python scripts/bootstrap_4track_ci.py
-    python scripts/bootstrap_4track_ci.py --tag v0.4 --out data/validation/4track_ci_2026-05-12_v0.4.json
+    python scripts/bootstrap_4track_ci.py --tag v0.4 \
+        --out data/validation/4track_ci_2026-05-12_v0.4.json
 """
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 
@@ -55,6 +56,27 @@ def pct_within_n_fold(folds: list[float], n: float) -> float | None:
     return float(round(100.0 * (log_abs <= np.log10(n)).mean(), 1))
 
 
+def paired_meta_ml_ratio(rows: list[dict], n_bootstrap: int = N_BOOTSTRAP) -> dict:
+    """Bootstrap the paired compound-level Meta/ML AAFE ratio."""
+
+    delta = np.asarray([
+        abs(np.log(row["meta"] / row["obs"]))
+        - abs(np.log(row["ml"] / row["obs"]))
+        for row in rows
+    ])
+    if not len(delta) or not np.all(np.isfinite(delta)):
+        raise ValueError("Paired Meta/ML benchmark requires finite positive predictions")
+    rng = np.random.default_rng(SEED)
+    indices = rng.integers(0, len(delta), size=(n_bootstrap, len(delta)))
+    boot = np.exp(delta[indices].mean(axis=1))
+    return {
+        "ratio": round(float(np.exp(delta.mean())), 4),
+        "ci_95_low": round(float(np.percentile(boot, 2.5)), 4),
+        "ci_95_high": round(float(np.percentile(boot, 97.5)), 4),
+        "n": len(delta),
+    }
+
+
 def _track_summary(rows: list[dict], track_key: str) -> dict:
     # Accept either compact key ("eng_fold", 107-holdout cache) or verbose
     # ("engine_fold", prospective N=15 cache) for the engine track.
@@ -79,7 +101,10 @@ def main() -> None:
                    help="artifact tag (date suffix is auto)")
     p.add_argument("--out", type=Path, default=None,
                    help="output JSON path (default: data/validation/4track_ci_<date>_<tag>.json)")
-    p.add_argument("--context", default="public-clone deterministic state (no DrugBank, no logp_correction); audit-driven honesty regen.",
+    p.add_argument("--context", default=(
+        "public-clone deterministic state (no DrugBank, no logp_correction); "
+        "audit-driven honesty regen."
+    ),
                    help="prose context for the artifact")
     p.add_argument("--date", default=None,
                    help="date stamp YYYY-MM-DD (default: today)")
@@ -95,7 +120,8 @@ def main() -> None:
 
     report = {
         "computed_at": f"{date}-{args.tag}",
-        "source_cache": str(args.cache.relative_to(ROOT)),
+        "source_cache": str(args.cache.resolve().relative_to(ROOT)),
+        "source_cache_sha256": hashlib.sha256(args.cache.read_bytes()).hexdigest(),
         "context": args.context,
         "method": "bootstrap on abs(log10(fold))",
         "n_bootstrap": N_BOOTSTRAP,
@@ -105,12 +131,14 @@ def main() -> None:
             "engine": _track_summary(drugs, "eng"),
             "ml":     _track_summary(drugs, "ml"),
             "meta":   _track_summary(drugs, "meta"),
+            "paired_meta_ml": paired_meta_ml_ratio(drugs),
         },
         "in_domain": {
             "n": len(in_domain),
             "engine": _track_summary(in_domain, "eng"),
             "ml":     _track_summary(in_domain, "ml"),
             "meta":   _track_summary(in_domain, "meta"),
+            "paired_meta_ml": paired_meta_ml_ratio(in_domain),
         },
     }
 
@@ -122,8 +150,11 @@ def main() -> None:
         print(f"\n{slice_name} (N={s['n']}):")
         for track in ("engine", "ml", "meta"):
             t = s[track]
-            print(f"  {track:6s}  AAFE={t['aafe']:.4f}  CI=[{t['ci_95_low']:.4f}, {t['ci_95_high']:.4f}]  "
-                  f"%2-fold={t['pct_2fold']}  %3-fold={t['pct_3fold']}")
+            print(
+                f"  {track:6s}  AAFE={t['aafe']:.4f}  "
+                f"CI=[{t['ci_95_low']:.4f}, {t['ci_95_high']:.4f}]  "
+                f"%2-fold={t['pct_2fold']}  %3-fold={t['pct_3fold']}"
+            )
 
 
 if __name__ == "__main__":

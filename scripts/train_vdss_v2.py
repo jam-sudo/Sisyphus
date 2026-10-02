@@ -24,20 +24,11 @@ import xgboost as xgb
 from rdkit import Chem
 
 from sisyphus.descriptors import compute_features
+from sisyphus.validation.identity import ik14 as _inchikey14
 
 logging.disable(logging.WARNING)
 
 ASSUMED_BODY_WEIGHT_KG = 70.0
-
-
-def _inchikey14(smiles: str) -> str | None:
-    try:
-        mol = Chem.MolFromSmiles(smiles)
-        if mol is None:
-            return None
-        return Chem.MolToInchiKey(mol).split("-")[0]
-    except Exception:
-        return None
 
 
 def load_holdout_keys() -> set:

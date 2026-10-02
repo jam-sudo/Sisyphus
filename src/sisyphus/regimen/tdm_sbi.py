@@ -31,13 +31,14 @@ from sisyphus.engine.compiler import CompiledODE, ResolvedParams
 from sisyphus.graph.body import BodyGraph
 from sisyphus.regimen.solver import solve_regimen
 from sisyphus.regimen.types import DosingRegimen
+from sisyphus.resources import get_resource_config
 
 if TYPE_CHECKING:
     from sisyphus.regimen.tdm import Observation, TDMResult
 
 logger = logging.getLogger(__name__)
 
-_DEFAULT_POSTERIOR_PATH = Path("models/sbi/multi_drug_nsf.pt")
+_DEFAULT_POSTERIOR_PATH = get_resource_config().model("sbi", "multi_drug_nsf.pt")
 _DEFAULT_AUX_SUFFIX = ".aux.pt"
 
 
@@ -51,8 +52,12 @@ def _extract_params(drug: DrugOnGraph) -> dict[str, float]:
     return params
 
 
-_DEFAULT_HIERARCHICAL_POSTERIOR_PATH = Path("models/sbi/hierarchical_nsf_2k.pt")
-_DEFAULT_CONTINUOUS_POSTERIOR_PATH = Path("models/sbi/continuous_hierarchical_nsf.pt")
+_DEFAULT_HIERARCHICAL_POSTERIOR_PATH = get_resource_config().model(
+    "sbi", "hierarchical_nsf_2k.pt"
+)
+_DEFAULT_CONTINUOUS_POSTERIOR_PATH = get_resource_config().model(
+    "sbi", "continuous_hierarchical_nsf.pt"
+)
 
 
 def sbi_update(
@@ -235,7 +240,7 @@ def sbi_update(
 
     # Determine simulation window (match importance_sampling path)
     max_obs_t = max(obs.time_h for obs in observations)
-    t_total = max(max_obs_t + 24.0, regimen.last_dose_time_h + 24.0)
+    t_total = max(max_obs_t + 24.0, regimen.last_dose_end_h + 24.0)
 
     # ── Optional: load surrogate ensemble for fast forward sims ──
     # D1 follow-up (2026-04-10): the nominal-feature OOD guard was not
@@ -269,7 +274,7 @@ def sbi_update(
             )
 
             sdir = _Path(surrogate_model_dir) if surrogate_model_dir is not None \
-                else _Path("models/surrogate")
+                else get_resource_config().model("surrogate")
             if not sdir.exists():
                 raise FileNotFoundError(f"surrogate dir {sdir} missing")
             s_models = load_surrogate_ensemble(sdir, n_ensemble=5)

@@ -25,6 +25,12 @@ accuracy. NOTE: remdesivir's 3-fold gate (test_prodrug_v2_validation_gate)
 flips xfail→PASS under public-only Cmax (1.573 mg/L vs FDA observed
 ~3.0 mg/L → FE 1.91 < 3.0 gate); see that test for the strict→strict-False
 adjustment.
+
+Re-baselined 2026-10-01 on a clean public clone. Remdesivir moved because IV
+predictions are now engine-only (e8dcd12: the oral-trained ML/meta is no longer
+blended into IV Cmax); its engine value was already 6.42 mg/L before that change.
+The other three moved with the 2026-09 public fup/Peff/CLint/VDss retrains and
+training-label screens (bisected per checkpoint; no single-drug branch).
 """
 from __future__ import annotations
 
@@ -34,10 +40,10 @@ from sisyphus.pipeline.predict import predict
 from tests._artifact_helpers import skip_if_local_artifacts
 
 _PINNED = {
-    "sepiapterin":       1.309912e+01,  # +paracellular absorption (was 8.679384e+00 pre-PARA)
-    "remdesivir":        1.573162e+00,
-    "tebipenem_pivoxil": 3.118914e-01,  # 2026-06-10 batch regen (was 3.109251e-01)
-    "fostamatinib":      6.675183e-02,
+    "sepiapterin":       1.386895e+01,  # 2026-09 public retrains (was 1.309912e+01)
+    "remdesivir":        5.890889e+00,  # IV is engine-only, no oral ML blend (was 1.573162e+00)
+    "tebipenem_pivoxil": 3.692924e-01,  # 2026-09 retrains + label screen (was 3.118914e-01)
+    "fostamatinib":      4.829905e-02,  # 2026-09 public retrains (was 6.675183e-02)
 }
 
 _RTOL = 0.05

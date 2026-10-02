@@ -14,17 +14,18 @@ from __future__ import annotations
 
 import json
 import logging
-import pathlib
 from functools import lru_cache
+
+from sisyphus.resources import get_resource_config
 
 logger = logging.getLogger(__name__)
 
-_REPO_ROOT = pathlib.Path(__file__).resolve().parents[3]
-_NAT2_PATH = _REPO_ROOT / "data" / "enzymes" / "nat2_substrates.json"
-_UGT1A1_PATH = _REPO_ROOT / "data" / "enzymes" / "ugt1a1_substrates.json"
-_UGT2B7_PATH = _REPO_ROOT / "data" / "enzymes" / "ugt2b7_substrates.json"
-_UGT1A9_PATH = _REPO_ROOT / "data" / "enzymes" / "ugt1a9_substrates.json"
-_UGT_IVIVE_SF_PATH = _REPO_ROOT / "data" / "enzymes" / "ugt_ivive_sf.json"
+_RESOURCES = get_resource_config()
+_NAT2_PATH = _RESOURCES.data("enzymes", "nat2_substrates.json", required=False)
+_UGT1A1_PATH = _RESOURCES.data("enzymes", "ugt1a1_substrates.json", required=False)
+_UGT2B7_PATH = _RESOURCES.data("enzymes", "ugt2b7_substrates.json", required=False)
+_UGT1A9_PATH = _RESOURCES.data("enzymes", "ugt1a9_substrates.json", required=False)
+_UGT_IVIVE_SF_PATH = _RESOURCES.data("enzymes", "ugt_ivive_sf.json", required=False)
 
 
 def _smiles_to_inchikey(smiles: str) -> str | None:

@@ -357,7 +357,7 @@ def bayesian_update(
                 age_years=age_years,
                 sbi_reweight=sbi_reweight,
             ))
-        except FileNotFoundError as exc:
+        except (FileNotFoundError, ImportError, ModuleNotFoundError) as exc:
             if not sbi_fallback:
                 raise
             logger.warning(
@@ -376,7 +376,7 @@ def bayesian_update(
 
     # Determine simulation window: cover all observation times + one interval
     max_obs_t = max(obs.time_h for obs in observations)
-    t_total = max(max_obs_t + 24.0, regimen.last_dose_time_h + 24.0)
+    t_total = max(max_obs_t + 24.0, regimen.last_dose_end_h + 24.0)
 
     # Collect prior samples and simulation results
     cmax_samples: list[float] = []

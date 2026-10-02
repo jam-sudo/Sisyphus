@@ -1,0 +1,4663 @@
+{
+  "candidates": [
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_4805",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 500.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/24227961/"
+        }
+      ],
+      "candidate_id": "2127",
+      "ik14": "IKQCSJBQLWJEPU",
+      "name": "ETHAMSYLATE",
+      "smiles": "O=S(=O)(O)c1cc(O)ccc1O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6213",
+          "cmax_unit": "μg/L",
+          "dose_mg": 60.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/29872264/"
+        },
+        {
+          "arm_id": "frdb_6214",
+          "cmax_unit": "μg/L",
+          "dose_mg": 90.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/29872264/"
+        }
+      ],
+      "candidate_id": "2849",
+      "ik14": "PTVWPYVOOKLBCG",
+      "name": "LEVODROPROPIZINE",
+      "smiles": "OC[C@@H](O)CN1CCN(c2ccccc2)CC1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_7874",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 20.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/16248851"
+        }
+      ],
+      "candidate_id": "8150",
+      "ik14": "PBHFNBQPZCRWQP",
+      "name": "PHENSERINE TARTRATE",
+      "smiles": "CN1CC[C@@]2(C)c3cc(OC(=O)Nc4ccccc4)ccc3N(C)[C@@H]12"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_4812",
+          "cmax_unit": "mg/L",
+          "dose_mg": 300.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/10763459"
+        }
+      ],
+      "candidate_id": "2134",
+      "ik14": "UGFHIPBXIWJXNA",
+      "name": "LIAROZOLE",
+      "smiles": "Clc1cccc(C(c2ccc3nc[nH]c3c2)n2ccnc2)c1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_3754",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 37.5,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2011/P201100027/470007000_16100AMZ03538000_A100_2.pdf#page=7 | https://www.pmda.go.jp/drugs/2011/P201100027/470007000_16100AMZ03538000_K100_2.pdf#page=70"
+        },
+        {
+          "arm_id": "frdb_3755",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 75.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2011/P201100027/470007000_16100AMZ03538000_A100_2.pdf#page=7 | https://www.pmda.go.jp/drugs/2011/P201100027/470007000_16100AMZ03538000_K100_2.pdf#page=70"
+        },
+        {
+          "arm_id": "frdb_3756",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 150.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2011/P201100027/470007000_16100AMZ03538000_A100_2.pdf#page=7 | https://www.pmda.go.jp/drugs/2011/P201100027/470007000_16100AMZ03538000_K100_2.pdf#page=70"
+        }
+      ],
+      "candidate_id": "1776",
+      "ik14": "BCCREUFCSIMJFS",
+      "name": "ROXATIDINE",
+      "smiles": "O=C(CO)NCCCOc1cccc(CN2CCCCC2)c1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6036",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 5.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/1839540/"
+        },
+        {
+          "arm_id": "frdb_6037",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 10.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/1839540/"
+        },
+        {
+          "arm_id": "frdb_6038",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 20.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/1839540/"
+        },
+        {
+          "arm_id": "frdb_6041",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 10.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://www.jstage.jst.go.jp/article/jscpt1970/26/1/26_1_305/_article/-char/en"
+        },
+        {
+          "arm_id": "frdb_6042",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 10.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://www.jstage.jst.go.jp/article/jscpt1970/26/1/26_1_305/_article/-char/en"
+        }
+      ],
+      "candidate_id": "2665",
+      "ik14": "GQGRDYWMOPRROR",
+      "name": "VAPIPROST",
+      "smiles": "O=C(O)CC/C=C\\CC[C@@H]1[C@@H](N2CCCCC2)[C@@H](O)C[C@@H]1OCc1ccc(-c2ccccc2)cc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_5784",
+          "cmax_unit": "μg/L",
+          "dose_mg": 75.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/6026786/"
+        }
+      ],
+      "candidate_id": "2572",
+      "ik14": "OOBHFESNSZDWIU",
+      "name": "PHENMETRAZINE",
+      "smiles": "CC1NCCOC1c1ccccc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_9985",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 40.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/22044402"
+        }
+      ],
+      "candidate_id": "10208",
+      "ik14": "BATCTBJIJJEPHM",
+      "name": "PF-04457845",
+      "smiles": "O=C(Nc1cccnn1)N1CCC(=Cc2cccc(Oc3ccc(C(F)(F)F)cn3)c2)CC1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_1401",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/17161665/"
+        },
+        {
+          "arm_id": "frdb_1402",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/17161665/"
+        },
+        {
+          "arm_id": "frdb_1403",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/17161665/"
+        },
+        {
+          "arm_id": "frdb_1404",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/17161665/"
+        },
+        {
+          "arm_id": "frdb_1405",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 300.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/17161665/"
+        },
+        {
+          "arm_id": "frdb_1406",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 300.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/17161665/"
+        },
+        {
+          "arm_id": "frdb_1410",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/17161665/"
+        },
+        {
+          "arm_id": "frdb_1411",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/9124849/"
+        },
+        {
+          "arm_id": "frdb_1412",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/9124849/"
+        }
+      ],
+      "candidate_id": "560",
+      "ik14": "MGQLHRYJBWGORO",
+      "name": "BALOFLOXACIN",
+      "smiles": "CNC1CCCN(c2c(F)cc3c(=O)c(C(=O)O)cn(C4CC4)c3c2OC)C1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_11357",
+          "cmax_unit": "μg/L",
+          "dose_mg": 60.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/24038952"
+        }
+      ],
+      "candidate_id": "45300",
+      "ik14": "ORXQGKIUCDPEAJ",
+      "name": "XANTHOHUMOL",
+      "smiles": "COc1cc(O)c(CC=C(C)C)c(O)c1C(=O)/C=C/c1ccc(O)cc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_10763",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 1.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/27138022/"
+        },
+        {
+          "arm_id": "frdb_10764",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 10.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/27138022/"
+        },
+        {
+          "arm_id": "frdb_10765",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/27138022/"
+        },
+        {
+          "arm_id": "frdb_10766",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/27138022/"
+        },
+        {
+          "arm_id": "frdb_10767",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 400.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/27138022/"
+        },
+        {
+          "arm_id": "frdb_10768",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 800.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/27138022/"
+        },
+        {
+          "arm_id": "frdb_10769",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/27138022/"
+        }
+      ],
+      "candidate_id": "30759",
+      "ik14": "MUFJHYRCIHHATF",
+      "name": "GIT-027",
+      "smiles": "O=C(O)CC1CC(c2ccccc2)=NO1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_7343",
+          "cmax_unit": "pg/mL",
+          "dose_mg": 0.024,
+          "source_type": "DRUG LABEL",
+          "source_uri": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2012/021908s010lbl.pdf"
+        }
+      ],
+      "candidate_id": "7875",
+      "ik14": "PNVYHTHOCKTJCO",
+      "name": "LUBIPROSTONE",
+      "smiles": "CCCCC(F)(F)C(O)CCC1C(O)CC(=O)C1CCCCCCC(=O)O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_7160",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 150.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/8300896/"
+        },
+        {
+          "arm_id": "frdb_7161",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 300.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/8300896/"
+        },
+        {
+          "arm_id": "frdb_7162",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 600.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/8300896/"
+        }
+      ],
+      "candidate_id": "7026",
+      "ik14": "SXONDGSPUVNZLO",
+      "name": "ZENARESTAT",
+      "smiles": "O=C(O)Cn1c(=O)n(Cc2ccc(Br)cc2F)c(=O)c2ccc(Cl)cc21"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_4859",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 160.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/28485775/"
+        }
+      ],
+      "candidate_id": "2197",
+      "ik14": "QCDYQQDYXPDABM",
+      "name": "PHLOROGLUCINOL",
+      "smiles": "Oc1cc(O)cc(O)c1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_4617",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 1000.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/22951317/"
+        },
+        {
+          "arm_id": "frdb_4618",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 1000.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/22951317/"
+        }
+      ],
+      "candidate_id": "2023",
+      "ik14": "RZZPDXZPRHQOCG",
+      "name": "CITICOLINE",
+      "smiles": "C[N+](C)(C)CCOP(=O)([O-])OP(=O)([O-])OC[C@H]1O[C@@H](n2ccc(N)nc2=O)[C@H](O)[C@@H]1O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_3699",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 50.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/11285356/"
+        },
+        {
+          "arm_id": "frdb_3703",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 30.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/15943224/"
+        },
+        {
+          "arm_id": "frdb_3704",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 60.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/15943224/"
+        },
+        {
+          "arm_id": "frdb_3705",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 150.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/15943224/"
+        },
+        {
+          "arm_id": "frdb_3706",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 300.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/15943224/"
+        }
+      ],
+      "candidate_id": "1729",
+      "ik14": "TZBJGXHYKVUXJN",
+      "name": "GENISTEIN",
+      "smiles": "O=c1c(-c2ccc(O)cc2)coc2cc(O)cc(O)c12"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_3348",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 35.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/6688092"
+        }
+      ],
+      "candidate_id": "1542",
+      "ik14": "MFOCDFTXLCYLKU",
+      "name": "PHENDIMETRAZINE",
+      "smiles": "C[C@H]1[C@H](c2ccccc2)OCCN1C"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_4386",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 30.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2006/P200600027/18007800_21800AMZ10369_A102_1.pdf#page=24 | https://www.pmda.go.jp/drugs/2006/P200600027/18007800_21800AMZ10369_K115_1.pdf#page=33"
+        },
+        {
+          "arm_id": "frdb_4387",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 60.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2006/P200600027/18007800_21800AMZ10369_A102_1.pdf#page=24 | https://www.pmda.go.jp/drugs/2006/P200600027/18007800_21800AMZ10369_K115_1.pdf#page=33"
+        },
+        {
+          "arm_id": "frdb_4388",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 90.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2006/P200600027/18007800_21800AMZ10369_A102_1.pdf#page=24 | https://www.pmda.go.jp/drugs/2006/P200600027/18007800_21800AMZ10369_K115_1.pdf#page=33"
+        },
+        {
+          "arm_id": "frdb_4391",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 30.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2006/P200600027/18007800_21800AMZ10369_A102_1.pdf#page=26 | https://www.pmda.go.jp/drugs/2006/P200600027/18007800_21800AMZ10369_K115_1.pdf#page=15"
+        }
+      ],
+      "candidate_id": "1860",
+      "ik14": "WRNXUQJJCIZICJ",
+      "name": "MOZAVAPTAN",
+      "smiles": "Cc1ccccc1C(=O)Nc1ccc(C(=O)N2CCCC(N(C)C)c3ccccc32)cc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6327",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 2.5,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/660508/"
+        }
+      ],
+      "candidate_id": "2879",
+      "ik14": "YTJIBEDMAQUYSZ",
+      "name": "CLOPREDNOL",
+      "smiles": "C[C@]12C=CC(=O)C=C1C(Cl)=C[C@@H]1[C@@H]2[C@@H](O)C[C@@]2(C)[C@H]1CC[C@]2(O)C(=O)CO"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_12979",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 1.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/29067308/"
+        },
+        {
+          "arm_id": "frdb_12980",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 1.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/29067308/"
+        },
+        {
+          "arm_id": "frdb_12981",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 3.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/29067308/"
+        },
+        {
+          "arm_id": "frdb_12982",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 10.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/29067308/"
+        },
+        {
+          "arm_id": "frdb_12983",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 30.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/29067308/"
+        },
+        {
+          "arm_id": "frdb_12984",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 90.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/29067308/"
+        },
+        {
+          "arm_id": "frdb_12985",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 150.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/29067308/"
+        },
+        {
+          "arm_id": "frdb_12993",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 5.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/29067308/"
+        },
+        {
+          "arm_id": "frdb_12994",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 25.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/29067308/"
+        },
+        {
+          "arm_id": "frdb_12995",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 50.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/29067308/"
+        }
+      ],
+      "candidate_id": "59566",
+      "ik14": "VLLFGVHGKLDDLW",
+      "name": "ATABECESTAT",
+      "smiles": "CC1(c2cc(NC(=O)c3ccc(C#N)cn3)ccc2F)C=CSC(N)=N1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_3671",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 400.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/2249375"
+        },
+        {
+          "arm_id": "frdb_3672",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 400.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/2249375"
+        }
+      ],
+      "candidate_id": "1717",
+      "ik14": "ALARQZQTBTVLJV",
+      "name": "MEPHOBARBITAL",
+      "smiles": "CCC1(c2ccccc2)C(=O)NC(=O)N(C)C1=O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_2512",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 75.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/31780765"
+        }
+      ],
+      "candidate_id": "1269",
+      "ik14": "XXEPPPIWZFICOJ",
+      "name": "DIETHYLPROPION",
+      "smiles": "CCN(CC)C(C)C(=O)c1ccccc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_7090",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 75.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/12959296/"
+        },
+        {
+          "arm_id": "frdb_7091",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 500.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/12959296/"
+        }
+      ],
+      "candidate_id": "6899",
+      "ik14": "AXUZQJFHDNNPFG",
+      "name": "VERLUKAST",
+      "smiles": "CN(C)C(=O)CCS[C@H](SCCC(=O)O)c1cccc(/C=C/c2ccc3ccc(Cl)cc3n2)c1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_11276",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 170.0,
+          "source_type": "PATENT",
+          "source_uri": "https://patentimages.storage.googleapis.com/2d/ec/d1/45148c1fe099d4/US20200016101A1.pdf"
+        }
+      ],
+      "candidate_id": "42994",
+      "ik14": "CIOAGBVUUVVLOB",
+      "name": "STRONTIUM LACTATE",
+      "smiles": "[Sr]"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_4607",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/29681381/"
+        }
+      ],
+      "candidate_id": "2015",
+      "ik14": "UEQVTKSAEXANEZ",
+      "name": "CEFMATILEN",
+      "smiles": "Nc1nc(/C(=N/O)C(=O)N[C@@H]2C(=O)N3C(C(=O)O)=C(SCSc4c[nH]nn4)CS[C@H]23)cs1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6104",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 1.2,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/29786964/"
+        },
+        {
+          "arm_id": "frdb_6106",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 0.6,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/32237115/"
+        },
+        {
+          "arm_id": "frdb_6108",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 0.6,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/32237115/"
+        }
+      ],
+      "candidate_id": "2791",
+      "ik14": "GKWPCEFFIHSJOE",
+      "name": "LAQUINIMOD",
+      "smiles": "CCN(C(=O)c1c(O)c2c(Cl)cccc2n(C)c1=O)c1ccccc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_7078",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/1544287/"
+        },
+        {
+          "arm_id": "frdb_7081",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/8529328/"
+        }
+      ],
+      "candidate_id": "6897",
+      "ik14": "LUBHDINQXIHVLS",
+      "name": "TOLRESTAT",
+      "smiles": "COc1ccc2c(C(=S)N(C)CC(=O)O)cccc2c1C(F)(F)F"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_10715",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 4.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/20981001"
+        },
+        {
+          "arm_id": "frdb_10718",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 4.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://www.ncbi.nlm.nih.gov/pubmed/20981001"
+        }
+      ],
+      "candidate_id": "28981",
+      "ik14": "MHJBZVSGOZTKRH",
+      "name": "ENDOXIFEN",
+      "smiles": "CC/C(=C(\\c1ccc(O)cc1)c1ccc(OCCNC)cc1)c1ccccc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_1318",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 4.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2004/P200400003/53011600_21600AMZ00038_X100_1.pdf#page=17"
+        },
+        {
+          "arm_id": "frdb_1319",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 8.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2004/P200400003/53011600_21600AMZ00038_X100_1.pdf#page=17"
+        },
+        {
+          "arm_id": "frdb_1320",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 16.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2004/P200400003/53011600_21600AMZ00038_X100_1.pdf#page=17"
+        },
+        {
+          "arm_id": "frdb_1321",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 32.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2004/P200400003/53011600_21600AMZ00038_X100_1.pdf#page=17"
+        }
+      ],
+      "candidate_id": "509",
+      "ik14": "MHNNVDILNTUWNS",
+      "name": "INDISETRON",
+      "smiles": "CN1C[C@H]2C[C@@H](NC(=O)c3n[nH]c4ccccc34)C[C@@H](C1)N2C"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_13161",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 48.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://www.prd-journal.com/article/S1353-8020(23)00004-4/pdf"
+        },
+        {
+          "arm_id": "frdb_13162",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 192.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://www.prd-journal.com/article/S1353-8020(23)00004-4/pdf"
+        },
+        {
+          "arm_id": "frdb_13163",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 384.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://www.prd-journal.com/article/S1353-8020(23)00004-4/pdf"
+        }
+      ],
+      "candidate_id": "59628",
+      "ik14": "ZQOBVMHBVWNVBG",
+      "name": "VODOBATINIB",
+      "smiles": "Cc1ccc(C(=O)NNC(=O)c2c(C)cccc2Cl)cc1C#Cc1cnc2ccccc2c1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_3372",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 25.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubs.rsc.org/en/content/articlehtml/2014/ay/c3ay41698d"
+        }
+      ],
+      "candidate_id": "1561",
+      "ik14": "MOYGZHXDRJNJEP",
+      "name": "BUCLIZINE",
+      "smiles": "CC(C)(C)c1ccc(CN2CCN(C(c3ccccc3)c3ccc(Cl)cc3)CC2)cc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_3620",
+          "cmax_unit": "mg/L",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/9056051/"
+        },
+        {
+          "arm_id": "frdb_3621",
+          "cmax_unit": "mg/L",
+          "dose_mg": 150.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/9056051/"
+        },
+        {
+          "arm_id": "frdb_3622",
+          "cmax_unit": "mg/L",
+          "dose_mg": 200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/9056051/"
+        },
+        {
+          "arm_id": "frdb_3623",
+          "cmax_unit": "mg/L",
+          "dose_mg": 250.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/9056051/"
+        },
+        {
+          "arm_id": "frdb_3624",
+          "cmax_unit": "mg/L",
+          "dose_mg": 350.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/9056051/"
+        }
+      ],
+      "candidate_id": "1689",
+      "ik14": "JZXRLKWWVNUZRB",
+      "name": "LAZABEMIDE",
+      "smiles": "NCCNC(=O)c1ccc(Cl)cn1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_8463",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 250.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/18971325"
+        }
+      ],
+      "candidate_id": "8430",
+      "ik14": "GYCPCOJTCINIFZ",
+      "name": "AVN-944",
+      "smiles": "CC[C@H](CC#N)OC(=O)N[C@@H](C)c1cccc(NC(=O)Nc2ccc(-c3cnco3)c(OC)c2)c1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_1527",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 25.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/1/530169_2135001F1136_1_009_1F.pdf#page=15"
+        }
+      ],
+      "candidate_id": "655",
+      "ik14": "SMNOERSLNYGGOU",
+      "name": "MEFRUSIDE",
+      "smiles": "CN(CC1(C)CCCO1)S(=O)(=O)c1ccc(Cl)c(S(N)(=O)=O)c1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_11639",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/17596104"
+        }
+      ],
+      "candidate_id": "46397",
+      "ik14": "QGJZLNKBHJESQX",
+      "name": "BETULINIC ACID",
+      "smiles": "C=C(C)[C@@H]1CC[C@]2(C(=O)O)CC[C@]3(C)[C@H](CC[C@@H]4[C@@]5(C)CC[C@H](O)C(C)(C)[C@@H]5CC[C@]43C)[C@@H]12"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_8592",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 50.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://link.springer.com/article/10.1007/s10637-016-0344-9"
+        }
+      ],
+      "candidate_id": "8587",
+      "ik14": "LWGUASZLXHYWIV",
+      "name": "E-7820",
+      "smiles": "Cc1ccc(NS(=O)(=O)c2cccc(C#N)c2)c2[nH]cc(C#N)c12"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_1251",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 100.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/1/230109_2329015C1100_1_013_1F.pdf#page=16"
+        },
+        {
+          "arm_id": "frdb_1252",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 100.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/1/230109_2329015C1100_1_013_1F.pdf#page=16"
+        }
+      ],
+      "candidate_id": "489",
+      "ik14": "YSIITVVESCNIPR",
+      "name": "TROXIPIDE",
+      "smiles": "COc1cc(C(=O)NC2CCCNC2)cc(OC)c1OC"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_1074",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 10.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/24412691/"
+        },
+        {
+          "arm_id": "frdb_1075",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 10.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/5/672212_2190023F1037_5_1F.pdf#page=29"
+        },
+        {
+          "arm_id": "frdb_1077",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 20.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/5/672212_2190023F1037_5_1F.pdf#page=29"
+        },
+        {
+          "arm_id": "frdb_1078",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 40.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/5/672212_2190023F1037_5_1F.pdf#page=29"
+        }
+      ],
+      "candidate_id": "451",
+      "ik14": "JQSAYKKFZOSZGJ",
+      "name": "LOMERIZINE",
+      "smiles": "COc1ccc(CN2CCN(C(c3ccc(F)cc3)c3ccc(F)cc3)CC2)c(OC)c1OC"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_7158",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 400.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/11200930"
+        }
+      ],
+      "candidate_id": "7019",
+      "ik14": "ZVQUCWXZCKWZBP",
+      "name": "TECALCET",
+      "smiles": "COc1cccc([C@@H](C)NCCCc2ccccc2Cl)c1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_8659",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 800.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/17164373"
+        },
+        {
+          "arm_id": "frdb_8660",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 1200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/17164373"
+        },
+        {
+          "arm_id": "frdb_8661",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 400.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/17164373/"
+        },
+        {
+          "arm_id": "frdb_8663",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 1000.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/17164373/"
+        },
+        {
+          "arm_id": "frdb_8664",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 600.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/17164373/"
+        }
+      ],
+      "candidate_id": "8707",
+      "ik14": "VFTRKSBEFQDZKX",
+      "name": "INDOLE-3-CARBINOL",
+      "smiles": "c1ccc2c(Cc3c[nH]c4ccccc34)c[nH]c2c1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6130",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 400.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://www.ncbi.nlm.nih.gov/pubmed/9855321"
+        }
+      ],
+      "candidate_id": "2808",
+      "ik14": "YJDYDFNKCBANTM",
+      "name": "VALSPODAR",
+      "smiles": "C/C=C/C[C@@H](C)C(=O)[C@H]1C(=O)N[C@@H](C(C)C)C(=O)N(C)CC(=O)N(C)[C@@H](CC(C)C)C(=O)N[C@@H](C(C)C)C(=O)N(C)[C@@H](CC(C)C)C(=O)N[C@@H](C)C(=O)N[C@H](C)C(=O)N(C)[C@@H](CC(C)C)C(=O)N(C)[C@@H](CC(C)C)C(=O)N(C)[C@@H](C(C)C)C(=O)N1C"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_7113",
+          "cmax_unit": "mg/L",
+          "dose_mg": 200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/9299"
+        }
+      ],
+      "candidate_id": "6962",
+      "ik14": "PAZQYDJGLKSCSI",
+      "name": "HEPTABARBITAL",
+      "smiles": "CCC1(C2=CCCCCC2)C(=O)NC(=O)NC1=O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_10097",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 10.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/26341813"
+        }
+      ],
+      "candidate_id": "10278",
+      "ik14": "YUUGYIUSCYNSQR",
+      "name": "BITOPERTIN",
+      "smiles": "C[C@H](Oc1ccc(S(C)(=O)=O)cc1C(=O)N1CCN(c2ncc(C(F)(F)F)cc2F)CC1)C(F)(F)F"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_4623",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 60.3,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/3625484"
+        }
+      ],
+      "candidate_id": "2039",
+      "ik14": "OEHAYUOVELTAPG",
+      "name": "METHOXYPHENAMINE",
+      "smiles": "CNC(C)Cc1ccccc1OC"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_7016",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 50.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/7929871/"
+        },
+        {
+          "arm_id": "frdb_7017",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/7929871/"
+        },
+        {
+          "arm_id": "frdb_7018",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/7929871/"
+        },
+        {
+          "arm_id": "frdb_7019",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 400.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/7929871/"
+        },
+        {
+          "arm_id": "frdb_7020",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 600.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/7929871/"
+        },
+        {
+          "arm_id": "frdb_7021",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 800.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/7929871/"
+        },
+        {
+          "arm_id": "frdb_7022",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 1000.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/7929871/"
+        },
+        {
+          "arm_id": "frdb_7023",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 1200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/7929871/"
+        }
+      ],
+      "candidate_id": "6804",
+      "ik14": "BCSVCWVQNOXFGL",
+      "name": "ZOPOLRESTAT",
+      "smiles": "O=C(O)Cc1nn(Cc2nc3cc(C(F)(F)F)ccc3s2)c(=O)c2ccccc12"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_11915",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 150.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/25953735/"
+        },
+        {
+          "arm_id": "frdb_11916",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 150.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/25953735/"
+        },
+        {
+          "arm_id": "frdb_11917",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 150.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/25953735/"
+        },
+        {
+          "arm_id": "frdb_11918",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 150.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/25953735/"
+        },
+        {
+          "arm_id": "frdb_11919",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 150.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/25953735/"
+        },
+        {
+          "arm_id": "frdb_11920",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 150.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/25953735/"
+        },
+        {
+          "arm_id": "frdb_11921",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 150.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/25953735/"
+        }
+      ],
+      "candidate_id": "47561",
+      "ik14": "FSKFPVLPFLJRQB",
+      "name": "TOLPERISONE HYDROCHLORIDE",
+      "smiles": "Cc1ccc(C(=O)C(C)CN2CCCCC2)cc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_10678",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/34080309/"
+        }
+      ],
+      "candidate_id": "28781",
+      "ik14": "RYAYYVTWKAOAJF",
+      "name": "MILADEMETAN",
+      "smiles": "CC1(C)CCC2(CC1)NC(C(=O)NC1CCC(C(N)=O)OC1)C(c1ccnc(Cl)c1F)C21C(=O)Nc2cc(Cl)ccc21"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_917",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/18498914/"
+        },
+        {
+          "arm_id": "frdb_918",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/18498914/"
+        },
+        {
+          "arm_id": "frdb_919",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/20166432/"
+        },
+        {
+          "arm_id": "frdb_920",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/20166432/"
+        }
+      ],
+      "candidate_id": "415",
+      "ik14": "XSPUSVIQHBDITA",
+      "name": "CEFTERAM",
+      "smiles": "CO/N=C(\\C(=O)N[C@@H]1C(=O)N2C(C(=O)O)=C(Cn3nnc(C)n3)CS[C@H]12)c1csc(N)n1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_1254",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 60.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://innovareacademics.in/journals/index.php/ijpps/article/view/2902"
+        }
+      ],
+      "candidate_id": "490",
+      "ik14": "ICMGLRUYEQNHPF",
+      "name": "URAPIDIL",
+      "smiles": "COc1ccccc1N1CCN(CCCNc2cc(=O)n(C)c(=O)n2C)CC1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_11912",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 150.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://www.ncbi.nlm.nih.gov/pubmed/18452416"
+        }
+      ],
+      "candidate_id": "47560",
+      "ik14": "MPDGHEJMBKOTSU",
+      "name": "ENOXOLONE",
+      "smiles": "CC1(C)[C@@H](O)CC[C@]2(C)[C@H]3C(=O)C=C4[C@@H]5C[C@@](C)(C(=O)O)CC[C@]5(C)CC[C@@]4(C)[C@]3(C)CC[C@@H]12"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_3361",
+          "cmax_unit": "pg/mL",
+          "dose_mg": 1.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://mhraproducts4853.blob.core.windows.net/docs/2759709c34db666297f0c936bbe3b0acfc88fed4#page=9"
+        }
+      ],
+      "candidate_id": "1552",
+      "ik14": "RGLYKWWBQGJZGM",
+      "name": "DIETHYLSTILBESTROL",
+      "smiles": "CC/C(=C(/CC)c1ccc(O)cc1)c1ccc(O)cc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_1137",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 60.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/1/300119_4490005F1603_1_071_1F.pdf#paage=19"
+        },
+        {
+          "arm_id": "frdb_1138",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 60.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/1/300119_4490005F1603_1_071_1F.pdf#paage=20"
+        }
+      ],
+      "candidate_id": "467",
+      "ik14": "BAINIUMDFURPJM",
+      "name": "OXATOMIDE",
+      "smiles": "O=c1[nH]c2ccccc2n1CCCN1CCN(C(c2ccccc2)c2ccccc2)CC1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_1520",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 600.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/3743616/"
+        }
+      ],
+      "candidate_id": "651",
+      "ik14": "YPIQVCUJEKAZCP",
+      "name": "MALOTILATE",
+      "smiles": "CC(C)OC(=O)C(C(=O)OC(C)C)=C1SC=CS1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_4331",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 80.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/17044126/"
+        },
+        {
+          "arm_id": "frdb_4337",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://www.jfda-online.com/journal/vol10/iss3/6/"
+        }
+      ],
+      "candidate_id": "1851",
+      "ik14": "NZHGWWWHIYHZNX",
+      "name": "TRANILAST",
+      "smiles": "COc1ccc(/C=C/C(=O)Nc2ccccc2C(=O)O)cc1OC"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_4720",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 21000.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.accessdata.fda.gov/drugsatfda_docs/nda/2020/211281Orig1s000MultidisciplineR.pdf"
+        }
+      ],
+      "candidate_id": "2077",
+      "ik14": "VQHSOMBJVWLPSR",
+      "name": "LACTITOL",
+      "smiles": "OC[C@@H](O)[C@@H](O[C@@H]1O[C@H](CO)[C@H](O)[C@H](O)[C@H]1O)[C@H](O)[C@@H](O)CO"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_1856",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 300.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/17540528/"
+        }
+      ],
+      "candidate_id": "988",
+      "ik14": "XMGQYMWWDOXHJM",
+      "name": "LIMONENE, (+)-",
+      "smiles": "C=C(C)[C@H]1CC=C(C)CC1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6907",
+          "cmax_unit": "pg/mL",
+          "dose_mg": 0.01,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/1/480220_1190015M1029_1_A13_1F.pdf#page=40 | https://www.pmda.go.jp/drugs/2009/P200900003/48022000_22100AMX00392_K100_1.pdf#page=376"
+        },
+        {
+          "arm_id": "frdb_6911",
+          "cmax_unit": "pg/mL",
+          "dose_mg": 0.03,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2009/P200900003/48022000_22100AMX00392_A100_2.pdf#page=30 | https://www.pmda.go.jp/drugs/2009/P200900003/48022000_22100AMX00392_K100_1.pdf#page=361"
+        },
+        {
+          "arm_id": "frdb_6912",
+          "cmax_unit": "pg/mL",
+          "dose_mg": 0.01,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2009/P200900003/48022000_22100AMX00392_A100_2.pdf#page=31 | https://www.pmda.go.jp/drugs/2009/P200900003/48022000_22100AMX00392_K100_1.pdf#page=396"
+        },
+        {
+          "arm_id": "frdb_6913",
+          "cmax_unit": "pg/mL",
+          "dose_mg": 0.02,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2009/P200900003/48022000_22100AMX00392_A100_2.pdf#page=31 | https://www.pmda.go.jp/drugs/2009/P200900003/48022000_22100AMX00392_K100_1.pdf#page=396"
+        },
+        {
+          "arm_id": "frdb_6914",
+          "cmax_unit": "pg/mL",
+          "dose_mg": 0.04,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2009/P200900003/48022000_22100AMX00392_A100_2.pdf#page=31 | https://www.pmda.go.jp/drugs/2009/P200900003/48022000_22100AMX00392_K100_1.pdf#page=396"
+        }
+      ],
+      "candidate_id": "6731",
+      "ik14": "XGZZHZMWIXFATA",
+      "name": "NALFURAFINE",
+      "smiles": "CN(C(=O)/C=C/c1ccoc1)[C@@H]1CC[C@@]2(O)[C@H]3Cc4ccc(O)c5c4[C@@]2(CCN3CC2CC2)[C@H]1O5"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_7893",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 20.0,
+          "source_type": "REVIEW",
+          "source_uri": "https://link.springer.com/article/10.14283/jpad.2018.18"
+        },
+        {
+          "arm_id": "frdb_7899",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 15.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://vtvtherapeutics.com/wp-content/uploads/pdf/ctad_hepatic_impairment_poster_25oct2017_final.pdf"
+        },
+        {
+          "arm_id": "frdb_7901",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 15.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://vtvtherapeutics.com/wp-content/uploads/pdf/ctad_hepatic_impairment_poster_25oct2017_final.pdf"
+        }
+      ],
+      "candidate_id": "8169",
+      "ik14": "KJNNWYBAOPXVJY",
+      "name": "AZELIRAGON",
+      "smiles": "CCCCc1nc(-c2ccc(OCCCN(CC)CC)cc2)cn1-c1ccc(Oc2ccc(Cl)cc2)cc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_5879",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 25.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/6714286/"
+        },
+        {
+          "arm_id": "frdb_5880",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 50.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/6714286/"
+        },
+        {
+          "arm_id": "frdb_5881",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/6714286/"
+        }
+      ],
+      "candidate_id": "2630",
+      "ik14": "NZLBHDRPUJLHCE",
+      "name": "APRINDINE",
+      "smiles": "CCN(CC)CCCN(c1ccccc1)C1Cc2ccccc2C1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_8244",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 0.1,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/23390072/"
+        },
+        {
+          "arm_id": "frdb_8247",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/23390072/"
+        },
+        {
+          "arm_id": "frdb_8248",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://www.scirp.org/pdf/PP_2014012316183810.pdf"
+        }
+      ],
+      "candidate_id": "8274",
+      "ik14": "MIJFNYMSCFYZNY",
+      "name": "MIRODENAFIL",
+      "smiles": "CCCOc1ccc(S(=O)(=O)N2CCN(CCO)CC2)cc1-c1nc2c(CCC)cn(CC)c2c(=O)[nH]1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6006",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 12.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/8298071/"
+        }
+      ],
+      "candidate_id": "2652",
+      "ik14": "CLPFFLWZZBQMAO",
+      "name": "FADROZOLE",
+      "smiles": "N#Cc1ccc(C2CCCc3cncn32)cc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_11457",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 3.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/31891240/"
+        }
+      ],
+      "candidate_id": "45950",
+      "ik14": "RSNPAKAFCAAMBH",
+      "name": "CC-122",
+      "smiles": "Cc1nc2cccc(N)c2c(=O)n1C1CCC(=O)NC1=O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6947",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://www.ncbi.nlm.nih.gov/pubmed/21059888"
+        },
+        {
+          "arm_id": "frdb_6948",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 350.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://www.ncbi.nlm.nih.gov/pubmed/21059888"
+        }
+      ],
+      "candidate_id": "6751",
+      "ik14": "BZHWKODEVHFEOJ",
+      "name": "APRATASTAT",
+      "smiles": "CC1(C)SCCN([S+](=O)([O-])c2ccc(OCC#CCO)cc2)[C@H]1C(=O)NO"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_4225",
+          "cmax_unit": "μg/L",
+          "dose_mg": 300.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/24325365/"
+        },
+        {
+          "arm_id": "frdb_4227",
+          "cmax_unit": "μg/L",
+          "dose_mg": 300.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/24325365/"
+        },
+        {
+          "arm_id": "frdb_4232",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 50.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/3/400315_3399006C1020_3_160_1F.pdf#page=23"
+        },
+        {
+          "arm_id": "frdb_4233",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 100.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/3/400315_3399006C1020_3_160_1F.pdf#page=23"
+        }
+      ],
+      "candidate_id": "1838",
+      "ik14": "FFYNAVGJSYHHFO",
+      "name": "SARPOGRELATE",
+      "smiles": "COc1cccc(CCc2ccccc2OCC(CN(C)C)OC(=O)CCC(=O)O)c1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_5735",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 250.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://www.ncbi.nlm.nih.gov/pubmed/2775615"
+        }
+      ],
+      "candidate_id": "2546",
+      "ik14": "VYFYYTLLBUKUHU",
+      "name": "DOPAMINE",
+      "smiles": "NCCc1ccc(O)c(O)c1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6438",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 20.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/25448190/"
+        },
+        {
+          "arm_id": "frdb_6439",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 50.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/25448190/"
+        },
+        {
+          "arm_id": "frdb_6440",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/25448190/"
+        },
+        {
+          "arm_id": "frdb_6441",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 20.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/25448190/"
+        },
+        {
+          "arm_id": "frdb_6442",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 50.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/25448190/"
+        },
+        {
+          "arm_id": "frdb_6443",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/25448190/"
+        }
+      ],
+      "candidate_id": "2953",
+      "ik14": "KVLLHLWBPNCVNR",
+      "name": "CAPROMORELIN",
+      "smiles": "CN1N=C2CCN(C(=O)[C@@H](COCc3ccccc3)NC(=O)C(C)(C)N)C[C@@]2(Cc2ccccc2)C1=O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_13339",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 1.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/34414672/"
+        },
+        {
+          "arm_id": "frdb_13340",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 3.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/34414672/"
+        },
+        {
+          "arm_id": "frdb_13341",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 9.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/34414672/"
+        },
+        {
+          "arm_id": "frdb_13342",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 25.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/34414672/"
+        },
+        {
+          "arm_id": "frdb_13343",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 50.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/34414672/"
+        },
+        {
+          "arm_id": "frdb_13344",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/34414672/"
+        },
+        {
+          "arm_id": "frdb_13345",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/34414672/"
+        }
+      ],
+      "candidate_id": "59661",
+      "ik14": "BJXYHBKEQFQVES",
+      "name": "ENPATORAN",
+      "smiles": "N#Cc1ccc(N2CC(N)CC(C(F)(F)F)C2)c2cccnc12"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6579",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/7250145/"
+        },
+        {
+          "arm_id": "frdb_6580",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 500.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/7250145/"
+        },
+        {
+          "arm_id": "frdb_6581",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 600.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/7250145/"
+        }
+      ],
+      "candidate_id": "3272",
+      "ik14": "IDKAXRLETRCXKS",
+      "name": "FENCLOFENAC",
+      "smiles": "O=C(O)Cc1ccccc1Oc1ccc(Cl)cc1Cl"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_7655",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 300.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://onlinelibrary.wiley.com/doi/epdf/10.1111/j.1872-034X.2011.00800.x"
+        },
+        {
+          "arm_id": "frdb_7656",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 300.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://onlinelibrary.wiley.com/doi/epdf/10.1111/j.1872-034X.2011.00800.x"
+        }
+      ],
+      "candidate_id": "8067",
+      "ik14": "UUBHZHZSIKRVIV",
+      "name": "PERETINOIN",
+      "smiles": "CC(C)=CCC/C(C)=C/CC/C(C)=C/C=C/C(C)=C/C(=O)O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_731",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 45.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/27989618/"
+        }
+      ],
+      "candidate_id": "256",
+      "ik14": "AUZUGWXLBGZUPP",
+      "name": "PELUBIPROFEN",
+      "smiles": "CC(C(=O)O)c1ccc(/C=C2\\CCCCC2=O)cc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_1841",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 2000.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/7303723/"
+        }
+      ],
+      "candidate_id": "905",
+      "ik14": "CVHZOJJKTDOEJC",
+      "name": "SACCHARIN",
+      "smiles": "O=C1NS(=O)(=O)c2ccccc21"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_13454",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 5.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://www.agios.com/wp-content/uploads/2021/12/2043_AG946-HV.pdf"
+        }
+      ],
+      "candidate_id": "59689",
+      "ik14": "DIUOELXIXSCFCR",
+      "name": "TEBAPIVAT",
+      "smiles": "Cn1c2nc(Cc3ccn[nH]3)sc2c2cnn(Cc3cccc(N)n3)c(=O)c21"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_963",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 10.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/3/380077_2149034F1020_3_1F.pdf#page=22"
+        },
+        {
+          "arm_id": "frdb_964",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 20.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/3/380077_2149034F1020_3_1F.pdf#page=22"
+        },
+        {
+          "arm_id": "frdb_965",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 40.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/3/380077_2149034F1020_3_1F.pdf#page=22"
+        }
+      ],
+      "candidate_id": "427",
+      "ik14": "NSVFSAJIGAJDMR",
+      "name": "EFONIDIPINE",
+      "smiles": "CC1=C(C(=O)OCCN(Cc2ccccc2)c2ccccc2)C(c2cccc([N+](=O)[O-])c2)C(P2(=O)OCC(C)(C)CO2)=C(C)N1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_8815",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 400.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/27163497"
+        }
+      ],
+      "candidate_id": "8858",
+      "ik14": "OZPFIJIOIVJZMN",
+      "name": "ORTERONEL",
+      "smiles": "CNC(=O)c1ccc2cc([C@@]3(O)CCn4cncc43)ccc2c1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_10779",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 40.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/3100313"
+        },
+        {
+          "arm_id": "frdb_10780",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 20.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/3105569"
+        }
+      ],
+      "candidate_id": "30872",
+      "ik14": "HXWLJBVVXXBZCM",
+      "name": "GLYCERYL 1-NITRATE",
+      "smiles": "O=[N+]([O-])OCC(O)CO"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_10605",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 600.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/31685472"
+        },
+        {
+          "arm_id": "frdb_10606",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 400.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/31685472"
+        }
+      ],
+      "candidate_id": "25673",
+      "ik14": "NNTYBKTXMKBRFA",
+      "name": "CRS-3123",
+      "smiles": "O=c1cc(NCCCN[C@@H]2CCOc3c(Br)cc(Br)cc32)[nH]c2ccsc12"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6114",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 320.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/21071997/"
+        }
+      ],
+      "candidate_id": "2801",
+      "ik14": "BHJIBOFHEFDSAU",
+      "name": "PRIRALFINAMIDE",
+      "smiles": "C[C@H](NCc1ccc(OCc2ccccc2F)cc1)C(N)=O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6507",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 400.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/30703444"
+        }
+      ],
+      "candidate_id": "3001",
+      "ik14": "WSYVIAQNTFPTBI",
+      "name": "MOGUISTEINE",
+      "smiles": "CCOC(=O)CC(=O)N1CCSC1COc1ccccc1OC"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6412",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 48.7,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/29273470/"
+        }
+      ],
+      "candidate_id": "2935",
+      "ik14": "SEBFKMXJBCUCAI",
+      "name": "SILIBININ A",
+      "smiles": "COc1cc([C@H]2Oc3cc([C@H]4Oc5cc(O)cc(O)c5C(=O)[C@@H]4O)ccc3O[C@@H]2CO)ccc1O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_13283",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 400.0,
+          "source_type": "OTHER",
+          "source_uri": "https://www.sanofi.com/assets/dotcom/content-app/clinical-studies/pharma/bex15859.pdf"
+        }
+      ],
+      "candidate_id": "59645",
+      "ik14": "KISZAGQTIXIVAR",
+      "name": "SAR-439859",
+      "smiles": "O=C(O)c1ccc2c(c1)CCCC(c1ccc(Cl)cc1Cl)=C2c1ccc(OC2CCN(CCCF)C2)cc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_1809",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 150.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/12445023/"
+        }
+      ],
+      "candidate_id": "846",
+      "ik14": "MIMJSJSRRDZIPW",
+      "name": "TILMACOXIB",
+      "smiles": "Cc1nc(C2CCCCC2)c(-c2ccc(S(N)(=O)=O)c(F)c2)o1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_4063",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 1.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/1/800126_3999026F1026_1_017_1F.pdf#page=44"
+        },
+        {
+          "arm_id": "frdb_4064",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 1.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/1/800126_3999026F1026_1_017_1F.pdf#page=44"
+        },
+        {
+          "arm_id": "frdb_4065",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 1.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/1/800126_3999026F1026_1_017_1F.pdf#page=44"
+        },
+        {
+          "arm_id": "frdb_4066",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 1.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/1/800126_3999026F1026_1_017_1F.pdf#page=44"
+        },
+        {
+          "arm_id": "frdb_4069",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 1.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/1/800126_3999026F1026_1_017_1F.pdf#page=46"
+        },
+        {
+          "arm_id": "frdb_4070",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 1.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/1/800126_3999026F1026_1_017_1F.pdf#page=46"
+        },
+        {
+          "arm_id": "frdb_4071",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 4.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/1/800126_3999026F1026_1_017_1F.pdf#page=46"
+        },
+        {
+          "arm_id": "frdb_4072",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 4.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/1/800126_3999026F1026_1_017_1F.pdf#page=46"
+        },
+        {
+          "arm_id": "frdb_4075",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 0.1,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2009/P200900002/80012600_22100AMX00391_K100_1.pdf#page=26"
+        },
+        {
+          "arm_id": "frdb_4076",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 0.2,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2009/P200900002/80012600_22100AMX00391_K100_1.pdf#page=26"
+        },
+        {
+          "arm_id": "frdb_4077",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 0.5,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2009/P200900002/80012600_22100AMX00391_K100_1.pdf#page=26"
+        },
+        {
+          "arm_id": "frdb_4078",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 1.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2009/P200900002/80012600_22100AMX00391_K100_1.pdf#page=26"
+        },
+        {
+          "arm_id": "frdb_4079",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 2.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2009/P200900002/80012600_22100AMX00391_K100_1.pdf#page=26"
+        },
+        {
+          "arm_id": "frdb_4080",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 4.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2009/P200900002/80012600_22100AMX00391_K100_1.pdf#page=26"
+        },
+        {
+          "arm_id": "frdb_4081",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 8.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2009/P200900002/80012600_22100AMX00391_K100_1.pdf#page=26"
+        },
+        {
+          "arm_id": "frdb_4082",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 4.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2009/P200900002/80012600_22100AMX00391_K100_1.pdf#page=28"
+        },
+        {
+          "arm_id": "frdb_4083",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 8.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2009/P200900002/80012600_22100AMX00391_K100_1.pdf#page=28"
+        },
+        {
+          "arm_id": "frdb_4084",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 12.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2009/P200900002/80012600_22100AMX00391_K100_1.pdf#page=28"
+        }
+      ],
+      "candidate_id": "1817",
+      "ik14": "VMMKGHQPQIEGSQ",
+      "name": "MINODRONIC ACID",
+      "smiles": "O=P(O)(O)C(O)(Cc1cnc2ccccn12)P(=O)(O)O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_2531",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 300.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/32901"
+        }
+      ],
+      "candidate_id": "1278",
+      "ik14": "XFDJYSQDBULQSI",
+      "name": "DOXAPRAM",
+      "smiles": "CCN1CC(CCN2CCOCC2)C(c2ccccc2)(c2ccccc2)C1=O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_8222",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 10.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/26998954/"
+        }
+      ],
+      "candidate_id": "8262",
+      "ik14": "HRRXCXABAPSOCP",
+      "name": "ILAPRAZOLE",
+      "smiles": "COc1ccnc(C[S+]([O-])c2nc3cc(-n4cccc4)ccc3[nH]2)c1C"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_3574",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/581593/"
+        }
+      ],
+      "candidate_id": "1661",
+      "ik14": "JSZILQVIPPROJI",
+      "name": "BENZQUINAMIDE",
+      "smiles": "CCN(CC)C(=O)C1CN2CCc3cc(OC)c(OC)cc3C2CC1OC(C)=O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_9848",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/30666922/"
+        }
+      ],
+      "candidate_id": "10124",
+      "ik14": "VFLDPWHFBUODDF",
+      "name": "CURCUMIN",
+      "smiles": "COc1cc(/C=C/C(=O)CC(=O)/C=C/c2ccc(O)c(OC)c2)ccc1O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_4778",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 10.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/1/300119_2190022F1237_1_081_1F.pdf#page=17"
+        },
+        {
+          "arm_id": "frdb_4779",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 10.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/1/400093_2190022F1024_1_022_1F.pdf#page=18"
+        }
+      ],
+      "candidate_id": "2096",
+      "ik14": "VXROHTDSRBRJLN",
+      "name": "AMEZINIUM",
+      "smiles": "COc1cc(N)cn[n+]1-c1ccccc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_3774",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 400.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/19025058/"
+        }
+      ],
+      "candidate_id": "1780",
+      "ik14": "ZXNRTKGTQJPIJK",
+      "name": "ANIRACETAM",
+      "smiles": "COc1ccc(C(=O)N2CCCC2=O)cc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_1794",
+          "cmax_unit": "mg/L",
+          "dose_mg": 150.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/1315685/"
+        },
+        {
+          "arm_id": "frdb_1795",
+          "cmax_unit": "mg/L",
+          "dose_mg": 300.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/1315685/"
+        },
+        {
+          "arm_id": "frdb_1796",
+          "cmax_unit": "mg/L",
+          "dose_mg": 450.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/1315685/"
+        }
+      ],
+      "candidate_id": "836",
+      "ik14": "NFQIAEMCQGTTIR",
+      "name": "REPIRINAST",
+      "smiles": "Cc1ccc2c([nH]c(=O)c3c(=O)cc(C(=O)OCCC(C)C)oc32)c1C"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_8266",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 20.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2012/P201200070/400315000_22400AMX00728_A100_2.pdf#page=30 | https://www.pmda.go.jp/drugs/2012/P201200070/400315000_22400AMX00728_K102_2.pdf#page=18"
+        },
+        {
+          "arm_id": "frdb_8268",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 2.5,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2012/P201200070/400315000_22400AMX00728_A100_2.pdf#page=32"
+        },
+        {
+          "arm_id": "frdb_8269",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 10.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2012/P201200070/400315000_22400AMX00728_A100_2.pdf#page=32"
+        },
+        {
+          "arm_id": "frdb_8270",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 20.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2012/P201200070/400315000_22400AMX00728_A100_2.pdf#page=32"
+        },
+        {
+          "arm_id": "frdb_8271",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 40.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2012/P201200070/400315000_22400AMX00728_A100_2.pdf#page=32"
+        },
+        {
+          "arm_id": "frdb_8272",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 80.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2012/P201200070/400315000_22400AMX00728_A100_2.pdf#page=32"
+        },
+        {
+          "arm_id": "frdb_8273",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 160.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2012/P201200070/400315000_22400AMX00728_A100_2.pdf#page=32"
+        },
+        {
+          "arm_id": "frdb_8279",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 20.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2012/P201200070/400315000_22400AMX00728_A100_2.pdf#page=38"
+        },
+        {
+          "arm_id": "frdb_8283",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 20.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2012/P201200070/400315000_22400AMX00728_A100_2.pdf#page=39"
+        },
+        {
+          "arm_id": "frdb_8286",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 20.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2012/P201200070/400315000_22400AMX00728_A100_2.pdf#page=40"
+        },
+        {
+          "arm_id": "frdb_8287",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 20.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2012/P201200070/400315000_22400AMX00728_A100_2.pdf#page=40"
+        },
+        {
+          "arm_id": "frdb_8288",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 20.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2012/P201200070/400315000_22400AMX00728_A100_2.pdf#page=40"
+        }
+      ],
+      "candidate_id": "8285",
+      "ik14": "WGRQANOPCQRCME",
+      "name": "TENELIGLIPTIN",
+      "smiles": "Cc1cc(N2CCN([C@@H]3CN[C@H](C(=O)N4CCSC4)C3)CC2)n(-c2ccccc2)n1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_11762",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 40.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://www.ncbi.nlm.nih.gov/pubmed/17446264"
+        },
+        {
+          "arm_id": "frdb_11763",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 40.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://www.ncbi.nlm.nih.gov/pubmed/17446264"
+        }
+      ],
+      "candidate_id": "47061",
+      "ik14": "IPKZCLGGYKRDES",
+      "name": "PHA-543613",
+      "smiles": "O=C(N[C@H]1CN2CCC1CC2)c1cc2ccoc2cn1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_4436",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 10.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/28012307/"
+        }
+      ],
+      "candidate_id": "1888",
+      "ik14": "LUALIOATIOESLM",
+      "name": "PERICIAZINE",
+      "smiles": "N#Cc1ccc2c(c1)N(CCCN1CCC(O)CC1)c1ccccc1S2"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_1438",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 90.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/24487058/"
+        }
+      ],
+      "candidate_id": "577",
+      "ik14": "XSXCZNVKFKNLPR",
+      "name": "CARBAZOCHROME SALICYLATE",
+      "smiles": "CN1CC(O)C2=C/C(=N/NC(N)=O)C(=O)C=C21"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_4209",
+          "cmax_unit": "pg/mL",
+          "dose_mg": 0.005,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2008/P200800026/80012600_22000AMX01708_A100_1.pdf#page=16 | https://www.pmda.go.jp/drugs/2008/P200800026/80012600_22000AMX01708_K105_1.pdf#page=10 | https://www.info.pmda.go.jp/go/interview/1/800126_2399014F1026_1_016_1F.pdf#page=47"
+        },
+        {
+          "arm_id": "frdb_4211",
+          "cmax_unit": "pg/mL",
+          "dose_mg": 0.005,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2008/P200800026/80012600_22000AMX01708_A100_1.pdf#page=17 | https://www.pmda.go.jp/drugs/2008/P200800026/80012600_22000AMX01708_K105_1.pdf#page=20 | https://www.info.pmda.go.jp/go/interview/1/800126_2399014F1026_1_016_1F.pdf#page=44"
+        },
+        {
+          "arm_id": "frdb_4212",
+          "cmax_unit": "pg/mL",
+          "dose_mg": 0.005,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2008/P200800026/80012600_22000AMX01708_A100_1.pdf#page=17 | https://www.pmda.go.jp/drugs/2008/P200800026/80012600_22000AMX01708_K105_1.pdf#page=20 | https://www.info.pmda.go.jp/go/interview/1/800126_2399014F1026_1_016_1F.pdf#page=44"
+        }
+      ],
+      "candidate_id": "1835",
+      "ik14": "NTHPAPBPFQJABD",
+      "name": "RAMOSETRON",
+      "smiles": "Cn1cc(C(=O)[C@@H]2CCc3[nH]cnc3C2)c2ccccc21"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6169",
+          "cmax_unit": "mg/L",
+          "dose_mg": 120.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/14551179"
+        }
+      ],
+      "candidate_id": "2829",
+      "ik14": "WMUIIGVAWPWQAW",
+      "name": "RAGAGLITAZAR",
+      "smiles": "CCO[C@H](Cc1ccc(OCCN2c3ccccc3Oc3ccccc32)cc1)C(=O)O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_2989",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 1.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/620486/"
+        }
+      ],
+      "candidate_id": "1428",
+      "ik14": "CYLWJCABXYDINA",
+      "name": "POLYTHIAZIDE",
+      "smiles": "CN1C(CSCC(F)(F)F)Nc2cc(Cl)c(S(N)(=O)=O)cc2S1(=O)=O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6590",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 80.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/21899503/"
+        },
+        {
+          "arm_id": "frdb_6593",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 80.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/7901024/"
+        }
+      ],
+      "candidate_id": "3277",
+      "ik14": "FVNFBBAOMBJTST",
+      "name": "FENSPIRIDE",
+      "smiles": "O=C1NCC2(CCN(CCc3ccccc3)CC2)O1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_1010",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 400.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/2/400022_6241017F1022_2_007_1F.pdf#page=41"
+        },
+        {
+          "arm_id": "frdb_1015",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 100.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2007/P200700040/480297000_21900AMX01088000_A100_1.pdf#page=25"
+        },
+        {
+          "arm_id": "frdb_1016",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 200.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2007/P200700040/480297000_21900AMX01088000_A100_1.pdf#page=25"
+        },
+        {
+          "arm_id": "frdb_1017",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 400.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2007/P200700040/480297000_21900AMX01088000_A100_1.pdf#page=25"
+        },
+        {
+          "arm_id": "frdb_1018",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 600.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2007/P200700040/480297000_21900AMX01088000_A100_1.pdf#page=25"
+        },
+        {
+          "arm_id": "frdb_1025",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 400.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2007/P200700040/480297000_21900AMX01088000_A100_1.pdf#page=27"
+        }
+      ],
+      "candidate_id": "437",
+      "ik14": "NJDRXTDGYFKORP",
+      "name": "GARENOXACIN",
+      "smiles": "C[C@H]1NCc2cc(-c3ccc4c(=O)c(C(=O)O)cn(C5CC5)c4c3OC(F)F)ccc21"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_13307",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 300.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "clinicaltrials.gov/ct2/show/results/NCT04427917"
+        }
+      ],
+      "candidate_id": "59653",
+      "ik14": "MDUYWDNWFXSMJJ",
+      "name": "PF-06835919",
+      "smiles": "CC1CCN1c1nc(N2CC3C(CC(=O)O)C3C2)cc(C(F)(F)F)n1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_922",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 160.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/3783460/"
+        }
+      ],
+      "candidate_id": "417",
+      "ik14": "IPOBOOXFSRWSHL",
+      "name": "CIFENLINE",
+      "smiles": "c1ccc(C2(c3ccccc3)CC2C2=NCCN2)cc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_11759",
+          "cmax_unit": "mg/mL",
+          "dose_mg": 21.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://journals.physiology.org/doi/epdf/10.1152/ajpgi.00384.2012"
+        }
+      ],
+      "candidate_id": "47055",
+      "ik14": "GEVVQZHMFVFGLN",
+      "name": "PF-04620110",
+      "smiles": "Nc1ncnc2c1C(=O)N(c1ccc([C@H]3CC[C@H](CC(=O)O)CC3)cc1)CCO2"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_924",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/23319135/"
+        },
+        {
+          "arm_id": "frdb_925",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 400.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/23319135/"
+        },
+        {
+          "arm_id": "frdb_926",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 600.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/23319135/"
+        },
+        {
+          "arm_id": "frdb_927",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 400.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/23849436/"
+        }
+      ],
+      "candidate_id": "418",
+      "ik14": "BMOVQUBVGICXQN",
+      "name": "CLINOFIBRATE",
+      "smiles": "CCC(C)(Oc1ccc(C2(c3ccc(OC(C)(CC)C(=O)O)cc3)CCCCC2)cc1)C(=O)O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6603",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/11499633/"
+        }
+      ],
+      "candidate_id": "3370",
+      "ik14": "ZMNSRFNUONFLSP",
+      "name": "MEPHENOXALONE",
+      "smiles": "COc1ccccc1OCC1CNC(=O)O1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_8170",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/23169608/"
+        }
+      ],
+      "candidate_id": "8247",
+      "ik14": "HJXMNVQARNZTEE",
+      "name": "BUTYLPHTHALIDE",
+      "smiles": "CCCCC1OC(=O)c2ccccc21"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_11455",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 1500.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/24691844"
+        }
+      ],
+      "candidate_id": "45929",
+      "ik14": "NHPQGZOBHSVTAQ",
+      "name": "ACT-462206",
+      "smiles": "COc1ccc(S(=O)(=O)N2CCCC2C(=O)Nc2cc(C)cc(C)c2)cc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_9126",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 700.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/22349808"
+        }
+      ],
+      "candidate_id": "9234",
+      "ik14": "UPALIKSFLSVKIS",
+      "name": "AMUVATINIB",
+      "smiles": "CN(C)CCN1C(=O)c2cccc3cc(N)cc(c23)C1=O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_11169",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 450.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/30747552"
+        }
+      ],
+      "candidate_id": "39483",
+      "ik14": "GKMLFBRLRVQVJO",
+      "name": "PF-04991532",
+      "smiles": "O=C(O)c1ccc(NC(=O)[C@H](CC2CCCC2)n2cnc(C(F)(F)F)c2)nc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_9360",
+          "cmax_unit": "mg/L",
+          "dose_mg": 250.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/21679246/"
+        },
+        {
+          "arm_id": "frdb_9361",
+          "cmax_unit": "mg/L",
+          "dose_mg": 500.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/21679246/"
+        },
+        {
+          "arm_id": "frdb_9362",
+          "cmax_unit": "mg/L",
+          "dose_mg": 1000.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/21679246/"
+        },
+        {
+          "arm_id": "frdb_9363",
+          "cmax_unit": "mg/L",
+          "dose_mg": 1250.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/21679246/"
+        },
+        {
+          "arm_id": "frdb_9364",
+          "cmax_unit": "mg/L",
+          "dose_mg": 1500.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/21679246/"
+        }
+      ],
+      "candidate_id": "9660",
+      "ik14": "PVBQYTCFVWZSJK",
+      "name": "MELDONIUM",
+      "smiles": "C[N+](C)(C)NCCC(=O)[O-]"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_750",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 750.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/6663474/"
+        }
+      ],
+      "candidate_id": "275",
+      "ik14": "SKIVFJLNDNKQPD",
+      "name": "SULFABENZAMIDE",
+      "smiles": "CC(=O)NS(=O)(=O)c1ccc(N)cc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_8640",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 0.25,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/7857509/"
+        },
+        {
+          "arm_id": "frdb_8641",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 0.75,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/7857509/"
+        },
+        {
+          "arm_id": "frdb_8642",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 1.5,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/7857509/"
+        },
+        {
+          "arm_id": "frdb_8643",
+          "cmax_unit": "μg/L",
+          "dose_mg": 0.25,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/8878586/"
+        },
+        {
+          "arm_id": "frdb_8644",
+          "cmax_unit": "μg/L",
+          "dose_mg": 0.75,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/8878586/"
+        },
+        {
+          "arm_id": "frdb_8645",
+          "cmax_unit": "μg/L",
+          "dose_mg": 1.5,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/8878586/"
+        }
+      ],
+      "candidate_id": "8696",
+      "ik14": "BTXNYTINYBABQR",
+      "name": "HYPERICIN",
+      "smiles": "Cc1cc(O)c2c(=O)c3c(O)cc(O)c4c5c(O)cc(O)c6c(=O)c7c(O)cc(C)c8c1c2c(c34)c(c78)c65"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_1743",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 5.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/2/530258_1124005C1032_2_003_1F.pdf#page=22"
+        }
+      ],
+      "candidate_id": "801",
+      "ik14": "ZRKDDZBVSZLOFS",
+      "name": "HALOXAZOLAM",
+      "smiles": "O=C1CN=C(c2ccccc2F)c2cc(Br)ccc2N1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_4860",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 1000.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/7840572/"
+        },
+        {
+          "arm_id": "frdb_4861",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 2000.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/7840572/"
+        }
+      ],
+      "candidate_id": "2198",
+      "ik14": "BHXLLRXDAYEMPP",
+      "name": "CEFOSELIS SULFATE",
+      "smiles": "CO/N=C(\\C(=O)N[C@@H]1C(=O)N2C(C(=O)[O-])=C(C[n+]3ccc(N)n3CCO)CS[C@H]12)c1csc(N)n1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_936",
+          "cmax_unit": "μg/L",
+          "dose_mg": 10.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/25262813/"
+        },
+        {
+          "arm_id": "frdb_937",
+          "cmax_unit": "μg/L",
+          "dose_mg": 20.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/25262813/"
+        },
+        {
+          "arm_id": "frdb_938",
+          "cmax_unit": "μg/L",
+          "dose_mg": 40.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/25262813/"
+        },
+        {
+          "arm_id": "frdb_939",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 10.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/28243685/"
+        },
+        {
+          "arm_id": "frdb_940",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 20.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/28243685/"
+        },
+        {
+          "arm_id": "frdb_941",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 40.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/28243685/"
+        }
+      ],
+      "candidate_id": "422",
+      "ik14": "KBEZZLAAKIIPFK",
+      "name": "DIMEMORFAN",
+      "smiles": "Cc1ccc2c(c1)[C@]13CCCC[C@@H]1[C@H](C2)N(C)CC3"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_13099",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 300.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/36925997/"
+        }
+      ],
+      "candidate_id": "59595",
+      "ik14": "RYBLECYFLJXEJX",
+      "name": "GLUMETINIB",
+      "smiles": "Cn1cc(-c2cnc3cnn(S(=O)(=O)c4cnc5ccc(-c6cnn(C)c6)cn45)c3c2)cn1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6314",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 300.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/3358898/ | https://link.springer.com/chapter/10.1007/978-1-4613-2067-8_27"
+        }
+      ],
+      "candidate_id": "2876",
+      "ik14": "CVKNDPRBJVBDSS",
+      "name": "CICLETANINE",
+      "smiles": "Cc1ncc2c(c1O)COC2c1ccc(Cl)cc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_2977",
+          "cmax_unit": "pg/mL",
+          "dose_mg": 10.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://www.scientiaricerca.com/srcops/SRCOPS-02-00048.php"
+        }
+      ],
+      "candidate_id": "1422",
+      "ik14": "QZVCTJOXCFMACW",
+      "name": "PHENOXYBENZAMINE",
+      "smiles": "CC(COc1ccccc1)N(CCCl)Cc1ccccc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_13186",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 20.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://accp1.onlinelibrary.wiley.com/doi/epdf/10.1002/jcph.2206"
+        },
+        {
+          "arm_id": "frdb_13189",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 20.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://classic.clinicaltrials.gov/ct2/show/results/NCT02891408"
+        },
+        {
+          "arm_id": "frdb_13191",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 20.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://classic.clinicaltrials.gov/ct2/show/results/NCT02891408"
+        },
+        {
+          "arm_id": "frdb_13193",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 5.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://classic.clinicaltrials.gov/ct2/show/results/NCT02891408"
+        }
+      ],
+      "candidate_id": "59629",
+      "ik14": "ZZWWXIBKLBMSCS",
+      "name": "FIRSOCOSTAT",
+      "smiles": "COc1ccccc1[C@H](Cn1c(=O)n(C(C)(C)C(=O)O)c(=O)c2c(C)c(-c3ncco3)sc21)OC1CCOCC1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_11379",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 0.1,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://accp1.onlinelibrary.wiley.com/doi/epdf/10.1002/j.1552-4604.1996.tb05031.x"
+        },
+        {
+          "arm_id": "frdb_11380",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 0.25,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://accp1.onlinelibrary.wiley.com/doi/epdf/10.1002/j.1552-4604.1996.tb05031.x"
+        },
+        {
+          "arm_id": "frdb_11381",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 0.5,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://accp1.onlinelibrary.wiley.com/doi/epdf/10.1002/j.1552-4604.1996.tb05031.x"
+        },
+        {
+          "arm_id": "frdb_11382",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 0.75,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://accp1.onlinelibrary.wiley.com/doi/epdf/10.1002/j.1552-4604.1996.tb05031.x"
+        },
+        {
+          "arm_id": "frdb_11383",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 1.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://accp1.onlinelibrary.wiley.com/doi/epdf/10.1002/j.1552-4604.1996.tb05031.x"
+        }
+      ],
+      "candidate_id": "45349",
+      "ik14": "IWTCFIIOUXJOOV",
+      "name": "Y-26763",
+      "smiles": "CC(=O)N(O)[C@@H]1c2cc(C#N)ccc2OC(C)(C)[C@H]1O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_8885",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 400.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://s3.amazonaws.com/ctr-gsk-7381/117171/efaf9f51-b67c-4381-a287-1d4fd566eb6e/df2d37af-3eb3-4e7b-9c87-e5b9e2b74657/117171-Clinical-Study-Result-Summary-v1.pdf"
+        }
+      ],
+      "candidate_id": "8964",
+      "ik14": "MPYACSQFXVMWNO",
+      "name": "SOLCITINIB",
+      "smiles": "CC1(C)CN(C(=O)c2ccc(-c3cccc4nc(NC(=O)C5CC5)nn34)cc2)C1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_1267",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 20.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/6734710/"
+        }
+      ],
+      "candidate_id": "492",
+      "ik14": "MTZBBNMLMNBNJL",
+      "name": "XIPAMIDE",
+      "smiles": "Cc1cccc(C)c1NC(=O)c1cc(S(N)(=O)=O)c(Cl)cc1O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_1278",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 12.5,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/2/171911_2149018F1021_1_LWT_2F.pdf#page=21 | https://pubmed.ncbi.nlm.nih.gov/6478731/"
+        },
+        {
+          "arm_id": "frdb_1279",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 25.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/2/171911_2149018F1021_1_LWT_2F.pdf#page=21 | https://pubmed.ncbi.nlm.nih.gov/6478731/"
+        },
+        {
+          "arm_id": "frdb_1280",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 50.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/2/171911_2149018F1021_1_LWT_2F.pdf#page=21 | https://pubmed.ncbi.nlm.nih.gov/6478731/"
+        },
+        {
+          "arm_id": "frdb_1281",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 100.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/2/171911_2149018F1021_1_LWT_2F.pdf#page=21 | https://pubmed.ncbi.nlm.nih.gov/6478731/"
+        },
+        {
+          "arm_id": "frdb_1282",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 150.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/2/171911_2149018F1021_1_LWT_2F.pdf#page=21 | https://pubmed.ncbi.nlm.nih.gov/6478731/"
+        },
+        {
+          "arm_id": "frdb_1284",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 30.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/2/171911_2149018F1021_1_LWT_2F.pdf#page=22"
+        }
+      ],
+      "candidate_id": "495",
+      "ik14": "LVEXHFZHOIWIIP",
+      "name": "AMOSULALOL",
+      "smiles": "COc1ccccc1OCCNCC(O)c1ccc(C)c(S(N)(=O)=O)c1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_979",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 150.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/32024955/"
+        },
+        {
+          "arm_id": "frdb_980",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 150.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/32024955/"
+        }
+      ],
+      "candidate_id": "429",
+      "ik14": "SQUNAWUMZGQQJD",
+      "name": "EPERISONE",
+      "smiles": "CCc1ccc(C(=O)C(C)CN2CCCCC2)cc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_10428",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 20.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/11081986"
+        }
+      ],
+      "candidate_id": "21634",
+      "ik14": "BOJKULTULYSRAS",
+      "name": "ANDROGRAPHOLIDE",
+      "smiles": "C=C1CC[C@@H]2[C@](C)(CO)[C@H](O)CC[C@@]2(C)[C@@H]1C/C=C1/C(=O)OC[C@H]1O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_8882",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 25.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/18635696"
+        }
+      ],
+      "candidate_id": "8956",
+      "ik14": "QQWHWWDIFGNCLV",
+      "name": "SL-65.1498",
+      "smiles": "Cn1c2ccc(F)cc2c2c(C(=O)N3CCCC3)cn(-c3ccccc3)c(=O)c21"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_2168",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 50.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://www.ncbi.nlm.nih.gov/pubmed/12907286"
+        }
+      ],
+      "candidate_id": "1141",
+      "ik14": "GHASVSINZRGABV",
+      "name": "FLUOROURACIL",
+      "smiles": "O=c1[nH]cc(F)c(=O)[nH]1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_9391",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 0.1,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2017/P20170718001/270072000_22900AMX00581_A100_1.pdf#page=33 | https://www.pmda.go.jp/drugs/2017/P20170718001/270072000_22900AMX00581_K101_1.pdf#page=270"
+        },
+        {
+          "arm_id": "frdb_9393",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 0.3,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2017/P20170718001/270072000_22900AMX00581_A100_1.pdf#page=36 | https://www.pmda.go.jp/drugs/2017/P20170718001/270072000_22900AMX00581_K101_1.pdf#page=55"
+        },
+        {
+          "arm_id": "frdb_9394",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 0.5,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2017/P20170718001/270072000_22900AMX00581_A100_1.pdf#page=36 | https://www.pmda.go.jp/drugs/2017/P20170718001/270072000_22900AMX00581_K101_1.pdf#page=55"
+        },
+        {
+          "arm_id": "frdb_9395",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 1.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2017/P20170718001/270072000_22900AMX00581_A100_1.pdf#page=36 | https://www.pmda.go.jp/drugs/2017/P20170718001/270072000_22900AMX00581_K101_1.pdf#page=55"
+        },
+        {
+          "arm_id": "frdb_9426",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 0.2,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2017/P20170718001/270072000_22900AMX00581_A100_1.pdf#page=39 | https://www.pmda.go.jp/drugs/2017/P20170718001/270072000_22900AMX00581_K101_1.pdf#page=134 | https://www.pmda.go.jp/drugs/2017/P20170718001/270072000_22900AMX00581_K101_1.pdf#page=135"
+        },
+        {
+          "arm_id": "frdb_9430",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 0.2,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2017/P20170718001/270072000_22900AMX00581_A100_1.pdf#page=39 | https://www.pmda.go.jp/drugs/2017/P20170718001/270072000_22900AMX00581_K101_1.pdf#page=155 | https://www.pmda.go.jp/drugs/2017/P20170718001/270072000_22900AMX00581_K101_1.pdf#page=156"
+        }
+      ],
+      "candidate_id": "9770",
+      "ik14": "ZHKNLJLMDFQVHJ",
+      "name": "PEMAFIBRATE",
+      "smiles": "CC[C@@H](Oc1cccc(CN(CCCOc2ccc(OC)cc2)c2nc3ccccc3o2)c1)C(=O)O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_5515",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 70.5,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/2825746/"
+        }
+      ],
+      "candidate_id": "2454",
+      "ik14": "RQTOOFIXOKYGAN",
+      "name": "NEDOCROMIL",
+      "smiles": "CCCc1c2oc(C(=O)O)cc(=O)c2cc2c(=O)cc(C(=O)O)n(CC)c12"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_11356",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/33044566/"
+        }
+      ],
+      "candidate_id": "45290",
+      "ik14": "ONPGOSVDVDPBCY",
+      "name": "X-396",
+      "smiles": "C[C@@H](Oc1cc(C(=O)Nc2ccc(C(=O)N3CCN(C)CC3)cc2)nnc1N)c1c(Cl)ccc(F)c1Cl"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_10103",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 150.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/19420128/"
+        }
+      ],
+      "candidate_id": "10281",
+      "ik14": "XGGTZCKQRWXCHW",
+      "name": "CASOPITANT",
+      "smiles": "CC(=O)N1CCN([C@H]2CCN(C(=O)N(C)[C@H](C)c3cc(C(F)(F)F)cc(C(F)(F)F)c3)[C@@H](c3ccc(F)cc3C)C2)CC1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6687",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 1400.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/11673644/"
+        }
+      ],
+      "candidate_id": "4904",
+      "ik14": "IMQLKJBTEOYOSI",
+      "name": "FYTIC ACID",
+      "smiles": "O=P(O)(O)O[C@H]1[C@H](OP(=O)(O)O)[C@@H](OP(=O)(O)O)[C@H](OP(=O)(O)O)[C@@H](OP(=O)(O)O)[C@H]1OP(=O)(O)O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_10885",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 108.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/23514701/"
+        },
+        {
+          "arm_id": "frdb_10889",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/29882510/"
+        }
+      ],
+      "candidate_id": "33538",
+      "ik14": "FINHMKGKINIASC",
+      "name": "LIGUSTRAZINE",
+      "smiles": "Cc1nc(C)c(C)nc1C"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_8937",
+          "cmax_unit": "μg/L",
+          "dose_mg": 10.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/15545307/"
+        },
+        {
+          "arm_id": "frdb_8938",
+          "cmax_unit": "μg/L",
+          "dose_mg": 50.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/15545307/"
+        },
+        {
+          "arm_id": "frdb_8939",
+          "cmax_unit": "μg/L",
+          "dose_mg": 150.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/15545307/"
+        },
+        {
+          "arm_id": "frdb_8940",
+          "cmax_unit": "μg/L",
+          "dose_mg": 300.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/15545307/"
+        },
+        {
+          "arm_id": "frdb_8941",
+          "cmax_unit": "μg/L",
+          "dose_mg": 600.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/15545307/"
+        },
+        {
+          "arm_id": "frdb_8942",
+          "cmax_unit": "μg/L",
+          "dose_mg": 900.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/15545307/"
+        },
+        {
+          "arm_id": "frdb_8943",
+          "cmax_unit": "μg/L",
+          "dose_mg": 1200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/15545307/"
+        }
+      ],
+      "candidate_id": "9033",
+      "ik14": "JTVWJXUGGJTGDA",
+      "name": "VALATEGRAST",
+      "smiles": "Cc1cccc(Cl)c1C(=O)NC(Cc1ccc(NC(=O)c2c(Cl)cccc2Cl)cc1)C(=O)O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_1203",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 0.4,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/19646081/"
+        }
+      ],
+      "candidate_id": "480",
+      "ik14": "DHSSDEDRBUKTQY",
+      "name": "TALIPEXOLE",
+      "smiles": "C=CCN1CCc2nc(N)sc2CC1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6609",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/20833114/"
+        }
+      ],
+      "candidate_id": "3418",
+      "ik14": "RJIWZDNTCBHXAL",
+      "name": "NITROXOLINE",
+      "smiles": "O=[N+]([O-])c1ccc(O)c2ncccc12"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_13404",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 120.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://www.tandfonline.com/doi/full/10.1080/17425255.2021.1881480"
+        }
+      ],
+      "candidate_id": "59669",
+      "ik14": "XJGXCBHXFWBOTN",
+      "name": "FLUZOPARIB",
+      "smiles": "O=C(c1cc(Cc2n[nH]c(=O)c3ccccc23)ccc1F)N1CCn2nc(C(F)(F)F)nc2C1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_12099",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 20.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/19144772/"
+        },
+        {
+          "arm_id": "frdb_12100",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 40.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/19144772/"
+        },
+        {
+          "arm_id": "frdb_12101",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 80.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/19144772/"
+        }
+      ],
+      "candidate_id": "49024",
+      "ik14": "RSUMDJRTAFBISX",
+      "name": "CB-13",
+      "smiles": "CCCCCOc1ccc(C(=O)c2cccc3ccccc23)c2ccccc12"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6801",
+          "cmax_unit": "mg/L",
+          "dose_mg": 400.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/2111246/"
+        }
+      ],
+      "candidate_id": "6604",
+      "ik14": "QRCJOCOSPZMDJY",
+      "name": "VALNOCTAMIDE",
+      "smiles": "CCC(C)C(CC)C(N)=O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_7093",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 60.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/10738641/"
+        }
+      ],
+      "candidate_id": "6901",
+      "ik14": "RXPRRQLKFXBCSJ",
+      "name": "VINCAMINE",
+      "smiles": "CC[C@]12CCCN3CCc4c(n(c5ccccc45)[C@@](O)(C(=O)OC)C1)[C@@H]32"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_5856",
+          "cmax_unit": "ng/L",
+          "dose_mg": 0.04,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/26770490/"
+        }
+      ],
+      "candidate_id": "2625",
+      "ik14": "STJMRWALKKWQGH",
+      "name": "CLENBUTEROL",
+      "smiles": "CC(C)(C)NCC(O)c1cc(Cl)c(N)c(Cl)c1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_8119",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 100.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2012/P201200123/300297000_22400AMX01387000_A100_1.pdf#page=35"
+        },
+        {
+          "arm_id": "frdb_8122",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 10.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2012/P201200123/300297000_22400AMX01387000_A100_1.pdf#page=39"
+        },
+        {
+          "arm_id": "frdb_8123",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 25.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2012/P201200123/300297000_22400AMX01387000_A100_1.pdf#page=39"
+        },
+        {
+          "arm_id": "frdb_8124",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 50.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2012/P201200123/300297000_22400AMX01387000_A100_1.pdf#page=39"
+        },
+        {
+          "arm_id": "frdb_8125",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 100.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2012/P201200123/300297000_22400AMX01387000_A100_1.pdf#page=39"
+        },
+        {
+          "arm_id": "frdb_8126",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 200.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2012/P201200123/300297000_22400AMX01387000_A100_1.pdf#page=39"
+        },
+        {
+          "arm_id": "frdb_8127",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 400.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2012/P201200123/300297000_22400AMX01387000_A100_1.pdf#page=39"
+        },
+        {
+          "arm_id": "frdb_8128",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 50.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2012/P201200123/300297000_22400AMX01387000_A100_1.pdf#page=39"
+        },
+        {
+          "arm_id": "frdb_8129",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 100.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2012/P201200123/300297000_22400AMX01387000_A100_1.pdf#page=39"
+        },
+        {
+          "arm_id": "frdb_8130",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 200.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2012/P201200123/300297000_22400AMX01387000_A100_1.pdf#page=39"
+        },
+        {
+          "arm_id": "frdb_8131",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 200.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2012/P201200123/300297000_22400AMX01387000_A100_1.pdf#page=40"
+        },
+        {
+          "arm_id": "frdb_8133",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 400.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2012/P201200123/300297000_22400AMX01387000_A100_1.pdf#page=43"
+        },
+        {
+          "arm_id": "frdb_8140",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 400.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2012/P201200123/300297000_22400AMX01387000_A100_1.pdf#page=44"
+        }
+      ],
+      "candidate_id": "8243",
+      "ik14": "LDXYBEHACFJIEL",
+      "name": "ANAGLIPTIN",
+      "smiles": "Cc1cc2ncc(C(=O)NCC(C)(C)NCC(=O)N3CCC[C@H]3C#N)cn2n1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_11351",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 600.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/24470465"
+        }
+      ],
+      "candidate_id": "45237",
+      "ik14": "NXWASIVXQMMPLM",
+      "name": "VTP-27999",
+      "smiles": "CN[C@H](CNC(=O)N1CCC[C@@H]([C@@H](OCCNC(=O)OC)c2cccc(Cl)c2)C1)C[C@H]1CCCOC1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_8433",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 500.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://www.ncbi.nlm.nih.gov/pubmed/25656305"
+        },
+        {
+          "arm_id": "frdb_8434",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 30.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://www.ncbi.nlm.nih.gov/pubmed/25656305"
+        },
+        {
+          "arm_id": "frdb_8435",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://www.ncbi.nlm.nih.gov/pubmed/25656305"
+        }
+      ],
+      "candidate_id": "8372",
+      "ik14": "FASLTMSUPQDLIB",
+      "name": "ADOMEGLIVANT",
+      "smiles": "Cc1cc(O[C@@H](CCC(F)(F)F)c2ccc(C(=O)NCCC(=O)O)cc2)cc(C)c1-c1ccc(C(C)(C)C)cc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_971",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 50.0,
+          "source_type": "REVIEW",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/18447661/"
+        }
+      ],
+      "candidate_id": "428",
+      "ik14": "CHNUOJQWGUIOLD",
+      "name": "EPALRESTAT",
+      "smiles": "CC(/C=C1\\SC(=S)N(CC(=O)O)C1=O)=C\\c1ccccc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_11078",
+          "cmax_unit": "μg/L",
+          "dose_mg": 400.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/20197487/"
+        }
+      ],
+      "candidate_id": "36941",
+      "ik14": "VEVMYTDOWUQLGI",
+      "name": "NAPHTHOQUINE",
+      "smiles": "CC(C)(C)NCc1cc(Nc2ccnc3cc(Cl)ccc23)c2c(c1O)CCCC2"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_12355",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/26608081/"
+        }
+      ],
+      "candidate_id": "50586",
+      "ik14": "ICYNYWFGIDGBRD",
+      "name": "PF-06282999",
+      "smiles": "COc1ccc(Cl)cc1-c1cc(=O)[nH]c(=S)n1CC(N)=O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6619",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 20.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/4082636/"
+        }
+      ],
+      "candidate_id": "3504",
+      "ik14": "AZVFIZVKGSPGPK",
+      "name": "RIODIPINE",
+      "smiles": "COC(=O)C1=C(C)NC(C)=C(C(=O)OC)C1c1ccccc1OC(F)F"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_11194",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 0.526,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/7857509"
+        },
+        {
+          "arm_id": "frdb_11195",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 3.156,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/7857509"
+        },
+        {
+          "arm_id": "frdb_11196",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 1.578,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/7857509"
+        }
+      ],
+      "candidate_id": "40814",
+      "ik14": "YXBUQQDFTYOHQI",
+      "name": "PSEUDOHYPERICIN",
+      "smiles": "Cc1cc(O)c2c(=O)c3c(O)cc(O)c4c5c(O)cc(O)c6c(=O)c7c(O)cc(CO)c8c1c2c(c34)c(c65)c78"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_4459",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 50.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/31990440/"
+        },
+        {
+          "arm_id": "frdb_4460",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/31990440/"
+        },
+        {
+          "arm_id": "frdb_4461",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/31990440/"
+        }
+      ],
+      "candidate_id": "1902",
+      "ik14": "HMHVCUVYZFYAJI",
+      "name": "SULTHIAME",
+      "smiles": "NS(=O)(=O)c1ccc(N2CCCCS2(=O)=O)cc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_4728",
+          "cmax_unit": "μg/L",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/19819764/"
+        },
+        {
+          "arm_id": "frdb_4729",
+          "cmax_unit": "μg/L",
+          "dose_mg": 200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/19819764/"
+        },
+        {
+          "arm_id": "frdb_4730",
+          "cmax_unit": "μg/L",
+          "dose_mg": 400.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/19819764/"
+        }
+      ],
+      "candidate_id": "2080",
+      "ik14": "JLICHNCFTLFZJN",
+      "name": "MEPTAZINOL",
+      "smiles": "CCC1(c2cccc(O)c2)CCCCN(C)C1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_1502",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 240.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/1/170033_1249007F1032_1_008_1F.pdf#page=18"
+        }
+      ],
+      "candidate_id": "625",
+      "ik14": "PTHLEKANMPKYDB",
+      "name": "FLOPROPIONE",
+      "smiles": "CCC(=O)c1c(O)cc(O)cc1O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_4486",
+          "cmax_unit": "μg/L",
+          "dose_mg": 300.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/30587933/"
+        }
+      ],
+      "candidate_id": "1933",
+      "ik14": "YBHILYKTIRIUTE",
+      "name": "BERBERINE",
+      "smiles": "COc1ccc2cc3[n+](cc2c1OC)CCc1cc2c(cc1-3)OCO2"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6729",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 400.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/17702193/"
+        }
+      ],
+      "candidate_id": "5563",
+      "ik14": "SRQKTCXJCCHINN",
+      "name": "NIFURATEL",
+      "smiles": "CSCC1CN(/N=C/c2ccc([N+](=O)[O-])o2)C(=O)O1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_5781",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 10.0,
+          "source_type": "OTHER",
+          "source_uri": "https://core.ac.uk/download/pdf/232467634.pdf"
+        }
+      ],
+      "candidate_id": "2569",
+      "ik14": "GFRUPHOKLBPHTQ",
+      "name": "OXYPHENONIUM",
+      "smiles": "CC[N+](C)(CC)CCOC(=O)C(O)(c1ccccc1)C1CCCCC1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6611",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 1000.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/25384588/"
+        }
+      ],
+      "candidate_id": "3430",
+      "ik14": "IPWKIXLWTCNBKN",
+      "name": "ORNIDAZOLE",
+      "smiles": "Cc1ncc([N+](=O)[O-])n1CC(O)CCl"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6562",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 250.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/20420792/"
+        }
+      ],
+      "candidate_id": "3177",
+      "ik14": "CLOMYZFHNHFSIQ",
+      "name": "CLONIXIN",
+      "smiles": "Cc1c(Cl)cccc1Nc1ncccc1C(=O)O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_8115",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://journals.innovareacademics.in/index.php/ijpps/article/view/38410"
+        },
+        {
+          "arm_id": "frdb_8116",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 300.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/files/000153467.pdf"
+        }
+      ],
+      "candidate_id": "8241",
+      "ik14": "TWHZNAUBXFZMCA",
+      "name": "ACOTIAMIDE",
+      "smiles": "COc1cc(O)c(C(=O)Nc2nc(C(=O)NCCN(C(C)C)C(C)C)cs2)cc1OC"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_8043",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 40.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/32437025"
+        }
+      ],
+      "candidate_id": "8213",
+      "ik14": "QCVNMNYRNIMDKV",
+      "name": "RANIRESTAT",
+      "smiles": "O=C1C[C@@]2(C(=O)N1)C(=O)N(Cc1ccc(Br)cc1F)C(=O)c1cccn12"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_13119",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 20.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "clinicaltrials.gov/ct2/show/results/NCT02959138"
+        }
+      ],
+      "candidate_id": "59604",
+      "ik14": "XCIGZBVOUQVIPI",
+      "name": "LANRAPLENIB",
+      "smiles": "Nc1cncc(-c2cn3ccnc3c(Nc3ccc(N4CCN(C5COC5)CC4)cc3)n2)n1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6115",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 5.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/9571226/"
+        },
+        {
+          "arm_id": "frdb_6116",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 5.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/9571226/"
+        }
+      ],
+      "candidate_id": "2804",
+      "ik14": "UXWBIYCPUVWKHP",
+      "name": "SUNEPITRON",
+      "smiles": "O=C1CCC(=O)N1C[C@H]1CC[C@H]2CN(c3ncccn3)CCN2C1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_10492",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 2800.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/25219601"
+        }
+      ],
+      "candidate_id": "22343",
+      "ik14": "IKIIZLYTISPENI",
+      "name": "BAICALIN",
+      "smiles": "O=C(O)[C@H]1O[C@@H](Oc2cc3oc(-c4ccccc4)cc(=O)c3c(O)c2O)[C@H](O)[C@@H](O)[C@@H]1O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_4557",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 10.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/21697613/"
+        }
+      ],
+      "candidate_id": "1982",
+      "ik14": "LJROKJGQSPMTKB",
+      "name": "DEACETYLBISACODYL",
+      "smiles": "Oc1ccc(C(c2ccc(O)cc2)c2ccccn2)cc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6620",
+          "cmax_unit": "mg/L",
+          "dose_mg": 1500.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/2088768"
+        }
+      ],
+      "candidate_id": "3508",
+      "ik14": "LNXXSBRGLBOASF",
+      "name": "ROMAZARIT",
+      "smiles": "Cc1nc(-c2ccc(Cl)cc2)oc1COC(C)(C)C(=O)O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_7515",
+          "cmax_unit": "pg/mL",
+          "dose_mg": 2.5,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/29959787/"
+        },
+        {
+          "arm_id": "frdb_7516",
+          "cmax_unit": "pg/mL",
+          "dose_mg": 10.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/29959787/"
+        },
+        {
+          "arm_id": "frdb_7517",
+          "cmax_unit": "pg/mL",
+          "dose_mg": 20.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/29959787/"
+        },
+        {
+          "arm_id": "frdb_7521",
+          "cmax_unit": "pg/mL",
+          "dose_mg": 10.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/files/000232054.pdf"
+        }
+      ],
+      "candidate_id": "8024",
+      "ik14": "XFLQIRAKKLNXRQ",
+      "name": "ELOBIXIBAT",
+      "smiles": "CCCCC1(CCCC)CN(c2ccccc2)c2cc(SC)c(OCC(=O)N[C@@H](C(=O)NCC(=O)O)c3ccccc3)cc2S(=O)(=O)C1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_9319",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 40.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/11219480/"
+        },
+        {
+          "arm_id": "frdb_9320",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 40.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/11219480/"
+        },
+        {
+          "arm_id": "frdb_9321",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 2.5,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/11874392/"
+        },
+        {
+          "arm_id": "frdb_9322",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 10.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/11874392/"
+        },
+        {
+          "arm_id": "frdb_9323",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 30.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/11874392/"
+        },
+        {
+          "arm_id": "frdb_9324",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 80.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/11874392/"
+        },
+        {
+          "arm_id": "frdb_9325",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 160.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/11874392/"
+        },
+        {
+          "arm_id": "frdb_9326",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 320.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/11874392/"
+        }
+      ],
+      "candidate_id": "9627",
+      "ik14": "XZEUAXYWNKYKPL",
+      "name": "LEVORMELOXIFENE",
+      "smiles": "COc1ccc2c(c1)OC(C)(C)[C@@H](c1ccccc1)[C@@H]2c1ccc(OCCN2CCCC2)cc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_1812",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 7.5,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/3216039/"
+        },
+        {
+          "arm_id": "frdb_1813",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 15.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/3216039/"
+        },
+        {
+          "arm_id": "frdb_1814",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 30.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/3216039/"
+        },
+        {
+          "arm_id": "frdb_1815",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 60.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/3216039/"
+        },
+        {
+          "arm_id": "frdb_1816",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 120.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/3216039/"
+        },
+        {
+          "arm_id": "frdb_1817",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 240.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/3216039/"
+        },
+        {
+          "arm_id": "frdb_1819",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 60.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/9630823/"
+        }
+      ],
+      "candidate_id": "852",
+      "ik14": "ZVNYJIZDIRKMBF",
+      "name": "VESNARINONE",
+      "smiles": "COc1ccc(C(=O)N2CCN(c3ccc4c(c3)CCC(=O)N4)CC2)cc1OC"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6840",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 50.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://www.researchgate.net/publication/361801101_Simple_and_rapid_LC-MSMS_method_for_determination_of_Piribedil_in_human_plasma"
+        }
+      ],
+      "candidate_id": "6709",
+      "ik14": "OQDPVLVUJFGPGQ",
+      "name": "PIRIBEDIL",
+      "smiles": "c1cnc(N2CCN(Cc3ccc4c(c3)OCO4)CC2)nc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_2213",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 100.0,
+          "source_type": "REVIEW",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/26699811/"
+        },
+        {
+          "arm_id": "frdb_2214",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 300.0,
+          "source_type": "REVIEW",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/26699811/"
+        }
+      ],
+      "candidate_id": "1161",
+      "ik14": "YBJHBAHKTGYVGT",
+      "name": "BIOTIN",
+      "smiles": "O=C(O)CCCC[C@@H]1SC[C@@H]2NC(=O)N[C@@H]21"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_698",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 1000.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/5072410/"
+        }
+      ],
+      "candidate_id": "228",
+      "ik14": "GPTONYMQFTZPKC",
+      "name": "SULFAMETER",
+      "smiles": "COc1cnc(NS(=O)(=O)c2ccc(N)cc2)nc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_1269",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 80.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/23554672/"
+        },
+        {
+          "arm_id": "frdb_1270",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 160.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/23554672/"
+        },
+        {
+          "arm_id": "frdb_1271",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 240.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/23554672/"
+        },
+        {
+          "arm_id": "frdb_1273",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 80.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/29092729/"
+        },
+        {
+          "arm_id": "frdb_1274",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 80.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/29092729/"
+        }
+      ],
+      "candidate_id": "493",
+      "ik14": "MUXFZBHBYYYLTH",
+      "name": "ZALTOPROFEN",
+      "smiles": "CC(C(=O)O)c1ccc2c(c1)CC(=O)c1ccccc1S2"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_13018",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 3.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/26249232/"
+        },
+        {
+          "arm_id": "frdb_13019",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 10.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/26249232/"
+        },
+        {
+          "arm_id": "frdb_13021",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 30.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/26249232/"
+        },
+        {
+          "arm_id": "frdb_13022",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/26249232/"
+        },
+        {
+          "arm_id": "frdb_13023",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 200.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/26249232/"
+        },
+        {
+          "arm_id": "frdb_13025",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 400.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/26249232/"
+        }
+      ],
+      "candidate_id": "59570",
+      "ik14": "ZBQMTQGDBFZUBG",
+      "name": "ONO-2952",
+      "smiles": "COc1cc(Cl)ccc1C1c2[nH]c3cccc(F)c3c2C2(CC2)CN1C(C)=O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_9444",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 720.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/24590312/"
+        }
+      ],
+      "candidate_id": "9822",
+      "ik14": "DJUFPMUQJKWIJB",
+      "name": "PYRONARIDINE",
+      "smiles": "COc1ccc2nc3cc(Cl)ccc3c(Nc3cc(CN4CCCC4)c(O)c(CN4CCCC4)c3)c2n1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_10315",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 50.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009000_A100_1.pdf#page=32 | https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009_K101_1.pdf#page=17"
+        },
+        {
+          "arm_id": "frdb_10316",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 50.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009000_A100_1.pdf#page=32 | https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009_K101_1.pdf#page=17"
+        },
+        {
+          "arm_id": "frdb_10330",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 100.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009000_A100_1.pdf#page=42 | https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009_K101_1.pdf#page=198"
+        },
+        {
+          "arm_id": "frdb_10335",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 100.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009000_A100_1.pdf#page=43 | https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009_K102_1.pdf#page=13"
+        },
+        {
+          "arm_id": "frdb_10337",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 1.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009_K100_1.pdf#page=35 | https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009_K101_1.pdf#pag=50 | https://pubmed.ncbi.nlm.nih.gov/25316572/"
+        },
+        {
+          "arm_id": "frdb_10338",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 3.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009_K100_1.pdf#page=35 | https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009_K101_1.pdf#pag=50 | https://pubmed.ncbi.nlm.nih.gov/25316572/"
+        },
+        {
+          "arm_id": "frdb_10339",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 10.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009_K100_1.pdf#page=35 | https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009_K101_1.pdf#pag=50 | https://pubmed.ncbi.nlm.nih.gov/25316572/"
+        },
+        {
+          "arm_id": "frdb_10340",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 30.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009_K100_1.pdf#page=35 | https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009_K101_1.pdf#pag=50 | https://pubmed.ncbi.nlm.nih.gov/25316572/"
+        },
+        {
+          "arm_id": "frdb_10341",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 100.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009_K100_1.pdf#page=35 | https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009_K101_1.pdf#pag=50 | https://pubmed.ncbi.nlm.nih.gov/25316572/"
+        },
+        {
+          "arm_id": "frdb_10342",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 300.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009_K100_1.pdf#page=35 | https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009_K101_1.pdf#pag=50 | https://pubmed.ncbi.nlm.nih.gov/25316572/"
+        }
+      ],
+      "candidate_id": "10404",
+      "ik14": "AHFWIQIYAXSLBA",
+      "name": "IPRAGLIFLOZIN L-PROLINE",
+      "smiles": "OC[C@H]1O[C@@H](c2ccc(F)c(Cc3cc4ccccc4s3)c2)[C@H](O)[C@@H](O)[C@@H]1O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_1468",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 5.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/8983399"
+        }
+      ],
+      "candidate_id": "613",
+      "ik14": "VAPSMQAHNAZRKC",
+      "name": "EPRISTERIDE",
+      "smiles": "CC(C)(C)NC(=O)[C@H]1CC[C@H]2[C@@H]3CC=C4C=C(C(=O)O)CC[C@]4(C)[C@H]3CC[C@]12C"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_1763",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 1.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/2864049/"
+        },
+        {
+          "arm_id": "frdb_1764",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 1.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/2864049/"
+        }
+      ],
+      "candidate_id": "811",
+      "ik14": "UTEFBSAVJNEPTR",
+      "name": "LOPRAZOLAM",
+      "smiles": "CN1CCN(/C=C2\\N=C3CN=C(c4ccccc4Cl)c4cc([N+](=O)[O-])ccc4N3C2=O)CC1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_4683",
+          "cmax_unit": "μg/L",
+          "dose_mg": 6.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://link.springer.com/article/10.1007/BF03258454"
+        },
+        {
+          "arm_id": "frdb_4684",
+          "cmax_unit": "μg/L",
+          "dose_mg": 6.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://link.springer.com/article/10.1007/BF03258454"
+        }
+      ],
+      "candidate_id": "2070",
+      "ik14": "RHLJLALHBZGAFM",
+      "name": "BUNAZOSIN",
+      "smiles": "CCCC(=O)N1CCCN(c2nc(N)c3cc(OC)c(OC)cc3n2)CC1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6949",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 10.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/10971307/"
+        },
+        {
+          "arm_id": "frdb_6950",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 1.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/10971307/"
+        },
+        {
+          "arm_id": "frdb_6951",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 5.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/10971307/"
+        }
+      ],
+      "candidate_id": "6752",
+      "ik14": "JHLHNYVMZCADTC",
+      "name": "ASIMADOLINE",
+      "smiles": "CN(C(=O)C(c1ccccc1)c1ccccc1)[C@H](CN1CC[C@H](O)C1)c1ccccc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_8833",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 30.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/30705758"
+        }
+      ],
+      "candidate_id": "8912",
+      "ik14": "GKGRZLGAQZPEHO",
+      "name": "RADIPRODIL",
+      "smiles": "O=C(Nc1ccc2[nH]c(=O)oc2c1)C(=O)N1CCC(Cc2ccc(F)cc2)CC1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_909",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 300.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/19546034/"
+        }
+      ],
+      "candidate_id": "408",
+      "ik14": "VUAFHZCUKUDDBC",
+      "name": "BUCILLAMINE",
+      "smiles": "CC(C)(S)C(=O)N[C@@H](CS)C(=O)O"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6376",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 100.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/17127027/"
+        }
+      ],
+      "candidate_id": "2916",
+      "ik14": "FDBWMYOFXWMGEY",
+      "name": "TIROPRAMIDE",
+      "smiles": "CCCN(CCC)C(=O)C(Cc1ccc(OCCN(CC)CC)cc1)NC(=O)c1ccccc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_10815",
+          "cmax_unit": "μg/L",
+          "dose_mg": 360.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/22284902/"
+        },
+        {
+          "arm_id": "frdb_10816",
+          "cmax_unit": "μg/L",
+          "dose_mg": 600.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/22284902/"
+        },
+        {
+          "arm_id": "frdb_10819",
+          "cmax_unit": "μg/L",
+          "dose_mg": 900.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/22284902/"
+        }
+      ],
+      "candidate_id": "31699",
+      "ik14": "AHJUHHDDCJQACA",
+      "name": "HM-30181",
+      "smiles": "COc1cc2c(cc1OC)CN(CCc1ccc(-n3nnc(-c4cc(OC)c(OC)cc4NC(=O)c4cc(=O)c5ccccc5o4)n3)cc1)CC2"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_4823",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 3.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/33835016/"
+        }
+      ],
+      "candidate_id": "2147",
+      "ik14": "RQXCLMGKHJWMOA",
+      "name": "PRIDINOL",
+      "smiles": "OC(CCN1CCCCC1)(c1ccccc1)c1ccccc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_821",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 100.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/1/530263_1149031F1030_1_14F_1F.pdf#page=18"
+        }
+      ],
+      "candidate_id": "393",
+      "ik14": "MROJXXOCABQVEF",
+      "name": "ACTARIT",
+      "smiles": "CC(=O)Nc1ccc(CC(=O)O)cc1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_8714",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 500.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/20124396"
+        },
+        {
+          "arm_id": "frdb_8715",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 2400.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/22371898"
+        }
+      ],
+      "candidate_id": "8748",
+      "ik14": "MCPUZZJBAHRIPO",
+      "name": "LERSIVIRINE",
+      "smiles": "CCc1nn(CCO)c(CC)c1Oc1cc(C#N)cc(C#N)c1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_1635",
+          "cmax_unit": "mg/L",
+          "dose_mg": 1000.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/6081878/"
+        }
+      ],
+      "candidate_id": "732",
+      "ik14": "VLYWMPOKSSWJAL",
+      "name": "SULFAMETHOXYPYRIDAZINE",
+      "smiles": "COc1ccc(NS(=O)(=O)c2ccc(N)cc2)nn1"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_6311",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 75.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/6894708/"
+        },
+        {
+          "arm_id": "frdb_6312",
+          "cmax_unit": "ng/mL",
+          "dose_mg": 75.0,
+          "source_type": "EXPERIMENT",
+          "source_uri": "https://pubmed.ncbi.nlm.nih.gov/6894708/"
+        }
+      ],
+      "candidate_id": "2875",
+      "ik14": "ALELTFCQZDXAMQ",
+      "name": "BUTRIPTYLINE",
+      "smiles": "CC(CC1c2ccccc2CCc2ccccc21)CN(C)C"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "frdb_4643",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 150.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/1/730155_6139001R1032_1_011_1F.pdf#page=33"
+        },
+        {
+          "arm_id": "frdb_4644",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 300.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/1/730155_6139001R1032_1_011_1F.pdf#page=33"
+        },
+        {
+          "arm_id": "frdb_4645",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 600.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/1/730155_6139001R1032_1_011_1F.pdf#page=33"
+        },
+        {
+          "arm_id": "frdb_4649",
+          "cmax_unit": "μg/mL",
+          "dose_mg": 300.0,
+          "source_type": "OTHER GOV'T",
+          "source_uri": "https://www.info.pmda.go.jp/go/interview/1/730155_6139001R1032_1_011_1F.pdf#page=35"
+        }
+      ],
+      "candidate_id": "2063",
+      "ik14": "HGGAKXAHAYOLDJ",
+      "name": "FAROPENEM",
+      "smiles": "C[C@@H](O)[C@H]1C(=O)N2C(C(=O)O)=C([C@H]3CCCO3)S[C@H]12"
+    }
+  ],
+  "metadata_exclusions": {
+    "duplicate_connectivity": 3,
+    "multiple_analyte_keys": 10
+  },
+  "model_git_sha": "618106b53b0c9ce3c5b8a8fe62c5adf8f02b2308",
+  "protocol": "docs/validation/self_run_pilot_p0.md",
+  "source_sha256": "647b80d9cdac4a0517ce649570517dc1aff40545bdc84617ec9f1a56405f9c7a"
+}

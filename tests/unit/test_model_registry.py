@@ -2,21 +2,21 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
-import logging
 from pathlib import Path
 
 import pytest
 
 from sisyphus.ml.registry import (
     CANONICAL_SMILES,
-    ModelRecord,
-    ModelRegistry,
     check_feature_hash,
+    compute_feature_hash_logp_corr_6,
     compute_feature_hash_v1,
     load_manifest,
     manifest_path_for,
     validate_manifest,
+    verify_model_artifact,
 )
 
 ROOT = Path(__file__).resolve().parent.parent.parent
@@ -116,74 +116,55 @@ def test_logp_correction_uses_separate_feature_schema():
     feat = manifest["feature_schema"]
     assert feat["name"] == "logp_corr_6"
     assert feat["n_features"] == 6
+    current = compute_feature_hash_logp_corr_6()
+    if current == LOCKFILE_LOGP6_HASH:
+        assert feat["sha256"] == current
     # Distinct from compute_features_v1 hash
     v1 = compute_feature_hash_v1()
     assert feat["sha256"] != v1
 
 
 # ---------------------------------------------------------------------------
-# Registry.get() returns a ModelRecord
+# Runtime verifier fails closed
 # ---------------------------------------------------------------------------
 
 
-def test_registry_get_returns_model_record():
-    reg = ModelRegistry()
-    record = reg.get(MODELS_DIRECT_PK / "xgboost_cmax.json")
-    assert isinstance(record, ModelRecord)
-    assert record.version == "v3_clean"
-    assert record.n_drugs_original == 1128
-    assert record.target.startswith("log10(cmax")
+def test_runtime_verifier_accepts_shipped_model():
+    manifest = verify_model_artifact(MODELS_DIRECT_PK / "xgboost_cmax.json")
+    assert manifest["version"] == "v3_public_omega"
 
 
-def test_registry_get_missing_manifest_returns_none(tmp_path, caplog):
-    """Missing manifest -> warn, return None (warn-only policy)."""
+def test_runtime_verifier_rejects_missing_manifest(tmp_path):
     fake_model = tmp_path / "nonexistent.json"
-    reg = ModelRegistry()
-    with caplog.at_level(logging.WARNING):
-        result = reg.get(fake_model)
-    assert result is None
-    assert any("manifest missing" in r.message for r in caplog.records)
+    with pytest.raises(ValueError, match="manifest unavailable"):
+        verify_model_artifact(fake_model)
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "message"),
+    [("sha256", "0" * 64, "Feature-schema drift"),
+     ("name", "unregistered_features", "Unknown feature schema")],
+)
+def test_runtime_verifier_rejects_logp_feature_drift(tmp_path, field, value, message):
+    model = tmp_path / "logp_correction.json"
+    model.write_bytes(b"{}")
+    manifest = load_manifest(MODELS_ADME / model.name)
+    assert manifest is not None
+    manifest["artifact_sha256"] = hashlib.sha256(model.read_bytes()).hexdigest()
+    manifest["feature_schema"][field] = value
+    manifest_path_for(model).write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match=message):
+        verify_model_artifact(model)
 
 
 # ---------------------------------------------------------------------------
-# register() is strict on missing fields
+# Manifest validation reports missing fields
 # ---------------------------------------------------------------------------
 
 
-def test_registry_register_rejects_incomplete_manifest(tmp_path):
-    reg = ModelRegistry()
+def test_manifest_rejects_incomplete_fields():
     incomplete = {"version": "v1", "target": "log10(cmax)"}  # missing most fields
-    with pytest.raises(ValueError, match="manifest incomplete"):
-        reg.register(tmp_path / "fake.json", incomplete)
-
-
-def test_registry_register_writes_complete_manifest(tmp_path):
-    reg = ModelRegistry()
-    manifest = {
-        "version": "v1",
-        "target": "log10(cmax)",
-        "trained_on": {"dataset_path": "test.csv", "sha256": "unknown_legacy"},
-        "feature_schema": {
-            "name": "compute_features_v1",
-            "n_features": 2057,
-            "sha256": "dd014cd8",
-            "description": "test",
-        },
-        "trained_at": "2026-04-24T00:00:00Z",
-        "n_drugs_original": 100,
-        "n_drugs_excluded": 5,
-        "holdout_version": "v1",
-        "holdout_metric": {"name": "AAFE", "value": 2.5},
-        "hyperparameters": {"n_estimators": 100},
-        "retrained_reason": "test",
-    }
-    model_path = tmp_path / "fake_model.json"
-    reg.register(model_path, manifest)
-
-    written = manifest_path_for(model_path)
-    assert written.exists()
-    loaded = json.loads(written.read_text())
-    assert loaded == manifest
+    assert "manifest field missing: artifact_sha256" in validate_manifest(incomplete)
 
 
 # ---------------------------------------------------------------------------

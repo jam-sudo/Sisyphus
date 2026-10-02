@@ -7,10 +7,10 @@ name: web-ci
 
 on:
   pull_request:
-    paths: ["web/**"]
+    paths: ["web/**", "app/**", "index.html"]
   push:
     branches: [main]
-    paths: ["web/**"]
+    paths: ["web/**", "app/**", "index.html"]
   workflow_dispatch:
 
 jobs:
@@ -27,5 +27,9 @@ jobs:
           cache: npm
           cache-dependency-path: web/package-lock.json
       - run: npm ci
-      - run: npm run build
-      - run: npm run smoke # headless render guard for all six workflows
+      - run: npm run build:pages
+      - run: npm run smoke # headless render guard for supported workflows
+      - name: Production /app bundle is synchronized
+        run: git diff --exit-code -- ../app
+      - run: VITE_API_URL=http://localhost:8000 npm run build
+      - run: SMOKE_LIVE_RACE=1 npm run smoke

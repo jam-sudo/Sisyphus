@@ -17,6 +17,7 @@ Strategy:
 from __future__ import annotations
 
 import logging
+import math
 
 import numpy as np
 
@@ -153,7 +154,7 @@ def solve_regimen(
         params: Resolved point-value parameters.
         regimen: Dosing regimen specifying all dose events.
         t_total_h: Total simulation time (hours). If ``None``, defaults
-            to ``last_dose_time + DEFAULT_TAIL_H``.
+            to ``last_dose_end + DEFAULT_TAIL_H``.
         dt_output: Output time resolution (hours). Default 0.1h (6 min).
 
     Returns:
@@ -161,7 +162,11 @@ def solve_regimen(
         with concatenated time/concentration/amount arrays.
     """
     if t_total_h is None:
-        t_total_h = regimen.last_dose_time_h + DEFAULT_TAIL_H
+        t_total_h = regimen.last_dose_end_h + DEFAULT_TAIL_H
+    if not math.isfinite(t_total_h) or t_total_h <= regimen.last_dose_end_h:
+        raise ValueError("t_total_h must be finite and after every dose ends")
+    if not math.isfinite(dt_output) or dt_output <= 0:
+        raise ValueError("dt_output must be positive and finite")
 
     # Expand infusions into micro-boluses
     boluses = _expand_infusions(regimen.events)
@@ -179,13 +184,14 @@ def solve_regimen(
     all_concentrations: dict[str, list[np.ndarray]] = {
         name: [] for name in compiled.state_index
     }
+    all_administered: list[np.ndarray] = []
 
     # State vector — starts at zero
     y_current = np.zeros(compiled.n_states)
 
-    # Track overall solver success and mass balance
+    # Track overall solver success
     overall_success = True
-    max_mbe = 0.0
+    cumulative_administered = 0.0
 
     # Build the list of segment boundaries:
     # Each dose group triggers a segment boundary
@@ -222,6 +228,7 @@ def solve_regimen(
                     )
                     continue
                 y_current[node_idx] += ev.dose_mg
+                cumulative_administered += ev.dose_mg
                 logger.debug(
                     "Injected %.2f mg into %r at t=%.2fh",
                     ev.dose_mg,
@@ -267,21 +274,16 @@ def solve_regimen(
             )
             overall_success = False
 
-        max_mbe = max(max_mbe, result.mass_balance_error)
-
-        # Determine which time points to keep (avoid duplicating boundary
-        # points from adjacent segments)
+        # Place the pre-dose state one representable instant before the new
+        # post-dose state. This preserves the jump for AUC and keeps the grid
+        # strictly increasing for interpolation at the exact dose time.
         if all_time:
-            # Skip first point if it duplicates the last point of the
-            # previous segment
-            start_idx = 1 if len(result.time_h) > 1 else 0
-        else:
-            start_idx = 0
-
-        all_time.append(result.time_h[start_idx:])
+            all_time[-1][-1] = np.nextafter(t_start, -np.inf)
+        all_time.append(result.time_h)
+        all_administered.append(np.full_like(result.time_h, cumulative_administered))
         for name in compiled.state_index:
-            all_amounts[name].append(result.amounts[name][start_idx:])
-            all_concentrations[name].append(result.concentrations[name][start_idx:])
+            all_amounts[name].append(result.amounts[name])
+            all_concentrations[name].append(result.concentrations[name])
 
         # Update state vector to final state of this segment
         for name, idx in compiled.state_index.items():
@@ -306,16 +308,13 @@ def solve_regimen(
         name: np.concatenate(arrs) for name, arrs in all_amounts.items()
     }
 
-    # Recompute mass balance over full time course using cumulative dose
-    # at each time point (fixes spurious MBE for multi-dose regimens where
-    # early time points only have the first dose administered).
+    # Each segment carries its actually administered dose, distinguishing
+    # pre- and post-dose states across the boundary.
     total = np.zeros_like(time_concat)
     for name in compiled.state_index:
         total += amt_concat[name]
 
-    cumulative_dose = np.zeros_like(time_concat)
-    for ev in regimen.events:
-        cumulative_dose[time_concat >= ev.time_h - 1e-12] += ev.dose_mg
+    cumulative_dose = np.concatenate(all_administered)
 
     valid = cumulative_dose > 0
     if np.any(valid):

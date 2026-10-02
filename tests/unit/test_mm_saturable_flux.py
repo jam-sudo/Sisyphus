@@ -55,7 +55,7 @@ def _auc(graph, drug, t_end=10000.0):
     y0[compiled.state_index[drug.administration_node]] = drug.dose_mg
     res = solve(compiled, params, y0, t_span=(0.0, t_end))
     conc, t = res.concentrations["venous_blood"], res.time_h
-    trapz = getattr(np, "trapezoid", np.trapz)
+    trapz = np.trapezoid if hasattr(np, "trapezoid") else np.trapz
     return float(trapz(conc, t))
 
 

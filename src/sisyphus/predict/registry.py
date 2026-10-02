@@ -19,12 +19,12 @@ from pathlib import Path
 from rdkit import Chem
 
 from sisyphus.core import ActiveMetabolite, Distribution
+from sisyphus.resources import get_resource_config
 
 logger = logging.getLogger(__name__)
 
-_DEFAULT_REGISTRY_PATH = (
-    Path(__file__).resolve().parent.parent.parent.parent
-    / "data" / "sbi" / "prodrug_activation_registry.json"
+_DEFAULT_REGISTRY_PATH = get_resource_config().data(
+    "sbi", "prodrug_activation_registry.json", required=False
 )
 
 

@@ -1,0 +1,62 @@
+{
+  "computed_at": "2026-09-23-fup_public",
+  "source_cache": "data/training/4track_holdout_predictions.json",
+  "context": "Public-only TDC fup retrain; development N=107 diagnostic, not independent external validation",
+  "method": "bootstrap on abs(log10(fold))",
+  "n_bootstrap": 10000,
+  "seed": 20260422,
+  "overall": {
+    "n": 107,
+    "engine": {
+      "aafe": 3.6722,
+      "ci_95_low": 3.0653,
+      "ci_95_high": 4.438,
+      "n": 107,
+      "pct_2fold": 32.7,
+      "pct_3fold": 49.5
+    },
+    "ml": {
+      "aafe": 2.9981,
+      "ci_95_low": 2.55,
+      "ci_95_high": 3.5473,
+      "n": 107,
+      "pct_2fold": 43.0,
+      "pct_3fold": 58.9
+    },
+    "meta": {
+      "aafe": 2.6758,
+      "ci_95_low": 2.2967,
+      "ci_95_high": 3.1449,
+      "n": 107,
+      "pct_2fold": 51.4,
+      "pct_3fold": 63.6
+    }
+  },
+  "in_domain": {
+    "n": 81,
+    "engine": {
+      "aafe": 3.6089,
+      "ci_95_low": 2.9665,
+      "ci_95_high": 4.3944,
+      "n": 81,
+      "pct_2fold": 32.1,
+      "pct_3fold": 49.4
+    },
+    "ml": {
+      "aafe": 2.9768,
+      "ci_95_low": 2.4703,
+      "ci_95_high": 3.6246,
+      "n": 81,
+      "pct_2fold": 44.4,
+      "pct_3fold": 60.5
+    },
+    "meta": {
+      "aafe": 2.7519,
+      "ci_95_low": 2.3028,
+      "ci_95_high": 3.2991,
+      "n": 81,
+      "pct_2fold": 48.1,
+      "pct_3fold": 61.7
+    }
+  }
+}

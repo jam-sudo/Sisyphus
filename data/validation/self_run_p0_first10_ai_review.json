@@ -1,0 +1,508 @@
+{
+  "task_id": "task_fc65e66c94ed",
+  "reviewed_at": "2026-09-23",
+  "scope": "first 10 candidates of data/validation/self_run_p0_candidates.json, original order; predictions not inspected",
+  "method_note": "Eligibility criteria are judged from original cited sources, not FRDB flags or model predictions. FRDB Cmax values were read only after all predictions were sealed and used to map duplicate-dose row IDs to exact source-table cells; this mapping did not determine eligibility or select by prediction error. 'verified_with_caveat' means original Cmax is readable but at least one P0 criterion remains unresolved. 'unverified' means the original full text was inaccessible.",
+  "summary": {
+    "candidates": 10,
+    "arms": 25,
+    "arm_verification": {
+      "verified": 0,
+      "verified_with_caveat": 8,
+      "ineligible": 2,
+      "unverified": 13,
+      "ineligible_or_secondary": 2
+    },
+    "candidates_with_any_verified_cmax": [
+      "2127",
+      "2849",
+      "1776",
+      "2665",
+      "10208",
+      "560"
+    ],
+    "protocol_eligible_candidates_confirmed": 0
+  },
+  "candidates": [
+    {
+      "candidate_id": "2127",
+      "name": "ETHAMSYLATE",
+      "arms": [
+        {
+          "arm_id": "frdb_4805",
+          "dose_mg": 500.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/24227961/",
+          "source_access_status": "full_text_accessed",
+          "accessed_via": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3824948/",
+          "healthy_adult": "FOR: §2.7.2 '24 male Egyptian volunteers... age 18–32', 'All enrolled volunteers were healthy'",
+          "fasted": "FOR: §2.7.3 'after an overnight fasting (10 h)'",
+          "single_oral_ir": "FOR (single oral dose, one Dicynone® 500 mg tablet); conventional tablet, 'immediate-release' not stated explicitly",
+          "parent_plasma": "FOR: HPLC assay of etamsylate in plasma",
+          "original_cmax": 8.05,
+          "original_cmax_unit": "μg/mL",
+          "cmax_statistic": "mean (%CV 30.3), n=24",
+          "locator": "Table 3 (Saudi Pharm J 2013;21:405-10)",
+          "verification": "verified_with_caveat",
+          "reason": "Single-dose fasted parent-plasma Cmax is supported, but the original clinical paper calls the product a Dicynone 500 mg tablet without explicitly identifying it as immediate-release; strict P0 eligibility remains unresolved."
+        }
+      ]
+    },
+    {
+      "candidate_id": "2849",
+      "name": "LEVODROPROPIZINE",
+      "arms": [
+        {
+          "arm_id": "frdb_6213",
+          "dose_mg": 60.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/29872264/",
+          "source_access_status": "full_text_accessed",
+          "accessed_via": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5973308/",
+          "healthy_adult": "FOR: Methods 'Korean male subjects aged 20–55 years, who were evaluated as healthy'",
+          "fasted": "FOR: 'at least 10 h of fasted state were required prior to drug administration'",
+          "single_oral_ir": "CAVEAT: IR 60 mg tablet given TID (6-h interval) in a multiple-dose design; paper reports first-dose (0–6 h) 'single-dose PK parameters' in Table 2",
+          "parent_plasma": "FOR: LC-MS/MS levodropropizine in plasma",
+          "original_cmax": 278.14,
+          "original_cmax_unit": "μg/L",
+          "cmax_statistic": "arithmetic mean ± SD 278.14 ± 100.95, n=46 (first dose, Table 2); Table 1 reports 325.46 ± 104.51 μg/L = Cmax over full 24 h TID regimen (not single-dose)",
+          "locator": "Table 2 'Single-dose PK parameters' (IR 60 mg fasted column); Table 1 for 24-h value",
+          "verification": "verified_with_caveat",
+          "reason": "Single-dose value is the first-dose interval of a TID regimen; coordinator must decide which value FRDB used/eligibility"
+        },
+        {
+          "arm_id": "frdb_6214",
+          "dose_mg": 90.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/29872264/",
+          "source_access_status": "full_text_accessed",
+          "accessed_via": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5973308/",
+          "healthy_adult": "FOR (same population)",
+          "fasted": "FOR for fasted CR arm; a separate fed CR arm also exists (high-fat meal) — arm identity (fasted vs fed) not determinable from candidate file",
+          "single_oral_ir": "AGAINST: 90 mg is the controlled-release (CR) tablet, BID",
+          "parent_plasma": "FOR",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "locator": "Table 2 lists CR 90 mg fasted 247.99 ± 81.63 and fed 225.46 ± 84.27 μg/L (first dose) — reported for reference only",
+          "verification": "ineligible",
+          "reason": "Not immediate-release (CR formulation)"
+        }
+      ]
+    },
+    {
+      "candidate_id": "8150",
+      "name": "PHENSERINE TARTRATE",
+      "arms": [
+        {
+          "arm_id": "frdb_7874",
+          "dose_mg": 20.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/16248851",
+          "source_access_status": "inaccessible_full_text",
+          "healthy_adult": "unverified",
+          "fasted": "unverified",
+          "single_oral_ir": "unverified",
+          "parent_plasma": "unverified",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "locator": null,
+          "verification": "unverified",
+          "reason": "PubMed 16248851 (Curr Alzheimer Res 2005;2:483-92, DOI 10.2174/156720505774330564) has no PMC copy, Unpaywall shows no OA copy, publisher page (eurekaselect) behind Cloudflare challenge. Abstract/title state healthy elderly; age alone is not an exclusion. Full text is still needed for fasting, formulation, parent analyte, and the exact Cmax arm."
+        }
+      ]
+    },
+    {
+      "candidate_id": "2134",
+      "name": "LIAROZOLE",
+      "arms": [
+        {
+          "arm_id": "frdb_4812",
+          "dose_mg": 300.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/10763459",
+          "source_access_status": "inaccessible_full_text",
+          "healthy_adult": "unverified",
+          "fasted": "unverified",
+          "single_oral_ir": "unverified",
+          "parent_plasma": "unverified",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "locator": null,
+          "verification": "unverified",
+          "reason": "PubMed 10763459 is an Adis 'Drugs in R&D' drug profile (DOI 10.2165/00126839-199902060-00017), i.e., a secondary review, not a primary PK study; Springer page is paywalled (buy/subscribe). Original study, population, fasting and formulation cannot be verified."
+        }
+      ]
+    },
+    {
+      "candidate_id": "1776",
+      "name": "ROXATIDINE",
+      "arms": [
+        {
+          "arm_id": "frdb_3754",
+          "dose_mg": 37.5,
+          "source_url": "https://www.pmda.go.jp/drugs/2011/P201100027/470007000_16100AMZ03538000_A100_2.pdf#page=7 | https://www.pmda.go.jp/drugs/2011/P201100027/470007000_16100AMZ03538000_K100_2.pdf#page=70",
+          "source_access_status": "full_text_accessed",
+          "accessed_via": "PMDA review report (A100_2 p.7) and CTD 2.7 clinical summary (K100_2 pp.65,70)",
+          "healthy_adult": "FOR: '20歳～45歳の健康成人男子' (healthy adult males 20–45 y), study AKP-004/1-A, n=8/group",
+          "fasted": "FOR: '空腹時に単回経口投与' / '10時間以上絶食させた後' (≥10 h fast)",
+          "single_oral_ir": "PARTIAL: single oral dose of roxatidine acetate HCl capsule (Altat® capsule; 150 mg group = capsules). IR vs modified-release NOT stated in reviewed pages — unverified",
+          "parent_plasma": "AGAINST/CAVEAT: administered compound is prodrug roxatidine acetate HCl; analyte is deacetylated roxatidine (CTD 2.7.1.1: '分析対象はロキサチジン'). Candidate SMILES is roxatidine (deacetyl), so analyte matches candidate, but dose_mg is prodrug-salt mass",
+          "original_cmax_unit": "ng/mL",
+          "verification": "verified_with_caveat",
+          "reason": "Cmax verified; IR status unverified; dose refers to roxatidine acetate HCl, analyte is roxatidine",
+          "original_cmax": 157.5,
+          "cmax_statistic": "mean ± SD 157.5 ± 20.2, n=8",
+          "locator": "PMDA review A100_2 p.7 表1; CTD K100_2 p.70 表2.7.6-4"
+        },
+        {
+          "arm_id": "frdb_3755",
+          "dose_mg": 75.0,
+          "source_url": "https://www.pmda.go.jp/drugs/2011/P201100027/470007000_16100AMZ03538000_A100_2.pdf#page=7 | https://www.pmda.go.jp/drugs/2011/P201100027/470007000_16100AMZ03538000_K100_2.pdf#page=70",
+          "source_access_status": "full_text_accessed",
+          "accessed_via": "PMDA review report (A100_2 p.7) and CTD 2.7 clinical summary (K100_2 pp.65,70)",
+          "healthy_adult": "FOR: '20歳～45歳の健康成人男子' (healthy adult males 20–45 y), study AKP-004/1-A, n=8/group",
+          "fasted": "FOR: '空腹時に単回経口投与' / '10時間以上絶食させた後' (≥10 h fast)",
+          "single_oral_ir": "PARTIAL: single oral dose of roxatidine acetate HCl capsule (Altat® capsule; 150 mg group = capsules). IR vs modified-release NOT stated in reviewed pages — unverified",
+          "parent_plasma": "AGAINST/CAVEAT: administered compound is prodrug roxatidine acetate HCl; analyte is deacetylated roxatidine (CTD 2.7.1.1: '分析対象はロキサチジン'). Candidate SMILES is roxatidine (deacetyl), so analyte matches candidate, but dose_mg is prodrug-salt mass",
+          "original_cmax_unit": "ng/mL",
+          "verification": "verified_with_caveat",
+          "reason": "Cmax verified; IR status unverified; dose refers to roxatidine acetate HCl, analyte is roxatidine",
+          "original_cmax": 329.0,
+          "cmax_statistic": "mean ± SD 329.0 ± 53.8, n=8",
+          "locator": "PMDA review A100_2 p.7 表1; CTD K100_2 p.70 表2.7.6-4"
+        },
+        {
+          "arm_id": "frdb_3756",
+          "dose_mg": 150.0,
+          "source_url": "https://www.pmda.go.jp/drugs/2011/P201100027/470007000_16100AMZ03538000_A100_2.pdf#page=7 | https://www.pmda.go.jp/drugs/2011/P201100027/470007000_16100AMZ03538000_K100_2.pdf#page=70",
+          "source_access_status": "full_text_accessed",
+          "accessed_via": "PMDA review report (A100_2 p.7) and CTD 2.7 clinical summary (K100_2 pp.65,70)",
+          "healthy_adult": "FOR: '20歳～45歳の健康成人男子' (healthy adult males 20–45 y), study AKP-004/1-A, n=8/group",
+          "fasted": "FOR: '空腹時に単回経口投与' / '10時間以上絶食させた後' (≥10 h fast)",
+          "single_oral_ir": "PARTIAL: single oral dose of roxatidine acetate HCl capsule (Altat® capsule; 150 mg group = capsules). IR vs modified-release NOT stated in reviewed pages — unverified",
+          "parent_plasma": "AGAINST/CAVEAT: administered compound is prodrug roxatidine acetate HCl; analyte is deacetylated roxatidine (CTD 2.7.1.1: '分析対象はロキサチジン'). Candidate SMILES is roxatidine (deacetyl), so analyte matches candidate, but dose_mg is prodrug-salt mass",
+          "original_cmax_unit": "ng/mL",
+          "verification": "verified_with_caveat",
+          "reason": "Cmax verified; IR status unverified; dose refers to roxatidine acetate HCl, analyte is roxatidine",
+          "original_cmax": 628.5,
+          "cmax_statistic": "mean ± SD 628.5 ± 66.7, n=8",
+          "locator": "PMDA review A100_2 p.7 表1; CTD K100_2 p.70 表2.7.6-4"
+        }
+      ]
+    },
+    {
+      "candidate_id": "2665",
+      "name": "VAPIPROST",
+      "arms": [
+        {
+          "arm_id": "frdb_6036",
+          "dose_mg": 5.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/1839540/",
+          "source_access_status": "inaccessible_full_text",
+          "healthy_adult": "unverified",
+          "fasted": "unverified",
+          "single_oral_ir": "unverified",
+          "parent_plasma": "unverified",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "locator": null,
+          "verification": "unverified",
+          "reason": "PubMed 1839540 (J Clin Pharmacol 1991;31:815-22, DOI 10.1002/j.1552-4604.1991.tb01917.x): no PMC copy, no OA per Unpaywall, Wiley full text not accessible. Not verified."
+        },
+        {
+          "arm_id": "frdb_6037",
+          "dose_mg": 10.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/1839540/",
+          "source_access_status": "inaccessible_full_text",
+          "healthy_adult": "unverified",
+          "fasted": "unverified",
+          "single_oral_ir": "unverified",
+          "parent_plasma": "unverified",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "locator": null,
+          "verification": "unverified",
+          "reason": "PubMed 1839540 (J Clin Pharmacol 1991;31:815-22, DOI 10.1002/j.1552-4604.1991.tb01917.x): no PMC copy, no OA per Unpaywall, Wiley full text not accessible. Not verified."
+        },
+        {
+          "arm_id": "frdb_6038",
+          "dose_mg": 20.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/1839540/",
+          "source_access_status": "inaccessible_full_text",
+          "healthy_adult": "unverified",
+          "fasted": "unverified",
+          "single_oral_ir": "unverified",
+          "parent_plasma": "unverified",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "locator": null,
+          "verification": "unverified",
+          "reason": "PubMed 1839540 (J Clin Pharmacol 1991;31:815-22, DOI 10.1002/j.1552-4604.1991.tb01917.x): no PMC copy, no OA per Unpaywall, Wiley full text not accessible. Not verified."
+        },
+        {
+          "arm_id": "frdb_6041",
+          "dose_mg": 10.0,
+          "source_url": "https://www.jstage.jst.go.jp/article/jscpt1970/26/1/26_1_305/_article/-char/en",
+          "source_access_status": "full_text_accessed",
+          "accessed_via": "J-STAGE PDF https://www.jstage.jst.go.jp/article/jscpt1970/26/1/26_1_305/_pdf/-char/en",
+          "fasted": "FOR (elderly study): '朝、絶食下で単回経口投与'",
+          "single_oral_ir": "PARTIAL: single oral 10 mg as one tablet (1錠); IR not stated",
+          "parent_plasma": "FOR: '血漿中未変化体' (unchanged drug)",
+          "original_cmax_unit": "ng/mL",
+          "locator": "Jpn J Clin Pharmacol Ther 26(1):305-306 (1995), p.305 Tab.1",
+          "healthy_adult": "FOR: original study enrolled six healthy men aged 65–72 years; no P0 upper-age cutoff",
+          "original_cmax": 81.4,
+          "cmax_values_in_source": {
+            "elderly_n6": "81.40 ± 13.91 ng/mL (2-compartment model-fitted)",
+            "young_n6_secondary_from_Uematsu1991": "43.00 ± 16.36 ng/mL"
+          },
+          "verification": "verified_with_caveat",
+          "reason": "Original healthy-adult fasted single-dose parent-plasma result. Immediate-release status of the 10 mg tablet is not explicit, and Cmax is model-fitted rather than an observed peak; strict P0 eligibility unresolved.",
+          "cmax_statistic": "mean ± SD 81.40 ± 13.91 ng/mL, n=6; derived by 2-compartment open-model fit",
+          "arm_mapping_evidence": "FRDB row 6041 records 81.4 ng/mL, matching the original elderly-study result; predictions not consulted."
+        },
+        {
+          "arm_id": "frdb_6042",
+          "dose_mg": 10.0,
+          "source_url": "https://www.jstage.jst.go.jp/article/jscpt1970/26/1/26_1_305/_article/-char/en",
+          "source_access_status": "full_text_accessed",
+          "accessed_via": "J-STAGE PDF https://www.jstage.jst.go.jp/article/jscpt1970/26/1/26_1_305/_pdf/-char/en",
+          "fasted": "FOR (elderly study): '朝、絶食下で単回経口投与'",
+          "single_oral_ir": "PARTIAL: single oral 10 mg as one tablet (1錠); IR not stated",
+          "parent_plasma": "FOR: '血漿中未変化体' (unchanged drug)",
+          "original_cmax_unit": "ng/mL",
+          "locator": "Jpn J Clin Pharmacol Ther 26(1):305-306 (1995), p.305 Tab.1",
+          "healthy_adult": "Young healthy-adult comparator, but value reproduced from Uematsu et al. 1991 rather than generated in this original study",
+          "original_cmax": null,
+          "cmax_values_in_source": {
+            "elderly_n6": "81.40 ± 13.91 ng/mL (2-compartment model-fitted)",
+            "young_n6_secondary_from_Uematsu1991": "43.00 ± 16.36 ng/mL"
+          },
+          "verification": "ineligible_or_secondary",
+          "reason": "FRDB row 6042 records 43 ng/mL, matching the young comparator column reproduced from Uematsu et al. 1991. This cited 1995 source is secondary for that arm; the original 1991 paper remains inaccessible."
+        }
+      ]
+    },
+    {
+      "candidate_id": "2572",
+      "name": "PHENMETRAZINE",
+      "arms": [
+        {
+          "arm_id": "frdb_5784",
+          "dose_mg": 75.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/6026786/",
+          "source_access_status": "inaccessible_full_text",
+          "healthy_adult": "unverified",
+          "fasted": "unverified",
+          "single_oral_ir": "unverified",
+          "parent_plasma": "unverified",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "locator": null,
+          "verification": "unverified",
+          "reason": "PubMed 6026786 (Clin Pharmacol Ther 1967;8:369-73, DOI 10.1002/cpt196783369): no abstract, no PMC, no OA; Wiley page shows metadata only. MeSH lists 'Delayed-Action Preparations' and title concerns formulation effect — IR status must be checked in full text. Not verified."
+        }
+      ]
+    },
+    {
+      "candidate_id": "10208",
+      "name": "PF-04457845",
+      "arms": [
+        {
+          "arm_id": "frdb_9985",
+          "dose_mg": 40.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/22044402",
+          "source_access_status": "full_text_accessed",
+          "accessed_via": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3403198/",
+          "healthy_adult": "FOR: entry criteria 'healthy male and/or female subjects aged 18 to 55'; Results: all male, 21–48 y, 76/77 Asian",
+          "fasted": "FOR: 'Doses for the SRD and MRD studies were administered in the fasted state'",
+          "single_oral_ir": "CAVEAT: single oral dose (SRD, cohort 2 period 4) but given as ORAL SOLUTION, not a solid IR tablet",
+          "parent_plasma": "FOR: LC/MS/MS PF-04457845 in plasma",
+          "original_cmax": 442,
+          "original_cmax_unit": "ng/mL",
+          "cmax_statistic": "geometric mean (%CV 34), N=9",
+          "locator": "Table 1 (SRD study), 40 mg column; Br J Clin Pharmacol 2012;73:706-16",
+          "verification": "verified_with_caveat",
+          "reason": "Dosage form is oral solution; coordinator decides whether solution counts as IR"
+        }
+      ]
+    },
+    {
+      "candidate_id": "560",
+      "name": "BALOFLOXACIN",
+      "arms": [
+        {
+          "arm_id": "frdb_1401",
+          "dose_mg": 100.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/17161665/",
+          "source_access_status": "inaccessible_full_text",
+          "healthy_adult": "unverified",
+          "fasted": "unverified",
+          "single_oral_ir": "unverified",
+          "parent_plasma": "unverified",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "locator": null,
+          "verification": "unverified",
+          "reason": "PubMed 17161665 (J Chromatogr B 2006;850:68-73, DOI 10.1016/j.jchromb.2006.11.001): no PMC, no OA, ScienceDirect behind bot challenge (403). Population/fasting/formulation/arm-level Cmax not verifiable."
+        },
+        {
+          "arm_id": "frdb_1402",
+          "dose_mg": 100.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/17161665/",
+          "source_access_status": "inaccessible_full_text",
+          "healthy_adult": "unverified",
+          "fasted": "unverified",
+          "single_oral_ir": "unverified",
+          "parent_plasma": "unverified",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "locator": null,
+          "verification": "unverified",
+          "reason": "PubMed 17161665 (J Chromatogr B 2006;850:68-73, DOI 10.1016/j.jchromb.2006.11.001): no PMC, no OA, ScienceDirect behind bot challenge (403). Population/fasting/formulation/arm-level Cmax not verifiable."
+        },
+        {
+          "arm_id": "frdb_1403",
+          "dose_mg": 200.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/17161665/",
+          "source_access_status": "inaccessible_full_text",
+          "healthy_adult": "unverified",
+          "fasted": "unverified",
+          "single_oral_ir": "unverified",
+          "parent_plasma": "unverified",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "locator": null,
+          "verification": "unverified",
+          "reason": "PubMed 17161665 (J Chromatogr B 2006;850:68-73, DOI 10.1016/j.jchromb.2006.11.001): no PMC, no OA, ScienceDirect behind bot challenge (403). Population/fasting/formulation/arm-level Cmax not verifiable."
+        },
+        {
+          "arm_id": "frdb_1404",
+          "dose_mg": 200.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/17161665/",
+          "source_access_status": "inaccessible_full_text",
+          "healthy_adult": "unverified",
+          "fasted": "unverified",
+          "single_oral_ir": "unverified",
+          "parent_plasma": "unverified",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "locator": null,
+          "verification": "unverified",
+          "reason": "PubMed 17161665 (J Chromatogr B 2006;850:68-73, DOI 10.1016/j.jchromb.2006.11.001): no PMC, no OA, ScienceDirect behind bot challenge (403). Population/fasting/formulation/arm-level Cmax not verifiable."
+        },
+        {
+          "arm_id": "frdb_1405",
+          "dose_mg": 300.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/17161665/",
+          "source_access_status": "inaccessible_full_text",
+          "healthy_adult": "unverified",
+          "fasted": "unverified",
+          "single_oral_ir": "unverified",
+          "parent_plasma": "unverified",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "locator": null,
+          "verification": "unverified",
+          "reason": "PubMed 17161665 (J Chromatogr B 2006;850:68-73, DOI 10.1016/j.jchromb.2006.11.001): no PMC, no OA, ScienceDirect behind bot challenge (403). Population/fasting/formulation/arm-level Cmax not verifiable."
+        },
+        {
+          "arm_id": "frdb_1406",
+          "dose_mg": 300.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/17161665/",
+          "source_access_status": "inaccessible_full_text",
+          "healthy_adult": "unverified",
+          "fasted": "unverified",
+          "single_oral_ir": "unverified",
+          "parent_plasma": "unverified",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "locator": null,
+          "verification": "unverified",
+          "reason": "PubMed 17161665 (J Chromatogr B 2006;850:68-73, DOI 10.1016/j.jchromb.2006.11.001): no PMC, no OA, ScienceDirect behind bot challenge (403). Population/fasting/formulation/arm-level Cmax not verifiable."
+        },
+        {
+          "arm_id": "frdb_1410",
+          "dose_mg": 100.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/17161665/",
+          "source_access_status": "inaccessible_full_text",
+          "healthy_adult": "unverified",
+          "fasted": "unverified",
+          "single_oral_ir": "unverified",
+          "parent_plasma": "unverified",
+          "original_cmax": null,
+          "original_cmax_unit": null,
+          "locator": null,
+          "verification": "unverified",
+          "reason": "PubMed 17161665 (J Chromatogr B 2006;850:68-73, DOI 10.1016/j.jchromb.2006.11.001): no PMC, no OA, ScienceDirect behind bot challenge (403). Population/fasting/formulation/arm-level Cmax not verifiable."
+        },
+        {
+          "arm_id": "frdb_1411",
+          "dose_mg": 200.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/9124849/",
+          "source_access_status": "full_text_accessed",
+          "accessed_via": "https://pmc.ncbi.nlm.nih.gov/articles/PMC163630/ (scanned PDF)",
+          "healthy_adult": "FOR: ten healthy elderly subjects, mean age 71.8 years (range 66–79), with no chronic disease; no P0 upper-age cutoff",
+          "fasted": "FOR (elderly): 'administered to the elderly volunteers after overnight (10-h) fasting'",
+          "single_oral_ir": "PARTIAL: single oral dose 200 mg; dosage form not stated in extracted text",
+          "parent_plasma": "FOR: HPLC balofloxacin in plasma",
+          "original_cmax": 1.72,
+          "original_cmax_unit": "μg/mL",
+          "cmax_values_in_source": {
+            "elderly_n10": "1.72 ± 0.50 μg/mL",
+            "young_n6_ref15_dose_normalized": "2.17 ± 0.36 μg/mL"
+          },
+          "locator": "Table 1, p.2826-2827, Antimicrob Agents Chemother 1996;40:2824-8",
+          "verification": "verified_with_caveat",
+          "reason": "Original healthy-adult fasted single-dose parent-plasma result. Oral dosage form is not specified in the cited paper, so immediate-release status remains unresolved.",
+          "cmax_statistic": "mean ± SD 1.72 ± 0.50 μg/mL, n=10",
+          "arm_mapping_evidence": "FRDB row 1411 records 1.72 μg/mL, matching the original elderly-study row; predictions not consulted."
+        },
+        {
+          "arm_id": "frdb_1412",
+          "dose_mg": 200.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/9124849/",
+          "source_access_status": "full_text_accessed",
+          "accessed_via": "https://pmc.ncbi.nlm.nih.gov/articles/PMC163630/ (scanned PDF)",
+          "healthy_adult": "Young healthy-adult comparator, but value is reproduced and dose-normalized from Reference 15 rather than generated in this original study",
+          "fasted": "FOR (elderly): 'administered to the elderly volunteers after overnight (10-h) fasting'",
+          "single_oral_ir": "PARTIAL: single oral dose 200 mg; dosage form not stated in extracted text",
+          "parent_plasma": "FOR: HPLC balofloxacin in plasma",
+          "original_cmax": null,
+          "original_cmax_unit": "μg/mL",
+          "cmax_values_in_source": {
+            "elderly_n10": "1.72 ± 0.50 μg/mL",
+            "young_n6_ref15_dose_normalized": "2.17 ± 0.36 μg/mL"
+          },
+          "locator": "Table 1, p.2826-2827, Antimicrob Agents Chemother 1996;40:2824-8",
+          "verification": "ineligible_or_secondary",
+          "reason": "FRDB row 1412 records 2.17 μg/mL, matching the young comparator row reproduced and dose-normalized from Reference 15. This cited 1996 source is secondary for that arm."
+        }
+      ]
+    },
+    {
+      "candidate_id": "45300",
+      "name": "XANTHOHUMOL",
+      "arms": [
+        {
+          "arm_id": "frdb_11357",
+          "dose_mg": 60.0,
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/24038952",
+          "source_access_status": "full_text_accessed",
+          "accessed_via": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4371792/",
+          "healthy_adult": "FOR: 'Healthy subjects (24 men and 24 women)'; mean age 31 (M) / 35 (F)",
+          "fasted": "FOR: 'advised to fast 8 h before the 0 ... h blood draws. Subjects resumed eating two hours after the 0 h time point'",
+          "single_oral_ir": "CAVEAT: single oral dose in self-emulsifying (oleic acid/Tween 80/propylene glycol) capsule; IR not stated; enabling lipid formulation",
+          "parent_plasma": "AGAINST: Cmax reported for TOTAL (free + conjugated) XN after enzymatic hydrolysis; free XN <4% of total (Table 2)",
+          "original_cmax": null,
+          "original_cmax_unit": "μg/L",
+          "cmax_values_in_source": {
+            "60mg_males_n6": "63 ± 16 μg/L (mean ± SEM)",
+            "60mg_females_n7": "70 ± 17 μg/L (mean ± SEM)"
+          },
+          "locator": "Table 3, Mol Nutr Food Res 2014;58:248-55 (no pooled 60 mg value in Table 3; abstract gives 48 ± 11 with unit 'mg/L')",
+          "verification": "ineligible",
+          "reason": "Analyte is total (deconjugated) xanthohumol, not parent plasma; no pooled Cmax in table"
+        }
+      ]
+    }
+  ],
+  "review_status": "AI-assisted source extraction draft; protocol eligibility not adjudicated; do not score",
+  "coordinator_note": "The original Claude pass marked etamsylate fully verified, but its paper does not explicitly establish immediate-release status. Subsequent coordinator review corrected age-only exclusions: healthy elderly participants meet the adult criterion. No first-ten candidate is yet confirmed to satisfy every P0 criterion. Model predictions were not inspected during source review.",
+  "coordinator_correction": "The P0 criterion healthy adult has no upper-age cutoff. Healthy elderly people are adults. The earlier age-only rejection of vapiprost and balofloxacin arms was erroneous; their original-study arms are now caveated for formulation/source issues rather than age. FRDB outcome values were used only to map duplicate-dose rows to original table columns, after predictions had been sealed and without inspecting predictions."
+}

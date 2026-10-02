@@ -12,11 +12,13 @@ import logging
 from dataclasses import dataclass
 from pathlib import Path
 
+from sisyphus.resources import get_resource_config
+
 logger = logging.getLogger(__name__)
 
 # Default data directory: resolve relative to repository root.
 # src/sisyphus/validation/reference.py -> ../../../../data/reference
-_DATA_DIR = Path(__file__).resolve().parent.parent.parent.parent / "data" / "reference"
+_DATA_DIR = get_resource_config().data("reference")
 
 
 @dataclass(frozen=True)

@@ -50,15 +50,9 @@ def load_drugbank_lookup() -> dict[str, dict]:
 
 
 def resolve_smiles(name: str, drugbank: dict) -> dict | None:
-    """Resolve drug name to {smiles, inchikey_14}."""
+    """Resolve an exact DrugBank name to {smiles, inchikey_14}."""
     key = name.strip().lower()
-    if key in drugbank:
-        return drugbank[key]
-    # Partial match
-    for db_name, info in drugbank.items():
-        if key in db_name or db_name in key:
-            return info
-    return None
+    return drugbank.get(key)
 
 
 def main():
@@ -107,7 +101,11 @@ def main():
         log.info(f"OSP drugs: {len(osp_data)}")
 
         for obs in osp_data:
+            if obs.get("data_type") == "individual" or obs.get("n_subjects") == 1:
+                continue
             name = obs["drug_name"].lower()
+            if name in drugs and drugs[name].get("tier") == "unverified":
+                continue
             cmax = obs["cmax_obs"]
             dose = obs["dose_mg"]
             smiles = obs["smiles"]
@@ -123,7 +121,7 @@ def main():
                 drugs[name]["dose_mg"] = dose
                 if smiles:
                     drugs[name]["smiles"] = smiles
-                drugs[name]["source"] = drugs[name].get("source", "") + f" + OSP"
+                drugs[name]["source"] = drugs[name].get("source", "") + f" + {obs['study']} via {obs['source']} ({obs['cmax_extraction']})"
                 osp_updated += 1
                 continue
 
@@ -134,7 +132,7 @@ def main():
             drugs[name] = {
                 "name": name,
                 "tier": "silver",
-                "source": f"OSP observed data",
+                "source": f"{obs['study']} via {obs['source']} ({obs['cmax_extraction']})",
                 "dose_mg": dose,
                 "route": "oral",
                 "pk_params": {"cmax_mg_L": cmax},
@@ -155,9 +153,11 @@ def main():
         log.info(f"Curated drugs: {len(curated_data)}")
 
         for entry in curated_data:
-            if entry.get("status") == "not_found":
+            if entry.get("status") != "confirmed":
                 continue
             name = entry["drug_name"].lower()
+            if name in drugs and drugs[name].get("tier") == "unverified":
+                continue
             cmax = entry.get("cmax_mg_L")
             dose = entry.get("dose_mg")
             if not cmax or cmax <= 0:
@@ -220,9 +220,11 @@ def main():
         log.info(f"Manual curation entries: {len(manual_data)}")
 
         for entry in manual_data:
-            if entry.get("status") == "not_found":
+            if entry.get("status") != "confirmed":
                 continue
             name = entry["drug_name"].lower()
+            if name in drugs and drugs[name].get("tier") == "unverified":
+                continue
             cmax = entry.get("cmax_mg_L")
             dose = entry.get("dose_mg")
             if not cmax or cmax <= 0:
@@ -283,6 +285,8 @@ def main():
             if entry.get("status") != "extracted":
                 continue
             name = entry["drug_name"].lower()
+            if name in drugs and drugs[name].get("tier") == "unverified":
+                continue
             cmax = entry.get("cmax_mg_L")
             dose = entry.get("dose_mg")
             if not cmax or cmax <= 0:

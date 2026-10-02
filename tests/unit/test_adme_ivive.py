@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import pytest
+
 from sisyphus.core import Distribution
 from sisyphus.predict.chemistry import compute_profile
 
@@ -18,6 +20,26 @@ _DIPHENHYDRAMINE_SMILES = "O(CCN(C)C)C(c1ccccc1)c1ccccc1"  # strong base, pKa ~9
 
 
 class TestADME:
+    def test_peff_model_error_does_not_silently_use_heuristic(self, monkeypatch, tmp_path):
+        import sisyphus.predict.adme as adme_module
+
+        model_path = tmp_path / "xgboost_peff.json"
+        model_path.write_text("invalid artifact")
+        monkeypatch.setattr(adme_module, "_PEFF_MODEL_PATH", model_path)
+
+        def fail(_features):
+            raise ValueError("model artifact hash mismatch")
+
+        monkeypatch.setattr(adme_module, "_predict_peff_xgb", fail)
+        profile = compute_profile(_ASPIRIN_SMILES)
+        with pytest.raises(ValueError, match="model artifact hash mismatch"):
+            adme_module._estimate_peff(profile)
+
+        monkeypatch.setattr(adme_module, "_PEFF_MODEL_PATH", tmp_path / "missing.json")
+        assert adme_module._estimate_peff(profile) == adme_module._estimate_peff_heuristic(
+            profile
+        )
+
     def test_predict_midazolam(self):
         """Midazolam ADME predictions should be in reasonable ranges."""
         from sisyphus.predict.adme import predict_adme
@@ -82,13 +104,13 @@ class TestADME:
         adme = predict_adme(profile)
         assert 0.001 <= adme.fup.mean <= 1.0
 
-    def test_peff_from_logp(self):
-        """Peff heuristic should give positive values."""
+    def test_peff_positive(self):
+        """The current trained Peff model should give a positive value."""
         from sisyphus.predict.adme import predict_adme
 
         profile = compute_profile(_ASPIRIN_SMILES)
         adme = predict_adme(profile)
-        assert 0.1 <= adme.peff.mean <= 50.0
+        assert 0.01 <= adme.peff.mean <= 100.0
 
     def test_solubility_from_logp(self):
         """Solubility heuristic should give positive values."""
@@ -169,6 +191,15 @@ class TestIVIVE:
         drug = build_drug_on_graph(profile, adme, dose_mg=10.0, route="oral")
         assert drug.administration_node == "stomach_lumen"
         assert drug.route == "oral"
+
+    def test_invalid_route_is_not_silently_coerced_to_oral(self):
+        from sisyphus.predict.adme import predict_adme
+        from sisyphus.predict.ivive import build_drug_on_graph
+
+        profile = compute_profile(_BENZENE_SMILES)
+        adme = predict_adme(profile)
+        with pytest.raises(ValueError, match="route must be"):
+            build_drug_on_graph(profile, adme, dose_mg=10.0, route="sc")
 
     def test_kp_values_reasonable(self):
         """Kp values should be in physiological range."""

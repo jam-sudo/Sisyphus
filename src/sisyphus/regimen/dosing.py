@@ -27,7 +27,6 @@ from sisyphus.core import DrugOnGraph
 from sisyphus.engine.compiler import CompiledODE
 from sisyphus.graph.body import BodyGraph
 from sisyphus.regimen.tdm import Observation, TDMResult, bayesian_update
-from sisyphus.regimen.tdm_enkf import EnKFResult, enkf_update
 from sisyphus.regimen.types import DosingRegimen
 
 logger = logging.getLogger(__name__)
@@ -74,8 +73,9 @@ class DoseRecommendation:
     predicted_css_recommended: float
     posterior_cv: float
     scaling_ratio: float
-    tdm_result: TDMResult | EnKFResult
+    tdm_result: TDMResult
     method: str = "linear_scaling"
+    inference_method: str = "importance_sampling"
 
 
 # ---------------------------------------------------------------------------
@@ -121,6 +121,7 @@ def recommend_dose(
     n_prior: int = 2000,
     seed: int = 42,
     method: str = "is",
+    allow_nonlinear_scaling: bool = False,
 ) -> DoseRecommendation:
     """Recommend an adjusted dose to achieve a target concentration.
 
@@ -142,8 +143,12 @@ def recommend_dose(
         round_increment: Round recommended dose to this increment (mg).
         n_prior: Number of prior MC samples for TDM.
         seed: RNG seed.
-        method: TDM method — ``"is"`` for importance sampling,
-            ``"enkf"`` for Ensemble Kalman Filter.
+        method: TDM method: ``is``/``importance_sampling``, ``ibis``,
+            ``enkf``, or ``sbi``. ``auto`` must be resolved by the caller.
+        allow_nonlinear_scaling: Explicit opt-in to linear dose scaling when
+            saturable enzyme kinetics are present. False by default because
+            forward simulation across candidate doses is required for a
+            defensible nonlinear-PK recommendation.
 
     Returns:
         DoseRecommendation with adjusted dose and predictions.
@@ -153,6 +158,12 @@ def recommend_dose(
     """
     if target_css <= 0:
         raise ValueError(f"target_css must be positive, got {target_css}")
+    if drug.enzyme_km and not allow_nonlinear_scaling:
+        raise ValueError(
+            "Linear dose recommendation is disabled for saturable metabolism. "
+            "Use a forward-simulation dose search or set "
+            "allow_nonlinear_scaling=True as an explicit experimental override."
+        )
 
     # Auto-infer dose range from current dose if not provided. Drugs span
     # 4 orders of magnitude in typical dose (digoxin 0.125mg ↔ metformin 1000mg),
@@ -170,20 +181,28 @@ def recommend_dose(
         round_increment = max(0.1, magnitude * 0.1)
 
     # Step 1: Bayesian update at current dose
-    if method == "enkf":
-        tdm = enkf_update(
-            compiled, graph, drug, regimen,
-            observations=observations,
-            n_ensemble=n_prior,
-            seed=seed,
-        )
-    else:
-        tdm = bayesian_update(
-            compiled, graph, drug, regimen,
-            observations=observations,
-            n_prior=n_prior,
-            seed=seed,
-        )
+    method_map = {
+        "is": "importance_sampling",
+        "importance_sampling": "importance_sampling",
+        "ibis": "ibis",
+        "enkf": "enkf",
+        "sbi": "sbi",
+    }
+    if method == "auto":
+        raise ValueError("method='auto' must be resolved before recommend_dose()")
+    if method not in method_map:
+        raise ValueError(f"Unsupported TDM method {method!r}; valid: {sorted(method_map)}")
+    inference_method = method_map[method]
+    tdm = bayesian_update(
+        compiled,
+        graph,
+        drug,
+        regimen,
+        observations=observations,
+        n_prior=n_prior,
+        seed=seed,
+        method=inference_method,
+    )
 
     posterior_css = tdm.posterior_cmax.mean
     if posterior_css <= 0:
@@ -220,4 +239,5 @@ def recommend_dose(
         posterior_cv=tdm.posterior_cmax.cv,
         scaling_ratio=actual_ratio,
         tdm_result=tdm,
+        inference_method=inference_method,
     )

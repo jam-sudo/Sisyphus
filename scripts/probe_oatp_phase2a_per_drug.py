@@ -40,7 +40,11 @@ from sisyphus.predict.transporter_db import load_oatp1b1_kinetics  # noqa: E402
 _PHYS = ROOT / "data" / "physiology" / "reference_man.yaml"
 
 _STATINS = {
-    "pravastatin":  ("CC[C@@H](C)C(=O)O[C@@H]1C[C@H](C=C2[C@@H]1CC[C@H]([C@@H]2CC[C@H](C[C@H](CC(=O)O)O)O)C)O", 40.0),
+    "pravastatin": (
+        "CC[C@H](C)C(=O)O[C@H]1C[C@@H](C=C2[C@H]1"
+        "[C@H]([C@H](C=C2)C)CC[C@H](C[C@H](CC(=O)O)O)O)O",
+        40.0,
+    ),
     "rosuvastatin": ("CC(C)C1=NC(=NC(=C1C=CC(CC(CC(=O)O)O)O)C2=CC=C(C=C2)F)N(C)S(=O)(=O)C", 20.0),
     "atorvastatin": ("CC(C)C1=C(C(=C(N1CCC(CC(CC(=O)O)O)O)C2=CC=C(C=C2)F)C3=CC=CC=C3)C(=O)NC4=CC=CC=C4", 40.0),
     "pitavastatin": ("O=C(O)C[C@H](O)C[C@H](O)/C=C/c1c(C2CC2)nc2ccccc2c1-c1ccc(F)cc1", 2.0),

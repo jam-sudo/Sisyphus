@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "sisyphus"
-version = "0.1.0"
-description = "Graph-based PBPK simulation with native uncertainty propagation"
+dynamic = ["version"]
+description = "Oral SMILES-only Cmax prediction with a topology-compiled PBPK track"
 requires-python = ">=3.10"
 license = "MIT"
 authors = [{ name = "Jae Min Yoon" }]
@@ -14,20 +14,20 @@ dependencies = [
     "numpy>=1.24",
     "scipy>=1.10",
     "pyyaml>=6.0",
+    "rdkit",
+    "scikit-learn>=1.3",
+    "xgboost>=2.0",
+    "jsonschema>=4.23,<5",
 ]
 
 [project.optional-dependencies]
 ml = [
-    "xgboost>=2.0",
     "lightgbm>=4.0",
-    "scikit-learn>=1.3",
-]
-chem = [
-    "rdkit",
 ]
 dev = [
     "pytest>=7.0",
     "ruff>=0.4",
+    "pandas>=2.2,<3",
 ]
 sbi = [
     "torch>=2.0",
@@ -41,6 +41,9 @@ sisyphus = "sisyphus.cli:main"
 [tool.ruff]
 line-length = 100
 target-version = "py310"
+# Historical experiment/training utilities are not part of the supported product
+# surface. CI passes the active release/audit scripts explicitly to Ruff.
+extend-exclude = ["scripts"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "W", "UP"]
@@ -53,3 +56,6 @@ markers = [
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/sisyphus"]
+
+[tool.hatch.version]
+path = "src/sisyphus/_version.py"

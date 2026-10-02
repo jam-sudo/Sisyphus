@@ -17,6 +17,10 @@ class TestNCA:
         conc = np.array([5, 5, 5, 5], dtype=float)
         assert auc_trapezoidal(time, conc) == pytest.approx(15.0)
 
+    def test_auc_without_removed_numpy_trapz(self, monkeypatch):
+        monkeypatch.delattr(np, "trapz", raising=False)
+        assert auc_trapezoidal(np.array([0.0, 1.0]), np.array([0.0, 2.0])) == 1.0
+
     def test_terminal_half_life_exponential(self):
         """Known exponential decay: C = 10 * exp(-0.1*t), t½ = ln(2)/0.1 = 6.93"""
         time = np.linspace(0, 50, 100)

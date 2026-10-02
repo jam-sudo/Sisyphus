@@ -85,7 +85,7 @@ def build_oral_cl_grid(
         if sim_sd.solver_success:
             pk_sd = compute_endpoints(sim_sd, observation_node=obs_node, t_min_h=0.0)
             feng = _engine_oral_bioavailability(
-                compiled, params_s, realized_drug_s, pk_sd.auc_0t.mean, obs_node
+                compiled, params_s, realized_drug_s, sim_sd, obs_node
             )
             feng = feng if (feng is not None and feng > 0) else np.nan
             if gi == i1 and pk_sd.t_half is not None:

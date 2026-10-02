@@ -1,24 +1,39 @@
 {
   "version": "v1",
+  "artifact_sha256": "4525b58cdc97a3ff59a8623a341dd83e691ba3b0e8d45040228caaf7da40dc70",
   "target": "log10(Vd/F L/kg)",
   "trained_on": {
-    "dataset_path": "MMPK clinical PK (holdout-excluded)",
-    "sha256": "unknown_legacy"
+    "dataset_path": "data/training/clf_training.csv",
+    "sha256": "02c4048011586fba6d00cb9cd5b61ab1861ecdac54a356719e22acb96f9a671e",
+    "n_drugs_clean": 831
   },
   "feature_schema": {
     "name": "compute_features_v1",
     "n_features": 2057,
     "sha256": "b41dddd78533661b8f4aed86bdb7c5f55d15ed3cd2ad20b39e9100557eda631e",
-    "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, NumHeavyAtoms). See src/sisyphus/descriptors.py::compute_features."
+    "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, MolMR). See src/sisyphus/descriptors.py::compute_features."
   },
-  "trained_at": "unknown_legacy",
+  "trained_at": "2026-09-25T07:07:39.880660+00:00",
   "n_drugs_original": null,
   "n_drugs_excluded": null,
-  "holdout_version": "unknown_legacy",
+  "holdout_version": "N=107 (data/reference/holdout.json)",
   "holdout_metric": {
-    "name": "scaffold_cv_r2",
-    "value": null
+    "name": "five_fold_cv_r2",
+    "value": 0.35324247971848743
   },
-  "hyperparameters": {},
-  "retrained_reason": "unknown_legacy"
+  "hyperparameters": {
+    "n_estimators": 300,
+    "max_depth": 6,
+    "learning_rate": 0.05,
+    "subsample": 0.8,
+    "colsample_bytree": 0.6,
+    "reg_alpha": 1.0,
+    "reg_lambda": 5.0,
+    "min_child_weight": 5,
+    "random_state": 42,
+    "n_jobs": 4,
+    "verbosity": 0,
+    "tree_method": "hist"
+  },
+  "retrained_reason": "Rebuilt from current holdout-excluded CL/F and Vd/F training data"
 }

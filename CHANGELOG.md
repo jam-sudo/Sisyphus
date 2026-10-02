@@ -12,6 +12,103 @@ track `pyproject.toml`.
 
 ## [Unreleased]
 
+### Console preset identity correction (2026-09-25)
+
+- Corrected a mislabeled midazolam preset that encoded a different molecule,
+  restored morphine stereochemistry, and regenerated their displayed predictions.
+  Updated the README examples and the deployed `app/data` mirror; the latter
+  now carries the current N=73 development benchmark. Preset identities and
+  source/deployed parity are regression-checked.
+- Fixed `dose-adjust --help` crashing on an unescaped percent sign and removed
+  an obsolete N=107 CLI benchmark label; all subcommand help screens now have a
+  regression check.
+
+### Development reference identity correction (2026-09-25)
+
+- Restored source-supported stereochemistry for atorvastatin, clarithromycin,
+  entacapone, isotretinoin, and naproxen in `clinical_pk.json`; doses and PK
+  observations are unchanged. Pinned their full InChIKeys in the reference
+  regression check.
+- Regenerated the development residual interval provenance and web presets;
+  a stale reference hash had disabled runtime Cmax intervals. The interval
+  remains development-derived and is not independently calibrated.
+
+### Scientific interpretation correction (2026-09-25)
+
+- Reconciled the failed-experiment summary with the later human-F source audit and
+  replicate-based label-noise estimate. The tested methods remain negative;
+  neither an intrinsic structure-only Cmax ceiling nor F as the dominant human
+  error has been established.
+- The current source-screened N=73 Meta AAFE is 2.8300 on repeatedly used
+  development data. Independent external accuracy is still unmeasured.
+
+### Public-only VDss training source pinned (2026-09-23)
+
+- Rebuilt VDss from 1,055 SHA-pinned public TDC Lombardo compounds after
+  duplicate and development-set exclusion. All seven active fitted models now
+  name exact public training snapshots.
+- On the repeatedly used N=107 development set, Meta AAFE worsened from 2.687
+  to 2.761; Engine and direct ML were unchanged. This is not an independent
+  validation result, and no unconsumed independently curated external cohort
+  is available.
+- Bound the current bootstrap interval to its prediction-cache hash and synced
+  the model-card interval from that artifact to prevent stale evidence.
+
+### Public-only hepatocyte CLint training source pinned (2026-09-23)
+
+- Rebuilt the single-assay CLint model from 996 SHA-pinned TDC hepatocyte
+  compounds after deduplication and 107-compound development exclusion. Only
+  the active VDss model still lacks an exact training-source hash.
+- On the repeatedly used N=107 development set, Meta AAFE worsened from 2.661
+  to 2.687 and Engine AAFE from 3.624 to 3.821. The partially in-sample Meta
+  residual band widened to ×/÷12.39 at nominal 90%. These are development
+  diagnostics, not independent validation.
+
+### Public-only Cmax training source pinned (2026-09-23)
+
+- Rebuilt direct Cmax from 1,028 SHA-pinned Omega rows after excluding 100
+  development compounds. Two active fitted models still lack exact training
+  source hashes.
+- Refreshed the repeatedly used N=107 development benchmark on pinned Linux:
+  Meta AAFE 2.661 (bootstrap 95% CI 2.28–3.13); direct ML AAFE 2.990. This
+  does not establish independent generalization.
+- Recomputed the partially in-sample residual band (90% Meta half-width
+  ×/÷12.16) and all eight web console presets for the new model.
+
+### Public-only Peff training source pinned (2026-09-23)
+
+- Rebuilt Peff from 874 hash-pinned TDC Caco2_Wang rows and replaced its
+  unverified legacy artifact. Three active fitted models still lack exact
+  training-source hashes.
+- Regenerated the repeatedly used development benchmark on the pinned Linux
+  stack: Meta AAFE 2.660 (bootstrap 95% CI 2.28–3.12, N=107). This is not
+  independent validation.
+- Recomputed the partially in-sample development residual band and regenerated
+  all eight web console presets. Source hashes now guard both artifacts against
+  stale model or benchmark data.
+
+### Public-only fup model and provenance (2026-09-23)
+
+- Rebuilt fup v2 from 1,557 SHA-pinned human TDC rows, replacing the artifact
+  fitted with unavailable DrugBank targets. The public external-validation gate
+  continues to reject the historical artifact by its SHA256.
+- Regenerated the then-current repeatedly used N=107 development benchmark and web figures
+  on the pinned Linux stack: Meta AAFE 2.676 (bootstrap 95% CI 2.30–3.14).
+  This was not independent external validation; four other fitted models still
+  lack exact training-source hashes.
+- Fixed the test dependency lock and retained explicit AI reviewer attribution
+  in the historical P0 source-audit records.
+
+### Evidence and product-contract correction (2026-07-14)
+
+- Reclassified N=107 as a repeatedly accessed development benchmark, not an independent holdout;
+  N=28 is a consumed temporal challenge. No independent external AAFE is currently available.
+- Reclassified the former “split-conformal” band as a development empirical-residual interval and
+  separated it from Monte Carlo parameter uncertainty. Historical entries below describe what was
+  claimed at the time and must not be cited as the current validation status.
+- Restricted the supported live product contract to oral SMILES + dose Cmax. IV and observation-
+  informed workflows remain experimental engine capabilities, not validated structure-only outputs.
+
 ### Holdout headline 2.735 → 2.743 — UGT single-path fm fix (2026-07-03)
 
 `build_drug_on_graph` double-allocated UGT tags: a tag present in both the `ugt_enzymes` block

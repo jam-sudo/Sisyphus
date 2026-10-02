@@ -72,14 +72,13 @@ A manifest whose `feature_schema.sha256` does not match the hash computed at loa
 
 ## Registry behavior
 
-`sisyphus.ml.registry.ModelRegistry` enforces the schema as follows:
+`sisyphus.ml.registry.verify_model_artifact` enforces the runtime schema:
 
-- **Manifest missing**: warn `model manifest missing: <path>`. Do not block.
-- **Required field missing**: warn `manifest field missing: <field>`. Do not block.
-- **Feature hash mismatch**: warn `feature schema hash mismatch: expected <x>, got <y>`. Do not block — a model trained on an older feature pipeline will still load but its predictions may be meaningless.
-- **New model registration**: `register()` writes the manifest alongside the model path. Raises `ValueError` if manifest fields are incomplete (so new models must carry full provenance).
+- **Manifest missing or incomplete**: raise `ValueError`; the model cannot load.
+- **Artifact hash or feature hash mismatch**: raise `ValueError`; the model cannot load.
+- **New model manifest**: write a sibling `<model>.meta.json` with all required fields and matching hashes.
 
-This is the warn-only rollout policy. Promotion to hard-error is its own future decision, not part of this cycle.
+`load_manifest` and `validate_manifest` remain available for offline diagnostics.
 
 ## Legacy mini-manifests
 

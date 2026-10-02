@@ -1,6 +1,6 @@
 """Therapeutic Drug Monitoring — Bayesian update via Ensemble Kalman Filter.
 
-Phase 3 of the UDE roadmap (docs/breakthrough_path.md).
+Phase 3 of the UDE research roadmap.
 Replaces importance-sampling in regimen/tdm.py with EnKF to fix particle
 degeneracy documented in TDM v2.1 benchmark (ketorolac ESS=2.5, rivaroxaban
 ESS=1.0 across 15 runs).
@@ -125,7 +125,7 @@ def _simulate_prior(
     """Simulate prior ensemble and extract state + predicted observations."""
     t_total = max(
         max(obs.time_h for obs in observations) + 24.0,
-        regimen.last_dose_time_h + 24.0,
+        regimen.last_dose_end_h + 24.0,
     )
 
     n_obs = len(observations)

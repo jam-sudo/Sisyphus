@@ -5,70 +5,41 @@ charter: A full layer-by-layer (data / engine / ML+meta / validation-UQ) analysi
 
 # Sisyphus — Layered Analysis & Performance-Leap Assessment (2026-06-08)
 
-> Method: five independent deep-dives (data, engine, ML/meta, validation/UQ, plus a decisive
-> decorrelation experiment), each grounded in `dead-ends.md` (44 prior entries) and `diagnosis.md`, each
-> required to pass the **error-decorrelation gate** (|r|<0.5 on per-drug log-Cmax residuals vs every existing
-> track — the only empirically-proven path, the VDss exception) before any claim of a lever. Four new
-> candidate tracks were tested against that gate this session. All four were falsified. The convergence is the
-> result.
+**2026-09-24 correction:** The proposed common bioavailability-F wall (W2)
+was inferred partly from ten noncomparable "literature F" values and is not
+established; see the [source audit](../validation/f_reference_source_audit_2026-09-24.md)
+and current [diagnosis §8/§10](diagnosis.md). The negative outcomes of the
+specific tested tracks remain historical results. Also, the 2.56–2.75 AAFE
+figure below is an estimate of the **existing model's de-noised error** under
+independence/Gaussian assumptions. A perfect latent-Cmax predictor would face
+the estimated label-noise floor of 1.18–1.5, not 2.56–2.75.
+
+> Historical method: separate data, engine, ML/meta, and validation/UQ analyses,
+> followed by an error-decorrelation screen (|r|<0.5 on per-drug log-Cmax
+> residuals against existing tracks). Four candidate tracks failed that
+> development screen. This did not test every possible track or establish
+> independent external accuracy.
 
 ---
 
-## 0. Bottom line up front
+## 0. Current interpretation of the 2026-06-08 tests
 
-1. **The headroom is real, but it is not label noise.** The clinical-Cmax *label-noise floor* is **AAFE ≈ 1.18**
-   (band 1.18–1.5), measured from 14 clean same-drug/same-dose study replicates. Label noise is only **3–16%**
-   of the model's error variance. The dead-ends.md line-32 claim ("residual ≈ experimental + formulation +
-   inter-patient variability") is **quantitatively false for the bulk of the error**. Sisyphus at 2.78 is
-   **model-limited, not label-limited** — there is ~0.70 AAFE of genuine model-side headroom down to the
-   OrBiTo commercial floor (2.08).
-
-2. **But every channel to that headroom is foreclosed — and the reason is now unified.** The single dominant
-   recoverable error mode is **bioavailability-F structural error** (absorption `fa` ⊕ first-pass `Fg`/`Fh`),
-   and it is **shared (correlated) across all four tracks**. This is *why* the decorrelation gate keeps
-   failing: any new track that also lacks an F mechanism re-makes the same directional errors on the same
-   drugs. It is *why* the meta damps the engine to ~18% (DE-43). It is *why* SMILES→F regressors fail (DE-28).
-   It is *why* an absorption recalibration is a flat scalar (DE-42). **The error, not the input, is what must
-   decorrelate — and F-error is everywhere.**
-
-3. **A "leap" expressed as a lower SMILES-only headline AAFE is not available.** This is now exhaustively
-   confirmed: 44 prior dead-ends + 4 fresh gate failures this session, against an externally-verified
-   commercial ceiling (OrBiTo 2.08–2.74; Sisyphus 2.78 already inside the band). Continuing to chase the 2.78
-   number is the one move the evidence forbids.
-
-4. **The genuine, rigor-preserving leaps are reframes of "performance," and they are real:**
-   (a) **correctness** as the durable product (FLUX-1/RBP shipped; D-1 transporter-unit bug; reference-data
-   fixes; ECM/OATP albumin uptake); (b) ~~the measured-input regime as a second operating point~~ —
-   **FALSIFIED 2026-06-08 (DE-48): measured-regime routing *degrades* accuracy** (engine-measured on a
-   representative N=93 is ~3.84, *worse* than the SMILES meta 2.78; the "2.33 floor" was a clean-10 artifact;
-   the meta correctly damps the engine even with measured inputs — DE-43 in the measured regime); (c)
-   **calibrated, conditional honesty** (conformal PI shipped + per-subclass advisory flags); (d) the only path
-   to a materially higher number is a **new F-orthogonal measured data modality** (in-vitro
-   permeability/dissolution/transporter kinetics, or measured F) — a data-acquisition program, which is exactly
-   the field-accepted escape (OrBiTo's expert-harmonised F reaches AAFE 1.75).
+1. Four tested candidate tracks failed their development error-decorrelation gates. This is evidence against those implementations, not a proof that future SMILES-only improvement is impossible.
+2. Fourteen same-drug/same-dose replicate pairs suggested a single-label noise AAFE near 1.18 under iid normal log-error assumptions. The estimate is small and model-dependent; it is not an independently validated accuracy ceiling.
+3. The proposed shared bioavailability-F mechanism is **unverified** after the 2026-09-24 source audit invalidated the ten-drug absolute-F reference set. Correlated Cmax errors alone do not identify the responsible PK parameter.
+4. The reported AAFE values were obtained on repeatedly used development cohorts. A matched, untouched external cohort is needed before ranking Sisyphus against other PBPK systems or claiming a performance bound.
 
 ---
 
-## I. The unified cross-layer diagnosis
+## I. Historical cross-layer hypotheses
 
-Sisyphus's accuracy is bounded by **three nested walls**, in order of how deep they sit:
+| Hypothesis | Current evidence status |
+| --- | --- |
+| Limited CLint prediction | Poor performance on the tested datasets and splits; no proof of an intrinsic universal R² floor. |
+| Shared bioavailability-F error | Original ten-drug F anchor invalid; requires matched human oral/IV observations. |
+| Meta co-calibration | Several tested single-track interventions were damped or worsened the fixed blend; no claim about every possible intervention. |
 
-| Wall | What it is | Confirmed by |
-|---|---|---|
-| **W1 — CLint target-noise** | hepatocyte CLint R²≈0.24 is intrinsic (interlab CV up to 99.8%) | DE-14/44, Bowman-Benet 2019, external literature review |
-| **W2 — bioavailability-F structural error** | the engine's `fa·Fg·Fh` map is wrong in a **bidirectional**, per-drug way no single knob reconciles; shared across tracks | DE-41/42/43, FLUX-1, this session's 4 gate failures |
-| **W3 — meta co-calibration** | the fixed-weight geometric blend damps any single-track change to ~18% (r>0.986 co-calibration + a disagreement penalty that *down-weights the engine on exactly the drugs a fix targets*) | DE-23/24/25/26/43, this session's meta-math derivation |
-
-The label-noise result (this session) adds the crucial fourth fact: **W4 does not exist** — there is no
-label-noise wall at 2.0 to hit. So the 2.78 is W1⊕W2 propagated through W3, not an irreducible property of the
-target. The headroom is real; the walls are what block it.
-
-The deepest, most actionable insight: **W2 is the binding wall, and W3 is what makes it un-attackable from any
-single track.** F-error is recoverable in principle (the field reaches F AAFE 1.75 with expert input), but in
-Sisyphus it (i) cannot be learned from SMILES (DE-28, circular with logP/the same molecular inputs), (ii)
-cannot be recalibrated (DE-42, `ka` linear → flat scalar), (iii) cannot propagate through the engine (DE-43,
-meta-damped), and (iv) cannot be added as a regressor track (this session, fails the gate because it shares the
-F-blindness). The only inputs that break the symmetry are **measured/experimental** and **F-orthogonal**.
+The sections below preserve the dated experiments. Their causal and ceiling interpretations are subject to these corrections.
 
 ---
 
@@ -80,8 +51,7 @@ F-blindness). The only inputs that break the symmetry are **measured/experimenta
   (**1,128 drugs, all with measured fup+clint+dose+cmax_obs** — verified measured, not predicted).
 - **Label-noise floor = AAFE 1.18** (14 clean replicate pairs; between-study geomean fold 1.261 → σ_label 0.090;
   external anchor: FDA intra-subject Cmax CV 21.7%±8.8%). Variance decomposition (σ_total=0.557 at AAFE 2.784):
-  label noise is 2.6–15.7% of variance → a *perfect* model would still score AAFE 2.56–2.75. **Headroom to the
-  label floor is tiny; headroom to OrBiTo (2.08) is real and model-side (~0.70 AAFE).** *(Confidence: high on
+  label noise is 2.6–15.7% of variance → the *current model's de-noised residual* would be estimated at AAFE 2.56–2.75 under independent Gaussian errors. A perfect latent-Cmax predictor would instead approach the label-noise floor. **Headroom to OrBiTo (2.08) is therefore plausibly model-side, though its exact size is uncertain.** *(Confidence: high on
   direction, medium on the point — N=14 replicates.)*
 - **Confirmed reference-data errors (correctness fixes, primary-source-adjudicated):** oxybutynin ref
   0.001→**0.008** mg/L (FDA Ditropan single-dose ~8 ng/mL, ~8× decimal/unit slip; defensible 8–12 ng/mL band); selegiline
@@ -94,10 +64,12 @@ F-blindness). The only inputs that break the symmetry are **measured/experimenta
 - **FLUX-1 (E-cap-at-0.5 double-count) and RBP (`fu_b=fup/Rb`) fixes are in-tree and verified canonical**
   (`E = fu_b·CLint/(Q+fu_b·CLint)`, →1.0). These were the two known textbook deviations; both closed.
 - **Open structural items (correctness, meta-damped unless surfaced as a new track):**
-  - **D-1 — `ActiveTransportFluxSpec` Michaelis-Menten output has no MW/time unit closure** (`flux.py:726-736`;
-    the code comment admits "rate is in arbitrary units… IVIVE handles unit conversion"). **Latent but
-    load-bearing**: it is the class through which any OAT/OCT/MATE renal-secretion or gut-P-gp track must flow.
-    Genuine bug; fix is a dedicated transporter `ivive_scaling` with explicit `×MW×60/1e6`.
+  - **D-1 — `ActiveTransportFluxSpec` has no independently pinned absolute-magnitude convention** (`flux.py`).
+    Its current `abundance × ivive_scaling` magnitude is calibration-bundled; the
+    direction, mass conservation, and solver parity were subsequently checked.
+    No production graph uses this edge. A transporter-specific Jmax/abundance
+    basis and validation are needed before changing its scale; see the later
+    [inspection](experiment-log.md).
   - **D-2 — gut first-pass uses full villous blood flow** (58.5 L/h), not the permeability-limited **Qgut**
     (Yang 2007, ~3–18 L/h). Systematically under-extracts gut CYP3A; currently calibration-entangled (the
     ×0.652 gut-CYP3A re-anchor compensates). Touch with care (DE-42 bidirectional-first-pass contributor).
@@ -186,7 +158,8 @@ channel*, which by definition is not SMILES.
 ### V.1 Leap A — Correctness as the product (ship; durable; not headline)
 Per correctness-over-benchmark. Concrete, ready:
 - **Reference-data fixes** (oxybutynin ~8×, selegiline 2×) — primary-source-adjudicated.
-- **D-1 transporter-MM unit closure** — a real latent bug; prerequisite for any transporter physics.
+- **D-1 transporter scale** — a later inspection reclassified this as an
+  unvalidated design convention, not a confirmed production bug.
 - **ECM/OATP albumin-mediated uptake re-anchor** — the one un-foreclosed *mechanistic* lever (Li/Benet 2020,
   ~1.9–2.0 fold, no empirical scaling), already FLUX-1-deferred (the xfailed pravastatin/pitavastatin
   statins). Production-breadth value; near-zero on the 107-holdout (only pravastatin, inviolable).
@@ -240,7 +213,7 @@ four tracks AND the pH-solubility term (not logP) carries the signal.
 |---|---|---|---|---|
 | ~~—~~ | ~~Measured-regime routing~~ — **❌ FALSIFIED (DE-48): degrades accuracy, do not build** | — | gate FAILED: engine-measured N=93 ~3.84 > meta 2.78; meta correctly damps the engine | — |
 | 1 | **Reference fix: oxybutynin** (0.001→0.008; FDA single-dose ~8× error) + flag **selegiline** (uncertain — defensible ~0.002, but 0.001 within the noisy low tail; leave or annotate) | Correctness (Leap A) | primary-source only, never toward the model; **needs holdout-reference sign-off + CI regen** (touches the inviolable yardstick) | S |
-| 2 | **D-1 transporter-MM unit closure** | Correctness (Leap A) | identity-blind random-rename invariance; **latent — 0 production YAML uses `active_transport`, zero blast radius**; coordinate with in-flight paracellular work (flux.py is dirty) | S |
+| 2 | **D-1 transporter scale** (superseded) | Design/validation | Define a measured Jmax and transporter-abundance basis before changing the latent `active_transport` scale; no production graph uses this edge. | — |
 | 3 | **Per-subclass advisory flags** (acid/high-PPB, high-first-pass base) | Product honesty (Leap C) | zero AAFE effect; pure reporting | S |
 | 4 | **ECM/OATP albumin-uptake re-anchor** (un-xfail the statins) | Correctness/breadth (Leap A) | non-holdout OATP substrate for re-anchor; holdout bit-identical | M |
 | 5 | **pKa-aware pH-solubility dose-number gate** | Falsification (Leap V.5) | pre-registered |r|<0.5 AND pH-term carries signal; else → next DE | S |

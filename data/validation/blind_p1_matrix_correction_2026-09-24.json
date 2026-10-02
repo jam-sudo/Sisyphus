@@ -1,0 +1,72 @@
+{
+  "classification": "post-label correction to consumed AI-assisted P1; development-only, not External Holdout V1",
+  "historical_results_sha256": "76bb4b082acfe7978b2794462bf1f1c38ef9138edd1c3fd83cc54de15db9bdb9",
+  "sealed_labels_sha256": "942fcc598b8749a5869a52d607d272e9be4b65cee7e89a74c70b1295bf9c6936",
+  "predictions_sha256": "4b378cab34f2f14074dcbd8726cc646747e1df1f51d1263cfb336ab446624aee",
+  "second_pass_report_sha256": "8b4f2f5c773506f25893ce00100aa571ddfa53a2f1f24f427f85d6c9236cea98",
+  "primary_source": "https://doi.org/10.1016/S1473-3099(21)00252-8",
+  "matrix_mismatch": {
+    "arm_id": "arm_05a",
+    "previous_label": "parent plasma Cmax",
+    "original_report": "parent whole-blood Cmax",
+    "action": "exclude from any plasma-only analysis"
+  },
+  "additional_uncertainty": {
+    "arm_id": "arm_08a",
+    "reason": "5 mg/capsule versus 180 mg administered; fasted PK analysis n=11 after vomiting exclusions; statistic header ambiguous"
+  },
+  "method": {
+    "unit": "one arm per compound",
+    "error": "absolute natural-log(predicted/observed)",
+    "aafe": "exp(mean absolute log error)",
+    "bootstrap": "paired compound resampling with replacement",
+    "seed": 20260924,
+    "n_bootstrap": 100000,
+    "ci_percentiles": [
+      2.5,
+      97.5
+    ]
+  },
+  "historical_all_eight_invalid_for_parent_plasma": true,
+  "plasma_matrix_only_development_sensitivity_excluding_arm_05a": {
+    "n_compounds": 7,
+    "meta_aafe": 6.628986538926105,
+    "meta_ci95": [
+      3.102031683579731,
+      13.840368028786775
+    ],
+    "ml_aafe": 5.248766185893294,
+    "ml_ci95": [
+      2.218498848767496,
+      13.966875417793501
+    ],
+    "paired_meta_ml_aafe_ratio": 1.2629609138891196,
+    "paired_ratio_ci95": [
+      0.9027407118784767,
+      1.7502027004950018
+    ]
+  },
+  "additional_sensitivity_excluding_arm_05a_and_uncertain_arm_08a": {
+    "n_compounds": 6,
+    "meta_aafe": 6.563130879644823,
+    "meta_ci95": [
+      2.7337028161551826,
+      15.34250314966653
+    ],
+    "ml_aafe": 5.844350495375239,
+    "ml_ci95": [
+      2.1657218524767385,
+      17.342332200236196
+    ],
+    "paired_meta_ml_aafe_ratio": 1.1229872138637764,
+    "paired_ratio_ci95": [
+      0.8267745997602287,
+      1.4802201055776545
+    ]
+  },
+  "limitations": [
+    "All remaining arms lack original-source confirmation of parent-moiety dose basis.",
+    "Seven formulations are not explicitly labelled immediate release in the source.",
+    "This consumed, nonconsecutive AI-assisted pilot cannot estimate population accuracy or satisfy External Holdout V1."
+  ]
+}

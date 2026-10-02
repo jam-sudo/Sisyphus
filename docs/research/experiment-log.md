@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-07-03
+last_updated: 2026-09-25
 parent: ../../README.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -9,6 +9,1140 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 Reverse-chronological. The project README carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
 
 ---
+
+## 2026-09-25 (cont.) — Bisoprolol hemifumarate dose-basis correction
+
+The [original source and workbook audit](../validation/development_bisoprolol_dose_basis_2026-09-25.md) reconciled bisoprolol's 5–40 mg hemifumarate tablet arms with parent-structure model inputs. The fitted 10 mg aggregate now uses 8.48673 mg parent; all four exploratory dose arms were converted, measured Cmax/AUC retained, and the stale PBPK-feature row removed. Fitted counts remain 906/900/831. Direct Cmax scaffold-CV AAFE changed **3.3889 → 3.3821**. On consumed N=73, direct ML changed **3.0780 → 3.0490**, Meta **2.8273 → 2.8300** (conditional CI **2.3038–3.5220**), and the paired Meta/ML ratio is **0.9282** (CI **0.8157–1.0533**). The original numeric tables and second study's batch composition remain unavailable. This is dose-integrity work, not external validation.
+
+---
+
+## 2026-09-25 (cont.) — Orphenadrine hydrochloride dose-basis correction
+
+The [original study and Omega workbook](../validation/development_orphenadrine_dose_basis_2026-09-25.md) identify a 100 mg orphenadrine hydrochloride tablet with parent orphenadrine measured in plasma. The fitted dose and single exploratory arm now use 88.08135 mg parent equivalent; Cmax and AUC were retained, and the stale PBPK-feature row was removed. The original numeric article table remained unavailable. Fitted counts stay 906/900/831. Direct Cmax scaffold-CV AAFE changed **3.3839 → 3.3889**. On consumed N=73, direct ML changed **3.1085 → 3.0780**, Meta **2.8485 → 2.8273** (conditional CI **2.2979–3.5289**), and the paired Meta/ML ratio is **0.9186** (CI **0.8081–1.0419**). This is dose-integrity work, not external validation.
+
+---
+
+## 2026-09-25 (cont.) — Benazepril hydrochloride dose-basis correction
+
+The [source follow-up](../validation/development_benazepril_dose_basis_2026-09-25.md) reconciled Omega's 10 mg benazepril hydrochloride capsule with the parent SMILES and a regulatory salt-strength convention. Its fitted dose became 9.20898 mg parent equivalent; Cmax/AUC were retained, and the stale PBPK-feature row was removed. The original numeric article table and capsule batch record were unavailable, so those source details remain workbook-based. Fitted counts remain 906/900/831. Direct Cmax scaffold-CV AAFE changed **3.3932 → 3.3839**. On the consumed N=73, direct ML changed **3.0024 → 3.1085**, Meta **2.7965 → 2.8485** (conditional CI **2.3195–3.5466**), and the paired Meta/ML ratio is **0.9164** (CI **0.8099–1.0350**). The dose correction is retained despite the development regression; none of these values is independent accuracy evidence.
+
+---
+
+## 2026-09-25 (cont.) — Almitrine bismesylate dose-basis correction
+
+The [original single-dose study](../validation/development_almitrine_dose_basis_2026-09-25.md) explicitly reports 25/50/100/200 mg **bismesylate** capsules while measuring parent almitrine in plasma. All four exploratory doses and the fitted 25 mg aggregate were converted to parent mass using ChEBI's 477.563/669.777 molecular-weight ratio; the stale PBPK-feature row was removed. Fitted counts remain 906/900/831. Direct Cmax scaffold-CV AAFE changed **3.3827 → 3.3932**. On consumed N=73, direct ML changed **2.9925 → 3.0024**, Meta **2.8053 → 2.7965** (conditional CI **2.2672–3.4882**), and the paired Meta/ML ratio is **0.9314** (CI **0.8232–1.0537**). This is data-integrity work, not an external accuracy result.
+
+---
+
+## 2026-09-25 (cont.) — Givinostat paired salt-mass normalization
+
+The [source follow-up](../validation/development_givinostat_mass_basis_2026-09-25.md) reconciled Furlan et al. 2011 Table 2's mass and molar Cmax/AUC values with the FDA hydrochloride-monohydrate equivalence and a later Italfarmaco ITF2357 capsule protocol. All five exploratory arms and the fitted aggregate now use paired parent-mass dose, Cmax, and AUC; the stale PBPK-feature row was removed. The 2011 capsule batch and assay calibration records remain unavailable, so the dose convention is source-linked inference. The Cmax/dose targets, derived CL/F table, Cmax model hash, development benchmark, and interval are unchanged.
+
+---
+
+## 2026-09-25 — Acoramidis hydrochloride dose-basis correction
+
+The [source adjudication](../validation/development_acoramidis_dose_basis_2026-09-25.md) uses the PMDA's AG10-001 study record and the original article's dose-normalized Cmax and AUC to show that its 50 mg arm is hydrochloride mass but the fitted structure requires 44.4277 mg free-acid equivalent. The 50 mg fitted aggregate and four exploratory arms were corrected; the stale PBPK-feature row was removed. Cmax/CLF/VDF fitted counts remain 906/900/831. Direct Cmax scaffold-CV AAFE changed **3.3699 → 3.3827**. On consumed N=73, Meta AAFE changed **2.8158 → 2.8053** (conditional CI **2.2829–3.4882**), and direct ML **2.9848 → 2.9925**. The paired Meta/ML AAFE ratio is **0.9374** (CI **0.8255–1.0625**). These small shifts are version bookkeeping, not external evidence.
+
+---
+
+## 2026-09-24 (cont.) — Methenamine concentration-basis quarantine
+
+The [source follow-up](../validation/development_methenamine_label_quarantine_2026-09-24.md) found that Omega's 1 g methenamine hippurate tablet is 438.96 mg parent by formula, but its reported serum Cmax and AUC together with the original paper's CL and V imply a shared **1 g concentration/dose basis**. An initial mass-only conversion was challenged by a separate AI-assisted read-only audit and retracted before commit. Methenamine was quarantined from Cmax, CL/F, and Vd/F training while the full numeric table and assay basis remain unavailable. Direct Cmax fitted N changed **907 → 906**, CL/F **901 → 900**, Vd/F **832 → 831**; scaffold-CV AAFE changed **3.3439 → 3.3699**. On consumed N=73, Meta AAFE changed **2.8311 → 2.8158** (conditional CI **2.2881–3.5022**) and direct ML **3.0398 → 2.9848**. These shifts are not independent accuracy evidence.
+
+---
+
+## 2026-09-24 (cont.) — Four more source-supported salt-dose corrections
+
+A workbook-wide salt-tag triage identified 269 fitted names requiring source-by-source dose-basis review. The [additional salt-dose follow-up](../validation/development_additional_salt_dose_followup_2026-09-24.md) documents metformin, bupropion, pyridostigmine, and trospium corrections; cysteamine is an explicit counterexample whose original study already reported parent mass. The raw Omega source stayed pinned. Direct Cmax N=907 and CL/F–Vd/F fitted counts 901/832 did not change. Cmax scaffold-CV AAFE changed **3.3382 → 3.3439**; CL/F row-CV R² **0.2060 → 0.2102**, Vd/F **0.3439 → 0.3528**. On the consumed N=73 development benchmark, direct ML AAFE changed **3.0737 → 3.0398**, Meta **2.8546 → 2.8311** (conditional 95% bootstrap CI **2.3057–3.5251**), and the paired Meta/ML ratio is **0.9313** (CI **0.8201–1.0541**). The development-residual half-width is **9.84×**, with **66/73** consumed-label coverage. These figures are not independent accuracy evidence.
+
+---
+
+## 2026-09-24 (cont.) — Correct two salt doses and rebuild CL/F–Vd/F from screened source
+
+An independent AI-assisted source check found that the fitted lisdexamfetamine
+30 mg and zofenopril 60 mg doses were dimesylate and calcium-salt masses,
+respectively. Parent-equivalent doses were applied to the Cmax recipe and the
+exploratory MMPK arms, using regulatory equivalences; the two stale PBPK-feature
+rows were removed. The [source follow-up](../validation/development_salt_dose_and_clf_screen_followup_2026-09-24.md)
+also records five candidate names whose original numeric tables remained
+inaccessible. These are not independently verified labels.
+
+Rebuilding `clf_training.csv` from the already screened MMPK source exposed
+120 stale rows previously left in CL/F–Vd/F: 114 administered/analyte
+mismatches and six blood-matrix entries. Fitted CL/F and Vd/F counts changed
+**1009 → 901** and **936 → 832**; row-CV R² changed **0.1973 → 0.2060**
+and **0.3686 → 0.3439**. Direct Cmax remains N=907, with scaffold-CV AAFE
+**3.3240 → 3.3382**. On the consumed N=73 development benchmark, direct ML
+AAFE changed **3.1205 → 3.0737** and Meta **2.8544 → 2.8546**
+(conditional 95% bootstrap CI **2.3270–3.5539**); paired Meta/ML ratio
+**0.9287** (CI **0.8167–1.0530**). The empirical 90% residual interval is
+/×**10.20**, covering **66/73 (90.4%)** development labels. None establishes
+external accuracy.
+
+---
+
+## 2026-09-24 (cont.) — Quarantine dolasetron active-metabolite training labels
+
+The pinned Omega workbook labels seven oral dolasetron arms as parent Cmax,
+although their cited source reports that parent plasma concentrations were too
+sparse for PK analysis and analyzes reduced dolasetron instead. The 200 mg
+aggregate (578.1 ng/mL) was removed from the direct Cmax fit, all seven doses
+from both exploratory MMPK snapshots, and the derived PBPK-feature row.
+Because CL/F and Vd/F training used AUC and half-life from the same study, the
+dolasetron row was also removed from their fitted source and both models were
+retrained. The [source adjudication](../validation/development_dolasetron_analyte_followup_2026-09-24.md)
+records the arm and evidence.
+
+Direct Cmax N is **907**; five-fold scaffold CV AAFE changed **3.3652 →
+3.3240**. CL/F and Vd/F fits are N=**1009** and **936**, with five-fold row-CV
+R² **0.1973** and **0.3686**. On the repeatedly accessed development N=73,
+ML AAFE changed **3.0343 → 3.1205** and Meta **2.8405 → 2.8544** (conditional
+95% CI **2.3225–3.5553**); paired Meta/ML ratio **0.9147** (CI
+**0.8050–1.0355**). The 90% development-residual interval is now /×**10.79**,
+covering **67/73 (91.8%)** consumed labels. The development regression is
+retained to remove the wrong target; these results are not independent validation.
+
+---
+
+## 2026-09-24 (cont.) — Pin both Omega Cmax source workbooks
+
+The current 908-row direct Cmax fit reconciles to 899 numerical aggregates in
+Omega's original `approved.xlsx`, eight in `approved_2024.xlsx`, and one
+separately corrected felbamate row. The 2024 supplement was missing from the
+model's upstream-source metadata. Both pinned workbook URLs and SHA256 values
+are now recorded; see the [coverage audit](../validation/development_omega_cmax_workbook_coverage_2026-09-24.md).
+The fitted CSV and model bytes are unchanged. This improves reproducibility,
+not external accuracy evidence.
+
+---
+
+## 2026-09-24 (cont.) — Quarantine voclosporin whole-blood Cmax training label
+
+The pinned Omega workbook's voclosporin 0.25–4.5 mg/kg Cmax values match the
+FDA review of study ISA03-10, and the EMA assessment identifies the study's
+concentrations and Cmax as whole blood. The fitted 18.07 mg/32 ng/mL aggregate,
+five exploratory dose rows in each expanded MMPK snapshot, and one derived
+PBPK-feature row were removed; the raw Omega source remains pinned. See the
+[source adjudication](../validation/development_voclosporin_training_matrix_2026-09-24.md)
+and commit `eb1d257`.
+
+The direct Cmax fit now has **908** rows. The former five-fold row CV AAFE moved
+**3.359 → 3.369**. The recipe now reports five-fold Murcko-scaffold CV AAFE
+**3.365** (R² **0.366**, 649 distinct scaffolds), without changing the fitted
+model hash. On the repeatedly used N=73 development set, direct ML AAFE moved
+**3.0418 → 3.0343** and Meta AAFE **2.8496 → 2.8405** (conditional 95%
+bootstrap CI **2.3135–3.5387**); the paired Meta/ML ratio is **0.9361**
+(**0.8266–1.0569**). The development-residual 90% half-width is **9.97×**
+with **67/73 (91.8%)** consumed-set coverage. These are source-screening
+diagnostics, not independent external validation.
+
+---
+
+## 2026-09-24 (cont.) — Retract the whole-blood arm from P1 plasma diagnostics
+
+An independent AI-assisted source re-review of all eight consumed P1 arms
+found that `arm_05a`'s original M5717 report measured Cmax in **whole blood**,
+while the sealed label and first-pass P1 result called it plasma. The numeric
+table transcription was correct, but the analyte matrix disqualifies that arm
+from a plasma benchmark. The old N=8 AAFE is retained as a historical,
+invalid-for-plasma calculation. On the frozen predictions, excluding that arm
+gives N=7 Meta **6.629**, direct ML **5.249**, paired AAFE ratio **1.263**
+(95% CI **0.903–1.750**). Excluding the additionally dose/statistic-uncertain
+`arm_08a` gives N=6 Meta **6.563**, direct ML **5.844**, ratio **1.123**
+(95% CI **0.827–1.480**). All remaining arms still lack explicit parent-moiety
+dose-basis evidence; this remains a consumed AI-assisted diagnostic, not V1.
+See [source review](../../data/validation/blind_p1_source_second_pass_2026-09-24.json)
+and [corrected calculations](../../data/validation/blind_p1_matrix_correction_2026-09-24.json).
+
+---
+
+## 2026-09-24 (cont.) — Re-screen PMDA index identities after salt correction
+
+On the pinned 2020–2025 PMDA English index (174 rows, 152 distinct names), the
+current salt-parent name gate found 45 repository hits. Eleven further names
+were ambiguous multi-component strings; of 96 queried single names, PubChem
+resolved 38. Structure normalization found 21 repository hits versus three
+hits from raw PubChem keys, leaving 17 provisional identity nonhits and 58
+unresolved lookups. Fifty-four unresolved names contain recombinant or
+SARS-CoV-2 wording. No clinical arm or Cmax value was inspected, and no new
+independent cohort was established.
+
+---
+
+## 2026-09-24 (cont.) — Correct older FDA holdout identity screen
+
+The FDA 1985–2014 feasibility screen's 145 provisional structure nonhits were
+overstated: raw PubChem InChIKeys for salts were compared with salt-stripped
+repository keys. Re-screening the same 158 exact-name nonmatches resolved 150;
+repository `ik14()` normalization found 131 exclusion hits, and parent-name
+matching removed three more, leaving at most 16 provisional identity nonhits
+and eight unresolved lookups. Ten of the 12 previously source-reviewed sample
+members are structure hits, one is a salt-parent name hit, and one remains
+unresolved. The external-holdout audit now catches common salt-name aliases;
+no Cmax was scored and no V1 cohort was established.
+
+---
+
+## 2026-09-24 (cont.) — Chiral fingerprint ablation after label correction
+
+On the corrected 1,028-row Cmax training table, a paired five-fold Murcko
+scaffold CV compared the shipped 2,048-bit radius-2 Morgan fingerprint with
+the same fingerprint using `includeChirality=True`; the nine descriptors and
+XGBoost hyperparameters were unchanged. Feature-vector uniqueness rose from
+1,003 to 1,025, but AAFE moved **3.310 → 3.334**. The chiral/baseline AAFE
+ratio was **1.007** (95% scaffold-group bootstrap CI **0.986–1.030**; 10,000
+resamples, seed 20260924). The interval spans parity and the point estimate
+is worse. Do not change the production feature schema on this evidence.
+This internal CV is not an external Cmax validation.
+
+## 2026-09-24 (cont.) — Correct one Omega Cmax unit and rebuild public artifacts
+
+The pinned Omega row for a single 600 mg felbamate study stored 0.0089 mg/L.
+[Primary-source adjudication](../validation/development_felbamate_source_correction_2026-09-24.md)
+supports 8.9 mg/L: the paper reports a peak of 8.9 on a µg/mL scale, and its
+600 mg dose, AUC, and CL/F are inconsistent with an ng/mL interpretation by
+three orders of magnitude. The raw Omega snapshot remains pinned; the public
+fitted-row recipe applies one guarded correction and the direct Cmax model was
+retrained without changing features or hyperparameters.
+
+Five-fold row CV AAFE moved **3.275 → 3.237**. On the same 73-compound
+repeatedly accessed development set, direct ML AAFE moved **3.255 → 3.377**
+and Meta AAFE **2.839 → 2.885** (conditional bootstrap 95% CI 2.337–3.611).
+The development-residual 90% Meta half-width is 9.49× with 89.0% consumed-set
+coverage. The higher development AAFE is reported rather than used to reject
+a source-backed label correction. These diagnostics provide no new external
+generalization evidence; External Holdout V1 remains unscored.
+
+## 2026-09-24 (cont.) — Retract the ten-drug absolute-F diagnosis
+
+[Source audit](../validation/f_reference_source_audit_2026-09-24.md) found that
+the earlier ten-reference table mixed human absolute F with absorption,
+relative F, animal values, and context-mismatched patient data. Therefore the
+10/10 F under-call, median engine/reference ratio 0.46–0.51, and N=10 measured-F
+Cmax gain are **withdrawn as validation claims**; dated entries below record
+the historical experiments only. Three regulatory-label human absolute-F
+references remain as illustrative unmatched diagnostics: diclofenac 0.98,
+sildenafil 0.42, quinine 0.20–0.23 (engine/reference). On the two label-backed
+point-F examples, the paired measured-input engine AAFE is 4.083 without F and
+2.619 with F; N=2 cannot establish an accuracy effect. The separate N=10
+measured-fup/CLint probe scores 5.968 versus 6.708 SMILES-only in the current
+local environment. Neither probe is an external Cmax validation. Also, comparing
+predicted systemic CL to literature CL/F cannot isolate F: CL/F is apparent
+oral clearance, not measured systemic CL. No production model changed.
+
+---
+
+## 2026-09-24 (cont.) — Recheck F diagnosis with the current converged exposure path
+
+`scripts/run_f_decomposition.py` still calculated F from separate 24-hour oral
+and IV AUCs, while production `predict(compute_f_engine=True)` now continues
+both trajectories until their AUC ratio converges. The diagnostic now calls
+that production path. On the current local environment, its ten illustrative
+measured-fup/CLint drugs give median engine-F/literature-F **0.51**, versus
+**0.49** from the old 24-hour calculation on the same stack; all ten ratios
+remain below one, although diclofenac is **0.98**. The literature F values are
+still approximate and not citation-curated, so this is a directional model
+diagnostic, not a validated absolute-F benchmark. Model code, fitted weights,
+and the Cmax headline did not change. Colima was not used.
+
+---
+
+## 2026-09-24 (cont.) — Match ketoconazole to an original fasted tablet arm
+
+The scored ketoconazole 200 mg / approximately 3.5 mg/L value came from a fed
+regulatory-label summary. [Huang et al. 1986](https://doi.org/10.1128/AAC.30.2.206),
+Table 2, reports a single overnight-fasted 200 mg tablet arm in 23 healthy men
+with arithmetic mean parent-plasma Cmax **4.22 ± 2.47 mg/L**. We replaced the
+development reference with this exact arm; fitted model weights are unchanged.
+The study provided lunch about 3–4 hours after dosing, so the arm still does
+not meet External Holdout V1's stricter ≥4-hour postdose fasting rule. See the
+[source adjudication](../validation/development_ketoconazole_fasted_arm_2026-09-24.md).
+
+On the same N=73 consumed development set, Meta AAFE **2.8322 → 2.8395**
+(conditional bootstrap CI **2.3011–3.5561**), Engine **3.8718**, direct ML
+**3.2549**. The score moves because the observed label changed, not because
+the model changed. This is not external validation. Colima was not used.
+
+---
+
+## 2026-09-24 (cont.) — Replace secondary indomethacin arm with regulatory primary data
+
+The scored indomethacin 25 mg / 1.54 mg/L value could be traced only to
+DrugBank's summary, not its original study. A [Health Canada product
+monograph](https://pdf.hres.ca/dpd_pm/00073611.PDF), section 14.2, reports a
+single fasted 50 mg dose as two INDOCID 25 mg capsules in 12 healthy adult men.
+The reference product's parent-plasma Cmax arithmetic mean is 3107 ng/mL
+(3.107 mg/L; CV 35.3%). We used that exact arm and upgraded its provenance to
+gold. The original 25 mg value may still be valid for another formulation; it
+is no longer the scored arm. See the [source adjudication](../validation/development_indomethacin_primary_arm_2026-09-24.md).
+
+The N=73 repeatedly accessed development Meta AAFE is **2.8322** (conditional
+bootstrap 95% CI **2.2980–3.5446**), Engine **3.8619**, direct ML **3.2466**.
+The slight score movement follows the changed reference and dose; no model
+weights changed, and this is not external validation. Colima was not used.
+
+---
+
+## 2026-09-24 (cont.) — Quarantine progesterone repeat-dose peak; correct rifabutin label statistics
+
+The PROMETRIUM 100 mg / 17.3 ng/mL mean followed five daily doses, not a
+single dose, and its fasting status was not stated. The scored progesterone
+row and a separately wrong 200 mg FDA extraction were quarantined. Rifabutin's
+single 300 mg / 375 ng/mL mean was retained; its FDA extraction had the wrong
+subject count and SD. See [source
+adjudication](../validation/development_progesterone_rifabutin_2026-09-24.md).
+The obsolete static FDA builder, which only failed on the adjudicated artifact,
+was removed along with its dedicated overwrite-guard test.
+
+On the reduced **N=73** repeatedly used development set, Meta AAFE
+**2.8812 → 2.8319** (conditional bootstrap CI **2.2980–3.5442**), Engine
+**3.8614**, direct ML **3.2462**. The paired Meta/ML ratio interval
+**0.7601–0.9956** is below 1 only conditional on the selected system and
+source exclusions; it is not independent superiority evidence. The score
+improves because a high-error row was removed, not because the model changed.
+Colima was not used.
+
+---
+
+## 2026-09-24 (cont.) — Replace lamivudine repeated-dose label arm; separate mercaptopurine formulations
+
+Lamivudine's scored 150 mg / 1.40 µg/mL peak was incorrectly called a single
+dose; the label reports it during twice-daily combination therapy. We replaced
+it with the label's directly reported single 300 mg / 2.6 µg/mL normal-renal
+stratum. Mercaptopurine's scored 69 ng/mL mean belongs to the tablet label;
+the separate 93 ng/mL median belongs to PURIXAN suspension. See [source
+adjudication](../validation/development_lamivudine_mercaptopurine_2026-09-24.md).
+
+On the unchanged **N=74** repeatedly used development set, Meta AAFE
+**2.8841 → 2.8812** (conditional bootstrap CI **2.3378–3.6002**), Engine
+**3.9096**, direct ML **3.2687**. Fitted models were unchanged. The minor score
+movement is a reference correction, not an independent accuracy improvement.
+Colima was not used.
+
+---
+
+## 2026-09-24 (cont.) — Correct ketorolac salt dose and exact peak; locate brincidofovir control arm
+
+The ketorolac 10 mg input was tromethamine salt mass while its SMILES is the
+free acid. The label's observed single-dose peak is 0.87 µg/mL; the separate
+1.05 µg/mL FDA-extraction value was simulated steady state. The parent-equivalent
+input is now 6.781701 mg. Brincidofovir's unchanged 251 ng/mL was traced to
+the fasted, unboosted 100 mg control period of FDA Study CMX001-120. A read-only
+second-model AI source review confirmed the previous three-drug batch and exposed
+two over-specific donepezil wording claims, which were removed. See [source
+adjudication](../validation/development_ketorolac_brincidofovir_2026-09-24.md).
+
+On the unchanged **N=74** development set, Meta AAFE **2.8657 → 2.8841**
+(conditional bootstrap CI **2.3413–3.6063**), Engine **3.9136**, direct ML
+**3.2719**. The paired Meta/ML ratio CI **0.7686–1.0043** still crosses 1.
+Fitted models were unchanged; this is not independent external validation.
+Colima was not used.
+
+---
+
+## 2026-09-24 (cont.) — Quarantine alvimopan repeat-dose peak; align donepezil dose basis
+
+The alvimopan label's 10.98 ng/mL peak follows 12 mg twice daily for five days,
+so it was removed from the single-dose development score. The donepezil
+healthy-control 7.7 ng/mL peak remains, with the 5 mg hydrochloride tablet
+converted to 4.56 mg free-base model input. Fruquintinib's unchanged 113 ng/mL
+peak comes from a fasted radiolabeled oral suspension, now named explicitly.
+See [source adjudication](../validation/development_alvimopan_donepezil_fruquintinib_2026-09-24.md).
+
+The scored development set moves **N=75 → 74**; Meta AAFE **2.8626 → 2.8657**
+(conditional bootstrap CI **2.3255–3.5723**), Engine **3.8887**, direct ML
+**3.2511**. The paired Meta/ML ratio CI **0.7686–1.0043** crosses 1; the
+10.24-fold residual band covers **68/74** (91.9%). Fitted models were unchanged;
+no independent external validation was done. Colima was not used.
+
+---
+
+## 2026-09-24 (cont.) — Quarantine acamprosate peak; repair three primary citations
+
+The review-reported acamprosate 180 ng/mL peak has no identified original arm;
+the FDA review gives a different approximate single-dose value. The directly
+observed Luo et al. 2015 fasted arm is already incorporated in the exploratory
+MMPK training aggregate, so it was not substituted as a nominal holdout.
+Ponatinib, posaconazole, and upadacitinib keep their verified Cmax values but
+now cite their actual original studies and exact arms. The ponatinib FDA
+extraction now identifies its 73 ng/mL value as cancer-patient steady state.
+See [source adjudication](../validation/development_four_more_silver_arms_2026-09-24.md).
+
+The scored development set moves **N=76 → 75**; Meta AAFE **2.9539 → 2.8626**
+(conditional bootstrap CI **2.3284–3.5706**), Engine **3.8252**, direct ML
+**3.2418**. The paired Meta/ML ratio CI **0.7735–1.0075** crosses 1. Nominal
+90% residual-band coverage is **69/75**, with the same 10.24-fold half-width.
+Fitted models were unchanged; no independent external validation was done.
+Colima was not used.
+
+---
+
+## 2026-09-24 (cont.) — Quarantine penicillamine midpoint; verify three silver arms
+
+The penicillamine 250 mg / 1.5 mg/L label was an invented midpoint of a
+published 1–2 mg/L range, so it was removed from scoring. The FDA extraction's
+2.0 mg/L endpoint was quarantined too. Lenacapavir 23.4 ng/mL, lorlatinib
+501.3 ng/mL, and vonoprazan 25.0 ng/mL match original single-dose control arms;
+their exact provenance and two wrong journal/author attributions were corrected.
+The lenacapavir FDA extraction's 73.8 ng/mL belonged to a combined-regimen
+population-PK context and was quarantined. See
+[source adjudication](../validation/development_four_silver_arms_2026-09-24.md).
+
+The scored development set moves **N=77 → 76**; Meta AAFE **2.9301 → 2.9539**
+(conditional bootstrap CI **2.3914–3.7036**), Engine **3.8928**, direct ML
+**3.3483**. The paired Meta/ML ratio CI **0.7730–1.0041** crosses 1. Fitted
+models were unchanged; this is not independent external validation. Colima was
+not used.
+
+---
+
+## 2026-09-24 (cont.) — Verify three legacy silver arms against original sources
+
+Wang et al. 2016 Table 2 confirms apixaban's 5 mg healthy-control Cmax at
+126 ng/mL, but not the generic 12 h half-life, 50% bioavailability, or the
+prior fasted claim.
+The famotidine 20 mg control Cmax of 73 ng/mL is supported by DailyMed;
+its previous 580 ng·h/mL AUC belongs to a pediatric 0.5 mg/kg arm, and
+its 2.5 h half-life was taken from the bottom of a general range. Nichols et
+al. 2002 Table 3 reports sildenafil 50 mg Cmax 271 ng/mL (previously rounded
+to 270) and same-arm half-life 2.96 h; the 41% bioavailability belongs to a
+separate oral/IV study. See [source adjudication](../validation/development_three_legacy_silver_arms_2026-09-24.md).
+
+With fitted models and N=77 unchanged, development Meta AAFE moves from
+**2.9299** to **2.9301** (conditional bootstrap CI **2.3833–3.6510**), Engine
+**3.8628**, direct ML **3.3486**, and in-domain Meta **3.0559** (N=62).
+This is a reference correction, not independent validation.
+
+---
+
+## 2026-09-24 (cont.) — Quarantine two OSP profile peaks and correct probenecid
+
+An outcome-blind second AI source review found that the scored cimetidine OSP
+curve came from one person, not a cohort, and that the mefenamic-acid
+mean-profile peak could not be verified from its original abstract. Both are
+now unverified. The probenecid original abstract reports a 35.3 mg/L mean
+peak after 500 mg, replacing the digitized mean-profile peak of 32.9 mg/L.
+Alprazolam and triazolam retain provisional profile maxima with explicit
+provenance and caveats. The OSP importer now excludes individual curves from
+cohort selection. A dry run also found the integration script could restore
+seven previously quarantined labels from curated/manual/FDA files; it now
+honors the `unverified` tier across every import. See
+[source adjudication](../validation/development_osp_silver_profile_followup_2026-09-24.md).
+
+With unchanged fitted models, the scored development set moves from N=79 to
+N=77; Meta AAFE **2.8980 → 2.9299** (conditional CI **2.3833–3.6509**),
+Engine **3.8627**, direct ML **3.3487**, and in-domain Meta **3.0557**
+(N=62). This reflects corrected reference scope, not a model change or
+independent validation. Colima was not used.
+
+---
+
+## 2026-09-24 (cont.) — Replace dapagliflozin profile peak with original-table Cmax
+
+The original fasted 10 mg, N=14 study Table 1 reports parent-plasma individual
+Cmax geometric mean **136 ng/mL**. The prior **121.809 ng/mL** came from the
+maximum of an OSP-digitized mean concentration profile, a different estimator.
+The upstream approximate 165 ng/mL midpoint and 158 ng/mL steady-state row are
+superseded. See [source adjudication](../validation/development_dapagliflozin_table_followup_2026-09-24.md).
+
+With fitted models and N=79 unchanged, development Meta AAFE moves from
+**2.8940** to **2.8980** (conditional CI **2.3757–3.6106**), Engine **3.8076**,
+direct ML **3.3089**, and in-domain Meta **3.0107** (N=64). This is a reference
+correction, not an independent accuracy result or model change.
+
+---
+
+## 2026-09-24 (cont.) — Correct ulipristal acetate molecular identity
+
+The FDA ella 30 mg / 176 ng/mL arm administers and measures ulipristal
+**acetate**, a covalent ester. The prior scored `ulipristal` SMILES was the
+different non-acetate molecule. The reference now uses the PubChem acetate
+structure, retains the actual 30 mg ester dose and observed Cmax, and occupies
+the same development-split slot. See [identity adjudication](../validation/development_covalent_ester_identity_followup_2026-09-24.md).
+
+With fitted models unchanged, N=79 development Meta AAFE moves from **2.9040**
+to **2.8940** (conditional CI **2.3695–3.6057**), Engine **3.8023**, direct
+ML **3.3043**, and in-domain Meta **3.0056** (N=64). The conditional paired
+Meta/ML ratio is **0.8758** (CI **0.7703–0.9925**); repeated system selection
+still precludes an independent superiority claim.
+
+---
+
+## 2026-09-24 (cont.) — Rescreen salt strengths and exact source arms
+
+Primary labels and study reports corrected parent-equivalent doses for
+carbinoxamine (5.717741 mg), pravastatin (19.01 mg), quizartinib (26.5 mg),
+and selegiline (8.370430 mg). The matched Cmax values for pravastatin,
+quizartinib, ranitidine, and selegiline are now 26.5, 102.0, 450.6, and
+3.093 ng/mL respectively. Montelukast's unchanged 350 ng/mL was identified
+as the female oral arm (meal state unspecified in the abstract). Carbinoxamine was lowered to silver because the
+label does not specify exact N or food state and its 8 mg maleate basis is
+inferred. See [source adjudication](../validation/development_salt_arm_rescreen_2026-09-24.md).
+
+With the fitted model unchanged and N=79, development Meta AAFE moves from
+**2.9312** to **2.9040** (conditional bootstrap CI **2.3784–3.6157**),
+Engine **3.8150**, direct ML **3.2381**, and in-domain Meta **2.9741**.
+The paired Meta/ML ratio remains **0.8968** (CI **0.7922–1.0106**),
+including 1. This is a reference correction, not external validation.
+
+---
+
+## 2026-09-24 (cont.) — Audit implicit salt doses and two unmatched peaks
+
+Four scored references used administered salt mass with parent SMILES even
+though their source descriptions did not flag the mismatch: amantadine,
+fluvoxamine, hydroxyzine, and trazodone. Parent-equivalent input doses are
+now 80.576421, 36.640193, 20.928701, and 91.069478 mg. Primary sources
+also changed fluvoxamine Cmax from an untraceable 15 to 17 ng/mL and replaced
+trazodone's attributed 1.62 mg/L peak (not in the cited serum study) with a
+directly tabulated fed plasma tablet arm at 1.5469 mg/L. An unsupported
+fluvoxamine 84% absolute bioavailability was removed. See
+[`development_implicit_salt_followup_2026-09-24.md`](../validation/development_implicit_salt_followup_2026-09-24.md).
+
+With unchanged fitted models and N=79, development Meta AAFE moves from
+**2.9442** to **2.9312** (conditional bootstrap CI **2.3983–3.6464**),
+Engine **3.8694**, direct ML **3.2683**, and in-domain Meta **3.0149**.
+The paired Meta/ML ratio is **0.8968** (CI **0.7922–1.0106**), including 1.
+These are reference corrections, not independent validation or model gains.
+
+---
+
+## 2026-09-24 (cont.) — Replace ambiguous codeine phosphate arm with FDA tablet arm
+
+The FDA review for NDA 202245 reports a single fasted 30 mg codeine sulfate
+immediate-release tablet arm in 36 healthy volunteers: parent Cmax
+71.4 ng/mL. Using the review's sulfate-trihydrate identity and USP/NIST
+molecular weights, the parent-equivalent model dose is 23.922024 mg. This
+replaces the silver 1994 codeine phosphate 60 mg / 138.8 ng/mL arm whose
+base-equivalent normalization and fasting state could not be confirmed from
+the abstract. See
+[`development_codeine_fda_arm_followup_2026-09-24.md`](../validation/development_codeine_fda_arm_followup_2026-09-24.md).
+
+With unchanged fitted models and N=79 scored, development Meta AAFE moves
+from **2.9348** to **2.9442** (conditional bootstrap CI **2.4084–3.6653**),
+Engine **3.8818**, direct ML **3.2988**, and in-domain Meta **3.0312**
+(N=65). This is a source correction that worsens the development number,
+not an independent model performance estimate.
+
+---
+
+## 2026-09-24 (cont.) — Correct three scored salt doses and quinine source arm
+
+The methylphenidate and levocetirizine labels report hydrochloride and
+dihydrochloride dose masses, while the model inputs are parent SMILES. Their
+parent-equivalent doses are now 17.296957 and 4.210697 mg, respectively.
+QUALAQUIN Table 1 directly reports 3.2 mg/L after one 648 mg sulfate dose
+in 23 healthy adults; the corresponding parent dose is 538 mg. This replaces
+the unsupported 600 mg / 5.4 mg/L pair, and an upstream 6.8 mg/L extraction
+was identified as seven-day steady state. See
+[`development_parent_dose_followup_2026-09-24.md`](../validation/development_parent_dose_followup_2026-09-24.md).
+
+The public-profile N=79 development cache is now Meta AAFE **2.9348**
+(conditional bootstrap 95% CI **2.3989–3.6527**), Engine **3.8747**,
+direct ML **3.2882**, and in-domain Meta **3.0194** (N=65). Paired Meta/ML
+ratio **0.8925** (CI **0.7890–1.0048**). The development-residual 90%
+band remains ±10.24× and covers 72/79. Fitted models did not change;
+these data corrections are not independent validation or a model gain.
+
+---
+
+## 2026-09-24 (cont.) — Remove obsolete 2.698 probe-test pins
+
+A full-suite run (1,451 collected) found seven failures in old probe-isolation
+tests. They asserted the historical 2.698 development AAFE or spawned a
+subprocess targeting a test name removed during source-audited regeneration.
+The current cache is 2.9492/N=79, and its aggregate is already checked by
+`tests/integration/test_holdout_regression.py`. Probe-isolation checks now use
+the existing before/after cache byte comparison; redundant subprocess runs
+and number-only assertions were removed. The mechanism and prediction-layer
+isolation assertions remain. This changes tests only, not model output.
+The follow-up full suite passed: **1,428 passed, 25 skipped, 3 xfailed**.
+
+---
+
+## 2026-09-24 (cont.) — Bind external-test manifest names to frozen identities
+
+The V1 source-plan contract already bound candidate IDs, structures, and the
+verified inventory names, but it did not require each manifest name to match
+its verified-shortlist name. The contamination audit looked up historical
+name-only exclusions using the manifest name, so an alternate name could
+hide a prior-use hit when the repository lacked that drug's structure.
+`verify_source_plan()` now rejects a manifest/shortlist name mismatch before
+audit, prediction, or scoring. A mutation of the existing synthetic frozen
+cohort verifies the rejection. No external cohort has been acquired or scored.
+
+---
+
+## 2026-09-24 (cont.) — Remove synthetic reference concentration curves
+
+The clinical reference file contained 166 `ct_curve` arrays. Removed 159
+normalized 1 mg/L exponential templates, five other unmeasured analytical
+profiles, and a codeine curve with two unlabelled concentrations per time
+point from a study comparing immediate-release and sustained-release arms.
+The reported first-dose codeine IR Cmax remains, but its tier is now silver
+because fasting and base-equivalent dose normalization cannot be established
+from the abstract. Only the unscored non-template simvastatin curve remains,
+pending arm-level review. See
+[`development_reference_curve_followup_2026-09-24.md`](../validation/development_reference_curve_followup_2026-09-24.md).
+
+The benchmark loader never reads these curves. N=79 Meta AAFE remains
+**2.9492**; the reference-hash-linked interval artifact was regenerated.
+This is data-integrity work, not an external validation result.
+
+---
+
+## 2026-09-24 (cont.) — Correct acamprosate and phenytoin parent-dose references
+
+The acamprosate label specifies 300 mg parent equivalent per 333 mg
+calcium-salt tablet, so the two-tablet model dose changed from 666 to
+600 mg. Its review-reported 0.18 mg/L single-dose peak remains, but the
+reference is silver until the original numeric arm is retrieved. A primary
+phenytoin study directly reports 2.32 mg/L after 300 mg phenytoin sodium;
+the parent-equivalent model dose is 275.956 mg. This replaces an untraceable
+5 mg/L range midpoint and removes an unmatched half-life and synthetic curve.
+See
+[`development_salt_equivalent_reference_followup_2026-09-24.md`](../validation/development_salt_equivalent_reference_followup_2026-09-24.md).
+
+The N=79 public-profile development cache now has Meta AAFE **2.9492**
+(conditional 95% compound-bootstrap CI **2.4077–3.6756**), Engine
+**3.8794**, direct ML **3.3044**, and in-domain Meta **3.0375** (N=65).
+The paired Meta/ML ratio is **0.8925** (CI **0.7890–1.0048**); the
+development-residual interval still has a 10.24× half-width and covers
+72/79 (91.1%). Fitted models did not change. The shift from 2.9276 is a
+source correction, not an independent accuracy result.
+
+---
+
+## 2026-09-24 (cont.) — Repair OSP molecule and dose provenance
+
+Source-level inspection of all 21 selected OSP rows exposed an extractor
+root cause: it filtered oral fasted plasma profiles without matching the
+observed molecule to the model's target or confirming a single dose.
+The scored cabozantinib row was rifampicin, the ruxolitinib row was
+midazolam, and erythromycin was a repeated-dose profile. The first two
+were replaced with directly reported FDA single-dose parent arms;
+erythromycin was replaced with an explicitly profile-derived single-dose
+arm. Five invalid OSP catalog rows were removed, and the extractor now
+guards both properties. See
+[`development_osp_identity_and_dose_followup_2026-09-24.md`](../validation/development_osp_identity_and_dose_followup_2026-09-24.md).
+
+The public-profile development cache remains N=79: Meta AAFE **2.9276**
+(conditional bootstrap 95% CI **2.3845–3.6603**), Engine **3.9184**,
+direct ML **3.2802**, in-domain Meta **3.0105** (N=65). Paired Meta/ML
+ratio **0.8925** (CI **0.7890–1.0048**) includes 1. The nominal 90%
+development-residual half-width is **10.24×**, covering **72/79 (91.1%)**
+of the consumed cohort. Fitted models did not change; this is not
+independent external validation.
+
+---
+
+## 2026-09-24 (cont.) — Finish generic-label arm source audit
+
+Six remaining scored generic-label rows were checked against primary reports.
+Budesonide's old AUC and half-life came from pediatric oral and intravenous
+arms, respectively; dalfampridine's 7.6 h half-life was a sulfate metabolite,
+while 96% was relative tablet-to-solution bioavailability. Etodolac's old
+peak came from serum while the benchmark requires plasma. Rivaroxaban's old
+half-life and bioavailability did not match the 10 mg source arm. Ramelteon's
+matching AUC was added. Dapagliflozin's OSP value was explicitly marked as a
+digitized mean-profile peak. All six synthetic curves were removed. See
+[`development_remaining_generic_label_followup_2026-09-24.md`](../validation/development_remaining_generic_label_followup_2026-09-24.md).
+
+The regenerated public-profile development cache still scores **N=79**:
+Meta AAFE **2.9272** (conditional bootstrap 95% CI **2.3869–3.6662**),
+Engine **3.9652**, direct ML **3.2553**, and descriptive in-domain Meta
+**2.9439** (N=65). The paired Meta/ML ratio is **0.8992**
+(CI **0.7975–1.0106**, includes 1). The nominal 90% development-residual
+half-width is **10.24×**, covering **72/79 (91.1%)** on the consumed
+cohort. No fitted model changed and no independent validation was added.
+
+---
+
+## 2026-09-24 (cont.) — Resolve generic-label development PK arms
+
+Eight scored references labeled only “FDA label (analytical model from PK
+params)” were checked against original labels, independent of prediction
+error. Ciprofloxacin and moxifloxacin had copied repeated-dose Cmax values;
+azithromycin had an unsupported AUC; diclofenac had the wrong 25 mg peak and
+unconverted sodium-salt dose; zolpidem's 12.5 mg tartrate dose was not converted
+to its label-stated 10 mg parent base. Colchicine's half-life came from a
+different arm. Isosorbide mononitrate selected an unidentified lower range
+endpoint, and losartan used a 7-day patient arm; both are quarantined.
+Synthetic curves were removed. See
+[`development_generic_label_arm_followup_2026-09-24.md`](../validation/development_generic_label_arm_followup_2026-09-24.md).
+
+The public-profile development cache now scores **N=79**: Meta AAFE
+**2.9320** (conditional bootstrap 95% CI **2.3897–3.6737**), Engine
+**3.9716**, direct ML **3.2605**, and descriptive in-domain Meta **2.9497**
+(N=65). The conditional paired Meta/ML AAFE ratio **0.8992** has 95% CI
+**0.7975–1.0106**, now including 1. The nominal 90% development-residual
+half-width remains **10.24×**, covering **72/79 (91.1%)** on the consumed
+cohort. No fitted model changed; differences from earlier reports are label,
+input-dose, and cohort corrections.
+
+---
+
+## 2026-09-24 (cont.) — Quarantine four mismatched development PK arms
+
+Original label review found that lopinavir 9.8 mg/L was ritonavir-boosted
+fed steady-state patient exposure, pilocarpine 15 ng/mL followed repeated
+dosing, and temozolomide 7.5 mg/L followed 150 mg/m² rather than a measured
+260 mg fixed dose. The 75 mg / 35.5 ng/mL venlafaxine arm could not be traced
+to an identified primary study; the cited label gives a different steady-state
+arm. All four are excluded pending exact-arm evidence. See
+[`development_additional_arm_followup_2026-09-24.md`](../validation/development_additional_arm_followup_2026-09-24.md).
+
+The public-profile development cache now scores **N=81**: Meta AAFE **2.8927**
+(conditional bootstrap 95% CI **2.3617–3.5990**), Engine **3.9166**, direct ML
+**3.2648**, and descriptive in-domain Meta **2.9015** (N=67). The nominal 90%
+development-residual half-width remains **10.24×**, covering **74/81 (91.4%)**
+on this consumed cohort. No fitted model changed; the difference from the
+preceding N=85 result is a reference/cohort correction, not a model gain.
+
+---
+
+## 2026-09-24 (cont.) — Correct the levofloxacin route and ketoconazole food arm
+
+The DrugBank follow-up identified a route collision: **6.2 mg/L** is the
+500 mg **IV** levofloxacin peak, whereas the same FDA label reports
+**5.1 mg/L** after a single 500 mg **oral tablet** in healthy men. The FDA
+ketoconazole label reports about **3.5 mg/L** after one 200 mg tablet with a
+meal, replacing the unsourced 3.0 mg/L. A manufacturer monograph confirms
+the metronidazole 500 mg oral / approximately 13 mg/L arm. The exact
+indomethacin 25 mg / 1.54 mg/L value remains secondary-source only; it is
+marked silver because a US label gives about 1 mg/L in a separate 25 mg
+capsule study. Synthetic curves were removed from all four rows. Source
+details are in the dated DrugBank-arm audit.
+
+After public-profile regeneration, the **N=85** development cache yields
+Meta AAFE **2.9079** (conditional bootstrap 95% CI **2.3839–3.5930**),
+Engine **3.9551**, direct ML **3.3040**, and descriptive in-domain Meta
+**2.8981** (N=69). The nominal 90% development-residual half-width remains
+**10.24×**, covering **78/85 (91.8%)** on the consumed cohort. No fitted
+model changed; these figures remain unsuitable for external claims.
+
+---
+
+## 2026-09-24 (cont.) — Recheck first four secondary DrugBank PK arms against regulatory sources
+
+The 100 mcg clonidine / 400.72 pg/mL arm remains traceable only to a
+secondary DrugBank statement, so it is quarantined pending the exact primary
+PK record. Its tablet is clonidine hydrochloride (0.087 mg parent equivalent),
+and the prior 0.33 h entry was a distribution half-life, not terminal
+elimination. The 5 mg pindolol parent Cmax of 33.1 ng/mL is confirmed by a
+Health Canada monograph, but its previous 8 h half-life describes inactive
+metabolites. The FDA tablet label reports 18 ng/mL after 25 mg oral
+sumatriptan, replacing the secondary 16.5 ng/mL. The FDA bexagliflozin
+integrated review confirms the fasted single 20 mg / 134 ng/mL arm. Synthetic
+curves were removed from all four records. See
+[`development_drugbank_arm_followup_2026-09-24.md`](../validation/development_drugbank_arm_followup_2026-09-24.md).
+
+The regenerated public-profile cache now scores **N=85**. Meta AAFE is
+**2.9093** (conditional bootstrap 95% CI **2.3885–3.5929**), Engine
+**3.9571**, direct ML **3.3056**, and descriptive in-domain Meta **2.8998**
+(N=69). The unchanged development-residual 90% half-width is **10.24×**,
+covering **78/85 (91.8%)** of the repeatedly used cohort. The higher AAFE
+versus N=86 is a label/cohort correction, not a model change or independent
+performance result.
+
+---
+
+## 2026-09-24 — Reconcile the then-current source-screened development benchmark
+
+The public-profile cache at `e430461` scored **86** of the original
+107 development compounds after source, analyte, dose, formulation, and
+structure adjudication. It yields Meta AAFE **2.8852** (conditional
+compound-bootstrap 95% CI **2.3761–3.5348**), Engine **3.9023**, and direct ML
+**3.3002**. The descriptive in-domain Meta slice is **2.8705** (N=70). The
+nominal 90% development-residual half-width is **10.24×**, with **79/86**
+coverage on this repeatedly accessed cohort. The fitted model weights did not
+change during the latest reference repairs; the scored labels and one
+salt-to-parent dose mapping did. The current figures are not directly
+comparable to the former 2.743/N=107 table as model gains or losses.
+
+The cache and its matching bootstrap artifact were
+`data/training/4track_holdout_predictions.json` and
+`data/validation/4track_ci_2026-09-24_audited_reference.json`. Individual
+source decisions are recorded in the dated `docs/validation/development_*`
+audits. The local AI guidance had still presented the 2026-07-03
+2.743/N=107 table as current; its metrics and limitations were reconciled
+against these artifacts. Neither the cohort nor its conditional CI establishes
+independent external accuracy or superiority over direct ML.
+
+---
+
+## 2026-09-23 (cont.) — Fail closed when the public fup model is missing
+
+The ordinary prediction path previously loaded the unverified legacy fup v1
+artifact if the pinned public fup v2 file was absent. It now requires v2 and
+raises the existing path-rich missing-model error. The shipped v2 prediction
+path is unchanged; a regression test checks that the presence of v1 cannot
+silently rescue a missing v2.
+
+---
+
+## 2026-09-23 (cont.) — Remove a pravastatin collision from CLint fitting
+
+The corrected pravastatin parent structure exposed `CHEMBL1144` in the
+production hepatocyte CLint fitted CSV. The structure was absent from the
+original N=107 exclusion because the previous reference SMILES encoded a
+different molecule. The full regression suite caught the mismatch: the
+current source filter returned 995 rows while the shipped snapshot held 996.
+No other active fitted-model snapshot contained this structure.
+
+Removed that row and retrained CLint in the locked Linux/Python 3.10 container:
+995 fitted structures, CSV SHA256
+`dbf2b750b58a68af02b01cfe90a370630908c311c8436f65818bbc08fcfaaa94`,
+model SHA256
+`0ca4ee7e88367dfb3ad55f94adc8eaa025cdd40b5a308e584b89e05555d3ff42`.
+Five-fold scaffold CV R² is 0.215 and CLint AAFE is 2.557. The locked Linux
+N=107 development cache moved Meta AAFE 2.7625→2.7342 and Engine AAFE
+3.8339→3.7409; direct ML stayed 3.0356. The paired Meta/ML ratio is 0.901
+[conditional 95% bootstrap 0.811–0.995]. This is a correction of a fitted-row
+collision, **not** independent evidence of superiority: N=107 remains a
+repeatedly used development set. The development residual band and web console
+were regenerated from the corrected model. Colima was stopped after the run.
+
+---
+
+## 2026-09-23 (cont.) — Reject stale stereoisomer docking poses
+
+Experimental Vina/DiffDock caches were named by the first 14 InChIKey
+characters, which omit stereochemistry. After the reference identity cleanup,
+the docking benchmark could silently reuse a pose generated for an
+unspecified or different isomer. Cache readers now verify canonical isomeric
+SMILES stored in each JSON record before using its features; the batch writers
+save new poses under full-InChIKey plus canonical-isomeric-SMILES-hash filenames
+so isomers and distinct tautomers can coexist. Legacy
+14-character files remain readable when their stored structure matches. A
+synthetic opposite-enantiomer regression test passes, and four existing
+non-isomeric DiffDock records (morphine, azithromycin, tamoxifen, darolutamide)
+are rejected for their corrected reference inputs. They require re-docking
+before any new docking-enriched evaluation; none of these experimental docking
+features enter the shipped Cmax benchmark.
+
+---
+
+## 2026-09-23 (cont.) — Development-reference stereochemistry adjudication
+
+The 107-name [PubChem PUG REST](https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest)
+audit found 24 same-connectivity entries whose
+local SMILES omitted stereochemistry present in the PubChem name record. We
+updated 21 reference SMILES to the corresponding isomeric parent structure;
+the exact full InChIKeys are pinned in
+`tests/regression/test_development_stereochemistry.py`. For darolutamide and
+valganciclovir, the PubChem representation specifies only the center fixed in
+the [Nubeqa FDA label](https://www.accessdata.fda.gov/drugsatfda_docs/label/2019/212099Orig1s000lbl.pdf)
+and [Valcyte FDA label](https://www.accessdata.fda.gov/drugsatfda_docs/label/2001/21304lbl.pdf),
+respectively; the other center remains unspecified as those products contain
+stereoisomer mixtures. We did **not** substitute PubChem's single-isomer record
+for itraconazole or ketoconazole: the
+[Sporanox FDA label](https://www.accessdata.fda.gov/drugsatfda_docs/label/2026/020083s072lbl.pdf)
+describes four itraconazole diastereomers, and the
+[FDA levoketoconazole review](https://www.accessdata.fda.gov/drugsatfda_docs/nda/2022/214133Orig1s000MultidisciplineR.pdf)
+describes ketoconazole as a cis-enantiomer pair. Ranitidine was also retained
+without E/Z assignment because its
+[FDA GSRS substance record](https://precision.fda.gov/ginas/app/ui/substances/c153f07c-d3be-4e27-83f7-027ecac7bf37)
+does not define an E/Z center.
+
+The hepatic-fu registry SMILES for five affected drugs and the UGT2B7/UGT1A9
+registries for morphine, bexagliflozin, and glasdegib now match their full
+reference keys. Non-CYP UGT routing intentionally requires a full InChIKey:
+an unspecified stereoisomer is not silently assigned the drug-specific
+metabolic fraction. The old UGT integration test checked only that the solver
+ran; three of its named seed structures failed to enter their asserted UGT
+paths. It now asserts the registry match before prediction.
+
+The locked Linux rerun completed all 107 predictions with zero skips. Engine,
+direct-ML, and Meta outputs were bit-identical to the preceding committed
+cache for every drug (overall AAFE 3.8339, 3.0356, and 2.7625). This repairs
+chemical identity without improving the model's predictive accuracy; the
+direct-ML Morgan fingerprint does not encode chirality, and the corrected
+curated registry routes retained the same drug-specific parameters. The
+experimental docking caches for some of these drugs still carry prior
+non-isomeric inputs; the subsequent cache-identity guard rejects them until
+they are re-docked.
+
+---
+
+## 2026-09-23 (cont.) — Pravastatin structure correction reverses the May identity claim
+
+A name-to-structure audit of all 107 development drugs against PubChem found
+four InChIKey connectivity mismatches. Atovaquone and rifabutin are alternate
+tautomers; darunavir ethanolate's model input omits ethanol as intended for the
+parent active moiety. Pravastatin was a real structural error. The May 2 log
+entry and commit `7042a96` incorrectly identified `GOSGZXISMCZCDW`
+(C23H38O7) as PubChem CID 54687. [PubChem CID 54687](https://pubchem.ncbi.nlm.nih.gov/compound/54687)
+identifies pravastatin as `TUZYXOIXSAXUGO` (C23H36O7), consistent with the
+[FDA Pravachol label](https://www.accessdata.fda.gov/drugsatfda_docs/label/2007/019898s060lbl.pdf)
+formula C23H35NaO7 for its sodium salt. The reference SMILES and both
+pravastatin transporter/clearance registry keys were corrected; old `GOS...`
+input no longer routes as pravastatin. The model weights and observed Cmax were
+unchanged.
+
+The audit also found 24 records whose local SMILES leave stereochemistry
+unspecified where the PubChem name record specifies it. Some drug names denote
+mixtures, so these require compound-by-compound source adjudication before any
+further structure replacement.
+
+The locked-dependency Linux rerun changed only pravastatin among 107 drugs;
+the other 106 predictions matched the preceding cache exactly. Its Engine,
+direct-ML, and Meta Cmax moved 0.03210→0.04642, 0.01660→0.00328, and
+0.03255→0.01821 mg/L. The repeatedly used development AAFE became Engine
+3.834, direct ML 3.036, Meta 2.762 (prior 3.821, 2.990, 2.761). The paired
+Meta/ML ratio is 0.910 [95% compound bootstrap 0.821–1.006], still crossing
+1. The cache, bootstrap artifact, residual-band provenance, model card, and
+web console were refreshed. This fixes identity, not independent validation.
+
+---
+
+## 2026-09-23 (cont.) — Public-only VDss retrain and complete fitted-source inventory
+
+Downloaded the official TDC VDss_Lombardo Dataverse file ID 4267387 (1,130
+measurements, SHA256
+`00bb7e0dea19f78c4c1887e27ecf476135d9de2ef5ecc26d7c645c37bd9cb7af`).
+Canonical deduplication removed 19 rows and three-key exclusion removed 56
+development structures, leaving 1,055 fitted compounds. Fitted CSV SHA256:
+`778851b9dad82c2eb3d948b7ffb3ae829ce5fd529395b7d0599d4c86e02e5e54`;
+model SHA256:
+`29f84cbff97da197ae516fccb2d91aff972f9bae661a8b2bde39786a984c1c35`.
+Five-fold Murcko-scaffold CV: Spearman 0.723, R² 0.499, VDss AAFE 2.224.
+All seven active fitted models now have SHA-pinned public fitted-source
+snapshots. This establishes a reproducible membership inventory, not an
+independent Cmax accuracy estimate.
+
+On the repeatedly used N=107 development set, Meta AAFE worsened 2.687 →
+2.761; Engine remained 3.821 and direct ML 2.990. In-domain Meta AAFE moved
+2.746 → 2.812 (N=81). The conditional Meta bootstrap CI is [2.36, 3.24].
+Current predictions are in `data/training/4track_holdout_predictions.json`,
+with cache-bound intervals in
+`data/validation/4track_ci_2026-09-23_public_models_pinned.json`. We did not
+adjust blend weights based on this development result. All 107 Meta predictions
+changed: 66 absolute log-errors worsened and 41 improved, so the aggregate
+regression is distributed rather than caused by one outlier.
+
+The partially in-sample Meta 90% residual half-width moved ×/÷12.39 →
+×/÷10.98 (63/67 training references usable); this is not split-conformal
+coverage. The model-card CI sync now rejects a bootstrap artifact whose
+source-cache hash differs from the current prediction cache. The eight static
+web presets were regenerated. An outcome-blinded, independently curated
+external cohort is still absent.
+
+## 2026-09-23 (cont.) — Public-only hepatocyte CLint retrain
+
+The single-assay TDC Clearance_Hepatocyte_AZ source has 1,213 measurements
+over 1,020 unique canonical structures. Averaging duplicate assay values and
+excluding 24 structures matched to the repeatedly used N=107 development set
+leaves 996 fitted compounds. Raw source SHA256:
+`2c217f46600c22e107b72faa2bfb1d9bf799213aee47b601f6e0d6d73b68f274`;
+fitted CSV SHA256:
+`300f5be5d0ada5fad88d94f9dc60c0c13ab77b122fed2494e06d764b43f6cd07`;
+model SHA256:
+`1fdafa7c2e287dd9e4f44f68b97e5ace80a6837f97ef17bed3c01daeff610401`.
+Five-fold Murcko-scaffold CV on those rows yielded R² 0.214 and CLint AAFE
+2.570. The former production model did not have an exact fitted-row snapshot.
+
+Replacing it worsened the repeatedly used N=107 development Meta AAFE from
+2.661 to 2.687 and Engine AAFE from 3.624 to 3.821; direct ML stayed 2.990.
+The conditional Meta bootstrap interval is [2.30, 3.16], and in-domain Meta
+AAFE is 2.746 (N=81). The cache is
+`data/training/4track_holdout_predictions.json`; its bootstrap artifact is
+`data/validation/4track_ci_2026-09-23_fup_peff_cmax_clint_public.json`.
+This regression is reported without adjusting the blend on N=107.
+
+The partially in-sample Meta residual interval widened from ×/÷12.16 to
+×/÷12.39 at nominal 90%, with 63/67 training references usable. The
+current static web presets were regenerated. Only the active VDss model
+still lacks an exact fitted-source hash; no unconsumed independently curated
+outcome cohort exists.
+
+## 2026-09-23 (cont.) — Public-only direct Cmax retrain
+
+The former direct Cmax model's base score matched the mean log-Cmax-per-dose
+target from the recovered Omega source after three-key exclusion, but a pinned
+Linux refit did not reproduce its trees or predictions (maximum fitted-row
+prediction difference 0.191 log10). Replaced it with a reproducible model
+using the recorded hyperparameters and all 1,028 non-holdout rows from the
+1,128-row source. Source SHA256:
+`e7228d14bdfdfc6c790177207779630c1e5655c19d451528c87b80e2e9de9c3d`;
+fitted CSV SHA256:
+`5668d3747e11d03d8c3d57c03ff0842ed3aa330f4c938386e47c05e1e318c919`;
+model SHA256:
+`14391eb0881cb3ec83ab2f81592c5fe75da7c949290ec438fddc2d7136f792a0`.
+Five-fold training CV: Cmax AAFE 3.275 and R² 0.374.
+
+On the pinned Linux stack, repeatedly used N=107 development Meta AAFE moved
+2.660 → 2.661, direct ML 2.998 → 2.990, and Engine stayed 3.624. Meta
+twofold coverage moved 49.5% → 50.5%; its conditional bootstrap interval is
+[2.28, 3.13]. In-domain Meta AAFE moved 2.727 → 2.712 (N=81). The current
+cache is `data/training/4track_holdout_predictions.json`; the conditional
+bootstrap artifact is
+`data/validation/4track_ci_2026-09-23_fup_peff_cmax_public.json`.
+This is development-set re-scoring, not independent improvement.
+
+The partially in-sample Meta 90% residual half-width grew from ×/÷10.72 to
+×/÷12.16; 63 of 67 training references were usable. Eight static web
+presets were regenerated. Two active fitted models still lack exact training
+source hashes, and no unconsumed independently curated outcome cohort exists.
+
+## 2026-09-23 (cont.) — Public-only Peff retrain
+
+The shipped Peff model's base score matched the mean target from the committed
+TDC Caco2_Wang data after holdout filtering, but neither macOS nor pinned Linux
+retraining reproduced its trees. Replaced it with a reproducible Linux model:
+910 raw rows, 32 holdout exclusions, four canonical-SMILES duplicates, and
+874 fitted rows. Raw source SHA256 is
+`447d9f1af487c06b080145a2361dbe45af5b27afc83e1a975dd29b9ea535d6ab`;
+fitted CSV SHA256 is
+`46a5a7c4f48b6d6f4f501fdca049c1fe25cadf115658bda504d2e41d2092a06c`;
+model SHA256 is
+`1566e5b7c9ced4c2c1ce6f0d7e693b0190ae7306a8f632a9486c1658dab6e1e7`.
+Five-fold training CV: R² 0.700, Peff AAFE 2.155. The model metadata and
+external exclusion inventory pin the fitted rows.
+
+On the same Linux stack, the repeatedly used N=107 development Meta AAFE moved
+2.676 → 2.660 and Engine 3.672 → 3.624; direct ML remained 2.998. Meta
+twofold coverage fell 51.4% → 49.5%. The current cache is
+`data/training/4track_holdout_predictions.json`, with conditional bootstrap
+intervals in `data/validation/4track_ci_2026-09-23_fup_peff_public.json`.
+These development-set changes do not demonstrate independent improvement.
+Three active fitted models still lack exact source hashes, and no blinded
+external outcome cohort exists.
+
+The displayed empirical residual interval was also recalculated on the current
+stack: 63/67 development training references were usable; four had an unknown
+route. The Meta 90% log10 half-width is 1.0301 (×/÷10.72), with 94.4%
+coverage on the *consumed* N=107 set. This is partially in-sample and is not
+an independent calibration claim. Its artifact now binds the benchmark cache
+and all active fitted-model hashes. The eight frozen web presets were
+regenerated from current predictions and have resource-hash checks.
+
+## 2026-09-23 (cont.) — Public-only fup retrain and fup-only development benchmark
+
+Replaced the shipped fup v2 artifact, whose fitted DrugBank targets could not be
+recovered in this public clone. The new model uses only human TDC PPBR_AZ rows:
+1,614 raw human rows, 1,557 after N=107 identity exclusion, deduplication,
+and range filtering. The pinned source SHA256 is
+`54c9520f4b6e04419b18bab7335583c3865d86fc53db40f74c2cff1577c8ec1b`;
+the exact fitted CSV SHA256 is
+`e2c70c83707b2031904a351be76ce61899557a4b14316b9429c4a77fd2eac742`.
+The Linux/Python 3.10 model artifact SHA256 is
+`b0731734730746866646a2628dded73d74254eb06ef1a6c7b457bf273d867096`.
+Five-fold training CV: fup AAFE 2.258, R² 0.384. The reproducible recipe is
+`scripts/retrain_fup_public.py`; model metadata and the external exclusion
+inventory pin the fitted CSV. The former DrugBank-trained artifact remains
+barred from the public V1 gate by its historical SHA.
+
+On the *same Linux stack*, development N=107 Meta AAFE moved 2.739 → 2.676
+and Engine 4.277 → 3.672; direct ML stayed 2.998. The fup-only cache at
+commit `7f9790c` was later superseded; its bootstrap CI artifact remains
+`data/validation/4track_ci_2026-09-23_fup_public.json`. This is a system
+change evaluated on a repeatedly used development set, not evidence of
+independent improvement. Four active fitted models still lack exact source
+hashes, and there is no new blinded external outcome cohort.
+
+## 2026-09-23 (cont.) — DrugBank fup provenance and N50 fail-closed gate
+
+The checked-in fup v2 training script merges TDC PPBR_AZ with DrugBank
+protein-binding targets; the 2026-03-24 ablation record reports 2,753 merged
+training samples. Its old manifest named only TDC, so the source description
+now names both inputs while retaining `unknown_legacy` for the missing fitted
+snapshot hash. The public clone does not have the licensed DrugBank fup subset.
+The N50 identity audit previously returned success on a DrugBank-only hit,
+despite requiring absence from both maps to claim a never-seen candidate. It
+now fails on such hits conservatively. This does not retroactively validate
+any earlier N50 or external performance result.
+
+## 2026-09-23 (cont.) — CL/F and Vd/F training source pinned from canonical regen
+
+Commit `3168e90` co-committed the leak-free `clf_training.csv` and the two
+shipped CL/F and Vd/F model artifacts after running the checked-in canonical
+regen recipe. Their current hashes match that commit. The training script
+reads this CSV, yielding 1,010 in-range CL/F and 937 in-range Vd/F rows;
+each model's stored base score matches its target mean. The two manifests now
+pin the CSV path and SHA256 instead of `unknown_legacy`. The date and CV
+metric fields remain unknown where the artifact itself cannot establish them.
+Five other active fitted models still lack exact source hashes, so the external
+V1 gate remains closed.
+
+## 2026-09-23 (cont.) — Omega Cmax source recovered for conservative exclusion
+
+Recovered the public Omega `mmpk_clean.csv` snapshot at commit `08a45047`
+and pinned its 1,128 rows in the external exclusion inventory. Three-key
+matching against the 107-compound holdout excludes 100 rows, leaving 1,028,
+exactly the counts recorded for the 2026-04-04 Cmax retrain. The target mean
+also matches the fitted model's stored base score. A fresh fit with the
+recorded hyperparameters did not reproduce the shipped trees or predictions,
+so exact fitted-row provenance remains unverified and the external V1 gate
+continues to fail closed. See the protocol for the snapshot hash.
+
+## 2026-09-23 (cont.) — Regulatory identity-pool overlap before external curation
+
+An outcome-free join of the pinned FDA NME, EMA medicine-page, EMA Article 57,
+and Health Canada snapshots found 682 oral FDA NDA names, 93 recent EMA names
+with an exact Article 57 `Oral Use` match, and 124 recent Canada ingredient
+names. Deduplication by lowercase alphanumeric name leaves 808 strings across
+the three subsets. This does not imply 808 eligible or structure-clean drugs;
+Canada was not route-filtered, and exact names miss salt/synonym equivalents.
+The 900-identity acquisition milestone needs additional older or
+investigational sources. No Cmax outcomes were accessed. Method and snapshot
+hashes are in `docs/validation/external_holdout_v1_protocol.md`.
+
+## 2026-09-23 (cont.) — External audit blocks unknown production-model membership
+
+The external-holdout exclusion union pinned 11 repository corpora, but the
+shipped direct Cmax model metadata names Omega `mmpk_clean.csv`, absent from
+the repository and local workspaces, with `sha256: unknown_legacy`. The other
+active fitted models also lack pinned source hashes. Thus a passing corpus
+collision check could not prove that a candidate was unseen by the shipped
+models. The external audit and prediction runner now require each active
+model's exact training dataset to be present in the exclusion inventory and
+to match its metadata SHA. The model card no longer claims verified
+compound-disjointness for the repeatedly used N=107 benchmark. The V1 gate
+currently fails as intended; source recovery or reproducible retraining is
+required before a valid external freeze.
+
+## 2026-09-23 (cont.) — Salt-form holdout exclusions in retraining paths
+
+The MMPK CSVs marked clopidogrel bisulfate (both files) and sumatriptan
+(Onzetra Xsail, v2) as `in_holdout=False`, although their largest organic
+fragments match holdout drugs. Corrected those three flags and routed the
+in-repo training and eligibility scripts through one salt-stripped IK14
+function. The MMPK Cmax, SBI pool, deconvolution, pKa and CLint docking
+loaders now reject a salt variant even when a source flag or precomputed
+full-salt key misses it. Synthetic false-flag regressions and the corpus
+overlap check cover the exclusion behavior.
+
+This is a forward-looking retraining and curation fix. The shipped Cmax
+artifact metadata identifies a separate Omega `mmpk_clean.csv` as its source,
+not these MMPK CSVs; its training-data SHA is `unknown_legacy`, so that
+claim cannot independently establish the artifact's exact memberships. No
+headline accuracy or blind external-validation result is revised here.
+
+## 2026-09-23 (cont.) — N50 exclusion audit fails closed and normalizes DrugBank salts
+
+The earlier guanfacine-HCl salt gap was already fixed in `ik14()`: the current
+code extracts the largest organic fragment, and the stored guanfacine-HCl and
+free-base structures now share a key. A remaining gap was DrugBank ingestion:
+it trusted a precomputed full-salt key even when the normalized active-fragment
+key differed (501 rows; 188 additional distinct normalized keys). The inventory
+now indexes both keys. The N50 audit also rejects missing corpus files and
+unparseable candidates instead of reporting a clean pass. Re-auditing the
+invalidated 2026Q2 N50 still finds 21/50 hard-corpus hits and 47/50 DrugBank
+presences; no new clean cohort was produced.
+
+## 2026-09-23 — Measured absolute F now uses converged oral/IV exposure
+
+The measured-F route previously divided two 0–24h AUCs. That ratio is not a reliable
+estimate of absolute bioavailability when substantial exposure remains after 24h:
+the warfarin engine case gives 0.424 at 24h and about 0.481 by 720h (matched dose,
+same parameters). Scaling by a clinical total-exposure F would therefore overcorrect
+the 24h PK endpoints. The opt-in F calculation now continues both trajectories in
+matched intervals and accepts the ratio after two consecutive <0.5% changes; it
+skips correction if that has not occurred by 768h. The SMILES-only path is unchanged.
+This is an internal numerical correction, not an external accuracy validation.
+Full suite: 1,436 passed, 23 skipped, 3 xfailed.
 
 ## 2026-07-07 (cont.) — N50' clean re-curation: infeasible from repo data (pool=0), deferred to human-led curation
 
@@ -544,7 +1678,7 @@ A full-codebase scientific+mathematical audit (10 subsystems, adversarial verifi
 
 DE-42/DE-43 foreclosed every *engine-recalibration* route to the F under-call and named exactly one un-foreclosed lever: **per-drug measured-F routing**. Built it as `MeasuredADMEInput.f_bioavail` (oral bioavailability, 0 < F ≤ 1), extending the SP1 measured-ADME channel. Branch `feat/measured-f-routing`; spec `docs/_internal/specs/2026-06-03-measured-f-routing-design.md`.
 
-**Mechanism (exposure-scaling, approved).** F is emergent in the engine (fa·Fg·Fh) — there is no F input. `predict()` computes the engine's own oral F via an IV-reference solve (`F_engine = oral AUC / IV AUC`; clearance cancels, so it is the pure structural fraction), then scales engine Cmax/AUC by `k = F_measured/F_engine` (clamped [0.05, 50]; `f_bioavail_cv` folded into the CV in quadrature). Pipeline-layer only — engine stays identity-blind (Invariant #1). Oral-only (ignored + warned for IV). Lands on `result.engine_pk`; the production meta path is **bit-identical when `f_bioavail` is None** (4-SMILES exact-float test + 28-case measured suite).
+**Mechanism (exposure-scaling, approved).** F is emergent in the engine (fa·Fg·Fh) — there is no F input. `predict()` computes the engine's 24-hour-truncated oral/IV AUC ratio via an IV-reference solve (`F_engine = oral AUC₀₋₂₄ / IV AUC₀₋₂₄`; this only approximates the absolute structural fraction when exposure persists beyond 24 hours), then scales engine Cmax/AUC by `k = F_measured/F_engine` (clamped [0.05, 50]; `f_bioavail_cv` folded into the CV in quadrature). Pipeline-layer only — engine stays identity-blind (Invariant #1). Oral-only (ignored + warned for IV). Lands on `result.engine_pk`; the production meta path is **bit-identical when `f_bioavail` is None** (4-SMILES exact-float test + 28-case measured suite).
 
 **Result (separate measured-input benchmark, engine-only; `scripts/run_measured_adme_benchmark.py`).** clean-10: SMILES **2.632** → measured fup+clint **2.334** → measured fup+clint+F **1.770**. F was the dominant structural error: alprazolam 6.04→1.68, quinine 7.68→1.47, sildenafil 3.40→1.12, etodolac 2.79→1.41. This also closes the stale-"1.98 floor" story — the real measured floor, *with* F, is 1.77 (< 1.98). Expected single-drug worsenings — dasatinib 1.66→4.10 (forcing the true low F=0.25 exposes previously-compensating engine errors, the DE-42 effect at single-drug scale) and clopidogrel 3.35→4.97 (prodrug; F-routing on the parent is documented out-of-scope) — confirm the channel is honest, not Cmax-fudged.
 

@@ -17,6 +17,20 @@ import hashlib
 import json
 from pathlib import Path
 
+import numpy as np
+import pandas as pd
+
+from scripts.retrain_clint_public import (
+    DATASET,
+    MODEL,
+    ROOT,
+    SOURCE,
+    SOURCE_SHA,
+    sha256,
+    training_rows,
+)
+from sisyphus.validation.identity import ik14
+
 _ADME = Path(__file__).resolve().parents[2] / "models" / "adme"
 _PROD = _ADME / "xgboost_clint.json"
 _PROD_META = _ADME / "xgboost_clint.meta.json"
@@ -28,13 +42,30 @@ def _sha256(path: Path) -> str:
 
 
 def test_production_clint_meta_declares_hepatocyte_only() -> None:
-    """The shipped CLint model documents single-assay (TDC Hepatocyte_AZ) training."""
+    """The shipped CLint model names the exact single-assay fitted rows."""
     meta = json.loads(_PROD_META.read_text())
     dataset = meta["trained_on"]["dataset_path"]
-    assert dataset == "TDC Hepatocyte_AZ", (
+    assert dataset == str(DATASET.relative_to(ROOT)), (
         f"production CLint provenance is {dataset!r}, not single-assay hepatocyte. "
         "If a mixed-assay model was promoted, hepatocyte-holdout R^2 is ~halved (DE-52)."
     )
+    assert sha256(SOURCE) == SOURCE_SHA
+    assert meta["trained_on"]["sha256"] == sha256(DATASET)
+    assert sha256(DATASET) == "dbf2b750b58a68af02b01cfe90a370630908c311c8436f65818bbc08fcfaaa94"
+    assert meta["trained_on"]["n_drugs_clean"] == 995
+    assert meta["artifact_sha256"] == sha256(MODEL)
+    assert sha256(MODEL) == "0ca4ee7e88367dfb3ad55f94adc8eaa025cdd40b5a308e584b89e05555d3ff42"
+
+
+def test_production_clint_fitted_rows_match_filtered_source() -> None:
+    expected = training_rows()
+    fitted = pd.read_csv(DATASET)
+    assert len(expected) == len(fitted) == 995
+    assert [ik14(s) for s in fitted["canonical_smiles"]] == [
+        ik14(s) for s in expected["canonical_smiles"]
+    ]
+    assert fitted["drug_id"].tolist() == expected["drug_id"].tolist()
+    np.testing.assert_allclose(fitted["Y"], expected["Y"], atol=3e-14, rtol=0)
 
 
 def test_production_clint_is_not_a_known_mixed_assay_model() -> None:

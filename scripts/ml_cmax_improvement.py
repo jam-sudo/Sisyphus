@@ -30,9 +30,9 @@ log = logging.getLogger(__name__)
 
 from rdkit import Chem
 from rdkit.Chem import AllChem, MACCSkeys
-from rdkit.Chem.inchi import MolToInchi, InchiToInchiKey
 from rdkit.Chem.Scaffolds.MurckoScaffold import MurckoScaffoldSmiles
 from sisyphus.descriptors import compute_features
+from sisyphus.validation.identity import ik14 as _ik14
 
 # ═══════════════════════════════════════════════════════════════════════════
 # Utilities
@@ -42,14 +42,6 @@ def _canon(smi):
     mol = Chem.MolFromSmiles(smi)
     return Chem.MolToSmiles(mol, isomericSmiles=True) if mol else None
 
-def _ik14(smi):
-    mol = Chem.MolFromSmiles(smi)
-    if not mol: return None
-    inchi = MolToInchi(mol)
-    if not inchi: return None
-    ik = InchiToInchiKey(inchi)
-    return ik[:14] if ik else None
-
 def load_holdout_ik():
     with open(ROOT / "data/reference/holdout.json") as f: hd = json.load(f)
     with open(ROOT / "data/reference/clinical_pk.json") as f: cp = json.load(f)
@@ -58,9 +50,10 @@ def load_holdout_ik():
     ik_set = set()
     for n in names:
         e = drugs.get(n) or drugs.get(n.replace(" ", "_"))
-        if e and e.get("smiles"):
-            ik = _ik14(e["smiles"])
-            if ik: ik_set.add(ik)
+        if e:
+            for smiles in (e.get("smiles"), e.get("prior_reference_smiles")):
+                ik = _ik14(smiles)
+                if ik: ik_set.add(ik)
     return ik_set
 
 def load_holdout_names() -> set[str]:
@@ -136,8 +129,8 @@ def load_mmpk_data():
     mmpk = mmpk[~mmpk["in_holdout"]].reset_index(drop=True)
     # Name-based holdout exclusion (defense-in-depth): catches reference drugs
     # whose MMPK canon_smiles yields a different InChIKey-14 than their
-    # clinical_pk SMILES, so the ho_ik filter below would miss them (e.g.
-    # pravastatin: clinical_pk GOSGZXISMCZCDW vs MMPK TUZYXOIXSAXUGO).
+    # clinical_pk SMILES, so the ho_ik filter below would miss them. This
+    # happened with pravastatin before its reference structure was corrected.
     mmpk = mmpk[~mmpk["name"].str.lower().isin(ho_names)].reset_index(drop=True)
 
     # Per-drug: take median entry

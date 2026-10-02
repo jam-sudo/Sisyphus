@@ -18,7 +18,6 @@ Output: TSV table + summary statistics.
 from __future__ import annotations
 
 import csv
-import json
 import logging
 import sys
 from dataclasses import dataclass, field
@@ -235,7 +234,7 @@ def load_cyp_annotations() -> dict[str, list[str]]:
 
 
 def run_predictions(holdout_refs: list) -> dict[str, tuple]:
-    """Run pipeline predictions, return {drug_name: (engine_cmax, meta_cmax, compound_type, ad_flags)}."""
+    """Return engine/meta Cmax, compound type, and AD flags by drug name."""
     from sisyphus.pipeline.predict import predict
 
     results = {}
@@ -264,8 +263,12 @@ def run_predictions(holdout_refs: list) -> dict[str, tuple]:
 
 
 def main():
-    from sisyphus.validation.reference import load_reference
+    from sisyphus.resources import get_resource_config
+
+    if get_resource_config().profile != "licensed_research":
+        raise ValueError("DrugBank mechanism audit requires SISYPHUS_PROFILE=licensed_research")
     from sisyphus.predict.drugbank import DrugBankLookup
+    from sisyphus.validation.reference import load_reference
 
     print("Loading reference data...", file=sys.stderr)
     refs = load_reference()
@@ -351,7 +354,11 @@ def main():
     ]
     print("\t".join(header))
 
-    for a in sorted(audits, key=lambda x: abs(np.log10(x.engine_fold)) if x.engine_fold > 0 else 99, reverse=True):
+    for a in sorted(
+        audits,
+        key=lambda x: abs(np.log10(x.engine_fold)) if x.engine_fold > 0 else 99,
+        reverse=True,
+    ):
         print("\t".join([
             a.name,
             a.compound_type,
@@ -394,7 +401,10 @@ def main():
         ("P-gp substrates", lambda a: a.p_gp),
         ("UGT substrates", lambda a: a.is_ugt_substrate),
         ("OATP substrates", lambda a: a.oatp1b1 or a.oatp1b3),
-        ("No transporter/UGT", lambda a: not a.p_gp and not a.is_ugt_substrate and not (a.oatp1b1 or a.oatp1b3)),
+        (
+            "No transporter/UGT",
+            lambda a: not a.p_gp and not a.is_ugt_substrate and not (a.oatp1b1 or a.oatp1b3),
+        ),
     ]:
         subset = [a for a in audits if mech_filter(a) and a.engine_fold > 0]
         if not subset:

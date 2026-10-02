@@ -1,0 +1,24 @@
+{
+  "classification": "modeler_seen_p2_source_review_development_only",
+  "source": "FDA 2015-2025 oral NME P2 acquisition and follow-up source review",
+  "screened_at": "2026-09-24",
+  "final_holdout_eligible": false,
+  "reason": "The model-development agent saw these two parent identities and their source adjudications before an External Holdout V1 freeze. Exclude their names, aliases, and parent structures from final-test and reserve cohorts.",
+  "source_report": "docs/validation/blind_p2_fda_acquisition_2026-09-24.md",
+  "candidates": [
+    {
+      "name": "voxilaprevir",
+      "aliases": [{"name": "GS-9857"}],
+      "smiles": "CC[C@@H]1[C@@H]2CN([C@@H]1C(=O)N[C@@]3(C[C@H]3C(F)F)C(=O)NS(=O)(=O)C4(CC4)C)C(=O)[C@@H](NC(=O)O[C@@H]5C[C@H]5CCCCC(C6=NC7=C(C=C(C=C7)OC)N=C6O2)(F)F)C(C)(C)C",
+      "ik14": "MZBLZLWXUBZHSL",
+      "structure_source": "https://pubchem.ncbi.nlm.nih.gov/compound/89921642"
+    },
+    {
+      "name": "lumacaftor",
+      "aliases": [{"name": "VX-809"}],
+      "smiles": "CC1=C(N=C(C=C1)NC(=O)C2(CC2)C3=CC4=C(C=C3)OC(O4)(F)F)C5=CC(=CC=C5)C(=O)O",
+      "ik14": "UFSKUSARDNFIRC",
+      "structure_source": "https://pubchem.ncbi.nlm.nih.gov/compound/16678941"
+    }
+  ]
+}

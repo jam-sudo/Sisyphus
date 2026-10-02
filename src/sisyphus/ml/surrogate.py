@@ -13,11 +13,13 @@ Falls back to full ODE when surrogate uncertainty is high.
 from __future__ import annotations
 
 import logging
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 import numpy as np
+
+from sisyphus.resources import get_resource_config
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +51,9 @@ N_FEATURES = 12
 class SurrogateConfig:
     """Configuration for surrogate model."""
     hidden_sizes: tuple[int, ...] = (256, 256, 128)
-    model_dir: Path = Path("models/surrogate")
+    model_dir: Path = field(
+        default_factory=lambda: get_resource_config().model("surrogate")
+    )
     n_ensemble: int = 5
     accuracy_threshold: float = 0.20   # 20% relative error gate
     coverage_threshold: float = 0.95   # 95% of parameter space
@@ -210,12 +214,13 @@ def features_in_distribution(
 
 
 def load_surrogate_ensemble(
-    model_dir: Path = Path("models/surrogate"),
+    model_dir: Path | None = None,
     n_ensemble: int = 5,
 ) -> list[CmaxSurrogate]:
     """Load a trained ensemble of surrogate models."""
     if not _HAS_EQX:
         raise ImportError("equinox required: pip install equinox")
+    model_dir = model_dir or get_resource_config().model("surrogate")
     models = []
     for i in range(n_ensemble):
         path = model_dir / f"cmax_mlp_{i}.eqx"

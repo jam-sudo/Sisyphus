@@ -15,6 +15,10 @@ History: this test was originally byte-identical (cmax_v3 == baseline).
 regen revealed that even with both env on numpy 1.26.4 + rdkit-pypi 2022.9.5,
 local-developer Cmax differs from CI Cmax by ~0.1-3% due to BLAS/CPU-SIMD
 build differences. Bit-identicality is not a cross-env-reproducible property.
+2026-10-01 regenerated the 73 evaluated entries on a clean public clone after
+the 2026-09 public model retrains and reference dose/arm corrections (every
+>7% move traced to one of those commits); the 34 entries for quarantined,
+unevaluated drugs are left unchanged.
 
 Two-dimension change tracking:
 - CHANGED_ENZYME_ABUNDANCES: physiology yaml abundance changes (cross-drug)

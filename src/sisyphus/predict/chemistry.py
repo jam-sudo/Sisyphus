@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
-from pathlib import Path
 
 from rdkit import Chem
 from rdkit.Chem import Descriptors
@@ -173,8 +172,6 @@ class MolecularProfile:
 _SMARTS_CARBOXYLIC_ACID = Chem.MolFromSmarts("[CX3](=O)[OX2H1]")
 # Sulfonic acid: pKa ~1
 _SMARTS_SULFONIC_ACID = Chem.MolFromSmarts("[SX4](=O)(=O)[OX2H1]")
-# Phenol: pKa ~10 (aromatic OH)
-_SMARTS_PHENOL = Chem.MolFromSmarts("[OX2H1]c")
 # Primary/secondary/tertiary amine (not imine, amide, etc.)
 _SMARTS_AMINE = Chem.MolFromSmarts("[NX3;H2,H1,H0;!$(N=*);!$(NC=O);!$(NS=O);!$(N#*)]")
 # Aromatic N-H in rings of size >= 6 — protonatable heterocyclic nitrogen
@@ -229,7 +226,6 @@ def _estimate_pka_type(mol: Chem.Mol, logp: float) -> tuple[float | None, str]:
     has_acid = bool(
         mol.HasSubstructMatch(_SMARTS_CARBOXYLIC_ACID)
         or mol.HasSubstructMatch(_SMARTS_SULFONIC_ACID)
-        or mol.HasSubstructMatch(_SMARTS_PHENOL)
     )
 
     # Check aliphatic amines (non-aromatic nitrogen with H or lone pair).
@@ -336,25 +332,32 @@ def compute_profile(smiles: str) -> MolecularProfile:
     # NOTE: this model is gitignored (`models/adme/logp_correction.json`). When
     # present locally it shifts headline AAFE by ~+2.7% (favourably); CI/public
     # clones run without it.
-    _LOGP_CORR_PATH = Path(__file__).resolve().parent.parent.parent.parent / "models" / "adme" / "logp_correction.json"  # noqa: E501
-    if db_logp is None and _LOGP_CORR_PATH.exists():
-        try:
+    from sisyphus.resources import get_resource_config
+    _resources = get_resource_config()
+    _LOGP_CORR_PATH = _resources.model("adme", "logp_correction.json", required=False)
+    if (
+        _resources.profile == "licensed_research"
+        and db_logp is None
+        and _LOGP_CORR_PATH.exists()
+    ):
+        if not hasattr(compute_profile, "_logp_model"):
             import xgboost as xgb
-            if not hasattr(compute_profile, "_logp_model"):
-                m = xgb.XGBRegressor()
-                m.load_model(str(_LOGP_CORR_PATH))
-                compute_profile._logp_model = m  # type: ignore[attr-defined]
-                logger.info(
-                    "logp_correction: enriched (gitignored artifact present at %s); "
-                    "predictions will differ from public-clone state by O(1-5%%)",
-                    _LOGP_CORR_PATH,
-                )
-            import numpy as np
-            corr_features = np.array([[logp, mw, tpsa, float(hbd), float(hba), float(rotatable_bonds)]])  # noqa: E501
-            correction = float(compute_profile._logp_model.predict(corr_features)[0])  # type: ignore[attr-defined]
-            logp = logp + correction
-        except Exception as e:
-            logger.warning("logP correction failed: %s", e)
+
+            from sisyphus.ml.registry import verify_model_artifact
+
+            verify_model_artifact(_LOGP_CORR_PATH)
+            m = xgb.XGBRegressor()
+            m.load_model(str(_LOGP_CORR_PATH))
+            compute_profile._logp_model = m  # type: ignore[attr-defined]
+            logger.info(
+                "logp_correction: enriched (gitignored artifact present at %s); "
+                "predictions will differ from public-clone state by O(1-5%%)",
+                _LOGP_CORR_PATH,
+            )
+        import numpy as np
+        corr_features = np.array([[logp, mw, tpsa, float(hbd), float(hba), float(rotatable_bonds)]])  # noqa: E501
+        correction = float(compute_profile._logp_model.predict(corr_features)[0])  # type: ignore[attr-defined]
+        logp = logp + correction
 
     # pKa: DrugBank ChemAxon → fallback SMARTS
     # NOTE: XGBoost pKa model (R²=0.79, MAE=1.6) was tested but reverted.

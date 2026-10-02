@@ -9,11 +9,11 @@ from __future__ import annotations
 
 import functools
 import json
-from pathlib import Path
 
 from sisyphus.core import Distribution, TransporterKinetics
+from sisyphus.resources import get_resource_config
 
-_DATA_ROOT = Path(__file__).resolve().parents[3] / "data" / "transporters"
+_DATA_ROOT = get_resource_config().data("transporters")
 _OATP1B1_FILE = _DATA_ROOT / "oatp1b1.json"
 
 

@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "profile": "public",
+  "identity_key": "largest-organic-fragment InChIKey-14",
+  "description": "Public raw corpora and exact SHA-pinned fitted-row snapshots for every active production model. Model metadata binds each artifact to its fitted snapshot; raw corpora are additional conservative exclusion inputs. Licensed DrugBank data are excluded from the public profile.",
+  "sources": [
+    {"path": "data/ppbr_az.tab", "sha256": "54c9520f4b6e04419b18bab7335583c3865d86fc53db40f74c2cff1577c8ec1b"},
+    {"path": "data/training/fup_tdc_public_clean.csv", "sha256": "e2c70c83707b2031904a351be76ce61899557a4b14316b9429c4a77fd2eac742"},
+    {"path": "data/caco2_wang.tab", "sha256": "447d9f1af487c06b080145a2361dbe45af5b27afc83e1a975dd29b9ea535d6ab"},
+    {"path": "data/training/peff_tdc_public_clean.csv", "sha256": "46a5a7c4f48b6d6f4f501fdca049c1fe25cadf115658bda504d2e41d2092a06c"},
+    {"path": "data/training/omega_mmpk_clean.csv", "sha256": "e7228d14bdfdfc6c790177207779630c1e5655c19d451528c87b80e2e9de9c3d"},
+    {"path": "data/training/cmax_omega_public_clean.csv", "sha256": "8cb120b5b1cc6e82b30a78fa28e1ec0315e21490969c201969fa6b3032b7bfee"},
+    {"path": "data/training/mmpk_expanded_full.csv", "sha256": "8b0a44d13fc9ebfb25bc8336bc3ff0603a8ac889719486a68f274d1cb2fc12a6"},
+    {"path": "data/training/mmpk_expanded_v2.csv", "sha256": "8a948e6e3370e35dcbd3c644aeb9ced36998843c5e8c1570797cf88a64a5c7f0"},
+    {"path": "data/training/mmpk_pbpk_features.csv", "sha256": "8a253ecce88ec1c73bb72ebc8ea126e9a9ad281b940de8cbdec86213695d4ee1"},
+    {"path": "data/training/clf_training.csv", "sha256": "02c4048011586fba6d00cb9cd5b61ab1861ecdac54a356719e22acb96f9a671e"},
+    {"path": "data/training/bioavailability_v1.csv", "sha256": "a45516a972d18d3a1ab3c0b4151d4075262d8bf80a4b9d001e34f62aab8f93ad"},
+    {"path": "data/training/clint_expanded_v2.csv", "sha256": "c68b935bb04660d7d1df1747d9a1987d5fa0c9b408f0aa8818a76bc2483e91c1"},
+    {"path": "data/training/clint_merged_v3_biogen.csv", "sha256": "380fa1748fdf6abfd54c02368e25ad1911368802b59ab0a3b7cfef840d4d9ff4"},
+    {"path": "data/training/clint_tdc_public_clean.csv", "sha256": "dbf2b750b58a68af02b01cfe90a370630908c311c8436f65818bbc08fcfaaa94"},
+    {"path": "data/vdss_lombardo.tab", "sha256": "00bb7e0dea19f78c4c1887e27ecf476135d9de2ef5ecc26d7c645c37bd9cb7af"},
+    {"path": "data/training/vdss_tdc_public_clean.csv", "sha256": "778851b9dad82c2eb3d948b7ffb3ae829ce5fd529395b7d0599d4c86e02e5e54"},
+    {"path": "data/training/vdss_v2_training.csv", "sha256": "9be8627b9e982b0cfd813d885f675f5d71733db3ac2109189bf0f4af7af01da2"},
+    {"path": "data/training/clearance_hepatocyte_az.tab", "sha256": "2c217f46600c22e107b72faa2bfb1d9bf799213aee47b601f6e0d6d73b68f274"}
+  ]
+}

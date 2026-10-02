@@ -662,6 +662,11 @@ def build_drug_on_graph(
     Returns:
         A fully parameterized DrugOnGraph ready for the engine.
     """
+    if isinstance(dose_mg, bool) or not np.isfinite(dose_mg) or dose_mg <= 0:
+        raise ValueError(f"dose_mg must be positive and finite, got {dose_mg!r}")
+    if route not in {"oral", "iv"}:
+        raise ValueError(f"route must be 'oral' or 'iv', got {route!r}")
+
     from sisyphus.predict.registry import lookup_active_metabolite
 
     # Prodrug activation routing: SMILES → ActiveMetabolite via registry.
@@ -755,9 +760,6 @@ def build_drug_on_graph(
         admin_node = "stomach_lumen"
     elif route == "iv":
         admin_node = "venous_blood"
-    else:
-        logger.warning("Unknown route %r, defaulting to oral", route)
-        admin_node = "stomach_lumen"
 
     # Truncate name for display (SMILES can be long)
     name = profile.smiles[:40] if len(profile.smiles) > 40 else profile.smiles

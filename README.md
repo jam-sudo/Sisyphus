@@ -1,6 +1,6 @@
 # Sisyphus
 
-**Graph-based whole-body PBPK simulation with native uncertainty propagation**
+**Oral structure + dose → Cmax, with a separate graph-based PBPK research engine**
 
 [![CI](https://github.com/jam-sudo/Sisyphus/actions/workflows/ci.yml/badge.svg)](https://github.com/jam-sudo/Sisyphus/actions/workflows/ci.yml)
 
@@ -8,23 +8,27 @@
 
 **Preprint:** [Yoon, J. M. (2026). *Sisyphus: A Topology-Compiled Physiologically Based Pharmacokinetic Platform with Structure-Only Input and Bayesian Parameter Refinement.* ChemRxiv.](https://doi.org/10.26434/chemrxiv.15004452/v1) &mdash; DOI [10.26434/chemrxiv.15004452/v1](https://doi.org/10.26434/chemrxiv.15004452/v1)
 
+The published v1 preprint and archived `Sisyphus_Preprint.pdf` report an older AAFE of 2.698. The current code's source-screened development benchmark is 2.830 on 73 scored compounds; the value comes from a different model and reference set. Use the validation section below for current evidence.
+
 ---
 
-Sisyphus is a physiologically based pharmacokinetic (PBPK) platform that represents the human body as a typed directed multi-graph, derives ordinary differential equation (ODE) systems from graph topology, and propagates parameter uncertainty natively through Monte Carlo sampling.
+Sisyphus is an oral structure-only C<sub>max</sub> prediction system with a separate physiologically based pharmacokinetic (PBPK) research engine. The engine represents the human body as a typed directed multi-graph and derives ordinary differential equation (ODE) systems from graph topology.
 
-The platform accepts a SMILES string and dosing regimen as input and produces PK endpoints (C<sub>max</sub>, T<sub>max</sub>, AUC, t<sub>1/2</sub>) with 90% prediction intervals. Beyond single-dose prediction, Sisyphus supports multi-dose regimen simulation with steady-state detection, Bayesian therapeutic drug monitoring (TDM) via dispatched simulation-based / importance / iterative Bayesian methods, model-informed precision dosing (MIPD), drug-drug interaction (DDI) modeling, pharmacogenomic phenotype-aware prediction (SLCO1B1, NAT2, UGT1A1), and PK/PD effect estimation. OATP1B1-mediated hepatic uptake is modeled via an extended clearance model (ECM) with closed-form QSSA hepatocyte kinetics.
+The production output is C<sub>max</sub> for a canonical parent SMILES and positive oral dose. Engine-derived T<sub>max</sub>, AUC, half-life, multi-dose simulation, TDM, MIPD, DDI, PGx, and PK/PD are experimental research outputs and are not covered by the C<sub>max</sub> accuracy claim. Residual/model-error and parameter-Monte-Carlo intervals are exposed separately.
 
-**Intended use.** Sisyphus targets *structure-only* PK prediction for the regime where measured ADME is unavailable. Its retrospective holdout accuracy (AAFE 2.743, N=107) is competitive with expert-harmonised commercial PBPK (OrBiTo AAFE 2.08&ndash;2.74), but error of this scale makes it a tool for **screening, ranking, and uncertainty-aware triage** rather than quantitative dose-setting. Quantitative individualization comes from the Bayesian/MIPD layer, which sharpens predictions as measured concentrations are supplied (posterior CV reduction &gt;50%). Prospective novel-chemotype accuracy (AAFE 3.21) and a wide structure-only prediction interval (&divide;&times;~13-fold) are the cost of having no measured inputs &mdash; see [Limitations](#limitations).
+**Intended use.** Sisyphus targets oral structure-only Cmax prediction (canonical parent SMILES + parent-active-moiety dose) when measured ADME is unavailable. On the repeatedly accessed retrospective **development benchmark**, Meta AAFE is 2.830 [bootstrap 95% CI 2.30&ndash;3.52, N=73 scored]. This is not an independent holdout result: the original 107-compound cohort has informed repeated system-selection decisions. A source-adjudicated diagnostic P0 pilot on 18 compounds, scored with an earlier model, found Meta AAFE **3.34**, compared with **3.01** for direct ML; its labels were AI-assisted, historical VDss training membership is unverified, and it does not establish Meta superiority. The current system has **no unconsumed independently curated external holdout AAFE**. Error of this scale and the wide development-residual interval (&divide;&times;~10.65-fold; 90.4% coverage on the repeatedly used development set) restrict the tool to **screening, ranking, and uncertainty-aware triage**, not dose setting.
+
+For a 500 mg metformin hydrochloride tablet, pass **389.93 mg** with the parent metformin SMILES; the [product label](https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=552ad61d-bafd-478d-e063-6294a90a02f9) states that active-moiety equivalence.
 
 ```
 $ sisyphus predict --smiles "Cn1c(=O)c2c(ncn2C)n(C)c1=O" --dose 100
 
 Drug: Cn1c(=O)c2c(ncn2C)n(C)c1=O
 Method: hybrid
-Confidence: high
-Cmax: 1.1792 mg/L
-Tmax: 0.63 h
-t½: 2.07 h
+Execution: ok (public profile)
+Applicability: no rule-based warning flags (confidence is not calibrated)
+Final oral Cmax: <value> mg/L
+Development empirical residual 90% interval: <low>–<high> mg/L
 ```
 
 ## Methodology
@@ -93,6 +97,7 @@ $$\frac{dA_{tissue}}{dt} = PS \cdot (C_{u,vasc} - C_{u,tissue})$$
 $$k_a = \frac{2.88 \cdot P_{eff} \cdot f_{ka}}{r}$$
 
 where $P_{eff}$ is effective permeability (&times;10<sup>&minus;4</sup> cm/s), $f_{ka}$ is the segment-specific absorption fraction, and $r$ is particle radius (&mu;m).
+The coefficient 2.88 is an empirical absorption-scale parameter for these numerical input units; it carries the units needed to produce h<sup>&minus;1</sup> and is not a dimensionless cm/s-to-&mu;m/h conversion. Its transferability across formulations has not been independently established.
 
 **Tissue:plasma partition coefficients** are computed via the Rodgers &amp; Rowland method (Rodgers &amp; Rowland, 2005, 2006), with the Berezhkovskiy correction for acids (Berezhkovskiy, 2004).
 
@@ -101,13 +106,13 @@ where $P_{eff}$ is effective permeability (&times;10<sup>&minus;4</sup> cm/s), $
 The full pipeline combines mechanistic simulation with data-driven prediction:
 
 1. **SMILES &rarr; molecular profile**: RDKit descriptors, structural pK<sub>a</sub> classification, applicability domain assessment
-2. **ADME prediction**: Pre-trained XGBoost models for f<sub>u,p</sub>, CL<sub>int</sub>, R<sub>B:P</sub>, VD<sub>ss</sub> (trained on TDC datasets; Huang et al., 2021), with DrugBank experimental f<sub>u,p</sub> enrichment where available
+2. **ADME prediction**: Pre-trained XGBoost models for f<sub>u,p</sub>, P<sub>eff</sub>, CL<sub>int</sub>, and VD<sub>ss</sub> (public TDC datasets; Huang et al., 2021); R<sub>B:P</sub> defaults to 1.0. DrugBank experimental enrichment is available only in the opt-in `licensed_research` profile and never affects public results
 3. **IVIVE**: CL<sub>int</sub> decomposition into per-enzyme affinities, Kp calculation
 4. **PBPK simulation**: 34-state ODE system solved via LSODA (Petzold, 1983)
-5. **ML direct prediction**: XGBoost C<sub>max</sub> model (trained on 1,128 drugs from multi-source clinical PK data)
+5. **ML direct prediction**: XGBoost C<sub>max</sub> model (906 hash-pinned public clinical PK rows derived from Omega MMPK data)
 6. **CL/F analytical track**: closed-form 1-compartment C<sub>max</sub> estimate using XGBoost CL/F + V<sub>d</sub> predictions and k<sub>a</sub> from Engine T<sub>max</sub> / Peff. Decorrelates with Engine+ML residuals via different input channels.
-7. **VDss analytical track**: 1-compartment C<sub>max</sub> using XGBoost VDss (volume-of-distribution-at-steady-state) predictor. Conditional activation based on applicability. Added 2026-04 as the orthogonal fourth track.
-8. **Meta-learner**: Compound-type-adaptive geometric blend of all four tracks via LOOCV-calibrated weights. Base compounds: engine 0.60 / ML 0.40 / CLF 0.00; non-base: engine 0.35 / ML 0.50 / CLF 0.15. VDss track weight 0.20 when activated; other weights scaled by ×0.80 so the four-track sum remains unity.
+7. **VDss volume proxy**: dose divided by predicted VDss (volume-of-distribution-at-steady-state) for a fixed 70 kg body weight. This is a simple scale estimate, not an absorption/elimination C<sub>max</sub> model. It is included whenever a positive VDss estimate is available; this routing was selected on N=107 and is not an independently validated applicability rule.
+8. **Meta-learner**: Compound-type-adaptive geometric blend of all four tracks with weights selected by LOOCV on the repeatedly accessed N=107 development set. Base compounds: engine 0.60 / ML 0.40 / CLF 0.00; non-base: engine 0.35 / ML 0.50 / CLF 0.15. VDss track weight 0.20 when activated; other weights scaled by ×0.80 so the four-track sum remains unity. These weights are frozen pending blinded external evaluation.
 
 ### Uncertainty propagation
 
@@ -127,7 +132,7 @@ Given observed plasma concentrations, Sisyphus refines population-level paramete
 - **IBIS (Iterative Bayesian Importance Sampling, 1/13 production drugs).** Used as fallback when SBC fails for a drug (e.g. pravastatin OATP1B1 issues pre-ECM); closed-loop iteration prevents weight degeneracy.
 - **IS (classical Importance Sampling, 0/13 production drugs post-routing).** Retained for legacy compatibility; used only for compounds where SBI training data is insufficient AND IBIS has not been validated.
 
-Effective sample size (ESS = $1/\sum w_i^2$) is monitored for importance-based methods. Morphine routes SBI with a likelihood reweighting kernel (P6, 2026-04-19) to compensate for hierarchical variance deficiency. All three methods share a unified output contract: per-PK-parameter posterior Distribution. This mechanism bypasses the CL<sub>int</sub> prediction ceiling (R&sup2; &asymp; 0.24): observed drug levels directly correct inaccurate population priors, reducing posterior CV by &gt;50% in validation (see [TDM validation](#tdm-validation)).
+Effective sample size (ESS = $1/\sum w_i^2$) is monitored for importance-based methods. Morphine routes SBI with a likelihood reweighting kernel (P6, 2026-04-19) to compensate for hierarchical variance deficiency. All three methods share a unified output contract: per-PK-parameter posterior Distribution. This mechanism can update errors in the current CL<sub>int</sub> predictor (scaffold-CV R&sup2; = 0.215): observed drug levels update population priors, reducing posterior CV by &gt;50% in internal validation (see [TDM validation](#tdm-validation)).
 
 ### Model-informed precision dosing
 
@@ -137,19 +142,23 @@ MIPD recommends adjusted doses to achieve a target steady-state concentration:
 2. Linear dose scaling: $dose_{new} = dose_{current} \times (C_{ss,target} / C_{ss,posterior})$
 3. Clamp to clinical dose range and round to a practical increment (default 25 mg).
 
-Linear scaling assumes non-saturable metabolism, which holds for most drugs at therapeutic concentrations. For drugs with known nonlinear pharmacokinetics (e.g., phenytoin), this approximation should be used with caution.
+Linear scaling assumes non-saturable metabolism. The dosing API rejects drugs
+with declared saturable enzyme kinetics unless the caller explicitly opts into
+an experimental override; production nonlinear dosing requires forward
+simulation across candidate doses.
 
-### Engine-as-prior posterior PK (MIPD module)
+### Experimental engine-as-prior posterior PK (MIPD module)
 
-The `mipd/` module repositions the mechanistic engine from a one-shot SMILES&rarr;C<sub>max</sub> oracle into a **structural prior that any sparse measured observation sharply updates**. The dominant structural error of an a-priori PBPK prediction is bioavailability F (formulation, salt/crystal form, food, particle size, transporter genetics — none of which is in the SMILES); the engine gets the *structure* (dose-response, distribution kinetics, accumulation) right while getting F-*magnitude* wrong, so a single measured anchor collapses the residual error.
+The `mipd/` module explores using the mechanistic engine as a structural prior updated by measured concentrations. Bioavailability F is one candidate latent because formulation, salt or crystal form, food, particle size, and transporter genetics are absent from the SMILES input. The current experiments do not show that one observation identifies F or corrects all sources of structural error.
 
-True F is treated as a latent with a wide prior centered on the engine's emergent F<sub>engine</sub>, and updated from whatever measured data exists — a measured F, a microdose AUC, a single plasma concentration, or one dose arm — by sampling/importance-resampling (SIR). The posterior over F/CL-determining parameters propagates to a posterior over the target PK quantity with an honest interval. With **zero** measured data the posterior reduces to the a-priori prediction (so the 107-holdout headline is unchanged); each added observation narrows it. The product metric is therefore posterior-predictive accuracy and calibrated coverage *as a function of how much measured data is supplied*, in the three regimes where the population ML/meta stack has no signal by construction: out-of-domain chemistry, dose/regimen/population extrapolation, and individualized MIPD.
+True F can be treated experimentally as a latent with a wide prior centered on the engine's emergent F<sub>engine</sub>, then updated from measured data by sampling/importance-resampling (SIR). This research path is not part of the supported structure-only Cmax path, and its posterior intervals have not been independently shown to be clinically calibrated.
 
 The module provides an a-priori-to-posterior path (`predict_posterior`), steady-state IV trough TDM with a renal-clearance latent (`predict_tdm`, vancomycin/aminoglycoside scope), patient covariate individualization (creatinine clearance via measured CrCl or a Cockcroft-Gault estimate; body weight and age via a physiology-generator graph swap), and target-attainment dose recommendation (`recommend_dose`) over the resulting posterior.
 
-> This is the post-headline pivot direction: the SMILES-only C<sub>max</sub> ceiling (~2.7 AAFE) was found to be empirically walled rather than under-engineered (the meta's own residual is structure-unpredictable out-of-sample), so the program shifted to the regimes where measured data is the only lever that moves the number. Charter: `docs/_internal/specs/2026-06-09-engine-as-prior-mipd-charter.md`.
+> This module is a research hypothesis. Synthetic/simulator validation does not
+> establish real-patient predictive accuracy or clinical utility.
 
-### Drug-drug interactions
+### Experimental drug-drug interactions
 
 DDI is modeled by adjusting enzyme abundances in the body graph prior to ODE compilation. The engine sees modified abundances and computes clearance as usual &mdash; no engine modifications are required.
 
@@ -163,7 +172,7 @@ $$E_{eff} = E_{base} \cdot \left(1 + \frac{E_{max} \cdot [I]}{EC_{50} + [I]}\rig
 
 where $E_{base}$ is baseline enzyme abundance (pmol), $[I]$ is perpetrator plasma concentration, $K_i$ is the inhibition constant, and $E_{max}$/$EC_{50}$ are induction parameters. Preset perpetrators: ketoconazole, fluconazole, quinidine (CYP inhibitors) and rifampin (CYP3A4 inducer).
 
-### PK/PD link
+### Experimental PK/PD link
 
 Pharmacodynamic effects are computed from the concentration-time profile via an effect compartment with sigmoid E<sub>max</sub> response:
 
@@ -182,37 +191,37 @@ where $k_{e0}$ is the effect-site equilibration rate constant (h<sup>&minus;1</s
 ### Installation
 
 ```bash
-pip install -e ".[dev,ml,chem]"
+pip install -e ".[dev,ml]"
 ```
 
-> Pre-trained XGBoost models (f<sub>u,p</sub>, CL<sub>int</sub>, R<sub>B:P</sub>, VD<sub>ss</sub>, C<sub>max</sub>) are required in `models/adme/` and `models/direct_pk/`. Re-training scripts are provided in `scripts/`.
+> Pre-trained XGBoost models (f<sub>u,p</sub>, P<sub>eff</sub>, CL<sub>int</sub>, VD<sub>ss</sub>, C<sub>max</sub>, CL/F, Vd/F) ship in `models/adme/` and `models/direct_pk/`. Re-training scripts are provided in `scripts/`.
 
 ### CLI
 
-Six commands cover the clinical pharmacology workflow:
+The oral `predict` command is the production-facing interface. The other commands below are explicitly experimental research interfaces:
 
 ```bash
 # Single-dose PK prediction
 sisyphus predict --smiles "Cn1c(=O)c2c(ncn2C)n(C)c1=O" --dose 100
 
 # Multi-dose regimen simulation (atorvastatin 40 mg QD × 14 days)
-sisyphus simulate --smiles "CC(C)c1n(CC(O)CC(O)CC(=O)O)c(=O)..." \
+sisyphus simulate --smiles "CC(C)C1=C(C(=C(N1CC[C@H](C[C@H](CC(=O)O)O)O)C2=CC=C(C=C2)F)C3=CC=CC=C3)C(=O)NC4=CC=CC=C4" \
     --dose 40 --interval 24 --doses 14
 
 # TDM Bayesian update (midazolam 5 mg, observed 0.015 mg/L at t=1 h)
-sisyphus tdm --smiles "c1ccc2c(c1)C(=NC(=O)N2)c1ccccc1F" \
+sisyphus tdm --smiles "CC1=NC=C2N1C3=C(C=C(C=C3)Cl)C(=NC2)C4=CC=CC=C4F" \
     --dose 5 --obs "1.0:0.015"
 
 # DDI prediction (midazolam + ketoconazole inhibition)
-sisyphus ddi --smiles "c1ccc2c(c1)C(=NC(=O)N2)c1ccccc1F" \
+sisyphus ddi --smiles "CC1=NC=C2N1C3=C(C=C(C=C3)Cl)C(=NC2)C4=CC=CC=C4F" \
     --dose 5 --inhibitor ketoconazole
 
 # MIPD dose recommendation (target Css,max = 0.02 mg/L)
-sisyphus dose-adjust --smiles "c1ccc2c(c1)C(=NC(=O)N2)c1ccccc1F" \
+sisyphus dose-adjust --smiles "CC1=NC=C2N1C3=C(C=C(C=C3)Cl)C(=NC2)C4=CC=CC=C4F" \
     --dose 5 --obs "1.0:0.015" --target-css 0.02
 
 # Holdout benchmark (add --compute-pi for empirical 90% PI coverage; diagnostic only)
-sisyphus benchmark --holdout
+sisyphus benchmark --development-set
 ```
 
 All commands accept `--verbose` for debug-level logging.
@@ -224,9 +233,11 @@ from sisyphus.pipeline.predict import predict
 
 result = predict("Cn1c(=O)c2c(ncn2C)n(C)c1=O", dose_mg=100.0)
 
-print(result.pk.cmax.mean)    # 1.18 mg/L
-print(result.method)          # "hybrid"
-print(result.confidence)      # "high"
+print(result.cmax_prediction.cmax.mean)       # authoritative Meta Cmax
+print(result.cmax_prediction.interval_90)     # residual/conformal interval
+print(result.engine_simulation.endpoints)     # coherent engine-only endpoints
+print(result.execution_status)                # "ok" / explicit fallback status
+print(result.in_applicability_domain)         # rule-based flags, not calibrated accuracy
 ```
 
 ### Engine-only mode (known compound parameters)
@@ -294,42 +305,95 @@ Mass balance error &lt; 10<sup>&minus;12</sup> for all simulations. **Lesson:** 
 
 > Engine-validation targets: high-extraction drugs (midazolam, propranolol) use post-FLUX-1/RBP-2 Sisyphus regression snapshots, not Omega parity — Omega shared the flow-limitation double-count bug FLUX-1 fixed, so Omega parity is no longer a correctness oracle for them. Warfarin is also a Sisyphus snapshot (RBP-2 only; FLUX-1 was a no-op for this low-extraction drug). The blood:plasma concentration basis is RBP-2 (whole-blood pools reported on a plasma basis); see `docs/_internal/specs/2026-06-04-rbp-concentration-basis-design.md`.
 
-### Holdout benchmark (SMILES &rarr; C<sub>max</sub>)
+### Retrospective development benchmark (SMILES &rarr; C<sub>max</sub>)
 
-External validation on a Murcko scaffold-stratified holdout set (N=107, seed=42, never used in training or model selection). The holdout set integrates observed concentration&ndash;time profiles from the Open Systems Pharmacology (OSP) repository, curated literature PK data, and FDA DailyMed labels. Performance is reported using AAFE (Absolute Average Fold Error; Obach et al., 1997) with bootstrap 95% confidence intervals (10,000 resamples on |log<sub>10</sub>(fold error)|):
+Retrospective evaluation on a Murcko scaffold-stratified development split (107 compounds, seed=42; 73 currently have source-supported scored Cmax). All seven active fitted models now have SHA-pinned public training snapshots with compound-level exclusions, but this cohort has been used for repeated weight, track, routing, and mechanism feedback and therefore is not an independent system holdout. It integrates observed concentration&ndash;time profiles from OSP, curated literature PK data, and FDA DailyMed labels, with mixed formulations and populations. Performance is reported using AAFE with bootstrap confidence intervals conditional on the selected system; those intervals do not include adaptive model-selection bias:
 
 $$AAFE = 10^{\operatorname{mean}\left(\left|\log_{10}\frac{C_{max,pred}}{C_{max,obs}}\right|\right)}$$
 
 | Track | AAFE | 95% CI | %2-fold | %3-fold | N |
 |---|:-:|:-:|:-:|:-:|:-:|
-| **Meta-learner (production)** | **2.743**† | [2.37, 3.20] | 44.9% | 63.6% | 107 |
-| Engine only | 4.278 | [3.56, 5.20] | 27.1% | 43.9% | 107 |
-| ML only | 2.998 | [2.55, 3.55] | 43.0% | 58.9% | 107 |
-| Meta, in-domain | 2.791 | [2.35, 3.33] | 42.0% | 61.7% | 81 |
+| **Meta-learner (production)** | **2.830**† | [2.30, 3.52] | 43.8% | 67.1% | 73 |
+| Engine only | 3.872 | [2.99, 5.09] | 38.4% | 50.7% | 73 |
+| ML only | 3.049 | [2.47, 3.78] | 41.1% | 57.5% | 73 |
+| Meta, in-domain | 2.898 | [2.34, 3.67] | 40.0% | 66.7% | 60 |
 
-> **Reproducibility note (2026-05-09 audit-driven update; B-03 refresh 2026-05-20; B-03.x literature-IVIVE 2026-05-25; B-02 Phase 2 UGT registry 2026-05-27).** These numbers reflect a **public-clone deterministic state** generated on the canonical CI numerics stack (Linux, Python 3.10, locked deps) that produced `data/training/4track_holdout_predictions.json` (pinned Meta AAFE **2.743**). **† Numerics-stack band — three-sig-fig reproduction holds only on that canonical stack.** A fresh `git clone` + `pip install -r requirements-lock.txt` on a *different* stack (Python minor version, BLAS implementation, libomp build) reproduces the **aggregate** Meta AAFE only to ~4%: an independent live re-run on 2026-07-03 (macOS, numpy 2.2.6) read Meta AAFE **2.62** (engine 4.41, ML 2.998; per-drug drift median ~16% / max ~1.9× — largest single on the canonical stack: trazodone engine 0.291 → 0.256), well within the bootstrap CI [2.37, 3.20]. On an arbitrary local stack expect the aggregate in the **~2.62–2.74 band**; the pinned **2.743** is the canonical-CI-stack value, and per-drug Cmax bit-identity additionally requires matching that exact stack. The previous cache (Meta 2.679 [2.30, 3.14], In-domain 2.733) was generated on a local-developer environment that conditionally loaded two artifacts not present in this repository: a proprietary DrugBank export (`data/drugbank/`, academic license required, gitignored) and a residual-correction logP XGBoost model (`models/adme/logp_correction.json`, gitignored). Both shifted Cmax predictions silently for the drugs they covered. Removing the silent shift moves Meta AAFE from local-artifact values near 2.68 to the public-clone 2.75–2.77 range. The 2026-05-20 B-03 refresh adds clopidogrel to the prodrug registry (parent-observation scoring + per-enzyme CES1/CYP yields) and fixes a parallel double-counting bug in `cyp_clearance_overrides.lookup_metabolic_fraction` (full InChIKey missed against the non-isomeric clinical_pk.json SMILES, leaving the default XGBoost-derived hepatic CL running alongside the explicit ProdrugActivationEdges); the fix shifts Meta AAFE 2.751 → 2.772 (+0.7%) and the In-domain Meta from 2.837 → 2.862, both well inside the bootstrap CI. The 2026-05-25 B-03.x refresh replaces the B-03 placeholder enzyme affinities (0.030 each for CES1/CYP3A4/CYP2C9) with literature-IVIVE values derived from Subash 2025 (Mol Pharm PMC12673578) rCES1 Vmax/Km + Boberg 2017 (PMC5267516) CES1 hepatic abundance + Kazui 2010 (DMD 38:92–99) 85/15 inactive/active fate split partition — CES1 0.0586, CYP3A4 0.0322, CYP2C9 0.0817 μL/min/pmol, preserving the literature 85/15 fate split and yielding a 1.92× total CLint scale-up over the placeholder; the resulting clopidogrel parent Meta fold tightens 5.15× → 4.67×, aggregate Meta AAFE shifts 2.772 → 2.769 (Δ=−0.0025, within bootstrap CI noise), and the clopidogrel registry disposition flips from `ceiling_accepted` to `literature_applied`. Bootstrap 95% CIs (10,000 resamples on |log<sub>10</sub>(fold)|, seed=20260422, computed 2026-05-20 after the B-03 fix) are above; the refreshed Meta CI [2.37, 3.26] overlaps the previous [2.30, 3.14], confirming the cumulative artifact + double-count shift remains within sampling uncertainty. The 2026-05-27 B-02 Phase 2 refresh activates the previously-disabled UGT path via 2 literature-curated substrate registries (`data/enzymes/{ugt2b7,ugt1a9}_substrates.json`, 8 seed drugs: morphine, codeine, ketorolac, indomethacin via UGT2B7; dapagliflozin, etodolac, bexagliflozin, glasdegib via UGT1A9) plus 2 abundance entries in `data/physiology/reference_man.yaml` (UGT2B7 2.43e6 pmol, UGT1A9 8.10e5 pmol; Achour 2017 PMC5328673 / Margaillan 2015 reference range). The cycle ships with **no DrugBank dependency** for the UGT path — closes the DE-36 reproducibility blocker. Gate-D 99-of-107 bit-identical verified (only the 8 seeds shift on the same numerics stack). Meta AAFE shifts 2.692 → 2.698 (Δ = +0.0067, **1.6% of the new bootstrap CI half-width [2.32, 3.17]** — well within sampling noise; see `data/validation/4track_ci_2026-05-27_B02.json`). 6 of 8 seeds improve (under-predicted drugs move toward observation); 2 of 8 (morphine, codeine) worsen because their pre-B-02 over-prediction relied on CYP-default over-extraction that the correct UGT path now partly displaces — a secondary diagnostic finding logged as DE-38, with `docs/_internal/backlog.md §B-13` (local-only) scoping the Phase 2.x abundance/IVIVE recalibration to address it (subsequently shipped as PR #49, metric-neutral). The headline table values above reflect the post-B-02 same-numerics-stack state and supersede the prior 2.772 headline (which was tied to a different numerics stack — Python/BLAS — and produced an aggregate-AAFE drift of ~0.08 unrelated to any cycle change, per the established ~12% per-drug numerics-stack drift). Prospective slice refresh subsequently shipped (N=14, PR #56) and was then expanded + decontaminated to N=28 (2026-06-01); the delta was *not* small — the expanded set reverses the earlier favorable reading (see Prospective validation below). Artifacts: `data/validation/4track_ci_2026-05-12_v0.4.json` (B-03 era), `data/validation/4track_ci_2026-05-27_B02.json` (current). Subsequent metric-neutral cycles — B-13 gut-UGT correction (2026-05-29, ΔMeta AAFE ≈ −3×10⁻⁵) and B-14 hepatic-UGT IVIVE (2026-05-30, no-op / DE-40) — left the headline at 2.698. **FLUX-1 (2026-06-04, PR #65) then moved the headline to the table's current 2.784:** the engine fix corrected a flow-limitation double-count that capped hepatic/gut extraction at E→0.5 (a real, triple-verified bug), but fixing it **regresses** the benchmark (the wrong formula was load-bearing as calibration). Of the 2.698→2.784 move, ~+0.8% is the FLUX-1 effect itself and the rest is a stack refresh (the cache was regenerated on the current CI stack; the prior 2.698 predated it). This is a correctness-first change — correct physics over a higher-but-wrong number. Cache regenerated on the canonical CI stack via `.github/workflows/flux1-regen.yml`; CIs `data/validation/4track_ci_2026-06-04_flux1.json`. **2026-06-10 batch regen → the table's current 2.731:** the FLUX-1 2.784 cache was found to be **stale** — it predated the oxybutynin holdout-reference fix (Cmax 0.001→0.008) which was merged via PR #68 but never re-pinned. A same-stack canonical regen of `origin/main` (oxybutynin) **+ the paracellular absorption pathway** (PR #70, Renkin tight-junction-pore physics, all constants externally anchored) gives Meta AAFE **2.731**. Same-stack attribution: oxybutynin **−0.026** (label correction) + paracellular **−0.031** (engine 4.458→4.244, −5%); both moves are **within the bootstrap CI** (half-width ~0.42) — correctness-driven, not a statistically-distinguishable accuracy gain. CIs `data/validation/4track_ci_2026-06-10_flux1.json`. **2026-07-02 CLF leak-free canonical regen → the table's current 2.735:** the CL/F-track training builder gained a structural InChIKey-14 holdout key (PR #90) that removed 5 name-evading stereo/salt holdout collisions (valacyclovir, darunavir ethanolate, ofloxacin/levofloxacin, dexmethylphenidate/methylphenidate, quinidine/quinine) from the CLF/VDF training set; a leak-free retrain on the canonical CI stack moved Meta AAFE **2.731 → 2.735** (Δ +0.00427). A same-stack baseline retrain reproduced the committed 2.731 to ±0.00004, so the Δ is cleanly attributable to the leak fix; its sign is stack-dependent (a local macOS retrain moved it −0.004), i.e. the leak effect sits at the retrain-noise floor and well inside the bootstrap CI. This is a **correctness-first** change — removing holdout leakage from training data per Invariant #5 (holdout is inviolable) — not an accuracy claim. CIs `data/validation/4track_ci_2026-07-02_clf_leakfree.json`. **2026-07-03 UGT single-path fm fix → the table's current 2.743:** `build_drug_on_graph` double-allocated UGT tags — a tag present in both the `ugt_enzymes` block and the per-gene `non_cyp_fractions` registry was counted twice in `_get_fm_fractions`, leaking the CYP residual into a phantom UGT slot and ~8×-suppressing CYP (a UGT2B7-only substrate at the literature 0.85/0.15 split resolved to 0.983/0.017). Routing each UGT tag through exactly one fm mechanism (PR #93) corrects the split for the 8 B-02 UGT substrates (all in-holdout) and moved Meta AAFE **2.735 → 2.743** (Δ +0.00748). Predict-layer, deterministic, no model retraining; the sign is stack-dependent (a local macOS re-run moved it −0.001), so the effect sits at the numerics-noise floor and well inside the bootstrap CI. **Correctness-first** — the 0.85/0.15 split is the literature fate. CIs `data/validation/4track_ci_2026-07-03_ugt.json`.
+The paired compound-bootstrap Meta/ML AAFE ratio is **0.928** (95% CI
+**0.816–1.053**, 10,000 resamples, seed 20260422). This conditional interval
+does not account for repeated system selection. The development data cannot
+establish independent Meta superiority. The in-domain ratio is
+1.008 (0.898–1.137).
 
-The 4-track meta-learner combines mechanistic PBPK (Engine), data-driven XGBoost C<sub>max</sub> (ML), a closed-form CL/F analytical (CLF), and a conditional VDss analytical track. Weights are compound-type-adaptive and LOOCV-calibrated: base compounds blend Engine 0.60 / ML 0.40; other compounds use Engine 0.35 / ML 0.50 / CLF 0.15, with VDss 0.20 added when applicability criteria are satisfied (and the remaining tracks re-scaled by ×0.80 so the total is 1.0). In-domain AAFE (N=81) excludes 26 drugs flagged as out-of-applicability-domain (prodrugs, high-MW, extreme lipophilicity, extended-release formulation mismatch). The current public-clone cache (`data/training/4track_holdout_predictions.json`) carries in-domain N=81, regenerated on the canonical CI stack by the 2026-06-10 oxybutynin + paracellular batch regen, the 2026-07-02 CLF leak-free regen, and the 2026-07-03 UGT single-path fix.
+**Reference and training-label audit (2026-09-24/25).** Before the current scores were produced, every scored development arm and the direct-model training aggregates were re-checked against original sources. The audit removed 165 synthetic or arm-mixed concentration profiles; quarantined untraceable, multi-day, steady-state, prodrug-metabolite, and whole-blood labels; replaced digitized or mixed-arm peaks with directly reported single-dose fasted arms where available; and converted salt-form doses to parent active-moiety mass. Per-compound decisions, sources, and hashes are in the dated `development_*` notes under [`docs/validation/`](docs/validation/), starting from the [reference source audit](docs/validation/development_reference_source_audit_2026-09-24.md). A subsequent metadata-level source-consistency filter for the direct C<sub>max</sub> training set was a no-go (3.5% higher out-of-fold AAFE; [ablation](docs/research/cmax_source_consistency_ablation_2026-09-25.md)), so the production model is unchanged.
 
-**Prospective validation** (FDA NMEs approved 2024–2025, single-active-ingredient oral small molecules, **production-clean** — none appears in any shipped-model training input or the engine reference; all re-scored on one numerics stack under public-clone state, **2026-06-01, N=28**):
+> **Reproducibility.** The table uses public-only TDC f<sub>u,p</sub>, P<sub>eff</sub>, hepatocyte CL<sub>int</sub>, and Lombardo VD<sub>ss</sub> models plus Omega-derived C<sub>max</sub>, CL/F, and Vd/F retrains. The fitted datasets contain 1,557 f<sub>u,p</sub>, 874 P<sub>eff</sub>, 906 C<sub>max</sub>, 995 CL<sub>int</sub>, and 1,055 VD<sub>ss</sub> hash-pinned rows; the CL/F and Vd/F tracks fit 900 and 831 rows. Per-drug predictions are in `data/training/4track_holdout_predictions.json`; bootstrap intervals are in `data/validation/4track_ci_2026-09-24_audited_reference.json`. Aggregate AAFE reproduces from a fresh clone with `requirements-lock.txt`; per-drug bit-identity additionally requires the same numerics stack (Python minor version, BLAS, libomp). †This repeatedly used development set and its conditional bootstrap CI do not establish independent generalization. Earlier benchmark lineage and numerics-drift measurements are in `docs/research/experiment-log.md`.
+
+The 4-track meta-learner combines mechanistic PBPK (Engine), data-driven XGBoost C<sub>max</sub> (ML), a closed-form CL/F analytical (CLF), and a conditional VDss analytical track. Weights are compound-type-adaptive and were LOOCV-selected on the original N=107 cohort: base compounds blend Engine 0.60 / ML 0.40; other compounds use Engine 0.35 / ML 0.50 / CLF 0.15, with VDss 0.20 added when applicability criteria are satisfied. The current in-domain N=60 slice is descriptive only: applicability flags have not demonstrated reliable error stratification, and neither slice is independent evidence.
+
+**Consumed temporal challenge** (FDA NMEs approved 2024–2025, single-active-ingredient oral small molecules, production-clean at construction, re-scored on the 2026-07-05 engine, N=28). These are historical predictions made before the public-only fup, Peff, Cmax, CLint, and VDss retrains; the set has informed diagnosis and is no longer independent evidence for the current system:
 
 | Slice | AAFE | 95% CI | %2-fold | %3-fold | N |
 |---|:-:|:-:|:-:|:-:|:-:|
-| All | 3.21 | [2.42, 4.37] | 25.0% | 53.6% | 28 |
-| In-domain | 3.20 | [2.06, 5.23] | 37.5% | 56.2% | 16 |
-| — existing 12 (decontaminated, rescored) | 2.52 | — | 50.0% | — | 12 |
-| — new 16 (2024–2025 NMEs) | 3.84 | — | 6.2% | — | 16 |
+| All | 3.286 | [2.45, 4.48]† | 25.0% | 50.0% | 28 |
+| In-domain | 3.318 | [2.12, 5.39]† | 37.5% | 50.0% | 16 |
 
-**Prospective generalization is *worse* than retrospective** (3.21 &gt; 2.743 overall), reversing the earlier "favorable direction" reading. That reading (N=15, 2.402 &lt; 2.743) was a small-sample / curation artifact — the exact under-powering the cherry-picking audit flagged. The expanded set was built two ways:
+On the 2026-07-05 system, the temporal cohort was directionally worse than its same-version development benchmark (3.286 versus 2.743), reversing the earlier favorable N=15 reading. It was assembled by decontaminating previously proposed candidates and expanding FDA-NME discovery before that re-score:
 
 - **Decontaminated.** Three drugs that had leaked into production training were removed: vorasidenib (`clinical_pk.json` gold reference), and aficamten + gepotidacin (`clf_training.csv` → the CLF track, which has no prospective-exclusion filter). A reusable production-aware gate (`scripts/check_prospective_eligibility.py`) now enforces this; it additionally rejected **9 of 26** newly-discovered candidates as already-in-training (e.g. ensartinib in `holdout.json['train']`, deuruxolitinib in `clinical_pk.json`, 7 in `clf_training.csv`). Membership in non-production files (e.g. `mmpk_expanded_*`, `vdss_v2_training` — models the pipeline never loads) is *not* treated as contamination.
 - **Expanded.** Exhaustive FDA-NME discovery (101 unique 2024–2025 NMEs across 3 cross-checked sources) → 37 new oral small-molecule candidates → adversarial per-drug Cmax verification (FDA label / EMA EPAR / peer-reviewed PK, ≥2 independent sources agreeing within ~1.5×). Excluded with reasons: 4 verification failures, 7 combination products, 9 production-contaminated, 1 prodrug (sepiapterin, parent-Cmax fold ~3000 — consistent with the prior vadadustat prodrug exclusion). 16 added.
 
-The new 2024–2025 NMEs are markedly harder for the engine (AAFE 3.84, only 6% within 2-fold; worst: mirdametinib 30× and sevabertinib 18× under-prediction, both FDA-label-verified). The reversal is **robust**: dropping the two worst folds still leaves overall 2.76 (&gt; 2.743) and the median fold is 2.72. The N=28 CI [2.42, 4.37] is wide and still overlaps the retrospective in-domain Meta CI, so the gap is **directional, not yet statistically separated**. Bootstrap CIs 2026-06-01 (10,000 resamples on |log<sub>10</sub>(fold)|, seed=20260422) via `scripts/bootstrap_4track_ci.py`. Artifacts: `data/validation/prospective_N28_public_only_2026-06-01.json` (per-drug folds + full methodology/exclusion record), `data/validation/prospective_ci_2026-06-01_N28.json`; scored via `scripts/score_prospective_candidates.py`. Superseded N=14/N=15 caches retained for audit trail. **Re-scored on the current engine (2026-07-05, [DE-54](docs/research/dead-ends.md)):** re-running the same N=28 set on the post-FLUX-1 engine (+CLF/UGT/RBP) moves Meta AAFE 3.21 → 3.29 (engine 4.30 → 4.55; the ML track is per-drug bit-identical, confirming a single numerics stack and isolating the delta to engine code) — deep inside the CI, **no improvement**. FLUX-1's correct extraction fix *removed* a compensating over-estimate (the pre-fix E-cap held Cmax too high) that had partly offset the residual absorption-side (fa) under-call, so correct physics **deepens** the out-of-distribution under-prediction rather than fixing it: the prospective gap is absorption-limited, not extraction-limited. Directional (local stack, N=28). Artifact `data/validation/prospective_N28_current_engine_2026-07-05.json`.
+The same-machine re-score moved Meta AAFE 3.208 → 3.286 and Engine AAFE 4.302 → 4.551, while the direct ML track was bit-identical. This supports an absorption/first-pass error diagnosis but does not establish a statistically separated generalization gap. †Compound bootstrap, 100,000 resamples of absolute log-fold error, seed 20260422; diagnostic because the set is consumed. Current artifact: `data/validation/prospective_N28_current_engine_2026-07-05.json`.
 
-**Cherry-picking caveat.** The 107-holdout has been used for ~47 configuration feedback cycles (track weights, routing, meta-learner variants). A quantitative audit (`docs/research/cherry_picking_audit_2026-04-22.md`) scores aggregate risk 4.65/10 (moderate). The retrospective-contamination estimate (2.85–3.10 from the audit) overlaps the upper tail of the current public-clone Meta bootstrap CI ([2.37, 3.20], point estimate 2.743), meaning the headline cannot statistically reject the null hypothesis that tuning inflated AAFE. A secondary permanent holdout (N50) is planned per `docs/research/cherry_picking_process_v1.md`.
+**Adaptive-selection caveat.** N=107 has been used for dozens of configuration feedback cycles (track weights, routing, and meta variants), including inspection of the public-only fup, Peff, Cmax, CLint, and VDss candidates. The historical 2.85–3.10 selection-bias sensitivity range has not been recalibrated for this model. The current scored N=73 bootstrap CI ([2.30, 3.52], point estimate 2.830) does not account for adaptive search. The attempted 2026Q2 N50 was invalidated after 21/50 repository-corpus collisions and must not be cited. The replacement strategy is the outcome-blind N=260 protocol in `docs/validation/external_holdout_v1_protocol.md` (N=120 resource-limited fallback; its combined release gate has about 80% pass probability only near a 19% true improvement).
 
-### Multi-dose regimen validation
+### Historical diagnostic P0 source-adjudicated pilot
+
+This pilot used the earlier DrugBank-trained fup artifact, so its scores do not
+measure the current public-only model. All 186 frozen candidates were reviewed against original PK sources before the
+sealed predictions were opened. Eighteen compounds (58 arms) met the source
+rules; 47 were excluded and 121 remain unresolved. Compound-cluster Meta AAFE
+was **3.34** (95% bootstrap CI 2.43–4.79), versus **3.01** (2.26–4.18) for
+direct ML. The paired Meta/ML ratio was **1.11** (95% CI 0.93–1.34); only
+33.3% of compounds were within twofold for Meta. These results do not show
+Meta superiority. Source eligibility was AI-assisted with coordinator checks,
+and the clarification of eligibility rules followed first-pass viewing of
+source Cmax values. Two scored compounds occur in the current VDss fitted
+snapshot; the earlier model's fitted-row membership cannot be reconstructed.
+This is diagnostic development evidence, not independent External Holdout V1
+or a clinical release gate. See the [P0 result](docs/validation/self_run_p0_result.md)
+for hashes, exclusions, and remaining source uncertainty.
+
+### AI-assisted blind P1 diagnostic (earlier public model)
+
+Eight previously unseen compounds were source-screened by a separate AI-assisted
+worker, and anonymous inputs/predictions were committed before their
+Cmax labels were opened. On this small, nonconsecutive, **development-grade**
+set, a second source review found one of the eight labels was **whole-blood**
+Cmax, not plasma. Excluding that arm, frozen-prediction Meta AAFE is **6.63**
+(95% compound-bootstrap CI 3.10–13.84, N=7), versus **5.25** (2.22–13.97)
+for direct ML; the paired Meta/ML ratio is **1.26** (0.90–1.75). These
+post-label diagnostic values are a serious error signal, not a population
+accuracy estimate or a proof of track inferiority. Immediate-release and active-moiety
+dose evidence is incomplete, one paper has an inconsistent capsule strength,
+and two independent human curators were unavailable. No P1 arm qualifies for
+External Holdout V1. See the [P1 diagnostic](docs/validation/blind_p1_result_2026-09-24.md)
+for the freeze chain, source cells, sensitivity, and limitations.
+
+### AI-assisted P2 FDA acquisition check
+
+A separate AI-assisted worker consecutively screened all **248 oral FDA NME rows
+from 2015–2025** against the repository exclusion union and strict original-arm
+criteria. No new eligible compound remained, so no predictions were run.
+Repository name collisions removed 235 rows; the two structure-clean parents
+that reached original-source arm review lacked stated post-dose meal timing.
+A follow-up found an explicit oral-solution arm for one parent but no matching
+post-dose fasting statement; both exposed identities are now excluded from a
+future blinded cohort. This is a single-agent acquisition check,
+not External Holdout V1 evidence; the [P2 screen](docs/validation/blind_p2_fda_acquisition_2026-09-24.md)
+records ordered attrition and limitations. A qualifying external cohort needs
+other source windows and independent human curation.
+
+### Experimental multi-dose regression checks
 
 Three drugs were simulated at clinical dosing regimens and compared against FDA-label steady-state C<sub>max</sub> values:
 
@@ -339,13 +403,15 @@ Three drugs were simulated at clinical dosing regimens and compared against FDA-
 | Metformin | 500 mg BID | 2.39 | 1.0 | 2.39 |
 | Warfarin | 5 mg QD | 0.21 | 1.4 | 0.15 |
 
-(Regenerated on the current engine — post-FLUX-1 + paracellular — via `scripts/verify_v2.py`; supersedes the pre-FLUX-1 values.) Atorvastatin and metformin are each over-predicted by ~2.4×, and warfarin (f<sub>u</sub> = 0.01, highly protein-bound) is severely under-predicted, reflecting the partition model&rsquo;s known limitation for very highly bound acids. Predicted accumulation ratios tracked the theoretical values (metformin 1.11 vs 1.35; atorvastatin 1.50 vs 1.44; warfarin 1.81 vs 2.94) and steady-state detection operated correctly in all cases. This is a solver-mechanics and limitation-exposure exercise rather than a multi-dose accuracy claim: each compound&rsquo;s single-dose error propagates into its steady-state estimate.
+(Regenerated on the current engine — post-FLUX-1 + paracellular — via `scripts/verify_v2.py`; supersedes the pre-FLUX-1 values.) Atorvastatin and metformin are each over-predicted by ~2.4×. The historical warfarin comparison suggested severe under-prediction, but its cited Cmax source was later quarantined for a dose/analyte mismatch, so that comparison is not current accuracy evidence. Predicted accumulation ratios tracked the theoretical values (metformin 1.11 vs 1.35; atorvastatin 1.50 vs 1.44; warfarin 1.81 vs 2.94) and steady-state detection operated correctly in all cases. This is a solver-mechanics and limitation-exposure exercise rather than a multi-dose accuracy claim: each compound&rsquo;s single-dose error propagates into its steady-state estimate.
 
-### TDM validation
+### Experimental TDM regression checks
 
-Bayesian update was validated in two stages: a single-drug functional test, then a multi-drug benchmark across diverse pharmacokinetic profiles. The tables below report the **Importance Sampling** baseline (legacy); production now uses a dispatched SBI/IS/IBIS router (`data/sbi/method_routing.json`) with 12/13 production drugs routing to SBI after SBC-gate validation. SBI provides millisecond-scale inference with equivalent or better CV reduction; detailed SBC + per-drug coverage reports are tracked separately.
+Bayesian update was tested with a single-drug functional check and a multi-drug synthetic-observation benchmark. The tables below report the **Importance Sampling** baseline (legacy); the experimental SBI/IS/IBIS router (`data/sbi/method_routing.json`) sends 12/13 configured drugs to SBI after simulation-based calibration checks. The reported SBI inference is millisecond-scale and reduced posterior CV in those tests; detailed calibration and per-drug coverage reports are tracked separately. These checks do not establish clinical TDM validity.
 
-**Single-drug validation** (midazolam, 5 mg PO, one observation at t = 1 h, 10% assay CV):
+The morphine row and pooled summaries below are historical: they used a superseded 30 mg / 18.65 ng/mL reference. See the [reference adjudication](docs/validation/reference_pmid_screen_2026-09-24.md). They require a dose-matched rerun before being used as current TDM evidence.
+
+**Single-drug functional check** (midazolam, 5 mg PO, one observation at t = 1 h, 10% assay CV):
 
 | Metric | Prior | Posterior |
 |--------|:-----:|:---------:|
@@ -371,21 +437,21 @@ Timepoint sensitivity analysis (morphine, single observation): t = 1.0 h (near T
 
 | Operation | Time | Configuration |
 |-----------|:----:|------|
-| Full prediction (SMILES &rarr; C<sub>max</sub>) | 414 ms | Deterministic, single core |
+| Full prediction (SMILES &rarr; C<sub>max</sub>) | 414 ms | Prior warm-run benchmark, deterministic, single core |
 | ODE solve (full fidelity) | 106 ms | LSODA, rtol=10<sup>&minus;8</sup>, atol=10<sup>&minus;10</sup> |
 | ODE solve (MC fast path) | 33 ms | LSODA, rtol=10<sup>&minus;4</sup>, atol=10<sup>&minus;6</sup> |
 | MC N=1,000 | 33.5 s | Pure Python RHS (no JIT compilation) |
 | RHS evaluation | 31 &mu;s | 54 flux specs per call |
 
-Single-patient deterministic prediction completes in &lt;500 ms, compatible with interactive clinical decision support workflows. MC propagation at N=1,000 requires ~34 s due to pure Python ODE evaluation; JIT compilation (e.g., via Numba) is an optimization path not yet pursued.
+The prior warm-run benchmark supports interactive research screening, but first-call model loading and hardware can change latency. A local macOS/Python 3.10 caffeine check on 2026-09-23 took 1.11 s on the first call and 0.16&ndash;0.17 s on five warm calls. MC propagation at N=1,000 required ~34 s in the prior benchmark due to pure Python ODE evaluation; JIT compilation (e.g., via Numba) is an optimization path not yet pursued.
 
 ### Test suite
 
-**1127 passed / 0 failed / 26 skipped / 2 xfailed / 1 xpassed** (1156 outcomes, full sweep 2026-06-12, 6:52; skip count includes artifact-conditional markers per `tests/_artifact_helpers.py`) covering graph construction, ODE compilation, flux functions (including ECM + V3 windowed IV-Cmax + ProdrugActivation + OneCompartmentElimination + paracellular Renkin pore-sieving), solver correctness, mass balance (incl. two-species analytical 2C cascade), ADME prediction, meta-learner calibration, multi-dose regimen, TDM Bayesian update via SBI/IBIS/IS/EnKF dispatch, engine-as-prior posterior PK (MIPD: F/CL/renal SIR latents, steady-state IV trough TDM, CrCl + weight/age covariate individualization, target-attainment dose recommendation), DDI, PK/PD, applicability-domain detection, prodrug-activation registry + pipeline integration, pharmacogenomic phenotype scaling (SLCO1B1, NAT2, UGT1A1), UGT2B7/UGT1A9 public substrate registry (B-02 Phase 2), gut-UGT abundance + hepatic-UGT IVIVE regressions (B-13/B-14), MMPK holdout-leak and JAX-RHS flux-drop guards (PR #53), and holdout benchmark reproducibility.
+The full test suite covers graph construction, ODE compilation, flux functions, solver correctness, mass balance, ADME prediction, the Cmax ensemble, dosing research modules, applicability flags, phenotype scaling, leakage guards, and development-benchmark reproducibility. CI output is the authoritative current count; historical pass counts are not used as a scientific validation claim.
 
-**Persistent xfails (2) + 1 xpass:** 2 statin Cmax tests under ECM remain xfail (rosuvastatin, atorvastatin — Peff over-prediction, an absorption-model limitation, not an ECM regression). fluvastatin is now an **xpass** (non-strict): the paracellular absorption pathway shifted its no-ECM Cmax (0.0539 → 0.0603) so the ECM-forced gate now passes — issue #21 still holds that ECM is not-applicable for fluvastatin (CYP2C9-dominant per Niemi 2009), so this remains a deliberately-marked test rather than a production claim. pravastatin + pitavastatin were promoted out of xfail by the 2026-06-04 OATP1B1 re-anchor (to the non-holdout pitavastatin). The 3 prodrug 3-fold clinical validation gates (sepiapterin, tebipenem-pivoxil, fostamatinib) that were previously xfailed per spec &sect; 3.3 mechanistic-A doctrine are now `pytest.skip`-gated under the public-clone state (DrugBank-conditional disposition data not present in this clone), preserving the mechanistic-A semantics without polluting the xfail count. remdesivir was promoted out of xfail in PR #43 (fold 2.78 < 3.0 gate).
+**Expected failures (3):** Rosuvastatin and atorvastatin still miss their ECM-forced Cmax gates; the separate axial PGx test deliberately retains a strict expected failure because its well-stirred analytic oracle does not apply to parallel-tube extraction. Fluvastatin now passes its numerical gate, but ECM remains marked not applicable for it in production. Three prodrug clinical gates are skipped in the public clone because their conditional disposition data are absent.
 
-**No failing tests.** A previously documented "known failing" entry for `test_irinotecan_returns_active_sn38_cmax` (claimed SN-38 C<sub>max</sub> 9.71 mg/L vs gate &lt; 1.0 mg/L) was a documentation error introduced 2026-05-08 in commit `71be8d0` — the test has always passed since its introduction in PR #34 (verified 2026-05-16: SN-38 Cmax 0.0466 mg/L, within Slatter 2000 clinical 0.03-0.10 mg/L range; the same value is recorded in `docs/research/experiment-log.md` under the 2026-05-08 entry). The previously listed cached-AAFE assertion and v3 enzyme-leak audit failures were resolved in PR #43 (cached test refreshed to 2.751 under public-clone state; subsequently advanced to 2.772 via the B-03 clopidogrel registry fix, 2.769 via B-03.x literature-IVIVE, and 2.698 via the B-02 Phase 2 UGT public registry activation, then 2.784 via the FLUX-1 flow-limitation fix, then 2.731 via the 2026-06-10 oxybutynin+paracellular batch regen, then 2.735 via the 2026-07-02 CLF leak-free regen, then 2.743 via the 2026-07-03 UGT single-path fix — current pinned test is `test_cached_holdout_aafe_is_2p743`; v3 leak audit now passes). Headline AAFE (cache 2.743) is re-runnable via `scripts/run_engine_benchmark.py`.
+**Test status.** The current public-only fup/Peff/Cmax/CLint/VDss benchmark is pinned by `test_cached_development_aafe_is_2p830`; historical benchmark changes and resolved failures are recorded in `docs/research/experiment-log.md`. The cached headline is reproducible with `scripts/run_engine_benchmark.py` on the pinned public profile.
 
 ## Architecture
 
@@ -428,6 +494,10 @@ SMILES + dose
 | `ddi.py` | Drug-drug interactions (competitive inhibition, E<sub>max</sub> induction) | `core`, `graph` |
 | `pkpd.py` | PK/PD effect modeling (effect compartment, sigmoid E<sub>max</sub>) | `core` |
 
+Only the structure-only Cmax prediction path is production-supported. `regimen`,
+`sbi`, `mipd`, `ddi`, and `pkpd` are experimental research modules and are not
+validated for clinical decisions. See `docs/architecture/product_scope.md`.
+
 **Layer isolation.** No cross-layer imports outside designated dependencies. `predict` does not import `engine`. `engine` does not import `predict`. `regimen` wraps `engine` without modifying it. Shared data types live in `core.py`.
 
 ### Design principles
@@ -467,7 +537,7 @@ graph.add_edge(AbsorptionEdge(source="sc_depot", target="venous_blood",
 
 Allometrically scaled physiology (cardiac output &prop; BW<sup>0.75</sup>) with ontogeny-adjusted enzyme abundances (e.g., CYP3A4 at 50% of adult at age 5). Same graph structure, different YAML parameters.
 
-### Drug-drug interactions
+### Experimental drug-drug interactions
 
 Competitive CYP inhibition via pre-simulation enzyme abundance adjustment:
 
@@ -475,10 +545,10 @@ Competitive CYP inhibition via pre-simulation enzyme abundance adjustment:
 from sisyphus.ddi import apply_inhibition, KETOCONAZOLE
 
 inhibited_graph = apply_inhibition(graph, KETOCONAZOLE)
-# Midazolam AUC increases 12x (clinical reference: ~15x)
+# Mechanistic scenario only; external clinical-pair validation is required.
 ```
 
-### PK/PD modeling
+### Experimental PK/PD modeling
 
 Effect compartment with sigmoid E<sub>max</sub> response, computed as post-processing on the concentration-time profile:
 
@@ -491,20 +561,20 @@ effect = compute_effect(sim_result, pd)
 
 ## Limitations
 
-- **Small-molecule oral PK only.** Biologics (antibodies, ADCs), parenteral formulations beyond SC, and non-oral routes (inhalation, topical) are not validated.
-- **Prodrug activation: v3 input-data refresh shipped, validation gate still fails; v0.3.4/B-03 expands registry to 7 substrates.** Iterations: v1 (2026-04-26, first-order conversion `rate = k × A_parent`), v2 (PR #7, 2026-04-30, well-stirred enzyme-abundance extraction parallel to the CYP3A4 elimination pattern), v3 (PR #15, 2026-05-01, input-data quality refresh per spec §3.3 mechanistic-A doctrine — 6 items dispositioned: 2 literature_applied, 4 ceiling_accepted), **v0.3.4** (PR #34, 2026-05-08, registry expansion adding `simvastatin` and `irinotecan`), **B-04** (2026-05-19, optional per-enzyme `yield` field), and **B-03** (2026-05-20, clopidogrel dual-fate CES1 dead-end + CYP bioactivation entry). v2 replaces `conversion_rate_per_h` with `enzyme_affinity_for_conversion: dict[str, Distribution]` and adds SPR/CES1/CES2/ALPI enzyme abundances at liver/gut_wall/kidney; B-04 adds per-enzyme conversion yields for multi-fate prodrugs. The shared 3-drug 3-fold clinical validation gate **still fails under v3** (sepiapterin 4748&times;, tebipenem-pivoxil 9.05&times;, fostamatinib 4.50&times;) — extraction-step rate-limits dominate over active CL/V disposition. Irinotecan SN-38 passes its mechanical correctness gate under public-clone state (0.0466 mg/L, within Slatter 2000 clinical 0.03&ndash;0.10 mg/L range). Clopidogrel remains scored as parent C<sub>max</sub> in the 107-holdout. The B-03.x literature-IVIVE refresh (2026-05-25) replaced the B-03 placeholder affinities (0.030 each, calibrated to the 85/15 fate split only) with Subash 2025 rCES1 Vmax/Km + Boberg 2017 CES1 abundance + Kazui 2010 fate-split partition (CES1 0.0586, CYP3A4 0.0322, CYP2C9 0.0817 μL/min/pmol; disposition_state flipped to `literature_applied`); the parent Meta fold tightened 5.15&times; → 4.67&times; (1.92× total CLint scale-up), within bootstrap CI noise. Active R-130964 disposition remains `ceiling_accepted` because the labile thiol and covalent P2Y12 binding prevent a clean conventional CL/V measurement. Prodrugs continue to be flagged out-of-applicability-domain. Detailed status: `CHANGELOG.md` &sect; Unreleased.
+- **Stereoisomer discrimination is unvalidated.** The direct-ML track uses a chirality-blind Morgan fingerprint, so enantiomers with the same connectivity receive the same ML features. Curated full-InChIKey registries can distinguish specific structures, but their isomer-specific C<sub>max</sub> accuracy has not been independently tested.
+- **Evaluated scope is narrower than the engine's route support.** The development C<sub>max</sub> claim concerns oral small-molecule parent drugs. Biologics and non-oral routes have no independent C<sub>max</sub> accuracy evaluation here.
+- **Prodrug activation remains experimental.** The seven-substrate registry supports parent-to-active routing, but its three-drug clinical gate still fails (sepiapterin 4748&times;, tebipenem pivoxil 9.05&times;, fostamatinib 4.50&times; in the recorded v3 test). Prodrugs are flagged outside the applicability domain. Clopidogrel parent C<sub>max</sub> remains in the consumed development benchmark; that label does not validate active-metabolite prediction. See `CHANGELOG.md` for mechanism and version history.
 - **Simplified pK<sub>a</sub>.** Ionization state is classified by structural rules (carboxylic acid &rarr; 4.5, aliphatic amine &rarr; 9.0), not computed quantum-mechanically. This limits Kp accuracy for highly ionized compounds.
-- **Phase II metabolism &mdash; expanding.** Liver NAT2 (1.0e7 pmol, CV 0.6) and UGT1A1 (1.215e6 pmol, CV 0.5) abundances were added in v0.3.2 (PR #32) with phenotype-aware scaling propagated through `predict()`; empirical PM/EM Cmax ratios verified at v0.3.2 merge (tizanidine CYP1A2 1.518&times;, isoniazid NAT2 1.478&times;, raltegravir UGT1A1 1.419&times;). PR #32 also closed a silent-zero back-solve cancellation bug for CYP/UGT/NAT phenotypes via pre-phenotype abundance snapshotting. **B-02 Phase 2 (2026-05-27) adds UGT2B7 (2.43e6 pmol) and UGT1A9 (8.10e5 pmol) abundances with 8 literature-curated substrate registry entries (no DrugBank dependency); phenotype scaling for UGT2B7/UGT1A9 deferred to Phase 2.x.** Sulfation (SULT) and other UGT isoforms (UGT1A4, UGT2B15 etc.) remain unmodeled; drugs cleared primarily by these routes will be under-predicted.
+- **Phase II metabolism is incomplete.** NAT2, UGT1A1, UGT1A9, and UGT2B7 have modeled abundances; SULT and other UGT routes remain unmodeled. Parent-drug exposure may be overpredicted when omitted pathways materially contribute to clearance, all else equal. The modeled pathway effects have not been independently validated for clinical dosing.
 - **Transporter-mediated disposition: OATP1B1 only.** Hepatic uptake by OATP1B1 is modeled mechanistically via the ECM (closed-form QSSA hepatocyte flux) with per-drug kinetic parameters in `data/transporters/oatp1b1.json`. Other hepatic transporters (OATP1B3, NTCP, BSEP), intestinal transporters (P-gp, BCRP), and renal transporters (OAT1/3, MATE1/2-K) are not mechanistically modeled. P-gp efflux at the gut wall is approximated via a binary permeability correction.
-- **CL<sub>int</sub> prediction is the weakest link.** The XGBoost CL<sub>int</sub> model achieves R&sup2; &asymp; 0.24 on TDC Hepatocyte_AZ (scaffold-split CV). This ceiling persists across molecular representations (Morgan FP, MACCS keys, atom-pair FP, MoLFormer, ChemBERTa, Uni-Mol, Chemprop D-MPNN), model architectures (XGBoost, Random Forest, Ridge, GNN), data scales (978&ndash;1,910 compounds), and alternative formulations (classification, BDE reactivity features, direct CL/F bypass, AUC decomposition). The authoritative failed-experiment list (`docs/research/dead-ends.md`) enumerates **41 distinct approaches** across 13 categories, none of which produced a meaningful reduction in holdout AAFE. The primary bottleneck is assay noise in public hepatocyte clearance data, not model capacity or molecular representation. Bayesian TDM partially mitigates this at the individual patient level: observed drug concentrations correct inaccurate population priors, reducing posterior CV by &gt;50% (see [TDM validation](#tdm-validation)).
-- **Novel-drug bioavailability (F) extrapolation.** The CL<sub>int</sub> ceiling above governs the *retrospective, in-distribution* holdout. For *out-of-distribution* novel drugs (the 2024&ndash;2025 prospective NMEs), the binding constraint is instead the absorption / first-pass **F** model: the engine's worst prospective under-predictions have approximately correct systemic clearance but catastrophically low predicted F (&asymp; 0.05&ndash;0.08 vs implied &asymp; 1.0). This per-drug F error is near-uniform and **not recoverable from the model's own outputs** &mdash; no predict-time applicability-domain signal (low predicted-F, or engine&harr;ML divergence) generalizes from the prospective slice to the holdout (DE-41 / [diagnosis &sect;8](docs/research/diagnosis.md)). Measured-F routing or absorption-model recalibration would be required.
-- **Error cancellation constrains component-level improvements.** The IVIVE pipeline (f<sub>u,p</sub> &times; CL<sub>int</sub> &times; scaling &rarr; CL<sub>h</sub>) exhibits systematic error cancellation: improving any single ADME component (e.g., CL<sub>int</sub> R&sup2; from 0.21 to 0.33 via data expansion) worsens overall AAFE because the error balance with other components is disrupted. Simultaneous replacement of all ADME models also failed to improve AAFE (+0.023), and post-hoc meta-learner optimization across more than 60 blending strategies (stacking, analog correction, rank aggregation, Bayesian model averaging, ensemble selection, isotonic/LOWESS calibration, substructure correction, disagreement routing, and others) confirmed that all such combinations produce holdout errors correlated at r &gt; 0.95 with the baseline meta-learner. The current compound-type-adaptive geometric blend is provably near-optimal at this sample size. Measured ADME inputs (experimental f<sub>u,p</sub> and CL<sub>int</sub>) reduce engine AAFE from 2.33 to 1.98, confirming that the mechanistic architecture is sound when inputs are accurate.
-- **IV-Cmax observation convention.** For intravenous bolus dosing, engine Cmax is extracted as the maximum concentration over `t ≥ 5 min` (windowed max), not the instantaneous `dose / V_venous` spike at `t = 0`. This matches the clinical first-draw convention and is route-conditional; oral drugs use full-interval max (V2-compatible). The 107-drug holdout set is entirely oral, so this methodology has zero impact on the headline AAFE. See `docs/_internal/specs/2026-04-22-iv-cmax-observation-design.md`.
-- **ECM (Extended Clearance Model) generalization unverified for non-statins.** ECM is validated on 5 statins (2/5 strict-pass 3-fold gate: pravastatin (FE 1.066, post-PR #22 metabolic\_fraction reconciliation), pitavastatin; fluvastatin xfail in the ECM-forced gate (FE 4.79 under-prediction) — issue #21 closed post-PR #29 reclassifying fluvastatin as not-ECM-applicable per Niemi 2009 CYP2C9-dominance; production `predict()` correctly skips ECM via the `ecm_applicable=false` flag in `data/transporters/oatp1b1.json` and yields FE 1.54 within the 3-fold gate; rosuvastatin/atorvastatin xfail due to Peff over-prediction). A pre-registered generalization test on valsartan + glimepiride (2026-04-22, N=2) returned Mode C with systematic 2.5× underprediction under V3 methodology. The fup override hypothesis was ruled out (DE-33); candidates remain for Jmax calibration, Vss/Kp over-distribution, and ECM architectural limits for Km &gt; 1 µM substrates. Users should not rely on ECM accuracy for non-statin OATP1B1 substrates without independent verification.
+- **CL<sub>int</sub> prediction is limited on the tested data.** The public-only XGBoost model achieved scaffold-CV R&sup2; = 0.215 on 995 TDC Hepatocyte_AZ compounds. Tested representation, dataset, and architecture changes did not reliably improve end-to-end C<sub>max</sub> on the repeatedly used development cohort. This does not prove an intrinsic R&sup2; ceiling or identify assay noise as the sole cause; see the corrected [accuracy diagnosis](docs/research/diagnosis.md). TDM results are internal, observation-conditioned research and do not establish structure-only or clinical dosing accuracy.
+- **Novel-drug underprediction has an unresolved mechanism.** Some 2024&ndash;2025 compounds were severely underpredicted in a consumed prospective diagnostic set. The earlier claim that F alone caused these errors is withdrawn: the cited oral CL/F is apparent clearance, not systemic CL, and the ten-drug literature-F comparison mixed incompatible endpoints. Low predicted F and engine&harr;ML divergence did not provide a useful error flag in the tested sets. A matched human oral/IV study and untouched C<sub>max</sub> cohort are needed to distinguish F, clearance, formulation, and other causes; see [diagnosis &sect;8](docs/research/diagnosis.md) and the [F source audit](docs/validation/f_reference_source_audit_2026-09-24.md).
+- **Error cancellation constrains component-level improvements.** Development experiments show strong residual correlation among many blending variants and sensitivity to compensating ADME errors. This does not prove the current blend is optimal. Further selection on N=107 would deepen adaptive overfitting; changes must be hypothesis-driven, trained without external labels, and judged once on the blinded external protocol.
+- **IV-Cmax observation convention.** For intravenous bolus dosing, engine Cmax is extracted as the maximum concentration over `t ≥ 5 min`, rather than the instantaneous `t = 0` spike. Oral drugs use the full-interval maximum. All 73 currently scored development compounds are oral, so this convention does not affect that AAFE; IV accuracy remains unvalidated.
+- **ECM (Extended Clearance Model) generalization unverified for non-statins.** Under the current public profile, pravastatin, pitavastatin, and fluvastatin pass their numerical ECM-forced Cmax gates; rosuvastatin and atorvastatin remain expected failures. Fluvastatin is marked `ecm_applicable=false` in production because its CYP2C9-dominant clearance makes the ECM-forced result biologically inapplicable. A pre-registered generalization test on valsartan + glimepiride (2026-04-22, N=2) returned Mode C with systematic 2.5× underprediction under V3 methodology. The fup override hypothesis was ruled out (DE-33); candidates remain for Jmax calibration, Vss/Kp over-distribution, and ECM architectural limits for Km &gt; 1 µM substrates. Users should not rely on ECM accuracy for non-statin OATP1B1 substrates without independent verification.
 - **R<sub>B:P</sub> defaults to 1.0.** The RBP model (R&sup2; = &minus;0.08 on external data) is effectively disabled; all drugs are assumed to have equal blood and plasma concentrations.
-- **90% prediction interval is uncalibrated.** The first empirical coverage measurement (2026-04-24, full N=107 holdout, 1,000 MC samples; `data/validation/holdout_pi_coverage_2026-04-24.json`) yielded **29.9%** at the nominal 90% level. The MC interval reflects only parameter-uncertainty propagation and captures roughly one third of the observed residual spread &mdash; the remaining ~60 percentage points are structural error (IVIVE scaling assumptions, DE-33 OATP underprediction, CL<sub>int</sub> assay noise). The 90% PI is therefore exposed as a **diagnostic** quantity and must not be quoted as a clinically calibrated interval without empirical recalibration.
-- **MIPD assumes linear pharmacokinetics.** Dose recommendations use linear scaling, which may be inaccurate for drugs with saturable metabolism (e.g., phenytoin) or nonlinear protein binding.
-- **TDM importance sampling degenerates for large prior errors.** When the population prior is far from the individual truth (fold error &gt;3&times;) or multiple observations are used (&ge;3), the effective sample size drops below 10, indicating particle weight degeneracy. Sequential Bayesian methods (EnKF, particle filter) would address this.
+- **90% residual interval is not externally calibrated.** The parameter-only Monte Carlo interval covered only 29.9% of N=107 observations at nominal 90%. The user-facing Meta band is a much wider empirical residual quantile whose component predictions are not fully out-of-sample for its calibration records. It is shown only for the public, default-Kp, four-track oral path after its calibration cache and model hashes pass a first-use check; altered partition methods, licensed-profile predictions, track fallbacks, and stale artifacts have no such band. It is not a valid split-conformal guarantee. Independent calibration must use nested OOF predictions or a separate untouched calibration cohort, followed by one-time evaluation on a different blinded holdout.
+- **Dose recommendation and TDM are experimental.** Linear dose scaling is rejected automatically for modeled saturable metabolism unless explicitly overridden. That guard prevents a known misuse but does not clinically validate MIPD, TDM, or any posterior interval; these modules remain outside the main product claim.
 
 ## Project Structure
 
@@ -515,7 +585,8 @@ src/sisyphus/
 ├── compounds.py         # Compound YAML → DrugOnGraph loader
 ├── ddi.py               # Drug-drug interaction modeling
 ├── pkpd.py              # PK/PD effect compartment + Emax
-├── cli.py               # Command-line interface (6 commands)
+├── cli.py               # Cmax CLI + explicitly experimental research commands
+├── resources.py         # explicit public/licensed model-data profiles
 │
 ├── graph/               # Body graph definition and construction
 │   ├── types.py         # Node, Edge type hierarchy (frozen dataclasses)
@@ -528,11 +599,8 @@ src/sisyphus/
 │   ├── flux.py          # FluxSpec implementations (8 transport types,
 │   │                    #   incl. ECM ActiveTransport, ProdrugActivation,
 │   │                    #   OneCompartmentElimination)
-│   ├── params_jax.py    # JAX parameter resolution (experimental)
 │   ├── result.py        # SimResult dataclass
-│   ├── rhs_jax.py       # JAX right-hand side (experimental)
 │   ├── solver.py        # LSODA wrapper (solve, solve_mc)
-│   ├── solver_jax.py    # JAX solver (experimental)
 │   └── uncertainty.py   # Monte Carlo propagation
 │
 ├── predict/             # SMILES → drug parameterization
@@ -540,7 +608,7 @@ src/sisyphus/
 │   ├── adme.py          # XGBoost ADME property prediction
 │   ├── ivive.py         # In vitro → in vivo extrapolation, Kp
 │   ├── hepatic_fu_correction.py # hepatic intracellular fu correction registry
-│   ├── drugbank.py      # DrugBank experimental enrichment (fup, logP)
+│   ├── drugbank.py      # DrugBank enrichment (licensed_research profile only)
 │   ├── phenotype.py     # Pharmacogenomic phenotype (e.g., SLCO1B1)
 │   ├── registry.py      # Prodrug activation registry (SMILES-keyed)
 │   ├── cyp_clearance_overrides.py # metabolic_fraction registry (OATP1B1 substrates, ECM)
@@ -613,7 +681,7 @@ models/                  # Pre-trained XGBoost models (committed; ~31MB)
 
 ## Predecessor
 
-Sisyphus inherits validated data assets from [Omega PBPK](https://github.com/jam-sudo/Omega) (591 commits) but not its architecture:
+Sisyphus inherits curated data assets from [Omega PBPK](https://github.com/jam-sudo/Omega) (591 commits) but not its architecture:
 
 | Inherited (data) | Not inherited (architecture) |
 |-------------------|------------------------------|
@@ -659,7 +727,7 @@ Refinement. ChemRxiv. https://doi.org/10.26434/chemrxiv.15004452/v1
 Software (this repository):
 
 ```
-Yoon, J. M. (2026). Sisyphus (0.1.0): Graph-based whole-body PBPK
+Yoon, J. M. (2026). Sisyphus (0.4.0): Graph-based whole-body PBPK
 simulation with native uncertainty propagation.
 https://github.com/jam-sudo/Sisyphus
 ```

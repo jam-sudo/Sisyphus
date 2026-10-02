@@ -1,8 +1,8 @@
-"""Holdout benchmark runner.
+"""Retrospective development-benchmark runner.
 
-Runs predictions on the holdout set and computes acceptance metrics.
-Enforces the invariant that holdout drugs are never used for training.
-Reports both full-holdout and in-domain AAFE separately.
+Runs predictions on the historical N=107 split and computes diagnostic metrics.
+This split is compound-disjoint from audited fitted targets but has informed
+repeated system selection; it is not an independent final-system holdout.
 """
 
 from __future__ import annotations
@@ -24,12 +24,12 @@ logger = logging.getLogger(__name__)
 # in-domain AAFE calculation.
 #
 # methylphenidate: 72 mg = Concerta (OROS), IR is 5/10/20 mg
-# oxybutynin:      5 mg Cmax=0.001 mg/L = Ditropan XL, IR Cmax ~0.008 mg/L
+# Oxybutynin was removed from this list after its reference was corrected to
+# IR Cmax 0.008 mg/L; retaining the old ER flag would be a classification bug.
 # ---------------------------------------------------------------------------
 _KNOWN_ER_FORMULATIONS: frozenset[str] = frozenset(
     {
         "methylphenidate",
-        "oxybutynin",
     }
 )
 
@@ -173,7 +173,13 @@ def run_benchmark(
 
     for i, ref in enumerate(refs):
         try:
-            result = predict(ref.smiles, ref.dose_mg, ref.route, **predict_kwargs)
+            result = predict(
+                ref.smiles,
+                ref.dose_mg,
+                ref.route,
+                strict=True,
+                **predict_kwargs,
+            )
             cmax_pred = result.pk.cmax.mean
             if cmax_pred <= 0:
                 skipped += 1
@@ -184,8 +190,13 @@ def run_benchmark(
             all_observed.append(ref.cmax_obs)
 
             # PI coverage collection (only when compute_pi=True and MC succeeded)
-            if compute_pi and result.cmax_90ci is not None:
-                lo, hi = result.cmax_90ci
+            parameter_interval = (
+                result.cmax_prediction.parameter_interval_90
+                if result.cmax_prediction is not None
+                else None
+            )
+            if compute_pi and parameter_interval is not None:
+                lo, hi = parameter_interval
                 # Skip degenerate intervals (e.g. MC fell back to zero tuple on
                 # upstream failure); only paired non-collapsed bounds count.
                 if hi > lo:

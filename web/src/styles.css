@@ -100,13 +100,6 @@ body {
 .seg button { flex: 1; text-align: center; font-family: var(--mono); font-size: 11px; padding: 6px 0; border-radius: 5px; color: var(--ink-mute); border: 0; background: transparent; cursor: pointer; }
 .seg button.on { background: var(--ink); color: var(--paper); }
 
-.obsrows { display: flex; flex-direction: column; gap: 7px; }
-.obsrow { display: grid; grid-template-columns: 1fr 1fr auto; gap: 7px; align-items: center; }
-.obsrow .num { padding: 7px 9px; }
-.obsrow .del { width: 26px; height: 26px; border-radius: 6px; border: 1px solid var(--hair); background: var(--surface); color: var(--ink-mute); cursor: pointer; font-size: 13px; line-height: 1; }
-.addobs { margin-top: 8px; width: 100%; padding: 7px; border: 1px dashed var(--hair); background: transparent; border-radius: 7px; font-family: var(--mono); font-size: 11px; color: var(--ink-soft); cursor: pointer; }
-.addobs:hover { border-color: var(--blue); color: var(--blue); }
-
 .btn-run {
   width: 100%; background: var(--blue); color: white; border: 0; border-radius: 9px;
   padding: 13px; font-family: var(--sans); font-size: 13.5px; font-weight: 600; letter-spacing: 0.01em;
@@ -244,8 +237,6 @@ svg.chart { display: block; width: 100%; height: auto; }
 /* toast on run */
 .toast { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--paper); font-family: var(--mono); font-size: 11px; padding: 8px 16px; border-radius: 999px; box-shadow: 0 10px 30px -12px rgba(0,0,0,0.5); animation: rise .3s ease; }
 @keyframes rise { from { opacity: 0; transform: translate(-50%, 8px); } }
-
-.pdtag { display:inline-flex; align-items:center; gap:6px; font-family: var(--mono); font-size: 10.5px; color: var(--ink-soft); background: var(--surface-2); border:1px solid var(--hair); padding: 3px 9px; border-radius: 999px; }
 
 /* loading / error states for the data layer */
 .bootscreen { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; font-family: var(--mono); font-size: 12.5px; color: var(--ink-mute); }

@@ -31,7 +31,7 @@ from sisyphus.sbi.amortizer import load_result  # noqa: E402
 from sisyphus.sbi.simulator import EngineSimulator  # noqa: E402
 from sisyphus.validation.reference import load_reference  # noqa: E402
 
-MORPHINE_SMILES = "CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O"
+MORPHINE_SMILES = "CN1CC[C@]23[C@@H]4[C@H]1CC5=C2C(=C(C=C5)O)O[C@H]3[C@H](C=C4)O"
 MORPHINE_DOSE_MG = 30.0
 
 
@@ -113,6 +113,11 @@ def main() -> None:
         log.error("morphine not found in holdout reference")
         sys.exit(1)
     ref = refs[0]
+    if ref.dose_mg != MORPHINE_DOSE_MG:
+        raise ValueError(
+            "The 30 mg morphine SBI posterior does not match the current "
+            f"{ref.dose_mg:g} mg reference; retrain before comparing."
+        )
     cmax_obs = float(ref.cmax_obs)
     x_obs = float(np.log10(cmax_obs))
 

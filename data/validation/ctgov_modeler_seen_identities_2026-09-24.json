@@ -1,0 +1,38 @@
+{
+  "classification": "modeler_seen_ctgov_development_only",
+  "source": "ClinicalTrials.gov",
+  "screened_at": "2026-09-24",
+  "final_holdout_eligible": false,
+  "reason": "The model-development agent saw these intervention names during source triage; CVN424 numeric Cmax results were also inspected. Exclude from final-test and reserve cohorts.",
+  "screen_basis": "ClinicalTrials.gov API v2: AREA[OutcomeMeasureTitle](Cmax) AND AREA[HealthyVolunteers](true) AND AREA[HasResults](true) AND fasted; results first posted 2020-2026, exactly one non-placebo drug intervention, and broad oral/single/fast text hits in protocol description or eligibility. These 24 displayed names are source-discovery leads, not verified eligible compounds.",
+  "numeric_outcome_seen_for": ["CVN424"],
+  "candidates": [
+    {"name": "BI 764122", "study_id": "NCT03794323"},
+    {"name": "Maribavir", "study_id": "NCT05382104"},
+    {"name": "AM1476", "study_id": "NCT04691115"},
+    {"name": "Bexagliflozin", "study_id": "NCT02820298"},
+    {
+      "name": "CVN424",
+      "study_id": "NCT05635461"
+    },
+    {"name": "MK-7762 (TBD09)", "drug_name": "MK-7762", "aliases": [{"name": "TBD09"}], "study_id": "NCT05824091"},
+    {"name": "BI 706321", "study_id": "NCT03971695"},
+    {"name": "TAK-041", "study_id": "NCT02748694"},
+    {"name": "AX-158", "study_id": "NCT05218434"},
+    {"name": "CRS3123 200 mg capsule", "drug_name": "CRS3123", "study_id": "NCT06988423"},
+    {"name": "BEN8744", "study_id": "NCT06118385"},
+    {"name": "ARN-75039 oral capsules", "drug_name": "ARN-75039", "study_id": "NCT05735249"},
+    {"name": "Desmetramadol", "study_id": "NCT04683926"},
+    {"name": "Mavacamten", "study_id": "NCT05135871"},
+    {"name": "IPG11406", "study_id": "NCT06255834"},
+    {"name": "GSK3494245", "study_id": "NCT04504435"},
+    {"name": "Budesonide", "study_id": "NCT06268301"},
+    {"name": "VT-1598", "study_id": "NCT04208321"},
+    {"name": "MT-1186", "study_id": "NCT05342597"},
+    {"name": "Apremilast", "study_id": "NCT01634178"},
+    {"name": "Linaprazan glurate", "study_id": "NCT05627518"},
+    {"name": "Ritlecitinib", "study_id": "NCT06172348"},
+    {"name": "simufilam", "study_id": "NCT04932655"},
+    {"name": "MTR-601", "study_id": "NCT06117020"}
+  ]
+}

@@ -1,8 +1,15 @@
 # Amortized SBI on Sisyphus — POC Results
 
+**Historical evidence warning (2026-09-24):** The morphine comparison below
+used a superseded 30 mg / 0.01865 mg/L reference; the corrected oral tablet arm
+is 22.5 mg morphine base / 0.0285 mg/L. Its 30 mg posterior is not dose-matched
+to the current reference, and the group Cmax was not a measured t=1 h patient
+observation. The clinical posterior-accuracy interpretation and comparison
+figures below are not current validation evidence. See the [source audit](validation/reference_pmid_screen_2026-09-24.md).
+
 **Date**: 2026-04-10
 **Branch**: `audit/holdout-leakage-fix` (post-merge with `feat/ude-diffrax`)
-**Scope**: Proof-of-concept for Phase 2 of the breakthrough path (`docs/breakthrough_path.md`): amortized posterior inference over ADME parameters using the Sisyphus engine as an SBI simulator and Neural Posterior Estimation (NPE) as the density estimator.
+**Scope**: Proof-of-concept for Phase 2 of the UDE research roadmap: amortized posterior inference over ADME parameters using the Sisyphus engine as an SBI simulator and Neural Posterior Estimation (NPE) as the density estimator.
 
 ## TL;DR
 

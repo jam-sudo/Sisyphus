@@ -5,8 +5,7 @@ Checks whether any compound in the TDC PPBR_AZ training dataset overlaps
 with Sisyphus holdout drugs using three complementary exclusion keys:
 
   1. Canonical SMILES (isomericSmiles=True)
-  2. First 14 characters of InChIKey (connectivity layer, salt-insensitive
-     for protonation variants, but NOT for dot-disconnected salts)
+  2. Salt-stripped InChIKey-14 (connectivity layer)
   3. Lowercase Drug_ID string
 
 Outputs a report to docs/holdout_contamination_audit.md.
@@ -27,6 +26,8 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 log = logging.getLogger(__name__)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO_ROOT / "src"))
+from sisyphus.validation.identity import ik14 as _inchikey_prefix  # noqa: E402
 HOLDOUT_JSON = REPO_ROOT / "data" / "reference" / "holdout.json"
 CLINICAL_PK_JSON = REPO_ROOT / "data" / "reference" / "clinical_pk.json"
 REPORT_PATH = REPO_ROOT / "docs" / "holdout_contamination_audit.md"
@@ -44,23 +45,6 @@ def _canonical_smiles(smiles: str) -> str | None:
     if mol is None:
         return None
     return Chem.MolToSmiles(mol, isomericSmiles=True)
-
-
-def _inchikey_prefix(smiles: str) -> str | None:
-    """Return first 14 characters of InChIKey (connectivity block), or None."""
-    from rdkit import Chem
-    from rdkit.Chem.inchi import MolToInchi, InchiToInchiKey
-
-    mol = Chem.MolFromSmiles(smiles)
-    if mol is None:
-        return None
-    inchi = MolToInchi(mol)
-    if inchi is None:
-        return None
-    ik = InchiToInchiKey(inchi)
-    if ik is None:
-        return None
-    return ik[:14]
 
 
 # ---------------------------------------------------------------------------

@@ -14,6 +14,7 @@ import json
 import pathlib
 
 import pytest
+from rdkit import Chem
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent.parent
 SCRIPT = ROOT / "scripts/build_n50_exclusion.py"
@@ -63,3 +64,59 @@ def test_ik14_equates_rifampin_and_rifampicin(excl_module):
 def test_distinct_molecules_differ(excl_module):
     """Sanity: unrelated molecules do not collide on IK14."""
     assert excl_module.ik14("CCO") != excl_module.ik14("c1ccccc1")
+
+
+def test_ik14_strips_hydrochloride_counterion(excl_module):
+    """Free base and HCl salt must collide in the exclusion inventory."""
+    free_base = "CN1CCC(C2=CC=CC=C2)CC1"
+    hydrochloride = "CN1CCC(C2=CC=CC=C2)CC1.Cl"
+    assert excl_module.ik14(free_base) == excl_module.ik14(hydrochloride)
+
+
+def test_drugbank_indexes_salt_stripped_parent_even_with_precomputed_key(
+    excl_module, tmp_path
+):
+    salt = "CC(=O)[O-].CC(=O)[O-].[Ca+2]"
+    stored = Chem.MolToInchiKey(Chem.MolFromSmiles(salt))[:14]
+    parent = excl_module.ik14("CC(=O)[O-]")
+    assert stored != parent
+    path = tmp_path / excl_module.DRUGBANK
+    path.parent.mkdir(parents=True)
+    with path.open("w") as handle:
+        writer = csv.DictWriter(handle, fieldnames=["name", "canonical_smiles", "inchikey_14"])
+        writer.writeheader()
+        writer.writerow({
+            "name": "calcium acetate", "canonical_smiles": salt, "inchikey_14": stored,
+        })
+    db = excl_module._ingest_drugbank(tmp_path)
+    assert db[parent] == db[stored] == "calcium acetate"
+
+
+def test_audit_fails_closed_for_missing_sources(excl_module, tmp_path):
+    candidate = tmp_path / "candidate.json"
+    candidate.write_text(json.dumps({"drugs": {"test": {"smiles": "CCO"}}}))
+    with pytest.raises(FileNotFoundError, match="N50 exclusion sources missing"):
+        excl_module.audit(tmp_path, candidate)
+
+
+def test_audit_rejects_unparseable_candidate(excl_module, tmp_path, monkeypatch, capsys):
+    monkeypatch.setattr(excl_module, "_require_sources", lambda root: None)
+    monkeypatch.setattr(excl_module, "_ingest_hard", lambda root: {})
+    monkeypatch.setattr(excl_module, "_ingest_drugbank", lambda root: {})
+    candidate = tmp_path / "candidate.json"
+    candidate.write_text(json.dumps({"drugs": {"bad": {"smiles": "not_a_smiles"}}}))
+    assert excl_module.audit(tmp_path, candidate) == 1
+    assert "clean of every" not in capsys.readouterr().out
+    candidate.write_text(json.dumps({"drugs": {}}))
+    with pytest.raises(ValueError, match="non-empty drugs"):
+        excl_module.audit(tmp_path, candidate)
+
+
+def test_audit_rejects_drugbank_only_identity_hit(excl_module, tmp_path, monkeypatch):
+    key = excl_module.ik14("CCO")
+    monkeypatch.setattr(excl_module, "_require_sources", lambda root: None)
+    monkeypatch.setattr(excl_module, "_ingest_hard", lambda root: {})
+    monkeypatch.setattr(excl_module, "_ingest_drugbank", lambda root: {key: "ethanol"})
+    candidate = tmp_path / "candidate.json"
+    candidate.write_text(json.dumps({"drugs": {"test": {"smiles": "CCO"}}}))
+    assert excl_module.audit(tmp_path, candidate) == 1

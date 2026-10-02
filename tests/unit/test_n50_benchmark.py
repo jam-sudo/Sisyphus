@@ -257,27 +257,22 @@ def test_cli_freeze_refuses_partial_n50(tmp_path):
     assert "n_admitted" in proc.stdout
 
 
-def test_cli_freeze_refuses_overwrite(tmp_path, monkeypatch):
+def test_cli_freeze_refuses_overwrite(n50_module, tmp_path, monkeypatch, capsys):
     """Existing freeze file for the same cycle must block the run."""
-    # Use a cycle_id that won't collide with real files. Place a pre-existing
-    # freeze file at data/validation/n50_benchmark_<cycle>.json.
     cycle = "unittest-cycle-2026Q2"
-    freeze_file = ROOT / "data/validation" / f"n50_benchmark_{cycle}.json"
-    assert not freeze_file.exists(), "test fixture collision"
+    monkeypatch.setattr(n50_module, "OUTPUT_DIR", tmp_path)
+    freeze_file = tmp_path / f"n50_benchmark_{cycle}.json"
     freeze_file.write_text("{}")
-    try:
-        payload = {
-            "cycle_id": cycle, "n_admitted": 50, "n_target": 50, "drugs": {},
-        }
-        n50_f = tmp_path / "n50.json"
-        n50_f.write_text(json.dumps(payload))
-        proc = _run_cli(
-            ["--freeze-run", "--confirm", "--n50-file", str(n50_f)], ROOT
-        )
-        assert proc.returncode == 2
-        assert "already exists" in proc.stdout
-    finally:
-        freeze_file.unlink()
+    payload = {"cycle_id": cycle, "n_admitted": 50, "n_target": 50, "drugs": {}}
+    n50_f = tmp_path / "n50.json"
+    n50_f.write_text(json.dumps(payload))
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["run_n50_benchmark.py", "--freeze-run", "--confirm", "--n50-file", str(n50_f)],
+    )
+    assert n50_module.main() == 2
+    assert "already exists" in capsys.readouterr().out
 
 
 def test_cli_freeze_refuses_invalidated_file(tmp_path):

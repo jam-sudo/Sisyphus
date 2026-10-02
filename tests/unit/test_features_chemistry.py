@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from types import SimpleNamespace
+
 import numpy as np
 import pytest
 
@@ -73,6 +75,24 @@ class TestFeatures:
 # Chemistry module tests
 # ---------------------------------------------------------------------------
 class TestChemistry:
+    def test_licensed_logp_model_integrity_failure_is_fatal(self, tmp_path, monkeypatch):
+        from sisyphus.resources import ResourceConfig
+
+        model = tmp_path / "models" / "adme" / "logp_correction.json"
+        model.parent.mkdir(parents=True)
+        model.write_bytes(b"corrupt")
+        monkeypatch.delattr(compute_profile, "_logp_model", raising=False)
+        monkeypatch.setattr(
+            "sisyphus.resources.get_resource_config",
+            lambda: ResourceConfig(tmp_path, "licensed_research"),
+        )
+        monkeypatch.setattr(
+            "sisyphus.predict.drugbank.drugbank_lookup",
+            lambda: SimpleNamespace(get_logp=lambda smiles: None),
+        )
+        with pytest.raises(ValueError, match="manifest unavailable"):
+            compute_profile("CCO")
+
     def test_aspirin_profile(self):
         profile = compute_profile("CC(=O)Oc1ccccc1C(=O)O")
         assert profile.mw == pytest.approx(180.16, abs=1.0)

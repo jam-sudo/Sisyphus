@@ -18,9 +18,11 @@ N > 300, so full 2057 features are acceptable per spec.
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 import logging
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
@@ -182,6 +184,7 @@ def train_and_evaluate(
         "fold_r2": fold_r2,
         "model": model_full,
         "cv_predictions": cv_predictions,
+        "hyperparameters": params,
     }
 
 
@@ -305,6 +308,30 @@ def main() -> None:
     vdf_model_path = model_dir / "xgboost_vdf.json"
     vdf_result["model"].save_model(str(vdf_model_path))
     logger.info("Vd/F model saved to %s", vdf_model_path)
+
+    dataset = ROOT / "data" / "training" / "clf_training.csv"
+    dataset_sha = hashlib.sha256(dataset.read_bytes()).hexdigest()
+    for path, result, count in (
+        (clf_model_path, clf_result, len(y_clf)),
+        (vdf_model_path, vdf_result, len(y_vdf)),
+    ):
+        meta_path = path.with_suffix(".meta.json")
+        metadata = json.loads(meta_path.read_text())
+        metadata["artifact_sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
+        metadata["trained_on"] = {
+            "dataset_path": str(dataset.relative_to(ROOT)),
+            "sha256": dataset_sha,
+            "n_drugs_clean": count,
+        }
+        metadata["trained_at"] = datetime.now(timezone.utc).isoformat()
+        metadata["holdout_version"] = "N=107 (data/reference/holdout.json)"
+        metadata["holdout_metric"] = {
+            "name": "five_fold_cv_r2",
+            "value": result["cv_r2"],
+        }
+        metadata["hyperparameters"] = result["hyperparameters"]
+        metadata["retrained_reason"] = "Rebuilt from current holdout-excluded CL/F and Vd/F training data"
+        meta_path.write_text(json.dumps(metadata, indent=2) + "\n")
 
     # --- Summary ---
     logger.info("\n" + "=" * 60)

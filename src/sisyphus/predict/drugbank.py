@@ -15,6 +15,8 @@ import logging
 from dataclasses import dataclass
 from pathlib import Path
 
+from sisyphus.resources import get_resource_config
+
 logger = logging.getLogger(__name__)
 
 # CYP name normalization: DrugBank full names → Sisyphus YAML tags
@@ -24,14 +26,10 @@ _CYP_NORMALIZATION: dict[str, str] = {
     "Cytochrome P450 1A2": "CYP1A2",
     "Cytochrome P450 2C9": "CYP2C9",
     "Cytochrome P450 2E1": "CYP2E1",
-    "Cytochrome P450 3A5": "CYP3A4",   # same gene family, merge
-    "Cytochrome P450 2C19": "CYP2C9",  # same 2C subfamily
-    "Cytochrome P450 2C8": "CYP2C9",   # same 2C subfamily
-    # CYP2B6 intentionally absent — no Sisyphus equivalent
+    # CYP3A5, CYP2C19, CYP2C8, and CYP2B6 intentionally remain unsupported.
+    # Family-level remapping would turn isoform-specific evidence into a
+    # biologically different enzyme and overstate PGx/DDI resolution.
 }
-
-_DEFAULT_DATA_DIR = Path(__file__).resolve().parent.parent.parent.parent / "data" / "drugbank"
-
 
 @dataclass
 class DrugBankConfig:
@@ -50,7 +48,13 @@ class DrugBankLookup:
         config: Feature flags for ablation.
     """
 
-    def __init__(self, data_dir: Path = _DEFAULT_DATA_DIR, config: DrugBankConfig | None = None):
+    def __init__(self, data_dir: Path | None = None, config: DrugBankConfig | None = None):
+        if data_dir is None:
+            resources = get_resource_config()
+            data_dir = resources.data(
+                "drugbank" if resources.profile == "licensed_research" else "__disabled_drugbank__",
+                required=False,
+            )
         self._data_dir = data_dir
         self._config = config or DrugBankConfig()
         self._loaded = False
@@ -246,7 +250,21 @@ def drugbank_lookup(config: DrugBankConfig | None = None) -> DrugBankLookup:
     """
     global _INSTANCE
     if _INSTANCE is None:
-        _INSTANCE = DrugBankLookup(config=config)
+        from sisyphus.resources import get_resource_config
+
+        resources = get_resource_config()
+        if resources.profile == "licensed_research":
+            active_config = config or DrugBankConfig()
+        else:
+            # Public results must not change merely because a gitignored,
+            # licensed export happens to exist on one developer's machine.
+            active_config = config or DrugBankConfig(
+                enable_enzyme_fm=False,
+                enable_fup=False,
+                enable_pka=False,
+                enable_logp=False,
+            )
+        _INSTANCE = DrugBankLookup(config=active_config)
     elif config is not None:
         logger.warning("drugbank_lookup() singleton already initialized, config argument ignored")
     return _INSTANCE

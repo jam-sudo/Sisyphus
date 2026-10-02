@@ -19,7 +19,7 @@ def auc_trapezoidal(time: NDArray[np.float64], conc: NDArray[np.float64]) -> flo
     Returns:
         AUC in mg·h/L.
     """
-    _trapz = getattr(np, "trapezoid", np.trapz)  # numpy 2.0+ vs 1.x
+    _trapz = np.trapezoid if hasattr(np, "trapezoid") else np.trapz
     return float(_trapz(conc, time))
 
 

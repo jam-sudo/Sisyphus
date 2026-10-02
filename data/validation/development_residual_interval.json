@@ -1,0 +1,63 @@
+{
+  "method": "development_empirical_residual_quantile",
+  "score": "abs_log10_fold_error",
+  "interval": "multiplicative: pred /\u00f7 10**q",
+  "calibration_set": "partially_in_sample_development",
+  "n_calibration_meta": 36,
+  "n_training_reference": 36,
+  "skipped_training_reference": [],
+  "generated_from": "scripts/calibrate_conformal.py",
+  "source_cache_sha256": "50f3d658d128370870b6d6e8cc2646bcfc64cbc01b7bfa84c578a3aa83033f69",
+  "calibration_reference_sha256": "48c0a4a904f56617bea084fa27b4deaefcbb5048994f88ce393cb2d40fb917ca",
+  "holdout_membership_sha256": "8c5d1b0c42247749767ac3a7da3bd61573e0f9bf45f503347a70f87b6b3ad02a",
+  "model_artifact_sha256": {
+    "models/direct_pk/xgboost_cmax.json": "9c5d11043b69fc13ac8a7b961dc1ece5036f923a5ff923464d7e9391ed5183ce",
+    "models/direct_pk/xgboost_clf.json": "a9a8d50ff52e0ca0139310aee0e45e3399044f048f9d147f56a3d571bda0fc16",
+    "models/direct_pk/xgboost_vdf.json": "4525b58cdc97a3ff59a8623a341dd83e691ba3b0e8d45040228caaf7da40dc70",
+    "models/adme/xgboost_fup_v2.json": "b0731734730746866646a2628dded73d74254eb06ef1a6c7b457bf273d867096",
+    "models/adme/xgboost_clint.json": "0ca4ee7e88367dfb3ad55f94adc8eaa025cdd40b5a308e584b89e05555d3ff42",
+    "models/adme/xgboost_vdss.json": "29f84cbff97da197ae516fccb2d91aff972f9bae661a8b2bde39786a984c1c35",
+    "models/adme/xgboost_peff.json": "1566e5b7c9ced4c2c1ce6f0d7e693b0190ae7306a8f632a9486c1658dab6e1e7"
+  },
+  "validity": "not split-conformal; fitted components saw calibration outcomes",
+  "tracks": {
+    "meta": {
+      "0.5": 0.4150694924423328,
+      "0.2": 0.7065953781116706,
+      "0.1": 1.0274576023741737,
+      "0.05": 1.632253571212082
+    },
+    "engine": {
+      "0.5": 0.6178446874388239,
+      "0.2": 1.3227599089939013,
+      "0.1": 1.5214920375151924,
+      "0.05": 1.7929130806302982
+    },
+    "ml": {
+      "0.5": 0.2891537182260584,
+      "0.2": 0.5563491892497154,
+      "0.1": 0.7547621107736406,
+      "0.05": 1.2050238218007645
+    }
+  },
+  "consumed_development_benchmark_coverage": {
+    "meta": {
+      "0.5": 0.5753,
+      "0.2": 0.7671,
+      "0.1": 0.9041,
+      "0.05": 0.9863
+    },
+    "engine": {
+      "0.5": 0.589,
+      "0.2": 0.9178,
+      "0.1": 0.9452,
+      "0.05": 0.9726
+    },
+    "ml": {
+      "0.5": 0.3973,
+      "0.2": 0.6438,
+      "0.1": 0.7123,
+      "0.05": 0.9452
+    }
+  }
+}

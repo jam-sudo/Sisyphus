@@ -1,0 +1,124 @@
+{
+  "interpretation": "AI-assisted diagnostic P0; not independent External Holdout V1 or a clinical release gate.",
+  "manifest_sha256": "e304a1e57275576f3de65b515a9392ab74194529fc68f0924574d1298a44ab3c",
+  "meta_aafe": 3.343401019690974,
+  "meta_bootstrap_95_ci": [
+    2.4301853293672404,
+    4.787539659156722
+  ],
+  "meta_geometric_bias": 0.6843592481217695,
+  "meta_ml_aafe_ratio": 1.111762411238732,
+  "meta_pct_compounds_within_2fold": 33.33333333333333,
+  "ml_aafe": 3.007298129431933,
+  "ml_bootstrap_95_ci": [
+    2.2629504611942832,
+    4.183027674667176
+  ],
+  "n_arms": 58,
+  "n_bootstrap": 100000,
+  "n_compounds": 18,
+  "paired_ratio_95_ci": [
+    0.9287452382385555,
+    1.3366636855961893
+  ],
+  "predictions_sha256": "c54702d9f7d9b9721b0d01aeaeedcbf55381d0ad8effb744d1612f7ecb3b7674",
+  "protocol": "docs/validation/self_run_pilot_p0.md",
+  "seed": 20260923,
+  "sensitivity_analyses": {
+    "all_scored_arms_first_pass_verified": {
+      "meta_aafe": 4.114607760312837,
+      "meta_bootstrap_95_ci": [
+        3.2581941850192946,
+        5.372912537349075
+      ],
+      "meta_geometric_bias": 0.49097205211177575,
+      "meta_ml_aafe_ratio": 1.402082007337398,
+      "meta_pct_compounds_within_2fold": 0.0,
+      "ml_aafe": 2.934641296857249,
+      "ml_bootstrap_95_ci": [
+        2.1342717808179144,
+        3.9147898306479565
+      ],
+      "n_arms": 31,
+      "n_bootstrap": 100000,
+      "n_compounds": 6,
+      "paired_ratio_95_ci": [
+        1.0441147931524435,
+        1.96124576707282
+      ],
+      "seed": 20260923
+    },
+    "same_statistic": {
+      "groups": {
+        "arithmetic": {
+          "n_arms": 37,
+          "n_compounds": 10,
+          "score": {
+            "meta_aafe": 3.8247402038309373,
+            "meta_bootstrap_95_ci": [
+              2.3636669125419867,
+              6.619544278829621
+            ],
+            "meta_geometric_bias": 0.5817343686960641,
+            "meta_ml_aafe_ratio": 1.2218686592837957,
+            "meta_pct_compounds_within_2fold": 20.0,
+            "ml_aafe": 3.130238405552383,
+            "ml_bootstrap_95_ci": [
+              2.03517500248741,
+              5.3758425773952245
+            ],
+            "n_arms": 37,
+            "n_bootstrap": 100000,
+            "n_compounds": 10,
+            "paired_ratio_95_ci": [
+              0.9683868647070045,
+              1.5815054997662232
+            ],
+            "seed": 20260923
+          }
+        },
+        "geometric": {
+          "n_arms": 12,
+          "n_compounds": 4,
+          "score": {
+            "meta_aafe": 2.4790720404592252,
+            "meta_bootstrap_95_ci": [
+              1.676014047834025,
+              3.6669132873492956
+            ],
+            "meta_geometric_bias": 1.7304953206561762,
+            "meta_ml_aafe_ratio": 0.9783806959973979,
+            "meta_pct_compounds_within_2fold": 50.0,
+            "ml_aafe": 2.5338521606172595,
+            "ml_bootstrap_95_ci": [
+              1.5094657058709824,
+              4.034038659000226
+            ],
+            "n_arms": 12,
+            "n_bootstrap": 100000,
+            "n_compounds": 4,
+            "paired_ratio_95_ci": [
+              0.6657593377940068,
+              1.3592341349792518
+            ],
+            "seed": 20260923
+          }
+        },
+        "geometric_lsmean": {
+          "n_arms": 2,
+          "n_compounds": 2,
+          "score": null
+        },
+        "median": {
+          "n_arms": 1,
+          "n_compounds": 1,
+          "score": null
+        }
+      },
+      "mixed_statistic_compounds": 1,
+      "rule": "Score only compounds whose every included arm has the same source Cmax statistic; groups with fewer than four compounds report counts only."
+    }
+  },
+  "source_adjudication_commit": "d9c4e4c",
+  "source_adjudication_sha256": "cb964fc5a30ad140df54a9d175082f154038312c2d8337cbdc87c5c142673812"
+}

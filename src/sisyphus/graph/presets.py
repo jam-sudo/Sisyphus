@@ -6,12 +6,11 @@ and return ready-to-use BodyGraph instances.
 
 from __future__ import annotations
 
-from pathlib import Path
-
 from sisyphus.graph.body import BodyGraph
 from sisyphus.graph.builder import build_from_yaml
+from sisyphus.resources import get_resource_config
 
-_PHYSIOLOGY_DIR = Path(__file__).resolve().parent.parent.parent.parent / "data" / "physiology"
+_PHYSIOLOGY_DIR = get_resource_config().data("physiology")
 
 
 def reference_man() -> BodyGraph:

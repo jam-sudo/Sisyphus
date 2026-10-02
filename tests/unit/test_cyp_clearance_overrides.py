@@ -20,12 +20,11 @@ from sisyphus.predict.cyp_clearance_overrides import lookup_metabolic_fraction
 from sisyphus.predict.ivive import _decompose_clint
 
 _PRAVASTATIN_CANONICAL = (
-    "CC[C@@H](C)C(=O)O[C@@H]1C[C@@H](O)C=C2[C@@H]"
-    "(CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H](C)CC[C@@H]21"
+    "CC[C@H](C)C(=O)O[C@H]1C[C@@H](C=C2[C@H]1"
+    "[C@H]([C@H](C=C2)C)CC[C@H](C[C@H](CC(=O)O)O)O)O"
 )
 _PRAVASTATIN_VARIANT = (
-    "CC[C@@H](C)C(=O)O[C@@H]1C[C@H](C=C2[C@@H]1CC[C@H]"
-    "([C@@H]2CC[C@H](C[C@H](CC(=O)O)O)O)C)O"
+    "CCC(C)C(=O)OC1CC(C=C2C1C(C(C=C2)C)CCC(CC(CC(=O)O)O)O)O"
 )
 _MORPHINE_SMILES = "CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O"
 _CLOPIDOGREL_SMILES = "COC(=O)[C@H](c1ccccc1Cl)N1CCc2sccc2C1"

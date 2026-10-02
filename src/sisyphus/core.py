@@ -11,11 +11,14 @@ Types defined:
     DrugOnGraph        — drug properties mapped to graph (predict → engine)
     SimResult          — raw ODE solution (engine → pk)
     PKEndpoints        — pharmacokinetic endpoints (pk → pipeline)
+    CmaxPrediction     — final structure-only Cmax output (pipeline → caller)
+    EngineSimulation   — mechanistic curve/endpoints (engine → caller)
     PredictionResult   — final pipeline output (pipeline → caller)
 """
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass, field
 
 import numpy as np
@@ -52,6 +55,8 @@ class Distribution:
     _VALID_DIST_TYPES = frozenset({"lognormal", "normal", "uniform"})
 
     def __post_init__(self) -> None:
+        if not math.isfinite(self.mean) or not math.isfinite(self.cv):
+            raise ValueError("Distribution mean and cv must be finite")
         if self.cv < 0:
             raise ValueError(f"cv must be non-negative, got {self.cv}")
         if self.dist_type not in self._VALID_DIST_TYPES:
@@ -483,6 +488,56 @@ class PKEndpoints:
 
 
 # ---------------------------------------------------------------------------
+# Public output contracts
+# ---------------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class CmaxPrediction:
+    """Authoritative final Cmax prediction.
+
+    The meta learner predicts Cmax only.  It does not generate a concentration-
+    time curve and therefore cannot legitimately generate Tmax, AUC, or half-
+    life.  Those mechanistic endpoints live in :class:`EngineSimulation`.
+
+    ``tracks`` and ``weights`` are ordered key/value pairs so the frozen result
+    remains immutable while callers can recover dictionaries with ``dict(...)``.
+    """
+
+    cmax: Distribution
+    method: str
+    tracks: tuple[tuple[str, float], ...]
+    weights: tuple[tuple[str, float], ...]
+    interval_90: tuple[float, float] | None = None
+    interval_source: str | None = None
+    # Residual/model-error and parameter-propagation intervals answer different
+    # questions and must never overwrite one another. ``interval_90`` above is
+    # retained as a compatibility alias for the primary applicable interval.
+    residual_interval_90: tuple[float, float] | None = None
+    residual_interval_source: str | None = None
+    parameter_interval_90: tuple[float, float] | None = None
+    parameter_interval_source: str | None = None
+
+
+@dataclass(frozen=True)
+class EngineSimulation:
+    """Mechanistic PBPK simulation output, separate from final meta Cmax.
+
+    The curve and endpoints all come from the same engine solve and exposure
+    correction. This avoids
+    presenting an engine-derived AUC/Tmax beside a meta-derived Cmax as if one
+    coherent curve had generated all of them.
+    """
+
+    endpoints: PKEndpoints
+    observation_node: str
+    time_h: tuple[float, ...]
+    concentration_mg_l: tuple[float, ...]
+    solver_success: bool
+    mass_balance_error: float
+
+
+# ---------------------------------------------------------------------------
 # PredictionResult — pipeline → caller contract
 # ---------------------------------------------------------------------------
 
@@ -502,7 +557,7 @@ class PredictionResult:
     method: str  # "engine", "ml", "hybrid"
     engine_pk: PKEndpoints | None
     ml_pk: PKEndpoints | None
-    confidence: str  # "high", "medium", "low"
+    confidence: str  # legacy adapter: "medium" or "low"; not calibrated probability
     in_applicability_domain: bool
     ad_flags: tuple[str, ...]
     warnings: tuple[str, ...]
@@ -512,8 +567,20 @@ class PredictionResult:
     # graph for this prediction. Empty when no phenotypes were supplied.
     # Round-trips via dict(result.phenotypes_applied).
     phenotypes_applied: tuple[tuple[str, str], ...] = ()
-    # Engine's emergent oral bioavailability (24h-truncated AUC_oral/AUC_iv).
+    # Engine's emergent oral bioavailability (converged AUC_oral/AUC_iv).
     # Populated only when predict(compute_f_engine=True) and route="oral";
     # None otherwise. Surfaced for the engine-as-prior MIPD F latent so callers
     # need not re-derive it via a probe call (see sisyphus.mipd).
     engine_f: float | None = None
+    # New explicit contracts. ``pk`` and ``cmax_90ci`` above remain as a
+    # backwards-compatible adapter for existing callers.
+    cmax_prediction: CmaxPrediction | None = None
+    engine_simulation: EngineSimulation | None = None
+    # Requested and unsupported PGx inputs are kept distinct from the actually
+    # applied phenotypes.  This prevents a no-op request being reported as used.
+    phenotypes_requested: tuple[tuple[str, str], ...] = ()
+    phenotypes_unsupported: tuple[tuple[str, str], ...] = ()
+    # Machine-readable execution status; warnings remain human-readable detail.
+    execution_status: str = "ok"
+    resource_profile: str = "public"
+    artifact_provenance: tuple[tuple[str, str], ...] = ()

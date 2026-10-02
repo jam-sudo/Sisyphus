@@ -71,7 +71,7 @@ def test_predict_posterior_cl_latent_with_measured_conc_is_well_formed():
     )
     assert post.cl_scale is not None  # the 2-latent path ran
     assert post.meta_cmax is not None  # product posterior attached
-    assert post.cmax_90ci is not None  # calibrated PI attached
+    assert post.cmax_90ci is None  # no validated residual PI for conditioned posterior
     assert post.cmax.point > 0
 
 

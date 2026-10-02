@@ -1,18 +1,13 @@
 """Guard: shipped XGBoost models' recorded feature schema must match the current
 ``compute_features`` pipeline.
 
-The production predictors load their models with a bare ``load_model()``; if
-``descriptors.compute_features`` ever drifts (feature count, or the 2048-Morgan +
-9-descriptor byte layout / order), the models would silently predict on the wrong
-vector with no error. Each shipped model records its training-time feature schema
+Each shipped model records its training-time feature schema
 (``n_features`` + a sha256 of ``compute_features(caffeine)``); this test recomputes
 both under the current code and asserts they still match, catching drift at CI
-time. The feature bytes are RDKit-only (Morgan bit vector + deterministic RDKit
-descriptors), so the sha256 is stable across BLAS/numpy stacks — a mismatch means
-a real pipeline change, not numerics drift.
+time before the runtime verifier rejects the model. The feature bytes are RDKit-only
+(Morgan bit vector + deterministic RDKit descriptors).
 
-Complements the *runtime* warn-only check wired via
-``registry.warn_on_feature_schema_drift`` in the model loaders.
+Complements the runtime fail-closed ``registry.verify_model_artifact`` check.
 """
 from __future__ import annotations
 

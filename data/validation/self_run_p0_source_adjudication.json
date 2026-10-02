@@ -1,0 +1,5146 @@
+{
+  "metadata": {
+    "date": "2026-09-23",
+    "protocol": "docs/validation/self_run_pilot_p0.md",
+    "adjudication_rule": "docs/validation/self_run_p0_pre_unseal_adjudication.md",
+    "frozen_candidate_manifest_sha256": "e304a1e57275576f3de65b515a9392ab74194529fc68f0924574d1298a44ab3c",
+    "sealed_prediction_sha256": "c54702d9f7d9b9721b0d01aeaeedcbf55381d0ad8effb744d1612f7ecb3b7674",
+    "prediction_status": "sealed; file was not opened for this adjudication",
+    "method": "Coordinator checked the full Claude AI proposal against all frozen IDs/arms and first-pass original-source review records; inclusion follows the committed rules. AI review is not independent human verification.",
+    "source_review_files": [
+      "data/validation/self_run_p0_candidates_101_110_ai_review.json",
+      "data/validation/self_run_p0_candidates_111_120_ai_review.json",
+      "data/validation/self_run_p0_candidates_11_20_ai_review.json",
+      "data/validation/self_run_p0_candidates_121_130_ai_review.json",
+      "data/validation/self_run_p0_candidates_131_140_ai_review.json",
+      "data/validation/self_run_p0_candidates_141_150_ai_review.json",
+      "data/validation/self_run_p0_candidates_151_160_ai_review.json",
+      "data/validation/self_run_p0_candidates_161_170_ai_review.json",
+      "data/validation/self_run_p0_candidates_171_180_ai_review.json",
+      "data/validation/self_run_p0_candidates_181_186_ai_review.json",
+      "data/validation/self_run_p0_candidates_21_30_ai_review.json",
+      "data/validation/self_run_p0_candidates_31_40_ai_review.json",
+      "data/validation/self_run_p0_candidates_41_50_ai_review.json",
+      "data/validation/self_run_p0_candidates_51_60_ai_review.json",
+      "data/validation/self_run_p0_candidates_61_70_ai_review.json",
+      "data/validation/self_run_p0_candidates_71_80_ai_review.json",
+      "data/validation/self_run_p0_candidates_81_90_ai_review.json",
+      "data/validation/self_run_p0_candidates_91_100_ai_review.json",
+      "data/validation/self_run_p0_first10_ai_review.json"
+    ],
+    "counts": {
+      "candidates": 186,
+      "arms": 452,
+      "included_compounds": 18,
+      "included_arms": 58,
+      "excluded_compounds": 47,
+      "unresolved_compounds": 121
+    },
+    "caveat": "Source Cmax had been viewed during first-pass review before this rule clarification, but model predictions remain sealed. This P0 pilot is diagnostic and not independent External Holdout V1."
+  },
+  "candidates": [
+    {
+      "position": 1,
+      "candidate_id": "2127",
+      "name": "ETHAMSYLATE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_4805"
+      ],
+      "rationale": "Fasted healthy conventional-tablet parent-plasma arm, but etamsylate is the diethylammonium salt of the manifest sulfonic acid and the 500 mg Dicynone dose is salt mass, not active-moiety-matched.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_4805",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (salt-basis dose)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 2,
+      "candidate_id": "2849",
+      "name": "LEVODROPROPIZINE",
+      "disposition": "include",
+      "included_arm_ids": [
+        "frdb_6213"
+      ],
+      "excluded_arm_ids": [
+        "frdb_6214"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_6214": "controlled-release 90 mg tablet"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "IR 60 mg tablet, fasted healthy adults; Table 2 first-dose (0-6 h, before second TID dose) pre-accumulation Cmax used; CR arm excluded.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_6213",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "include",
+          "note": "verified_with_caveat->include (first-dose pre-accumulation interval, explicit IR tablet)"
+        }
+      ],
+      "included_arm_evidence": [
+        {
+          "arm_id": "frdb_6213",
+          "dose_mg": 60.0,
+          "observed_cmax": 278.14,
+          "observed_cmax_unit": "μg/L",
+          "observed_cmax_raw": 278.14,
+          "observed_cmax_mg_l": 0.27814,
+          "cmax_statistic": "arithmetic mean ± SD 278.14 ± 100.95, n=46 (first dose, Table 2); Table 1 reports 325.46 ± 104.51 μg/L = Cmax over full 24 h TID regimen (not single-dose)",
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/29872264/",
+          "full_text_url_used": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5973308/",
+          "source_access_status": "full_text_accessed",
+          "source_locator": "Table 2 'Single-dose PK parameters' (IR 60 mg fasted column); Table 1 for 24-h value",
+          "first_pass_verification": "verified_with_caveat",
+          "source_uncertainty": null
+        }
+      ]
+    },
+    {
+      "position": 3,
+      "candidate_id": "8150",
+      "name": "PHENSERINE TARTRATE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_7874"
+      ],
+      "rationale": "Original full text inaccessible; fasting, formulation, analyte and Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 4,
+      "candidate_id": "2134",
+      "name": "LIAROZOLE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_4812"
+      ],
+      "rationale": "Cited source is a secondary drug profile; primary study unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 5,
+      "candidate_id": "1776",
+      "name": "ROXATIDINE",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_3754",
+        "frdb_3755",
+        "frdb_3756"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_3754": "dosed compound is prodrug roxatidine acetate HCl; manifest structure is the deacetylated activation product and dose is prodrug-salt mass",
+        "frdb_3755": "dosed compound is prodrug roxatidine acetate HCl; manifest structure is the deacetylated activation product and dose is prodrug-salt mass",
+        "frdb_3756": "dosed compound is prodrug roxatidine acetate HCl; manifest structure is the deacetylated activation product and dose is prodrug-salt mass"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Dosed parent does not match manifest structure (prodrug activation product analyte).",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_3754",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "exclude",
+          "note": "verified_with_caveat->exclude (prodrug activation product)"
+        },
+        {
+          "arm_id": "frdb_3755",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "exclude",
+          "note": "verified_with_caveat->exclude (prodrug activation product)"
+        },
+        {
+          "arm_id": "frdb_3756",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "exclude",
+          "note": "verified_with_caveat->exclude (prodrug activation product)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 6,
+      "candidate_id": "2665",
+      "name": "VAPIPROST",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_6042"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_6042": "secondary reproduction of the young Uematsu 1991 cohort, not generated in cited source"
+      },
+      "unresolved_arm_ids": [
+        "frdb_6036",
+        "frdb_6037",
+        "frdb_6038",
+        "frdb_6041"
+      ],
+      "rationale": "Young-cohort 1991 arms (5/10/20 mg) unverified (full text inaccessible), so the whole candidate stays unresolved; elderly arm 6041 (model-fitted Cmax, tablet) not scored selectively.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_6041",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (sibling arms unverified)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 7,
+      "candidate_id": "2572",
+      "name": "PHENMETRAZINE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_5784"
+      ],
+      "rationale": "Full text inaccessible; formulation (MeSH delayed-action) and all criteria unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 8,
+      "candidate_id": "10208",
+      "name": "PF-04457845",
+      "disposition": "include",
+      "included_arm_ids": [
+        "frdb_9985"
+      ],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [],
+      "rationale": "Fasted SRD oral solution (ordinary liquid = IR), healthy adults, parent plasma geometric mean.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_9985",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "include",
+          "note": "verified_with_caveat->include (oral solution = IR)"
+        }
+      ],
+      "included_arm_evidence": [
+        {
+          "arm_id": "frdb_9985",
+          "dose_mg": 40.0,
+          "observed_cmax": 442.0,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 442,
+          "observed_cmax_mg_l": 0.442,
+          "cmax_statistic": "geometric mean (%CV 34), N=9",
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/22044402",
+          "full_text_url_used": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3403198/",
+          "source_access_status": "full_text_accessed",
+          "source_locator": "Table 1 (SRD study), 40 mg column; Br J Clin Pharmacol 2012;73:706-16",
+          "first_pass_verification": "verified_with_caveat",
+          "source_uncertainty": null
+        }
+      ]
+    },
+    {
+      "position": 9,
+      "candidate_id": "560",
+      "name": "BALOFLOXACIN",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_1412"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_1412": "secondary dose-normalized reproduction of Reference 15 young cohort"
+      },
+      "unresolved_arm_ids": [
+        "frdb_1401",
+        "frdb_1402",
+        "frdb_1403",
+        "frdb_1404",
+        "frdb_1405",
+        "frdb_1406",
+        "frdb_1410",
+        "frdb_1411"
+      ],
+      "rationale": "Seven J Chromatogr B arms unverified; elderly arm 1411 has unknown dosage form. Unresolved.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_1411",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (dosage form unknown; sibling arms unverified)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 10,
+      "candidate_id": "45300",
+      "name": "XANTHOHUMOL",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_11357"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_11357": "total (deconjugated) xanthohumol, not parent; no pooled Cmax"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Analyte not parent plasma.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 11,
+      "candidate_id": "30759",
+      "name": "GIT-027",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_10763",
+        "frdb_10764",
+        "frdb_10765",
+        "frdb_10766",
+        "frdb_10767",
+        "frdb_10768",
+        "frdb_10769"
+      ],
+      "rationale": "Fasted healthy parent-plasma Cmax readable, but the original article never names the dosage form; unknown dosage form stays unresolved.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_10763",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (dosage form unknown)"
+        },
+        {
+          "arm_id": "frdb_10764",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (dosage form unknown)"
+        },
+        {
+          "arm_id": "frdb_10765",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (dosage form unknown)"
+        },
+        {
+          "arm_id": "frdb_10766",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (dosage form unknown)"
+        },
+        {
+          "arm_id": "frdb_10767",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (dosage form unknown)"
+        },
+        {
+          "arm_id": "frdb_10768",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (dosage form unknown)"
+        },
+        {
+          "arm_id": "frdb_10769",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (dosage form unknown)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 12,
+      "candidate_id": "7875",
+      "name": "LUBIPROSTONE",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_7343"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_7343": "parent below LOQ; labelled Cmax is metabolite M3; fasting not stated"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Non-parent analyte.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 13,
+      "candidate_id": "7026",
+      "name": "ZENARESTAT",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_7160",
+        "frdb_7161",
+        "frdb_7162"
+      ],
+      "rationale": "Abstract only; formulation and Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 14,
+      "candidate_id": "2197",
+      "name": "PHLOROGLUCINOL",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_4859"
+      ],
+      "rationale": "Fasted healthy ODT arm (ODT = IR), plasma parent, but phloroglucinol products are commonly dosed as the dihydrate and the source does not state an anhydrous active-moiety basis; fasting appears only in the abstract.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_4859",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (hydrate/dose basis not confirmed)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 15,
+      "candidate_id": "2023",
+      "name": "CITICOLINE",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_4617",
+        "frdb_4618"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_4617": "controlled-release tablet; choline metabolite analyte",
+        "frdb_4618": "controlled-release tablet; choline metabolite analyte"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "CR formulation and metabolite analyte per original abstract.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 16,
+      "candidate_id": "1729",
+      "name": "GENISTEIN",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_3699",
+        "frdb_3703",
+        "frdb_3704",
+        "frdb_3705",
+        "frdb_3706"
+      ],
+      "rationale": "Both originals abstract-only; fasting, formulation, free vs total analyte, adult-only unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 17,
+      "candidate_id": "1542",
+      "name": "PHENDIMETRAZINE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_3348"
+      ],
+      "rationale": "Abstract only; population, fasting, formulation, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 18,
+      "candidate_id": "1860",
+      "name": "MOZAVAPTAN",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_4386",
+        "frdb_4387",
+        "frdb_4388",
+        "frdb_4391"
+      ],
+      "rationale": "Otherwise eligible, but all doses are mozavaptan hydrochloride salt mass; free-base dose not stated, so salt dose is not active-moiety-matched (committed rule: leave unresolved).",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_4386",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (salt-basis dose)"
+        },
+        {
+          "arm_id": "frdb_4387",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (salt-basis dose)"
+        },
+        {
+          "arm_id": "frdb_4388",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (salt-basis dose)"
+        },
+        {
+          "arm_id": "frdb_4391",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (salt-basis dose)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 19,
+      "candidate_id": "2879",
+      "name": "CLOPREDNOL",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_6327"
+      ],
+      "rationale": "Abstract only; arm cannot be mapped to capsule/tablet/solution; Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 20,
+      "candidate_id": "59566",
+      "name": "ATABECESTAT",
+      "disposition": "include",
+      "included_arm_ids": [
+        "frdb_12979",
+        "frdb_12980",
+        "frdb_12981",
+        "frdb_12982",
+        "frdb_12983",
+        "frdb_12984",
+        "frdb_12985"
+      ],
+      "excluded_arm_ids": [
+        "frdb_12993",
+        "frdb_12994",
+        "frdb_12995"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_12993": "MAD study dosed fed (standard breakfast), 14-day QD",
+        "frdb_12994": "MAD study dosed fed (standard breakfast), 14-day QD",
+        "frdb_12995": "MAD study dosed fed (standard breakfast), 14-day QD"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Fasted SAD free-base oral suspension (ordinary liquid = IR), healthy young and elderly cohorts (distinct cohorts), parent plasma mean; MAD fed arms excluded.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_12979",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "include",
+          "note": "verified_with_caveat->include (oral suspension = IR)"
+        },
+        {
+          "arm_id": "frdb_12980",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "include",
+          "note": "verified_with_caveat->include (oral suspension = IR)"
+        },
+        {
+          "arm_id": "frdb_12981",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "include",
+          "note": "verified_with_caveat->include (oral suspension = IR)"
+        },
+        {
+          "arm_id": "frdb_12982",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "include",
+          "note": "verified_with_caveat->include (oral suspension = IR)"
+        },
+        {
+          "arm_id": "frdb_12983",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "include",
+          "note": "verified_with_caveat->include (oral suspension = IR)"
+        },
+        {
+          "arm_id": "frdb_12984",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "include",
+          "note": "verified_with_caveat->include (oral suspension = IR)"
+        },
+        {
+          "arm_id": "frdb_12985",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "include",
+          "note": "verified_with_caveat->include (oral suspension = IR)"
+        }
+      ],
+      "included_arm_evidence": [
+        {
+          "arm_id": "frdb_12979",
+          "dose_mg": 1.0,
+          "observed_cmax": 6.72,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 6.72,
+          "observed_cmax_mg_l": 0.00672,
+          "cmax_statistic": "mean (SD) 6.72 (2.09), n=6",
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/29067308/",
+          "full_text_url_used": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5651349/ + supplementary mmc1.docx (Europe PMC supplementaryFiles)",
+          "source_access_status": "full_text_accessed",
+          "source_locator": "Supplementary Table S3 (mmc1.docx)",
+          "first_pass_verification": "verified_with_caveat",
+          "source_uncertainty": null
+        },
+        {
+          "arm_id": "frdb_12980",
+          "dose_mg": 1.0,
+          "observed_cmax": 5.62,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 5.62,
+          "observed_cmax_mg_l": 0.00562,
+          "cmax_statistic": "mean (SD) 5.62 (1.70), n=6",
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/29067308/",
+          "full_text_url_used": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5651349/ + supplementary mmc1.docx (Europe PMC supplementaryFiles)",
+          "source_access_status": "full_text_accessed",
+          "source_locator": "Supplementary Table S3 (mmc1.docx)",
+          "first_pass_verification": "verified_with_caveat",
+          "source_uncertainty": null
+        },
+        {
+          "arm_id": "frdb_12981",
+          "dose_mg": 3.0,
+          "observed_cmax": 17.2,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 17.2,
+          "observed_cmax_mg_l": 0.0172,
+          "cmax_statistic": "mean (SD) 17.2 (3.56), n=6",
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/29067308/",
+          "full_text_url_used": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5651349/ + supplementary mmc1.docx (Europe PMC supplementaryFiles)",
+          "source_access_status": "full_text_accessed",
+          "source_locator": "Supplementary Table S3 (mmc1.docx)",
+          "first_pass_verification": "verified_with_caveat",
+          "source_uncertainty": null
+        },
+        {
+          "arm_id": "frdb_12982",
+          "dose_mg": 10.0,
+          "observed_cmax": 83.9,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 83.9,
+          "observed_cmax_mg_l": 0.0839,
+          "cmax_statistic": "mean (SD) 83.9 (20.3), n=6",
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/29067308/",
+          "full_text_url_used": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5651349/ + supplementary mmc1.docx (Europe PMC supplementaryFiles)",
+          "source_access_status": "full_text_accessed",
+          "source_locator": "Supplementary Table S3 (mmc1.docx)",
+          "first_pass_verification": "verified_with_caveat",
+          "source_uncertainty": null
+        },
+        {
+          "arm_id": "frdb_12983",
+          "dose_mg": 30.0,
+          "observed_cmax": 148.0,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 148,
+          "observed_cmax_mg_l": 0.148,
+          "cmax_statistic": "mean (SD) 148 (29.7), n=6",
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/29067308/",
+          "full_text_url_used": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5651349/ + supplementary mmc1.docx (Europe PMC supplementaryFiles)",
+          "source_access_status": "full_text_accessed",
+          "source_locator": "Supplementary Table S3 (mmc1.docx)",
+          "first_pass_verification": "verified_with_caveat",
+          "source_uncertainty": null
+        },
+        {
+          "arm_id": "frdb_12984",
+          "dose_mg": 90.0,
+          "observed_cmax": 519.0,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 519,
+          "observed_cmax_mg_l": 0.519,
+          "cmax_statistic": "mean (SD) 519 (156), n=5",
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/29067308/",
+          "full_text_url_used": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5651349/ + supplementary mmc1.docx (Europe PMC supplementaryFiles)",
+          "source_access_status": "full_text_accessed",
+          "source_locator": "Supplementary Table S3 (mmc1.docx)",
+          "first_pass_verification": "verified_with_caveat",
+          "source_uncertainty": null
+        },
+        {
+          "arm_id": "frdb_12985",
+          "dose_mg": 150.0,
+          "observed_cmax": 906.0,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 906,
+          "observed_cmax_mg_l": 0.906,
+          "cmax_statistic": "mean (SD) 906 (451), n=6",
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/29067308/",
+          "full_text_url_used": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5651349/ + supplementary mmc1.docx (Europe PMC supplementaryFiles)",
+          "source_access_status": "full_text_accessed",
+          "source_locator": "Supplementary Table S3 (mmc1.docx)",
+          "first_pass_verification": "verified_with_caveat",
+          "source_uncertainty": null
+        }
+      ]
+    },
+    {
+      "position": 21,
+      "candidate_id": "1717",
+      "name": "MEPHOBARBITAL",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_3671",
+        "frdb_3672"
+      ],
+      "rationale": "Abstract only; racemate Cmax existence, stratum mapping, fasting, formulation unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 22,
+      "candidate_id": "1269",
+      "name": "DIETHYLPROPION",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_2512"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_2512": "extended-release capsule"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Not IR.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 23,
+      "candidate_id": "6899",
+      "name": "VERLUKAST",
+      "disposition": "include",
+      "included_arm_ids": [
+        "frdb_7090",
+        "frdb_7091"
+      ],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [],
+      "rationale": "Plain compressed tablets (IR), overnight fast, healthy males, parent plasma arithmetic mean; fed arm not in manifest.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_7090",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "include",
+          "note": "verified_with_caveat->include (compressed tablet = IR)"
+        },
+        {
+          "arm_id": "frdb_7091",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "include",
+          "note": "verified_with_caveat->include (compressed tablet = IR)"
+        }
+      ],
+      "included_arm_evidence": [
+        {
+          "arm_id": "frdb_7090",
+          "dose_mg": 75.0,
+          "observed_cmax": 6.7,
+          "observed_cmax_unit": "μg/mL",
+          "observed_cmax_raw": 6.7,
+          "observed_cmax_mg_l": 6.7,
+          "cmax_statistic": "arithmetic mean of individual values (±SEM, n=12; SD ≈ 1.4 derived)",
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/12959296/",
+          "full_text_url_used": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1364621/pdf/brjclinpharm00027-0083.pdf (scanned PDF; table read from page image)",
+          "source_access_status": "full_text",
+          "source_locator": "Table 1, p. 465 (Br J Clin Pharmac 1993;36:465)",
+          "first_pass_verification": "verified_with_caveat",
+          "source_uncertainty": null
+        },
+        {
+          "arm_id": "frdb_7091",
+          "dose_mg": 500.0,
+          "observed_cmax": 41.3,
+          "observed_cmax_unit": "μg/mL",
+          "observed_cmax_raw": 41.3,
+          "observed_cmax_mg_l": 41.3,
+          "cmax_statistic": "arithmetic mean of individual values (±SEM, n=12; SD ≈ 13.9 derived)",
+          "source_url": "https://pubmed.ncbi.nlm.nih.gov/12959296/",
+          "full_text_url_used": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1364621/pdf/brjclinpharm00027-0083.pdf",
+          "source_access_status": "full_text",
+          "source_locator": "Table 1, p. 465, row '500' (fasted); row '500 + Food' is the fed arm",
+          "first_pass_verification": "verified_with_caveat",
+          "source_uncertainty": null
+        }
+      ]
+    },
+    {
+      "position": 24,
+      "candidate_id": "42994",
+      "name": "STRONTIUM LACTATE",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_11276"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_11276": "elemental strontium in serum; elemental-Sr dose; not parent plasma"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Not parent plasma analyte/dose.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 25,
+      "candidate_id": "2015",
+      "name": "CEFMATILEN",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_4607"
+      ],
+      "rationale": "Abstract only; abstract 100 mg Cmax is non-fasting; fasted arm existence and salt basis unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 26,
+      "candidate_id": "2791",
+      "name": "LAQUINIMOD",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_6104",
+        "frdb_6106",
+        "frdb_6108"
+      ],
+      "rationale": "Abstract only; Cmax day/timing, fasting, formulation, reference-arm mapping unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 27,
+      "candidate_id": "6897",
+      "name": "TOLRESTAT",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_7078",
+        "frdb_7081"
+      ],
+      "rationale": "Abstract only; matrix, fasting, formulation, single vs multiple-dose provenance unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 28,
+      "candidate_id": "28981",
+      "name": "ENDOXIFEN",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_10715",
+        "frdb_10718"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_10715": "enteric-coated tablet",
+        "frdb_10718": "enteric-coated tablet; E-isomer/female descriptor unsupported (duplicate of 10715)"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Delayed-release formulation.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 29,
+      "candidate_id": "509",
+      "name": "INDISETRON",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_1318",
+        "frdb_1319",
+        "frdb_1320",
+        "frdb_1321"
+      ],
+      "rationale": "Fasted film-coated tablet (IR) in healthy males, parent plasma; but doses are indisetron hydrochloride salt mass, not active-moiety-matched.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_1318",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (salt-basis dose)"
+        },
+        {
+          "arm_id": "frdb_1319",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (salt-basis dose)"
+        },
+        {
+          "arm_id": "frdb_1320",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (salt-basis dose)"
+        },
+        {
+          "arm_id": "frdb_1321",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (salt-basis dose)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 30,
+      "candidate_id": "59628",
+      "name": "VODOBATINIB",
+      "disposition": "include",
+      "included_arm_ids": [
+        "frdb_13161",
+        "frdb_13162",
+        "frdb_13163"
+      ],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [],
+      "rationale": "Day-1 first-dose Cmax (sampled before 24 h second dose, pre-accumulation) of fasted QD MAD in healthy males; capsules = IR; dose named as vodobatinib with no salt stated; mean (CV%).",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_13161",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "include",
+          "note": "verified_with_caveat->include (first-dose pre-accumulation; capsule = IR)"
+        },
+        {
+          "arm_id": "frdb_13162",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "include",
+          "note": "verified_with_caveat->include (first-dose pre-accumulation; capsule = IR)"
+        },
+        {
+          "arm_id": "frdb_13163",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "include",
+          "note": "verified_with_caveat->include (first-dose pre-accumulation; capsule = IR)"
+        }
+      ],
+      "included_arm_evidence": [
+        {
+          "arm_id": "frdb_13161",
+          "dose_mg": 48.0,
+          "observed_cmax": 1378.0,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 1378.0,
+          "observed_cmax_mg_l": 1.378,
+          "cmax_statistic": "mean (CV%), Day 1 (after first dose)",
+          "source_url": "https://www.prd-journal.com/article/S1353-8020(23)00004-4/pdf",
+          "full_text_url_used": "https://www.prd-journal.com/article/S1353-8020(23)00004-4/fulltext (HTML full text via browser; PDF/ScienceDirect curl returned 403)",
+          "source_access_status": "full_text",
+          "source_locator": "Table 2 'Plasma PK of vodobatinib in healthy subjects and PD patients following once-daily oral dosing with vodobatinib capsules', section 'Healthy Subjects', column Cmax Day 1 (Day 7 values also listed: 1395 (46%), 5377 (45%), 7880 (68%) — steady state, do not use)",
+          "first_pass_verification": "verified_with_caveat",
+          "source_uncertainty": null
+        },
+        {
+          "arm_id": "frdb_13162",
+          "dose_mg": 192.0,
+          "observed_cmax": 3775.0,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 3775.0,
+          "observed_cmax_mg_l": 3.775,
+          "cmax_statistic": "mean (CV%), Day 1 (after first dose)",
+          "source_url": "https://www.prd-journal.com/article/S1353-8020(23)00004-4/pdf",
+          "full_text_url_used": "https://www.prd-journal.com/article/S1353-8020(23)00004-4/fulltext (HTML full text via browser; PDF/ScienceDirect curl returned 403)",
+          "source_access_status": "full_text",
+          "source_locator": "Table 2 'Plasma PK of vodobatinib in healthy subjects and PD patients following once-daily oral dosing with vodobatinib capsules', section 'Healthy Subjects', column Cmax Day 1 (Day 7 values also listed: 1395 (46%), 5377 (45%), 7880 (68%) — steady state, do not use)",
+          "first_pass_verification": "verified_with_caveat",
+          "source_uncertainty": null
+        },
+        {
+          "arm_id": "frdb_13163",
+          "dose_mg": 384.0,
+          "observed_cmax": 6632.0,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 6632.0,
+          "observed_cmax_mg_l": 6.632,
+          "cmax_statistic": "mean (CV%), Day 1 (after first dose)",
+          "source_url": "https://www.prd-journal.com/article/S1353-8020(23)00004-4/pdf",
+          "full_text_url_used": "https://www.prd-journal.com/article/S1353-8020(23)00004-4/fulltext (HTML full text via browser; PDF/ScienceDirect curl returned 403)",
+          "source_access_status": "full_text",
+          "source_locator": "Table 2 'Plasma PK of vodobatinib in healthy subjects and PD patients following once-daily oral dosing with vodobatinib capsules', section 'Healthy Subjects', column Cmax Day 1 (Day 7 values also listed: 1395 (46%), 5377 (45%), 7880 (68%) — steady state, do not use)",
+          "first_pass_verification": "verified_with_caveat",
+          "source_uncertainty": null
+        }
+      ]
+    },
+    {
+      "position": 31,
+      "candidate_id": "1561",
+      "name": "BUCLIZINE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_3372"
+      ],
+      "rationale": "Fasted (plus 4 h post-dose fast) parent plasma Cmax in healthy men confirmed, but the administered PK dosage form is not identified; unknown dosage form stays unresolved.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_3372",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (dosage form unknown)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 32,
+      "candidate_id": "1689",
+      "name": "LAZABEMIDE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_3620",
+        "frdb_3621",
+        "frdb_3622",
+        "frdb_3623",
+        "frdb_3624"
+      ],
+      "rationale": "Abstract only; single vs multiple-dose Cmax, fasting, formulation unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 33,
+      "candidate_id": "8430",
+      "name": "AVN-944",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_8463"
+      ],
+      "rationale": "Abstract only; Cmax and formulation unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 34,
+      "candidate_id": "655",
+      "name": "MEFRUSIDE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_1527"
+      ],
+      "rationale": "Fasted healthy uncoated-tablet BE arm, free-drug dose, but matrix is stated only as blood ('血中'); plasma not established (whole-blood assays excluded).",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_1527",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (matrix not explicitly plasma)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 35,
+      "candidate_id": "46397",
+      "name": "BETULINIC ACID",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_11639"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_11639": "source dosed bevirimat, not manifest betulinic acid; day 1 of multiple-dose study"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Identity mismatch.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 36,
+      "candidate_id": "8587",
+      "name": "E-7820",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_8592"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_8592": "advanced solid-tumor patients, not healthy"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Not a healthy population.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 37,
+      "candidate_id": "489",
+      "name": "TROXIPIDE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_1251",
+        "frdb_1252"
+      ],
+      "rationale": "Fasted tablet and non-MR fine-granule arms (both IR-eligible), but matrix is stated only as blood ('血中'); plasma not established.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_1251",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (matrix not explicitly plasma)"
+        },
+        {
+          "arm_id": "frdb_1252",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (matrix not explicitly plasma)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 38,
+      "candidate_id": "451",
+      "name": "LOMERIZINE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_1074",
+        "frdb_1075",
+        "frdb_1077",
+        "frdb_1078"
+      ],
+      "rationale": "Ren 2014 arm unverified; IF arms have lomerizine hydrochloride salt-basis doses and unstated study formulation.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_1075",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (salt dose; formulation unstated)"
+        },
+        {
+          "arm_id": "frdb_1077",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (salt dose; formulation unstated)"
+        },
+        {
+          "arm_id": "frdb_1078",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (salt dose; formulation unstated)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 39,
+      "candidate_id": "7019",
+      "name": "TECALCET",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_7158"
+      ],
+      "rationale": "Dosage form and salt basis not stated; dispersion SD/SE unspecified; genotype subgroup row. Unknown dosage form stays unresolved.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_7158",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (dosage form unknown)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 40,
+      "candidate_id": "8707",
+      "name": "INDOLE-3-CARBINOL",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_8659",
+        "frdb_8660",
+        "frdb_8661",
+        "frdb_8663",
+        "frdb_8664"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_8659": "reported analyte is DIM condensation product; dosed I3C undetectable",
+        "frdb_8660": "reported analyte is DIM condensation product; dosed I3C undetectable",
+        "frdb_8661": "reported analyte is DIM condensation product; dosed I3C undetectable",
+        "frdb_8663": "reported analyte is DIM condensation product; dosed I3C undetectable",
+        "frdb_8664": "reported analyte is DIM condensation product; dosed I3C undetectable"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Non-parent analyte; manifest structure is not dosed parent.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 41,
+      "candidate_id": "2808",
+      "name": "VALSPODAR",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_6130"
+      ],
+      "rationale": "Abstract only; Cmax,b notation suggests blood matrix; matrix and formulation unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 42,
+      "candidate_id": "6962",
+      "name": "HEPTABARBITAL",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_7113"
+      ],
+      "rationale": "Abstract only; tablet vs sodium-salt capsule mapping, fasting, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 43,
+      "candidate_id": "10278",
+      "name": "BITOPERTIN",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_10097"
+      ],
+      "rationale": "Abstract only; dose, fasting, formulation, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 44,
+      "candidate_id": "2039",
+      "name": "METHOXYPHENAMINE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_4623"
+      ],
+      "rationale": "Abstract only; urine-pH phase, salt basis, fasting, formulation unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 45,
+      "candidate_id": "6804",
+      "name": "ZOPOLRESTAT",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_7016",
+        "frdb_7017",
+        "frdb_7018",
+        "frdb_7019",
+        "frdb_7020",
+        "frdb_7021",
+        "frdb_7022",
+        "frdb_7023"
+      ],
+      "rationale": "Abstract only; fasting, formulation, adult-only, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 46,
+      "candidate_id": "47561",
+      "name": "TOLPERISONE HYDROCHLORIDE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_11915",
+        "frdb_11916",
+        "frdb_11917",
+        "frdb_11918",
+        "frdb_11919",
+        "frdb_11920",
+        "frdb_11921"
+      ],
+      "rationale": "Abstract only; fasting and formulation unverified; overlapping genotype subgroups would also need a prespecified overlap rule.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 47,
+      "candidate_id": "28781",
+      "name": "MILADEMETAN",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_10678"
+      ],
+      "rationale": "Fasted healthy parent-plasma geometric mean with registry-documented capsule, but salt-vs-free-base dose basis is unstated (clinical milademetan product is a tosylate salt); not explicitly active-moiety-matched.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_10678",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (dose basis vs salt unverified)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 48,
+      "candidate_id": "415",
+      "name": "CEFTERAM",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_917",
+        "frdb_918",
+        "frdb_919",
+        "frdb_920"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_917": "dosed prodrug cefteram pivoxil; analyte/manifest is de-esterified active moiety",
+        "frdb_918": "dosed prodrug cefteram pivoxil; analyte/manifest is de-esterified active moiety",
+        "frdb_919": "dosed prodrug cefteram pivoxil; analyte/manifest is de-esterified active moiety",
+        "frdb_920": "dosed prodrug cefteram pivoxil; analyte/manifest is de-esterified active moiety"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Prodrug activation product, not dosed parent.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 49,
+      "candidate_id": "490",
+      "name": "URAPIDIL",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_1254"
+      ],
+      "rationale": "Source names only 'urapidil 60 mg capsule'; marketed 60 mg capsules are prolonged-release, so conventional IR status cannot be established.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 50,
+      "candidate_id": "47560",
+      "name": "ENOXOLONE",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_11912"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_11912": "dosed diammonium glycyrrhizinate; enoxolone is hydrolysis metabolite"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Non-parent analyte.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 51,
+      "candidate_id": "1552",
+      "name": "DIETHYLSTILBESTROL",
+      "disposition": "include",
+      "included_arm_ids": [
+        "frdb_3361"
+      ],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [],
+      "rationale": "MHRA PAR: fasted single-dose BE in healthy males, conventional film-coated test tablet (IR), plasma parent, geometric LSmean; n not reported (caveat).",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_3361",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "include",
+          "note": "verified_with_caveat->include (film-coated tablet = IR)"
+        }
+      ],
+      "included_arm_evidence": [
+        {
+          "arm_id": "frdb_3361",
+          "dose_mg": 1.0,
+          "observed_cmax": 3672.44,
+          "observed_cmax_unit": "pg/mL",
+          "observed_cmax_raw": 3672.44,
+          "observed_cmax_mg_l": 0.00367244,
+          "cmax_statistic": "geometric least-squares mean (Test); reference 3623.84",
+          "source_url": "https://mhraproducts4853.blob.core.windows.net/docs/2759709c34db666297f0c936bbe3b0acfc88fed4",
+          "full_text_url_used": null,
+          "source_access_status": "full_text",
+          "source_locator": "PAR PL 44710/0016, section IV.2, p.8 (design) and p.9 Results table (image)",
+          "first_pass_verification": "verified_with_caveat",
+          "source_uncertainty": null
+        }
+      ]
+    },
+    {
+      "position": 52,
+      "candidate_id": "467",
+      "name": "OXATOMIDE",
+      "disposition": "include",
+      "included_arm_ids": [
+        "frdb_1137",
+        "frdb_1138"
+      ],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [],
+      "rationale": "Current revision of same Sawai IF (arm identity and AUC/t1/2 match): fasted healthy males, uncoated tablet and non-MR dry syrup (both IR), plasma parent, free-base dose; separate BE studies.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_1137",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "include",
+          "note": "verified_with_caveat->include (uncoated tablet = IR; later IF revision allowed)"
+        },
+        {
+          "arm_id": "frdb_1138",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "include",
+          "note": "verified_with_caveat->include (dry syrup ordinary liquid/solid = IR; later IF revision allowed)"
+        }
+      ],
+      "included_arm_evidence": [
+        {
+          "arm_id": "frdb_1137",
+          "dose_mg": 60.0,
+          "observed_cmax": 13.6,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 13.6,
+          "observed_cmax_mg_l": 0.0136,
+          "cmax_statistic": "mean +/- SD (13.6 +/- 4.2)",
+          "source_url": "https://www.info.pmda.go.jp/go/interview/1/300119_4490005F1603_1_101_1F.pdf",
+          "full_text_url_used": null,
+          "source_access_status": "full_text (later revision of cited document)",
+          "source_locator": "IF printed p.16 (PDF p.20), 2-tablet PK table, Oxatomide Tablets 30mg 'Sawai' row",
+          "first_pass_verification": "verified_with_caveat",
+          "source_uncertainty": null
+        },
+        {
+          "arm_id": "frdb_1138",
+          "dose_mg": 60.0,
+          "observed_cmax": 13.2,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 13.2,
+          "observed_cmax_mg_l": 0.0132,
+          "cmax_statistic": "mean +/- SD (13.2 +/- 4.7)",
+          "source_url": "https://www.info.pmda.go.jp/go/interview/1/300119_4490005F1603_1_101_1F.pdf",
+          "full_text_url_used": null,
+          "source_access_status": "full_text (later revision of cited document)",
+          "source_locator": "IF printed p.17 (PDF p.21), 3 g PK table, Oxatomide DS 2% 'Sawai' row",
+          "first_pass_verification": "verified_with_caveat",
+          "source_uncertainty": null
+        }
+      ]
+    },
+    {
+      "position": 53,
+      "candidate_id": "651",
+      "name": "MALOTILATE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_1520"
+      ],
+      "rationale": "Abstract only; 500 vs 600 mg dose conflict, fasting, formulation unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 54,
+      "candidate_id": "1851",
+      "name": "TRANILAST",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_4337"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_4337": "pooled statistic across two capsule products, not a single arm"
+      },
+      "unresolved_arm_ids": [
+        "frdb_4331"
+      ],
+      "rationale": "80 mg arm abstract-only (fasting, formulation, Cmax unverified); 200 mg row is a pooled two-product statistic.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 55,
+      "candidate_id": "2077",
+      "name": "LACTITOL",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_4720"
+      ],
+      "rationale": "Fasted oral-solution parent-plasma arm in healthy adults, but the 21 g dose is lactitol monohydrate mass (=20 g lactitol), not active-moiety-matched to the frozen dose.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_4720",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (hydrate-mass dose not active-moiety-matched)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 56,
+      "candidate_id": "988",
+      "name": "LIMONENE, (+)-",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_1856"
+      ],
+      "rationale": "Abstract only; dose, fasting, formulation, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 57,
+      "candidate_id": "6731",
+      "name": "NALFURAFINE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_6907",
+        "frdb_6911",
+        "frdb_6912",
+        "frdb_6913",
+        "frdb_6914"
+      ],
+      "rationale": "Fasted healthy-male rapid-release capsule / oral solution parent-plasma arms, but all doses are nominal nalfurafine hydrochloride mass, not active-moiety-matched.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_6907",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (salt-basis dose)"
+        },
+        {
+          "arm_id": "frdb_6911",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (salt-basis dose)"
+        },
+        {
+          "arm_id": "frdb_6912",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (salt-basis dose)"
+        },
+        {
+          "arm_id": "frdb_6913",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (salt-basis dose)"
+        },
+        {
+          "arm_id": "frdb_6914",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (salt-basis dose)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 58,
+      "candidate_id": "8169",
+      "name": "AZELIRAGON",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_7901"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_7901": "duplicate of frdb_7899 (same 8-subject healthy reference group); first frozen ID kept"
+      },
+      "unresolved_arm_ids": [
+        "frdb_7893",
+        "frdb_7899"
+      ],
+      "rationale": "20 mg arm cited only via secondary review (data on file); 15 mg poster never states dosage form.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_7901",
+          "first_pass": "unverified",
+          "adjudicated": "exclude",
+          "note": "unverified->exclude"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 59,
+      "candidate_id": "2630",
+      "name": "APRINDINE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_5879",
+        "frdb_5880",
+        "frdb_5881"
+      ],
+      "rationale": "Abstract only; Cmax, fasting, formulation, salt basis unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 60,
+      "candidate_id": "8274",
+      "name": "MIRODENAFIL",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_8244",
+        "frdb_8247",
+        "frdb_8248"
+      ],
+      "rationale": "Two J Sep Sci arms abstract-only; SCIRP 100 mg tablet arm has unstated salt basis (clinical mirodenafil is a dihydrochloride). Unresolved.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_8248",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (salt basis unstated; sibling arms unverified)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 61,
+      "candidate_id": "2652",
+      "name": "FADROZOLE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_6006"
+      ],
+      "rationale": "Abstract only; dosage form, matrix, Cmax unverified; dose is fadrozole hydrochloride.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 62,
+      "candidate_id": "45950",
+      "name": "CC-122",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_11457"
+      ],
+      "rationale": "Abstract only; renal-study control health status, fasting, formulation, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 63,
+      "candidate_id": "6751",
+      "name": "APRATASTAT",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_6947",
+        "frdb_6948"
+      ],
+      "rationale": "Abstract only; SAD vs LPS-challenge table mapping, fasting, formulation unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 64,
+      "candidate_id": "1838",
+      "name": "SARPOGRELATE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_4225",
+        "frdb_4227"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_4225": "300 mg controlled-release tablet",
+        "frdb_4227": "IR reference given as 100 mg x3 q6h, not a single 300 mg dose"
+      },
+      "unresolved_arm_ids": [
+        "frdb_4232",
+        "frdb_4233"
+      ],
+      "rationale": "Fasted healthy-male film-coated IR tablet arms (dissolution documented) have doses stated as sarpogrelate hydrochloride, not active-moiety-matched.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_4232",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (salt-basis dose)"
+        },
+        {
+          "arm_id": "frdb_4233",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (salt-basis dose)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 65,
+      "candidate_id": "2546",
+      "name": "DOPAMINE",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_5735"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_5735": "source dosed levodopa, not dopamine"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Dosed parent mismatch.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 66,
+      "candidate_id": "2953",
+      "name": "CAPROMORELIN",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_6441",
+        "frdb_6442",
+        "frdb_6443"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_6441": "spinal cord injury participants, not healthy",
+        "frdb_6442": "spinal cord injury participants, not healthy",
+        "frdb_6443": "spinal cord injury participants, not healthy"
+      },
+      "unresolved_arm_ids": [
+        "frdb_6438",
+        "frdb_6439",
+        "frdb_6440"
+      ],
+      "rationale": "Able-bodied arms abstract-only (fasting, dosage form, Cmax unverified; tartrate salt basis unknown); SCI arms excluded.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 67,
+      "candidate_id": "59661",
+      "name": "ENPATORAN",
+      "disposition": "include",
+      "included_arm_ids": [
+        "frdb_13339",
+        "frdb_13340",
+        "frdb_13341",
+        "frdb_13342",
+        "frdb_13343",
+        "frdb_13344",
+        "frdb_13345"
+      ],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [],
+      "rationale": "Open full text: Part A SAD oral solution after >=10 h fast with 4 h post-dose fast, healthy adults, parent plasma geometric means.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": [
+        {
+          "arm_id": "frdb_13339",
+          "dose_mg": 1.0,
+          "observed_cmax": 0.834,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 0.834,
+          "observed_cmax_mg_l": 0.000834,
+          "cmax_statistic": "geometric mean (geoCV 30.4%), n=6",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8377444/",
+          "full_text_url_used": null,
+          "source_access_status": "full_text",
+          "source_locator": "Port et al. Pharmacol Res Perspect 2021;9:e00842, Table 4 (Part A fasting)",
+          "first_pass_verification": "verified",
+          "source_uncertainty": null
+        },
+        {
+          "arm_id": "frdb_13340",
+          "dose_mg": 3.0,
+          "observed_cmax": 2.64,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 2.64,
+          "observed_cmax_mg_l": 0.00264,
+          "cmax_statistic": "geometric mean (geoCV 20.2%), n=6",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8377444/",
+          "full_text_url_used": null,
+          "source_access_status": "full_text",
+          "source_locator": "Port et al. Pharmacol Res Perspect 2021;9:e00842, Table 4 (Part A fasting)",
+          "first_pass_verification": "verified",
+          "source_uncertainty": null
+        },
+        {
+          "arm_id": "frdb_13341",
+          "dose_mg": 9.0,
+          "observed_cmax": 11.4,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 11.4,
+          "observed_cmax_mg_l": 0.0114,
+          "cmax_statistic": "geometric mean (geoCV 31.5%), n=6",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8377444/",
+          "full_text_url_used": null,
+          "source_access_status": "full_text",
+          "source_locator": "Port et al. Pharmacol Res Perspect 2021;9:e00842, Table 4 (Part A fasting)",
+          "first_pass_verification": "verified",
+          "source_uncertainty": null
+        },
+        {
+          "arm_id": "frdb_13342",
+          "dose_mg": 25.0,
+          "observed_cmax": 22.5,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 22.5,
+          "observed_cmax_mg_l": 0.0225,
+          "cmax_statistic": "geometric mean (geoCV 42.0%), n=6",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8377444/",
+          "full_text_url_used": null,
+          "source_access_status": "full_text",
+          "source_locator": "Port et al. Pharmacol Res Perspect 2021;9:e00842, Table 4 (Part A fasting)",
+          "first_pass_verification": "verified",
+          "source_uncertainty": null
+        },
+        {
+          "arm_id": "frdb_13343",
+          "dose_mg": 50.0,
+          "observed_cmax": 50.6,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 50.6,
+          "observed_cmax_mg_l": 0.0506,
+          "cmax_statistic": "geometric mean (geoCV 20.5%), n=6",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8377444/",
+          "full_text_url_used": null,
+          "source_access_status": "full_text",
+          "source_locator": "Port et al. Pharmacol Res Perspect 2021;9:e00842, Table 4 (Part A fasting)",
+          "first_pass_verification": "verified",
+          "source_uncertainty": null
+        },
+        {
+          "arm_id": "frdb_13344",
+          "dose_mg": 100.0,
+          "observed_cmax": 121.0,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 121,
+          "observed_cmax_mg_l": 0.121,
+          "cmax_statistic": "geometric mean (geoCV 50.9%), n=6",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8377444/",
+          "full_text_url_used": null,
+          "source_access_status": "full_text",
+          "source_locator": "Port et al. Pharmacol Res Perspect 2021;9:e00842, Table 4 (Part A fasting)",
+          "first_pass_verification": "verified",
+          "source_uncertainty": null
+        },
+        {
+          "arm_id": "frdb_13345",
+          "dose_mg": 200.0,
+          "observed_cmax": 230.0,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 230,
+          "observed_cmax_mg_l": 0.23,
+          "cmax_statistic": "geometric mean (geoCV 28.8%), n=6",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8377444/",
+          "full_text_url_used": null,
+          "source_access_status": "full_text",
+          "source_locator": "Port et al. Pharmacol Res Perspect 2021;9:e00842, Table 4 (Part A fasting)",
+          "first_pass_verification": "verified",
+          "source_uncertainty": null
+        }
+      ]
+    },
+    {
+      "position": 68,
+      "candidate_id": "3272",
+      "name": "FENCLOFENAC",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_6579",
+        "frdb_6580",
+        "frdb_6581"
+      ],
+      "rationale": "Abstract only; health status, fasting, formulation, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 69,
+      "candidate_id": "8067",
+      "name": "PERETINOIN",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_7655",
+        "frdb_7656"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_7655": "post-curative HCC patients, not healthy",
+        "frdb_7656": "HCC patients; lipid-form analyte, not free parent"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Not a healthy population.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 70,
+      "candidate_id": "256",
+      "name": "PELUBIPROFEN",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_731"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_731": "45 mg sustained-release formulation"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Not IR.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 71,
+      "candidate_id": "905",
+      "name": "SACCHARIN",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_1841"
+      ],
+      "rationale": "Abstract only; dosage/salt form, fasting, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 72,
+      "candidate_id": "59689",
+      "name": "TEBAPIVAT",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_13454"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_13454": "source gives only a digitized dose-normalized figure (no exact labelled Cmax); matrix and dosage form unstated; MAD cohort"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "No exact labelled central Cmax in the cited source.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_13454",
+          "first_pass": "unverified",
+          "adjudicated": "exclude",
+          "note": "unverified->exclude"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 73,
+      "candidate_id": "427",
+      "name": "EFONIDIPINE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_963",
+        "frdb_964",
+        "frdb_965"
+      ],
+      "rationale": "Fasted healthy-male JP-IR film-coated tablet parent-plasma arms, but doses are nominal efonidipine hydrochloride ethanolate mass, not active-moiety-matched.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_963",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (salt-basis dose)"
+        },
+        {
+          "arm_id": "frdb_964",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (salt-basis dose)"
+        },
+        {
+          "arm_id": "frdb_965",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (salt-basis dose)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 74,
+      "candidate_id": "8858",
+      "name": "ORTERONEL",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_8815"
+      ],
+      "rationale": "Abstract only; dosage form, Cmax table unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 75,
+      "candidate_id": "30872",
+      "name": "GLYCERYL 1-NITRATE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_10779",
+        "frdb_10780"
+      ],
+      "rationale": "40 mg EJCP arm abstract-only (fasting, arm mapping, Cmax unverified); eligible-looking 20 mg BJCP tablet arm not scored selectively.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_10780",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (sibling arm unverified)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 76,
+      "candidate_id": "25673",
+      "name": "CRS-3123",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_10605",
+        "frdb_10606"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_10605": "only 1 h pre-dose and 2 h post-dose fast (not an original-source fasted condition; food permitted within 4 h); dihydrochloride dose basis unstated",
+        "frdb_10606": "only 1 h pre-dose and 2 h post-dose fast (not an original-source fasted condition; food permitted within 4 h); dihydrochloride dose basis unstated"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Non-standard fasting with food allowed from 2 h post-dose.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_10605",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "exclude",
+          "note": "verified_with_caveat->exclude (fasting condition)"
+        },
+        {
+          "arm_id": "frdb_10606",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "exclude",
+          "note": "verified_with_caveat->exclude (fasting condition)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 77,
+      "candidate_id": "2801",
+      "name": "PRIRALFINAMIDE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_6114"
+      ],
+      "rationale": "Abstract only; dosage form, fasting, methanesulfonate dose basis, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 78,
+      "candidate_id": "3001",
+      "name": "MOGUISTEINE",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_6507"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_6507": "metabolite M1 in serum; parent not reported"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Non-parent analyte, serum.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 79,
+      "candidate_id": "2935",
+      "name": "SILIBININ A",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_6412"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_6412": "multi-ingredient botanical supplement; silybin A is an extract constituent"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Not a single-drug parent dose.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 80,
+      "candidate_id": "59645",
+      "name": "SAR-439859",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_13283"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_13283": "protocol permitted a meal/snack from 2 h post-dose (<4 h, before median Tmax) and an IV [14C] dose was given at 3 h before Tmax"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Meal permitted within 4 h after dosing; Cmax confounded by IV co-dose.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_13283",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "exclude",
+          "note": "verified_with_caveat->exclude (meal within 4 h permitted; IV co-dose)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 81,
+      "candidate_id": "846",
+      "name": "TILMACOXIB",
+      "disposition": "include",
+      "included_arm_ids": [
+        "frdb_1809"
+      ],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [],
+      "rationale": "14 h supervised fast, uncoated tablets (IR), healthy males, plasma unchanged parent mean.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": [
+        {
+          "arm_id": "frdb_1809",
+          "dose_mg": 150.0,
+          "observed_cmax": 325.0,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": "325.0 ± 124.2 (95% CI 194.7-455.4)",
+          "observed_cmax_mg_l": 0.325,
+          "cmax_statistic": "mean ± s.d., n=6",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1874460/",
+          "full_text_url_used": null,
+          "source_access_status": "full_text (PMC HTML)",
+          "source_locator": "Table 3, Plasma, unchanged drug, Step 5 '150 (fast)'; Methods 'Study design' + Table 1",
+          "first_pass_verification": "verified",
+          "source_uncertainty": null
+        }
+      ]
+    },
+    {
+      "position": 82,
+      "candidate_id": "1817",
+      "name": "MINODRONIC ACID",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_4070",
+        "frdb_4072",
+        "frdb_4075",
+        "frdb_4076"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_4070": "dosed 30 min before a meal (meal <4 h post-dose)",
+        "frdb_4072": "dosed 1 h before a meal (meal <4 h post-dose)",
+        "frdb_4075": "mean Cmax at/below 0.05 ng/mL LLOQ with n=3 (BLQ-influenced; documented assay-limit invalidity)",
+        "frdb_4076": "mean Cmax below 0.05 ng/mL LLOQ with n=3 (BLQ-influenced; documented assay-limit invalidity)"
+      },
+      "unresolved_arm_ids": [
+        "frdb_4063",
+        "frdb_4064",
+        "frdb_4065",
+        "frdb_4066",
+        "frdb_4069",
+        "frdb_4071",
+        "frdb_4077",
+        "frdb_4078",
+        "frdb_4079",
+        "frdb_4080",
+        "frdb_4081",
+        "frdb_4082",
+        "frdb_4083",
+        "frdb_4084"
+      ],
+      "rationale": "Fasted conventional film-coated tablet parent-plasma arms in healthy young/elderly adults, but every dose is stated as minodronic acid hydrate (monohydrate) mass, not active-moiety-matched; treated like salt basis. Pre-meal arms and sub-LLOQ arms excluded.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_4063",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (hydrate-basis dose)"
+        },
+        {
+          "arm_id": "frdb_4064",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (hydrate-basis dose)"
+        },
+        {
+          "arm_id": "frdb_4065",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (hydrate-basis dose)"
+        },
+        {
+          "arm_id": "frdb_4066",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (hydrate-basis dose)"
+        },
+        {
+          "arm_id": "frdb_4069",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (hydrate-basis dose)"
+        },
+        {
+          "arm_id": "frdb_4071",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (hydrate-basis dose)"
+        },
+        {
+          "arm_id": "frdb_4075",
+          "first_pass": "verified",
+          "adjudicated": "exclude",
+          "note": "verified->exclude (BLQ assay limit)"
+        },
+        {
+          "arm_id": "frdb_4076",
+          "first_pass": "verified",
+          "adjudicated": "exclude",
+          "note": "verified->exclude (BLQ assay limit)"
+        },
+        {
+          "arm_id": "frdb_4077",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (hydrate-basis dose)"
+        },
+        {
+          "arm_id": "frdb_4078",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (hydrate-basis dose)"
+        },
+        {
+          "arm_id": "frdb_4079",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (hydrate-basis dose)"
+        },
+        {
+          "arm_id": "frdb_4080",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (hydrate-basis dose)"
+        },
+        {
+          "arm_id": "frdb_4081",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (hydrate-basis dose)"
+        },
+        {
+          "arm_id": "frdb_4082",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (hydrate-basis dose)"
+        },
+        {
+          "arm_id": "frdb_4083",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (hydrate-basis dose)"
+        },
+        {
+          "arm_id": "frdb_4084",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (hydrate-basis dose)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 83,
+      "candidate_id": "1278",
+      "name": "DOXAPRAM",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_2531"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_2531": "enteric-coated capsules (delayed release)"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Not IR.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 84,
+      "candidate_id": "8262",
+      "name": "ILAPRAZOLE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_8222"
+      ],
+      "rationale": "Abstract only; oral dosage form (possibly enteric-coated), fasting, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 85,
+      "candidate_id": "1661",
+      "name": "BENZQUINAMIDE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_3574"
+      ],
+      "rationale": "Abstract only; dose, fasting, health status, matrix, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 86,
+      "candidate_id": "10124",
+      "name": "CURCUMIN",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_9848"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_9848": "Cmax visually estimated from mean curve (no exact labelled statistic); n=3; uncorrected non-zero baseline"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Approximate curve-read Cmax does not count.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_9848",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "exclude",
+          "note": "verified_with_caveat->exclude (visually estimated Cmax)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 87,
+      "candidate_id": "2096",
+      "name": "AMEZINIUM",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_4778",
+        "frdb_4779"
+      ],
+      "rationale": "Fasted healthy-male uncoated tablet parent-plasma arms, but doses are amezinium metilsulfate salt mass, not active-moiety-matched.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_4778",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (salt-basis dose)"
+        },
+        {
+          "arm_id": "frdb_4779",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (salt-basis dose)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 88,
+      "candidate_id": "1780",
+      "name": "ANIRACETAM",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_3774"
+      ],
+      "rationale": "Abstract-only BE source; Cmax statistic only implied (not explicitly labelled) and no table; abstract does not explicitly provide every required item.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_3774",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (abstract-only, unlabelled statistic)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 89,
+      "candidate_id": "836",
+      "name": "REPIRINAST",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_1794",
+        "frdb_1795",
+        "frdb_1796"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_1794": "only active metabolite BAY w 8199 measured; parent not analyte",
+        "frdb_1795": "only active metabolite BAY w 8199 measured; parent not analyte",
+        "frdb_1796": "only active metabolite BAY w 8199 measured; parent not analyte"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Non-parent analyte.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 90,
+      "candidate_id": "8285",
+      "name": "TENELIGLIPTIN",
+      "disposition": "include",
+      "included_arm_ids": [
+        "frdb_8266",
+        "frdb_8268",
+        "frdb_8269",
+        "frdb_8270",
+        "frdb_8271",
+        "frdb_8272",
+        "frdb_8273"
+      ],
+      "excluded_arm_ids": [
+        "frdb_8279",
+        "frdb_8283",
+        "frdb_8286",
+        "frdb_8287",
+        "frdb_8288"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_8279": "meal 30 min post-dose (<4 h)",
+        "frdb_8283": "meal 30 min post-dose (<4 h); only 6 h pre-dose fast",
+        "frdb_8286": "meal 30 min post-dose (<4 h)",
+        "frdb_8287": "hepatic impairment; meal 30 min post-dose",
+        "frdb_8288": "hepatic impairment; meal 30 min post-dose"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "A13 fasted (4 h post-dose fast) and A1 SAD fasted conventional tablets (IR), free-base doses, healthy males, plasma parent mean; impairment-study arms dosed 30 min pre-meal excluded.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": [
+        {
+          "arm_id": "frdb_8266",
+          "dose_mg": 20.0,
+          "observed_cmax": 236.2,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": "236.2 ± 43.77 (geo mean 232.2)",
+          "observed_cmax_mg_l": 0.2362,
+          "cmax_statistic": "arithmetic mean ± SD, n=14",
+          "source_url": "https://www.pmda.go.jp/drugs/2012/P201200070/400315000_22400AMX00728_K102_2.pdf#page=18",
+          "full_text_url_used": null,
+          "source_access_status": "full_text (PMDA CTD 2.7.6 text layer); A100 p.30 image cross-checked by page",
+          "source_locator": "K102 Table 2.7.6.1-5 (printed p.18), '空腹時投与' rows; design Table 2.7.6.1-1 (pdf p.13)",
+          "first_pass_verification": "verified",
+          "source_uncertainty": null
+        },
+        {
+          "arm_id": "frdb_8268",
+          "dose_mg": 2.5,
+          "observed_cmax": 13.9,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": "13.90 (3.79)",
+          "observed_cmax_mg_l": 0.0139,
+          "cmax_statistic": "mean (SD), n=6",
+          "source_url": "https://www.pmda.go.jp/drugs/2012/P201200070/400315000_22400AMX00728_A100_2.pdf#page=32",
+          "full_text_url_used": null,
+          "source_access_status": "full_text (A100 image p.32 viewed; values transcribed from text-layer K102 Table 2.7.6.3-4, identical)",
+          "source_locator": "A100 p.32 Table 5 (printed 31) / K102 Table 2.7.6.3-4 (printed p.36), 2.5 mg row",
+          "first_pass_verification": "verified",
+          "source_uncertainty": null
+        },
+        {
+          "arm_id": "frdb_8269",
+          "dose_mg": 10.0,
+          "observed_cmax": 77.22,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": "77.22 (19.84)",
+          "observed_cmax_mg_l": 0.07722,
+          "cmax_statistic": "mean (SD), n=6",
+          "source_url": "https://www.pmda.go.jp/drugs/2012/P201200070/400315000_22400AMX00728_A100_2.pdf#page=32",
+          "full_text_url_used": null,
+          "source_access_status": "full_text (A100 image p.32 viewed; values transcribed from text-layer K102 Table 2.7.6.3-4, identical)",
+          "source_locator": "A100 p.32 Table 5 (printed 31) / K102 Table 2.7.6.3-4 (printed p.36), 10 mg row",
+          "first_pass_verification": "verified",
+          "source_uncertainty": null
+        },
+        {
+          "arm_id": "frdb_8270",
+          "dose_mg": 20.0,
+          "observed_cmax": 187.2,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": "187.20 (44.70)",
+          "observed_cmax_mg_l": 0.1872,
+          "cmax_statistic": "mean (SD), n=6",
+          "source_url": "https://www.pmda.go.jp/drugs/2012/P201200070/400315000_22400AMX00728_A100_2.pdf#page=32",
+          "full_text_url_used": null,
+          "source_access_status": "full_text (A100 image p.32 viewed; values transcribed from text-layer K102 Table 2.7.6.3-4, identical)",
+          "source_locator": "A100 p.32 Table 5 (printed 31) / K102 Table 2.7.6.3-4 (printed p.36), 20 mg row",
+          "first_pass_verification": "verified",
+          "source_uncertainty": null
+        },
+        {
+          "arm_id": "frdb_8271",
+          "dose_mg": 40.0,
+          "observed_cmax": 382.4,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": "382.40 (89.83)",
+          "observed_cmax_mg_l": 0.3824,
+          "cmax_statistic": "mean (SD), n=6",
+          "source_url": "https://www.pmda.go.jp/drugs/2012/P201200070/400315000_22400AMX00728_A100_2.pdf#page=32",
+          "full_text_url_used": null,
+          "source_access_status": "full_text (A100 image p.32 viewed; values transcribed from text-layer K102 Table 2.7.6.3-4, identical)",
+          "source_locator": "A100 p.32 Table 5 (printed 31) / K102 Table 2.7.6.3-4 (printed p.36), 40 mg row",
+          "first_pass_verification": "verified",
+          "source_uncertainty": null
+        },
+        {
+          "arm_id": "frdb_8272",
+          "dose_mg": 80.0,
+          "observed_cmax": 955.77,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": "955.77 (207.45)",
+          "observed_cmax_mg_l": 0.95577,
+          "cmax_statistic": "mean (SD), n=6",
+          "source_url": "https://www.pmda.go.jp/drugs/2012/P201200070/400315000_22400AMX00728_A100_2.pdf#page=32",
+          "full_text_url_used": null,
+          "source_access_status": "full_text (A100 image p.32 viewed; values transcribed from text-layer K102 Table 2.7.6.3-4, identical)",
+          "source_locator": "A100 p.32 Table 5 (printed 31) / K102 Table 2.7.6.3-4 (printed p.36), 80 mg row",
+          "first_pass_verification": "verified",
+          "source_uncertainty": null
+        },
+        {
+          "arm_id": "frdb_8273",
+          "dose_mg": 160.0,
+          "observed_cmax": 2107.83,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": "2107.83 (450.30)",
+          "observed_cmax_mg_l": 2.10783,
+          "cmax_statistic": "mean (SD), n=6",
+          "source_url": "https://www.pmda.go.jp/drugs/2012/P201200070/400315000_22400AMX00728_A100_2.pdf#page=32",
+          "full_text_url_used": null,
+          "source_access_status": "full_text (A100 image p.32 viewed; values transcribed from text-layer K102 Table 2.7.6.3-4, identical)",
+          "source_locator": "A100 p.32 Table 5 (printed 31) / K102 Table 2.7.6.3-4 (printed p.36), 160 mg row",
+          "first_pass_verification": "verified",
+          "source_uncertainty": null
+        }
+      ]
+    },
+    {
+      "position": 91,
+      "candidate_id": "47061",
+      "name": "PHA-543613",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_11762",
+        "frdb_11763"
+      ],
+      "rationale": "Abstract only; dose, formulation, fasting, parent vs radioactivity Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 92,
+      "candidate_id": "1888",
+      "name": "PERICIAZINE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_4436"
+      ],
+      "rationale": "Abstract only; fasting, product/arm mapping, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 93,
+      "candidate_id": "577",
+      "name": "CARBAZOCHROME SALICYLATE",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_1438"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_1438": "dosed/measured carbazochrome sodium sulfonate, a different entity from manifest structure"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Identity mismatch.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 94,
+      "candidate_id": "1835",
+      "name": "RAMOSETRON",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_4209",
+        "frdb_4211",
+        "frdb_4212"
+      ],
+      "rationale": "Fasted healthy conventional film-coated tablet parent-plasma arms, but the 5 ug dose is ramosetron hydrochloride salt mass, not active-moiety-matched.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_4209",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (salt-basis dose)"
+        },
+        {
+          "arm_id": "frdb_4211",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (salt-basis dose)"
+        },
+        {
+          "arm_id": "frdb_4212",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (salt-basis dose)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 95,
+      "candidate_id": "2829",
+      "name": "RAGAGLITAZAR",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_6169"
+      ],
+      "rationale": "Abstract only; fasting, formulation, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 96,
+      "candidate_id": "1428",
+      "name": "POLYTHIAZIDE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_2989"
+      ],
+      "rationale": "Abstract only; fasting, formulation, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 97,
+      "candidate_id": "3277",
+      "name": "FENSPIRIDE",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_6590",
+        "frdb_6593"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_6590": "modified-release formulation",
+        "frdb_6593": "slow-release tablet"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Not IR.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 98,
+      "candidate_id": "437",
+      "name": "GARENOXACIN",
+      "disposition": "include",
+      "included_arm_ids": [
+        "frdb_1010",
+        "frdb_1015",
+        "frdb_1016",
+        "frdb_1017",
+        "frdb_1018",
+        "frdb_1025"
+      ],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [],
+      "rationale": "Fasted healthy adults; conventional tablets/capsules (IR); doses explicitly GRNX active-moiety equivalent; plasma parent; distinct cohorts (BE round tablet, 61001 SAD, AI464007 fasted, geometric mean).",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": [
+        {
+          "arm_id": "frdb_1010",
+          "dose_mg": 400.0,
+          "observed_cmax": 8.86,
+          "observed_cmax_unit": "μg/mL",
+          "observed_cmax_raw": "8.86 ± 2.36",
+          "observed_cmax_mg_l": 8.86,
+          "cmax_statistic": "arithmetic mean ± SD, n=19",
+          "source_url": "https://www.info.pmda.go.jp/go/interview/2/400022_6241017F1022_2_009_1F.pdf#page=41",
+          "full_text_url_used": null,
+          "source_access_status": "full_text (current IF text layer)",
+          "source_locator": "IF_009 VII.1.(2) 1) ① 単回投与時 table (printed p.34, PDF p.41); BE table printed p.35 (round tablet row)",
+          "first_pass_verification": "verified",
+          "source_uncertainty": "low"
+        },
+        {
+          "arm_id": "frdb_1015",
+          "dose_mg": 100.0,
+          "observed_cmax": 2.09,
+          "observed_cmax_unit": "μg/mL",
+          "observed_cmax_raw": "2.09 ± 0.47",
+          "observed_cmax_mg_l": 2.09,
+          "cmax_statistic": "arithmetic mean ± SD, n=6",
+          "source_url": "https://www.pmda.go.jp/drugs/2007/P200700040/480297000_21900AMX01088000_A100_1.pdf#page=25",
+          "full_text_url_used": null,
+          "source_access_status": "full_text (PMDA review report A100 text layer; current Geninax IF 9th rev; PMC3249185 Europe PMC XML)",
+          "source_locator": "A100 p.25 (printed 24) '日本人健康被験者における本剤単回経口投与時の薬物動態パラメータ' table",
+          "first_pass_verification": "verified",
+          "source_uncertainty": "low"
+        },
+        {
+          "arm_id": "frdb_1016",
+          "dose_mg": 200.0,
+          "observed_cmax": 4.89,
+          "observed_cmax_unit": "μg/mL",
+          "observed_cmax_raw": "4.89 ± 1.53",
+          "observed_cmax_mg_l": 4.89,
+          "cmax_statistic": "arithmetic mean ± SD, n=6",
+          "source_url": "https://www.pmda.go.jp/drugs/2007/P200700040/480297000_21900AMX01088000_A100_1.pdf#page=25",
+          "full_text_url_used": null,
+          "source_access_status": "full_text (PMDA review report A100 text layer; current Geninax IF 9th rev; PMC3249185 Europe PMC XML)",
+          "source_locator": "A100 p.25 (printed 24) '日本人健康被験者における本剤単回経口投与時の薬物動態パラメータ' table",
+          "first_pass_verification": "verified",
+          "source_uncertainty": "low"
+        },
+        {
+          "arm_id": "frdb_1017",
+          "dose_mg": 400.0,
+          "observed_cmax": 7.43,
+          "observed_cmax_unit": "μg/mL",
+          "observed_cmax_raw": "7.43 ± 1.42",
+          "observed_cmax_mg_l": 7.43,
+          "cmax_statistic": "arithmetic mean ± SD, n=6",
+          "source_url": "https://www.pmda.go.jp/drugs/2007/P200700040/480297000_21900AMX01088000_A100_1.pdf#page=25",
+          "full_text_url_used": null,
+          "source_access_status": "full_text (PMDA review report A100 text layer; current Geninax IF 9th rev; PMC3249185 Europe PMC XML)",
+          "source_locator": "A100 p.25 (printed 24) '日本人健康被験者における本剤単回経口投与時の薬物動態パラメータ' table ; IF_009 printed p.35 capsule 400 mg fasted table (7.43±1.42)",
+          "first_pass_verification": "verified",
+          "source_uncertainty": "low"
+        },
+        {
+          "arm_id": "frdb_1018",
+          "dose_mg": 600.0,
+          "observed_cmax": 12.34,
+          "observed_cmax_unit": "μg/mL",
+          "observed_cmax_raw": "12.34 ± 2.08",
+          "observed_cmax_mg_l": 12.34,
+          "cmax_statistic": "arithmetic mean ± SD, n=6",
+          "source_url": "https://www.pmda.go.jp/drugs/2007/P200700040/480297000_21900AMX01088000_A100_1.pdf#page=25",
+          "full_text_url_used": null,
+          "source_access_status": "full_text (PMDA review report A100 text layer; current Geninax IF 9th rev; PMC3249185 Europe PMC XML)",
+          "source_locator": "A100 p.25 (printed 24) '日本人健康被験者における本剤単回経口投与時の薬物動態パラメータ' table",
+          "first_pass_verification": "verified",
+          "source_uncertainty": "low"
+        },
+        {
+          "arm_id": "frdb_1025",
+          "dose_mg": 400.0,
+          "observed_cmax": 5.76,
+          "observed_cmax_unit": "μg/mL",
+          "observed_cmax_raw": "5.76",
+          "observed_cmax_mg_l": 5.76,
+          "cmax_statistic": "geometric mean, n=13 (no dispersion given)",
+          "source_url": "https://www.pmda.go.jp/drugs/2007/P200700040/480297000_21900AMX01088000_A100_1.pdf#page=27",
+          "full_text_url_used": null,
+          "source_access_status": "full_text (PMDA A100 text layer)",
+          "source_locator": "A100 p.27 (printed 26) '本剤 400mg空腹時投与と高脂肪食摂取後投与におけるCmax及びAUCの比' table, 空腹時投与 column",
+          "first_pass_verification": "verified",
+          "source_uncertainty": "low-moderate (formulation unspecified; geometric mean)"
+        }
+      ]
+    },
+    {
+      "position": 99,
+      "candidate_id": "59653",
+      "name": "PF-06835919",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_13307"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_13307": "dosed ~20 min before breakfast (meal <4 h); MAD day 1"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Not fasted.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 100,
+      "candidate_id": "417",
+      "name": "CIFENLINE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_922"
+      ],
+      "rationale": "Abstract only; capsule/tablet/solution mapping, fasting, salt basis, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 101,
+      "candidate_id": "47055",
+      "name": "PF-04620110",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_11759"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_11759": "lipid-challenge study with 1000-kcal meal ~2 h post-dose (<4 h, coordinator-located publisher text); only a figure-digitized median exists"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Meal within 4 h; no exact labelled Cmax.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_11759",
+          "first_pass": "unverified",
+          "adjudicated": "exclude",
+          "note": "unverified->exclude (meal 2 h post-dose per coordinator note)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 102,
+      "candidate_id": "418",
+      "name": "CLINOFIBRATE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_924",
+        "frdb_925",
+        "frdb_926",
+        "frdb_927"
+      ],
+      "rationale": "JPBA dose-ranging arms abstract-only (fasting, formulation, Cmax unverified); fasting 400 mg arm abstract-only with unstated mean type and unit typo.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_927",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (abstract-only; sibling arms unverified)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 103,
+      "candidate_id": "3370",
+      "name": "MEPHENOXALONE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_6603"
+      ],
+      "rationale": "Abstract only; nothing verifiable.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 104,
+      "candidate_id": "8247",
+      "name": "BUTYLPHTHALIDE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_8170"
+      ],
+      "rationale": "Abstract only; fasting, formulation, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 105,
+      "candidate_id": "45929",
+      "name": "ACT-462206",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_11455"
+      ],
+      "rationale": "Abstract/registry only; fasting, formulation, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 106,
+      "candidate_id": "9234",
+      "name": "AMUVATINIB",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_9126"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_9126": "manifest SMILES is amonafide; source dosed amuvatinib"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Identity mismatch.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 107,
+      "candidate_id": "39483",
+      "name": "PF-04991532",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_11169"
+      ],
+      "rationale": "Abstract/registry only; parent vs radioactivity Cmax and fasting unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 108,
+      "candidate_id": "9660",
+      "name": "MELDONIUM",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_9360",
+        "frdb_9361",
+        "frdb_9362",
+        "frdb_9363",
+        "frdb_9364"
+      ],
+      "rationale": "Abstract only; fasting, Cmax, n per arm unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 109,
+      "candidate_id": "275",
+      "name": "SULFABENZAMIDE",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_750"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_750": "cited source is a diflunisal study; no sulfonamide dosed/measured"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Identity mismatch.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 110,
+      "candidate_id": "8696",
+      "name": "HYPERICIN",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_8640",
+        "frdb_8641",
+        "frdb_8642",
+        "frdb_8643",
+        "frdb_8644",
+        "frdb_8645"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_8640": "hypericin dosed within multi-component Hypericum extract LI 160",
+        "frdb_8641": "hypericin dosed within multi-component Hypericum extract LI 160",
+        "frdb_8642": "hypericin dosed within multi-component Hypericum extract LI 160",
+        "frdb_8643": "hypericin dosed within multi-component Hypericum extract LI 160",
+        "frdb_8644": "hypericin dosed within multi-component Hypericum extract LI 160",
+        "frdb_8645": "hypericin dosed within multi-component Hypericum extract LI 160"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Botanical extract, not isolated parent dose.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 111,
+      "candidate_id": "801",
+      "name": "HALOXAZOLAM",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_1743"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_1743": "parent undetectable; value is metabolite No.574 (flubromazepam) in 1 subject"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Non-parent analyte.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 112,
+      "candidate_id": "2198",
+      "name": "CEFOSELIS SULFATE",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_4860",
+        "frdb_4861"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_4860": "30-min IV infusion, not oral",
+        "frdb_4861": "30-min IV infusion, not oral"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Not oral.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 113,
+      "candidate_id": "422",
+      "name": "DIMEMORFAN",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_936",
+        "frdb_937",
+        "frdb_938",
+        "frdb_939",
+        "frdb_940",
+        "frdb_941"
+      ],
+      "rationale": "Both originals abstract-only; doses, fasting (stage 1), phosphate-salt basis, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 114,
+      "candidate_id": "59595",
+      "name": "GLUMETINIB",
+      "disposition": "include",
+      "included_arm_ids": [
+        "frdb_13099"
+      ],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [],
+      "rationale": "Fasted period of food-effect crossover, 300 mg tablets (solid dispersion = formulation caveat, not MR), healthy men, parent EDTA plasma arithmetic mean.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_13099",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "include",
+          "note": "verified_with_caveat->include (conventional tablet; solid dispersion is a caveat only)"
+        }
+      ],
+      "included_arm_evidence": [
+        {
+          "arm_id": "frdb_13099",
+          "dose_mg": 300.0,
+          "observed_cmax": 868.7,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 868.7,
+          "observed_cmax_mg_l": 0.8687,
+          "cmax_statistic": "arithmetic mean (SD 297.5), n=18",
+          "source_url": "https://doi.org/10.2147/DDDT.S388846",
+          "full_text_url_used": null,
+          "source_access_status": "full text read (Europe PMC XML, PMC10013581)",
+          "source_locator": "Table 2 'Effect of Food on the Pharmacokinetics of SCC244', Fasting (n=18) column, Cmax row",
+          "first_pass_verification": "verified_with_caveat",
+          "source_uncertainty": "low-moderate: formulation is solid dispersion"
+        }
+      ]
+    },
+    {
+      "position": 115,
+      "candidate_id": "2876",
+      "name": "CICLETANINE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_6314"
+      ],
+      "rationale": "Overnight-fasted healthy controls (meal at 4 h), plasma parent, but dosage form is never stated; unknown dosage form stays unresolved.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_6314",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (dosage form unknown)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 116,
+      "candidate_id": "1422",
+      "name": "PHENOXYBENZAMINE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_2977"
+      ],
+      "rationale": "Fasted BE reference capsule, healthy adults, plasma parent, but dose is 10 mg phenoxybenzamine hydrochloride (~8.9 mg base), not active-moiety-matched.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_2977",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (salt-basis dose)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 117,
+      "candidate_id": "59629",
+      "name": "FIRSOCOSTAT",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_13186",
+        "frdb_13189",
+        "frdb_13191",
+        "frdb_13193"
+      ],
+      "rationale": "Renal-study healthy-control arm 13186 has no stated dosage form; 5 mg arm has capsule/tablet conflict; hepatic-control arms 13189/13191 share controls. Whole candidate unresolved.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_13186",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (dosage form unknown/conflicting in sibling arms)"
+        },
+        {
+          "arm_id": "frdb_13189",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (dosage form unknown/conflicting in sibling arms)"
+        },
+        {
+          "arm_id": "frdb_13191",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (dosage form unknown/conflicting in sibling arms)"
+        },
+        {
+          "arm_id": "frdb_13193",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (dosage form unknown/conflicting in sibling arms)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 118,
+      "candidate_id": "45349",
+      "name": "Y-26763",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_11379",
+        "frdb_11380",
+        "frdb_11381",
+        "frdb_11382",
+        "frdb_11383"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_11379": "dosed prodrug Y-27152; Y-26763 is its active metabolite",
+        "frdb_11380": "dosed prodrug Y-27152; Y-26763 is its active metabolite",
+        "frdb_11381": "dosed prodrug Y-27152; Y-26763 is its active metabolite",
+        "frdb_11382": "dosed prodrug Y-27152; Y-26763 is its active metabolite",
+        "frdb_11383": "dosed prodrug Y-27152; Y-26763 is its active metabolite"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Non-parent analyte.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 119,
+      "candidate_id": "8964",
+      "name": "SOLCITINIB",
+      "disposition": "include",
+      "included_arm_ids": [
+        "frdb_8885"
+      ],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [],
+      "rationale": "GSK result summary: fasted 400 mg new-formulation tablet (conventional, IR) in healthy males, plasma parent geometric LSmean.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_8885",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "include",
+          "note": "verified_with_caveat->include (tablet = IR; LSmean allowed)"
+        }
+      ],
+      "included_arm_evidence": [
+        {
+          "arm_id": "frdb_8885",
+          "dose_mg": 400.0,
+          "observed_cmax": 779.8,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 779.8,
+          "observed_cmax_mg_l": 0.7798,
+          "cmax_statistic": "geometric LSmean (mixed model), n=9",
+          "source_url": "https://s3.amazonaws.com/ctr-gsk-7381/117171/efaf9f51-b67c-4381-a287-1d4fd566eb6e/df2d37af-3eb3-4e7b-9c87-e5b9e2b74657/117171-Clinical-Study-Result-Summary-v1.pdf",
+          "full_text_url_used": null,
+          "source_access_status": "full original read (5-page GSK result summary PDF)",
+          "source_locator": "p.3, table 'Cohort B - Summary of Statistical Analysis of Derived Plasma GSK2586184 Pharmacokinetic Parameters for GSK2586184 (New formulation) under Fed vs. Fasted conditions', column 'GSK2586184 SD Fasted', Cmax row",
+          "first_pass_verification": "verified_with_caveat",
+          "source_uncertainty": "low-moderate: LSmean statistic; formulation mislabelled in FRDB"
+        }
+      ]
+    },
+    {
+      "position": 120,
+      "candidate_id": "492",
+      "name": "XIPAMIDE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_1267"
+      ],
+      "rationale": "Abstract only; 40 vs 20 mg dose conflict, fasting, formulation unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 121,
+      "candidate_id": "495",
+      "name": "AMOSULALOL",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_1278",
+        "frdb_1279",
+        "frdb_1280",
+        "frdb_1281",
+        "frdb_1282",
+        "frdb_1284"
+      ],
+      "rationale": "Fasted healthy-male parent-plasma arms, but all doses are amosulalol hydrochloride salt mass and SAD dosage form is unstated.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_1278",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (salt-basis dose; dosage form unstated)"
+        },
+        {
+          "arm_id": "frdb_1279",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (salt-basis dose; dosage form unstated)"
+        },
+        {
+          "arm_id": "frdb_1280",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (salt-basis dose; dosage form unstated)"
+        },
+        {
+          "arm_id": "frdb_1281",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (salt-basis dose; dosage form unstated)"
+        },
+        {
+          "arm_id": "frdb_1282",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (salt-basis dose; dosage form unstated)"
+        },
+        {
+          "arm_id": "frdb_1284",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (salt-basis dose; dosage form unstated)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 122,
+      "candidate_id": "429",
+      "name": "EPERISONE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_980"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_980": "osmotic controlled-release tablet"
+      },
+      "unresolved_arm_ids": [
+        "frdb_979"
+      ],
+      "rationale": "Explicit IR tablets, fasted healthy men, plasma parent; but the product (Smur) is eperisone hydrochloride and the 150 mg dose is not stated in active-moiety units.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_979",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (salt-form product; dose basis not active-moiety-matched)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 123,
+      "candidate_id": "21634",
+      "name": "ANDROGRAPHOLIDE",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_10428"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_10428": "Kan Jang fixed-combination herbal tablet"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Multi-ingredient herbal product.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 124,
+      "candidate_id": "8956",
+      "name": "SL-65.1498",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_8882"
+      ],
+      "rationale": "Abstract only; nothing verifiable.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 125,
+      "candidate_id": "1141",
+      "name": "FLUOROURACIL",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_2168"
+      ],
+      "rationale": "Abstract-only IR tablet arm; fasting and statistic not stated in abstract.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 126,
+      "candidate_id": "9770",
+      "name": "PEMAFIBRATE",
+      "disposition": "include",
+      "included_arm_ids": [
+        "frdb_9391",
+        "frdb_9393",
+        "frdb_9394",
+        "frdb_9395"
+      ],
+      "excluded_arm_ids": [
+        "frdb_9426",
+        "frdb_9430"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_9426": "hepatic-study matched control described only as normal hepatic function, not explicitly healthy",
+        "frdb_9430": "renal-study matched control not described as healthy"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Fasted (>=10 h) conventional tablets, healthy Japanese men (food-effect fasted period and SAD), plasma parent arithmetic mean; impairment-study controls lack explicit healthy status in the fully read source.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_9391",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "include",
+          "note": "verified_with_caveat->include (tablet = IR)"
+        },
+        {
+          "arm_id": "frdb_9393",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "include",
+          "note": "verified_with_caveat->include (tablet = IR)"
+        },
+        {
+          "arm_id": "frdb_9394",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "include",
+          "note": "verified_with_caveat->include (tablet = IR)"
+        },
+        {
+          "arm_id": "frdb_9395",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "include",
+          "note": "verified_with_caveat->include (tablet = IR)"
+        },
+        {
+          "arm_id": "frdb_9426",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "exclude",
+          "note": "verified_with_caveat->exclude (control not explicitly healthy)"
+        },
+        {
+          "arm_id": "frdb_9430",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "exclude",
+          "note": "verified_with_caveat->exclude (control not explicitly healthy)"
+        }
+      ],
+      "included_arm_evidence": [
+        {
+          "arm_id": "frdb_9391",
+          "dose_mg": 0.1,
+          "observed_cmax": 1.82,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 1.82,
+          "observed_cmax_mg_l": 0.00182,
+          "cmax_statistic": "arithmetic mean (SD) 1.82 (0.54); geometric mean 1.74 (CV 29.8%); n=16",
+          "source_url": "https://www.pmda.go.jp/drugs/2017/P20170718001/270072000_22900AMX00581_K101_1.pdf#page=270",
+          "full_text_url_used": null,
+          "source_access_status": "full original read: PMDA review report (A100, pp.33-39) and CTD 2.7.6 summaries (K101, 294 pp; study sections extracted)",
+          "source_locator": "K101 CTD 2.7.6.12 (K-877-20 food-effect study), Table 2.7.6.12-5, column Fasted administration, PDF p.270; A100 review 6.1.2 p.33",
+          "first_pass_verification": "verified_with_caveat",
+          "source_uncertainty": "low-moderate: conventional tablet; crossover period"
+        },
+        {
+          "arm_id": "frdb_9393",
+          "dose_mg": 0.3,
+          "observed_cmax": 4.504,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 4.504,
+          "observed_cmax_mg_l": 0.004504,
+          "cmax_statistic": "arithmetic mean (SD) 4.504 (1.839); geometric mean 4.223 (CV 40.8%); n=8",
+          "source_url": "https://www.pmda.go.jp/drugs/2017/P20170718001/270072000_22900AMX00581_K101_1.pdf#page=55",
+          "full_text_url_used": null,
+          "source_access_status": "full original read: PMDA review report (A100, pp.33-39) and CTD 2.7.6 summaries (K101, 294 pp; study sections extracted)",
+          "source_locator": "K101 CTD 2.7.6.2 (K-877-01 single ascending dose), Table 2.7.6.2-5, 0.3 mg column, PDF p.55; A100 review Table 9, p.36",
+          "first_pass_verification": "verified_with_caveat",
+          "source_uncertainty": "low-moderate: conventional tablet"
+        },
+        {
+          "arm_id": "frdb_9394",
+          "dose_mg": 0.5,
+          "observed_cmax": 6.007,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 6.007,
+          "observed_cmax_mg_l": 0.006007,
+          "cmax_statistic": "arithmetic mean (SD) 6.007 (2.162); geometric mean 5.672 (CV 36.0%); n=8",
+          "source_url": "https://www.pmda.go.jp/drugs/2017/P20170718001/270072000_22900AMX00581_K101_1.pdf#page=55",
+          "full_text_url_used": null,
+          "source_access_status": "full original read: PMDA review report (A100, pp.33-39) and CTD 2.7.6 summaries (K101, 294 pp; study sections extracted)",
+          "source_locator": "K101 CTD 2.7.6.2 (K-877-01 single ascending dose), Table 2.7.6.2-5, 0.5 mg column, PDF p.55; A100 review Table 9, p.36",
+          "first_pass_verification": "verified_with_caveat",
+          "source_uncertainty": "low-moderate: conventional tablet"
+        },
+        {
+          "arm_id": "frdb_9395",
+          "dose_mg": 1.0,
+          "observed_cmax": 14.325,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 14.325,
+          "observed_cmax_mg_l": 0.014325,
+          "cmax_statistic": "arithmetic mean (SD) 14.325 (3.704); geometric mean 13.962 (CV 25.9%); n=8",
+          "source_url": "https://www.pmda.go.jp/drugs/2017/P20170718001/270072000_22900AMX00581_K101_1.pdf#page=55",
+          "full_text_url_used": null,
+          "source_access_status": "full original read: PMDA review report (A100, pp.33-39) and CTD 2.7.6 summaries (K101, 294 pp; study sections extracted)",
+          "source_locator": "K101 CTD 2.7.6.2 (K-877-01 single ascending dose), Table 2.7.6.2-5, 1 mg column, PDF p.55; A100 review Table 9, p.36",
+          "first_pass_verification": "verified_with_caveat",
+          "source_uncertainty": "low-moderate: conventional tablet"
+        }
+      ]
+    },
+    {
+      "position": 127,
+      "candidate_id": "2454",
+      "name": "NEDOCROMIL",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_5515"
+      ],
+      "rationale": "Fasted oral aqueous solution in healthy volunteers, but dose is weight-based nedocromil sodium (disodium salt) mass, not active-moiety-matched.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_5515",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (salt-basis dose)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 128,
+      "candidate_id": "45290",
+      "name": "X-396",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_11356"
+      ],
+      "rationale": "Abstract-only fasted oral suspension in healthy men; salt basis of the 200 mg ensartinib dose unconfirmed (clinical product is a hydrochloride) and no table.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_11356",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (dose basis vs salt unverified; abstract only)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 129,
+      "candidate_id": "10281",
+      "name": "CASOPITANT",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_10103"
+      ],
+      "rationale": "Abstract only; Cmax, fasting, formulation, IV washout unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 130,
+      "candidate_id": "4904",
+      "name": "FYTIC ACID",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_6687"
+      ],
+      "rationale": "Abstract only; endogenous analyte, supplement product, dose, fasting unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 131,
+      "candidate_id": "33538",
+      "name": "LIGUSTRAZINE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_10885"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_10885": "standardized meal served 2 h after dosing (<4 h)"
+      },
+      "unresolved_arm_ids": [
+        "frdb_10889"
+      ],
+      "rationale": "Shen 2013 tablet arm (active-moiety 108 mg TMP dose) has a meal 2 h post-dose; Li 2018 BE arm is abstract-only, unmappable, and dosed as 200 mg TMPP salt.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_10885",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "exclude",
+          "note": "verified_with_caveat->exclude (meal 2 h post-dose)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 132,
+      "candidate_id": "9033",
+      "name": "VALATEGRAST",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_8937",
+        "frdb_8938",
+        "frdb_8939",
+        "frdb_8940",
+        "frdb_8941",
+        "frdb_8942",
+        "frdb_8943"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_8937": "dosed ester prodrug R411; manifest/analyte is active metabolite RO0270608",
+        "frdb_8938": "dosed ester prodrug R411; manifest/analyte is active metabolite RO0270608",
+        "frdb_8939": "dosed ester prodrug R411; manifest/analyte is active metabolite RO0270608",
+        "frdb_8940": "dosed ester prodrug R411; manifest/analyte is active metabolite RO0270608",
+        "frdb_8941": "dosed ester prodrug R411; manifest/analyte is active metabolite RO0270608",
+        "frdb_8942": "dosed ester prodrug R411; manifest/analyte is active metabolite RO0270608",
+        "frdb_8943": "dosed ester prodrug R411; manifest/analyte is active metabolite RO0270608"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Non-parent analyte.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 133,
+      "candidate_id": "480",
+      "name": "TALIPEXOLE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_1203"
+      ],
+      "rationale": "Abstract only; dose (hydrochloride), Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 134,
+      "candidate_id": "3418",
+      "name": "NITROXOLINE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_6609"
+      ],
+      "rationale": "Abstract only; dose, formulation, fasting, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 135,
+      "candidate_id": "59669",
+      "name": "FLUZOPARIB",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_13404"
+      ],
+      "rationale": "Abstract only; tablet/capsule conflict; fasted Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 136,
+      "candidate_id": "49024",
+      "name": "CB-13",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_12099",
+        "frdb_12100",
+        "frdb_12101"
+      ],
+      "rationale": "Abstract only; per-dose Cmax and dosage form unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 137,
+      "candidate_id": "6604",
+      "name": "VALNOCTAMIDE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_6801"
+      ],
+      "rationale": "Abstract only; formulation, fasting, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 138,
+      "candidate_id": "6901",
+      "name": "VINCAMINE",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_7093"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_7093": "prolonged-release vincamine products"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Not IR.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 139,
+      "candidate_id": "2625",
+      "name": "CLENBUTEROL",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_5856"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_5856": "ambroxol + clenbuterol fixed-combination tablet; compartment-model Cmax"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Fixed combination.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 140,
+      "candidate_id": "8243",
+      "name": "ANAGLIPTIN",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_8128",
+        "frdb_8129",
+        "frdb_8130",
+        "frdb_8131",
+        "frdb_8133"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_8128": "dosed immediately before a meal",
+        "frdb_8129": "dosed immediately before a meal",
+        "frdb_8130": "dosed immediately before a meal",
+        "frdb_8131": "DP0002 day 0 dosed immediately before breakfast",
+        "frdb_8133": "renal-study control fasted only until 30 min post-dose (food permitted <4 h); formulation not stated"
+      },
+      "unresolved_arm_ids": [
+        "frdb_8119",
+        "frdb_8122",
+        "frdb_8123",
+        "frdb_8124",
+        "frdb_8125",
+        "frdb_8126",
+        "frdb_8127",
+        "frdb_8140"
+      ],
+      "rationale": "DP0001/DP0004 fasted conventional-tablet arms are eligible, but the hepatic-study healthy-control 400 mg arm (frdb_8140, fasted, geometric mean) has no stated formulation, so the compound cannot be scored selectively.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_8119",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (sibling arm formulation unstated)"
+        },
+        {
+          "arm_id": "frdb_8122",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (sibling arm formulation unstated)"
+        },
+        {
+          "arm_id": "frdb_8123",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (sibling arm formulation unstated)"
+        },
+        {
+          "arm_id": "frdb_8124",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (sibling arm formulation unstated)"
+        },
+        {
+          "arm_id": "frdb_8125",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (sibling arm formulation unstated)"
+        },
+        {
+          "arm_id": "frdb_8126",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (sibling arm formulation unstated)"
+        },
+        {
+          "arm_id": "frdb_8127",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (sibling arm formulation unstated)"
+        },
+        {
+          "arm_id": "frdb_8133",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "exclude",
+          "note": "verified_with_caveat->exclude (food permitted 30 min post-dose)"
+        },
+        {
+          "arm_id": "frdb_8140",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (sibling arm formulation unstated)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 141,
+      "candidate_id": "45237",
+      "name": "VTP-27999",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_11351"
+      ],
+      "rationale": "Abstract only; MAD in salt-depleted volunteers; day-1 Cmax, fasting, formulation unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 142,
+      "candidate_id": "8372",
+      "name": "ADOMEGLIVANT",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_8433",
+        "frdb_8434",
+        "frdb_8435"
+      ],
+      "rationale": "Supplement Table S1 geometric means readable, but fasting and dosage form are only in paywalled main text.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 143,
+      "candidate_id": "428",
+      "name": "EPALRESTAT",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_971"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_971": "cited source is a secondary review; primary IF arm dosed 30 min before a meal"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Not fasted (meal <4 h).",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 144,
+      "candidate_id": "36941",
+      "name": "NAPHTHOQUINE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_11078"
+      ],
+      "rationale": "Abstract only; monotherapy vs FDC arm identity, fasting, diphosphate-salt dose basis unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 145,
+      "candidate_id": "50586",
+      "name": "PF-06282999",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_12355"
+      ],
+      "rationale": "Full text inaccessible; fasting, solution formulation, Table 8 Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 146,
+      "candidate_id": "3504",
+      "name": "RIODIPINE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_6619"
+      ],
+      "rationale": "Abstract only; parent Cmax (vs total 14C), fasting, dose unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 147,
+      "candidate_id": "40814",
+      "name": "PSEUDOHYPERICIN",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_11194",
+        "frdb_11195",
+        "frdb_11196"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_11194": "pseudohypericin dosed within multi-constituent Hypericum extract LI 160; interim median",
+        "frdb_11195": "pseudohypericin dosed within multi-constituent Hypericum extract LI 160; interim median",
+        "frdb_11196": "pseudohypericin dosed within multi-constituent Hypericum extract LI 160; interim median"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Botanical extract, not isolated parent dose.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 148,
+      "candidate_id": "1902",
+      "name": "SULTHIAME",
+      "disposition": "include",
+      "included_arm_ids": [
+        "frdb_4459",
+        "frdb_4460",
+        "frdb_4461"
+      ],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [],
+      "rationale": "Open full text: explicit IR coated tablets, fasting, healthy men, parent plasma geometric means; 50 mg value is above the LLOQ (coarse precision caveat only).",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_4459",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "include",
+          "note": "verified_with_caveat->include (above LLOQ; precision caveat)"
+        }
+      ],
+      "included_arm_evidence": [
+        {
+          "arm_id": "frdb_4459",
+          "dose_mg": 50.0,
+          "observed_cmax": 0.02,
+          "observed_cmax_unit": "μg/mL",
+          "observed_cmax_raw": 0.02,
+          "observed_cmax_mg_l": 0.02,
+          "cmax_statistic": "geometric mean (CV%)",
+          "source_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6986439/",
+          "full_text_url_used": null,
+          "source_access_status": "full original read: PMC6986439 open access (Dao et al., Pharmacol Res Perspect 2020;8(1):e00558, doi 10.1002/prp2.558)",
+          "source_locator": "Table 1, Plasma parameters, Cmax row, Sultiame 50 mg (n=4) column: 0.02 (16)",
+          "first_pass_verification": "verified_with_caveat",
+          "source_uncertainty": "moderate: low reported precision near LLOQ; n=4"
+        },
+        {
+          "arm_id": "frdb_4460",
+          "dose_mg": 100.0,
+          "observed_cmax": 0.18,
+          "observed_cmax_unit": "μg/mL",
+          "observed_cmax_raw": 0.18,
+          "observed_cmax_mg_l": 0.18,
+          "cmax_statistic": "geometric mean (CV%)",
+          "source_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6986439/",
+          "full_text_url_used": null,
+          "source_access_status": "full original read: PMC6986439 open access (Dao et al., Pharmacol Res Perspect 2020;8(1):e00558, doi 10.1002/prp2.558)",
+          "source_locator": "Table 1, Plasma parameters, Cmax row, Sultiame 100 mg (n=4) column: 0.18 (44)",
+          "first_pass_verification": "verified",
+          "source_uncertainty": "low-moderate: n=4; nonlinear PK"
+        },
+        {
+          "arm_id": "frdb_4461",
+          "dose_mg": 200.0,
+          "observed_cmax": 1.88,
+          "observed_cmax_unit": "μg/mL",
+          "observed_cmax_raw": 1.88,
+          "observed_cmax_mg_l": 1.88,
+          "cmax_statistic": "geometric mean (CV%)",
+          "source_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6986439/",
+          "full_text_url_used": null,
+          "source_access_status": "full original read: PMC6986439 open access (Dao et al., Pharmacol Res Perspect 2020;8(1):e00558, doi 10.1002/prp2.558)",
+          "source_locator": "Table 1, Plasma parameters, Cmax row, Sultiame 200 mg (n=4) column: 1.88 (24)",
+          "first_pass_verification": "verified",
+          "source_uncertainty": "low-moderate: n=4; nonlinear PK"
+        }
+      ]
+    },
+    {
+      "position": 149,
+      "candidate_id": "2080",
+      "name": "MEPTAZINOL",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_4728",
+        "frdb_4729",
+        "frdb_4730"
+      ],
+      "rationale": "Abstract only; fasting, tablet type, HCl dose basis, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 150,
+      "candidate_id": "625",
+      "name": "FLOPROPIONE",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_1502"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_1502": "Cmax only approximate ('約9 ug/mL') read from a figure with no defined statistic"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "No exact labelled central Cmax.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_1502",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "exclude",
+          "note": "verified_with_caveat->exclude (approximate figure value)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 151,
+      "candidate_id": "1933",
+      "name": "BERBERINE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_4486"
+      ],
+      "rationale": "Overnight-fasted conventional tablets, healthy adults, plasma parent, but the 300 mg dose is berberine chloride salt mass; group n not printed.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_4486",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (salt-basis dose)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 152,
+      "candidate_id": "5563",
+      "name": "NIFURATEL",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_6729"
+      ],
+      "rationale": "Abstract only; dose, fasting, test/reference mapping, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 153,
+      "candidate_id": "2569",
+      "name": "OXYPHENONIUM",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_5781"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_5781": "CARA (chronic respiratory disease) patients; approximate 'about 5 ng/ml'"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Not healthy; no exact Cmax.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 154,
+      "candidate_id": "3430",
+      "name": "ORNIDAZOLE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_6611"
+      ],
+      "rationale": "Abstract only; fasting, formulation, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 155,
+      "candidate_id": "3177",
+      "name": "CLONIXIN",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_6562"
+      ],
+      "rationale": "Abstract only; matrix not stated; 250 mg lysine clonixinate salt dose (~160.6 mg clonixin) not active-moiety-matched.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 156,
+      "candidate_id": "8241",
+      "name": "ACOTIAMIDE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_8116"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_8116": "PMDA MAD day 1 dosed before a meal (preprandial)"
+      },
+      "unresolved_arm_ids": [
+        "frdb_8115"
+      ],
+      "rationale": "IJPPS reference arm is fasted film-coated tablet with plasma parent, but dose is acotiamide hydrochloride hydrate mass (~83 mg base), not active-moiety-matched.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_8115",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (salt/hydrate-basis dose)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 157,
+      "candidate_id": "8213",
+      "name": "RANIRESTAT",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_8043"
+      ],
+      "rationale": "Abstract only; control-group Cmax, fasting, formulation, healthy status unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 158,
+      "candidate_id": "59604",
+      "name": "LANRAPLENIB",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_13119"
+      ],
+      "rationale": "Registry results give fasted tablet Cmax for healthy matched controls, but the sampled matrix is never named.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 159,
+      "candidate_id": "2804",
+      "name": "SUNEPITRON",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_6115",
+        "frdb_6116"
+      ],
+      "rationale": "Abstract only; fasting and dosage form unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 160,
+      "candidate_id": "22343",
+      "name": "BAICALIN",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_10492"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_10492": "dosed baicalein; baicalin is its metabolite"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Non-parent analyte.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 161,
+      "candidate_id": "1982",
+      "name": "DEACETYLBISACODYL",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_4557"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_4557": "dosed prodrug sodium picosulfate; analyte total BHPM; lactating women; breakfast 1 h post-dose"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Prodrug activation product; not fasted.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 162,
+      "candidate_id": "3508",
+      "name": "ROMAZARIT",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_6620"
+      ],
+      "rationale": "Abstract only; fasting, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 163,
+      "candidate_id": "8024",
+      "name": "ELOBIXIBAT",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_7515",
+        "frdb_7516",
+        "frdb_7517",
+        "frdb_7521"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_7515": "Japanese chronic-constipation patients, not healthy",
+        "frdb_7516": "Japanese chronic-constipation patients, not healthy",
+        "frdb_7517": "Japanese chronic-constipation patients, not healthy",
+        "frdb_7521": "Japanese chronic-constipation patients, not healthy"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Not a healthy population.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 164,
+      "candidate_id": "9627",
+      "name": "LEVORMELOXIFENE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_9319",
+        "frdb_9320",
+        "frdb_9321",
+        "frdb_9322",
+        "frdb_9323",
+        "frdb_9324",
+        "frdb_9325",
+        "frdb_9326"
+      ],
+      "rationale": "Two 40 mg tablet age-group arms (Clin Ther 2001) are abstract-only; SAD oral-solution arms (fasted 8 h pre / 4 h post, healthy postmenopausal women) are not scored selectively.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_9321",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (sibling arms unverified)"
+        },
+        {
+          "arm_id": "frdb_9322",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (sibling arms unverified)"
+        },
+        {
+          "arm_id": "frdb_9323",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (sibling arms unverified)"
+        },
+        {
+          "arm_id": "frdb_9324",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (sibling arms unverified)"
+        },
+        {
+          "arm_id": "frdb_9325",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (sibling arms unverified)"
+        },
+        {
+          "arm_id": "frdb_9326",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (sibling arms unverified)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 165,
+      "candidate_id": "852",
+      "name": "VESNARINONE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_1812",
+        "frdb_1813",
+        "frdb_1814",
+        "frdb_1815",
+        "frdb_1816",
+        "frdb_1817",
+        "frdb_1819"
+      ],
+      "rationale": "Abstract only; per-dose Cmax and formulation unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 166,
+      "candidate_id": "6709",
+      "name": "PIRIBEDIL",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_6840"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_6840": "prolonged-release tablet"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Not IR.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 167,
+      "candidate_id": "1161",
+      "name": "BIOTIN",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_2213",
+        "frdb_2214"
+      ],
+      "rationale": "Secondary review source; original study, population, baseline correction, fasting unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 168,
+      "candidate_id": "228",
+      "name": "SULFAMETER",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_698"
+      ],
+      "rationale": "No abstract; crystal-form arm, formulation, matrix, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 169,
+      "candidate_id": "493",
+      "name": "ZALTOPROFEN",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_1269",
+        "frdb_1270",
+        "frdb_1271",
+        "frdb_1273",
+        "frdb_1274"
+      ],
+      "rationale": "Open-text SAD arms (10 h fast, 4 h post-dose fast, conventional tablets) are eligible, but the two fasting BE arms (capsule/tablet) are abstract-only with no fasting Cmax; no selective scoring.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_1269",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (sibling arms unverified)"
+        },
+        {
+          "arm_id": "frdb_1270",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (sibling arms unverified)"
+        },
+        {
+          "arm_id": "frdb_1271",
+          "first_pass": "verified",
+          "adjudicated": "unresolved",
+          "note": "verified->unresolved (sibling arms unverified)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 170,
+      "candidate_id": "59570",
+      "name": "ONO-2952",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_13018",
+        "frdb_13019",
+        "frdb_13021",
+        "frdb_13022",
+        "frdb_13023",
+        "frdb_13025"
+      ],
+      "rationale": "Abstract only; Cmax and formulation unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 171,
+      "candidate_id": "9822",
+      "name": "PYRONARIDINE",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_9444"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_9444": "parent measured in whole blood, not plasma; tetraphosphate salt dose"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Whole-blood assay.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 172,
+      "candidate_id": "10404",
+      "name": "IPRAGLIFLOZIN L-PROLINE",
+      "disposition": "include",
+      "included_arm_ids": [
+        "frdb_10315",
+        "frdb_10330",
+        "frdb_10335",
+        "frdb_10337",
+        "frdb_10338",
+        "frdb_10339",
+        "frdb_10340",
+        "frdb_10341",
+        "frdb_10342"
+      ],
+      "excluded_arm_ids": [
+        "frdb_10316"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_10316": "dosed 5 min before breakfast (meal <4 h)"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "PMDA review/CTD: fasted conventional film-coated tablets; doses explicitly in free-ipragliflozin (active-moiety) units; healthy Japanese males (SAD, food-effect fasted) and explicitly healthy impairment-study controls; plasma parent arithmetic means; 300 mg source PK n=5 noted.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": [
+        {
+          "arm_id": "frdb_10315",
+          "dose_mg": 50.0,
+          "observed_cmax": 1174.67,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 1174.67,
+          "observed_cmax_mg_l": 1.17467,
+          "cmax_statistic": "arithmetic mean (SD 212.99; geometric mean 1156.82, CV 18.13%), n=30",
+          "source_url": "https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009_K101_1.pdf#page=17",
+          "full_text_url_used": null,
+          "source_access_status": "open PMDA CTD 2.7.6 PDF read (p.17) + review report p.32 (study description)",
+          "source_locator": "PMDA Suglat CTD 2.7.6 (K101) p.17, Table 2.7.6.1-2 '未変化体の血漿中薬物動態パラメータの要約統計量（PKAS）', Cmax row, 空腹時投与 (Source: CL-0071 CSR Table 8-1)",
+          "first_pass_verification": "verified",
+          "source_uncertainty": "low"
+        },
+        {
+          "arm_id": "frdb_10330",
+          "dose_mg": 100.0,
+          "observed_cmax": 1277.0,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 1277.0,
+          "observed_cmax_mg_l": 1.277,
+          "cmax_statistic": "arithmetic mean ± SD 360, n=8",
+          "source_url": "https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009000_A100_1.pdf#page=42",
+          "full_text_url_used": null,
+          "source_access_status": "open PMDA review report PDF read (pp.41-42) + CTD 2.7.2 study table",
+          "source_locator": "PMDA Suglat review report (審査報告書) p.42 (printed 41), 表 12 '本薬 100 mg 単回経口投与時の本薬未変化体の薬物動態パラメータ', 健康成人 column, Cmax row",
+          "first_pass_verification": "verified",
+          "source_uncertainty": "low; healthy controls within a renal-impairment study (Poland/Slovakia/Hungary/Czech), 5 M / 3 F"
+        },
+        {
+          "arm_id": "frdb_10335",
+          "dose_mg": 100.0,
+          "observed_cmax": 1398.0,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 1398.0,
+          "observed_cmax_mg_l": 1.398,
+          "cmax_statistic": "arithmetic mean ± SD 445.0, n=8",
+          "source_url": "https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009000_A100_1.pdf#page=43",
+          "full_text_url_used": null,
+          "source_access_status": "open PMDA review report PDF read (p.43) + CTD 2.7.2 study table",
+          "source_locator": "PMDA Suglat review report p.43 (printed 42), 表 14 '本薬 100 mg 単回経口投与時の本薬未変化体の薬物動態パラメータ', 健康成人 column, Cmax row",
+          "first_pass_verification": "verified",
+          "source_uncertainty": "low; healthy controls of a hepatic-impairment study (US), 4 M / 4 F"
+        },
+        {
+          "arm_id": "frdb_10337",
+          "dose_mg": 1.0,
+          "observed_cmax": 17.89,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 17.89,
+          "observed_cmax_mg_l": 0.01789,
+          "cmax_statistic": "arithmetic mean (SD 4.0)",
+          "source_url": "https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009_K101_1.pdf#page=50",
+          "full_text_url_used": null,
+          "source_access_status": "open PMDA CTD Module 2.7.6 PDF read (p.50); formulation from CTD 2.7.2 study table (K100 p.~15)",
+          "source_locator": "PMDA Suglat CTD 2.7.6 (K101) p.50, Table 2.7.6.3-3 '未変化体の血漿中薬物動態パラメータの平均値（標準偏差）：第一部（単回経口投与，空腹時）', 1 mg column, Cmax row (Source: CL-0101 CSR Table 8-1)",
+          "first_pass_verification": "verified",
+          "source_uncertainty": "low"
+        },
+        {
+          "arm_id": "frdb_10338",
+          "dose_mg": 3.0,
+          "observed_cmax": 53.72,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 53.72,
+          "observed_cmax_mg_l": 0.05372,
+          "cmax_statistic": "arithmetic mean (SD 15.55)",
+          "source_url": "https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009_K101_1.pdf#page=50",
+          "full_text_url_used": null,
+          "source_access_status": "open PMDA CTD Module 2.7.6 PDF read (p.50); formulation from CTD 2.7.2 study table (K100 p.~15)",
+          "source_locator": "PMDA Suglat CTD 2.7.6 (K101) p.50, Table 2.7.6.3-3 '未変化体の血漿中薬物動態パラメータの平均値（標準偏差）：第一部（単回経口投与，空腹時）', 3 mg column, Cmax row (Source: CL-0101 CSR Table 8-1)",
+          "first_pass_verification": "verified",
+          "source_uncertainty": "low"
+        },
+        {
+          "arm_id": "frdb_10339",
+          "dose_mg": 10.0,
+          "observed_cmax": 174.34,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 174.34,
+          "observed_cmax_mg_l": 0.17434,
+          "cmax_statistic": "arithmetic mean (SD 14.26)",
+          "source_url": "https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009_K101_1.pdf#page=50",
+          "full_text_url_used": null,
+          "source_access_status": "open PMDA CTD Module 2.7.6 PDF read (p.50); formulation from CTD 2.7.2 study table (K100 p.~15)",
+          "source_locator": "PMDA Suglat CTD 2.7.6 (K101) p.50, Table 2.7.6.3-3 '未変化体の血漿中薬物動態パラメータの平均値（標準偏差）：第一部（単回経口投与，空腹時）', 10 mg column, Cmax row (Source: CL-0101 CSR Table 8-1)",
+          "first_pass_verification": "verified",
+          "source_uncertainty": "low"
+        },
+        {
+          "arm_id": "frdb_10340",
+          "dose_mg": 30.0,
+          "observed_cmax": 523.63,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 523.63,
+          "observed_cmax_mg_l": 0.52363,
+          "cmax_statistic": "arithmetic mean (SD 103.36)",
+          "source_url": "https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009_K101_1.pdf#page=50",
+          "full_text_url_used": null,
+          "source_access_status": "open PMDA CTD Module 2.7.6 PDF read (p.50); formulation from CTD 2.7.2 study table (K100 p.~15)",
+          "source_locator": "PMDA Suglat CTD 2.7.6 (K101) p.50, Table 2.7.6.3-3 '未変化体の血漿中薬物動態パラメータの平均値（標準偏差）：第一部（単回経口投与，空腹時）', 30 mg column, Cmax row (Source: CL-0101 CSR Table 8-1)",
+          "first_pass_verification": "verified",
+          "source_uncertainty": "low"
+        },
+        {
+          "arm_id": "frdb_10341",
+          "dose_mg": 100.0,
+          "observed_cmax": 1392.39,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 1392.39,
+          "observed_cmax_mg_l": 1.39239,
+          "cmax_statistic": "arithmetic mean (SD 422.99)",
+          "source_url": "https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009_K101_1.pdf#page=50",
+          "full_text_url_used": null,
+          "source_access_status": "open PMDA CTD Module 2.7.6 PDF read (p.50); formulation from CTD 2.7.2 study table (K100 p.~15)",
+          "source_locator": "PMDA Suglat CTD 2.7.6 (K101) p.50, Table 2.7.6.3-3 '未変化体の血漿中薬物動態パラメータの平均値（標準偏差）：第一部（単回経口投与，空腹時）', 100 mg column, Cmax row (Source: CL-0101 CSR Table 8-1)",
+          "first_pass_verification": "verified",
+          "source_uncertainty": "low"
+        },
+        {
+          "arm_id": "frdb_10342",
+          "dose_mg": 300.0,
+          "observed_cmax": 3421.41,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 3421.41,
+          "observed_cmax_mg_l": 3.42141,
+          "cmax_statistic": "arithmetic mean (SD 690.45)",
+          "source_url": "https://www.pmda.go.jp/drugs/2013/P201300172/800126000_22600AMX00009_K101_1.pdf#page=50",
+          "full_text_url_used": null,
+          "source_access_status": "open PMDA CTD Module 2.7.6 PDF read (p.50); formulation from CTD 2.7.2 study table (K100 p.~15)",
+          "source_locator": "PMDA Suglat CTD 2.7.6 (K101) p.50, Table 2.7.6.3-3 '未変化体の血漿中薬物動態パラメータの平均値（標準偏差）：第一部（単回経口投与，空腹時）', 300 mg column, Cmax row (Source: CL-0101 CSR Table 8-1)",
+          "first_pass_verification": "verified",
+          "source_uncertainty": "low for value; FRDB n=6 vs source PK N=5"
+        }
+      ]
+    },
+    {
+      "position": 173,
+      "candidate_id": "613",
+      "name": "EPRISTERIDE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_1468"
+      ],
+      "rationale": "Abstract only; Cmax, fasting, dosage form unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 174,
+      "candidate_id": "811",
+      "name": "LOPRAZOLAM",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_1763",
+        "frdb_1764"
+      ],
+      "rationale": "Overnight-fasted healthy young/elderly plasma arms (food at 4 h), but dosage form is not stated and loprazolam is marketed as the mesilate with unstated dose basis.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_1763",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (dosage form unknown; salt basis)"
+        },
+        {
+          "arm_id": "frdb_1764",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (dosage form unknown; salt basis)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 175,
+      "candidate_id": "2070",
+      "name": "BUNAZOSIN",
+      "disposition": "exclude",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_4683",
+        "frdb_4684"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_4683": "sustained-release Bunazosin Retard",
+        "frdb_4684": "sustained-release Bunazosin Retard"
+      },
+      "unresolved_arm_ids": [],
+      "rationale": "Not IR.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 176,
+      "candidate_id": "6752",
+      "name": "ASIMADOLINE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_6949",
+        "frdb_6950",
+        "frdb_6951"
+      ],
+      "rationale": "Fasted healthy-male plasma parent arms, but dosage form and salt basis are not stated; unknown dosage form stays unresolved.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_6949",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (dosage form unknown)"
+        },
+        {
+          "arm_id": "frdb_6950",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (dosage form unknown)"
+        },
+        {
+          "arm_id": "frdb_6951",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (dosage form unknown)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 177,
+      "candidate_id": "8912",
+      "name": "RADIPRODIL",
+      "disposition": "include",
+      "included_arm_ids": [
+        "frdb_8833"
+      ],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [],
+      "rationale": "Single 30 mg oral suspension (ordinary liquid = IR) after >=12 h fast in healthy adults, venous plasma parent geometric mean.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_8833",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "include",
+          "note": "verified_with_caveat->include (oral suspension = IR)"
+        }
+      ],
+      "included_arm_evidence": [
+        {
+          "arm_id": "frdb_8833",
+          "dose_mg": 30.0,
+          "observed_cmax": 89.4,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 89.4,
+          "observed_cmax_mg_l": 0.0894,
+          "cmax_statistic": "geometric mean (geoCV 28.6%), n=10",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6349788/",
+          "full_text_url_used": null,
+          "source_access_status": "open access full text (PMC6349788) read incl. Table 1",
+          "source_locator": "Pharmacol Res Perspect 2019;7(1):e00459, Table 1, 'Conventional venous blood sampling (n=10)' column, Cmax row",
+          "first_pass_verification": "verified_with_caveat",
+          "source_uncertainty": "low"
+        }
+      ]
+    },
+    {
+      "position": 178,
+      "candidate_id": "408",
+      "name": "BUCILLAMINE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_909"
+      ],
+      "rationale": "Abstract only; Cmax, fasting, dosage form, free vs total thiol unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 179,
+      "candidate_id": "2916",
+      "name": "TIROPRAMIDE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_6376"
+      ],
+      "rationale": "Abstract only; test/reference mapping, salt basis, Cmax unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 180,
+      "candidate_id": "31699",
+      "name": "HM-30181",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_10815",
+        "frdb_10816",
+        "frdb_10819"
+      ],
+      "rationale": "Abstract only; per-dose Cmax, fasting, dosage form, mesylate salt basis unverified.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 181,
+      "candidate_id": "2147",
+      "name": "PRIDINOL",
+      "disposition": "include",
+      "included_arm_ids": [
+        "frdb_4823"
+      ],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [],
+      "rationale": "Explicit IR tablet, 4 mg pridinol mesylate stated as 3 mg pridinol base (active-moiety match), 8 h fast, healthy adults, plasma parent; test-product median (labelled; mean/gmean also reported for same-statistic sensitivity).",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": [
+        {
+          "arm_id": "frdb_4823",
+          "dose_mg": 3.0,
+          "observed_cmax": 31.04,
+          "observed_cmax_unit": "ng/mL",
+          "observed_cmax_raw": 31.04,
+          "observed_cmax_mg_l": 0.03104,
+          "cmax_statistic": "median (range 10.64-55.94), N=33, test product; same arm arithmetic mean 30.71 (SD 9.34), geometric mean 29.27 (CV 33.47%). Reference product: median 27.45, mean 28.76, gmean 27.44 (not an FRDB arm). Statistic choice (median, matching the FRDB AUC/t1/2 mapping) needs coordinator adjudication.",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8167741/",
+          "full_text_url_used": null,
+          "source_access_status": "open PMC full text read (Methods, Results, Table 2)",
+          "source_locator": "Int J Clin Pharmacol Ther 2021;59(6):471-477, Table 2 'Descriptive statistics of pharmacokinetic parameters of pridinol (per-protocol set, N = 33)', Cmax column, Test",
+          "first_pass_verification": "verified",
+          "source_uncertainty": "low"
+        }
+      ]
+    },
+    {
+      "position": 182,
+      "candidate_id": "393",
+      "name": "ACTARIT",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_821"
+      ],
+      "rationale": "Fasted healthy-male plasma row from the current IF revision, free-acid dose, but the food-effect study's dosage form is not stated (only the IF product is a tablet).",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_821",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (study dosage form unstated)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 183,
+      "candidate_id": "8748",
+      "name": "LERSIVIRINE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_8714",
+        "frdb_8715"
+      ],
+      "rationale": "500 mg ADME arm abstract-only; 2400 mg TQT arm (8 h fast, geometric mean) has no stated dosage form.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_8715",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (dosage form unknown)"
+        }
+      ],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 184,
+      "candidate_id": "732",
+      "name": "SULFAMETHOXYPYRIDAZINE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [],
+      "excluded_arm_reasons": {},
+      "unresolved_arm_ids": [
+        "frdb_1635"
+      ],
+      "rationale": "No abstract; nothing verifiable; free vs total sulfonamide unknown.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 185,
+      "candidate_id": "2875",
+      "name": "BUTRIPTYLINE",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_6312"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_6312": "sustained-release tablet"
+      },
+      "unresolved_arm_ids": [
+        "frdb_6311"
+      ],
+      "rationale": "Conventional-tablet arm abstract-only (fasting, health, statistic unverified) and dosed as butriptyline hydrochloride salt.",
+      "overridden_first_pass_statuses": [],
+      "included_arm_evidence": []
+    },
+    {
+      "position": 186,
+      "candidate_id": "2063",
+      "name": "FAROPENEM",
+      "disposition": "unresolved",
+      "included_arm_ids": [],
+      "excluded_arm_ids": [
+        "frdb_4649"
+      ],
+      "excluded_arm_reasons": {
+        "frdb_4649": "identical cohort to frdb_4644 (same fasted 300 mg values); first frozen ID kept"
+      },
+      "unresolved_arm_ids": [
+        "frdb_4643",
+        "frdb_4644",
+        "frdb_4645"
+      ],
+      "rationale": "Fasted healthy plasma arms with potency (free-acid) doses, but the PK study dosage form is not stated in the IF text (tablet inferred only from the IF cover); cited revision substituted.",
+      "overridden_first_pass_statuses": [
+        {
+          "arm_id": "frdb_4643",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (study dosage form unstated)"
+        },
+        {
+          "arm_id": "frdb_4644",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (study dosage form unstated)"
+        },
+        {
+          "arm_id": "frdb_4645",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "unresolved",
+          "note": "verified_with_caveat->unresolved (study dosage form unstated)"
+        },
+        {
+          "arm_id": "frdb_4649",
+          "first_pass": "verified_with_caveat",
+          "adjudicated": "exclude",
+          "note": "verified_with_caveat->exclude"
+        }
+      ],
+      "included_arm_evidence": []
+    }
+  ]
+}

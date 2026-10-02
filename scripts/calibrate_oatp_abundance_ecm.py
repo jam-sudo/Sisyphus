@@ -44,8 +44,8 @@ from sisyphus.predict.transporter_db import (  # noqa: E402
 _PHYS = ROOT / "data" / "physiology" / "reference_man.yaml"
 _OUT = ROOT / "data" / "validation" / "oatp_ecm_abundance_calibration.json"
 _PRAVA_SMILES = (
-    "CC[C@@H](C)C(=O)O[C@@H]1C[C@H](C=C2[C@@H]1CC[C@H]"
-    "([C@@H]2CC[C@H](C[C@H](CC(=O)O)O)O)C)O"
+    "CC[C@H](C)C(=O)O[C@H]1C[C@@H](C=C2[C@H]1"
+    "[C@H]([C@H](C=C2)C)CC[C@H](C[C@H](CC(=O)O)O)O)O"
 )
 _OBS_CMAX = 0.045  # mg/L, 40 mg oral pravastatin (FDA label)
 

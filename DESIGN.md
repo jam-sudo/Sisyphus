@@ -17,7 +17,7 @@
 > - Method dispatch SBI / IBIS / IS / EnKF for TDM (P6, 2026-04-19) — `regimen/` + `sbi/` modules
 > - Mean-only deterministic realization (Hardening, 2026-05-01)
 > - **FLUX-1 flow-limitation double-count fix + RBP-2 blood:plasma basis** (2026-06-04) — corrected hepatic/gut extraction physics; engine contract hardening (fail-loud fu-correction, real parallel-tube via `graph/axial.py`, JAX↔SciPy parity) (2026-06-07)
-> - **Split-conformal user-facing 90% Cmax prediction interval** (2026-06-04) replacing the under-covering MC interval
+> - **Development-residual 90% Cmax band** (2026-06-04; reclassified 2026-07-14). It is not split-conformal because a fitted component saw calibration outcomes; the separate Monte Carlo interval remains parameter-only.
 > - **MIPD engine-as-prior posterior PK** (`mipd/` module, 2026-06-09 → 06-12): the engine repositioned as a structural prior that sparse measured observations update via SIR — posterior PK, steady-state IV TDM, CrCl/weight/age covariate individualization, target-attainment dose recommendation. Charter: `docs/_internal/specs/2026-06-09-engine-as-prior-mipd-charter.md`
 > - New top-level modules not in the tree below: `regimen/`, `sbi/`, `mipd/`, `ddi.py`, `pkpd.py`
 >

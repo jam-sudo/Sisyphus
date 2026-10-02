@@ -3,7 +3,6 @@ outcome: the axial machinery composes with the active-metabolite species (spatia
 convected, mass-conserving), and the Damkohler map is monotone (convection matters at low Da,
 local/post-processor-correct at high Da). Stack-independent assertions only."""
 import importlib.util
-import json
 from pathlib import Path
 
 _ROOT = Path(__file__).resolve().parents[2]
@@ -18,6 +17,8 @@ def _load():
 
 
 spike = _load()
+_CACHE = _ROOT / "data" / "training" / "4track_holdout_predictions.json"
+_CACHE_BEFORE = _CACHE.read_bytes()
 _R = spike.run()  # engine solves are slow; compute once, all tests read from this
 
 
@@ -50,6 +51,4 @@ def test_da_map_monotone_decreasing():
 
 
 def test_headline_isolation_unchanged():
-    p = _ROOT / "data" / "training" / "4track_holdout_predictions.json"
-    d = json.loads(p.read_text())
-    assert abs(d["overall"]["meta"]["aafe"] - 2.743) < 5e-3
+    assert _CACHE.read_bytes() == _CACHE_BEFORE

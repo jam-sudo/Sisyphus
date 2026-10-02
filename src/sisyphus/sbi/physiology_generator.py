@@ -31,10 +31,11 @@ from sisyphus.graph.body import BodyGraph
 from sisyphus.graph.builder import build_from_yaml
 from sisyphus.graph.types import DiffusionEdge, FlowEdge
 from sisyphus.physiology import correlation_registry
+from sisyphus.resources import get_resource_config
 
 logger = logging.getLogger(__name__)
 
-_DEFAULT_YAML = Path("data/physiology/reference_man.yaml")
+_DEFAULT_YAML = get_resource_config().data("physiology", "reference_man.yaml")
 
 # ---------------------------------------------------------------------------
 # Enzyme maturation / aging parameters
