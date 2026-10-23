@@ -21,8 +21,18 @@ def test_public_cmax_fitted_rows_and_artifact_are_pinned():
     with DATASET.open(newline="") as handle:
         fitted = list(csv.DictReader(handle))
     assert sha256(SOURCE) == SOURCE_SHA
-    assert fitted == training_rows()
-    assert len(fitted) == 906
+    regenerated = training_rows()
+    assert len(regenerated) == len(fitted) == 906
+    for row, expected in zip(fitted, regenerated, strict=True):
+        # np.log10 can differ by one ULP between numerics stacks (macOS arm64
+        # vs Linux x86_64 CI), so the derived log column is compared numerically.
+        row, expected = dict(row), dict(expected)
+        assert math.isclose(
+            float(row.pop("log_cmax_per_dose")),
+            float(expected.pop("log_cmax_per_dose")),
+            rel_tol=1e-12,
+        )
+        assert row == expected
     blood_names = {
         "indapamide", "cyclosporine", "everolimus", "tacrolimus", "pimecrolimus", "voclosporin",
     }
