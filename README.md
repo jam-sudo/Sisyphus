@@ -2,36 +2,26 @@
 
 # Sisyphus
 
-**A topology-compiled PBPK platform for structure-only oral C<sub>max</sub> prediction**
+**Structure-only oral C<sub>max</sub> prediction on a topology-compiled PBPK engine**
 
-The human body as a typed directed multi-graph &middot; ODEs derived from topology &middot; uncertainty as a native type
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/figures/hero-dark.svg">
+  <img src="docs/figures/hero-light.svg" width="100%" alt="The reference body graph, with blood pools, organs, portal circulation, and GI lumen joined by typed edges, is compiled into one ODE system with a flux term per edge. Solving it for 200 Monte Carlo draws gives a caffeine plasma concentration curve with a 5 to 95 percent band and its Cmax.">
+</picture>
 
 [![CI](https://github.com/jam-sudo/Sisyphus/actions/workflows/ci.yml/badge.svg)](https://github.com/jam-sudo/Sisyphus/actions/workflows/ci.yml)
 [![Preprint](https://img.shields.io/badge/preprint-ChemRxiv-1f6feb)](https://doi.org/10.26434/chemrxiv.15004452/v1)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776ab)](pyproject.toml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-2ea44f)](LICENSE)
 
-[Overview](#overview) &middot; [Quickstart](#quickstart) &middot; [Method](#method) &middot; [Evidence](#evidence) &middot; [Architecture](#architecture) &middot; [Limitations](#limitations) &middot; [Citation](#citation)
+[Overview](#overview)&emsp;[Quickstart](#quickstart)&emsp;[Method](#method)&emsp;[Evidence](#evidence)&emsp;[Architecture](#architecture)&emsp;[Limitations](#limitations)&emsp;[Citation](#citation)
 
 </div>
 
----
-
-Sisyphus predicts oral C<sub>max</sub> from a canonical parent SMILES and dose. Its mechanistic core is a physiologically based pharmacokinetic (PBPK) engine that represents the body as a typed directed multi-graph &mdash; organs as nodes; blood flow, GI transit, absorption, and clearance as typed edges &mdash; and compiles that graph into an ordinary differential equation (ODE) system. Every physiological and drug parameter is a probability distribution, so Monte Carlo prediction intervals are the engine's native output. A meta-learner blends the engine with three data-driven tracks into the production C<sub>max</sub> estimate.
-
-| At a glance | |
-|:--|:--|
-| **Input** | Canonical parent SMILES + oral parent-active-moiety dose (mg) |
-| **Output** | C<sub>max</sub> (mg/L) with a development-residual 90% interval |
-| **Core** | 34-compartment body graph &rarr; auto-derived ODE system &rarr; LSODA, with Monte Carlo over `Distribution`-valued parameters |
-| **Evidence** | Retrospective development AAFE 2.830 (N=73); no independent external holdout yet |
-| **Intended use** | Screening, ranking, and uncertainty-aware triage &mdash; **not** dose setting |
+Sisyphus predicts the peak plasma concentration (C<sub>max</sub>) of an oral drug from its structure and dose. The body is modeled as a typed directed graph: organs are nodes, and blood flow, portal drainage, GI transit, absorption, and clearance are edges. The engine compiles that graph into an ODE system and treats every parameter as a probability distribution; a meta-learner then blends the engine with three data-driven tracks into the production estimate.
 
 > [!IMPORTANT]
-> **Evidence status.** Sisyphus targets oral structure-only Cmax prediction when measured ADME is unavailable. On the repeatedly accessed retrospective **development benchmark**, Meta AAFE is 2.830 [bootstrap 95% CI 2.30&ndash;3.52, N=73 scored]. This is not an independent holdout result: the original 107-compound cohort has informed repeated system-selection decisions. A source-adjudicated diagnostic P0 pilot on 18 compounds, scored with an earlier model, found Meta AAFE **3.34**, compared with **3.01** for direct ML; its labels were AI-assisted, historical VDss training membership is unverified, and it does not establish Meta superiority. The current system has **no unconsumed independently curated external holdout AAFE**. Error of this scale and the wide development-residual interval (&divide;&times;~10.65-fold; 90.4% coverage on the repeatedly used development set) restrict the tool to screening, ranking, and uncertainty-aware triage, not dose setting.
-
-> [!NOTE]
-> The published v1 preprint and archived `Sisyphus_Preprint.pdf` report an older AAFE of 2.698. The current code's source-screened development benchmark is 2.830 on 73 scored compounds; the value comes from a different model and reference set. Use [Evidence](#evidence) for current results.
+> Current evidence is a repeatedly accessed retrospective development benchmark (Meta AAFE 2.830, N=73), not an independent holdout. Use Sisyphus for screening, ranking, and uncertainty-aware triage, not dose setting. Details are under [Evidence](#evidence).
 
 ## Overview
 
@@ -346,6 +336,8 @@ effect = compute_effect(sim_result, PDModel(ke0=0.5, emax=100.0, ec50=0.05, hill
 
 ## Evidence
 
+Sisyphus targets oral structure-only Cmax prediction when measured ADME is unavailable. On the repeatedly accessed retrospective **development benchmark**, Meta AAFE is 2.830 [bootstrap 95% CI 2.30&ndash;3.52, N=73 scored]. This is not an independent holdout result: the original 107-compound cohort has informed repeated system-selection decisions. A source-adjudicated diagnostic P0 pilot on 18 compounds, scored with an earlier model, found Meta AAFE **3.34**, compared with **3.01** for direct ML; its labels were AI-assisted, historical VDss training membership is unverified, and it does not establish Meta superiority. The current system has **no unconsumed independently curated external holdout AAFE**. Error of this scale and the wide development-residual interval (&divide;&times;~10.65-fold; 90.4% coverage on the repeatedly used development set) restrict the tool to screening, ranking, and uncertainty-aware triage, not dose setting.
+
 Each evaluation is listed with the model it scored and its consumption status, including unfavorable results.
 
 | Evaluation | N | Meta AAFE | Direct-ML AAFE | Status |
@@ -613,6 +605,8 @@ Sisyphus inherits curated data assets from its predecessor, [Omega PBPK](https:/
 Three Omega findings shaped the design: **data quality dominates model choice** (14 reference corrections reduced AAFE by 47.5% with no model changes); **gut CL<sub>int</sub> matters more than hepatic CL<sub>int</sub> for C<sub>max</sub>** (Sobol total-order indices 0.47 vs 0.00); and **a meta-learner beats a fixed ensemble** (feature importance: ML C<sub>max</sub> 50%, PBPK C<sub>max</sub> 26%).
 
 ## Citation
+
+The published v1 preprint and archived `Sisyphus_Preprint.pdf` report an older AAFE of 2.698. The current code's source-screened development benchmark is 2.830 on 73 scored compounds; the value comes from a different model and reference set. Use [Evidence](#evidence) for current results.
 
 If you use Sisyphus in your research, please cite the preprint:
 
