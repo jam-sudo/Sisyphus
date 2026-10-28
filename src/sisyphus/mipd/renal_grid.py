@@ -206,7 +206,7 @@ def build_renal_cl_grid(
     auc = _fill_nan_log_s(np.array(aucs), r_grid)
     conc = _nearest_finite_backfill(np.array(conc_rows))
     if t_half_h is not None:
-        is_ss = is_ss and t_total >= 5.0 * t_half_h
+        is_ss = is_ss and last + tau >= 5.0 * t_half_h
     return RenalCLGrid(
         r_grid=r_grid, t_grid=t_grid, conc=conc, cmax=cmax, auc=auc,
         is_steady_state=is_ss, t_half_h=t_half_h,
