@@ -101,7 +101,7 @@ class Distribution:
 @dataclass(frozen=True)
 class TissueComposition:
     """Fractional tissue composition used for tissue:plasma partition
-    coefficient (Kp) estimation via Rodgers & Rowland or Berezhkovskiy.
+    coefficient (Kp) estimation via R&R-derived or Berezhkovskiy methods.
 
     All fractions are dimensionless (volume fraction of wet tissue weight).
 
@@ -283,6 +283,7 @@ class DrugOnGraph:
     # Empty = linear (current behaviour). Vmax_i = abundance_i * affinity_i * Km_i emerges
     # implicitly; the well_stirred flux multiplies enzyme i's CLint by 1/(1 + C_u/Km_i).
     enzyme_km: dict[str, Distribution] = field(default_factory=dict)
+    pka_secondary: float | None = None
 
     def __post_init__(self) -> None:
         if self.observation_species not in ("parent", "active"):
@@ -317,6 +318,7 @@ class DrugOnGraph:
             administration_node=self.administration_node,
             mw=self.mw,
             pka=self.pka,
+            pka_secondary=self.pka_secondary,
             compound_type=self.compound_type,
             particle_radius_um=self.particle_radius_um,
             fup=Distribution(mean=self.fup.sample(rng), cv=0.0),
@@ -390,6 +392,7 @@ class DrugOnGraph:
             administration_node=self.administration_node,
             mw=self.mw,
             pka=self.pka,
+            pka_secondary=self.pka_secondary,
             compound_type=self.compound_type,
             particle_radius_um=self.particle_radius_um,
             fup=Distribution(mean=self.fup.mean, cv=0.0),

@@ -2,7 +2,7 @@
 
 Translates ADME properties into DrugOnGraph parameters:
 1. CLint decomposition into per-enzyme affinities
-2. Kp calculation via Rodgers & Rowland (2005/2006)
+2. R&R-derived Kp approximation (Rodgers et al. 2005; Rodgers & Rowland 2006)
 3. Renal clearance estimation
 4. DrugOnGraph assembly
 
@@ -125,9 +125,8 @@ _FM_ADJUSTMENTS: dict[str, dict[str, float]] = {
 }
 
 # ---------------------------------------------------------------------------
-# Tissue compositions for Kp calculation (Rodgers & Rowland)
-# Source: Rodgers & Rowland (2006), Table 1
-# Standard literature values — these do not change.
+# Aggregated tissue compositions for the R&R-derived Kp approximation.
+# Source: Rodgers & Rowland (2006), Table 1; water and phospholipid pools are combined.
 # ---------------------------------------------------------------------------
 
 # Plasma composition
@@ -152,7 +151,7 @@ _TISSUE_COMPOSITIONS: dict[str, TissueComposition] = {
     "skin_tissue": TissueComposition(fn=0.0284, fp=0.0111, fw=0.718, pH=7.0),
 }
 
-# CV for Kp predictions (moderate — the R&R equations are well-validated)
+# CV for Kp predictions under the aggregated-composition approximation
 _KP_CV = 0.4
 
 
@@ -365,8 +364,9 @@ def _compute_kp_rodgers_rowland(
     compound_type: str,
     tissue_comp: TissueComposition,
     plasma_comp: TissueComposition,
+    pka_secondary: float | None = None,
 ) -> float:
-    """Compute tissue:plasma partition coefficient using Rodgers & Rowland.
+    """Compute an R&R-derived tissue:plasma partition approximation.
 
     For neutrals:
         Kp = (fw_t + fn_t*P + fp_t*(0.3P+0.7)) / (fw_p + fn_p*P + fp_p*(0.3P+0.7))
@@ -375,11 +375,15 @@ def _compute_kp_rodgers_rowland(
 
     For bases: adds phospholipid binding correction for cationic species.
 
-    Source: Rodgers & Rowland, Pharm Res (2005) 22:1495; (2006) 23:56.
+    Uses total water and phospholipid fractions, omitting the published
+    extracellular/intracellular split and acidic-phospholipid affinity.
+    Source: Rodgers et al., J Pharm Sci 94:1259 (2005), eqs. 18-20;
+    Rodgers & Rowland, J Pharm Sci 95:1238 (2006), eqs. 9-14.
 
     Args:
         logp: Octanol-water partition coefficient.
-        pka: Dissociation constant. None for neutrals.
+        pka: Basic pKa for zwitterions; only pKa for other ionized classes.
+        pka_secondary: Acidic pKa for zwitterions, if available.
         compound_type: "neutral", "acid", "base", "zwitterion".
         tissue_comp: Tissue composition fractions.
         plasma_comp: Plasma composition fractions.
@@ -402,6 +406,19 @@ def _compute_kp_rodgers_rowland(
         ion_ratio = (1.0 + 10 ** (tissue_comp.pH - pka)) / (1.0 + 10 ** (plasma_comp.pH - pka))
         kp_num = tissue_comp.fw * ion_ratio + _lipid_partition(tissue_comp, d_tissue)
         kp_den = plasma_comp.fw + _lipid_partition(plasma_comp, d_plasma)
+        kp = kp_num / kp_den if kp_den > 0 else 1.0
+
+    elif compound_type == "zwitterion" and pka_secondary is not None:
+        # 2006 eq. 10 ionization terms X/Y: both acidic and basic centres.
+        ion_tissue = 1.0 + 10 ** (tissue_comp.pH - pka_secondary) + 10 ** (pka - tissue_comp.pH)
+        ion_plasma = 1.0 + 10 ** (plasma_comp.pH - pka_secondary) + 10 ** (pka - plasma_comp.pH)
+        ion_ratio = ion_tissue / ion_plasma
+        kp_num = (
+            tissue_comp.fw * ion_ratio
+            + _lipid_partition(tissue_comp, p / ion_tissue)
+            + tissue_comp.fp * max(ion_ratio - 1.0, 0.0)
+        )
+        kp_den = plasma_comp.fw + _lipid_partition(plasma_comp, p / ion_plasma)
         kp = kp_num / kp_den if kp_den > 0 else 1.0
 
     elif compound_type in ("base", "zwitterion"):
@@ -516,6 +533,7 @@ def _compute_all_kp(
     compound_type: str,
     kp_method: str = "rodgers_rowland",
     fup: float | None = None,
+    pka_secondary: float | None = None,
 ) -> dict[str, Distribution]:
     """Compute Kp for all tissues.
 
@@ -526,6 +544,7 @@ def _compute_all_kp(
         kp_method: Kp calculation method. One of "rodgers_rowland",
             "poulin_theil", "berezhkovskiy" (R&R + BZ correction).
         fup: Fraction unbound in plasma (required for "berezhkovskiy").
+        pka_secondary: Acidic pKa for zwitterions when available.
 
     Returns:
         Dict mapping tissue name -> Kp as Distribution.
@@ -538,7 +557,10 @@ def _compute_all_kp(
 
     kp_overrides: dict[str, Distribution] = {}
     for tissue_name, tissue_comp in _TISSUE_COMPOSITIONS.items():
-        kp = kp_fn(logp, pka, compound_type, tissue_comp, _PLASMA_COMP)
+        if base_method == "rodgers_rowland" and pka_secondary is not None:
+            kp = kp_fn(logp, pka, compound_type, tissue_comp, _PLASMA_COMP, pka_secondary)
+        else:
+            kp = kp_fn(logp, pka, compound_type, tissue_comp, _PLASMA_COMP)
         if use_bz and fup is not None:
             kp = _apply_bz_correction(kp, fup)
             kp = float(np.clip(kp, 0.01, 50.0))
@@ -811,6 +833,7 @@ def build_drug_on_graph(
         kp_overrides = _compute_all_kp(
             profile.logp, profile.pka, profile.compound_type,
             kp_method=kp_method, fup=adme.fup.mean,
+            pka_secondary=profile.pka_secondary,
         )
         if measured_kp:
             kp_overrides.update(measured_kp)
@@ -847,6 +870,7 @@ def build_drug_on_graph(
         administration_node=admin_node,
         mw=profile.mw,
         pka=profile.pka,
+        pka_secondary=profile.pka_secondary,
         compound_type=profile.compound_type,
         fup=adme.fup,
         rbp=adme.rbp,

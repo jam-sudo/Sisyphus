@@ -153,6 +153,7 @@ class MolecularProfile:
         mw: Molecular weight (g/mol).
         logp: Octanol-water partition coefficient (log units).
         pka: Dissociation constant.  ``None`` for neutral compounds.
+        pka_secondary: Acidic pKa for zwitterions; ``None`` otherwise.
         compound_type: ``"neutral"``, ``"acid"``, ``"base"``, ``"zwitterion"``.
         hbd: Hydrogen bond donors.
         hba: Hydrogen bond acceptors.
@@ -173,6 +174,7 @@ class MolecularProfile:
     rotatable_bonds: int
     in_ad: bool
     ad_flags: tuple[str, ...]
+    pka_secondary: float | None = None  # acidic centre when pka is the basic centre
 
 
 # ---------------------------------------------------------------------------
@@ -378,6 +380,9 @@ def compute_profile(smiles: str) -> MolecularProfile:
         pka, compound_type = _classify_from_pka(db_pka[0], db_pka[1])
     else:
         pka, compound_type = _estimate_pka_type(mol, logp)
+    pka_secondary = (
+        db_pka[0] if db_pka is not None else _DEFAULT_PKA["acid"]
+    ) if compound_type == "zwitterion" else None
 
     # _check_ad uses the local `logp` which may be overridden — correct per spec
     ad_flags = _check_ad(mol, mw, logp, tpsa)
@@ -398,4 +403,5 @@ def compute_profile(smiles: str) -> MolecularProfile:
         rotatable_bonds=rotatable_bonds,
         in_ad=len(ad_flags) == 0,
         ad_flags=tuple(ad_flags),
+        pka_secondary=pka_secondary,
     )

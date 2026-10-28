@@ -135,6 +135,29 @@ class TestADME:
 
 
 class TestIVIVE:
+    def test_zwitterion_kp_uses_both_pka_values(self):
+        from sisyphus.core import TissueComposition
+        from sisyphus.predict.ivive import _compute_kp_rodgers_rowland
+
+        tissue = TissueComposition(fn=0.01, fp=0.02, fw=0.7, pH=7.0)
+        plasma = TissueComposition(fn=0.002, fp=0.02, fw=0.945, pH=7.4)
+        kp = _compute_kp_rodgers_rowland(1.0, 9.5, "zwitterion", tissue, plasma, 4.0)
+        changed_acid = _compute_kp_rodgers_rowland(1.0, 9.5, "zwitterion", tissue, plasma, 6.0)
+        assert kp != changed_acid
+        assert kp > 0
+
+    def test_zwitterion_secondary_pka_reaches_drug_and_point_copy(self):
+        import numpy as np
+
+        from sisyphus.predict.adme import predict_adme
+        from sisyphus.predict.ivive import build_drug_on_graph
+
+        profile = compute_profile("NCC(=O)O")
+        drug = build_drug_on_graph(profile, predict_adme(profile), dose_mg=10.0)
+        assert drug.pka_secondary == profile.pka_secondary
+        assert drug.realize_means().pka_secondary == profile.pka_secondary
+        assert drug.sample(np.random.default_rng(1)).pka_secondary == profile.pka_secondary
+
     def test_build_drug_on_graph(self):
         from sisyphus.predict.adme import predict_adme
         from sisyphus.predict.ivive import build_drug_on_graph
