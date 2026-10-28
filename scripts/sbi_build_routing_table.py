@@ -13,7 +13,7 @@ when the user passes ``--method auto``.
 Usage::
 
     python scripts/sbi_build_routing_table.py \\
-        --sbc data/validation/sbi_sbc_multi_drug.json \\
+        --sbc data/validation/sbi_sbc_multi_drug_v2.json \\
         --out data/sbi/method_routing.json
 """
 
@@ -36,7 +36,7 @@ BORDERLINE_COVERAGE = 0.15
 def main() -> None:
     p = argparse.ArgumentParser()
     p.add_argument("--sbc", type=Path,
-                   default=ROOT / "data" / "validation" / "sbi_sbc_multi_drug.json")
+                   default=ROOT / "data" / "validation" / "sbi_sbc_multi_drug_v2.json")
     p.add_argument("--out", type=Path,
                    default=ROOT / "data" / "sbi" / "method_routing.json")
     p.add_argument("--default", default="ibis",
@@ -45,6 +45,7 @@ def main() -> None:
 
     with open(args.sbc) as f:
         sbc = json.load(f)
+    existing = json.loads(args.out.read_text()) if args.out.exists() else {}
 
     routes: dict[str, str] = {}
     reasons: dict[str, dict] = {}
@@ -72,6 +73,11 @@ def main() -> None:
             "coverage_max_deviation": cov_dev,
             "ks_pvalues": ks,
         }
+        override = existing.get("reasons", {}).get(name, {}).get("tdm_bias_override")
+        if override is not None:
+            reasons[name]["tdm_bias_override"] = override
+
+    reweight = existing.get("sbi_reweight", {})
 
     payload = {
         "source": str(args.sbc.resolve().relative_to(ROOT)),
@@ -90,7 +96,10 @@ def main() -> None:
             "sbi": sbi_count,
             "ibis": ibis_count,
             "total": len(routes),
+            "is": 0,
+            "sbi_reweight_drugs": sum(bool(value) for value in reweight.values()),
         },
+        "sbi_reweight": reweight,
         "routes": routes,
         "reasons": reasons,
     }
@@ -104,7 +113,10 @@ def main() -> None:
     print()
     for name, data in reasons.items():
         mark = "✓" if data["method"] == "sbi" else "✗"
-        print(f"  {mark} {name:<15s}  {data['method']:<5s}  cov_dev={data['coverage_max_deviation']:.3f}  ({data['reason']})")
+        print(
+            f"  {mark} {name:<15s}  {data['method']:<5s}  "
+            f"cov_dev={data['coverage_max_deviation']:.3f}  ({data['reason']})"
+        )
 
 
 if __name__ == "__main__":

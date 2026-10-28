@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import json
 import math
+import sys
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -121,6 +123,22 @@ def test_stale_sbi_model_logs_engine_revision_warning(caplog):
     with caplog.at_level("WARNING"):
         _warn_engine_revision(Path("multi_drug_nsf.pt"))
     assert "Posterior calibration may be stale" in caplog.text
+
+
+def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
+    from scripts.sbi_build_routing_table import main
+
+    root = Path(__file__).resolve().parents[2]
+    out = tmp_path / "method_routing.json"
+    original = json.loads((root / "data/sbi/method_routing.json").read_text())
+    out.write_text(json.dumps(original))
+    monkeypatch.setattr(sys, "argv", ["sbi_build_routing_table", "--out", str(out)])
+    main()
+    rebuilt = json.loads(out.read_text())
+    assert rebuilt["source"] == "data/validation/sbi_sbc_multi_drug_v2.json"
+    assert rebuilt["sbi_reweight"] == original["sbi_reweight"]
+    assert (rebuilt["reasons"]["morphine"]["tdm_bias_override"]
+            == original["reasons"]["morphine"]["tdm_bias_override"])
 
 
 def test_sbi_warns_for_timed_multidose_observation(case, caplog):
