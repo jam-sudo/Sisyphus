@@ -15,7 +15,7 @@ def _yaml_paths() -> list[pathlib.Path]:
     """Return only standalone (non-overlay) physiology YAML files.
 
     Overlay files (sc_overlay.yaml, tumor_overlay.yaml) lack ``cardiac_output``
-    and are merged onto a base graph at runtime — they cannot be loaded via
+    and must be merged onto a base graph — they cannot be loaded via
     ``build_from_yaml`` in isolation.
     """
     root = pathlib.Path(__file__).resolve().parents[2] / "data" / "physiology"

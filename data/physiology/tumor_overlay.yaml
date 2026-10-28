@@ -18,3 +18,9 @@ edges:
   - source: tumor
     target: venous_blood
     type: flow
+
+overrides:
+  edges:
+    # DESIGN.md §4.5: 0.069 rest flow minus 0.005 diverted to tumor.
+    - {source: arterial_blood, target: rest, flow_fraction: 0.064}
+    - {source: rest, target: venous_blood, flow_fraction: 0.064}
