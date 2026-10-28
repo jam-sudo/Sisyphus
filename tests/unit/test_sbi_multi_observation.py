@@ -1,5 +1,6 @@
 """Time-aware SBI context encoding."""
 
+import importlib
 import sys
 from types import SimpleNamespace
 
@@ -34,18 +35,23 @@ def test_pack_observations_rejects_invalid_observations():
         pack_observations([(1.0, 0.02)], DosingRegimen.single_iv(30.0), np.ones(12))
 
 
-def test_sbc_bounds_posterior_sampling_time():
+@pytest.mark.parametrize("module_name", [
+    "sbi_run_sbc_multi_drug",
+    "sbi_run_sbc_hierarchical",
+    "sbi_run_sbc_continuous",
+])
+def test_sbc_bounds_posterior_sampling_time(module_name):
     pytest.importorskip("torch")
-    from scripts.sbi_run_sbc_multi_drug import MAX_SBC_SAMPLE_TIME_S, _coverage_and_ranks
+    module = importlib.import_module(f"scripts.{module_name}")
 
     class StalledPosterior:
         def sample(self, shape, *, x, show_progress_bars, max_sampling_time):
             assert shape == (500,)
-            assert max_sampling_time == MAX_SBC_SAMPLE_TIME_S
+            assert max_sampling_time == module.MAX_SBC_SAMPLE_TIME_S
             raise RuntimeError("sampling timed out")
 
     with pytest.raises(RuntimeError, match="sampling timed out"):
-        _coverage_and_ranks(
+        module._coverage_and_ranks(
             np.zeros((1, 3)), StalledPosterior(), np.zeros((1, 13)), (90,)
         )
 

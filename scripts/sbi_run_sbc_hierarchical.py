@@ -42,9 +42,11 @@ sys.path.insert(0, str(ROOT / "src"))
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 log = logging.getLogger("sbi_sbc_hier")
 
+# Source: sbi DirectPosterior.sample bounds pathological prior-support rejection.
+MAX_SBC_SAMPLE_TIME_S = 30.0
+
 from sisyphus.sbi.amortizer import load_result  # noqa: E402
 from sisyphus.sbi.multi_drug import (  # noqa: E402
-    DrugSpec,
     extract_drug_features,
     load_drug_specs_from_json,
     load_populations,
@@ -69,7 +71,10 @@ def _coverage_and_ranks(
     cov = {level: np.zeros(d_theta, dtype=np.int64) for level in levels}
     for i in range(n_cal):
         x_t = torch.as_tensor(xs_packed[i:i + 1], dtype=torch.float32)
-        samples = posterior.sample((n_posterior,), x=x_t, show_progress_bars=False)
+        samples = posterior.sample(
+            (n_posterior,), x=x_t, show_progress_bars=False,
+            max_sampling_time=MAX_SBC_SAMPLE_TIME_S,
+        )
         s = samples.detach().cpu().numpy()
         for d in range(d_theta):
             ranks[i, d] = int(np.sum(s[:, d] < thetas_true[i, d]))
@@ -202,10 +207,26 @@ def main() -> None:
                 np.tile(pop_oh[None, :], (args.n_calibration, 1)),
             ], axis=1).astype(np.float64)
 
-            ranks, cov_counts = _coverage_and_ranks(
-                thetas_true, result.posterior, xs_packed, levels=levels,
-                n_posterior=args.n_posterior,
-            )
+            try:
+                ranks, cov_counts = _coverage_and_ranks(
+                    thetas_true, result.posterior, xs_packed, levels=levels,
+                    n_posterior=args.n_posterior,
+                )
+            except RuntimeError as exc:
+                log.warning("  posterior sampling failed for %s / %s: %s", pop_name, spec.name, exc)
+                out["pairs"].append({
+                    "population": pop_name,
+                    "drug": spec.name,
+                    "dose_mg": spec.dose_mg,
+                    "ks_stats": [1.0] * 3,
+                    "ks_pvalues": [0.0] * 3,
+                    "coverage": {},
+                    "coverage_max_deviation": 1.0,
+                    "pass": False,
+                    "sampling_error": str(exc),
+                    "elapsed_s": float(time.time() - t0),
+                })
+                continue
 
             ks_stats = np.zeros(3)
             ks_p = np.zeros(3)
