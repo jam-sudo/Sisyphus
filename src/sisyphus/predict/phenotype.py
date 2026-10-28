@@ -12,7 +12,7 @@ Scale factors follow CPIC activity score conventions:
     EM  (Extensive / Normal Function)         — 1.00×
     UM  (Ultra-rapid / Increased Function)    — 2.00×
 
-Supported enzymes: CYP2D6, CYP2C9, CYP2C19, CYP3A5, CYP1A2, CYP2B6.
+Supported CYP enzymes in reference_man.yaml: CYP2D6, CYP2C9, CYP1A2, CYP3A4, CYP2E1.
 Supported transporters: SLCO1B1 (→ OATP1B1 protein). For SLCO1B1,
 Cooper-DeHoff 2022 CPIC labels map as: Normal Function → EM, Decreased
 Function (*1/*5, *1/*15) → IM, Poor Function (*5/*5, *15/*15) → PM,
@@ -83,7 +83,7 @@ def parse_phenotype_spec(spec: str) -> dict[str, str]:
 
     Examples:
         "CYP2D6:PM"                  → {"CYP2D6": "PM"}
-        "CYP2D6:PM,CYP3A5:EM"        → {"CYP2D6": "PM", "CYP3A5": "EM"}
+        "CYP2D6:PM,CYP1A2:EM"        → {"CYP2D6": "PM", "CYP1A2": "EM"}
         "2D6:pm,2c9:im"              → {"CYP2D6": "PM", "CYP2C9": "IM"}
         "SLCO1B1:PM"                 → {"SLCO1B1": "PM"}
         "CYP2D6:PM,SLCO1B1:IM"       → {"CYP2D6": "PM", "SLCO1B1": "IM"}

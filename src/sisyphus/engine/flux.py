@@ -427,8 +427,8 @@ class AbsorptionFluxSpec(FluxSpec):
 
     ``ka = 2.88 * Peff * ka_fraction / particle_radius_um``
 
-    The 2.88 comes from calibration of the effective permeability
-    model to observed absorption rates.
+    The 2.88 is the empirical absorption calibration introduced in commit
+    3b0bb2b (2026-03-22); that commit records no source data or derivation.
     """
 
     @classmethod

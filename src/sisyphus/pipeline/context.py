@@ -17,7 +17,7 @@ from sisyphus.graph.body import BodyGraph
 from sisyphus.predict.phenotype import PhenotypeApplicationReport
 
 if TYPE_CHECKING:
-    from sisyphus.predict.adme import ADMEProperties
+    from sisyphus.predict.adme import ADMEProperties, MeasuredADMEInput
     from sisyphus.predict.chemistry import MolecularProfile
 
 
@@ -46,6 +46,7 @@ def prepare_simulation_context(
     kp_method: str = "rodgers_rowland",
     profile: MolecularProfile | None = None,
     adme: ADMEProperties | None = None,
+    measured_adme: MeasuredADMEInput | None = None,
     base_yaml: Path | None = None,
 ) -> SimulationContext:
     """Build one canonical simulation context for every public entry point."""
@@ -74,6 +75,8 @@ def prepare_simulation_context(
         transporter_kinetics=oatp_kinetics,
         hepatic_ecm_params=ecm_params,
         non_cyp_fractions=non_cyp_fractions,
+        measured_kp=measured_adme.kp_overrides if measured_adme else None,
+        enzyme_km=measured_adme.enzyme_km if measured_adme else None,
     )
 
     physiology = base_yaml or get_resource_config().data(
@@ -107,6 +110,8 @@ def prepare_simulation_context(
             transporter_kinetics=oatp_kinetics,
             hepatic_ecm_params=ecm_params,
             non_cyp_fractions=non_cyp_fractions,
+            measured_kp=measured_adme.kp_overrides if measured_adme else None,
+            enzyme_km=measured_adme.enzyme_km if measured_adme else None,
         )
 
     graph = augment_for_active_species(graph, drug)
