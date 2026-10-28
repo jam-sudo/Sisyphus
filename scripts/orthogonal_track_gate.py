@@ -27,6 +27,8 @@ import sys
 from pathlib import Path
 
 import numpy as np
+from rdkit import Chem
+from rdkit.Chem import Descriptors
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
@@ -50,13 +52,16 @@ drugs = {d["name"]: d for d in holdout_data["drugs"]}
 N = len(drugs)
 print(f"Loaded {N} holdout drugs")
 
+if any("clf" not in d or "vdss" not in d for d in drugs.values()):
+    raise SystemExit("Holdout cache lacks clf/vdss tracks; regenerate with run_engine_benchmark.py")
+
 # ---------------------------------------------------------------------------
 # Load ADME models — use the ALREADY FROZEN production models
 # (no retraining, no fitting against holdout Cmax)
 # ---------------------------------------------------------------------------
 
-from sisyphus.predict.adme import predict_adme
-from sisyphus.predict.chemistry import MolecularProfile, compute_profile as analyze_smiles
+from sisyphus.predict.adme import predict_adme  # noqa: E402
+from sisyphus.predict.chemistry import compute_profile as analyze_smiles  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Build per-drug ADME feature cache from SMILES
@@ -104,10 +109,12 @@ print(f"ADME computed for {len(adme_cache)} drugs; skipped {len(skipped)}: {skip
 # ---------------------------------------------------------------------------
 
 def pearson_r(x: list[float], y: list[float]) -> float:
-    xa = np.array(x); ya = np.array(y)
+    xa = np.array(x)
+    ya = np.array(y)
     if len(xa) < 5:
         return float("nan")
-    xa -= xa.mean(); ya -= ya.mean()
+    xa -= xa.mean()
+    ya -= ya.mean()
     denom = np.sqrt((xa**2).sum() * (ya**2).sum())
     if denom == 0:
         return float("nan")
@@ -123,9 +130,6 @@ def aafe(fold_errors: list[float]) -> float:
 res_engine: list[float] = []
 res_ml: list[float] = []
 res_meta: list[float] = []
-# For clf (CL/F analytical) and vdss — we have clf in 3track (clf=None mostly)
-# and vdss track is not stored per-drug in artifacts.
-# We will reconstruct clf (w=0) and vdss (analytical) below.
 
 # Collect names in order
 drug_list = []
@@ -139,63 +143,20 @@ for name, d in drugs.items():
     res_meta.append(math.log10(met / obs))
     drug_list.append(name)
 
-# ---------------------------------------------------------------------------
-# Reconstruct VDss analytical track per-drug
-# Formula (from pipeline): Cmax_vdss = dose / (Vdss_L_kg * BW_kg)
-# where BW = 70 kg, Vdss from XGBoost model (already in adme_cache)
-# ---------------------------------------------------------------------------
+BW_KG = 70.0  # reference body weight; source: pipeline VDss analytical track
 
-BW_KG = 70.0
-res_vdss: list[float] = []
-drug_list_vdss: list[str] = []
-
-for name in drug_list:
-    d = drugs[name]
-    obs = d["obs"]
-    if name not in adme_cache:
-        res_vdss.append(float("nan"))
-        continue
-    a = adme_cache[name]
-    vdss_L = a["vdss"] * BW_KG   # L/kg * kg = L
-    if vdss_L <= 0:
-        res_vdss.append(float("nan"))
-        continue
-    cmax_vdss = a["dose_mg"] / vdss_L  # mg/L — crude 1-cpt, dose-normalized
-    # Scale to match the meta-learner's VDss track convention
-    # (The actual VDss track in the pipeline uses dose/(Vss*BW) directly)
-    res_vdss.append(math.log10(cmax_vdss / obs))
-    drug_list_vdss.append(name)
-
-# For clf track: w=0.00 in production, so residuals are arbitrary;
-# construct from xgboost_clearance_v1.json (CL/F approach)
-# clf is set to None per-drug in 3track; we cannot reconstruct it without
-# the clf predictor. We'll approximate clf residuals from 3track data.
-
-from sisyphus.ml.clf_predictor import CLFPredictor
-
-_clf_predictor = CLFPredictor()
-
-res_clf: list[float] = []
-for name in drug_list:
-    d = drugs[name]
-    obs = d["obs"]
-    if name not in adme_cache:
-        res_clf.append(float("nan"))
-        continue
-    smiles = SMILES_CACHE.get(name, "")
-    if not smiles:
-        res_clf.append(float("nan"))
-        continue
-    try:
-        a = adme_cache[name]
-        clf_dist, _ = _clf_predictor.predict_cmax(smiles, a["dose_mg"], peff=a["peff"])
-        clf_cmax = clf_dist.mean
-        if clf_cmax is None or clf_cmax <= 0:
-            res_clf.append(float("nan"))
-            continue
-        res_clf.append(math.log10(float(clf_cmax) / obs))
-    except Exception:
-        res_clf.append(float("nan"))
+# Use the exact frozen pipeline track predictions saved by the benchmark writer.
+# The current cache predates these fields; regenerate it before scoring this gate.
+res_vdss = [
+    math.log10(drugs[name]["vdss"] / drugs[name]["obs"])
+    if drugs[name]["vdss"] and drugs[name]["vdss"] > 0 else float("nan")
+    for name in drug_list
+]
+res_clf = [
+    math.log10(drugs[name]["clf"] / drugs[name]["obs"])
+    if drugs[name]["clf"] and drugs[name]["clf"] > 0 else float("nan")
+    for name in drug_list
+]
 
 # ---------------------------------------------------------------------------
 # CANDIDATE 1: RENAL-CLr analytical track
@@ -385,9 +346,6 @@ def fa_from_log_papp(log_papp: float, mw: float) -> float:
     mw_penalty = math.exp(-max(0.0, mw - 300.0) / 500.0)
     return fa_base * mw_penalty
 
-from rdkit import Chem
-from rdkit.Chem import Descriptors
-
 for name in drug_list:
     d = drugs[name]
     obs = d["obs"]
@@ -457,7 +415,10 @@ def correlation_report(cand_name, cand_cmax_list, drug_list, drugs_dict,
     """Compute and print correlation report for a candidate track."""
     # Build aligned residuals
     cand_res = []
-    eng_r = []; ml_r = []; vdss_r = []; clf_r = []
+    eng_r = []
+    ml_r = []
+    vdss_r = []
+    clf_r = []
     names_used = []
 
     for i, name in enumerate(drug_list):
@@ -519,16 +480,16 @@ def correlation_report(cand_name, cand_cmax_list, drug_list, drugs_dict,
     print(f"CANDIDATE: {cand_name}")
     print(f"  N valid: {N_valid}")
     print(f"  Candidate standalone AAFE: {cand_aafe:.3f}")
-    print(f"  Pearson r vs engine:  {r_eng:+.3f}  (|r|={'PASS' if abs(r_eng)<0.5 else 'FAIL'} < 0.5)")
-    print(f"  Pearson r vs ml:      {r_ml:+.3f}  (|r|={'PASS' if abs(r_ml)<0.5 else 'FAIL'} < 0.5)")
-    print(f"  Pearson r vs vdss:    {r_vdss:+.3f}  (|r|={'PASS' if abs(r_vdss)<0.5 else 'FAIL'} < 0.5)")
-    print(f"  Pearson r vs clf:     {r_clf:+.3f}  (|r|={'PASS' if abs(r_clf)<0.5 else 'FAIL'} < 0.5)")
+    for label, value in (("engine", r_eng), ("ml", r_ml),
+                         ("vdss", r_vdss), ("clf", r_clf)):
+        verdict = "PASS" if abs(value) < 0.5 else "FAIL"
+        print(f"  Pearson r vs {label:<6}: {value:+.3f} (|r|={verdict} < 0.5)")
     print(f"  MAX |r|: {max_r:.3f}  => GATE {'PASS' if gate_pass else 'FAIL'}")
     print(f"  Renally-significant drugs (CLr/(CLr+CLint)>30%): {renal_sig_count}/{N_valid}")
 
     # Show top-5 absolute candidate residuals
     sorted_res = sorted(zip(cand_res, names_used), key=lambda x: abs(x[0]), reverse=True)
-    print(f"  Top-5 worst candidate predictions:")
+    print("  Top-5 worst candidate predictions:")
     for cr, nm in sorted_res[:5]:
         obs_v = drugs_dict[nm]["obs"]
         pred_v = 10**(math.log10(obs_v) + cr)
@@ -592,7 +553,8 @@ result3 = correlation_report(
 
 print("\n" + "="*60)
 print("SUMMARY TABLE")
-print(f"{'Candidate':<22} {'N':>4} {'AAFE':>7} {'r(eng)':>8} {'r(ml)':>7} {'r(vdss)':>8} {'r(clf)':>7} {'GATE':>6}")
+print(f"{'Candidate':<22} {'N':>4} {'AAFE':>7} {'r(eng)':>8} "
+      f"{'r(ml)':>7} {'r(vdss)':>8} {'r(clf)':>7} {'GATE':>6}")
 for r in [result1, result2, result3]:
     gate_str = "PASS" if r["gate_pass"] else "FAIL"
     print(f"{r['name']:<22} {r['n_valid']:>4} {r['standalone_aafe']:>7.3f} "

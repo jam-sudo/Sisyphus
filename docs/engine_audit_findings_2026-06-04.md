@@ -30,8 +30,7 @@ Evidence:
   - `solve_mc()` follows the same pattern.
 - `src/sisyphus/pk/endpoints.py`
   - `compute_endpoints()` documents and computes PK endpoints from "plasma concentrations" but receives the raw observation-node series.
-- `docs/superpowers/specs/2026-06-04-rbp-concentration-basis-design.md`
-  - Reporting-basis handling is discussed but appears partially descoped or internally inconsistent.
+- The RBP concentration-basis design discussed reporting-basis handling, but left its endpoint contract unresolved.
 - `tests/unit/test_rbp_concentration_basis.py`
   - Tests cover flow and clearance basis, but not final reporting conversion.
 
