@@ -21,7 +21,7 @@
 Sisyphus predicts the peak plasma concentration (C<sub>max</sub>) of an oral drug from its structure and dose. The body is modeled as a typed directed graph: organs are nodes, and blood flow, portal drainage, GI transit, absorption, and clearance are edges. The engine compiles that graph into an ODE system and treats every parameter as a probability distribution; a meta-learner then blends the engine with three data-driven tracks into the production estimate.
 
 > [!IMPORTANT]
-> Current evidence is a repeatedly accessed retrospective development benchmark (Meta AAFE 2.830, N=73), not an independent holdout. Use Sisyphus for screening, ranking, and uncertainty-aware triage, not dose setting. Details are under [Evidence](#evidence).
+> Current evidence is a repeatedly accessed retrospective development benchmark (Meta AAFE 2.805, N=73), not an independent holdout. Use Sisyphus for screening, ranking, and uncertainty-aware triage, not dose setting. Details are under [Evidence](#evidence).
 
 ## Overview
 
@@ -350,13 +350,13 @@ The CLI uses the `PDModel` defaults for E<sub>max</sub>, Hill coefficient, and b
 
 ## Evidence
 
-Sisyphus targets oral structure-only Cmax prediction when measured ADME is unavailable. On the repeatedly accessed retrospective **development benchmark**, Meta AAFE is 2.830 [bootstrap 95% CI 2.30&ndash;3.52, N=73 scored]. This is not an independent holdout result: the original 107-compound cohort has informed repeated system-selection decisions. A source-adjudicated diagnostic P0 pilot on 18 compounds, scored with an earlier model, found Meta AAFE **3.34**, compared with **3.01** for direct ML; its labels were AI-assisted, historical VDss training membership is unverified, and it does not establish Meta superiority. The current system has **no unconsumed independently curated external holdout AAFE**. Error of this scale and the wide development-residual interval (&divide;&times;~10.65-fold; 90.4% coverage on the repeatedly used development set) restrict the tool to screening, ranking, and uncertainty-aware triage, not dose setting.
+Sisyphus targets oral structure-only Cmax prediction when measured ADME is unavailable. On the repeatedly accessed retrospective **development benchmark**, Meta AAFE is 2.805 [bootstrap 95% CI 2.29&ndash;3.49, N=73 scored]. This is not an independent holdout result: the original 107-compound cohort has informed repeated system-selection decisions. A source-adjudicated diagnostic P0 pilot on 18 compounds, scored with an earlier model, found Meta AAFE **3.34**, compared with **3.01** for direct ML; its labels were AI-assisted, historical VDss training membership is unverified, and it does not establish Meta superiority. The current system has **no unconsumed independently curated external holdout AAFE**. Error of this scale and the wide development-residual interval (&divide;&times;~10.71-fold; 90.4% coverage on the repeatedly used development set) restrict the tool to screening, ranking, and uncertainty-aware triage, not dose setting.
 
 Each evaluation is listed with the model it scored and its consumption status, including unfavorable results.
 
 | Evaluation | N | Meta AAFE | Direct-ML AAFE | Status |
 |:--|:-:|:-:|:-:|:--|
-| [Retrospective development benchmark](#retrospective-development-benchmark) | 73 | **2.830** | 3.049 | Current model; repeatedly accessed |
+| [Retrospective development benchmark](#retrospective-development-benchmark) | 73 | **2.805** | 3.049 | Current model; repeatedly accessed |
 | Consumed temporal challenge (FDA NMEs 2024&ndash;2025) | 28 | 3.286 | &mdash; | 2026-07-05 engine; consumed |
 | P0 source-adjudicated pilot | 18 | 3.34 | 3.01 | Earlier model; diagnostic |
 | P1 AI-assisted blind diagnostic | 7 | 6.63 | 5.25 | Earlier public model; development-grade |
@@ -371,19 +371,19 @@ $$AAFE = 10^{\operatorname{mean}\left(\left|\log_{10}\frac{C_{max,pred}}{C_{max,
 
 | Track | AAFE | 95% CI | %2-fold | %3-fold | N |
 |---|:-:|:-:|:-:|:-:|:-:|
-| **Meta-learner (production)** | **2.830**† | [2.30, 3.52] | 43.8% | 67.1% | 73 |
-| Engine only | 3.872 | [2.99, 5.09] | 38.4% | 50.7% | 73 |
+| **Meta-learner (production)** | **2.805**† | [2.29, 3.49] | 43.8% | 67.1% | 73 |
+| Engine only | 3.723 | [2.88, 4.89] | 38.4% | 52.1% | 73 |
 | ML only | 3.049 | [2.47, 3.78] | 41.1% | 57.5% | 73 |
-| Meta, in-domain | 2.898 | [2.34, 3.67] | 40.0% | 66.7% | 60 |
+| Meta, in-domain | 2.700 | [2.25, 3.29] | 40.7% | 67.8% | 59 |
 
-The paired compound-bootstrap Meta/ML AAFE ratio is **0.928** (95% CI **0.816–1.053**, 10,000 resamples, seed 20260422); the in-domain ratio is 1.008 (0.898–1.137). These conditional intervals do not account for repeated system selection, and the development data cannot establish independent Meta superiority. The in-domain N=60 slice is descriptive only: applicability flags have not demonstrated reliable error stratification.
+The paired compound-bootstrap Meta/ML AAFE ratio is **0.920** (95% CI **0.809–1.045**, 10,000 resamples, seed 20260422); the in-domain ratio is 0.976 (0.873–1.095). These conditional intervals do not account for repeated system selection, and the development data cannot establish independent Meta superiority. The in-domain N=59 slice is descriptive only: applicability flags have not demonstrated reliable error stratification.
 
 **Reference and training-label audit (2026-09-24/25).** Before the current scores were produced, every scored development arm and the direct-model training aggregates were re-checked against original sources. The audit removed 165 synthetic or arm-mixed concentration profiles; quarantined untraceable, multi-day, steady-state, prodrug-metabolite, and whole-blood labels; replaced digitized or mixed-arm peaks with directly reported single-dose fasted arms where available; and converted salt-form doses to parent active-moiety mass. Per-compound decisions, sources, and hashes are in the dated `development_*` notes under [`docs/validation/`](docs/validation/), starting from the [reference source audit](docs/validation/development_reference_source_audit_2026-09-24.md). A subsequent metadata-level source-consistency filter for the direct C<sub>max</sub> training set was a no-go (3.5% higher out-of-fold AAFE; [ablation](docs/research/cmax_source_consistency_ablation_2026-09-25.md)), so the production model is unchanged.
 
-**Reproducibility.** The table uses public-only TDC f<sub>u,p</sub>, P<sub>eff</sub>, hepatocyte CL<sub>int</sub>, and Lombardo VD<sub>ss</sub> models plus Omega-derived C<sub>max</sub>, CL/F, and Vd/F retrains, fitted on 1,557 f<sub>u,p</sub>, 874 P<sub>eff</sub>, 906 C<sub>max</sub>, 995 CL<sub>int</sub>, 1,055 VD<sub>ss</sub>, 900 CL/F, and 831 Vd/F hash-pinned rows. Per-drug predictions are in `data/training/4track_holdout_predictions.json`; bootstrap intervals are in `data/validation/4track_ci_2026-09-24_audited_reference.json`. Aggregate AAFE reproduces from a fresh clone with `requirements-lock.txt`; per-drug bit-identity additionally requires the same numerics stack (Python minor version, BLAS, libomp). Benchmark lineage and numerics-drift measurements are in [`docs/research/experiment-log.md`](docs/research/experiment-log.md).
+**Reproducibility.** The table uses public-only TDC f<sub>u,p</sub>, P<sub>eff</sub>, hepatocyte CL<sub>int</sub>, and Lombardo VD<sub>ss</sub> models plus Omega-derived C<sub>max</sub>, CL/F, and Vd/F retrains, fitted on 1,557 f<sub>u,p</sub>, 874 P<sub>eff</sub>, 906 C<sub>max</sub>, 995 CL<sub>int</sub>, 1,055 VD<sub>ss</sub>, 898 CL/F, and 829 Vd/F hash-pinned rows. Per-drug predictions are in `data/training/4track_holdout_predictions.json`; bootstrap intervals are in `data/validation/4track_ci_2026-10-28_canonical.json`. Aggregate AAFE reproduces from a fresh clone with `requirements-lock.txt`; per-drug bit-identity additionally requires the same numerics stack (Python minor version, BLAS, libomp). Benchmark lineage and numerics-drift measurements are in [`docs/research/experiment-log.md`](docs/research/experiment-log.md).
 
 > [!WARNING]
-> **Adaptive selection.** †N=107 has been used for dozens of configuration feedback cycles (track weights, routing, and meta variants), including inspection of the public-only fup, Peff, Cmax, CLint, and VDss candidates. The historical 2.85–3.10 selection-bias sensitivity range has not been recalibrated for this model, and the current N=73 bootstrap CI ([2.30, 3.52]) does not account for adaptive search. The attempted 2026Q2 N50 was invalidated after 21/50 repository-corpus collisions and must not be cited. The replacement is the outcome-blind N=260 protocol in [`docs/validation/external_holdout_v1_protocol.md`](docs/validation/external_holdout_v1_protocol.md) (N=120 resource-limited fallback; its combined release gate has about 80% pass probability only near a 19% true improvement).
+> **Adaptive selection.** †N=107 has been used for dozens of configuration feedback cycles (track weights, routing, and meta variants), including inspection of the public-only fup, Peff, Cmax, CLint, and VDss candidates. The historical 2.85–3.10 selection-bias sensitivity range has not been recalibrated for this model, and the current N=73 bootstrap CI ([2.29, 3.49]) does not account for adaptive search. The attempted 2026Q2 N50 was invalidated after 21/50 repository-corpus collisions and must not be cited. The replacement is the outcome-blind N=260 protocol in [`docs/validation/external_holdout_v1_protocol.md`](docs/validation/external_holdout_v1_protocol.md) (N=120 resource-limited fallback; its combined release gate has about 80% pass probability only near a 19% true improvement).
 
 ### Diagnostic and consumed evaluations
 
@@ -506,7 +506,7 @@ First-call model loading and hardware change latency: a local macOS/Python 3.10 
 
 ### Test suite
 
-The suite covers graph construction, ODE compilation, flux functions, solver correctness, mass balance, ADME prediction, the C<sub>max</sub> ensemble, dosing research modules, applicability flags, phenotype scaling, leakage guards, and development-benchmark reproducibility; CI output is the authoritative count. The current benchmark is pinned by `test_cached_development_aafe_is_2p830` and reproducible with `scripts/run_engine_benchmark.py` on the public profile. Three expected failures remain: rosuvastatin and atorvastatin miss their ECM-forced C<sub>max</sub> gates, and an axial PGx test deliberately retains a strict xfail because its well-stirred analytic oracle does not apply to parallel-tube extraction. Three prodrug clinical gates are also strict expected failures in the public clone because their conditional disposition data are absent, making six expected failures in total.
+The suite covers graph construction, ODE compilation, flux functions, solver correctness, mass balance, ADME prediction, the C<sub>max</sub> ensemble, dosing research modules, applicability flags, phenotype scaling, leakage guards, and development-benchmark reproducibility; CI output is the authoritative count. The current benchmark is pinned by `test_cached_development_aafe_is_2p805` and reproducible with `scripts/run_engine_benchmark.py` on the public profile. Three expected failures remain: rosuvastatin and atorvastatin miss their ECM-forced C<sub>max</sub> gates, and an axial PGx test deliberately retains a strict xfail because its well-stirred analytic oracle does not apply to parallel-tube extraction. Three prodrug clinical gates are also strict expected failures in the public clone because their conditional disposition data are absent, making six expected failures in total.
 
 ## Architecture
 
@@ -620,7 +620,7 @@ Three Omega findings shaped the design: **data quality dominates model choice** 
 
 ## Citation
 
-The published v1 preprint and archived `Sisyphus_Preprint.pdf` report an older AAFE of 2.698. The current code's source-screened development benchmark is 2.830 on 73 scored compounds; the value comes from a different model and reference set. Use [Evidence](#evidence) for current results.
+The published v1 preprint and archived `Sisyphus_Preprint.pdf` report an older AAFE of 2.698. The current code's source-screened development benchmark is 2.805 on 73 scored compounds; the value comes from a different model and reference set. Use [Evidence](#evidence) for current results.
 
 If you use Sisyphus in your research, please cite the preprint:
 

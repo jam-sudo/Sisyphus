@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-09-25
+last_updated: 2026-10-28
 parent: ../../README.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -7,6 +7,23 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 # Experiment Log
 
 Reverse-chronological. The project README carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
+
+---
+
+## 2026-10-28 — Canonical B-15, renal, and zwitterion regeneration
+
+Commit `f4c269a` ran [canonical regen](https://github.com/jam-sudo/Sisyphus/actions/runs/40776965650) on the public-clone GitHub Actions stack (Ubuntu, Python 3.10, `requirements-lock.txt`). The branch includes the completion integration and the renal reabsorption and zwitterion Kp fixes. The B-15 InChIKey-14 prospective filter rebuilt `clf_training.csv`, removing Aficamten and Gepotidacin; fitted CL/F and Vd/F counts fell **900→898** and **831→829**. The workflow retrained both direct models, regenerated the four-track cache with per-drug CL/F and VDss columns, leak-audit baseline, development residual interval, model card, console data, and a new [bootstrap CI](../../data/validation/4track_ci_2026-10-28_canonical.json). The [attribution artifact](../../data/validation/canonical_regen_attribution_2026-10-28.json) records sequential arms on that same stack.
+
+| N=73 track | Previous cache | New canonical | %2-fold old→new | %3-fold old→new | 95% CI old→new |
+|---|---:|---:|---:|---:|---|
+| Meta AAFE | 2.8300 | **2.8052** | 43.8→43.8% | 67.1→67.1% | [2.3038, 3.5220]→[2.2891, 3.4860] |
+| Engine AAFE | 3.8718 | **3.7235** | 38.4→38.4% | 50.7→52.1% | [2.9856, 5.0866]→[2.8801, 4.8881] |
+| ML AAFE | 3.0490 | **3.0490** | 41.1→41.1% | 57.5→57.5% | [2.4657, 3.7782]→[2.4657, 3.7782] |
+| In-domain Meta | 2.8980 (N=60) | **2.7004 (N=59)** | 40.0→40.7% | 66.7→67.8% | [2.3430, 3.6720]→[2.2466, 3.2870] |
+
+**Attribution (Meta AAFE, same stack, sequential arms):** completion integration with shipped models **2.83002** (reproduces the old aggregate); renal-only **2.83074** (**+0.00072**, despite Engine 3.87180→3.85479); adding the zwitterion Kp fix **2.80781** (**−0.02293**, Engine 3.85479→3.72348); canonical recipe retraining on the old corpus **2.80447** (**−0.00334**); B-15 filtered retraining **2.80517** (**+0.00070**). The filter is retained for eligibility correctness despite its small adverse score move. The in-domain improvement is partly a membership change: the completion code flags clopidogrel as `PRODRUG`, reducing the slice from 60 to 59 before either physics fix; it is not a like-for-like improvement. The overall Meta change is within the conditional bootstrap CI and is not independent validation.
+
+The [orthogonal track gate](../../data/validation/orthogonal_track_gate_2026-10-28_canonical.txt) was rerun on the new cache: RENAL-CLr and ABSORPTION-peff fail the |r|<0.5 decorrelation gate; ION-Fabs passes correlation but has standalone AAFE 693.755 and is not a production candidate. The only moved numeric regression pin is the N=73 cache AAFE (`2.8300→2.8052`); the model-card and console checks continue to derive their values from the new cache and CI file.
 
 ---
 
