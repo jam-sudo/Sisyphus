@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches: [regen/canonical-2026-10]
-    paths: [.github/workflows/canonical-regen.yml]
+    paths: [.github/workflows/canonical-regen.yml, scripts/regen_canonical.py]
 
 jobs:
   regen:
@@ -12,6 +12,8 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Set up Python 3.10
         uses: actions/setup-python@v6
@@ -31,7 +33,7 @@ jobs:
           test ! -e models/adme/logp_correction.json
 
       - name: Regenerate canonical artifacts
-        run: set -o pipefail; PYTHONPATH=src python scripts/regen_canonical.py 2>&1 | tee regen_output.txt
+        run: set -o pipefail; PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src python scripts/regen_canonical.py 2>&1 | tee regen_output.txt
 
       - name: Upload regenerated artifacts
         uses: actions/upload-artifact@v4

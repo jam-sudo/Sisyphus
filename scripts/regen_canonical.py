@@ -11,12 +11,34 @@ from __future__ import annotations
 import csv
 import json
 import shutil
+import subprocess
 
 from regen_clf_leakfree_canonical import ROOT, _benchmark_meta_aafe, _require_public_clone, _run
 
 CACHE = ROOT / "data/training/4track_holdout_predictions.json"
 CSV = ROOT / "data/training/clf_training.csv"
 ATTRIBUTION = ROOT / "data/validation/canonical_regen_attribution_2026-10-28.json"
+SOURCES = (
+    "src/sisyphus/core.py",
+    "src/sisyphus/engine/flux.py",
+    "src/sisyphus/predict/chemistry.py",
+    "src/sisyphus/predict/ivive.py",
+)
+
+
+def _benchmark_revision(revision: str) -> dict:
+    # shortcut: these revision anchors belong to this one-off merge, update for any later regen.
+    original = {path: (ROOT / path).read_bytes() for path in SOURCES}
+    try:
+        for path in SOURCES:
+            (ROOT / path).write_bytes(subprocess.check_output(
+                ["git", "show", f"{revision}:{path}"], cwd=ROOT
+            ))
+        _benchmark_meta_aafe()
+        return json.loads(CACHE.read_text())
+    finally:
+        for path, contents in original.items():
+            (ROOT / path).write_bytes(contents)
 
 
 def main() -> None:
@@ -24,6 +46,8 @@ def main() -> None:
     committed = json.loads(CACHE.read_text())
     before_names = {row["name"].lower() for row in csv.DictReader(CSV.open())}
 
+    integration = _benchmark_revision("5de25d7")
+    renal = _benchmark_revision("b362d76")
     _benchmark_meta_aafe()  # merged renal + Kp code, shipped CL/F and Vd/F models
     merged = json.loads(CACHE.read_text())
 
@@ -42,8 +66,14 @@ def main() -> None:
     assert all("clf" in row and "vdss" in row for row in filtered["drugs"])
 
     ATTRIBUTION.write_text(json.dumps({
-        "context": "same canonical stack; merged arm combines renal and zwitterion fixes",
+        "context": "same canonical stack; sequential integration, renal, Kp, retrain, B-15 arms",
         "committed": {"overall": committed["overall"], "in_domain": committed["in_domain"]},
+        "integration_shipped_models": {
+            "overall": integration["overall"], "in_domain": integration["in_domain"]
+        },
+        "renal_shipped_models": {
+            "overall": renal["overall"], "in_domain": renal["in_domain"]
+        },
         "merged_shipped_models": {
             "overall": merged["overall"], "in_domain": merged["in_domain"]
         },
