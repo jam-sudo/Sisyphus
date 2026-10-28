@@ -55,25 +55,29 @@ def main() -> None:
     log.info("Loading %s", args.data)
     data = np.load(args.data, allow_pickle=True)
     theta = data["theta"].astype(np.float32)
-    log10_cmax = data["x"].astype(np.float32)
-    drug_features = data["drug_features"].astype(np.float32)
+    multi_obs = "multi_obs_x" in data
+    if multi_obs:
+        x_full = data["multi_obs_x"].astype(np.float32)
+        drug_features = x_full[:, -12:].copy()
+    else:
+        log10_cmax = data["x"].astype(np.float32)
+        drug_features = data["drug_features"].astype(np.float32)
+        x_full = np.concatenate([log10_cmax, drug_features], axis=1).astype(np.float32)
     prior_low = data["prior_low"].astype(np.float32)
     prior_high = data["prior_high"].astype(np.float32)
 
     log.info(
-        "  theta=%s  log10_cmax=%s  drug_features=%s",
+        "  theta=%s  context=%s  drug_features=%s",
         theta.shape,
-        log10_cmax.shape,
+        x_full.shape,
         drug_features.shape,
     )
-    log.info(
-        "  log10_cmax range=[%.3f, %.3f]",
-        float(log10_cmax.min()),
-        float(log10_cmax.max()),
-    )
-
-    # Pack observation: (N, 1 + 12) = (N, 13)
-    x_full = np.concatenate([log10_cmax, drug_features], axis=1).astype(np.float32)
+    if not multi_obs:
+        log.info(
+            "  log10_cmax range=[%.3f, %.3f]",
+            float(log10_cmax.min()),
+            float(log10_cmax.max()),
+        )
     log.info("  x_full (packed) shape=%s", x_full.shape)
 
     # Standardize drug-feature columns only (log10_cmax is already in log-space
@@ -83,7 +87,7 @@ def main() -> None:
     feat_mean = drug_features.mean(axis=0)
     feat_std = drug_features.std(axis=0)
     feat_std[feat_std < 1e-6] = 1.0
-    x_full[:, 1 : 1 + n_features] = (drug_features - feat_mean) / feat_std
+    x_full[:, -n_features:] = (drug_features - feat_mean) / feat_std
 
     t0 = time.time()
     result = train_npe(
@@ -118,6 +122,7 @@ def main() -> None:
             "feat_mean": feat_mean,
             "feat_std": feat_std,
             "n_features": int(n_features),
+            "multi_observation": multi_obs,
         },
         aux_path,
     )
