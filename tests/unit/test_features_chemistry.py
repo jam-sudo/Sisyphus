@@ -122,6 +122,21 @@ class TestChemistry:
         # pKa: ChemAxon basic ~9.24 if DrugBank present, SMARTS default 7.0 otherwise
         assert profile.pka is not None
         assert 6.5 <= profile.pka <= 10.0  # covers both paths
+        assert profile.pka_secondary is not None
+
+    def test_drugbank_zwitterion_keeps_both_pka_values(self, monkeypatch):
+        import sisyphus.predict.drugbank as drugbank
+
+        class Lookup:
+            def get_logp(self, smiles):
+                return None
+
+            def get_pka(self, smiles):
+                return 4.0, 9.5
+
+        monkeypatch.setattr(drugbank, "drugbank_lookup", lambda: Lookup())
+        profile = compute_profile("NCC(=O)O")
+        assert (profile.pka, profile.pka_secondary) == (9.5, 4.0)
 
     def test_canonical_smiles(self):
         # Different representations of aspirin should give the same canonical
