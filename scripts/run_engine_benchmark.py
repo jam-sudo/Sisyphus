@@ -51,6 +51,7 @@ def main():
             eng_cmax = result.engine_pk.cmax.mean if result.engine_pk else None
             ml_cmax = result.ml_pk.cmax.mean if result.ml_pk else None
             meta_cmax = result.pk.cmax.mean
+            tracks = dict(result.cmax_prediction.tracks) if result.cmax_prediction else {}
             compound_type = "?"
             try:
                 from sisyphus.predict.chemistry import compute_profile
@@ -70,6 +71,8 @@ def main():
                 "eng": eng_cmax,
                 "ml": ml_cmax,
                 "meta": meta_cmax,
+                "clf": tracks.get("clf"),
+                "vdss": tracks.get("vdss"),
                 "eng_fold": eng_fold,
                 "ml_fold": ml_fold,
                 "meta_fold": meta_fold,
@@ -93,7 +96,10 @@ def main():
     print(f"{'='*80}")
     print(f"{'Source':<15s} {'N':>4s} {'AAFE':>8s} {'%2-fold':>8s} {'%3-fold':>8s}")
     print(f"{'-'*45}")
-    for label, p, o in [("Engine", eng_pred, eng_obs), ("ML", ml_pred, ml_obs), ("Meta-learner", meta_pred, meta_obs)]:
+    for label, p, o in [
+        ("Engine", eng_pred, eng_obs), ("ML", ml_pred, ml_obs),
+        ("Meta-learner", meta_pred, meta_obs),
+    ]:
         if len(p) > 0:
             a = aafe(p, o)
             p2 = pct_within_n_fold(p, o, 2.0)
@@ -104,7 +110,10 @@ def main():
     print(f"\n{'='*80}")
     print("PER-DRUG FOLD ERRORS (sorted by |log10(eng_fold)|)")
     print(f"{'='*80}")
-    print(f"{'Drug':<25s} {'Type':<8s} {'Obs':>8s} {'Eng':>8s} {'ML':>8s} {'Meta':>8s} {'EngFold':>9s} {'Direction':>10s}")
+    print(
+        f"{'Drug':<25s} {'Type':<8s} {'Obs':>8s} {'Eng':>8s} "
+        f"{'ML':>8s} {'Meta':>8s} {'EngFold':>9s} {'Direction':>10s}"
+    )
     print(f"{'-'*90}")
 
     def sort_key(r):
@@ -120,7 +129,10 @@ def main():
         ml_str = f"{r['ml']:.4f}" if r["ml"] else "N/A"
         meta_str = f"{r['meta']:.4f}" if r["meta"] else "N/A"
         ef_str = f"{ef:.2f}x" if ef else "N/A"
-        print(f"{r['name']:<25s} {r['type']:<8s} {r['obs']:8.4f} {eng_str:>8s} {ml_str:>8s} {meta_str:>8s} {ef_str:>9s} {direction:>10s}")
+        print(
+            f"{r['name']:<25s} {r['type']:<8s} {r['obs']:8.4f} {eng_str:>8s} "
+            f"{ml_str:>8s} {meta_str:>8s} {ef_str:>9s} {direction:>10s}"
+        )
 
     print(f"\nSkipped: {skipped}")
 

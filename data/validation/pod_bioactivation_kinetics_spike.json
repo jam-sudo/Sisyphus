@@ -1,0 +1,81 @@
+{
+  "precommitted": true,
+  "data_halt": true,
+  "schema_version": "1.0",
+  "description": "Pre-committed a-priori rat bioactivation kinetics / rat PK / observed hepatotoxicity point-of-departure (PoD) set for the reactive-metabolite hazard feasibility study. Every value-bearing field must trace to a real, checkable literature source recorded in its *_source field. Honest-curation rule: a drug whose rat reactive-metabolite formation Vmax/Km, rat detoxification Vmax, rat PK, observed PoD, or non-circular enzyme-zonation basis could NOT be sourced is moved to 'halted' with a reason rather than estimated. vmax_bio_basis is a single shared basis for all compounds.",
+  "vmax_bio_basis_global": "pmol/min/mg_microsomal_protein",
+  "reason": "PROGRAM-VIABILITY FLOOR NOT MET (honest data HALT). The model needs, for >=3 non-acetaminophen REACTIVE drugs, a rat reactive-metabolite FORMATION Vmax/Km on a single consistent microsomal basis (pmol/min/mg) PLUS a rat reactive-metabolite DETOXIFICATION Vmax, plus rat PK and an observed hepatotoxic PoD. After literature curation (PubMed + web search), zero non-acetaminophen reactive drugs could be fully populated: carbon tetrachloride has only whole-body gas-uptake PBPK Vmax (mg/kg/hr, wrong basis); bromobenzene, diclofenac and troglitazone have no rat reactive-metabolite formation Vmax/Km in consistent units; and a rat reactive-metabolite glutathione-conjugation (detox) Vmax could not be located for ANY reactive compound (including acetaminophen, whose FORMATION kinetics ARE available). Binding constraints: (a) the single microsomal vmax_bio_basis -- most published bioactivation data are whole-body PBPK or qualitative covalent-binding, not microsomal Vmax/Km; (b) the rat detoxification Vmax, essentially unpublished as a clean kinetic constant. This is the honest data-feasibility outcome: the a-priori rat bioactivation-kinetics dataset the study depends on does not exist in public literature at the required harmonization. A fully-sourced negative control (caffeine) is retained so the schema/contract is exercised. Downstream tasks do not run.",
+  "compounds": [
+    {
+      "name": "caffeine",
+      "role": "negative",
+      "smiles": "Cn1cnc2c1c(=O)n(C)c(=O)n2C",
+      "mw": 194.19,
+      "rat_fup": 0.8,
+      "rat_fup_source": "Institute of Medicine (US) Committee on Military Nutrition Research, 'Pharmacology of Caffeine', in Caffeine for the Sustainment of Mental Task Performance, National Academies Press, 2001 (NCBI Bookshelf NBK223808): caffeine is weakly and reversibly bound to plasma proteins (~10-30% bound, i.e. fu ~0.7-0.9); fu_p set to 0.8 (midpoint). NOTE: this is a cross-species value (caffeine binding is low and species-similar), not an exclusively rat measurement; it is non-load-bearing for a negative control.",
+      "rat_clint": 3.12,
+      "rat_clint_unit": "uL/min/mg_microsomal_protein",
+      "rat_clint_source": "Sakai C, Iwano S, Yamazaki Y, Ando A, Nakane F, Kouno M, Yamazaki H, Miyamoto Y. 'Species Differences in the Pharmacokinetic Parameters of Cytochrome P450 Probe Substrates between Experimental Animals.' J Drug Metab Toxicol 5(5):173, 2014 (open access). Rat liver-microsomal in vitro CLint for caffeine = 0.00312 +/- 0.00034 mL/min/mg protein (= 3.12 uL/min/mg).",
+      "vmax_bio": 0.0,
+      "vmax_bio_basis": "pmol/min/mg_microsomal_protein",
+      "km_bio_uM": 280.0,
+      "fu_mic": 1.0,
+      "kinetics_source": "NEGATIVE CONTROL: caffeine forms NO reactive/electrophilic metabolite, so reactive-metabolite formation Vmax = 0.0. Caffeine is metabolized (CYP1A2) by N-demethylation to stable methylxanthines (paraxanthine, theobromine, theophylline) and methylurates, reported to have no toxic effects (IOM 2001, NCBI Bookshelf NBK223808). km_bio_uM = 280 uM is the NOMINAL caffeine N-demethylation apparent Km for cDNA-expressed CYP1A2 (Tassaneeyakul W, Birkett DJ, McManus ME, Veronese ME, Andersson T, Tukey RH, Miners JO. Biochem Pharmacol 47(10):1767-76, 1994, doi:10.1016/0006-2952(94)90304-2; Km 0.24-0.28 mM for N1/N3/N7-demethylation); it is non-load-bearing because vmax_bio=0 (reactive flux is zero regardless of Km). This Km is human CYP1A2 and is explicitly NOT presented as a rat reactive-metabolite Km. fu_mic ~ 1.0: caffeine is hydrophilic and weakly bound, so microsomal binding is negligible.",
+      "bioactivating_enzyme": "none",
+      "enzyme_zonation": "n/a",
+      "vmax_detox": 0.0,
+      "vmax_detox_source": "Not applicable: with vmax_bio=0 (no reactive metabolite formed), there is no reactive species to detoxify, so the detoxification Vmax is 0.0. Basis: caffeine produces only stable methylxanthine/methylurate metabolites with no reactive intermediate (IOM 2001, NCBI Bookshelf NBK223808; Tassaneeyakul et al. 1994, doi:10.1016/0006-2952(94)90304-2). This 0.0 encodes a sourced biological absence, not a placeholder.",
+      "observed_zone": "none",
+      "observed_zone_source": "Caffeine is not a recognized hepatotoxicant and causes no zonal (centrilobular/periportal) hepatic necrosis; it is not listed as a cause of clinically apparent drug-induced liver injury (NIDDK LiverTox; IOM 2001 monograph NBK223808 reports no toxic metabolic effects).",
+      "pod_obs_noel": "no hepatotoxic point-of-departure (not hepatotoxic at pharmacological / dietary doses)",
+      "pod_obs_loel": "no hepatic LOEL identified; lethality occurs only at very high systemic doses (rat oral LD50 ~ 200-380 mg/kg) and is CNS/cardiac, not hepatic",
+      "pod_obs_source": "IOM 2001 'Pharmacology of Caffeine' (NCBI Bookshelf NBK223808): caffeine is not associated with hepatotoxicity, so there is no centrilobular/zonal liver PoD. Reported rat oral LD50 (~200-380 mg/kg) reflects systemic (CNS/cardiac) lethality, not hepatic injury; included only to bound the absence of a hepatic PoD.",
+      "obs_rat_cmax_or_auc": "Rat oral caffeine Cmax and AUC(0-24h) are dose-proportional (linear kinetics) over 9-38 mg/kg PO; terminal t1/2 ~ 0.83-1.14 h; oral bioavailability ~ 44.7% (first-pass via CYP1A2).",
+      "obs_pk_source": "Lau CE, Ma F, Falk JL. 'Oral and IP caffeine pharmacokinetics under a chronic food-limitation condition.' Pharmacol Biochem Behav 50(2):245-52, 1995, doi:10.1016/0091-3057(94)00306-4 (rat oral Cmax & AUC0-24h dose-proportional, linear). Sakai C et al., J Drug Metab Toxicol 5(5):173, 2014 (rat oral bioavailability 44.7%, t1/2 0.83-1.14 h, dose 1.6 mg/kg)."
+    }
+  ],
+  "halted": [
+    {
+      "name": "acetaminophen",
+      "role": "reactive",
+      "intended": "primary mechanism design target (centrilobular NAPQI)",
+      "reason": "Rat NAPQI-formation kinetics ARE sourceable (Bessems JGM, te Koppele JM, van Dijk PA, van Stee LL, Commandeur JNM, Vermeulen NPE. Xenobiotica 26(6):647-66, 1996, doi:10.3109/00498259609046740: rat liver-microsomal CYP-dependent paracetamol oxidation, apparent Km 0.73 mM, Vmax 0.66 nmol/min/mg protein), and the bioactivating-enzyme zonation basis is non-circular (CYP2E1 is documented perivenous/pericentral; Oinonen T, Lindros KO, Biochem J 329(Pt1):17-35, 1998). HOWEVER the required rat DETOXIFICATION Vmax (vmax_detox = NAPQI glutathione-conjugation Vmax in rat) could NOT be located in public literature (PubMed returned 0 hits). Per the no-fabrication rule, acetaminophen cannot be fully populated and is halted even though it is the mechanism's design target -- reinforcing the data-feasibility HALT."
+    },
+    {
+      "name": "carbon_tetrachloride",
+      "role": "reactive",
+      "intended": "centrilobular CYP2E1 trichloromethyl-radical toxicant",
+      "reason": "Only WHOLE-BODY gas-uptake PBPK metabolic constants are published (Paustenbach DJ, Clewell HJ, Gargas ML, Andersen ME. Toxicol Appl Pharmacol 96(2):191-211, 1988, doi:10.1016/0041-008x(88)90080-4: Vmax 0.65 mg/kg/hr, Km 0.25 mg/L). These are whole-organism (mg/kg/hr), NOT the microsomal pmol/min/mg basis required by vmax_bio_basis, and cannot be converted without fabricating an enzyme abundance. No rat microsomal CCl4 bioactivation Vmax/Km in consistent units located. Halted."
+    },
+    {
+      "name": "bromobenzene",
+      "role": "reactive",
+      "intended": "classic centrilobular epoxide/quinone toxicant",
+      "reason": "Bromobenzene is bioactivated to the 3,4-epoxide, but no rat liver-microsomal Vmax/Km for 3,4-epoxide (reactive-metabolite) formation in pmol/min/mg or convertible units was located. Literature provides only qualitative covalent-binding and mechanism data (protein-bound fraction ~2-5% of products) without formation kinetic constants, and no rat reactive-metabolite detox Vmax. Halted."
+    },
+    {
+      "name": "diclofenac",
+      "role": "reactive",
+      "intended": "quinone-imine / acyl-glucuronide reactive-metabolite hepatotoxicant",
+      "reason": "No rat reactive-metabolite (quinone-imine / arene-oxide) FORMATION Vmax/Km located (PubMed 0 hits). Oxidative hydroxylation kinetics exist for some systems but not the bioactivation arm in a consistent microsomal basis, and no rat reactive-metabolite detox Vmax. Halted."
+    },
+    {
+      "name": "troglitazone",
+      "role": "reactive",
+      "intended": "idiosyncratic DILI (reactive quinone / sulfur metabolites)",
+      "reason": "Troglitazone DILI is human-idiosyncratic and is not reproduced in rat; no rat microsomal reactive-metabolite (quinone / reactive-sulfur) formation Vmax/Km located (PubMed 0 hits). Halted."
+    },
+    {
+      "name": "allyl_alcohol",
+      "role": "periportal",
+      "intended": "periportal contrast: bioactivated by alcohol dehydrogenase (ADH) to acrolein; ADH is a documented PERIPORTAL enzyme (non-circular zonation basis, set from the enzyme not the injury zone)",
+      "reason": "The non-circular periportal basis exists (ADH zonation), but no rat ADH allyl-alcohol oxidation Vmax/Km in a basis CONSISTENT with the microsomal vmax_bio_basis was located. ADH is cytosolic, not microsomal, so any cytosolic ADH Vmax would break the single shared vmax_bio_basis; and no rat acrolein detox (GSH/ALDH) Vmax in matching units was found. Halted (cannot populate consistent-basis kinetics without fabrication)."
+    },
+    {
+      "name": "valproate",
+      "role": "off_mechanism",
+      "intended": "off-mechanism control: microvesicular steatosis / mitochondrial beta-oxidation inhibition, NOT the centrilobular reactive-metabolite route -- present so the reactive-centrilobular hazard must NOT fire",
+      "reason": "Valproate's dominant hepatotoxic mechanism is steatosis/mitochondrial, not reactive-centrilobular. 4-ene-VPA reactive-metabolite formation by CYP exists qualitatively, but no rat reactive-metabolite formation Vmax/Km AND no rat detox Vmax in consistent units could be assembled. Included as halted-with-reason per the off-mechanism requirement; its mechanism is outside the route this dataset tests."
+    }
+  ]
+}
