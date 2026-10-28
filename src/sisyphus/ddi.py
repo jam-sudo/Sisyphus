@@ -8,6 +8,10 @@ Competitive inhibition::
 
     abundance_effective = abundance_base / (1 + [I] / Ki)
 
+Time-dependent inhibition (static steady state)::
+
+    abundance_effective = abundance_base * kdeg / (kdeg + kinact * [I] / (KI + [I]))
+
 Enzyme induction::
 
     abundance_effective = abundance_base * (1 + Emax * [I] / (EC50 + [I]))
@@ -21,6 +25,7 @@ from __future__ import annotations
 
 import dataclasses
 import logging
+import math
 from dataclasses import dataclass
 
 from sisyphus.core import Distribution
@@ -50,8 +55,10 @@ class Inhibitor:
             Defaults to 1.0 (total = unbound assumption).  Set to
             the actual fu when unbound concentrations are needed for
             more refined predictions.
-        mechanism: Inhibition mechanism.  Currently only "competitive"
-            is implemented.  "time_dependent" is a future extension.
+        mechanism: "competitive" or "time_dependent". The latter also applies
+            competitive inhibition when enzyme_ki is supplied.
+        enzyme_tdi: Mapping of enzyme tag -> (kinact h^-1, KI uM, kdeg h^-1).
+            Required for time_dependent; no turnover defaults are assumed.
     """
 
     name: str
@@ -59,6 +66,7 @@ class Inhibitor:
     plasma_concentration: float  # [I] at steady state, uM (total Cmax)
     fu_perpetrator: float = 1.0  # fraction unbound (1.0 = total ≈ unbound)
     mechanism: str = "competitive"  # "competitive" | "time_dependent"
+    enzyme_tdi: dict[str, tuple[float, float, float]] | None = None
 
 
 @dataclass(frozen=True)
@@ -88,7 +96,7 @@ class Inducer:
 
 
 def apply_inhibition(graph: BodyGraph, inhibitor: Inhibitor) -> BodyGraph:
-    """Apply competitive CYP inhibition to a BodyGraph.
+    """Apply competitive and/or static time-dependent CYP inhibition to a BodyGraph.
 
     For each node with enzymes, reduces affected enzyme abundances by::
 
@@ -104,11 +112,26 @@ def apply_inhibition(graph: BodyGraph, inhibitor: Inhibitor) -> BodyGraph:
     Returns:
         Modified BodyGraph with reduced enzyme abundances.
     """
-    if inhibitor.mechanism != "competitive":
-        raise ValueError(
-            f"Unsupported inhibition mechanism: {inhibitor.mechanism!r}. "
-            f"Only 'competitive' is currently implemented."
-        )
+    if inhibitor.mechanism not in ("competitive", "time_dependent"):
+        raise ValueError(f"Unsupported inhibition mechanism: {inhibitor.mechanism!r}")
+    tdi = inhibitor.enzyme_tdi if inhibitor.mechanism == "time_dependent" else None
+    if inhibitor.mechanism == "competitive" and inhibitor.enzyme_tdi:
+        raise ValueError("enzyme_tdi requires mechanism='time_dependent'")
+    if inhibitor.mechanism == "time_dependent":
+        if not tdi:
+            raise ValueError("time_dependent requires enzyme_tdi parameters")
+        if not all(map(math.isfinite, (
+            inhibitor.plasma_concentration, inhibitor.fu_perpetrator,
+        ))) or inhibitor.plasma_concentration < 0 or not 0 <= inhibitor.fu_perpetrator <= 1:
+            raise ValueError("TDI concentration must be nonnegative and fu_perpetrator in [0, 1]")
+        for tag, (kinact, ki_tdi, kdeg) in tdi.items():
+            if not all(map(math.isfinite, (kinact, ki_tdi, kdeg))) or (
+                kinact < 0 or ki_tdi <= 0 or kdeg <= 0
+            ):
+                raise ValueError(f"TDI requires kinact >= 0, KI > 0, kdeg > 0 for {tag!r}")
+        missing = set(tdi) - {tag for node in graph.nodes.values() for tag in node.enzymes}
+        if missing:
+            raise ValueError(f"TDI enzyme(s) absent from graph: {', '.join(sorted(missing))}")
 
     new_graph = BodyGraph()
     new_graph.global_params = dict(graph.global_params)
@@ -122,30 +145,30 @@ def apply_inhibition(graph: BodyGraph, inhibitor: Inhibitor) -> BodyGraph:
         modified = False
 
         for tag, abundance in node.enzymes.items():
-            if tag in inhibitor.enzyme_ki:
-                ki = inhibitor.enzyme_ki[tag]
-                if ki <= 0:
-                    raise ValueError(f"Ki must be positive for enzyme {tag!r}, got {ki}")
-                # Unbound perpetrant drives inhibition: [I]_u = fu * [I].
-                # fu_perpetrator defaults to 1.0, so total-concentration callers
-                # are unaffected.
+            if tag in inhibitor.enzyme_ki or (tdi and tag in tdi):
                 conc_u = inhibitor.plasma_concentration * inhibitor.fu_perpetrator
-                ratio = conc_u / ki
-                # Competitive inhibition: effective = base / (1 + [I]_u/Ki)
-                factor = 1.0 / (1.0 + ratio)
+                factor = 1.0
+                if tag in inhibitor.enzyme_ki:
+                    ki = inhibitor.enzyme_ki[tag]
+                    if ki <= 0:
+                        raise ValueError(f"Ki must be positive for enzyme {tag!r}, got {ki}")
+                    factor /= 1.0 + conc_u / ki
+                if tdi and tag in tdi:
+                    kinact, ki_tdi, kdeg = tdi[tag]
+                    # shortcut: fixed perpetrator exposure; use turnover dynamics for time courses.
+                    factor *= kdeg / (kdeg + kinact * conc_u / (ki_tdi + conc_u))
                 new_enzymes[tag] = Distribution(
                     mean=abundance.mean * factor,
                     cv=abundance.cv,
                 )
                 modified = True
                 logger.debug(
-                    "%s: %s abundance %.0f -> %.0f (factor=%.4f, [I]/Ki=%.1f)",
+                    "%s: %s abundance %.0f -> %.0f (factor=%.4f)",
                     name,
                     tag,
                     abundance.mean,
                     abundance.mean * factor,
                     factor,
-                    ratio,
                 )
             else:
                 new_enzymes[tag] = abundance

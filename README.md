@@ -304,9 +304,9 @@ The module provides an a-priori-to-posterior path (`predict_posterior`), steady-
 
 DDI adjusts enzyme abundances in the body graph before ODE compilation; the engine computes clearance as usual.
 
-$$E_{eff} = \frac{E_{base}}{1 + [I] / K_i} \quad \text{(competitive inhibition)}, \qquad E_{eff} = E_{base} \cdot \left(1 + \frac{E_{max} \cdot [I]}{EC_{50} + [I]}\right) \quad \text{(induction)}$$
+$$E_{eff} = \frac{E_{base}}{1 + [I] / K_i} \quad \text{(competitive inhibition)}, \qquad E_{eff} = E_{base} \cdot \frac{k_{deg}}{k_{deg} + k_{inact}[I]/(K_I + [I])} \quad \text{(static time-dependent inhibition)}, \qquad E_{eff} = E_{base} \cdot \left(1 + \frac{E_{max} \cdot [I]}{EC_{50} + [I]}\right) \quad \text{(induction)}$$
 
-where $E_{base}$ is baseline enzyme abundance (pmol), $[I]$ the perpetrator plasma concentration, $K_i$ the inhibition constant, and $E_{max}$/$EC_{50}$ the induction parameters. Preset perpetrators: ketoconazole, fluconazole, quinidine (CYP inhibitors) and rifampin (CYP3A4 inducer).
+where $E_{base}$ is baseline enzyme abundance (pmol), $[I]$ the unbound perpetrator concentration (total concentration multiplied by `fu_perpetrator`), $K_i$ the competitive inhibition constant, $k_{inact}$ and $k_{deg}$ rates in h<sup>&minus;1</sup>, $K_I$ in µM, and $E_{max}$/$EC_{50}$ the induction parameters. The factors multiply when mechanisms are combined. TDI uses a fixed perpetrator concentration and user-supplied enzyme-specific parameters; it does not simulate perpetrator exposure or enzyme turnover over time. Preset perpetrators: ketoconazole, fluconazole, quinidine (CYP inhibitors) and rifampin (CYP3A4 inducer).
 
 ```python
 from sisyphus.ddi import apply_inhibition, KETOCONAZOLE
@@ -314,6 +314,14 @@ from sisyphus.ddi import apply_inhibition, KETOCONAZOLE
 inhibited_graph = apply_inhibition(graph, KETOCONAZOLE)
 # Mechanistic scenario only; external clinical-pair validation is required.
 ```
+
+```sh
+sisyphus ddi --smiles 'CCO' --dose 100 --inhibitor ketoconazole
+sisyphus ddi --smiles 'CCO' --dose 100 --tdi-enzyme CYP3A4 \
+  --kinact 0.2 --ki-tdi 1 --kdeg 0.1 --concentration 1
+```
+
+The second command is an illustrative parameter scenario, not a validated drug pair. Add `--competitive-ki` for competitive inhibition by the same perpetrator, `--fu-perpetrator` for unbound concentration, or `--inducer rifampin` to apply induction as well. The Python API accepts per-enzyme `(kinact, KI, kdeg)` tuples via `Inhibitor(enzyme_tdi=..., mechanism="time_dependent")`.
 
 </details>
 
@@ -331,6 +339,12 @@ from sisyphus.pkpd import compute_effect, PDModel
 
 effect = compute_effect(sim_result, PDModel(ke0=0.5, emax=100.0, ec50=0.05, hill=2.0))
 ```
+
+```sh
+sisyphus pkpd --smiles 'CCO' --dose 100 --ke0 0.5 --ec50 0.05
+```
+
+The CLI uses the `PDModel` defaults for E<sub>max</sub>, Hill coefficient, and baseline, and reports peak effect and its time. Choose `ke0` and `ec50` for the drug and endpoint; use the Python API for other effect parameters. This is an experimental scenario, not a clinical prediction.
 
 </details>
 

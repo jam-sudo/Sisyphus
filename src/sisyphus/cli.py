@@ -101,7 +101,27 @@ def main() -> None:
         choices=["rifampin"],
         help="Preset inducer name",
     )
+    ddi_parser.add_argument("--tdi-enzyme", help="Enzyme tag for user-supplied TDI")
+    ddi_parser.add_argument("--kinact", type=float, help="TDI kinact (h^-1)")
+    ddi_parser.add_argument("--ki-tdi", type=float, help="TDI KI (uM)")
+    ddi_parser.add_argument("--kdeg", type=float, help="Enzyme turnover kdeg (h^-1)")
+    ddi_parser.add_argument(
+        "--concentration", type=float, help="Perpetrator total concentration (uM)"
+    )
+    ddi_parser.add_argument("--fu-perpetrator", type=float, default=1.0)
+    ddi_parser.add_argument("--competitive-ki", type=float, help="Optional competitive Ki (uM)")
     ddi_parser.add_argument("--verbose", "-v", action="store_true")
+
+    # pkpd command
+    pd_parser = subparsers.add_parser("pkpd", help="EXPERIMENTAL: effect-site PK/PD scenario")
+    pd_parser.add_argument("--smiles", required=True, help="Drug SMILES")
+    pd_parser.add_argument("--dose", type=float, required=True, help="Dose (mg)")
+    pd_parser.add_argument("--route", default="oral", choices=["oral", "iv"])
+    pd_parser.add_argument("--ke0", type=float, required=True, help="Effect-site rate (h^-1)")
+    pd_parser.add_argument(
+        "--ec50", type=float, required=True, help="Half-maximal concentration (mg/L)"
+    )
+    pd_parser.add_argument("--verbose", "-v", action="store_true")
 
     # dose-adjust command (MIPD)
     da_parser = subparsers.add_parser(
@@ -169,6 +189,8 @@ def main() -> None:
         _run_tdm(args)
     elif args.command == "ddi":
         _run_ddi(args)
+    elif args.command == "pkpd":
+        _run_pkpd(args)
     elif args.command == "dose-adjust":
         _run_dose_adjust(args)
     elif args.command == "benchmark":
@@ -541,6 +563,9 @@ def _run_ddi(args: argparse.Namespace) -> None:
         "EXPERIMENTAL: DDI output is a mechanistic scenario, not a clinical prediction.",
         file=sys.stderr,
     )
+    import math
+    from dataclasses import replace
+
     import numpy as np
 
     from sisyphus.ddi import (
@@ -548,6 +573,7 @@ def _run_ddi(args: argparse.Namespace) -> None:
         KETOCONAZOLE,
         QUINIDINE,
         RIFAMPIN,
+        Inhibitor,
         apply_induction,
         apply_inhibition,
     )
@@ -555,27 +581,48 @@ def _run_ddi(args: argparse.Namespace) -> None:
     from sisyphus.engine.solver import solve
     from sisyphus.pk.endpoints import compute_endpoints
 
-    graph, compiled, drug = _build_drug_and_graph(args.smiles, args.dose, args.route)
-
     # Resolve perpetrator
     inhibitors = {"ketoconazole": KETOCONAZOLE, "fluconazole": FLUCONAZOLE, "quinidine": QUINIDINE}
     inducers = {"rifampin": RIFAMPIN}
 
-    if args.inhibitor and args.inducer:
-        print("Error: specify --inhibitor or --inducer, not both", file=sys.stderr)
-        sys.exit(1)
-    if not args.inhibitor and not args.inducer:
-        print("Error: specify --inhibitor or --inducer", file=sys.stderr)
-        sys.exit(1)
-
-    if args.inhibitor:
-        perpetrator = inhibitors[args.inhibitor]
-        ddi_graph = apply_inhibition(graph, perpetrator)
-        ddi_type = f"inhibition ({perpetrator.name})"
+    if not math.isfinite(args.fu_perpetrator) or not 0 <= args.fu_perpetrator <= 1:
+        raise ValueError("--fu-perpetrator must be between 0 and 1")
+    tdi_args = (args.kinact, args.ki_tdi, args.kdeg, args.concentration)
+    if args.tdi_enzyme:
+        if args.inhibitor or any(value is None for value in tdi_args):
+            parser_error = "--tdi-enzyme requires --kinact, --ki-tdi, --kdeg, --concentration"
+            raise ValueError(parser_error + " and cannot be combined with --inhibitor")
+        perpetrator = Inhibitor(
+            name="user-supplied TDI",
+            enzyme_ki={args.tdi_enzyme: args.competitive_ki}
+            if args.competitive_ki is not None else {},
+            plasma_concentration=args.concentration,
+            fu_perpetrator=args.fu_perpetrator,
+            mechanism="time_dependent",
+            enzyme_tdi={args.tdi_enzyme: (args.kinact, args.ki_tdi, args.kdeg)},
+        )
+    elif any(value is not None for value in tdi_args) or args.competitive_ki is not None:
+        raise ValueError("TDI parameters require --tdi-enzyme")
+    elif args.inhibitor:
+        perpetrator = replace(
+            inhibitors[args.inhibitor], fu_perpetrator=args.fu_perpetrator
+        )
     else:
-        perpetrator = inducers[args.inducer]
-        ddi_graph = apply_induction(graph, perpetrator)
-        ddi_type = f"induction ({perpetrator.name})"
+        perpetrator = None
+
+    if not perpetrator and not args.inducer:
+        raise ValueError("specify --inhibitor, --tdi-enzyme, or --inducer")
+    graph, _, drug = _build_drug_and_graph(args.smiles, args.dose, args.route)
+    ddi_graph = graph
+    ddi_types = []
+    if perpetrator:
+        ddi_graph = apply_inhibition(ddi_graph, perpetrator)
+        ddi_types.append(f"inhibition ({perpetrator.name})")
+    if args.inducer:
+        inducer = replace(inducers[args.inducer], fu_perpetrator=args.fu_perpetrator)
+        ddi_graph = apply_induction(ddi_graph, inducer)
+        ddi_types.append(f"induction ({inducer.name})")
+    ddi_type = " + ".join(ddi_types)
 
     def _solve_pk(g):
         import sisyphus.engine.flux  # noqa: F401
@@ -603,6 +650,31 @@ def _run_ddi(args: argparse.Namespace) -> None:
     if base_pk.t_half and ddi_pk.t_half:
         thalf_ratio = ddi_pk.t_half.mean / base_pk.t_half.mean if base_pk.t_half.mean > 0 else 0.0
         print(f"{'t½ (h)':<20s} {base_pk.t_half.mean:>12.2f} {ddi_pk.t_half.mean:>12.2f} {thalf_ratio:>8.2f}")  # noqa: E501
+
+
+def _run_pkpd(args: argparse.Namespace) -> None:
+    """Simulate a dose and post-process its effect-site response."""
+    logging.basicConfig(
+        level=logging.DEBUG if args.verbose else logging.WARNING,
+        format="%(levelname)s %(name)s: %(message)s",
+    )
+    print("EXPERIMENTAL: PK/PD parameters require external validation.", file=sys.stderr)
+    import numpy as np
+
+    import sisyphus.engine.flux  # noqa: F401
+    from sisyphus.engine.compiler import ResolvedParams
+    from sisyphus.engine.solver import solve
+    from sisyphus.pkpd import PDModel, compute_effect
+
+    graph, compiled, drug = _build_drug_and_graph(args.smiles, args.dose, args.route)
+    rng = np.random.default_rng(42)
+    params = ResolvedParams(graph.sample(rng), drug.sample(rng))
+    y0 = np.zeros(compiled.n_states)
+    y0[compiled.state_index[drug.administration_node]] = drug.dose_mg
+    result = solve(compiled, params, y0, t_span=(0, 24))
+    effect = compute_effect(result, PDModel(ke0=args.ke0, ec50=args.ec50))
+    print(f"Drug: {drug.name}")
+    print(f"Peak effect: {effect.emax_achieved:.4f} at {effect.temax:.2f} h")
 
 
 def _run_benchmark(args: argparse.Namespace) -> None:
