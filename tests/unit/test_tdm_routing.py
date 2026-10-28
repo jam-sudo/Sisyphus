@@ -137,8 +137,18 @@ def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
     rebuilt = json.loads(out.read_text())
     assert rebuilt["source"] == "data/validation/sbi_sbc_multi_drug_v2.json"
     assert rebuilt["sbi_reweight"] == original["sbi_reweight"]
+    assert rebuilt["summary"]["sbi"] == 5
+    assert rebuilt["summary"]["ibis"] == 8
+    assert rebuilt["summary"]["global_sbc_gate_passed"] is False
     assert (rebuilt["reasons"]["morphine"]["tdm_bias_override"]
             == original["reasons"]["morphine"]["tdm_bias_override"])
+
+    original["routes"]["pravastatin"] = "is"
+    out.write_text(json.dumps(original))
+    main()
+    rebuilt = json.loads(out.read_text())
+    assert rebuilt["routes"]["pravastatin"] == "is"
+    assert rebuilt["summary"]["is"] == 1
 
 
 def test_sbi_warns_for_timed_multidose_observation(case, caplog):
