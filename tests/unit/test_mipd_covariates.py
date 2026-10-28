@@ -4,7 +4,7 @@ import logging
 import pytest
 
 from sisyphus.mipd.core import ci_floor
-from sisyphus.mipd.covariates import Covariates, cockcroft_gault
+from sisyphus.mipd.covariates import Covariates, cockcroft_gault, population_gfr_ml_min
 
 
 def test_ci_floor_off_by_default_fraction():
@@ -30,6 +30,24 @@ def test_ci_floor_nonpositive_mean_passthrough():
 
 def test_covariates_renal_factor_unity_at_reference():
     assert Covariates(crcl_ml_min=125.0).renal_factor() == 1.0
+
+
+def test_population_gfr_rhodin_half_maturity():
+    assert population_gfr_ml_min(70.0, 47.7) == pytest.approx(60.6)
+    cov = Covariates(body_weight_kg=70.0, pma_weeks=47.7)
+    assert cov.renal_factor() == pytest.approx(60.6 / 125.0)
+    assert any("population-estimate" in w for w in cov.warnings())
+    assert Covariates(crcl_ml_min=80, body_weight_kg=70, pma_weeks=47.7).renal_factor() == 80 / 125
+
+
+def test_population_gfr_and_crcl_cv_validation():
+    with pytest.raises(ValueError, match="pma_weeks"):
+        Covariates(pma_weeks=47.7)
+    with pytest.raises(ValueError, match="crcl_cv"):
+        Covariates(crcl_ml_min=80, crcl_cv=-0.1)
+    with pytest.raises(ValueError, match="crcl_ml_min"):
+        Covariates(crcl_cv=0.2)
+    assert Covariates(crcl_ml_min=80, crcl_cv=0.2).crcl_cv == 0.2
 
 
 def test_covariates_renal_factor_scales_linearly():

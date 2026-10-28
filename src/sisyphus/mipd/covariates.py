@@ -1,4 +1,4 @@
-"""Patient covariates that deterministically individualize the engine prior.
+"""Patient covariates for renal and whole-body engine-prior individualization.
 
 Measured creatinine clearance (CrCl) scales
 the drug's renal (glomerular-filtration) clearance: the engine's reference renal
@@ -34,6 +34,27 @@ _DEVINE_KG_PER_INCH = 2.3
 _DEVINE_REFERENCE_HEIGHT_IN = 60.0
 # Winter et al. 2012, PMID 22576791: adjusted body weight uses 40% excess weight.
 _CG_ADJUSTED_WEIGHT_FRACTION = 0.4
+
+# Rhodin et al., Pediatr Nephrol 24:67-76 (2009), PMID 18846389.
+_RHODIN_ADULT_GFR_ML_MIN = 121.2
+_RHODIN_ADULT_WEIGHT_KG = 70.0
+_RHODIN_PMA50_WEEKS = 47.7
+_RHODIN_WEIGHT_EXPONENT_UNITLESS = 0.75
+_RHODIN_HILL_EXPONENT_UNITLESS = 3.4
+
+
+def population_gfr_ml_min(weight_kg: float, pma_weeks: float) -> float:
+    """Rhodin population GFR estimate (mL/min) from weight and postmenstrual age."""
+    if not math.isfinite(weight_kg) or weight_kg <= 0:
+        raise ValueError("weight_kg must be finite and > 0")
+    if not math.isfinite(pma_weeks) or pma_weeks <= 0:
+        raise ValueError("pma_weeks must be finite and > 0")
+    maturity = pma_weeks ** _RHODIN_HILL_EXPONENT_UNITLESS
+    return (
+        _RHODIN_ADULT_GFR_ML_MIN
+        * (weight_kg / _RHODIN_ADULT_WEIGHT_KG) ** _RHODIN_WEIGHT_EXPONENT_UNITLESS
+        * maturity / (_RHODIN_PMA50_WEEKS ** _RHODIN_HILL_EXPONENT_UNITLESS + maturity)
+    )
 
 
 def cockcroft_gault(
@@ -108,18 +129,22 @@ def cockcroft_gault(
 
 @dataclass(frozen=True)
 class Covariates:
-    """Deterministic patient covariates for the engine-as-prior individualization.
+    """Patient covariates for engine-as-prior individualization.
 
     Attributes:
         crcl_ml_min: measured creatinine clearance (mL/min). None -> no renal
             individualization (renal_factor 1.0).
         body_weight_kg: patient body weight for whole-body physiology.
         age_years: patient age for enzyme ontogeny and organ physiology.
+        pma_weeks: postmenstrual age for the Rhodin population GFR estimate.
+        crcl_cv: optional measurement CV for measured CrCl; zero disables it.
     """
 
     crcl_ml_min: float | None = None
     body_weight_kg: float | None = None
     age_years: float | None = None
+    pma_weeks: float | None = None
+    crcl_cv: float = 0.0
 
     def __post_init__(self) -> None:
         if self.crcl_ml_min is not None and self.crcl_ml_min <= 0:
@@ -128,16 +153,24 @@ class Covariates:
             raise ValueError(f"body_weight_kg must be > 0, got {self.body_weight_kg}")
         if self.age_years is not None and self.age_years <= 0:
             raise ValueError(f"age_years must be > 0, got {self.age_years}")
+        if self.pma_weeks is not None:
+            if not math.isfinite(self.pma_weeks) or self.pma_weeks <= 0:
+                raise ValueError("pma_weeks must be finite and > 0")
+            if self.body_weight_kg is None:
+                raise ValueError("pma_weeks requires body_weight_kg")
+        if not math.isfinite(self.crcl_cv) or self.crcl_cv < 0:
+            raise ValueError("crcl_cv must be finite and >= 0")
+        if self.crcl_cv and self.crcl_ml_min is None:
+            raise ValueError("crcl_cv requires crcl_ml_min")
 
     def renal_factor(self) -> float:
-        """Multiplicative scale for ``drug.renal_clearance`` (CrCl-only; 1.0 at CrCl=125).
-
-        Weight/age never affect this — renal individualization is measured-CrCl-only
-        (estimating GFR from age/weight is deferred; see the design spec).
-        """
-        if self.crcl_ml_min is None:
-            return 1.0
-        return self.crcl_ml_min / _REFERENCE_GFR_ML_MIN
+        """Renal clearance scale from measured CrCl or Rhodin population GFR."""
+        if self.crcl_ml_min is not None:
+            return self.crcl_ml_min / _REFERENCE_GFR_ML_MIN
+        if self.pma_weeks is not None:
+            gfr = population_gfr_ml_min(self.body_weight_kg, self.pma_weeks)
+            return gfr / _REFERENCE_GFR_ML_MIN
+        return 1.0
 
     def has_physiology(self) -> bool:
         """True iff weight or age is set — triggers generate_physiology graph build."""
@@ -146,6 +179,10 @@ class Covariates:
     def warnings(self) -> tuple[str, ...]:
         """Structured flags for physiologically extreme covariates (extrapolation risk)."""
         w: list[str] = []
+        if self.crcl_ml_min is None and self.pma_weeks is not None:
+            w.append(
+                "gfr:population-estimate: Rhodin weight/PMA model, not measured renal function"
+            )
         if self.crcl_ml_min is not None and not (5.0 <= self.crcl_ml_min <= 200.0):
             w.append(
                 f"crcl:extreme:{self.crcl_ml_min}: the engine renal model is "
