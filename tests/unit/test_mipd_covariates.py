@@ -37,6 +37,10 @@ def test_population_gfr_rhodin_half_maturity():
     cov = Covariates(body_weight_kg=70.0, pma_weeks=47.7)
     assert cov.renal_factor() == pytest.approx(60.6 / 125.0)
     assert any("population-estimate" in w for w in cov.warnings())
+    assert any("adult default age" in w for w in cov.warnings())
+    assert not any("adult default age" in w for w in Covariates(
+        body_weight_kg=70, pma_weeks=47.7, age_years=0.5
+    ).warnings())
     assert Covariates(crcl_ml_min=80, body_weight_kg=70, pma_weeks=47.7).renal_factor() == 80 / 125
 
 

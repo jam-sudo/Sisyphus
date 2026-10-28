@@ -49,6 +49,7 @@ def main() -> None:
     mipd_parser.add_argument("--crcl-cv", type=float, default=0.0,
                              help="Measurement CV for CrCl (default: 0)")
     mipd_parser.add_argument("--body-weight", type=float, help="Body weight in kg")
+    mipd_parser.add_argument("--age-years", type=float, help="Postnatal age in years")
     mipd_parser.add_argument("--pma-weeks", type=float, help="Postmenstrual age in weeks")
     mipd_parser.add_argument("--structural-latents", action="store_true",
                              help="Infer CL, V, and oral absorption rate")
@@ -241,8 +242,11 @@ def _run_mipd(args: argparse.Namespace) -> None:
     covariates = (
         Covariates(
             crcl_ml_min=args.crcl, crcl_cv=args.crcl_cv,
-            body_weight_kg=args.body_weight, pma_weeks=args.pma_weeks,
-        ) if any(x is not None for x in (args.crcl, args.body_weight, args.pma_weeks))
+            body_weight_kg=args.body_weight, age_years=args.age_years,
+            pma_weeks=args.pma_weeks,
+        ) if any(
+            x is not None for x in (args.crcl, args.body_weight, args.age_years, args.pma_weeks)
+        )
         or args.crcl_cv else None
     )
     target_specs = (

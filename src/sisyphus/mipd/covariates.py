@@ -183,6 +183,11 @@ class Covariates:
             w.append(
                 "gfr:population-estimate: Rhodin weight/PMA model, not measured renal function"
             )
+            if self.age_years is None:
+                w.append(
+                    "age:unspecified: non-renal physiology uses the adult default age; "
+                    "supply age_years for pediatric body scaling"
+                )
         if self.crcl_ml_min is not None and not (5.0 <= self.crcl_ml_min <= 200.0):
             w.append(
                 f"crcl:extreme:{self.crcl_ml_min}: the engine renal model is "
