@@ -553,7 +553,7 @@ src/sisyphus/
 ├── engine/              # Identity-blind ODE compiler, flux specs, LSODA solver, Monte Carlo
 ├── predict/             # Chemistry, ADME, IVIVE, phenotype, prodrug + transporter registries
 ├── ml/                  # Direct PK predictors, CL/F track, model registry, meta-learner
-├── pk/                  # Endpoints, non-compartmental analysis, closed-form solutions
+├── pk/                  # Endpoints and non-compartmental analysis
 ├── regimen/             # Multi-dose solver, steady state, TDM (SBI/IBIS/EnKF), dosing
 ├── sbi/                 # Priors, simulator, neural posterior, physiology generator, SBC gate
 ├── mipd/                # F / CL / renal latents, covariates, posterior PK, dose recommendation

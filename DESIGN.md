@@ -195,7 +195,6 @@ sisyphus/
 │   ├── pk/                   # PK endpoint computation
 │   │   ├── endpoints.py      # Cmax, AUC, t½
 │   │   ├── nca.py            # Non-compartmental analysis
-│   │   └── analytical.py     # 1-cpt, 2-cpt closed-form
 │   │
 │   ├── validation/           # Reference, benchmark, metrics
 │   │   ├── reference.py      # Single source of truth
@@ -535,8 +534,8 @@ class SimResult:
 @dataclass(frozen=True)
 class PKEndpoints:
     cmax: Distribution
-    tmax: Distribution
-    auc_0t: Distribution
+    tmax: Distribution | None
+    auc_0t: Distribution | None
     auc_0inf: Distribution | None
     t_half: Distribution | None
     cl: Distribution | None
@@ -544,6 +543,8 @@ class PKEndpoints:
 ```
 
 MC 결과: N개 sample에서 집계한 distribution. 단일 simulation: cv=0인 deterministic distribution.
+ML-only results expose Cmax; curve-derived endpoints are None. CL and Vss require an IV curve
+that has returned near baseline for terminal extrapolation.
 
 ### 7.3 PredictionResult (pipeline → caller)
 
@@ -600,7 +601,7 @@ MC latency 근거: ODE 1회 ~50ms (Omega 200ms의 4x 최적화 — graph precomp
 | Graph validation 실패 (flow conservation 등) | `ValueError`. Graph 정의 오류. |
 | ADME 예측 실패 | conservative defaults, `confidence="low"`, `warnings`에 기록. |
 | AD 밖 | `in_applicability_domain=False`, `ad_flags`에 사유. 예측은 계속. |
-| ODE solver 발산 | `solver_success=False`, analytical fallback, `warnings`. |
+| ODE solver 발산 | `solver_success=False`, warning; engine track dropped while available ML tracks continue. |
 | Mass balance > 1e-4 | `warnings`에 기록, 신뢰도 하향. |
 | Terminal t½ 추정 불가 | `t_half=None`. |
 

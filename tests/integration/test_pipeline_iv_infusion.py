@@ -69,12 +69,13 @@ def test_infusion_requires_post_infusion_observation_within_24h():
         predict(_VALSARTAN_SMILES, 20.0, route="iv", infusion_duration_min=1435.0)
 
 
-def test_infusion_skips_mc_with_warning():
-    """MC on infusion is Phase 2 scope — Phase 1 skips with warning."""
+def test_infusion_mc_has_parameter_interval():
     result = predict(
         _VALSARTAN_SMILES, 20.0, route="iv",
-        infusion_duration_min=30.0, n_mc_samples=50,
+        infusion_duration_min=30.0, n_mc_samples=10,
     )
     assert result.engine_pk is not None
-    assert result.cmax_90ci is None
-    assert any("infusion" in w.lower() for w in result.warnings)
+    assert result.cmax_90ci is not None
+    assert result.cmax_90ci[0] < result.cmax_90ci[1]
+    assert result.cmax_prediction.parameter_interval_90 == result.cmax_90ci
+    assert not any("MC skipped" in w for w in result.warnings)

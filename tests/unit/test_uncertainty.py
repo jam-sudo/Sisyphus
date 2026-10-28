@@ -10,6 +10,7 @@ from sisyphus.engine.compiler import ODECompiler
 from sisyphus.engine.uncertainty import MCResult, UncertaintyEngine, UncertaintyResult
 from sisyphus.graph.body import BodyGraph
 from sisyphus.graph.types import ClearanceEdge, FlowEdge, Node
+from sisyphus.regimen.types import DosingRegimen
 
 
 def _make_simple_graph() -> BodyGraph:
@@ -61,6 +62,18 @@ def _make_simple_drug() -> DrugOnGraph:
 
 
 class TestUncertaintyEngine:
+    def test_propagate_regimen_returns_parameter_interval(self):
+        graph = _make_simple_graph()
+        drug = _make_simple_drug()
+        compiled = ODECompiler().compile(graph)
+        regimen = DosingRegimen.single_iv(dose_mg=drug.dose_mg, duration_h=1.0)
+        result = UncertaintyEngine().propagate_regimen(
+            compiled, graph, drug, regimen, n_samples=3, t_total_h=4.0,
+        )
+        assert result.n_samples == 3
+        assert result.n_failures == 0
+        assert result.cmax_90ci[0] < result.cmax_90ci[1]
+
     def test_propagate_returns_uncertainty_result(self):
         graph = _make_simple_graph()
         drug = _make_simple_drug()

@@ -474,13 +474,13 @@ class SimResult:
 class PKEndpoints:
     """Pharmacokinetic endpoints.
 
-    All values are Distribution.  For a single deterministic run the cv
-    is 0.  For MC results the distribution aggregates N samples.
+    Available values are Distribution. A single deterministic run has cv=0;
+    absent curve-derived endpoints are None (such as ML-only Tmax/AUC).
     """
 
     cmax: Distribution
-    tmax: Distribution
-    auc_0t: Distribution
+    tmax: Distribution | None
+    auc_0t: Distribution | None
     auc_0inf: Distribution | None = None
     t_half: Distribution | None = None
     cl: Distribution | None = None

@@ -10,6 +10,36 @@ from sisyphus.core import Distribution, PredictionResult
 
 
 class TestPipeline:
+    def test_mass_balance_violation_warns_and_downgrades_confidence(self, monkeypatch):
+        import sisyphus.engine.solver as solver
+        from sisyphus.pipeline.predict import predict
+
+        real_solve = solver.solve
+
+        def imbalanced_solve(*args, **kwargs):
+            return replace(real_solve(*args, **kwargs), mass_balance_error=2e-4)
+
+        monkeypatch.setattr(solver, "solve", imbalanced_solve)
+        result = predict("Cn1c(=O)c2c(ncn2C)n(C)c1=O", 100.0)
+        assert result.confidence == "low"
+        assert any("Mass balance error" in warning for warning in result.warnings)
+
+    def test_ml_only_fallback_has_no_synthetic_endpoints(self, monkeypatch):
+        import sisyphus.engine.solver as solver
+        from sisyphus.core import SimResult
+        from sisyphus.pipeline.predict import predict
+
+        def failed_solve(*args, **kwargs):
+            return SimResult(
+                time_h=np.array([0.0]), concentrations={}, amounts={},
+                mass_balance_error=0.0, solver_success=False,
+            )
+
+        monkeypatch.setattr(solver, "solve", failed_solve)
+        result = predict("Cn1c(=O)c2c(ncn2C)n(C)c1=O", 100.0)
+        assert result.engine_pk is None
+        assert result.pk.tmax is None and result.pk.auc_0t is None
+
     @pytest.mark.parametrize("dose", [0, -1, float("nan"), float("inf")])
     def test_rejects_nonpositive_or_nonfinite_dose(self, dose):
         from sisyphus.pipeline.predict import predict

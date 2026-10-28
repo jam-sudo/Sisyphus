@@ -224,8 +224,8 @@ class MetaLearner:
         )
 
         # Legacy adapter only: these endpoints come from the engine/ML track.
-        tmax = engine_pk.tmax if engine_pk else (ml_pk.tmax if ml_pk else Distribution(1.0))
-        auc = engine_pk.auc_0t if engine_pk else (ml_pk.auc_0t if ml_pk else Distribution(0.0))
+        tmax = engine_pk.tmax if engine_pk else (ml_pk.tmax if ml_pk else None)
+        auc = engine_pk.auc_0t if engine_pk else (ml_pk.auc_0t if ml_pk else None)
         t_half = engine_pk.t_half if engine_pk else None
 
         return PKEndpoints(
