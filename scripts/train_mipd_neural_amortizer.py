@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Train and gate a two-latent MIPD SNPE model from engine CL grids.
 
-Input is a JSON list of {"smiles": ..., "dose_mg": ...} oral compounds. The last
-20% of compounds are held out. No model is written unless held-out coverage and
-agreement with the grid SIR reference both pass.
+Input is a JSON list of {"smiles": ..., "dose_mg": ...} oral compounds. A second
+manifest can provide a compound-disjoint held-out set; otherwise the last 20%
+after seeded shuffling are held out. No model is written unless the held-out
+coverage, SBC and ESS-aware grid-SIR agreement gates pass.
 """
 
 from __future__ import annotations
@@ -31,6 +32,11 @@ log = logging.getLogger(__name__)
 # these conservative minimum counts are project release gates, not published cutoffs.
 _MIN_HELDOUT_COMPOUNDS_COUNT = 5
 _MIN_SBC_CASES_COUNT = 100
+_MIN_TRAIN_PAIRS_COUNT = 100000
+# Importance-sampling ESS (Kong et al., 1994); project reference floor and draw cap.
+_MIN_SIR_ESS_COUNT = 200
+_INITIAL_SIR_DRAWS_COUNT = 20000
+_MAX_SIR_DRAWS_COUNT = 320000
 
 
 def _draw_pair(forward, f_prior, cl_prior, features, regimen, rng):
@@ -90,9 +96,30 @@ def _setup(spec, n_grid, cache_dir=None, *, generate=False):
     )
 
 
+def _sir_reference(f_prior, cl_prior, forward, observations, rng):
+    n = _INITIAL_SIR_DRAWS_COUNT
+    while True:
+        post = sir_posterior_2d(
+            f_prior, cl_prior, forward, observations, n_samples=n, rng=rng
+        )
+        if post.n_eff >= _MIN_SIR_ESS_COUNT or n >= _MAX_SIR_DRAWS_COUNT:
+            return post, n
+        n *= 2
+
+
+def _mean_agrees_with_mc(neural_samples, sir_samples, sir_ess):
+    # SIR resamples repeat weighted particles; ESS, not resample count, limits precision.
+    mc_se = math.sqrt(
+        np.var(neural_samples) / len(neural_samples)
+        + np.var(sir_samples) * (1 / sir_ess + 1 / len(sir_samples))
+    )
+    return abs(np.mean(neural_samples) - np.mean(sir_samples)) <= 3 * mc_se
+
+
 def _main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--manifest", type=Path, required=True)
+    parser.add_argument("--heldout-manifest", type=Path)
     parser.add_argument("--out", type=Path)
     parser.add_argument("--report", type=Path)
     parser.add_argument("--samples-per-compound", type=int, default=1000)
@@ -101,10 +128,15 @@ def _main() -> None:
     parser.add_argument("--generate-index", type=int)
     parser.add_argument("--n-calibration", type=int, default=100)
     parser.add_argument("--epochs", type=int, default=100)
+    parser.add_argument("--device", choices=("cpu", "cuda"), default="cpu")
     parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO)
-    specs = json.loads(args.manifest.read_text())
+    train_specs = json.loads(args.manifest.read_text())
+    heldout_specs = (
+        json.loads(args.heldout_manifest.read_text()) if args.heldout_manifest else []
+    )
+    specs = train_specs + heldout_specs
     for index, spec in enumerate(specs):
         spec["_index"] = index
     if len(specs) < 5 or args.samples_per_compound < 1 or args.n_calibration < 1:
@@ -121,9 +153,12 @@ def _main() -> None:
     if args.out.exists():
         raise FileExistsError(f"refusing to reuse existing model path: {args.out}")
     rng = np.random.default_rng(args.seed)
-    rng.shuffle(specs)
-    n_train = len(specs) - max(1, len(specs) // 5)
-    train, heldout = specs[:n_train], specs[n_train:]
+    if heldout_specs:
+        train, heldout = train_specs, heldout_specs
+    else:
+        rng.shuffle(specs)
+        n_train = len(specs) - max(1, len(specs) // 5)
+        train, heldout = specs[:n_train], specs[n_train:]
     theta_rows, x_rows = [], []
     for i, spec in enumerate(train, 1):
         log.info("Training grid %d/%d: %s", i, len(train), spec["smiles"])
@@ -137,11 +172,14 @@ def _main() -> None:
         np.array([1e-6, 0.05]), np.array([1.0, 20.0]),
         density_estimator="nsf", embedding_net_hidden=64,
         max_num_epochs=args.epochs, stop_after_epochs=15, seed=args.seed,
+        device=args.device,
     )
     neural = NeuralAmortizer(result)
     coverage = np.zeros(2)
     agreement = np.zeros(2)
     ranks = []
+    sir_ess = []
+    sir_draws = []
     cases = 0
     for i, spec in enumerate(heldout, 1):
         log.info("Held-out grid %d/%d: %s", i, len(heldout), spec["smiles"])
@@ -154,9 +192,9 @@ def _main() -> None:
                 f_prior, cl_prior, forward, obs, molecular_features=features,
                 regimen=regimen, n_samples=500, rng=rng,
             )
-            sir = sir_posterior_2d(
-                f_prior, cl_prior, forward, obs, n_samples=5000, rng=rng
-            )
+            sir, n_sir = _sir_reference(f_prior, cl_prior, forward, obs, rng)
+            sir_ess.append(sir.n_eff)
+            sir_draws.append(n_sir)
             neural_samples = (post.f.samples, post.cl_scale.samples)
             sir_samples = (sir.f.samples, sir.cl_scale.samples)
             ranks.append([float(np.mean(draws < value)) for draws, value in zip(
@@ -165,21 +203,18 @@ def _main() -> None:
             for dim in range(2):
                 lo, hi = np.quantile(neural_samples[dim], [0.05, 0.95])
                 coverage[dim] += lo <= truth[dim] <= hi
-                median_error = abs(np.median(neural_samples[dim]) - np.median(sir_samples[dim]))
-                # The pooled Monte Carlo standard error of two sample means is a
-                # conservative scale for checking posterior location agreement.
-                mc_se = math.sqrt(
-                    np.var(neural_samples[dim]) / len(neural_samples[dim])
-                    + np.var(sir_samples[dim]) / len(sir_samples[dim])
+                agreement[dim] += _mean_agrees_with_mc(
+                    neural_samples[dim], sir_samples[dim], sir.n_eff
                 )
-                agreement[dim] += median_error <= 3 * mc_se
             cases += 1
     coverage /= cases
     agreement /= cases
     ks_p = np.array([kstest(np.asarray(ranks)[:, dim], "uniform").pvalue for dim in range(2)])
     passed = bool(
         len(heldout) >= _MIN_HELDOUT_COMPOUNDS_COUNT
+        and len(theta_rows) >= _MIN_TRAIN_PAIRS_COUNT
         and cases >= _MIN_SBC_CASES_COUNT
+        and min(sir_ess) >= _MIN_SIR_ESS_COUNT
         and np.all(abs(coverage - 0.9) <= 0.1)
         and np.all(agreement >= 0.95)
         and np.all(ks_p > 0.01)
@@ -189,11 +224,15 @@ def _main() -> None:
         "train_pairs": len(theta_rows), "heldout_cases": cases,
         "minimum_sample_gate_passed": bool(
             len(heldout) >= _MIN_HELDOUT_COMPOUNDS_COUNT
+            and len(theta_rows) >= _MIN_TRAIN_PAIRS_COUNT
             and cases >= _MIN_SBC_CASES_COUNT
         ),
         "coverage_90_f_clint": coverage.tolist(),
         "sbc_ks_p_f_clint": ks_p.tolist(),
         "sir_agreement_fraction_f_clint": agreement.tolist(),
+        "sir_ess_min": float(min(sir_ess)),
+        "sir_ess_median": float(np.median(sir_ess)),
+        "sir_draws_max": int(max(sir_draws)),
         "gate_passed": passed,
     }
     args.report.parent.mkdir(parents=True, exist_ok=True)

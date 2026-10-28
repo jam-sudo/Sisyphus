@@ -30,7 +30,8 @@ class NPETrainingResult:
         """Draw n samples from posterior conditioned on observed x."""
         import torch
 
-        x_t = torch.as_tensor(x_obs, dtype=torch.float32)
+        device = next(self.density_estimator.parameters()).device
+        x_t = torch.as_tensor(x_obs, dtype=torch.float32, device=device)
         if x_t.ndim == 1:
             x_t = x_t[None, :]
         samples = self.posterior.sample((n,), x=x_t, show_progress_bars=False)
@@ -52,6 +53,7 @@ def train_npe(
     stop_after_epochs: int = 20,
     seed: int = 42,
     embedding_net_hidden: int | None = None,
+    device: str = "cpu",
 ) -> NPETrainingResult:
     """Train a Neural Posterior Estimator on (theta, x) pairs.
 
@@ -114,12 +116,14 @@ def train_npe(
         inference = SNPE(
             prior=prior_torch,
             density_estimator=density_estimator_obj,
+            device=device,
             show_progress_bars=True,
         )
     else:
         inference = SNPE(
             prior=prior_torch,
             density_estimator=density_estimator,
+            device=device,
             show_progress_bars=True,
         )
     inference.append_simulations(theta_t, x_t)
@@ -172,7 +176,7 @@ def load_result(path: Path, *, allow_legacy_fup: bool = False) -> NPETrainingRes
     from sbi.inference import SNPE
     from sbi.utils import BoxUniform
 
-    payload = torch.load(path, weights_only=False)
+    payload = torch.load(path, weights_only=False, map_location="cpu")
     prior_low = np.asarray(payload["prior_low"], dtype=np.float64)
     prior_high = np.asarray(payload["prior_high"], dtype=np.float64)
 

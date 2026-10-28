@@ -88,6 +88,32 @@ def test_cached_grid_checks_compound_identity(tmp_path):
         _setup({"smiles": "CCC", "dose_mg": 10, "_index": 0}, 3, tmp_path)
 
 
+def test_sir_reference_raises_particle_count_until_ess_is_usable(monkeypatch):
+    from types import SimpleNamespace
+
+    from scripts import train_mipd_neural_amortizer as trainer
+
+    calls = []
+
+    def fake_sir(*args, n_samples, **kwargs):
+        calls.append(n_samples)
+        return SimpleNamespace(n_eff=50 if n_samples == 20000 else 300)
+
+    monkeypatch.setattr(trainer, "sir_posterior_2d", fake_sir)
+    post, n = trainer._sir_reference(None, None, None, (), np.random.default_rng(0))
+    assert calls == [20000, 40000]
+    assert n == 40000 and post.n_eff == 300
+
+
+def test_agreement_uses_sir_ess_not_resample_count():
+    from scripts.train_mipd_neural_amortizer import _mean_agrees_with_mc
+
+    neural = np.tile([-0.8, 1.2], 250)
+    sir = np.tile([-1.0, 1.0], 10000)
+    assert _mean_agrees_with_mc(neural, sir, sir_ess=200)
+    assert not _mean_agrees_with_mc(neural, sir, sir_ess=20000)
+
+
 def test_neural_posterior_maps_latents_through_grid():
     pytest.importorskip("torch")
     f_prior, cl_prior, forward, features, regimen = _case()
