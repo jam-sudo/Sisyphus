@@ -2,6 +2,9 @@ name: Canonical development benchmark regen
 
 on:
   workflow_dispatch:
+  push:
+    branches: [regen/canonical-2026-10]
+    paths: [.github/workflows/canonical-regen.yml]
 
 jobs:
   regen:
