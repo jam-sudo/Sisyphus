@@ -34,6 +34,22 @@ def test_pack_observations_rejects_invalid_observations():
         pack_observations([(1.0, 0.02)], DosingRegimen.single_iv(30.0), np.ones(12))
 
 
+def test_sbc_bounds_posterior_sampling_time():
+    pytest.importorskip("torch")
+    from scripts.sbi_run_sbc_multi_drug import MAX_SBC_SAMPLE_TIME_S, _coverage_and_ranks
+
+    class StalledPosterior:
+        def sample(self, shape, *, x, show_progress_bars, max_sampling_time):
+            assert shape == (500,)
+            assert max_sampling_time == MAX_SBC_SAMPLE_TIME_S
+            raise RuntimeError("sampling timed out")
+
+    with pytest.raises(RuntimeError, match="sampling timed out"):
+        _coverage_and_ranks(
+            np.zeros((1, 3)), StalledPosterior(), np.zeros((1, 13)), (90,)
+        )
+
+
 def test_train_script_scales_only_multi_observation_drug_features(tmp_path, monkeypatch):
     torch = pytest.importorskip("torch")
     from scripts import sbi_train_multi_drug
