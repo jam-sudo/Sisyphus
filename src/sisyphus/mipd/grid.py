@@ -6,7 +6,7 @@ compile), then re-solves at ``enzyme_affinity`` scaled by each clint-scale
 venous concentration-time curve (re-gridded onto a common time axis), Cmax, AUC
 (from compute_endpoints — exact), and the emergent F_engine (oral AUC / IV-AUC).
 
-Scope (v1): the standard oral/IV path with no phenotypes, no measured-ADME
+Scope: the standard oral/IV path with no measured-ADME
 overrides, and no auto OATP1B1 ECM. Faithfulness at clint-scale 1.0 is pinned to
 predict()'s engine PK by ``test_cl_grid_at_unit_scale_reproduces_predict_engine_pk``.
 """
@@ -63,6 +63,7 @@ def _build_grid_engine(
     kp_method: str,
     body_weight_kg: float | None = None,
     age_years: float | None = None,
+    phenotypes: dict[str, str] | None = None,
 ):
     """Build + compile the engine for a grid: profile -> adme -> graph -> drug.
 
@@ -77,6 +78,7 @@ def _build_grid_engine(
     from sisyphus.predict.adme import predict_adme
     from sisyphus.predict.chemistry import compute_profile
     from sisyphus.predict.ivive import build_drug_on_graph, detect_disposition
+    from sisyphus.predict.phenotype import apply_phenotype_to_graph
 
     profile = compute_profile(smiles)
     adme = predict_adme(profile)
@@ -105,6 +107,13 @@ def _build_grid_engine(
         hepatic_ecm_params=auto_ecm_params,
         non_cyp_fractions=non_cyp_fractions,
     )
+    if phenotypes:
+        graph, report = apply_phenotype_to_graph(graph, phenotypes, return_report=True)
+        if report.unsupported:
+            raise ValueError(
+                "Unsupported phenotype tag(s): "
+                + ", ".join(tag for tag, _ in report.unsupported)
+            )
     if renal_factor != 1.0:
         drug = dataclasses.replace(
             drug,
@@ -133,6 +142,7 @@ def build_cl_grid(
     renal_factor: float = 1.0,
     body_weight_kg: float | None = None,
     age_years: float | None = None,
+    phenotypes: dict[str, str] | None = None,
 ) -> CLGrid:
     """Solve the engine over a clint-scale grid and return a ``CLGrid``."""
     from sisyphus.engine.compiler import ResolvedParams
@@ -145,7 +155,8 @@ def build_cl_grid(
     s_grid = np.geomspace(s_range[0], s_range[1], n_grid)
 
     compiled, realized_graph, drug, obs_node = _build_grid_engine(
-        smiles, dose_mg, route, renal_factor, kp_method, body_weight_kg, age_years
+        smiles, dose_mg, route, renal_factor, kp_method, body_weight_kg, age_years,
+        phenotypes,
     )
     t_min_h = _IV_CMAX_DELAY_H if route == "iv" else 0.0
     admin_idx = compiled.state_index[drug.administration_node]
