@@ -220,21 +220,6 @@ def _run_predict(args: argparse.Namespace) -> None:
         print(f"Warnings: {result.warnings}")
 
 
-def _apply_phenotype(graph, phenotype_spec: str | None):
-    """Apply CYP phenotype scaling to the graph's liver enzymes.
-
-    Must be called *after* the drug has been built from the reference graph,
-    so that drug.enzyme_affinity stays calibrated against reference CLint and
-    the engine's runtime product (node.enzymes × affinity) reflects the
-    phenotype multiplier.
-    """
-    if not phenotype_spec:
-        return graph
-    from sisyphus.predict.phenotype import apply_phenotype_to_graph, parse_phenotype_spec
-    phenotypes = parse_phenotype_spec(phenotype_spec)
-    return apply_phenotype_to_graph(graph, phenotypes, node="liver")
-
-
 def _build_drug_and_graph(
     smiles: str,
     dose_mg: float,
