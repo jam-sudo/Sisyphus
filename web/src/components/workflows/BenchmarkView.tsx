@@ -1,6 +1,6 @@
 /* ============================================================
    BenchmarkView — retrospective development evidence. The scatter and per-track
-   AAFE are the source-audited N=86 development-benchmark results
+   AAFE are the source-audited development-benchmark results
    (data/training/4track_holdout_predictions.json).
    ============================================================ */
 import type { ConsoleData } from "../../types";
@@ -50,7 +50,7 @@ export function BenchmarkView({ tab, data }: { tab: number; data: ConsoleData })
           </div>
           <div className="panel">
             <Caveat>
-              Paired Meta/ML AAFE ratio: <b>{f2(b.paired_meta_ml.ratio)}</b> (95% bootstrap CI {f2(b.paired_meta_ml.ci_95_low)}–{f2(b.paired_meta_ml.ci_95_high)}). The original N=107 cohort informed ~47 system-selection cycles; this audited N={b.n_development} subset is development evidence, and its interval excludes adaptive-selection bias. An outcome-blinded external set is still required.
+              Paired Meta/ML AAFE ratio: <b>{f2(b.paired_meta_ml.ratio)}</b> (95% bootstrap CI {f2(b.paired_meta_ml.ci_95_low)}–{f2(b.paired_meta_ml.ci_95_high)}). The original development cohort informed ~47 system-selection cycles; this audited N={b.n_development} subset is development evidence, and its interval excludes adaptive-selection bias. An outcome-blinded external set is still required.
             </Caveat>
           </div>
         </div>

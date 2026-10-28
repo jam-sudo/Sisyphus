@@ -143,7 +143,9 @@ export function App() {
   const isCustom = s.drugId === "custom";
   const activeDrug: Drug | null = isCustom ? customDrug : drugById(data, s.drugId);
   const wfCfg = WORKFLOWS.find((x) => x.id === wf) ?? WORKFLOWS[0];
-  const tabs = wfCfg.tabs;
+  const tabs = wf === "benchmark"
+    ? [`Development N=${data.benchmark.n_development}`, ...wfCfg.tabs.slice(1)]
+    : wfCfg.tabs;
   const safeTab = Math.min(tab, tabs.length - 1);
   const customPredictMode = wf === "predict" && isCustom;
   const busy = predicting;
@@ -298,10 +300,19 @@ export function App() {
               <div className="custom-empty">
                 {live
                   ? "Enter a SMILES string in the rail, then hit Predict SMILES."
-                  : "Live engine is offline — select a preset compound to explore."}
+                  : engineClient.apiConfigured()
+                    ? "Live engine is offline — select a preset compound to explore."
+                    : "Live engine not deployed in this build — select a preset compound to explore."}
               </div>
             ) : (
               <WorkflowView wf={wf} s={s} tab={safeTab} running={busy} data={data} drug={activeDrug ?? undefined} />
+            )}
+            {wf === "predict" && !engineClient.apiConfigured() && (
+              <div className="panel" style={{ marginTop: 14 }}>
+                <p className="note" style={{ margin: 0 }}>
+                  Live engine not deployed in this build. Preset predictions are available here; for arbitrary SMILES, use the <a href="/#quickstart">command-line quickstart</a>.
+                </p>
+              </div>
             )}
           </div>
           <div className="provenance">

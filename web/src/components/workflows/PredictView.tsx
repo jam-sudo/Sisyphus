@@ -130,7 +130,7 @@ export function PredictView({ drug, s, tab, running }: { drug: Drug; s: AppState
           </div>
           <div className="divider" style={{ margin: "16px 0" }} />
           <p className="note" style={{ margin: 0 }}>
-              Available mechanistic Engine, direct XGBoost C<sub>max</sub> (ML), closed-form CL/F, and conditional VDss tracks use partly different signals. The compound-type-adaptive weights were selected on the original N=107 development cohort and therefore require confirmation on a new blinded holdout.
+              Available mechanistic Engine, direct XGBoost C<sub>max</sub> (ML), closed-form CL/F, and conditional VDss tracks use partly different signals. The compound-type-adaptive weights were selected on the original development cohort and therefore require confirmation on a new blinded holdout.
           </p>
         </div>
         <div className="stack">

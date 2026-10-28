@@ -91,6 +91,10 @@ assert(!root.textContent.includes("external holdout"), "development set is not l
 assert(document.querySelector('input[type="number"]')?.disabled, "preset dose cannot be rescaled");
 assert(root.textContent.includes("Dose/AUC"), "24h exposure proxy is labeled without CL/F claim");
 assert(document.querySelector(".btn-run")?.textContent.includes("View prediction"), "preset action identifies frozen prediction");
+if (!process.env.SMOKE_LIVE_RACE) {
+  assert(root.textContent.includes("Live engine not deployed in this build"), "static build explains live-engine state");
+  assert(document.querySelector('.content a[href="/#quickstart"]'), "static build links to CLI usage");
+}
 document.querySelector(".btn-run").click();
 await settle();
 assert(!document.querySelector(".btn-run")?.textContent.includes("solving"), "preset action does not simulate a solve");
@@ -121,6 +125,8 @@ for (const w of WF) {
 // benchmark scatter reflects the current development cache
 await clickNav("benchmark");
 await clickTab(0);
+assert(document.querySelector(".tabs button")?.textContent.includes(`N=${JSON.parse(data).benchmark.n_development}`), "development tab uses current cohort size");
+assert(document.querySelector(".content h5")?.textContent.includes(`N = ${JSON.parse(data).benchmark.n_development}`), "benchmark header uses current cohort size");
 const circles = document.querySelectorAll(".content svg.chart circle");
 const expectedPoints = JSON.parse(data).benchmark.scatter.length;
 assert(circles.length === expectedPoints, `benchmark scatter renders ${circles.length} points (${expectedPoints} expected)`);
