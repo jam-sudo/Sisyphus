@@ -60,6 +60,8 @@ _DI_N_RING_SMARTS = Chem.MolFromSmarts("[nR]~*~[nR]")
 # Excludes aspirin (has -COOH, indicating the ester is part of the drug, not a prodrug linkage).
 _PHENOL_ESTER_SMARTS = Chem.MolFromSmarts("[c]([c])([c])[OX2][CX3](=O)[CX4;!$(C-c)]")
 _CARBOXYLIC_ACID_SMARTS = Chem.MolFromSmarts("[CX3](=O)[OX2H1]")
+# Fostamatinib's phosphate monoester is cleaved by intestinal ALPI (registry entry).
+_PHOSPHATE_MONOESTER_SMARTS = Chem.MolFromSmarts("[CX4][OX2][PX4](=O)([OX2H])[OX2H]")
 
 
 def _check_prodrug(mol: Chem.Mol) -> list[str]:
@@ -126,6 +128,14 @@ def _check_prodrug(mol: Chem.Mol) -> list[str]:
     elif has_phenol_ester and not has_cooh:
         is_prodrug = True
         reason = "phenol ester without free carboxylic acid"
+    elif mol.HasSubstructMatch(_PHOSPHATE_MONOESTER_SMARTS):
+        is_prodrug = True
+        reason = "phosphate monoester activation motif"
+    else:
+        from sisyphus.predict.registry import lookup_active_metabolite
+        if lookup_active_metabolite(Chem.MolToSmiles(mol)) is not None:
+            is_prodrug = True
+            reason = "activation registry membership"
 
     if is_prodrug:
         flags.append("PRODRUG")

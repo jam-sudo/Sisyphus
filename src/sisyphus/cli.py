@@ -80,6 +80,7 @@ def main() -> None:
         "--phenotype",
         default=None,
         help="CYP phenotype spec, e.g. 'CYP2D6:PM' or '2D6:PM,2C9:IM'. "
+             "Supported CYP tags: 2D6, 2C9, 1A2, 3A4, 2E1. "
              "Scales hepatic enzyme abundance by CPIC activity score "
              "(PM 0.1×, IM 0.5×, EM/NM 1×, RM 1.5×, UM 2×).",
     )
