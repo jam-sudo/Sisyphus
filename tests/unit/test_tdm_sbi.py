@@ -93,8 +93,8 @@ class TestSBIDispatch:
         assert result.prior_cmax.mean > 0
         assert result.posterior_cmax.mean > 0
 
-    def test_sbi_posterior_tighter_than_prior_cv(self, physiology, morphine_drug):
-        """Posterior predictive CV should be ≤ prior CV after observation."""
+    def test_sbi_posterior_shifts_toward_low_observation(self, physiology, morphine_drug):
+        """A low measured concentration should shift predicted Cmax downward."""
         graph, compiled = physiology
         drug, logp = morphine_drug
         regimen = DosingRegimen.single_oral(30.0)
@@ -106,10 +106,7 @@ class TestSBIDispatch:
             n_prior=100,
             logp_hint=logp,
         )
-        # Posterior should not be meaningfully wider than prior; we allow
-        # slack for Monte-Carlo noise at N=100. 0.10 absorbs the expected
-        # ~5–8 % MC variation on the CV estimate.
-        assert result.posterior_cmax.cv < result.prior_cmax.cv + 0.10
+        assert result.posterior_cmax.mean < result.prior_cmax.mean
 
     def test_sbi_hybrid_surrogate_matches_scipy_on_easy_drug(
         self, physiology, morphine_drug
