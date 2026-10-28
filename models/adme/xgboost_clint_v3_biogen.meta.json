@@ -1,0 +1,27 @@
+{
+  "version": "unknown_legacy",
+  "artifact_sha256": "66e981efdd809849f1e80f84a8ea65f93497aec185982672a51779b779326791",
+  "target": "unknown_legacy",
+  "trained_on": {
+    "dataset_path": null,
+    "sha256": "unknown_legacy"
+  },
+  "feature_schema": {
+    "name": "compute_features_v1",
+    "n_features": 2057,
+    "sha256": "b41dddd78533661b8f4aed86bdb7c5f55d15ed3cd2ad20b39e9100557eda631e",
+    "description": "Morgan fingerprint (2048 bits, radius=2) plus 9 RDKit descriptors."
+  },
+  "trained_at": "unknown_legacy",
+  "n_drugs_original": null,
+  "n_drugs_excluded": null,
+  "holdout_version": "unknown_legacy",
+  "holdout_metric": {
+    "name": "unknown_legacy",
+    "value": null
+  },
+  "hyperparameters": {},
+  "retrained_reason": "unknown_legacy",
+  "artifact_status": "nonproduction",
+  "runtime_loader": null
+}

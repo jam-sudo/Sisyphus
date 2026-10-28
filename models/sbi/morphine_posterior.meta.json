@@ -1,0 +1,27 @@
+{
+  "version": "unknown_legacy",
+  "artifact_sha256": "aa9b03aecb0c5eb407b98e631dcf81cd9136ee32471d639bcff562dbb8a17809",
+  "target": "unknown_legacy",
+  "trained_on": {
+    "dataset_path": null,
+    "sha256": "unknown_legacy"
+  },
+  "feature_schema": {
+    "name": "artifact_only",
+    "n_features": null,
+    "sha256": "not_applicable",
+    "description": "Artifact integrity only; no canonical feature-vector fingerprint."
+  },
+  "trained_at": "unknown_legacy",
+  "n_drugs_original": null,
+  "n_drugs_excluded": null,
+  "holdout_version": "unknown_legacy",
+  "holdout_metric": {
+    "name": "unknown_legacy",
+    "value": null
+  },
+  "hyperparameters": {},
+  "retrained_reason": "unknown_legacy",
+  "artifact_status": "nonproduction",
+  "runtime_loader": null
+}

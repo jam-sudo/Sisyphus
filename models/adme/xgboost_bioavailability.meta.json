@@ -1,0 +1,27 @@
+{
+  "version": "unknown_legacy",
+  "artifact_sha256": "e306363bc41bcb36df0ca1f0665d38874ae6e3c8ef5319635e7b991d14522e68",
+  "target": "log10(F/100) where F is in percent",
+  "trained_on": {
+    "dataset_path": "DrugBank absorption text regex parsing (holdout-excluded)",
+    "sha256": "unknown_legacy"
+  },
+  "feature_schema": {
+    "name": "compute_features_v1",
+    "n_features": 2057,
+    "sha256": "b41dddd78533661b8f4aed86bdb7c5f55d15ed3cd2ad20b39e9100557eda631e",
+    "description": "Morgan fingerprint (2048 bits, radius=2) plus 9 RDKit descriptors."
+  },
+  "trained_at": "unknown_legacy",
+  "n_drugs_original": 442,
+  "n_drugs_excluded": null,
+  "holdout_version": "unknown_legacy",
+  "holdout_metric": {
+    "name": "scaffold_cv_r2",
+    "value": -0.09044302621195202
+  },
+  "hyperparameters": {},
+  "retrained_reason": "unknown_legacy",
+  "artifact_status": "nonproduction",
+  "runtime_loader": null
+}

@@ -1,0 +1,27 @@
+{
+  "version": "unknown_legacy",
+  "artifact_sha256": "0a081808172d3a1ed5e95d5af640a36cd2cd8a4e8a2b5bf4d5e47ca36ceef810",
+  "target": "unknown_legacy",
+  "trained_on": {
+    "dataset_path": null,
+    "sha256": "unknown_legacy"
+  },
+  "feature_schema": {
+    "name": "artifact_only",
+    "n_features": null,
+    "sha256": "not_applicable",
+    "description": "Artifact integrity only; no canonical feature-vector fingerprint."
+  },
+  "trained_at": "unknown_legacy",
+  "n_drugs_original": null,
+  "n_drugs_excluded": null,
+  "holdout_version": "unknown_legacy",
+  "holdout_metric": {
+    "name": "unknown_legacy",
+    "value": null
+  },
+  "hyperparameters": {},
+  "retrained_reason": "unknown_legacy",
+  "artifact_status": "optional_runtime",
+  "runtime_loader": "sisyphus.ml.surrogate"
+}

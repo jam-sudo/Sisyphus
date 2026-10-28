@@ -157,7 +157,7 @@ def _current_feature_hash_v1() -> str:
 
 
 def verify_model_artifact(model_json_path: Path | str) -> dict[str, Any]:
-    """Fail closed on manifest, artifact-integrity, or feature-schema drift."""
+    """Check artifact integrity and, where defined, feature-schema drift."""
 
     path = Path(model_json_path)
     manifest = load_manifest(path)
@@ -174,6 +174,10 @@ def verify_model_artifact(model_json_path: Path | str) -> dict[str, Any]:
         )
     feature_schema = manifest.get("feature_schema", {})
     name = feature_schema.get("name")
+    if name == "artifact_only":
+        if feature_schema.get("sha256") != "not_applicable":
+            raise ValueError(f"Invalid artifact-only schema for {path}")
+        return manifest
     if name == "compute_features_v1":
         expected = _current_feature_hash_v1()
     elif name == "logp_corr_6":
