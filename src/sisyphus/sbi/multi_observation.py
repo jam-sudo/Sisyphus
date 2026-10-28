@@ -13,11 +13,11 @@ from sisyphus.sbi.multi_drug import N_DRUG_FEATURES
 MAX_OBSERVATION_COUNT = 3
 # Source: 24 hours per day, used to scale regimen and sample times.
 HOURS_PER_DAY_H = 24.0
-# Source: scripts/run_tdm_benchmark.py evaluates 1–3 oral doses.
+# Source: W11 Phase 2.1 training design caps dose count at the observation depth.
 MAX_DOSE_COUNT = 3
 # Source: TDM benchmark observes at 1, 4, and 8 h; 2 and 12 h extend that grid.
 OBSERVATION_OFFSETS_H = (1.0, 2.0, 4.0, 8.0, 12.0)
-# Source: common once, twice, or three-times-daily oral dosing schedules.
+# Source: src/sisyphus/mipd/dosing.py uses the 8/12/24 h candidate intervals.
 DOSING_INTERVALS_H = (8.0, 12.0, 24.0)
 # Source: sisyphus/sbi/simulator.py 10% assay CV in log10 concentration.
 ASSAY_SIGMA_LOG10 = 0.0414

@@ -85,6 +85,8 @@ def main() -> int:
     parser.add_argument("--checkpoint-every", type=int, default=1,
                         help="Save partial npz every N pairs (default 1)")
     args = parser.parse_args()
+    if args.drug_offset < 0:
+        parser.error("--drug-offset must be non-negative")
     load_from_json(ROOT / "data" / "physiology" / "achour2021_correlation.json")
 
     specs = load_drug_specs_from_json(Path(args.drug_set))
