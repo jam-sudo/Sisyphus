@@ -1,0 +1,54 @@
+name: Canonical development benchmark regen
+
+on:
+  workflow_dispatch:
+
+jobs:
+  regen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.10"
+          cache: pip
+
+      - name: Install locked dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-lock.txt
+          pip install -e . --no-deps
+
+      - name: Confirm public-clone state
+        run: |
+          test ! -e data/drugbank/drugs.csv
+          test ! -e models/adme/logp_correction.json
+
+      - name: Regenerate canonical artifacts
+        run: set -o pipefail; PYTHONPATH=src python scripts/regen_canonical.py 2>&1 | tee regen_output.txt
+
+      - name: Upload regenerated artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: canonical-2026-10-28
+          path: |
+            data/training/clf_training.csv
+            models/direct_pk/xgboost_clf.json
+            models/direct_pk/xgboost_clf.meta.json
+            models/direct_pk/xgboost_vdf.json
+            models/direct_pk/xgboost_vdf.meta.json
+            data/training/4track_holdout_predictions.json
+            tests/regression/data/prodrug_v3_pre_baseline.json
+            data/validation/4track_ci_2026-10-28_canonical.json
+            data/validation/canonical_regen_attribution_2026-10-28.json
+            data/validation/development_residual_interval.json
+            data/model_card.json
+            web/public/data/benchmark.json
+            web/public/data/console_data.json
+            app/data/benchmark.json
+            app/data/console_data.json
+            regen_output.txt
+          if-no-files-found: error
