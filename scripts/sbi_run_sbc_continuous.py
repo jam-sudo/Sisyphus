@@ -125,6 +125,7 @@ def main() -> int:
 
     log.info("Loading posterior: %s", args.posterior)
     import torch
+    torch.manual_seed(args.seed)
     payload = torch.load(args.posterior, weights_only=False)
     posterior_obj = payload["posterior"]
     aux_path = args.posterior.with_suffix(".aux.pt")

@@ -107,6 +107,7 @@ def main() -> None:
     log.info("Loading posterior: %s", args.posterior)
     result = load_result(args.posterior)
     import torch
+    torch.manual_seed(args.seed)
     aux_path = args.posterior.with_suffix(".aux.pt")
     if aux_path.exists():
         aux = torch.load(aux_path, weights_only=False)
