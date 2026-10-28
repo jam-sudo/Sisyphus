@@ -27,6 +27,11 @@ from sisyphus.sbi.amortizer import save_result, train_npe
 
 log = logging.getLogger(__name__)
 
+# SBC needs ranks across multiple unseen contexts (Talts et al., 2018, arXiv:1804.06788);
+# these conservative minimum counts are project release gates, not published cutoffs.
+_MIN_HELDOUT_COMPOUNDS_COUNT = 5
+_MIN_SBC_CASES_COUNT = 100
+
 
 def _draw_pair(forward, f_prior, cl_prior, features, regimen, rng):
     f = float(f_prior.sample(1, rng)[0])
@@ -113,6 +118,8 @@ def _main() -> None:
         return
     if args.out is None or args.report is None:
         raise ValueError("training requires --out and --report")
+    if args.out.exists():
+        raise FileExistsError(f"refusing to reuse existing model path: {args.out}")
     rng = np.random.default_rng(args.seed)
     rng.shuffle(specs)
     n_train = len(specs) - max(1, len(specs) // 5)
@@ -171,13 +178,19 @@ def _main() -> None:
     agreement /= cases
     ks_p = np.array([kstest(np.asarray(ranks)[:, dim], "uniform").pvalue for dim in range(2)])
     passed = bool(
-        np.all(abs(coverage - 0.9) <= 0.1)
+        len(heldout) >= _MIN_HELDOUT_COMPOUNDS_COUNT
+        and cases >= _MIN_SBC_CASES_COUNT
+        and np.all(abs(coverage - 0.9) <= 0.1)
         and np.all(agreement >= 0.95)
         and np.all(ks_p > 0.01)
     )
     report = {
         "train_compounds": len(train), "heldout_compounds": len(heldout),
         "train_pairs": len(theta_rows), "heldout_cases": cases,
+        "minimum_sample_gate_passed": bool(
+            len(heldout) >= _MIN_HELDOUT_COMPOUNDS_COUNT
+            and cases >= _MIN_SBC_CASES_COUNT
+        ),
         "coverage_90_f_clint": coverage.tolist(),
         "sbc_ks_p_f_clint": ks_p.tolist(),
         "sir_agreement_fraction_f_clint": agreement.tolist(),
