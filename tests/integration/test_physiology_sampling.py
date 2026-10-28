@@ -6,14 +6,12 @@ import pathlib
 import numpy as np
 import pytest
 
-pytest.importorskip("torch")
-
-from sisyphus.physiology.correlation_registry import (  # noqa: E402
+from sisyphus.physiology.correlation_registry import (
     _REGISTRY,
     assert_sampled,
     load_from_json,
 )
-from sisyphus.sbi.physiology_generator import generate_physiology  # noqa: E402
+from sisyphus.sbi.physiology_generator import generate_physiology
 
 ACHOUR_JSON = (
     pathlib.Path(__file__).resolve().parents[2]

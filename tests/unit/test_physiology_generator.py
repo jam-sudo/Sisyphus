@@ -9,9 +9,7 @@ from pathlib import Path
 
 import pytest
 
-pytest.importorskip("torch")
-
-from sisyphus.sbi.physiology_generator import (  # noqa: E402
+from sisyphus.sbi.physiology_generator import (
     ENZYME_PARAMS,
     enzyme_factor,
     generate_physiology,
