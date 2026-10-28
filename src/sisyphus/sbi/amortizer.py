@@ -79,12 +79,12 @@ def train_npe(
     np.random.seed(seed)
 
     prior_torch = BoxUniform(
-        low=torch.as_tensor(prior_low, dtype=torch.float32),
-        high=torch.as_tensor(prior_high, dtype=torch.float32),
+        low=torch.as_tensor(prior_low, dtype=torch.float32, device=device),
+        high=torch.as_tensor(prior_high, dtype=torch.float32, device=device),
     )
 
-    theta_t = torch.as_tensor(theta, dtype=torch.float32)
-    x_t = torch.as_tensor(x, dtype=torch.float32)
+    theta_t = torch.as_tensor(theta, dtype=torch.float32, device=device)
+    x_t = torch.as_tensor(x, dtype=torch.float32, device=device)
 
     logger.info(
         "Training NPE on N=%d, theta_dim=%d, x_dim=%d, estimator=%s",
