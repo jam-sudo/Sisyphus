@@ -233,9 +233,7 @@ def predict(
             for route='iv'. When > 0.5, routes the deterministic simulation
             through ``regimen.solver`` (zero-order input) instead of the
             bolus y0 shortcut. ``None`` or <= 0.5 falls back to V3 bolus.
-            MC for infusion is V3.1 Phase 2 scope and is skipped with a
-            warning in Phase 1. See
-            docs/_internal/specs/2026-04-22-v3.1-iv-infusion-design.md.
+            MC uses the same regimen solver for every sampled parameter set.
         phenotypes: Optional CPIC phenotype assignments mapping enzyme or
             transporter gene tag (e.g., ``"CYP2D6"``, ``"SLCO1B1"``) to
             phenotype label (``"PM"``/``"IM"``/``"EM"``/``"NM"``/``"UM"``/
@@ -459,7 +457,14 @@ def predict(
         if sim_result.solver_success:
             _obs_node = _resolve_observation_node(drug)
             observation_node = _obs_node
-            engine_pk = compute_endpoints(sim_result, observation_node=_obs_node, t_min_h=t_min_h)
+            engine_pk = compute_endpoints(
+                sim_result, observation_node=_obs_node, t_min_h=t_min_h,
+                dose_mg=drug.dose_mg, route=route,
+            )
+            if engine_pk.t_half is not None and engine_pk.auc_0inf is None:
+                warnings_list.append(
+                    "AUC(0-inf) unavailable: curve has not returned toward baseline"
+                )
             logger.info(
                 "Engine PK: Cmax=%.4f mg/L, Tmax=%.2f h, AUC=%.4f mg*h/L",
                 engine_pk.cmax.mean,
@@ -523,31 +528,37 @@ def predict(
         logger.warning("Engine simulation failed: %s", e)
 
     # ── Step 2b: MC uncertainty propagation ────────────────────────────
-    # MC via regimen.solver is V3.1 Phase 2 scope. In Phase 1 we skip MC
-    # for infusion rather than emit a misleading bolus-centered 90% PI.
     if n_mc_samples > 0 and compiled is not None and graph is not None:
-        if is_infusion:
-            warnings_list.append("MC skipped for IV infusion (V3.1 Phase 2 scope)")
-            logger.info("Skipping MC propagation for IV infusion (Phase 2 feature)")
-        else:
-            try:
-                ue = UncertaintyEngine()
-                mc = ue.propagate_fast(
-                    compiled, graph, drug, n_samples=n_mc_samples, t_min_h=t_min_h
+        try:
+            from sisyphus.physiology.correlated import resample_correlated_abundances
+
+            def graph_sampler(g, rng):
+                return resample_correlated_abundances(g, rng).sample(rng)
+            if is_infusion:
+                from sisyphus.pipeline.uncertainty import propagate_regimen
+
+                mc = propagate_regimen(
+                    compiled, graph, drug, regimen, n_samples=n_mc_samples,
+                    t_min_h=t_min_h, observation_node=_resolve_observation_node(drug),
+                    t_total_h=PRIMARY_SIMULATION_HORIZON_H,
+                    graph_sampler=graph_sampler,
                 )
-                if mc.n_samples > 0:
-                    parameter_cmax_90ci = mc.cmax_90ci
-                    logger.info(
-                        "MC propagation: %d samples, Cmax 90%% PI = (%.4f, %.4f)",
-                        mc.n_samples,
-                        parameter_cmax_90ci[0],
-                        parameter_cmax_90ci[1],
-                    )
-            except Exception as e:
-                if strict:
-                    raise
-                warnings_list.append(f"MC propagation failed: {e}")
-                logger.warning("MC propagation failed: %s", e)
+            else:
+                mc = UncertaintyEngine().propagate_fast(
+                    compiled, graph, drug, n_samples=n_mc_samples, t_min_h=t_min_h,
+                    graph_sampler=graph_sampler,
+                )
+            if mc.n_samples > 0:
+                parameter_cmax_90ci = mc.cmax_90ci
+                logger.info(
+                    "MC propagation: %d samples, Cmax 90%% PI = (%.4f, %.4f)",
+                    mc.n_samples, parameter_cmax_90ci[0], parameter_cmax_90ci[1],
+                )
+        except Exception as e:
+            if strict:
+                raise
+            warnings_list.append(f"MC propagation failed: {e}")
+            logger.warning("MC propagation failed: %s", e)
 
     # MC recomputes Cmax independently of engine_pk, so apply the same measured-F
     # exposure-scaling to the PI to keep it consistent with the corrected point.
@@ -568,8 +579,8 @@ def predict(
             ml_cmax = predictor.predict_cmax(smiles, dose_mg)
             ml_pk = PKEndpoints(
                 cmax=ml_cmax,
-                tmax=Distribution(1.0),  # ML does not predict Tmax
-                auc_0t=Distribution(0.0),  # ML does not predict AUC
+                tmax=None,
+                auc_0t=None,
             )
             logger.info("ML PK: Cmax=%.4f mg/L", ml_cmax.mean)
         except Exception as e:
@@ -591,8 +602,8 @@ def predict(
             )
             clf_pk = PKEndpoints(
                 cmax=clf_cmax,
-                tmax=Distribution(1.0),
-                auc_0t=Distribution(0.0),
+                tmax=None,
+                auc_0t=None,
             )
             logger.info("CL/F PK: Cmax=%.4f mg/L (ka=%s)", clf_cmax.mean, ka_method)
         except Exception as e:
@@ -638,8 +649,8 @@ def predict(
     endpoint_source = engine_pk or ml_pk
     final_pk = PKEndpoints(
         cmax=cmax_prediction.cmax,
-        tmax=endpoint_source.tmax if endpoint_source else Distribution(0.0),
-        auc_0t=endpoint_source.auc_0t if endpoint_source else Distribution(0.0),
+        tmax=endpoint_source.tmax if endpoint_source else None,
+        auc_0t=endpoint_source.auc_0t if endpoint_source else None,
         auc_0inf=endpoint_source.auc_0inf if endpoint_source else None,
         t_half=endpoint_source.t_half if endpoint_source else None,
         cl=endpoint_source.cl if endpoint_source else None,
@@ -730,6 +741,11 @@ def predict(
         confidence = "low"
     else:
         confidence = "medium"
+    if sim_result is not None and sim_result.mass_balance_error > 1e-4:
+        warnings_list.append(
+            f"Mass balance error exceeds 1e-4: {sim_result.mass_balance_error:.3g}"
+        )
+        confidence = "low"
 
     engine_simulation = None
     if (
