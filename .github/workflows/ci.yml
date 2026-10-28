@@ -8,11 +8,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    # Suite wall-time reached ~24-25min after the paracellular merge (the prior
-    # ceiling timed out main + feature CI); 40 then 55 as the suite grew (a 40min
-    # run was cancelled at the ceiling, 2026-06-18). pytest-xdist parallelization
-    # is the standing follow-up to bring this back down rather than keep raising it.
-    timeout-minutes: 55
+    # Serial CI reached ~49min; xdist parallelizes the unit and integration steps.
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v6
 
@@ -51,16 +48,43 @@ jobs:
           scripts/prediction_trace.py
 
       - name: Unit tests
-        run: pytest tests/unit -v --tb=short
+        run: pytest tests/unit -n auto -v --tb=short --run-slow
 
       - name: Integration tests (full)
-        run: pytest tests/integration -v --tb=short
+        run: pytest tests/integration -n auto -v --tb=short --run-slow
 
       - name: Regression tests (registry pinning, holdout invariance, prodrug gates)
-        run: pytest tests/regression -v --tb=short
+        run: pytest tests/regression -v --tb=short --run-slow
 
       - name: Benchmark smoke (N≤10 holdout drugs, slow marker)
-        run: pytest tests/benchmark/test_holdout.py -v --tb=short
+        run: pytest tests/benchmark/test_holdout.py -v --tb=short --run-slow
+
+  sbi:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.10"
+          cache: pip
+      - name: Install locked and SBI dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-lock.txt
+          pip install torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+          pip install sbi==0.24.0 nflows==0.14
+          pip install -e . --no-deps
+      - name: Torch and SBI tests
+        run: >-
+          pytest -v --tb=short
+          tests/unit/test_continuous_hierarchical.py
+          tests/unit/test_sbi_amortizer.py
+          tests/unit/test_sbi_hierarchical.py
+          tests/unit/test_sbi_multi_drug.py
+          tests/unit/test_sbi_simulator.py
+          tests/unit/test_tdm_sbi.py
 
   server-security:
     # Exercise the API contract with the same CPU-only runtime deps as the image.
