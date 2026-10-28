@@ -13,7 +13,7 @@
     {"path": "data/training/mmpk_expanded_full.csv", "sha256": "8b0a44d13fc9ebfb25bc8336bc3ff0603a8ac889719486a68f274d1cb2fc12a6"},
     {"path": "data/training/mmpk_expanded_v2.csv", "sha256": "8a948e6e3370e35dcbd3c644aeb9ced36998843c5e8c1570797cf88a64a5c7f0"},
     {"path": "data/training/mmpk_pbpk_features.csv", "sha256": "8a253ecce88ec1c73bb72ebc8ea126e9a9ad281b940de8cbdec86213695d4ee1"},
-    {"path": "data/training/clf_training.csv", "sha256": "02c4048011586fba6d00cb9cd5b61ab1861ecdac54a356719e22acb96f9a671e"},
+    {"path": "data/training/clf_training.csv", "sha256": "b21490bd2232dec471bd511e13ba3e004a7e6e14516efe37bfa9db6ac124ea68"},
     {"path": "data/training/bioavailability_v1.csv", "sha256": "a45516a972d18d3a1ab3c0b4151d4075262d8bf80a4b9d001e34f62aab8f93ad"},
     {"path": "data/training/clint_expanded_v2.csv", "sha256": "c68b935bb04660d7d1df1747d9a1987d5fa0c9b408f0aa8818a76bc2483e91c1"},
     {"path": "data/training/clint_merged_v3_biogen.csv", "sha256": "380fa1748fdf6abfd54c02368e25ad1911368802b59ab0a3b7cfef840d4d9ff4"},
