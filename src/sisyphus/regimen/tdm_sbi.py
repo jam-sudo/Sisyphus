@@ -159,9 +159,8 @@ def sbi_update(
         graph: BodyGraph with distributional parameters.
         drug: DrugOnGraph with distributional parameters (population prior).
         regimen: Dosing regimen the patient received.
-        observations: Observed concentrations. Only the first observation is
-            currently conditioned on — multi-observation amortization is a
-            Phase 2.1 follow-up.
+        observations: Observed concentrations. The amortizer conditions on the
+            first observation; additional observations reweight posterior samples.
         posterior_path: Path to the trained posterior .pt file. Defaults to
             ``models/sbi/multi_drug_nsf.pt``. Expects a sibling ``.aux.pt``
             holding the feature standardizer (mean / std) produced by
@@ -214,8 +213,7 @@ def sbi_update(
     # observations are used as a post-hoc importance-reweighting likelihood:
     # each theta sample from the amortizer is re-weighted by the probability
     # of producing the non-first observations under the engine forward sim.
-    # See _multi_obs_reweight below for implementation. Single-obs path is
-    # unchanged.
+    # The single-observation path is unchanged.
     _extra_obs = observations[1:]
 
     if posterior_path is not None:

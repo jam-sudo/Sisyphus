@@ -34,6 +34,7 @@ class SimulationContext:
     phenotype_report: PhenotypeApplicationReport
     auto_oatp: bool
     non_cyp_tags: tuple[str, ...]
+    fm_source: str | None = None
 
 
 def prepare_simulation_context(
@@ -99,6 +100,14 @@ def prepare_simulation_context(
     else:
         phenotype_report = PhenotypeApplicationReport((), (), ())
 
+    fm_override = None
+    if phenotype_report.applied:
+        from sisyphus.predict.phenotype import _fm_from_registry
+
+        fm_override = _fm_from_registry(
+            profile.smiles, {gene for gene, _ in phenotype_report.applied}
+        )
+
     if liver_enzymes_pre is not None:
         drug = build_drug_on_graph(
             profile,
@@ -112,6 +121,7 @@ def prepare_simulation_context(
             non_cyp_fractions=non_cyp_fractions,
             measured_kp=measured_adme.kp_overrides if measured_adme else None,
             enzyme_km=measured_adme.enzyme_km if measured_adme else None,
+            fm_override=fm_override,
         )
 
     graph = augment_for_active_species(graph, drug)
@@ -130,4 +140,5 @@ def prepare_simulation_context(
         phenotype_report=phenotype_report,
         auto_oatp=oatp_kinetics is not None and ecm_params is not None,
         non_cyp_tags=tuple(sorted(non_cyp_fractions)),
+        fm_source="validation:pgx_fm_registry" if fm_override else None,
     )
