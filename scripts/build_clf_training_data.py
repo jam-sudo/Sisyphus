@@ -33,6 +33,7 @@ logger = logging.getLogger(__name__)
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 from sisyphus.validation.identity import ik14 as _inchikey14  # noqa: E402
+
 BW_KG = 70.0  # reference body weight
 
 # Sanity bounds for CL/F (mL/min/kg)
@@ -86,10 +87,39 @@ def load_holdout_inchikeys() -> set[str]:
     return keys
 
 
+def load_prospective_inchikeys() -> set[str]:
+    """Structural exclusions from prospective sets and a frozen external manifest."""
+    paths = sorted((ROOT / "data" / "validation").glob("prospective_*.json"))
+    paths += sorted((ROOT / "data").glob("**/external_holdout*manifest.json"))
+    keys: set[str] = set()
+
+    def collect(value: object) -> None:
+        if isinstance(value, dict):
+            smiles = value.get("smiles")
+            if isinstance(smiles, str):
+                key = _inchikey14(smiles)
+                if key:
+                    keys.add(key)
+            for child in value.values():
+                collect(child)
+        elif isinstance(value, list):
+            for child in value:
+                collect(child)
+
+    for path in paths:
+        if path.name.endswith(".schema.json"):
+            continue
+        with path.open() as f:
+            collect(json.load(f))
+    logger.info("Prospective/external InChIKey-14 keys loaded: %d", len(keys))
+    return keys
+
+
 def main() -> None:
     holdout_names = load_holdout_drugs()
     exclusion_names = load_holdout_exclusions()
     holdout_inchikeys = load_holdout_inchikeys()
+    prospective_inchikeys = load_prospective_inchikeys()
 
     mmpk_path = ROOT / "data" / "training" / "mmpk_expanded_full.csv"
     logger.info("Loading MMPK data from %s", mmpk_path)
@@ -102,6 +132,7 @@ def main() -> None:
     n_holdout_name = 0
     n_holdout_excl = 0
     n_holdout_ik = 0
+    n_prospective_ik = 0
     n_no_smiles = 0
     n_zero_dose = 0
     n_clf_out_of_range = 0
@@ -131,8 +162,12 @@ def main() -> None:
 
             # Structural (InChIKey-14) holdout check — catches spelling / salt /
             # stereo variants the name filters miss (DE: CLF-track leak audit).
-            if _inchikey14(smiles) in holdout_inchikeys:
+            key = _inchikey14(smiles)
+            if key in holdout_inchikeys:
                 n_holdout_ik += 1
+                continue
+            if key in prospective_inchikeys:
+                n_prospective_ik += 1
                 continue
 
             dose_mg_str = row.get("dose_mg", "").strip()
@@ -211,6 +246,7 @@ def main() -> None:
     logger.info("Holdout (in_holdout):    %d", n_holdout_flag)
     logger.info("Holdout (name match):    %d", n_holdout_name)
     logger.info("Holdout (InChIKey-14):   %d", n_holdout_ik)
+    logger.info("Prospective (InChIKey-14): %d", n_prospective_ik)
     logger.info("Holdout (exclusion):     %d", n_holdout_excl)
     logger.info("No SMILES:               %d", n_no_smiles)
     logger.info("Zero/missing dose:       %d", n_zero_dose)
@@ -246,7 +282,10 @@ def main() -> None:
             n_nonlinear_flag += 1
 
         # Vd/F: geometric mean of non-None values
-        vdf_values = [e["vdf_L_kg"] for e in elist if e["vdf_L_kg"] is not None and e["vdf_L_kg"] > 0]
+        vdf_values = [
+            e["vdf_L_kg"] for e in elist
+            if e["vdf_L_kg"] is not None and e["vdf_L_kg"] > 0
+        ]
         if vdf_values:
             vdf_geomean = float(np.exp(np.mean(np.log(vdf_values))))
             log10_vdf = np.log10(vdf_geomean)
@@ -277,7 +316,6 @@ def main() -> None:
     n_drugs = len(drugs)
     n_with_vdf = sum(1 for d in drugs if d["has_vdf"])
     n_clf_oor_drugs = sum(1 for d in drugs if d["clf_oor"])
-    n_vdf_oor_drugs = sum(1 for d in drugs if d["vdf_oor"])
 
     # Subset: in-range CL/F only
     clf_in_range = [d for d in drugs if not d["clf_oor"]]
@@ -286,8 +324,14 @@ def main() -> None:
     logger.info("\n=== Per-Drug Statistics ===")
     logger.info("Unique drugs (by SMILES): %d", n_drugs)
     logger.info("  with Vd/F:              %d", n_with_vdf)
-    logger.info("  CL/F out of range:      %d (%.1f%%)", n_clf_oor_drugs, 100 * n_clf_oor_drugs / n_drugs)
-    logger.info("  Non-linear PK flag:     %d (%.1f%%)", n_nonlinear_flag, 100 * n_nonlinear_flag / n_drugs)
+    logger.info(
+        "  CL/F out of range:      %d (%.1f%%)", n_clf_oor_drugs,
+        100 * n_clf_oor_drugs / n_drugs,
+    )
+    logger.info(
+        "  Non-linear PK flag:     %d (%.1f%%)", n_nonlinear_flag,
+        100 * n_nonlinear_flag / n_drugs,
+    )
     logger.info("  CL/F in range:          %d", len(clf_in_range))
     logger.info("  Vd/F in range:          %d", len(vdf_in_range))
 
@@ -377,7 +421,10 @@ def main() -> None:
     # Warfarin CL/F ≈ 0.05 mL/min/kg (very low clearance)
     warf = [d for d in drugs if "warfarin" in d["name"].lower()]
     if warf:
-        logger.info("Warfarin CL/F: %.2f mL/min/kg (literature ≈ 0.03-0.06)", warf[0]["clf_mL_min_kg"])
+        logger.info(
+            "Warfarin CL/F: %.2f mL/min/kg (literature ≈ 0.03-0.06)",
+            warf[0]["clf_mL_min_kg"],
+        )
 
 
 if __name__ == "__main__":
