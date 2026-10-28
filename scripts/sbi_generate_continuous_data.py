@@ -22,14 +22,14 @@ import numpy as np
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 
-from sisyphus.sbi.multi_drug import (
-    DrugSpec,
+from sisyphus.physiology.correlation_registry import load_from_json  # noqa: E402
+from sisyphus.sbi.multi_drug import (  # noqa: E402
     extract_drug_features,
     load_drug_specs_from_json,
 )
-from sisyphus.sbi.physiology_generator import generate_physiology
-from sisyphus.sbi.priors import PRIOR_HIGH, PRIOR_LOW
-from sisyphus.sbi.simulator import apply_theta_to_drug
+from sisyphus.sbi.physiology_generator import generate_physiology  # noqa: E402
+from sisyphus.sbi.priors import PRIOR_HIGH, PRIOR_LOW  # noqa: E402
+from sisyphus.sbi.simulator import apply_theta_to_drug  # noqa: E402
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
@@ -72,7 +72,9 @@ def _atomic_save(path: Path, **arrays) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Generate continuous hierarchical SBI training data")
+    parser = argparse.ArgumentParser(
+        description="Generate continuous hierarchical SBI training data"
+    )
     parser.add_argument("--n-theta", type=int, default=1000)
     parser.add_argument("--n-pops", type=int, default=20)
     parser.add_argument("--drug-set", type=str, default=str(_DRUG_SET))
@@ -81,6 +83,7 @@ def main() -> int:
     parser.add_argument("--checkpoint-every", type=int, default=1,
                         help="Save partial npz every N pairs (default 1)")
     args = parser.parse_args()
+    load_from_json(ROOT / "data" / "physiology" / "achour2021_correlation.json")
 
     specs = load_drug_specs_from_json(Path(args.drug_set))
     logger.info("Loaded %d drugs", len(specs))
@@ -100,13 +103,10 @@ def main() -> int:
     import sisyphus.engine.flux  # noqa: F401
     from sisyphus.engine.compiler import ODECompiler, ResolvedParams
     from sisyphus.engine.solver import solve
-    from sisyphus.graph.builder import build_from_yaml
     from sisyphus.predict.adme import predict_adme
     from sisyphus.predict.chemistry import compute_profile
     from sisyphus.predict.ivive import build_drug_on_graph
     from sisyphus.sbi.simulator import EngineSimulator
-
-    adult_graph = build_from_yaml(_ADULT_PHYS)
 
     out_path = Path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -167,7 +167,8 @@ def main() -> int:
                 feats = extract_drug_features(adult_sim, logp=float(profile.logp))
 
             bw, age = float(bws[pi]), float(ages[pi])
-            graph = generate_physiology(bw, age)
+            rng_pair = _pair_rng(args.seed, si, pi)
+            graph = generate_physiology(bw, age, rng=rng_pair)
 
             compiled = ODECompiler().compile(graph)
             adme = predict_adme(profile)
@@ -182,7 +183,6 @@ def main() -> int:
             )
             nominal_peff = float(adme.peff.mean)
 
-            rng_pair = _pair_rng(args.seed, si, pi)
             thetas = rng_pair.uniform(prior_low, prior_high, size=(args.n_theta, 3))
             logcmax_batch = np.full(args.n_theta, np.nan)
 

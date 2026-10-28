@@ -34,6 +34,7 @@ sys.path.insert(0, str(ROOT / "src"))
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 log = logging.getLogger("sbi_sbc_continuous")
 
+from sisyphus.physiology.correlation_registry import load_from_json  # noqa: E402
 from sisyphus.sbi.multi_drug import (  # noqa: E402
     extract_drug_features,
     load_drug_specs_from_json,
@@ -41,7 +42,6 @@ from sisyphus.sbi.multi_drug import (  # noqa: E402
 from sisyphus.sbi.physiology_generator import generate_physiology  # noqa: E402
 from sisyphus.sbi.priors import build_box_prior  # noqa: E402
 from sisyphus.sbi.simulator import EngineSimulator, apply_theta_to_drug  # noqa: E402
-
 
 _ADULT_PHYS = ROOT / "data" / "physiology" / "reference_man.yaml"
 _DEFAULT_POPS = [
@@ -113,6 +113,7 @@ def main() -> int:
     p.add_argument("--populations", type=str, default="",
                    help="JSON list of {name, bw, age}; empty→default 4-pop grid")
     args = p.parse_args()
+    load_from_json(ROOT / "data" / "physiology" / "achour2021_correlation.json")
 
     levels = tuple(int(x) for x in args.levels.split(","))
 
@@ -198,7 +199,9 @@ def main() -> int:
             t0 = time.time()
             log.info("[sbc-cont] [%d/%d] %s / %s", pair_idx, total_pairs, pop_name, spec.name)
 
-            graph = generate_physiology(bw, age)
+            graph = generate_physiology(
+                bw, age, rng=np.random.default_rng(args.seed + pair_idx * 1000)
+            )
             compiled = ODECompiler().compile(graph)
             profile = compute_profile(spec.smiles)
             adme = predict_adme(profile)
