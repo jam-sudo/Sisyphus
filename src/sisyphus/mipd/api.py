@@ -108,6 +108,8 @@ def predict_posterior(
         )
 
     observations = list(observations)
+    if covariates is not None and covariates.crcl_cv > 0:
+        raise ValueError("CrCl measurement CV requires repeated-dose structural TDM")
     needs_grid = cl_latent or any(isinstance(o, MeasuredConc) for o in observations)
     renal_factor = covariates.renal_factor() if covariates is not None else 1.0
     has_phys = covariates.has_physiology() if covariates is not None else False

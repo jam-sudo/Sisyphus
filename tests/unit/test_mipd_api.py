@@ -32,6 +32,13 @@ def test_predict_posterior_no_observations_matches_apriori_engine_cmax():
     assert post.cmax.point == pytest.approx(ap_cmax, rel=0.20)
 
 
+def test_single_dose_rejects_unpropagated_crcl_uncertainty():
+    with pytest.raises(ValueError, match="repeated-dose structural TDM"):
+        predict_posterior(
+            MIDAZOLAM, DOSE, covariates=Covariates(crcl_ml_min=80, crcl_cv=0.2)
+        )
+
+
 def test_phenotype_shifts_unobserved_prior_and_conditioned_posterior():
     base = predict_posterior(METOPROLOL, 100.0, n_samples=1000, seed=0)
     poor = predict_posterior(

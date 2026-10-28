@@ -57,6 +57,7 @@ class RenalCLGrid:
     auc: np.ndarray
     is_steady_state: bool = False
     t_half_h: float | None = None
+    renal_cl_l_h: float | None = None
 
     def conc_at(self, r: np.ndarray, t: float) -> np.ndarray:
         """Model venous concentration at time ``t`` for each renal-scale in ``r``.
@@ -210,6 +211,7 @@ def build_renal_cl_grid(
     return RenalCLGrid(
         r_grid=r_grid, t_grid=t_grid, conc=conc, cmax=cmax, auc=auc,
         is_steady_state=is_ss, t_half_h=t_half_h,
+        renal_cl_l_h=float(drug.renal_clearance.mean),
     )
 
 

@@ -1,8 +1,9 @@
 """Steady-state TDM for IV and oral regimens.
 
-``predict_tdm`` conditions the engine-as-prior on a steady-state IV trough to
-individualize renal clearance. The latent is a free renal-CL scale (prior centered
-on the CrCl-implied value); F == 1 (IV). The oral-train-calibrated ``meta_cmax`` /
+``predict_tdm`` conditions the engine-as-prior on measured concentrations. The
+default IV latent is renal CL; the default oral latents are F and metabolic CL.
+The opt-in structural forward adds total CL, central V, and oral absorption rate.
+The oral-train-calibrated ``meta_cmax`` /
 ``cmax_90ci`` are NOT attached — they are oral-Cmax artifacts, invalid for IV. The
 primary output is the conditioned engine posterior ``cmax``/``auc`` with the
 ``renal_scale`` posterior; ``cmax.ci90`` is a parameter-uncertainty band (does not
@@ -30,14 +31,17 @@ def predict_tdm(
     n_grid: int = 13,
     seed: int = 0,
     kp_method: str = "rodgers_rowland",
+    structural_latents: bool = False,
 ) -> PosteriorPK:
     """Posterior PK for an IV or oral regimen and measured observations.
 
     Args:
         regimen: a uniform IV or oral ``DosingRegimen``.
         observations: ``MeasuredConc`` troughs at times within the regimen horizon.
-        covariates: v1 supports a measured CrCl, which sets the renal-CL prior
-            center (``CrCl/125``); the trough updates the latent around it.
+        covariates: measured CrCl or weight/PMA population GFR sets the renal
+            prior centre; optional CrCl CV adds a lognormal measurement latent.
+        structural_latents: use the one-compartment CL/V/ka forward for measured
+            observations. With no observations, preserve the existing prior path.
     """
     from sisyphus.mipd._regimen import _regimen_route, _require_uniform_regimen
     from sisyphus.mipd.renal_grid import (
@@ -49,6 +53,31 @@ def predict_tdm(
 
     route = _regimen_route(regimen)
     _require_uniform_regimen(regimen)
+    observations = list(observations)
+    if (structural_latents or (covariates is not None and covariates.crcl_cv > 0)) and observations:
+        from sisyphus.mipd.analytic import engine_structural_prior, sir_structural_posterior
+
+        prior, is_ss = engine_structural_prior(
+            smiles, regimen,
+            renal_factor=covariates.renal_factor() if covariates is not None else 1.0,
+            body_weight_kg=covariates.body_weight_kg if covariates is not None else None,
+            age_years=covariates.age_years if covariates is not None else None,
+            kp_method=kp_method,
+        )
+        post = sir_structural_posterior(
+            prior, regimen, observations, n_samples=n_samples,
+            rng=np.random.default_rng(seed),
+            crcl_cv=covariates.crcl_cv if covariates is not None else 0.0,
+        )
+        warnings_list = list(covariates.warnings()) if covariates is not None else []
+        warnings_list.append(
+            "structural latents use a one-compartment approximation to the engine curve"
+        )
+        if renal_prior_cv is not None:
+            warnings_list.append("renal_prior_cv is ignored by the structural latent model")
+        if not is_ss:
+            warnings_list.append("observed regimen has not reached steady state")
+        return dataclasses.replace(post, warnings=tuple(warnings_list))
     if route == "oral":
         return _predict_tdm_oral(
             smiles, regimen, list(observations), covariates=covariates,
@@ -61,7 +90,6 @@ def predict_tdm(
     # (renal_prior_cv unset) still draws the renal-CL prior at cv=1.0.
     renal_cv = 1.0 if renal_prior_cv is None else renal_prior_cv
 
-    observations = list(observations)
     renal_factor = covariates.renal_factor() if covariates is not None else 1.0
     body_weight_kg = covariates.body_weight_kg if covariates is not None else None
     age_years = covariates.age_years if covariates is not None else None

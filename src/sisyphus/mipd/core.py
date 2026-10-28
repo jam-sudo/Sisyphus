@@ -203,7 +203,8 @@ class PosteriorPK:
 
     ``cmax``/``auc`` are the engine-track posterior and ``meta_cmax`` (populated
     by the API) is the production meta blend routed through the same posterior.
-    These are **parameter-uncertainty** bands (bioavailability F only) — they do
+    These are **parameter-uncertainty** bands (including structural latents when
+    enabled) — they do
     NOT carry calibrated predictive coverage, because structural model error is
     not in them (the F-only ``meta_cmax.ci90`` is narrow and under-covers the
     observable Cmax). ``cmax_90ci`` remains None: the development residual
@@ -227,6 +228,10 @@ class PosteriorPK:
     # the individualized renal-clearance scale relative to the CrCl-implied value.
     # None on every other path. Additive — preserves the prior contract.
     renal_scale: Posterior | None = None
+    volume_l: Posterior | None = None
+    absorption_rate_per_h: Posterior | None = None
+    total_clearance_l_h: Posterior | None = None
+    crcl_scale: Posterior | None = None
 
 
 def _softmax_resample(
