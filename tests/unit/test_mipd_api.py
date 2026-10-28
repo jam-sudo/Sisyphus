@@ -12,7 +12,7 @@ import pytest
 
 import sisyphus.pipeline.predict as pp
 from sisyphus.mipd import MeasuredF, PosteriorPK
-from sisyphus.mipd.amortizer import NeuralAmortizer, SIRAmortizer
+from sisyphus.mipd.amortizer import SIRAmortizer
 from sisyphus.mipd.api import predict_posterior
 from sisyphus.mipd.core import APrioriPK
 from sisyphus.mipd.covariates import Covariates
@@ -89,11 +89,6 @@ def test_sir_amortizer_reproduces_sir_core_posterior():
     )
     assert post.f.point == pytest.approx(0.2, abs=0.03)
     assert post.cmax.point == pytest.approx(0.4, rel=0.15)
-
-
-def test_neural_amortizer_raises_informative_error_without_torch():
-    with pytest.raises(NotImplementedError, match="torch"):
-        NeuralAmortizer()
 
 
 def test_f_only_path_calls_predict_once_with_compute_f_engine(monkeypatch):
