@@ -530,16 +530,23 @@ def predict(
     # ── Step 2b: MC uncertainty propagation ────────────────────────────
     if n_mc_samples > 0 and compiled is not None and graph is not None:
         try:
-            ue = UncertaintyEngine()
+            from sisyphus.physiology.correlated import resample_correlated_abundances
+
+            def graph_sampler(g, rng):
+                return resample_correlated_abundances(g, rng).sample(rng)
             if is_infusion:
-                mc = ue.propagate_regimen(
+                from sisyphus.pipeline.uncertainty import propagate_regimen
+
+                mc = propagate_regimen(
                     compiled, graph, drug, regimen, n_samples=n_mc_samples,
                     t_min_h=t_min_h, observation_node=_resolve_observation_node(drug),
                     t_total_h=PRIMARY_SIMULATION_HORIZON_H,
+                    graph_sampler=graph_sampler,
                 )
             else:
-                mc = ue.propagate_fast(
-                    compiled, graph, drug, n_samples=n_mc_samples, t_min_h=t_min_h
+                mc = UncertaintyEngine().propagate_fast(
+                    compiled, graph, drug, n_samples=n_mc_samples, t_min_h=t_min_h,
+                    graph_sampler=graph_sampler,
                 )
             if mc.n_samples > 0:
                 parameter_cmax_90ci = mc.cmax_90ci

@@ -13,6 +13,7 @@ Two modes:
 from __future__ import annotations
 
 import logging
+from collections.abc import Callable
 from dataclasses import dataclass
 
 import numpy as np
@@ -22,10 +23,6 @@ from sisyphus.engine.compiler import CompiledODE, ResolvedParams
 from sisyphus.engine.contracts import assert_fu_correction_honored
 from sisyphus.engine.solver import solve, solve_mc
 from sisyphus.graph.body import BodyGraph
-from sisyphus.physiology.correlated import resample_correlated_abundances
-from sisyphus.pk.nca import auc_trapezoidal
-from sisyphus.regimen.solver import solve_regimen
-from sisyphus.regimen.types import DosingRegimen
 
 logger = logging.getLogger(__name__)
 
@@ -106,6 +103,7 @@ class UncertaintyEngine:
         n_samples: int = 1000,
         seed: int = 42,
         t_span: tuple[float, float] = (0.0, 24.0),
+        graph_sampler: Callable[[BodyGraph, np.random.Generator], BodyGraph] | None = None,
     ) -> UncertaintyResult:
         """Run MC sampling and return aggregated SimResults.
 
@@ -125,6 +123,7 @@ class UncertaintyEngine:
             n_samples: Number of MC iterations.
             seed: Base RNG seed (sample i uses seed + i).
             t_span: Integration interval (t_start, t_end) in hours.
+            graph_sampler: Optional graph realization; defaults to graph.sample.
 
         Returns:
             UncertaintyResult with raw SimResult samples.
@@ -145,7 +144,7 @@ class UncertaintyEngine:
             rng = np.random.default_rng(seed + i)
 
             # Sample parameter distributions
-            realized_graph = resample_correlated_abundances(graph, rng).sample(rng)
+            realized_graph = graph_sampler(graph, rng) if graph_sampler else graph.sample(rng)
             realized_drug = drug.sample(rng)
             params = ResolvedParams(realized_graph, realized_drug)
 
@@ -188,6 +187,7 @@ class UncertaintyEngine:
         t_span: tuple[float, float] = (0.0, 24.0),
         observation_node: str = "venous_blood",
         t_min_h: float = 0.0,
+        graph_sampler: Callable[[BodyGraph, np.random.Generator], BodyGraph] | None = None,
     ) -> MCResult:
         """Fast MC propagation -- returns aggregated PK only (no SimResults).
 
@@ -203,6 +203,7 @@ class UncertaintyEngine:
             seed: Base RNG seed (sample i uses seed + i).
             t_span: Integration interval (t_start, t_end) in hours.
             observation_node: Node to extract PK from.
+            graph_sampler: Optional graph realization; defaults to graph.sample.
             t_min_h: Minimum observation time in hours.  When > 0, skips the
                 t=0 IV-bolus spike for Cmax extraction. Default 0.0
                 (V2-compatible).
@@ -226,7 +227,7 @@ class UncertaintyEngine:
             rng = np.random.default_rng(seed + i)
 
             # Sample parameter distributions
-            realized_graph = resample_correlated_abundances(graph, rng).sample(rng)
+            realized_graph = graph_sampler(graph, rng) if graph_sampler else graph.sample(rng)
             realized_drug = drug.sample(rng)
             params = ResolvedParams(realized_graph, realized_drug)
 
@@ -263,56 +264,6 @@ class UncertaintyEngine:
         auc_arr = np.array(auc_samples)
 
         return self._build_mc_result(cmax_arr, tmax_arr, auc_arr, n_ok, n_failures)
-
-    def propagate_regimen(
-        self,
-        compiled: CompiledODE,
-        graph: BodyGraph,
-        drug: DrugOnGraph,
-        regimen: DosingRegimen,
-        n_samples: int = 1000,
-        seed: int = 42,
-        observation_node: str = "venous_blood",
-        t_min_h: float = 0.0,
-        t_total_h: float = 24.0,
-    ) -> MCResult:
-        """Propagate parameter draws through the same regimen as the point solve."""
-        assert_fu_correction_honored(graph, drug.fu_correction_liver.mean)
-        cmax_samples: list[float] = []
-        tmax_samples: list[float] = []
-        auc_samples: list[float] = []
-        n_failures = 0
-        for i in range(n_samples):
-            rng = np.random.default_rng(seed + i)
-            realized_graph = resample_correlated_abundances(graph, rng).sample(rng)
-            realized_drug = drug.sample(rng)
-            try:
-                result = solve_regimen(
-                    compiled, ResolvedParams(realized_graph, realized_drug), regimen,
-                    t_total_h=t_total_h,
-                )
-                if not result.solver_success:
-                    n_failures += 1
-                    continue
-                time = result.time_h
-                conc = result.concentrations[observation_node]
-                mask = time >= t_min_h
-                if not np.any(mask) or not np.any(conc[mask] > 0):
-                    n_failures += 1
-                    continue
-                peak = int(np.argmax(conc[mask]))
-                cmax_samples.append(float(conc[mask][peak]))
-                tmax_samples.append(float(time[mask][peak]))
-                auc_samples.append(auc_trapezoidal(time, conc))
-            except Exception:
-                n_failures += 1
-                logger.debug("MC-regimen sample %d: solver exception", i, exc_info=True)
-        n_ok = len(cmax_samples)
-        logger.info("MC-regimen propagation: %d/%d successful", n_ok, n_samples)
-        return self._build_mc_result(
-            np.asarray(cmax_samples), np.asarray(tmax_samples), np.asarray(auc_samples),
-            n_ok, n_failures,
-        )
 
     @staticmethod
     def _build_mc_result(
