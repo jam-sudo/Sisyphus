@@ -22,15 +22,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 import sisyphus.engine.flux  # noqa: F401,E402
 from sisyphus.engine.compiler import ODECompiler, ResolvedParams  # noqa: E402
-from sisyphus.engine.solver import solve as solve_scipy  # noqa: E402
-from sisyphus.engine import solver_jax as _sj  # noqa: E402
-
-# Loosen default tolerances for stiff OATP MM kinetics. Publication-grade but
-# converges where rtol=1e-8 LSODA stalls on low-Km statins (rosuvastatin Km=6.5).
-_sj._DEFAULT_RTOL = 1e-6
-_sj._DEFAULT_ATOL = 1e-8
-_sj._DEFAULT_MAX_STEPS = 65536
-solve = _sj.solve
+from sisyphus.engine.solver import solve  # noqa: E402
 from sisyphus.graph.builder import build_from_yaml  # noqa: E402
 from sisyphus.predict.adme import predict_adme  # noqa: E402
 from sisyphus.predict.chemistry import compute_profile  # noqa: E402
@@ -46,7 +38,10 @@ _STATINS = {
         40.0,
     ),
     "rosuvastatin": ("CC(C)C1=NC(=NC(=C1C=CC(CC(CC(=O)O)O)O)C2=CC=C(C=C2)F)N(C)S(=O)(=O)C", 20.0),
-    "atorvastatin": ("CC(C)C1=C(C(=C(N1CCC(CC(CC(=O)O)O)O)C2=CC=C(C=C2)F)C3=CC=CC=C3)C(=O)NC4=CC=CC=C4", 40.0),
+    "atorvastatin": (
+        "CC(C)C1=C(C(=C(N1CCC(CC(CC(=O)O)O)O)C2=CC=C(C=C2)F)C3=CC=CC=C3)C(=O)NC4=CC=CC=C4",
+        40.0,
+    ),
     "pitavastatin": ("O=C(O)C[C@H](O)C[C@H](O)/C=C/c1c(C2CC2)nc2ccccc2c1-c1ccc(F)cc1", 2.0),
     "fluvastatin":  ("CC(C)N1C2=CC=CC=C2C(=C1C=CC(CC(CC(=O)O)O)O)C3=CC=C(C=C3)F", 40.0),
 }
@@ -70,10 +65,16 @@ def main() -> None:
     }
     t1 = time.time()
     profile = compute_profile(smiles)
-    print(f"  chemistry profile in {time.time()-t1:.1f}s mw={profile.mw:.1f} logp={profile.logp:.2f}", flush=True)
+    print(
+        f"  chemistry profile in {time.time()-t1:.1f}s mw={profile.mw:.1f} "
+        f"logp={profile.logp:.2f}", flush=True,
+    )
     t2 = time.time()
     adme = predict_adme(profile)
-    print(f"  adme predicted in {time.time()-t2:.1f}s fup={adme.fup.mean:.3f} clint={adme.clint.mean:.1f}", flush=True)
+    print(
+        f"  adme predicted in {time.time()-t2:.1f}s fup={adme.fup.mean:.3f} "
+        f"clint={adme.clint.mean:.1f}", flush=True,
+    )
     kin = load_oatp1b1_kinetics(name)
     oatp = kin["OATP1B1"]
     print(f"  OATP kinetics: Jmax={oatp.jmax.mean:.1f} Km={oatp.km.mean:.3f} "

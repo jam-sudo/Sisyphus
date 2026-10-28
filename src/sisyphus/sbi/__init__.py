@@ -18,8 +18,9 @@ Current scope (POC):
 
 Imports are LAZY (PEP 562 ``__getattr__``): ``torch`` is an optional extra
 (pyproject ``[project.optional-dependencies]``) and the multi-drug / simulator
-members need it. The physiology generator and priors are torch-free and must
-remain importable without torch (e.g. by ``mipd`` weight/age covariates), so the
+members need it. The physiology generator and priors are torch-free at import
+time (``PriorSpec.as_torch`` loads torch on use) and must remain importable
+without torch (e.g. by ``mipd`` weight/age covariates), so the
 torch-dependent submodules are NOT imported at package-import time — each public
 name is resolved from its submodule only when first accessed.
 """

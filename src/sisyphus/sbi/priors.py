@@ -12,9 +12,12 @@ mass on high-fup drugs and underrepresenting low-fup acids/statins.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
 import numpy as np
-import torch
+
+if TYPE_CHECKING:
+    import torch
 
 
 # --- logit / sigmoid helpers ---
@@ -58,6 +61,7 @@ class PriorSpec:
         return len(self.low)
 
     def as_torch(self) -> torch.distributions.Distribution:
+        import torch
         from sbi.utils import BoxUniform
 
         return BoxUniform(

@@ -20,6 +20,14 @@ from sisyphus.ml.registry import (
 )
 
 ROOT = Path(__file__).resolve().parent.parent.parent
+SHIPPED_MODELS = [
+    path for path in (ROOT / "models").rglob("*")
+    if path.is_file()
+    and path.name != ".gitkeep"
+    and path.name != "artifact_loaders.json"
+    and not path.name.endswith(".meta.json")
+    and (not path.name.endswith("_meta.json") or path.name == "xgboost_meta.json")
+]
 MODELS_ADME = ROOT / "models" / "adme"
 MODELS_DIRECT_PK = ROOT / "models" / "direct_pk"
 
@@ -59,6 +67,19 @@ def test_manifest_path_for_direct_pk():
 # ---------------------------------------------------------------------------
 # Shipped manifests: all 12 must exist, parse, and validate clean
 # ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("model_path", SHIPPED_MODELS, ids=lambda p: p.name)
+def test_every_shipped_artifact_has_verified_manifest(model_path):
+    manifest = verify_model_artifact(model_path)
+    if manifest["feature_schema"]["name"] == "artifact_only":
+        assert "runtime_loader" in manifest
+
+
+def test_shipped_artifact_loader_inventory_is_complete():
+    loaders = json.loads((ROOT / "models" / "artifact_loaders.json").read_text())
+    assert set(loaders) == {str(path.relative_to(ROOT)) for path in SHIPPED_MODELS}
+    assert loaders["models/meta_learner/xgboost_meta.json"] is None
 
 
 @pytest.mark.parametrize("model_path", ACTIVE_MODELS, ids=lambda p: p.name)
@@ -138,6 +159,19 @@ def test_runtime_verifier_rejects_missing_manifest(tmp_path):
     fake_model = tmp_path / "nonexistent.json"
     with pytest.raises(ValueError, match="manifest unavailable"):
         verify_model_artifact(fake_model)
+
+
+def test_artifact_only_manifest_still_checks_bytes(tmp_path):
+    model = tmp_path / "model.pt"
+    model.write_bytes(b"original")
+    manifest = load_manifest(ROOT / "models" / "e2e_mlp.pt")
+    assert manifest is not None
+    manifest["artifact_sha256"] = hashlib.sha256(model.read_bytes()).hexdigest()
+    manifest_path_for(model).write_text(json.dumps(manifest))
+    assert verify_model_artifact(model) == manifest
+    model.write_bytes(b"changed")
+    with pytest.raises(ValueError, match="artifact hash mismatch"):
+        verify_model_artifact(model)
 
 
 @pytest.mark.parametrize(
