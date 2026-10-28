@@ -45,6 +45,8 @@ class StructuralPrior:
 class AnalyticRegimenForward:
     """Vectorized finite-dose one-compartment IV bolus/infusion or oral forward."""
 
+    # shortcut: one compartment omits tissue kinetics, upgrade with a calibrated PBPK latent grid.
+
     def __init__(self, regimen: DosingRegimen) -> None:
         self.regimen = regimen
         self.route = _regimen_route(regimen)
