@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-09-25
+last_updated: 2026-10-28
 charter: Authoritative list of failed Sisyphus experiments. Read before proposing any accuracy improvement.
 ---
 
