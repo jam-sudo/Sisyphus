@@ -3,11 +3,9 @@
 ``predict_tdm`` conditions the engine-as-prior on measured concentrations. The
 default IV latent is renal CL; the default oral latents are F and metabolic CL.
 The opt-in structural forward adds total CL, central V, and oral absorption rate.
-The oral-train-calibrated ``meta_cmax`` /
-``cmax_90ci`` are NOT attached — they are oral-Cmax artifacts, invalid for IV. The
-primary output is the conditioned engine posterior ``cmax``/``auc`` with the
-``renal_scale`` posterior; ``cmax.ci90`` is a parameter-uncertainty band (does not
-carry calibrated structural coverage). See the design spec.
+The output is the conditioned engine posterior ``cmax``/``auc`` with
+route-specific latent posteriors. ``cmax.ci90`` is a parameter-uncertainty band
+without calibrated structural coverage. See the design spec.
 """
 from __future__ import annotations
 
