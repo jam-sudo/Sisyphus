@@ -80,6 +80,8 @@ def main() -> int:
     parser.add_argument("--drug-set", type=str, default=str(_DRUG_SET))
     parser.add_argument("--out", type=str, default="data/sbi/continuous_train.npz")
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--drug-offset", type=int, default=0,
+                        help="Index of the first drug in the full training set")
     parser.add_argument("--checkpoint-every", type=int, default=1,
                         help="Save partial npz every N pairs (default 1)")
     args = parser.parse_args()
@@ -146,7 +148,7 @@ def main() -> int:
     pairs_done_this_run = 0
     pairs_skipped = len(done_pairs)
 
-    for si, spec in enumerate(specs):
+    for local_si, spec in enumerate(specs):
         adult_sim = None
         profile = None
         feats = None
@@ -156,7 +158,7 @@ def main() -> int:
                 continue
 
             if adult_sim is None:
-                logger.info("[%d/%d] %s", si + 1, len(specs), spec.name)
+                logger.info("[%d/%d] %s", local_si + 1, len(specs), spec.name)
                 adult_sim = EngineSimulator.for_drug(
                     smiles=spec.smiles,
                     dose_mg=spec.dose_mg,
@@ -167,7 +169,7 @@ def main() -> int:
                 feats = extract_drug_features(adult_sim, logp=float(profile.logp))
 
             bw, age = float(bws[pi]), float(ages[pi])
-            rng_pair = _pair_rng(args.seed, si, pi)
+            rng_pair = _pair_rng(args.seed, args.drug_offset + local_si, pi)
             graph = generate_physiology(bw, age, rng=rng_pair)
 
             compiled = ODECompiler().compile(graph)
