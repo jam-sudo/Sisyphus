@@ -78,7 +78,7 @@ def _build_grid_engine(
     from sisyphus.predict.adme import predict_adme
     from sisyphus.predict.chemistry import compute_profile
     from sisyphus.predict.ivive import build_drug_on_graph, detect_disposition
-    from sisyphus.predict.phenotype import apply_phenotype_to_graph
+    from sisyphus.predict.phenotype import _fm_from_registry, apply_phenotype_to_graph
 
     profile = compute_profile(smiles)
     adme = predict_adme(profile)
@@ -99,14 +99,7 @@ def _build_grid_engine(
     liver_pre: dict[str, float] | None = None
     if "liver" in graph.nodes and graph.nodes["liver"].enzymes:
         liver_pre = {tag: d.mean for tag, d in graph.nodes["liver"].enzymes.items()}
-    drug = build_drug_on_graph(
-        profile, adme, dose_mg, route,
-        liver_enzymes=liver_pre,
-        kp_method=kp_method,
-        transporter_kinetics=auto_oatp_kinetics,
-        hepatic_ecm_params=auto_ecm_params,
-        non_cyp_fractions=non_cyp_fractions,
-    )
+    fm_override = None
     if phenotypes:
         graph, report = apply_phenotype_to_graph(graph, phenotypes, return_report=True)
         if report.unsupported:
@@ -114,6 +107,18 @@ def _build_grid_engine(
                 "Unsupported phenotype tag(s): "
                 + ", ".join(tag for tag, _ in report.unsupported)
             )
+        fm_override = _fm_from_registry(
+            profile.smiles, {gene for gene, _ in report.applied}
+        )
+    drug = build_drug_on_graph(
+        profile, adme, dose_mg, route,
+        liver_enzymes=liver_pre,
+        kp_method=kp_method,
+        transporter_kinetics=auto_oatp_kinetics,
+        hepatic_ecm_params=auto_ecm_params,
+        non_cyp_fractions=non_cyp_fractions,
+        fm_override=fm_override,
+    )
     if renal_factor != 1.0:
         drug = dataclasses.replace(
             drug,
