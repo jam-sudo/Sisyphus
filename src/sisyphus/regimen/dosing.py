@@ -122,6 +122,7 @@ def recommend_dose(
     seed: int = 42,
     method: str = "is",
     allow_nonlinear_scaling: bool = False,
+    sbi_reweight: bool = False,
 ) -> DoseRecommendation:
     """Recommend an adjusted dose to achieve a target concentration.
 
@@ -149,6 +150,7 @@ def recommend_dose(
             saturable enzyme kinetics are present. False by default because
             forward simulation across candidate doses is required for a
             defensible nonlinear-PK recommendation.
+        sbi_reweight: Reweight SBI posterior samples against observations.
 
     Returns:
         DoseRecommendation with adjusted dose and predictions.
@@ -202,6 +204,7 @@ def recommend_dose(
         n_prior=n_prior,
         seed=seed,
         method=inference_method,
+        sbi_reweight=sbi_reweight,
     )
 
     posterior_css = tdm.posterior_cmax.mean
@@ -239,5 +242,5 @@ def recommend_dose(
         posterior_cv=tdm.posterior_cmax.cv,
         scaling_ratio=actual_ratio,
         tdm_result=tdm,
-        inference_method=inference_method,
+        inference_method=tdm.method_used,
     )

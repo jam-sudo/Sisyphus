@@ -46,6 +46,7 @@ def main() -> None:
     # tdm command (Bayesian update)
     tdm_parser = subparsers.add_parser("tdm", help="EXPERIMENTAL: TDM Bayesian update")
     tdm_parser.add_argument("--smiles", required=True, help="SMILES string")
+    tdm_parser.add_argument("--name", help="Drug name for per-drug auto routing")
     tdm_parser.add_argument("--dose", type=float, required=True, help="Dose (mg)")
     tdm_parser.add_argument(
         "--obs", required=True, nargs="+",
@@ -69,12 +70,12 @@ def main() -> None:
         "--population",
         default=None,
         help="Population class for hierarchical SBI (e.g. 'adult', 'pediatric_5y'). "
-             "Uses hierarchical posterior when set.",
+             "Only used by SBI; uses hierarchical posterior when set.",
     )
     tdm_parser.add_argument("--body-weight", type=float, default=None,
-                            help="Patient body weight in kg (continuous hierarchical)")
+                            help="Patient body weight in kg (SBI only; requires --age)")
     tdm_parser.add_argument("--age", type=float, default=None,
-                            help="Patient age in years (continuous hierarchical)")
+                            help="Patient age in years (SBI only; requires --body-weight)")
     tdm_parser.add_argument(
         "--phenotype",
         default=None,
@@ -128,6 +129,7 @@ def main() -> None:
         "dose-adjust", help="EXPERIMENTAL: MIPD dose recommendation from TDM"
     )
     da_parser.add_argument("--smiles", required=True, help="SMILES string")
+    da_parser.add_argument("--name", help="Drug name for per-drug auto routing")
     da_parser.add_argument("--dose", type=float, required=True, help="Current dose (mg)")
     da_parser.add_argument(
         "--obs", required=True, nargs="+",
@@ -334,11 +336,13 @@ def _resolve_auto_method(drug_name: str) -> tuple[str, bool]:
     import json
 
     if not _ROUTING_TABLE_PATH.exists():
+        print("Warning: routing table missing; using IBIS default", file=sys.stderr)
         return "ibis", False
     try:
         with open(_ROUTING_TABLE_PATH) as f:
             table = json.load(f)
-    except Exception:
+    except (OSError, ValueError) as exc:
+        print(f"Warning: routing table unreadable ({exc}); using IBIS default", file=sys.stderr)
         return "ibis", False
     mapping = table.get("routes", {})
     reweight_map = table.get("sbi_reweight", {})
@@ -348,12 +352,34 @@ def _resolve_auto_method(drug_name: str) -> tuple[str, bool]:
         if key.lower().strip() == lower:
             method = m
             break
+    else:
+        print(f"Warning: {drug_name!r} not in routing table; using {method} default",
+              file=sys.stderr)
+        return method, False
     reweight = False
     for key, flag in reweight_map.items():
         if key.lower().strip() == lower:
             reweight = bool(flag)
             break
     return method, reweight
+
+
+def _route_drug_name(smiles: str, name: str | None) -> str:
+    """Use an explicit name or find the matching compound YAML name."""
+    if name:
+        return name
+    import yaml
+    from rdkit import Chem
+
+    target = Chem.MolFromSmiles(smiles)
+    compounds = get_resource_config().data("compounds", required=False)
+    for path in sorted(compounds.glob("*.yaml")):
+        data = yaml.safe_load(path.read_text())
+        candidate = Chem.MolFromSmiles(data["smiles"])
+        if (target is not None and candidate is not None
+                and Chem.MolToSmiles(target) == Chem.MolToSmiles(candidate)):
+            return str(data["name"])
+    return smiles
 
 
 def _parse_observations(obs_strings: list[str]):
@@ -410,18 +436,19 @@ def _run_tdm(args: argparse.Namespace) -> None:
     cli_method = args.method
     auto_reweight = False
     if cli_method == "auto":
-        resolved, auto_reweight = _resolve_auto_method(drug.name)
+        route_name = _route_drug_name(args.smiles, args.name)
+        resolved, auto_reweight = _resolve_auto_method(route_name)
         suffix = " +reweight" if auto_reweight else ""
-        print(f"[auto] routing {drug.name} → method={resolved}{suffix}",
+        print(f"[auto] routing {route_name} → method={resolved}{suffix}",
               file=sys.stderr)
         cli_method = resolved
     method_map = {
-        "is": ("importance_sampling", "Importance Sampling"),
-        "ibis": ("ibis", "IBIS (sequential MC + MCMC)"),
-        "enkf": ("enkf", "EnKF (Ensemble Kalman Filter)"),
-        "sbi": ("sbi", "Amortized SBI (multi-drug NSF)"),
+        "is": "importance_sampling",
+        "ibis": "ibis",
+        "enkf": "enkf",
+        "sbi": "sbi",
     }
-    tdm_method, method_label = method_map[cli_method]
+    tdm_method = method_map[cli_method]
 
     from sisyphus.regimen.tdm import bayesian_update
 
@@ -436,10 +463,14 @@ def _run_tdm(args: argparse.Namespace) -> None:
         if auto_reweight:
             extra_kwargs["sbi_reweight"] = True
     pop = getattr(args, "population", None)
-    if pop:
-        extra_kwargs["population_class"] = pop
     bw = getattr(args, "body_weight", None)
     age_val = getattr(args, "age", None)
+    if (bw is None) != (age_val is None):
+        raise ValueError("--body-weight and --age must be supplied together")
+    if tdm_method != "sbi" and (pop is not None or bw is not None):
+        raise ValueError("--population, --body-weight, and --age require SBI")
+    if pop:
+        extra_kwargs["population_class"] = pop
     if bw is not None and age_val is not None:
         extra_kwargs["body_weight_kg"] = bw
         extra_kwargs["age_years"] = age_val
@@ -454,7 +485,9 @@ def _run_tdm(args: argparse.Namespace) -> None:
     )
 
     print(f"Drug: {drug.name}")
-    print(f"Method: {method_label}")
+    print(f"Method: {result.method_used}")
+    for warning in result.warnings:
+        print(f"Warning: {warning}", file=sys.stderr)
     print(f"Observations: {len(observations)}")
     for obs in observations:
         print(f"  t={obs.time_h:.1f}h: {obs.concentration:.4f} mg/L")
@@ -517,15 +550,11 @@ def _run_dose_adjust(args: argparse.Namespace) -> None:
 
     dose_method = args.method
     if dose_method == "auto":
-        dose_method, auto_reweight = _resolve_auto_method(drug.name)
-        if auto_reweight and dose_method == "sbi":
-            print(
-                "Warning: dose-adjust does not support SBI reweight routing; "
-                "using IBIS instead.",
-                file=sys.stderr,
-            )
-            dose_method = "ibis"
-        print(f"[auto] routing {drug.name} → method={dose_method}", file=sys.stderr)
+        route_name = _route_drug_name(args.smiles, args.name)
+        dose_method, auto_reweight = _resolve_auto_method(route_name)
+        print(f"[auto] routing {route_name} → method={dose_method}", file=sys.stderr)
+    else:
+        auto_reweight = False
 
     result = recommend_dose(
         compiled, graph, drug, regimen,
@@ -536,6 +565,7 @@ def _run_dose_adjust(args: argparse.Namespace) -> None:
         n_prior=args.n_samples,
         seed=42,
         method=dose_method,
+        sbi_reweight=auto_reweight,
     )
 
     print(f"Drug: {drug.name}")
@@ -550,7 +580,9 @@ def _run_dose_adjust(args: argparse.Namespace) -> None:
     print()
     print(f"TDM: {result.tdm_result.n_successful}/{result.tdm_result.n_prior} samples, "
           f"ESS={result.tdm_result.ess:.0f}")
-    print(f"Inference method: {result.inference_method}")
+    print(f"Inference method: {result.tdm_result.method_used}")
+    for warning in result.tdm_result.warnings:
+        print(f"Warning: {warning}", file=sys.stderr)
 
 
 def _run_ddi(args: argparse.Namespace) -> None:
