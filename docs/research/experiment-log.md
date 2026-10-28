@@ -1375,7 +1375,7 @@ First concrete sub-project of **Bridge B** (the PD/toxicity surface from the 202
 - **G3 — saturable-detox dose-threshold + zone-specificity.** Clean threshold for the acetaminophen config (bio pericentral-high, detox pericentral-low): dose 50 → maxH 0; 100 → 0.11; 200 → 1.26; 800 → 29.8, **all peaking at the pericentral zone (z9 = zone-3/centrilobular)**. Raising detox 3× protects (100 mg: 0.11→0; 200 mg: 1.26→0.21) — the GSH-protection mechanism. Correctly-signed.
 - **G1 — localization** (sanity): hazard peaks pericentrally for the acetaminophen config.
 
-**Takeaway.** The engine *can* mechanistically represent zonal hepatotoxicity (acetaminophen zone-3 pattern reproduced qualitatively) on a surface **orthogonal** to the walled bulk-PK headline — the first PD/tox capability the Cmax-only platform lacked. Report `data/validation/zonal_hazard_probe_2026-06-18.{json,md}`. **B1.x follow-ups:** transported reactive-metabolite (downstream-detox fidelity; needs the convection feasibility spike), GSH-**pool depletion dynamics** (vs the steady-state saturable proxy), quantitative threshold/PoD vs data (DOSE-L1000). Qualitative mechanism demonstration only — no calibrated tox number; no parameter tuned to clinical data (synthetic-param selection for mechanism visibility, documented).
+**Takeaway.** The engine *can* mechanistically represent zonal hepatotoxicity (acetaminophen zone-3 pattern reproduced qualitatively) on a surface **orthogonal** to the walled bulk-PK headline — the first PD/tox capability the Cmax-only platform lacked. Report `data/validation/zonal_hazard_probe_2026-06-18.{json,md}`. **B1.x follow-ups:** transported reactive-metabolite (downstream-detox fidelity; needs the convection feasibility spike), GSH-**pool depletion dynamics** (vs the steady-state saturable proxy), quantitative threshold/PoD vs data (DOSE-L1000; halted by the rat bioactivation/detox kinetics data floor, DE-60). Qualitative mechanism demonstration only — no calibrated tox number; no parameter tuned to clinical data (synthetic-param selection for mechanism visibility, documented).
 
 ---
 
@@ -2378,7 +2378,7 @@ CI artifact: `data/validation/4track_ci_2026-05-03_v0.3.json` (10k bootstrap, se
 
 - Pitavastatin `metabolic_fraction` curation (~0.15-0.25 estimate; UGT1A3/2B7 + minor CYP2C9; needs primary literature). Promotion to `ecm_applicable=true` queued.
 - Rosuvastatin / atorvastatin: blocked on Peff over-prediction xfail (separate engine work) AND `metabolic_fraction` curation.
-- `data/sbi/method_routing.json` reassessment via `scripts/route_sbi.py` re-run. Not auto-affected by Task 5 (offline-determined); follow-up.
+- `data/sbi/method_routing.json` reassessed 2026-10-28 with `scripts/sbi_build_routing_table.py` against the committed SBC input: generated routes are 10 SBI / 3 IBIS, versus shipped 12 SBI / 1 IBIS. Diclofenac and posaconazole would switch SBI→IBIS. No routing edit was made because the forward-looking SBC/decorrelation gate (§4 of `cherry_picking_process_v1.md`) has not evaluated those changes; current routing remains as shipped.
 - v0.3.x optional: PredictionResult metadata fields (`ecm_activated: bool`, `phenotypes_applied: dict`) for GenoADME debugging.
 
 ### Closes

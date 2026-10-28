@@ -24,7 +24,7 @@ SHIPPED_MODELS = [
     path for path in (ROOT / "models").rglob("*")
     if path.is_file()
     and path.name != ".gitkeep"
-    and path.name != "artifact_loaders.json"
+    and path.name not in ("artifact_loaders.json", "engine_revision.json")
     and not path.name.endswith(".meta.json")
     and (not path.name.endswith("_meta.json") or path.name == "xgboost_meta.json")
 ]

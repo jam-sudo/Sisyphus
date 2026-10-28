@@ -98,3 +98,24 @@ def test_shipped_clf_training_csv_is_holdout_clean():
         f"{leaks[:5]} — the structural filter was not applied to the shipped "
         "artifact. Regenerate via scripts/build_clf_training_data.py."
     )
+
+
+def test_prospective_and_external_manifest_exclusions(tmp_path, monkeypatch):
+    """The builder excludes structural matches from both future validation sets."""
+    import json
+
+    mod = _load_builder()
+    monkeypatch.setattr(mod, "ROOT", tmp_path)
+    validation = tmp_path / "data" / "validation"
+    validation.mkdir(parents=True)
+    prospective_smiles = "CCO"
+    external_smiles = "c1ccccc1"
+    (validation / "prospective_fixture.json").write_text(
+        json.dumps({"drugs": [{"name": "alias", "smiles": prospective_smiles}]})
+    )
+    (validation / "external_holdout_v1_manifest.json").write_text(
+        json.dumps({"compounds": [{"name": "other alias", "smiles": external_smiles}]})
+    )
+    keys = mod.load_prospective_inchikeys()
+    assert mod._inchikey14(prospective_smiles) in keys
+    assert mod._inchikey14(external_smiles) in keys

@@ -155,9 +155,9 @@ class ActiveMetabolite:
     No enzyme-level decomposition (out of scope; see
     docs/_internal/specs/2026-04-24-prodrug-activation-design.md §2).
 
-    The conversion edge connects ``conversion_site`` (a parent-graph node)
-    to the active's plasma compartment. Conversion is 1st-order in parent
-    amount with optional yield fraction < 1.
+    Conversion follows the v2 enzyme-affinity edges. The v1
+    ``conversion_rate_per_h`` and ``conversion_site`` fields are retained for
+    compatibility but unused by the graph builder.
 
     Attributes:
         name: Identifier for the active species (e.g. ``"BH4"``).
@@ -474,13 +474,13 @@ class SimResult:
 class PKEndpoints:
     """Pharmacokinetic endpoints.
 
-    All values are Distribution.  For a single deterministic run the cv
-    is 0.  For MC results the distribution aggregates N samples.
+    Available values are Distribution. A single deterministic run has cv=0;
+    absent curve-derived endpoints are None (such as ML-only Tmax/AUC).
     """
 
     cmax: Distribution
-    tmax: Distribution
-    auc_0t: Distribution
+    tmax: Distribution | None
+    auc_0t: Distribution | None
     auc_0inf: Distribution | None = None
     t_half: Distribution | None = None
     cl: Distribution | None = None

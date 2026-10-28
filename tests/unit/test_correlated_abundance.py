@@ -8,7 +8,8 @@ import numpy as np
 import pytest
 
 from sisyphus.core import Distribution
-from sisyphus.graph.builder import _parse_distribution
+from sisyphus.graph.builder import _parse_distribution, build_from_yaml
+from sisyphus.physiology.correlated import resample_correlated_abundances
 from sisyphus.physiology.correlation_registry import (
     _REGISTRY,
     CorrelationSpec,
@@ -16,6 +17,27 @@ from sisyphus.physiology.correlation_registry import (
     load_from_json,
     register,
 )
+from sisyphus.resources import get_resource_config
+
+
+def test_mc_abundance_draws_recover_registry_log_correlation() -> None:
+    graph = build_from_yaml(get_resource_config().data("physiology", "reference_man.yaml"))
+    draws = np.empty((600, 5))
+    for i in range(len(draws)):
+        realized = resample_correlated_abundances(graph, np.random.default_rng(i))
+        draws[i] = [
+            realized.nodes["liver"].enzymes[tag].mean
+            for tag in ("CYP3A4", "CYP2D6", "CYP1A2", "CYP2C9", "CYP2E1")
+        ]
+    target = get("liver_achour2021").log_corr_matrix
+    np.testing.assert_allclose(np.corrcoef(np.log(draws), rowvar=False), target, atol=0.12)
+
+
+def test_gut_cyp3a4_has_published_cv_without_changing_mean() -> None:
+    graph = build_from_yaml(get_resource_config().data("physiology", "reference_man.yaml"))
+    gut_cyp3a4 = graph.nodes["gut_wall"].enzymes["CYP3A4"]
+    assert gut_cyp3a4.mean == 13837729
+    assert gut_cyp3a4.cv == 0.58
 
 
 class TestDistributionCorrelationGroup:

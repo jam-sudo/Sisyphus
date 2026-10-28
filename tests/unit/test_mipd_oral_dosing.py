@@ -59,3 +59,14 @@ def test_oral_tau_change_emits_shape_caveat():
         candidate_intervals=(8.0, 24.0), n_grid=5, n_samples=4000, seed=0,
     )
     assert any("shape" in w.lower() for w in rec.warnings)
+
+
+def test_oral_feasible_window_tie_prefers_longer_interval():
+    target = DoseTarget((Constraint("trough", low=0.001, high=1000.0),))
+    rec = recommend_dose(
+        SMILES, _reg(), [MeasuredConc(value=1.0, t=72.0)], target,
+        candidate_intervals=(8.0, 24.0), n_grid=3, n_samples=1000, seed=0,
+    )
+    assert rec.interval_h == 24.0
+    assert rec.attainment_prob == 1.0
+    assert 0.001 <= rec.trough.point <= 1000.0

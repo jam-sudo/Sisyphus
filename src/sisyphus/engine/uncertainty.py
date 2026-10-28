@@ -13,6 +13,7 @@ Two modes:
 from __future__ import annotations
 
 import logging
+from collections.abc import Callable
 from dataclasses import dataclass
 
 import numpy as np
@@ -102,6 +103,7 @@ class UncertaintyEngine:
         n_samples: int = 1000,
         seed: int = 42,
         t_span: tuple[float, float] = (0.0, 24.0),
+        graph_sampler: Callable[[BodyGraph, np.random.Generator], BodyGraph] | None = None,
     ) -> UncertaintyResult:
         """Run MC sampling and return aggregated SimResults.
 
@@ -121,6 +123,7 @@ class UncertaintyEngine:
             n_samples: Number of MC iterations.
             seed: Base RNG seed (sample i uses seed + i).
             t_span: Integration interval (t_start, t_end) in hours.
+            graph_sampler: Optional graph realization; defaults to graph.sample.
 
         Returns:
             UncertaintyResult with raw SimResult samples.
@@ -141,7 +144,7 @@ class UncertaintyEngine:
             rng = np.random.default_rng(seed + i)
 
             # Sample parameter distributions
-            realized_graph = graph.sample(rng)
+            realized_graph = graph_sampler(graph, rng) if graph_sampler else graph.sample(rng)
             realized_drug = drug.sample(rng)
             params = ResolvedParams(realized_graph, realized_drug)
 
@@ -183,8 +186,8 @@ class UncertaintyEngine:
         seed: int = 42,
         t_span: tuple[float, float] = (0.0, 24.0),
         observation_node: str = "venous_blood",
-        backend: str = "scipy",
         t_min_h: float = 0.0,
+        graph_sampler: Callable[[BodyGraph, np.random.Generator], BodyGraph] | None = None,
     ) -> MCResult:
         """Fast MC propagation -- returns aggregated PK only (no SimResults).
 
@@ -200,11 +203,10 @@ class UncertaintyEngine:
             seed: Base RNG seed (sample i uses seed + i).
             t_span: Integration interval (t_start, t_end) in hours.
             observation_node: Node to extract PK from.
+            graph_sampler: Optional graph realization; defaults to graph.sample.
             t_min_h: Minimum observation time in hours.  When > 0, skips the
-                t=0 IV-bolus spike for Cmax extraction.  scipy backend only —
-                the surrogate backend ignores this parameter.  Default 0.0
+                t=0 IV-bolus spike for Cmax extraction. Default 0.0
                 (V2-compatible).
-            backend: Solver backend to use (``"scipy"`` or ``"surrogate"``).
 
         Returns:
             MCResult with aggregated PKEndpoints and 90% PI.
@@ -215,42 +217,7 @@ class UncertaintyEngine:
         admin_idx = compiled.state_index[drug.administration_node]
         y0_template[admin_idx] = drug.dose_mg
 
-        # ── Surrogate backend: MLP forward pass (no ODE) ──
-        if backend == "surrogate":
-            from sisyphus.ml.surrogate import (
-                load_surrogate_ensemble,
-                solve_surrogate_batch,
-            )
-
-            models = load_surrogate_ensemble()
-            from sisyphus.resources import get_resource_config
-
-            scaler = np.load(get_resource_config().model("surrogate", "scaler.npz"))
-
-            params_list = []
-            for i in range(n_samples):
-                rng = np.random.default_rng(seed + i)
-                realized_graph = graph.sample(rng)
-                realized_drug = drug.sample(rng)
-                params_list.append(ResolvedParams(realized_graph, realized_drug))
-
-            cmax_arr, uncertainty = solve_surrogate_batch(
-                models, params_list, scaler["mean"], scaler["std"],
-            )
-
-            mask = cmax_arr > 0
-            cmax_arr = cmax_arr[mask]
-            n_ok = int(np.sum(mask))
-            n_failures = n_samples - n_ok
-
-            # Surrogate doesn't produce tmax/auc — fill with zeros
-            tmax_arr = np.zeros(n_ok)
-            auc_arr = np.zeros(n_ok)
-
-            logger.info("MC-fast surrogate: %d/%d successful", n_ok, n_samples)
-            return self._build_mc_result(cmax_arr, tmax_arr, auc_arr, n_ok, n_failures)
-
-        # ── SciPy backend: sequential loop (default) ──
+        # ── SciPy solver: sequential loop ──
         cmax_samples: list[float] = []
         tmax_samples: list[float] = []
         auc_samples: list[float] = []
@@ -260,7 +227,7 @@ class UncertaintyEngine:
             rng = np.random.default_rng(seed + i)
 
             # Sample parameter distributions
-            realized_graph = graph.sample(rng)
+            realized_graph = graph_sampler(graph, rng) if graph_sampler else graph.sample(rng)
             realized_drug = drug.sample(rng)
             params = ResolvedParams(realized_graph, realized_drug)
 

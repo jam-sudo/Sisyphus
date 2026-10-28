@@ -69,6 +69,31 @@ class TestNCA:
 
 
 class TestEndpoints:
+    def test_iv_auc_infinity_clearance_and_vss(self):
+        time = np.linspace(0, 40, 401)
+        conc = 10 * np.exp(-0.2 * time)
+        result = SimResult(
+            time_h=time, concentrations={"venous_blood": conc},
+            amounts={}, mass_balance_error=0.0, solver_success=True,
+        )
+        pk = compute_endpoints(result, dose_mg=100, route="iv")
+        assert pk.auc_0inf.mean == pytest.approx(50, rel=0.001)
+        assert pk.cl.mean == pytest.approx(2, rel=0.001)
+        assert pk.vss.mean == pytest.approx(10, rel=0.001)
+        oral = compute_endpoints(result, dose_mg=100, route="oral")
+        assert oral.cl is None and oral.vss is None
+
+    def test_auc_infinity_requires_return_toward_baseline(self, caplog):
+        time = np.linspace(0, 5, 51)
+        conc = 10 * np.exp(-0.2 * time)
+        result = SimResult(
+            time_h=time, concentrations={"venous_blood": conc},
+            amounts={}, mass_balance_error=0.0, solver_success=True,
+        )
+        pk = compute_endpoints(result, dose_mg=100, route="iv")
+        assert pk.auc_0inf is None and pk.cl is None and pk.vss is None
+        assert "returned toward baseline" in caplog.text
+
     def test_cmax_tmax(self):
         time = np.array([0, 1, 2, 3, 4, 5], dtype=float)
         conc = np.array([0, 5, 10, 7, 4, 2], dtype=float)

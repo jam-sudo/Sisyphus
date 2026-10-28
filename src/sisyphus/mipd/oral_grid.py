@@ -131,5 +131,10 @@ def build_oral_cl_grid(
     auc = _fill_nan_log_s(np.array(aucs), s_grid)
     f_engine = np.clip(_fill_nan_log_s(fengs_arr, s_grid), 1e-4, 1.0)
     conc = _nearest_finite_backfill(np.array(conc_rows))
-    grid = CLGrid(s_grid=s_grid, t_grid=t_grid, conc=conc, cmax=cmax, auc=auc, f_engine=f_engine)
+    grid = CLGrid(
+        s_grid=s_grid, t_grid=t_grid, conc=conc, cmax=cmax, auc=auc,
+        f_engine=f_engine, renal_cl_l_h=float(drug.renal_clearance.mean),
+    )
+    if t_half_h is not None:
+        is_ss = is_ss and last + tau >= 5.0 * t_half_h
     return grid, is_ss, t_half_h

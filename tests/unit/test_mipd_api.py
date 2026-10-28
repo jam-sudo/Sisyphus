@@ -22,6 +22,7 @@ from sisyphus.predict.adme import MeasuredADMEInput
 MIDAZOLAM = "C[n+]1cnc2n1-c1ccc(Cl)cc1C(c1ccccc1F)=NC2"
 DOSE = 7.5
 ATENOLOL = "CC(C)NCC(O)COc1ccc(CC(N)=O)cc1"  # high-fup, renally-cleared
+METOPROLOL = "COCCc1ccc(OCC(O)CNC(C)C)cc1"
 
 
 def test_predict_posterior_no_observations_matches_apriori_engine_cmax():
@@ -29,6 +30,39 @@ def test_predict_posterior_no_observations_matches_apriori_engine_cmax():
     assert isinstance(post, PosteriorPK)
     ap_cmax = predict(MIDAZOLAM, DOSE).engine_pk.cmax.mean
     assert post.cmax.point == pytest.approx(ap_cmax, rel=0.20)
+
+
+def test_single_dose_rejects_unpropagated_crcl_uncertainty():
+    with pytest.raises(ValueError, match="repeated-dose structural TDM"):
+        predict_posterior(
+            MIDAZOLAM, DOSE, covariates=Covariates(crcl_ml_min=80, crcl_cv=0.2)
+        )
+
+
+def test_phenotype_shifts_unobserved_prior_and_conditioned_posterior():
+    base = predict_posterior(METOPROLOL, 100.0, n_samples=1000, seed=0)
+    poor = predict_posterior(
+        METOPROLOL, 100.0, n_samples=1000, seed=0,
+        phenotypes={"CYP2D6": "PM"},
+    )
+    rapid = predict_posterior(
+        METOPROLOL, 100.0, n_samples=1000, seed=0,
+        phenotypes={"CYP2D6": "UM"},
+    )
+    assert poor.auc.point > base.auc.point > rapid.auc.point
+    observed = predict_posterior(
+        METOPROLOL, 100.0, [MeasuredF(0.5)], n_samples=1000,
+        phenotypes={"CYP2D6": "PM"},
+    )
+    assert observed.auc.point > 0
+    assert observed.cmax_90ci is None
+
+
+def test_phenotype_rejects_unsupported_tag():
+    with pytest.raises(ValueError, match="Unsupported phenotype"):
+        predict_posterior(
+            METOPROLOL, 100.0, phenotypes={"CYP9999": "PM"}, n_samples=100
+        )
 
 
 def test_predict_posterior_measured_F_reproduces_routing_cmax():

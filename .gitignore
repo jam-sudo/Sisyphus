@@ -125,3 +125,8 @@ v4_build/
 .planning/
 .superpowers/
 docs/breakthrough_path.md
+
+# Local manuscript build tooling and its output (regenerable, not part of the platform)
+/v5_build/
+/output/
+/tmp/

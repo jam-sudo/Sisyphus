@@ -88,10 +88,9 @@ def _adjust_ad_for_prodrug(
     has_active = drug.active_metabolite is not None
 
     if has_prodrug and has_active:
-        site = drug.active_metabolite.conversion_site
         warnings.append(
             f"Prodrug {drug.name!r} routed via activation to "
-            f"{drug.active_metabolite.name!r} at {site}."
+            f"{drug.active_metabolite.name!r}."
         )
         flags_for_domain = [f for f in ad_flags if f != "PRODRUG"]
     elif has_active and not has_prodrug:
@@ -233,9 +232,7 @@ def predict(
             for route='iv'. When > 0.5, routes the deterministic simulation
             through ``regimen.solver`` (zero-order input) instead of the
             bolus y0 shortcut. ``None`` or <= 0.5 falls back to V3 bolus.
-            MC for infusion is V3.1 Phase 2 scope and is skipped with a
-            warning in Phase 1. See
-            docs/_internal/specs/2026-04-22-v3.1-iv-infusion-design.md.
+            MC uses the same regimen solver for every sampled parameter set.
         phenotypes: Optional CPIC phenotype assignments mapping enzyme or
             transporter gene tag (e.g., ``"CYP2D6"``, ``"SLCO1B1"``) to
             phenotype label (``"PM"``/``"IM"``/``"EM"``/``"NM"``/``"UM"``/
@@ -254,14 +251,15 @@ def predict(
             and caller-justified — Sisyphus does not endorse specific values.
         kp_method: Tissue partition coefficient (Kp) calculation method.
             One of ``"rodgers_rowland"`` (default, suitable for most
-            small-molecule drugs), ``"berezhkovskiy"`` (alternative
-            ionization handling, differs from Rodgers-Rowland mainly for
-            bases and zwitterions), or ``"provided"`` (use values
-            supplied via ``DrugOnGraph.kp_overrides`` instead of
-            computing). Forwarded to ``build_drug_on_graph``; the prior
+            small-molecule drugs), ``"berezhkovskiy"`` (experimental
+            scalar correction), ``"poulin_theil"``, or ``"provided"``
+            (use values supplied via ``measured_adme.kp_overrides``).
+            Forwarded to ``build_drug_on_graph``; the prior
             implementation hard-coded the default and made the per-drug
             field unreachable through the public API (hardening backlog
             B3, 2026-05-02).
+        measured_adme: Optional measured ADME values, tissue Kp values, and
+            enzyme Km values. Kp and Km maps use ``Distribution`` values.
         compute_f_engine: when True (and route='oral'), run the engine's
             IV-reference solve and surface the emergent oral bioavailability
             on ``PredictionResult.engine_f`` (converged AUC_oral/AUC_iv).
@@ -289,6 +287,10 @@ def predict(
         raise ValueError(f"dose_mg must be positive and finite, got {dose_mg!r}")
     if route not in {"oral", "iv"}:
         raise ValueError(f"route must be 'oral' or 'iv', got {route!r}")
+    if kp_method not in {"rodgers_rowland", "poulin_theil", "berezhkovskiy", "provided"}:
+        raise ValueError(f"Unknown kp_method {kp_method!r}")
+    if kp_method == "provided" and not (measured_adme and measured_adme.kp_overrides):
+        raise ValueError("kp_method='provided' requires measured_adme.kp_overrides")
     if isinstance(n_mc_samples, bool) or not isinstance(n_mc_samples, int) or n_mc_samples < 0:
         raise ValueError("n_mc_samples must be a non-negative integer")
     if infusion_duration_min is not None:
@@ -322,6 +324,11 @@ def predict(
     from sisyphus.predict.transporter_db import find_oatp1b1_substrate_name
 
     warnings_list: list[str] = []
+    if kp_method == "berezhkovskiy":
+        warnings_list.append(
+            "kp_method:berezhkovskiy is experimental; current correction is not "
+            "verified against Berezhkovskiy 2004 J Pharm Sci 93:1628"
+        )
     parameter_cmax_90ci: tuple[float, float] | None = None
     graph = None
     compiled = None
@@ -377,11 +384,15 @@ def predict(
     # a drug whose DrugBank fup was rejected by the 5x guard will still
     # be tagged as "drugbank:fup" (~5-10% of cases).  This is an accepted
     # imprecision per spec §5.5 — gold group has minor silver contamination.
+    has_cyp_fm_annotation = False
     try:
         from sisyphus.predict.drugbank import drugbank_lookup
+        from sisyphus.predict.ivive import _DEFAULT_FM
         db = drugbank_lookup()
         canonical = profile.smiles
-        if db.get_substrate_enzymes(canonical) is not None:
+        substrate_enzymes = db.get_substrate_enzymes(canonical)
+        has_cyp_fm_annotation = bool(substrate_enzymes and substrate_enzymes & _DEFAULT_FM.keys())
+        if has_cyp_fm_annotation:
             warnings_list.append("drugbank:enzyme_fm")
         db_fup = db.get_fup(canonical)
         if db_fup is not None and 0.001 <= db_fup <= 1.0:
@@ -392,6 +403,10 @@ def predict(
             warnings_list.append("drugbank:logp")
     except Exception:
         pass  # DrugBank tagging is advisory, never blocks pipeline
+    if not has_cyp_fm_annotation and phenotypes and any(
+        tag.startswith("CYP") for tag in phenotypes
+    ):
+        warnings_list.append("fm:compound-type default; phenotype effect is class-generic")
 
     # ── Step 2: Engine (PBPK simulation) ─────────────────────────────────
     # Route-conditional Cmax window and simulation path.
@@ -421,6 +436,7 @@ def predict(
             kp_method=kp_method,
             profile=profile,
             adme=adme,
+            measured_adme=measured_adme,
             base_yaml=_PHYSIOLOGY_DIR / "reference_man.yaml",
         )
         graph = context.graph
@@ -432,6 +448,11 @@ def predict(
             warnings_list.append(f"oatp1b1:auto_ecm:{substrate_name}")
         phenotype_applied = context.phenotype_report.applied
         phenotype_unsupported = context.phenotype_report.unsupported
+        if phenotype_applied and drug.observation_species == "active":
+            warnings_list.append(
+                "phenotype:active metabolite uses aggregate clearance; "
+                "applied phenotype may not affect observed species"
+            )
         if phenotype_unsupported:
             unsupported = ", ".join(tag for tag, _ in phenotype_unsupported)
             if strict:
@@ -459,7 +480,14 @@ def predict(
         if sim_result.solver_success:
             _obs_node = _resolve_observation_node(drug)
             observation_node = _obs_node
-            engine_pk = compute_endpoints(sim_result, observation_node=_obs_node, t_min_h=t_min_h)
+            engine_pk = compute_endpoints(
+                sim_result, observation_node=_obs_node, t_min_h=t_min_h,
+                dose_mg=drug.dose_mg, route=route,
+            )
+            if engine_pk.t_half is not None and engine_pk.auc_0inf is None:
+                warnings_list.append(
+                    "AUC(0-inf) unavailable: curve has not returned toward baseline"
+                )
             logger.info(
                 "Engine PK: Cmax=%.4f mg/L, Tmax=%.2f h, AUC=%.4f mg*h/L",
                 engine_pk.cmax.mean,
@@ -523,31 +551,37 @@ def predict(
         logger.warning("Engine simulation failed: %s", e)
 
     # ── Step 2b: MC uncertainty propagation ────────────────────────────
-    # MC via regimen.solver is V3.1 Phase 2 scope. In Phase 1 we skip MC
-    # for infusion rather than emit a misleading bolus-centered 90% PI.
     if n_mc_samples > 0 and compiled is not None and graph is not None:
-        if is_infusion:
-            warnings_list.append("MC skipped for IV infusion (V3.1 Phase 2 scope)")
-            logger.info("Skipping MC propagation for IV infusion (Phase 2 feature)")
-        else:
-            try:
-                ue = UncertaintyEngine()
-                mc = ue.propagate_fast(
-                    compiled, graph, drug, n_samples=n_mc_samples, t_min_h=t_min_h
+        try:
+            from sisyphus.physiology.correlated import resample_correlated_abundances
+
+            def graph_sampler(g, rng):
+                return resample_correlated_abundances(g, rng).sample(rng)
+            if is_infusion:
+                from sisyphus.pipeline.uncertainty import propagate_regimen
+
+                mc = propagate_regimen(
+                    compiled, graph, drug, regimen, n_samples=n_mc_samples,
+                    t_min_h=t_min_h, observation_node=_resolve_observation_node(drug),
+                    t_total_h=PRIMARY_SIMULATION_HORIZON_H,
+                    graph_sampler=graph_sampler,
                 )
-                if mc.n_samples > 0:
-                    parameter_cmax_90ci = mc.cmax_90ci
-                    logger.info(
-                        "MC propagation: %d samples, Cmax 90%% PI = (%.4f, %.4f)",
-                        mc.n_samples,
-                        parameter_cmax_90ci[0],
-                        parameter_cmax_90ci[1],
-                    )
-            except Exception as e:
-                if strict:
-                    raise
-                warnings_list.append(f"MC propagation failed: {e}")
-                logger.warning("MC propagation failed: %s", e)
+            else:
+                mc = UncertaintyEngine().propagate_fast(
+                    compiled, graph, drug, n_samples=n_mc_samples, t_min_h=t_min_h,
+                    graph_sampler=graph_sampler,
+                )
+            if mc.n_samples > 0:
+                parameter_cmax_90ci = mc.cmax_90ci
+                logger.info(
+                    "MC propagation: %d samples, Cmax 90%% PI = (%.4f, %.4f)",
+                    mc.n_samples, parameter_cmax_90ci[0], parameter_cmax_90ci[1],
+                )
+        except Exception as e:
+            if strict:
+                raise
+            warnings_list.append(f"MC propagation failed: {e}")
+            logger.warning("MC propagation failed: %s", e)
 
     # MC recomputes Cmax independently of engine_pk, so apply the same measured-F
     # exposure-scaling to the PI to keep it consistent with the corrected point.
@@ -568,8 +602,8 @@ def predict(
             ml_cmax = predictor.predict_cmax(smiles, dose_mg)
             ml_pk = PKEndpoints(
                 cmax=ml_cmax,
-                tmax=Distribution(1.0),  # ML does not predict Tmax
-                auc_0t=Distribution(0.0),  # ML does not predict AUC
+                tmax=None,
+                auc_0t=None,
             )
             logger.info("ML PK: Cmax=%.4f mg/L", ml_cmax.mean)
         except Exception as e:
@@ -591,8 +625,8 @@ def predict(
             )
             clf_pk = PKEndpoints(
                 cmax=clf_cmax,
-                tmax=Distribution(1.0),
-                auc_0t=Distribution(0.0),
+                tmax=None,
+                auc_0t=None,
             )
             logger.info("CL/F PK: Cmax=%.4f mg/L (ka=%s)", clf_cmax.mean, ka_method)
         except Exception as e:
@@ -638,8 +672,8 @@ def predict(
     endpoint_source = engine_pk or ml_pk
     final_pk = PKEndpoints(
         cmax=cmax_prediction.cmax,
-        tmax=endpoint_source.tmax if endpoint_source else Distribution(0.0),
-        auc_0t=endpoint_source.auc_0t if endpoint_source else Distribution(0.0),
+        tmax=endpoint_source.tmax if endpoint_source else None,
+        auc_0t=endpoint_source.auc_0t if endpoint_source else None,
         auc_0inf=endpoint_source.auc_0inf if endpoint_source else None,
         t_half=endpoint_source.t_half if endpoint_source else None,
         cl=endpoint_source.cl if endpoint_source else None,
@@ -730,6 +764,11 @@ def predict(
         confidence = "low"
     else:
         confidence = "medium"
+    if sim_result is not None and sim_result.mass_balance_error > 1e-4:
+        warnings_list.append(
+            f"Mass balance error exceeds 1e-4: {sim_result.mass_balance_error:.3g}"
+        )
+        confidence = "low"
 
     engine_simulation = None
     if (

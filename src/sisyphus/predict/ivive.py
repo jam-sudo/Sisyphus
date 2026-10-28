@@ -469,8 +469,9 @@ def _apply_bz_correction(kp: float, fup: float) -> float:
         fup=0.01, Kp=100 -> 100 / 1.99 = 50.3  (mild — fup is small)
         fup=0.5,  Kp=10  -> 10  / 5.5  = 1.8   (strong)
     NOTE: this is NOT a "highly-bound-only" shrink — at fup << 1 it is nearly a
-    no-op. The exact algebraic form has not been reconciled against
-    Berezhkovskiy (2004), J Pharm Sci 93:1628; treat this method as experimental.
+    no-op. Berezhkovskiy (2004), J Pharm Sci 93:1628, addresses tissue/plasma
+    partitioning with peripheral elimination; it does not establish this scalar
+    Rodgers-Rowland correction. Treat the method as experimental.
     The default ``kp_method`` is ``rodgers_rowland``, which does not call this.
     """
     denom = 1.0 + (kp - 1.0) * fup
@@ -511,7 +512,9 @@ def _compute_all_kp(
     """
     use_bz = kp_method == "berezhkovskiy"
     base_method = "rodgers_rowland" if use_bz else kp_method
-    kp_fn = _KP_FUNCTIONS.get(base_method, _compute_kp_rodgers_rowland)
+    if base_method not in _KP_FUNCTIONS:
+        raise ValueError(f"Unknown kp_method {kp_method!r}")
+    kp_fn = _KP_FUNCTIONS[base_method]
 
     kp_overrides: dict[str, Distribution] = {}
     for tissue_name, tissue_comp in _TISSUE_COMPOSITIONS.items():
@@ -642,6 +645,8 @@ def build_drug_on_graph(
     transporter_kinetics: dict[str, TransporterKinetics] | None = None,
     hepatic_ecm_params: dict[str, Distribution] | None = None,
     non_cyp_fractions: dict[str, float] | None = None,
+    measured_kp: dict[str, Distribution] | None = None,
+    enzyme_km: dict[str, Distribution] | None = None,
 ) -> DrugOnGraph:
     """Construct a DrugOnGraph from predicted properties.
 
@@ -658,6 +663,9 @@ def build_drug_on_graph(
         liver_enzymes: Enzyme abundances from the graph (tag -> pmol).
             If provided, used instead of the hardcoded fallback values.
             The pipeline passes ``graph.nodes["liver"].enzymes`` values.
+        measured_kp: Tissue Kp Distributions; ``kp_method="provided"`` requires
+            all modeled tissue names.
+        enzyme_km: Per-clearance-enzyme Km Distributions in mg/L.
 
     Returns:
         A fully parameterized DrugOnGraph ready for the engine.
@@ -744,10 +752,25 @@ def build_drug_on_graph(
     )
 
     # Compute Kp for each tissue using selected method
-    kp_overrides = _compute_all_kp(
-        profile.logp, profile.pka, profile.compound_type,
-        kp_method=kp_method, fup=adme.fup.mean,
-    )
+    if measured_kp and (unknown_kp := set(measured_kp) - set(_TISSUE_COMPOSITIONS)):
+        raise ValueError(f"Unknown Kp tissue(s): {sorted(unknown_kp)}")
+    if enzyme_km and (unknown_enzymes := set(enzyme_km) - set(enzyme_affinity)):
+        raise ValueError(f"Km enzyme(s) without clearance affinity: {sorted(unknown_enzymes)}")
+    if kp_method == "provided":
+        if not measured_kp:
+            raise ValueError("kp_method='provided' requires measured_adme.kp_overrides")
+        if missing_kp := set(_TISSUE_COMPOSITIONS) - set(measured_kp):
+            raise ValueError(
+                f"kp_method='provided' requires all tissues; missing {sorted(missing_kp)}"
+            )
+        kp_overrides = dict(measured_kp)
+    else:
+        kp_overrides = _compute_all_kp(
+            profile.logp, profile.pka, profile.compound_type,
+            kp_method=kp_method, fup=adme.fup.mean,
+        )
+        if measured_kp:
+            kp_overrides.update(measured_kp)
 
     # Estimate particle radius from solubility
     particle_radius = _estimate_particle_radius(adme.solubility)
@@ -784,11 +807,12 @@ def build_drug_on_graph(
         compound_type=profile.compound_type,
         fup=adme.fup,
         rbp=adme.rbp,
-        kp_method="rodgers_rowland",
+        kp_method=kp_method,
         kp_overrides=kp_overrides,
         peff=adme.peff,
         solubility=adme.solubility,
         enzyme_affinity=enzyme_affinity,
+        enzyme_km=enzyme_km or {},
         renal_clearance=renal_cl,
         fu_correction_liver=fu_correction_liver,
         particle_radius_um=particle_radius,

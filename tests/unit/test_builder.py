@@ -2,15 +2,66 @@
 
 from pathlib import Path
 
+import numpy as np
 import pytest
 
 from sisyphus.compounds import load_compound
 from sisyphus.core import DrugOnGraph
+from sisyphus.engine.compiler import ODECompiler, ResolvedParams
+from sisyphus.engine.solver import solve
 from sisyphus.graph.body import BodyGraph
-from sisyphus.graph.builder import build_from_yaml
+from sisyphus.graph.builder import build_from_yaml, merge_overlay
+from sisyphus.graph.types import ActiveTransportEdge, FlowEdge
 
 
 class TestBuilder:
+    @pytest.mark.parametrize("overlay,node", [
+        ("sc_overlay.yaml", "sc_depot"),
+        ("tumor_overlay.yaml", "tumor"),
+    ])
+    def test_merge_overlay(self, overlay, node):
+        base = build_from_yaml(Path("data/physiology/reference_man.yaml"))
+        merged = merge_overlay(base, Path("data/physiology") / overlay)
+        assert node in merged.nodes
+        assert node not in base.nodes
+        assert merged.validate() == []
+        if node == "tumor":
+            rest_flow = next(
+                e for e in merged.edges
+                if isinstance(e, FlowEdge) and e.source == "arterial_blood" and e.target == "rest"
+            )
+            assert rest_flow.flow_rate.mean == pytest.approx(0.064 * 390.0)
+
+    def test_sc_yaml_compound_simulates_with_closed_mass_balance(self):
+        graph = merge_overlay(
+            build_from_yaml(Path("data/physiology/reference_man.yaml")),
+            Path("data/physiology/sc_overlay.yaml"),
+        ).realize_means()
+        drug = load_compound(Path("data/compounds/midazolam_sc.yaml")).realize_means()
+        compiled = ODECompiler().compile(graph)
+        y0 = np.zeros(compiled.n_states)
+        y0[compiled.state_index[drug.administration_node]] = drug.dose_mg
+        result = solve(compiled, ResolvedParams(graph, drug), y0, (0.0, 24.0))
+        assert result.solver_success
+        assert result.mass_balance_error < 1e-6
+
+    def test_yaml_efflux_direction(self, tmp_path):
+        path = tmp_path / "efflux.yaml"
+        path.write_text(
+            "global_params: {cardiac_output: 1}\n"
+            "nodes:\n"
+            "  - {name: tissue, type: organ, volume: 1}\n"
+            "  - {name: lumen, type: lumen, volume: 1}\n"
+            "edges:\n"
+            "  - {source: tissue, target: lumen, type: active_transport, direction: efflux}\n"
+        )
+        graph = build_from_yaml(path)
+        assert isinstance(graph.edges[0], ActiveTransportEdge)
+        assert graph.edges[0].direction == "efflux"
+        path.write_text(path.read_text().replace("efflux", "backwards"))
+        with pytest.raises(ValueError, match="Unknown active transport direction"):
+            build_from_yaml(path)
+
     def test_build_reference_man(self):
         g = build_from_yaml(Path("data/physiology/reference_man.yaml"))
         assert isinstance(g, BodyGraph)

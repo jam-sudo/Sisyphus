@@ -86,6 +86,12 @@ class MeasuredADMEInput:
     not set the absorption-rate shape (compose with measured peff for slow
     absorbers). Lands on result.engine_pk; ignored for non-oral routes. See
     docs/_internal/specs/2026-06-03-measured-f-routing-design.md.
+
+    kp_overrides maps tissue names to measured Kp Distributions. With
+    kp_method="provided", values for every modeled tissue are required;
+    otherwise supplied tissues override the calculated method. enzyme_km maps
+    clearance enzyme tags to measured Km Distributions in mg/L; absent enzymes
+    keep the existing linear clearance path.
     """
 
     fup: float | None = None
@@ -102,6 +108,8 @@ class MeasuredADMEInput:
     solubility_cv: float = 0.30
     f_bioavail: float | None = None
     f_bioavail_cv: float = 0.15
+    kp_overrides: dict[str, Distribution] | None = None
+    enzyme_km: dict[str, Distribution] | None = None
 
     def __post_init__(self) -> None:
         if (self.fup is None) != (self.clint is None):
@@ -133,6 +141,14 @@ class MeasuredADMEInput:
                     f"MeasuredADMEInput.{name}={cv} must be finite and >= 0.10; "
                     "a CV below 10% implies a unit error and collapses the MC envelope."
                 )
+        for name, values in (("kp_overrides", self.kp_overrides), ("enzyme_km", self.enzyme_km)):
+            for tag, value in (values or {}).items():
+                if not isinstance(tag, str) or not tag or not isinstance(value, Distribution):
+                    raise ValueError(f"MeasuredADMEInput.{name} requires named Distribution values")
+                if not np.isfinite(value.mean) or value.mean <= 0 or value.cv < 0.10:
+                    raise ValueError(
+                        f"MeasuredADMEInput.{name}[{tag!r}] needs mean > 0 and CV >= 0.10"
+                    )
 
 
 # ---------------------------------------------------------------------------

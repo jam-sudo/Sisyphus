@@ -5,6 +5,7 @@ Usage::
     sisyphus predict --smiles "CC(=O)Oc1ccccc1C(=O)O" --dose 500
     sisyphus simulate --smiles "CN(C)C(=N)NC(=N)N" --dose 500 --interval 12 --doses 14
     sisyphus tdm --help
+    sisyphus mipd --smiles "CCO" --dose 100 --measured-f 0.5
     sisyphus benchmark --development-set
 """
 
@@ -32,6 +33,35 @@ def main() -> None:
     )
     pred_parser.add_argument("--verbose", "-v", action="store_true")
 
+    mipd_parser = subparsers.add_parser("mipd", help="Update oral PK with measured data")
+    mipd_parser.add_argument("--smiles", required=True)
+    mipd_parser.add_argument("--dose", required=True, type=float, help="Dose in mg")
+    mipd_parser.add_argument("--measured-f", type=float, help="Measured oral bioavailability")
+    mipd_parser.add_argument("--measured-cmax", type=float, help="Measured Cmax in mg/L")
+    mipd_parser.add_argument("--measured-auc", type=float, help="Measured AUC in mg*h/L")
+    mipd_parser.add_argument("--obs", nargs="*", default=[], help="Time_h:concentration_mg_L")
+    mipd_parser.add_argument("--route", choices=("oral", "iv"), default="oral")
+    mipd_parser.add_argument("--interval", type=float, help="Repeated-dose interval in hours")
+    mipd_parser.add_argument("--doses", type=int, help="Number of administered doses")
+    mipd_parser.add_argument("--duration", type=float, default=1.0,
+                             help="IV infusion duration in hours")
+    mipd_parser.add_argument("--crcl", type=float, help="Creatinine clearance in mL/min")
+    mipd_parser.add_argument("--crcl-cv", type=float, default=0.0,
+                             help="Measurement CV for CrCl (default: 0)")
+    mipd_parser.add_argument("--body-weight", type=float, help="Body weight in kg")
+    mipd_parser.add_argument("--age-years", type=float, help="Postnatal age in years")
+    mipd_parser.add_argument("--pma-weeks", type=float, help="Postmenstrual age in weeks")
+    mipd_parser.add_argument("--structural-latents", action="store_true",
+                             help="Infer CL, V, and oral absorption rate")
+    mipd_parser.add_argument("--target-trough", help="Trough window low:high in mg/L")
+    mipd_parser.add_argument("--target-peak", help="Cmax window low:high in mg/L")
+    mipd_parser.add_argument("--target-auc24", help="AUC24 window low:high in mg*h/L")
+    mipd_parser.add_argument("--candidate-doses", type=float, nargs="+")
+    mipd_parser.add_argument("--candidate-intervals", type=float, nargs="+")
+    mipd_parser.add_argument("--loading-target", type=float,
+                             help="Loading-dose target concentration in mg/L")
+    mipd_parser.add_argument("--n-samples", type=int, default=20000)
+
     # simulate command (multi-dose)
     sim_parser = subparsers.add_parser(
         "simulate", help="EXPERIMENTAL: multi-dose engine simulation"
@@ -46,6 +76,7 @@ def main() -> None:
     # tdm command (Bayesian update)
     tdm_parser = subparsers.add_parser("tdm", help="EXPERIMENTAL: TDM Bayesian update")
     tdm_parser.add_argument("--smiles", required=True, help="SMILES string")
+    tdm_parser.add_argument("--name", help="Drug name for per-drug auto routing")
     tdm_parser.add_argument("--dose", type=float, required=True, help="Dose (mg)")
     tdm_parser.add_argument(
         "--obs", required=True, nargs="+",
@@ -69,16 +100,17 @@ def main() -> None:
         "--population",
         default=None,
         help="Population class for hierarchical SBI (e.g. 'adult', 'pediatric_5y'). "
-             "Uses hierarchical posterior when set.",
+             "Only used by SBI; uses hierarchical posterior when set.",
     )
     tdm_parser.add_argument("--body-weight", type=float, default=None,
-                            help="Patient body weight in kg (continuous hierarchical)")
+                            help="Patient body weight in kg (SBI only; requires --age)")
     tdm_parser.add_argument("--age", type=float, default=None,
-                            help="Patient age in years (continuous hierarchical)")
+                            help="Patient age in years (SBI only; requires --body-weight)")
     tdm_parser.add_argument(
         "--phenotype",
         default=None,
         help="CYP phenotype spec, e.g. 'CYP2D6:PM' or '2D6:PM,2C9:IM'. "
+             "Supported CYP tags: 2D6, 2C9, 1A2, 3A4, 2E1. "
              "Scales hepatic enzyme abundance by CPIC activity score "
              "(PM 0.1×, IM 0.5×, EM/NM 1×, RM 1.5×, UM 2×).",
     )
@@ -101,13 +133,34 @@ def main() -> None:
         choices=["rifampin"],
         help="Preset inducer name",
     )
+    ddi_parser.add_argument("--tdi-enzyme", help="Enzyme tag for user-supplied TDI")
+    ddi_parser.add_argument("--kinact", type=float, help="TDI kinact (h^-1)")
+    ddi_parser.add_argument("--ki-tdi", type=float, help="TDI KI (uM)")
+    ddi_parser.add_argument("--kdeg", type=float, help="Enzyme turnover kdeg (h^-1)")
+    ddi_parser.add_argument(
+        "--concentration", type=float, help="Perpetrator total concentration (uM)"
+    )
+    ddi_parser.add_argument("--fu-perpetrator", type=float, default=1.0)
+    ddi_parser.add_argument("--competitive-ki", type=float, help="Optional competitive Ki (uM)")
     ddi_parser.add_argument("--verbose", "-v", action="store_true")
+
+    # pkpd command
+    pd_parser = subparsers.add_parser("pkpd", help="EXPERIMENTAL: effect-site PK/PD scenario")
+    pd_parser.add_argument("--smiles", required=True, help="Drug SMILES")
+    pd_parser.add_argument("--dose", type=float, required=True, help="Dose (mg)")
+    pd_parser.add_argument("--route", default="oral", choices=["oral", "iv"])
+    pd_parser.add_argument("--ke0", type=float, required=True, help="Effect-site rate (h^-1)")
+    pd_parser.add_argument(
+        "--ec50", type=float, required=True, help="Half-maximal concentration (mg/L)"
+    )
+    pd_parser.add_argument("--verbose", "-v", action="store_true")
 
     # dose-adjust command (MIPD)
     da_parser = subparsers.add_parser(
         "dose-adjust", help="EXPERIMENTAL: MIPD dose recommendation from TDM"
     )
     da_parser.add_argument("--smiles", required=True, help="SMILES string")
+    da_parser.add_argument("--name", help="Drug name for per-drug auto routing")
     da_parser.add_argument("--dose", type=float, required=True, help="Current dose (mg)")
     da_parser.add_argument(
         "--obs", required=True, nargs="+",
@@ -163,12 +216,16 @@ def main() -> None:
 
     if args.command == "predict":
         _run_predict(args)
+    elif args.command == "mipd":
+        _run_mipd(args)
     elif args.command == "simulate":
         _run_simulate(args)
     elif args.command == "tdm":
         _run_tdm(args)
     elif args.command == "ddi":
         _run_ddi(args)
+    elif args.command == "pkpd":
+        _run_pkpd(args)
     elif args.command == "dose-adjust":
         _run_dose_adjust(args)
     elif args.command == "benchmark":
@@ -176,6 +233,111 @@ def main() -> None:
     else:
         parser.print_help()
         sys.exit(1)
+
+
+def _run_mipd(args: argparse.Namespace) -> None:
+    """Print the MIPD posterior from measured PK observations."""
+    from sisyphus.mipd import (
+        Constraint,
+        Covariates,
+        DoseTarget,
+        MeasuredAUC,
+        MeasuredCmax,
+        MeasuredConc,
+        MeasuredF,
+        predict_posterior,
+        predict_tdm,
+        recommend_dose,
+    )
+    from sisyphus.regimen.types import DosingRegimen
+
+    observations = []
+    if args.measured_f is not None:
+        observations.append(MeasuredF(args.measured_f))
+    if args.measured_cmax is not None:
+        observations.append(MeasuredCmax(args.measured_cmax))
+    if args.measured_auc is not None:
+        observations.append(MeasuredAUC(args.measured_auc))
+    for value in args.obs:
+        try:
+            t, c = map(float, value.split(":"))
+        except ValueError as exc:
+            raise ValueError(f"observation must be time_h:concentration_mg_L: {value!r}") from exc
+        observations.append(MeasuredConc(value=c, t=t))
+    covariates = (
+        Covariates(
+            crcl_ml_min=args.crcl, crcl_cv=args.crcl_cv,
+            body_weight_kg=args.body_weight, age_years=args.age_years,
+            pma_weeks=args.pma_weeks,
+        ) if any(
+            x is not None for x in (args.crcl, args.body_weight, args.age_years, args.pma_weeks)
+        )
+        or args.crcl_cv else None
+    )
+    target_specs = (
+        ("trough", args.target_trough),
+        ("cmax", args.target_peak),
+        ("auc24", args.target_auc24),
+    )
+    if args.route == "iv" or args.interval is not None or args.doses is not None:
+        if args.interval is None or args.doses is None:
+            raise ValueError("repeated-dose MIPD requires --interval and --doses")
+        if args.route == "iv":
+            regimen = DosingRegimen.iv_infusion(
+                dose_mg=args.dose, duration_h=args.duration,
+                interval_h=args.interval, n_doses=args.doses,
+            )
+        else:
+            regimen = DosingRegimen.oral_repeated(
+                dose_mg=args.dose, interval_h=args.interval, n_doses=args.doses,
+            )
+        if any(value is not None for _, value in target_specs):
+            constraints = []
+            for quantity, value in target_specs:
+                if value is None:
+                    continue
+                try:
+                    low, high = map(float, value.split(":"))
+                except ValueError as exc:
+                    raise ValueError(f"{quantity} target must be low:high") from exc
+                constraints.append(Constraint(quantity, low=low, high=high))
+            rec = recommend_dose(
+                args.smiles, regimen, observations, DoseTarget(tuple(constraints)),
+                covariates=covariates,
+                candidate_doses_mg=tuple(args.candidate_doses or (args.dose,)),
+                candidate_intervals=tuple(args.candidate_intervals or (args.interval,)),
+                loading_target_mg_l=args.loading_target, n_samples=args.n_samples,
+            )
+            print(f"Recommended maintenance: {rec.dose_mg:.4f} mg every {rec.interval_h:g} h")
+            print(f"Target attainment: {rec.attainment_prob:.3f}")
+            if rec.loading_dose is not None:
+                lo, hi = rec.loading_dose.ci90
+                print(f"Loading dose: {rec.loading_dose.point:.4f} mg (90% CI {lo:.4f}-{hi:.4f})")
+            for warning in rec.warnings:
+                print(f"Warning: {warning}", file=sys.stderr)
+            return
+        post = predict_tdm(
+            args.smiles, regimen, observations, covariates=covariates,
+            n_samples=args.n_samples, structural_latents=args.structural_latents,
+        )
+    else:
+        if any(value is not None for _, value in target_specs) or args.loading_target is not None:
+            raise ValueError("dose targets require --interval and --doses")
+        if args.structural_latents:
+            raise ValueError("structural latents require --interval and --doses")
+        post = predict_posterior(
+            args.smiles, args.dose, observations,
+            covariates=covariates, n_samples=args.n_samples,
+        )
+    print(f"Engine posterior Cmax: {post.cmax.point:.4f} mg/L")
+    print(f"Engine posterior AUC: {post.auc.point:.4f} mg*h/L")
+    print(f"Posterior F: {post.f.point:.4f}")
+    if post.volume_l is not None:
+        print(f"Posterior central V: {post.volume_l.point:.4f} L")
+    if post.absorption_rate_per_h is not None:
+        print(f"Posterior ka: {post.absorption_rate_per_h.point:.4f} 1/h")
+    for warning in post.warnings:
+        print(f"Warning: {warning}", file=sys.stderr)
 
 
 def _run_predict(args: argparse.Namespace) -> None:
@@ -218,21 +380,6 @@ def _run_predict(args: argparse.Namespace) -> None:
         print(f"  ML Cmax: {result.ml_pk.cmax.mean:.4f} mg/L")
     if result.warnings:
         print(f"Warnings: {result.warnings}")
-
-
-def _apply_phenotype(graph, phenotype_spec: str | None):
-    """Apply CYP phenotype scaling to the graph's liver enzymes.
-
-    Must be called *after* the drug has been built from the reference graph,
-    so that drug.enzyme_affinity stays calibrated against reference CLint and
-    the engine's runtime product (node.enzymes × affinity) reflects the
-    phenotype multiplier.
-    """
-    if not phenotype_spec:
-        return graph
-    from sisyphus.predict.phenotype import apply_phenotype_to_graph, parse_phenotype_spec
-    phenotypes = parse_phenotype_spec(phenotype_spec)
-    return apply_phenotype_to_graph(graph, phenotypes, node="liver")
 
 
 def _build_drug_and_graph(
@@ -327,11 +474,13 @@ def _resolve_auto_method(drug_name: str) -> tuple[str, bool]:
     import json
 
     if not _ROUTING_TABLE_PATH.exists():
+        print("Warning: routing table missing; using IBIS default", file=sys.stderr)
         return "ibis", False
     try:
         with open(_ROUTING_TABLE_PATH) as f:
             table = json.load(f)
-    except Exception:
+    except (OSError, ValueError) as exc:
+        print(f"Warning: routing table unreadable ({exc}); using IBIS default", file=sys.stderr)
         return "ibis", False
     mapping = table.get("routes", {})
     reweight_map = table.get("sbi_reweight", {})
@@ -341,12 +490,34 @@ def _resolve_auto_method(drug_name: str) -> tuple[str, bool]:
         if key.lower().strip() == lower:
             method = m
             break
+    else:
+        print(f"Warning: {drug_name!r} not in routing table; using {method} default",
+              file=sys.stderr)
+        return method, False
     reweight = False
     for key, flag in reweight_map.items():
         if key.lower().strip() == lower:
             reweight = bool(flag)
             break
     return method, reweight
+
+
+def _route_drug_name(smiles: str, name: str | None) -> str:
+    """Use an explicit name or find the matching compound YAML name."""
+    if name:
+        return name
+    import yaml
+    from rdkit import Chem
+
+    target = Chem.MolFromSmiles(smiles)
+    compounds = get_resource_config().data("compounds", required=False)
+    for path in sorted(compounds.glob("*.yaml")):
+        data = yaml.safe_load(path.read_text())
+        candidate = Chem.MolFromSmiles(data["smiles"])
+        if (target is not None and candidate is not None
+                and Chem.MolToSmiles(target) == Chem.MolToSmiles(candidate)):
+            return str(data["name"])
+    return smiles
 
 
 def _parse_observations(obs_strings: list[str]):
@@ -403,18 +574,19 @@ def _run_tdm(args: argparse.Namespace) -> None:
     cli_method = args.method
     auto_reweight = False
     if cli_method == "auto":
-        resolved, auto_reweight = _resolve_auto_method(drug.name)
+        route_name = _route_drug_name(args.smiles, args.name)
+        resolved, auto_reweight = _resolve_auto_method(route_name)
         suffix = " +reweight" if auto_reweight else ""
-        print(f"[auto] routing {drug.name} → method={resolved}{suffix}",
+        print(f"[auto] routing {route_name} → method={resolved}{suffix}",
               file=sys.stderr)
         cli_method = resolved
     method_map = {
-        "is": ("importance_sampling", "Importance Sampling"),
-        "ibis": ("ibis", "IBIS (sequential MC + MCMC)"),
-        "enkf": ("enkf", "EnKF (Ensemble Kalman Filter)"),
-        "sbi": ("sbi", "Amortized SBI (multi-drug NSF)"),
+        "is": "importance_sampling",
+        "ibis": "ibis",
+        "enkf": "enkf",
+        "sbi": "sbi",
     }
-    tdm_method, method_label = method_map[cli_method]
+    tdm_method = method_map[cli_method]
 
     from sisyphus.regimen.tdm import bayesian_update
 
@@ -429,10 +601,14 @@ def _run_tdm(args: argparse.Namespace) -> None:
         if auto_reweight:
             extra_kwargs["sbi_reweight"] = True
     pop = getattr(args, "population", None)
-    if pop:
-        extra_kwargs["population_class"] = pop
     bw = getattr(args, "body_weight", None)
     age_val = getattr(args, "age", None)
+    if (bw is None) != (age_val is None):
+        raise ValueError("--body-weight and --age must be supplied together")
+    if tdm_method != "sbi" and (pop is not None or bw is not None):
+        raise ValueError("--population, --body-weight, and --age require SBI")
+    if pop:
+        extra_kwargs["population_class"] = pop
     if bw is not None and age_val is not None:
         extra_kwargs["body_weight_kg"] = bw
         extra_kwargs["age_years"] = age_val
@@ -447,7 +623,9 @@ def _run_tdm(args: argparse.Namespace) -> None:
     )
 
     print(f"Drug: {drug.name}")
-    print(f"Method: {method_label}")
+    print(f"Method: {result.method_used}")
+    for warning in result.warnings:
+        print(f"Warning: {warning}", file=sys.stderr)
     print(f"Observations: {len(observations)}")
     for obs in observations:
         print(f"  t={obs.time_h:.1f}h: {obs.concentration:.4f} mg/L")
@@ -510,15 +688,11 @@ def _run_dose_adjust(args: argparse.Namespace) -> None:
 
     dose_method = args.method
     if dose_method == "auto":
-        dose_method, auto_reweight = _resolve_auto_method(drug.name)
-        if auto_reweight and dose_method == "sbi":
-            print(
-                "Warning: dose-adjust does not support SBI reweight routing; "
-                "using IBIS instead.",
-                file=sys.stderr,
-            )
-            dose_method = "ibis"
-        print(f"[auto] routing {drug.name} → method={dose_method}", file=sys.stderr)
+        route_name = _route_drug_name(args.smiles, args.name)
+        dose_method, auto_reweight = _resolve_auto_method(route_name)
+        print(f"[auto] routing {route_name} → method={dose_method}", file=sys.stderr)
+    else:
+        auto_reweight = False
 
     result = recommend_dose(
         compiled, graph, drug, regimen,
@@ -529,6 +703,7 @@ def _run_dose_adjust(args: argparse.Namespace) -> None:
         n_prior=args.n_samples,
         seed=42,
         method=dose_method,
+        sbi_reweight=auto_reweight,
     )
 
     print(f"Drug: {drug.name}")
@@ -543,7 +718,9 @@ def _run_dose_adjust(args: argparse.Namespace) -> None:
     print()
     print(f"TDM: {result.tdm_result.n_successful}/{result.tdm_result.n_prior} samples, "
           f"ESS={result.tdm_result.ess:.0f}")
-    print(f"Inference method: {result.inference_method}")
+    print(f"Inference method: {result.tdm_result.method_used}")
+    for warning in result.tdm_result.warnings:
+        print(f"Warning: {warning}", file=sys.stderr)
 
 
 def _run_ddi(args: argparse.Namespace) -> None:
@@ -556,6 +733,9 @@ def _run_ddi(args: argparse.Namespace) -> None:
         "EXPERIMENTAL: DDI output is a mechanistic scenario, not a clinical prediction.",
         file=sys.stderr,
     )
+    import math
+    from dataclasses import replace
+
     import numpy as np
 
     from sisyphus.ddi import (
@@ -563,6 +743,7 @@ def _run_ddi(args: argparse.Namespace) -> None:
         KETOCONAZOLE,
         QUINIDINE,
         RIFAMPIN,
+        Inhibitor,
         apply_induction,
         apply_inhibition,
     )
@@ -570,27 +751,48 @@ def _run_ddi(args: argparse.Namespace) -> None:
     from sisyphus.engine.solver import solve
     from sisyphus.pk.endpoints import compute_endpoints
 
-    graph, compiled, drug = _build_drug_and_graph(args.smiles, args.dose, args.route)
-
     # Resolve perpetrator
     inhibitors = {"ketoconazole": KETOCONAZOLE, "fluconazole": FLUCONAZOLE, "quinidine": QUINIDINE}
     inducers = {"rifampin": RIFAMPIN}
 
-    if args.inhibitor and args.inducer:
-        print("Error: specify --inhibitor or --inducer, not both", file=sys.stderr)
-        sys.exit(1)
-    if not args.inhibitor and not args.inducer:
-        print("Error: specify --inhibitor or --inducer", file=sys.stderr)
-        sys.exit(1)
-
-    if args.inhibitor:
-        perpetrator = inhibitors[args.inhibitor]
-        ddi_graph = apply_inhibition(graph, perpetrator)
-        ddi_type = f"inhibition ({perpetrator.name})"
+    if not math.isfinite(args.fu_perpetrator) or not 0 <= args.fu_perpetrator <= 1:
+        raise ValueError("--fu-perpetrator must be between 0 and 1")
+    tdi_args = (args.kinact, args.ki_tdi, args.kdeg, args.concentration)
+    if args.tdi_enzyme:
+        if args.inhibitor or any(value is None for value in tdi_args):
+            parser_error = "--tdi-enzyme requires --kinact, --ki-tdi, --kdeg, --concentration"
+            raise ValueError(parser_error + " and cannot be combined with --inhibitor")
+        perpetrator = Inhibitor(
+            name="user-supplied TDI",
+            enzyme_ki={args.tdi_enzyme: args.competitive_ki}
+            if args.competitive_ki is not None else {},
+            plasma_concentration=args.concentration,
+            fu_perpetrator=args.fu_perpetrator,
+            mechanism="time_dependent",
+            enzyme_tdi={args.tdi_enzyme: (args.kinact, args.ki_tdi, args.kdeg)},
+        )
+    elif any(value is not None for value in tdi_args) or args.competitive_ki is not None:
+        raise ValueError("TDI parameters require --tdi-enzyme")
+    elif args.inhibitor:
+        perpetrator = replace(
+            inhibitors[args.inhibitor], fu_perpetrator=args.fu_perpetrator
+        )
     else:
-        perpetrator = inducers[args.inducer]
-        ddi_graph = apply_induction(graph, perpetrator)
-        ddi_type = f"induction ({perpetrator.name})"
+        perpetrator = None
+
+    if not perpetrator and not args.inducer:
+        raise ValueError("specify --inhibitor, --tdi-enzyme, or --inducer")
+    graph, _, drug = _build_drug_and_graph(args.smiles, args.dose, args.route)
+    ddi_graph = graph
+    ddi_types = []
+    if perpetrator:
+        ddi_graph = apply_inhibition(ddi_graph, perpetrator)
+        ddi_types.append(f"inhibition ({perpetrator.name})")
+    if args.inducer:
+        inducer = replace(inducers[args.inducer], fu_perpetrator=args.fu_perpetrator)
+        ddi_graph = apply_induction(ddi_graph, inducer)
+        ddi_types.append(f"induction ({inducer.name})")
+    ddi_type = " + ".join(ddi_types)
 
     def _solve_pk(g):
         import sisyphus.engine.flux  # noqa: F401
@@ -618,6 +820,31 @@ def _run_ddi(args: argparse.Namespace) -> None:
     if base_pk.t_half and ddi_pk.t_half:
         thalf_ratio = ddi_pk.t_half.mean / base_pk.t_half.mean if base_pk.t_half.mean > 0 else 0.0
         print(f"{'t½ (h)':<20s} {base_pk.t_half.mean:>12.2f} {ddi_pk.t_half.mean:>12.2f} {thalf_ratio:>8.2f}")  # noqa: E501
+
+
+def _run_pkpd(args: argparse.Namespace) -> None:
+    """Simulate a dose and post-process its effect-site response."""
+    logging.basicConfig(
+        level=logging.DEBUG if args.verbose else logging.WARNING,
+        format="%(levelname)s %(name)s: %(message)s",
+    )
+    print("EXPERIMENTAL: PK/PD parameters require external validation.", file=sys.stderr)
+    import numpy as np
+
+    import sisyphus.engine.flux  # noqa: F401
+    from sisyphus.engine.compiler import ResolvedParams
+    from sisyphus.engine.solver import solve
+    from sisyphus.pkpd import PDModel, compute_effect
+
+    graph, compiled, drug = _build_drug_and_graph(args.smiles, args.dose, args.route)
+    rng = np.random.default_rng(42)
+    params = ResolvedParams(graph.sample(rng), drug.sample(rng))
+    y0 = np.zeros(compiled.n_states)
+    y0[compiled.state_index[drug.administration_node]] = drug.dose_mg
+    result = solve(compiled, params, y0, t_span=(0, 24))
+    effect = compute_effect(result, PDModel(ke0=args.ke0, ec50=args.ec50))
+    print(f"Drug: {drug.name}")
+    print(f"Peak effect: {effect.emax_achieved:.4f} at {effect.temax:.2f} h")
 
 
 def _run_benchmark(args: argparse.Namespace) -> None:

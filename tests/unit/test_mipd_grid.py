@@ -21,6 +21,7 @@ DOSE = 7.5
 # a non-empty dict, so a grid that omits non_cyp_fractions diverges ~18% at s=1.
 CODEINE = "COc1ccc2c3c1O[C@H]1[C@@H](O)C=C[C@H]4[C@@H](C2)N(C)CC[C@@]341"
 CODEINE_DOSE = 30.0
+METOPROLOL = "COCCc1ccc(OCC(O)CNC(C)C)cc1"
 
 
 def test_build_cl_grid_returns_well_formed_grid():
@@ -40,6 +41,16 @@ def test_cl_grid_at_unit_scale_reproduces_predict_engine_pk():
     ap = predict(MIDAZOLAM, DOSE)
     assert grid.cmax[i] == pytest.approx(ap.engine_pk.cmax.mean, rel=0.03)
     assert grid.auc[i] == pytest.approx(ap.engine_pk.auc_0t.mean, rel=0.03)
+
+
+def test_cl_grid_at_unit_scale_matches_phenotype_prior():
+    phenotypes = {"CYP2D6": "PM"}
+    grid = build_cl_grid(
+        METOPROLOL, 100.0, n_grid=1, s_range=(1.0, 1.0), phenotypes=phenotypes
+    )
+    ap = predict(METOPROLOL, 100.0, phenotypes=phenotypes)
+    assert grid.cmax[0] == pytest.approx(ap.engine_pk.cmax.mean, rel=0.03)
+    assert grid.auc[0] == pytest.approx(ap.engine_pk.auc_0t.mean, rel=0.03)
 
 
 def test_cl_grid_at_unit_scale_reproduces_predict_for_non_cyp_substrate():

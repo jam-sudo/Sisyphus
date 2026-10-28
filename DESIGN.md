@@ -54,12 +54,12 @@ Sisyphus는 인체의 약물 거동을 시뮬레이션하는 computational 플�
 ```
 혈류:   heart → artery → [organs] → vein → heart
 림프:   [tissues] → [lymph_nodes] → thoracic_duct → blood
-담즙:   liver → bile_duct → duodenum → (enterohepatic recirculation)
+담즙:   liver → terminal sink (v1; enterohepatic recirculation deferred)
 ```
 
 이것들은 **같은 node set (organs/tissues) 위에 다른 edge types이 overlay된 multi-graph**다.
 
-**적용 범위:** 이 graph 모델은 연속적 물질 이동(blood flow, diffusion, active transport, secretion)에 적합하다. 이산적 사건(neural firing, immune cell migration)은 ODE로 자연스럽게 표현되지 않으므로 별도 메커니즘이 필요하다. v1에서는 혈류 + GI transit + 담즙 순환까지만 다룬다.
+**적용 범위:** 이 graph 모델은 연속적 물질 이동(blood flow, diffusion, active transport, secretion)에 적합하다. 이산적 사건(neural firing, immune cell migration)은 ODE로 자연스럽게 표현되지 않으므로 별도 메커니즘이 필요하다. v1에서는 혈류와 GI transit을 다루며 담즙 배설은 terminal sink로 처리한다. Enterohepatic recirculation은 구현 및 재흡수율 데이터가 마련될 때까지 제외한다.
 
 기존 PBPK 도구들(PK-Sim, Simcyp, Omega)은 ODE state vector에 organ을 하드코딩한다. 새 compartment를 추가하려면 state vector를 확장하고, ODE indexing을 수정하고, flow fraction을 재계산해야 한다.
 
@@ -195,7 +195,6 @@ sisyphus/
 │   ├── pk/                   # PK endpoint computation
 │   │   ├── endpoints.py      # Cmax, AUC, t½
 │   │   ├── nca.py            # Non-compartmental analysis
-│   │   └── analytical.py     # 1-cpt, 2-cpt closed-form
 │   │
 │   ├── validation/           # Reference, benchmark, metrics
 │   │   ├── reference.py      # Single source of truth
@@ -345,6 +344,7 @@ edges:
 overrides:
   edges:
     - { source: arterial_blood, target: rest, flow_fraction: 0.064 }
+    - { source: rest, target: venous_blood, flow_fraction: 0.064 }
 ```
 
 Builder는 base YAML + overlay YAML을 merge한 후 flow conservation을 검증한다.
@@ -535,8 +535,8 @@ class SimResult:
 @dataclass(frozen=True)
 class PKEndpoints:
     cmax: Distribution
-    tmax: Distribution
-    auc_0t: Distribution
+    tmax: Distribution | None
+    auc_0t: Distribution | None
     auc_0inf: Distribution | None
     t_half: Distribution | None
     cl: Distribution | None
@@ -544,6 +544,8 @@ class PKEndpoints:
 ```
 
 MC 결과: N개 sample에서 집계한 distribution. 단일 simulation: cv=0인 deterministic distribution.
+ML-only results expose Cmax; curve-derived endpoints are None. CL and Vss require an IV curve
+that has returned near baseline for terminal extrapolation.
 
 ### 7.3 PredictionResult (pipeline → caller)
 
@@ -600,7 +602,7 @@ MC latency 근거: ODE 1회 ~50ms (Omega 200ms의 4x 최적화 — graph precomp
 | Graph validation 실패 (flow conservation 등) | `ValueError`. Graph 정의 오류. |
 | ADME 예측 실패 | conservative defaults, `confidence="low"`, `warnings`에 기록. |
 | AD 밖 | `in_applicability_domain=False`, `ad_flags`에 사유. 예측은 계속. |
-| ODE solver 발산 | `solver_success=False`, analytical fallback, `warnings`. |
+| ODE solver 발산 | `solver_success=False`, warning; engine track dropped while available ML tracks continue. |
 | Mass balance > 1e-4 | `warnings`에 기록, 신뢰도 하향. |
 | Terminal t½ 추정 불가 | `t_half=None`. |
 

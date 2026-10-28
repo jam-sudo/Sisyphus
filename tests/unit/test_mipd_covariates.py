@@ -4,7 +4,7 @@ import logging
 import pytest
 
 from sisyphus.mipd.core import ci_floor
-from sisyphus.mipd.covariates import Covariates, cockcroft_gault
+from sisyphus.mipd.covariates import Covariates, cockcroft_gault, population_gfr_ml_min
 
 
 def test_ci_floor_off_by_default_fraction():
@@ -30,6 +30,28 @@ def test_ci_floor_nonpositive_mean_passthrough():
 
 def test_covariates_renal_factor_unity_at_reference():
     assert Covariates(crcl_ml_min=125.0).renal_factor() == 1.0
+
+
+def test_population_gfr_rhodin_half_maturity():
+    assert population_gfr_ml_min(70.0, 47.7) == pytest.approx(60.6)
+    cov = Covariates(body_weight_kg=70.0, pma_weeks=47.7)
+    assert cov.renal_factor() == pytest.approx(60.6 / 125.0)
+    assert any("population-estimate" in w for w in cov.warnings())
+    assert any("adult default age" in w for w in cov.warnings())
+    assert not any("adult default age" in w for w in Covariates(
+        body_weight_kg=70, pma_weeks=47.7, age_years=0.5
+    ).warnings())
+    assert Covariates(crcl_ml_min=80, body_weight_kg=70, pma_weeks=47.7).renal_factor() == 80 / 125
+
+
+def test_population_gfr_and_crcl_cv_validation():
+    with pytest.raises(ValueError, match="pma_weeks"):
+        Covariates(pma_weeks=47.7)
+    with pytest.raises(ValueError, match="crcl_cv"):
+        Covariates(crcl_ml_min=80, crcl_cv=-0.1)
+    with pytest.raises(ValueError, match="crcl_ml_min"):
+        Covariates(crcl_cv=0.2)
+    assert Covariates(crcl_ml_min=80, crcl_cv=0.2).crcl_cv == 0.2
 
 
 def test_covariates_renal_factor_scales_linearly():
@@ -90,6 +112,29 @@ def test_cockcroft_gault_female_factor():
 def test_cockcroft_gault_non_cancelling_anchor():
     # full arithmetic: (140-40)*80 / (72*1.2) = 8000 / 86.4 = 92.5926
     assert cockcroft_gault(40, 80.0, 1.2, "male") == pytest.approx(92.5926, rel=1e-4)
+
+
+def test_cockcroft_gault_weight_variants():
+    args = (60, 120.0, 1.0, "male")
+    ideal = cockcroft_gault(*args, weight_type="ideal", height_cm=177.8)
+    adjusted = cockcroft_gault(*args, weight_type="adjusted", height_cm=177.8)
+    total = cockcroft_gault(*args)
+    assert ideal == pytest.approx(80.0 * 73.0 / 72.0)
+    assert ideal < adjusted < total
+    assert adjusted == pytest.approx(cockcroft_gault(60, 91.8, 1.0, "male"))
+    cov = Covariates.from_cockcroft_gault(
+        *args, weight_type="adjusted", height_cm=177.8
+    )
+    assert cov.crcl_ml_min == pytest.approx(adjusted)
+
+
+def test_cockcroft_gault_weight_variant_validation():
+    with pytest.raises(ValueError, match="weight_type"):
+        cockcroft_gault(60, 120, 1, "male", weight_type="lean")
+    with pytest.raises(ValueError, match="height_cm"):
+        cockcroft_gault(60, 120, 1, "male", weight_type="ideal")
+    with pytest.raises(ValueError, match="height_cm"):
+        cockcroft_gault(60, 120, 1, "male", weight_type="ideal", height_cm=145)
 
 
 def test_cockcroft_gault_sex_case_insensitive():

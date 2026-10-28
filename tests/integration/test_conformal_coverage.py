@@ -1,11 +1,10 @@
-"""Real-data proof that split-conformal fixes the 29.9%@90% PI under-coverage.
+"""Development-cache check of leave-one-out cross-conformal coverage.
 
 Computes leave-one-out cross-conformal coverage on the committed holdout cache
-(``data/training/4track_holdout_predictions.json``). This MEASURES the conformal
-algorithm's marginal-coverage property on the holdout (the holdout's designated
-role is validation) — it does NOT tune any deployed parameter on the holdout
-(the production quantile is calibrated on train / CV+; Invariant #5). Documented
-MC baseline at nominal 90% is 0.299; conformal restores ~0.90.
+(``data/training/4track_holdout_predictions.json``), a repeatedly consumed
+development cache. This does not validate the shipped development-residual band
+or establish a fresh split-conformal guarantee. The documented MC baseline at
+nominal 90% is 0.299.
 """
 
 import json

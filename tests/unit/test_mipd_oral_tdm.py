@@ -15,6 +15,7 @@ from sisyphus.mipd.clgrid import (
     MeasuredConc,
     sir_posterior_2d,
 )
+from sisyphus.mipd.core import MeasuredF
 from sisyphus.mipd.oral_grid import build_oral_cl_grid
 from sisyphus.mipd.tdm import predict_tdm
 from sisyphus.regimen.types import DosingRegimen
@@ -51,6 +52,21 @@ def test_peak_plus_trough_is_free_both():
     obs = [MeasuredConc(value=5.0, t=62.0), MeasuredConc(value=1.0, t=72.0)]
     post = predict_tdm(SMILES, reg, obs, n_grid=7)
     assert post.cl_scale is not None
+
+
+def test_measured_f_frees_both_axes():
+    reg = _reg()
+    post = predict_tdm(
+        SMILES, reg,
+        [MeasuredConc(value=1.0, t=72.0), MeasuredF(0.5)], n_grid=5,
+    )
+    assert post.cl_scale is not None
+
+
+def test_short_oral_regimen_warns_before_steady_state():
+    reg = _reg(tau=2.0, n=2)
+    post = predict_tdm(SMILES, reg, [MeasuredConc(value=1.0, t=4.0)], n_grid=3)
+    assert any("not reached steady state" in w for w in post.warnings)
 
 
 def test_inference_direction_low_trough_lowers_F():

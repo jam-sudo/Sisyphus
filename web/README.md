@@ -9,7 +9,7 @@ Two supported workflows, driven by real model artifacts:
 | Workflow      | What it shows                                                              |
 | ------------- | ------------------------------------------------------------------------- |
 | `predict`     | SMILES → C(t) curve (real ODE), 4-track meta-learner, body graph, development-residual 90% interval, pipeline log |
-| `benchmark`   | N=107 retrospective development scatter + per-track AAFE; explicitly not an independent holdout |
+| `benchmark`   | N=73 retrospective development scatter + per-track AAFE; explicitly not an independent holdout |
 
 ## Stack
 
@@ -40,7 +40,7 @@ produced offline by:
 ```
 
 This regenerates `web/public/data/console_data.json` (curated core predictions)
-and `web/public/data/benchmark.json` (the N=107 development evidence). Each
+and `web/public/data/benchmark.json` (the N=73 development evidence). Each
 preset uses one strict prediction; its Cmax contract and matching engine curve
 are serialized without a second solve or curve rescaling.
 

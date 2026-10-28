@@ -213,14 +213,66 @@ class TestApplyInhibition:
         with pytest.raises(ValueError, match="Ki must be positive"):
             apply_inhibition(graph, inhibitor)
 
-    def test_unsupported_mechanism_raises(self):
-        """Non-competitive mechanisms should raise ValueError."""
+    def test_tdi_zero_concentration_is_identity(self):
         graph = _make_simple_graph()
         inhibitor = Inhibitor(
-            name="bad",
-            enzyme_ki={"CYP3A4": 1.0},
-            plasma_concentration=1.0,
+            name="tdi", enzyme_ki={}, plasma_concentration=0.0,
             mechanism="time_dependent",
+            enzyme_tdi={"CYP3A4": (0.2, 1.0, 0.1)},
+        )
+        modified = apply_inhibition(graph, inhibitor)
+        assert modified.nodes["liver"].enzymes["CYP3A4"].mean == (
+            graph.nodes["liver"].enzymes["CYP3A4"].mean
+        )
+
+    def test_tdi_static_ratio_and_competitive_induction_composition(self):
+        graph = _make_simple_graph()
+        baseline = graph.nodes["liver"].enzymes["CYP3A4"].mean
+        tdi_only = Inhibitor(
+            name="tdi", enzyme_ki={}, plasma_concentration=1.0,
+            mechanism="time_dependent", enzyme_tdi={"CYP3A4": (0.2, 1.0, 0.1)},
+        )
+        assert apply_inhibition(graph, tdi_only).nodes["liver"].enzymes[
+            "CYP3A4"
+        ].mean == pytest.approx(baseline / 2)
+        inhibitor = Inhibitor(
+            name="tdi", enzyme_ki={"CYP3A4": 1.0}, plasma_concentration=1.0,
+            mechanism="time_dependent", enzyme_tdi={"CYP3A4": (0.2, 1.0, 0.1)},
+        )
+        modified = apply_inhibition(graph, inhibitor)
+        # kinact*I/(KI+I) = kdeg, so TDI leaves 1/2 active; competitive adds 1/2.
+        assert modified.nodes["liver"].enzymes["CYP3A4"].mean == pytest.approx(baseline / 4)
+        induced = apply_induction(modified, Inducer(
+            name="inducer", enzyme_emax={"CYP3A4": 1.0},
+            enzyme_ec50={"CYP3A4": 1.0}, plasma_concentration=1.0,
+        ))
+        assert induced.nodes["liver"].enzymes["CYP3A4"].mean == pytest.approx(
+            baseline * 0.375
+        )
+
+    def test_tdi_requires_valid_parameters(self):
+        graph = _make_simple_graph()
+        inhibitor = Inhibitor(
+            name="bad", enzyme_ki={}, plasma_concentration=1.0,
+            mechanism="time_dependent", enzyme_tdi={"CYP3A4": (0.2, 1.0, 0.0)},
+        )
+        with pytest.raises(ValueError, match="kdeg"):
+            apply_inhibition(graph, inhibitor)
+
+    def test_tdi_rejects_unknown_enzyme(self):
+        graph = _make_simple_graph()
+        inhibitor = Inhibitor(
+            name="bad", enzyme_ki={}, plasma_concentration=1.0,
+            mechanism="time_dependent", enzyme_tdi={"CYP1A2": (0.2, 1.0, 0.1)},
+        )
+        with pytest.raises(ValueError, match="absent from graph"):
+            apply_inhibition(graph, inhibitor)
+
+    def test_unsupported_mechanism_raises(self):
+        graph = _make_simple_graph()
+        inhibitor = Inhibitor(
+            name="bad", enzyme_ki={}, plasma_concentration=1.0,
+            mechanism="other",
         )
         with pytest.raises(ValueError, match="Unsupported inhibition mechanism"):
             apply_inhibition(graph, inhibitor)

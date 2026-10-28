@@ -19,6 +19,8 @@ methods.
 
 from __future__ import annotations
 
+import hashlib
+import json
 import logging
 import time
 from pathlib import Path
@@ -29,7 +31,7 @@ import numpy as np
 from sisyphus.core import Distribution, DrugOnGraph
 from sisyphus.engine.compiler import CompiledODE, ResolvedParams
 from sisyphus.graph.body import BodyGraph
-from sisyphus.regimen.solver import solve_regimen
+from sisyphus.regimen.solver import DEFAULT_TAIL_H, solve_regimen
 from sisyphus.regimen.types import DosingRegimen
 from sisyphus.resources import get_resource_config
 
@@ -40,6 +42,76 @@ logger = logging.getLogger(__name__)
 
 _DEFAULT_POSTERIOR_PATH = get_resource_config().model("sbi", "multi_drug_nsf.pt")
 _DEFAULT_AUX_SUFFIX = ".aux.pt"
+
+# Source: sisyphus/sbi/simulator.py trains on single-dose Cmax.
+# shortcut: 2 h or half-Tmax is a heuristic screen; replace with a time-aware amortizer.
+_TMAX_WARNING_DISTANCE_H = 2.0
+_TMAX_WARNING_FRACTION_RATIO = 0.5
+# Source: regimen/tdm.py uses 0.25 h output spacing for engine TDM simulations.
+_TMAX_SCAN_STEP_H = 0.25
+
+
+def _warn_engine_revision(posterior_path: Path) -> None:
+    """Warn if the loaded amortizer predates the current simulation inputs."""
+    stamp_path = get_resource_config().model("sbi", "engine_revision.json", required=False)
+    if not stamp_path.exists():
+        logger.warning("SBI engine revision stamp missing; model compatibility is unknown")
+        return
+    try:
+        stamp = json.loads(stamp_path.read_text())
+        entry = stamp["models"][posterior_path.name]
+        root = get_resource_config().root
+        digest = hashlib.sha256()
+        for relative in entry["paths"]:
+            path = root / relative
+            digest.update(relative.encode() + b"\0")
+            digest.update(path.read_bytes() if path.exists() else b"<missing>")
+        if digest.hexdigest() != entry["sha256"]:
+            logger.warning(
+                "SBI model %s was trained against engine revision %s; current engine/physiology "
+                "inputs differ. Posterior calibration may be stale.",
+                posterior_path.name, entry["commit"],
+            )
+    except (OSError, KeyError, TypeError, ValueError) as exc:
+        logger.warning("SBI engine revision stamp could not be checked: %s", exc)
+
+
+def _warn_observation_scope(
+    compiled: CompiledODE,
+    graph: BodyGraph,
+    drug: DrugOnGraph,
+    regimen: DosingRegimen,
+    observation: Observation,
+    observation_node: str,
+) -> None:
+    """Flag observations outside the amortizer's single-dose Cmax training setting."""
+    if regimen.n_doses > 1:
+        logger.warning("SBI amortizer was trained on single-dose Cmax; this regimen has %d doses",
+                       regimen.n_doses)
+    try:
+        nominal = solve_regimen(
+            compiled, ResolvedParams(graph, drug), regimen,
+            t_total_h=max(
+                observation.time_h + DEFAULT_TAIL_H,
+                regimen.last_dose_end_h + DEFAULT_TAIL_H,
+            ),
+            dt_output=_TMAX_SCAN_STEP_H,
+        )
+        if nominal.solver_success:
+            concentrations = nominal.concentrations[observation_node]
+            engine_tmax_h = float(nominal.time_h[int(np.argmax(concentrations))])
+            if abs(observation.time_h - engine_tmax_h) > max(
+                _TMAX_WARNING_DISTANCE_H, engine_tmax_h * _TMAX_WARNING_FRACTION_RATIO
+            ):
+                logger.warning(
+                    "SBI first observation at %.2f h is far from engine Tmax %.2f h; "
+                    "the amortizer treats it as Cmax",
+                    observation.time_h, engine_tmax_h,
+                )
+        else:
+            logger.warning("SBI could not assess observation time: nominal engine solve failed")
+    except Exception as exc:
+        logger.warning("SBI could not assess observation time against engine Tmax: %s", exc)
 
 
 def _extract_params(drug: DrugOnGraph) -> dict[str, float]:
@@ -160,6 +232,8 @@ def sbi_update(
             "Run scripts/sbi_train_multi_drug.py or fall back to method='ibis'."
         )
 
+    _warn_engine_revision(ppath)
+
     aux_path = ppath.with_suffix(_DEFAULT_AUX_SUFFIX)
     import torch  # local import to keep optional-dep policy clean
 
@@ -193,6 +267,7 @@ def sbi_update(
 
     # Packed observation: [log10(first_obs_concentration), drug_features, (pop_onehot or bw/age)]
     obs0 = observations[0]
+    _warn_observation_scope(compiled, graph, drug, regimen, obs0, observation_node)
     log10_cmax_obs = float(np.log10(max(obs0.concentration, 1e-12)))
 
     if body_weight_kg is not None and age_years is not None:
@@ -253,9 +328,9 @@ def sbi_update(
     # the vectorised surrogate call, out-of-distribution rows fall back
     # to a scipy forward sim. This preserves most of the speedup on
     # well-behaved drugs while restoring accuracy on the hard ones.
-    if _extra_obs and use_surrogate:
+    if (_extra_obs or sbi_reweight) and use_surrogate:
         logger.warning(
-            "SBI TDM: multi-obs reweighting is not yet supported under the "
+            "SBI TDM: observation reweighting is not yet supported under the "
             "surrogate path. Falling back to scipy forward sims for accurate "
             "multi-observation conditioning."
         )
@@ -587,6 +662,7 @@ def sbi_update(
             n_successful=len(post_cmax_list),
             ess=float(len(post_cmax_list)),
             observations=observations,
+            method_used="sbi",
         )
 
     prior_arr = np.array(prior_cmax_list)
@@ -686,4 +762,5 @@ def sbi_update(
         weights=weights,
         log_likelihoods=np.zeros(n_post),
         cmax_ci_90=ci90,
+        method_used="sbi",
     )
