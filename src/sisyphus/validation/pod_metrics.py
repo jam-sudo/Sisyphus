@@ -89,7 +89,7 @@ def auc_null_hazard(c_u_liver, time, vmax_bio: float, km_bio: float) -> float:
     """Well-mixed, non-zonal attribution null: bioactivation intrinsic clearance times
     unbound hepatic AUC = (Vmax_bio/Km_bio) * integral(C_u dt). No zonation, no detox
     threshold — the covalent-burden-at-toxic-dose baseline the zonal model must beat."""
-    trapz = getattr(np, "trapezoid", np.trapz)
+    trapz = np.trapezoid if hasattr(np, "trapezoid") else np.trapz
     auc = float(trapz(np.asarray(c_u_liver, dtype=float), np.asarray(time, dtype=float)))
     return (float(vmax_bio) / float(km_bio)) * auc
 
