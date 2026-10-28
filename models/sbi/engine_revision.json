@@ -1,0 +1,113 @@
+{
+  "description": "SHA256 of engine source, regimen solver, and physiology YAML at each model last-commit revision; missing paths hash as <missing>.",
+  "models": {
+    "multi_drug_nsf.pt": {
+      "commit": "1359765553a26e91a6fc1f8a69d55f6f8e1e6531",
+      "sha256": "77b570f2c2a1ed8ef75d6c3299fd53156e7a0ef0d4b7da12727e3d54f86ab8e4",
+      "paths": [
+        "data/physiology/pediatric_5y.yaml",
+        "data/physiology/reference_man.yaml",
+        "data/physiology/sc_overlay.yaml",
+        "data/physiology/tumor_overlay.yaml",
+        "src/sisyphus/engine/__init__.py",
+        "src/sisyphus/engine/compiler.py",
+        "src/sisyphus/engine/contracts.py",
+        "src/sisyphus/engine/flux.py",
+        "src/sisyphus/engine/result.py",
+        "src/sisyphus/engine/solver.py",
+        "src/sisyphus/engine/uncertainty.py",
+        "src/sisyphus/regimen/solver.py"
+      ]
+    },
+    "hierarchical_nsf_2k.pt": {
+      "commit": "1359765553a26e91a6fc1f8a69d55f6f8e1e6531",
+      "sha256": "77b570f2c2a1ed8ef75d6c3299fd53156e7a0ef0d4b7da12727e3d54f86ab8e4",
+      "paths": [
+        "data/physiology/pediatric_5y.yaml",
+        "data/physiology/reference_man.yaml",
+        "data/physiology/sc_overlay.yaml",
+        "data/physiology/tumor_overlay.yaml",
+        "src/sisyphus/engine/__init__.py",
+        "src/sisyphus/engine/compiler.py",
+        "src/sisyphus/engine/contracts.py",
+        "src/sisyphus/engine/flux.py",
+        "src/sisyphus/engine/result.py",
+        "src/sisyphus/engine/solver.py",
+        "src/sisyphus/engine/uncertainty.py",
+        "src/sisyphus/regimen/solver.py"
+      ]
+    },
+    "continuous_hierarchical_nsf.pt": {
+      "commit": "2e0751c41ad8c26656f78f08fc768b59ec6c7fe3",
+      "sha256": "b11feaf8e1b9e111c3bf8aa88518ffa1570c53ac50ff9e5e56a5979af04a04b9",
+      "paths": [
+        "data/physiology/pediatric_5y.yaml",
+        "data/physiology/reference_man.yaml",
+        "data/physiology/sc_overlay.yaml",
+        "data/physiology/tumor_overlay.yaml",
+        "src/sisyphus/engine/__init__.py",
+        "src/sisyphus/engine/compiler.py",
+        "src/sisyphus/engine/contracts.py",
+        "src/sisyphus/engine/flux.py",
+        "src/sisyphus/engine/result.py",
+        "src/sisyphus/engine/solver.py",
+        "src/sisyphus/engine/uncertainty.py",
+        "src/sisyphus/regimen/solver.py"
+      ]
+    },
+    "clozapine_posterior_nsf.pt": {
+      "commit": "7776de09143e6217f2dfad7bccb5b217ed161e6b",
+      "sha256": "ce57292bb02ca0a6d36d63e65adbf368afe23f5c5e400d8d57d22b02074167f8",
+      "paths": [
+        "data/physiology/pediatric_5y.yaml",
+        "data/physiology/reference_man.yaml",
+        "data/physiology/sc_overlay.yaml",
+        "data/physiology/tumor_overlay.yaml",
+        "src/sisyphus/engine/__init__.py",
+        "src/sisyphus/engine/compiler.py",
+        "src/sisyphus/engine/contracts.py",
+        "src/sisyphus/engine/flux.py",
+        "src/sisyphus/engine/result.py",
+        "src/sisyphus/engine/solver.py",
+        "src/sisyphus/engine/uncertainty.py",
+        "src/sisyphus/regimen/solver.py"
+      ]
+    },
+    "morphine_posterior.pt": {
+      "commit": "7776de09143e6217f2dfad7bccb5b217ed161e6b",
+      "sha256": "ce57292bb02ca0a6d36d63e65adbf368afe23f5c5e400d8d57d22b02074167f8",
+      "paths": [
+        "data/physiology/pediatric_5y.yaml",
+        "data/physiology/reference_man.yaml",
+        "data/physiology/sc_overlay.yaml",
+        "data/physiology/tumor_overlay.yaml",
+        "src/sisyphus/engine/__init__.py",
+        "src/sisyphus/engine/compiler.py",
+        "src/sisyphus/engine/contracts.py",
+        "src/sisyphus/engine/flux.py",
+        "src/sisyphus/engine/result.py",
+        "src/sisyphus/engine/solver.py",
+        "src/sisyphus/engine/uncertainty.py",
+        "src/sisyphus/regimen/solver.py"
+      ]
+    },
+    "morphine_posterior_nsf.pt": {
+      "commit": "7776de09143e6217f2dfad7bccb5b217ed161e6b",
+      "sha256": "ce57292bb02ca0a6d36d63e65adbf368afe23f5c5e400d8d57d22b02074167f8",
+      "paths": [
+        "data/physiology/pediatric_5y.yaml",
+        "data/physiology/reference_man.yaml",
+        "data/physiology/sc_overlay.yaml",
+        "data/physiology/tumor_overlay.yaml",
+        "src/sisyphus/engine/__init__.py",
+        "src/sisyphus/engine/compiler.py",
+        "src/sisyphus/engine/contracts.py",
+        "src/sisyphus/engine/flux.py",
+        "src/sisyphus/engine/result.py",
+        "src/sisyphus/engine/solver.py",
+        "src/sisyphus/engine/uncertainty.py",
+        "src/sisyphus/regimen/solver.py"
+      ]
+    }
+  }
+}

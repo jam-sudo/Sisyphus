@@ -19,7 +19,7 @@ Does NOT modify pipeline weights or model parameters (invariant).
 from __future__ import annotations
 
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 import numpy as np
 from numpy.typing import NDArray
@@ -84,6 +84,8 @@ class TDMResult:
         observations: The observations used.
         weights: Normalized importance weights (length n_successful).
         log_likelihoods: Log-likelihoods per sample (length n_successful).
+        method_used: Inference method actually used, including any fallback.
+        warnings: Limitations or fallbacks affecting this update.
     """
     prior_cmax: Distribution
     posterior_cmax: Distribution
@@ -102,6 +104,8 @@ class TDMResult:
     # None when not computed (older callers can still rely on the lognormal
     # approximation at `.posterior_cmax.mean`/`.cv`).
     cmax_ci_90: tuple[float, float] | None = None
+    method_used: str = "importance_sampling"
+    warnings: tuple[str, ...] = ()
 
 
 # ---------------------------------------------------------------------------
@@ -312,6 +316,7 @@ def bayesian_update(
             weights=ibis_result.weights,
             log_likelihoods=np.log(np.maximum(ibis_result.weights, 1e-300)),
             cmax_ci_90=tuple(ibis_result.cmax_ci_90),
+            method_used="ibis",
         ))
 
     if method == "enkf":
@@ -336,6 +341,7 @@ def bayesian_update(
             weights=uniform_weights,
             log_likelihoods=np.zeros(n_post),
             cmax_ci_90=tuple(enkf_result.cmax_ci_90),
+            method_used="enkf",
         ))
 
     if method == "sbi":
@@ -360,17 +366,21 @@ def bayesian_update(
         except (FileNotFoundError, ImportError, ModuleNotFoundError) as exc:
             if not sbi_fallback:
                 raise
-            logger.warning(
-                "SBI posterior unavailable (%s), falling back to IBIS",
-                exc,
-            )
-            return bayesian_update(
+            warning = f"SBI posterior unavailable ({exc}); using IBIS instead"
+            if population_class is not None or body_weight_kg is not None or age_years is not None:
+                warning += "; IBIS cannot use population, body weight, or age covariates"
+            logger.warning("%s", warning)
+            result = bayesian_update(
                 compiled, graph, drug, regimen, observations,
                 n_prior=n_prior, seed=seed,
                 observation_node=observation_node,
                 method="ibis",
                 min_ci_half_width_fraction=min_ci_half_width_fraction,
+                population_class=population_class,
+                body_weight_kg=body_weight_kg,
+                age_years=age_years,
             )
+            return replace(result, warnings=result.warnings + (warning,))
 
     # ── Default: importance sampling (original method) ──
 
