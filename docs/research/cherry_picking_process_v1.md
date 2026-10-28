@@ -81,15 +81,7 @@ The CI upper bound (3.20) brackets the audit's true-AAFE estimate (2.85–3.10),
 3. **Decorrelation declaration** — before committing the routing entry, compute the Pearson r between the proposed routing's residuals (on 107-holdout) and the current meta residuals. If r > 0.90, the new routing is not orthogonal — REJECT as cherry-picking regardless of AAFE delta.
 4. **Effect reporting** — commit message must include: before/after 107-holdout AAFE with CI, SBC cov_dev, decorrelation r, N50 AAFE (if N50 exists at that cycle).
 
-**Concrete procedure** (to be codified as `scripts/routing_decorrelation_gate.py` in a future task):
-
-```
-python3 scripts/routing_decorrelation_gate.py \
-    --drug DRUG_NAME --proposed-method {SBI,IS,IBIS,override} \
-    --report-only
-```
-
-Outputs a go/no-go verdict. Commit only on go.
+**Concrete procedure:** Before a routing edit, recompute the proposed method's 107-holdout residuals, compare them with current meta residuals, and record Pearson r, SBC coverage deviation, and before/after AAFE with CI. Reject if r > 0.90. This remains a manual review step until a proposed-route scorer and its inputs are specified.
 
 **Retroactive:** The 13 existing entries (12 SBI + 1 IBIS) predate this gate. They are not audited retroactively — the gate is forward-looking only. If any of them is touched again, they must pass the gate on re-touch.
 
@@ -128,6 +120,6 @@ A commit without one of these tags touching Cmax pipeline code will fail a futur
 |---|---|---|---|
 | 1 | Update the README headline with 95% CI | the author | same commit as this doc |
 | 2 | Curate N50 (50 drugs, new holdout file) | the author | before next accuracy commit |
-| 3 | Write `scripts/routing_decorrelation_gate.py` | the author | when next routing entry is proposed |
+| 3 | Record the manual decorrelation verdict | the author | when next routing entry is proposed |
 | 4 | Pre-commit hook for tag enforcement | deferred | after N50 lands |
 | 5 | First N50 benchmark run + CI | deferred | after N50 lands + cycle freeze |
