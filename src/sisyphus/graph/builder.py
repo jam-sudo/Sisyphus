@@ -10,6 +10,8 @@ never reaches the engine.
 
 from __future__ import annotations
 
+from copy import deepcopy
+from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
@@ -58,7 +60,11 @@ def build_from_yaml(path: Path) -> BodyGraph:
     with open(path) as f:
         data = yaml.safe_load(f)
 
-    graph = BodyGraph()
+    return _build_into_graph(data, BodyGraph())
+
+
+def _build_into_graph(data: dict[str, Any], graph: BodyGraph) -> BodyGraph:
+    """Add YAML nodes and edges to a graph, then validate the result."""
 
     # --- Parse global_params ---
     raw_globals = data.get("global_params", {})
@@ -144,9 +150,13 @@ def build_from_yaml(path: Path) -> BodyGraph:
             graph.add_edge(edge)
 
         elif edge_type == "active_transport":
+            direction = edge_spec.get("direction", "uptake")
+            if direction not in ("uptake", "efflux"):
+                raise ValueError(f"Unknown active transport direction: {direction!r}")
             edge = ActiveTransportEdge(
                 source=edge_spec["source"],
                 target=edge_spec["target"],
+                direction=direction,
             )
             graph.add_edge(edge)
 
@@ -175,6 +185,32 @@ def build_from_yaml(path: Path) -> BodyGraph:
         )
         graph.add_edge(edge)
 
+    for override in data.get("overrides", {}).get("edges", []):
+        matches = [
+            i for i, edge in enumerate(graph.edges)
+            if edge.source == override["source"] and edge.target == override["target"]
+        ]
+        if len(matches) != 1:
+            raise ValueError(
+                f"Expected one edge for override {override['source']!r} -> "
+                f"{override['target']!r}, found {len(matches)}"
+            )
+        edge = graph.edges[matches[0]]
+        changes = {}
+        for key, value in override.items():
+            if key in ("source", "target"):
+                continue
+            field_name = "flow_rate" if key == "flow_fraction" else key
+            if not hasattr(edge, field_name):
+                raise ValueError(f"Unknown edge parameter for override: {key!r}")
+            if key == "flow_fraction":
+                value *= cardiac_output
+            changes[field_name] = (
+                _parse_distribution(value)
+                if isinstance(getattr(edge, field_name), Distribution) else value
+            )
+        graph.edges[matches[0]] = replace(edge, **changes)
+
     # --- Validate ---
     errors = graph.validate()
     if errors:
@@ -199,7 +235,9 @@ def merge_overlay(base: BodyGraph, overlay_path: Path) -> BodyGraph:
     Raises:
         ValueError: If the merged graph fails validation.
     """
-    raise NotImplementedError
+    with open(overlay_path) as f:
+        data = yaml.safe_load(f)
+    return _build_into_graph(data, deepcopy(base))
 
 
 def _build_node(spec: dict[str, Any]) -> Node:

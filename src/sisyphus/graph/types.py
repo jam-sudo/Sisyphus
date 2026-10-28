@@ -174,7 +174,8 @@ class ActiveTransportEdge(Edge):
     """Active transporter-mediated mass transfer (efflux or uptake).
 
     Full Michaelis-Menten: rate = abundance × Jmax × C / (Km + C).
-    Direction is determined by edge source → target:
+    Mass moves from edge source → target. ``direction`` selects the node
+    carrying the transporter (target for uptake, source for efflux):
     - Gut efflux: gut_wall → lumen (P-gp: tissue → lumen)
     - Hepatic uptake: liver_blood → liver (OATP: blood → tissue)
 
