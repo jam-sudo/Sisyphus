@@ -121,8 +121,8 @@ def test_public_cmax_fitted_rows_and_artifact_are_pinned():
 
     clf_dataset = ROOT / "data/training/clf_training.csv"
     for model_name, expected_n, expected_hash in (
-        ("clf", 900, "a9a8d50ff52e0ca0139310aee0e45e3399044f048f9d147f56a3d571bda0fc16"),
-        ("vdf", 831, "4525b58cdc97a3ff59a8623a341dd83e691ba3b0e8d45040228caaf7da40dc70"),
+        ("clf", 898, "6988da95b97a454d9085b15f4fa107012778dda91a203c1c0096c1af40695aeb"),
+        ("vdf", 829, "5ff06e9949661e696f70d51bae33e5a37124f6cab3e74f27edd96d63f3764462"),
     ):
         model = ROOT / f"models/direct_pk/xgboost_{model_name}.json"
         meta = json.loads(model.with_suffix(".meta.json").read_text())

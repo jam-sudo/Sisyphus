@@ -2,7 +2,7 @@
 
 Translates ADME properties into DrugOnGraph parameters:
 1. CLint decomposition into per-enzyme affinities
-2. Kp calculation via Rodgers & Rowland (2005/2006)
+2. R&R-derived Kp approximation (Rodgers et al. 2005; Rodgers & Rowland 2006)
 3. Renal clearance estimation
 4. DrugOnGraph assembly
 
@@ -41,6 +41,26 @@ _IVIVE_SCALING = 6e-5  # from reference_man.yaml
 
 # GFR: glomerular filtration rate (L/h)
 _GFR_L_PER_H = 7.5  # ~125 mL/min = 7.5 L/h
+
+# Urine flow at the end of the nephron (L/h). Scotcher et al. 2016,
+# Eur J Pharm Sci 94:59-71 (doi:10.1016/j.ejps.2016.03.018) assume 1 mL/min.
+_URINE_FLOW_L_PER_H = 0.06  # 1 mL/min
+
+# Effective lumped tubular surface area (cm^2) for scaling peff -> PS.
+# Back-calculated from the Scotcher 2016 mechanistic-model calibration point:
+# their 5-compartment model reaches F' = 0.5 (half of urine/plasma equilibrium)
+# at Caco-2 Papp = 14.8e-6 cm/s under a pH 6.5/7.4 gradient. In the
+# one-compartment reduction used below F' = PS/(PS + UF), so F' = 0.5 means
+# PS = UF = 0.06 L/h. Sisyphus `peff` is in-vivo-calibrated Caco-2
+# (peff = 10**1.29 * Papp ~= 19.5x, adme._CACO2_TO_INVIVO_OFFSET), putting the
+# half-reabsorption point at peff = 2.886e-4 cm/s, hence
+#   TSA = 0.06 L/h * 1000 cm3/L / (2.886e-4 cm/s * 3600 s/h) = 57.8 cm^2.
+# This is an EFFECTIVE area, well below the geometric proximal-tubule area: a
+# well-stirred tubule sees fully concentrated filtrate everywhere and so
+# over-reabsorbs relative to Scotcher's 5-region plug-flow-with-water-removal
+# structure, and the lumping difference is absorbed here. Anchored to the
+# published renal model ONLY — never fitted to Sisyphus Cmax loss (Invariant #8).
+_TUBULAR_SURFACE_AREA_CM2 = 57.8
 
 # ---------------------------------------------------------------------------
 # Enzyme abundances (pmol, total organ) — from reference_man.yaml
@@ -105,9 +125,8 @@ _FM_ADJUSTMENTS: dict[str, dict[str, float]] = {
 }
 
 # ---------------------------------------------------------------------------
-# Tissue compositions for Kp calculation (Rodgers & Rowland)
-# Source: Rodgers & Rowland (2006), Table 1
-# Standard literature values — these do not change.
+# Aggregated tissue compositions for the R&R-derived Kp approximation.
+# Source: Rodgers & Rowland (2006), Table 1; water and phospholipid pools are combined.
 # ---------------------------------------------------------------------------
 
 # Plasma composition
@@ -132,7 +151,7 @@ _TISSUE_COMPOSITIONS: dict[str, TissueComposition] = {
     "skin_tissue": TissueComposition(fn=0.0284, fp=0.0111, fw=0.718, pH=7.0),
 }
 
-# CV for Kp predictions (moderate — the R&R equations are well-validated)
+# CV for Kp predictions under the aggregated-composition approximation
 _KP_CV = 0.4
 
 
@@ -345,8 +364,9 @@ def _compute_kp_rodgers_rowland(
     compound_type: str,
     tissue_comp: TissueComposition,
     plasma_comp: TissueComposition,
+    pka_secondary: float | None = None,
 ) -> float:
-    """Compute tissue:plasma partition coefficient using Rodgers & Rowland.
+    """Compute an R&R-derived tissue:plasma partition approximation.
 
     For neutrals:
         Kp = (fw_t + fn_t*P + fp_t*(0.3P+0.7)) / (fw_p + fn_p*P + fp_p*(0.3P+0.7))
@@ -355,11 +375,15 @@ def _compute_kp_rodgers_rowland(
 
     For bases: adds phospholipid binding correction for cationic species.
 
-    Source: Rodgers & Rowland, Pharm Res (2005) 22:1495; (2006) 23:56.
+    Uses total water and phospholipid fractions, omitting the published
+    extracellular/intracellular split and acidic-phospholipid affinity.
+    Source: Rodgers et al., J Pharm Sci 94:1259 (2005), eqs. 18-20;
+    Rodgers & Rowland, J Pharm Sci 95:1238 (2006), eqs. 9-14.
 
     Args:
         logp: Octanol-water partition coefficient.
-        pka: Dissociation constant. None for neutrals.
+        pka: Basic pKa for zwitterions; only pKa for other ionized classes.
+        pka_secondary: Acidic pKa for zwitterions, if available.
         compound_type: "neutral", "acid", "base", "zwitterion".
         tissue_comp: Tissue composition fractions.
         plasma_comp: Plasma composition fractions.
@@ -382,6 +406,19 @@ def _compute_kp_rodgers_rowland(
         ion_ratio = (1.0 + 10 ** (tissue_comp.pH - pka)) / (1.0 + 10 ** (plasma_comp.pH - pka))
         kp_num = tissue_comp.fw * ion_ratio + _lipid_partition(tissue_comp, d_tissue)
         kp_den = plasma_comp.fw + _lipid_partition(plasma_comp, d_plasma)
+        kp = kp_num / kp_den if kp_den > 0 else 1.0
+
+    elif compound_type == "zwitterion" and pka_secondary is not None:
+        # 2006 eq. 10 ionization terms X/Y: both acidic and basic centres.
+        ion_tissue = 1.0 + 10 ** (tissue_comp.pH - pka_secondary) + 10 ** (pka - tissue_comp.pH)
+        ion_plasma = 1.0 + 10 ** (plasma_comp.pH - pka_secondary) + 10 ** (pka - plasma_comp.pH)
+        ion_ratio = ion_tissue / ion_plasma
+        kp_num = (
+            tissue_comp.fw * ion_ratio
+            + _lipid_partition(tissue_comp, p / ion_tissue)
+            + tissue_comp.fp * max(ion_ratio - 1.0, 0.0)
+        )
+        kp_den = plasma_comp.fw + _lipid_partition(plasma_comp, p / ion_plasma)
         kp = kp_num / kp_den if kp_den > 0 else 1.0
 
     elif compound_type in ("base", "zwitterion"):
@@ -496,6 +533,7 @@ def _compute_all_kp(
     compound_type: str,
     kp_method: str = "rodgers_rowland",
     fup: float | None = None,
+    pka_secondary: float | None = None,
 ) -> dict[str, Distribution]:
     """Compute Kp for all tissues.
 
@@ -506,6 +544,7 @@ def _compute_all_kp(
         kp_method: Kp calculation method. One of "rodgers_rowland",
             "poulin_theil", "berezhkovskiy" (R&R + BZ correction).
         fup: Fraction unbound in plasma (required for "berezhkovskiy").
+        pka_secondary: Acidic pKa for zwitterions when available.
 
     Returns:
         Dict mapping tissue name -> Kp as Distribution.
@@ -518,7 +557,10 @@ def _compute_all_kp(
 
     kp_overrides: dict[str, Distribution] = {}
     for tissue_name, tissue_comp in _TISSUE_COMPOSITIONS.items():
-        kp = kp_fn(logp, pka, compound_type, tissue_comp, _PLASMA_COMP)
+        if base_method == "rodgers_rowland" and pka_secondary is not None:
+            kp = kp_fn(logp, pka, compound_type, tissue_comp, _PLASMA_COMP, pka_secondary)
+        else:
+            kp = kp_fn(logp, pka, compound_type, tissue_comp, _PLASMA_COMP)
         if use_bz and fup is not None:
             kp = _apply_bz_correction(kp, fup)
             kp = float(np.clip(kp, 0.01, 50.0))
@@ -542,23 +584,46 @@ def _compute_all_kp(
 # ---------------------------------------------------------------------------
 
 
-def _estimate_renal_clearance(fup: Distribution, profile: MolecularProfile) -> Distribution:
-    """Estimate renal clearance from GFR and fraction unbound.
+def _estimate_renal_clearance(fup: Distribution, peff: Distribution) -> Distribution:
+    """Estimate renal clearance from filtration and passive tubular reabsorption.
 
-    For drugs undergoing glomerular filtration without active secretion:
-        CL_renal = GFR * fup
+    One-compartment (well-stirred) tubule mass balance: drug enters by
+    glomerular filtration (``fup * GFR``), leaves in urine (``UF * C_tubule``),
+    and exchanges passively across the tubular wall in both directions
+    (``PS * (C_tubule - fup * C_plasma)``). At steady state this gives
 
-    Active secretion/reabsorption would require transporter data.
+        CL_renal = fup * UF * (GFR + PS) / (UF + PS)
+
+    algebraically identical to the Scotcher et al. 2016 formulation
+    ``CL = fup * GFR * (1 - F_reabs)``, ``F_reabs = F' * (1 - UF/GFR)``,
+    ``F' = PS / (PS + UF)``, reduced to a single tubular region.
+
+    Limits: ``PS -> 0`` recovers ``fup * GFR`` (impermeable; filtration only),
+    ``PS -> inf`` gives ``fup * UF`` (equilibrates with plasma, so the drug
+    leaves only as fast as water does). The previous model was the ``PS = 0``
+    limit applied to *every* drug, which over-predicted renal clearance for
+    permeable, high-fup compounds (e.g. caffeine, paracetamol) by ~an order of
+    magnitude — they are filtered freely but almost entirely reabsorbed.
+
+    NOT modelled: active secretion (so secretion-dominant drugs are still
+    under-predicted), pH/ionisation-dependent reabsorption, and peff
+    uncertainty — the returned cv tracks fup only.
 
     Args:
         fup: Fraction unbound in plasma.
-        profile: Molecular profile (reserved for future use, e.g. charge-based
-            reabsorption estimates).
+        peff: Effective permeability (x10^-4 cm/s).
 
     Returns:
         Renal clearance (L/h) as Distribution.
     """
-    cl_renal = _GFR_L_PER_H * fup.mean
+    # peff (x10^-4 cm/s) * TSA (cm^2) -> L/h
+    ps_l_per_h = peff.mean * 1e-4 * 3600.0 * _TUBULAR_SURFACE_AREA_CM2 / 1000.0
+    cl_renal = (
+        fup.mean
+        * _URINE_FLOW_L_PER_H
+        * (_GFR_L_PER_H + ps_l_per_h)
+        / (_URINE_FLOW_L_PER_H + ps_l_per_h)
+    )
     return Distribution(mean=cl_renal, cv=fup.cv)
 
 
@@ -768,6 +833,7 @@ def build_drug_on_graph(
         kp_overrides = _compute_all_kp(
             profile.logp, profile.pka, profile.compound_type,
             kp_method=kp_method, fup=adme.fup.mean,
+            pka_secondary=profile.pka_secondary,
         )
         if measured_kp:
             kp_overrides.update(measured_kp)
@@ -776,7 +842,7 @@ def build_drug_on_graph(
     particle_radius = _estimate_particle_radius(adme.solubility)
 
     # Estimate renal clearance
-    renal_cl = _estimate_renal_clearance(adme.fup, profile)
+    renal_cl = _estimate_renal_clearance(adme.fup, adme.peff)
 
     # Set administration node based on route
     if route == "oral":
@@ -804,6 +870,7 @@ def build_drug_on_graph(
         administration_node=admin_node,
         mw=profile.mw,
         pka=profile.pka,
+        pka_secondary=profile.pka_secondary,
         compound_type=profile.compound_type,
         fup=adme.fup,
         rbp=adme.rbp,

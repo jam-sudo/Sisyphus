@@ -357,7 +357,6 @@ alectinib,CCc1cc2c(cc1N1CCC(N3CCOCC3)CC1)C(C)(C)c1[nH]c3cc(C#N)ccc3c1C2=O,1,75.1
 clotiazepam,CCc1cc2c(s1)N(C)C(=O)CN=C2c1ccccc1Cl,1,2.2538,0.3529,1.00,False,False,0.9015,-0.0450,False
 pioglitazone,CCc1ccc(CCOc2ccc(CC3SC(=O)NC3=O)cc2)nc1,3,0.6397,-0.1941,1.01,False,False,0.3825,-0.4174,False
 Tofogliflozin,CCc1ccc(Cc2ccc3c(c2)[C@]2(OC3)O[C@H](CO)[C@@H](O)[C@H](O)[C@H]2O)cc1,7,1.9555,0.2913,1.63,False,False,0.9703,-0.0131,False
-Aficamten,CCc1nc(-c2ccc3c(c2)CC[C@H]3NC(=O)c2cnn(C)c2)no1,2,0.7532,-0.1231,1.11,False,False,4.9255,0.6924,False
 pyrimethamine,CCc1nc(N)nc(N)c1-c1ccc(Cl)cc1,1,0.2132,-0.6713,1.00,False,False,2.0515,0.3121,False
 Ziritaxestat,CCc1nc2c(C)cc(N3CCN(CC(=O)N4CC(O)C4)CC3)cn2c1N(C)c1nc(-c2ccc(F)cc2)c(C#N)s1,1,3.5714,0.5528,1.00,False,False,2.1645,0.3354,False
 Telacebec,CCc1nc2ccc(Cl)cn2c1C(=O)NCc1ccc(N2CCC(c3ccc(OC(F)(F)F)cc3)CC2)cc1,7,21.7141,1.3367,2.95,False,False,44.2810,1.6462,True
@@ -973,7 +972,6 @@ chlorzoxazone,O=c1[nH]c2cc(Cl)ccc2o1,2,4.5161,0.6548,1.70,False,False,0.5250,-0.
 pimozide,O=c1[nH]c2ccccc2n1C1CCN(CCCC(c2ccc(F)cc2)c2ccc(F)cc2)CC1,1,8.6843,0.9387,1.00,False,False,16.4288,1.2156,False
 domperidone,O=c1[nH]c2ccccc2n1CCCN1CCC(n2c(=O)[nH]c3cc(Cl)ccc32)CC1,2,27.4432,1.4384,1.54,False,False,24.1206,1.3824,False
 flibanserin,O=c1[nH]c2ccccc2n1CCN1CCN(c2cccc(C(F)(F)F)c2)CC1,1,12.4395,1.0948,1.00,False,False,11.2710,1.0520,False
-Gepotidacin,O=c1ccc2ncc(=O)n3c2n1C[C@H]3CN1CCC(NCc2cc3c(cn2)OCCC3)CC1,4,22.8474,1.3588,2.80,False,False,22.9870,1.3615,False
 didanosine,O=c1nc[nH]c2c1ncn2[C@H]1CC[C@@H](CO)O1,2,28.8772,1.4606,1.19,False,False,3.6688,0.5645,False
 dicoumarol,O=c1oc2ccccc2c(O)c1Cc1c(O)c2ccccc2oc1=O,2,0.0630,-1.2008,2.56,False,True,0.2027,-0.6932,False
 procyclidine,OC(CCN1CCCC1)(c1ccccc1)C1CCCCC1,1,1.2912,0.1110,1.00,False,False,1.4086,0.1488,False

@@ -135,6 +135,29 @@ class TestADME:
 
 
 class TestIVIVE:
+    def test_zwitterion_kp_uses_both_pka_values(self):
+        from sisyphus.core import TissueComposition
+        from sisyphus.predict.ivive import _compute_kp_rodgers_rowland
+
+        tissue = TissueComposition(fn=0.01, fp=0.02, fw=0.7, pH=7.0)
+        plasma = TissueComposition(fn=0.002, fp=0.02, fw=0.945, pH=7.4)
+        kp = _compute_kp_rodgers_rowland(1.0, 9.5, "zwitterion", tissue, plasma, 4.0)
+        changed_acid = _compute_kp_rodgers_rowland(1.0, 9.5, "zwitterion", tissue, plasma, 6.0)
+        assert kp != changed_acid
+        assert kp > 0
+
+    def test_zwitterion_secondary_pka_reaches_drug_and_point_copy(self):
+        import numpy as np
+
+        from sisyphus.predict.adme import predict_adme
+        from sisyphus.predict.ivive import build_drug_on_graph
+
+        profile = compute_profile("NCC(=O)O")
+        drug = build_drug_on_graph(profile, predict_adme(profile), dose_mg=10.0)
+        assert drug.pka_secondary == profile.pka_secondary
+        assert drug.realize_means().pka_secondary == profile.pka_secondary
+        assert drug.sample(np.random.default_rng(1)).pka_secondary == profile.pka_secondary
+
     def test_build_drug_on_graph(self):
         from sisyphus.predict.adme import predict_adme
         from sisyphus.predict.ivive import build_drug_on_graph
@@ -221,6 +244,48 @@ class TestIVIVE:
         adme = predict_adme(profile)
         drug = build_drug_on_graph(profile, adme, dose_mg=2.0)
         assert drug.renal_clearance.mean >= 0
+
+    def test_renal_reabsorption_limits(self):
+        """CL_renal must interpolate between filtration-only and urine-flow limits.
+
+        Scotcher et al. 2016 one-compartment reduction: PS -> 0 recovers
+        fup*GFR (impermeable), PS -> inf gives fup*UF (fully equilibrated),
+        and CL_renal decreases monotonically in between.
+        """
+        from sisyphus.predict.ivive import (
+            _GFR_L_PER_H,
+            _URINE_FLOW_L_PER_H,
+            _estimate_renal_clearance,
+        )
+
+        fup = Distribution(mean=0.7, cv=0.3)
+        cl = [
+            _estimate_renal_clearance(fup, Distribution(mean=p, cv=0.0)).mean
+            for p in (1e-9, 0.1, 1.0, 10.0, 1e9)
+        ]
+        assert cl[0] == pytest.approx(fup.mean * _GFR_L_PER_H, rel=1e-6)
+        assert cl[-1] == pytest.approx(fup.mean * _URINE_FLOW_L_PER_H, rel=1e-6)
+        assert all(a > b for a, b in zip(cl, cl[1:])), f"not monotone: {cl}"
+
+    def test_renal_reabsorption_half_point(self):
+        """peff at the Scotcher F'=0.5 anchor must halve the equilibrium gap.
+
+        At PS == urine flow the model sits exactly midway (in the F' sense)
+        between the two limits, which pins _TUBULAR_SURFACE_AREA_CM2.
+        """
+        from sisyphus.predict.ivive import (
+            _GFR_L_PER_H,
+            _URINE_FLOW_L_PER_H,
+            _estimate_renal_clearance,
+        )
+
+        fup = Distribution(mean=1.0, cv=0.0)
+        # Caco-2 Papp 14.8e-6 cm/s * 10**1.29 in-vivo offset -> peff x10^-4 cm/s
+        peff_half = 14.8e-6 * 10**1.29 * 1e4
+        cl = _estimate_renal_clearance(fup, Distribution(mean=peff_half, cv=0.0)).mean
+        uf = _URINE_FLOW_L_PER_H
+        expected = uf * (_GFR_L_PER_H + uf) / (2 * uf)
+        assert cl == pytest.approx(expected, rel=0.01)
 
     def test_compound_type_preserved(self):
         """compound_type should pass through from MolecularProfile."""

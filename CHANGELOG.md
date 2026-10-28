@@ -12,6 +12,14 @@ track `pyproject.toml`.
 
 ## [Unreleased]
 
+### Canonical development benchmark regeneration (2026-10-28)
+
+- Rebuilt the CL/F corpus with the prospective InChIKey-14 filter, retrained
+  CL/F and Vd/F, and regenerated the four-track cache after renal reabsorption
+  and zwitterion Kp fixes. The repeatedly used N=73 Meta AAFE is 2.8052
+  (conditional bootstrap 95% CI 2.2891–3.4860); independent accuracy remains
+  unmeasured. The canonical run and per-change attribution are in the experiment log.
+
 ### Console preset identity correction (2026-09-25)
 
 - Corrected a mislabeled midazolam preset that encoded a different molecule,
@@ -39,7 +47,7 @@ track `pyproject.toml`.
   replicate-based label-noise estimate. The tested methods remain negative;
   neither an intrinsic structure-only Cmax ceiling nor F as the dominant human
   error has been established.
-- The current source-screened N=73 Meta AAFE is 2.8300 on repeatedly used
+- At that date, the source-screened N=73 Meta AAFE was 2.8300 on repeatedly used
   development data. Independent external accuracy is still unmeasured.
 
 ### Public-only VDss training source pinned (2026-09-23)

@@ -1,10 +1,11 @@
 """Patient covariates for renal and whole-body engine-prior individualization.
 
-Measured creatinine clearance (CrCl) scales
-the drug's renal (glomerular-filtration) clearance: the engine's reference renal
-model is ``CL_renal = GFR*fup`` with GFR = 7.5 L/h (~125 mL/min), so an
-individual's renal CL is scaled by ``CrCl / 125``. Weight and age individualize
-the body graph via ``sbi.physiology_generator``. See the design spec
+Measured creatinine clearance (CrCl) scales the drug's renal clearance by
+``CrCl / 125`` (reference GFR = 7.5 L/h ~= 125 mL/min). The engine's reference
+renal model includes passive tubular reabsorption (predict/ivive.py), so linear
+CrCl scaling is exact only when filtration dominates; it over-scales highly
+reabsorbed drugs, whose renal clearance is then small. Weight and age also
+individualize the body graph via ``sbi.physiology_generator``. See the design spec
 docs/_internal/specs/2026-06-11-mipd-crcl-renal-individualization-design.md.
 """
 from __future__ import annotations
@@ -191,7 +192,8 @@ class Covariates:
         if self.crcl_ml_min is not None and not (5.0 <= self.crcl_ml_min <= 200.0):
             w.append(
                 f"crcl:extreme:{self.crcl_ml_min}: the engine renal model is "
-                "glomerular-filtration-only and least reliable outside [5, 200] mL/min"
+                "filtration + passive reabsorption only (no active secretion) and least "
+                "reliable outside [5, 200] mL/min"
             )
         if self.body_weight_kg is not None and not (2.0 <= self.body_weight_kg <= 250.0):
             w.append(
