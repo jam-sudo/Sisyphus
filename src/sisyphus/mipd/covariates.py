@@ -1,10 +1,10 @@
 """Patient covariates that deterministically individualize the engine prior.
 
-v1: renal function only — a measured creatinine clearance (CrCl). CrCl scales
+Measured creatinine clearance (CrCl) scales
 the drug's renal (glomerular-filtration) clearance: the engine's reference renal
 model is ``CL_renal = GFR*fup`` with GFR = 7.5 L/h (~125 mL/min), so an
-individual's renal CL is scaled by ``CrCl / 125``. Weight/age covariates (via
-sbi.physiology_generator) are a documented future extension — see the design spec
+individual's renal CL is scaled by ``CrCl / 125``. Weight and age individualize
+the body graph via ``sbi.physiology_generator``. See the design spec
 docs/_internal/specs/2026-06-11-mipd-crcl-renal-individualization-design.md.
 """
 from __future__ import annotations
@@ -90,6 +90,8 @@ class Covariates:
     Attributes:
         crcl_ml_min: measured creatinine clearance (mL/min). None -> no renal
             individualization (renal_factor 1.0).
+        body_weight_kg: patient body weight for whole-body physiology.
+        age_years: patient age for enzyme ontogeny and organ physiology.
     """
 
     crcl_ml_min: float | None = None

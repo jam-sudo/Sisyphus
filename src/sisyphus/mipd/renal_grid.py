@@ -55,6 +55,8 @@ class RenalCLGrid:
     conc: np.ndarray
     cmax: np.ndarray
     auc: np.ndarray
+    is_steady_state: bool = False
+    t_half_h: float | None = None
 
     def conc_at(self, r: np.ndarray, t: float) -> np.ndarray:
         """Model venous concentration at time ``t`` for each renal-scale in ``r``.
@@ -128,11 +130,14 @@ def build_renal_cl_grid(
 
     from sisyphus.core import Distribution
     from sisyphus.engine.compiler import ResolvedParams
+    from sisyphus.engine.solver import solve
     from sisyphus.mipd.grid import (
         _build_grid_engine,
         _fill_nan_log_s,
         _nearest_finite_backfill,
     )
+    from sisyphus.pk.endpoints import compute_endpoints
+    from sisyphus.regimen.profile import compute_steady_state_metrics
     from sisyphus.regimen.solver import solve_regimen
 
     compiled, realized_graph, drug, obs_node = _build_grid_engine(
@@ -150,7 +155,10 @@ def build_renal_cl_grid(
     conc_rows: list[np.ndarray] = []
     cmaxs: list[float] = []
     aucs: list[float] = []
-    for r in r_grid:
+    is_ss = False
+    t_half_h: float | None = None
+    i1 = int(np.argmin(np.abs(np.log(r_grid))))
+    for gi, r in enumerate(r_grid):
         drug_r = dataclasses.replace(
             drug,
             renal_clearance=Distribution(
@@ -158,6 +166,14 @@ def build_renal_cl_grid(
             ),
         )
         params_r = ResolvedParams(realized_graph, drug_r.realize_means())
+        if gi == i1:
+            y0 = np.zeros(compiled.n_states)
+            y0[compiled.state_index[drug.administration_node]] = regimen.events[0].dose_mg
+            single = solve(compiled, params_r, y0, t_span=(0, 24), t_min_h=0.0)
+            if single.solver_success:
+                endpoint = compute_endpoints(single, observation_node=obs_node, t_min_h=0.0)
+                if endpoint.t_half is not None:
+                    t_half_h = float(endpoint.t_half.mean)
         sim = solve_regimen(compiled, params_r, regimen, t_total_h=t_total, dt_output=dt_output)
         if not sim.solver_success:
             conc_rows.append(np.full(t_grid.size, np.nan))
@@ -174,6 +190,12 @@ def build_renal_cl_grid(
         else:
             cmaxs.append(np.nan)
             aucs.append(np.nan)
+        if gi == i1:
+            try:
+                metrics = compute_steady_state_metrics(sim, regimen, node=obs_node)
+                is_ss = bool(metrics.is_steady_state)
+            except ValueError:
+                is_ss = False
 
     cmaxs_arr = np.array(cmaxs)
     if not np.isfinite(cmaxs_arr).any():
@@ -183,7 +205,12 @@ def build_renal_cl_grid(
     cmax = _fill_nan_log_s(cmaxs_arr, r_grid)
     auc = _fill_nan_log_s(np.array(aucs), r_grid)
     conc = _nearest_finite_backfill(np.array(conc_rows))
-    return RenalCLGrid(r_grid=r_grid, t_grid=t_grid, conc=conc, cmax=cmax, auc=auc)
+    if t_half_h is not None:
+        is_ss = is_ss and t_total >= 5.0 * t_half_h
+    return RenalCLGrid(
+        r_grid=r_grid, t_grid=t_grid, conc=conc, cmax=cmax, auc=auc,
+        is_steady_state=is_ss, t_half_h=t_half_h,
+    )
 
 
 def sir_posterior_renal(

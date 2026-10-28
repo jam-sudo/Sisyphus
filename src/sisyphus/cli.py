@@ -5,6 +5,7 @@ Usage::
     sisyphus predict --smiles "CC(=O)Oc1ccccc1C(=O)O" --dose 500
     sisyphus simulate --smiles "CN(C)C(=N)NC(=N)N" --dose 500 --interval 12 --doses 14
     sisyphus tdm --help
+    sisyphus mipd --smiles "CCO" --dose 100 --measured-f 0.5
     sisyphus benchmark --development-set
 """
 
@@ -31,6 +32,15 @@ def main() -> None:
         help="Production Cmax is validated for oral dosing only",
     )
     pred_parser.add_argument("--verbose", "-v", action="store_true")
+
+    mipd_parser = subparsers.add_parser("mipd", help="Update oral PK with measured data")
+    mipd_parser.add_argument("--smiles", required=True)
+    mipd_parser.add_argument("--dose", required=True, type=float, help="Dose in mg")
+    mipd_parser.add_argument("--measured-f", type=float, help="Measured oral bioavailability")
+    mipd_parser.add_argument("--measured-cmax", type=float, help="Measured Cmax in mg/L")
+    mipd_parser.add_argument("--measured-auc", type=float, help="Measured AUC in mg*h/L")
+    mipd_parser.add_argument("--crcl", type=float, help="Creatinine clearance in mL/min")
+    mipd_parser.add_argument("--n-samples", type=int, default=20000)
 
     # simulate command (multi-dose)
     sim_parser = subparsers.add_parser(
@@ -163,6 +173,8 @@ def main() -> None:
 
     if args.command == "predict":
         _run_predict(args)
+    elif args.command == "mipd":
+        _run_mipd(args)
     elif args.command == "simulate":
         _run_simulate(args)
     elif args.command == "tdm":
@@ -176,6 +188,35 @@ def main() -> None:
     else:
         parser.print_help()
         sys.exit(1)
+
+
+def _run_mipd(args: argparse.Namespace) -> None:
+    """Print the oral engine posterior from measured PK observations."""
+    from sisyphus.mipd import (
+        Covariates,
+        MeasuredAUC,
+        MeasuredCmax,
+        MeasuredF,
+        predict_posterior,
+    )
+
+    observations = []
+    if args.measured_f is not None:
+        observations.append(MeasuredF(args.measured_f))
+    if args.measured_cmax is not None:
+        observations.append(MeasuredCmax(args.measured_cmax))
+    if args.measured_auc is not None:
+        observations.append(MeasuredAUC(args.measured_auc))
+    post = predict_posterior(
+        args.smiles, args.dose, observations,
+        covariates=Covariates(crcl_ml_min=args.crcl) if args.crcl is not None else None,
+        n_samples=args.n_samples,
+    )
+    print(f"Engine posterior Cmax: {post.cmax.point:.4f} mg/L")
+    print(f"Engine posterior AUC: {post.auc.point:.4f} mg*h/L")
+    print(f"Posterior F: {post.f.point:.4f}")
+    for warning in post.warnings:
+        print(f"Warning: {warning}", file=sys.stderr)
 
 
 def _run_predict(args: argparse.Namespace) -> None:

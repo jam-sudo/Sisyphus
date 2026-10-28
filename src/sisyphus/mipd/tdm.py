@@ -1,4 +1,4 @@
-"""Public IV steady-state TDM: SMILES + IV regimen + trough -> renal-CL posterior.
+"""Steady-state TDM for IV and oral regimens.
 
 ``predict_tdm`` conditions the engine-as-prior on a steady-state IV trough to
 individualize renal clearance. The latent is a free renal-CL scale (prior centered
@@ -31,11 +31,10 @@ def predict_tdm(
     seed: int = 0,
     kp_method: str = "rodgers_rowland",
 ) -> PosteriorPK:
-    """Posterior PK for an IV ``regimen`` given steady-state trough ``observations``.
+    """Posterior PK for an IV or oral regimen and measured observations.
 
     Args:
-        regimen: an IV ``DosingRegimen`` (e.g. ``DosingRegimen.iv_infusion(...)``).
-            Every event must target the IV node; an oral regimen is rejected.
+        regimen: a uniform IV or oral ``DosingRegimen``.
         observations: ``MeasuredConc`` troughs at times within the regimen horizon.
         covariates: v1 supports a measured CrCl, which sets the renal-CL prior
             center (``CrCl/125``); the trough updates the latent around it.
@@ -81,6 +80,11 @@ def predict_tdm(
         n_samples=n_samples,
         rng=rng,
     )
+    if not grid.is_steady_state:
+        warnings_list.append(
+            "observed regimen has not reached steady state at the grid horizon; "
+            "the SS trough/posterior may be biased"
+        )
     return dataclasses.replace(post, warnings=tuple(warnings_list))
 
 
@@ -108,6 +112,7 @@ def _predict_tdm_oral(
     """
     from sisyphus.mipd._regimen import _distinct_phases, _regimen_interval_h
     from sisyphus.mipd.clgrid import CLGridForward, CLPrior, FPrior, sir_posterior_2d
+    from sisyphus.mipd.core import MeasuredF
     from sisyphus.mipd.oral_grid import build_oral_cl_grid
 
     renal_factor = covariates.renal_factor() if covariates is not None else 1.0
@@ -120,7 +125,7 @@ def _predict_tdm_oral(
         )
     rng = np.random.default_rng(seed)
     tau = _regimen_interval_h(regimen)
-    has_f = any(not hasattr(o, "t") for o in observations)
+    has_f = any(isinstance(o, MeasuredF) for o in observations)
     free_both = has_f or _distinct_phases(observations, tau)
 
     if free_both:
