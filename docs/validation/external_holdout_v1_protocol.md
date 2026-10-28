@@ -284,6 +284,14 @@ Original-source licensing and Cmax values would need separate verification.
 PK-DB therefore cannot currently supply the primary N=120 or N=260 cohort by
 itself.
 
+A count-only re-screen on 2026-09-25 followed the pkdb 0.11.1 release
+(2026-09-24), which moves queries and exports to `/api/v2/` on
+`alpha.pk-db.com`. Production `pk-db.com` still reported version 0.9.8, 803
+studies, and zero rows from `/outputs/`, `/pkdata/outputs/`, and
+`/pkdata/timecourses/`. The alpha host accepted TLS connections but returned
+no HTTP response within 90 s, including for `/api/v2/capabilities`. The
+conclusion above is unchanged; v2 availability remains untested.
+
 The [Open Systems Pharmacology observed-data workbook](https://github.com/Open-Systems-Pharmacology/Database-for-observed-data/blob/master/ObsDataPK_OSP.xlsx)
 (retrieved 2026-09-23; XLSX SHA256
 `e77e3c99c059f97ea45785508f7b0cbb52382306b8257737c9cd1ac83d83e86b`)
