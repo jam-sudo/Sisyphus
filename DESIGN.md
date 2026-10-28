@@ -54,12 +54,12 @@ Sisyphus는 인체의 약물 거동을 시뮬레이션하는 computational 플�
 ```
 혈류:   heart → artery → [organs] → vein → heart
 림프:   [tissues] → [lymph_nodes] → thoracic_duct → blood
-담즙:   liver → bile_duct → duodenum → (enterohepatic recirculation)
+담즙:   liver → terminal sink (v1; enterohepatic recirculation deferred)
 ```
 
 이것들은 **같은 node set (organs/tissues) 위에 다른 edge types이 overlay된 multi-graph**다.
 
-**적용 범위:** 이 graph 모델은 연속적 물질 이동(blood flow, diffusion, active transport, secretion)에 적합하다. 이산적 사건(neural firing, immune cell migration)은 ODE로 자연스럽게 표현되지 않으므로 별도 메커니즘이 필요하다. v1에서는 혈류 + GI transit + 담즙 순환까지만 다룬다.
+**적용 범위:** 이 graph 모델은 연속적 물질 이동(blood flow, diffusion, active transport, secretion)에 적합하다. 이산적 사건(neural firing, immune cell migration)은 ODE로 자연스럽게 표현되지 않으므로 별도 메커니즘이 필요하다. v1에서는 혈류와 GI transit을 다루며 담즙 배설은 terminal sink로 처리한다. Enterohepatic recirculation은 구현 및 재흡수율 데이터가 마련될 때까지 제외한다.
 
 기존 PBPK 도구들(PK-Sim, Simcyp, Omega)은 ODE state vector에 organ을 하드코딩한다. 새 compartment를 추가하려면 state vector를 확장하고, ODE indexing을 수정하고, flow fraction을 재계산해야 한다.
 
@@ -345,6 +345,7 @@ edges:
 overrides:
   edges:
     - { source: arterial_blood, target: rest, flow_fraction: 0.064 }
+    - { source: rest, target: venous_blood, flow_fraction: 0.064 }
 ```
 
 Builder는 base YAML + overlay YAML을 merge한 후 flow conservation을 검증한다.

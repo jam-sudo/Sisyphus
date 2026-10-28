@@ -678,10 +678,11 @@ class ActiveTransportFluxSpec(FluxSpec):
         C_µM = (A / V) * 1000 / MW        # mg/L → µM
         rate = abundance × Jmax × C_µM / (Km + C_µM)
 
-    Direction is source → target (edge direction). Intended use cases:
+    Mass moves source → target; direction selects the transporter-bearing node:
+    target for uptake, source for efflux. Intended use cases:
     - Gut efflux (P-gp, BCRP at gut_wall → lumen): reduces Fg.
     - Renal secretion (OAT/OCT at proximal tubule → urine): increases CL_renal.
-    - BBB efflux (P-gp at brain vascular → brain tissue).
+    - BBB efflux (P-gp at brain tissue → brain vascular).
 
     **Hepatic OATP uptake is NOT handled here anymore.** Since the
     2026-04-20 ECM migration, hepatic active uptake is folded into
@@ -692,8 +693,9 @@ class ActiveTransportFluxSpec(FluxSpec):
 
     Identity-blind: engine matches tags, never inspects names.
 
-    Unit conversion note: Km is in µM, concentration is computed in mg/L.
-    MW is needed to convert mg/L → µM: C_µM = C_mg_L × 1000 / MW.
+    Unit convention: Km is µM and C_µM = C_mg_L × 1000 / MW.
+    Jmax must be supplied on a basis such that abundance × Jmax × ivive_scaling
+    yields mg/h; no reference YAML currently uses this edge type.
     """
 
     def __init__(
@@ -762,9 +764,7 @@ class ActiveTransportFluxSpec(FluxSpec):
         if total_rate <= 0:
             return
 
-        # Convert from µM·volume/time units back to mg/time
-        # rate is in arbitrary units scaled by abundance, jmax, and concentration
-        # The IVIVE scaling factor handles unit conversion
+        # IVIVE scaling closes the supplied Jmax basis to mg/h.
         ivive = params.node_param(transporter_node, "ivive_scaling")
         mass_rate = total_rate * ivive
 
