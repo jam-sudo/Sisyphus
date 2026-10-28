@@ -267,6 +267,8 @@ def _run_engine_track(
             substrate_name = find_oatp1b1_substrate_name(profile.smiles) or "unknown"
             warnings_list.append(f"oatp1b1:auto_ecm:{substrate_name}")
         phenotype_applied = context.phenotype_report.applied
+        if context.fm_source:
+            warnings_list.append(f"fm:{context.fm_source}")
         phenotype_unsupported = context.phenotype_report.unsupported
         if phenotype_applied and drug.observation_species == "active":
             warnings_list.append(
@@ -803,11 +805,6 @@ def predict(
             warnings_list.append("drugbank:logp")
     except Exception:
         pass  # DrugBank tagging is advisory, never blocks pipeline
-    if not has_cyp_fm_annotation and phenotypes and any(
-        tag.startswith("CYP") for tag in phenotypes
-    ):
-        warnings_list.append("fm:compound-type default; phenotype effect is class-generic")
-
     (engine_pk, graph, compiled, drug, sim_result, observation_node,
      phenotype_applied, phenotype_unsupported, f_correction_k,
      engine_f_value, parameter_cmax_90ci), track_warnings = _run_engine_track(
@@ -816,6 +813,11 @@ def predict(
         infusion_duration_min,
     )
     warnings_list.extend(track_warnings)
+    if (not has_cyp_fm_annotation and phenotypes
+            and any(tag.startswith("CYP") for tag in phenotypes)
+            and "fm:validation:pgx_fm_registry" not in track_warnings):
+        warnings_list.append("fm:compound-type default; phenotype effect is class-generic")
+
     ml_pk, track_warnings = _run_ml_track(smiles, dose_mg, route, strict)
     warnings_list.extend(track_warnings)
     clf_pk, track_warnings = _run_clf_track(
