@@ -6,7 +6,7 @@ from collections.abc import Sequence
 
 import numpy as np
 
-from sisyphus.regimen.types import DosingRegimen
+from sisyphus.regimen.types import DEFAULT_ORAL_NODE, DosingRegimen
 from sisyphus.sbi.multi_drug import N_DRUG_FEATURES
 
 # Source: scripts/run_tdm_benchmark.py evaluates up to three observation times.
@@ -35,8 +35,9 @@ def pack_observations(
         raise ValueError(f"Expected {N_DRUG_FEATURES} drug features")
     events = regimen.events
     dose = events[0].dose_mg
-    if events[0].time_h != 0 or dose <= 0 or any(
-        event.dose_mg != dose or event.duration_h != 0 for event in events
+    if len(events) > MAX_DOSE_COUNT or events[0].time_h != 0 or dose <= 0 or any(
+        event.dose_mg != dose or event.duration_h != 0 or event.node != DEFAULT_ORAL_NODE
+        for event in events
     ):
         raise ValueError("Time-aware SBI requires equal bolus doses starting at t=0")
     interval = events[1].time_h if len(events) > 1 else 0.0
@@ -50,6 +51,9 @@ def pack_observations(
         if (time_h < 0 or not np.isfinite(time_h)
                 or concentration <= 0 or not np.isfinite(concentration)):
             raise ValueError("Observation time and concentration must be finite and positive")
+        if not any(np.isclose(time_h - regimen.last_dose_time_h, offset)
+                   for offset in OBSERVATION_OFFSETS_H):
+            raise ValueError("Observation time is outside the time-aware training grid")
         obs[i] = (time_h / HOURS_PER_DAY_H, np.log10(concentration), 1.0)
     return np.concatenate([
         obs.ravel(),

@@ -28,6 +28,10 @@ def test_pack_observations_rejects_invalid_observations():
         pack_observations([(1.0, 0.0)], regimen, np.ones(12))
     with pytest.raises(ValueError, match="1–3"):
         pack_observations([], regimen, np.ones(12))
+    with pytest.raises(ValueError, match="training grid"):
+        pack_observations([(1.5, 0.02)], regimen, np.ones(12))
+    with pytest.raises(ValueError, match="equal bolus"):
+        pack_observations([(1.0, 0.02)], DosingRegimen.single_iv(30.0), np.ones(12))
 
 
 def test_train_script_scales_only_multi_observation_drug_features(tmp_path, monkeypatch):
