@@ -5,6 +5,7 @@ Usage::
     sisyphus predict --smiles "CC(=O)Oc1ccccc1C(=O)O" --dose 500
     sisyphus simulate --smiles "CN(C)C(=N)NC(=N)N" --dose 500 --interval 12 --doses 14
     sisyphus tdm --help
+    sisyphus mipd --smiles "CCO" --dose 100 --measured-f 0.5
     sisyphus benchmark --development-set
 """
 
@@ -31,6 +32,35 @@ def main() -> None:
         help="Production Cmax is validated for oral dosing only",
     )
     pred_parser.add_argument("--verbose", "-v", action="store_true")
+
+    mipd_parser = subparsers.add_parser("mipd", help="Update oral PK with measured data")
+    mipd_parser.add_argument("--smiles", required=True)
+    mipd_parser.add_argument("--dose", required=True, type=float, help="Dose in mg")
+    mipd_parser.add_argument("--measured-f", type=float, help="Measured oral bioavailability")
+    mipd_parser.add_argument("--measured-cmax", type=float, help="Measured Cmax in mg/L")
+    mipd_parser.add_argument("--measured-auc", type=float, help="Measured AUC in mg*h/L")
+    mipd_parser.add_argument("--obs", nargs="*", default=[], help="Time_h:concentration_mg_L")
+    mipd_parser.add_argument("--route", choices=("oral", "iv"), default="oral")
+    mipd_parser.add_argument("--interval", type=float, help="Repeated-dose interval in hours")
+    mipd_parser.add_argument("--doses", type=int, help="Number of administered doses")
+    mipd_parser.add_argument("--duration", type=float, default=1.0,
+                             help="IV infusion duration in hours")
+    mipd_parser.add_argument("--crcl", type=float, help="Creatinine clearance in mL/min")
+    mipd_parser.add_argument("--crcl-cv", type=float, default=0.0,
+                             help="Measurement CV for CrCl (default: 0)")
+    mipd_parser.add_argument("--body-weight", type=float, help="Body weight in kg")
+    mipd_parser.add_argument("--age-years", type=float, help="Postnatal age in years")
+    mipd_parser.add_argument("--pma-weeks", type=float, help="Postmenstrual age in weeks")
+    mipd_parser.add_argument("--structural-latents", action="store_true",
+                             help="Infer CL, V, and oral absorption rate")
+    mipd_parser.add_argument("--target-trough", help="Trough window low:high in mg/L")
+    mipd_parser.add_argument("--target-peak", help="Cmax window low:high in mg/L")
+    mipd_parser.add_argument("--target-auc24", help="AUC24 window low:high in mg*h/L")
+    mipd_parser.add_argument("--candidate-doses", type=float, nargs="+")
+    mipd_parser.add_argument("--candidate-intervals", type=float, nargs="+")
+    mipd_parser.add_argument("--loading-target", type=float,
+                             help="Loading-dose target concentration in mg/L")
+    mipd_parser.add_argument("--n-samples", type=int, default=20000)
 
     # simulate command (multi-dose)
     sim_parser = subparsers.add_parser(
@@ -186,6 +216,8 @@ def main() -> None:
 
     if args.command == "predict":
         _run_predict(args)
+    elif args.command == "mipd":
+        _run_mipd(args)
     elif args.command == "simulate":
         _run_simulate(args)
     elif args.command == "tdm":
@@ -201,6 +233,111 @@ def main() -> None:
     else:
         parser.print_help()
         sys.exit(1)
+
+
+def _run_mipd(args: argparse.Namespace) -> None:
+    """Print the MIPD posterior from measured PK observations."""
+    from sisyphus.mipd import (
+        Constraint,
+        Covariates,
+        DoseTarget,
+        MeasuredAUC,
+        MeasuredCmax,
+        MeasuredConc,
+        MeasuredF,
+        predict_posterior,
+        predict_tdm,
+        recommend_dose,
+    )
+    from sisyphus.regimen.types import DosingRegimen
+
+    observations = []
+    if args.measured_f is not None:
+        observations.append(MeasuredF(args.measured_f))
+    if args.measured_cmax is not None:
+        observations.append(MeasuredCmax(args.measured_cmax))
+    if args.measured_auc is not None:
+        observations.append(MeasuredAUC(args.measured_auc))
+    for value in args.obs:
+        try:
+            t, c = map(float, value.split(":"))
+        except ValueError as exc:
+            raise ValueError(f"observation must be time_h:concentration_mg_L: {value!r}") from exc
+        observations.append(MeasuredConc(value=c, t=t))
+    covariates = (
+        Covariates(
+            crcl_ml_min=args.crcl, crcl_cv=args.crcl_cv,
+            body_weight_kg=args.body_weight, age_years=args.age_years,
+            pma_weeks=args.pma_weeks,
+        ) if any(
+            x is not None for x in (args.crcl, args.body_weight, args.age_years, args.pma_weeks)
+        )
+        or args.crcl_cv else None
+    )
+    target_specs = (
+        ("trough", args.target_trough),
+        ("cmax", args.target_peak),
+        ("auc24", args.target_auc24),
+    )
+    if args.route == "iv" or args.interval is not None or args.doses is not None:
+        if args.interval is None or args.doses is None:
+            raise ValueError("repeated-dose MIPD requires --interval and --doses")
+        if args.route == "iv":
+            regimen = DosingRegimen.iv_infusion(
+                dose_mg=args.dose, duration_h=args.duration,
+                interval_h=args.interval, n_doses=args.doses,
+            )
+        else:
+            regimen = DosingRegimen.oral_repeated(
+                dose_mg=args.dose, interval_h=args.interval, n_doses=args.doses,
+            )
+        if any(value is not None for _, value in target_specs):
+            constraints = []
+            for quantity, value in target_specs:
+                if value is None:
+                    continue
+                try:
+                    low, high = map(float, value.split(":"))
+                except ValueError as exc:
+                    raise ValueError(f"{quantity} target must be low:high") from exc
+                constraints.append(Constraint(quantity, low=low, high=high))
+            rec = recommend_dose(
+                args.smiles, regimen, observations, DoseTarget(tuple(constraints)),
+                covariates=covariates,
+                candidate_doses_mg=tuple(args.candidate_doses or (args.dose,)),
+                candidate_intervals=tuple(args.candidate_intervals or (args.interval,)),
+                loading_target_mg_l=args.loading_target, n_samples=args.n_samples,
+            )
+            print(f"Recommended maintenance: {rec.dose_mg:.4f} mg every {rec.interval_h:g} h")
+            print(f"Target attainment: {rec.attainment_prob:.3f}")
+            if rec.loading_dose is not None:
+                lo, hi = rec.loading_dose.ci90
+                print(f"Loading dose: {rec.loading_dose.point:.4f} mg (90% CI {lo:.4f}-{hi:.4f})")
+            for warning in rec.warnings:
+                print(f"Warning: {warning}", file=sys.stderr)
+            return
+        post = predict_tdm(
+            args.smiles, regimen, observations, covariates=covariates,
+            n_samples=args.n_samples, structural_latents=args.structural_latents,
+        )
+    else:
+        if any(value is not None for _, value in target_specs) or args.loading_target is not None:
+            raise ValueError("dose targets require --interval and --doses")
+        if args.structural_latents:
+            raise ValueError("structural latents require --interval and --doses")
+        post = predict_posterior(
+            args.smiles, args.dose, observations,
+            covariates=covariates, n_samples=args.n_samples,
+        )
+    print(f"Engine posterior Cmax: {post.cmax.point:.4f} mg/L")
+    print(f"Engine posterior AUC: {post.auc.point:.4f} mg*h/L")
+    print(f"Posterior F: {post.f.point:.4f}")
+    if post.volume_l is not None:
+        print(f"Posterior central V: {post.volume_l.point:.4f} L")
+    if post.absorption_rate_per_h is not None:
+        print(f"Posterior ka: {post.absorption_rate_per_h.point:.4f} 1/h")
+    for warning in post.warnings:
+        print(f"Warning: {warning}", file=sys.stderr)
 
 
 def _run_predict(args: argparse.Namespace) -> None:

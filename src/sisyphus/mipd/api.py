@@ -52,6 +52,7 @@ def predict_posterior(
     seed: int = 0,
     cl_latent: bool = False,
     covariates: Covariates | None = None,
+    phenotypes: dict[str, str] | None = None,
     n_grid: int = 13,
     **predict_kwargs,
 ) -> PosteriorPK:
@@ -83,6 +84,9 @@ def predict_posterior(
             individualize the engine's renal clearance (CrCl/125). Routes through a
             single renal-scaled engine solve when no MeasuredConc is present, so the
             metabolic clint latent stays fixed.
+        phenotypes: CPIC phenotype assignments such as ``{"CYP2D6": "PM"}``.
+            The engine prior is conditioned on these via hepatic enzyme or
+            transporter abundance before measured observations update it.
         n_grid: clint-scale grid resolution for the CL-grid path.
         seed: RNG seed for reproducible SIR.
         predict_kwargs: forwarded to ``pipeline.predict.predict`` (e.g. kp_method).
@@ -96,14 +100,22 @@ def predict_posterior(
             f"predict_posterior supports oral route only — the latent is oral "
             f"bioavailability F (IV has F≡1). Got route={route!r}."
         )
+    if phenotypes:
+        from sisyphus.predict.phenotype import parse_phenotype_spec
+
+        phenotypes = parse_phenotype_spec(
+            ",".join(f"{tag}:{code}" for tag, code in phenotypes.items())
+        )
 
     observations = list(observations)
+    if covariates is not None and covariates.crcl_cv > 0:
+        raise ValueError("CrCl measurement CV requires repeated-dose structural TDM")
     needs_grid = cl_latent or any(isinstance(o, MeasuredConc) for o in observations)
     renal_factor = covariates.renal_factor() if covariates is not None else 1.0
     has_phys = covariates.has_physiology() if covariates is not None else False
     body_weight_kg = covariates.body_weight_kg if covariates is not None else None
     age_years = covariates.age_years if covariates is not None else None
-    individualized = renal_factor != 1.0 or has_phys
+    individualized = renal_factor != 1.0 or has_phys or bool(phenotypes)
     rng = np.random.default_rng(seed)
 
     warnings_list: list[str] = list(covariates.warnings()) if covariates is not None else []
@@ -114,6 +126,7 @@ def predict_posterior(
     ap = predict(
         smiles, dose_mg, route=route,
         compute_f_engine=(not needs_grid and not individualized),
+        phenotypes=phenotypes,
         **predict_kwargs,
     )
     if ap.engine_pk is None or ap.engine_pk.cmax is None:
@@ -134,6 +147,7 @@ def predict_posterior(
             renal_factor=renal_factor,
             body_weight_kg=body_weight_kg,
             age_years=age_years,
+            phenotypes=phenotypes,
         )
         i1 = int(np.argmin(np.abs(np.log(grid.s_grid))))
         f_engine0 = float(min(max(grid.f_engine[i1], 1e-4), 1.0))
@@ -155,6 +169,7 @@ def predict_posterior(
             renal_factor=renal_factor,
             body_weight_kg=body_weight_kg,
             age_years=age_years,
+            phenotypes=phenotypes,
         )
         cmax0 = float(g1.cmax[0])
         auc0 = float(g1.auc[0])

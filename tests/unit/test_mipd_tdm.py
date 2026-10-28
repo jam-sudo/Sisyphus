@@ -31,6 +31,17 @@ def test_predict_tdm_output_is_honest_for_iv():
     assert post.cmax.point > 0
 
 
+def test_short_iv_regimen_warns_before_steady_state():
+    reg = DosingRegimen.iv_infusion(
+        dose_mg=50.0, duration_h=0.5, interval_h=24.0, n_doses=2
+    )
+    post = predict_tdm(
+        ATENOLOL, reg, [MeasuredConc(value=1.0, t=48.0)],
+        covariates=Covariates(crcl_ml_min=12.5), n_grid=3,
+    )
+    assert any("not reached steady state" in w for w in post.warnings)
+
+
 def test_predict_tdm_low_trough_means_faster_clearance_lower_exposure():
     # Reference the engine's OWN r=1 predicted trough at t=39 (computed in the same
     # numerics stack), then condition on a measured trough clearly BELOW it. This is

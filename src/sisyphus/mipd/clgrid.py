@@ -52,6 +52,7 @@ class CLGrid:
     cmax: np.ndarray
     auc: np.ndarray
     f_engine: np.ndarray
+    renal_cl_l_h: float | None = None
 
     def conc_at(self, s: np.ndarray, t: float) -> np.ndarray:
         """Model venous concentration at time ``t`` for each clint-scale in ``s``.
