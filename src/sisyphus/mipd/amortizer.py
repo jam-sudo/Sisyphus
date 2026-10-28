@@ -11,9 +11,10 @@ as ``sir_posterior_2d``. Model weights are supplied explicitly after validation.
 """
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Protocol
+from typing import Any, Protocol
 
 import numpy as np
 
@@ -25,6 +26,7 @@ from sisyphus.mipd.core import (
     MeasuredAUC,
     MeasuredCmax,
     MeasuredF,
+    Observation,
     Posterior,
     PosteriorPK,
     sir_posterior,
@@ -78,7 +80,7 @@ class NeuralAmortizer:
     amortization replaces per-query latent likelihood weighting, not grid building.
     """
 
-    def __init__(self, model) -> None:
+    def __init__(self, model: Any) -> None:
         self.model = model
 
     @classmethod
@@ -100,7 +102,7 @@ class NeuralAmortizer:
         f_prior: FPrior,
         cl_prior: CLPrior,
         forward: CLGridForward,
-        observations,
+        observations: Sequence[Observation],
         *,
         molecular_features: np.ndarray,
         regimen: DosingRegimen,
@@ -151,6 +153,11 @@ def _neural_context(
     regimen: DosingRegimen,
 ) -> np.ndarray:
     # shortcut: CLGridForward models one oral dose; extend the simulator before repeated regimens.
+    # shortcut: training uses CV 1 priors; simulate other widths before accepting them here.
+    if f_prior.cv != 1.0 or cl_prior.cv != 1.0:
+        raise ValueError("neural posterior was trained with F and CLint prior CV 1")
+    if not np.isfinite(f_prior.f_engine) or not 0 < f_prior.f_engine <= 1:
+        raise ValueError("F prior centre must be finite and in (0, 1]")
     if len(regimen.events) != 1 or regimen.events[0].node != DEFAULT_ORAL_NODE:
         raise ValueError("neural CL-grid posterior supports one oral dose")
     dose = regimen.events[0].dose_mg

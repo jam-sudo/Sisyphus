@@ -51,6 +51,8 @@ def test_context_validates_regimen_and_observations():
         _neural_context(
             f_prior, cl_prior, forward, (MeasuredF(0.4),) * 3, features, regimen
         )
+    with pytest.raises(ValueError, match="prior CV 1"):
+        _neural_context(FPrior(0.5, 0.5), cl_prior, forward, (), features, regimen)
 
 
 def test_training_pairs_use_engine_priors_and_observation_schema():
