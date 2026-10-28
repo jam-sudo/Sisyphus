@@ -92,6 +92,29 @@ def test_cockcroft_gault_non_cancelling_anchor():
     assert cockcroft_gault(40, 80.0, 1.2, "male") == pytest.approx(92.5926, rel=1e-4)
 
 
+def test_cockcroft_gault_weight_variants():
+    args = (60, 120.0, 1.0, "male")
+    ideal = cockcroft_gault(*args, weight_type="ideal", height_cm=177.8)
+    adjusted = cockcroft_gault(*args, weight_type="adjusted", height_cm=177.8)
+    total = cockcroft_gault(*args)
+    assert ideal == pytest.approx(80.0 * 73.0 / 72.0)
+    assert ideal < adjusted < total
+    assert adjusted == pytest.approx(cockcroft_gault(60, 91.8, 1.0, "male"))
+    cov = Covariates.from_cockcroft_gault(
+        *args, weight_type="adjusted", height_cm=177.8
+    )
+    assert cov.crcl_ml_min == pytest.approx(adjusted)
+
+
+def test_cockcroft_gault_weight_variant_validation():
+    with pytest.raises(ValueError, match="weight_type"):
+        cockcroft_gault(60, 120, 1, "male", weight_type="lean")
+    with pytest.raises(ValueError, match="height_cm"):
+        cockcroft_gault(60, 120, 1, "male", weight_type="ideal")
+    with pytest.raises(ValueError, match="height_cm"):
+        cockcroft_gault(60, 120, 1, "male", weight_type="ideal", height_cm=145)
+
+
 def test_cockcroft_gault_sex_case_insensitive():
     assert cockcroft_gault(60, 72.0, 1.0, "Male") == pytest.approx(80.0)
     assert cockcroft_gault(60, 72.0, 1.0, "FEMALE") == pytest.approx(68.0)

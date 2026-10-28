@@ -27,9 +27,18 @@ _CG_MAX_AGE_YEARS = 140.0          # validation floor: 140 - age must stay > 0
 _CG_PEDIATRIC_AGE_YEARS = 18.0     # CG is not validated below this age
 _CG_LOW_SCR_MG_DL = 0.6            # low SCr -> CrCl overestimation risk (low muscle mass)
 
+# Devine 1974 IBW; FDA Appendix B: https://www.accessdata.fda.gov/cdrh_docs/pdf16/P160013c.pdf
+_DEVINE_MALE_BASE_KG = 50.0
+_DEVINE_FEMALE_BASE_KG = 45.5
+_DEVINE_KG_PER_INCH = 2.3
+_DEVINE_REFERENCE_HEIGHT_IN = 60.0
+# Winter et al. 2012, PMID 22576791: adjusted body weight uses 40% excess weight.
+_CG_ADJUSTED_WEIGHT_FRACTION = 0.4
+
 
 def cockcroft_gault(
-    age_years: float, weight_kg: float, scr_mg_dl: float, sex: str
+    age_years: float, weight_kg: float, scr_mg_dl: float, sex: str,
+    *, weight_type: str = "total", height_cm: float | None = None,
 ) -> float:
     """Estimate creatinine clearance (mL/min) by the Cockcroft-Gault equation.
 
@@ -38,7 +47,8 @@ def cockcroft_gault(
     ``sex`` is "male"/"female" (case-insensitive). Returns an ABSOLUTE CrCl in mL/min
     (body size enters via the weight term) — the quantity ``Covariates.crcl_ml_min``
     expects; do not pass a BSA-normalized eGFR there instead. With actual body weight,
-    CG overestimates CrCl in obese patients (adjusted body weight needs height — future).
+    ``weight_type`` selects total, ideal (Devine), or adjusted (Devine + 40% of
+    excess total weight); the latter two require ``height_cm >= 152.4``.
 
     Raises ``ValueError`` on non-finite, non-positive, or out-of-range inputs. Logs a
     (non-blocking) warning for age < 18 (CG unvalidated) and for very low SCr
@@ -62,6 +72,19 @@ def cockcroft_gault(
         raise ValueError(f"weight_kg must be > 0, got {weight_kg}")
     if scr_mg_dl <= 0:
         raise ValueError(f"scr_mg_dl must be > 0, got {scr_mg_dl}")
+    if weight_type not in ("total", "ideal", "adjusted"):
+        raise ValueError("weight_type must be 'total', 'ideal', or 'adjusted'")
+    if weight_type != "total":
+        if height_cm is None or not math.isfinite(height_cm) or height_cm < 152.4:
+            raise ValueError("height_cm must be finite and >= 152.4 for ideal/adjusted weight")
+        height_in = height_cm / 2.54
+        ideal_kg = (
+            _DEVINE_MALE_BASE_KG if sex_l == "male" else _DEVINE_FEMALE_BASE_KG
+        ) + _DEVINE_KG_PER_INCH * (height_in - _DEVINE_REFERENCE_HEIGHT_IN)
+        if weight_type == "ideal":
+            weight_kg = ideal_kg
+        elif weight_kg > ideal_kg:
+            weight_kg = ideal_kg + _CG_ADJUSTED_WEIGHT_FRACTION * (weight_kg - ideal_kg)
 
     if age_years < _CG_PEDIATRIC_AGE_YEARS:
         logger.warning(
@@ -142,7 +165,8 @@ class Covariates:
 
     @classmethod
     def from_cockcroft_gault(
-        cls, age_years: float, weight_kg: float, scr_mg_dl: float, sex: str
+        cls, age_years: float, weight_kg: float, scr_mg_dl: float, sex: str,
+        *, weight_type: str = "total", height_cm: float | None = None,
     ) -> Covariates:
         """Build Covariates with crcl_ml_min ESTIMATED via Cockcroft-Gault (renal-only).
 
@@ -153,4 +177,7 @@ class Covariates:
         ``Covariates(...)`` directly. The estimate then flows through ``renal_factor()``
         exactly like a measured CrCl.
         """
-        return cls(crcl_ml_min=cockcroft_gault(age_years, weight_kg, scr_mg_dl, sex))
+        return cls(crcl_ml_min=cockcroft_gault(
+            age_years, weight_kg, scr_mg_dl, sex,
+            weight_type=weight_type, height_cm=height_cm,
+        ))
