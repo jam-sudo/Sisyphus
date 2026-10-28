@@ -36,9 +36,12 @@ from __future__ import annotations
 import json
 import math
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
+from sisyphus.core import DrugOnGraph
+from sisyphus.pipeline.context import prepare_simulation_context
 from sisyphus.pipeline.predict import predict
 from sisyphus.validation.reference import load_reference
 
@@ -93,6 +96,27 @@ DRUG_SPECIFIC_CHANGES: frozenset[str] = frozenset({
 })
 
 
+def _affected_by_abundance_change(drug: DrugOnGraph, tags: frozenset[str]) -> bool:
+    return bool(tags.intersection(
+        drug.enzyme_affinity.keys()
+        | drug.enzyme_affinity_for_conversion.keys()
+        | drug.transporter_kinetics.keys()
+    ))
+
+
+@pytest.mark.parametrize("field", [
+    "enzyme_affinity", "enzyme_affinity_for_conversion", "transporter_kinetics",
+])
+def test_abundance_change_tracks_drug_disposition(field: str) -> None:
+    mappings = {name: {} for name in (
+        "enzyme_affinity", "enzyme_affinity_for_conversion", "transporter_kinetics",
+    )}
+    drug = SimpleNamespace(**mappings)
+    assert not _affected_by_abundance_change(drug, frozenset({"changed_tag"}))
+    mappings[field]["changed_tag"] = object()
+    assert _affected_by_abundance_change(drug, frozenset({"changed_tag"}))
+
+
 @pytest.fixture(scope="module")
 def pre_baseline() -> dict[str, float]:
     return json.loads(PRE_BASELINE_PATH.read_text())
@@ -113,9 +137,12 @@ def test_enzyme_leak_audit(pre_baseline: dict[str, float]) -> None:
     for drug in drugs:
         if drug.name in DRUG_SPECIFIC_CHANGES:
             expected_changed.append(drug.name)
+        elif CHANGED_ENZYME_ABUNDANCES and _affected_by_abundance_change(
+            prepare_simulation_context(drug.smiles, drug.dose_mg, drug.route).drug,
+            CHANGED_ENZYME_ABUNDANCES,
+        ):
+            expected_changed.append(drug.name)
         else:
-            # CHANGED_ENZYME_ABUNDANCES check would go here if non-empty;
-            # currently empty per Item 5 ceiling, so all non-DRUG_SPECIFIC are unchanged.
             expected_unchanged.append(drug.name)
 
     # All-ceiling sanity: if no changes, all 107 should be unchanged
