@@ -3,7 +3,7 @@ Orthogonal Track Decorrelation Gate — Task B
 =============================================
 Pre-register and score 3 candidate new tracks against the decorrelation gate:
   |Pearson r| < 0.5 vs ALL 4 existing tracks (engine, ml, clf, vdss)
-  on per-drug log10 Cmax residuals across N=107 holdout.
+  on per-drug log10 Cmax residuals across the saved holdout cohort.
 
 NO parameters are tuned or fit against holdout Cmax.
 Each candidate uses a fixed, pre-specified analytical formula.
@@ -173,7 +173,7 @@ res_clf = [
 # ciprofloxacin, levofloxacin, dalfampridine, metformin-class, acamprosate),
 # the dominant elimination is renal, so the CLr-derived Cmax will align with obs
 # while the engine (CYP-focused) will mismatch. The question is whether this
-# axis decorrelates from engine/ML residuals on the full N=107.
+# axis decorrelates from engine/ML residuals on the saved holdout cohort.
 # ---------------------------------------------------------------------------
 
 GFR_L_PER_H = 7.5   # 125 mL/min = 7.5 L/h
@@ -561,6 +561,6 @@ for r in [result1, result2, result3]:
           f"{r['r_vs_engine']:>8.3f} {r['r_vs_ml']:>7.3f} "
           f"{r['r_vs_vdss']:>8.3f} {r['r_vs_clf']:>7.3f} {gate_str:>6}")
 
-print("\nMeta AAFE baseline: 2.698 (N=107)")
+print(f"\nMeta AAFE baseline: {holdout_data['overall']['meta']['aafe']:.3f} (N={N})")
 print("Gate: |r| < 0.5 vs ALL 4 existing tracks")
 print("\nDone.")
