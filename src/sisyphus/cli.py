@@ -39,6 +39,12 @@ def main() -> None:
     mipd_parser.add_argument("--measured-f", type=float, help="Measured oral bioavailability")
     mipd_parser.add_argument("--measured-cmax", type=float, help="Measured Cmax in mg/L")
     mipd_parser.add_argument("--measured-auc", type=float, help="Measured AUC in mg*h/L")
+    mipd_parser.add_argument("--obs", nargs="*", default=[], help="Time_h:concentration_mg_L")
+    mipd_parser.add_argument("--route", choices=("oral", "iv"), default="oral")
+    mipd_parser.add_argument("--interval", type=float, help="Repeated-dose interval in hours")
+    mipd_parser.add_argument("--doses", type=int, help="Number of administered doses")
+    mipd_parser.add_argument("--duration", type=float, default=1.0,
+                             help="IV infusion duration in hours")
     mipd_parser.add_argument("--crcl", type=float, help="Creatinine clearance in mL/min")
     mipd_parser.add_argument("--n-samples", type=int, default=20000)
 
@@ -191,14 +197,17 @@ def main() -> None:
 
 
 def _run_mipd(args: argparse.Namespace) -> None:
-    """Print the oral engine posterior from measured PK observations."""
+    """Print the MIPD posterior from measured PK observations."""
     from sisyphus.mipd import (
         Covariates,
         MeasuredAUC,
         MeasuredCmax,
+        MeasuredConc,
         MeasuredF,
         predict_posterior,
+        predict_tdm,
     )
+    from sisyphus.regimen.types import DosingRegimen
 
     observations = []
     if args.measured_f is not None:
@@ -207,11 +216,34 @@ def _run_mipd(args: argparse.Namespace) -> None:
         observations.append(MeasuredCmax(args.measured_cmax))
     if args.measured_auc is not None:
         observations.append(MeasuredAUC(args.measured_auc))
-    post = predict_posterior(
-        args.smiles, args.dose, observations,
-        covariates=Covariates(crcl_ml_min=args.crcl) if args.crcl is not None else None,
-        n_samples=args.n_samples,
-    )
+    for value in args.obs:
+        try:
+            t, c = map(float, value.split(":"))
+        except ValueError as exc:
+            raise ValueError(f"observation must be time_h:concentration_mg_L: {value!r}") from exc
+        observations.append(MeasuredConc(value=c, t=t))
+    covariates = Covariates(crcl_ml_min=args.crcl) if args.crcl is not None else None
+    if args.route == "iv" or args.interval is not None or args.doses is not None:
+        if args.interval is None or args.doses is None:
+            raise ValueError("repeated-dose MIPD requires --interval and --doses")
+        if args.route == "iv":
+            regimen = DosingRegimen.iv_infusion(
+                dose_mg=args.dose, duration_h=args.duration,
+                interval_h=args.interval, n_doses=args.doses,
+            )
+        else:
+            regimen = DosingRegimen.oral_repeated(
+                dose_mg=args.dose, interval_h=args.interval, n_doses=args.doses,
+            )
+        post = predict_tdm(
+            args.smiles, regimen, observations, covariates=covariates,
+            n_samples=args.n_samples,
+        )
+    else:
+        post = predict_posterior(
+            args.smiles, args.dose, observations,
+            covariates=covariates, n_samples=args.n_samples,
+        )
     print(f"Engine posterior Cmax: {post.cmax.point:.4f} mg/L")
     print(f"Engine posterior AUC: {post.auc.point:.4f} mg*h/L")
     print(f"Posterior F: {post.f.point:.4f}")

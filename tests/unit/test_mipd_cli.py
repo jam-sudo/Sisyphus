@@ -18,3 +18,13 @@ def test_mipd_cli(monkeypatch, capsys):
     ])
     cli.main()
     assert "Engine posterior Cmax:" in capsys.readouterr().out
+
+
+def test_mipd_cli_repeated_iv(monkeypatch, capsys):
+    monkeypatch.setattr(sys, "argv", [
+        "sisyphus", "mipd", "--smiles", "CCO", "--dose", "100",
+        "--route", "iv", "--interval", "12", "--doses", "2",
+        "--obs", "24:0.1", "--n-samples", "100",
+    ])
+    cli.main()
+    assert "Posterior F: 1.0000" in capsys.readouterr().out
