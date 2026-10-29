@@ -1,10 +1,11 @@
 {
-  "description": "SHA256 of engine source, regimen solver, and physiology YAML at each model last-commit revision; missing paths hash as <missing>.",
+  "description": "SHA256 of selected engine, physiology, graph, and SBI simulator inputs; commit identifies the engine baseline. Missing paths hash as <missing>.",
   "models": {
     "multi_drug_nsf.pt": {
-      "commit": "1359765553a26e91a6fc1f8a69d55f6f8e1e6531",
-      "sha256": "77b570f2c2a1ed8ef75d6c3299fd53156e7a0ef0d4b7da12727e3d54f86ab8e4",
+      "commit": "a3d398f5912a064cd9a0b3ff78b5a4d2b53d6b2b",
+      "sha256": "f15c5c9a6cd710d8aa579293baaecd946768f94cb6ea547a78252d3b3fae3d3e",
       "paths": [
+        "data/physiology/achour2021_correlation.json",
         "data/physiology/pediatric_5y.yaml",
         "data/physiology/reference_man.yaml",
         "data/physiology/sc_overlay.yaml",
@@ -16,13 +17,23 @@
         "src/sisyphus/engine/result.py",
         "src/sisyphus/engine/solver.py",
         "src/sisyphus/engine/uncertainty.py",
-        "src/sisyphus/regimen/solver.py"
+        "src/sisyphus/graph/body.py",
+        "src/sisyphus/graph/builder.py",
+        "src/sisyphus/physiology/correlated.py",
+        "src/sisyphus/predict/adme.py",
+        "src/sisyphus/predict/chemistry.py",
+        "src/sisyphus/predict/ivive.py",
+        "src/sisyphus/regimen/solver.py",
+        "src/sisyphus/sbi/multi_drug.py",
+        "src/sisyphus/sbi/priors.py",
+        "src/sisyphus/sbi/simulator.py"
       ]
     },
     "hierarchical_nsf_2k.pt": {
-      "commit": "df4abf8d8e56d029c1732b26b1d4dcc5f374c1a6",
-      "sha256": "722de3ec718e821ac8ba208050fde8004d863f47f6c5dde1bb19c32150c96b07",
+      "commit": "a3d398f5912a064cd9a0b3ff78b5a4d2b53d6b2b",
+      "sha256": "f15c5c9a6cd710d8aa579293baaecd946768f94cb6ea547a78252d3b3fae3d3e",
       "paths": [
+        "data/physiology/achour2021_correlation.json",
         "data/physiology/pediatric_5y.yaml",
         "data/physiology/reference_man.yaml",
         "data/physiology/sc_overlay.yaml",
@@ -34,7 +45,16 @@
         "src/sisyphus/engine/result.py",
         "src/sisyphus/engine/solver.py",
         "src/sisyphus/engine/uncertainty.py",
-        "src/sisyphus/regimen/solver.py"
+        "src/sisyphus/graph/body.py",
+        "src/sisyphus/graph/builder.py",
+        "src/sisyphus/physiology/correlated.py",
+        "src/sisyphus/predict/adme.py",
+        "src/sisyphus/predict/chemistry.py",
+        "src/sisyphus/predict/ivive.py",
+        "src/sisyphus/regimen/solver.py",
+        "src/sisyphus/sbi/multi_drug.py",
+        "src/sisyphus/sbi/priors.py",
+        "src/sisyphus/sbi/simulator.py"
       ]
     },
     "continuous_hierarchical_nsf.pt": {

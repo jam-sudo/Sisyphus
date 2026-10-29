@@ -35,10 +35,11 @@ def case():
 
 
 def test_auto_routing_by_name_and_compound_smiles(capsys):
-    assert _resolve_auto_method("morphine") == ("sbi", True)
+    assert _resolve_auto_method("morphine") == ("ibis", False)
     assert _resolve_auto_method(_route_drug_name(MORPHINE_SMILES, "morphine")) == (
-        "sbi", True
+        "ibis", False
     )
+    assert _resolve_auto_method("ketorolac") == ("sbi", False)
     assert _route_drug_name("Cn1c(=O)c2c(ncn2C)n(C)c1=O", None) == "Caffeine"
     assert _resolve_auto_method("unlisted") == ("ibis", False)
     assert "not in routing table" in capsys.readouterr().err
@@ -66,7 +67,7 @@ def test_sbi_import_error_falls_back_and_discloses_covariates(case, monkeypatch)
     monkeypatch.setattr(tdm_sbi, "sbi_update", unavailable)
     compiled, graph, drug, regimen = case
     result = bayesian_update(
-        compiled, graph, drug, regimen, (Observation(1.0, 0.01865),),
+        compiled, graph, drug, regimen, (Observation(1.0, 0.0285),),
         method="sbi", n_prior=50, population_class="adult",
         body_weight_kg=70.0, age_years=40.0,
     )
@@ -79,7 +80,7 @@ def test_sbi_unavailable_raises_without_fallback(case, tmp_path):
     compiled, graph, drug, regimen = case
     with pytest.raises((FileNotFoundError, ImportError)):
         bayesian_update(
-            compiled, graph, drug, regimen, (Observation(1.0, 0.01865),),
+            compiled, graph, drug, regimen, (Observation(1.0, 0.0285),),
             method="sbi", sbi_posterior_path=str(tmp_path / "missing.pt"),
             sbi_fallback=False, n_prior=50,
         )
@@ -96,20 +97,20 @@ def test_cli_auto_uses_name_and_reports_actual_method(case, monkeypatch, capsys)
     def update(*args, **kwargs):
         called.update(kwargs)
         return TDMResult(Distribution(0.1), Distribution(0.02),
-                         method_used="ibis", warnings=("SBI fallback",))
+                         method_used="ibis")
 
     monkeypatch.setattr(tdm, "bayesian_update", update)
     args = SimpleNamespace(
-        smiles=MORPHINE_SMILES, name="morphine", dose=30.0, route="oral",
-        phenotype=None, doses=1, interval=None, obs=["1:0.02"], method="auto",
+        smiles=MORPHINE_SMILES, name="morphine", dose=22.5, route="oral",
+        phenotype=None, doses=1, interval=None, obs=["1:0.0285"], method="auto",
         n_samples=50, population=None, body_weight=None, age=None, verbose=False,
     )
     cli._run_tdm(args)
     out = capsys.readouterr()
-    assert called["method"] == "sbi"
-    assert called["sbi_reweight"] is True
+    assert called["method"] == "ibis"
+    assert "sbi_reweight" not in called
     assert "Method: ibis" in out.out
-    assert "SBI fallback" in out.err
+    assert "routing morphine" in out.err
 
     args.method = "ibis"
     args.population = "adult"
