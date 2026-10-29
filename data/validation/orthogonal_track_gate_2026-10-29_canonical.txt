@@ -1,0 +1,77 @@
+Loaded 73 holdout drugs
+ADME computed for 73 drugs; skipped 0: []
+
+CANDIDATE 1 (RENAL-CLr): 73 drugs with predictions
+CANDIDATE 2 (ABSORPTION-peff): 73 drugs with predictions
+CANDIDATE 3 (ION-Fabs): 73 drugs with predictions
+
+============================================================
+BASELINE: existing 4 track inter-correlations (sanity check)
+  r(engine, ml)   = +0.457
+  r(engine, vdss) = +0.384
+  r(ml, vdss)     = +0.783
+  r(engine, clf)  = +0.543
+  r(ml, clf)      = +0.924
+
+============================================================
+CANDIDATE: RENAL-CLr
+  N valid: 73
+  Candidate standalone AAFE: 4.192
+  Pearson r vs engine: +0.387 (|r|=PASS < 0.5)
+  Pearson r vs ml    : +0.784 (|r|=FAIL < 0.5)
+  Pearson r vs vdss  : +1.000 (|r|=FAIL < 0.5)
+  Pearson r vs clf   : +0.840 (|r|=FAIL < 0.5)
+  MAX |r|: 1.000  => GATE FAIL
+  Renally-significant drugs (CLr/(CLr+CLint)>30%): 0/73
+  Top-5 worst candidate predictions:
+    lenacapavir: obs=0.0234, pred=5.7271, fold=244.75x
+    clopidogrel: obs=0.0145, pred=3.1665, fold=218.38x
+    ulipristal: obs=0.1760, pred=15.0277, fold=85.38x
+    budesonide: obs=0.0015, pred=0.0973, fold=64.83x
+    azacitidine: obs=0.1450, pred=3.8583, fold=26.61x
+
+============================================================
+CANDIDATE: ABSORPTION-peff
+  N valid: 73
+  Candidate standalone AAFE: 3.882
+  Pearson r vs engine: +0.464 (|r|=PASS < 0.5)
+  Pearson r vs ml    : +0.719 (|r|=FAIL < 0.5)
+  Pearson r vs vdss  : +0.926 (|r|=FAIL < 0.5)
+  Pearson r vs clf   : +0.821 (|r|=FAIL < 0.5)
+  MAX |r|: 0.926  => GATE FAIL
+  Renally-significant drugs (CLr/(CLr+CLint)>30%): 0/73
+  Top-5 worst candidate predictions:
+    clopidogrel: obs=0.0145, pred=3.1641, fold=218.21x
+    lenacapavir: obs=0.0234, pred=4.3194, fold=184.59x
+    ulipristal: obs=0.1760, pred=11.9251, fold=67.76x
+    budesonide: obs=0.0015, pred=0.0736, fold=49.09x
+    paroxetine: obs=0.0055, pred=0.1313, fold=23.87x
+
+============================================================
+CANDIDATE: ION-Fabs
+  N valid: 73
+  Candidate standalone AAFE: 693.755
+  Pearson r vs engine: +0.351 (|r|=PASS < 0.5)
+  Pearson r vs ml    : +0.055 (|r|=PASS < 0.5)
+  Pearson r vs vdss  : +0.180 (|r|=PASS < 0.5)
+  Pearson r vs clf   : +0.181 (|r|=PASS < 0.5)
+  MAX |r|: 0.351  => GATE PASS
+  Renally-significant drugs (CLr/(CLr+CLint)>30%): 0/73
+  Top-5 worst candidate predictions:
+    digoxin: obs=0.0031, pred=0.0000, fold=96426291.23x
+    rifabutin: obs=0.3750, pred=0.0000, fold=91860578.08x
+    erythromycin: obs=1.0142, pred=0.0000, fold=27147512.69x
+    famotidine: obs=0.0730, pred=0.0000, fold=2943260.36x
+    azithromycin: obs=0.5000, pred=0.0000, fold=2721038.06x
+
+============================================================
+SUMMARY TABLE
+Candidate                 N    AAFE   r(eng)   r(ml)  r(vdss)  r(clf)   GATE
+RENAL-CLr                73   4.192    0.387   0.784    1.000   0.840   FAIL
+ABSORPTION-peff          73   3.882    0.464   0.719    0.926   0.821   FAIL
+ION-Fabs                 73 693.755    0.351   0.055    0.180   0.181   PASS
+
+Meta AAFE baseline: 2.825 (N=73)
+Gate: |r| < 0.5 vs ALL 4 existing tracks
+
+Done.

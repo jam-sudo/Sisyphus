@@ -108,7 +108,7 @@ def prepare_simulation_context(
             profile.smiles, {gene for gene, _ in phenotype_report.applied}
         )
 
-    if liver_enzymes_pre is not None:
+    if liver_enzymes_pre is not None or "hematocrit" in graph.global_params:
         drug = build_drug_on_graph(
             profile,
             adme,
@@ -122,6 +122,7 @@ def prepare_simulation_context(
             measured_kp=measured_adme.kp_overrides if measured_adme else None,
             enzyme_km=measured_adme.enzyme_km if measured_adme else None,
             fm_override=fm_override,
+            hematocrit=graph.global_params.get("hematocrit"),
         )
 
     graph = augment_for_active_species(graph, drug)

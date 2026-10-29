@@ -1,61 +1,27 @@
-"""v2/v3 validation gate (per-drug parametrized 3-fold).
+"""Public-worktree 3-fold prodrug gate; unsupported cases remain strict xfail.
 
-Per spec section 6.1: failing-drug parametrize cases are marked xfail with
-documented reason. Affinity values NOT adjusted to make tests pass --
-mechanistic-A core promise.
+2026-10-29 deterministic Cmax and fold errors (mg/L, n_mc_samples=0):
+  sepiapterin parent       13.897 / 0.0024 = 5790x
+  remdesivir parent         5.894 / 4.38   = 1.35x
+  tebipenem active          0.369 / 4.01   = 10.86x under
+  fostamatinib active       0.0483 / 0.61  = 12.63x under
 
-v3 update (2026-05-01, prodrug-v3 dispositions per
-docs/_internal/specs/2026-04-29-prodrug-v3-literature.md):
-4 of 4 drugs remain xfail. v3 brought 2 literature-applied registry
-updates (Items 2 + 3); fold errors essentially unchanged because
-conversion-step extraction efficiency (well-stirred E ~1 at high CLint)
-dominates over active-compartment CL/Vd disposition.
-
-Public-only update (2026-05-09, audit-driven honesty pass):
-Pinned values were generated with DrugBank+logp_correction enrichment.
-Under public-clone deterministic state (no DrugBank, no logp_correction),
-remdesivir parent Cmax shifts 0.987 → 1.573 mg/L → fold error 2.78x
-(under 3.0x gate). Remdesivir promoted out of xfail. The other 3 remain
-xfail (sepiapterin 23×→smaller-but-still-fail, tebipenem ~9×, fostamatinib
-~9× under public-only).
-
-Current empirical fold-errors (2026-05-01, v3 dispositions applied):
-  - sepiapterin       4748x  (pred 11.40 mg/L vs obs 0.0024 mg/L)
-                      Item 1 ceiling_accepted (F_sapropterin not located in
-                      primary literature; FDA/EMA explicit). v1 Vd=150
-                      retained as known-wrong placeholder. SPR class-
-                      extrapolated affinity unchanged from v2; conversion
-                      saturation at 4200 mg dose dominates.
-  - remdesivir        4.44x  (pred 0.987 mg/L vs obs 4.38 mg/L)
-                      Item 2 literature_applied — GS-441524 active
-                      CL=17.4 L/h, V=535 L (Tamura 2023 + Leegwater 2022
-                      geomean). observation_species=parent → active
-                      CL/V update doesn't shift parent Cmax. CES1 abundance
-                      only at liver still lacks systemic esterase distribution.
-  - tebipenem_pivoxil 9.05x  (pred 0.443 mg/L vs obs 4.01 mg/L)
-                      Item 4 + Item 6 ceiling_accepted (F_tebipenem absolute
-                      not located; CES2/tebipenem in vitro Vmax/Km not
-                      located). v2 placeholder Vd=50, CL=17 retained;
-                      class-extrapolated CES2 affinity retained.
-  - fostamatinib      4.50x  (pred 0.136 mg/L vs obs 0.61 mg/L)
-                      Item 3 literature_applied — R406 active CL=15.7 L/h,
-                      Vss=256 L (Matsukane 2022 IV microdose). Active
-                      compartment ke (CL/V) reduced ~44%; Cmax shift
-                      marginal because conversion-step (ALPI extraction)
-                      remains rate-limiting.
-
-These are NOT relaxed by tuning affinities. Resolution requires:
-  (a) literature-grade in vitro kinetic data per enzyme/drug (Items 5-6
-      ceiling: not yet located in literature), or
-  (b) extra mechanistic terms beyond v3 scope (e.g., extra-hepatic esterase
-      abundance, intestinal-loss kinetics, BH4 first-pass depletion).
+Gut-wall CES2/ALPI and gut/liver/kidney SPR activation are already wired.
+Missing substrate-specific kinetics and presystemic disposition are described
+in docs/research/prodrug-v4-mechanism-audit.md. Affinities are not fitted to
+clinical Cmax.
 """
 from __future__ import annotations
 
 import pytest
 
+from sisyphus.graph.builder import augment_for_active_species
+from sisyphus.graph.presets import reference_man
+from sisyphus.graph.types import ProdrugActivationEdge
 from sisyphus.pipeline.predict import predict
+from sisyphus.predict.registry import lookup_active_metabolite
 from tests._artifact_helpers import skip_if_local_artifacts
+from tests.unit.test_prodrug_v2_drug import _minimal_drug
 
 _CLINICAL_CMAX = {
     "sepiapterin":       0.0024,
@@ -81,26 +47,42 @@ _DOSE_ROUTE = {
 
 _KNOWN_FAILURES = {
     "sepiapterin":
-        "v3 4748x overpredict (Item 1 ceiling_accepted — F_sapropterin not "
-        "located in primary literature, v1 Vd=150 placeholder retained). "
-        "SPR class-extrapolated affinity; 4200 mg dose pre-systemic conversion "
-        "saturation dominates. Resolution: literature-grade BH4 IV F primary "
-        "study or extra-hepatic SPR proteomic abundance.",
-    # remdesivir: removed from xfail 2026-05-09 (public-only honesty pass).
-    # Under public-clone deterministic state, parent Cmax 1.573 mg/L vs FDA
-    # observed ~4.38 → fold error 2.78x (under 3.0 gate). Local-developer
-    # state with DrugBank+logp_correction had Cmax 0.987 → fold 4.44 (xfail).
+        "v4 audit: 5790x parent overprediction. Gut/liver/kidney SPR sites "
+        "exist, but human tissue abundance and presystemic conversion kinetics "
+        "for sepiapterin are unmeasured; no Cmax-based fit is allowed.",
+    # Remdesivir passes the current public-worktree gate.
     "tebipenem_pivoxil":
-        "v3 9.05x underpredict (Item 4 + Item 6 stacked ceiling — F_tebipenem "
-        "absolute not located, CES2/tebipenem in vitro Vmax/Km not located). "
-        "Class-extrapolated CES2 affinity retained. Resolution: literature-grade "
-        "in vitro CES2/tebipenem-pivoxil kinetic data.",
+        "v4 audit: 10.86x active underprediction. Gut-wall CES2 site exists, "
+        "but substrate-specific human CES2 Vmax/Km and gastric/intestinal "
+        "hydrolysis kinetics were not located in public sources.",
     "fostamatinib":
-        "v3 4.50x underpredict (Item 3 literature_applied — R406 active CL=15.7, "
-        "Vss=256 from Matsukane 2022 IV microdose). Active ke reduced ~44%; "
-        "Cmax shift marginal because ALPI extraction remains rate-limiting. "
-        "Resolution: literature-grade in vitro ALPI/fostamatinib kinetics.",
+        "v4 audit: 12.63x active underprediction. Gut-wall ALPI site exists, "
+        "but brush-border ALPI/fostamatinib Vmax/Km were not located in "
+        "public sources.",
 }
+
+
+def test_strict_xfail_activation_sites_are_wired():
+    expected = {
+        "sepiapterin": {("gut_wall", "SPR"), ("liver", "SPR"), ("kidney", "SPR")},
+        "tebipenem_pivoxil": {("gut_wall", "CES2"), ("liver", "CES2")},
+        "fostamatinib": {("gut_wall", "ALPI")},
+    }
+    for name, sites in expected.items():
+        active, observation_species, affinities, _ = lookup_active_metabolite(_SMILES[name])
+        graph = reference_man()
+        drug = _minimal_drug(
+            active_metabolite=active,
+            observation_species=observation_species,
+            enzyme_affinity_for_conversion=affinities,
+        )
+        augment_for_active_species(graph, drug)
+        actual = {
+            (edge.source, next(iter(edge.enzyme_tags)))
+            for edge in graph.edges
+            if isinstance(edge, ProdrugActivationEdge)
+        }
+        assert actual == sites
 
 
 @skip_if_local_artifacts

@@ -2,7 +2,7 @@
 
 Translates ADME properties into DrugOnGraph parameters:
 1. CLint decomposition into per-enzyme affinities
-2. R&R-derived Kp approximation (Rodgers et al. 2005; Rodgers & Rowland 2006)
+2. Rodgers–Rowland Kp (Rodgers et al. 2005; Rodgers & Rowland 2006)
 3. Renal clearance estimation
 4. DrugOnGraph assembly
 
@@ -18,6 +18,7 @@ import numpy as np
 from sisyphus.core import Distribution, DrugOnGraph, TissueComposition, TransporterKinetics
 from sisyphus.predict.adme import ADMEProperties
 from sisyphus.predict.chemistry import MolecularProfile
+from sisyphus.predict.rr_full import _RR_ROWS, compute_berezhkovskiy_kp, compute_rr_kp
 
 logger = logging.getLogger(__name__)
 
@@ -151,8 +152,10 @@ _TISSUE_COMPOSITIONS: dict[str, TissueComposition] = {
     "skin_tissue": TissueComposition(fn=0.0284, fp=0.0111, fw=0.718, pH=7.0),
 }
 
-# CV for Kp predictions under the aggregated-composition approximation
+# CV for predicted Kp values (existing model uncertainty).
 _KP_CV = 0.4
+# ICRP reference-man graph hematocrit (data/physiology/reference_man.yaml).
+_REFERENCE_HEMATOCRIT_FRACTION = Distribution(0.45, 0.0)
 
 
 # ---------------------------------------------------------------------------
@@ -515,33 +518,12 @@ def _compute_kp_poulin_theil(
     return kp
 
 
-def _apply_bz_correction(kp: float, fup: float) -> float:
-    """Berezhkovskiy-style correction pulling R&R Kp toward unity.
-
-    Kp_bz = Kp_rr / (1 + (Kp_rr - 1) * fup)
-
-    The correction shrinks Kp toward 1; its magnitude GROWS with fup (largest as
-    fup -> 1, vanishing as fup -> 0) and with the distance of Kp from 1:
-        fup=0.01, Kp=100 -> 100 / 1.99 = 50.3  (mild — fup is small)
-        fup=0.5,  Kp=10  -> 10  / 5.5  = 1.8   (strong)
-    NOTE: this is NOT a "highly-bound-only" shrink — at fup << 1 it is nearly a
-    no-op. Berezhkovskiy (2004), J Pharm Sci 93:1628, addresses tissue/plasma
-    partitioning with peripheral elimination; it does not establish this scalar
-    Rodgers-Rowland correction. Treat the method as experimental.
-    The default ``kp_method`` is ``rodgers_rowland``, which does not call this.
-    """
-    denom = 1.0 + (kp - 1.0) * fup
-    if denom < 1e-10:
-        return kp
-    return kp / denom
-
-
 # ---------------------------------------------------------------------------
 # Kp method registry
 # ---------------------------------------------------------------------------
 
 _KP_FUNCTIONS = {
-    "rodgers_rowland": _compute_kp_rodgers_rowland,
+    "rodgers_rowland_approx": _compute_kp_rodgers_rowland,
     "poulin_theil": _compute_kp_poulin_theil,
 }
 
@@ -553,6 +535,8 @@ def _compute_all_kp(
     kp_method: str = "rodgers_rowland",
     fup: float | None = None,
     pka_secondary: float | None = None,
+    rbp: float | None = None,
+    hematocrit: float | None = None,
 ) -> dict[str, Distribution]:
     """Compute Kp for all tissues.
 
@@ -560,29 +544,44 @@ def _compute_all_kp(
         logp: Octanol-water partition coefficient.
         pka: Dissociation constant.
         compound_type: Ionization class.
-        kp_method: Kp calculation method. One of "rodgers_rowland",
-            "poulin_theil", "berezhkovskiy" (R&R + BZ correction).
-        fup: Fraction unbound in plasma (required for "berezhkovskiy").
+        kp_method: "rodgers_rowland" (full), "rodgers_rowland_approx",
+            "poulin_theil", or "berezhkovskiy".
+        fup: Fraction unbound in plasma (required for full R&R and Berezhkovskiy).
         pka_secondary: Acidic pKa for zwitterions when available.
 
     Returns:
         Dict mapping tissue name -> Kp as Distribution.
     """
-    use_bz = kp_method == "berezhkovskiy"
-    base_method = "rodgers_rowland" if use_bz else kp_method
-    if base_method not in _KP_FUNCTIONS:
+    if kp_method not in {"rodgers_rowland", "berezhkovskiy", *_KP_FUNCTIONS}:
         raise ValueError(f"Unknown kp_method {kp_method!r}")
-    kp_fn = _KP_FUNCTIONS[base_method]
+    if kp_method == "rodgers_rowland" and (
+        fup is None or rbp is None or hematocrit is None
+    ):
+        raise ValueError("rodgers_rowland requires fup, rbp, and hematocrit")
+    if kp_method == "berezhkovskiy" and fup is None:
+        raise ValueError("berezhkovskiy requires fup")
 
     kp_overrides: dict[str, Distribution] = {}
     for tissue_name, tissue_comp in _TISSUE_COMPOSITIONS.items():
-        if base_method == "rodgers_rowland" and pka_secondary is not None:
-            kp = kp_fn(logp, pka, compound_type, tissue_comp, _PLASMA_COMP, pka_secondary)
+        if kp_method == "rodgers_rowland":
+            kp = compute_rr_kp(
+                logp, pka, compound_type, _RR_ROWS[tissue_name], fup,
+                rbp, hematocrit, pka_secondary,
+                adipose=tissue_name == "adipose_tissue",
+            )
+        elif kp_method == "berezhkovskiy":
+            kp = compute_berezhkovskiy_kp(
+                logp, _RR_ROWS[tissue_name], fup,
+                adipose=tissue_name == "adipose_tissue",
+            )
+        elif kp_method == "rodgers_rowland_approx" and pka_secondary is not None:
+            kp = _compute_kp_rodgers_rowland(
+                logp, pka, compound_type, tissue_comp, _PLASMA_COMP, pka_secondary
+            )
         else:
-            kp = kp_fn(logp, pka, compound_type, tissue_comp, _PLASMA_COMP)
-        if use_bz and fup is not None:
-            kp = _apply_bz_correction(kp, fup)
-            kp = float(np.clip(kp, 0.01, 50.0))
+            kp = _KP_FUNCTIONS[kp_method](
+                logp, pka, compound_type, tissue_comp, _PLASMA_COMP
+            )
         kp_overrides[tissue_name] = Distribution(mean=kp, cv=_KP_CV)
 
     logger.debug(
@@ -732,6 +731,7 @@ def build_drug_on_graph(
     measured_kp: dict[str, Distribution] | None = None,
     enzyme_km: dict[str, Distribution] | None = None,
     fm_override: tuple[str, float] | None = None,
+    hematocrit: Distribution | None = None,
 ) -> DrugOnGraph:
     """Construct a DrugOnGraph from predicted properties.
 
@@ -855,6 +855,8 @@ def build_drug_on_graph(
             profile.logp, profile.pka, profile.compound_type,
             kp_method=kp_method, fup=adme.fup.mean,
             pka_secondary=profile.pka_secondary,
+            rbp=adme.rbp.mean,
+            hematocrit=(hematocrit or _REFERENCE_HEMATOCRIT_FRACTION).mean,
         )
         if measured_kp:
             kp_overrides.update(measured_kp)

@@ -12,7 +12,8 @@ Scale factors follow CPIC activity score conventions:
     EM  (Extensive / Normal Function)         — 1.00×
     UM  (Ultra-rapid / Increased Function)    — 2.00×
 
-Supported CYP enzymes in reference_man.yaml: CYP2D6, CYP2C9, CYP1A2, CYP3A4, CYP2E1.
+Supported CYP enzymes in reference_man.yaml: CYP2D6, CYP2C9, CYP1A2, CYP3A4,
+CYP2E1, CYP2B6, CYP2C19, CYP3A5.
 Supported transporters: SLCO1B1 (→ OATP1B1 protein). For SLCO1B1,
 Cooper-DeHoff 2022 CPIC labels map as: Normal Function → EM, Decreased
 Function (*1/*5, *1/*15) → IM, Poor Function (*5/*5, *15/*15) → PM,

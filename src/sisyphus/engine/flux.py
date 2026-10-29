@@ -219,9 +219,11 @@ class ClearanceFluxSpec(FluxSpec):
         source_name: str,
         target_name: str,
         model: str,
+        bile_target_idx: int | None = None,
     ) -> None:
         super().__init__(edge_id, source_idx, target_idx, source_name, target_name)
         self.model = model
+        self.bile_target_idx = bile_target_idx
 
     @classmethod
     def from_edge(cls, edge_id: int, edge, state_index: dict[str, int]) -> ClearanceFluxSpec:
@@ -239,6 +241,7 @@ class ClearanceFluxSpec(FluxSpec):
             edge.source,
             edge.target,
             edge.model,
+            state_index[edge.bile_target] if edge.bile_target is not None else None,
         )
 
     def apply(
@@ -385,6 +388,13 @@ class ClearanceFluxSpec(FluxSpec):
             kp = params.drug_kp(src)
             c_plasma = y[self.source_idx] / (v * kp) if v > 0 else 0.0
             rate = cl_intrinsic * c_plasma
+
+            if self.bile_target_idx is not None and cl_int_h > 0:
+                bile_rate = rate * cl_int_bile / cl_int_h
+                dydt[self.source_idx] -= rate
+                dydt[self.target_idx] += rate - bile_rate
+                dydt[self.bile_target_idx] += bile_rate
+                return
 
         else:
             return

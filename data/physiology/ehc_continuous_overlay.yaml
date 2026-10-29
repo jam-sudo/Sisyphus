@@ -1,0 +1,12 @@
+# Opt-in continuous enterohepatic return for the extended hepatic clearance edge.
+# This simplified route sends all biliary drug into the duodenum, where existing
+# absorption and transit edges determine reabsorption and fecal loss.
+# PK-Sim's human default for continuous EHC is 0% (gallbladder storage instead):
+# https://docs.open-systems-pharmacology.org/v9/working-with-pk-sim/pk-sim-documentation/pk-sim-events
+description: "Continuous enterohepatic recirculation"
+
+overrides:
+  edges:
+    - source: liver
+      target: metabolized_hepatic
+      bile_target: duodenum_lumen

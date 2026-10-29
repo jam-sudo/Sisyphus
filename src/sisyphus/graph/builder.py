@@ -146,6 +146,7 @@ def _build_into_graph(data: dict[str, Any], graph: BodyGraph) -> BodyGraph:
                 source=edge_spec["source"],
                 target=edge_spec["target"],
                 model=edge_spec.get("model", "well_stirred"),
+                bile_target=edge_spec.get("bile_target"),
             )
             graph.add_edge(edge)
 

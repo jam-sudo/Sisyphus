@@ -1,0 +1,25 @@
+# Opt-in gallbladder storage for biliary drug; meal-triggered pulses are out of scope
+# because the current solver has no time-varying transit-edge parameters.
+# Fasted human gallbladder volume: 25 mL (PMID 15611951).
+# https://pubmed.ncbi.nlm.nih.gov/15611951/
+# Interdigestive emptying: 32% mean decrease over 2.5 h (PMID 7173714).
+# First-order equivalent k = -ln(0.68)/2.5 h = 0.154 h^-1; actual release is intermittent.
+# https://pubmed.ncbi.nlm.nih.gov/7173714/
+description: "Fasting gallbladder storage and approximate emptying"
+
+nodes:
+  - name: gallbladder
+    type: lumen
+    volume: {mean: 0.025, cv: 0.0}
+
+edges:
+  - source: gallbladder
+    target: duodenum_lumen
+    type: transit
+    transit_rate: {mean: 0.154, cv: 0.0}
+
+overrides:
+  edges:
+    - source: liver
+      target: metabolized_hepatic
+      bile_target: gallbladder

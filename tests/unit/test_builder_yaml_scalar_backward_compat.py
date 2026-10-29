@@ -43,6 +43,7 @@ MIGRATED_GROUPED = {
         ("liver", "enzymes", "CYP2E1"),
     },
 }
+MIGRATED_GROUPED["reference_woman.yaml"] = MIGRATED_GROUPED["reference_man.yaml"]
 
 
 def test_scalar_enzyme_values_parse_to_none_group() -> None:
