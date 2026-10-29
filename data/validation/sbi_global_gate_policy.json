@@ -4,13 +4,64 @@
   "original_gate": {
     "definition": "Every marginal KS p-value > 0.01 and every pair's original coverage deviation <= 0.10",
     "ks_threshold_p": 0.01,
-    "coverage_tolerance_fraction": 0.10
+    "coverage_tolerance_fraction": 0.1
   },
   "holm_gate": {
     "definition": "Holm-Bonferroni step-down across all three marginal KS p-values for every pair in a flow at family-wise alpha 0.01; pass if zero KS hypotheses are rejected and every pair's original coverage deviation is <= 0.10",
     "family_wise_alpha": 0.01,
-    "coverage_tolerance_fraction": 0.10,
+    "coverage_tolerance_fraction": 0.1,
     "coverage_rule": "Unchanged from each original flow's SBC script"
   },
-  "null_simulation": "data/validation/sbi_global_gate_null.json"
+  "null_simulation": "data/validation/sbi_global_gate_null.json",
+  "null_pass_probabilities": {
+    "multi_drug": {
+      "original": 0.1062,
+      "original_ci_95": [
+        0.10022679297089668,
+        0.1124036230166811
+      ],
+      "holm": 0.1452,
+      "holm_ci_95": [
+        0.13834905421797616,
+        0.1522582618540306
+      ]
+    },
+    "multi_observation": {
+      "original": 0.1062,
+      "original_ci_95": [
+        0.10022679297089668,
+        0.1124036230166811
+      ],
+      "holm": 0.1452,
+      "holm_ci_95": [
+        0.13834905421797616,
+        0.1522582618540306
+      ]
+    },
+    "hierarchical": {
+      "original": 0.0088,
+      "original_ci_95": [
+        0.007063668692759798,
+        0.010830761334579353
+      ],
+      "holm": 0.0185,
+      "holm_ci_95": [
+        0.015949885124840416,
+        0.021335720477487666
+      ]
+    },
+    "continuous": {
+      "original": 0.0935,
+      "original_ci_95": [
+        0.08786290202530243,
+        0.0993750940021224
+      ],
+      "holm": 0.4107,
+      "holm_ci_95": [
+        0.401034924509944,
+        0.4204171150878055
+      ]
+    }
+  },
+  "null_assumptions": "Exact uniform marginal ranks; independent parameters and pairs; uniform location within posterior quantile gaps"
 }

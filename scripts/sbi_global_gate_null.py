@@ -58,6 +58,7 @@ def gate_probability(
         raise ValueError("Pair, calibration, and repetition counts must be positive")
     rng = np.random.default_rng(seed)
     passed = 0
+    holm_passed = 0
     for _ in range(repetitions):
         ranks = rng.integers(0, POSTERIOR_DRAW_COUNT + 1, size=(n_pairs, n_calibration, 3))
         sorted_ranks = np.sort(ranks / POSTERIOR_DRAW_COUNT, axis=1)
@@ -66,7 +67,10 @@ def gate_probability(
             grid - sorted_ranks,
             sorted_ranks - (grid - 1 / n_calibration),
         ).max(axis=1)
-        if not np.all(kstwo.sf(d_stat, n_calibration) > KS_THRESHOLD_P):
+        pvalues = kstwo.sf(d_stat, n_calibration)
+        original_ks_ok = bool(np.all(pvalues > KS_THRESHOLD_P))
+        # Holm makes no rejection exactly when the smallest p exceeds alpha / m.
+        if np.min(pvalues) <= KS_THRESHOLD_P / pvalues.size:
             continue
         coverage_ok = True
         for level in COVERAGE_LEVELS_PERCENT:
@@ -77,8 +81,11 @@ def gate_probability(
             if np.any(np.abs(empirical - level / 100) > COVERAGE_TOLERANCE_FRACTION):
                 coverage_ok = False
                 break
-        passed += coverage_ok
+        if coverage_ok:
+            holm_passed += 1
+            passed += original_ks_ok
     ci = binomtest(passed, repetitions).proportion_ci(confidence_level=0.95)
+    holm_ci = binomtest(holm_passed, repetitions).proportion_ci(confidence_level=0.95)
     return {
         "pairs": n_pairs,
         "simultaneous_ks_tests": 3 * n_pairs,
@@ -87,6 +94,11 @@ def gate_probability(
         "passed": passed,
         "pass_probability": passed / repetitions,
         "ci_95": [ci.low, ci.high],
+        "holm": {
+            "passed": holm_passed,
+            "pass_probability": holm_passed / repetitions,
+            "ci_95": [holm_ci.low, holm_ci.high],
+        },
     }
 
 
@@ -111,6 +123,12 @@ def main() -> None:
             "uniform location within posterior quantile gaps"
         ),
         "method": "Exact calibrated-rank sampling by posterior exchangeability",
+        "gate": {
+            "posterior_draws": POSTERIOR_DRAW_COUNT,
+            "coverage_levels_percent": COVERAGE_LEVELS_PERCENT,
+            "ks_threshold_p": KS_THRESHOLD_P,
+            "coverage_tolerance_fraction": COVERAGE_TOLERANCE_FRACTION,
+        },
     }
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(results, indent=2))

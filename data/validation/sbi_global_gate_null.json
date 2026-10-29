@@ -4,49 +4,92 @@
     "simultaneous_ks_tests": 39,
     "n_calibration": 100,
     "repetitions": 10000,
-    "passed": 1013,
-    "pass_probability": 0.1013,
+    "passed": 1062,
+    "pass_probability": 0.1062,
     "ci_95": [
-      0.09545301603611274,
-      0.10738031999012614
-    ]
+      0.10022679297089668,
+      0.1124036230166811
+    ],
+    "holm": {
+      "passed": 1452,
+      "pass_probability": 0.1452,
+      "ci_95": [
+        0.13834905421797616,
+        0.1522582618540306
+      ]
+    }
   },
   "multi_observation": {
     "pairs": 13,
     "simultaneous_ks_tests": 39,
     "n_calibration": 100,
     "repetitions": 10000,
-    "passed": 1013,
-    "pass_probability": 0.1013,
+    "passed": 1062,
+    "pass_probability": 0.1062,
     "ci_95": [
-      0.09545301603611274,
-      0.10738031999012614
-    ]
+      0.10022679297089668,
+      0.1124036230166811
+    ],
+    "holm": {
+      "passed": 1452,
+      "pass_probability": 0.1452,
+      "ci_95": [
+        0.13834905421797616,
+        0.1522582618540306
+      ]
+    }
   },
   "hierarchical": {
     "pairs": 26,
     "simultaneous_ks_tests": 78,
     "n_calibration": 100,
     "repetitions": 10000,
-    "passed": 106,
-    "pass_probability": 0.0106,
+    "passed": 88,
+    "pass_probability": 0.0088,
     "ci_95": [
-      0.008686342174122614,
-      0.012806135286500825
-    ]
+      0.007063668692759798,
+      0.010830761334579353
+    ],
+    "holm": {
+      "passed": 185,
+      "pass_probability": 0.0185,
+      "ci_95": [
+        0.015949885124840416,
+        0.021335720477487666
+      ]
+    }
   },
   "continuous": {
     "pairs": 52,
     "simultaneous_ks_tests": 156,
     "n_calibration": 50,
     "repetitions": 10000,
-    "passed": 893,
-    "pass_probability": 0.0893,
+    "passed": 935,
+    "pass_probability": 0.0935,
     "ci_95": [
-      0.08378084250758472,
-      0.09505966966005502
-    ]
+      0.08786290202530243,
+      0.0993750940021224
+    ],
+    "holm": {
+      "passed": 4107,
+      "pass_probability": 0.4107,
+      "ci_95": [
+        0.401034924509944,
+        0.4204171150878055
+      ]
+    }
   },
   "assumptions": "Exact uniform marginal ranks; independent parameters and pairs; uniform location within posterior quantile gaps",
-  "method": "Exact calibrated-rank sampling by posterior exchangeability"
+  "method": "Exact calibrated-rank sampling by posterior exchangeability",
+  "gate": {
+    "posterior_draws": 500,
+    "coverage_levels_percent": [
+      50,
+      80,
+      90,
+      95
+    ],
+    "ks_threshold_p": 0.01,
+    "coverage_tolerance_fraction": 0.1
+  }
 }

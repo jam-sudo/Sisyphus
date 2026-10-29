@@ -4,10 +4,15 @@ import json
 
 import pytest
 
-from scripts.sbi_aggregate_sbc_blocks import aggregate_blocks
+from scripts.sbi_aggregate_sbc_blocks import _holm_rejection_count, aggregate_blocks, main
 
 
-def test_aggregate_blocks_counts_and_missing_case(tmp_path):
+def test_holm_rejections_use_one_flow_family():
+    assert _holm_rejection_count([0.004, 0.006, 0.2], 0.01) == 0
+    assert _holm_rejection_count([0.0001, 0.006, 0.2], 0.01) == 1
+
+
+def test_aggregate_blocks_counts_and_missing_case(tmp_path, monkeypatch):
     paths = []
     for start in (0, 2):
         block = {
@@ -26,7 +31,15 @@ def test_aggregate_blocks_counts_and_missing_case(tmp_path):
         path.write_text(json.dumps(block))
         paths.append(path)
     result = aggregate_blocks(paths, "multi_drug", 1)
+    assert result["validation_set"] == "data/sbi/validation_drug_set.json"
     assert result["drugs"][0]["n_valid"] == 4
     assert result["drugs"][0]["coverage"]["50"] == [0.5, 0.5, 0.5]
+    out = tmp_path.parent / "aggregated.json"
+    monkeypatch.setattr("sys.argv", [
+        "sbi_aggregate_sbc_blocks.py", "--flow", "multi_drug", "--blocks", str(tmp_path),
+        "--expected-pairs", "1", "--out", str(out),
+    ])
+    main()
+    assert json.loads(out.read_text())["calibrated_null_global_pass_probability"] > 0
     with pytest.raises(ValueError, match="Incomplete"):
         aggregate_blocks(paths[:1], "multi_drug", 1)

@@ -43,6 +43,8 @@ def aggregate_blocks(paths: list[Path], flow: str, expected_pairs: int) -> dict:
         "posterior", "validation_set", "n_calibration", "n_posterior", "levels",
         "seed", "ks_threshold", "coverage_tol",
     ) if key in first}
+    if "validation_set" in output:
+        output["validation_set"] = "data/sbi/validation_drug_set.json"
     output["sampler"] = "corrected"
     key_name = "drugs" if flow in ("multi_drug", "multi_observation") else "pairs"
     output[key_name] = []
@@ -125,6 +127,17 @@ def aggregate_blocks(paths: list[Path], flow: str, expected_pairs: int) -> dict:
     return output
 
 
+def _holm_rejection_count(pvalues: list[float], alpha: float) -> int:
+    """Count sequential Holm-Bonferroni rejections in one flow family."""
+    ordered = sorted(pvalues)
+    count = 0
+    for index, pvalue in enumerate(ordered):
+        if pvalue > alpha / (len(ordered) - index):
+            break
+        count += 1
+    return count
+
+
 def main() -> None:
     """Aggregate a completed per-flow block directory."""
     parser = argparse.ArgumentParser()
@@ -136,6 +149,38 @@ def main() -> None:
     args = parser.parse_args()
     result = aggregate_blocks(sorted(args.blocks.glob("*.json")), args.flow,
                               args.expected_pairs)
+    null_path = Path(__file__).resolve().parent.parent / "data/validation/sbi_global_gate_null.json"
+    null_result = json.loads(null_path.read_text())
+    result["calibrated_null_global_pass_probability"] = null_result[args.flow][
+        "pass_probability"
+    ]
+    result["calibrated_null_ci_95"] = null_result[args.flow]["ci_95"]
+    result["calibrated_null_assumptions"] = null_result["assumptions"]
+    policy_path = (Path(__file__).resolve().parent.parent
+                   / "data/validation/sbi_global_gate_policy.json")
+    policy = json.loads(policy_path.read_text())
+    entries = result["drugs"] if args.flow in ("multi_drug", "multi_observation") \
+        else result["pairs"]
+    pvalues = [pvalue for entry in entries for pvalue in entry["ks_pvalues"]]
+    alpha = policy["holm_gate"]["family_wise_alpha"]
+    coverage_ok = all(
+        entry["coverage_max_deviation"] <= policy["holm_gate"]["coverage_tolerance_fraction"]
+        for entry in entries
+    )
+    rejected = _holm_rejection_count(pvalues, alpha)
+    result["holm_global_gate"] = {
+        "passed": rejected == 0 and coverage_ok,
+        "ks_rejections": rejected,
+        "coverage_passed": coverage_ok,
+        "family_wise_alpha": alpha,
+        "predeclared_at_utc": policy["predeclared_at_utc"],
+        "definition": policy["holm_gate"]["definition"],
+        "calibrated_null_pass_probability": null_result[args.flow]["holm"][
+            "pass_probability"
+        ],
+        "calibrated_null_ci_95": null_result[args.flow]["holm"]["ci_95"],
+        "calibrated_null_assumptions": null_result["assumptions"],
+    }
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(result, indent=2))
 
