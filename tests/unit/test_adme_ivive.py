@@ -343,28 +343,13 @@ class TestIVIVE:
 
 
 class TestBerezhkovskiyCorrection:
-    def test_bz_reduces_kp_for_low_fup(self):
-        """BZ correction halves Kp for highly bound drugs (fup=0.01)."""
-        from sisyphus.predict.ivive import _apply_bz_correction
+    def test_uses_modified_poulin_and_requires_fup(self):
+        from sisyphus.predict.ivive import _compute_all_kp
 
-        kp_rr = 100.0
-        kp_bz = _apply_bz_correction(kp_rr, fup=0.01)
-        assert kp_bz < kp_rr
-        assert abs(kp_bz - 50.25) < 1.0
-
-    def test_bz_minimal_for_high_fup(self):
-        """BZ correction still reduces Kp even at high fup."""
-        from sisyphus.predict.ivive import _apply_bz_correction
-
-        kp_rr = 5.0
-        kp_bz = _apply_bz_correction(kp_rr, fup=0.9)
-        assert kp_bz < kp_rr
-
-    def test_bz_kp_one_unchanged(self):
-        """Kp=1.0 is a fixed point of BZ correction."""
-        from sisyphus.predict.ivive import _apply_bz_correction
-
-        assert _apply_bz_correction(1.0, 0.5) == 1.0
+        kp = _compute_all_kp(2.0, 9.0, "base", "berezhkovskiy", fup=0.2)
+        assert kp["liver"].mean == pytest.approx(0.8574048381252114)
+        with pytest.raises(ValueError, match="requires fup"):
+            _compute_all_kp(2.0, 9.0, "base", "berezhkovskiy")
 
 
 # ═══════════════════════════════════════════════════════════════════

@@ -77,9 +77,9 @@ def test_active_species_phenotype_warns_about_aggregate_clearance():
     assert any("active metabolite uses aggregate clearance" in w for w in result.warnings)
 
 
-def test_berezhkovskiy_method_warns_that_equation_is_unverified():
+def test_berezhkovskiy_method_is_available():
     result = predict(CAFFEINE, 100, kp_method="berezhkovskiy")
-    assert any("not verified against Berezhkovskiy" in w for w in result.warnings)
+    assert result.pk.cmax.mean > 0
 
 
 def test_phenotype_help_lists_only_graph_supported_cyp_tags(monkeypatch, capsys):

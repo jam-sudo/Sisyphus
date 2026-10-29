@@ -48,7 +48,7 @@ def test_parameter_mc_is_not_overwritten_by_residual_band():
 
 
 def test_residual_band_is_omitted_for_nondefault_partition_method():
-    result = predict(_CAFFEINE, 100.0, "oral", kp_method="berezhkovskiy")
+    result = predict(_CAFFEINE, 100.0, "oral", kp_method="rodgers_rowland_approx")
     assert result.cmax_prediction.residual_interval_90 is None
     assert result.cmax_prediction.interval_source is None
 
