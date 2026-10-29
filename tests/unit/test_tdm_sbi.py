@@ -76,6 +76,34 @@ def _posterior_prior_matches_current() -> bool:
     reason="Posterior trained with old fup parameterization (pre-logit); retrain needed",
 )
 class TestSBIDispatch:
+    def test_default_sbi_uses_likelihood_correction(
+        self, physiology, morphine_drug, monkeypatch,
+    ):
+        from types import SimpleNamespace
+
+        from sisyphus.regimen.tdm_sbi import sbi_update
+        from sisyphus.sbi import amortizer, importance
+
+        graph, compiled = physiology
+        drug, logp = morphine_drug
+        seen = []
+        monkeypatch.setattr(amortizer, "load_result", lambda path: SimpleNamespace(
+            prior_low=np.array([-1.0, -4.5, -0.5]), posterior=object(),
+        ))
+
+        def corrected(posterior, x, log_draw, *, n_draws, seed):
+            seen.append(len(x))
+            return np.zeros((n_draws, 3)), 64.0
+
+        monkeypatch.setattr(importance, "sample_corrected", corrected)
+        result = sbi_update(
+            compiled, graph, drug, DosingRegimen.single_oral(30.0),
+            (Observation(1.0, 0.01865),), n_samples=2, n_predictive_sims=1,
+            logp_hint=logp,
+        )
+        assert seen == [13]
+        assert result.ess == 64.0
+
     def test_retrained_hierarchical_posterior_runs_end_to_end(
         self, physiology, morphine_drug,
     ):
@@ -87,22 +115,34 @@ class TestSBIDispatch:
             compiled, graph, drug, DosingRegimen.single_oral(30.0),
             (Observation(1.0, 0.01865),), n_samples=100, n_predictive_sims=5,
             population_class="adult", logp_hint=logp,
+            raw_npe=True,
         )
         assert result.n_successful > 0
         assert result.posterior_cmax.mean > 0
 
     def test_retrained_continuous_posterior_runs_end_to_end(
-        self, physiology, morphine_drug,
+        self, physiology, morphine_drug, monkeypatch,
     ):
+        from sisyphus.regimen import tdm_sbi
         from sisyphus.regimen.tdm_sbi import sbi_update
 
         graph, compiled = physiology
         drug, logp = morphine_drug
+        weights = []
+        original_compile = tdm_sbi.ODECompiler.compile
+
+        def capture_compile(self, covariate_graph):
+            weights.append(covariate_graph.global_params["body_weight"].mean)
+            return original_compile(self, covariate_graph)
+
+        monkeypatch.setattr(tdm_sbi.ODECompiler, "compile", capture_compile)
         result = sbi_update(
             compiled, graph, drug, DosingRegimen.single_oral(30.0),
             (Observation(1.0, 0.01865),), n_samples=100, n_predictive_sims=5,
-            body_weight_kg=70.0, age_years=35.0, logp_hint=logp,
+            body_weight_kg=18.0, age_years=5.0, logp_hint=logp,
+            raw_npe=True,
         )
+        assert weights == [18.0]
         assert result.n_successful > 0
         assert result.posterior_cmax.mean > 0
 
@@ -132,6 +172,7 @@ class TestSBIDispatch:
             compiled, graph, drug, DosingRegimen.single_oral(30.0),
             (Observation(1.0, 0.01865),), n_samples=2, n_predictive_sims=1,
             body_weight_kg=70.0, age_years=35.0, logp_hint=logp,
+            raw_npe=True,
         )
         assert observed == [15]
         assert result.method_used == "sbi"
@@ -156,6 +197,7 @@ class TestSBIDispatch:
             compiled, graph, drug, DosingRegimen.single_oral(30.0),
             (Observation(1.0, 0.01865), Observation(4.0, 0.010)),
             n_samples=100, n_predictive_sims=5, logp_hint=logp, use_surrogate=True,
+            raw_npe=True,
         )
         assert loaded == ["multi_observation_nsf.pt"]
         assert result.n_successful > 0
@@ -173,6 +215,7 @@ class TestSBIDispatch:
             method="sbi",
             n_prior=50,  # small for fast test
             logp_hint=logp,
+            sbi_raw_npe=True,
         )
         assert isinstance(result, TDMResult)
         assert result.n_successful > 0
@@ -191,6 +234,7 @@ class TestSBIDispatch:
             method="sbi",
             n_prior=100,
             logp_hint=logp,
+            sbi_raw_npe=True,
         )
         assert result.posterior_cmax.mean < result.prior_cmax.mean
 
@@ -219,12 +263,12 @@ class TestSBIDispatch:
 
         r_sci = bayesian_update(
             compiled, graph, drug, regimen, obs,
-            method="sbi", n_prior=80, logp_hint=logp,
+            method="sbi", n_prior=80, logp_hint=logp, sbi_raw_npe=True,
         )
         r_hyb = bayesian_update(
             compiled, graph, drug, regimen, obs,
             method="sbi", n_prior=80, logp_hint=logp,
-            sbi_use_surrogate=True,
+            sbi_use_surrogate=True, sbi_raw_npe=True,
         )
         ratio = r_hyb.posterior_cmax.mean / max(r_sci.posterior_cmax.mean, 1e-12)
         # Within 60 % of scipy is generous but covers MC noise + minor surrogate bias
@@ -251,12 +295,13 @@ class TestSBIDispatch:
 
         r1 = bayesian_update(
             compiled, graph, drug, regimen, obs1,
-            method="sbi", n_prior=80, logp_hint=logp, seed=42,
+            method="sbi", n_prior=80, logp_hint=logp, seed=42, sbi_raw_npe=True,
         )
         r2 = bayesian_update(
             compiled, graph, drug, regimen, obs2,
             method="sbi", n_prior=80, logp_hint=logp, seed=42,
             sbi_posterior_path=str(POSTERIOR_PATH),
+            sbi_raw_npe=True,
         )
         assert r1.n_successful > 0
         assert r2.n_successful > 0
@@ -283,7 +328,7 @@ class TestSBIDispatch:
         t0 = time.time()
         r_sbi = bayesian_update(
             compiled, graph, drug, regimen, obs,
-            method="sbi", n_prior=50, logp_hint=logp,
+            method="sbi", n_prior=50, logp_hint=logp, sbi_raw_npe=True,
         )
         sbi_time = time.time() - t0
 

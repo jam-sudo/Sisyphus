@@ -1,0 +1,66 @@
+"""Checks for the pseudo-marginal SBI correction."""
+
+import numpy as np
+import pytest
+
+torch = pytest.importorskip("torch")
+
+from sisyphus.sbi import importance  # noqa: E402
+from sisyphus.sbi.importance import (  # noqa: E402
+    CorrectedSBCPosterior,
+    LowImportanceESS,
+    sample_corrected,
+)
+from sisyphus.sbi.priors import PRIOR_HIGH, PRIOR_LOW  # noqa: E402
+
+
+class UniformPosterior:
+    def sample(self, shape, *, x, show_progress_bars):
+        rng = np.random.default_rng(1)
+        return torch.as_tensor(
+            rng.uniform(PRIOR_LOW, PRIOR_HIGH, size=(shape[0], 3)), dtype=torch.float32,
+        )
+
+    def log_prob(self, theta, *, x):
+        return torch.full((len(theta),), -np.log(np.prod(PRIOR_HIGH - PRIOR_LOW)))
+
+
+def test_corrected_sampler_moves_toward_likelihood_peak():
+    posterior = UniformPosterior()
+
+    def log_draw(theta, rng):
+        return float(-0.5 * ((theta[0] - 0.7) / 0.2) ** 2)
+
+    samples, ess = sample_corrected(
+        posterior, np.zeros(1), log_draw,
+        n_draws=1000, n_proposals=2000, n_nuisance=2, seed=7,
+    )
+    assert 0.55 < samples[:, 0].mean() < 0.8
+    assert ess > 32
+
+
+def test_corrected_sampler_rejects_degenerate_weights():
+    with pytest.raises(LowImportanceESS):
+        sample_corrected(
+            UniformPosterior(), np.zeros(1),
+            lambda theta, rng: -1000.0 * (theta[0] - 0.7) ** 2,
+            n_draws=10, n_proposals=32, n_nuisance=1, seed=7,
+        )
+
+
+def test_sbc_sampler_counts_exact_rejection_fallback(monkeypatch):
+    class Simulator:
+        obs_sigma_log10 = 0.2
+
+        def simulate_single(self, theta, seed, add_noise=True):
+            assert not add_noise
+            return theta[0]
+
+    def low_ess(*args, **kwargs):
+        raise LowImportanceESS("forced")
+
+    monkeypatch.setattr(importance, "sample_corrected", low_ess)
+    sampler = CorrectedSBCPosterior(UniformPosterior(), Simulator(), seed=7)
+    draws = sampler.sample((100,), x=torch.as_tensor([[0.7]]))
+    assert sampler.rejection_count == 1
+    assert 0.5 < draws[:, 0].mean() < 0.9
