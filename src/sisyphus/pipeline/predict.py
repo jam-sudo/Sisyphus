@@ -667,10 +667,12 @@ def predict(
             CPIC default scale for that gene. Values are caller-supplied
             and caller-justified — Sisyphus does not endorse specific values.
         kp_method: Tissue partition coefficient (Kp) calculation method.
-            One of ``"rodgers_rowland"`` (default, suitable for most
-            small-molecule drugs), ``"berezhkovskiy"`` (experimental
-            scalar correction), ``"poulin_theil"``, or ``"provided"``
+            One of ``"rodgers_rowland"`` (full R&R default),
+            ``"rodgers_rowland_approx"`` (former approximation),
+            ``"poulin_theil"``, or ``"provided"``
             (use values supplied via ``measured_adme.kp_overrides``).
+            ``"berezhkovskiy"`` is rejected because the former scalar
+            correction is unsupported by the cited paper.
             Forwarded to ``build_drug_on_graph``; the prior
             implementation hard-coded the default and made the per-drug
             field unreachable through the public API (hardening backlog
@@ -706,8 +708,16 @@ def predict(
         raise ValueError(f"route must be 'oral' or 'iv', got {route!r}")
     if isinstance(route, Route):
         route = route.value
-    if kp_method not in {"rodgers_rowland", "poulin_theil", "berezhkovskiy", "provided"}:
+    if kp_method not in {
+        "rodgers_rowland", "rodgers_rowland_approx", "poulin_theil", "berezhkovskiy",
+        "provided",
+    }:
         raise ValueError(f"Unknown kp_method {kp_method!r}")
+    if kp_method == "berezhkovskiy":
+        raise ValueError(
+            "Berezhkovskiy 2004 J Pharm Sci 93:1628 does not support the former "
+            "scalar Kp correction; tissue binding data are required"
+        )
     if kp_method == "provided" and not (measured_adme and measured_adme.kp_overrides):
         raise ValueError("kp_method='provided' requires measured_adme.kp_overrides")
     if isinstance(n_mc_samples, bool) or not isinstance(n_mc_samples, int) or n_mc_samples < 0:
@@ -736,11 +746,6 @@ def predict(
     from sisyphus.predict.chemistry import compute_profile
 
     warnings_list: list[str] = []
-    if kp_method == "berezhkovskiy":
-        warnings_list.append(
-            "kp_method:berezhkovskiy is experimental; current correction is not "
-            "verified against Berezhkovskiy 2004 J Pharm Sci 93:1628"
-        )
     # ── Step 1: Chemistry + ADME ─────────────────────────────────────────
     profile = compute_profile(smiles)
     adme = predict_adme(profile)

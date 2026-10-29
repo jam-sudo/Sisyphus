@@ -1,8 +1,7 @@
 """Unit tests for the kp_method= parameter on pipeline.predict.predict.
 
 These verify that the parameter is threaded correctly through the pipeline
-to ``build_drug_on_graph``. Magnitude validation (does Berezhkovskiy
-produce different Cmax than Rodgers-Rowland?) belongs to integration
+to ``build_drug_on_graph``. Magnitude validation belongs to integration
 tests; this file's job is the wiring contract only.
 
 Closes hardening backlog B3 (the per-drug DrugOnGraph.kp_method field
@@ -64,10 +63,10 @@ class TestPredictKpMethodWiring:
             return real_build(*args, **kwargs)
 
         with patch("sisyphus.predict.ivive.build_drug_on_graph", side_effect=spy) as p:
-            predict(_CAFFEINE, dose_mg=100.0, kp_method="berezhkovskiy")
+            predict(_CAFFEINE, dose_mg=100.0, kp_method="rodgers_rowland_approx")
             assert p.call_count >= 1, "expected build_drug_on_graph to be called at least once"
-            assert all(m == "berezhkovskiy" for m in seen_kp_methods), (
-                f"expected every build_drug_on_graph call to receive kp_method='berezhkovskiy', "
+            assert all(m == "rodgers_rowland_approx" for m in seen_kp_methods), (
+                f"expected every build_drug_on_graph call to receive the comparison method, "
                 f"got {seen_kp_methods}"
             )
 
