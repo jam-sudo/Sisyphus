@@ -329,3 +329,35 @@ def test_continuous_bile_return_raises_auc_and_late_shoulder():
     early = np.argmin(abs(time_h - 2.0))
     late = np.argmin(abs(time_h - 12.0))
     assert returned[late] / baseline[late] > returned[early] / baseline[early] + 0.2
+
+
+def test_gallbladder_overlay_delays_return_and_preserves_mass():
+    drug = replace(
+        _make_ecm_drug(
+            fup=0.3, cyp3a4_affinity=0.01,
+            ps_passive=100.0, ps_eff=100.0, cl_int_bile=45.0,
+        ),
+        route="oral", administration_node="stomach_lumen",
+    ).realize_means()
+    curves = {}
+    for overlay in ("ehc_continuous_overlay.yaml", "ehc_gallbladder_overlay.yaml"):
+        graph = merge_overlay(
+            build_from_yaml(Path("data/physiology/reference_man.yaml")),
+            Path("data/physiology") / overlay,
+        ).realize_means()
+        compiled = ODECompiler().compile(graph)
+        initial = np.zeros(compiled.n_states)
+        initial[compiled.state_index[drug.administration_node]] = drug.dose_mg
+        result = solve(compiled, ResolvedParams(graph, drug), initial, (0.0, 48.0))
+        assert result.solver_success
+        assert result.mass_balance_error < 1e-6
+        curves[overlay] = result.concentrations["venous_blood"]
+        if "gallbladder" in result.amounts:
+            assert result.amounts["gallbladder"].max() > 0
+
+    continuous = curves["ehc_continuous_overlay.yaml"]
+    gallbladder = curves["ehc_gallbladder_overlay.yaml"]
+    early = np.argmin(abs(result.time_h - 2.0))
+    late = np.argmin(abs(result.time_h - 24.0))
+    assert gallbladder[early] < continuous[early]
+    assert gallbladder[late] > continuous[late]
