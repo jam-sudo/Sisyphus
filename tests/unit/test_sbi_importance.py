@@ -48,6 +48,18 @@ def test_corrected_sampler_rejects_degenerate_weights():
         )
 
 
+def test_flow_numerical_failure_uses_existing_fallback():
+    class BrokenPosterior(UniformPosterior):
+        def sample(self, shape, *, x, show_progress_bars):
+            raise AssertionError("spline discriminant")
+
+    with pytest.raises(LowImportanceESS, match="numerical failure"):
+        sample_corrected(
+            BrokenPosterior(), np.zeros(1), lambda theta, rng: 0.0,
+            n_draws=10, n_proposals=64, n_nuisance=1,
+        )
+
+
 def test_corrected_sampler_excludes_flow_draws_outside_box_prior():
     class OutsidePosterior(UniformPosterior):
         def sample(self, shape, *, x, show_progress_bars):

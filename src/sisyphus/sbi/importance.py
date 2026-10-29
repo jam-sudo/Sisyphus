@@ -56,15 +56,18 @@ def sample_corrected(
     x_t = torch.as_tensor(np.asarray(x, dtype=np.float32).reshape(1, -1))
     n_prior = int(round(n_proposals * defensive_fraction))
     actual_fraction = n_prior / n_proposals
-    with torch.no_grad():
-        flow = posterior.sample(
-            (n_proposals - n_prior,), x=x_t, show_progress_bars=False,
-        ).detach().cpu().numpy()
-        prior = rng.uniform(PRIOR_LOW, PRIOR_HIGH, size=(n_prior, len(PRIOR_LOW)))
-        theta = np.concatenate((flow, prior), axis=0)
-        log_q_flow = posterior.log_prob(
-            torch.as_tensor(theta, dtype=torch.float32), x=x_t,
-        ).detach().cpu().numpy().reshape(-1)
+    try:
+        with torch.no_grad():
+            flow = posterior.sample(
+                (n_proposals - n_prior,), x=x_t, show_progress_bars=False,
+            ).detach().cpu().numpy()
+            prior = rng.uniform(PRIOR_LOW, PRIOR_HIGH, size=(n_prior, len(PRIOR_LOW)))
+            theta = np.concatenate((flow, prior), axis=0)
+            log_q_flow = posterior.log_prob(
+                torch.as_tensor(theta, dtype=torch.float32), x=x_t,
+            ).detach().cpu().numpy().reshape(-1)
+    except AssertionError as exc:
+        raise LowImportanceESS("Flow proposal numerical failure") from exc
     log_p = -np.log(np.prod(PRIOR_HIGH - PRIOR_LOW))
     log_p_theta = np.where(
         np.all((theta >= PRIOR_LOW) & (theta <= PRIOR_HIGH), axis=1), log_p, -np.inf,
