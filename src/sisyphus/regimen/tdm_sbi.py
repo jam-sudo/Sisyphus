@@ -37,6 +37,8 @@ _TMAX_WARNING_DISTANCE_H = 2.0
 _TMAX_WARNING_FRACTION_RATIO = 0.5
 # Source: regimen/tdm.py uses 0.25 h output spacing for engine TDM simulations.
 _TMAX_SCAN_STEP_H = 0.25
+# Source: sisyphus/sbi/simulator.py::_DEFAULT_T_SPAN; training Cmax uses 0–48 h.
+_SIMULATOR_CMAX_HORIZON_H = 48.0
 
 
 def _warn_engine_revision(posterior_path: Path) -> None:
@@ -176,8 +178,8 @@ def sbi_update(
         regimen: Dosing regimen the patient received.
         observations: Observed concentrations. For calibrated drugs and supported
             oral regimens, two or three observations use the time-aware posterior.
-            Other SBI cases condition on the first observation and reweight
-            against later observations.
+            Other SBI cases condition the proposal on the first observation;
+            correction weights use the joint likelihood of all observations.
         posterior_path: Explicit path to a trained posterior .pt file. By
             default the routing table can select the time-aware model;
             otherwise ``models/sbi/multi_drug_nsf.pt`` is used. Expects a
@@ -393,6 +395,8 @@ def sbi_update(
         t_total_likelihood = max(
             max(obs.time_h for obs in observations), regimen.last_dose_end_h
         ) + 24.0
+        if len(observations) == 1:
+            t_total_likelihood = max(t_total_likelihood, _SIMULATOR_CMAX_HORIZON_H)
 
         def log_likelihood_draw(theta: np.ndarray, rng: np.random.Generator) -> float:
             overridden = apply_theta_to_drug(drug, theta, float(drug.peff.mean))
@@ -757,9 +761,8 @@ def sbi_update(
     prior_arr = np.array(prior_cmax_list)
     post_arr = np.array(post_cmax_list)
 
-    # Compute posterior weights. Without multi-obs reweighting, weights are
-    # uniform (NPE gives exact samples conditioned on first obs). With extra
-    # observations, we log-normalize the likelihood weights via log-sum-exp.
+    # Corrected draws already encode the joint likelihood; legacy raw-flow
+    # reweighting still uses these separate predictive weights.
     n_post = len(post_cmax_list)
     multi_obs_used = False
     if (_extra_obs or sbi_reweight) and surrogate_bundle is None and 'post_log_weights' in dir() and post_log_weights:  # noqa: E501

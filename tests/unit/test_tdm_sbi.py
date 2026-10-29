@@ -89,13 +89,18 @@ class TestSBIDispatch:
         drug, logp = morphine_drug
         seen = []
         log_densities = []
+        solve_windows = []
         monkeypatch.setattr(amortizer, "load_result", lambda path: SimpleNamespace(
             prior_low=np.array([-1.0, -4.5, -0.5]), posterior=object(),
         ))
-        monkeypatch.setattr(tdm_sbi, "solve_regimen", lambda *args, **kwargs: SimpleNamespace(
-            solver_success=True, time_h=np.array([0.0, 1.0, 2.0]),
-            concentrations={"venous_blood": np.array([0.01, 0.005, 0.02])},
-        ))
+        def fake_solve(*args, **kwargs):
+            solve_windows.append(kwargs["t_total_h"])
+            return SimpleNamespace(
+                solver_success=True, time_h=np.array([0.0, 1.0, 2.0]),
+                concentrations={"venous_blood": np.array([0.01, 0.005, 0.02])},
+            )
+
+        monkeypatch.setattr(tdm_sbi, "solve_regimen", fake_solve)
 
         def corrected(posterior, x, log_draw, *, n_draws, seed):
             seen.append(len(x))
@@ -114,6 +119,7 @@ class TestSBIDispatch:
                     - np.log(sigma) - 0.5 * np.log(2 * np.pi))
         assert log_densities[0] == pytest.approx(expected)
         assert result.ess == 64.0
+        assert 48.0 in solve_windows
 
     def test_retrained_hierarchical_posterior_runs_end_to_end(
         self, physiology, morphine_drug,
