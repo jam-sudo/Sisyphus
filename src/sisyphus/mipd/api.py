@@ -87,8 +87,8 @@ def predict_posterior(
             (MeasuredConc on the elimination tail); with magnitude-only data
             (MeasuredCmax/AUC) they trade off along an F/CL ridge — prefer the F-only
             path or anchor F with a MeasuredF (review finding #7).
-        method: ``sir`` (default) uses the reference posterior; ``neural`` explicitly
-            selects the calibrated but SIR-disagreeing CL-grid approximation.
+        method: ``sir`` (default) uses the reference posterior; ``neural`` uses the
+            CL-grid neural importance proposal, with grid-SIR fallback at low ESS.
         covariates: patient covariates (v1: measured CrCl) that deterministically
             individualize the engine's renal clearance (CrCl/125). Routes through a
             single renal-scaled engine solve when no MeasuredConc is present, so the

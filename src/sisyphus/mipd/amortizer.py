@@ -4,22 +4,23 @@
 engine is linear, so sampling-importance-resampling is exact and instant — no
 training needed.
 
-``NeuralAmortizer`` conditions a trained SNPE posterior on the engine forward map,
-single-dose regimen and sparse observations for the (F, metabolic CLint scale)
-CL-grid regime. Training data come from the same engine-grid forward and priors
-as ``sir_posterior_2d``. The shipped model is opt-in because it failed strict
-agreement with grid SIR.
+``NeuralAmortizer`` uses a trained SNPE posterior as a proposal for the (F,
+metabolic CLint scale) CL-grid regime, then corrects its draws with the same
+prior and likelihood as grid SIR. A prior proposal component covers the atoms
+created by clipping F at 1 and CLint at its bounds.
 """
 from __future__ import annotations
 
+import math
 from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Protocol
 
 import numpy as np
+from scipy.special import log_ndtr, logsumexp
 
-from sisyphus.mipd.clgrid import CLGridForward, CLPrior, MeasuredConc
+from sisyphus.mipd.clgrid import CLGridForward, CLPrior, MeasuredConc, sir_posterior_2d
 from sisyphus.mipd.core import (
     AnalyticForward,
     APrioriPK,
@@ -38,6 +39,15 @@ from sisyphus.regimen.types import DEFAULT_ORAL_NODE, DosingRegimen
 _DESIGN_CLINT_SCALE_RATIO = np.array([0.05, 0.25, 1.0, 4.0, 20.0])
 # Training's sparse concentration observations use 4 and 16 h (train_mipd_neural_amortizer).
 _DESIGN_CONC_TIME_H = (4.0, 16.0)
+# Project release floor from train_mipd_neural_amortizer._MIN_SIR_ESS_COUNT.
+_MIN_NEURAL_ESS_COUNT = 200
+# Defensive importance sampling (Hesterberg, 1995) covers clipped-prior boundary atoms.
+_PRIOR_PROPOSAL_FRACTION = 0.5
+# At least ten proposals per ESS-floor particle; grid SIR uses 20,000 initial draws.
+_MIN_NEURAL_PROPOSALS_COUNT = 2000
+# Same adaptive grid-SIR bounds as train_mipd_neural_amortizer._sir_reference.
+_INITIAL_GRID_FALLBACK_DRAWS_COUNT = 20000
+_MAX_GRID_FALLBACK_DRAWS_COUNT = 320000
 
 
 class Amortizer(Protocol):
@@ -81,8 +91,7 @@ class NeuralAmortizer:
 
     ``model`` is a validated ``NPETrainingResult`` from ``sisyphus.sbi.amortizer``.
     The context contains the grid response at fixed CLint scales, not molecular identity.
-    The engine grid remains necessary to report Cmax/AUC from posterior draws;
-    amortization replaces per-query latent likelihood weighting, not grid building.
+    The engine grid remains necessary for likelihood evaluation and PK outputs.
     """
 
     def __init__(self, model: Any) -> None:
@@ -114,8 +123,9 @@ class NeuralAmortizer:
         regimen: DosingRegimen,
         n_samples: int = 20000,
         rng: np.random.Generator | None = None,
+        raw_flow: bool = False,
     ) -> PosteriorPK:
-        """Sample a conditioned two-latent posterior and map it through the grid."""
+        """Correct neural draws with the grid likelihood/prior, or explicitly use raw flow."""
         if n_samples <= 0:
             raise ValueError("n_samples must be positive")
         rng = np.random.default_rng() if rng is None else rng
@@ -133,25 +143,112 @@ class NeuralAmortizer:
                     "NeuralAmortizer.posterior requires the optional sbi extra (torch+sbi)"
                 ) from exc
             torch.manual_seed(int(rng.integers(0, 2**31 - 1)))
-            theta = np.asarray(self.model.sample(context, n=n_samples), dtype=float)
-            if theta.shape != (n_samples, 2) or not np.isfinite(theta).all():
+            n_proposals = n_samples if raw_flow else max(n_samples, _MIN_NEURAL_PROPOSALS_COUNT)
+            n_prior = 0 if raw_flow else int(n_proposals * _PRIOR_PROPOSAL_FRACTION)
+            theta = np.asarray(
+                self.model.sample(
+                    context, n=n_proposals - n_prior,
+                    **({"reject_outside_prior": False} if not raw_flow else {}),
+                ),
+                dtype=float,
+            )
+            if theta.shape != (n_proposals - n_prior, 2) or not np.isfinite(theta).all():
                 raise ValueError("neural posterior returned invalid (F, CLint scale) samples")
+            if n_prior:
+                prior_theta = np.column_stack((
+                    f_prior.sample(n_prior, rng), cl_prior.sample(n_prior, rng)
+                ))
+                theta = np.concatenate((theta, prior_theta))
             f, s = theta.T
-            if np.any((f <= 0) | (f > 1) | (s < cl_prior.s_min) | (s > cl_prior.s_max)):
+            inside = (f >= 1e-6) & (f <= 1) & (s >= cl_prior.s_min) & (s <= cl_prior.s_max)
+            if raw_flow and not np.all(inside):
                 raise ValueError("neural posterior samples are outside the engine prior")
         else:
             f = f_prior.sample(n_samples, rng)
             s = cl_prior.sample(n_samples, rng)
-        state = forward(f, s)
+        state = forward(np.clip(f, 1e-6, 1.0), np.clip(s, cl_prior.s_min, cl_prior.s_max))
+        if obs and not raw_flow:
+            log_prior = np.full(n_proposals, -np.inf)
+            log_prior[inside] = (
+                _clipped_log_normal_logprob(
+                    f[inside], min(max(f_prior.f_engine, 1e-4), 1.0),
+                    f_prior.cv, 1e-6, 1.0,
+                )
+                + _clipped_log_normal_logprob(
+                    s[inside], 1.0, cl_prior.cv, cl_prior.s_min, cl_prior.s_max
+                )
+            )
+            boundary = (f == 1e-6) | (f == 1.0) | (s == cl_prior.s_min) | (s == cl_prior.s_max)
+            log_flow = np.full(n_proposals, -np.inf)
+            if np.any(inside & ~boundary):
+                device = next(self.model.density_estimator.parameters()).device
+                # Untruncated flow draws require its base density, not sbi's leakage correction.
+                values = self.model.posterior.log_prob(
+                    torch.as_tensor(theta[inside & ~boundary], dtype=torch.float32, device=device),
+                    x=torch.as_tensor(context, dtype=torch.float32, device=device),
+                    norm_posterior=False,
+                )
+                log_flow[inside & ~boundary] = np.asarray(values.detach().cpu(), dtype=float)
+            log_proposal = np.logaddexp(
+                math.log(n_prior / n_proposals) + log_prior,
+                math.log(1 - n_prior / n_proposals) + log_flow,
+            )
+            log_weight = np.full(n_proposals, -np.inf)
+            log_weight[inside] = log_prior[inside] - log_proposal[inside]
+            for observation in obs:
+                log_weight[inside] += observation.log_likelihood(state)[inside]
+            weights = np.exp(log_weight - logsumexp(log_weight))
+            n_eff = float(1.0 / np.sum(weights**2)) if np.isfinite(weights).all() else 0.0
+            if n_eff < _MIN_NEURAL_ESS_COUNT:
+                n_grid_draws = max(n_samples, _INITIAL_GRID_FALLBACK_DRAWS_COUNT)
+                while True:
+                    fallback = sir_posterior_2d(
+                        f_prior, cl_prior, forward, obs,
+                        n_samples=n_grid_draws, rng=rng,
+                    )
+                    if (
+                        fallback.n_eff >= _MIN_NEURAL_ESS_COUNT
+                        or n_grid_draws >= _MAX_GRID_FALLBACK_DRAWS_COUNT
+                    ):
+                        break
+                    n_grid_draws *= 2
+                fallback_idx = rng.choice(len(fallback.f.samples), size=n_samples, replace=False)
+                return PosteriorPK(
+                    f=Posterior(fallback.f.samples[fallback_idx]),
+                    cmax=Posterior(fallback.cmax.samples[fallback_idx]),
+                    auc=Posterior(fallback.auc.samples[fallback_idx]),
+                    cl_scale=Posterior(fallback.cl_scale.samples[fallback_idx]),
+                    n_eff=fallback.n_eff,
+                    proposal_n_eff=n_eff,
+                    warnings=(f"neural IS ESS {n_eff:.1f} below 200; used grid SIR",),
+                )
+            idx = rng.choice(n_proposals, size=n_samples, p=weights)
+            return PosteriorPK(
+                f=Posterior(f[idx]), cmax=Posterior(state["cmax"][idx]),
+                auc=Posterior(state["auc"][idx]), cl_scale=Posterior(s[idx]), n_eff=n_eff,
+                proposal_n_eff=n_eff,
+            )
         return PosteriorPK(
             f=Posterior(f), cmax=Posterior(state["cmax"]),
             auc=Posterior(state["auc"]), cl_scale=Posterior(s),
             n_eff=float(n_samples),
-            warnings=(
+            warnings=() if not obs or not raw_flow else (
                 "neural posterior is a calibrated approximation that does not match "
                 "exact SIR within Monte Carlo error",
             ),
         )
+
+
+def _clipped_log_normal_logprob(
+    values: np.ndarray, median: float, cv: float, lower: float, upper: float,
+) -> np.ndarray:
+    """Density in the interior and probability mass at each clipped endpoint."""
+    sigma = math.sqrt(math.log1p(cv * cv))
+    z = (np.log(values) - math.log(median)) / sigma
+    result = -0.5 * z**2 - np.log(values * sigma * math.sqrt(2 * math.pi))
+    result[values == lower] = log_ndtr((math.log(lower) - math.log(median)) / sigma)
+    result[values == upper] = log_ndtr(-(math.log(upper) - math.log(median)) / sigma)
+    return result
 
 
 def _neural_context(

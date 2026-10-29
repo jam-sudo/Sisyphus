@@ -232,6 +232,8 @@ class PosteriorPK:
     absorption_rate_per_h: Posterior | None = None
     total_clearance_l_h: Posterior | None = None
     crcl_scale: Posterior | None = None
+    # ESS of the neural proposal before any grid-SIR fallback.
+    proposal_n_eff: float | None = None
 
 
 def _softmax_resample(

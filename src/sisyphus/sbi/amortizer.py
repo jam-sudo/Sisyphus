@@ -26,15 +26,20 @@ class NPETrainingResult:
     prior_low: np.ndarray
     prior_high: np.ndarray
 
-    def sample(self, x_obs: np.ndarray, n: int = 5000) -> np.ndarray:
-        """Draw n samples from posterior conditioned on observed x."""
+    def sample(
+        self, x_obs: np.ndarray, n: int = 5000, *, reject_outside_prior: bool = True,
+    ) -> np.ndarray:
+        """Draw n conditioned samples; disable rejection for normalized flow proposals."""
         import torch
 
         device = next(self.density_estimator.parameters()).device
         x_t = torch.as_tensor(x_obs, dtype=torch.float32, device=device)
         if x_t.ndim == 1:
             x_t = x_t[None, :]
-        samples = self.posterior.sample((n,), x=x_t, show_progress_bars=False)
+        if reject_outside_prior:
+            samples = self.posterior.sample((n,), x=x_t, show_progress_bars=False)
+        else:
+            samples = self.density_estimator.sample(torch.Size([n]), condition=x_t)[:, 0]
         return samples.detach().cpu().numpy()
 
 
