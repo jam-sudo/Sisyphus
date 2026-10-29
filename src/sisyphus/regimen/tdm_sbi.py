@@ -159,9 +159,10 @@ def sbi_update(
         graph: BodyGraph with distributional parameters.
         drug: DrugOnGraph with distributional parameters (population prior).
         regimen: Dosing regimen the patient received.
-        observations: Observed concentrations. Only the first observation is
-            currently conditioned on — multi-observation amortization is a
-            Phase 2.1 follow-up.
+        observations: Observed concentrations. The amortizer conditions on the
+            first observation; later observations use post-hoc importance
+            reweighting. Native multi-observation amortization is deferred
+            pending calibration.
         posterior_path: Path to the trained posterior .pt file. Defaults to
             ``models/sbi/multi_drug_nsf.pt``. Expects a sibling ``.aux.pt``
             holding the feature standardizer (mean / std) produced by
