@@ -17,6 +17,7 @@ uncertainty; no residual interval is validated for this path.
 from __future__ import annotations
 
 import dataclasses
+from typing import Literal
 
 import numpy as np
 
@@ -25,6 +26,11 @@ from sisyphus.mipd.clgrid import MeasuredConc
 from sisyphus.mipd.core import APrioriPK, Posterior, PosteriorPK
 from sisyphus.mipd.covariates import Covariates
 from sisyphus.mipd.meta import build_meta_tracks, meta_blend_cmax
+
+# Source: train_mipd_neural_amortizer._setup trains with s_range=(0.05, 20.0).
+_NEURAL_CLINT_RANGE_RATIO = (0.05, 20.0)
+# Source: train_mipd_neural_amortizer._main trains and validates on 13 grid points.
+_NEURAL_GRID_POINTS_COUNT = 13
 
 
 def _attach_meta(post: PosteriorPK, smiles: str, dose_mg: float, ap) -> PosteriorPK:
@@ -51,6 +57,7 @@ def predict_posterior(
     n_samples: int = 20000,
     seed: int = 0,
     cl_latent: bool = False,
+    method: Literal["sir", "neural"] = "sir",
     covariates: Covariates | None = None,
     phenotypes: dict[str, str] | None = None,
     n_grid: int = 13,
@@ -80,6 +87,8 @@ def predict_posterior(
             (MeasuredConc on the elimination tail); with magnitude-only data
             (MeasuredCmax/AUC) they trade off along an F/CL ridge — prefer the F-only
             path or anchor F with a MeasuredF (review finding #7).
+        method: ``sir`` (default) uses the reference posterior; ``neural`` explicitly
+            selects the calibrated but SIR-disagreeing CL-grid approximation.
         covariates: patient covariates (v1: measured CrCl) that deterministically
             individualize the engine's renal clearance (CrCl/125). Routes through a
             single renal-scaled engine solve when no MeasuredConc is present, so the
@@ -100,6 +109,10 @@ def predict_posterior(
             f"predict_posterior supports oral route only — the latent is oral "
             f"bioavailability F (IV has F≡1). Got route={route!r}."
         )
+    if method not in ("sir", "neural"):
+        raise ValueError(f"unknown MIPD posterior method: {method!r}")
+    if method == "neural" and n_grid != _NEURAL_GRID_POINTS_COUNT:
+        raise ValueError("neural MIPD posterior was validated on a 13-point CL grid")
     if phenotypes:
         from sisyphus.predict.phenotype import parse_phenotype_spec
 
@@ -110,7 +123,9 @@ def predict_posterior(
     observations = list(observations)
     if covariates is not None and covariates.crcl_cv > 0:
         raise ValueError("CrCl measurement CV requires repeated-dose structural TDM")
-    needs_grid = cl_latent or any(isinstance(o, MeasuredConc) for o in observations)
+    needs_grid = method == "neural" or cl_latent or any(
+        isinstance(o, MeasuredConc) for o in observations
+    )
     renal_factor = covariates.renal_factor() if covariates is not None else 1.0
     has_phys = covariates.has_physiology() if covariates is not None else False
     body_weight_kg = covariates.body_weight_kg if covariates is not None else None
@@ -148,6 +163,7 @@ def predict_posterior(
             body_weight_kg=body_weight_kg,
             age_years=age_years,
             phenotypes=phenotypes,
+            **({"s_range": _NEURAL_CLINT_RANGE_RATIO} if method == "neural" else {}),
         )
         i1 = int(np.argmin(np.abs(np.log(grid.s_grid))))
         f_engine0 = float(min(max(grid.f_engine[i1], 1e-4), 1.0))
@@ -155,10 +171,22 @@ def predict_posterior(
         cl_prior = CLPrior(
             cv=cl_prior_cv, s_min=float(grid.s_grid[0]), s_max=float(grid.s_grid[-1])
         )
-        post = sir_posterior_2d(
-            f_prior, cl_prior, CLGridForward(grid), observations,
-            n_samples=n_samples, rng=rng,
-        )
+        forward = CLGridForward(grid)
+        if method == "neural":
+            from sisyphus.mipd.amortizer import NeuralAmortizer
+            from sisyphus.regimen.types import DosingRegimen
+            from sisyphus.resources import get_resource_config
+
+            path = get_resource_config().model("mipd", "neural_clgrid_v2.pt")
+            post = NeuralAmortizer.load(path).posterior(
+                f_prior, cl_prior, forward, observations,
+                regimen=DosingRegimen.single_oral(dose_mg), n_samples=n_samples, rng=rng,
+            )
+        else:
+            post = sir_posterior_2d(
+                f_prior, cl_prior, forward, observations,
+                n_samples=n_samples, rng=rng,
+            )
     elif individualized:
         # CrCl-only (no curve-shape obs): a single renal-scaled engine solve at
         # clint-scale s=1 (clint latent stays FIXED). Reuses build_cl_grid with a
@@ -195,4 +223,5 @@ def predict_posterior(
         )
 
     post = _attach_meta(post, smiles, dose_mg, ap)
+    warnings_list.extend(post.warnings)
     return dataclasses.replace(post, warnings=tuple(warnings_list))

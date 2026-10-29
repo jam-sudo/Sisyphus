@@ -19,6 +19,7 @@
   "models/direct_pk/xgboost_vdf.json": "sisyphus.ml.clf_predictor",
   "models/e2e_mlp.pt": null,
   "models/meta_learner/xgboost_meta.json": null,
+  "models/mipd/neural_clgrid_v2.pt": "sisyphus.mipd.api",
   "models/sbi/clozapine_posterior_nsf.pt": null,
   "models/sbi/continuous_hierarchical_nsf.aux.pt": "sisyphus.regimen.tdm_sbi",
   "models/sbi/continuous_hierarchical_nsf.pt": "sisyphus.regimen.tdm_sbi",

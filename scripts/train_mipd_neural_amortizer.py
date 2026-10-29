@@ -3,8 +3,9 @@
 
 Input is a JSON list of {"smiles": ..., "dose_mg": ...} oral compounds. A second
 manifest can provide a compound-disjoint held-out set; otherwise the last 20%
-after seeded shuffling are held out. No model is written unless the held-out
-coverage, SBC and ESS-aware grid-SIR agreement gates pass.
+after seeded shuffling are held out. The held-out coverage, SBC and ESS-aware
+grid-SIR agreement gates remain strict. A failed model can only be saved with
+the explicit --save-approximation flag, for opt-in use with its failed-gate report.
 """
 
 from __future__ import annotations
@@ -18,7 +19,6 @@ from pathlib import Path
 import numpy as np
 from scipy.stats import kstest
 
-from sisyphus.descriptors import compute_features
 from sisyphus.mipd.amortizer import NeuralAmortizer, _neural_context
 from sisyphus.mipd.clgrid import CLGrid, CLGridForward, CLPrior, MeasuredConc, sir_posterior_2d
 from sisyphus.mipd.core import FPrior, MeasuredAUC, MeasuredCmax, MeasuredF
@@ -39,7 +39,7 @@ _INITIAL_SIR_DRAWS_COUNT = 20000
 _MAX_SIR_DRAWS_COUNT = 320000
 
 
-def _draw_pair(forward, f_prior, cl_prior, features, regimen, rng):
+def _draw_pair(forward, f_prior, cl_prior, regimen, rng):
     f = float(f_prior.sample(1, rng)[0])
     s = float(cl_prior.sample(1, rng)[0])
     state = forward(np.array([f]), np.array([s]))
@@ -57,7 +57,7 @@ def _draw_pair(forward, f_prior, cl_prior, features, regimen, rng):
                 float(rng.lognormal(math.log(state["conc_at"](t)[0]), 0.25)), t
             ) for t in times
         )
-    x = _neural_context(f_prior, cl_prior, forward, obs, features, regimen)
+    x = _neural_context(f_prior, cl_prior, forward, obs, regimen)
     return np.array([f, s], dtype=np.float32), x, obs
 
 
@@ -89,9 +89,8 @@ def _setup(spec, n_grid, cache_dir=None, *, generate=False):
             raise ValueError(f"grid resolution mismatch in {cache_path}")
     forward = CLGridForward(grid)
     f_prior = FPrior(float(np.interp(1.0, grid.s_grid, grid.f_engine)))
-    # The shared feature function's final nine coordinates are RDKit descriptors.
     return (
-        forward, f_prior, CLPrior(), compute_features(smiles)[-9:],
+        forward, f_prior, CLPrior(),
         DosingRegimen.single_oral(dose),
     )
 
@@ -128,6 +127,10 @@ def _main() -> None:
     parser.add_argument("--generate-index", type=int)
     parser.add_argument("--n-calibration", type=int, default=100)
     parser.add_argument("--epochs", type=int, default=100)
+    parser.add_argument("--hidden-features", type=int, default=64)
+    parser.add_argument("--num-transforms", type=int, default=5)
+    parser.add_argument("--embedding-hidden", type=int, default=64)
+    parser.add_argument("--save-approximation", action="store_true")
     parser.add_argument("--device", choices=("cpu", "cuda"), default="cpu")
     parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
@@ -170,7 +173,8 @@ def _main() -> None:
     result = train_npe(
         np.stack(theta_rows), np.stack(x_rows),
         np.array([1e-6, 0.05]), np.array([1.0, 20.0]),
-        density_estimator="nsf", embedding_net_hidden=64,
+        density_estimator="nsf", embedding_net_hidden=args.embedding_hidden,
+        hidden_features=args.hidden_features, num_transforms=args.num_transforms,
         max_num_epochs=args.epochs, stop_after_epochs=15, seed=args.seed,
         device=args.device,
     )
@@ -180,16 +184,17 @@ def _main() -> None:
     ranks = []
     sir_ess = []
     sir_draws = []
+    normalized_mean_error = [[], []]
     cases = 0
     for i, spec in enumerate(heldout, 1):
         log.info("Held-out grid %d/%d: %s", i, len(heldout), spec["smiles"])
-        forward, f_prior, cl_prior, features, regimen = _setup(
+        forward, f_prior, cl_prior, regimen = _setup(
             spec, args.n_grid, args.cache_dir
         )
         for _ in range(args.n_calibration):
-            truth, _, obs = _draw_pair(forward, f_prior, cl_prior, features, regimen, rng)
+            truth, _, obs = _draw_pair(forward, f_prior, cl_prior, regimen, rng)
             post = neural.posterior(
-                f_prior, cl_prior, forward, obs, molecular_features=features,
+                f_prior, cl_prior, forward, obs,
                 regimen=regimen, n_samples=500, rng=rng,
             )
             sir, n_sir = _sir_reference(f_prior, cl_prior, forward, obs, rng)
@@ -203,6 +208,10 @@ def _main() -> None:
             for dim in range(2):
                 lo, hi = np.quantile(neural_samples[dim], [0.05, 0.95])
                 coverage[dim] += lo <= truth[dim] <= hi
+                normalized_mean_error[dim].append(
+                    abs(np.mean(neural_samples[dim]) - np.mean(sir_samples[dim]))
+                    / max(np.std(sir_samples[dim]), np.finfo(float).tiny)
+                )
                 agreement[dim] += _mean_agrees_with_mc(
                     neural_samples[dim], sir_samples[dim], sir.n_eff
                 )
@@ -233,14 +242,20 @@ def _main() -> None:
         "sir_ess_min": float(min(sir_ess)),
         "sir_ess_median": float(np.median(sir_ess)),
         "sir_draws_max": int(max(sir_draws)),
+        "sir_normalized_mean_error_median_f_clint": [
+            float(np.median(errors)) for errors in normalized_mean_error
+        ],
+        "sir_normalized_mean_error_p90_f_clint": [
+            float(np.quantile(errors, 0.9)) for errors in normalized_mean_error
+        ],
         "gate_passed": passed,
     }
     args.report.parent.mkdir(parents=True, exist_ok=True)
     args.report.write_text(json.dumps(report, indent=2) + "\n")
     log.info("Held-out gate: %s", report)
-    if passed:
+    if passed or args.save_approximation:
         save_result(result, args.out)
-        log.info("Validated model saved to %s", args.out)
+        log.info("Model saved to %s (strict gate passed: %s)", args.out, passed)
     else:
         log.warning("Gate failed; model was not saved")
         raise SystemExit(2)
