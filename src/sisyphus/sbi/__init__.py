@@ -10,11 +10,10 @@ posterior returns an answer in milliseconds after an offline training phase.
 Architecture:
     prior  →  simulator(engine)  →  (theta, x) pairs  →  NPE  →  amortized posterior
 
-Current scope (POC):
-    - Single-drug amortizer (per-drug training)
-    - 3D theta: (log10_clint_scale, fup, log10_peff_scale)
-    - 1D observation: log10(Cmax)
-    - Simulator: full scipy engine (not surrogate — OOD bug)
+Implemented paths include single-drug, multi-drug, hierarchical, and continuous
+amortizers. The single-drug theta is (log10_clint_scale, logit_fup,
+log10_peff_scale), conditioned on log10(Cmax). The simulator uses the
+full scipy engine.
 
 Imports are LAZY (PEP 562 ``__getattr__``): ``torch`` is an optional extra
 (pyproject ``[project.optional-dependencies]``) and the multi-drug / simulator

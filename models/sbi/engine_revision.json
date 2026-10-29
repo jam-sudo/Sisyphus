@@ -27,7 +27,11 @@
         "src/sisyphus/sbi/multi_drug.py",
         "src/sisyphus/sbi/priors.py",
         "src/sisyphus/sbi/simulator.py"
-      ]
+      ],
+      "verified_equivalent": {
+        "sha256": "bb267b0164e3ba6f43684ca575d5eff0be8b8fdf75b63be159b527d2197922b0",
+        "check": "11,000 fixed-seed draws (200 per each of 55 training drugs); theta, log10 Cmax, drug features, names, and per-drug counts bit-identical to the training-source tree"
+      }
     },
     "hierarchical_nsf_2k.pt": {
       "commit": "a3d398f5912a064cd9a0b3ff78b5a4d2b53d6b2b",
@@ -55,7 +59,11 @@
         "src/sisyphus/sbi/multi_drug.py",
         "src/sisyphus/sbi/priors.py",
         "src/sisyphus/sbi/simulator.py"
-      ]
+      ],
+      "verified_equivalent": {
+        "sha256": "bb267b0164e3ba6f43684ca575d5eff0be8b8fdf75b63be159b527d2197922b0",
+        "check": "11,000 fixed-seed draws (200 per each of 55 training drugs); theta, log10 Cmax, drug features, names, and per-drug counts bit-identical to the training-source tree"
+      }
     },
     "continuous_hierarchical_nsf.pt": {
       "commit": "2e0751c41ad8c26656f78f08fc768b59ec6c7fe3",

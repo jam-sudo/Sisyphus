@@ -35,6 +35,37 @@ from sisyphus.graph.types import Node
 
 logger = logging.getLogger(__name__)
 
+def _fm_from_registry(smiles: str, applied_genes: set[str]) -> tuple[str, float] | None:
+    """Find a phenotype-relevant in-vitro fm by parent InChIKey connectivity."""
+    import json
+
+    from rdkit import Chem
+
+    from sisyphus.predict.drugbank import drugbank_lookup
+    from sisyphus.resources import get_resource_config
+
+    if drugbank_lookup().get_substrate_enzymes(smiles):
+        return None
+
+    resources = get_resource_config()
+    clinical = json.loads(resources.data("reference", "clinical_pk.json").read_text())["drugs"]
+    entries = json.loads(resources.data("validation", "pgx_fm_registry.json").read_text())
+    registry = {}
+    for name, entry in entries.items():
+        reference = clinical.get(name, {})
+        reference_smiles = reference.get("smiles")
+        mol = Chem.MolFromSmiles(reference_smiles) if reference_smiles else None
+        if mol is not None:
+            key = Chem.MolToInchiKey(mol)[:14]
+            registry[key] = entry["gene"], float(entry["fm_invitro"])
+
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        return None
+    match = registry.get(Chem.MolToInchiKey(mol)[:14])
+    return match if match is not None and match[0] in applied_genes else None
+
+
 # Phenotype → activity multiplier. Applied to enzyme or transporter abundance.
 PHENOTYPE_SCALES: dict[str, float] = {
     "PM": 0.10,

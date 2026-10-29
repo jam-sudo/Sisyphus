@@ -173,6 +173,7 @@ def _get_fm_fractions(
     substrate_enzymes: set[str] | None = None,
     ugt_enzymes: set[str] | None = None,
     non_cyp_fractions: dict[str, float] | None = None,
+    fm_override: tuple[str, float] | None = None,
 ) -> dict[str, float]:
     """Get fraction metabolized by each enzyme (CYP + UGT + non-CYP), adjusted for compound type.
 
@@ -239,7 +240,7 @@ def _get_fm_fractions(
         cyp_fm = _normalize_fm(result)
 
     if not non_cyp_fractions:
-        return cyp_fm
+        return _apply_fm_override(cyp_fm, fm_override)
 
     for gene, frac in non_cyp_fractions.items():
         if not (0.0 <= frac <= 1.0):
@@ -257,7 +258,23 @@ def _get_fm_fractions(
     for gene, frac in non_cyp_fractions.items():
         out[gene] = frac
 
-    return _normalize_fm(out)
+    return _apply_fm_override(_normalize_fm(out), fm_override)
+
+
+def _apply_fm_override(
+    fractions: dict[str, float], override: tuple[str, float] | None
+) -> dict[str, float]:
+    """Set one measured fm and preserve the ratios of remaining routes."""
+    if override is None:
+        return fractions
+    gene, fm = override
+    if gene not in fractions or not 0.0 <= fm <= 1.0:
+        raise ValueError(f"Invalid fm override {override!r}")
+    other = 1.0 - fractions[gene]
+    if other <= 0.0:
+        raise ValueError(f"Cannot distribute fm override {override!r}")
+    return {tag: fm if tag == gene else value * (1.0 - fm) / other
+            for tag, value in fractions.items()}
 
 
 def _decompose_clint(
@@ -270,6 +287,7 @@ def _decompose_clint(
     metabolic_fraction: float = 1.0,
     non_cyp_fractions: dict[str, float] | None = None,
     ugt_ivive_sf: dict[str, float] | None = None,
+    fm_override: tuple[str, float] | None = None,
 ) -> dict[str, Distribution]:
     """Decompose total hepatic CLint into per-enzyme affinities.
 
@@ -315,6 +333,7 @@ def _decompose_clint(
         substrate_enzymes=substrate_enzymes,
         ugt_enzymes=ugt_enzymes,
         non_cyp_fractions=non_cyp_fractions,
+        fm_override=fm_override,
     )
     abundances = enzyme_abundances if enzyme_abundances is not None else _LIVER_ENZYME_ABUNDANCE
 
@@ -712,6 +731,7 @@ def build_drug_on_graph(
     non_cyp_fractions: dict[str, float] | None = None,
     measured_kp: dict[str, Distribution] | None = None,
     enzyme_km: dict[str, Distribution] | None = None,
+    fm_override: tuple[str, float] | None = None,
 ) -> DrugOnGraph:
     """Construct a DrugOnGraph from predicted properties.
 
@@ -814,6 +834,7 @@ def build_drug_on_graph(
         metabolic_fraction=metabolic_fraction,
         non_cyp_fractions=non_cyp_fractions,
         ugt_ivive_sf=ugt_ivive_sf,
+        fm_override=fm_override,
     )
 
     # Compute Kp for each tissue using selected method

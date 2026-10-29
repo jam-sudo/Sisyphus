@@ -66,7 +66,8 @@ def _warn_engine_revision(posterior_path: Path) -> None:
             path = root / relative
             digest.update(relative.encode() + b"\0")
             digest.update(path.read_bytes() if path.exists() else b"<missing>")
-        if digest.hexdigest() != entry["sha256"]:
+        equivalent = entry.get("verified_equivalent", {})
+        if digest.hexdigest() not in (entry["sha256"], equivalent.get("sha256")):
             logger.warning(
                 "SBI model %s was trained against engine revision %s; current engine/physiology "
                 "inputs differ. Posterior calibration may be stale.",
@@ -215,8 +216,7 @@ def sbi_update(
     # observations are used as a post-hoc importance-reweighting likelihood:
     # each theta sample from the amortizer is re-weighted by the probability
     # of producing the non-first observations under the engine forward sim.
-    # See _multi_obs_reweight below for implementation. Single-obs path is
-    # unchanged.
+    # The single-observation path is unchanged.
     _extra_obs = observations[1:]
 
     if posterior_path is not None:

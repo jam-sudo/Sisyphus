@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 import sys
@@ -140,6 +141,26 @@ def test_stale_sbi_model_logs_engine_revision_warning(tmp_path, monkeypatch, cap
     with caplog.at_level("WARNING"):
         tdm_sbi._warn_engine_revision(Path("multi_drug_nsf.pt"))
     assert "Posterior calibration may be stale" in caplog.text
+
+
+def test_verified_equivalent_sbi_engine_revision(tmp_path, monkeypatch, caplog):
+    from sisyphus.regimen import tdm_sbi
+
+    stamp_path = tmp_path / "engine_revision.json"
+    (tmp_path / "engine.py").write_text("current")
+    digest = hashlib.sha256(b"engine.py\0current").hexdigest()
+    stamp_path.write_text(json.dumps({"models": {"multi_drug_nsf.pt": {
+        "commit": "training", "sha256": "training-hash", "paths": ["engine.py"],
+        "verified_equivalent": {"sha256": digest, "check": "fixed-seed comparison"},
+    }}}))
+    monkeypatch.setattr(
+        tdm_sbi, "get_resource_config",
+        lambda: SimpleNamespace(root=tmp_path, model=lambda *args, **kwargs: stamp_path),
+    )
+
+    with caplog.at_level("WARNING"):
+        tdm_sbi._warn_engine_revision(Path("multi_drug_nsf.pt"))
+    assert not caplog.records
 
 
 @pytest.mark.parametrize("model_name", ["multi_drug_nsf.pt", "hierarchical_nsf_2k.pt"])

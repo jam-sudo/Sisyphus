@@ -2,8 +2,7 @@
 
 Each compound YAML file specifies physicochemical properties, binding
 parameters, enzyme affinities, and tissue partition coefficients.
-Bare float values are wrapped in deterministic ``Distribution(value, cv=0.0)``
-for Phase 1 (no parameter uncertainty on drug properties).
+Drug properties accept scalars (deterministic) or ``{mean, cv}`` distributions.
 """
 
 from __future__ import annotations
@@ -13,14 +12,13 @@ from pathlib import Path
 import yaml
 
 from sisyphus.core import Distribution, DrugOnGraph
+from sisyphus.graph.builder import _parse_distribution
 
 
 def load_compound(path: Path) -> DrugOnGraph:
     """Read a compound YAML file and return a DrugOnGraph.
 
-    All numeric drug properties that the engine treats as uncertain
-    are wrapped in ``Distribution(value, cv=0.0)`` (deterministic for
-    Phase 1).
+    Numeric drug properties accept scalars or ``{mean, cv}`` mappings.
 
     Args:
         path: Path to the compound YAML file.
@@ -45,28 +43,27 @@ def load_compound(path: Path) -> DrugOnGraph:
     raw_pka = data.get("pka")
     pka: float | None = float(raw_pka) if raw_pka is not None else None
 
-    # Deterministic distributions for Phase 1.
-    fup = Distribution(mean=float(data["fup"]), cv=0.0)
-    rbp = Distribution(mean=float(data["rbp"]), cv=0.0)
-    peff = Distribution(mean=float(data["peff"]), cv=0.0)
-    solubility = Distribution(mean=float(data["solubility"]), cv=0.0)
-    renal_clearance = Distribution(mean=float(data["renal_clearance"]), cv=0.0)
+    fup = _parse_distribution(data["fup"])
+    rbp = _parse_distribution(data["rbp"])
+    peff = _parse_distribution(data["peff"])
+    solubility = _parse_distribution(data["solubility"])
+    renal_clearance = _parse_distribution(data["renal_clearance"])
 
     # Kp method and overrides.
     kp_method = data.get("kp_method", "provided")
     kp_overrides: dict[str, Distribution] = {}
     for tissue, kp_val in data.get("kp_overrides", {}).items():
-        kp_overrides[tissue] = Distribution(mean=float(kp_val), cv=0.0)
+        kp_overrides[tissue] = _parse_distribution(kp_val)
 
     # Enzyme affinity.
     enzyme_affinity: dict[str, Distribution] = {}
     for enzyme, affinity_val in data.get("enzyme_affinity", {}).items():
-        enzyme_affinity[enzyme] = Distribution(mean=float(affinity_val), cv=0.0)
+        enzyme_affinity[enzyme] = _parse_distribution(affinity_val)
 
     # PS overrides.
     ps_overrides: dict[str, Distribution] = {}
     for tissue, ps_val in data.get("ps_overrides", {}).items():
-        ps_overrides[tissue] = Distribution(mean=float(ps_val), cv=0.0)
+        ps_overrides[tissue] = _parse_distribution(ps_val)
 
     return DrugOnGraph(
         name=name,

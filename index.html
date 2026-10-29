@@ -153,7 +153,7 @@ footer{padding:40px 0 56px}
         <a class="btn ghost" href="https://github.com/jam-sudo/Sisyphus">View on GitHub</a>
       </div>
       <div class="stats">
-        <div class="stat"><div class="v">2.830</div><div class="k">development AAFE</div></div>
+        <div class="stat"><div class="v">2.805</div><div class="k">development AAFE</div></div>
         <div class="stat"><div class="v">N=73</div><div class="k">development compounds</div></div>
         <div class="stat"><div class="v">N/A</div><div class="k">independent AAFE</div></div>
         <div class="stat"><div class="v">43.8%</div><div class="k">within 2-fold · development</div></div>
@@ -204,6 +204,7 @@ footer{padding:40px 0 56px}
       <a class="wf" href="/app/"><div class="nm"><span class="g"></span>predict</div><p>Parent SMILES + oral dose → C<sub>max</sub>, component tracks, applicability flags, and explicitly labeled interval sources.</p></a>
       <a class="wf" href="/app/"><div class="nm"><span class="g"></span>benchmark</div><p>N=73 retrospective development evidence — predicted vs observed by track, never labeled as an independent holdout.</p></a>
     </div>
+    <p>Experimental Python and CLI workflows now include engine-as-prior MIPD with structural latents and forward dose search (<code>sisyphus mipd</code>), fixed-concentration time-dependent DDI scenarios (<code>sisyphus ddi</code>), and effect-site PK/PD scenarios (<code>sisyphus pkpd</code>). The engine also provides conditional AUC∞, IV clearance and Vss endpoints, correlated Monte Carlo sampling, IV-infusion C<sub>max</sub> intervals, graph overlays, and renal reabsorption.</p>
   </div>
 </section>
 
@@ -212,7 +213,7 @@ footer{padding:40px 0 56px}
     <div class="sec-head">
       <span class="lab">Validation</span>
       <h2>Retrospective development evidence</h2>
-      <p>The source-audited N=73 benchmark is compound-disjoint from fitted-model training, but it was repeatedly used for system selection and calibration. It is therefore development data, not an independent holdout.</p>
+      <p>The source-audited N=73 benchmark is compound-disjoint from fitted-model training, but it was repeatedly used for system selection and calibration. Meta AAFE has a conditional bootstrap 95% CI of 2.29–3.49. This is development data, not an independent holdout.</p>
     </div>
     <div class="val">
       <div class="figpanel" style="padding:24px"><p>Explore the current N=73 predicted-vs-observed scatter by track in the console.</p><a class="btn ghost" href="/app/">View development benchmark →</a></div>
@@ -220,16 +221,16 @@ footer{padding:40px 0 56px}
         <table class="btable">
           <thead><tr><th>Track</th><th>AAFE</th><th>within 2-fold</th></tr></thead>
           <tbody>
-            <tr class="hl"><td>Meta · development</td><td class="big">2.830</td><td>43.8%</td></tr>
-            <tr><td>Engine only</td><td>3.872</td><td>38.4%</td></tr>
+            <tr class="hl"><td>Meta · development</td><td class="big">2.805</td><td>43.8%</td></tr>
+            <tr><td>Engine only</td><td>3.723</td><td>38.4%</td></tr>
             <tr><td>ML only</td><td>3.049</td><td>41.1%</td></tr>
-            <tr><td>Meta, structurally in-scope</td><td>2.898</td><td>40.0%</td></tr>
+            <tr><td>Meta, structurally in-scope</td><td>2.700</td><td>40.7%</td></tr>
           </tbody>
         </table>
         <p style="font-size:13.5px;color:var(--ink-soft);margin:16px 0 0">A four-track meta-learner blends a mechanistic engine, a data-driven ML C<sub>max</sub>, a CL/F analytical, and a conditional VDss track. Prospective FDA NMEs (2024–25) are harder still at <b>AAFE 3.29</b> — generalization, stated plainly.</p>
       </div>
     </div>
-    <div class="caveat">Independent external AAFE is currently <b>not available</b>. The displayed Meta residual band is derived from development residuals and is correspondingly wide (approximately ÷×13); it must not be interpreted as a split-conformal coverage guarantee. A preregistered, custodian-controlled external evaluation is required.</div>
+    <div class="caveat">Independent external AAFE is currently <b>not available</b>. The displayed Meta residual band is derived from development residuals and is correspondingly wide (approximately ÷×10.71); it must not be interpreted as a split-conformal coverage guarantee. A preregistered, custodian-controlled external evaluation is required.</div>
   </div>
 </section>
 

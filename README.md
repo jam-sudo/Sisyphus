@@ -36,7 +36,7 @@ Sisyphus predicts the peak plasma concentration (C<sub>max</sub>) of an oral dru
 | Capability | Status | Module |
 |:--|:--|:--|
 | Oral structure-only C<sub>max</sub> | **Supported** &mdash; development-benchmarked | `pipeline/` |
-| Engine T<sub>max</sub>, AUC, t<sub>&frac12;</sub> | Experimental | `engine/`, `pk/` |
+| Engine T<sub>max</sub>, AUC, t<sub>&frac12;</sub>; conditional AUC∞ and IV CL/Vss | Experimental | `engine/`, `pk/` |
 | Multi-dose regimen simulation | Experimental | `regimen/` |
 | Bayesian TDM (SBI / IBIS / IS) | Experimental | `regimen/`, `sbi/` |
 | Engine-as-prior posterior PK and MIPD | Research hypothesis | `mipd/` |
@@ -97,6 +97,10 @@ sisyphus tdm --smiles "CC1=NC=C2N1C3=C(C=C(C=C3)Cl)C(=NC2)C4=CC=CC=C4F" \
 # DDI prediction (midazolam + ketoconazole inhibition)
 sisyphus ddi --smiles "CC1=NC=C2N1C3=C(C=C(C=C3)Cl)C(=NC2)C4=CC=CC=C4F" \
     --dose 5 --inhibitor ketoconazole
+
+# Engine-as-prior MIPD update from measured oral bioavailability
+sisyphus mipd --smiles "Cn1c(=O)c2c(ncn2C)n(C)c1=O" \
+    --dose 100 --measured-f 0.8
 
 # MIPD dose recommendation (target Css,max = 0.02 mg/L)
 sisyphus dose-adjust --smiles "CC1=NC=C2N1C3=C(C=C(C=C3)Cl)C(=NC2)C4=CC=CC=C4F" \
@@ -252,7 +256,7 @@ flowchart LR
 
 ### Uncertainty propagation
 
-Monte Carlo sampling draws realizations from all parameter distributions simultaneously, solves the ODE for each, and aggregates the PK endpoints into distributional summaries. The parameter-only Monte Carlo interval and the user-facing development-residual interval are reported separately; their calibration status is described under [Limitations](#limitations).
+Monte Carlo sampling draws realizations from parameter distributions, including configured correlated enzyme abundances, solves the ODE for each, and aggregates the PK endpoints into distributional summaries. IV infusion also has a parameter-only C<sub>max</sub> interval. The parameter-only Monte Carlo interval and the user-facing development-residual interval are reported separately; their calibration status is described under [Limitations](#limitations).
 
 ### Research modules
 
@@ -289,11 +293,11 @@ Effective sample size (ESS = $1/\sum w_i^2$) is monitored for importance-based m
 2. $dose_{new} = dose_{current} \times (C_{ss,target} / C_{ss,posterior})$
 3. The result is clamped to the clinical dose range and rounded to a practical increment (default 25 mg).
 
-Linear scaling assumes non-saturable metabolism. The dosing API rejects drugs with declared saturable enzyme kinetics unless the caller explicitly opts into an experimental override; production nonlinear dosing would require forward simulation across candidate doses.
+Linear scaling assumes non-saturable metabolism. The legacy `regimen/` dosing API rejects drugs with declared saturable enzyme kinetics unless the caller explicitly opts into an experimental override. The separate `mipd/` dose search evaluates candidate regimens under its posterior; neither path is clinically validated.
 
 **Engine-as-prior posterior PK (`mipd/`).** This module explores the mechanistic engine as a structural prior updated by measured concentrations. Bioavailability F is one candidate latent, because formulation, salt or crystal form, food, particle size, and transporter genetics are absent from the SMILES input; it can be given a wide prior centered on the engine's emergent F<sub>engine</sub> and updated by sampling/importance-resampling (SIR). The current experiments do not show that one observation identifies F or corrects all sources of structural error.
 
-The module provides an a-priori-to-posterior path (`predict_posterior`), steady-state IV trough TDM with a renal-clearance latent (`predict_tdm`, vancomycin/aminoglycoside scope), covariate individualization (measured or Cockcroft&ndash;Gault creatinine clearance; body weight and age through a physiology-generator graph swap), and target-attainment dose recommendation (`recommend_dose`).
+The module provides an a-priori-to-posterior path (`predict_posterior`), steady-state TDM with renal and optional structural latents (`predict_tdm`), covariate individualization (measured or Cockcroft&ndash;Gault creatinine clearance; body weight and age through a physiology-generator graph swap), and target-attainment dose recommendation (`recommend_dose`, with `forward_dose_search` for structural posteriors). The `sisyphus mipd` CLI exposes these research workflows. `NeuralAmortizer` remains a placeholder; no MIPD neural weights ship.
 
 > This module is a research hypothesis. Synthetic/simulator validation does not establish real-patient predictive accuracy, clinical utility, or calibrated posterior intervals.
 
@@ -521,7 +525,7 @@ The suite covers graph construction, ODE compilation, flux functions, solver cor
 | `regimen/` | Multi-dose solver, TDM dispatch (SBI/IS/IBIS/EnKF), linear-scaling dose adjustment | `core`, `engine`, `graph`, `sbi` |
 | `sbi/` | Simulation-based inference training, amortized posterior, physiology generator | `core`, `engine` |
 | `mipd/` | Engine-as-prior posterior PK via SIR, covariate individualization, dose recommendation | `core`, `engine`, `graph`, `regimen`, `sbi` |
-| `ddi.py` | Competitive inhibition, E<sub>max</sub> induction | `core`, `graph` |
+| `ddi.py` | Competitive and fixed-concentration time-dependent inhibition, E<sub>max</sub> induction | `core`, `graph` |
 | `pkpd.py` | Effect compartment, sigmoid E<sub>max</sub> | `core` |
 
 Layers import only their listed dependencies: `predict` does not import `engine`, `engine` does not import `predict`, and `regimen` wraps `engine` without modifying it. Shared data types live in `core.py`. The three data contracts &mdash; `DrugOnGraph` (predict &rarr; engine), `SimResult` (engine &rarr; pk), and `PredictionResult` (pipeline &rarr; caller) &mdash; are frozen dataclasses; `DrugOnGraph.enzyme_affinity` carries per-enzyme intrinsic clearance rather than organ-level CL<sub>int</sub>, so IVIVE happens inside the engine, organ-blind.

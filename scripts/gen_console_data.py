@@ -315,7 +315,7 @@ def main():
     payload = {
         "meta_info": {
             "generated_by": "scripts/gen_console_data.py",
-            "interpreter": sys.executable,
+            "interpreter": sys.version.split()[0],
             "engine": f"Sisyphus v{__version__}",
             "notes": notes,
         },
