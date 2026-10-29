@@ -4,7 +4,7 @@
 engine is linear, so sampling-importance-resampling is exact and instant — no
 training needed.
 
-``NeuralAmortizer`` conditions a trained SNPE posterior on molecular features,
+``NeuralAmortizer`` conditions a trained SNPE posterior on the engine forward map,
 single-dose regimen and sparse observations for the (F, metabolic CLint scale)
 CL-grid regime. Training data come from the same engine-grid forward and priors
 as ``sir_posterior_2d``. Model weights are supplied explicitly after validation.
@@ -32,6 +32,11 @@ from sisyphus.mipd.core import (
     sir_posterior,
 )
 from sisyphus.regimen.types import DEFAULT_ORAL_NODE, DosingRegimen
+
+# Fixed log-scale design spans CLPrior's 0.05–20 support (mipd.clgrid.CLPrior).
+_DESIGN_CLINT_SCALE_RATIO = np.array([0.05, 0.25, 1.0, 4.0, 20.0])
+# Training's sparse concentration observations use 4 and 16 h (train_mipd_neural_amortizer).
+_DESIGN_CONC_TIME_H = (4.0, 16.0)
 
 
 class Amortizer(Protocol):
@@ -74,8 +79,7 @@ class NeuralAmortizer:
     """SNPE posterior over the same F and metabolic CLint latents as grid SIR.
 
     ``model`` is a validated ``NPETrainingResult`` from ``sisyphus.sbi.amortizer``.
-    ``molecular_features`` are the nine RDKit descriptors at the end of
-    ``sisyphus.descriptors.compute_features(smiles)``.
+    The context contains the grid response at fixed CLint scales, not molecular identity.
     The engine grid remains necessary to report Cmax/AUC from posterior draws;
     amortization replaces per-query latent likelihood weighting, not grid building.
     """
@@ -104,7 +108,6 @@ class NeuralAmortizer:
         forward: CLGridForward,
         observations: Sequence[Observation],
         *,
-        molecular_features: np.ndarray,
         regimen: DosingRegimen,
         n_samples: int = 20000,
         rng: np.random.Generator | None = None,
@@ -115,7 +118,7 @@ class NeuralAmortizer:
         rng = np.random.default_rng() if rng is None else rng
         obs = tuple(observations)
         context = _neural_context(
-            f_prior, cl_prior, forward, obs, molecular_features, regimen
+            f_prior, cl_prior, forward, obs, regimen
         )
         if obs:
             if self.model is None:
@@ -149,13 +152,16 @@ def _neural_context(
     cl_prior: CLPrior,
     forward: CLGridForward,
     observations,
-    molecular_features: np.ndarray,
     regimen: DosingRegimen,
 ) -> np.ndarray:
     # shortcut: CLGridForward models one oral dose; extend the simulator before repeated regimens.
     # shortcut: training uses CV 1 priors; simulate other widths before accepting them here.
     if f_prior.cv != 1.0 or cl_prior.cv != 1.0:
         raise ValueError("neural posterior was trained with F and CLint prior CV 1")
+    if cl_prior.s_min != _DESIGN_CLINT_SCALE_RATIO[0] or (
+        cl_prior.s_max != _DESIGN_CLINT_SCALE_RATIO[-1]
+    ):
+        raise ValueError("neural posterior requires the trained CLint prior bounds")
     if not np.isfinite(f_prior.f_engine) or not 0 < f_prior.f_engine <= 1:
         raise ValueError("F prior centre must be finite and in (0, 1]")
     if len(regimen.events) != 1 or regimen.events[0].node != DEFAULT_ORAL_NODE:
@@ -163,17 +169,20 @@ def _neural_context(
     dose = regimen.events[0].dose_mg
     if dose <= 0 or regimen.events[0].duration_h != 0:
         raise ValueError("neural CL-grid posterior requires a positive oral bolus")
-    features = np.asarray(molecular_features, dtype=float)
-    if features.shape != (9,) or not np.isfinite(features).all():
-        raise ValueError("molecular_features must be the nine finite RDKit descriptors")
     if len(observations) > 2:
         raise ValueError("neural posterior supports at most two observations")
-    anchor = forward(np.array([f_prior.f_engine]), np.array([1.0]))
+    if forward.grid.t_grid[0] > _DESIGN_CONC_TIME_H[0] or (
+        forward.grid.t_grid[-1] < _DESIGN_CONC_TIME_H[-1]
+    ):
+        raise ValueError("engine grid must cover the neural design times")
+    design = forward(np.ones(len(_DESIGN_CLINT_SCALE_RATIO)), _DESIGN_CLINT_SCALE_RATIO)
     context = [
-        *features, np.log(dose), np.log(anchor["cmax"][0]),
-        np.log(anchor["auc"][0]), f_prior.f_engine,
-        f_prior.cv, cl_prior.cv,
+        *np.log(design["cmax"]), *np.log(design["auc"]),
+        *(value for t in _DESIGN_CONC_TIME_H for value in np.log(design["conc_at"](t))),
+        np.log(dose), f_prior.f_engine, f_prior.cv, cl_prior.cv,
     ]
+    if not np.isfinite(context).all():
+        raise ValueError("engine forward-map summary must be finite")
     for obs in (*observations, *([None] * (2 - len(observations)))):
         slot = [0.0] * 7
         if obs is not None:

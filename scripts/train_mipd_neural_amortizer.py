@@ -18,7 +18,6 @@ from pathlib import Path
 import numpy as np
 from scipy.stats import kstest
 
-from sisyphus.descriptors import compute_features
 from sisyphus.mipd.amortizer import NeuralAmortizer, _neural_context
 from sisyphus.mipd.clgrid import CLGrid, CLGridForward, CLPrior, MeasuredConc, sir_posterior_2d
 from sisyphus.mipd.core import FPrior, MeasuredAUC, MeasuredCmax, MeasuredF
@@ -39,7 +38,7 @@ _INITIAL_SIR_DRAWS_COUNT = 20000
 _MAX_SIR_DRAWS_COUNT = 320000
 
 
-def _draw_pair(forward, f_prior, cl_prior, features, regimen, rng):
+def _draw_pair(forward, f_prior, cl_prior, regimen, rng):
     f = float(f_prior.sample(1, rng)[0])
     s = float(cl_prior.sample(1, rng)[0])
     state = forward(np.array([f]), np.array([s]))
@@ -57,7 +56,7 @@ def _draw_pair(forward, f_prior, cl_prior, features, regimen, rng):
                 float(rng.lognormal(math.log(state["conc_at"](t)[0]), 0.25)), t
             ) for t in times
         )
-    x = _neural_context(f_prior, cl_prior, forward, obs, features, regimen)
+    x = _neural_context(f_prior, cl_prior, forward, obs, regimen)
     return np.array([f, s], dtype=np.float32), x, obs
 
 
@@ -89,9 +88,8 @@ def _setup(spec, n_grid, cache_dir=None, *, generate=False):
             raise ValueError(f"grid resolution mismatch in {cache_path}")
     forward = CLGridForward(grid)
     f_prior = FPrior(float(np.interp(1.0, grid.s_grid, grid.f_engine)))
-    # The shared feature function's final nine coordinates are RDKit descriptors.
     return (
-        forward, f_prior, CLPrior(), compute_features(smiles)[-9:],
+        forward, f_prior, CLPrior(),
         DosingRegimen.single_oral(dose),
     )
 
@@ -128,6 +126,9 @@ def _main() -> None:
     parser.add_argument("--generate-index", type=int)
     parser.add_argument("--n-calibration", type=int, default=100)
     parser.add_argument("--epochs", type=int, default=100)
+    parser.add_argument("--hidden-features", type=int, default=64)
+    parser.add_argument("--num-transforms", type=int, default=5)
+    parser.add_argument("--embedding-hidden", type=int, default=64)
     parser.add_argument("--device", choices=("cpu", "cuda"), default="cpu")
     parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
@@ -170,7 +171,8 @@ def _main() -> None:
     result = train_npe(
         np.stack(theta_rows), np.stack(x_rows),
         np.array([1e-6, 0.05]), np.array([1.0, 20.0]),
-        density_estimator="nsf", embedding_net_hidden=64,
+        density_estimator="nsf", embedding_net_hidden=args.embedding_hidden,
+        hidden_features=args.hidden_features, num_transforms=args.num_transforms,
         max_num_epochs=args.epochs, stop_after_epochs=15, seed=args.seed,
         device=args.device,
     )
@@ -183,13 +185,13 @@ def _main() -> None:
     cases = 0
     for i, spec in enumerate(heldout, 1):
         log.info("Held-out grid %d/%d: %s", i, len(heldout), spec["smiles"])
-        forward, f_prior, cl_prior, features, regimen = _setup(
+        forward, f_prior, cl_prior, regimen = _setup(
             spec, args.n_grid, args.cache_dir
         )
         for _ in range(args.n_calibration):
-            truth, _, obs = _draw_pair(forward, f_prior, cl_prior, features, regimen, rng)
+            truth, _, obs = _draw_pair(forward, f_prior, cl_prior, regimen, rng)
             post = neural.posterior(
-                f_prior, cl_prior, forward, obs, molecular_features=features,
+                f_prior, cl_prior, forward, obs,
                 regimen=regimen, n_samples=500, rng=rng,
             )
             sir, n_sir = _sir_reference(f_prior, cl_prior, forward, obs, rng)
