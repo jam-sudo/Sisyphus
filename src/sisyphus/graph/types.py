@@ -163,10 +163,12 @@ class ClearanceEdge(Edge):
         - ``"gfr_filtration"`` — glomerular filtration (renal)
         - ``"extended"`` — Extended Clearance Model (ECM): active + passive
           uptake, passive efflux, metabolism, biliary clearance via QSSA.
+    ``bile_target`` optionally routes the ECM biliary fraction to another node.
     """
 
     edge_type: str = field(default="clearance", init=False)
     model: str = "well_stirred"
+    bile_target: str | None = None
 
 
 @dataclass(frozen=True)

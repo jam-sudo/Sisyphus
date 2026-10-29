@@ -16,6 +16,7 @@ import numpy as np
 from sisyphus.core import Distribution
 from sisyphus.graph.types import (
     AbsorptionEdge,
+    ClearanceEdge,
     DiffusionEdge,
     Edge,
     FlowEdge,
@@ -65,6 +66,9 @@ class BodyGraph:
             raise ValueError(f"source node {edge.source!r} not found in graph")
         if edge.target not in self.nodes:
             raise ValueError(f"target node {edge.target!r} not found in graph")
+        if isinstance(edge, ClearanceEdge) and edge.bile_target is not None:
+            if edge.bile_target not in self.nodes:
+                raise ValueError(f"bile target node {edge.bile_target!r} not found in graph")
         self.edges.append(edge)
 
     def remove_node(self, name: str) -> None:
@@ -72,7 +76,11 @@ class BodyGraph:
         if name not in self.nodes:
             raise ValueError(f"node {name!r} not found in graph")
         del self.nodes[name]
-        self.edges = [e for e in self.edges if e.source != name and e.target != name]
+        self.edges = [
+            e for e in self.edges
+            if e.source != name and e.target != name
+            and not (isinstance(e, ClearanceEdge) and e.bile_target == name)
+        ]
 
     # -- Validation --------------------------------------------------------
 
@@ -94,6 +102,12 @@ class BodyGraph:
                 errors.append(f"edge {edge.source!r} → {edge.target!r}: source node not found")
             if edge.target not in self.nodes:
                 errors.append(f"edge {edge.source!r} → {edge.target!r}: target node not found")
+            if isinstance(edge, ClearanceEdge) and edge.bile_target is not None:
+                if edge.bile_target not in self.nodes:
+                    errors.append(
+                        f"edge {edge.source!r} → {edge.bile_target!r}: "
+                        "bile target node not found"
+                    )
 
         # Flow conservation: sum of FlowEdge inflows ≈ sum of FlowEdge outflows per node.
         inflow: dict[str, float] = {name: 0.0 for name in self.nodes}
