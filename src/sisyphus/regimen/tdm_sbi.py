@@ -378,11 +378,10 @@ def sbi_update(
     # the vectorised surrogate call, out-of-distribution rows fall back
     # to a scipy forward sim. This preserves most of the speedup on
     # well-behaved drugs while restoring accuracy on the hard ones.
-    if (_extra_obs or sbi_reweight) and use_surrogate:
+    if (len(observations) > 1 or sbi_reweight) and use_surrogate:
         logger.warning(
-            "SBI TDM: observation reweighting is not yet supported under the "
-            "surrogate path. Falling back to scipy forward sims for accurate "
-            "multi-observation conditioning."
+            "SBI TDM: the surrogate does not support timed observations or "
+            "reweighting; using scipy forward simulations."
         )
         use_surrogate = False
 

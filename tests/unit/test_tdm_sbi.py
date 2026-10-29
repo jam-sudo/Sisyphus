@@ -107,7 +107,7 @@ class TestSBIDispatch:
         assert result.method_used == "sbi"
 
     def test_calibrated_multi_observation_uses_time_aware_posterior(
-        self, physiology, morphine_drug, monkeypatch,
+        self, physiology, morphine_drug, monkeypatch, caplog,
     ):
         from sisyphus.sbi import amortizer
 
@@ -124,11 +124,12 @@ class TestSBIDispatch:
         result = bayesian_update(
             compiled, graph, drug, DosingRegimen.single_oral(30.0),
             (Observation(1.0, 0.01865), Observation(4.0, 0.010)),
-            method="sbi", n_prior=30, logp_hint=logp,
+            method="sbi", n_prior=30, logp_hint=logp, sbi_use_surrogate=True,
         )
         assert loaded == ["multi_observation_nsf.pt"]
         assert result.n_successful > 0
         assert np.allclose(result.weights, result.weights[0])
+        assert "surrogate does not support timed observations" in caplog.text
 
     def test_sbi_update_runs_end_to_end(self, physiology, morphine_drug):
         graph, compiled = physiology
