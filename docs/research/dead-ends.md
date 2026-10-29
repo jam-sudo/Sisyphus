@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-28
+last_updated: 2026-10-29
 charter: Authoritative list of failed Sisyphus experiments. Read before proposing any accuracy improvement.
 ---
 
@@ -24,7 +24,7 @@ The source audit above also leaves shared bioavailability-F error unverified.
 The dated experiments below remain valid as tests of their stated methods, but
 their broad information-theoretic and F-causal interpretations are withdrawn.
 
-**Canonical count:** 60 enumerated experiments below. Narrative references in commit messages or prose (e.g. "#35 error cancellation", "14번째 시도", "누적 33 methods") use **informal** numbering that counts early exploration attempts separately; those narrative numbers are **not authoritative** and do not match the table count below. When in doubt, cite the table entry (`DE-NN`).
+**Canonical count:** 62 enumerated experiments below. Narrative references in commit messages or prose (e.g. "#35 error cancellation", "14번째 시도", "누적 33 methods") use **informal** numbering that counts early exploration attempts separately; those narrative numbers are **not authoritative** and do not match the table count below. When in doubt, cite the table entry (`DE-NN`).
 
 ## 1. Theme summary (16 categories)
 
@@ -554,6 +554,18 @@ Removing rows with unresolved salt annotations, missing formulation in any sourc
 ### DE-60 — SP0 rat reactive-metabolite PoD feasibility halted by missing kinetics (2026-06-28)
 
 The pre-registered rat bioactivation set could populate **zero non-acetaminophen reactive drugs** with formation Vmax/Km on one microsomal basis plus a rat detoxification Vmax, rat PK and observed hepatotoxic PoD; even acetaminophen lacks a sourced rat NAPQI detoxification Vmax. Whole-body or cytosolic values cannot be substituted without violating the common-basis requirement. Caffeine remains a sourced negative control. **Data HALT:** quantitative PoD calibration and downstream SP0 tasks 4–6 do not run until measured, basis-compatible kinetics exist; `pod_metrics.py` remains feasibility-only with no production wiring. Artifact: `data/validation/pod_bioactivation_kinetics_spike.json`. Telltale: proposing a calibrated rat PoD from synthetic or mixed-basis formation/detox constants.
+
+---
+
+### DE-61 — MIPD neural amortization of engine-prior F and CLint (2026-10-28)
+
+An SNPE flow converged after 90 epochs on 110,000 simulated pairs from 55 compounds; 13 disjoint compounds (130 cases) gave nominal 90% coverage 0.738/0.892 for F/CLint and SBC KS p-values 0.012/0.738. Posterior-mean agreement within three Monte Carlo standard errors of converged grid SIR was 0.223/0.592 versus a 0.95 gate (SIR ESS minimum 218, median 4,848; up to 80,000 draws). F undercoverage and posterior disagreement persisted at full scale, so weights were not shipped. **Telltale:** a small simulated pilot can look calibrated while failing disjoint-compound coverage and reference-posterior agreement.
+
+---
+
+### DE-62 — SBI multi-observation and continuous age/weight amortizers fail SBC (2026-10-29)
+
+A time-aware multi-observation flow trained on 27,500 simulated rows passed SBC for 7/13 drugs and was not shipped (`data/validation/sbi_sbc_multi_observation_current.json`). Replacing discrete physiology with continuous age/weight sampling passed 28/52 population–drug SBC gates versus 41/52 for the prior model, so the replacement was rejected (`data/validation/sbi_sbc_continuous_current.json`; baseline `data/validation/sbi_sbc_continuous.json`). **Telltale:** additional observations or continuous covariates do not establish calibration when the SBC pass count falls.
 
 ---
 
