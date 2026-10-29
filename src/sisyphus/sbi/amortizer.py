@@ -193,11 +193,16 @@ def load_result(path: Path, *, allow_legacy_fup: bool = False) -> NPETrainingRes
         low=torch.as_tensor(prior_low, dtype=torch.float32),
         high=torch.as_tensor(prior_high, dtype=torch.float32),
     )
-    inference = SNPE(prior=prior_torch)
-    posterior = inference.build_posterior(payload["density_estimator"])
+    density_estimator = payload.get("density_estimator")
+    if density_estimator is None:
+        posterior = payload["posterior"]
+        density_estimator = posterior.posterior_estimator
+    else:
+        inference = SNPE(prior=prior_torch)
+        posterior = inference.build_posterior(density_estimator)
     return NPETrainingResult(
         posterior=posterior,
-        density_estimator=payload["density_estimator"],
+        density_estimator=density_estimator,
         training_losses=payload.get("training_losses", []),
         validation_losses=payload.get("validation_losses", []),
         n_train_samples=int(payload.get("n_train_samples", 0)),

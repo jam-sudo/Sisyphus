@@ -7,7 +7,6 @@ from collections.abc import Sequence
 import numpy as np
 
 from sisyphus.regimen.types import DEFAULT_ORAL_NODE, DosingRegimen
-from sisyphus.sbi.multi_drug import N_DRUG_FEATURES
 
 # Source: scripts/run_tdm_benchmark.py evaluates up to three observation times.
 MAX_OBSERVATION_COUNT = 3
@@ -31,8 +30,9 @@ def pack_observations(
     """Pack observed (time_h, concentration_mg_l) pairs, regimen, and features."""
     if not 1 <= len(observations) <= MAX_OBSERVATION_COUNT:
         raise ValueError(f"Expected 1–{MAX_OBSERVATION_COUNT} observations")
-    if len(drug_features) != N_DRUG_FEATURES:
-        raise ValueError(f"Expected {N_DRUG_FEATURES} drug features")
+    # Source: multi_drug.py packs 12 nominal ADME features.
+    if len(drug_features) != 12:
+        raise ValueError("Expected 12 drug features")
     events = regimen.events
     dose = events[0].dose_mg
     if len(events) > MAX_DOSE_COUNT or events[0].time_h != 0 or dose <= 0 or any(

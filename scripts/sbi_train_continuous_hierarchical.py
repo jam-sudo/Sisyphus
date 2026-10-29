@@ -32,6 +32,7 @@ def main() -> int:
     parser.add_argument("--hidden", type=int, default=64)
     parser.add_argument("--transforms", type=int, default=8)
     parser.add_argument("--batch-size", type=int, default=256)
+    parser.add_argument("--stop-after-epochs", type=int, default=20)
     args = parser.parse_args()
 
     data = np.load(args.data, allow_pickle=True)
@@ -66,7 +67,9 @@ def main() -> int:
     obs_t = torch.as_tensor(obs, dtype=torch.float32)
 
     from sbi.inference import SNPE
+    from sbi.neural_nets import posterior_nn
     from sbi.utils import BoxUniform
+
     from sisyphus.sbi.priors import PRIOR_HIGH, PRIOR_LOW
 
     prior = BoxUniform(
@@ -74,13 +77,19 @@ def main() -> int:
         high=torch.tensor(PRIOR_HIGH, dtype=torch.float32),
     )
 
-    inference = SNPE(prior=prior, density_estimator="nsf")
+    inference = SNPE(
+        prior=prior,
+        density_estimator=posterior_nn(
+            model="nsf", hidden_features=args.hidden, num_transforms=args.transforms
+        ),
+    )
     inference.append_simulations(theta_t, obs_t)
 
     t0 = time.time()
     density_estimator = inference.train(
         training_batch_size=args.batch_size,
         max_num_epochs=args.epochs,
+        stop_after_epochs=args.stop_after_epochs,
         show_train_summary=True,
     )
     logger.info("Training took %.1f min", (time.time() - t0) / 60)
@@ -92,6 +101,7 @@ def main() -> int:
     torch.save(
         {
             "posterior": posterior,
+            "density_estimator": density_estimator,
             "prior_low": list(PRIOR_LOW),
             "prior_high": list(PRIOR_HIGH),
         },

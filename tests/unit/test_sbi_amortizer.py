@@ -98,6 +98,12 @@ def test_npe_save_load_roundtrip(tmp_path: Path):
     # Samples may differ slightly if sbi internally randomizes, so check means/CIs are close.
     assert abs(s1[:, 0].mean() - s2[:, 0].mean()) < 0.1
 
+    legacy_path = tmp_path / "posterior_only.pt"
+    torch.save({"posterior": result.posterior, "prior_low": low, "prior_high": high},
+               legacy_path)
+    legacy = load_result(legacy_path)
+    assert legacy.sample(np.array([0.3], dtype=np.float32), n=10).shape == (10, 3)
+
 
 def test_sbc_runs_on_linear_model():
     theta, x, low, high = _make_linear_synthetic(n=3000, seed=3)

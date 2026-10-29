@@ -76,6 +76,92 @@ def _posterior_prior_matches_current() -> bool:
     reason="Posterior trained with old fup parameterization (pre-logit); retrain needed",
 )
 class TestSBIDispatch:
+    def test_retrained_hierarchical_posterior_runs_end_to_end(
+        self, physiology, morphine_drug,
+    ):
+        from sisyphus.regimen.tdm_sbi import sbi_update
+
+        graph, compiled = physiology
+        drug, logp = morphine_drug
+        result = sbi_update(
+            compiled, graph, drug, DosingRegimen.single_oral(30.0),
+            (Observation(1.0, 0.01865),), n_samples=100, n_predictive_sims=5,
+            population_class="adult", logp_hint=logp,
+        )
+        assert result.n_successful > 0
+        assert result.posterior_cmax.mean > 0
+
+    def test_retrained_continuous_posterior_runs_end_to_end(
+        self, physiology, morphine_drug,
+    ):
+        from sisyphus.regimen.tdm_sbi import sbi_update
+
+        graph, compiled = physiology
+        drug, logp = morphine_drug
+        result = sbi_update(
+            compiled, graph, drug, DosingRegimen.single_oral(30.0),
+            (Observation(1.0, 0.01865),), n_samples=100, n_predictive_sims=5,
+            body_weight_kg=70.0, age_years=35.0, logp_hint=logp,
+        )
+        assert result.n_successful > 0
+        assert result.posterior_cmax.mean > 0
+
+    def test_continuous_context_uses_14_feature_standardizer(
+        self, physiology, morphine_drug, monkeypatch,
+    ):
+        from types import SimpleNamespace
+
+        import torch
+
+        from sisyphus.regimen.tdm_sbi import sbi_update
+        from sisyphus.sbi import amortizer
+
+        graph, compiled = physiology
+        drug, logp = morphine_drug
+        observed = []
+
+        class Posterior:
+            def sample(self, shape, *, x, show_progress_bars):
+                observed.append(x.shape[1])
+                return torch.zeros((shape[0], 3))
+
+        monkeypatch.setattr(amortizer, "load_result", lambda path: SimpleNamespace(
+            prior_low=np.array([-1.0, -4.5, -1.0]), posterior=Posterior(),
+        ))
+        result = sbi_update(
+            compiled, graph, drug, DosingRegimen.single_oral(30.0),
+            (Observation(1.0, 0.01865),), n_samples=2, n_predictive_sims=1,
+            body_weight_kg=70.0, age_years=35.0, logp_hint=logp,
+        )
+        assert observed == [15]
+        assert result.method_used == "sbi"
+
+    def test_calibrated_multi_observation_uses_time_aware_posterior(
+        self, physiology, morphine_drug, monkeypatch, caplog,
+    ):
+        from sisyphus.regimen.tdm_sbi import sbi_update
+        from sisyphus.sbi import amortizer
+
+        graph, compiled = physiology
+        drug, logp = morphine_drug
+        loaded = []
+        original_load = amortizer.load_result
+
+        def record_load(path):
+            loaded.append(pathlib.Path(path).name)
+            return original_load(path)
+
+        monkeypatch.setattr(amortizer, "load_result", record_load)
+        result = sbi_update(
+            compiled, graph, drug, DosingRegimen.single_oral(30.0),
+            (Observation(1.0, 0.01865), Observation(4.0, 0.010)),
+            n_samples=100, n_predictive_sims=5, logp_hint=logp, use_surrogate=True,
+        )
+        assert loaded == ["multi_observation_nsf.pt"]
+        assert result.n_successful > 0
+        assert np.allclose(result.weights, result.weights[0])
+        assert "surrogate does not support timed observations" in caplog.text
+
     def test_sbi_update_runs_end_to_end(self, physiology, morphine_drug):
         graph, compiled = physiology
         drug, logp = morphine_drug
@@ -148,7 +234,7 @@ class TestSBIDispatch:
         )
 
     def test_sbi_multi_obs_reweight_affects_posterior(self, physiology, morphine_drug):
-        """Multi-obs SBI should produce a different posterior than single-obs.
+        """The legacy multi-obs reweight path should alter posterior weights.
 
         With an extra observation that disagrees with the first (higher
         concentration later than expected for morphine's half-life), the
@@ -170,6 +256,7 @@ class TestSBIDispatch:
         r2 = bayesian_update(
             compiled, graph, drug, regimen, obs2,
             method="sbi", n_prior=80, logp_hint=logp, seed=42,
+            sbi_posterior_path=str(POSTERIOR_PATH),
         )
         assert r1.n_successful > 0
         assert r2.n_successful > 0

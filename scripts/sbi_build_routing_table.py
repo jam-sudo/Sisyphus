@@ -9,6 +9,10 @@ Drugs not in the validation set default to ``default`` (``ibis`` unless
 overridden). The table is consumed by ``sisyphus.cli._resolve_auto_method``
 when the user passes ``--method auto``.
 
+The time-aware model is routed separately for multiple observations, using
+the same per-drug SBC and coverage rule. A failed multi-observation gate
+leaves the existing single-observation route in place.
+
 Usage::
 
     python scripts/sbi_build_routing_table.py \\
@@ -38,6 +42,9 @@ def main() -> None:
                    default=ROOT / "data" / "validation" / "sbi_sbc_multi_drug_current.json")
     p.add_argument("--out", type=Path,
                    default=ROOT / "data" / "sbi" / "method_routing.json")
+    p.add_argument("--multi-observation-sbc", type=Path,
+                   default=ROOT / "data" / "validation"
+                   / "sbi_sbc_multi_observation_current.json")
     p.add_argument("--default", default="ibis",
                    help="default method for drugs not in the validation set")
     args = p.parse_args()
@@ -88,6 +95,30 @@ def main() -> None:
             reasons[name]["tdm_bias_override"] = override
 
     reweight = existing.get("sbi_reweight", {})
+    multi_observation = existing.get("multi_observation")
+    if args.multi_observation_sbc.exists():
+        multi_sbc = json.loads(args.multi_observation_sbc.read_text())
+        validation = json.loads((ROOT / "data/sbi/validation_drug_set.json").read_text())
+        smiles = {entry["name"]: entry["smiles"] for entry in validation["drugs"]}
+        decisions = {}
+        for entry in multi_sbc["drugs"]:
+            name = entry["name"]
+            coverage = float(entry["coverage_max_deviation"])
+            passed = bool(entry.get("pass", False)) and coverage <= STRICT_COVERAGE_OK
+            decisions[name] = {
+                "use_native": passed,
+                "smiles": smiles[name],
+                "sbc_pass": bool(entry.get("pass", False)),
+                "coverage_max_deviation": coverage,
+                "ks_pvalues": entry["ks_pvalues"],
+            }
+        multi_observation = {
+            "source": str(args.multi_observation_sbc.resolve().relative_to(ROOT)),
+            "model": "multi_observation_nsf.pt",
+            "global_sbc_gate_passed": bool(multi_sbc.get("gate_passed", False)),
+            "native_count": sum(row["use_native"] for row in decisions.values()),
+            "drugs": decisions,
+        }
 
     payload = {
         "source": str(args.sbc.resolve().relative_to(ROOT)),
@@ -110,6 +141,7 @@ def main() -> None:
             "global_sbc_gate_passed": bool(sbc.get("gate_passed", False)),
         },
         "sbi_reweight": reweight,
+        "multi_observation": multi_observation,
         "routes": routes,
         "reasons": reasons,
     }

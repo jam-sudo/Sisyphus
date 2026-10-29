@@ -1,0 +1,39 @@
+{
+  "version": "post_rr_engine_multi_observation_v2",
+  "artifact_sha256": "ca086a19384b7379086fd030a20f1c18002254263ab081bf7515898a8629ae47",
+  "target": "posterior log10 CLint shift, logit fup, log10 Peff shift",
+  "trained_on": {
+    "dataset_path": null,
+    "sha256": "0bb5a439e55e011a900249b4f1c328e8ae5d8d36ab00695105e9d2f7ab2ece47"
+  },
+  "feature_schema": {
+    "name": "artifact_only",
+    "n_features": 24,
+    "sha256": "not_applicable",
+    "description": "Three masked time/concentration slots, dose context, and 12 drug features"
+  },
+  "trained_at": "2026-10-29",
+  "n_drugs_original": 55,
+  "n_drugs_excluded": 0,
+  "holdout_version": "896e926a127f9a8a3fa632245b79196a3b105a335f76e453eb797e1ccb53e3ba",
+  "holdout_metric": {
+    "name": "per_drug_sbc_pass_count",
+    "value": 2
+  },
+  "hyperparameters": {
+    "density_estimator": "nsf",
+    "hidden_features": 64,
+    "num_transforms": 8,
+    "batch_size": 512,
+    "learning_rate": 0.0005,
+    "max_epochs": 500,
+    "stop_after_epochs": 40,
+    "seed": 42,
+    "training_rows": 27500,
+    "theta_per_drug": 500,
+    "actual_epochs": 110
+  },
+  "retrained_reason": "Rebuilt after the full Rodgers-Rowland engine change; 2/13 held-out drugs pass per-drug SBC and coverage gates",
+  "artifact_status": "optional_runtime",
+  "runtime_loader": "sisyphus.regimen.tdm_sbi"
+}

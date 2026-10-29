@@ -278,11 +278,17 @@ Steady state is declared when trough variation falls below 5% across the last th
 
 Given observed plasma concentrations, a **dispatched Bayesian router** (`data/sbi/method_routing.json`) refines population-level parameter distributions into individual posteriors with one of three methods per drug:
 
-- **SBI (simulation-based inference; 8/13 configured drugs).** A shared neural spline flow conditions on the observed concentration and drug features. The router uses it only for drugs that pass per-drug SBC and have coverage deviation no greater than 10 percentage points. The global SBC gate remains failed (8/13).
-- **IBIS (iterative Bayesian importance sampling; 5/13).** Fallback when a drug fails the per-drug calibration rule; closed-loop iteration prevents weight degeneracy.
+- **SBI (simulation-based inference; 2/13 configured drugs).** A shared neural spline flow conditions on the observed concentration and drug features. The router uses it only for drugs that pass per-drug SBC and have coverage deviation no greater than 10 percentage points. The global SBC gate remains failed (2/13).
+- **IBIS (iterative Bayesian importance sampling; 11/13).** Fallback when a drug fails the per-drug calibration rule; closed-loop iteration prevents weight degeneracy.
 - **IS (classical importance sampling; 0/13 after routing).** Retained for legacy compatibility, used only when SBI training data are insufficient and IBIS has not been validated.
 
 Effective sample size (ESS = $1/\sum w_i^2$) is monitored for importance-based methods. Morphine now routes IBIS after failing SBC; its SBI reweighting setting remains in the table for traceability but is inactive on this route. All three methods share one output contract: a posterior `Distribution` per PK parameter. Observed drug levels can update errors in the current CL<sub>int</sub> predictor (scaffold-CV R&sup2; = 0.215), reducing posterior CV by &gt;50% in internal validation (see [TDM regression checks](#evidence)).
+
+For two or three observations, a time-aware flow conditions on the observation times, concentrations, and dosing regimen for the drugs marked `use_native` in the same routing table. After retraining on the full Rodgers–Rowland engine, its per-drug SBC and coverage gate passes for 2/13 validation drugs (morphine and ketorolac); the global gate fails. Other drugs retain their existing TDM method, and SBI routes use first-observation conditioning with likelihood reweighting. The time-aware path requires equal oral bolus doses (up to three) and observations 1, 2, 4, 8, or 12 hours after the last dose. Unsupported regimens, observation times, and population or age/weight covariates retain the existing path.
+
+Explicit population-class SBI uses a separate hierarchical flow retrained on the same engine. It passes 9/26 population–drug SBC and coverage gates, so its aggregate calibration remains experimental.
+
+With `--method sbi` and both body weight and age supplied, TDM uses the retrained continuous-covariate flow. Its SBC on the full Rodgers–Rowland engine passes 31/52 population–drug pairs versus 0/52 for the stale model it replaces; it remains experimental because the aggregate gate fails.
 
 </details>
 
@@ -472,7 +478,7 @@ Regenerated on the current engine (post-FLUX-1 + paracellular) via `scripts/veri
 <details>
 <summary><b>TDM regression checks</b> &mdash; importance-sampling baseline on synthetic observations</summary>
 
-The multi-drug table reports **importance sampling** rerun on the current engine and reference set; the experimental router sends 8/13 configured drugs to SBI after per-drug calibration checks. Detailed calibration and per-drug coverage reports are tracked separately. These checks do not establish clinical TDM validity.
+The multi-drug table below is an earlier **importance sampling** check on synthetic observations. After retraining on the full Rodgers–Rowland engine, the experimental router sends 2/13 configured drugs to SBI after per-drug calibration checks. Detailed calibration and per-drug coverage reports are tracked separately. These checks do not establish clinical TDM validity.
 
 > Morphine uses the adjudicated 22.5 mg / 28.5 ng/mL reference ([reference adjudication](docs/validation/reference_pmid_screen_2026-09-24.md)). The single-drug midazolam check below is historical and was not rerun in this update.
 

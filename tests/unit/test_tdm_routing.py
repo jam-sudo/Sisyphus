@@ -40,10 +40,46 @@ def test_auto_routing_by_name_and_compound_smiles(capsys):
     assert _resolve_auto_method(_route_drug_name(MORPHINE_SMILES, "morphine")) == (
         "ibis", False
     )
-    assert _resolve_auto_method("ketorolac") == ("sbi", False)
+    assert _resolve_auto_method("clozapine") == ("sbi", False)
     assert _route_drug_name("Cn1c(=O)c2c(ncn2C)n(C)c1=O", None) == "Caffeine"
     assert _resolve_auto_method("unlisted") == ("ibis", False)
     assert "not in routing table" in capsys.readouterr().err
+
+
+def test_multi_observation_auto_routing_uses_only_calibrated_valid_context():
+    regimen = DosingRegimen.single_oral(10.0)
+    observations = (Observation(1.0, 0.02), Observation(4.0, 0.01))
+    assert _resolve_auto_method("morphine", regimen, observations) == ("sbi", False)
+    assert _resolve_auto_method("ketorolac", regimen, observations) == ("sbi", False)
+    assert _resolve_auto_method(
+        "morphine", regimen, observations, SimpleNamespace(smiles="CCO")
+    ) == ("ibis", False)
+    assert _resolve_auto_method("rivaroxaban", regimen, observations) == ("ibis", False)
+    invalid = (Observation(1.0, 0.02), Observation(3.0, 0.01))
+    assert _resolve_auto_method("morphine", regimen, invalid) == ("ibis", False)
+    assert _resolve_auto_method("morphine", regimen, observations[:1]) == ("ibis", False)
+
+
+def test_multi_observation_model_matches_canonical_smiles():
+    from sisyphus.regimen.tdm_sbi import _native_multi_observation_model
+
+    root = Path(__file__).resolve().parents[2]
+    validation = json.loads((root / "data/sbi/validation_drug_set.json").read_text())
+    morphine = next(row for row in validation["drugs"] if row["name"] == "morphine")
+    ketorolac = next(row for row in validation["drugs"] if row["name"] == "ketorolac")
+    clozapine = next(row for row in validation["drugs"] if row["name"] == "clozapine")
+    rivaroxaban = next(row for row in validation["drugs"] if row["name"] == "rivaroxaban")
+    assert _native_multi_observation_model(SimpleNamespace(smiles=morphine["smiles"])).name == (
+        "multi_observation_nsf.pt"
+    )
+    assert _native_multi_observation_model(SimpleNamespace(smiles=MORPHINE_SMILES)).name == (
+        "multi_observation_nsf.pt"
+    )
+    assert _native_multi_observation_model(SimpleNamespace(smiles=ketorolac["smiles"])).name == (
+        "multi_observation_nsf.pt"
+    )
+    assert _native_multi_observation_model(SimpleNamespace(smiles=clozapine["smiles"])) is None
+    assert _native_multi_observation_model(SimpleNamespace(smiles=rivaroxaban["smiles"])) is None
 
 
 def test_ibis_end_to_end_moves_toward_observation(case):
@@ -113,6 +149,10 @@ def test_cli_auto_uses_name_and_reports_actual_method(case, monkeypatch, capsys)
     assert "Method: ibis" in out.out
     assert "routing morphine" in out.err
 
+    args.obs = ["1:0.0285", "4:0.010"]
+    cli._run_tdm(args)
+    assert called["method"] == "sbi"
+
     args.method = "ibis"
     args.population = "adult"
     with pytest.raises(ValueError, match="require SBI"):
@@ -163,13 +203,36 @@ def test_verified_equivalent_sbi_engine_revision(tmp_path, monkeypatch, caplog):
     assert not caplog.records
 
 
-@pytest.mark.parametrize("model_name", ["multi_drug_nsf.pt", "hierarchical_nsf_2k.pt"])
-def test_sbi_model_warns_after_physiology_and_kp_change(model_name, caplog):
+def test_validated_sbi_engine_revision(tmp_path, monkeypatch, caplog):
+    from sisyphus.regimen import tdm_sbi
+
+    stamp_path = tmp_path / "engine_revision.json"
+    (tmp_path / "engine.py").write_text("current")
+    digest = hashlib.sha256(b"engine.py\0current").hexdigest()
+    stamp_path.write_text(json.dumps({"models": {"multi_observation_nsf.pt": {
+        "commit": "training", "sha256": "training-hash", "paths": ["engine.py"],
+        "validated_revision": {"sha256": digest, "check": "current-engine SBC"},
+    }}}))
+    monkeypatch.setattr(
+        tdm_sbi, "get_resource_config",
+        lambda: SimpleNamespace(root=tmp_path, model=lambda *args, **kwargs: stamp_path),
+    )
+
+    with caplog.at_level("WARNING"):
+        tdm_sbi._warn_engine_revision(Path("multi_observation_nsf.pt"))
+    assert not caplog.records
+
+
+@pytest.mark.parametrize("model_name", [
+    "multi_drug_nsf.pt", "hierarchical_nsf_2k.pt", "multi_observation_nsf.pt",
+    "continuous_hierarchical_nsf.pt",
+])
+def test_retrained_sbi_model_matches_current_engine(model_name, caplog):
     from sisyphus.regimen.tdm_sbi import _warn_engine_revision
 
     with caplog.at_level("WARNING"):
         _warn_engine_revision(Path(model_name))
-    assert "Posterior calibration may be stale" in caplog.text
+    assert "Posterior calibration may be stale" not in caplog.text
 
 
 def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
@@ -201,6 +264,7 @@ def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
     assert rebuilt["summary"]["sbi"] == 1
     assert rebuilt["summary"]["ibis"] == 2
     assert rebuilt["summary"]["global_sbc_gate_passed"] is False
+    assert rebuilt["multi_observation"] == original["multi_observation"]
     assert (rebuilt["reasons"]["morphine"]["tdm_bias_override"]
             == original["reasons"]["morphine"]["tdm_bias_override"])
 
@@ -210,6 +274,27 @@ def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
     rebuilt = json.loads(out.read_text())
     assert rebuilt["routes"]["pravastatin"] == "is"
     assert rebuilt["summary"]["is"] == 1
+
+    multi_path = tmp_path / "data/validation/sbi_sbc_multi_observation_current.json"
+    multi_path.write_text(json.dumps({"gate_passed": False, "drugs": [
+        {"name": "morphine", "pass": True, "coverage_max_deviation": 0.05,
+         "ks_pvalues": [0.2, 0.2, 0.2]},
+        {"name": "clozapine", "pass": True, "coverage_max_deviation": 0.12,
+         "ks_pvalues": [0.2, 0.2, 0.2]},
+        {"name": "pravastatin", "pass": False, "coverage_max_deviation": 0.02,
+         "ks_pvalues": [0.001, 0.2, 0.2]},
+    ]}))
+    validation_path = tmp_path / "data/sbi/validation_drug_set.json"
+    validation_path.parent.mkdir(parents=True)
+    validation_path.write_text(json.dumps({"drugs": [
+        {"name": name, "smiles": name} for name in ("morphine", "clozapine", "pravastatin")
+    ]}))
+    main()
+    decisions = json.loads(out.read_text())["multi_observation"]
+    assert decisions["native_count"] == 1
+    assert [decisions["drugs"][name]["use_native"] for name in (
+        "morphine", "clozapine", "pravastatin"
+    )] == [True, False, False]
 
 
 def test_sbi_warns_for_timed_multidose_observation(case, caplog):

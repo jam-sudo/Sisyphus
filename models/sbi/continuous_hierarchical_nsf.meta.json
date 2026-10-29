@@ -1,27 +1,40 @@
 {
-  "version": "unknown_legacy",
-  "artifact_sha256": "f88b49cf7dd578d099925caf7e47a03010864ceb7e58808e349fe74a45a377f8",
-  "target": "unknown_legacy",
+  "version": "post_rr_engine_continuous_retry_v3",
+  "artifact_sha256": "6997a339902d4fec7c716f59c09a476d425212c871c85e598a7ace74ba9b6697",
+  "target": "posterior log10 CLint shift, logit fup, log10 Peff shift",
   "trained_on": {
     "dataset_path": null,
-    "sha256": "unknown_legacy"
+    "sha256": "e78ca32f8e3a2b8277f167a52bb340d0f922da2c82fa0b6c9778412766044779"
   },
   "feature_schema": {
     "name": "artifact_only",
-    "n_features": null,
+    "n_features": 15,
     "sha256": "not_applicable",
-    "description": "Artifact integrity only; no canonical feature-vector fingerprint."
+    "description": "log10 Cmax, 12 drug features, normalized log10 body weight and age"
   },
-  "trained_at": "unknown_legacy",
-  "n_drugs_original": null,
-  "n_drugs_excluded": null,
-  "holdout_version": "unknown_legacy",
+  "trained_at": "2026-10-29",
+  "n_drugs_original": 55,
+  "n_drugs_excluded": 0,
+  "holdout_version": "896e926a127f9a8a3fa632245b79196a3b105a335f76e453eb797e1ccb53e3ba",
   "holdout_metric": {
-    "name": "unknown_legacy",
-    "value": null
+    "name": "per_population_drug_sbc_pass_count",
+    "value": 31
   },
-  "hyperparameters": {},
-  "retrained_reason": "unknown_legacy",
+  "hyperparameters": {
+    "training_rows": 110000,
+    "theta_per_drug_population": 200,
+    "n_populations": 10,
+    "data_seed": 142,
+    "flow": "nsf",
+    "hidden_features": 128,
+    "num_transforms": 12,
+    "batch_size": 512,
+    "max_epochs": 300,
+    "stop_after_epochs": 60,
+    "actual_epochs": 74,
+    "best_validation_performance": 2.1424
+  },
+  "retrained_reason": "Rebuilt after the full Rodgers-Rowland engine change; 31/52 held-out population-drug SBC gates pass versus 0/52 for the stale checkpoint on this engine",
   "artifact_status": "optional_runtime",
   "runtime_loader": "sisyphus.regimen.tdm_sbi"
 }
