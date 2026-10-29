@@ -109,6 +109,7 @@ class TestSBIDispatch:
     def test_calibrated_multi_observation_uses_time_aware_posterior(
         self, physiology, morphine_drug, monkeypatch, caplog,
     ):
+        from sisyphus.regimen.tdm_sbi import sbi_update
         from sisyphus.sbi import amortizer
 
         graph, compiled = physiology
@@ -121,10 +122,10 @@ class TestSBIDispatch:
             return original_load(path)
 
         monkeypatch.setattr(amortizer, "load_result", record_load)
-        result = bayesian_update(
+        result = sbi_update(
             compiled, graph, drug, DosingRegimen.single_oral(30.0),
             (Observation(1.0, 0.01865), Observation(4.0, 0.010)),
-            method="sbi", n_prior=30, logp_hint=logp, sbi_use_surrogate=True,
+            n_samples=100, n_predictive_sims=5, logp_hint=logp, use_surrogate=True,
         )
         assert loaded == ["multi_observation_nsf.pt"]
         assert result.n_successful > 0
