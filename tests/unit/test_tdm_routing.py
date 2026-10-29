@@ -142,11 +142,12 @@ def test_stale_sbi_model_logs_engine_revision_warning(tmp_path, monkeypatch, cap
     assert "Posterior calibration may be stale" in caplog.text
 
 
-def test_retrained_hierarchical_model_matches_engine_revision(caplog):
+@pytest.mark.parametrize("model_name", ["multi_drug_nsf.pt", "hierarchical_nsf_2k.pt"])
+def test_retrained_model_matches_engine_revision(model_name, caplog):
     from sisyphus.regimen.tdm_sbi import _warn_engine_revision
 
     with caplog.at_level("WARNING"):
-        _warn_engine_revision(Path("hierarchical_nsf_2k.pt"))
+        _warn_engine_revision(Path(model_name))
     assert not caplog.records
 
 
