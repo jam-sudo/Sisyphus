@@ -107,7 +107,8 @@ nodes:
       # Prodrug activation enzymes — independent lognormal.
       # Values from T1 deliverable §1 (intestinal-specific isoforms).
       SPR:  {mean: 3.0e3, cv: 1.2}    # Lower expression vs liver (PMC7520308 colon mention)
-      CES2: {mean: 3.0e6, cv: 0.6}    # Al-Majdoub 2020 PMC8048492: 500 pmol/mg × 6000 mg mucosal
+      CES2: {mean: 3.0e6, cv: 0.6}    # Class estimate: 500 pmol/mg × 6000 mg mucosal.
+      # Al-Majdoub 2021 PMC8048492 does not quantify CES2; direct abundance is unresolved.
       ALPI: {mean: 2.3e4, cv: 0.9}    # Al-Majdoub 2020 PMC8048492: 3.89 pmol/mg × 6000 mg mucosal
       # Phase II UGT — gut wall expression (B-13 Phase 2.x follow-up to B-02 UGT registries).
       # PROVENANCE (audit 2026-05-29, verify-gut-ugt-citations workflow, 11 agents): the spec's
