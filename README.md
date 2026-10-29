@@ -478,7 +478,7 @@ The multi-drug table reports **importance sampling** rerun on the current engine
 | ESS | &mdash; | 586.6 (29.3% of 2,000) |
 | CV reduction | &mdash; | 55.3% |
 
-**Multi-drug benchmark** (5 holdout drugs, synthetic observations scaled from engine C(t) profiles to observed C<sub>max</sub>, 10% log-normal assay noise, seed = 42):
+**Multi-drug benchmark** (5 selected drugs, synthetic observations scaled from engine C(t) profiles to observed C<sub>max</sub>, 10% log-normal assay noise, seed = 42):
 
 | Drug | Type | 1-obs CV reduction | 2-obs CV reduction | 3-obs CV reduction | 1-obs ESS |
 |:--|:-:|:-:|:-:|:-:|:-:|
