@@ -5,8 +5,12 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from sisyphus.mipd.amortizer import NeuralAmortizer, _neural_context
-from sisyphus.mipd.clgrid import CLGrid, CLGridForward, CLPrior, MeasuredConc
+from sisyphus.mipd.amortizer import (
+    NeuralAmortizer,
+    _clipped_log_normal_logprob,
+    _neural_context,
+)
+from sisyphus.mipd.clgrid import CLGrid, CLGridForward, CLPrior, MeasuredConc, sir_posterior_2d
 from sisyphus.mipd.core import FPrior, MeasuredF
 from sisyphus.regimen.types import DosingRegimen
 
@@ -33,7 +37,22 @@ def test_zero_observations_returns_engine_prior():
     assert post.cl_scale is not None
     assert np.median(post.f.samples) == pytest.approx(0.5, rel=0.1)
     assert np.median(post.cl_scale.samples) == pytest.approx(1.0, rel=0.1)
-    assert any("does not match exact SIR" in warning for warning in post.warnings)
+    assert not post.warnings
+    assert not NeuralAmortizer(None).posterior(
+        f_prior, cl_prior, forward, (), regimen=regimen,
+        n_samples=5, raw_flow=True,
+    ).warnings
+
+
+def test_clipped_prior_density_includes_endpoint_mass():
+    from scipy.stats import lognorm
+
+    values = np.array([1e-6, 0.5, 1.0])
+    sigma = np.sqrt(np.log(2.0))
+    logp = _clipped_log_normal_logprob(values, 0.5, 1.0, 1e-6, 1.0)
+    assert np.exp(logp[0]) == pytest.approx(lognorm.cdf(1e-6, sigma, scale=0.5))
+    assert np.exp(logp[1]) == pytest.approx(lognorm.pdf(0.5, sigma, scale=0.5))
+    assert np.exp(logp[2]) == pytest.approx(lognorm.sf(1.0, sigma, scale=0.5))
 
 
 def test_context_validates_regimen_and_observations():
@@ -135,12 +154,75 @@ def test_neural_posterior_maps_latents_through_grid():
 
     post = NeuralAmortizer(Model()).posterior(
         f_prior, cl_prior, forward, (MeasuredConc(0.2, 16.0),),
-        regimen=regimen, n_samples=20,
+        regimen=regimen, n_samples=20, raw_flow=True,
     )
     assert post.f.point == pytest.approx(0.4)
     assert post.cl_scale.point == pytest.approx(2.0)
     assert post.cmax.point == pytest.approx(forward(np.array([0.4]), np.array([2.0]))["cmax"][0])
     assert any("does not match exact SIR" in warning for warning in post.warnings)
+
+
+def test_neural_is_retains_f_boundary_mass_and_agrees_with_sir(monkeypatch):
+    torch = pytest.importorskip("torch")
+    f_prior, cl_prior, forward, regimen = _case()
+
+    class UniformFlow:
+        density_estimator = torch.nn.Linear(1, 1)
+
+        def sample(self, context, n, *, reject_outside_prior=True):
+            rng = np.random.default_rng(3)
+            return np.column_stack((rng.uniform(0, 1.2, n), rng.uniform(0, 20.5, n)))
+
+        class posterior:
+            @staticmethod
+            def log_prob(theta, x, norm_posterior=True):
+                return torch.full((len(theta),), -np.log(1.2 * 20.5))
+
+    obs = (MeasuredF(0.8, cv=0.3),)
+    post = NeuralAmortizer(UniformFlow()).posterior(
+        f_prior, cl_prior, forward, obs, regimen=regimen,
+        n_samples=2000, rng=np.random.default_rng(4),
+    )
+    sir = sir_posterior_2d(
+        f_prior, cl_prior, forward, obs, n_samples=50000, rng=np.random.default_rng(5),
+    )
+    assert post.proposal_n_eff is not None and post.proposal_n_eff >= 200
+    assert np.all((post.f.samples >= 1e-6) & (post.f.samples <= 1))
+    assert np.mean(post.f.samples == 1.0) > 0.1
+    assert abs(post.f.mean - sir.f.mean) < 0.05
+
+    monkeypatch.setattr("sisyphus.mipd.amortizer._MIN_NEURAL_ESS_COUNT", 2001)
+    fallback = NeuralAmortizer(UniformFlow()).posterior(
+        f_prior, cl_prior, forward, obs, regimen=regimen,
+        n_samples=50, rng=np.random.default_rng(4),
+    )
+    assert len(fallback.f.samples) == 50
+    assert fallback.proposal_n_eff is not None and fallback.proposal_n_eff < 2001
+    assert any("used grid SIR" in warning for warning in fallback.warnings)
+
+
+def test_npe_sampler_can_draw_untruncated_flow():
+    torch = pytest.importorskip("torch")
+    from sisyphus.sbi.amortizer import NPETrainingResult
+
+    class DensityEstimator(torch.nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.weight = torch.nn.Parameter(torch.ones(1))
+            self.condition = None
+
+        def sample(self, shape, *, condition):
+            self.condition = condition
+            return torch.ones((shape[0], 1, 2))
+
+    estimator = DensityEstimator()
+    result = NPETrainingResult(
+        posterior=None, density_estimator=estimator,
+        training_losses=[], validation_losses=[], n_train_samples=1,
+        prior_low=np.zeros(2), prior_high=np.ones(2),
+    )
+    assert result.sample(np.zeros(3), n=4, reject_outside_prior=False).shape == (4, 2)
+    assert estimator.condition.shape == (1, 3)
 
 
 def test_load_requires_optional_dependencies(monkeypatch, tmp_path):

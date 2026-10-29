@@ -1,0 +1,39 @@
+{
+  "train_compounds": 55,
+  "heldout_compounds": 13,
+  "train_pairs": 110000,
+  "heldout_cases": 130,
+  "minimum_sample_gate_passed": true,
+  "coverage_90_f_clint": [
+    0.9461538461538461,
+    0.8769230769230769
+  ],
+  "sbc_ks_p_f_clint": [
+    0.634712187120902,
+    0.830576963644782
+  ],
+  "sir_agreement_fraction_f_clint": [
+    0.9692307692307692,
+    0.9846153846153847
+  ],
+  "sir_ess_min": 244.13407342877085,
+  "sir_ess_median": 4443.38355032089,
+  "sir_draws_max": 40000,
+  "neural_proposal_ess_min": 55.46239467541855,
+  "neural_proposal_ess_median": 1067.4476783682398,
+  "neural_proposal_ess_p10": 384.7768130739845,
+  "neural_fallback_count": 6,
+  "neural_fallback_fraction": 0.046153846153846156,
+  "neural_seconds": 7.441713433712721,
+  "sir_seconds": 0.9225846864283085,
+  "neural_vs_sir_speed_ratio": 0.12397476665102176,
+  "sir_normalized_mean_error_median_f_clint": [
+    0.040198886542177056,
+    0.03956961763169238
+  ],
+  "sir_normalized_mean_error_p90_f_clint": [
+    0.0953587630801371,
+    0.10055461413866038
+  ],
+  "gate_passed": true
+}

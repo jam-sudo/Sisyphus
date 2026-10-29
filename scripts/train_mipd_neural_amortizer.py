@@ -14,6 +14,7 @@ import argparse
 import json
 import logging
 import math
+import time
 from pathlib import Path
 
 import numpy as np
@@ -24,7 +25,7 @@ from sisyphus.mipd.clgrid import CLGrid, CLGridForward, CLPrior, MeasuredConc, s
 from sisyphus.mipd.core import FPrior, MeasuredAUC, MeasuredCmax, MeasuredF
 from sisyphus.mipd.grid import build_cl_grid
 from sisyphus.regimen.types import DosingRegimen
-from sisyphus.sbi.amortizer import save_result, train_npe
+from sisyphus.sbi.amortizer import load_result, save_result, train_npe
 
 log = logging.getLogger(__name__)
 
@@ -120,6 +121,7 @@ def _main() -> None:
     parser.add_argument("--manifest", type=Path, required=True)
     parser.add_argument("--heldout-manifest", type=Path)
     parser.add_argument("--out", type=Path)
+    parser.add_argument("--load-model", type=Path)
     parser.add_argument("--report", type=Path)
     parser.add_argument("--samples-per-compound", type=int, default=1000)
     parser.add_argument("--n-grid", type=int, default=13)
@@ -151,9 +153,9 @@ def _main() -> None:
             raise ValueError("--generate-index needs --cache-dir and a valid manifest index")
         _setup(specs[args.generate_index], args.n_grid, args.cache_dir, generate=True)
         return
-    if args.out is None or args.report is None:
-        raise ValueError("training requires --out and --report")
-    if args.out.exists():
+    if args.report is None or (args.load_model is None and args.out is None):
+        raise ValueError("training requires --out and --report; evaluation requires --report")
+    if args.out is not None and args.out.exists():
         raise FileExistsError(f"refusing to reuse existing model path: {args.out}")
     rng = np.random.default_rng(args.seed)
     if heldout_specs:
@@ -170,7 +172,7 @@ def _main() -> None:
             theta, x, _ = _draw_pair(*setup, rng)
             theta_rows.append(theta)
             x_rows.append(x)
-    result = train_npe(
+    result = load_result(args.load_model) if args.load_model else train_npe(
         np.stack(theta_rows), np.stack(x_rows),
         np.array([1e-6, 0.05]), np.array([1.0, 20.0]),
         density_estimator="nsf", embedding_net_hidden=args.embedding_hidden,
@@ -184,6 +186,10 @@ def _main() -> None:
     ranks = []
     sir_ess = []
     sir_draws = []
+    neural_ess = []
+    fallback_count = 0
+    neural_seconds = 0.0
+    sir_seconds = 0.0
     normalized_mean_error = [[], []]
     cases = 0
     for i, spec in enumerate(heldout, 1):
@@ -193,11 +199,17 @@ def _main() -> None:
         )
         for _ in range(args.n_calibration):
             truth, _, obs = _draw_pair(forward, f_prior, cl_prior, regimen, rng)
+            started = time.perf_counter()
             post = neural.posterior(
                 f_prior, cl_prior, forward, obs,
                 regimen=regimen, n_samples=500, rng=rng,
             )
+            neural_seconds += time.perf_counter() - started
+            neural_ess.append(post.proposal_n_eff)
+            fallback_count += any("used grid SIR" in warning for warning in post.warnings)
+            started = time.perf_counter()
             sir, n_sir = _sir_reference(f_prior, cl_prior, forward, obs, rng)
+            sir_seconds += time.perf_counter() - started
             sir_ess.append(sir.n_eff)
             sir_draws.append(n_sir)
             neural_samples = (post.f.samples, post.cl_scale.samples)
@@ -242,6 +254,14 @@ def _main() -> None:
         "sir_ess_min": float(min(sir_ess)),
         "sir_ess_median": float(np.median(sir_ess)),
         "sir_draws_max": int(max(sir_draws)),
+        "neural_proposal_ess_min": float(min(neural_ess)),
+        "neural_proposal_ess_median": float(np.median(neural_ess)),
+        "neural_proposal_ess_p10": float(np.quantile(neural_ess, 0.1)),
+        "neural_fallback_count": fallback_count,
+        "neural_fallback_fraction": fallback_count / cases,
+        "neural_seconds": neural_seconds,
+        "sir_seconds": sir_seconds,
+        "neural_vs_sir_speed_ratio": sir_seconds / neural_seconds,
         "sir_normalized_mean_error_median_f_clint": [
             float(np.median(errors)) for errors in normalized_mean_error
         ],
@@ -253,10 +273,10 @@ def _main() -> None:
     args.report.parent.mkdir(parents=True, exist_ok=True)
     args.report.write_text(json.dumps(report, indent=2) + "\n")
     log.info("Held-out gate: %s", report)
-    if passed or args.save_approximation:
+    if args.load_model is None and (passed or args.save_approximation):
         save_result(result, args.out)
         log.info("Model saved to %s (strict gate passed: %s)", args.out, passed)
-    else:
+    elif args.load_model is None:
         log.warning("Gate failed; model was not saved")
         raise SystemExit(2)
 
