@@ -77,7 +77,7 @@ def _simulate_context(
     from sisyphus.sbi.simulator import apply_theta_to_drug
 
     overridden = apply_theta_to_drug(sim.nominal_drug, theta, sim.nominal_peff)
-    realized_graph = sim.graph.sample(rng)
+    realized_graph = sim._sample_graph(rng)
     realized_drug = overridden.sample(rng)
     try:
         result = solve_regimen(
