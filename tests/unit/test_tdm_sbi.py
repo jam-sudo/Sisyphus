@@ -90,11 +90,13 @@ class TestSBIDispatch:
         seen = []
         log_densities = []
         solve_windows = []
+        solve_steps = []
         monkeypatch.setattr(amortizer, "load_result", lambda path: SimpleNamespace(
             prior_low=np.array([-1.0, -4.5, -0.5]), posterior=object(),
         ))
         def fake_solve(*args, **kwargs):
             solve_windows.append(kwargs["t_total_h"])
+            solve_steps.append(kwargs["dt_output"])
             return SimpleNamespace(
                 solver_success=True, time_h=np.array([0.0, 1.0, 2.0]),
                 concentrations={"venous_blood": np.array([0.01, 0.005, 0.02])},
@@ -120,6 +122,7 @@ class TestSBIDispatch:
         assert log_densities[0] == pytest.approx(expected)
         assert result.ess == 64.0
         assert 48.0 in solve_windows
+        assert 48.0 / 499 in solve_steps
 
     def test_retrained_hierarchical_posterior_runs_end_to_end(
         self, physiology, morphine_drug,

@@ -18,6 +18,7 @@ import numpy as np
 
 from sisyphus.core import Distribution, DrugOnGraph
 from sisyphus.engine.compiler import CompiledODE, ODECompiler, ResolvedParams
+from sisyphus.engine.solver import DETERMINISTIC_OUTPUT_POINTS
 from sisyphus.graph.body import BodyGraph
 from sisyphus.regimen.solver import DEFAULT_TAIL_H, solve_regimen
 from sisyphus.regimen.types import DosingRegimen
@@ -397,6 +398,11 @@ def sbi_update(
         ) + 24.0
         if len(observations) == 1:
             t_total_likelihood = max(t_total_likelihood, _SIMULATOR_CMAX_HORIZON_H)
+        likelihood_output_step_h = (
+            _SIMULATOR_CMAX_HORIZON_H / (DETERMINISTIC_OUTPUT_POINTS - 1)
+            if len(observations) == 1 and regimen.n_doses == 1
+            and t_total_likelihood == _SIMULATOR_CMAX_HORIZON_H else 0.25
+        )
 
         def log_likelihood_draw(theta: np.ndarray, rng: np.random.Generator) -> float:
             overridden = apply_theta_to_drug(drug, theta, float(drug.peff.mean))
@@ -405,7 +411,7 @@ def sbi_update(
             try:
                 sim = solve_regimen(
                     compiled, ResolvedParams(realized_graph, realized_drug), regimen,
-                    t_total_h=t_total_likelihood, dt_output=0.25,
+                    t_total_h=t_total_likelihood, dt_output=likelihood_output_step_h,
                 )
                 if not sim.solver_success:
                     return -np.inf
