@@ -122,7 +122,7 @@ def main() -> None:
     p.add_argument("--out", type=Path, required=True)
     p.add_argument("--t-obs-h", type=float, default=1.0)
     p.add_argument("--sbi-reweight", action="store_true",
-                   help="Enable SBI posterior likelihood reweighting (P6 Option 2)")
+                   help="Legacy option; corrected SBI always uses the full likelihood")
     args = p.parse_args()
 
     methods = [m.strip() for m in args.methods.split(",") if m.strip()]

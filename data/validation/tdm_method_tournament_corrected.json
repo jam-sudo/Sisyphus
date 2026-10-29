@@ -1,0 +1,464 @@
+{
+  "validation_set": "data/sbi/validation_drug_set.json",
+  "methods": [
+    "is",
+    "ibis",
+    "enkf",
+    "sbi"
+  ],
+  "t_obs_h": 1.0,
+  "sbi_sampler": "pseudo_marginal_importance_corrected",
+  "drugs": [
+    {
+      "name": "morphine",
+      "dose_mg": 22.5,
+      "observed_cmax_mg_l": 0.0285,
+      "results": [
+        {
+          "method": "is",
+          "method_used": "importance_sampling",
+          "warnings": [],
+          "wall_seconds": 184.62550854682922,
+          "prior_cmax_mean": 0.07823237626914009,
+          "prior_cmax_cv": 0.5712711120118786,
+          "posterior_cmax_mean": 0.04205755811042045,
+          "posterior_cmax_cv": 0.28531534876367803,
+          "ess": 69.01754499406913,
+          "n_successful": 500,
+          "n_prior": 500,
+          "posterior_params": {
+            "fup": 0.149663880005543,
+            "peff": 3.0199439730306343,
+            "total_enzyme_affinity": 2.794822925047337
+          },
+          "ok": true,
+          "bias_pct_vs_obs": 47.5703793348086
+        },
+        {
+          "method": "ibis",
+          "method_used": "ibis",
+          "warnings": [],
+          "wall_seconds": 4346.690036773682,
+          "prior_cmax_mean": 0.07726532575015656,
+          "prior_cmax_cv": 0.5852856496036135,
+          "posterior_cmax_mean": 0.04195787809503772,
+          "posterior_cmax_cv": 0.2743209610995888,
+          "ess": 279.54088569097803,
+          "n_successful": 2000,
+          "n_prior": 2000,
+          "posterior_params": {
+            "fup": 0.14793645045523993,
+            "peff": 3.038139110377711,
+            "total_enzyme_affinity": 3.0236014424751096
+          },
+          "ok": true,
+          "bias_pct_vs_obs": 47.220624894869175
+        },
+        {
+          "method": "enkf",
+          "method_used": "enkf",
+          "warnings": [],
+          "wall_seconds": 1579.3976924419403,
+          "prior_cmax_mean": 0.07726532575015656,
+          "prior_cmax_cv": 0.5852856496036135,
+          "posterior_cmax_mean": 0.05503990996926743,
+          "posterior_cmax_cv": 0.5008610573454314,
+          "ess": 2000.0,
+          "n_successful": 2000,
+          "n_prior": 2000,
+          "posterior_params": {
+            "total_enzyme_affinity": 3.612155376211352,
+            "fup": 0.15639886745511095,
+            "peff": 3.172044871291416
+          },
+          "ok": true,
+          "bias_pct_vs_obs": 93.12249112023659
+        },
+        {
+          "method": "sbi",
+          "method_used": "sbi",
+          "warnings": [],
+          "wall_seconds": 857.323301076889,
+          "prior_cmax_mean": 0.07792756022679037,
+          "prior_cmax_cv": 0.5767072381343842,
+          "posterior_cmax_mean": 0.037638782993150634,
+          "posterior_cmax_cv": 0.8159732824642969,
+          "ess": 83.10900304266882,
+          "n_successful": 200,
+          "n_prior": 200,
+          "posterior_params": {
+            "peff": 4.097111432436361,
+            "fup": 0.6016562376896607,
+            "total_enzyme_affinity": 3.6956829840127092
+          },
+          "ok": true,
+          "bias_pct_vs_obs": 32.06590523912502
+        }
+      ]
+    },
+    {
+      "name": "amantadine",
+      "dose_mg": 80.576421,
+      "observed_cmax_mg_l": 0.22,
+      "results": [
+        {
+          "method": "is",
+          "method_used": "importance_sampling",
+          "warnings": [],
+          "wall_seconds": 166.46855998039246,
+          "prior_cmax_mean": 0.06254946837895389,
+          "prior_cmax_cv": 1.0828760381769438,
+          "posterior_cmax_mean": 0.2153673220501962,
+          "posterior_cmax_cv": 0.12387331529191109,
+          "ess": 13.772440274591323,
+          "n_successful": 500,
+          "n_prior": 500,
+          "posterior_params": {
+            "fup": 0.4918578085335954,
+            "peff": 7.9304058182345045,
+            "total_enzyme_affinity": 2.50991172966203
+          },
+          "ok": true,
+          "bias_pct_vs_obs": -2.1057627044562697
+        },
+        {
+          "method": "ibis",
+          "method_used": "ibis",
+          "warnings": [],
+          "wall_seconds": 4053.94770359993,
+          "prior_cmax_mean": 0.0695414951804104,
+          "prior_cmax_cv": 1.1112626533730967,
+          "posterior_cmax_mean": 0.2179759519266308,
+          "posterior_cmax_cv": 0.10697614617766624,
+          "ess": 96.54291261911587,
+          "n_successful": 2000,
+          "n_prior": 2000,
+          "posterior_params": {
+            "fup": 0.48085370544248174,
+            "peff": 8.26733138656609,
+            "total_enzyme_affinity": 2.417844843985915
+          },
+          "ok": true,
+          "bias_pct_vs_obs": -0.9200218515314545
+        },
+        {
+          "method": "enkf",
+          "method_used": "enkf",
+          "warnings": [],
+          "wall_seconds": 1320.451196193695,
+          "prior_cmax_mean": 0.0695414951804104,
+          "prior_cmax_cv": 1.1112626533730967,
+          "posterior_cmax_mean": 0.10572451300436508,
+          "posterior_cmax_cv": 0.7245268831629192,
+          "ess": 2000.0,
+          "n_successful": 2000,
+          "n_prior": 2000,
+          "posterior_params": {
+            "total_enzyme_affinity": 2.912204417194801,
+            "fup": 0.5408030724935907,
+            "peff": 7.844599214085578
+          },
+          "ok": true,
+          "bias_pct_vs_obs": -51.94340317983406
+        },
+        {
+          "method": "sbi",
+          "method_used": "sbi",
+          "warnings": [],
+          "wall_seconds": 909.3314280509949,
+          "prior_cmax_mean": 0.06604515851353733,
+          "prior_cmax_cv": 1.1117787288565286,
+          "posterior_cmax_mean": 0.21412126302685958,
+          "posterior_cmax_cv": 0.7731541056874375,
+          "ess": 109.50794847650148,
+          "n_successful": 200,
+          "n_prior": 200,
+          "posterior_params": {
+            "peff": 8.839362936107387,
+            "total_enzyme_affinity": 3.77550339308783,
+            "fup": 0.565070687846934
+          },
+          "ok": true,
+          "bias_pct_vs_obs": -2.6721531696092837
+        }
+      ]
+    },
+    {
+      "name": "ketorolac",
+      "dose_mg": 6.781701,
+      "observed_cmax_mg_l": 0.87,
+      "results": [
+        {
+          "method": "is",
+          "method_used": "importance_sampling",
+          "warnings": [],
+          "wall_seconds": 164.95802330970764,
+          "prior_cmax_mean": 0.1789378099940932,
+          "prior_cmax_cv": 0.4737116709016421,
+          "posterior_cmax_mean": 0.43507437512446573,
+          "posterior_cmax_cv": 0.05264826695183564,
+          "ess": 1.262959842105379,
+          "n_successful": 500,
+          "n_prior": 500,
+          "posterior_params": {
+            "fup": 0.022361524540219762,
+            "peff": 14.004513790275674,
+            "total_enzyme_affinity": 0.6289278954909739
+          },
+          "ok": true,
+          "bias_pct_vs_obs": -49.99145113511888
+        },
+        {
+          "method": "ibis",
+          "method_used": "ibis",
+          "warnings": [],
+          "wall_seconds": 4118.811068534851,
+          "prior_cmax_mean": 0.17713631257546814,
+          "prior_cmax_cv": 0.4771493009564171,
+          "posterior_cmax_mean": 0.45423143691988893,
+          "posterior_cmax_cv": 0.09804267289525637,
+          "ess": 2.8245458516998427,
+          "n_successful": 2000,
+          "n_prior": 2000,
+          "posterior_params": {
+            "fup": 0.024663687503761036,
+            "peff": 14.442591811939844,
+            "total_enzyme_affinity": 0.5729176693201106
+          },
+          "ok": true,
+          "bias_pct_vs_obs": -47.789490009208166
+        },
+        {
+          "method": "enkf",
+          "method_used": "enkf",
+          "warnings": [],
+          "wall_seconds": 1327.014769077301,
+          "prior_cmax_mean": 0.17713631257546814,
+          "prior_cmax_cv": 0.4771493009564171,
+          "posterior_cmax_mean": 0.44158546851763225,
+          "posterior_cmax_cv": 0.12430937072150357,
+          "ess": 2000.0,
+          "n_successful": 2000,
+          "n_prior": 2000,
+          "posterior_params": {
+            "total_enzyme_affinity": 0.29319027065296394,
+            "fup": 0.023605620196413636,
+            "peff": 11.150734694084852
+          },
+          "ok": true,
+          "bias_pct_vs_obs": -49.24304959567446
+        },
+        {
+          "method": "sbi",
+          "method_used": "ibis",
+          "warnings": [
+            "SBI correction unavailable (Corrected SBI ESS 22.1 below floor 32.0); using IBIS instead"
+          ],
+          "wall_seconds": 1180.4891645908356,
+          "prior_cmax_mean": 0.17765773494616952,
+          "prior_cmax_cv": 0.4755016739933588,
+          "posterior_cmax_mean": 0.46268200067666765,
+          "posterior_cmax_cv": 0.08308171938317836,
+          "ess": 1.014246940855079,
+          "n_successful": 200,
+          "n_prior": 200,
+          "posterior_params": {
+            "fup": 0.021244369382963334,
+            "peff": 15.942457291600663,
+            "total_enzyme_affinity": 0.6133292971684384
+          },
+          "ok": true,
+          "bias_pct_vs_obs": -46.81816084176234
+        }
+      ]
+    },
+    {
+      "name": "rivaroxaban",
+      "dose_mg": 10.0,
+      "observed_cmax_mg_l": 0.1432,
+      "results": [
+        {
+          "method": "is",
+          "method_used": "importance_sampling",
+          "warnings": [],
+          "wall_seconds": 145.7888901233673,
+          "prior_cmax_mean": 0.020648990689813584,
+          "prior_cmax_cv": 0.766712743939163,
+          "posterior_cmax_mean": 0.10070222649253818,
+          "posterior_cmax_cv": 0.042108353404488215,
+          "ess": 1.186864775237774,
+          "n_successful": 500,
+          "n_prior": 500,
+          "posterior_params": {
+            "fup": 0.037514721282744204,
+            "peff": 4.511063736500673,
+            "total_enzyme_affinity": 0.6766005757134448
+          },
+          "ok": true,
+          "bias_pct_vs_obs": -29.677216136495684
+        },
+        {
+          "method": "ibis",
+          "method_used": "ibis",
+          "warnings": [],
+          "wall_seconds": 3783.7675547599792,
+          "prior_cmax_mean": 0.022100946004895133,
+          "prior_cmax_cv": 0.7658213413989894,
+          "posterior_cmax_mean": 0.14613834118755065,
+          "posterior_cmax_cv": 0.15577849690047774,
+          "ess": 1.08208242770028,
+          "n_successful": 2000,
+          "n_prior": 2000,
+          "posterior_params": {
+            "fup": 0.09430244733589398,
+            "peff": 3.64531553345867,
+            "total_enzyme_affinity": 0.6431985876001111
+          },
+          "ok": true,
+          "bias_pct_vs_obs": 2.0519142371163777
+        },
+        {
+          "method": "enkf",
+          "method_used": "enkf",
+          "warnings": [],
+          "wall_seconds": 1164.2434175014496,
+          "prior_cmax_mean": 0.022100946004895133,
+          "prior_cmax_cv": 0.7658213413989894,
+          "posterior_cmax_mean": 0.05052701286807651,
+          "posterior_cmax_cv": 0.41789510397171903,
+          "ess": 2000.0,
+          "n_successful": 2000,
+          "n_prior": 2000,
+          "posterior_params": {
+            "total_enzyme_affinity": 0.8438384215161987,
+            "fup": 0.06859756922711803,
+            "peff": 3.100394822170668
+          },
+          "ok": true,
+          "bias_pct_vs_obs": -64.71577313681807
+        },
+        {
+          "method": "sbi",
+          "method_used": "sbi",
+          "warnings": [],
+          "wall_seconds": 809.5834193229675,
+          "prior_cmax_mean": 0.02105186401509082,
+          "prior_cmax_cv": 0.782609718709531,
+          "posterior_cmax_mean": 0.11745336057343846,
+          "posterior_cmax_cv": 0.5422175028683454,
+          "ess": 116.39034343329166,
+          "n_successful": 200,
+          "n_prior": 200,
+          "posterior_params": {
+            "fup": 0.04559210996755567,
+            "total_enzyme_affinity": 0.9484289077092855,
+            "peff": 4.254310917089203
+          },
+          "ok": true,
+          "bias_pct_vs_obs": -17.97949680625806
+        }
+      ]
+    },
+    {
+      "name": "diclofenac",
+      "dose_mg": 23.27098,
+      "observed_cmax_mg_l": 1.0,
+      "results": [
+        {
+          "method": "is",
+          "method_used": "importance_sampling",
+          "warnings": [],
+          "wall_seconds": 149.43093824386597,
+          "prior_cmax_mean": 0.10119851708917653,
+          "prior_cmax_cv": 0.4448764461507669,
+          "posterior_cmax_mean": 0.28423755633155146,
+          "posterior_cmax_cv": 0.10153270960156052,
+          "ess": 1.3684823834100095,
+          "n_successful": 500,
+          "n_prior": 500,
+          "posterior_params": {
+            "fup": 0.013053654150990223,
+            "peff": 8.807481448770151,
+            "total_enzyme_affinity": 3.956055729501978
+          },
+          "ok": true,
+          "bias_pct_vs_obs": -71.57624436684486
+        },
+        {
+          "method": "ibis",
+          "method_used": "ibis",
+          "warnings": [],
+          "wall_seconds": 3650.149977207184,
+          "prior_cmax_mean": 0.10262914846732488,
+          "prior_cmax_cv": 0.4574280399610593,
+          "posterior_cmax_mean": 0.35720667849981536,
+          "posterior_cmax_cv": 0.24498416337641293,
+          "ess": 3.777381740493267,
+          "n_successful": 2000,
+          "n_prior": 2000,
+          "posterior_params": {
+            "fup": 0.013511909546068105,
+            "peff": 8.704529858200246,
+            "total_enzyme_affinity": 3.069100707703396
+          },
+          "ok": true,
+          "bias_pct_vs_obs": -64.27933215001846
+        },
+        {
+          "method": "enkf",
+          "method_used": "enkf",
+          "warnings": [],
+          "wall_seconds": 1174.9810733795166,
+          "prior_cmax_mean": 0.10262914846732488,
+          "prior_cmax_cv": 0.4574280399610593,
+          "posterior_cmax_mean": 0.1927964359859824,
+          "posterior_cmax_cv": 0.31935039152765105,
+          "ess": 2000.0,
+          "n_successful": 2000,
+          "n_prior": 2000,
+          "posterior_params": {
+            "total_enzyme_affinity": 2.62171137289014,
+            "fup": 0.011604394658260138,
+            "peff": 15.178827838641885
+          },
+          "ok": true,
+          "bias_pct_vs_obs": -80.72035640140176
+        },
+        {
+          "method": "sbi",
+          "method_used": "ibis",
+          "warnings": [
+            "SBI correction unavailable (Corrected SBI ESS 1.9 below floor 32.0); using IBIS instead"
+          ],
+          "wall_seconds": 1050.155737876892,
+          "prior_cmax_mean": 0.10097086709934015,
+          "prior_cmax_cv": 0.4247525858412191,
+          "posterior_cmax_mean": 0.20039384633053497,
+          "posterior_cmax_cv": 0.2391058649037915,
+          "ess": 9.736561309944081,
+          "n_successful": 200,
+          "n_prior": 200,
+          "posterior_params": {
+            "fup": 0.010846727153542112,
+            "peff": 7.894295541912146,
+            "total_enzyme_affinity": 2.469959892490943
+          },
+          "ok": true,
+          "bias_pct_vs_obs": -79.9606153669465
+        }
+      ]
+    }
+  ],
+  "per_method_totals": {
+    "is": 811.2719202041626,
+    "ibis": 19953.366340875626,
+    "enkf": 6566.088148593903,
+    "sbi": 4806.883050918579
+  },
+  "skipped_drugs": [
+    {
+      "name": "clozapine",
+      "reason": "No holdout Cmax reference"
+    }
+  ]
+}
