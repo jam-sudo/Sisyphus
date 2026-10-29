@@ -82,7 +82,7 @@ def test_berezhkovskiy_method_is_available():
     assert result.pk.cmax.mean > 0
 
 
-def test_phenotype_help_lists_only_graph_supported_cyp_tags(monkeypatch, capsys):
+def test_phenotype_help_lists_graph_supported_cyp_tags(monkeypatch, capsys):
     from sisyphus import cli
     from sisyphus.predict import phenotype
 
@@ -90,11 +90,9 @@ def test_phenotype_help_lists_only_graph_supported_cyp_tags(monkeypatch, capsys)
     with pytest.raises(SystemExit):
         cli.main()
     help_text = capsys.readouterr().out
-    for tag in ("2D6", "2C9", "1A2", "3A4", "2E1"):
+    for tag in ("2D6", "2C9", "1A2", "3A4", "2E1", "2C19", "3A5", "2B6"):
         assert tag in help_text
-    for tag in ("2C19", "3A5", "2B6"):
-        assert tag not in help_text
-        assert f"CYP{tag}" not in phenotype.__doc__
+        assert f"CYP{tag}" in phenotype.__doc__
 
 
 def test_nonester_registry_prodrugs_are_flagged():

@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-"""Regenerate canonical public-clone artifacts after the B-15 and physics fixes.
+"""Regenerate canonical public-clone artifacts after the full R&R Kp merge.
 
 Run through canonical-regen.yml on Linux/Python 3.10 with requirements-lock.txt.
-The three arms distinguish merged-code effects, recipe retraining, and the B-15
-prospective-corpus filter on one numerics stack.
+Sequential arms distinguish merge effects, full R&R, and model retraining on one stack.
 """
 
 from __future__ import annotations
@@ -17,20 +16,26 @@ from regen_clf_leakfree_canonical import ROOT, _benchmark_meta_aafe, _require_pu
 
 CACHE = ROOT / "data/training/4track_holdout_predictions.json"
 CSV = ROOT / "data/training/clf_training.csv"
-ATTRIBUTION = ROOT / "data/validation/canonical_regen_attribution_2026-10-28.json"
+ATTRIBUTION = ROOT / "data/validation/canonical_regen_attribution_2026-10-29.json"
 SOURCES = (
     "src/sisyphus/core.py",
     "src/sisyphus/engine/flux.py",
     "src/sisyphus/predict/chemistry.py",
     "src/sisyphus/predict/ivive.py",
 )
+KP_SOURCES = (
+    "src/sisyphus/core.py",
+    "src/sisyphus/pipeline/context.py",
+    "src/sisyphus/pipeline/predict.py",
+    "src/sisyphus/predict/ivive.py",
+)
 
 
-def _benchmark_revision(revision: str) -> dict:
+def _benchmark_revision(revision: str, sources: tuple[str, ...] = SOURCES) -> dict:
     # shortcut: these revision anchors belong to this one-off merge, update for any later regen.
-    original = {path: (ROOT / path).read_bytes() for path in SOURCES}
+    original = {path: (ROOT / path).read_bytes() for path in sources}
     try:
-        for path in SOURCES:
+        for path in sources:
             (ROOT / path).write_bytes(subprocess.check_output(
                 ["git", "show", f"{revision}:{path}"], cwd=ROOT
             ))
@@ -48,7 +53,8 @@ def main() -> None:
 
     integration = _benchmark_revision("5de25d7")
     renal = _benchmark_revision("b362d76")
-    _benchmark_meta_aafe()  # merged renal + Kp code, shipped CL/F and Vd/F models
+    before_rr = _benchmark_revision("48a9927", KP_SOURCES)
+    _benchmark_meta_aafe()  # full R&R, shipped CL/F and Vd/F models
     merged = json.loads(CACHE.read_text())
 
     _run(str(ROOT / "scripts/train_clf_vdf_models.py"))
@@ -66,13 +72,16 @@ def main() -> None:
     assert all("clf" in row and "vdss" in row for row in filtered["drugs"])
 
     ATTRIBUTION.write_text(json.dumps({
-        "context": "same canonical stack; sequential integration, renal, Kp, retrain, B-15 arms",
+        "context": "same canonical stack; integration, renal, full R&R, retrain, B-15 arms",
         "committed": {"overall": committed["overall"], "in_domain": committed["in_domain"]},
         "integration_shipped_models": {
             "overall": integration["overall"], "in_domain": integration["in_domain"]
         },
         "renal_shipped_models": {
             "overall": renal["overall"], "in_domain": renal["in_domain"]
+        },
+        "merged_before_full_rr_shipped_models": {
+            "overall": before_rr["overall"], "in_domain": before_rr["in_domain"]
         },
         "merged_shipped_models": {
             "overall": merged["overall"], "in_domain": merged["in_domain"]
@@ -87,8 +96,8 @@ def main() -> None:
     }, indent=2) + "\n")
 
     _run(str(ROOT / "scripts/capture_prodrug_v3_baseline.py"))
-    _run(str(ROOT / "scripts/bootstrap_4track_ci.py"), "--date", "2026-10-28",
-         "--tag", "canonical", "--context", "B-15 corpus filter plus renal and Kp fixes")
+    _run(str(ROOT / "scripts/bootstrap_4track_ci.py"), "--date", "2026-10-29",
+         "--tag", "canonical", "--context", "EHC, public physiology, prodrug audit, full R&R Kp")
     _run(str(ROOT / "scripts/calibrate_conformal.py"))
     _run(str(ROOT / "scripts/sync_public_model_metrics.py"))
     _run(str(ROOT / "scripts/gen_console_data.py"))
