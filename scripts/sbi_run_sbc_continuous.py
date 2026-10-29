@@ -246,7 +246,7 @@ def main() -> int:
                 ranks, cov = _coverage_and_ranks(
                     thetas_true, posterior_obj, xs_packed, levels, args.n_posterior,
                 )
-            except RuntimeError as exc:
+            except (RuntimeError, AssertionError) as exc:
                 log.warning("  posterior sampling failed for %s / %s: %s", pop_name, spec.name, exc)
                 out["pairs"].append({
                     "population": pop_name,
@@ -259,7 +259,7 @@ def main() -> int:
                     "ks_pass": False,
                     "coverage_pass": False,
                     "pass": False,
-                    "sampling_error": str(exc),
+                    "sampling_error": str(exc) or type(exc).__name__,
                     "wall_s": time.time() - t0,
                 })
                 continue
