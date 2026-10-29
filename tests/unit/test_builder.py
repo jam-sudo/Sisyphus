@@ -118,7 +118,23 @@ class TestBuilder:
         ]
         assert len(liver_clearance) == 1
         assert liver_clearance[0].model == "extended"
-        assert liver_clearance[0].bile_target == "duodenum_lumen"
+        assert liver_clearance[0].bile_target is None
+
+    def test_continuous_ehc_overlay(self):
+        from sisyphus.graph.types import ClearanceEdge
+
+        base = build_from_yaml(Path("data/physiology/reference_man.yaml"))
+        merged = merge_overlay(base, Path("data/physiology/ehc_continuous_overlay.yaml"))
+        liver_edge = next(
+            edge for edge in merged.edges
+            if isinstance(edge, ClearanceEdge) and edge.source == "liver"
+        )
+        assert base.validate() == merged.validate() == []
+        assert next(
+            edge for edge in base.edges
+            if isinstance(edge, ClearanceEdge) and edge.source == "liver"
+        ).bile_target is None
+        assert liver_edge.bile_target == "duodenum_lumen"
 
     def test_clearance_bile_target_must_exist(self, tmp_path):
         path = tmp_path / "bile.yaml"

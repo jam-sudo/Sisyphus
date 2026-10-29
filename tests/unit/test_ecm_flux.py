@@ -24,7 +24,7 @@ from sisyphus.engine.compiler import ODECompiler, ResolvedParams
 from sisyphus.engine.flux import ClearanceFluxSpec
 from sisyphus.engine.solver import solve
 from sisyphus.graph.body import BodyGraph
-from sisyphus.graph.builder import build_from_yaml
+from sisyphus.graph.builder import build_from_yaml, merge_overlay
 from sisyphus.graph.types import ClearanceEdge, FlowEdge, Node
 
 
@@ -310,12 +310,10 @@ def test_continuous_bile_return_raises_auc_and_late_shoulder():
     curves = []
     for enabled in (False, True):
         graph = build_from_yaml(Path("data/physiology/reference_man.yaml")).realize_means()
-        if not enabled:
-            graph.edges = [
-                replace(edge, bile_target=None)
-                if isinstance(edge, ClearanceEdge) and edge.bile_target else edge
-                for edge in graph.edges
-            ]
+        if enabled:
+            graph = merge_overlay(
+                graph, Path("data/physiology/ehc_continuous_overlay.yaml"),
+            )
         compiled = ODECompiler().compile(graph)
         initial = np.zeros(compiled.n_states)
         initial[compiled.state_index[drug.administration_node]] = drug.dose_mg

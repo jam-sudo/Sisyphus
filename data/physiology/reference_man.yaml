@@ -363,9 +363,6 @@ edges:
   - {source: colon_lumen, target: gut_wall, type: paracellular_absorption, ka_fraction: 0.05}
 
   # ── Clearance ────────────────────────────
-  # All biliary clearance returns continuously to the duodenum in this simplified model.
-  # PK-Sim documents this pathway but defaults its continuous EHC fraction to 0% in humans:
-  # https://docs.open-systems-pharmacology.org/v9/working-with-pk-sim/pk-sim-documentation/pk-sim-events
-  - {source: liver, target: metabolized_hepatic, type: clearance, model: extended, bile_target: duodenum_lumen}
+  - {source: liver, target: metabolized_hepatic, type: clearance, model: extended}
   - {source: gut_wall, target: metabolized_gut, type: clearance, model: well_stirred}
   - {source: kidney, target: excreted_renal, type: clearance, model: gfr_filtration}
