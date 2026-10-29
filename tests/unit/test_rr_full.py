@@ -3,7 +3,7 @@
 import pytest
 
 from sisyphus.core import Distribution
-from sisyphus.predict.rr_full import _RR_ROWS, compute_rr_kp
+from sisyphus.predict.rr_full import _RR_ROWS, compute_berezhkovskiy_kp, compute_rr_kp
 
 
 @pytest.mark.parametrize(
@@ -57,6 +57,17 @@ def test_compositions_cover_all_modeled_tissues_as_distributions():
     assert set(_RR_ROWS) == set(_TISSUE_COMPOSITIONS)
     for composition in _RR_ROWS.values():
         assert all(isinstance(value, Distribution) for value in vars(composition).values())
+
+
+def test_berezhkovskiy_worked_liver_and_adipose_values():
+    # GastroPlus guide Eqs. 2-19/2-21/2-24, logP=2 and fup=0.2:
+    # fut=1/3; liver numerator=4.28266, plasma denominator=4.99491.
+    liver = compute_berezhkovskiy_kp(2.0, _RR_ROWS["liver"], 0.2)
+    adipose = compute_berezhkovskiy_kp(2.0, _RR_ROWS["adipose_tissue"], 0.2, adipose=True)
+    assert liver == pytest.approx(4.28266 / 4.99491)
+    assert adipose == pytest.approx(1.4603806977406462)
+    with pytest.raises(ValueError, match="0 < fup <= 1"):
+        compute_berezhkovskiy_kp(2.0, _RR_ROWS["liver"], 0.0)
 
 
 def test_graph_hematocrit_reaches_blood_cell_affinity(tmp_path):

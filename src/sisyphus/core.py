@@ -231,7 +231,8 @@ class DrugOnGraph:
     # Binding & partitioning
     fup: Distribution  # fraction unbound in plasma
     rbp: Distribution  # blood:plasma ratio
-    kp_method: str  # "rodgers_rowland" | "rodgers_rowland_approx" | "poulin_theil" | "provided"
+    # Full R&R (default), aggregated R&R, Poulin-Theil, Berezhkovskiy, or provided Kp.
+    kp_method: str
     kp_overrides: dict[str, Distribution]  # node_name → Kp override
 
     # Absorption

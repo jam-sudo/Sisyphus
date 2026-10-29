@@ -343,11 +343,13 @@ class TestIVIVE:
 
 
 class TestBerezhkovskiyCorrection:
-    def test_unsupported_method_rejected(self):
+    def test_uses_modified_poulin_and_requires_fup(self):
         from sisyphus.predict.ivive import _compute_all_kp
 
-        with pytest.raises(ValueError, match="tissue binding data are required"):
-            _compute_all_kp(2.0, 9.0, "base", "berezhkovskiy", fup=0.1)
+        kp = _compute_all_kp(2.0, 9.0, "base", "berezhkovskiy", fup=0.2)
+        assert kp["liver"].mean == pytest.approx(0.8574048381252114)
+        with pytest.raises(ValueError, match="requires fup"):
+            _compute_all_kp(2.0, 9.0, "base", "berezhkovskiy")
 
 
 # ═══════════════════════════════════════════════════════════════════

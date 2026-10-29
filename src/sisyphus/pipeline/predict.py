@@ -669,10 +669,9 @@ def predict(
         kp_method: Tissue partition coefficient (Kp) calculation method.
             One of ``"rodgers_rowland"`` (full R&R default),
             ``"rodgers_rowland_approx"`` (former approximation),
-            ``"poulin_theil"``, or ``"provided"``
+            ``"poulin_theil"``, ``"berezhkovskiy"`` (modified Poulin),
+            or ``"provided"``
             (use values supplied via ``measured_adme.kp_overrides``).
-            ``"berezhkovskiy"`` is rejected because the former scalar
-            correction is unsupported by the cited paper.
             Forwarded to ``build_drug_on_graph``; the prior
             implementation hard-coded the default and made the per-drug
             field unreachable through the public API (hardening backlog
@@ -713,11 +712,6 @@ def predict(
         "provided",
     }:
         raise ValueError(f"Unknown kp_method {kp_method!r}")
-    if kp_method == "berezhkovskiy":
-        raise ValueError(
-            "Berezhkovskiy 2004 J Pharm Sci 93:1628 does not support the former "
-            "scalar Kp correction; tissue binding data are required"
-        )
     if kp_method == "provided" and not (measured_adme and measured_adme.kp_overrides):
         raise ValueError("kp_method='provided' requires measured_adme.kp_overrides")
     if isinstance(n_mc_samples, bool) or not isinstance(n_mc_samples, int) or n_mc_samples < 0:

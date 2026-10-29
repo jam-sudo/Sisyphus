@@ -53,6 +53,11 @@ _RR_ROWS["rest"] = _RR_ROWS["muscle_tissue"]
 # Plasma and red-cell fractions, Rodgers et al. 2005 Table 1 (dimensionless).
 PLASMA_FNL_FRACTION = Distribution(0.0023, 0.0)
 PLASMA_FNP_FRACTION = Distribution(0.0013, 0.0)
+# Poulin & Theil 2002 (PMID 11977112); plasma water fraction used by the
+# modified-Poulin equation (also the existing IVIVE plasma composition).
+PLASMA_WATER_FRACTION_UNITLESS = Distribution(0.945, 0.0)
+# Poulin & Theil 2002; tissue:plasma albumin ratio in the standard f_ut estimate.
+POULIN_ALBUMIN_RATIO_UNITLESS = Distribution(0.5, 0.0)
 BC_FIW_FRACTION = Distribution(0.603, 0.0)
 BC_FNL_FRACTION = Distribution(0.0017, 0.0)
 BC_FNP_FRACTION = Distribution(0.0029, 0.0)
@@ -61,6 +66,31 @@ BC_AP_MG_G = Distribution(0.50, 0.0)
 IW_PH_UNITLESS = Distribution(7.0, 0.0)
 BC_PH_UNITLESS = Distribution(7.2, 0.0)
 PLASMA_PH_UNITLESS = Distribution(7.4, 0.0)
+
+
+def compute_berezhkovskiy_kp(
+    logp: float, tissue: RRTissue, fup: float, *, adipose: bool = False
+) -> float:
+    """Return modified-Poulin tissue:plasma Kp (Berezhkovskiy 2004)."""
+    if not 0 < fup <= 1:
+        raise ValueError("Berezhkovskiy requires 0 < fup <= 1")
+
+    # GastroPlus Scientific Principles Guide, Eqs. 2-19, 2-21, 2-24:
+    # https://gastroplus.slp-software.com/scientific-principles-guide/GPX.2/tissue-distribution-calculations
+    p = 10 ** (1.115 * logp - 1.35 if adipose else logp)
+    fut = 1 / (1 + ((1 - fup) / fup) * POULIN_ALBUMIN_RATIO_UNITLESS.mean)
+    tissue_water = tissue.few.mean + tissue.fiw.mean
+    tissue_partition = (
+        p * (tissue.fnl.mean + 0.3 * tissue.fnp.mean)
+        + 0.7 * tissue.fnp.mean
+        + tissue_water / fut
+    )
+    plasma_partition = (
+        p * (PLASMA_FNL_FRACTION.mean + 0.3 * PLASMA_FNP_FRACTION.mean)
+        + 0.7 * PLASMA_FNP_FRACTION.mean
+        + PLASMA_WATER_FRACTION_UNITLESS.mean / fup
+    )
+    return tissue_partition / plasma_partition
 
 
 def compute_rr_kp(

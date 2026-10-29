@@ -18,7 +18,7 @@ import numpy as np
 from sisyphus.core import Distribution, DrugOnGraph, TissueComposition, TransporterKinetics
 from sisyphus.predict.adme import ADMEProperties
 from sisyphus.predict.chemistry import MolecularProfile
-from sisyphus.predict.rr_full import _RR_ROWS, compute_rr_kp
+from sisyphus.predict.rr_full import _RR_ROWS, compute_berezhkovskiy_kp, compute_rr_kp
 
 logger = logging.getLogger(__name__)
 
@@ -544,24 +544,22 @@ def _compute_all_kp(
         logp: Octanol-water partition coefficient.
         pka: Dissociation constant.
         compound_type: Ionization class.
-        kp_method: "rodgers_rowland" (full), "rodgers_rowland_approx", or "poulin_theil".
-        fup: Fraction unbound in plasma (required for full R&R).
+        kp_method: "rodgers_rowland" (full), "rodgers_rowland_approx",
+            "poulin_theil", or "berezhkovskiy".
+        fup: Fraction unbound in plasma (required for full R&R and Berezhkovskiy).
         pka_secondary: Acidic pKa for zwitterions when available.
 
     Returns:
         Dict mapping tissue name -> Kp as Distribution.
     """
-    if kp_method == "berezhkovskiy":
-        raise ValueError(
-            "Berezhkovskiy 2004 J Pharm Sci 93:1628 does not support the former "
-            "scalar Kp correction; tissue binding data are required"
-        )
-    if kp_method != "rodgers_rowland" and kp_method not in _KP_FUNCTIONS:
+    if kp_method not in {"rodgers_rowland", "berezhkovskiy", *_KP_FUNCTIONS}:
         raise ValueError(f"Unknown kp_method {kp_method!r}")
     if kp_method == "rodgers_rowland" and (
         fup is None or rbp is None or hematocrit is None
     ):
         raise ValueError("rodgers_rowland requires fup, rbp, and hematocrit")
+    if kp_method == "berezhkovskiy" and fup is None:
+        raise ValueError("berezhkovskiy requires fup")
 
     kp_overrides: dict[str, Distribution] = {}
     for tissue_name, tissue_comp in _TISSUE_COMPOSITIONS.items():
@@ -569,6 +567,11 @@ def _compute_all_kp(
             kp = compute_rr_kp(
                 logp, pka, compound_type, _RR_ROWS[tissue_name], fup,
                 rbp, hematocrit, pka_secondary,
+                adipose=tissue_name == "adipose_tissue",
+            )
+        elif kp_method == "berezhkovskiy":
+            kp = compute_berezhkovskiy_kp(
+                logp, _RR_ROWS[tissue_name], fup,
                 adipose=tissue_name == "adipose_tissue",
             )
         elif kp_method == "rodgers_rowland_approx" and pka_secondary is not None:
