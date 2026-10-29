@@ -17,6 +17,157 @@
   "sbi_reweight": {
     "morphine": true
   },
+  "multi_observation": {
+    "source": "data/validation/sbi_sbc_multi_observation_current.json",
+    "model": "multi_observation_nsf.pt",
+    "global_sbc_gate_passed": false,
+    "native_count": 7,
+    "drugs": {
+      "morphine": {
+        "use_native": true,
+        "smiles": "CN1CC[C@]23c4c5ccc(O)c4O[C@H]2[C@@H](O)C=C[C@H]3[C@H]1C5",
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.08000000000000007,
+        "ks_pvalues": [
+          0.03193610782728346,
+          0.010543506724454206,
+          0.23282134931905776
+        ]
+      },
+      "clozapine": {
+        "use_native": true,
+        "smiles": "CN1CCN(C2=Nc3cc(Cl)ccc3Nc3ccccc32)CC1",
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.050000000000000044,
+        "ks_pvalues": [
+          0.6171494172888633,
+          0.012004022343593917,
+          0.06209234069876253
+        ]
+      },
+      "amantadine": {
+        "use_native": true,
+        "smiles": "NC12CC3CC(CC(C3)C1)C2",
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.09000000000000008,
+        "ks_pvalues": [
+          0.1374749336479978,
+          0.03582511969274859,
+          0.11381468170073904
+        ]
+      },
+      "ketorolac": {
+        "use_native": true,
+        "smiles": "O=C(c1ccccc1)c1ccc2n1CCC2C(=O)O",
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.04999999999999993,
+        "ks_pvalues": [
+          0.022401933667068493,
+          0.10330374901819939,
+          0.2526927570063955
+        ]
+      },
+      "rivaroxaban": {
+        "use_native": false,
+        "smiles": "O=C(NC[C@H]1CN(c2ccc(N3CCOCC3=O)cc2)C(=O)O1)c1ccc(Cl)s1",
+        "sbc_pass": false,
+        "coverage_max_deviation": 0.12,
+        "ks_pvalues": [
+          0.10330374901819939,
+          0.15071744612730198,
+          0.19663614878216185
+        ]
+      },
+      "diclofenac": {
+        "use_native": false,
+        "smiles": "O=C(O)Cc1ccccc1Nc1c(Cl)cccc1Cl",
+        "sbc_pass": false,
+        "coverage_max_deviation": 0.13,
+        "ks_pvalues": [
+          0.00467554269802779,
+          0.2328213493190514,
+          0.07648941364240387
+        ]
+      },
+      "digoxin": {
+        "use_native": true,
+        "smiles": "C[C@H]1O[C@@H](O[C@H]2[C@@H](O)C[C@H](O[C@H]3[C@@H](O)C[C@H](O[C@H]4CC[C@@]5(C)[C@H](CC[C@@H]6[C@@H]5C[C@@H](O)[C@]5(C)[C@@H](C7=CC(=O)OC7)CC[C@]65O)C4)O[C@@H]3C)O[C@@H]2C)C[C@H](O)[C@@H]1O",
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.06000000000000005,
+        "ks_pvalues": [
+          0.25269275700639643,
+          0.6171494172888625,
+          0.9171597106843916
+        ]
+      },
+      "pravastatin": {
+        "use_native": false,
+        "smiles": "CC[C@H](C)C(=O)O[C@H]1C[C@H](O)C=C2C=C[C@H](C)[C@H](CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H]21",
+        "sbc_pass": false,
+        "coverage_max_deviation": 1.0,
+        "ks_pvalues": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "sildenafil": {
+        "use_native": false,
+        "smiles": "CCCc1nn(C)c2c(=O)[nH]c(-c3cc(S(=O)(=O)N4CCN(C)CC4)ccc3OCC)nc12",
+        "sbc_pass": false,
+        "coverage_max_deviation": 0.10999999999999999,
+        "ks_pvalues": [
+          0.017540807429153774,
+          0.16496264039322706,
+          0.1374749336479978
+        ]
+      },
+      "phenytoin": {
+        "use_native": true,
+        "smiles": "O=C1NC(=O)C(c2ccccc2)(c2ccccc2)N1",
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.050000000000000044,
+        "ks_pvalues": [
+          0.37063202558632946,
+          0.6846706791645834,
+          0.9171597106843917
+        ]
+      },
+      "tamoxifen": {
+        "use_native": false,
+        "smiles": "CC/C(=C(\\c1ccccc1)c1ccc(OCCN(C)C)cc1)c1ccccc1",
+        "sbc_pass": false,
+        "coverage_max_deviation": 0.05999999999999994,
+        "ks_pvalues": [
+          0.009245390617829441,
+          0.252692757006389,
+          0.6509082962856875
+        ]
+      },
+      "indomethacin": {
+        "use_native": true,
+        "smiles": "COc1ccc2c(c1)c(CC(=O)O)c(C)n2C(=O)c1ccc(Cl)cc1",
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.09000000000000002,
+        "ks_pvalues": [
+          0.02525407328831241,
+          0.10330374901819939,
+          0.936649040852751
+        ]
+      },
+      "posaconazole": {
+        "use_native": false,
+        "smiles": "CC[C@@H]([C@H](C)O)n1ncn(-c2ccc(N3CCN(c4ccc(OC[C@@H]5CO[C@@](Cn6cncn6)(c6ccc(F)cc6F)C5)cc4)CC3)cc2)c1=O",
+        "sbc_pass": false,
+        "coverage_max_deviation": 0.10000000000000009,
+        "ks_pvalues": [
+          0.15071744612730198,
+          0.8137761665209279,
+          0.00047084202398393795
+        ]
+      }
+    }
+  },
   "routes": {
     "morphine": "ibis",
     "clozapine": "ibis",

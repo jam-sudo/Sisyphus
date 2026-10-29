@@ -136,6 +136,39 @@
         "src/sisyphus/engine/uncertainty.py",
         "src/sisyphus/regimen/solver.py"
       ]
+    },
+    "multi_observation_nsf.pt": {
+      "commit": "d891568e290bfb7dff45d6ae78f3cb8b56e742f7",
+      "sha256": "68d7ea7eb6ec593f8813bf81a9ee6c289c8bd65ffa96ce6264c61a910099ab8f",
+      "paths": [
+        "data/physiology/achour2021_correlation.json",
+        "data/physiology/pediatric_5y.yaml",
+        "data/physiology/reference_man.yaml",
+        "data/physiology/sc_overlay.yaml",
+        "data/physiology/tumor_overlay.yaml",
+        "src/sisyphus/engine/__init__.py",
+        "src/sisyphus/engine/compiler.py",
+        "src/sisyphus/engine/contracts.py",
+        "src/sisyphus/engine/flux.py",
+        "src/sisyphus/engine/result.py",
+        "src/sisyphus/engine/solver.py",
+        "src/sisyphus/engine/uncertainty.py",
+        "src/sisyphus/graph/body.py",
+        "src/sisyphus/graph/builder.py",
+        "src/sisyphus/physiology/correlated.py",
+        "src/sisyphus/predict/adme.py",
+        "src/sisyphus/predict/chemistry.py",
+        "src/sisyphus/predict/ivive.py",
+        "src/sisyphus/regimen/solver.py",
+        "src/sisyphus/sbi/multi_drug.py",
+        "src/sisyphus/sbi/priors.py",
+        "src/sisyphus/sbi/simulator.py",
+        "src/sisyphus/sbi/multi_observation.py"
+      ],
+      "validated_revision": {
+        "sha256": "401cb8c546841d58eae769495fa32bbe62c2a2e22e19ca57da94badd8506d51d",
+        "check": "Current-engine per-drug SBC: 100 calibration draws and 500 posterior draws for each of 13 held-out drugs; native routing limited to the 7 drugs passing KS and coverage gates."
+      }
     }
   }
 }

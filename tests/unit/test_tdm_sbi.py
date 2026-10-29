@@ -76,6 +76,30 @@ def _posterior_prior_matches_current() -> bool:
     reason="Posterior trained with old fup parameterization (pre-logit); retrain needed",
 )
 class TestSBIDispatch:
+    def test_calibrated_multi_observation_uses_time_aware_posterior(
+        self, physiology, morphine_drug, monkeypatch,
+    ):
+        from sisyphus.sbi import amortizer
+
+        graph, compiled = physiology
+        drug, logp = morphine_drug
+        loaded = []
+        original_load = amortizer.load_result
+
+        def record_load(path):
+            loaded.append(pathlib.Path(path).name)
+            return original_load(path)
+
+        monkeypatch.setattr(amortizer, "load_result", record_load)
+        result = bayesian_update(
+            compiled, graph, drug, DosingRegimen.single_oral(30.0),
+            (Observation(1.0, 0.01865), Observation(4.0, 0.010)),
+            method="sbi", n_prior=30, logp_hint=logp,
+        )
+        assert loaded == ["multi_observation_nsf.pt"]
+        assert result.n_successful > 0
+        assert np.allclose(result.weights, result.weights[0])
+
     def test_sbi_update_runs_end_to_end(self, physiology, morphine_drug):
         graph, compiled = physiology
         drug, logp = morphine_drug

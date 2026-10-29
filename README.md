@@ -284,6 +284,8 @@ Given observed plasma concentrations, a **dispatched Bayesian router** (`data/sb
 
 Effective sample size (ESS = $1/\sum w_i^2$) is monitored for importance-based methods. Morphine now routes IBIS after failing SBC; its SBI reweighting setting remains in the table for traceability but is inactive on this route. All three methods share one output contract: a posterior `Distribution` per PK parameter. Observed drug levels can update errors in the current CL<sub>int</sub> predictor (scaffold-CV R&sup2; = 0.215), reducing posterior CV by &gt;50% in internal validation (see [TDM regression checks](#evidence)).
 
+For two or three observations, a time-aware flow conditions on the observation times, concentrations, and dosing regimen for the drugs marked `use_native` in the same routing table. Its per-drug SBC and coverage gate passes for 7/13 validation drugs; the global gate fails. Other drugs retain their existing TDM method, and SBI routes use first-observation conditioning with likelihood reweighting. The time-aware path requires equal oral bolus doses (up to three) and observations 1, 2, 4, 8, or 12 hours after the last dose. Unsupported regimens, observation times, and population or age/weight covariates retain the existing path.
+
 </details>
 
 <details>

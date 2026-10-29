@@ -14,8 +14,14 @@ from __future__ import annotations
 import argparse
 import logging
 import sys
+from typing import TYPE_CHECKING
 
 from sisyphus.resources import get_resource_config
+
+if TYPE_CHECKING:
+    from sisyphus.core import DrugOnGraph
+    from sisyphus.regimen.tdm import Observation
+    from sisyphus.regimen.types import DosingRegimen
 
 
 def main() -> None:
@@ -462,7 +468,12 @@ _ROUTING_TABLE_PATH = get_resource_config().data(
 )
 
 
-def _resolve_auto_method(drug_name: str) -> tuple[str, bool]:
+def _resolve_auto_method(
+    drug_name: str,
+    regimen: DosingRegimen | None = None,
+    observations: tuple[Observation, ...] | None = None,
+    drug: DrugOnGraph | None = None,
+) -> tuple[str, bool]:
     """Look up the per-drug routing table and return (method, sbi_reweight).
 
     Falls back to ``("ibis", False)`` when the table is missing or the drug
@@ -499,6 +510,27 @@ def _resolve_auto_method(drug_name: str) -> tuple[str, bool]:
         if key.lower().strip() == lower:
             reweight = bool(flag)
             break
+    if regimen is not None and observations is not None and len(observations) > 1:
+        multi = table.get("multi_observation", {}).get("drugs", {})
+        for key, decision in multi.items():
+            if key.lower().strip() == lower and decision.get("use_native", False):
+                if drug is not None:
+                    from sisyphus.regimen.tdm_sbi import _native_multi_observation_model
+
+                    if _native_multi_observation_model(drug) is None:
+                        break
+                import numpy as np
+
+                from sisyphus.sbi.multi_observation import pack_observations
+
+                try:
+                    pack_observations(
+                        [(obs.time_h, obs.concentration) for obs in observations],
+                        regimen, np.zeros(12),
+                    )
+                except ValueError:
+                    break
+                return "sbi", False
     return method, reweight if method == "sbi" else False
 
 
@@ -575,7 +607,12 @@ def _run_tdm(args: argparse.Namespace) -> None:
     auto_reweight = False
     if cli_method == "auto":
         route_name = _route_drug_name(args.smiles, args.name)
-        resolved, auto_reweight = _resolve_auto_method(route_name)
+        eligible_regimen = regimen if all(
+            getattr(args, key, None) is None for key in ("population", "body_weight", "age")
+        ) else None
+        resolved, auto_reweight = _resolve_auto_method(
+            route_name, eligible_regimen, observations, drug
+        )
         suffix = " +reweight" if auto_reweight else ""
         print(f"[auto] routing {route_name} → method={resolved}{suffix}",
               file=sys.stderr)
@@ -689,7 +726,9 @@ def _run_dose_adjust(args: argparse.Namespace) -> None:
     dose_method = args.method
     if dose_method == "auto":
         route_name = _route_drug_name(args.smiles, args.name)
-        dose_method, auto_reweight = _resolve_auto_method(route_name)
+        dose_method, auto_reweight = _resolve_auto_method(
+            route_name, regimen, observations, drug
+        )
         print(f"[auto] routing {route_name} → method={dose_method}", file=sys.stderr)
     else:
         auto_reweight = False

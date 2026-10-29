@@ -1,0 +1,36 @@
+{
+  "version": "current_engine_multi_observation_v1",
+  "artifact_sha256": "811d682365d12ff99daf0cc0d2ec02073d73e076a7b8d4f51befc8c5e115e092",
+  "target": "posterior log10 CLint shift, logit fup, log10 Peff shift",
+  "trained_on": {
+    "dataset_path": "data/sbi/multi_observation_train.npz",
+    "sha256": "fe284cda3a56e1ec804ef6718a9ecdb27640724158069321aead69b19045d2d7"
+  },
+  "feature_schema": {
+    "name": "time_aware_sbi_context_v1",
+    "n_features": 24,
+    "sha256": "854771e3147fa788f8db12876fa1f76c84c62eaa36595b3f81c26f1a51b47080",
+    "description": "Three masked time/concentration slots, dose context, 12 drug features"
+  },
+  "trained_at": "2026-10-29",
+  "n_drugs_original": 55,
+  "n_drugs_excluded": 0,
+  "holdout_version": "896e926a127f9a8a3fa632245b79196a3b105a335f76e453eb797e1ccb53e3ba",
+  "holdout_metric": {
+    "name": "per_drug_sbc_pass_count",
+    "value": 7
+  },
+  "hyperparameters": {
+    "density_estimator": "nsf",
+    "hidden_features": 64,
+    "num_transforms": 8,
+    "batch_size": 512,
+    "learning_rate": 0.0005,
+    "max_epochs": 500,
+    "stop_after_epochs": 40,
+    "seed": 42
+  },
+  "retrained_reason": "time-aware multi-observation conditioning on current-engine simulations",
+  "artifact_status": "optional_runtime",
+  "runtime_loader": "sisyphus.regimen.tdm_sbi"
+}

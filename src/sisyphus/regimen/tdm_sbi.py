@@ -67,7 +67,10 @@ def _warn_engine_revision(posterior_path: Path) -> None:
             digest.update(relative.encode() + b"\0")
             digest.update(path.read_bytes() if path.exists() else b"<missing>")
         equivalent = entry.get("verified_equivalent", {})
-        if digest.hexdigest() not in (entry["sha256"], equivalent.get("sha256")):
+        validated = entry.get("validated_revision", {})
+        if digest.hexdigest() not in (
+            entry["sha256"], equivalent.get("sha256"), validated.get("sha256")
+        ):
             logger.warning(
                 "SBI model %s was trained against engine revision %s; current engine/physiology "
                 "inputs differ. Posterior calibration may be stale.",
@@ -133,6 +136,28 @@ _DEFAULT_CONTINUOUS_POSTERIOR_PATH = get_resource_config().model(
 )
 
 
+def _native_multi_observation_model(drug: DrugOnGraph) -> Path | None:
+    """Return the time-aware model only for a calibrated validation drug."""
+    table_path = get_resource_config().data("sbi", "method_routing.json", required=False)
+    try:
+        table = json.loads(table_path.read_text())["multi_observation"]
+        from rdkit import Chem
+
+        molecule = Chem.MolFromSmiles(drug.smiles)
+        if molecule is None:
+            return None
+        canonical = Chem.MolToSmiles(molecule, isomericSmiles=False)
+        for decision in table["drugs"].values():
+            if decision["use_native"]:
+                reference = Chem.MolFromSmiles(decision["smiles"])
+                if (reference is not None
+                        and Chem.MolToSmiles(reference, isomericSmiles=False) == canonical):
+                    return get_resource_config().model("sbi", table["model"])
+    except (OSError, KeyError, TypeError, ValueError) as exc:
+        logger.warning("SBI multi-observation routing unavailable: %s", exc)
+    return None
+
+
 def sbi_update(
     compiled: CompiledODE,
     graph: BodyGraph,
@@ -160,14 +185,14 @@ def sbi_update(
         graph: BodyGraph with distributional parameters.
         drug: DrugOnGraph with distributional parameters (population prior).
         regimen: Dosing regimen the patient received.
-        observations: Observed concentrations. The amortizer conditions on the
-            first observation; later observations use post-hoc importance
-            reweighting. Native multi-observation amortization is deferred
-            pending calibration.
-        posterior_path: Path to the trained posterior .pt file. Defaults to
-            ``models/sbi/multi_drug_nsf.pt``. Expects a sibling ``.aux.pt``
-            holding the feature standardizer (mean / std) produced by
-            ``scripts/sbi_train_multi_drug.py``.
+        observations: Observed concentrations. For calibrated drugs and supported
+            oral regimens, two or three observations use the time-aware posterior.
+            Other SBI cases condition on the first observation and reweight
+            against later observations.
+        posterior_path: Explicit path to a trained posterior .pt file. By
+            default the routing table can select the time-aware model;
+            otherwise ``models/sbi/multi_drug_nsf.pt`` is used. Expects a
+            sibling ``.aux.pt`` holding the feature standardizer.
         n_samples: Number of theta samples drawn from the amortized posterior.
         n_predictive_sims: Number of posterior theta samples forwarded
             through the engine for the posterior-predictive Cmax distribution.
@@ -212,14 +237,29 @@ def sbi_update(
     if not observations:
         raise ValueError("At least one observation is required")
 
-    # Track A amortizer conditions on the first observation only. Additional
-    # observations are used as a post-hoc importance-reweighting likelihood:
-    # each theta sample from the amortizer is re-weighted by the probability
-    # of producing the non-first observations under the engine forward sim.
-    # The single-observation path is unchanged.
     _extra_obs = observations[1:]
+    native_context = None
+    native_path = None
+    if (len(observations) > 1 and posterior_path is None and population_class is None
+            and body_weight_kg is None and age_years is None):
+        native_path = _native_multi_observation_model(drug)
+        if native_path is not None:
+            from sisyphus.sbi.multi_observation import pack_observations
 
-    if posterior_path is not None:
+            try:
+                native_context = pack_observations(
+                    [(obs.time_h, obs.concentration) for obs in observations],
+                    regimen, np.zeros(12),
+                )
+            except ValueError as exc:
+                logger.info("SBI time-aware context unavailable (%s); using reweighting", exc)
+                native_path = None
+
+    if native_path is not None:
+        ppath = native_path
+        _extra_obs = ()
+        sbi_reweight = False
+    elif posterior_path is not None:
         ppath = Path(posterior_path)
     elif body_weight_kg is not None and age_years is not None:
         ppath = _DEFAULT_CONTINUOUS_POSTERIOR_PATH
@@ -260,18 +300,26 @@ def sbi_update(
             "SBI TDM: aux standardizer missing at %s — using raw features",
             aux_path,
         )
+    if native_context is not None and (
+        not aux.get("multi_observation", False) or feat_mean is None or len(feat_mean) != 12
+    ):
+        raise ValueError("Time-aware SBI posterior has an incompatible observation schema")
 
     feats = extract_drug_features(drug=drug, graph=graph, logp=logp_hint)
     feats_used = feats.copy()
     if feat_mean is not None:
         feats_used = (feats - feat_mean) / feat_std
 
-    # Packed observation: [log10(first_obs_concentration), drug_features, (pop_onehot or bw/age)]
+    # Packed observation: time-aware context or legacy first concentration + features.
     obs0 = observations[0]
-    _warn_observation_scope(compiled, graph, drug, regimen, obs0, observation_node)
+    if native_context is None:
+        _warn_observation_scope(compiled, graph, drug, regimen, obs0, observation_node)
     log10_cmax_obs = float(np.log10(max(obs0.concentration, 1e-12)))
 
-    if body_weight_kg is not None and age_years is not None:
+    if native_context is not None:
+        native_context[-len(feats_used):] = feats_used
+        parts = [native_context]
+    elif body_weight_kg is not None and age_years is not None:
         log_bw_norm = float(np.log10(body_weight_kg / 70.0))
         log_age_norm = float(np.log10(max(age_years, 0.5)))
         if feat_mean is not None and len(feat_mean) == 14:
