@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-28
+last_updated: 2026-10-29
 parent: ../../README.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -7,6 +7,23 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 # Experiment Log
 
 Reverse-chronological. The project README carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
+
+---
+
+## 2026-10-29 — Full Rodgers–Rowland Kp canonical regeneration
+
+[Canonical Actions run](https://github.com/jam-sudo/Sisyphus/actions/runs/40833219831) used a public clone on Ubuntu, Python 3.10, and `requirements-lock.txt` after integrating #132–#135. It regenerated the N=73 four-track cache, the prodrug pre-baseline, [bootstrap CI](../../data/validation/4track_ci_2026-10-29_canonical.json), [development residual interval](../../data/validation/development_residual_interval.json), model card, console data, and [orthogonal-track gate](../../data/validation/orthogonal_track_gate_2026-10-29_canonical.txt). The direct CL/F and Vd/F recipe retrain produced unchanged model weights and training corpus; their metadata timestamps moved.
+
+| N=73 track | Previous | New | %2-fold old→new | %3-fold old→new | 95% CI old→new |
+|---|---:|---:|---:|---:|---|
+| Meta AAFE | 2.8052 | **2.8251** | 43.8→39.7% | 67.1→61.6% | [2.2891, 3.4860]→[2.3102, 3.4935] |
+| Engine AAFE | 3.7235 | **4.6537** | 38.4→30.1% | 52.1→46.6% | [2.8801, 4.8881]→[3.4500, 6.4343] |
+| ML AAFE | 3.0490 | **3.0490** | 41.1→41.1% | 57.5→57.5% | [2.4657, 3.7782]→[2.4657, 3.7782] |
+| In-domain Meta | 2.7004 (N=59) | **2.7623 (N=59)** | 40.7→37.3% | 67.8→62.7% | [2.2466, 3.2870]→[2.2902, 3.3841] |
+
+**Attribution.** The [same-stack artifact](../../data/validation/canonical_regen_attribution_2026-10-29.json) measured committed main **2.80517**, merged #132–#134 before full R&R **2.80517**, full R&R with shipped models **2.82508**, and full R&R after recipe retraining **2.82508**. #132's EHC overlays require opt-in, #133 changes the CES2 citation without changing its value, and #134 adds a woman preset, blood-pool CVs, and CYP2B6/CYP2C19/CYP3A5 expression without moving default point predictions. The full R&R Kp change accounts for the **+0.01991 Meta** and **+0.93020 Engine** AAFE moves on this cohort. The N=59 in-domain membership is unchanged. The numerical regression is retained for partition-model correctness, not tuned away against Cmax.
+
+The residual band half-width moved **10.71→9.36-fold**, with consumed-development coverage **90.4→89.0%** at nominal 90%; neither is independent calibration. The orthogonal-track gate still rejects RENAL-CLr and ABSORPTION-peff for correlation and leaves ION-Fabs unsuitable despite decorrelation (standalone AAFE 693.755). The moved regression pins are the cache AAFE (`2.8052→2.8251`), the per-drug prodrug pre-baseline, sepiapterin (`13.86895→12.07040` mg/L), and remdesivir (`5.89089→4.49890` mg/L); the latter two crossed the 5% snapshot tolerance under full R&R Kp. The conditional CI, model card, and console provenance hashes follow the regenerated cache. The old bootstrap and gate files remain dated history. No new external holdout was evaluated.
 
 ---
 
