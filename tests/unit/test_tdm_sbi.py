@@ -76,6 +76,36 @@ def _posterior_prior_matches_current() -> bool:
     reason="Posterior trained with old fup parameterization (pre-logit); retrain needed",
 )
 class TestSBIDispatch:
+    def test_continuous_context_uses_14_feature_standardizer(
+        self, physiology, morphine_drug, monkeypatch,
+    ):
+        from types import SimpleNamespace
+
+        import torch
+
+        from sisyphus.regimen.tdm_sbi import sbi_update
+        from sisyphus.sbi import amortizer
+
+        graph, compiled = physiology
+        drug, logp = morphine_drug
+        observed = []
+
+        class Posterior:
+            def sample(self, shape, *, x, show_progress_bars):
+                observed.append(x.shape[1])
+                return torch.zeros((shape[0], 3))
+
+        monkeypatch.setattr(amortizer, "load_result", lambda path: SimpleNamespace(
+            prior_low=np.array([-1.0, -4.5, -1.0]), posterior=Posterior(),
+        ))
+        result = sbi_update(
+            compiled, graph, drug, DosingRegimen.single_oral(30.0),
+            (Observation(1.0, 0.01865),), n_samples=2, n_predictive_sims=1,
+            body_weight_kg=70.0, age_years=35.0, logp_hint=logp,
+        )
+        assert observed == [15]
+        assert result.method_used == "sbi"
+
     def test_calibrated_multi_observation_uses_time_aware_posterior(
         self, physiology, morphine_drug, monkeypatch,
     ):

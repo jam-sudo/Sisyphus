@@ -307,7 +307,7 @@ def sbi_update(
 
     feats = extract_drug_features(drug=drug, graph=graph, logp=logp_hint)
     feats_used = feats.copy()
-    if feat_mean is not None:
+    if feat_mean is not None and len(feat_mean) == len(feats):
         feats_used = (feats - feat_mean) / feat_std
 
     # Packed observation: time-aware context or legacy first concentration + features.
