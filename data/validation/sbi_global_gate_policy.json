@@ -1,0 +1,16 @@
+{
+  "predeclared_at_utc": "2026-10-29T15:40:44Z",
+  "predeclared_before": "aggregation of any corrected flow's full SBC result",
+  "original_gate": {
+    "definition": "Every marginal KS p-value > 0.01 and every pair's original coverage deviation <= 0.10",
+    "ks_threshold_p": 0.01,
+    "coverage_tolerance_fraction": 0.10
+  },
+  "holm_gate": {
+    "definition": "Holm-Bonferroni step-down across all three marginal KS p-values for every pair in a flow at family-wise alpha 0.01; pass if zero KS hypotheses are rejected and every pair's original coverage deviation is <= 0.10",
+    "family_wise_alpha": 0.01,
+    "coverage_tolerance_fraction": 0.10,
+    "coverage_rule": "Unchanged from each original flow's SBC script"
+  },
+  "null_simulation": "data/validation/sbi_global_gate_null.json"
+}
