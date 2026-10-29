@@ -1,0 +1,52 @@
+{
+  "multi_drug": {
+    "pairs": 13,
+    "simultaneous_ks_tests": 39,
+    "n_calibration": 100,
+    "repetitions": 10000,
+    "passed": 1013,
+    "pass_probability": 0.1013,
+    "ci_95": [
+      0.09545301603611274,
+      0.10738031999012614
+    ]
+  },
+  "multi_observation": {
+    "pairs": 13,
+    "simultaneous_ks_tests": 39,
+    "n_calibration": 100,
+    "repetitions": 10000,
+    "passed": 1013,
+    "pass_probability": 0.1013,
+    "ci_95": [
+      0.09545301603611274,
+      0.10738031999012614
+    ]
+  },
+  "hierarchical": {
+    "pairs": 26,
+    "simultaneous_ks_tests": 78,
+    "n_calibration": 100,
+    "repetitions": 10000,
+    "passed": 106,
+    "pass_probability": 0.0106,
+    "ci_95": [
+      0.008686342174122614,
+      0.012806135286500825
+    ]
+  },
+  "continuous": {
+    "pairs": 52,
+    "simultaneous_ks_tests": 156,
+    "n_calibration": 50,
+    "repetitions": 10000,
+    "passed": 893,
+    "pass_probability": 0.0893,
+    "ci_95": [
+      0.08378084250758472,
+      0.09505966966005502
+    ]
+  },
+  "assumptions": "Exact uniform marginal ranks; independent parameters and pairs; uniform location within posterior quantile gaps",
+  "method": "Exact calibrated-rank sampling by posterior exchangeability"
+}

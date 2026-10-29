@@ -1,6 +1,15 @@
 """The calibrated-rank gate simulation preserves the current test shape."""
 
-from scripts.sbi_global_gate_null import gate_probability
+import numpy as np
+
+from scripts.sbi_global_gate_null import _inside_quantile_interval, gate_probability
+
+
+def test_interpolated_coverage_is_calibrated_for_exact_ranks():
+    rng = np.random.default_rng(7)
+    ranks = rng.integers(0, 501, size=10000)
+    inside = _inside_quantile_interval(ranks, 90, rng)
+    assert 0.88 < inside.mean() < 0.92
 
 
 def test_exact_rank_null_uses_all_three_parameters():

@@ -20,6 +20,26 @@ KS_THRESHOLD_P = 0.01
 COVERAGE_TOLERANCE_FRACTION = 0.10
 
 
+def _inside_quantile_interval(
+    ranks: np.ndarray,
+    level: int,
+    rng: np.random.Generator,
+) -> np.ndarray:
+    """Apply NumPy's interpolated posterior quantile rule to exact ranks."""
+    tail = (1 - level / 100) / 2
+    lower_pos = (POSTERIOR_DRAW_COUNT - 1) * tail
+    upper_pos = (POSTERIOR_DRAW_COUNT - 1) * (1 - tail)
+    lower_edge = int(np.floor(lower_pos)) + 1
+    upper_edge = int(np.floor(upper_pos)) + 1
+    above_lower = ((ranks > lower_edge)
+                   | ((ranks == lower_edge) & (rng.random(ranks.shape)
+                                               >= lower_pos % 1)))
+    below_upper = ((ranks < upper_edge)
+                   | ((ranks == upper_edge) & (rng.random(ranks.shape)
+                                               <= upper_pos % 1)))
+    return above_lower & below_upper
+
+
 def gate_probability(
     n_pairs: int,
     n_calibration: int,
@@ -30,9 +50,9 @@ def gate_probability(
 ) -> dict[str, float | int]:
     """Draw exact discrete-uniform SBC ranks and apply the existing global gate.
 
-    Rank draws are independent across parameters and pairs. This is an exact
-    calibrated null for marginal ranks, with the four coverage levels sharing
-    each rank just as in a real SBC run.
+    By posterior exchangeability, the truth's rank among 500 exact posterior
+    draws is discrete-uniform on 0..500. Rank draws here are independent across
+    parameters and pairs; the four coverage levels share each rank.
     """
     if n_pairs < 1 or n_calibration < 1 or repetitions < 1:
         raise ValueError("Pair, calibration, and repetition counts must be positive")
@@ -50,9 +70,7 @@ def gate_probability(
             continue
         coverage_ok = True
         for level in COVERAGE_LEVELS_PERCENT:
-            tail = (1 - level / 100) / 2
-            inside = ((ranks >= tail * POSTERIOR_DRAW_COUNT)
-                      & (ranks <= (1 - tail) * POSTERIOR_DRAW_COUNT))
+            inside = _inside_quantile_interval(ranks, level, rng)
             empirical = inside.mean(axis=1)
             if continuous_coverage:
                 empirical = empirical.mean(axis=1)
@@ -79,14 +97,20 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
+    single_gate = gate_probability(13, 100, repetitions=args.repetitions, seed=args.seed)
     results = {
-        "multi_drug": gate_probability(13, 100, repetitions=args.repetitions, seed=args.seed),
+        "multi_drug": single_gate,
+        "multi_observation": single_gate.copy(),
         "hierarchical": gate_probability(26, 100, repetitions=args.repetitions, seed=args.seed + 1),
         "continuous": gate_probability(
             52, 50, continuous_coverage=True,
             repetitions=args.repetitions, seed=args.seed + 2,
         ),
-        "assumptions": "Exact uniform marginal ranks; independent parameters and pairs",
+        "assumptions": (
+            "Exact uniform marginal ranks; independent parameters and pairs; "
+            "uniform location within posterior quantile gaps"
+        ),
+        "method": "Exact calibrated-rank sampling by posterior exchangeability",
     }
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(results, indent=2))

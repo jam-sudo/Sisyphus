@@ -1,0 +1,63 @@
+{
+  "purpose": "Finite-budget bias reference for two synthetic observations; exact joint-prior rejection samples theta marginally",
+  "drugs": [
+    {
+      "drug": "morphine",
+      "seed": 42,
+      "true_theta": [
+        0.5479120971119267,
+        -0.5617217895330837,
+        0.35859791991138246
+      ],
+      "observation_log10_cmax": -1.9705016678568825,
+      "n_accepted": 200,
+      "n_proposals": 3940,
+      "acceptance_rate": 0.050761421319796954,
+      "theta_mean": [
+        0.02009458171677555,
+        0.6521230380262618,
+        -0.032845380123554084
+      ],
+      "theta_sd": [
+        0.4987320767891901,
+        2.3464453458927577,
+        0.2902464847462666
+      ],
+      "method": "Exact joint-prior rejection using Gaussian density divided by its maximum",
+      "theta_mean_standard_error": [
+        0.035265683349288625,
+        0.1659187415764383,
+        0.020523525757964293
+      ]
+    },
+    {
+      "drug": "ketorolac",
+      "seed": 42,
+      "true_theta": [
+        0.5479120971119267,
+        -0.5617217895330837,
+        0.35859791991138246
+      ],
+      "observation_log10_cmax": -1.4068113156170683,
+      "n_accepted": 200,
+      "n_proposals": 4561,
+      "acceptance_rate": 0.04385003288752467,
+      "theta_mean": [
+        0.005723489853396372,
+        0.6619936887492942,
+        0.013925209642042712
+      ],
+      "theta_sd": [
+        0.49884482661589524,
+        2.2905329392909235,
+        0.2978781664835818
+      ],
+      "method": "Exact joint-prior rejection using Gaussian density divided by its maximum",
+      "theta_mean_standard_error": [
+        0.035273655965992703,
+        0.16196513739037666,
+        0.0210631671487956
+      ]
+    }
+  ]
+}
