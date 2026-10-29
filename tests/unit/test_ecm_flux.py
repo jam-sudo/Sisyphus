@@ -12,14 +12,19 @@ Covers:
 
 from __future__ import annotations
 
+from dataclasses import replace
+from pathlib import Path
+
 import numpy as np
 import pytest
 
 import sisyphus.engine.flux  # noqa: F401 -- register flux specs
 from sisyphus.core import Distribution, DrugOnGraph, TransporterKinetics
-from sisyphus.engine.compiler import ResolvedParams
+from sisyphus.engine.compiler import ODECompiler, ResolvedParams
 from sisyphus.engine.flux import ClearanceFluxSpec
+from sisyphus.engine.solver import solve
 from sisyphus.graph.body import BodyGraph
+from sisyphus.graph.builder import build_from_yaml
 from sisyphus.graph.types import ClearanceEdge, FlowEdge, Node
 
 
@@ -259,3 +264,70 @@ def test_cl_int_bile_additive_to_metabolism():
     rate_bile = _compute_rate(g, drug_bile, "liver",
                               "metabolized_hepatic", 10.0)
     assert rate_bile > rate_no_bile, "bile>0 should increase clearance"
+
+
+def test_bile_split_conserves_mass_and_default_matches_old_sink():
+    drug = _make_ecm_drug(
+        fup=0.5, cyp3a4_affinity=10.0,
+        ps_passive=100.0, ps_eff=100.0, cl_int_bile=5.0,
+    )
+    graph = _make_liver_graph(liver_name="compartment_a", sink_name="terminal_b",
+                              cyp3a4_abundance=1.0)
+    graph.add_node(Node(name="return_c", node_type="lumen", volume=Distribution(1.0)))
+    params = ResolvedParams(graph, drug)
+    state_index = {"blood_src": 0, "compartment_a": 1, "terminal_b": 2, "return_c": 3}
+    y = np.array([0.0, 10.0, 0.0, 0.0])
+    edge = ClearanceEdge(source="compartment_a", target="terminal_b", model="extended")
+    baseline = np.zeros(4)
+    ClearanceFluxSpec.from_edge(0, edge, state_index).apply(0.0, y, baseline, params)
+    expected_rate = 0.5 * 100.0 * (10.0 * 6e-5 + 5.0) / (100.0 + 10.0 * 6e-5 + 5.0)
+    expected_rate *= 10.0 / 1.8
+    np.testing.assert_array_equal(baseline, [0.0, -expected_rate, expected_rate, 0.0])
+    explicit_none = np.zeros(4)
+    ClearanceFluxSpec.from_edge(0, replace(edge, bile_target=None), state_index).apply(
+        0.0, y, explicit_none, params,
+    )
+    assert explicit_none.tobytes() == baseline.tobytes()
+
+    routed = np.zeros(4)
+    ClearanceFluxSpec.from_edge(
+        0, replace(edge, bile_target="return_c"), state_index,
+    ).apply(0.0, y, routed, params)
+    assert routed.sum() == pytest.approx(0.0, abs=1e-14)
+    assert routed[1] == baseline[1]
+    assert routed[3] == pytest.approx(expected_rate * 5.0 / (5.0 + 10.0 * 6e-5))
+    assert routed[2] == pytest.approx(expected_rate - routed[3])
+
+
+def test_continuous_bile_return_raises_auc_and_late_shoulder():
+    drug = replace(
+        _make_ecm_drug(
+            fup=0.3, cyp3a4_affinity=0.01,
+            ps_passive=100.0, ps_eff=100.0, cl_int_bile=45.0,
+        ),
+        route="oral", administration_node="stomach_lumen",
+    ).realize_means()
+    curves = []
+    for enabled in (False, True):
+        graph = build_from_yaml(Path("data/physiology/reference_man.yaml")).realize_means()
+        if not enabled:
+            graph.edges = [
+                replace(edge, bile_target=None)
+                if isinstance(edge, ClearanceEdge) and edge.bile_target else edge
+                for edge in graph.edges
+            ]
+        compiled = ODECompiler().compile(graph)
+        initial = np.zeros(compiled.n_states)
+        initial[compiled.state_index[drug.administration_node]] = drug.dose_mg
+        result = solve(compiled, ResolvedParams(graph, drug), initial, (0.0, 48.0))
+        assert result.solver_success
+        assert result.mass_balance_error < 1e-6
+        curves.append(result.concentrations["venous_blood"])
+
+    baseline, returned = curves
+    time_h = result.time_h
+    assert np.trapezoid(returned, time_h) > np.trapezoid(baseline, time_h)
+    # Continuous secretion makes a delayed shoulder rather than a meal-triggered peak.
+    early = np.argmin(abs(time_h - 2.0))
+    late = np.argmin(abs(time_h - 12.0))
+    assert returned[late] / baseline[late] > returned[early] / baseline[early] + 0.2

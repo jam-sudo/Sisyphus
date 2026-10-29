@@ -118,6 +118,21 @@ class TestBuilder:
         ]
         assert len(liver_clearance) == 1
         assert liver_clearance[0].model == "extended"
+        assert liver_clearance[0].bile_target == "duodenum_lumen"
+
+    def test_clearance_bile_target_must_exist(self, tmp_path):
+        path = tmp_path / "bile.yaml"
+        path.write_text(
+            "global_params: {cardiac_output: 1}\n"
+            "nodes:\n"
+            "  - {name: tissue, type: organ, volume: 1}\n"
+            "  - {name: sink, type: sink, volume: 1}\n"
+            "edges:\n"
+            "  - {source: tissue, target: sink, type: clearance, "
+            "model: extended, bile_target: missing}\n"
+        )
+        with pytest.raises(ValueError, match="bile target node 'missing' not found"):
+            build_from_yaml(path)
 
     def test_reference_man_has_no_active_transport_edges(self):
         """active_transport edges removed; ECM flux replaces MM uptake."""
