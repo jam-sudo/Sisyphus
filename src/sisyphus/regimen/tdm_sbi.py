@@ -66,7 +66,8 @@ def _warn_engine_revision(posterior_path: Path) -> None:
             path = root / relative
             digest.update(relative.encode() + b"\0")
             digest.update(path.read_bytes() if path.exists() else b"<missing>")
-        if digest.hexdigest() != entry["sha256"]:
+        equivalent = entry.get("verified_equivalent", {})
+        if digest.hexdigest() not in (entry["sha256"], equivalent.get("sha256")):
             logger.warning(
                 "SBI model %s was trained against engine revision %s; current engine/physiology "
                 "inputs differ. Posterior calibration may be stale.",
@@ -160,7 +161,9 @@ def sbi_update(
         drug: DrugOnGraph with distributional parameters (population prior).
         regimen: Dosing regimen the patient received.
         observations: Observed concentrations. The amortizer conditions on the
-            first observation; additional observations reweight posterior samples.
+            first observation; later observations use post-hoc importance
+            reweighting. Native multi-observation amortization is deferred
+            pending calibration.
         posterior_path: Path to the trained posterior .pt file. Defaults to
             ``models/sbi/multi_drug_nsf.pt``. Expects a sibling ``.aux.pt``
             holding the feature standardizer (mean / std) produced by

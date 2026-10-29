@@ -1,6 +1,6 @@
 {
   "version": "unknown_legacy",
-  "artifact_sha256": "87a558ed129c2ab5deeec3b9634632bb2ba633010f930674c3dfe9d715ec02c9",
+  "artifact_sha256": "02d108bbd1a9d9e9349bea0c070906d3e3b2566df1462490c9a79f62927d162d",
   "target": "unknown_legacy",
   "trained_on": {
     "dataset_path": null,
@@ -12,7 +12,7 @@
     "sha256": "not_applicable",
     "description": "Artifact integrity only; no canonical feature-vector fingerprint."
   },
-  "trained_at": "unknown_legacy",
+  "trained_at": "2026-10-29",
   "n_drugs_original": null,
   "n_drugs_excluded": null,
   "holdout_version": "unknown_legacy",
@@ -21,7 +21,7 @@
     "value": null
   },
   "hyperparameters": {},
-  "retrained_reason": "unknown_legacy",
+  "retrained_reason": "current-engine retrain with correlated physiology; provenance in models/sbi/engine_revision.json and data/sbi/multi_drug_train.meta.json",
   "artifact_status": "optional_runtime",
   "runtime_loader": "sisyphus.regimen.tdm_sbi"
 }

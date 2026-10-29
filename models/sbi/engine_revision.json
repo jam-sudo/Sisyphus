@@ -1,10 +1,11 @@
 {
-  "description": "SHA256 of engine source, regimen solver, and physiology YAML at each model last-commit revision; missing paths hash as <missing>.",
+  "description": "SHA256 of selected engine, physiology, graph, and SBI simulator inputs; commit identifies the engine baseline. Missing paths hash as <missing>.",
   "models": {
     "multi_drug_nsf.pt": {
-      "commit": "1359765553a26e91a6fc1f8a69d55f6f8e1e6531",
-      "sha256": "77b570f2c2a1ed8ef75d6c3299fd53156e7a0ef0d4b7da12727e3d54f86ab8e4",
+      "commit": "a3d398f5912a064cd9a0b3ff78b5a4d2b53d6b2b",
+      "sha256": "f15c5c9a6cd710d8aa579293baaecd946768f94cb6ea547a78252d3b3fae3d3e",
       "paths": [
+        "data/physiology/achour2021_correlation.json",
         "data/physiology/pediatric_5y.yaml",
         "data/physiology/reference_man.yaml",
         "data/physiology/sc_overlay.yaml",
@@ -16,13 +17,27 @@
         "src/sisyphus/engine/result.py",
         "src/sisyphus/engine/solver.py",
         "src/sisyphus/engine/uncertainty.py",
-        "src/sisyphus/regimen/solver.py"
-      ]
+        "src/sisyphus/graph/body.py",
+        "src/sisyphus/graph/builder.py",
+        "src/sisyphus/physiology/correlated.py",
+        "src/sisyphus/predict/adme.py",
+        "src/sisyphus/predict/chemistry.py",
+        "src/sisyphus/predict/ivive.py",
+        "src/sisyphus/regimen/solver.py",
+        "src/sisyphus/sbi/multi_drug.py",
+        "src/sisyphus/sbi/priors.py",
+        "src/sisyphus/sbi/simulator.py"
+      ],
+      "verified_equivalent": {
+        "sha256": "bb267b0164e3ba6f43684ca575d5eff0be8b8fdf75b63be159b527d2197922b0",
+        "check": "11,000 fixed-seed draws (200 per each of 55 training drugs); theta, log10 Cmax, drug features, names, and per-drug counts bit-identical to the training-source tree"
+      }
     },
     "hierarchical_nsf_2k.pt": {
-      "commit": "1359765553a26e91a6fc1f8a69d55f6f8e1e6531",
-      "sha256": "77b570f2c2a1ed8ef75d6c3299fd53156e7a0ef0d4b7da12727e3d54f86ab8e4",
+      "commit": "a3d398f5912a064cd9a0b3ff78b5a4d2b53d6b2b",
+      "sha256": "f15c5c9a6cd710d8aa579293baaecd946768f94cb6ea547a78252d3b3fae3d3e",
       "paths": [
+        "data/physiology/achour2021_correlation.json",
         "data/physiology/pediatric_5y.yaml",
         "data/physiology/reference_man.yaml",
         "data/physiology/sc_overlay.yaml",
@@ -34,8 +49,21 @@
         "src/sisyphus/engine/result.py",
         "src/sisyphus/engine/solver.py",
         "src/sisyphus/engine/uncertainty.py",
-        "src/sisyphus/regimen/solver.py"
-      ]
+        "src/sisyphus/graph/body.py",
+        "src/sisyphus/graph/builder.py",
+        "src/sisyphus/physiology/correlated.py",
+        "src/sisyphus/predict/adme.py",
+        "src/sisyphus/predict/chemistry.py",
+        "src/sisyphus/predict/ivive.py",
+        "src/sisyphus/regimen/solver.py",
+        "src/sisyphus/sbi/multi_drug.py",
+        "src/sisyphus/sbi/priors.py",
+        "src/sisyphus/sbi/simulator.py"
+      ],
+      "verified_equivalent": {
+        "sha256": "bb267b0164e3ba6f43684ca575d5eff0be8b8fdf75b63be159b527d2197922b0",
+        "check": "11,000 fixed-seed draws (200 per each of 55 training drugs); theta, log10 Cmax, drug features, names, and per-drug counts bit-identical to the training-source tree"
+      }
     },
     "continuous_hierarchical_nsf.pt": {
       "commit": "2e0751c41ad8c26656f78f08fc768b59ec6c7fe3",

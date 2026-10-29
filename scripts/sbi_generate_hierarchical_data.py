@@ -43,7 +43,6 @@ def _worker(args: tuple) -> dict:
     (pop_name, physiology_yaml, drug_name, smiles, dose_mg, route,
      thetas, base_seed, logp_hint) = args
 
-    from sisyphus.sbi.multi_drug import extract_drug_features
     from sisyphus.sbi.simulator import EngineSimulator
 
     t0 = time.time()
@@ -83,6 +82,8 @@ def main() -> None:
     p.add_argument("--mini-theta-per-drug", type=int, default=200)
     p.add_argument("--full-theta-per-drug", type=int, default=1000)
     p.add_argument("--out", type=Path, default=None)
+    p.add_argument("--chunk-index", type=int, default=0)
+    p.add_argument("--chunk-count", type=int, default=1)
     args = p.parse_args()
 
     from sisyphus.sbi.multi_drug import (
@@ -114,6 +115,12 @@ def main() -> None:
         if args.out is None:
             args.out = ROOT / "data" / "sbi" / "hierarchical_train.npz"
 
+    if not 0 <= args.chunk_index < args.chunk_count:
+        p.error("--chunk-index must be between 0 and --chunk-count - 1")
+    all_drug_count = len(drugs)
+    selected = list(enumerate(drugs))[args.chunk_index::args.chunk_count]
+    drugs = [drug for _, drug in selected]
+
     total = len(drugs) * theta_per * n_pop
     print(f"[gen-hier] mode={args.mode}  drugs={len(drugs)}  pops={n_pop}  "
           f"theta/pair={theta_per}  total_sims={total}")
@@ -136,12 +143,12 @@ def main() -> None:
     jobs = []
     for pi, pop_name in enumerate(pop_names):
         pop_spec = populations[pop_name]
-        for di, d in enumerate(drugs):
+        for di, d in selected:
             block_rng = np.random.default_rng(
-                args.seed + 1_000_000 * (pi * len(drugs) + di + 1)
+                args.seed + 1_000_000 * (pi * all_drug_count + di + 1)
             )
             thetas = prior.sample_numpy(theta_per, block_rng)
-            base_seed = args.seed + (pi * len(drugs) + di + 1) * 2**16
+            base_seed = args.seed + (pi * all_drug_count + di + 1) * 2**16
             jobs.append((
                 pop_name,
                 str(pop_spec.physiology_yaml),

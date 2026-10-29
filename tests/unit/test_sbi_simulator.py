@@ -88,6 +88,18 @@ def test_simulate_single_deterministic(simulator: EngineSimulator):
     assert a == b
 
 
+def test_simulator_samples_achour_enzyme_correlation(simulator: EngineSimulator):
+    rng = np.random.default_rng(42)
+    draws = np.array([
+        [
+            graph.nodes["liver"].enzymes["CYP3A4"].mean,
+            graph.nodes["liver"].enzymes["CYP2D6"].mean,
+        ]
+        for graph in (simulator._sample_graph(rng) for _ in range(300))
+    ])
+    assert np.corrcoef(np.log(draws).T)[0, 1] > 0.2
+
+
 def test_simulate_single_seed_changes_result(simulator: EngineSimulator):
     """Different seeds must yield different results (variance via Distribution CVs)."""
     theta = np.array([0.0, _logit(0.65), 0.0])

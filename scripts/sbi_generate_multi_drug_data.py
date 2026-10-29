@@ -43,7 +43,7 @@ def _worker(args: tuple) -> dict:
 
     # Late imports so this works under multiprocessing spawn.
     from sisyphus.predict.chemistry import compute_profile  # noqa: F401
-    from sisyphus.sbi.multi_drug import DrugSpec, MultiDrugSimulator, extract_drug_features
+    from sisyphus.sbi.multi_drug import extract_drug_features
     from sisyphus.sbi.simulator import EngineSimulator
 
     t0 = time.time()
@@ -76,6 +76,8 @@ def main() -> None:
     p.add_argument("--mini-theta-per-drug", type=int, default=500)
     p.add_argument("--full-theta-per-drug", type=int, default=2000)
     p.add_argument("--out", type=Path, default=None)
+    p.add_argument("--chunk-index", type=int, default=0)
+    p.add_argument("--chunk-count", type=int, default=1)
     args = p.parse_args()
 
     from sisyphus.sbi.priors import build_box_prior
@@ -98,15 +100,19 @@ def main() -> None:
         if args.out is None:
             args.out = ROOT / "data" / "sbi" / "multi_drug_train.npz"
 
+    if not 0 <= args.chunk_index < args.chunk_count:
+        p.error("--chunk-index must be between 0 and --chunk-count - 1")
+    selected = list(enumerate(drugs))[args.chunk_index::args.chunk_count]
+    drugs = [drug for _, drug in selected]
+
     total = len(drugs) * theta_per
     print(f"[gen-md] mode={args.mode}  drugs={len(drugs)}  "
           f"theta/drug={theta_per}  total_sims={total}")
     print(f"[gen-md] workers={args.workers}  out={args.out}")
 
     # Per-drug theta blocks use base_seed + drug_index * 2**16 so blocks are disjoint.
-    rng_master = np.random.default_rng(args.seed)
     jobs = []
-    for di, d in enumerate(drugs):
+    for di, d in selected:
         block_rng = np.random.default_rng(args.seed + 1_000_000 * (di + 1))
         thetas = prior.sample_numpy(theta_per, block_rng)
         base_seed = args.seed + (di + 1) * 2**16

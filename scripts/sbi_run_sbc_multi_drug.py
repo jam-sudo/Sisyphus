@@ -44,12 +44,22 @@ sys.path.insert(0, str(ROOT / "src"))
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 log = logging.getLogger("sbi_sbc_md")
 
+# Source: sbi DirectPosterior.sample bounds pathological prior-support rejection.
+MAX_SBC_SAMPLE_TIME_S = 30.0
+
+from sisyphus.regimen.types import DosingRegimen  # noqa: E402
 from sisyphus.sbi.amortizer import load_result  # noqa: E402
 from sisyphus.sbi.multi_drug import (  # noqa: E402
-    DrugSpec,
     MultiDrugSimulator,
     extract_drug_features,
     load_drug_specs_from_json,
+)
+from sisyphus.sbi.multi_observation import (  # noqa: E402
+    DOSING_INTERVALS_H,
+    MAX_DOSE_COUNT,
+    MAX_OBSERVATION_COUNT,
+    OBSERVATION_OFFSETS_H,
+    _simulate_context,
 )
 from sisyphus.sbi.priors import build_box_prior  # noqa: E402
 
@@ -59,6 +69,7 @@ def _coverage_and_ranks(
     posterior,
     xs_packed: np.ndarray,
     levels: tuple[int, ...],
+    n_posterior: int = 500,
 ) -> tuple[np.ndarray, dict[int, np.ndarray]]:
     """Per-dim ranks and coverage counts for one drug."""
     import torch
@@ -68,7 +79,10 @@ def _coverage_and_ranks(
     cov = {level: np.zeros(d_theta, dtype=np.int64) for level in levels}
     for i in range(n_cal):
         x_t = torch.as_tensor(xs_packed[i : i + 1], dtype=torch.float32)
-        samples = posterior.sample((500,), x=x_t, show_progress_bars=False)
+        samples = posterior.sample(
+            (n_posterior,), x=x_t, show_progress_bars=False,
+            max_sampling_time=MAX_SBC_SAMPLE_TIME_S,
+        )
         s = samples.detach().cpu().numpy()
         for d in range(d_theta):
             ranks[i, d] = int(np.sum(s[:, d] < thetas_true[i, d]))
@@ -94,6 +108,7 @@ def main() -> None:
     p.add_argument("--out", type=Path, required=True)
     p.add_argument("--ks-threshold", type=float, default=0.01)
     p.add_argument("--coverage-tol", type=float, default=0.10)
+    p.add_argument("--multi-observation", action="store_true")
     args = p.parse_args()
 
     levels = tuple(int(x) for x in args.levels.split(","))
@@ -101,9 +116,12 @@ def main() -> None:
     log.info("Loading posterior: %s", args.posterior)
     result = load_result(args.posterior)
     import torch
+    torch.manual_seed(args.seed)
     aux_path = args.posterior.with_suffix(".aux.pt")
     if aux_path.exists():
         aux = torch.load(aux_path, weights_only=False)
+        if bool(aux.get("multi_observation", False)) != args.multi_observation:
+            raise ValueError("Posterior observation format does not match --multi-observation")
         feat_mean = np.asarray(aux["feat_mean"], dtype=np.float64)
         feat_std = np.asarray(aux["feat_std"], dtype=np.float64)
         log.info("  loaded feature standardizer from %s", aux_path.name)
@@ -117,8 +135,9 @@ def main() -> None:
     specs = load_drug_specs_from_json(args.validation_set)
     log.info("Loaded %d validation drugs", len(specs))
 
-    from scipy import stats as scistats
     import json as _json
+
+    from scipy import stats as scistats
 
     out: dict = {
         "posterior": str(args.posterior),
@@ -129,6 +148,7 @@ def main() -> None:
         "seed": args.seed,
         "ks_threshold": args.ks_threshold,
         "coverage_tol": args.coverage_tol,
+        "multi_observation": args.multi_observation,
         "drugs": [],
     }
 
@@ -155,19 +175,56 @@ def main() -> None:
 
         rng = np.random.default_rng(args.seed + i * 1000)
         thetas_true = prior.sample_numpy(args.n_calibration, rng)
+        if args.multi_observation:
+            contexts = []
+            valid_thetas = []
+            for theta in thetas_true:
+                n_doses = int(rng.integers(1, MAX_DOSE_COUNT + 1))
+                interval = float(rng.choice(DOSING_INTERVALS_H))
+                regimen = DosingRegimen.oral_repeated(spec.dose_mg, interval, n_doses)
+                n_obs = int(rng.integers(2, MAX_OBSERVATION_COUNT + 1))
+                offsets = sorted(rng.choice(OBSERVATION_OFFSETS_H, size=n_obs, replace=False))
+                times = [regimen.last_dose_time_h + float(offset) for offset in offsets]
+                context = _simulate_context(sim, theta, rng, regimen, times, feats)
+                if context is not None:
+                    context[-len(feats):] = feats_std
+                    contexts.append(context)
+                    valid_thetas.append(theta)
+            if not contexts:
+                raise RuntimeError(f"No valid SBC simulations for {spec.name}")
+            xs_packed = np.asarray(contexts, dtype=np.float32)
+            thetas_true = np.asarray(valid_thetas)
+        else:
+            xs = np.zeros((args.n_calibration, 1), dtype=np.float64)
+            for j in range(args.n_calibration):
+                val = sim.simulate_single(thetas_true[j], seed=args.seed + 7777 * (i + 1) + j)
+                xs[j, 0] = val if np.isfinite(val) else -20.0
+            xs_packed = np.concatenate(
+                [xs, np.tile(feats_std[None, :], (args.n_calibration, 1))],
+                axis=1,
+            ).astype(np.float64)
 
-        xs = np.zeros((args.n_calibration, 1), dtype=np.float64)
-        for j in range(args.n_calibration):
-            val = sim.simulate_single(thetas_true[j], seed=args.seed + 7777 * (i + 1) + j)
-            xs[j, 0] = val if np.isfinite(val) else -20.0
-        xs_packed = np.concatenate(
-            [xs, np.tile(feats_std[None, :], (args.n_calibration, 1))],
-            axis=1,
-        ).astype(np.float64)
-
-        ranks, cov_counts = _coverage_and_ranks(
-            thetas_true, result.posterior, xs_packed, levels=levels
-        )
+        try:
+            ranks, cov_counts = _coverage_and_ranks(
+                thetas_true, result.posterior, xs_packed, levels=levels,
+                n_posterior=args.n_posterior,
+            )
+        except RuntimeError as exc:
+            log.warning("  posterior sampling failed for %s: %s", spec.name, exc)
+            out["drugs"].append({
+                "name": spec.name,
+                "dose_mg": spec.dose_mg,
+                "n_valid": len(thetas_true),
+                "ks_stats": [1.0] * 3,
+                "ks_pvalues": [0.0] * 3,
+                "coverage": {},
+                "coverage_max_deviation": 1.0,
+                "drug_features": feats.tolist(),
+                "pass": False,
+                "sampling_error": str(exc),
+                "elapsed_s": float(time.time() - t0),
+            })
+            continue
 
         ks_stats = np.zeros(3)
         ks_p = np.zeros(3)
@@ -178,7 +235,7 @@ def main() -> None:
             ks_p[d] = float(res.pvalue)
 
         coverage = {
-            level: (cov_counts[level].astype(np.float64) / args.n_calibration).tolist()
+            level: (cov_counts[level].astype(np.float64) / len(thetas_true)).tolist()
             for level in levels
         }
         # Gate check
@@ -199,6 +256,7 @@ def main() -> None:
         out["drugs"].append({
             "name": spec.name,
             "dose_mg": spec.dose_mg,
+            "n_valid": len(thetas_true),
             "ks_stats": ks_stats.tolist(),
             "ks_pvalues": ks_p.tolist(),
             "coverage": coverage,

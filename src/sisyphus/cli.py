@@ -499,7 +499,7 @@ def _resolve_auto_method(drug_name: str) -> tuple[str, bool]:
         if key.lower().strip() == lower:
             reweight = bool(flag)
             break
-    return method, reweight
+    return method, reweight if method == "sbi" else False
 
 
 def _route_drug_name(smiles: str, name: str | None) -> str:

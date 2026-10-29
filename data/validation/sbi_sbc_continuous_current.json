@@ -1,0 +1,2901 @@
+{
+  "posterior": "models/sbi/continuous_hierarchical_nsf.pt",
+  "validation_set": "data/sbi/validation_drug_set.json",
+  "populations": [
+    {
+      "name": "adult",
+      "bw": 70.0,
+      "age": 35.0
+    },
+    {
+      "name": "elderly",
+      "bw": 65.0,
+      "age": 75.0
+    },
+    {
+      "name": "pediatric_5y",
+      "bw": 18.0,
+      "age": 5.0
+    },
+    {
+      "name": "infant_1y",
+      "bw": 8.0,
+      "age": 1.0
+    }
+  ],
+  "n_calibration": 100,
+  "n_posterior": 500,
+  "levels": [
+    50,
+    80,
+    90,
+    95
+  ],
+  "seed": 0,
+  "ks_threshold": 0.01,
+  "coverage_tol": 0.1,
+  "pairs": [
+    {
+      "population": "adult",
+      "bw": 70.0,
+      "age": 35.0,
+      "drug": "morphine",
+      "ks_pvalues": [
+        0.11381468170073096,
+        0.00020137832433084427,
+        0.3706320255863302
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.5433333333333333,
+          "deviation": 0.043333333333333335,
+          "per_dim": [
+            0.56,
+            0.59,
+            0.48
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.84,
+          "deviation": 0.039999999999999925,
+          "per_dim": [
+            0.83,
+            0.87,
+            0.82
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.9066666666666667,
+          "deviation": 0.00666666666666671,
+          "per_dim": [
+            0.92,
+            0.91,
+            0.89
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9466666666666667,
+          "deviation": 0.0033333333333332993,
+          "per_dim": [
+            0.96,
+            0.94,
+            0.94
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.043333333333333335,
+      "ks_pass": false,
+      "coverage_pass": true,
+      "pass": false,
+      "wall_s": 38.15767765045166
+    },
+    {
+      "population": "adult",
+      "bw": 70.0,
+      "age": 35.0,
+      "drug": "clozapine",
+      "ks_pvalues": [
+        0.012004022343593917,
+        0.01983924212565265,
+        0.06897234094909263
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.5299999999999999,
+          "deviation": 0.029999999999999916,
+          "per_dim": [
+            0.43,
+            0.59,
+            0.57
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.81,
+          "deviation": 0.010000000000000009,
+          "per_dim": [
+            0.79,
+            0.8,
+            0.84
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.89,
+          "deviation": 0.010000000000000009,
+          "per_dim": [
+            0.87,
+            0.91,
+            0.89
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9566666666666667,
+          "deviation": 0.00666666666666671,
+          "per_dim": [
+            0.95,
+            0.97,
+            0.95
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.029999999999999916,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 37.06724500656128
+    },
+    {
+      "population": "adult",
+      "bw": 70.0,
+      "age": 35.0,
+      "drug": "amantadine",
+      "ks_pvalues": [
+        0.8700277490019067,
+        0.11381468170073904,
+        0.5506038212152977
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.47,
+          "deviation": 0.030000000000000027,
+          "per_dim": [
+            0.51,
+            0.49,
+            0.41
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.7766666666666667,
+          "deviation": 0.023333333333333317,
+          "per_dim": [
+            0.77,
+            0.77,
+            0.79
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.8966666666666666,
+          "deviation": 0.0033333333333334103,
+          "per_dim": [
+            0.88,
+            0.9,
+            0.91
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9499999999999998,
+          "deviation": 1.1102230246251565e-16,
+          "per_dim": [
+            0.96,
+            0.94,
+            0.95
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.030000000000000027,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 41.812854528427124
+    },
+    {
+      "population": "adult",
+      "bw": 70.0,
+      "age": 35.0,
+      "drug": "ketorolac",
+      "ks_pvalues": [
+        9.900265927321764e-05,
+        0.05580722295912035,
+        0.6171494172888633
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.4633333333333333,
+          "deviation": 0.03666666666666668,
+          "per_dim": [
+            0.41,
+            0.51,
+            0.47
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.7466666666666667,
+          "deviation": 0.053333333333333344,
+          "per_dim": [
+            0.72,
+            0.77,
+            0.75
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.8333333333333334,
+          "deviation": 0.06666666666666665,
+          "per_dim": [
+            0.82,
+            0.84,
+            0.84
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9066666666666666,
+          "deviation": 0.043333333333333335,
+          "per_dim": [
+            0.88,
+            0.9,
+            0.94
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.06666666666666665,
+      "ks_pass": false,
+      "coverage_pass": true,
+      "pass": false,
+      "wall_s": 38.77128887176514
+    },
+    {
+      "population": "adult",
+      "bw": 70.0,
+      "age": 35.0,
+      "drug": "rivaroxaban",
+      "ks_pvalues": [
+        0.009245390617829441,
+        0.1374749336479978,
+        0.019839242125644047
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.48,
+          "deviation": 0.020000000000000018,
+          "per_dim": [
+            0.46,
+            0.43,
+            0.55
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.7766666666666667,
+          "deviation": 0.023333333333333317,
+          "per_dim": [
+            0.8,
+            0.71,
+            0.82
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.8966666666666666,
+          "deviation": 0.0033333333333334103,
+          "per_dim": [
+            0.92,
+            0.85,
+            0.92
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.94,
+          "deviation": 0.010000000000000009,
+          "per_dim": [
+            0.96,
+            0.9,
+            0.96
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.023333333333333317,
+      "ks_pass": false,
+      "coverage_pass": true,
+      "pass": false,
+      "wall_s": 33.22313857078552
+    },
+    {
+      "population": "adult",
+      "bw": 70.0,
+      "age": 35.0,
+      "drug": "diclofenac",
+      "ks_pvalues": [
+        0.02842257481961436,
+        0.252692757006389,
+        0.3706320255863282
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.47333333333333333,
+          "deviation": 0.026666666666666672,
+          "per_dim": [
+            0.52,
+            0.47,
+            0.43
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.79,
+          "deviation": 0.010000000000000009,
+          "per_dim": [
+            0.79,
+            0.82,
+            0.76
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.8766666666666666,
+          "deviation": 0.023333333333333428,
+          "per_dim": [
+            0.84,
+            0.92,
+            0.87
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9499999999999998,
+          "deviation": 1.1102230246251565e-16,
+          "per_dim": [
+            0.94,
+            0.96,
+            0.95
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.026666666666666672,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 36.61404085159302
+    },
+    {
+      "population": "adult",
+      "bw": 70.0,
+      "age": 35.0,
+      "drug": "digoxin",
+      "ks_pvalues": [
+        0.9532159710635726,
+        0.7510610234994359,
+        0.4560077143943707
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.51,
+          "deviation": 0.010000000000000009,
+          "per_dim": [
+            0.54,
+            0.5,
+            0.49
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.7799999999999999,
+          "deviation": 0.02000000000000013,
+          "per_dim": [
+            0.8,
+            0.77,
+            0.77
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.8866666666666667,
+          "deviation": 0.013333333333333308,
+          "per_dim": [
+            0.88,
+            0.87,
+            0.91
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9333333333333332,
+          "deviation": 0.01666666666666672,
+          "per_dim": [
+            0.92,
+            0.93,
+            0.95
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.02000000000000013,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 24.566277503967285
+    },
+    {
+      "population": "adult",
+      "bw": 70.0,
+      "age": 35.0,
+      "drug": "pravastatin",
+      "ks_pvalues": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "coverage": {},
+      "max_coverage_deviation": 1.0,
+      "ks_pass": false,
+      "coverage_pass": false,
+      "pass": false,
+      "sampling_error": "Sampling aborted early because rejection sampling exceeded max_sampling_time. This is likely due to extremely low acceptance. You can disable rejection sampling using `reject_outside_prior=False` to draw samples directly from the trained estimator. Consider switching to MCMC or VI, or checking for model misspecification.",
+      "wall_s": 64.13788986206055
+    },
+    {
+      "population": "adult",
+      "bw": 70.0,
+      "age": 35.0,
+      "drug": "sildenafil",
+      "ks_pvalues": [
+        0.19663614878217164,
+        0.5506038212152973,
+        0.21414632569910702
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.52,
+          "deviation": 0.020000000000000018,
+          "per_dim": [
+            0.52,
+            0.56,
+            0.48
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.7933333333333333,
+          "deviation": 0.00666666666666671,
+          "per_dim": [
+            0.76,
+            0.84,
+            0.78
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.91,
+          "deviation": 0.010000000000000009,
+          "per_dim": [
+            0.93,
+            0.92,
+            0.88
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9533333333333333,
+          "deviation": 0.0033333333333332993,
+          "per_dim": [
+            0.95,
+            0.97,
+            0.94
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.020000000000000018,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 37.229544162750244
+    },
+    {
+      "population": "adult",
+      "bw": 70.0,
+      "age": 35.0,
+      "drug": "phenytoin",
+      "ks_pvalues": [
+        0.15071744612731025,
+        0.5506038212152977,
+        0.10330374901821006
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.5533333333333333,
+          "deviation": 0.053333333333333344,
+          "per_dim": [
+            0.54,
+            0.55,
+            0.57
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.7933333333333333,
+          "deviation": 0.00666666666666671,
+          "per_dim": [
+            0.76,
+            0.79,
+            0.83
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.9333333333333332,
+          "deviation": 0.033333333333333215,
+          "per_dim": [
+            0.94,
+            0.91,
+            0.95
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.98,
+          "deviation": 0.030000000000000027,
+          "per_dim": [
+            0.99,
+            0.96,
+            0.99
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.053333333333333344,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 43.01592707633972
+    },
+    {
+      "population": "adult",
+      "bw": 70.0,
+      "age": 35.0,
+      "drug": "tamoxifen",
+      "ks_pvalues": [
+        0.3445493220213276,
+        0.12518948731353885,
+        0.11381468170073096
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.44999999999999996,
+          "deviation": 0.050000000000000044,
+          "per_dim": [
+            0.42,
+            0.47,
+            0.46
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.7533333333333333,
+          "deviation": 0.046666666666666745,
+          "per_dim": [
+            0.73,
+            0.75,
+            0.78
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.8533333333333334,
+          "deviation": 0.046666666666666634,
+          "per_dim": [
+            0.82,
+            0.87,
+            0.87
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9400000000000001,
+          "deviation": 0.009999999999999898,
+          "per_dim": [
+            0.92,
+            0.93,
+            0.97
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.050000000000000044,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 36.45290446281433
+    },
+    {
+      "population": "adult",
+      "bw": 70.0,
+      "age": 35.0,
+      "drug": "indomethacin",
+      "ks_pvalues": [
+        0.012004022343584969,
+        0.11381468170073904,
+        0.3979325641016012
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.48666666666666664,
+          "deviation": 0.013333333333333364,
+          "per_dim": [
+            0.46,
+            0.53,
+            0.47
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.8166666666666665,
+          "deviation": 0.016666666666666496,
+          "per_dim": [
+            0.79,
+            0.84,
+            0.82
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.8833333333333333,
+          "deviation": 0.01666666666666672,
+          "per_dim": [
+            0.83,
+            0.94,
+            0.88
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9366666666666666,
+          "deviation": 0.013333333333333308,
+          "per_dim": [
+            0.91,
+            0.97,
+            0.93
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.01666666666666672,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 41.417051792144775
+    },
+    {
+      "population": "adult",
+      "bw": 70.0,
+      "age": 35.0,
+      "drug": "posaconazole",
+      "ks_pvalues": [
+        0.2526927570063874,
+        0.11381468170073904,
+        0.7510610234994352
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.5233333333333333,
+          "deviation": 0.023333333333333317,
+          "per_dim": [
+            0.57,
+            0.47,
+            0.53
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.8366666666666666,
+          "deviation": 0.036666666666666514,
+          "per_dim": [
+            0.83,
+            0.85,
+            0.83
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.91,
+          "deviation": 0.010000000000000009,
+          "per_dim": [
+            0.93,
+            0.9,
+            0.9
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.94,
+          "deviation": 0.010000000000000009,
+          "per_dim": [
+            0.95,
+            0.93,
+            0.94
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.036666666666666514,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 36.20278215408325
+    },
+    {
+      "population": "elderly",
+      "bw": 65.0,
+      "age": 75.0,
+      "drug": "morphine",
+      "ks_pvalues": [
+        0.03582511969274067,
+        0.05007626057597746,
+        0.12518948731353885
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.5233333333333333,
+          "deviation": 0.023333333333333317,
+          "per_dim": [
+            0.56,
+            0.56,
+            0.45
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.8066666666666666,
+          "deviation": 0.006666666666666599,
+          "per_dim": [
+            0.85,
+            0.81,
+            0.76
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.9,
+          "deviation": 0.0,
+          "per_dim": [
+            0.93,
+            0.9,
+            0.87
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9633333333333334,
+          "deviation": 0.01333333333333342,
+          "per_dim": [
+            0.99,
+            0.97,
+            0.93
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.023333333333333317,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 36.39895439147949
+    },
+    {
+      "population": "elderly",
+      "bw": 65.0,
+      "age": 75.0,
+      "drug": "clozapine",
+      "ks_pvalues": [
+        0.3979325641016012,
+        0.37063202558632946,
+        0.062092340698773195
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.5433333333333333,
+          "deviation": 0.043333333333333335,
+          "per_dim": [
+            0.53,
+            0.6,
+            0.5
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.8466666666666667,
+          "deviation": 0.046666666666666634,
+          "per_dim": [
+            0.82,
+            0.9,
+            0.82
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.9166666666666666,
+          "deviation": 0.016666666666666607,
+          "per_dim": [
+            0.89,
+            0.95,
+            0.91
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9633333333333333,
+          "deviation": 0.013333333333333308,
+          "per_dim": [
+            0.95,
+            1.0,
+            0.94
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.046666666666666634,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 36.20274257659912
+    },
+    {
+      "population": "elderly",
+      "bw": 65.0,
+      "age": 75.0,
+      "drug": "amantadine",
+      "ks_pvalues": [
+        0.0007680396698497105,
+        0.3706320255863348,
+        0.29612160727892417
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.47666666666666674,
+          "deviation": 0.02333333333333326,
+          "per_dim": [
+            0.39,
+            0.52,
+            0.52
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.7799999999999999,
+          "deviation": 0.02000000000000013,
+          "per_dim": [
+            0.79,
+            0.77,
+            0.78
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.8766666666666666,
+          "deviation": 0.023333333333333428,
+          "per_dim": [
+            0.89,
+            0.91,
+            0.83
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9433333333333334,
+          "deviation": 0.006666666666666599,
+          "per_dim": [
+            0.94,
+            0.96,
+            0.93
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.023333333333333428,
+      "ks_pass": false,
+      "coverage_pass": true,
+      "pass": false,
+      "wall_s": 40.94436717033386
+    },
+    {
+      "population": "elderly",
+      "bw": 65.0,
+      "age": 75.0,
+      "drug": "ketorolac",
+      "ks_pvalues": [
+        0.0006535512411085806,
+        0.017540807429145513,
+        0.3979325641016012
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.5800000000000001,
+          "deviation": 0.08000000000000007,
+          "per_dim": [
+            0.55,
+            0.63,
+            0.56
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.8266666666666667,
+          "deviation": 0.026666666666666616,
+          "per_dim": [
+            0.83,
+            0.85,
+            0.8
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.92,
+          "deviation": 0.020000000000000018,
+          "per_dim": [
+            0.95,
+            0.92,
+            0.89
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.96,
+          "deviation": 0.010000000000000009,
+          "per_dim": [
+            0.97,
+            0.96,
+            0.95
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.08000000000000007,
+      "ks_pass": false,
+      "coverage_pass": true,
+      "pass": false,
+      "wall_s": 37.57822608947754
+    },
+    {
+      "population": "elderly",
+      "bw": 65.0,
+      "age": 75.0,
+      "drug": "rivaroxaban",
+      "ks_pvalues": [
+        0.08468707199223291,
+        0.2328213493190513,
+        0.583642355120206
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.49,
+          "deviation": 0.010000000000000009,
+          "per_dim": [
+            0.46,
+            0.5,
+            0.51
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.7600000000000001,
+          "deviation": 0.039999999999999925,
+          "per_dim": [
+            0.75,
+            0.75,
+            0.78
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.89,
+          "deviation": 0.010000000000000009,
+          "per_dim": [
+            0.9,
+            0.88,
+            0.89
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9233333333333333,
+          "deviation": 0.026666666666666616,
+          "per_dim": [
+            0.92,
+            0.91,
+            0.94
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.039999999999999925,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 32.40930676460266
+    },
+    {
+      "population": "elderly",
+      "bw": 65.0,
+      "age": 75.0,
+      "drug": "diclofenac",
+      "ks_pvalues": [
+        0.3979325641016064,
+        0.08468707199223291,
+        0.11381468170073904
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.47333333333333333,
+          "deviation": 0.026666666666666672,
+          "per_dim": [
+            0.47,
+            0.54,
+            0.41
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.7799999999999999,
+          "deviation": 0.02000000000000013,
+          "per_dim": [
+            0.82,
+            0.79,
+            0.73
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.9066666666666666,
+          "deviation": 0.006666666666666599,
+          "per_dim": [
+            0.89,
+            0.95,
+            0.88
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9733333333333333,
+          "deviation": 0.023333333333333317,
+          "per_dim": [
+            0.97,
+            0.99,
+            0.96
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.026666666666666672,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 35.51718211174011
+    },
+    {
+      "population": "elderly",
+      "bw": 65.0,
+      "age": 75.0,
+      "drug": "digoxin",
+      "ks_pvalues": [
+        0.718157438035612,
+        0.06897234094909263,
+        0.6846706791645851
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.4533333333333333,
+          "deviation": 0.04666666666666669,
+          "per_dim": [
+            0.5,
+            0.42,
+            0.44
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.7600000000000001,
+          "deviation": 0.039999999999999925,
+          "per_dim": [
+            0.8,
+            0.73,
+            0.75
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.88,
+          "deviation": 0.020000000000000018,
+          "per_dim": [
+            0.9,
+            0.87,
+            0.87
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9366666666666666,
+          "deviation": 0.013333333333333308,
+          "per_dim": [
+            0.94,
+            0.95,
+            0.92
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.04666666666666669,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 24.946763277053833
+    },
+    {
+      "population": "elderly",
+      "bw": 65.0,
+      "age": 75.0,
+      "drug": "pravastatin",
+      "ks_pvalues": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "coverage": {},
+      "max_coverage_deviation": 1.0,
+      "ks_pass": false,
+      "coverage_pass": false,
+      "pass": false,
+      "sampling_error": "Sampling aborted early because rejection sampling exceeded max_sampling_time. This is likely due to extremely low acceptance. You can disable rejection sampling using `reject_outside_prior=False` to draw samples directly from the trained estimator. Consider switching to MCMC or VI, or checking for model misspecification.",
+      "wall_s": 63.39458179473877
+    },
+    {
+      "population": "elderly",
+      "bw": 65.0,
+      "age": 75.0,
+      "drug": "sildenafil",
+      "ks_pvalues": [
+        0.5182193645480672,
+        0.48664471299257595,
+        0.8137761665209289
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.5,
+          "deviation": 0.0,
+          "per_dim": [
+            0.53,
+            0.45,
+            0.52
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.8233333333333334,
+          "deviation": 0.023333333333333317,
+          "per_dim": [
+            0.91,
+            0.77,
+            0.79
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.9066666666666666,
+          "deviation": 0.006666666666666599,
+          "per_dim": [
+            0.96,
+            0.88,
+            0.88
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9466666666666667,
+          "deviation": 0.0033333333333332993,
+          "per_dim": [
+            0.98,
+            0.92,
+            0.94
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.023333333333333317,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 37.35447549819946
+    },
+    {
+      "population": "elderly",
+      "bw": 65.0,
+      "age": 75.0,
+      "drug": "phenytoin",
+      "ks_pvalues": [
+        0.9366490408527515,
+        0.31970891966275516,
+        0.9171597106843911
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.49666666666666665,
+          "deviation": 0.003333333333333355,
+          "per_dim": [
+            0.45,
+            0.53,
+            0.51
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.8133333333333334,
+          "deviation": 0.013333333333333308,
+          "per_dim": [
+            0.82,
+            0.79,
+            0.83
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.8933333333333334,
+          "deviation": 0.006666666666666599,
+          "per_dim": [
+            0.91,
+            0.86,
+            0.91
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9566666666666667,
+          "deviation": 0.00666666666666671,
+          "per_dim": [
+            0.96,
+            0.95,
+            0.96
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.013333333333333308,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 41.84229564666748
+    },
+    {
+      "population": "elderly",
+      "bw": 65.0,
+      "age": 75.0,
+      "drug": "tamoxifen",
+      "ks_pvalues": [
+        0.019839242125644047,
+        0.7181574380356126,
+        0.8948800679675537
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.48,
+          "deviation": 0.020000000000000018,
+          "per_dim": [
+            0.48,
+            0.48,
+            0.48
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.7633333333333333,
+          "deviation": 0.036666666666666736,
+          "per_dim": [
+            0.73,
+            0.77,
+            0.79
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.8766666666666666,
+          "deviation": 0.023333333333333428,
+          "per_dim": [
+            0.85,
+            0.88,
+            0.9
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.94,
+          "deviation": 0.010000000000000009,
+          "per_dim": [
+            0.95,
+            0.93,
+            0.94
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.036666666666666736,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 36.38080453872681
+    },
+    {
+      "population": "elderly",
+      "bw": 65.0,
+      "age": 75.0,
+      "drug": "indomethacin",
+      "ks_pvalues": [
+        0.18025478001338005,
+        0.0019529150125949684,
+        0.022401933667068493
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.5566666666666668,
+          "deviation": 0.056666666666666754,
+          "per_dim": [
+            0.55,
+            0.56,
+            0.56
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.8099999999999999,
+          "deviation": 0.009999999999999898,
+          "per_dim": [
+            0.76,
+            0.87,
+            0.8
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.9333333333333332,
+          "deviation": 0.033333333333333215,
+          "per_dim": [
+            0.91,
+            0.95,
+            0.94
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9566666666666667,
+          "deviation": 0.00666666666666671,
+          "per_dim": [
+            0.94,
+            0.96,
+            0.97
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.056666666666666754,
+      "ks_pass": false,
+      "coverage_pass": true,
+      "pass": false,
+      "wall_s": 41.72408723831177
+    },
+    {
+      "population": "elderly",
+      "bw": 65.0,
+      "age": 75.0,
+      "drug": "posaconazole",
+      "ks_pvalues": [
+        0.7830499882004666,
+        0.0005551927327988775,
+        0.2526927570063874
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.5499999999999999,
+          "deviation": 0.04999999999999993,
+          "per_dim": [
+            0.48,
+            0.55,
+            0.62
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.82,
+          "deviation": 0.019999999999999907,
+          "per_dim": [
+            0.74,
+            0.84,
+            0.88
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.9133333333333332,
+          "deviation": 0.013333333333333197,
+          "per_dim": [
+            0.88,
+            0.94,
+            0.92
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9566666666666667,
+          "deviation": 0.00666666666666671,
+          "per_dim": [
+            0.93,
+            0.98,
+            0.96
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.04999999999999993,
+      "ks_pass": false,
+      "coverage_pass": true,
+      "pass": false,
+      "wall_s": 35.18607974052429
+    },
+    {
+      "population": "pediatric_5y",
+      "bw": 18.0,
+      "age": 5.0,
+      "drug": "morphine",
+      "ks_pvalues": [
+        3.242162784318055e-05,
+        1.2197869160090458e-05,
+        0.42641062421491094
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.4566666666666666,
+          "deviation": 0.04333333333333339,
+          "per_dim": [
+            0.46,
+            0.49,
+            0.42
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.7999999999999999,
+          "deviation": 1.1102230246251565e-16,
+          "per_dim": [
+            0.75,
+            0.82,
+            0.83
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.9,
+          "deviation": 0.0,
+          "per_dim": [
+            0.88,
+            0.9,
+            0.92
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.96,
+          "deviation": 0.010000000000000009,
+          "per_dim": [
+            0.95,
+            0.95,
+            0.98
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.04333333333333339,
+      "ks_pass": false,
+      "coverage_pass": true,
+      "pass": false,
+      "wall_s": 37.073031425476074
+    },
+    {
+      "population": "pediatric_5y",
+      "bw": 18.0,
+      "age": 5.0,
+      "drug": "clozapine",
+      "ks_pvalues": [
+        0.07648941364240387,
+        0.5182193645480672,
+        0.7510610234994359
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.47,
+          "deviation": 0.030000000000000027,
+          "per_dim": [
+            0.45,
+            0.5,
+            0.46
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.8666666666666667,
+          "deviation": 0.06666666666666665,
+          "per_dim": [
+            0.83,
+            0.89,
+            0.88
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.9366666666666666,
+          "deviation": 0.036666666666666625,
+          "per_dim": [
+            0.93,
+            0.94,
+            0.94
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9533333333333333,
+          "deviation": 0.0033333333333332993,
+          "per_dim": [
+            0.96,
+            0.95,
+            0.95
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.06666666666666665,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 37.895161628723145
+    },
+    {
+      "population": "pediatric_5y",
+      "bw": 18.0,
+      "age": 5.0,
+      "drug": "amantadine",
+      "ks_pvalues": [
+        0.08468707199222947,
+        0.02842257481961436,
+        0.01548311834604137
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.4666666666666666,
+          "deviation": 0.03333333333333338,
+          "per_dim": [
+            0.44,
+            0.48,
+            0.48
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.8133333333333334,
+          "deviation": 0.013333333333333308,
+          "per_dim": [
+            0.78,
+            0.85,
+            0.81
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.9,
+          "deviation": 0.0,
+          "per_dim": [
+            0.87,
+            0.92,
+            0.91
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9533333333333333,
+          "deviation": 0.0033333333333332993,
+          "per_dim": [
+            0.97,
+            0.94,
+            0.95
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.03333333333333338,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 41.47739624977112
+    },
+    {
+      "population": "pediatric_5y",
+      "bw": 18.0,
+      "age": 5.0,
+      "drug": "ketorolac",
+      "ks_pvalues": [
+        1.2197869160090458e-05,
+        0.001952915012582064,
+        0.6171494172888641
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.45999999999999996,
+          "deviation": 0.040000000000000036,
+          "per_dim": [
+            0.39,
+            0.48,
+            0.51
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.7966666666666667,
+          "deviation": 0.0033333333333332993,
+          "per_dim": [
+            0.75,
+            0.85,
+            0.79
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.91,
+          "deviation": 0.010000000000000009,
+          "per_dim": [
+            0.89,
+            0.91,
+            0.93
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9499999999999998,
+          "deviation": 1.1102230246251565e-16,
+          "per_dim": [
+            0.94,
+            0.95,
+            0.96
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.040000000000000036,
+      "ks_pass": false,
+      "coverage_pass": true,
+      "pass": false,
+      "wall_s": 38.998963356018066
+    },
+    {
+      "population": "pediatric_5y",
+      "bw": 18.0,
+      "age": 5.0,
+      "drug": "rivaroxaban",
+      "ks_pvalues": [
+        0.5182193645480664,
+        0.4560077143943707,
+        0.34454932202132205
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.48,
+          "deviation": 0.020000000000000018,
+          "per_dim": [
+            0.48,
+            0.51,
+            0.45
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.79,
+          "deviation": 0.010000000000000009,
+          "per_dim": [
+            0.81,
+            0.8,
+            0.76
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.8933333333333334,
+          "deviation": 0.006666666666666599,
+          "per_dim": [
+            0.92,
+            0.9,
+            0.86
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9566666666666667,
+          "deviation": 0.00666666666666671,
+          "per_dim": [
+            1.0,
+            0.96,
+            0.91
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.020000000000000018,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 33.08852767944336
+    },
+    {
+      "population": "pediatric_5y",
+      "bw": 18.0,
+      "age": 5.0,
+      "drug": "diclofenac",
+      "ks_pvalues": [
+        0.6846706791645845,
+        0.21414632569910497,
+        0.6171494172888633
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.5266666666666666,
+          "deviation": 0.026666666666666616,
+          "per_dim": [
+            0.5,
+            0.57,
+            0.51
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.8233333333333333,
+          "deviation": 0.023333333333333206,
+          "per_dim": [
+            0.82,
+            0.85,
+            0.8
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.92,
+          "deviation": 0.020000000000000018,
+          "per_dim": [
+            0.94,
+            0.93,
+            0.89
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9566666666666667,
+          "deviation": 0.00666666666666671,
+          "per_dim": [
+            0.98,
+            0.94,
+            0.95
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.026666666666666616,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 36.291422843933105
+    },
+    {
+      "population": "pediatric_5y",
+      "bw": 18.0,
+      "age": 5.0,
+      "drug": "digoxin",
+      "ks_pvalues": [
+        0.01983924212565265,
+        0.05580722295912035,
+        0.10330374901819939
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.5133333333333333,
+          "deviation": 0.013333333333333308,
+          "per_dim": [
+            0.47,
+            0.61,
+            0.46
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.7566666666666667,
+          "deviation": 0.043333333333333335,
+          "per_dim": [
+            0.7,
+            0.82,
+            0.75
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.9,
+          "deviation": 0.0,
+          "per_dim": [
+            0.9,
+            0.91,
+            0.89
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9433333333333334,
+          "deviation": 0.006666666666666599,
+          "per_dim": [
+            0.95,
+            0.96,
+            0.92
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.043333333333333335,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 24.85258722305298
+    },
+    {
+      "population": "pediatric_5y",
+      "bw": 18.0,
+      "age": 5.0,
+      "drug": "pravastatin",
+      "ks_pvalues": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "coverage": {},
+      "max_coverage_deviation": 1.0,
+      "ks_pass": false,
+      "coverage_pass": false,
+      "pass": false,
+      "sampling_error": "AssertionError",
+      "wall_s": 42.76365900039673
+    },
+    {
+      "population": "pediatric_5y",
+      "bw": 18.0,
+      "age": 5.0,
+      "drug": "sildenafil",
+      "ks_pvalues": [
+        0.6509082962856858,
+        0.3979325641016064,
+        0.003044504090837437
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.49333333333333335,
+          "deviation": 0.006666666666666654,
+          "per_dim": [
+            0.52,
+            0.48,
+            0.48
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.8300000000000001,
+          "deviation": 0.030000000000000027,
+          "per_dim": [
+            0.83,
+            0.86,
+            0.8
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.9266666666666667,
+          "deviation": 0.026666666666666727,
+          "per_dim": [
+            0.93,
+            0.9,
+            0.95
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9566666666666667,
+          "deviation": 0.00666666666666671,
+          "per_dim": [
+            0.96,
+            0.95,
+            0.96
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.030000000000000027,
+      "ks_pass": false,
+      "coverage_pass": true,
+      "pass": false,
+      "wall_s": 37.55265951156616
+    },
+    {
+      "population": "pediatric_5y",
+      "bw": 18.0,
+      "age": 5.0,
+      "drug": "phenytoin",
+      "ks_pvalues": [
+        0.8948800679675544,
+        0.5506038212152977,
+        0.5506038212152977
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.5333333333333333,
+          "deviation": 0.033333333333333326,
+          "per_dim": [
+            0.51,
+            0.55,
+            0.54
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.8266666666666667,
+          "deviation": 0.026666666666666616,
+          "per_dim": [
+            0.82,
+            0.84,
+            0.82
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.9033333333333333,
+          "deviation": 0.0033333333333332993,
+          "per_dim": [
+            0.9,
+            0.92,
+            0.89
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9533333333333333,
+          "deviation": 0.0033333333333332993,
+          "per_dim": [
+            0.95,
+            0.96,
+            0.95
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.033333333333333326,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 42.373470306396484
+    },
+    {
+      "population": "pediatric_5y",
+      "bw": 18.0,
+      "age": 5.0,
+      "drug": "tamoxifen",
+      "ks_pvalues": [
+        8.150876724635971e-06,
+        0.42641062421491094,
+        0.5836423551202066
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.4766666666666666,
+          "deviation": 0.023333333333333373,
+          "per_dim": [
+            0.42,
+            0.47,
+            0.54
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.75,
+          "deviation": 0.050000000000000044,
+          "per_dim": [
+            0.66,
+            0.79,
+            0.8
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.8533333333333334,
+          "deviation": 0.046666666666666634,
+          "per_dim": [
+            0.81,
+            0.85,
+            0.9
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.93,
+          "deviation": 0.019999999999999907,
+          "per_dim": [
+            0.89,
+            0.93,
+            0.97
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.050000000000000044,
+      "ks_pass": false,
+      "coverage_pass": true,
+      "pass": false,
+      "wall_s": 36.08724761009216
+    },
+    {
+      "population": "pediatric_5y",
+      "bw": 18.0,
+      "age": 5.0,
+      "drug": "indomethacin",
+      "ks_pvalues": [
+        0.00028429229081609317,
+        0.00033692770198340093,
+        0.11381468170073904
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.4633333333333333,
+          "deviation": 0.03666666666666668,
+          "per_dim": [
+            0.43,
+            0.5,
+            0.46
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.79,
+          "deviation": 0.010000000000000009,
+          "per_dim": [
+            0.79,
+            0.8,
+            0.78
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.8866666666666667,
+          "deviation": 0.013333333333333308,
+          "per_dim": [
+            0.91,
+            0.89,
+            0.86
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9466666666666667,
+          "deviation": 0.0033333333333332993,
+          "per_dim": [
+            0.97,
+            0.95,
+            0.92
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.03666666666666668,
+      "ks_pass": false,
+      "coverage_pass": true,
+      "pass": false,
+      "wall_s": 41.80888819694519
+    },
+    {
+      "population": "pediatric_5y",
+      "bw": 18.0,
+      "age": 5.0,
+      "drug": "posaconazole",
+      "ks_pvalues": [
+        0.5506038212152973,
+        0.42641062421491094,
+        0.12518948731353885
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.4666666666666666,
+          "deviation": 0.03333333333333338,
+          "per_dim": [
+            0.5,
+            0.42,
+            0.48
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.7966666666666667,
+          "deviation": 0.0033333333333332993,
+          "per_dim": [
+            0.81,
+            0.77,
+            0.81
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.9033333333333333,
+          "deviation": 0.0033333333333332993,
+          "per_dim": [
+            0.9,
+            0.91,
+            0.9
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9533333333333333,
+          "deviation": 0.0033333333333332993,
+          "per_dim": [
+            0.97,
+            0.96,
+            0.93
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.03333333333333338,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 35.562132358551025
+    },
+    {
+      "population": "infant_1y",
+      "bw": 8.0,
+      "age": 1.0,
+      "drug": "morphine",
+      "ks_pvalues": [
+        8.150876724635971e-06,
+        5.002927736300103e-07,
+        0.01983924212565265
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.48,
+          "deviation": 0.020000000000000018,
+          "per_dim": [
+            0.4,
+            0.45,
+            0.59
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.7833333333333333,
+          "deviation": 0.01666666666666672,
+          "per_dim": [
+            0.7,
+            0.75,
+            0.9
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.8799999999999999,
+          "deviation": 0.02000000000000013,
+          "per_dim": [
+            0.82,
+            0.88,
+            0.94
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9433333333333334,
+          "deviation": 0.006666666666666599,
+          "per_dim": [
+            0.9,
+            0.96,
+            0.97
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.02000000000000013,
+      "ks_pass": false,
+      "coverage_pass": true,
+      "pass": false,
+      "wall_s": 37.988137006759644
+    },
+    {
+      "population": "infant_1y",
+      "bw": 8.0,
+      "age": 1.0,
+      "drug": "clozapine",
+      "ks_pvalues": [
+        0.017540807429153774,
+        0.8137761665209279,
+        0.6171494172888633
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.5066666666666667,
+          "deviation": 0.00666666666666671,
+          "per_dim": [
+            0.47,
+            0.47,
+            0.58
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.8033333333333333,
+          "deviation": 0.0033333333333332993,
+          "per_dim": [
+            0.8,
+            0.76,
+            0.85
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.9166666666666666,
+          "deviation": 0.016666666666666607,
+          "per_dim": [
+            0.89,
+            0.93,
+            0.93
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9766666666666666,
+          "deviation": 0.026666666666666616,
+          "per_dim": [
+            0.97,
+            0.99,
+            0.97
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.026666666666666616,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 37.80712890625
+    },
+    {
+      "population": "infant_1y",
+      "bw": 8.0,
+      "age": 1.0,
+      "drug": "amantadine",
+      "ks_pvalues": [
+        0.2526927570063955,
+        0.0030445040908382973,
+        0.9856930192430912
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.48666666666666664,
+          "deviation": 0.013333333333333364,
+          "per_dim": [
+            0.47,
+            0.46,
+            0.53
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.7633333333333333,
+          "deviation": 0.036666666666666736,
+          "per_dim": [
+            0.72,
+            0.78,
+            0.79
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.8566666666666666,
+          "deviation": 0.043333333333333446,
+          "per_dim": [
+            0.82,
+            0.91,
+            0.84
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9266666666666667,
+          "deviation": 0.023333333333333206,
+          "per_dim": [
+            0.9,
+            0.95,
+            0.93
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.043333333333333446,
+      "ks_pass": false,
+      "coverage_pass": true,
+      "pass": false,
+      "wall_s": 40.62549448013306
+    },
+    {
+      "population": "infant_1y",
+      "bw": 8.0,
+      "age": 1.0,
+      "drug": "ketorolac",
+      "ks_pvalues": [
+        0.01548311834604481,
+        0.0006535512411085806,
+        0.013644293110835292
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.5,
+          "deviation": 0.0,
+          "per_dim": [
+            0.41,
+            0.52,
+            0.57
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.8033333333333333,
+          "deviation": 0.0033333333333332993,
+          "per_dim": [
+            0.79,
+            0.78,
+            0.84
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.9066666666666667,
+          "deviation": 0.00666666666666671,
+          "per_dim": [
+            0.86,
+            0.93,
+            0.93
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9466666666666667,
+          "deviation": 0.0033333333333332993,
+          "per_dim": [
+            0.93,
+            0.95,
+            0.96
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.00666666666666671,
+      "ks_pass": false,
+      "coverage_pass": true,
+      "pass": false,
+      "wall_s": 37.089406967163086
+    },
+    {
+      "population": "infant_1y",
+      "bw": 8.0,
+      "age": 1.0,
+      "drug": "rivaroxaban",
+      "ks_pvalues": [
+        3.986959734522374e-07,
+        0.29612160727892417,
+        0.08468707199223291
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.48,
+          "deviation": 0.020000000000000018,
+          "per_dim": [
+            0.34,
+            0.5,
+            0.6
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.7866666666666666,
+          "deviation": 0.01333333333333342,
+          "per_dim": [
+            0.72,
+            0.8,
+            0.84
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.8633333333333333,
+          "deviation": 0.036666666666666736,
+          "per_dim": [
+            0.82,
+            0.87,
+            0.9
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9366666666666665,
+          "deviation": 0.01333333333333342,
+          "per_dim": [
+            0.91,
+            0.95,
+            0.95
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.036666666666666736,
+      "ks_pass": false,
+      "coverage_pass": true,
+      "pass": false,
+      "wall_s": 32.45744299888611
+    },
+    {
+      "population": "infant_1y",
+      "bw": 8.0,
+      "age": 1.0,
+      "drug": "diclofenac",
+      "ks_pvalues": [
+        0.9171597106843917,
+        0.08468707199223291,
+        0.8948800679675544
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.5299999999999999,
+          "deviation": 0.029999999999999916,
+          "per_dim": [
+            0.49,
+            0.53,
+            0.57
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.8133333333333334,
+          "deviation": 0.013333333333333308,
+          "per_dim": [
+            0.76,
+            0.85,
+            0.83
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.9133333333333334,
+          "deviation": 0.01333333333333342,
+          "per_dim": [
+            0.9,
+            0.92,
+            0.92
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9533333333333333,
+          "deviation": 0.0033333333333332993,
+          "per_dim": [
+            0.95,
+            0.96,
+            0.95
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.029999999999999916,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 39.080005407333374
+    },
+    {
+      "population": "infant_1y",
+      "bw": 8.0,
+      "age": 1.0,
+      "drug": "digoxin",
+      "ks_pvalues": [
+        0.00039863290775468674,
+        0.0022682268371175805,
+        0.02842257481961436
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.51,
+          "deviation": 0.010000000000000009,
+          "per_dim": [
+            0.45,
+            0.59,
+            0.49
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.7733333333333333,
+          "deviation": 0.026666666666666727,
+          "per_dim": [
+            0.7,
+            0.83,
+            0.79
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.8833333333333333,
+          "deviation": 0.01666666666666672,
+          "per_dim": [
+            0.84,
+            0.91,
+            0.9
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9133333333333334,
+          "deviation": 0.036666666666666514,
+          "per_dim": [
+            0.92,
+            0.91,
+            0.91
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.036666666666666514,
+      "ks_pass": false,
+      "coverage_pass": true,
+      "pass": false,
+      "wall_s": 25.172388315200806
+    },
+    {
+      "population": "infant_1y",
+      "bw": 8.0,
+      "age": 1.0,
+      "drug": "pravastatin",
+      "ks_pvalues": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "coverage": {},
+      "max_coverage_deviation": 1.0,
+      "ks_pass": false,
+      "coverage_pass": false,
+      "pass": false,
+      "sampling_error": "Sampling aborted early because rejection sampling exceeded max_sampling_time. This is likely due to extremely low acceptance. You can disable rejection sampling using `reject_outside_prior=False` to draw samples directly from the trained estimator. Consider switching to MCMC or VI, or checking for model misspecification.",
+      "wall_s": 64.77470016479492
+    },
+    {
+      "population": "infant_1y",
+      "bw": 8.0,
+      "age": 1.0,
+      "drug": "sildenafil",
+      "ks_pvalues": [
+        0.4560077143943717,
+        0.12518948731353885,
+        0.7181574380356137
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.5433333333333333,
+          "deviation": 0.043333333333333335,
+          "per_dim": [
+            0.56,
+            0.51,
+            0.56
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.8566666666666666,
+          "deviation": 0.05666666666666653,
+          "per_dim": [
+            0.83,
+            0.89,
+            0.85
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.9166666666666666,
+          "deviation": 0.016666666666666607,
+          "per_dim": [
+            0.9,
+            0.92,
+            0.93
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9333333333333335,
+          "deviation": 0.016666666666666496,
+          "per_dim": [
+            0.94,
+            0.93,
+            0.93
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.05666666666666653,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 37.77511191368103
+    },
+    {
+      "population": "infant_1y",
+      "bw": 8.0,
+      "age": 1.0,
+      "drug": "phenytoin",
+      "ks_pvalues": [
+        0.31970891966275516,
+        3.242162784318055e-05,
+        0.00144044653610121
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.4666666666666666,
+          "deviation": 0.03333333333333338,
+          "per_dim": [
+            0.47,
+            0.4,
+            0.53
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.7933333333333333,
+          "deviation": 0.00666666666666671,
+          "per_dim": [
+            0.74,
+            0.76,
+            0.88
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.89,
+          "deviation": 0.010000000000000009,
+          "per_dim": [
+            0.87,
+            0.86,
+            0.94
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9433333333333334,
+          "deviation": 0.006666666666666599,
+          "per_dim": [
+            0.92,
+            0.91,
+            1.0
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.03333333333333338,
+      "ks_pass": false,
+      "coverage_pass": true,
+      "pass": false,
+      "wall_s": 42.591426610946655
+    },
+    {
+      "population": "infant_1y",
+      "bw": 8.0,
+      "age": 1.0,
+      "drug": "tamoxifen",
+      "ks_pvalues": [
+        0.0022682268371260117,
+        0.34454932202132205,
+        0.9668325640890826
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.44,
+          "deviation": 0.06,
+          "per_dim": [
+            0.38,
+            0.43,
+            0.51
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.7633333333333333,
+          "deviation": 0.036666666666666736,
+          "per_dim": [
+            0.67,
+            0.8,
+            0.82
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.8733333333333334,
+          "deviation": 0.026666666666666616,
+          "per_dim": [
+            0.81,
+            0.91,
+            0.9
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9533333333333333,
+          "deviation": 0.0033333333333332993,
+          "per_dim": [
+            0.94,
+            0.95,
+            0.97
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.06,
+      "ks_pass": false,
+      "coverage_pass": true,
+      "pass": false,
+      "wall_s": 36.53616118431091
+    },
+    {
+      "population": "infant_1y",
+      "bw": 8.0,
+      "age": 1.0,
+      "drug": "indomethacin",
+      "ks_pvalues": [
+        0.008093692737058384,
+        1.0682826871056052e-08,
+        0.03193610782728346
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.48666666666666664,
+          "deviation": 0.013333333333333364,
+          "per_dim": [
+            0.52,
+            0.41,
+            0.53
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.8166666666666668,
+          "deviation": 0.01666666666666672,
+          "per_dim": [
+            0.81,
+            0.75,
+            0.89
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.9066666666666666,
+          "deviation": 0.006666666666666599,
+          "per_dim": [
+            0.9,
+            0.85,
+            0.97
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.96,
+          "deviation": 0.010000000000000009,
+          "per_dim": [
+            0.97,
+            0.92,
+            0.99
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.01666666666666672,
+      "ks_pass": false,
+      "coverage_pass": true,
+      "pass": false,
+      "wall_s": 42.074124813079834
+    },
+    {
+      "population": "infant_1y",
+      "bw": 8.0,
+      "age": 1.0,
+      "drug": "posaconazole",
+      "ks_pvalues": [
+        0.7830499882004666,
+        0.6171494172888633,
+        0.34454932202132205
+      ],
+      "coverage": {
+        "50": {
+          "nominal": 0.5,
+          "empirical_mean": 0.5333333333333333,
+          "deviation": 0.033333333333333326,
+          "per_dim": [
+            0.47,
+            0.56,
+            0.57
+          ]
+        },
+        "80": {
+          "nominal": 0.8,
+          "empirical_mean": 0.8166666666666668,
+          "deviation": 0.01666666666666672,
+          "per_dim": [
+            0.8,
+            0.84,
+            0.81
+          ]
+        },
+        "90": {
+          "nominal": 0.9,
+          "empirical_mean": 0.9133333333333334,
+          "deviation": 0.01333333333333342,
+          "per_dim": [
+            0.89,
+            0.93,
+            0.92
+          ]
+        },
+        "95": {
+          "nominal": 0.95,
+          "empirical_mean": 0.9466666666666667,
+          "deviation": 0.0033333333333332993,
+          "per_dim": [
+            0.94,
+            0.95,
+            0.95
+          ]
+        }
+      },
+      "max_coverage_deviation": 0.033333333333333326,
+      "ks_pass": true,
+      "coverage_pass": true,
+      "pass": true,
+      "wall_s": 35.92068314552307
+    }
+  ],
+  "summary": {
+    "total_pairs": 52,
+    "pass": 28,
+    "pass_rate": 0.5384615384615384,
+    "wall_s": 2004.2976248264313
+  }
+}

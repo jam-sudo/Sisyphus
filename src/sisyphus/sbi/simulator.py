@@ -33,6 +33,7 @@ from sisyphus.engine.compiler import CompiledODE, ODECompiler, ResolvedParams
 from sisyphus.engine.solver import solve
 from sisyphus.graph.body import BodyGraph
 from sisyphus.graph.builder import build_from_yaml
+from sisyphus.physiology.correlated import resample_correlated_abundances
 from sisyphus.resources import get_resource_config
 
 logger = logging.getLogger(__name__)
@@ -143,7 +144,7 @@ class EngineSimulator:
         """
         overridden = apply_theta_to_drug(self.nominal_drug, theta, self.nominal_peff)
         rng = np.random.default_rng(seed)
-        rg = self.graph.sample(rng)
+        rg = self._sample_graph(rng)
         rd = overridden.sample(rng)
         params = ResolvedParams(rg, rd)
         y0 = np.zeros(self.compiled.n_states)
@@ -163,6 +164,9 @@ class EngineSimulator:
             return float("-inf")
         noise = rng.normal(0.0, self.obs_sigma_log10)
         return float(np.log10(cmax) + noise)
+
+    def _sample_graph(self, rng: np.random.Generator) -> BodyGraph:
+        return resample_correlated_abundances(self.graph, rng).sample(rng)
 
     def simulate_batch(
         self,

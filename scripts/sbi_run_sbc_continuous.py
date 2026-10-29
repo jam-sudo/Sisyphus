@@ -34,6 +34,10 @@ sys.path.insert(0, str(ROOT / "src"))
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 log = logging.getLogger("sbi_sbc_continuous")
 
+# Source: sbi DirectPosterior.sample bounds pathological prior-support rejection.
+MAX_SBC_SAMPLE_TIME_S = 30.0
+
+from sisyphus.physiology.correlation_registry import load_from_json  # noqa: E402
 from sisyphus.sbi.multi_drug import (  # noqa: E402
     extract_drug_features,
     load_drug_specs_from_json,
@@ -41,7 +45,6 @@ from sisyphus.sbi.multi_drug import (  # noqa: E402
 from sisyphus.sbi.physiology_generator import generate_physiology  # noqa: E402
 from sisyphus.sbi.priors import build_box_prior  # noqa: E402
 from sisyphus.sbi.simulator import EngineSimulator, apply_theta_to_drug  # noqa: E402
-
 
 _ADULT_PHYS = ROOT / "data" / "physiology" / "reference_man.yaml"
 _DEFAULT_POPS = [
@@ -84,7 +87,10 @@ def _coverage_and_ranks(thetas_true, posterior, xs_packed, levels, n_posterior=5
     cov = {level: np.zeros(d_theta, dtype=np.int64) for level in levels}
     for i in range(n_cal):
         x_t = torch.as_tensor(xs_packed[i:i + 1], dtype=torch.float32)
-        samples = posterior.sample((n_posterior,), x=x_t, show_progress_bars=False)
+        samples = posterior.sample(
+            (n_posterior,), x=x_t, show_progress_bars=False,
+            max_sampling_time=MAX_SBC_SAMPLE_TIME_S,
+        )
         s = samples.detach().cpu().numpy()
         for d in range(d_theta):
             ranks[i, d] = int(np.sum(s[:, d] < thetas_true[i, d]))
@@ -113,11 +119,13 @@ def main() -> int:
     p.add_argument("--populations", type=str, default="",
                    help="JSON list of {name, bw, age}; empty→default 4-pop grid")
     args = p.parse_args()
+    load_from_json(ROOT / "data" / "physiology" / "achour2021_correlation.json")
 
     levels = tuple(int(x) for x in args.levels.split(","))
 
     log.info("Loading posterior: %s", args.posterior)
     import torch
+    torch.manual_seed(args.seed)
     payload = torch.load(args.posterior, weights_only=False)
     posterior_obj = payload["posterior"]
     aux_path = args.posterior.with_suffix(".aux.pt")
@@ -198,7 +206,9 @@ def main() -> int:
             t0 = time.time()
             log.info("[sbc-cont] [%d/%d] %s / %s", pair_idx, total_pairs, pop_name, spec.name)
 
-            graph = generate_physiology(bw, age)
+            graph = generate_physiology(
+                bw, age, rng=np.random.default_rng(args.seed + pair_idx * 1000)
+            )
             compiled = ODECompiler().compile(graph)
             profile = compute_profile(spec.smiles)
             adme = predict_adme(profile)
@@ -232,9 +242,27 @@ def main() -> int:
                 axis=1,
             )  # (n_cal, 15)
 
-            ranks, cov = _coverage_and_ranks(
-                thetas_true, posterior_obj, xs_packed, levels, args.n_posterior,
-            )
+            try:
+                ranks, cov = _coverage_and_ranks(
+                    thetas_true, posterior_obj, xs_packed, levels, args.n_posterior,
+                )
+            except (RuntimeError, AssertionError) as exc:
+                log.warning("  posterior sampling failed for %s / %s: %s", pop_name, spec.name, exc)
+                out["pairs"].append({
+                    "population": pop_name,
+                    "bw": bw,
+                    "age": age,
+                    "drug": spec.name,
+                    "ks_pvalues": [0.0] * 3,
+                    "coverage": {},
+                    "max_coverage_deviation": 1.0,
+                    "ks_pass": False,
+                    "coverage_pass": False,
+                    "pass": False,
+                    "sampling_error": str(exc) or type(exc).__name__,
+                    "wall_s": time.time() - t0,
+                })
+                continue
 
             # KS uniformity
             n_post = args.n_posterior
