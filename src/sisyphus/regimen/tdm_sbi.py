@@ -405,10 +405,13 @@ def sbi_update(
                 )
                 if not sim.solver_success:
                     return -np.inf
-                predicted = np.array([
-                    np.interp(obs.time_h, sim.time_h, sim.concentrations[obs.node])
-                    for obs in observations
-                ])
+                if len(observations) == 1:
+                    predicted = np.array([np.max(sim.concentrations[obs0.node])])
+                else:
+                    predicted = np.array([
+                        np.interp(obs.time_h, sim.time_h, sim.concentrations[obs.node])
+                        for obs in observations
+                    ])
                 if np.any(predicted <= 0) or np.any(~np.isfinite(predicted)):
                     return -np.inf
                 residual = (log_obs - np.log10(predicted)) / log_sigma

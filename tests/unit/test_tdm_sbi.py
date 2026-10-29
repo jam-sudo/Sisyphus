@@ -81,18 +81,25 @@ class TestSBIDispatch:
     ):
         from types import SimpleNamespace
 
+        from sisyphus.regimen import tdm_sbi
         from sisyphus.regimen.tdm_sbi import sbi_update
         from sisyphus.sbi import amortizer, importance
 
         graph, compiled = physiology
         drug, logp = morphine_drug
         seen = []
+        log_densities = []
         monkeypatch.setattr(amortizer, "load_result", lambda path: SimpleNamespace(
             prior_low=np.array([-1.0, -4.5, -0.5]), posterior=object(),
+        ))
+        monkeypatch.setattr(tdm_sbi, "solve_regimen", lambda *args, **kwargs: SimpleNamespace(
+            solver_success=True, time_h=np.array([0.0, 1.0, 2.0]),
+            concentrations={"venous_blood": np.array([0.01, 0.005, 0.02])},
         ))
 
         def corrected(posterior, x, log_draw, *, n_draws, seed):
             seen.append(len(x))
+            log_densities.append(log_draw(np.zeros(3), np.random.default_rng(1)))
             return np.zeros((n_draws, 3)), 64.0
 
         monkeypatch.setattr(importance, "sample_corrected", corrected)
@@ -102,6 +109,10 @@ class TestSBIDispatch:
             logp_hint=logp,
         )
         assert seen == [13]
+        sigma = np.log10(1.1)
+        expected = (-0.5 * ((np.log10(0.01865) - np.log10(0.02)) / sigma) ** 2
+                    - np.log(sigma) - 0.5 * np.log(2 * np.pi))
+        assert log_densities[0] == pytest.approx(expected)
         assert result.ess == 64.0
 
     def test_retrained_hierarchical_posterior_runs_end_to_end(

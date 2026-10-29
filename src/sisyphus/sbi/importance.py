@@ -125,7 +125,8 @@ class CorrectedSBCPosterior:
             dose = sim.nominal_drug.dose_mg
             interval = float(context[10]) * HOURS_PER_DAY_H
             n_doses = int(round(float(context[11]) * MAX_DOSE_COUNT))
-            regimen = DosingRegimen.oral_repeated(dose, interval, n_doses)
+            regimen = (DosingRegimen.single_oral(dose) if n_doses == 1
+                       else DosingRegimen.oral_repeated(dose, interval, n_doses))
             sigma = ASSAY_SIGMA_LOG10
             max_log_likelihood = len(times) * (
                 -np.log(sigma) - 0.5 * np.log(2 * np.pi)

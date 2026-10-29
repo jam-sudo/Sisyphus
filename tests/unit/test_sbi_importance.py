@@ -64,3 +64,21 @@ def test_sbc_sampler_counts_exact_rejection_fallback(monkeypatch):
     draws = sampler.sample((100,), x=torch.as_tensor([[0.7]]))
     assert sampler.rejection_count == 1
     assert 0.5 < draws[:, 0].mean() < 0.9
+
+
+def test_time_aware_sampler_accepts_single_dose_context(monkeypatch):
+    class Simulator:
+        nominal_drug = type("Drug", (), {"dose_mg": 10.0})()
+
+    def corrected(*args, **kwargs):
+        return np.zeros((2, 3)), 64.0
+
+    monkeypatch.setattr(importance, "sample_corrected", corrected)
+    context = np.zeros(24, dtype=np.float32)
+    context[:3] = [1 / 24, -1.0, 1.0]
+    context[11] = 1 / 3
+    sampler = CorrectedSBCPosterior(
+        UniformPosterior(), Simulator(), seed=7, multi_observation=True,
+    )
+    draws = sampler.sample((2,), x=torch.as_tensor(context[None, :]))
+    assert draws.shape == (2, 3)
