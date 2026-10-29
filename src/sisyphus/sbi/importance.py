@@ -66,6 +66,9 @@ def sample_corrected(
             torch.as_tensor(theta, dtype=torch.float32), x=x_t,
         ).detach().cpu().numpy().reshape(-1)
     log_p = -np.log(np.prod(PRIOR_HIGH - PRIOR_LOW))
+    log_p_theta = np.where(
+        np.all((theta >= PRIOR_LOW) & (theta <= PRIOR_HIGH), axis=1), log_p, -np.inf,
+    )
     log_q = np.logaddexp(
         np.log1p(-actual_fraction) + log_q_flow,
         np.log(actual_fraction) + log_p if actual_fraction else -np.inf,
@@ -74,7 +77,7 @@ def sample_corrected(
     for i, row in enumerate(theta):
         draws = [log_likelihood_draw(row, rng) for _ in range(n_nuisance)]
         log_likelihood[i] = logsumexp(draws) - np.log(n_nuisance)
-    log_weights = log_likelihood + log_p - log_q
+    log_weights = log_likelihood + log_p_theta - log_q
     if not np.any(np.isfinite(log_weights)):
         raise LowImportanceESS("All corrected likelihood weights are zero")
     weights = np.exp(log_weights - logsumexp(log_weights))

@@ -48,6 +48,21 @@ def test_corrected_sampler_rejects_degenerate_weights():
         )
 
 
+def test_corrected_sampler_excludes_flow_draws_outside_box_prior():
+    class OutsidePosterior(UniformPosterior):
+        def sample(self, shape, *, x, show_progress_bars):
+            return torch.as_tensor(
+                np.tile(PRIOR_HIGH + 1.0, (shape[0], 1)), dtype=torch.float32,
+            )
+
+    draws, ess = sample_corrected(
+        OutsidePosterior(), np.zeros(1), lambda theta, rng: 0.0,
+        n_draws=100, n_proposals=100, n_nuisance=1, seed=7, ess_floor=1,
+    )
+    assert np.all((draws >= PRIOR_LOW) & (draws <= PRIOR_HIGH))
+    assert ess == pytest.approx(5)
+
+
 def test_sbc_sampler_counts_exact_rejection_fallback(monkeypatch):
     class Simulator:
         obs_sigma_log10 = 0.2
