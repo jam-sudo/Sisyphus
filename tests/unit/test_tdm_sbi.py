@@ -202,7 +202,7 @@ class TestSBIDispatch:
         )
 
     def test_sbi_multi_obs_reweight_affects_posterior(self, physiology, morphine_drug):
-        """Multi-obs SBI should produce a different posterior than single-obs.
+        """The legacy multi-obs reweight path should alter posterior weights.
 
         With an extra observation that disagrees with the first (higher
         concentration later than expected for morphine's half-life), the
@@ -224,6 +224,7 @@ class TestSBIDispatch:
         r2 = bayesian_update(
             compiled, graph, drug, regimen, obs2,
             method="sbi", n_prior=80, logp_hint=logp, seed=42,
+            sbi_posterior_path=str(POSTERIOR_PATH),
         )
         assert r1.n_successful > 0
         assert r2.n_successful > 0
