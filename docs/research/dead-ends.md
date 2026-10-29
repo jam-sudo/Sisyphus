@@ -567,7 +567,7 @@ Follow-up (2026-10-29): replacing the nine molecular descriptors with the engine
 
 ### DE-62 — SBI multi-observation and continuous age/weight amortizers fail SBC (2026-10-29)
 
-A time-aware multi-observation flow trained on 27,500 simulated rows passed SBC for 7/13 drugs and was not shipped (`data/validation/sbi_sbc_multi_observation_current.json`). Replacing discrete physiology with continuous age/weight sampling passed 28/52 population–drug SBC gates versus 41/52 for the prior model, so the replacement was rejected (`data/validation/sbi_sbc_continuous_current.json`; baseline `data/validation/sbi_sbc_continuous.json`). **Telltale:** additional observations or continuous covariates do not establish calibration when the SBC pass count falls.
+A time-aware multi-observation flow trained on 27,500 simulated rows passed current-engine SBC for 7/13 drugs. It now ships only for those drugs under the per-drug SBC and ≤0.10 coverage-deviation rule; all others retain their prior TDM path (`data/validation/sbi_sbc_multi_observation_current.json`). The old continuous age/weight model passed 41/52 population–drug gates on its training-era engine but only 1/52 on the current engine (`data/validation/sbi_sbc_continuous.json`, `data/validation/sbi_sbc_continuous_stale_current.json`). A first current-engine candidate passed 28/52; a retry with 110,000 rows, a 128-feature/12-transform flow, and 79 training epochs passed 29/52 and replaced the stale model under the current-engine comparison rule (`data/validation/sbi_sbc_continuous_current.json`, `data/validation/sbi_sbc_continuous_retry_current.json`). **Telltale:** aggregate SBC remains failed; relative improvement does not establish calibration across all populations and drugs.
 
 ---
 

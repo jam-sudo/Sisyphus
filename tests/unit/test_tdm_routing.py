@@ -218,6 +218,7 @@ def test_validated_sbi_engine_revision(tmp_path, monkeypatch, caplog):
 
 @pytest.mark.parametrize("model_name", [
     "multi_drug_nsf.pt", "hierarchical_nsf_2k.pt", "multi_observation_nsf.pt",
+    "continuous_hierarchical_nsf.pt",
 ])
 def test_sbi_model_warns_after_physiology_and_kp_change(model_name, caplog):
     from sisyphus.regimen.tdm_sbi import _warn_engine_revision

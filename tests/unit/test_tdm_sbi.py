@@ -76,6 +76,21 @@ def _posterior_prior_matches_current() -> bool:
     reason="Posterior trained with old fup parameterization (pre-logit); retrain needed",
 )
 class TestSBIDispatch:
+    def test_retrained_continuous_posterior_runs_end_to_end(
+        self, physiology, morphine_drug,
+    ):
+        from sisyphus.regimen.tdm_sbi import sbi_update
+
+        graph, compiled = physiology
+        drug, logp = morphine_drug
+        result = sbi_update(
+            compiled, graph, drug, DosingRegimen.single_oral(30.0),
+            (Observation(1.0, 0.01865),), n_samples=100, n_predictive_sims=5,
+            body_weight_kg=70.0, age_years=35.0, logp_hint=logp,
+        )
+        assert result.n_successful > 0
+        assert result.posterior_cmax.mean > 0
+
     def test_continuous_context_uses_14_feature_standardizer(
         self, physiology, morphine_drug, monkeypatch,
     ):

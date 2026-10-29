@@ -286,6 +286,8 @@ Effective sample size (ESS = $1/\sum w_i^2$) is monitored for importance-based m
 
 For two or three observations, a time-aware flow conditions on the observation times, concentrations, and dosing regimen for the drugs marked `use_native` in the same routing table. Its per-drug SBC and coverage gate passes for 7/13 validation drugs; the global gate fails. Other drugs retain their existing TDM method, and SBI routes use first-observation conditioning with likelihood reweighting. The time-aware path requires equal oral bolus doses (up to three) and observations 1, 2, 4, 8, or 12 hours after the last dose. Unsupported regimens, observation times, and population or age/weight covariates retain the existing path.
 
+With `--method sbi` and both body weight and age supplied, TDM uses the retrained continuous-covariate flow. Its current-engine SBC passes 29/52 population–drug pairs versus 1/52 for the stale model it replaces; it remains experimental because the aggregate gate fails.
+
 </details>
 
 <details>
