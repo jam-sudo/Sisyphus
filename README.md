@@ -272,11 +272,11 @@ Steady state is declared when trough variation falls below 5% across the last th
 
 Given observed plasma concentrations, a **dispatched Bayesian router** (`data/sbi/method_routing.json`) refines population-level parameter distributions into individual posteriors with one of three methods per drug:
 
-- **SBI (simulation-based inference; default, 12/13 configured drugs).** Amortized neural posterior estimation (neural spline flow) conditioned on simulator output and patient observation, pre-trained offline per drug. Inference is a single forward pass (milliseconds). Used when the simulation-based calibration (SBC) gate passes on the offline validation profile.
-- **IBIS (iterative Bayesian importance sampling; 1/13).** Fallback when SBC fails for a drug (e.g. pravastatin OATP1B1 issues pre-ECM); closed-loop iteration prevents weight degeneracy.
+- **SBI (simulation-based inference; 8/13 configured drugs).** A shared neural spline flow conditions on the observed concentration and drug features. The router uses it only for drugs that pass per-drug SBC and have coverage deviation no greater than 10 percentage points. The global SBC gate remains failed (8/13).
+- **IBIS (iterative Bayesian importance sampling; 5/13).** Fallback when a drug fails the per-drug calibration rule; closed-loop iteration prevents weight degeneracy.
 - **IS (classical importance sampling; 0/13 after routing).** Retained for legacy compatibility, used only when SBI training data are insufficient and IBIS has not been validated.
 
-Effective sample size (ESS = $1/\sum w_i^2$) is monitored for importance-based methods. Morphine routes SBI with a likelihood reweighting kernel to compensate for hierarchical variance deficiency. All three methods share one output contract: a posterior `Distribution` per PK parameter. Observed drug levels can update errors in the current CL<sub>int</sub> predictor (scaffold-CV R&sup2; = 0.215), reducing posterior CV by &gt;50% in internal validation (see [TDM regression checks](#evidence)).
+Effective sample size (ESS = $1/\sum w_i^2$) is monitored for importance-based methods. Morphine now routes IBIS after failing SBC; its SBI reweighting setting remains in the table for traceability but is inactive on this route. All three methods share one output contract: a posterior `Distribution` per PK parameter. Observed drug levels can update errors in the current CL<sub>int</sub> predictor (scaffold-CV R&sup2; = 0.215), reducing posterior CV by &gt;50% in internal validation (see [TDM regression checks](#evidence)).
 
 </details>
 
@@ -466,9 +466,9 @@ Regenerated on the current engine (post-FLUX-1 + paracellular) via `scripts/veri
 <details>
 <summary><b>TDM regression checks</b> &mdash; importance-sampling baseline on synthetic observations</summary>
 
-The tables report the legacy **importance sampling** baseline; the experimental router sends 12/13 configured drugs to SBI after simulation-based calibration checks, with millisecond-scale inference and reduced posterior CV in those tests. Detailed calibration and per-drug coverage reports are tracked separately. These checks do not establish clinical TDM validity.
+The multi-drug table reports **importance sampling** rerun on the current engine and reference set; the experimental router sends 8/13 configured drugs to SBI after per-drug calibration checks. Detailed calibration and per-drug coverage reports are tracked separately. These checks do not establish clinical TDM validity.
 
-> The morphine row and pooled summaries are historical: they used a superseded 30 mg / 18.65 ng/mL reference (see the [reference adjudication](docs/validation/reference_pmid_screen_2026-09-24.md)) and require a dose-matched rerun before use as current TDM evidence.
+> Morphine uses the adjudicated 22.5 mg / 28.5 ng/mL reference ([reference adjudication](docs/validation/reference_pmid_screen_2026-09-24.md)). The single-drug midazolam check below is historical and was not rerun in this update.
 
 **Single-drug functional check** (midazolam, 5 mg PO, one observation at t = 1 h, 10% assay CV):
 
@@ -482,13 +482,13 @@ The tables report the legacy **importance sampling** baseline; the experimental 
 
 | Drug | Type | 1-obs CV reduction | 2-obs CV reduction | 3-obs CV reduction | 1-obs ESS |
 |:--|:-:|:-:|:-:|:-:|:-:|
-| Morphine | base | 76.3% | 77.0% | 74.6% | 428 |
-| Amantadine | base | 74.0% | 74.5% | 74.7% | 514 |
-| Ketorolac | acid | 87.7% | 92.6% | 90.1% | 2.8 |
-| Clozapine | neutral | 68.7% | 76.2% | 76.9% | 482 |
-| Rivaroxaban | neutral | 83.8% | 93.3% | 98.3% | 7.1 |
+| Morphine | base | 83.7% | 84.3% | 84.2% | 87.4 |
+| Amantadine | base | 89.5% | 90.4% | 90.9% | 138.4 |
+| Ketorolac | acid | 86.8% | 93.6% | 95.9% | 4.4 |
+| Clozapine | neutral | 74.2% | 84.2% | 85.4% | 500.1 |
+| Rivaroxaban | neutral | 94.2% | 96.5% | 97.0% | 5.0 |
 
-Across all 15 runs (5 drugs &times; 3 observation scenarios): mean CV reduction 81.2%, mean error reduction 79.8%, 90% CI coverage 67%. A single observation reduces C<sub>max</sub> CV by 70&ndash;88% when the population prior fold error is below 2.5&times;. With larger prior errors (ketorolac, fold error 3.25&times;) or multiple observations, effective sample size falls below 10, indicating particle degeneracy; sequential methods (ensemble Kalman filter, particle filter) would be required. Timepoint sensitivity (morphine, one observation): t = 1.0 h near T<sub>max</sub> gave the largest CV reduction (76.3%); observations beyond 4 h gave diminishing information (34%). Seed sensitivity across three seeds was 0.8% at N = 2,000 prior samples.
+Across all 15 runs (5 drugs &times; 3 observation scenarios): mean CV reduction 88.7%, mean error reduction 75.2%, and 90% CI coverage 60% (9/15). One-observation ESS is below 10 for ketorolac and rivaroxaban, indicating particle degeneracy despite narrow intervals. Timepoint sensitivity (morphine, one observation) gave the largest CV reduction at 1.0 h (83.0%); across three seeds the reduction ranged from 82.2% to 83.7% at N = 2,000 prior samples.
 
 </details>
 

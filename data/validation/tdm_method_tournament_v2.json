@@ -1,5 +1,5 @@
 {
-  "validation_set": "/home/jam/Sisyphus/data/sbi/validation_drug_set.json",
+  "validation_set": "data/sbi/validation_drug_set.json",
   "methods": [
     "is",
     "sbi"
@@ -8,173 +8,130 @@
   "drugs": [
     {
       "name": "morphine",
-      "dose_mg": 30.0,
-      "observed_cmax_mg_l": 0.01865,
+      "dose_mg": 22.5,
+      "observed_cmax_mg_l": 0.0285,
       "results": [
         {
           "method": "is",
-          "wall_seconds": 85.12913346290588,
-          "prior_cmax_mean": 0.043180103482602615,
-          "prior_cmax_cv": 0.44164021160049405,
-          "posterior_cmax_mean": 0.01923697854017348,
-          "posterior_cmax_cv": 0.09958220367869206,
-          "ess": 30.177908694743564,
+          "wall_seconds": 169.71066284179688,
+          "prior_cmax_mean": 0.11401054782235129,
+          "prior_cmax_cv": 0.6543485677795834,
+          "posterior_cmax_mean": 0.029431336187819984,
+          "posterior_cmax_cv": 0.10768242869872044,
+          "ess": 27.02149547799042,
           "n_successful": 500,
           "n_prior": 500,
           "posterior_params": {
-            "fup": 0.7018371740341691,
-            "peff": 1.9864511604156752,
-            "total_enzyme_affinity": 1.0769038618813531
+            "fup": 0.1835823209305794,
+            "peff": 2.843560817904348,
+            "total_enzyme_affinity": 6.05356489994009
           },
           "ok": true,
-          "bias_pct_vs_obs": 3.147338017015983
+          "bias_pct_vs_obs": 3.267846273052572
         },
         {
           "method": "sbi",
-          "wall_seconds": 77.45575904846191,
-          "prior_cmax_mean": 0.042079246639264746,
-          "prior_cmax_cv": 0.40820212196581457,
-          "posterior_cmax_mean": 0.028403593315898444,
-          "posterior_cmax_cv": 0.4715228908993997,
+          "wall_seconds": 143.9923586845398,
+          "prior_cmax_mean": 0.1181301593483368,
+          "prior_cmax_cv": 0.6851471377239771,
+          "posterior_cmax_mean": 0.05135315351139513,
+          "posterior_cmax_cv": 0.8592118275784201,
           "ess": 200.0,
           "n_successful": 200,
           "n_prior": 200,
           "posterior_params": {
-            "fup": 0.6886713423074537,
-            "peff": 2.566932555796206,
-            "total_enzyme_affinity": 2.604732203883901
+            "peff": 4.155841234536494,
+            "fup": 0.5907755141792714,
+            "total_enzyme_affinity": 3.567000362742667
           },
           "ok": true,
-          "bias_pct_vs_obs": 52.29808748471015
-        }
-      ]
-    },
-    {
-      "name": "clozapine",
-      "dose_mg": 75.0,
-      "observed_cmax_mg_l": 0.413,
-      "results": [
-        {
-          "method": "is",
-          "wall_seconds": 89.30441212654114,
-          "prior_cmax_mean": 0.7005802983793878,
-          "prior_cmax_cv": 0.2794569559193119,
-          "posterior_cmax_mean": 0.772920027114402,
-          "posterior_cmax_cv": 0.11776751592000277,
-          "ess": 183.26563574114596,
-          "n_successful": 500,
-          "n_prior": 500,
-          "posterior_params": {
-            "fup": 0.03013570020898778,
-            "peff": 5.4955945700126545,
-            "total_enzyme_affinity": 0.5603873614708913
-          },
-          "ok": true,
-          "bias_pct_vs_obs": 87.14770632309977
-        },
-        {
-          "method": "sbi",
-          "wall_seconds": 73.31802654266357,
-          "prior_cmax_mean": 0.6789919325175048,
-          "prior_cmax_cv": 0.26403240864839905,
-          "posterior_cmax_mean": 0.38767127502978455,
-          "posterior_cmax_cv": 0.3812063995916257,
-          "ess": 200.0,
-          "n_successful": 200,
-          "n_prior": 200,
-          "posterior_params": {
-            "fup": 0.38111889180484376,
-            "peff": 6.400084744857388,
-            "total_enzyme_affinity": 0.7738535006477198
-          },
-          "ok": true,
-          "bias_pct_vs_obs": -6.132863188914149
+          "bias_pct_vs_obs": 80.18650354875486
         }
       ]
     },
     {
       "name": "amantadine",
-      "dose_mg": 100.0,
+      "dose_mg": 80.576421,
       "observed_cmax_mg_l": 0.22,
       "results": [
         {
           "method": "is",
-          "wall_seconds": 91.93378138542175,
-          "prior_cmax_mean": 0.2394640353778127,
-          "prior_cmax_cv": 0.43424235161931896,
-          "posterior_cmax_mean": 0.22082205893604426,
-          "posterior_cmax_cv": 0.10313439055048607,
-          "ess": 173.08261068775855,
+          "wall_seconds": 182.1512954235077,
+          "prior_cmax_mean": 0.07440736862722512,
+          "prior_cmax_cv": 1.1763542618700789,
+          "posterior_cmax_mean": 0.22250786464208003,
+          "posterior_cmax_cv": 0.10340503399989656,
+          "ess": 31.75351010774808,
           "n_successful": 500,
           "n_prior": 500,
           "posterior_params": {
-            "fup": 0.3240686786615262,
-            "peff": 6.262961087968643,
-            "total_enzyme_affinity": 3.222425365767005
+            "fup": 0.5111959100839397,
+            "peff": 7.625023594640612,
+            "total_enzyme_affinity": 2.293939338313738
           },
           "ok": true,
-          "bias_pct_vs_obs": 0.3736631527473893
+          "bias_pct_vs_obs": 1.1399384736727394
         },
         {
           "method": "sbi",
-          "wall_seconds": 75.98640441894531,
-          "prior_cmax_mean": 0.23230822678594193,
-          "prior_cmax_cv": 0.3942233940114098,
-          "posterior_cmax_mean": 0.17563606452996233,
-          "posterior_cmax_cv": 0.4268169249986874,
+          "wall_seconds": 146.78688526153564,
+          "prior_cmax_mean": 0.07466019335517482,
+          "prior_cmax_cv": 1.080534073557333,
+          "posterior_cmax_mean": 0.233912291524761,
+          "posterior_cmax_cv": 0.9618416397487021,
           "ess": 200.0,
           "n_successful": 200,
           "n_prior": 200,
           "posterior_params": {
-            "fup": 0.645673000400524,
-            "peff": 7.624247941776622,
-            "total_enzyme_affinity": 7.878740487995512
+            "peff": 8.92155696335951,
+            "fup": 0.4550716413504703,
+            "total_enzyme_affinity": 4.8369395971654185
           },
           "ok": true,
-          "bias_pct_vs_obs": -20.165425213653485
+          "bias_pct_vs_obs": 6.323768874891367
         }
       ]
     },
     {
       "name": "ketorolac",
-      "dose_mg": 10.0,
-      "observed_cmax_mg_l": 0.8,
+      "dose_mg": 6.781701,
+      "observed_cmax_mg_l": 0.87,
       "results": [
         {
           "method": "is",
-          "wall_seconds": 86.65550208091736,
-          "prior_cmax_mean": 0.13800720201144212,
-          "prior_cmax_cv": 0.4542138094440065,
-          "posterior_cmax_mean": 0.42744051139885303,
-          "posterior_cmax_cv": 0.02932007500293837,
-          "ess": 1.0289725554547617,
+          "wall_seconds": 173.5395004749298,
+          "prior_cmax_mean": 0.1519996979679151,
+          "prior_cmax_cv": 0.45187259007277725,
+          "posterior_cmax_mean": 0.32979890173296894,
+          "posterior_cmax_cv": 0.0814906034070548,
+          "ess": 3.578505655423422,
           "n_successful": 500,
           "n_prior": 500,
           "posterior_params": {
-            "fup": 0.04798873704954371,
-            "peff": 10.506985579140792,
-            "total_enzyme_affinity": 0.2752919184687589
+            "fup": 0.026394647402424816,
+            "peff": 10.19310147956377,
+            "total_enzyme_affinity": 1.1156941885192437
           },
           "ok": true,
-          "bias_pct_vs_obs": -46.569936075143374
+          "bias_pct_vs_obs": -62.092080260578285
         },
         {
           "method": "sbi",
-          "wall_seconds": 69.92828106880188,
-          "prior_cmax_mean": 0.1339219654815888,
-          "prior_cmax_cv": 0.4503190315602665,
-          "posterior_cmax_mean": 0.5499271752178386,
-          "posterior_cmax_cv": 0.1480227781802939,
+          "wall_seconds": 140.18893814086914,
+          "prior_cmax_mean": 0.15607440563759067,
+          "prior_cmax_cv": 0.4775339544570899,
+          "posterior_cmax_mean": 0.41587098404393247,
+          "posterior_cmax_cv": 0.2070168878710807,
           "ess": 200.0,
           "n_successful": 200,
           "n_prior": 200,
           "posterior_params": {
-            "fup": 0.01912430683255521,
-            "peff": 12.20748611028177,
-            "total_enzyme_affinity": 0.27688835179591625
+            "peff": 14.41445921958892,
+            "fup": 0.018782491967183304,
+            "total_enzyme_affinity": 0.5140932327363976
           },
           "ok": true,
-          "bias_pct_vs_obs": -31.259103097770176
+          "bias_pct_vs_obs": -52.19873746621466
         }
       ]
     },
@@ -185,45 +142,45 @@
       "results": [
         {
           "method": "is",
-          "wall_seconds": 79.45534944534302,
-          "prior_cmax_mean": 0.038779693411567104,
-          "prior_cmax_cv": 0.5100763030811265,
-          "posterior_cmax_mean": 0.11789015037199477,
-          "posterior_cmax_cv": 0.0539383477055779,
-          "ess": 1.9811117391570214,
+          "wall_seconds": 157.20942425727844,
+          "prior_cmax_mean": 0.017617002687094322,
+          "prior_cmax_cv": 0.7327205441469196,
+          "posterior_cmax_mean": 0.06802193273461031,
+          "posterior_cmax_cv": 0.05578132208679416,
+          "ess": 1.2982443350328157,
           "n_successful": 500,
           "n_prior": 500,
           "posterior_params": {
-            "fup": 0.0697087090307892,
-            "peff": 5.8928558465178575,
-            "total_enzyme_affinity": 0.22168549211097363
+            "fup": 0.0922784036174931,
+            "peff": 3.7926128925956446,
+            "total_enzyme_affinity": 0.9280828697065979
           },
           "ok": true,
-          "bias_pct_vs_obs": -17.674475997210354
+          "bias_pct_vs_obs": -52.4986503249928
         },
         {
           "method": "sbi",
-          "wall_seconds": 67.34077882766724,
-          "prior_cmax_mean": 0.03767859402006343,
-          "prior_cmax_cv": 0.47541967819268227,
-          "posterior_cmax_mean": 0.15027074457570236,
-          "posterior_cmax_cv": 0.2879556210433629,
+          "wall_seconds": 128.2783398628235,
+          "prior_cmax_mean": 0.01823558703346275,
+          "prior_cmax_cv": 0.6968472042375883,
+          "posterior_cmax_mean": 0.08109691636521361,
+          "posterior_cmax_cv": 0.4947562133538038,
           "ess": 200.0,
           "n_successful": 200,
           "n_prior": 200,
           "posterior_params": {
-            "fup": 0.0307507444451572,
-            "peff": 6.605325390214114,
-            "total_enzyme_affinity": 0.35089879441126615
+            "peff": 4.646523506208912,
+            "fup": 0.05837269217076427,
+            "total_enzyme_affinity": 1.0644307849223056
           },
           "ok": true,
-          "bias_pct_vs_obs": 4.937670793088244
+          "bias_pct_vs_obs": -43.36807516395697
         }
       ]
     }
   ],
   "per_method_totals": {
-    "is": 432.47817850112915,
-    "sbi": 364.0292499065399
+    "is": 682.6108829975128,
+    "sbi": 559.2465219497681
   }
 }
