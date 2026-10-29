@@ -83,20 +83,19 @@ def main() -> None:
             log.info("%s: %d/%d proposals", args.drug, i + 1, args.n_proposals)
 
     budgets = []
-    for n in sorted({args.n_proposals // 2, args.n_proposals}):
-        for k in (1, 2, 4, 8):
-            if k > args.k_max:
-                continue
-            log_lik = logsumexp(likelihood[:n, :k], axis=1) - np.log(k)
-            log_w = log_lik + log_prior - log_q[:n]
-            weights = np.exp(log_w - logsumexp(log_w))
-            budgets.append({
-                "proposals": n,
-                "nuisance_draws": k,
-                "ode_solves": n * k,
-                "ess": float(1.0 / np.sum(weights**2)),
-                "theta_mean": np.average(theta[:n], axis=0, weights=weights).tolist(),
-            })
+    for k in (1, 2, 4, 8):
+        if k > args.k_max:
+            continue
+        log_lik = logsumexp(likelihood[:, :k], axis=1) - np.log(k)
+        log_w = log_lik + log_prior - log_q
+        weights = np.exp(log_w - logsumexp(log_w))
+        budgets.append({
+            "proposals": args.n_proposals,
+            "nuisance_draws": k,
+            "ode_solves": args.n_proposals * k,
+            "ess": float(1.0 / np.sum(weights**2)),
+            "theta_mean": np.average(theta, axis=0, weights=weights).tolist(),
+        })
     payload = {
         "drug": args.drug,
         "seed": args.seed,

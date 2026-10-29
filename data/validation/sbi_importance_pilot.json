@@ -1,0 +1,474 @@
+{
+  "purpose": "Compare nuisance likelihood draw count and flow proposal count on fixed synthetic observations",
+  "notes": "ESS measures weight variance; mean errors use 200 exact joint-prior rejection draws and include reference Monte Carlo error. Nuisance estimates are unbiased, while finite resampling has error. Only full-budget runs with the stated defensive prior fraction are included.",
+  "drugs": [
+    {
+      "drug": "amantadine",
+      "seed": 42,
+      "true_theta": [
+        0.5479120971119267,
+        -0.5617217895330837,
+        0.35859791991138246
+      ],
+      "observation_log10_cmax": -1.6540532703461839,
+      "budgets": [
+        {
+          "proposals": 64,
+          "nuisance_draws": 1,
+          "ode_solves": 64,
+          "ess": 6.357137988837948,
+          "theta_mean": [
+            0.24783145345609744,
+            2.1772492290492305,
+            -0.22019884634275605
+          ],
+          "defensive_prior_fraction": 0.046875
+        },
+        {
+          "proposals": 64,
+          "nuisance_draws": 2,
+          "ode_solves": 128,
+          "ess": 11.077836039105662,
+          "theta_mean": [
+            0.3795273016297389,
+            1.0764605535917955,
+            -0.1533636188963228
+          ],
+          "defensive_prior_fraction": 0.046875
+        },
+        {
+          "proposals": 64,
+          "nuisance_draws": 4,
+          "ode_solves": 256,
+          "ess": 16.810803147511063,
+          "theta_mean": [
+            0.316300893012535,
+            1.3278425248860881,
+            -0.08951618604586023
+          ],
+          "defensive_prior_fraction": 0.046875
+        },
+        {
+          "proposals": 64,
+          "nuisance_draws": 8,
+          "ode_solves": 512,
+          "ess": 25.2072694415773,
+          "theta_mean": [
+            0.2353234662433995,
+            1.9147506616483563,
+            -0.050671686989048795
+          ],
+          "defensive_prior_fraction": 0.046875
+        }
+      ],
+      "defensive_prior_fraction_by_proposal": {
+        "64": 0.046875
+      }
+    },
+    {
+      "drug": "clozapine",
+      "seed": 42,
+      "true_theta": [
+        0.5479120971119267,
+        -0.5617217895330837,
+        0.35859791991138246
+      ],
+      "observation_log10_cmax": -1.732754695696625,
+      "budgets": [
+        {
+          "proposals": 64,
+          "nuisance_draws": 1,
+          "ode_solves": 64,
+          "ess": 9.343595768698096,
+          "theta_mean": [
+            -0.2530579246669554,
+            1.7663269651104514,
+            -0.13395934292839573
+          ],
+          "defensive_prior_fraction": 0.046875
+        },
+        {
+          "proposals": 64,
+          "nuisance_draws": 2,
+          "ode_solves": 128,
+          "ess": 11.709942546619727,
+          "theta_mean": [
+            -0.2610699423198001,
+            1.8545798755863587,
+            -0.14973911463518205
+          ],
+          "defensive_prior_fraction": 0.046875
+        },
+        {
+          "proposals": 64,
+          "nuisance_draws": 4,
+          "ode_solves": 256,
+          "ess": 22.552338849874644,
+          "theta_mean": [
+            -0.17456674149257292,
+            1.3647080800237796,
+            -0.10078606218611982
+          ],
+          "defensive_prior_fraction": 0.046875
+        },
+        {
+          "proposals": 64,
+          "nuisance_draws": 8,
+          "ode_solves": 512,
+          "ess": 29.537474208920038,
+          "theta_mean": [
+            -0.1114890409965859,
+            1.2736858875667891,
+            -0.07746463680465521
+          ],
+          "defensive_prior_fraction": 0.046875
+        }
+      ],
+      "defensive_prior_fraction_by_proposal": {
+        "64": 0.046875
+      }
+    },
+    {
+      "drug": "ketorolac",
+      "seed": 42,
+      "true_theta": [
+        0.5479120971119267,
+        -0.5617217895330837,
+        0.35859791991138246
+      ],
+      "observation_log10_cmax": -1.4068113156822561,
+      "budgets": [
+        {
+          "proposals": 64,
+          "nuisance_draws": 1,
+          "ode_solves": 64,
+          "ess": 3.833309367380455,
+          "theta_mean": [
+            -0.07605889277823047,
+            3.082092323247168,
+            -0.08919987875591702
+          ],
+          "abs_theta_mean_error_vs_exact": [
+            0.08178238263162683,
+            2.4200986344978737,
+            0.10312508839795972
+          ],
+          "defensive_prior_fraction": 0.046875
+        },
+        {
+          "proposals": 64,
+          "nuisance_draws": 2,
+          "ode_solves": 128,
+          "ess": 10.17147910033691,
+          "theta_mean": [
+            0.016638663075426965,
+            1.6746856717242138,
+            0.019494547902014304
+          ],
+          "abs_theta_mean_error_vs_exact": [
+            0.010915173222030592,
+            1.0126919829749195,
+            0.005569338259971593
+          ],
+          "defensive_prior_fraction": 0.046875
+        },
+        {
+          "proposals": 64,
+          "nuisance_draws": 4,
+          "ode_solves": 256,
+          "ess": 21.258546382872257,
+          "theta_mean": [
+            -0.04085861157859394,
+            1.6667026675196424,
+            -0.04851575583802482
+          ],
+          "abs_theta_mean_error_vs_exact": [
+            0.04658210143199031,
+            1.0047089787703483,
+            0.06244096548006753
+          ],
+          "defensive_prior_fraction": 0.046875
+        },
+        {
+          "proposals": 64,
+          "nuisance_draws": 8,
+          "ode_solves": 512,
+          "ess": 27.56563266279152,
+          "theta_mean": [
+            -0.027510910533121026,
+            1.5354937308624257,
+            0.005797521221418617
+          ],
+          "abs_theta_mean_error_vs_exact": [
+            0.0332344003865174,
+            0.8735000421131315,
+            0.008127688420624096
+          ],
+          "defensive_prior_fraction": 0.046875
+        },
+        {
+          "proposals": 256,
+          "nuisance_draws": 1,
+          "ode_solves": 256,
+          "ess": 28.29081720126515,
+          "theta_mean": [
+            -0.03373991338091996,
+            0.6713106973311055,
+            -0.036715638840111274
+          ],
+          "defensive_prior_fraction": 0.05078125,
+          "abs_theta_mean_error_vs_exact": [
+            0.03946340323431633,
+            0.009317008581811281,
+            0.050640848482153986
+          ]
+        },
+        {
+          "proposals": 256,
+          "nuisance_draws": 2,
+          "ode_solves": 512,
+          "ess": 46.02345774002455,
+          "theta_mean": [
+            0.038353297959535584,
+            0.6944621210062055,
+            -0.005682148060788748
+          ],
+          "defensive_prior_fraction": 0.05078125,
+          "abs_theta_mean_error_vs_exact": [
+            0.03262980810613921,
+            0.03246843225691132,
+            0.01960735770283146
+          ]
+        },
+        {
+          "proposals": 256,
+          "nuisance_draws": 4,
+          "ode_solves": 1024,
+          "ess": 70.77024423715086,
+          "theta_mean": [
+            0.13160682592410095,
+            0.2563755497748493,
+            0.009633731318128511
+          ],
+          "defensive_prior_fraction": 0.05078125,
+          "abs_theta_mean_error_vs_exact": [
+            0.12588333607070457,
+            0.40561813897444493,
+            0.004291478323914201
+          ]
+        },
+        {
+          "proposals": 256,
+          "nuisance_draws": 8,
+          "ode_solves": 2048,
+          "ess": 104.2946004618336,
+          "theta_mean": [
+            0.042859625715226175,
+            0.3546754161990758,
+            -0.0213570627446539
+          ],
+          "defensive_prior_fraction": 0.05078125,
+          "abs_theta_mean_error_vs_exact": [
+            0.0371361358618298,
+            0.30731827255021843,
+            0.03528227238669661
+          ]
+        }
+      ],
+      "exact_reference": {
+        "n_accepted": 200,
+        "n_proposals": 4561,
+        "theta_mean": [
+          0.005723489853396372,
+          0.6619936887492942,
+          0.013925209642042712
+        ],
+        "theta_sd": [
+          0.49884482661589524,
+          2.2905329392909235,
+          0.2978781664835818
+        ],
+        "theta_mean_standard_error": [
+          0.035273655965992703,
+          0.16196513739037666,
+          0.0210631671487956
+        ]
+      },
+      "defensive_prior_fraction_by_proposal": {
+        "64": 0.046875,
+        "256": 0.05078125
+      }
+    },
+    {
+      "drug": "morphine",
+      "seed": 42,
+      "true_theta": [
+        0.5479120971119267,
+        -0.5617217895330837,
+        0.35859791991138246
+      ],
+      "observation_log10_cmax": -1.9705016678568825,
+      "budgets": [
+        {
+          "proposals": 64,
+          "nuisance_draws": 1,
+          "ode_solves": 64,
+          "ess": 5.962220063786522,
+          "theta_mean": [
+            -0.12701076695893768,
+            1.946720827125905,
+            -0.024400833251386974
+          ],
+          "abs_theta_mean_error_vs_exact": [
+            0.14710534867571323,
+            1.2945977890996434,
+            0.00844454687216711
+          ],
+          "defensive_prior_fraction": 0.046875
+        },
+        {
+          "proposals": 64,
+          "nuisance_draws": 2,
+          "ode_solves": 128,
+          "ess": 6.162625671969169,
+          "theta_mean": [
+            -0.19623882293603084,
+            2.0021232216925906,
+            -0.11943516695694148
+          ],
+          "abs_theta_mean_error_vs_exact": [
+            0.2163334046528064,
+            1.350000183666329,
+            0.08658978683338739
+          ],
+          "defensive_prior_fraction": 0.046875
+        },
+        {
+          "proposals": 64,
+          "nuisance_draws": 4,
+          "ode_solves": 256,
+          "ess": 10.61838720400287,
+          "theta_mean": [
+            -0.10057606996722693,
+            1.3759660318866835,
+            -0.08974507876905796
+          ],
+          "abs_theta_mean_error_vs_exact": [
+            0.12067065168400248,
+            0.7238429938604217,
+            0.05689969864550388
+          ],
+          "defensive_prior_fraction": 0.046875
+        },
+        {
+          "proposals": 64,
+          "nuisance_draws": 8,
+          "ode_solves": 512,
+          "ess": 17.38088735375011,
+          "theta_mean": [
+            -0.1308256893791576,
+            1.6776982017005238,
+            -0.06756594178183876
+          ],
+          "abs_theta_mean_error_vs_exact": [
+            0.15092027109593315,
+            1.025575163674262,
+            0.03472056165828468
+          ],
+          "defensive_prior_fraction": 0.046875
+        },
+        {
+          "proposals": 256,
+          "nuisance_draws": 1,
+          "ode_solves": 256,
+          "ess": 10.835370623755294,
+          "theta_mean": [
+            0.21395304560425948,
+            0.17867060250078287,
+            -0.007803787748475619
+          ],
+          "defensive_prior_fraction": 0.05078125,
+          "abs_theta_mean_error_vs_exact": [
+            0.19385846388748393,
+            0.47345243552547894,
+            0.025041592375078466
+          ]
+        },
+        {
+          "proposals": 256,
+          "nuisance_draws": 2,
+          "ode_solves": 512,
+          "ess": 25.847081953788766,
+          "theta_mean": [
+            0.07519910489294544,
+            0.4347186096184126,
+            -0.0333976226014495
+          ],
+          "defensive_prior_fraction": 0.05078125,
+          "abs_theta_mean_error_vs_exact": [
+            0.055104523176169894,
+            0.21740442840784924,
+            0.0005522424778954191
+          ]
+        },
+        {
+          "proposals": 256,
+          "nuisance_draws": 4,
+          "ode_solves": 1024,
+          "ess": 51.19724427513324,
+          "theta_mean": [
+            0.07384906319454239,
+            0.3717489395048192,
+            -0.04879208337993465
+          ],
+          "defensive_prior_fraction": 0.05078125,
+          "abs_theta_mean_error_vs_exact": [
+            0.05375448147776684,
+            0.2803740985214426,
+            0.01594670325638057
+          ]
+        },
+        {
+          "proposals": 256,
+          "nuisance_draws": 8,
+          "ode_solves": 2048,
+          "ess": 90.41711120078082,
+          "theta_mean": [
+            0.011720207948314364,
+            0.3852311891038938,
+            -0.0602221036514286
+          ],
+          "defensive_prior_fraction": 0.05078125,
+          "abs_theta_mean_error_vs_exact": [
+            0.008374373768461185,
+            0.266891848922368,
+            0.027376723527874514
+          ]
+        }
+      ],
+      "exact_reference": {
+        "n_accepted": 200,
+        "n_proposals": 3940,
+        "theta_mean": [
+          0.02009458171677555,
+          0.6521230380262618,
+          -0.032845380123554084
+        ],
+        "theta_sd": [
+          0.4987320767891901,
+          2.3464453458927577,
+          0.2902464847462666
+        ],
+        "theta_mean_standard_error": [
+          0.035265683349288625,
+          0.1659187415764383,
+          0.020523525757964293
+        ]
+      },
+      "defensive_prior_fraction_by_proposal": {
+        "64": 0.046875,
+        "256": 0.05078125
+      }
+    }
+  ]
+}
