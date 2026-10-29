@@ -57,13 +57,17 @@ def main() -> None:
     with torch.no_grad():
         flow = model.posterior.sample(
             (args.n_proposals - n_prior,), x=x_t, show_progress_bars=False,
+            reject_outside_prior=False,
         ).detach().cpu().numpy()
         prior = rng.uniform(PRIOR_LOW, PRIOR_HIGH, size=(n_prior, 3))
         theta = np.concatenate([flow, prior])
         log_q_flow = model.posterior.log_prob(
-            torch.as_tensor(theta, dtype=torch.float32), x=x_t,
+            torch.as_tensor(theta, dtype=torch.float32), x=x_t, norm_posterior=False,
         ).detach().cpu().numpy()
     log_prior = -np.log(np.prod(PRIOR_HIGH - PRIOR_LOW))
+    log_prior_theta = np.where(
+        np.all((theta >= PRIOR_LOW) & (theta <= PRIOR_HIGH), axis=1), log_prior, -np.inf,
+    )
     log_q = np.logaddexp(
         np.log1p(-prior_fraction) + log_q_flow, np.log(prior_fraction) + log_prior,
     )
@@ -87,7 +91,7 @@ def main() -> None:
         if k > args.k_max:
             continue
         log_lik = logsumexp(likelihood[:, :k], axis=1) - np.log(k)
-        log_w = log_lik + log_prior - log_q
+        log_w = log_lik + log_prior_theta - log_q
         weights = np.exp(log_w - logsumexp(log_w))
         budgets.append({
             "proposals": args.n_proposals,

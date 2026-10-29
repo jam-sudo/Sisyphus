@@ -60,6 +60,26 @@ def test_flow_numerical_failure_uses_existing_fallback():
         )
 
 
+def test_direct_posterior_uses_raw_flow_proposal_density():
+    class DirectPosteriorStub(UniformPosterior):
+        posterior_estimator = object()
+
+        def sample(self, shape, *, x, show_progress_bars, reject_outside_prior):
+            assert reject_outside_prior is False
+            return super().sample(shape, x=x, show_progress_bars=show_progress_bars)
+
+        def log_prob(self, theta, *, x, norm_posterior):
+            assert norm_posterior is False
+            return super().log_prob(theta, x=x)
+
+    draws, ess = sample_corrected(
+        DirectPosteriorStub(), np.zeros(1), lambda theta, rng: 0.0,
+        n_draws=10, n_proposals=100, n_nuisance=1,
+    )
+    assert draws.shape == (10, 3)
+    assert ess == pytest.approx(100)
+
+
 def test_corrected_sampler_excludes_flow_draws_outside_box_prior():
     class OutsidePosterior(UniformPosterior):
         def sample(self, shape, *, x, show_progress_bars):
