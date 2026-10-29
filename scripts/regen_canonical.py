@@ -2,12 +2,11 @@
 """Regenerate canonical public-clone artifacts after the full R&R Kp merge.
 
 Run through canonical-regen.yml on Linux/Python 3.10 with requirements-lock.txt.
-Sequential arms distinguish merge effects, full R&R, and model retraining on one stack.
+Sequential arms distinguish merged code, full R&R, and retraining on one stack.
 """
 
 from __future__ import annotations
 
-import csv
 import json
 import shutil
 import subprocess
@@ -15,14 +14,7 @@ import subprocess
 from regen_clf_leakfree_canonical import ROOT, _benchmark_meta_aafe, _require_public_clone, _run
 
 CACHE = ROOT / "data/training/4track_holdout_predictions.json"
-CSV = ROOT / "data/training/clf_training.csv"
 ATTRIBUTION = ROOT / "data/validation/canonical_regen_attribution_2026-10-29.json"
-SOURCES = (
-    "src/sisyphus/core.py",
-    "src/sisyphus/engine/flux.py",
-    "src/sisyphus/predict/chemistry.py",
-    "src/sisyphus/predict/ivive.py",
-)
 KP_SOURCES = (
     "src/sisyphus/core.py",
     "src/sisyphus/pipeline/context.py",
@@ -31,11 +23,11 @@ KP_SOURCES = (
 )
 
 
-def _benchmark_revision(revision: str, sources: tuple[str, ...] = SOURCES) -> dict:
-    # shortcut: these revision anchors belong to this one-off merge, update for any later regen.
-    original = {path: (ROOT / path).read_bytes() for path in sources}
+def _benchmark_revision(revision: str) -> dict:
+    # shortcut: this revision anchor belongs to the full R&R merge, update for any later regen.
+    original = {path: (ROOT / path).read_bytes() for path in KP_SOURCES}
     try:
-        for path in sources:
+        for path in KP_SOURCES:
             (ROOT / path).write_bytes(subprocess.check_output(
                 ["git", "show", f"{revision}:{path}"], cwd=ROOT
             ))
@@ -49,50 +41,28 @@ def _benchmark_revision(revision: str, sources: tuple[str, ...] = SOURCES) -> di
 def main() -> None:
     _require_public_clone()
     committed = json.loads(CACHE.read_text())
-    before_names = {row["name"].lower() for row in csv.DictReader(CSV.open())}
-
-    integration = _benchmark_revision("5de25d7")
-    renal = _benchmark_revision("b362d76")
-    before_rr = _benchmark_revision("48a9927", KP_SOURCES)
+    before_rr = _benchmark_revision("48a9927")
     _benchmark_meta_aafe()  # full R&R, shipped CL/F and Vd/F models
     merged = json.loads(CACHE.read_text())
 
     _run(str(ROOT / "scripts/train_clf_vdf_models.py"))
-    _benchmark_meta_aafe()  # same corpus, canonical recipe retrain
+    _benchmark_meta_aafe()  # canonical recipe retrain on the already filtered corpus
     retrained = json.loads(CACHE.read_text())
-
-    _run(str(ROOT / "scripts/build_clf_training_data.py"))
-    after_names = {row["name"].lower() for row in csv.DictReader(CSV.open())}
-    assert {"aficamten", "gepotidacin"} <= before_names
-    assert not {"aficamten", "gepotidacin"} & after_names
-    _run(str(ROOT / "scripts/train_clf_vdf_models.py"))
-    _benchmark_meta_aafe()  # final filtered model and four-track cache
-    filtered = json.loads(CACHE.read_text())
-    assert filtered["n_holdout"] == committed["n_holdout"]
-    assert all("clf" in row and "vdss" in row for row in filtered["drugs"])
+    assert retrained["n_holdout"] == committed["n_holdout"]
+    assert all("clf" in row and "vdss" in row for row in retrained["drugs"])
 
     ATTRIBUTION.write_text(json.dumps({
-        "context": "same canonical stack; integration, renal, full R&R, retrain, B-15 arms",
+        "context": "same canonical stack; merged #132-134, full R&R, recipe retrain",
         "committed": {"overall": committed["overall"], "in_domain": committed["in_domain"]},
-        "integration_shipped_models": {
-            "overall": integration["overall"], "in_domain": integration["in_domain"]
-        },
-        "renal_shipped_models": {
-            "overall": renal["overall"], "in_domain": renal["in_domain"]
-        },
         "merged_before_full_rr_shipped_models": {
             "overall": before_rr["overall"], "in_domain": before_rr["in_domain"]
         },
         "merged_shipped_models": {
             "overall": merged["overall"], "in_domain": merged["in_domain"]
         },
-        "merged_retrained_old_corpus": {
+        "merged_retrained": {
             "overall": retrained["overall"], "in_domain": retrained["in_domain"]
         },
-        "merged_retrained_b15_corpus": {
-            "overall": filtered["overall"], "in_domain": filtered["in_domain"]
-        },
-        "removed_names": sorted(before_names - after_names),
     }, indent=2) + "\n")
 
     _run(str(ROOT / "scripts/capture_prodrug_v3_baseline.py"))
