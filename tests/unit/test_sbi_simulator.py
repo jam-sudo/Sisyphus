@@ -88,6 +88,14 @@ def test_simulate_single_deterministic(simulator: EngineSimulator):
     assert a == b
 
 
+def test_simulate_single_can_return_noiseless_cmax(simulator: EngineSimulator):
+    theta = np.array([0.0, _logit(0.65), 0.0])
+    noiseless = simulator.simulate_single(theta, seed=7, add_noise=False)
+    noisy = simulator.simulate_single(theta, seed=7)
+    assert np.isfinite(noiseless)
+    assert noiseless != noisy
+
+
 def test_simulator_samples_achour_enzyme_correlation(simulator: EngineSimulator):
     rng = np.random.default_rng(42)
     draws = np.array([

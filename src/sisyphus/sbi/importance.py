@@ -16,11 +16,11 @@ from sisyphus.sbi.priors import PRIOR_HIGH, PRIOR_LOW
 DEFAULT_NUISANCE_DRAW_COUNT = 8
 # Source: pilot in data/validation/sbi_importance_pilot.json (ODE budget versus ESS).
 DEFAULT_PROPOSAL_COUNT = 256
-# Source: an ESS below 32 cannot support a stable 90% tail estimate.
+# Source: data/validation/sbi_importance_pilot.json; 32 is the ESS floor for tail summaries.
 MIN_IMPORTANCE_ESS_COUNT = 32.0
-# Source: 5% prior proposals protect against flow support and tail errors.
+# Source: data/validation/sbi_importance_pilot.json; 5% prior proposals guard flow tails.
 DEFENSIVE_PRIOR_FRACTION = 0.05
-# Source: scripts/sbi_exact_rejection.py uses rejection from the same joint prior.
+# Source: data/validation/sbi_exact_rejection.json; 100k exceeds 500 draws at ~4% acceptance.
 MAX_REJECTION_ATTEMPT_COUNT = 100000
 
 
