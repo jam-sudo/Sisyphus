@@ -16,7 +16,8 @@ leaves the existing single-observation route in place.
 Usage::
 
     python scripts/sbi_build_routing_table.py \\
-        --sbc data/validation/sbi_sbc_multi_drug_current.json \\
+        --sbc data/validation/sbi_sbc_multi_drug_corrected.json \\
+        --multi-observation-sbc data/validation/sbi_sbc_multi_observation_corrected.json \\
         --out data/sbi/method_routing.json
 """
 
@@ -39,12 +40,12 @@ BORDERLINE_COVERAGE = 0.15
 def main() -> None:
     p = argparse.ArgumentParser()
     p.add_argument("--sbc", type=Path,
-                   default=ROOT / "data" / "validation" / "sbi_sbc_multi_drug_current.json")
+                   default=ROOT / "data" / "validation" / "sbi_sbc_multi_drug_corrected.json")
     p.add_argument("--out", type=Path,
                    default=ROOT / "data" / "sbi" / "method_routing.json")
     p.add_argument("--multi-observation-sbc", type=Path,
                    default=ROOT / "data" / "validation"
-                   / "sbi_sbc_multi_observation_current.json")
+                   / "sbi_sbc_multi_observation_corrected.json")
     p.add_argument("--default", default="ibis",
                    help="default method for drugs not in the validation set")
     args = p.parse_args()

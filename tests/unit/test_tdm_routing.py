@@ -241,7 +241,7 @@ def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
     root = Path(__file__).resolve().parents[2]
     out = tmp_path / "method_routing.json"
     original = json.loads((root / "data/sbi/method_routing.json").read_text())
-    sbc_path = tmp_path / "data/validation/sbi_sbc_multi_drug_current.json"
+    sbc_path = tmp_path / "data/validation/sbi_sbc_multi_drug_corrected.json"
     sbc_path.parent.mkdir(parents=True)
     sbc_path.write_text(json.dumps({
         "gate_passed": False,
@@ -259,7 +259,7 @@ def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
     monkeypatch.setattr(sys, "argv", ["sbi_build_routing_table", "--out", str(out)])
     main()
     rebuilt = json.loads(out.read_text())
-    assert rebuilt["source"] == "data/validation/sbi_sbc_multi_drug_current.json"
+    assert rebuilt["source"] == "data/validation/sbi_sbc_multi_drug_corrected.json"
     assert rebuilt["sbi_reweight"] == original["sbi_reweight"]
     assert rebuilt["summary"]["sbi"] == 1
     assert rebuilt["summary"]["ibis"] == 2
@@ -275,7 +275,7 @@ def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
     assert rebuilt["routes"]["pravastatin"] == "is"
     assert rebuilt["summary"]["is"] == 1
 
-    multi_path = tmp_path / "data/validation/sbi_sbc_multi_observation_current.json"
+    multi_path = tmp_path / "data/validation/sbi_sbc_multi_observation_corrected.json"
     multi_path.write_text(json.dumps({"gate_passed": False, "drugs": [
         {"name": "morphine", "pass": True, "coverage_max_deviation": 0.05,
          "ks_pvalues": [0.2, 0.2, 0.2]},
