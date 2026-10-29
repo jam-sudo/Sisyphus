@@ -19,3 +19,5 @@ def test_exact_rank_null_uses_all_three_parameters():
     assert 0 <= result["passed"] <= result["repetitions"]
     assert result["ci_95"][0] <= result["pass_probability"] <= result["ci_95"][1]
     assert result["holm"]["passed"] >= result["passed"]
+    assert result["size_calibrated"]["simultaneous_tests"] == 30
+    assert 0.9 < result["size_calibrated"]["pass_probability"] <= 1

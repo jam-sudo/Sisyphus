@@ -81,6 +81,28 @@ def test_sbc_sampler_counts_exact_rejection_fallback(monkeypatch):
     assert 0.5 < draws[:, 0].mean() < 0.9
 
 
+def test_sbc_case_streams_are_independent_of_block_boundaries(monkeypatch):
+    class Simulator:
+        obs_sigma_log10 = 0.2
+
+    seen = []
+
+    def corrected(*args, seed, n_draws, **kwargs):
+        seen.append((seed, torch.initial_seed()))
+        return np.zeros((n_draws, 3)), 64.0
+
+    monkeypatch.setattr(importance, "sample_corrected", corrected)
+    full = CorrectedSBCPosterior(UniformPosterior(), Simulator(), seed=7)
+    for _ in range(6):
+        full.sample((1,), x=torch.as_tensor([[0.0]]))
+    unsplit = seen[:]
+    seen.clear()
+    block = CorrectedSBCPosterior(UniformPosterior(), Simulator(), seed=7, case_start=5)
+    block.sample((1,), x=torch.as_tensor([[0.0]]))
+    assert seen == [unsplit[5]]
+    assert len(set(unsplit)) == 6
+
+
 def test_time_aware_sampler_accepts_single_dose_context(monkeypatch):
     class Simulator:
         nominal_drug = type("Drug", (), {"dose_mg": 10.0})()

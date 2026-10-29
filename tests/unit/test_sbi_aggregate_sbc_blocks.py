@@ -40,6 +40,15 @@ def test_aggregate_blocks_counts_and_missing_case(tmp_path, monkeypatch):
         "--expected-pairs", "1", "--out", str(out),
     ])
     main()
-    assert json.loads(out.read_text())["calibrated_null_global_pass_probability"] > 0
+    written = json.loads(out.read_text())
+    assert written["calibrated_null_global_pass_probability"] > 0
+    assert written["holm_global_gate"]["predeclared_at_utc"] == "2026-10-29T15:40:44Z"
+    assert (written["holm_global_gate"]["calibrated_null_pass_probability"]
+            >= written["calibrated_null_global_pass_probability"])
+    assert written["size_calibrated_global_gate"]["ks_test_count"] == 3
+    assert written["size_calibrated_global_gate"]["coverage_test_count"] == 12
+    assert written["size_calibrated_global_gate"]["predeclared_at_utc"] == (
+        "2026-10-29T19:14:47Z"
+    )
     with pytest.raises(ValueError, match="Incomplete"):
         aggregate_blocks(paths[:1], "multi_drug", 1)

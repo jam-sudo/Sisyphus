@@ -224,6 +224,7 @@ def main() -> None:
         try:
             sampler = (CorrectedSBCPosterior(
                 result.posterior, sim, seed=args.seed + i,
+                case_start=args.case_start,
                 multi_observation=args.multi_observation,
             ) if args.sampler == "corrected" else result.posterior)
             ranks, cov_counts = _coverage_and_ranks(

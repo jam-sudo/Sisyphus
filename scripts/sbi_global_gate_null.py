@@ -18,6 +18,8 @@ COVERAGE_LEVELS_PERCENT = (50, 80, 90, 95)
 KS_THRESHOLD_P = 0.01
 # Source: the unchanged SBC scripts' coverage tolerance.
 COVERAGE_TOLERANCE_FRACTION = 0.10
+# Source: predeclared size-calibrated policy in data/validation/sbi_global_gate_policy.json.
+SIZE_CALIBRATED_FWER_ALPHA_P = 0.01
 
 
 def _inside_quantile_interval(
@@ -57,8 +59,18 @@ def gate_probability(
     if n_pairs < 1 or n_calibration < 1 or repetitions < 1:
         raise ValueError("Pair, calibration, and repetition counts must be positive")
     rng = np.random.default_rng(seed)
+    size_rng = np.random.default_rng(np.random.SeedSequence([seed, 1]))
+    coverage_draws = n_calibration * (3 if continuous_coverage else 1)
+    binomial_pvalues = {
+        level: np.array([
+            binomtest(count, coverage_draws, level / 100).pvalue
+            for count in range(coverage_draws + 1)
+        ]) for level in COVERAGE_LEVELS_PERCENT
+    }
     passed = 0
     holm_passed = 0
+    size_passed = 0
+    size_test_count = n_pairs * (7 if continuous_coverage else 15)
     for _ in range(repetitions):
         ranks = rng.integers(0, POSTERIOR_DRAW_COUNT + 1, size=(n_pairs, n_calibration, 3))
         sorted_ranks = np.sort(ranks / POSTERIOR_DRAW_COUNT, axis=1)
@@ -68,6 +80,16 @@ def gate_probability(
             sorted_ranks - (grid - 1 / n_calibration),
         ).max(axis=1)
         pvalues = kstwo.sf(d_stat, n_calibration)
+        size_pvalues = [pvalues.ravel()]
+        for level in COVERAGE_LEVELS_PERCENT:
+            inside = _inside_quantile_interval(ranks, level, size_rng)
+            counts = (inside.sum(axis=(1, 2)) if continuous_coverage
+                      else inside.sum(axis=1))
+            size_pvalues.append(binomial_pvalues[level][counts].ravel())
+        size_passed += int(
+            min(float(np.min(values)) for values in size_pvalues)
+            > SIZE_CALIBRATED_FWER_ALPHA_P / size_test_count
+        )
         original_ks_ok = bool(np.all(pvalues > KS_THRESHOLD_P))
         # Holm makes no rejection exactly when the smallest p exceeds alpha / m.
         if np.min(pvalues) <= KS_THRESHOLD_P / pvalues.size:
@@ -86,6 +108,7 @@ def gate_probability(
             passed += original_ks_ok
     ci = binomtest(passed, repetitions).proportion_ci(confidence_level=0.95)
     holm_ci = binomtest(holm_passed, repetitions).proportion_ci(confidence_level=0.95)
+    size_ci = binomtest(size_passed, repetitions).proportion_ci(confidence_level=0.95)
     return {
         "pairs": n_pairs,
         "simultaneous_ks_tests": 3 * n_pairs,
@@ -98,6 +121,12 @@ def gate_probability(
             "passed": holm_passed,
             "pass_probability": holm_passed / repetitions,
             "ci_95": [holm_ci.low, holm_ci.high],
+        },
+        "size_calibrated": {
+            "simultaneous_tests": size_test_count,
+            "passed": size_passed,
+            "pass_probability": size_passed / repetitions,
+            "ci_95": [size_ci.low, size_ci.high],
         },
     }
 

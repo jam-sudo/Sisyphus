@@ -12,6 +12,19 @@
     "coverage_tolerance_fraction": 0.1,
     "coverage_rule": "Unchanged from each original flow's SBC script"
   },
+  "size_calibrated_gate": {
+    "predeclared_at_utc": "2026-10-29T19:14:47Z",
+    "predeclared_before": "restart of SBC blocks with independent case-index-derived RNG streams",
+    "definition": "Test each pair's three marginal ranks with KS and each coverage level with an exact two-sided binomial test (per parameter for multi-drug, time-aware, and hierarchical flows; pooled across three parameters for continuous). Apply Holm-Bonferroni to the combined KS and coverage p-value family per flow at FWER 0.01; pass if no hypotheses are rejected.",
+    "family_wise_alpha": 0.01,
+    "simultaneous_tests": {
+      "multi_drug": 195,
+      "multi_observation": 195,
+      "hierarchical": 390,
+      "continuous": 364
+    },
+    "original_coverage_tolerance_note": "The 0.10 coverage tolerance remains unchanged in the original and Holm-KS gates; this gate uses exact binomial coverage p-values instead."
+  },
   "null_simulation": "data/validation/sbi_global_gate_null.json",
   "null_pass_probabilities": {
     "multi_drug": {
@@ -24,6 +37,11 @@
       "holm_ci_95": [
         0.13834905421797616,
         0.1522582618540306
+      ],
+      "size_calibrated": 0.9899,
+      "size_calibrated_ci_95": [
+        0.9877409379203101,
+        0.9917660662919513
       ]
     },
     "multi_observation": {
@@ -36,6 +54,11 @@
       "holm_ci_95": [
         0.13834905421797616,
         0.1522582618540306
+      ],
+      "size_calibrated": 0.9899,
+      "size_calibrated_ci_95": [
+        0.9877409379203101,
+        0.9917660662919513
       ]
     },
     "hierarchical": {
@@ -48,6 +71,11 @@
       "holm_ci_95": [
         0.015949885124840416,
         0.021335720477487666
+      ],
+      "size_calibrated": 0.9922,
+      "size_calibrated_ci_95": [
+        0.9902746758735245,
+        0.9938296814077955
       ]
     },
     "continuous": {
@@ -60,6 +88,11 @@
       "holm_ci_95": [
         0.401034924509944,
         0.4204171150878055
+      ],
+      "size_calibrated": 0.9886,
+      "size_calibrated_ci_95": [
+        0.986320863367395,
+        0.9905874573726338
       ]
     }
   },

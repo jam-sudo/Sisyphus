@@ -181,6 +181,44 @@ def main() -> None:
         "calibrated_null_ci_95": null_result[args.flow]["holm"]["ci_95"],
         "calibrated_null_assumptions": null_result["assumptions"],
     }
+    size_pvalues = pvalues[:]
+    coverage_test_count = 0
+    for entry in entries:
+        for level in result["levels"]:
+            if not entry["coverage"]:
+                missing_count = 1 if args.flow == "continuous" else 3
+                size_pvalues.extend([0.0] * missing_count)
+                coverage_test_count += missing_count
+                continue
+            counts = np.rint(
+                np.asarray(entry["coverage"][str(level)]) * entry["n_valid"]
+            ).astype(int)
+            if args.flow == "continuous":
+                counts = np.array([int(counts.sum())])
+                n_trials = 3 * entry["n_valid"]
+            else:
+                n_trials = entry["n_valid"]
+            size_pvalues.extend(
+                float(stats.binomtest(int(count), n_trials, level / 100).pvalue)
+                for count in counts
+            )
+            coverage_test_count += len(counts)
+    size_alpha = policy["size_calibrated_gate"]["family_wise_alpha"]
+    size_rejected = _holm_rejection_count(size_pvalues, size_alpha)
+    result["size_calibrated_global_gate"] = {
+        "passed": size_rejected == 0,
+        "rejections": size_rejected,
+        "ks_test_count": len(pvalues),
+        "coverage_test_count": coverage_test_count,
+        "family_wise_alpha": size_alpha,
+        "predeclared_at_utc": policy["size_calibrated_gate"]["predeclared_at_utc"],
+        "definition": policy["size_calibrated_gate"]["definition"],
+        "calibrated_null_pass_probability": null_result[args.flow]["size_calibrated"][
+            "pass_probability"
+        ],
+        "calibrated_null_ci_95": null_result[args.flow]["size_calibrated"]["ci_95"],
+        "calibrated_null_assumptions": null_result["assumptions"],
+    }
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(result, indent=2))
 

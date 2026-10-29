@@ -265,6 +265,7 @@ def main() -> int:
                 )
                 sampler = (CorrectedSBCPosterior(
                     posterior_obj, sim, seed=args.seed + pair_idx,
+                    case_start=args.case_start,
                 ) if args.sampler == "corrected" else posterior_obj)
                 ranks, cov = _coverage_and_ranks(
                     thetas_true, sampler, xs_packed, levels, args.n_posterior,

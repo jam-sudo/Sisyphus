@@ -96,11 +96,13 @@ class CorrectedSBCPosterior:
         simulator: object,
         *,
         seed: int,
+        case_start: int = 0,
         multi_observation: bool = False,
     ) -> None:
         self.posterior = posterior
         self.simulator = simulator
-        self.rng = np.random.default_rng(seed)
+        self.seed = seed
+        self.case_index = case_start
         self.multi_observation = multi_observation
         self.ess: list[float] = []
         self.rejection_count = 0
@@ -112,7 +114,8 @@ class CorrectedSBCPosterior:
 
         context = x.detach().cpu().numpy().reshape(-1)
         sim = self.simulator
-        seed = int(self.rng.integers(0, 2**31 - 1))
+        seed = int(np.random.SeedSequence([self.seed, self.case_index]).generate_state(1)[0])
+        self.case_index += 1
         if self.multi_observation:
             from sisyphus.sbi.multi_observation import (
                 ASSAY_SIGMA_LOG10,
@@ -172,10 +175,12 @@ class CorrectedSBCPosterior:
         for proposal_count in (DEFAULT_PROPOSAL_COUNT, 2 * DEFAULT_PROPOSAL_COUNT,
                                4 * DEFAULT_PROPOSAL_COUNT):
             try:
-                samples, ess = sample_corrected(
-                    self.posterior, context, log_draw, n_draws=shape[0],
-                    n_proposals=proposal_count, seed=seed + proposal_count,
-                )
+                with torch.random.fork_rng(devices=[]):
+                    torch.manual_seed(seed + proposal_count)
+                    samples, ess = sample_corrected(
+                        self.posterior, context, log_draw, n_draws=shape[0],
+                        n_proposals=proposal_count, seed=seed + proposal_count,
+                    )
                 self.ess.append(ess)
                 self.proposal_counts.append(proposal_count)
                 break
