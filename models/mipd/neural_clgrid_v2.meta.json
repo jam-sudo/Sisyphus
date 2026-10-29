@@ -1,0 +1,83 @@
+{
+  "version": "v2_clgrid_opt_in",
+  "artifact_sha256": "8cca0e2b750e6652a568b7cc15387157e5cd6b1011d7add248e362c5923d1937",
+  "target": "Posterior over oral bioavailability F (unitless) and metabolic CLint scale (unitless)",
+  "trained_on": {
+    "dataset_path": null,
+    "sha256": "09e9383bcd665237ba9a58d8a12244f7cd824a85b3e9fc15e73195fb73411097",
+    "description": "Engine-grid simulations from 55 compound-disjoint training SMILES"
+  },
+  "feature_schema": {
+    "name": "artifact_only",
+    "n_features": 38,
+    "sha256": "not_applicable",
+    "description": "20 log CL-grid responses at five CLint scales and 4/16 h, four prior/dose values, and two seven-value observation slots"
+  },
+  "trained_at": "2026-10-29T08:14:44.007294+00:00",
+  "n_drugs_original": 55,
+  "n_drugs_excluded": 0,
+  "holdout_version": "13 disjoint compounds; manifest sha256 7ee14926d1f5e70526e2e3d8c597df04721f2c6e0f65b95f9be0749d6d906bb6",
+  "holdout_metric": {
+    "name": "strict_sir_agreement_min_f_clint",
+    "value": 0.5153846153846153
+  },
+  "hyperparameters": {
+    "density_estimator": "nsf",
+    "hidden_features": 64,
+    "num_transforms": 5,
+    "embedding_net_hidden": 64,
+    "max_num_epochs": 100,
+    "stop_after_epochs": 15,
+    "seed": 42,
+    "n_grid": 13,
+    "samples_per_compound": 2000,
+    "epochs_trained": 85
+  },
+  "retrained_reason": "Ship the coverage/SBC-calibrated v2 only as an explicit opt-in approximation; strict SIR agreement failed",
+  "artifact_status": "optional_runtime",
+  "runtime_loader": "sisyphus.mipd.api",
+  "validation": {
+    "train_compounds": 55,
+    "heldout_compounds": 13,
+    "train_pairs": 110000,
+    "heldout_cases": 130,
+    "minimum_sample_gate_passed": true,
+    "coverage_90_f_clint": [
+      0.8307692307692308,
+      0.8923076923076924
+    ],
+    "sbc_ks_p_f_clint": [
+      0.11567586565700563,
+      0.20951879233556958
+    ],
+    "sir_agreement_fraction_f_clint": [
+      0.5153846153846153,
+      0.8076923076923077
+    ],
+    "sir_ess_min": 218.4252488214952,
+    "sir_ess_median": 4848.10481819398,
+    "sir_draws_max": 80000,
+    "sir_normalized_mean_error_median_f_clint": [
+      0.13647920331187074,
+      0.0597976486775202
+    ],
+    "sir_normalized_mean_error_p90_f_clint": [
+      0.5502137425105006,
+      0.2924103662218121
+    ],
+    "gate_passed": false,
+    "coverage_90_target_f_clint": [
+      0.9,
+      0.9
+    ],
+    "coverage_90_tolerance_f_clint": [
+      0.1,
+      0.1
+    ],
+    "sbc_ks_p_gate_threshold": 0.01,
+    "sir_agreement_gate_threshold_f_clint": [
+      0.95,
+      0.95
+    ]
+  }
+}

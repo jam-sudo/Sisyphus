@@ -7,7 +7,8 @@ training needed.
 ``NeuralAmortizer`` conditions a trained SNPE posterior on the engine forward map,
 single-dose regimen and sparse observations for the (F, metabolic CLint scale)
 CL-grid regime. Training data come from the same engine-grid forward and priors
-as ``sir_posterior_2d``. Model weights are supplied explicitly after validation.
+as ``sir_posterior_2d``. The shipped model is opt-in because it failed strict
+agreement with grid SIR.
 """
 from __future__ import annotations
 
@@ -94,11 +95,13 @@ class NeuralAmortizer:
             import sbi  # noqa: F401
             import torch  # noqa: F401
 
+            from sisyphus.ml.registry import verify_model_artifact
             from sisyphus.sbi.amortizer import load_result
         except ImportError as exc:
             raise ImportError(
                 "NeuralAmortizer.load requires the optional sbi extra (torch+sbi)"
             ) from exc
+        verify_model_artifact(path)
         return cls(load_result(path))
 
     def posterior(
@@ -144,6 +147,10 @@ class NeuralAmortizer:
             f=Posterior(f), cmax=Posterior(state["cmax"]),
             auc=Posterior(state["auc"]), cl_scale=Posterior(s),
             n_eff=float(n_samples),
+            warnings=(
+                "neural posterior is a calibrated approximation that does not match "
+                "exact SIR within Monte Carlo error",
+            ),
         )
 
 
@@ -158,8 +165,8 @@ def _neural_context(
     # shortcut: training uses CV 1 priors; simulate other widths before accepting them here.
     if f_prior.cv != 1.0 or cl_prior.cv != 1.0:
         raise ValueError("neural posterior was trained with F and CLint prior CV 1")
-    if cl_prior.s_min != _DESIGN_CLINT_SCALE_RATIO[0] or (
-        cl_prior.s_max != _DESIGN_CLINT_SCALE_RATIO[-1]
+    if not np.isclose(cl_prior.s_min, _DESIGN_CLINT_SCALE_RATIO[0]) or (
+        not np.isclose(cl_prior.s_max, _DESIGN_CLINT_SCALE_RATIO[-1])
     ):
         raise ValueError("neural posterior requires the trained CLint prior bounds")
     if not np.isfinite(f_prior.f_engine) or not 0 < f_prior.f_engine <= 1:

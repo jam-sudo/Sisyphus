@@ -33,6 +33,7 @@ def test_zero_observations_returns_engine_prior():
     assert post.cl_scale is not None
     assert np.median(post.f.samples) == pytest.approx(0.5, rel=0.1)
     assert np.median(post.cl_scale.samples) == pytest.approx(1.0, rel=0.1)
+    assert any("does not match exact SIR" in warning for warning in post.warnings)
 
 
 def test_context_validates_regimen_and_observations():
@@ -59,6 +60,9 @@ def test_context_validates_regimen_and_observations():
         _neural_context(FPrior(0.5, 0.5), cl_prior, forward, (), regimen)
     with pytest.raises(ValueError, match="trained CLint prior bounds"):
         _neural_context(f_prior, CLPrior(s_min=0.1), forward, (), regimen)
+    _neural_context(
+        f_prior, CLPrior(s_max=np.nextafter(20.0, 0.0)), forward, (), regimen
+    )
 
 
 def test_training_pairs_use_engine_priors_and_observation_schema():
@@ -136,6 +140,7 @@ def test_neural_posterior_maps_latents_through_grid():
     assert post.f.point == pytest.approx(0.4)
     assert post.cl_scale.point == pytest.approx(2.0)
     assert post.cmax.point == pytest.approx(forward(np.array([0.4]), np.array([2.0]))["cmax"][0])
+    assert any("does not match exact SIR" in warning for warning in post.warnings)
 
 
 def test_load_requires_optional_dependencies(monkeypatch, tmp_path):

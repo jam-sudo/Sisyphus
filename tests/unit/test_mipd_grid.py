@@ -73,10 +73,14 @@ def test_cl_grid_higher_clint_lowers_exposure():
     assert grid.auc[0] > grid.auc[-1]
 
 
-def test_predict_posterior_cl_latent_with_measured_conc_is_well_formed():
+def test_predict_posterior_cl_latent_with_measured_conc_is_well_formed(monkeypatch):
     from sisyphus.mipd.api import predict_posterior
     from sisyphus.mipd.clgrid import MeasuredConc
 
+    def no_neural_load(*_args, **_kwargs):
+        raise AssertionError("default MIPD method loaded neural weights")
+
+    monkeypatch.setattr("sisyphus.mipd.amortizer.NeuralAmortizer.load", no_neural_load)
     post = predict_posterior(
         MIDAZOLAM, DOSE, [MeasuredConc(0.02, t=2.0, cv=0.25)], n_grid=9, seed=0
     )
@@ -84,6 +88,32 @@ def test_predict_posterior_cl_latent_with_measured_conc_is_well_formed():
     assert post.meta_cmax is not None  # product posterior attached
     assert post.cmax_90ci is None  # no validated residual PI for conditioned posterior
     assert post.cmax.point > 0
+    assert post.warnings == ()
+
+
+def test_neural_opt_in_loads_shipped_weights_and_warns():
+    pytest.importorskip("torch")
+    pytest.importorskip("sbi")
+    from sisyphus.mipd.api import predict_posterior
+    from sisyphus.mipd.clgrid import MeasuredConc
+
+    post = predict_posterior(
+        MIDAZOLAM, DOSE, [MeasuredConc(0.02, t=4.0)],
+        method="neural", n_grid=13, n_samples=200, seed=0,
+    )
+    assert post.cl_scale is not None
+    assert post.meta_cmax is not None
+    assert post.cmax.point > 0
+    assert any("does not match exact SIR" in warning for warning in post.warnings)
+
+
+def test_predict_posterior_rejects_unknown_method():
+    from sisyphus.mipd.api import predict_posterior
+
+    with pytest.raises(ValueError, match="unknown MIPD posterior method"):
+        predict_posterior(MIDAZOLAM, DOSE, method="other")
+    with pytest.raises(ValueError, match="13-point CL grid"):
+        predict_posterior(MIDAZOLAM, DOSE, method="neural", n_grid=9)
 
 
 def test_predict_posterior_cl_latent_no_obs_returns_prior_centered_posterior():

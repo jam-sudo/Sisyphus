@@ -3,8 +3,9 @@
 
 Input is a JSON list of {"smiles": ..., "dose_mg": ...} oral compounds. A second
 manifest can provide a compound-disjoint held-out set; otherwise the last 20%
-after seeded shuffling are held out. No model is written unless the held-out
-coverage, SBC and ESS-aware grid-SIR agreement gates pass.
+after seeded shuffling are held out. The held-out coverage, SBC and ESS-aware
+grid-SIR agreement gates remain strict. A failed model can only be saved with
+the explicit --save-approximation flag, for opt-in use with its failed-gate report.
 """
 
 from __future__ import annotations
@@ -129,6 +130,7 @@ def _main() -> None:
     parser.add_argument("--hidden-features", type=int, default=64)
     parser.add_argument("--num-transforms", type=int, default=5)
     parser.add_argument("--embedding-hidden", type=int, default=64)
+    parser.add_argument("--save-approximation", action="store_true")
     parser.add_argument("--device", choices=("cpu", "cuda"), default="cpu")
     parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
@@ -182,6 +184,7 @@ def _main() -> None:
     ranks = []
     sir_ess = []
     sir_draws = []
+    normalized_mean_error = [[], []]
     cases = 0
     for i, spec in enumerate(heldout, 1):
         log.info("Held-out grid %d/%d: %s", i, len(heldout), spec["smiles"])
@@ -205,6 +208,10 @@ def _main() -> None:
             for dim in range(2):
                 lo, hi = np.quantile(neural_samples[dim], [0.05, 0.95])
                 coverage[dim] += lo <= truth[dim] <= hi
+                normalized_mean_error[dim].append(
+                    abs(np.mean(neural_samples[dim]) - np.mean(sir_samples[dim]))
+                    / max(np.std(sir_samples[dim]), np.finfo(float).tiny)
+                )
                 agreement[dim] += _mean_agrees_with_mc(
                     neural_samples[dim], sir_samples[dim], sir.n_eff
                 )
@@ -235,14 +242,20 @@ def _main() -> None:
         "sir_ess_min": float(min(sir_ess)),
         "sir_ess_median": float(np.median(sir_ess)),
         "sir_draws_max": int(max(sir_draws)),
+        "sir_normalized_mean_error_median_f_clint": [
+            float(np.median(errors)) for errors in normalized_mean_error
+        ],
+        "sir_normalized_mean_error_p90_f_clint": [
+            float(np.quantile(errors, 0.9)) for errors in normalized_mean_error
+        ],
         "gate_passed": passed,
     }
     args.report.parent.mkdir(parents=True, exist_ok=True)
     args.report.write_text(json.dumps(report, indent=2) + "\n")
     log.info("Held-out gate: %s", report)
-    if passed:
+    if passed or args.save_approximation:
         save_result(result, args.out)
-        log.info("Validated model saved to %s", args.out)
+        log.info("Model saved to %s (strict gate passed: %s)", args.out, passed)
     else:
         log.warning("Gate failed; model was not saved")
         raise SystemExit(2)
