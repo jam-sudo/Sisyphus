@@ -164,12 +164,12 @@ def test_verified_equivalent_sbi_engine_revision(tmp_path, monkeypatch, caplog):
 
 
 @pytest.mark.parametrize("model_name", ["multi_drug_nsf.pt", "hierarchical_nsf_2k.pt"])
-def test_retrained_model_matches_engine_revision(model_name, caplog):
+def test_sbi_model_warns_after_physiology_and_kp_change(model_name, caplog):
     from sisyphus.regimen.tdm_sbi import _warn_engine_revision
 
     with caplog.at_level("WARNING"):
         _warn_engine_revision(Path(model_name))
-    assert not caplog.records
+    assert "Posterior calibration may be stale" in caplog.text
 
 
 def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):

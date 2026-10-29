@@ -76,10 +76,10 @@ def test_solve_mc_iv_cmax_excludes_t0_spike():
     """Zero-width PI root cause: IV Cmax at t=0 = dose/V_venous (deterministic).
     With t_min_h > 0, the windowed max must be < the t=0 value."""
     compiled, params, y0 = _setup("iv")
-    # Unfiltered (V2 behavior): Cmax should equal dose/V_venous = 20/3.7 ≈ 5.405
+    # Unfiltered (V2 behavior): Cmax equals dose / sampled venous volume.
     cmax_v2, _, _, ok_v2 = solve_mc(compiled, params, y0, t_span=(0.0, 24.0))
     assert ok_v2
-    assert cmax_v2 == pytest.approx(20.0 / 3.7, rel=1e-3)
+    assert cmax_v2 == pytest.approx(20.0 / params.node_param("venous_blood", "volume"), rel=1e-3)
     # Windowed (V3 behavior): Cmax must be strictly less than t=0 value.
     cmax_v3, tmax_v3, _, ok_v3 = solve_mc(
         compiled, params, y0, t_span=(0.0, 24.0), t_min_h=_IV_CMAX_DELAY_H

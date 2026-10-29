@@ -31,6 +31,9 @@ predictions are now engine-only (e8dcd12: the oral-trained ML/meta is no longer
 blended into IV Cmax); its engine value was already 6.42 mg/L before that change.
 The other three moved with the 2026-09 public fup/Peff/CLint/VDss retrains and
 training-label screens (bisected per checkpoint; no single-drug branch).
+
+Full Rodgers–Rowland Kp (2026-10-29) moved sepiapterin and remdesivir beyond
+the 5% snapshot tolerance; the other two remain within tolerance.
 """
 from __future__ import annotations
 
@@ -40,8 +43,8 @@ from sisyphus.pipeline.predict import predict
 from tests._artifact_helpers import skip_if_local_artifacts
 
 _PINNED = {
-    "sepiapterin":       1.386895e+01,  # 2026-09 public retrains (was 1.309912e+01)
-    "remdesivir":        5.890889e+00,  # IV is engine-only, no oral ML blend (was 1.573162e+00)
+    "sepiapterin":       1.207040e+01,  # full R&R Kp (was 1.386895e+01)
+    "remdesivir":        4.498897e+00,  # full R&R Kp (was 5.890889e+00)
     "tebipenem_pivoxil": 3.692924e-01,  # 2026-09 retrains + label screen (was 3.118914e-01)
     "fostamatinib":      4.829905e-02,  # 2026-09 public retrains (was 6.675183e-02)
 }

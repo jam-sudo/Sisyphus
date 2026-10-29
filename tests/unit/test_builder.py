@@ -11,7 +11,7 @@ from sisyphus.engine.compiler import ODECompiler, ResolvedParams
 from sisyphus.engine.solver import solve
 from sisyphus.graph.body import BodyGraph
 from sisyphus.graph.builder import build_from_yaml, merge_overlay
-from sisyphus.graph.types import ActiveTransportEdge, FlowEdge
+from sisyphus.graph.types import ActiveTransportEdge, ClearanceEdge, FlowEdge, TransitEdge
 
 
 class TestBuilder:
@@ -118,6 +118,54 @@ class TestBuilder:
         ]
         assert len(liver_clearance) == 1
         assert liver_clearance[0].model == "extended"
+        assert liver_clearance[0].bile_target is None
+
+    def test_continuous_ehc_overlay(self):
+        base = build_from_yaml(Path("data/physiology/reference_man.yaml"))
+        merged = merge_overlay(base, Path("data/physiology/ehc_continuous_overlay.yaml"))
+        liver_edge = next(
+            edge for edge in merged.edges
+            if isinstance(edge, ClearanceEdge) and edge.source == "liver"
+        )
+        assert base.validate() == merged.validate() == []
+        assert next(
+            edge for edge in base.edges
+            if isinstance(edge, ClearanceEdge) and edge.source == "liver"
+        ).bile_target is None
+        assert liver_edge.bile_target == "duodenum_lumen"
+
+    def test_gallbladder_ehc_overlay(self):
+        base = build_from_yaml(Path("data/physiology/reference_man.yaml"))
+        merged = merge_overlay(base, Path("data/physiology/ehc_gallbladder_overlay.yaml"))
+        assert merged.validate() == []
+        assert "gallbladder" not in base.nodes
+        assert merged.nodes["gallbladder"].node_type == "lumen"
+        assert merged.nodes["gallbladder"].volume.mean == pytest.approx(0.025)
+        liver_edge = next(
+            edge for edge in merged.edges
+            if isinstance(edge, ClearanceEdge) and edge.source == "liver"
+        )
+        assert liver_edge.bile_target == "gallbladder"
+        emptying = next(
+            edge for edge in merged.edges
+            if isinstance(edge, TransitEdge) and edge.source == "gallbladder"
+        )
+        assert emptying.target == "duodenum_lumen"
+        assert emptying.transit_rate.mean == pytest.approx(0.154)
+
+    def test_clearance_bile_target_must_exist(self, tmp_path):
+        path = tmp_path / "bile.yaml"
+        path.write_text(
+            "global_params: {cardiac_output: 1}\n"
+            "nodes:\n"
+            "  - {name: tissue, type: organ, volume: 1}\n"
+            "  - {name: sink, type: sink, volume: 1}\n"
+            "edges:\n"
+            "  - {source: tissue, target: sink, type: clearance, "
+            "model: extended, bile_target: missing}\n"
+        )
+        with pytest.raises(ValueError, match="bile target node 'missing' not found"):
+            build_from_yaml(path)
 
     def test_reference_man_has_no_active_transport_edges(self):
         """active_transport edges removed; ECM flux replaces MM uptake."""

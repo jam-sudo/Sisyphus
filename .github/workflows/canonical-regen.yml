@@ -3,7 +3,7 @@ name: Canonical development benchmark regen
 on:
   workflow_dispatch:
   push:
-    branches: [regen/canonical-2026-10]
+    branches: [regen/canonical-2026-10-b]
     paths: [.github/workflows/canonical-regen.yml, scripts/regen_canonical.py]
 
 jobs:
@@ -35,10 +35,13 @@ jobs:
       - name: Regenerate canonical artifacts
         run: set -o pipefail; PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src python scripts/regen_canonical.py 2>&1 | tee regen_output.txt
 
+      - name: Recheck orthogonal-track gate
+        run: PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src python scripts/orthogonal_track_gate.py > data/validation/orthogonal_track_gate_2026-10-29_canonical.txt
+
       - name: Upload regenerated artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: canonical-2026-10-28
+          name: canonical-2026-10-29
           path: |
             data/training/clf_training.csv
             models/direct_pk/xgboost_clf.json
@@ -47,8 +50,9 @@ jobs:
             models/direct_pk/xgboost_vdf.meta.json
             data/training/4track_holdout_predictions.json
             tests/regression/data/prodrug_v3_pre_baseline.json
-            data/validation/4track_ci_2026-10-28_canonical.json
-            data/validation/canonical_regen_attribution_2026-10-28.json
+            data/validation/4track_ci_2026-10-29_canonical.json
+            data/validation/canonical_regen_attribution_2026-10-29.json
+            data/validation/orthogonal_track_gate_2026-10-29_canonical.txt
             data/validation/development_residual_interval.json
             data/model_card.json
             web/public/data/benchmark.json
