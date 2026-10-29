@@ -12,7 +12,7 @@ when the user passes ``--method auto``.
 Usage::
 
     python scripts/sbi_build_routing_table.py \\
-        --sbc data/validation/sbi_sbc_multi_drug_v2.json \\
+        --sbc data/validation/sbi_sbc_multi_drug_current.json \\
         --out data/sbi/method_routing.json
 """
 
@@ -35,7 +35,7 @@ BORDERLINE_COVERAGE = 0.15
 def main() -> None:
     p = argparse.ArgumentParser()
     p.add_argument("--sbc", type=Path,
-                   default=ROOT / "data" / "validation" / "sbi_sbc_multi_drug_v2.json")
+                   default=ROOT / "data" / "validation" / "sbi_sbc_multi_drug_current.json")
     p.add_argument("--out", type=Path,
                    default=ROOT / "data" / "sbi" / "method_routing.json")
     p.add_argument("--default", default="ibis",

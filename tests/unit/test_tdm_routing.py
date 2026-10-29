@@ -30,8 +30,8 @@ def case():
     graph = build_from_yaml(root / "data/physiology/reference_man.yaml")
     compiled = ODECompiler().compile(graph)
     profile = compute_profile(MORPHINE_SMILES)
-    drug = build_drug_on_graph(profile, predict_adme(profile), 30.0, "oral")
-    return compiled, graph, drug, DosingRegimen.single_oral(30.0)
+    drug = build_drug_on_graph(profile, predict_adme(profile), 22.5, "oral")
+    return compiled, graph, drug, DosingRegimen.single_oral(22.5)
 
 
 def test_auto_routing_by_name_and_compound_smiles(capsys):
@@ -46,7 +46,7 @@ def test_auto_routing_by_name_and_compound_smiles(capsys):
 
 def test_ibis_end_to_end_moves_toward_observation(case):
     compiled, graph, drug, regimen = case
-    observed = 0.01865
+    observed = 0.0285
     result = bayesian_update(
         compiled, graph, drug, regimen, (Observation(1.0, observed),),
         method="ibis", n_prior=50,
@@ -117,12 +117,36 @@ def test_cli_auto_uses_name_and_reports_actual_method(case, monkeypatch, capsys)
         cli._run_tdm(args)
 
 
-def test_stale_sbi_model_logs_engine_revision_warning(caplog):
+def test_stale_sbi_model_logs_engine_revision_warning(tmp_path, monkeypatch, caplog):
+    from sisyphus.regimen import tdm_sbi
+
+    stamp_path = tmp_path / "engine_revision.json"
+    stamp_path.write_text(json.dumps({
+        "models": {
+            "multi_drug_nsf.pt": {
+                "commit": "previous",
+                "sha256": "outdated",
+                "paths": ["engine.py"],
+            },
+        },
+    }))
+    (tmp_path / "engine.py").write_text("current")
+    monkeypatch.setattr(
+        tdm_sbi, "get_resource_config",
+        lambda: SimpleNamespace(root=tmp_path, model=lambda *args, **kwargs: stamp_path),
+    )
+
+    with caplog.at_level("WARNING"):
+        tdm_sbi._warn_engine_revision(Path("multi_drug_nsf.pt"))
+    assert "Posterior calibration may be stale" in caplog.text
+
+
+def test_retrained_hierarchical_model_matches_engine_revision(caplog):
     from sisyphus.regimen.tdm_sbi import _warn_engine_revision
 
     with caplog.at_level("WARNING"):
-        _warn_engine_revision(Path("multi_drug_nsf.pt"))
-    assert "Posterior calibration may be stale" in caplog.text
+        _warn_engine_revision(Path("hierarchical_nsf_2k.pt"))
+    assert not caplog.records
 
 
 def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
@@ -131,14 +155,28 @@ def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
     root = Path(__file__).resolve().parents[2]
     out = tmp_path / "method_routing.json"
     original = json.loads((root / "data/sbi/method_routing.json").read_text())
+    sbc_path = tmp_path / "data/validation/sbi_sbc_multi_drug_current.json"
+    sbc_path.parent.mkdir(parents=True)
+    sbc_path.write_text(json.dumps({
+        "gate_passed": False,
+        "drugs": [
+            {"name": "morphine", "pass": True, "coverage_max_deviation": 0.05,
+             "ks_pvalues": [0.5]},
+            {"name": "pravastatin", "pass": False, "coverage_max_deviation": 0.20,
+             "ks_pvalues": [0.001]},
+            {"name": "clozapine", "pass": True, "coverage_max_deviation": 0.12,
+             "ks_pvalues": [0.5]},
+        ],
+    }))
+    monkeypatch.setattr("scripts.sbi_build_routing_table.ROOT", tmp_path)
     out.write_text(json.dumps(original))
     monkeypatch.setattr(sys, "argv", ["sbi_build_routing_table", "--out", str(out)])
     main()
     rebuilt = json.loads(out.read_text())
-    assert rebuilt["source"] == "data/validation/sbi_sbc_multi_drug_v2.json"
+    assert rebuilt["source"] == "data/validation/sbi_sbc_multi_drug_current.json"
     assert rebuilt["sbi_reweight"] == original["sbi_reweight"]
-    assert rebuilt["summary"]["sbi"] == 5
-    assert rebuilt["summary"]["ibis"] == 8
+    assert rebuilt["summary"]["sbi"] == 1
+    assert rebuilt["summary"]["ibis"] == 2
     assert rebuilt["summary"]["global_sbc_gate_passed"] is False
     assert (rebuilt["reasons"]["morphine"]["tdm_bias_override"]
             == original["reasons"]["morphine"]["tdm_bias_override"])
