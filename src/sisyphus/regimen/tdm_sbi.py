@@ -240,7 +240,8 @@ def sbi_update(
     _extra_obs = observations[1:]
     native_context = None
     native_path = None
-    if (len(observations) > 1 and posterior_path is None and population_class is None
+    if (len(observations) > 1 and observation_node == "venous_blood"
+            and posterior_path is None and population_class is None
             and body_weight_kg is None and age_years is None):
         native_path = _native_multi_observation_model(drug)
         if native_path is not None:
