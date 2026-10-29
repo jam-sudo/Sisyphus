@@ -29,6 +29,8 @@
   "models/sbi/morphine_posterior_nsf.pt": null,
   "models/sbi/multi_drug_nsf.aux.pt": "sisyphus.regimen.tdm_sbi",
   "models/sbi/multi_drug_nsf.pt": "sisyphus.regimen.tdm_sbi",
+  "models/sbi/multi_observation_nsf.aux.pt": "sisyphus.regimen.tdm_sbi",
+  "models/sbi/multi_observation_nsf.pt": "sisyphus.regimen.tdm_sbi",
   "models/surrogate/cmax_mlp_0.eqx": "sisyphus.ml.surrogate",
   "models/surrogate/cmax_mlp_1.eqx": "sisyphus.ml.surrogate",
   "models/surrogate/cmax_mlp_2.eqx": "sisyphus.ml.surrogate",
