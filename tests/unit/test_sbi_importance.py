@@ -82,3 +82,50 @@ def test_time_aware_sampler_accepts_single_dose_context(monkeypatch):
     )
     draws = sampler.sample((2,), x=torch.as_tensor(context[None, :]))
     assert draws.shape == (2, 3)
+
+
+def test_time_aware_likelihood_uses_joint_observations_per_nuisance_draw(monkeypatch):
+    from types import SimpleNamespace
+
+    from sisyphus.sbi import simulator as simulator_module
+    from sisyphus.sbi.multi_observation import ASSAY_SIGMA_LOG10
+
+    class Simulator:
+        nominal_drug = type("Drug", (), {"dose_mg": 10.0})()
+        nominal_peff = 1.0
+        compiled = object()
+        obs_node = "venous_blood"
+
+        def _sample_graph(self, rng):
+            return object()
+
+    observed = []
+    solves = []
+
+    def corrected(posterior, x, log_draw, **kwargs):
+        observed.append(log_draw(np.zeros(3), np.random.default_rng(1)))
+        return np.zeros((2, 3)), 64.0
+
+    def solve(*args, **kwargs):
+        solves.append(1)
+        return SimpleNamespace(
+            solver_success=True, time_h=np.array([0.0, 1.0, 2.0]),
+            concentrations={"venous_blood": np.array([0.1, 0.2, 0.4])},
+        )
+
+    monkeypatch.setattr(importance, "sample_corrected", corrected)
+    monkeypatch.setattr(importance, "solve_regimen", solve)
+    monkeypatch.setattr(importance, "ResolvedParams", lambda graph, drug: object())
+    monkeypatch.setattr(simulator_module, "apply_theta_to_drug", lambda *args: SimpleNamespace(
+        sample=lambda rng: object(),
+    ))
+    context = np.zeros(24, dtype=np.float32)
+    context[:6] = [1 / 24, np.log10(0.2), 1.0, 2 / 24, np.log10(0.4), 1.0]
+    context[11] = 1 / 3
+    sampler = CorrectedSBCPosterior(
+        UniformPosterior(), Simulator(), seed=7, multi_observation=True,
+    )
+    sampler.sample((2,), x=torch.as_tensor(context[None, :]))
+    expected = 2 * (-np.log(ASSAY_SIGMA_LOG10) - 0.5 * np.log(2 * np.pi))
+    assert len(solves) == 1
+    assert observed[0] == pytest.approx(expected, abs=1e-5)
