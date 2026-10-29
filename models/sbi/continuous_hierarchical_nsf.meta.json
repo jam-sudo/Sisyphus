@@ -1,15 +1,15 @@
 {
-  "version": "current_engine_continuous_retry_v2",
-  "artifact_sha256": "1cd5dd85a5e1253850ed67a2b4e7e0dad3efb1627d333ccdee37f3af026581d9",
+  "version": "post_rr_engine_continuous_retry_v3",
+  "artifact_sha256": "6997a339902d4fec7c716f59c09a476d425212c871c85e598a7ace74ba9b6697",
   "target": "posterior log10 CLint shift, logit fup, log10 Peff shift",
   "trained_on": {
     "dataset_path": null,
-    "sha256": "5a04bc239bd3bce42d61842bf1918d73f58fb3268e138872370f4a86b675004f"
+    "sha256": "e78ca32f8e3a2b8277f167a52bb340d0f922da2c82fa0b6c9778412766044779"
   },
   "feature_schema": {
-    "name": "continuous_age_weight_sbi_context_v1",
+    "name": "artifact_only",
     "n_features": 15,
-    "sha256": "449b144e52f6cd06a4ac223761c736e9041d847be18e7de597619f5bda49c69d",
+    "sha256": "not_applicable",
     "description": "log10 Cmax, 12 drug features, normalized log10 body weight and age"
   },
   "trained_at": "2026-10-29",
@@ -18,7 +18,7 @@
   "holdout_version": "896e926a127f9a8a3fa632245b79196a3b105a335f76e453eb797e1ccb53e3ba",
   "holdout_metric": {
     "name": "per_population_drug_sbc_pass_count",
-    "value": 29
+    "value": 31
   },
   "hyperparameters": {
     "training_rows": 110000,
@@ -31,10 +31,10 @@
     "batch_size": 512,
     "max_epochs": 300,
     "stop_after_epochs": 60,
-    "actual_epochs": 79,
-    "best_validation_performance": 2.1145
+    "actual_epochs": 74,
+    "best_validation_performance": 2.1424
   },
-  "retrained_reason": "Current-engine age/weight retry; 29/52 SBC pairs versus 1/52 for the stale shipped model",
+  "retrained_reason": "Rebuilt after the full Rodgers-Rowland engine change; 31/52 held-out population-drug SBC gates pass versus 0/52 for the stale checkpoint on this engine",
   "artifact_status": "optional_runtime",
   "runtime_loader": "sisyphus.regimen.tdm_sbi"
 }

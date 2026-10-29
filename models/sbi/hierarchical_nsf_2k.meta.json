@@ -1,27 +1,40 @@
 {
-  "version": "unknown_legacy",
-  "artifact_sha256": "3e354ffe9975a073665bbf1b68344e42b15501f4db88152da8dbfc348bf30e8f",
-  "target": "unknown_legacy",
+  "version": "post_rr_engine_hierarchical_v2",
+  "artifact_sha256": "fdd54a51cd33a276a872500d27bde4397db399e1cdb79c7813ca0aeb47c1be30",
+  "target": "posterior log10 CLint shift, logit fup, log10 Peff shift",
   "trained_on": {
     "dataset_path": null,
-    "sha256": "unknown_legacy"
+    "sha256": "0d409766fd2f41bb64d46b8abc14d733907b223f361f7536603d24ec63e8b0c8"
   },
   "feature_schema": {
     "name": "artifact_only",
-    "n_features": null,
+    "n_features": 15,
     "sha256": "not_applicable",
-    "description": "Artifact integrity only; no canonical feature-vector fingerprint."
+    "description": "log10 Cmax, 12 drug features, two population indicators"
   },
   "trained_at": "2026-10-29",
-  "n_drugs_original": null,
-  "n_drugs_excluded": null,
-  "holdout_version": "unknown_legacy",
+  "n_drugs_original": 55,
+  "n_drugs_excluded": 0,
+  "holdout_version": "896e926a127f9a8a3fa632245b79196a3b105a335f76e453eb797e1ccb53e3ba",
   "holdout_metric": {
-    "name": "unknown_legacy",
-    "value": null
+    "name": "per_population_drug_sbc_pass_count",
+    "value": 9
   },
-  "hyperparameters": {},
-  "retrained_reason": "current-engine retrain with correlated physiology; provenance in models/sbi/engine_revision.json and data/sbi/multi_drug_train.meta.json",
+  "hyperparameters": {
+    "training_rows": 110000,
+    "theta_per_drug_population": 1000,
+    "n_populations": 2,
+    "density_estimator": "nsf",
+    "hidden_features": 64,
+    "num_transforms": 8,
+    "batch_size": 512,
+    "learning_rate": 0.0005,
+    "max_epochs": 500,
+    "stop_after_epochs": 40,
+    "seed": 42,
+    "actual_epochs": 107
+  },
+  "retrained_reason": "Rebuilt after the full Rodgers-Rowland engine change; 9/26 held-out population-drug SBC and coverage gates pass",
   "artifact_status": "optional_runtime",
   "runtime_loader": "sisyphus.regimen.tdm_sbi"
 }

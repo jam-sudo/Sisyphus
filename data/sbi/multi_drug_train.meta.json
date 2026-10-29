@@ -5,16 +5,18 @@
   "theta_per_drug": 2000,
   "total_requested": 110000,
   "total_valid": 110000,
-  "wall_time_s": 15323.464051246643,
-  "longest_chunk_wall_s": 2084.496547937393,
+  "wall_time_s": 14418.498904943466,
+  "longest_chunk_wall_s": 2013.4373450279236,
   "chunk_count": 11,
   "workers_per_chunk": 4,
+  "engine_baseline": "562ded043aa40bae4fedbc7832a1ab58309a9b49",
+  "training_data_sha256": "79c6f37da4f5af21d204574f2fe5a296123a262d9da3b221c9b3406baf44bcf7",
   "per_drug": [
     {
       "name": "3beta-hydroxytibolone",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 1171.4720797538757,
+      "elapsed_s": 552.2992050647736,
       "features": [
         6.632869241057591,
         0.11321380823935462,
@@ -34,7 +36,7 @@
       "name": "6-methoxy-2-naphthylacetic acid",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 863.3299703598022,
+      "elapsed_s": 865.3200476169586,
       "features": [
         6.558498499213413,
         0.04068727661137932,
@@ -54,7 +56,7 @@
       "name": "adagrasib",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 829.1088602542877,
+      "elapsed_s": 787.9955251216888,
       "features": [
         7.097823974906163,
         0.01589471459474236,
@@ -74,7 +76,7 @@
       "name": "alfentanil",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 599.9434049129486,
+      "elapsed_s": 574.5468935966492,
       "features": [
         6.544613835631565,
         0.4761160075210413,
@@ -94,7 +96,7 @@
       "name": "alimemazine",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 678.22558760643,
+      "elapsed_s": 1290.2637515068054,
       "features": [
         6.9799312327491805,
         0.025850561265477925,
@@ -114,7 +116,7 @@
       "name": "armodafinil",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 753.5085558891296,
+      "elapsed_s": 737.5252816677094,
       "features": [
         6.5231876347648665,
         0.1893310973468617,
@@ -134,7 +136,7 @@
       "name": "aspirin (aspirin-pc)",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 870.6958768367767,
+      "elapsed_s": 859.8874967098236,
       "features": [
         6.448921797095494,
         0.33688783371168735,
@@ -154,7 +156,7 @@
       "name": "ataluren",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 1617.580096244812,
+      "elapsed_s": 825.6869888305664,
       "features": [
         6.434731719313817,
         0.019804236665096966,
@@ -174,7 +176,7 @@
       "name": "baclofen",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 713.5405902862549,
+      "elapsed_s": 650.7836475372314,
       "features": [
         5.746923533498005,
         0.2992592586619239,
@@ -194,7 +196,7 @@
       "name": "bempedoic acid",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 601.8135161399841,
+      "elapsed_s": 587.7969241142273,
       "features": [
         6.8160775874244734,
         0.016934446104528322,
@@ -214,7 +216,7 @@
       "name": "bendazac",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 874.1694076061249,
+      "elapsed_s": 862.2761282920837,
       "features": [
         6.608223197280125,
         0.021047508179078363,
@@ -234,7 +236,7 @@
       "name": "benzgalantamine",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 615.6763153076172,
+      "elapsed_s": 621.3522880077362,
       "features": [
         7.176946995078282,
         0.05263360974358214,
@@ -254,7 +256,7 @@
       "name": "benzydamine",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 1434.5090866088867,
+      "elapsed_s": 714.6972298622131,
       "features": [
         7.155025598822789,
         0.19247846102196678,
@@ -274,7 +276,7 @@
       "name": "cefuroxime",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 912.1994073390961,
+      "elapsed_s": 808.7048585414886,
       "features": [
         6.217570063887791,
         0.27661661404421845,
@@ -294,7 +296,7 @@
       "name": "cenobamate",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 632.8045608997345,
+      "elapsed_s": 651.1435513496399,
       "features": [
         6.588718769370274,
         0.3496166933267932,
@@ -314,7 +316,7 @@
       "name": "chlorthalidone",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 698.7550551891327,
+      "elapsed_s": 719.5473191738129,
       "features": [
         6.100493905364231,
         0.13706860271697058,
@@ -334,7 +336,7 @@
       "name": "cidofovir",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 656.4427642822266,
+      "elapsed_s": 1223.58021235466,
       "features": [
         6.045488653002934,
         0.4518584948891911,
@@ -354,7 +356,7 @@
       "name": "clindamycin",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 817.1246449947357,
+      "elapsed_s": 844.7781291007996,
       "features": [
         6.483907458602147,
         0.25235467033616554,
@@ -374,7 +376,7 @@
       "name": "daprodustat",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 625.8299808502197,
+      "elapsed_s": 622.6660799980164,
       "features": [
         6.121215996562199,
         0.26834464121970675,
@@ -394,7 +396,7 @@
       "name": "desmopressin",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 889.8138966560364,
+      "elapsed_s": 452.6285707950592,
       "features": [
         6.543784973441319,
         0.2851894527169844,
@@ -414,7 +416,7 @@
       "name": "deucravacitinib",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 559.4662730693817,
+      "elapsed_s": 535.7525618076324,
       "features": [
         6.494903085051732,
         0.1218210256824899,
@@ -434,7 +436,7 @@
       "name": "dihydro-alpha-ergocryptine (alpha-dihydroergocryptine)",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 607.0291478633881,
+      "elapsed_s": 584.7551929950714,
       "features": [
         6.609868523894505,
         0.07768110937770448,
@@ -454,7 +456,7 @@
       "name": "disulfiram",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 788.4360094070435,
+      "elapsed_s": 771.222519159317,
       "features": [
         7.446609852133946,
         0.2795263034406989,
@@ -474,7 +476,7 @@
       "name": "edaravone",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 1326.1484236717224,
+      "elapsed_s": 727.9915227890015,
       "features": [
         6.03691822033997,
         0.29249064147872716,
@@ -494,7 +496,7 @@
       "name": "empagliflozin",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 518.8470420837402,
+      "elapsed_s": 514.0379168987274,
       "features": [
         6.092966971217351,
         0.11946423242977251,
@@ -514,7 +516,7 @@
       "name": "fenofibric acid",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 770.8223025798798,
+      "elapsed_s": 772.1481695175171,
       "features": [
         6.264316794692235,
         0.014135013565106847,
@@ -534,7 +536,7 @@
       "name": "flurbiprofen",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 729.7594814300537,
+      "elapsed_s": 741.4794065952301,
       "features": [
         6.510274288474278,
         0.01009352115741921,
@@ -554,7 +556,7 @@
       "name": "fluticasone propionate",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 478.1003997325897,
+      "elapsed_s": 485.03919529914856,
       "features": [
         7.391195413886265,
         0.016440271016661803,
@@ -574,7 +576,7 @@
       "name": "ganciclovir",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 833.570812702179,
+      "elapsed_s": 816.8667681217194,
       "features": [
         6.050059315978245,
         0.45324701801550077,
@@ -594,7 +596,7 @@
       "name": "ketoprofen",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 939.731983423233,
+      "elapsed_s": 754.7604632377625,
       "features": [
         6.613542315779881,
         0.009726789976762072,
@@ -614,7 +616,7 @@
       "name": "lenvatinib",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 619.6198155879974,
+      "elapsed_s": 1164.9055314064026,
       "features": [
         6.133101162730412,
         0.026530961615594435,
@@ -634,7 +636,7 @@
       "name": "linerixibat",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 715.279403924942,
+      "elapsed_s": 699.4562833309174,
       "features": [
         6.5049710248100325,
         0.03816351624746369,
@@ -654,7 +656,7 @@
       "name": "luseogliflozin",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 547.5241134166718,
+      "elapsed_s": 556.8284227848053,
       "features": [
         6.516255018531041,
         0.16513091737362467,
@@ -674,7 +676,7 @@
       "name": "methylene blue",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 1622.8756654262543,
+      "elapsed_s": 812.596125125885,
       "features": [
         7.0420591805564925,
         0.04488130168719821,
@@ -694,7 +696,7 @@
       "name": "nitisinone (ntbc)",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 753.9860243797302,
+      "elapsed_s": 749.9401133060455,
       "features": [
         6.633275387107091,
         0.050393072660386125,
@@ -714,7 +716,7 @@
       "name": "nitroglycerin",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 691.5306413173676,
+      "elapsed_s": 696.2280983924866,
       "features": [
         6.080098388014989,
         0.3905217519464219,
@@ -734,7 +736,7 @@
       "name": "noscapine",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 749.350191116333,
+      "elapsed_s": 739.0961792469025,
       "features": [
         7.086677071868138,
         0.06621345323816495,
@@ -754,7 +756,7 @@
       "name": "osu-6162 (pnu-96391)",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 1251.4759414196014,
+      "elapsed_s": 610.6227746009827,
       "features": [
         6.925020215331273,
         0.37957893566497364,
@@ -774,7 +776,7 @@
       "name": "oxycodone/naloxone (targiniq er)",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 716.4180431365967,
+      "elapsed_s": 707.3226683139801,
       "features": [
         6.806259987174229,
         0.2634966444787642,
@@ -794,7 +796,7 @@
       "name": "phenprocoumon",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 681.3811330795288,
+      "elapsed_s": 667.8834972381592,
       "features": [
         5.944719550429539,
         0.024213017330850906,
@@ -814,7 +816,7 @@
       "name": "pholcodine",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 668.0636653900146,
+      "elapsed_s": 669.7382616996765,
       "features": [
         6.820028183280186,
         0.13506808089651914,
@@ -834,7 +836,7 @@
       "name": "pirenzepine",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 694.2648015022278,
+      "elapsed_s": 1347.4256105422974,
       "features": [
         6.099951622306065,
         0.6869865383440422,
@@ -854,7 +856,7 @@
       "name": "prazosin",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 556.6205396652222,
+      "elapsed_s": 552.3529710769653,
       "features": [
         6.194930968104558,
         0.07045339416783047,
@@ -874,7 +876,7 @@
       "name": "pseudoephedrine",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 715.6217474937439,
+      "elapsed_s": 712.6162867546082,
       "features": [
         6.255623814879613,
         0.6725358537561734,
@@ -894,7 +896,7 @@
       "name": "remoxipride",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 1333.769071817398,
+      "elapsed_s": 668.9483239650726,
       "features": [
         6.916488644896702,
         0.33231894717865773,
@@ -914,7 +916,7 @@
       "name": "rofecoxib",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 679.198587179184,
+      "elapsed_s": 664.5457062721252,
       "features": [
         6.846772191344456,
         0.058269663642682316,
@@ -934,7 +936,7 @@
       "name": "rosuvastatin",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 653.7887485027313,
+      "elapsed_s": 639.240864276886,
       "features": [
         5.160090980349736,
         0.1017928668802374,
@@ -954,7 +956,7 @@
       "name": "roxadustat",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 720.059653043747,
+      "elapsed_s": 716.5130341053009,
       "features": [
         6.2063429926025435,
         0.021108263167542954,
@@ -974,7 +976,7 @@
       "name": "rufinamide",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 908.0940961837769,
+      "elapsed_s": 818.8728065490723,
       "features": [
         6.23843121272202,
         0.2735632328779591,
@@ -994,7 +996,7 @@
       "name": "sarecycline",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 741.1271414756775,
+      "elapsed_s": 717.4638621807098,
       "features": [
         5.949526665030675,
         0.10477795498545743,
@@ -1014,7 +1016,7 @@
       "name": "tacrine",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 684.6409111022949,
+      "elapsed_s": 696.889949798584,
       "features": [
         6.419272777854161,
         0.3618879909972028,
@@ -1034,7 +1036,7 @@
       "name": "tadalafil",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 655.4932930469513,
+      "elapsed_s": 639.6855390071869,
       "features": [
         6.68120407801743,
         0.05692242775660617,
@@ -1054,7 +1056,7 @@
       "name": "telcagepant",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 772.4047176837921,
+      "elapsed_s": 833.2497100830078,
       "features": [
         6.324229595481114,
         0.10610369617912421,
@@ -1074,7 +1076,7 @@
       "name": "teriflunomide",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 674.2554068565369,
+      "elapsed_s": 696.9117684364319,
       "features": [
         6.262172934828953,
         0.04563474268597292,
@@ -1094,7 +1096,7 @@
       "name": "varenicline",
       "n_requested": 2000,
       "n_valid": 2000,
-      "elapsed_s": 489.3790442943573,
+      "elapsed_s": 484.7695641517639,
       "features": [
         6.192949411689,
         0.6010989114219528,

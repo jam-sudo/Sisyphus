@@ -40,7 +40,7 @@ def test_auto_routing_by_name_and_compound_smiles(capsys):
     assert _resolve_auto_method(_route_drug_name(MORPHINE_SMILES, "morphine")) == (
         "ibis", False
     )
-    assert _resolve_auto_method("ketorolac") == ("sbi", False)
+    assert _resolve_auto_method("clozapine") == ("sbi", False)
     assert _route_drug_name("Cn1c(=O)c2c(ncn2C)n(C)c1=O", None) == "Caffeine"
     assert _resolve_auto_method("unlisted") == ("ibis", False)
     assert "not in routing table" in capsys.readouterr().err
@@ -50,6 +50,7 @@ def test_multi_observation_auto_routing_uses_only_calibrated_valid_context():
     regimen = DosingRegimen.single_oral(10.0)
     observations = (Observation(1.0, 0.02), Observation(4.0, 0.01))
     assert _resolve_auto_method("morphine", regimen, observations) == ("sbi", False)
+    assert _resolve_auto_method("ketorolac", regimen, observations) == ("sbi", False)
     assert _resolve_auto_method(
         "morphine", regimen, observations, SimpleNamespace(smiles="CCO")
     ) == ("ibis", False)
@@ -65,6 +66,8 @@ def test_multi_observation_model_matches_canonical_smiles():
     root = Path(__file__).resolve().parents[2]
     validation = json.loads((root / "data/sbi/validation_drug_set.json").read_text())
     morphine = next(row for row in validation["drugs"] if row["name"] == "morphine")
+    ketorolac = next(row for row in validation["drugs"] if row["name"] == "ketorolac")
+    clozapine = next(row for row in validation["drugs"] if row["name"] == "clozapine")
     rivaroxaban = next(row for row in validation["drugs"] if row["name"] == "rivaroxaban")
     assert _native_multi_observation_model(SimpleNamespace(smiles=morphine["smiles"])).name == (
         "multi_observation_nsf.pt"
@@ -72,6 +75,10 @@ def test_multi_observation_model_matches_canonical_smiles():
     assert _native_multi_observation_model(SimpleNamespace(smiles=MORPHINE_SMILES)).name == (
         "multi_observation_nsf.pt"
     )
+    assert _native_multi_observation_model(SimpleNamespace(smiles=ketorolac["smiles"])).name == (
+        "multi_observation_nsf.pt"
+    )
+    assert _native_multi_observation_model(SimpleNamespace(smiles=clozapine["smiles"])) is None
     assert _native_multi_observation_model(SimpleNamespace(smiles=rivaroxaban["smiles"])) is None
 
 
@@ -220,12 +227,12 @@ def test_validated_sbi_engine_revision(tmp_path, monkeypatch, caplog):
     "multi_drug_nsf.pt", "hierarchical_nsf_2k.pt", "multi_observation_nsf.pt",
     "continuous_hierarchical_nsf.pt",
 ])
-def test_sbi_model_warns_after_physiology_and_kp_change(model_name, caplog):
+def test_retrained_sbi_model_matches_current_engine(model_name, caplog):
     from sisyphus.regimen.tdm_sbi import _warn_engine_revision
 
     with caplog.at_level("WARNING"):
         _warn_engine_revision(Path(model_name))
-    assert "Posterior calibration may be stale" in caplog.text
+    assert "Posterior calibration may be stale" not in caplog.text
 
 
 def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):

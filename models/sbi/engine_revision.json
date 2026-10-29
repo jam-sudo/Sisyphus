@@ -2,8 +2,8 @@
   "description": "SHA256 of selected engine, physiology, graph, and SBI simulator inputs; commit identifies the engine baseline. Missing paths hash as <missing>.",
   "models": {
     "multi_drug_nsf.pt": {
-      "commit": "a3d398f5912a064cd9a0b3ff78b5a4d2b53d6b2b",
-      "sha256": "f15c5c9a6cd710d8aa579293baaecd946768f94cb6ea547a78252d3b3fae3d3e",
+      "commit": "562ded043aa40bae4fedbc7832a1ab58309a9b49",
+      "sha256": "4476af709c82ac0b0ac3084afd80a5cbf7fe33034855062986fe35f9f96b0f1f",
       "paths": [
         "data/physiology/achour2021_correlation.json",
         "data/physiology/pediatric_5y.yaml",
@@ -26,16 +26,14 @@
         "src/sisyphus/regimen/solver.py",
         "src/sisyphus/sbi/multi_drug.py",
         "src/sisyphus/sbi/priors.py",
-        "src/sisyphus/sbi/simulator.py"
-      ],
-      "verified_equivalent": {
-        "sha256": "bb267b0164e3ba6f43684ca575d5eff0be8b8fdf75b63be159b527d2197922b0",
-        "check": "11,000 fixed-seed draws (200 per each of 55 training drugs); theta, log10 Cmax, drug features, names, and per-drug counts bit-identical to the training-source tree"
-      }
+        "src/sisyphus/sbi/simulator.py",
+        "src/sisyphus/graph/types.py",
+        "src/sisyphus/predict/rr_full.py"
+      ]
     },
     "hierarchical_nsf_2k.pt": {
-      "commit": "a3d398f5912a064cd9a0b3ff78b5a4d2b53d6b2b",
-      "sha256": "f15c5c9a6cd710d8aa579293baaecd946768f94cb6ea547a78252d3b3fae3d3e",
+      "commit": "562ded043aa40bae4fedbc7832a1ab58309a9b49",
+      "sha256": "4476af709c82ac0b0ac3084afd80a5cbf7fe33034855062986fe35f9f96b0f1f",
       "paths": [
         "data/physiology/achour2021_correlation.json",
         "data/physiology/pediatric_5y.yaml",
@@ -58,16 +56,14 @@
         "src/sisyphus/regimen/solver.py",
         "src/sisyphus/sbi/multi_drug.py",
         "src/sisyphus/sbi/priors.py",
-        "src/sisyphus/sbi/simulator.py"
-      ],
-      "verified_equivalent": {
-        "sha256": "bb267b0164e3ba6f43684ca575d5eff0be8b8fdf75b63be159b527d2197922b0",
-        "check": "11,000 fixed-seed draws (200 per each of 55 training drugs); theta, log10 Cmax, drug features, names, and per-drug counts bit-identical to the training-source tree"
-      }
+        "src/sisyphus/sbi/simulator.py",
+        "src/sisyphus/graph/types.py",
+        "src/sisyphus/predict/rr_full.py"
+      ]
     },
     "continuous_hierarchical_nsf.pt": {
-      "commit": "382dfe7835f37f25e069bf5065f8ca8c0e3fb914",
-      "sha256": "d7b45f4ac54782fa75c14e97fb307f4b718bd43ebf3604d9954938dc60f58f31",
+      "commit": "562ded043aa40bae4fedbc7832a1ab58309a9b49",
+      "sha256": "194bd0997c9bd59018b1565aac1be08f24ad4957c6988ab6f50c6b53eefa4717",
       "paths": [
         "data/physiology/achour2021_correlation.json",
         "data/physiology/pediatric_5y.yaml",
@@ -91,7 +87,9 @@
         "src/sisyphus/sbi/multi_drug.py",
         "src/sisyphus/sbi/physiology_generator.py",
         "src/sisyphus/sbi/priors.py",
-        "src/sisyphus/sbi/simulator.py"
+        "src/sisyphus/sbi/simulator.py",
+        "src/sisyphus/graph/types.py",
+        "src/sisyphus/predict/rr_full.py"
       ]
     },
     "clozapine_posterior_nsf.pt": {
@@ -149,8 +147,8 @@
       ]
     },
     "multi_observation_nsf.pt": {
-      "commit": "d891568e290bfb7dff45d6ae78f3cb8b56e742f7",
-      "sha256": "68d7ea7eb6ec593f8813bf81a9ee6c289c8bd65ffa96ce6264c61a910099ab8f",
+      "commit": "562ded043aa40bae4fedbc7832a1ab58309a9b49",
+      "sha256": "966a95a6c9ded69565d2b496368aa1f9fe4b3fdb22264ae148a495c8e8f167e8",
       "paths": [
         "data/physiology/achour2021_correlation.json",
         "data/physiology/pediatric_5y.yaml",
@@ -174,12 +172,10 @@
         "src/sisyphus/sbi/multi_drug.py",
         "src/sisyphus/sbi/priors.py",
         "src/sisyphus/sbi/simulator.py",
-        "src/sisyphus/sbi/multi_observation.py"
-      ],
-      "validated_revision": {
-        "sha256": "401cb8c546841d58eae769495fa32bbe62c2a2e22e19ca57da94badd8506d51d",
-        "check": "Current-engine per-drug SBC: 100 calibration draws and 500 posterior draws for each of 13 held-out drugs; native routing limited to the 7 drugs passing KS and coverage gates."
-      }
+        "src/sisyphus/sbi/multi_observation.py",
+        "src/sisyphus/graph/types.py",
+        "src/sisyphus/predict/rr_full.py"
+      ]
     }
   }
 }
