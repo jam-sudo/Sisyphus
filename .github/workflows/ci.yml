@@ -83,6 +83,7 @@ jobs:
           tests/unit/test_sbi_amortizer.py
           tests/unit/test_sbi_hierarchical.py
           tests/unit/test_sbi_multi_drug.py
+          tests/unit/test_sbi_multi_observation.py
           tests/unit/test_sbi_simulator.py
           tests/unit/test_tdm_sbi.py
 

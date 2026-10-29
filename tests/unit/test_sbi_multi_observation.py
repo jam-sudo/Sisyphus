@@ -7,6 +7,8 @@ from types import SimpleNamespace
 import numpy as np
 import pytest
 
+pytest.importorskip("torch")
+
 from sisyphus.regimen.types import DosingRegimen
 from sisyphus.sbi.multi_observation import pack_observations
 
