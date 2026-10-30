@@ -29,7 +29,8 @@ def test_aggregate_blocks_counts_and_missing_case(tmp_path, monkeypatch):
                 "rejection_fallback_cases": int(start == 0),
                 "forced_exact_rejection_cases": int(start == 0),
                 "joint_smc_fallback_cases": int(start == 2),
-                "joint_smc_diagnostics": ([{"stages": [{"beta": 1.0}]}]
+                "joint_smc_diagnostics": ([{"stages": [{"beta": 1.0}],
+                                            "unique_initial_ancestors": 150}]
                                           if start == 2 else []),
             }],
         }
@@ -53,6 +54,7 @@ def test_aggregate_blocks_counts_and_missing_case(tmp_path, monkeypatch):
     main()
     written = json.loads(out.read_text())
     assert written["calibrated_null_global_pass_probability"] > 0
+    assert written["exact_reference_null_global_pass_probability"] > 0
     assert written["holm_global_gate"]["predeclared_at_utc"] == "2026-10-29T15:40:44Z"
     assert (written["holm_global_gate"]["calibrated_null_pass_probability"]
             >= written["calibrated_null_global_pass_probability"])
@@ -61,6 +63,12 @@ def test_aggregate_blocks_counts_and_missing_case(tmp_path, monkeypatch):
     assert written["size_calibrated_global_gate"]["predeclared_at_utc"] == (
         "2026-10-29T19:14:47Z"
     )
+    block["drugs"][0]["joint_smc_diagnostics"][0]["unique_initial_ancestors"] = 36
+    paths[1].write_text(json.dumps(block))
+    low_lineage = aggregate_blocks(paths, "multi_drug", 1)
+    assert low_lineage["drugs"][0]["pass"] is None
+    assert low_lineage["drugs"][0]["sampling_status"] == "joint_smc_low_ancestor"
+    assert low_lineage["incomplete_count"] == 1
     with pytest.raises(ValueError, match="Incomplete"):
         aggregate_blocks(paths[:1], "multi_drug", 1)
 

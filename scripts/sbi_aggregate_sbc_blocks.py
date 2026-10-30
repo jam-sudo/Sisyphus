@@ -12,6 +12,7 @@ import numpy as np
 from scipy import stats
 
 from sisyphus.sbi.importance import MAX_REJECTION_ATTEMPT_COUNT
+from sisyphus.sbi.joint_smc import SMC_MIN_UNIQUE_INITIAL_ANCESTORS
 
 
 def aggregate_blocks(paths: list[Path], flow: str, expected_pairs: int) -> dict:
@@ -62,23 +63,35 @@ def aggregate_blocks(paths: list[Path], flow: str, expected_pairs: int) -> dict:
             cursor = end
         if cursor != available or available == 0:
             raise ValueError(f"Incomplete SBC blocks for {key}: {cursor}/{available}")
-        if any(not entry.get("ranks") for _, entry in parts):
+        low_ancestor_parts = [
+            entry for _, entry in parts
+            if any(diagnostics.get("unique_initial_ancestors", 0)
+                   < SMC_MIN_UNIQUE_INITIAL_ANCESTORS
+                   for diagnostics in entry.get("joint_smc_diagnostics", []))
+        ]
+        if any(not entry.get("ranks") for _, entry in parts) or low_ancestor_parts:
             row = {
                 "n_valid": available,
                 "ks_pvalues": [],
                 "coverage": {},
                 "coverage_max_deviation": None,
                 "pass": None,
-                "sampling_error": "At least one calibration block had low ESS or failed",
+                "sampling_error": (
+                    "Joint SMC lineage below floor" if low_ancestor_parts else
+                    "At least one calibration block had low ESS or failed"
+                ),
                 "sampling_errors": [entry["sampling_error"] for _, entry in parts
-                                    if entry.get("sampling_error")],
+                                    if entry.get("sampling_error")]
+                + (["Joint SMC lineage below floor"] if low_ancestor_parts else []),
                 "sampling_status": (
+                    "joint_smc_low_ancestor" if low_ancestor_parts else
                     "uncomputable_by_exact_fallback"
                     if any("Exact rejection yielded" in entry.get("sampling_error", "")
                            for _, entry in parts) else "incomplete"
                 ),
                 "sampling_error_blocks": sum(
-                    bool(entry.get("sampling_error")) for _, entry in parts
+                    bool(entry.get("sampling_error") or entry in low_ancestor_parts)
+                    for _, entry in parts
                 ),
                 "rejection_fallback_cases": sum(
                     entry.get("rejection_fallback_cases", 0) for _, entry in parts
@@ -221,6 +234,14 @@ def main() -> None:
     ]
     result["calibrated_null_ci_95"] = null_result[args.flow]["ci_95"]
     result["calibrated_null_assumptions"] = null_result["assumptions"]
+    exact_null_path = (Path(__file__).resolve().parent.parent
+                       / "data/validation/sbi_global_gate_exact_reference_null.json")
+    exact_null = json.loads(exact_null_path.read_text())
+    result["exact_reference_null_global_pass_probability"] = exact_null[args.flow][
+        "pass_probability"
+    ]
+    result["exact_reference_null_ci_95"] = exact_null[args.flow]["ci_95"]
+    result["exact_reference_null_assumptions"] = exact_null["assumptions"]
     policy_path = (Path(__file__).resolve().parent.parent
                    / "data/validation/sbi_global_gate_policy.json")
     policy = json.loads(policy_path.read_text())
