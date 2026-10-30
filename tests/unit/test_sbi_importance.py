@@ -46,6 +46,11 @@ def test_corrected_sampler_parallel_likelihood():
     )
     assert samples.shape == (50, 3)
     assert ess == pytest.approx(100)
+    _, noisy_ess = sample_corrected(
+        UniformPosterior(), np.zeros(1), lambda theta, rng: np.log(rng.random()),
+        n_draws=50, n_proposals=100, n_nuisance=2, seed=7, workers=2,
+    )
+    assert noisy_ess < 95
 
 
 def test_corrected_sampler_rejects_degenerate_weights():
