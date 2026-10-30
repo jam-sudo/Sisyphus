@@ -48,6 +48,8 @@
       "sampling_error_blocks": 0,
       "rejection_fallback_cases": 0,
       "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
       "rejection_attempt_counts": [],
       "max_rejection_attempts": 100000,
       "median_correction_ess": 95.34934952644328,
@@ -89,6 +91,8 @@
       "sampling_error_blocks": 0,
       "rejection_fallback_cases": 0,
       "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
       "rejection_attempt_counts": [],
       "max_rejection_attempts": 100000,
       "median_correction_ess": 121.37431782824672,
@@ -130,6 +134,8 @@
       "sampling_error_blocks": 0,
       "rejection_fallback_cases": 0,
       "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
       "rejection_attempt_counts": [],
       "max_rejection_attempts": 100000,
       "median_correction_ess": 83.69413647824055,
@@ -171,6 +177,8 @@
       "sampling_error_blocks": 0,
       "rejection_fallback_cases": 0,
       "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
       "rejection_attempt_counts": [],
       "max_rejection_attempts": 100000,
       "median_correction_ess": 76.71227943371127,
@@ -212,6 +220,8 @@
       "sampling_error_blocks": 0,
       "rejection_fallback_cases": 0,
       "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
       "rejection_attempt_counts": [],
       "max_rejection_attempts": 100000,
       "median_correction_ess": 76.48112304817256,
@@ -253,6 +263,8 @@
       "sampling_error_blocks": 0,
       "rejection_fallback_cases": 0,
       "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
       "rejection_attempt_counts": [],
       "max_rejection_attempts": 100000,
       "median_correction_ess": 108.54220786032545,
@@ -294,6 +306,8 @@
       "sampling_error_blocks": 0,
       "rejection_fallback_cases": 0,
       "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
       "rejection_attempt_counts": [],
       "max_rejection_attempts": 100000,
       "median_correction_ess": 70.91686240158515,
@@ -335,6 +349,8 @@
       "sampling_error_blocks": 0,
       "rejection_fallback_cases": 0,
       "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
       "rejection_attempt_counts": [],
       "max_rejection_attempts": 100000,
       "median_correction_ess": 93.88284106387775,
@@ -376,6 +392,8 @@
       "sampling_error_blocks": 0,
       "rejection_fallback_cases": 0,
       "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
       "rejection_attempt_counts": [],
       "max_rejection_attempts": 100000,
       "median_correction_ess": 67.30024941557411,
@@ -417,6 +435,8 @@
       "sampling_error_blocks": 0,
       "rejection_fallback_cases": 100,
       "forced_exact_rejection_cases": 100,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
       "rejection_attempt_counts": [],
       "max_rejection_attempts": 100000,
       "median_correction_ess": null,
@@ -458,6 +478,8 @@
       "sampling_error_blocks": 0,
       "rejection_fallback_cases": 0,
       "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
       "rejection_attempt_counts": [],
       "max_rejection_attempts": 100000,
       "median_correction_ess": 96.71469056431859,
@@ -467,21 +489,247 @@
     },
     {
       "n_valid": 100,
-      "ks_pvalues": [],
-      "coverage": {},
-      "coverage_max_deviation": null,
-      "pass": null,
-      "sampling_error": "At least one calibration block had low ESS or failed",
-      "sampling_errors": [
-        "Exact rejection yielded 7/500 samples"
+      "ks_pvalues": [
+        0.01983924212565369,
+        0.06897234094909266,
+        0.9532159710635721
       ],
-      "sampling_status": "uncomputable_by_exact_fallback",
-      "sampling_error_blocks": 1,
-      "rejection_fallback_cases": 3,
-      "forced_exact_rejection_cases": 3,
-      "rejection_attempt_counts": [],
+      "coverage": {
+        "50": [
+          0.6,
+          0.54,
+          0.53
+        ],
+        "80": [
+          0.85,
+          0.79,
+          0.8
+        ],
+        "90": [
+          0.91,
+          0.9,
+          0.89
+        ],
+        "95": [
+          0.95,
+          0.95,
+          0.93
+        ]
+      },
+      "coverage_max_deviation": 0.09999999999999998,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 5,
+      "joint_smc_diagnostics": [
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 54,
+          "stages": [
+            {
+              "beta": 0.0023210230810946086,
+              "incremental_ess": 500.00000000050824,
+              "theta_acceptance": 0.247,
+              "nuisance_acceptance": 0.946
+            },
+            {
+              "beta": 0.00987246313109234,
+              "incremental_ess": 500.0000000159944,
+              "theta_acceptance": 0.2345,
+              "nuisance_acceptance": 0.8385
+            },
+            {
+              "beta": 0.060948423660341394,
+              "incremental_ess": 500.0000000020278,
+              "theta_acceptance": 0.136,
+              "nuisance_acceptance": 0.512
+            },
+            {
+              "beta": 0.4291692581339491,
+              "incremental_ess": 500.00000000035726,
+              "theta_acceptance": 0.058,
+              "nuisance_acceptance": 0.2
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 829.190642094244,
+              "theta_acceptance": 0.046,
+              "nuisance_acceptance": 0.1485
+            }
+          ],
+          "unique_initial_ancestors": 150,
+          "simulator_evaluations": 15443,
+          "elapsed_s": 1632.2500289548188,
+          "case_index": 25
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 54,
+          "stages": [
+            {
+              "beta": 0.013587858324171975,
+              "incremental_ess": 500.00000000048345,
+              "theta_acceptance": 0.2395,
+              "nuisance_acceptance": 0.9285
+            },
+            {
+              "beta": 0.10225862037723277,
+              "incremental_ess": 500.00000000094985,
+              "theta_acceptance": 0.145,
+              "nuisance_acceptance": 0.669
+            },
+            {
+              "beta": 0.7308037102341407,
+              "incremental_ess": 500.0000000002151,
+              "theta_acceptance": 0.0575,
+              "nuisance_acceptance": 0.306
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 969.2763510301668,
+              "theta_acceptance": 0.058,
+              "nuisance_acceptance": 0.272
+            }
+          ],
+          "unique_initial_ancestors": 235,
+          "simulator_evaluations": 12572,
+          "elapsed_s": 1386.610143808648,
+          "case_index": 26
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 54,
+          "stages": [
+            {
+              "beta": 0.021126118211213907,
+              "incremental_ess": 500.0000000077893,
+              "theta_acceptance": 0.2385,
+              "nuisance_acceptance": 0.897
+            },
+            {
+              "beta": 0.14575497509540852,
+              "incremental_ess": 500.00000000044463,
+              "theta_acceptance": 0.116,
+              "nuisance_acceptance": 0.684
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 504.44638514643077,
+              "theta_acceptance": 0.0565,
+              "nuisance_acceptance": 0.3385
+            }
+          ],
+          "unique_initial_ancestors": 251,
+          "simulator_evaluations": 9442,
+          "elapsed_s": 1045.5949953552336,
+          "case_index": 27
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 4000,
+          "nuisance_dimensions": 54,
+          "stages": [
+            {
+              "beta": 0.0005926003595959628,
+              "incremental_ess": 2000.000000304423,
+              "theta_acceptance": 0.24183333333333334,
+              "nuisance_acceptance": 0.9574166666666667
+            },
+            {
+              "beta": 0.0014307918744569054,
+              "incremental_ess": 2000.0000014458603,
+              "theta_acceptance": 0.2025,
+              "nuisance_acceptance": 0.8659166666666667
+            },
+            {
+              "beta": 0.0032066742641061186,
+              "incremental_ess": 2000.0000006509654,
+              "theta_acceptance": 0.197,
+              "nuisance_acceptance": 0.687
+            },
+            {
+              "beta": 0.0072887010277822946,
+              "incremental_ess": 2000.0000000103835,
+              "theta_acceptance": 0.2145,
+              "nuisance_acceptance": 0.47291666666666665
+            },
+            {
+              "beta": 0.020343459698772777,
+              "incremental_ess": 2000.000000049683,
+              "theta_acceptance": 0.19991666666666666,
+              "nuisance_acceptance": 0.29675
+            },
+            {
+              "beta": 0.09040864061577704,
+              "incremental_ess": 2000.0000000025466,
+              "theta_acceptance": 0.14133333333333334,
+              "nuisance_acceptance": 0.15258333333333332
+            },
+            {
+              "beta": 0.6010095292619108,
+              "incremental_ess": 2000.0000000000898,
+              "theta_acceptance": 0.07758333333333334,
+              "nuisance_acceptance": 0.06783333333333333
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 3668.2458816431217,
+              "theta_acceptance": 0.06466666666666666,
+              "nuisance_acceptance": 0.06433333333333334
+            }
+          ],
+          "unique_initial_ancestors": 239,
+          "simulator_evaluations": 139941,
+          "elapsed_s": 3697.723657708615,
+          "ancestor_guard_passed": true,
+          "case_index": 28
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 54,
+          "stages": [
+            {
+              "beta": 0.026420767148920277,
+              "incremental_ess": 500.0000000035991,
+              "theta_acceptance": 0.228,
+              "nuisance_acceptance": 0.9295
+            },
+            {
+              "beta": 0.24471595866919627,
+              "incremental_ess": 500.0000000002502,
+              "theta_acceptance": 0.1405,
+              "nuisance_acceptance": 0.687
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 661.1248172634016,
+              "theta_acceptance": 0.0755,
+              "nuisance_acceptance": 0.4125
+            }
+          ],
+          "unique_initial_ancestors": 284,
+          "simulator_evaluations": 9302,
+          "elapsed_s": 792.6866662763059,
+          "case_index": 29
+        }
+      ],
+      "rejection_attempt_counts": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
       "max_rejection_attempts": 100000,
+      "median_correction_ess": 118.32629549288592,
+      "max_proposals_used": 1024,
       "name": "sildenafil",
+      "sampling_status": "joint_smc_fallback",
       "size_calibrated_rejections": 0
     },
     {
@@ -518,6 +766,8 @@
       "sampling_error_blocks": 0,
       "rejection_fallback_cases": 0,
       "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
       "rejection_attempt_counts": [],
       "max_rejection_attempts": 100000,
       "median_correction_ess": 82.58419977940922,
@@ -527,12 +777,13 @@
     }
   ],
   "flow": "multi_drug",
-  "pass_count": 8,
-  "incomplete_count": 1,
+  "pass_count": 9,
+  "incomplete_count": 0,
   "failed_count": 4,
-  "rejection_fallback_cases": 103,
-  "forced_exact_rejection_cases": 103,
-  "sampling_error_blocks": 1,
+  "rejection_fallback_cases": 100,
+  "forced_exact_rejection_cases": 100,
+  "joint_smc_fallback_cases": 5,
+  "sampling_error_blocks": 0,
   "total_pairs": 13,
   "gate_passed": false,
   "calibrated_null_global_pass_probability": 0.1062,
@@ -541,9 +792,13 @@
     0.1124036230166811
   ],
   "calibrated_null_assumptions": "Exact uniform marginal ranks; independent parameters and pairs; uniform location within posterior quantile gaps",
-  "uncomputable_pairs": [
-    "sildenafil"
+  "exact_reference_null_global_pass_probability": 0.1032,
+  "exact_reference_null_ci_95": [
+    0.09730357863813661,
+    0.10932862450314187
   ],
+  "exact_reference_null_assumptions": "Exact exchangeable posterior draws from the supplied synthetic contexts; parameter dependence retained within each rank triple; pairs and calibration cases sampled independently; uniform location within posterior quantile gaps",
+  "uncomputable_pairs": [],
   "holm_global_gate": {
     "passed": false,
     "ks_rejections": 0,
@@ -559,11 +814,9 @@
     "calibrated_null_assumptions": "Exact uniform marginal ranks; independent parameters and pairs; uniform location within posterior quantile gaps"
   },
   "size_calibrated_global_gate": {
-    "passed": null,
-    "status": "INCOMPLETE",
-    "uncomputable_pairs": [
-      "sildenafil"
-    ],
+    "passed": true,
+    "status": "PASS",
+    "uncomputable_pairs": [],
     "rejections": 0,
     "ks_test_count": 39,
     "coverage_test_count": 156,
