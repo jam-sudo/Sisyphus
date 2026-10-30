@@ -173,36 +173,6 @@ def test_sbc_low_ess_parallel_fallback_uses_cap(monkeypatch):
     assert sampler.rejection_attempt_counts == [1024]
 
 
-def test_sbc_capped_rejection_uses_pseudo_marginal_mcmc(monkeypatch):
-    from sisyphus.sbi import mcmc
-
-    class Simulator:
-        obs_sigma_log10 = 0.2
-
-        def simulate_single(self, theta, seed, add_noise=True):
-            return theta[0]
-
-    def capped(*args, **kwargs):
-        raise LowImportanceESS("Exact rejection yielded 0/5 samples")
-
-    def converged(posterior, x, log_draw, **kwargs):
-        assert np.isfinite(log_draw(np.mean([PRIOR_LOW, PRIOR_HIGH], axis=0),
-                                    np.random.default_rng(1)))
-        return np.zeros((5, 3)), {"rhat": [1.0] * 3, "bulk_ess": [600] * 3}
-
-    monkeypatch.setattr(importance, "sample_exact_rejection_parallel", capped)
-    monkeypatch.setattr(mcmc, "sample_pseudo_marginal_mcmc", converged)
-    sampler = CorrectedSBCPosterior(
-        UniformPosterior(), Simulator(), seed=7, exact_rejection_workers=2,
-        max_rejection_attempts=1, mcmc_after_rejection=True,
-    )
-    draws = sampler.sample((5,), x=torch.as_tensor([[0.0]]))
-    assert draws.shape == (5, 3)
-    assert sampler.mcmc_fallback_count == 1
-    assert sampler.mcmc_diagnostics[0]["case_index"] == 0
-    assert sampler.rejection_attempt_counts == [1]
-
-
 def test_sbc_capped_rejection_uses_joint_smc(monkeypatch):
     from types import SimpleNamespace
 

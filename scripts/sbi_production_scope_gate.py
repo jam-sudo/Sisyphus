@@ -41,7 +41,6 @@ def production_scope_gate(
 
     behavior_eligible = [row["pass"] is not None
                          and not row.get("rejection_fallback_cases", 0)
-                         and not row.get("mcmc_fallback_cases", 0)
                          and not row.get("joint_smc_fallback_cases", 0)
                          and not row.get("sampling_error_blocks", 0) for row in rows]
     selected = [row for row, eligible in zip(rows, behavior_eligible, strict=True)

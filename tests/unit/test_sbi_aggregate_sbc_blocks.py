@@ -28,9 +28,9 @@ def test_aggregate_blocks_counts_and_missing_case(tmp_path, monkeypatch):
                                     for level in (50, 80, 90, 95)},
                 "rejection_fallback_cases": int(start == 0),
                 "forced_exact_rejection_cases": int(start == 0),
-                "mcmc_fallback_cases": int(start == 2),
-                "mcmc_diagnostics": ([{"rhat": [1.0], "bulk_ess": [600]}]
-                                     if start == 2 else []),
+                "joint_smc_fallback_cases": int(start == 2),
+                "joint_smc_diagnostics": ([{"stages": [{"beta": 1.0}]}]
+                                          if start == 2 else []),
             }],
         }
         path = tmp_path / f"{start}.json"
@@ -42,16 +42,9 @@ def test_aggregate_blocks_counts_and_missing_case(tmp_path, monkeypatch):
     assert result["drugs"][0]["n_valid"] == 4
     assert result["drugs"][0]["coverage"]["50"] == [0.5, 0.5, 0.5]
     assert result["forced_exact_rejection_cases"] == 1
-    assert result["mcmc_fallback_cases"] == 1
-    assert result["drugs"][0]["sampling_status"] == "pseudo_marginal_mcmc_fallback"
+    assert result["joint_smc_fallback_cases"] == 1
+    assert result["drugs"][0]["sampling_status"] == "joint_smc_fallback"
     assert result["sampling_error_blocks"] == 0
-    joint_block = json.loads(paths[0].read_text())
-    joint_block["drugs"][0]["joint_smc_fallback_cases"] = 1
-    joint_block["drugs"][0]["joint_smc_diagnostics"] = [{"stages": [{"beta": 1.0}]}]
-    paths[0].write_text(json.dumps(joint_block))
-    joint_result = aggregate_blocks(paths, "multi_drug", 1)
-    assert joint_result["joint_smc_fallback_cases"] == 1
-    assert joint_result["drugs"][0]["sampling_status"] == "joint_smc_fallback"
     out = tmp_path.parent / "aggregated.json"
     monkeypatch.setattr("sys.argv", [
         "sbi_aggregate_sbc_blocks.py", "--flow", "multi_drug", "--blocks", str(tmp_path),

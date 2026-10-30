@@ -51,7 +51,6 @@ from sisyphus.sbi.importance import (  # noqa: E402
     CorrectedSBCPosterior,
 )
 from sisyphus.sbi.joint_smc import SMC_PARTICLE_COUNT, SMC_REJUVENATION_SWEEP_COUNT  # noqa: E402
-from sisyphus.sbi.mcmc import MCMC_MAX_RETAINED_STEP_COUNT  # noqa: E402
 from sisyphus.sbi.multi_drug import (  # noqa: E402
     extract_drug_features,
     load_drug_specs_from_json,
@@ -109,13 +108,10 @@ def main() -> None:
     p.add_argument("--sampler", choices=("raw", "corrected"), default="corrected")
     p.add_argument("--exact-rejection-workers", type=int, default=0)
     p.add_argument("--fallback-rejection-workers", type=int, default=0)
-    p.add_argument("--mcmc-after-rejection", action="store_true")
     p.add_argument("--joint-smc-after-rejection", action="store_true")
     p.add_argument("--joint-smc-particles", type=int, default=SMC_PARTICLE_COUNT)
     p.add_argument("--joint-smc-workers", type=int, default=1)
     p.add_argument("--joint-smc-sweeps", type=int, default=SMC_REJUVENATION_SWEEP_COUNT)
-    p.add_argument("--mcmc-max-retained-steps", type=int,
-                   default=MCMC_MAX_RETAINED_STEP_COUNT)
     p.add_argument("--max-rejection-attempts", type=int,
                    default=MAX_REJECTION_ATTEMPT_COUNT)
     p.add_argument("--only-pair", type=int, default=0)
@@ -248,8 +244,6 @@ def main() -> None:
                     exact_rejection_workers=args.exact_rejection_workers,
                     fallback_rejection_workers=args.fallback_rejection_workers,
                     max_rejection_attempts=args.max_rejection_attempts,
-                    mcmc_after_rejection=args.mcmc_after_rejection,
-                    mcmc_max_retained_steps=args.mcmc_max_retained_steps,
                     joint_smc_after_rejection=args.joint_smc_after_rejection,
                     joint_smc_particles=args.joint_smc_particles,
                     joint_smc_workers=args.joint_smc_workers,
@@ -282,8 +276,6 @@ def main() -> None:
                     "rejection_attempt_counts": getattr(
                         sampler, "rejection_attempt_counts", []
                     ),
-                    "mcmc_fallback_cases": getattr(sampler, "mcmc_fallback_count", 0),
-                    "mcmc_diagnostics": getattr(sampler, "mcmc_diagnostics", []),
                     "joint_smc_fallback_cases": getattr(
                         sampler, "joint_smc_fallback_count", 0
                     ),
@@ -341,8 +333,6 @@ def main() -> None:
                 "correction_ess": getattr(sampler, "ess", []),
                 "proposal_counts": getattr(sampler, "proposal_counts", []),
                 "rejection_attempt_counts": getattr(sampler, "rejection_attempt_counts", []),
-                "mcmc_fallback_cases": getattr(sampler, "mcmc_fallback_count", 0),
-                "mcmc_diagnostics": getattr(sampler, "mcmc_diagnostics", []),
                 "joint_smc_fallback_cases": getattr(
                     sampler, "joint_smc_fallback_count", 0
                 ),
