@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from collections.abc import Callable
 from multiprocessing import get_context
 
@@ -10,6 +11,8 @@ from scipy.special import logsumexp
 from scipy.stats import norm, rankdata
 
 from sisyphus.sbi.priors import PRIOR_HIGH, PRIOR_LOW
+
+log = logging.getLogger(__name__)
 
 # Source: data/validation/sbi_mcmc_fallback_policy.json.
 MCMC_CHAIN_COUNT = 4
@@ -216,6 +219,11 @@ def sample_pseudo_marginal_mcmc(
                     states[chain] = state
                 draws = np.stack([np.concatenate(parts) for parts in traces])
                 diagnostics = mcmc_diagnostics(draws)
+                log.info(
+                    "Pseudo-marginal MCMC: %d retained steps/chain, max R-hat %.3f, "
+                    "min bulk ESS %.1f",
+                    draws.shape[1], max(diagnostics["rhat"]), min(diagnostics["bulk_ess"]),
+                )
                 if (max(diagnostics["rhat"]) <= max_rhat
                         and min(diagnostics["bulk_ess"]) >= min_bulk_ess):
                     break
