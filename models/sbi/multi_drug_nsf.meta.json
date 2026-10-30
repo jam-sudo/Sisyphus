@@ -51,6 +51,7 @@
       512,
       1024
     ],
-    "sbc_low_ess_fallback": "exact joint-prior rejection after all retries"
+    "sbc_low_ess_fallback": "exact joint-prior rejection after all retries",
+    "sbc_capped_rejection_recovery": "data/validation/sbi_mcmc_fallback_policy.json"
   }
 }
