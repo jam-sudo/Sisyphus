@@ -16,7 +16,11 @@ def test_parallel_exact_rejection_preserves_conditional_box_prior():
               "workers": 2, "max_attempts": 4096}
     samples, attempts = sample_exact_rejection_parallel(log_draw, **kwargs)
     repeat, repeat_attempts = sample_exact_rejection_parallel(log_draw, **kwargs)
+    higher_cap, _ = sample_exact_rejection_parallel(
+        log_draw, **{**kwargs, "max_attempts": 8192}
+    )
     assert np.array_equal(samples, repeat)
+    assert np.array_equal(samples, higher_cap)
     assert attempts == repeat_attempts
     assert np.all(samples[:, 0] > midpoint)
     assert np.all(samples <= PRIOR_HIGH)
