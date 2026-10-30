@@ -149,6 +149,46 @@ def _native_multi_observation_model(drug: DrugOnGraph) -> Path | None:
     return None
 
 
+def _sbc_covariate_exclusion(
+    drug: DrugOnGraph,
+    population_class: str | None,
+    body_weight_kg: float | None,
+    age_years: float | None,
+) -> str | None:
+    """Explain why a validated covariate–drug pair cannot use its SBI flow."""
+    flow = "continuous" if body_weight_kg is not None else (
+        "hierarchical" if population_class is not None else None
+    )
+    if flow is None:
+        return None
+    try:
+        from rdkit import Chem
+
+        table_path = get_resource_config().data("sbi", "method_routing.json", required=False)
+        pairs = json.loads(table_path.read_text())[flow]["pairs"]
+        molecule = Chem.MolFromSmiles(drug.smiles)
+        if molecule is None:
+            return None
+        canonical = Chem.MolToSmiles(molecule, isomericSmiles=False)
+        for row in pairs:
+            if flow == "hierarchical" and row["population"] != population_class:
+                continue
+            if flow == "continuous" and (
+                row["body_weight_kg"] != body_weight_kg or row["age_years"] != age_years
+            ):
+                continue
+            reference = Chem.MolFromSmiles(row["smiles"])
+            if (reference is not None
+                    and Chem.MolToSmiles(reference, isomericSmiles=False) == canonical):
+                if not row["use_sbi"]:
+                    return (f"{flow} SBC excludes {row['population']}/{row['drug']} "
+                            "from SBI routing")
+                return None
+    except (OSError, KeyError, TypeError, ValueError) as exc:
+        logger.warning("SBI covariate routing unavailable: %s", exc)
+    return None
+
+
 def sbi_update(
     compiled: CompiledODE,
     graph: BodyGraph,
@@ -261,6 +301,14 @@ def sbi_update(
         ppath = _DEFAULT_HIERARCHICAL_POSTERIOR_PATH
     else:
         ppath = _DEFAULT_POSTERIOR_PATH
+    if not raw_npe:
+        exclusion = _sbc_covariate_exclusion(
+            drug, population_class, body_weight_kg, age_years
+        )
+        if exclusion is not None:
+            from sisyphus.sbi.importance import LowImportanceESS
+
+            raise LowImportanceESS(exclusion)
     if not ppath.exists():
         raise FileNotFoundError(
             f"SBI posterior file not found: {ppath}. "
@@ -385,7 +433,11 @@ def sbi_update(
         samples_np = samples_t.detach().cpu().numpy()
     else:
         from sisyphus.physiology.correlated import resample_correlated_abundances
-        from sisyphus.sbi.importance import sample_corrected
+        from sisyphus.sbi.importance import (
+            DEFAULT_PROPOSAL_COUNT,
+            LowImportanceESS,
+            sample_corrected,
+        )
 
         if any(obs.concentration <= 0 or obs.cv <= 0 for obs in observations):
             raise ValueError("SBI observations must have positive concentration and CV")
@@ -430,10 +482,27 @@ def sbi_update(
             except (KeyError, ValueError, RuntimeError):
                 return -np.inf
 
-        samples_np, corrected_ess = sample_corrected(
-            result.posterior, x_vec, log_likelihood_draw,
-            n_draws=n_samples, seed=seed,
+        proposal_counts = (
+            DEFAULT_PROPOSAL_COUNT, 2 * DEFAULT_PROPOSAL_COUNT, 4 * DEFAULT_PROPOSAL_COUNT
         )
+        for proposal_count in proposal_counts:
+            try:
+                with torch.random.fork_rng(devices=[]):
+                    torch.manual_seed(seed + proposal_count)
+                    samples_np, corrected_ess = sample_corrected(
+                        result.posterior, x_vec, log_likelihood_draw,
+                        n_draws=n_samples, n_proposals=proposal_count,
+                        seed=seed + proposal_count,
+                    )
+                logger.info("SBI correction accepted %d proposals at ESS %.1f",
+                            proposal_count, corrected_ess)
+                break
+            except LowImportanceESS as exc:
+                logger.warning("SBI correction at %d proposals failed: %s", proposal_count, exc)
+        else:
+            raise LowImportanceESS(
+                f"SBI correction remained below ESS floor after {proposal_counts[-1]} proposals"
+            )
         _extra_obs = ()
         sbi_reweight = False
     posterior_sample_time = time.time() - t0_sample

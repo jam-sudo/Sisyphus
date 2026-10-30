@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import pathlib
 
 import numpy as np
@@ -76,8 +77,43 @@ def _posterior_prior_matches_current() -> bool:
     reason="Posterior trained with old fup parameterization (pre-logit); retrain needed",
 )
 class TestSBIDispatch:
+    def test_covariate_pair_exclusion_uses_flow_specific_routing(
+        self, morphine_drug, monkeypatch, tmp_path,
+    ):
+        from types import SimpleNamespace
+
+        from sisyphus.regimen import tdm_sbi
+
+        drug, _ = morphine_drug
+        path = tmp_path / "routing.json"
+        path.write_text(json.dumps({
+            "hierarchical": {"pairs": [
+                {"population": "adult", "drug": "morphine", "smiles": MORPHINE_SMILES,
+                 "use_sbi": False},
+            ]},
+            "continuous": {"pairs": [
+                {"population": "adult", "drug": "morphine", "smiles": MORPHINE_SMILES,
+                 "body_weight_kg": 70.0, "age_years": 35.0, "use_sbi": False},
+                {"population": "pediatric_5y", "drug": "morphine", "smiles": MORPHINE_SMILES,
+                 "body_weight_kg": 18.0, "age_years": 5.0, "use_sbi": True},
+            ]},
+        }))
+        monkeypatch.setattr(
+            tdm_sbi, "get_resource_config",
+            lambda: SimpleNamespace(data=lambda *args, **kwargs: path),
+        )
+        assert "hierarchical SBC excludes" in tdm_sbi._sbc_covariate_exclusion(
+            drug, "adult", None, None
+        )
+        assert "continuous SBC excludes" in tdm_sbi._sbc_covariate_exclusion(
+            drug, None, 70.0, 35.0
+        )
+        assert tdm_sbi._sbc_covariate_exclusion(drug, None, 18.0, 5.0) is None
+        assert tdm_sbi._sbc_covariate_exclusion(drug, "pediatric_5y", None, None) is None
+
+    @pytest.mark.parametrize("failed_attempts", [0, 2, 3])
     def test_default_sbi_uses_likelihood_correction(
-        self, physiology, morphine_drug, monkeypatch,
+        self, physiology, morphine_drug, monkeypatch, failed_attempts,
     ):
         from types import SimpleNamespace
 
@@ -104,23 +140,33 @@ class TestSBIDispatch:
 
         monkeypatch.setattr(tdm_sbi, "solve_regimen", fake_solve)
 
-        def corrected(posterior, x, log_draw, *, n_draws, seed):
-            seen.append(len(x))
+        def corrected(posterior, x, log_draw, *, n_draws, n_proposals, seed):
+            seen.append((len(x), n_proposals, seed))
             log_densities.append(log_draw(np.zeros(3), np.random.default_rng(1)))
+            if len(seen) <= failed_attempts:
+                raise importance.LowImportanceESS("forced low ESS")
             return np.zeros((n_draws, 3)), 64.0
 
         monkeypatch.setattr(importance, "sample_corrected", corrected)
-        result = sbi_update(
-            compiled, graph, drug, DosingRegimen.single_oral(30.0),
-            (Observation(1.0, 0.01865),), n_samples=2, n_predictive_sims=1,
-            logp_hint=logp,
-        )
-        assert seen == [13]
+        def run():
+            return sbi_update(
+                compiled, graph, drug, DosingRegimen.single_oral(30.0),
+                (Observation(1.0, 0.01865),), n_samples=2, n_predictive_sims=1,
+                logp_hint=logp,
+            )
+
+        if failed_attempts == 3:
+            with pytest.raises(importance.LowImportanceESS, match="after 1024 proposals"):
+                run()
+        else:
+            result = run()
+            assert result.ess == 64.0
+        expected_counts = [256] if failed_attempts == 0 else [256, 512, 1024]
+        assert seen == [(13, count, 42 + count) for count in expected_counts]
         sigma = np.log10(1.1)
         expected = (-0.5 * ((np.log10(0.01865) - np.log10(0.02)) / sigma) ** 2
                     - np.log(sigma) - 0.5 * np.log(2 * np.pi))
-        assert log_densities[0] == pytest.approx(expected)
-        assert result.ess == 64.0
+        assert all(value == pytest.approx(expected) for value in log_densities)
         assert 48.0 in solve_windows
         assert 48.0 / 499 in solve_steps
 

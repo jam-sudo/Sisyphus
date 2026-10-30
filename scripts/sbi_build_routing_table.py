@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """Build the per-drug TDM method routing table from SBC results.
 
-Policy (Track B hybrid dispatch, 2026-04-10):
-    - per-drug SBC pass and coverage deviation ≤ 0.10 → "sbi"
-    - all other drugs                           → "ibis" (or existing "is" override)
+Policy:
+    - per-drug SBC pass, coverage deviation ≤ 0.10, and no exact SBC fallback → "sbi"
+    - all other drugs → "ibis" (or existing "is" override)
 
 Drugs not in the validation set default to ``default`` (``ibis`` unless
 overridden). The table is consumed by ``sisyphus.cli._resolve_auto_method``
 when the user passes ``--method auto``.
 
 The time-aware model is routed separately for multiple observations, using
-the same per-drug SBC and coverage rule. A failed multi-observation gate
+the same per-drug SBC, coverage, and rejection rule. A failed multi-observation gate
 leaves the existing single-observation route in place.
 
 Usage::
@@ -46,6 +46,12 @@ def main() -> None:
     p.add_argument("--multi-observation-sbc", type=Path,
                    default=ROOT / "data" / "validation"
                    / "sbi_sbc_multi_observation_corrected.json")
+    p.add_argument("--hierarchical-sbc", type=Path,
+                   default=ROOT / "data" / "validation"
+                   / "sbi_sbc_hierarchical_corrected.json")
+    p.add_argument("--continuous-sbc", type=Path,
+                   default=ROOT / "data" / "validation"
+                   / "sbi_sbc_continuous_corrected.json")
     p.add_argument("--default", default="ibis",
                    help="default method for drugs not in the validation set")
     args = p.parse_args()
@@ -62,11 +68,16 @@ def main() -> None:
         cov_dev = float(entry["coverage_max_deviation"])
         ks = entry["ks_pvalues"]
         per_drug_pass = bool(entry.get("pass", False))
+        rejection_cases = int(entry.get("rejection_fallback_cases", 0))
         existing_is = existing.get("routes", {}).get(name) == "is"
         if existing_is:
             method = "is"
             reason = "existing_is_override"
             is_count += 1
+        elif rejection_cases:
+            method = "ibis"
+            reason = "exact_rejection_sbc_fallback"
+            ibis_count += 1
         elif per_drug_pass and cov_dev <= STRICT_COVERAGE_OK:
             method = "sbi"
             reason = "sbc_and_coverage_ok"
@@ -90,6 +101,7 @@ def main() -> None:
             "coverage_max_deviation": cov_dev,
             "ks_pvalues": ks,
             "sbc_pass": per_drug_pass,
+            "rejection_fallback_cases": rejection_cases,
         }
         override = existing.get("reasons", {}).get(name, {}).get("tdm_bias_override")
         if override is not None:
@@ -105,20 +117,81 @@ def main() -> None:
         for entry in multi_sbc["drugs"]:
             name = entry["name"]
             coverage = float(entry["coverage_max_deviation"])
-            passed = bool(entry.get("pass", False)) and coverage <= STRICT_COVERAGE_OK
+            rejection_cases = int(entry.get("rejection_fallback_cases", 0))
+            passed = (bool(entry.get("pass", False)) and coverage <= STRICT_COVERAGE_OK
+                      and rejection_cases == 0)
             decisions[name] = {
                 "use_native": passed,
                 "smiles": smiles[name],
                 "sbc_pass": bool(entry.get("pass", False)),
                 "coverage_max_deviation": coverage,
                 "ks_pvalues": entry["ks_pvalues"],
+                "rejection_fallback_cases": rejection_cases,
             }
         multi_observation = {
             "source": str(args.multi_observation_sbc.resolve().relative_to(ROOT)),
             "model": "multi_observation_nsf.pt",
             "global_sbc_gate_passed": bool(multi_sbc.get("gate_passed", False)),
             "native_count": sum(row["use_native"] for row in decisions.values()),
+            "sbc_exact_rejection_cases_total": sum(
+                row["rejection_fallback_cases"] for row in decisions.values()
+            ),
+            "sbc_exact_rejection_cases_on_native_routes": sum(
+                row["rejection_fallback_cases"] for row in decisions.values()
+                if row["use_native"]
+            ),
             "drugs": decisions,
+        }
+
+    covariate_sections = {
+        "hierarchical": existing.get("hierarchical"),
+        "continuous": existing.get("continuous"),
+    }
+    for flow, path, model in (
+        ("hierarchical", args.hierarchical_sbc, "hierarchical_nsf_2k.pt"),
+        ("continuous", args.continuous_sbc, "continuous_hierarchical_nsf.pt"),
+    ):
+        if not path.exists():
+            continue
+        flow_sbc = json.loads(path.read_text())
+        validation = json.loads((ROOT / "data/sbi/validation_drug_set.json").read_text())
+        smiles = {entry["name"]: entry["smiles"] for entry in validation["drugs"]}
+        populations = {
+            entry["name"]: entry for entry in flow_sbc["populations"]
+        } if flow == "continuous" else {}
+        pair_decisions = []
+        for entry in flow_sbc["pairs"]:
+            rejection_cases = int(entry.get("rejection_fallback_cases", 0))
+            coverage = float(entry["coverage_max_deviation"])
+            use_sbi = (bool(entry.get("pass", False)) and coverage <= STRICT_COVERAGE_OK
+                       and rejection_cases == 0)
+            decision = {
+                "population": entry["population"],
+                "drug": entry["drug"],
+                "smiles": smiles[entry["drug"]],
+                "use_sbi": use_sbi,
+                "sbc_pass": bool(entry.get("pass", False)),
+                "coverage_max_deviation": coverage,
+                "ks_pvalues": entry["ks_pvalues"],
+                "rejection_fallback_cases": rejection_cases,
+            }
+            if flow == "continuous":
+                population = populations[entry["population"]]
+                decision["body_weight_kg"] = population["bw"]
+                decision["age_years"] = population["age"]
+            pair_decisions.append(decision)
+        covariate_sections[flow] = {
+            "source": str(path.resolve().relative_to(ROOT)),
+            "model": model,
+            "global_sbc_gate_passed": bool(flow_sbc.get("gate_passed", False)),
+            "sbi_pair_count": sum(row["use_sbi"] for row in pair_decisions),
+            "sbc_exact_rejection_cases_total": sum(
+                row["rejection_fallback_cases"] for row in pair_decisions
+            ),
+            "sbc_exact_rejection_cases_on_sbi_routes": sum(
+                row["rejection_fallback_cases"] for row in pair_decisions if row["use_sbi"]
+            ),
+            "pairs": pair_decisions,
         }
 
     payload = {
@@ -127,8 +200,9 @@ def main() -> None:
             "strict_coverage_ok": STRICT_COVERAGE_OK,
             "borderline_coverage": BORDERLINE_COVERAGE,
             "description": (
-                "SBI only where per-drug SBC passes and coverage deviation "
-                "is ≤10pp of nominal across all CI levels. Existing IS routes "
+                "SBI only where per-drug or covariate-pair SBC passes and coverage deviation "
+                "is ≤10pp of nominal across all CI levels, with no exact-rejection "
+                "SBC fallback cases. Existing IS routes "
                 "remain IS; other failures use IBIS."
             ),
         },
@@ -140,12 +214,20 @@ def main() -> None:
             "is": is_count,
             "sbi_reweight_drugs": sum(bool(value) for value in reweight.values()),
             "global_sbc_gate_passed": bool(sbc.get("gate_passed", False)),
+            "sbc_exact_rejection_cases_total": sum(
+                row.get("rejection_fallback_cases", 0) for row in sbc["drugs"]
+            ),
+            "sbc_exact_rejection_cases_on_sbi_routes": sum(
+                reasons[name]["rejection_fallback_cases"]
+                for name, method in routes.items() if method == "sbi"
+            ),
         },
         "sbi_reweight": reweight,
         "multi_observation": multi_observation,
         "routes": routes,
         "reasons": reasons,
     }
+    payload.update({key: value for key, value in covariate_sections.items() if value is not None})
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     with open(args.out, "w") as f:

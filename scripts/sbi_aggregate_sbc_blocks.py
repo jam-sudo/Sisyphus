@@ -41,7 +41,7 @@ def aggregate_blocks(paths: list[Path], flow: str, expected_pairs: int) -> dict:
     assert first is not None
     output = {key: first[key] for key in (
         "posterior", "validation_set", "n_calibration", "n_posterior", "levels",
-        "seed", "ks_threshold", "coverage_tol",
+        "seed", "ks_threshold", "coverage_tol", "populations",
     ) if key in first}
     if "validation_set" in output:
         output["validation_set"] = "data/sbi/validation_drug_set.json"

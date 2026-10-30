@@ -19,6 +19,7 @@ def test_aggregate_blocks_counts_and_missing_case(tmp_path, monkeypatch):
             "posterior": "test.pt", "validation_set": "test.json", "sampler": "corrected",
             "n_calibration": 4, "n_posterior": 500, "levels": [50, 80, 90, 95],
             "seed": 0, "ks_threshold": 0.01, "coverage_tol": 0.10,
+            "populations": [{"name": "adult", "bw": 70.0, "age": 35.0}],
             "case_start": start, "case_end": start + 2,
             "drugs": [{
                 "name": "test", "n_available": 4, "n_valid": 2,
@@ -32,6 +33,7 @@ def test_aggregate_blocks_counts_and_missing_case(tmp_path, monkeypatch):
         paths.append(path)
     result = aggregate_blocks(paths, "multi_drug", 1)
     assert result["validation_set"] == "data/sbi/validation_drug_set.json"
+    assert result["populations"][0]["bw"] == 70.0
     assert result["drugs"][0]["n_valid"] == 4
     assert result["drugs"][0]["coverage"]["50"] == [0.5, 0.5, 0.5]
     out = tmp_path.parent / "aggregated.json"
