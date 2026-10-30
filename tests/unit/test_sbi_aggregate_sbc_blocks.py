@@ -60,7 +60,7 @@ def test_aggregate_blocks_counts_and_missing_case(tmp_path, monkeypatch):
         aggregate_blocks(paths[:1], "multi_drug", 1)
 
 
-def test_aggregate_blocks_reports_sampling_errors(tmp_path):
+def test_aggregate_blocks_reports_sampling_errors(tmp_path, monkeypatch):
     block = {
         "posterior": "test.pt", "validation_set": "test.json", "sampler": "corrected",
         "n_calibration": 2, "n_posterior": 500, "levels": [50, 80, 90, 95],
@@ -75,4 +75,28 @@ def test_aggregate_blocks_reports_sampling_errors(tmp_path):
     path.write_text(json.dumps(block))
     result = aggregate_blocks([path], "multi_drug", 1)
     assert result["sampling_error_blocks"] == 1
-    assert result["drugs"][0]["pass"] is False
+    assert result["drugs"][0]["pass"] is None
+    assert result["incomplete_count"] == 1
+    assert result["failed_count"] == 0
+    assert result["gate_passed"] is None
+    out = tmp_path.parent / "incomplete.json"
+    monkeypatch.setattr("sys.argv", [
+        "sbi_aggregate_sbc_blocks.py", "--flow", "multi_drug", "--blocks", str(tmp_path),
+        "--expected-pairs", "1", "--out", str(out),
+    ])
+    main()
+    written = json.loads(out.read_text())
+    assert written["holm_global_gate"]["passed"] is None
+    assert written["size_calibrated_global_gate"]["passed"] is None
+
+    block["drugs"].append({
+        "name": "known_failure", "n_available": 2,
+        "ranks": [[0, 0, 0], [0, 0, 0]],
+        "coverage_counts": {str(level): [0, 0, 0]
+                            for level in (50, 80, 90, 95)},
+    })
+    path.write_text(json.dumps(block))
+    mixed = aggregate_blocks([path], "multi_drug", 2)
+    assert mixed["incomplete_count"] == 1
+    assert mixed["failed_count"] == 1
+    assert mixed["gate_passed"] is False

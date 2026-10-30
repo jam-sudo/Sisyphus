@@ -332,6 +332,17 @@ def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
     assert rebuilt["continuous"]["pairs"][0]["body_weight_kg"] == 70.0
     assert rebuilt["continuous"]["pairs"][0]["age_years"] == 35.0
 
+    incomplete = json.loads(sbc_path.read_text())
+    incomplete["drugs"].append({
+        "name": "amantadine", "pass": None, "coverage_max_deviation": None,
+        "ks_pvalues": [],
+    })
+    sbc_path.write_text(json.dumps(incomplete))
+    main()
+    rebuilt = json.loads(out.read_text())
+    assert rebuilt["routes"]["amantadine"] == "ibis"
+    assert rebuilt["reasons"]["amantadine"]["reason"] == "sampling_incomplete"
+
 
 def test_sbi_warns_for_timed_multidose_observation(case, caplog):
     from sisyphus.regimen.tdm_sbi import _warn_observation_scope

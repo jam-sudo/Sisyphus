@@ -434,14 +434,10 @@
     },
     {
       "n_valid": 100,
-      "ks_pvalues": [
-        0.0,
-        0.0,
-        0.0
-      ],
+      "ks_pvalues": [],
       "coverage": {},
-      "coverage_max_deviation": 1.0,
-      "pass": false,
+      "coverage_max_deviation": null,
+      "pass": null,
       "sampling_error": "At least one calibration block had low ESS or failed",
       "sampling_error_blocks": 1,
       "rejection_fallback_cases": 3,
@@ -489,6 +485,8 @@
   ],
   "flow": "multi_drug",
   "pass_count": 8,
+  "incomplete_count": 1,
+  "failed_count": 4,
   "rejection_fallback_cases": 103,
   "forced_exact_rejection_cases": 103,
   "sampling_error_blocks": 1,
@@ -502,7 +500,7 @@
   "calibrated_null_assumptions": "Exact uniform marginal ranks; independent parameters and pairs; uniform location within posterior quantile gaps",
   "holm_global_gate": {
     "passed": false,
-    "ks_rejections": 3,
+    "ks_rejections": 0,
     "coverage_passed": false,
     "family_wise_alpha": 0.01,
     "predeclared_at_utc": "2026-10-29T15:40:44Z",
@@ -515,8 +513,8 @@
     "calibrated_null_assumptions": "Exact uniform marginal ranks; independent parameters and pairs; uniform location within posterior quantile gaps"
   },
   "size_calibrated_global_gate": {
-    "passed": false,
-    "rejections": 15,
+    "passed": null,
+    "rejections": 0,
     "ks_test_count": 39,
     "coverage_test_count": 156,
     "family_wise_alpha": 0.01,

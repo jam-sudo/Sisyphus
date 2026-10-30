@@ -63,10 +63,10 @@ def aggregate_blocks(paths: list[Path], flow: str, expected_pairs: int) -> dict:
         if any(not entry.get("ranks") for _, entry in parts):
             row = {
                 "n_valid": available,
-                "ks_pvalues": [0.0] * 3,
+                "ks_pvalues": [],
                 "coverage": {},
-                "coverage_max_deviation": 1.0,
-                "pass": False,
+                "coverage_max_deviation": None,
+                "pass": None,
                 "sampling_error": "At least one calibration block had low ESS or failed",
                 "sampling_error_blocks": sum(
                     bool(entry.get("sampling_error")) for _, entry in parts
@@ -128,7 +128,9 @@ def aggregate_blocks(paths: list[Path], flow: str, expected_pairs: int) -> dict:
         else:
             row["population"], row["drug"] = key
         output[key_name].append(row)
-    output["pass_count"] = sum(row["pass"] for row in output[key_name])
+    output["pass_count"] = sum(row["pass"] is True for row in output[key_name])
+    output["incomplete_count"] = sum(row["pass"] is None for row in output[key_name])
+    output["failed_count"] = sum(row["pass"] is False for row in output[key_name])
     output["rejection_fallback_cases"] = sum(
         row.get("rejection_fallback_cases", 0) for row in output[key_name]
     )
@@ -139,7 +141,10 @@ def aggregate_blocks(paths: list[Path], flow: str, expected_pairs: int) -> dict:
         row["sampling_error_blocks"] for row in output[key_name]
     )
     output["total_pairs"] = expected_pairs
-    output["gate_passed"] = output["pass_count"] == expected_pairs
+    output["gate_passed"] = (
+        False if output["failed_count"] else
+        None if output["incomplete_count"] else True
+    )
     return output
 
 
@@ -177,15 +182,18 @@ def main() -> None:
     policy = json.loads(policy_path.read_text())
     entries = result["drugs"] if args.flow in ("multi_drug", "multi_observation") \
         else result["pairs"]
-    pvalues = [pvalue for entry in entries for pvalue in entry["ks_pvalues"]]
+    evaluable = [entry for entry in entries if entry["pass"] is not None]
+    pvalues = [pvalue for entry in evaluable for pvalue in entry["ks_pvalues"]]
+    missing_ks = 3 * (len(entries) - len(evaluable))
     alpha = policy["holm_gate"]["family_wise_alpha"]
     coverage_ok = all(
         entry["coverage_max_deviation"] <= policy["holm_gate"]["coverage_tolerance_fraction"]
-        for entry in entries
+        for entry in evaluable
     )
-    rejected = _holm_rejection_count(pvalues, alpha)
+    rejected = _holm_rejection_count(pvalues + [1.0] * missing_ks, alpha)
     result["holm_global_gate"] = {
-        "passed": rejected == 0 and coverage_ok,
+        "passed": (False if rejected or not coverage_ok else
+                   None if missing_ks else True),
         "ks_rejections": rejected,
         "coverage_passed": coverage_ok,
         "family_wise_alpha": alpha,
@@ -199,13 +207,8 @@ def main() -> None:
     }
     size_pvalues = pvalues[:]
     coverage_test_count = 0
-    for entry in entries:
+    for entry in evaluable:
         for level in result["levels"]:
-            if not entry["coverage"]:
-                missing_count = 1 if args.flow == "continuous" else 3
-                size_pvalues.extend([0.0] * missing_count)
-                coverage_test_count += missing_count
-                continue
             counts = np.rint(
                 np.asarray(entry["coverage"][str(level)]) * entry["n_valid"]
             ).astype(int)
@@ -219,12 +222,18 @@ def main() -> None:
                 for count in counts
             )
             coverage_test_count += len(counts)
+    missing_coverage = (len(entries) - len(evaluable)) * len(result["levels"]) * (
+        1 if args.flow == "continuous" else 3
+    )
+    size_pvalues.extend([1.0] * (missing_ks + missing_coverage))
+    coverage_test_count += missing_coverage
     size_alpha = policy["size_calibrated_gate"]["family_wise_alpha"]
     size_rejected = _holm_rejection_count(size_pvalues, size_alpha)
     result["size_calibrated_global_gate"] = {
-        "passed": size_rejected == 0,
+        "passed": (False if size_rejected else
+                   None if missing_ks else True),
         "rejections": size_rejected,
-        "ks_test_count": len(pvalues),
+        "ks_test_count": len(pvalues) + missing_ks,
         "coverage_test_count": coverage_test_count,
         "family_wise_alpha": size_alpha,
         "predeclared_at_utc": policy["size_calibrated_gate"]["predeclared_at_utc"],

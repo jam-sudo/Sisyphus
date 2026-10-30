@@ -65,7 +65,8 @@ def main() -> None:
     sbi_count = ibis_count = is_count = 0
     for entry in sbc["drugs"]:
         name = entry["name"]
-        cov_dev = float(entry["coverage_max_deviation"])
+        raw_cov_dev = entry["coverage_max_deviation"]
+        cov_dev = float(raw_cov_dev) if raw_cov_dev is not None else None
         ks = entry["ks_pvalues"]
         per_drug_pass = bool(entry.get("pass", False))
         rejection_cases = int(entry.get("rejection_fallback_cases", 0))
@@ -78,7 +79,11 @@ def main() -> None:
             method = "ibis"
             reason = "exact_rejection_sbc_fallback"
             ibis_count += 1
-        elif per_drug_pass and cov_dev <= STRICT_COVERAGE_OK:
+        elif entry.get("pass") is None:
+            method = "ibis"
+            reason = "sampling_incomplete"
+            ibis_count += 1
+        elif per_drug_pass and cov_dev is not None and cov_dev <= STRICT_COVERAGE_OK:
             method = "sbi"
             reason = "sbc_and_coverage_ok"
             sbi_count += 1
@@ -86,7 +91,7 @@ def main() -> None:
             method = "ibis"
             reason = "sbc_failed"
             ibis_count += 1
-        elif cov_dev <= BORDERLINE_COVERAGE:
+        elif cov_dev is not None and cov_dev <= BORDERLINE_COVERAGE:
             method = "ibis"
             reason = "coverage_borderline"
             ibis_count += 1
@@ -116,9 +121,11 @@ def main() -> None:
         decisions = {}
         for entry in multi_sbc["drugs"]:
             name = entry["name"]
-            coverage = float(entry["coverage_max_deviation"])
+            raw_coverage = entry["coverage_max_deviation"]
+            coverage = float(raw_coverage) if raw_coverage is not None else None
             rejection_cases = int(entry.get("rejection_fallback_cases", 0))
-            passed = (bool(entry.get("pass", False)) and coverage <= STRICT_COVERAGE_OK
+            passed = (bool(entry.get("pass", False)) and coverage is not None
+                      and coverage <= STRICT_COVERAGE_OK
                       and rejection_cases == 0)
             decisions[name] = {
                 "use_native": passed,
@@ -131,7 +138,7 @@ def main() -> None:
         multi_observation = {
             "source": str(args.multi_observation_sbc.resolve().relative_to(ROOT)),
             "model": "multi_observation_nsf.pt",
-            "global_sbc_gate_passed": bool(multi_sbc.get("gate_passed", False)),
+            "global_sbc_gate_passed": multi_sbc.get("gate_passed"),
             "native_count": sum(row["use_native"] for row in decisions.values()),
             "sbc_exact_rejection_cases_total": sum(
                 row["rejection_fallback_cases"] for row in decisions.values()
@@ -162,8 +169,10 @@ def main() -> None:
         pair_decisions = []
         for entry in flow_sbc["pairs"]:
             rejection_cases = int(entry.get("rejection_fallback_cases", 0))
-            coverage = float(entry["coverage_max_deviation"])
-            use_sbi = (bool(entry.get("pass", False)) and coverage <= STRICT_COVERAGE_OK
+            raw_coverage = entry["coverage_max_deviation"]
+            coverage = float(raw_coverage) if raw_coverage is not None else None
+            use_sbi = (bool(entry.get("pass", False)) and coverage is not None
+                       and coverage <= STRICT_COVERAGE_OK
                        and rejection_cases == 0)
             decision = {
                 "population": entry["population"],
@@ -183,7 +192,7 @@ def main() -> None:
         covariate_sections[flow] = {
             "source": str(path.resolve().relative_to(ROOT)),
             "model": model,
-            "global_sbc_gate_passed": bool(flow_sbc.get("gate_passed", False)),
+            "global_sbc_gate_passed": flow_sbc.get("gate_passed"),
             "sbi_pair_count": sum(row["use_sbi"] for row in pair_decisions),
             "sbc_exact_rejection_cases_total": sum(
                 row["rejection_fallback_cases"] for row in pair_decisions
@@ -213,7 +222,7 @@ def main() -> None:
             "total": len(routes),
             "is": is_count,
             "sbi_reweight_drugs": sum(bool(value) for value in reweight.values()),
-            "global_sbc_gate_passed": bool(sbc.get("gate_passed", False)),
+            "global_sbc_gate_passed": sbc.get("gate_passed"),
             "sbc_exact_rejection_cases_total": sum(
                 row.get("rejection_fallback_cases", 0) for row in sbc["drugs"]
             ),
@@ -241,9 +250,11 @@ def main() -> None:
     print()
     for name, data in reasons.items():
         mark = "✓" if data["method"] == "sbi" else "✗"
+        cov_text = (f"{data['coverage_max_deviation']:.3f}"
+                    if data["coverage_max_deviation"] is not None else "incomplete")
         print(
             f"  {mark} {name:<15s}  {data['method']:<5s}  "
-            f"cov_dev={data['coverage_max_deviation']:.3f}  ({data['reason']})"
+            f"cov_dev={cov_text}  ({data['reason']})"
         )
 
 
