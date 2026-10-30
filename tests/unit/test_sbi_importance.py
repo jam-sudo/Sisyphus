@@ -130,6 +130,21 @@ def test_corrected_sampler_excludes_flow_draws_outside_box_prior():
     assert len(evaluated) == 5
 
 
+def test_corrected_sampler_skips_impossible_ess_before_likelihood():
+    class OutsidePosterior(UniformPosterior):
+        def sample(self, shape, *, x, show_progress_bars):
+            return torch.as_tensor(
+                np.tile(PRIOR_HIGH + 1.0, (shape[0], 1)), dtype=torch.float32,
+            )
+
+    with pytest.raises(LowImportanceESS, match="nonzero-weight proposals"):
+        sample_corrected(
+            OutsidePosterior(), np.zeros(1),
+            lambda theta, rng: pytest.fail("Likelihood must not be evaluated"),
+            n_draws=100, n_proposals=100, n_nuisance=1, seed=7,
+        )
+
+
 def test_sbc_sampler_counts_exact_rejection_fallback(monkeypatch):
     class Simulator:
         obs_sigma_log10 = 0.2

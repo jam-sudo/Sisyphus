@@ -162,6 +162,10 @@ def sample_corrected(
     )
     # Proposals outside the box prior have zero weight; skip their ODE solves.
     in_prior = np.flatnonzero(np.isfinite(log_p_theta))
+    if len(in_prior) < ess_floor:
+        raise LowImportanceESS(
+            f"At most {len(in_prior)} nonzero-weight proposals below ESS floor {ess_floor:.1f}"
+        )
     log_likelihood = np.full(n_proposals, -np.inf)
     if workers == 1:
         for i in in_prior:
