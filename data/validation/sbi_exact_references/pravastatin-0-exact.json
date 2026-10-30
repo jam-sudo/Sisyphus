@@ -1,0 +1,8 @@
+{
+  "mode": "exact",
+  "elapsed_s": 374.6960397809744,
+  "rejection_attempt_counts": [
+    16384
+  ],
+  "joint_smc_diagnostics": []
+}
