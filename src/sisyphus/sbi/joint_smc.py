@@ -34,6 +34,12 @@ SMC_TARGET_ACCEPTANCE_FRACTION = 0.234
 SMC_ADAPTATION_GAIN_FRACTION = 0.5
 # Source: data/validation/sbi_joint_smc_policy.json; bound for nuisance-dimension probe.
 SMC_PROBE_NORMAL_COUNT = 1024
+# Source: data/validation/sbi_joint_smc_policy.json; post-pilot ancestor floor.
+SMC_MIN_UNIQUE_INITIAL_ANCESTORS = 100
+# Source: data/validation/sbi_joint_smc_policy.json; sildenafil pilot recovery.
+SMC_GUARD_PARTICLE_MULTIPLIER = 4
+# Source: data/validation/sbi_joint_smc_policy.json; sildenafil pilot recovery.
+SMC_GUARD_EXTRA_SWEEPS = 1
 
 _joint_log_likelihood: Callable[[np.ndarray, _GaussianStream], float] | None = None
 
@@ -90,7 +96,7 @@ def _systematic_resample(weights: np.ndarray, rng: np.random.Generator) -> np.nd
     return np.searchsorted(np.cumsum(weights), positions, side="right")
 
 
-def sample_joint_smc(
+def _sample_joint_smc_once(
     log_likelihood: Callable[[np.ndarray, _GaussianStream], float],
     *,
     n_draws: int,
@@ -223,3 +229,49 @@ def sample_joint_smc(
         "elapsed_s": time.monotonic() - started,
     }
     return theta[selected].copy(), diagnostics
+
+
+def sample_joint_smc(
+    log_likelihood: Callable[[np.ndarray, _GaussianStream], float],
+    *,
+    n_draws: int,
+    seed: int,
+    n_particles: int = SMC_PARTICLE_COUNT,
+    workers: int = 1,
+    max_stages: int = SMC_MAX_STAGE_COUNT,
+    rejuvenation_sweeps: int = SMC_REJUVENATION_SWEEP_COUNT,
+) -> tuple[np.ndarray, dict]:
+    """Sample the joint posterior, increasing particles if ancestor diversity is low."""
+    samples, diagnostics = _sample_joint_smc_once(
+        log_likelihood, n_draws=n_draws, seed=seed, n_particles=n_particles,
+        workers=workers, max_stages=max_stages,
+        rejuvenation_sweeps=rejuvenation_sweeps,
+    )
+    if n_particles != SMC_PARTICLE_COUNT or (
+        diagnostics["unique_initial_ancestors"] >= SMC_MIN_UNIQUE_INITIAL_ANCESTORS
+    ):
+        diagnostics["ancestor_guard_passed"] = (
+            n_particles < SMC_PARTICLE_COUNT
+            or diagnostics["unique_initial_ancestors"] >= SMC_MIN_UNIQUE_INITIAL_ANCESTORS
+        )
+        return samples, diagnostics
+
+    first_attempt = {
+        key: diagnostics[key] for key in (
+            "particles", "unique_initial_ancestors", "stages",
+            "simulator_evaluations", "elapsed_s",
+        )
+    }
+    samples, diagnostics = _sample_joint_smc_once(
+        log_likelihood, n_draws=n_draws, seed=seed + 1,
+        n_particles=n_particles * SMC_GUARD_PARTICLE_MULTIPLIER,
+        workers=workers, max_stages=max_stages,
+        rejuvenation_sweeps=rejuvenation_sweeps + SMC_GUARD_EXTRA_SWEEPS,
+    )
+    diagnostics["first_attempt"] = first_attempt
+    diagnostics["simulator_evaluations"] += first_attempt["simulator_evaluations"]
+    diagnostics["elapsed_s"] += first_attempt["elapsed_s"]
+    diagnostics["ancestor_guard_passed"] = (
+        diagnostics["unique_initial_ancestors"] >= SMC_MIN_UNIQUE_INITIAL_ANCESTORS
+    )
+    return samples, diagnostics

@@ -2,6 +2,7 @@
 
 import numpy as np
 
+from sisyphus.sbi import joint_smc
 from sisyphus.sbi.joint_smc import _GaussianStream, sample_joint_smc
 
 
@@ -34,3 +35,30 @@ def test_joint_smc_matches_toy_marginal_likelihood():
     assert diagnostics["nuisance_dimensions"] == 1
     assert diagnostics["stages"][-1]["beta"] == 1.0
     assert diagnostics["simulator_evaluations"] > 300
+
+
+def test_low_ancestor_guard_repeats_with_four_times_the_particles(monkeypatch):
+    calls = []
+
+    def run_once(*args, n_particles, rejuvenation_sweeps, **kwargs):
+        calls.append((n_particles, rejuvenation_sweeps))
+        return np.zeros((500, 3)), {
+            "particles": n_particles,
+            "unique_initial_ancestors": 36 if len(calls) == 1 else 140,
+            "stages": [{"beta": 1.0}],
+            "simulator_evaluations": 10 * n_particles,
+            "elapsed_s": float(n_particles),
+        }
+
+    monkeypatch.setattr(joint_smc, "_sample_joint_smc_once", run_once)
+    _, diagnostics = sample_joint_smc(lambda theta, stream: 0.0, n_draws=500, seed=1)
+    assert calls == [(1000, 2), (4000, 3)]
+    assert diagnostics["ancestor_guard_passed"] is True
+    assert diagnostics["first_attempt"]["unique_initial_ancestors"] == 36
+    assert diagnostics["simulator_evaluations"] == 50000
+    calls.clear()
+    _, diagnostics = sample_joint_smc(
+        lambda theta, stream: 0.0, n_draws=500, seed=1, n_particles=4000,
+    )
+    assert calls == [(4000, 2)]
+    assert diagnostics["ancestor_guard_passed"] is False

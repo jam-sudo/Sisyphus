@@ -50,7 +50,7 @@ from sisyphus.sbi.importance import (  # noqa: E402
     MAX_REJECTION_ATTEMPT_COUNT,
     CorrectedSBCPosterior,
 )
-from sisyphus.sbi.joint_smc import SMC_PARTICLE_COUNT  # noqa: E402
+from sisyphus.sbi.joint_smc import SMC_PARTICLE_COUNT, SMC_REJUVENATION_SWEEP_COUNT  # noqa: E402
 from sisyphus.sbi.mcmc import MCMC_MAX_RETAINED_STEP_COUNT  # noqa: E402
 from sisyphus.sbi.multi_drug import (  # noqa: E402
     extract_drug_features,
@@ -113,6 +113,7 @@ def main() -> None:
     p.add_argument("--joint-smc-after-rejection", action="store_true")
     p.add_argument("--joint-smc-particles", type=int, default=SMC_PARTICLE_COUNT)
     p.add_argument("--joint-smc-workers", type=int, default=1)
+    p.add_argument("--joint-smc-sweeps", type=int, default=SMC_REJUVENATION_SWEEP_COUNT)
     p.add_argument("--mcmc-max-retained-steps", type=int,
                    default=MCMC_MAX_RETAINED_STEP_COUNT)
     p.add_argument("--max-rejection-attempts", type=int,
@@ -252,6 +253,7 @@ def main() -> None:
                     joint_smc_after_rejection=args.joint_smc_after_rejection,
                     joint_smc_particles=args.joint_smc_particles,
                     joint_smc_workers=args.joint_smc_workers,
+                    joint_smc_rejuvenation_sweeps=args.joint_smc_sweeps,
                 ) if args.sampler == "corrected" else result.posterior)
                 ranks, cov_counts = _coverage_and_ranks(
                     thetas_true, sampler, xs_packed, levels=levels,

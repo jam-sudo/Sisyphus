@@ -12,7 +12,11 @@ from sisyphus.engine.compiler import ResolvedParams
 from sisyphus.engine.solver import solve
 from sisyphus.regimen.solver import solve_regimen
 from sisyphus.regimen.types import DosingRegimen
-from sisyphus.sbi.joint_smc import SMC_PARTICLE_COUNT
+from sisyphus.sbi.joint_smc import (
+    SMC_MIN_UNIQUE_INITIAL_ANCESTORS,
+    SMC_PARTICLE_COUNT,
+    SMC_REJUVENATION_SWEEP_COUNT,
+)
 from sisyphus.sbi.mcmc import MCMC_MAX_RETAINED_STEP_COUNT
 from sisyphus.sbi.priors import PRIOR_HIGH, PRIOR_LOW
 
@@ -182,6 +186,7 @@ class CorrectedSBCPosterior:
         joint_smc_after_rejection: bool = False,
         joint_smc_particles: int = SMC_PARTICLE_COUNT,
         joint_smc_workers: int = 1,
+        joint_smc_rejuvenation_sweeps: int = SMC_REJUVENATION_SWEEP_COUNT,
     ) -> None:
         if max_rejection_attempts < 1 or fallback_rejection_workers < 0:
             raise ValueError("Rejection attempts must be positive and workers nonnegative")
@@ -198,6 +203,7 @@ class CorrectedSBCPosterior:
         self.joint_smc_after_rejection = joint_smc_after_rejection
         self.joint_smc_particles = joint_smc_particles
         self.joint_smc_workers = joint_smc_workers
+        self.joint_smc_rejuvenation_sweeps = joint_smc_rejuvenation_sweeps
         self.ess: list[float] = []
         self.rejection_count = 0
         self.forced_exact_rejection_count = 0
@@ -302,11 +308,18 @@ class CorrectedSBCPosterior:
             samples, diagnostics = sample_joint_smc(
                 log_joint, n_draws=shape[0], seed=seed + 2,
                 n_particles=self.joint_smc_particles, workers=self.joint_smc_workers,
+                rejuvenation_sweeps=self.joint_smc_rejuvenation_sweeps,
             )
             diagnostics["case_index"] = self.case_index - 1
             self.joint_smc_fallback_count += 1
             self.joint_smc_diagnostics.append(diagnostics)
             self.rejection_attempt_counts.append(self.max_rejection_attempts)
+            if not diagnostics["ancestor_guard_passed"]:
+                raise LowImportanceESS(
+                    "Joint SMC retained fewer than "
+                    f"{SMC_MIN_UNIQUE_INITIAL_ANCESTORS} initial ancestors after "
+                    "the enlarged recovery run"
+                )
             return torch.as_tensor(samples, dtype=torch.float32)
 
         def mcmc_fallback() -> object:

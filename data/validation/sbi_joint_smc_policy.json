@@ -13,6 +13,8 @@
   "proposal_adaptation_gain": 0.5,
   "nuisance_probe_normal_count": 1024,
   "returned_draws": 500,
+  "minimum_unique_initial_ancestors": 100,
+  "low_ancestor_recovery": "Rerun with four times as many particles and three rejuvenation sweeps per stage; mark the case incomplete if fewer than 100 initial ancestors remain.",
   "routing": "Any pair using joint SMC fallback is excluded from SBI routing",
   "limitations": "Finite-particle SMC approximates the exact joint target; validate against exact rejection on a tractable case before accepting SBC recovery."
 }

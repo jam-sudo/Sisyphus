@@ -235,7 +235,9 @@ def test_sbc_capped_rejection_uses_joint_smc(monkeypatch):
         value = log_likelihood(np.mean([PRIOR_LOW, PRIOR_HIGH], axis=0),
                                joint_smc._GaussianStream(np.zeros(2)))
         assert np.isfinite(value)
-        return np.zeros((n_draws, 3)), {"stages": [{"beta": 1.0}]}
+        return np.zeros((n_draws, 3)), {
+            "stages": [{"beta": 1.0}], "ancestor_guard_passed": True,
+        }
 
     monkeypatch.setattr(importance, "sample_exact_rejection_parallel", capped)
     monkeypatch.setattr(importance, "ResolvedParams", lambda graph, drug: object())
@@ -252,6 +254,12 @@ def test_sbc_capped_rejection_uses_joint_smc(monkeypatch):
     assert draws.shape == (5, 3)
     assert sampler.joint_smc_fallback_count == 1
     assert sampler.joint_smc_diagnostics[0]["case_index"] == 0
+    monkeypatch.setattr(joint_smc, "sample_joint_smc", lambda *args, **kwargs: (
+        np.zeros((5, 3)), {"ancestor_guard_passed": False},
+    ))
+    with pytest.raises(LowImportanceESS, match="initial ancestors"):
+        sampler.sample((5,), x=torch.as_tensor([[0.0]]))
+    assert sampler.joint_smc_diagnostics[-1]["ancestor_guard_passed"] is False
 
 
 def test_sbc_case_streams_are_independent_of_block_boundaries(monkeypatch):
