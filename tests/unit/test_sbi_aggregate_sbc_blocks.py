@@ -102,3 +102,12 @@ def test_aggregate_blocks_reports_sampling_errors(tmp_path, monkeypatch):
     assert mixed["incomplete_count"] == 1
     assert mixed["failed_count"] == 1
     assert mixed["gate_passed"] is False
+    monkeypatch.setattr("sys.argv", [
+        "sbi_aggregate_sbc_blocks.py", "--flow", "multi_drug", "--blocks", str(tmp_path),
+        "--expected-pairs", "2", "--out", str(out),
+    ])
+    main()
+    written = json.loads(out.read_text())
+    by_name = {row["name"]: row for row in written["drugs"]}
+    assert by_name["test"]["size_calibrated_rejections"] == 0
+    assert by_name["known_failure"]["size_calibrated_rejections"] > 0

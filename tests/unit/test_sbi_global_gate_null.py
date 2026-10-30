@@ -2,7 +2,11 @@
 
 import numpy as np
 
-from scripts.sbi_global_gate_null import _inside_quantile_interval, gate_probability
+from scripts.sbi_global_gate_null import (
+    _inside_quantile_interval,
+    gate_probability,
+    production_scope_probability,
+)
 
 
 def test_interpolated_coverage_is_calibrated_for_exact_ranks():
@@ -21,3 +25,14 @@ def test_exact_rank_null_uses_all_three_parameters():
     assert result["holm"]["passed"] >= result["passed"]
     assert result["size_calibrated"]["simultaneous_tests"] == 30
     assert 0.9 < result["size_calibrated"]["pass_probability"] <= 1
+
+
+def test_production_null_repeats_full_family_screening():
+    result = production_scope_probability(
+        [True, False], [False, False], 50, repetitions=100, seed=7,
+    )
+    assert result["tests_per_pair"] == 15
+    assert 0.9 < result["pass_probability"] <= result["nonempty_probability"] <= 1
+    empty = production_scope_probability([False], [True], 50, repetitions=20, seed=7)
+    assert empty["pass_probability"] == 0
+    assert empty["nonempty_probability"] == 0

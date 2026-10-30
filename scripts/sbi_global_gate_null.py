@@ -131,6 +131,69 @@ def gate_probability(
     }
 
 
+def production_scope_probability(
+    behavior_eligible: list[bool],
+    incomplete: list[bool],
+    n_calibration: int,
+    *,
+    continuous_coverage: bool = False,
+    repetitions: int = 10000,
+    seed: int = 42,
+) -> dict[str, float | int | list[float]]:
+    """Simulate exact ranks through flow-wide route screening and the routed gate."""
+    n_pairs = len(behavior_eligible)
+    if n_pairs < 1 or len(incomplete) != n_pairs or n_calibration < 1 or repetitions < 1:
+        raise ValueError("Masks, calibration count, and repetitions must be valid")
+    eligible = np.asarray(behavior_eligible, dtype=bool)
+    missing = np.asarray(incomplete, dtype=bool)
+    rng = np.random.default_rng(seed)
+    coverage_draws = n_calibration * (3 if continuous_coverage else 1)
+    binomial_pvalues = {
+        level: np.array([
+            binomtest(count, coverage_draws, level / 100).pvalue
+            for count in range(coverage_draws + 1)
+        ]) for level in COVERAGE_LEVELS_PERCENT
+    }
+    tests_per_pair = 7 if continuous_coverage else 15
+    passed = nonempty = 0
+    for _ in range(repetitions):
+        ranks = rng.integers(0, POSTERIOR_DRAW_COUNT + 1,
+                             size=(n_pairs, n_calibration, 3))
+        sorted_ranks = np.sort(ranks / POSTERIOR_DRAW_COUNT, axis=1)
+        grid = np.arange(1, n_calibration + 1)[None, :, None] / n_calibration
+        d_stat = np.maximum(grid - sorted_ranks,
+                            sorted_ranks - (grid - 1 / n_calibration)).max(axis=1)
+        p_by_pair = [kstwo.sf(d_stat, n_calibration)]
+        for level in COVERAGE_LEVELS_PERCENT:
+            inside = _inside_quantile_interval(ranks, level, rng)
+            counts = (inside.sum(axis=(1, 2)) if continuous_coverage
+                      else inside.sum(axis=1))
+            coverage_p = binomial_pvalues[level][counts]
+            p_by_pair.append(coverage_p[:, None] if continuous_coverage else coverage_p)
+        pvalues = np.concatenate(p_by_pair, axis=1)
+        pvalues[missing] = 1.0
+        flat = pvalues.ravel()
+        rejected_rows = np.zeros(n_pairs, dtype=bool)
+        for index, test_index in enumerate(np.argsort(flat)):
+            if flat[test_index] > SIZE_CALIBRATED_FWER_ALPHA_P / (flat.size - index):
+                break
+            rejected_rows[test_index // tests_per_pair] = True
+        selected = eligible & ~rejected_rows
+        if np.any(selected):
+            nonempty += 1
+            scoped = pvalues[selected].ravel()
+            passed += int(np.min(scoped) > SIZE_CALIBRATED_FWER_ALPHA_P / scoped.size)
+    ci = binomtest(passed, repetitions).proportion_ci(confidence_level=0.95)
+    return {
+        "pass_probability": passed / repetitions,
+        "passed": passed,
+        "ci_95": [ci.low, ci.high],
+        "nonempty_probability": nonempty / repetitions,
+        "repetitions": repetitions,
+        "tests_per_pair": tests_per_pair,
+    }
+
+
 def main() -> None:
     """Write null probabilities for the three existing SBC gate shapes."""
     parser = argparse.ArgumentParser()

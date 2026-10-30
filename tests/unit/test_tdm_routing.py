@@ -249,11 +249,12 @@ def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
         "gate_passed": False,
         "drugs": [
             {"name": "morphine", "pass": True, "coverage_max_deviation": 0.05,
-             "ks_pvalues": [0.5]},
+             "ks_pvalues": [0.5], "size_calibrated_rejections": 0},
             {"name": "pravastatin", "pass": True, "coverage_max_deviation": 0.05,
-             "ks_pvalues": [0.5], "rejection_fallback_cases": 1},
+             "ks_pvalues": [0.5], "size_calibrated_rejections": 0,
+             "rejection_fallback_cases": 1},
             {"name": "clozapine", "pass": True, "coverage_max_deviation": 0.12,
-             "ks_pvalues": [0.5]},
+             "ks_pvalues": [0.5], "size_calibrated_rejections": 1},
         ],
     }))
     monkeypatch.setattr("scripts.sbi_build_routing_table.ROOT", tmp_path)
@@ -283,11 +284,12 @@ def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
     multi_path = tmp_path / "data/validation/sbi_sbc_multi_observation_corrected.json"
     multi_path.write_text(json.dumps({"gate_passed": False, "drugs": [
         {"name": "morphine", "pass": True, "coverage_max_deviation": 0.05,
-         "ks_pvalues": [0.2, 0.2, 0.2]},
+         "ks_pvalues": [0.2, 0.2, 0.2], "size_calibrated_rejections": 0},
         {"name": "clozapine", "pass": True, "coverage_max_deviation": 0.12,
-         "ks_pvalues": [0.2, 0.2, 0.2]},
+         "ks_pvalues": [0.2, 0.2, 0.2], "size_calibrated_rejections": 1},
         {"name": "pravastatin", "pass": True, "coverage_max_deviation": 0.02,
-         "ks_pvalues": [0.2, 0.2, 0.2], "rejection_fallback_cases": 1},
+         "ks_pvalues": [0.2, 0.2, 0.2], "size_calibrated_rejections": 0,
+         "rejection_fallback_cases": 1},
     ]}))
     validation_path = tmp_path / "data/sbi/validation_drug_set.json"
     validation_path.parent.mkdir(parents=True)
@@ -306,10 +308,10 @@ def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
     pairs = [
         {"population": "adult", "drug": "morphine", "pass": True,
          "coverage_max_deviation": 0.05, "ks_pvalues": [0.2, 0.2, 0.2],
-         "rejection_fallback_cases": 0},
+         "rejection_fallback_cases": 0, "size_calibrated_rejections": 0},
         {"population": "adult", "drug": "pravastatin", "pass": True,
          "coverage_max_deviation": 0.05, "ks_pvalues": [0.2, 0.2, 0.2],
-         "rejection_fallback_cases": 2},
+         "rejection_fallback_cases": 2, "size_calibrated_rejections": 0},
     ]
     hier_path = tmp_path / "data/validation/sbi_sbc_hierarchical_corrected.json"
     hier_path.write_text(json.dumps({
@@ -334,8 +336,17 @@ def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
 
     incomplete = json.loads(sbc_path.read_text())
     incomplete["drugs"].append({
-        "name": "amantadine", "pass": None, "coverage_max_deviation": None,
-        "ks_pvalues": [],
+        "name": "amantadine", "pass": False, "coverage_max_deviation": 0.14,
+        "ks_pvalues": [0.1, 0.1, 0.1], "size_calibrated_rejections": 0,
+    })
+    sbc_path.write_text(json.dumps(incomplete))
+    main()
+    rebuilt = json.loads(out.read_text())
+    assert rebuilt["routes"]["amantadine"] == "sbi"
+    assert rebuilt["reasons"]["amantadine"]["sbc_pass"] is False
+
+    incomplete["drugs"][-1].update({
+        "pass": None, "coverage_max_deviation": None, "ks_pvalues": [],
     })
     sbc_path.write_text(json.dumps(incomplete))
     main()

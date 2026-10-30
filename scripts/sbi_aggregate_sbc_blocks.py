@@ -230,8 +230,12 @@ def main() -> None:
         "calibrated_null_assumptions": null_result["assumptions"],
     }
     size_pvalues = pvalues[:]
+    size_owners = [index for index, entry in enumerate(entries) if entry["pass"] is not None
+                   for _ in entry["ks_pvalues"]]
     coverage_test_count = 0
-    for entry in evaluable:
+    for row_index, entry in enumerate(entries):
+        if entry["pass"] is None:
+            continue
         for level in result["levels"]:
             counts = np.rint(
                 np.asarray(entry["coverage"][str(level)]) * entry["n_valid"]
@@ -241,18 +245,28 @@ def main() -> None:
                 n_trials = 3 * entry["n_valid"]
             else:
                 n_trials = entry["n_valid"]
-            size_pvalues.extend(
+            coverage_pvalues = [
                 float(stats.binomtest(int(count), n_trials, level / 100).pvalue)
                 for count in counts
-            )
+            ]
+            size_pvalues.extend(coverage_pvalues)
+            size_owners.extend([row_index] * len(coverage_pvalues))
             coverage_test_count += len(counts)
     missing_coverage = (len(entries) - len(evaluable)) * len(result["levels"]) * (
         1 if args.flow == "continuous" else 3
     )
     size_pvalues.extend([1.0] * (missing_ks + missing_coverage))
+    size_owners.extend([-1] * (missing_ks + missing_coverage))
     coverage_test_count += missing_coverage
     size_alpha = policy["size_calibrated_gate"]["family_wise_alpha"]
     size_rejected = _holm_rejection_count(size_pvalues, size_alpha)
+    for entry in entries:
+        entry["size_calibrated_rejections"] = 0
+    for test_index in sorted(range(len(size_pvalues)), key=size_pvalues.__getitem__)[
+        :size_rejected
+    ]:
+        if size_owners[test_index] >= 0:
+            entries[size_owners[test_index]]["size_calibrated_rejections"] += 1
     result["size_calibrated_global_gate"] = {
         "passed": None if missing_ks else size_rejected == 0,
         "status": ("INCOMPLETE" if missing_ks else

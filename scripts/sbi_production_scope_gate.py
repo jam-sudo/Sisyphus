@@ -15,7 +15,7 @@ from scipy.stats import binomtest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from scripts.sbi_aggregate_sbc_blocks import _holm_rejection_count  # noqa: E402
-from scripts.sbi_global_gate_null import gate_probability  # noqa: E402
+from scripts.sbi_global_gate_null import production_scope_probability  # noqa: E402
 
 # Source: data/validation/sbi_production_scope_gate_policy.json.
 DEFAULT_NULL_REPETITION_COUNT = 10000
@@ -39,9 +39,11 @@ def production_scope_gate(
     def label(row: dict) -> str:
         return row["name"] if "name" in row else f"{row['population']}/{row['drug']}"
 
-    selected = [row for row in rows if row["pass"] is not None
-                and not row.get("rejection_fallback_cases", 0)
-                and not row.get("sampling_error_blocks", 0)]
+    behavior_eligible = [row["pass"] is not None
+                         and not row.get("rejection_fallback_cases", 0)
+                         and not row.get("sampling_error_blocks", 0) for row in rows]
+    selected = [row for row, eligible in zip(rows, behavior_eligible, strict=True)
+                if eligible and row.get("size_calibrated_rejections") == 0]
     pvalues = [p for row in selected for p in row["ks_pvalues"]]
     for row in selected:
         n_trials = row["n_valid"]
@@ -58,10 +60,11 @@ def production_scope_gate(
             )
     alpha = policy["family_wise_alpha"]
     rejected = _holm_rejection_count(pvalues, alpha) if pvalues else 0
-    null = (gate_probability(
-        len(selected), aggregate["n_calibration"],
-        continuous_coverage=flow == "continuous", repetitions=repetitions, seed=42,
-    )["size_calibrated"] if selected else None)
+    null = production_scope_probability(
+        behavior_eligible, [row["pass"] is None for row in rows],
+        aggregate["n_calibration"], continuous_coverage=flow == "continuous",
+        repetitions=repetitions, seed=42,
+    )
     return {
         "status": ("INCOMPLETE" if not selected else "FAIL" if rejected else "PASS"),
         "passed": None if not selected else rejected == 0,
@@ -72,11 +75,11 @@ def production_scope_gate(
         "rejections": rejected,
         "family_wise_alpha": alpha,
         "predeclared_at_utc": policy["predeclared_at_utc"],
-        "calibrated_null_pass_probability": (
-            null["pass_probability"] if null else None
-        ),
-        "calibrated_null_ci_95": null["ci_95"] if null else None,
-        "calibrated_null_repetitions": repetitions if null else 0,
+        "amended_at_utc": policy["amended_at_utc"],
+        "calibrated_null_pass_probability": null["pass_probability"],
+        "calibrated_null_ci_95": null["ci_95"],
+        "calibrated_null_nonempty_probability": null["nonempty_probability"],
+        "calibrated_null_repetitions": repetitions,
         "calibrated_null_assumptions": aggregate["calibrated_null_assumptions"],
     }
 

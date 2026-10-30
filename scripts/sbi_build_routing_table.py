@@ -2,7 +2,7 @@
 """Build the per-drug TDM method routing table from SBC results.
 
 Policy:
-    - per-drug SBC pass, coverage deviation ≤ 0.10, and no exact SBC fallback → "sbi"
+    - zero exact/uncomputable SBC cases and no combined-Holm rejection → "sbi"
     - all other drugs → "ibis" (or existing "is" override)
 
 Drugs not in the validation set default to ``default`` (``ibis`` unless
@@ -68,7 +68,8 @@ def main() -> None:
         raw_cov_dev = entry["coverage_max_deviation"]
         cov_dev = float(raw_cov_dev) if raw_cov_dev is not None else None
         ks = entry["ks_pvalues"]
-        per_drug_pass = bool(entry.get("pass", False))
+        per_drug_pass = entry.get("pass")
+        calibrated_rejections = entry.get("size_calibrated_rejections")
         rejection_cases = int(entry.get("rejection_fallback_cases", 0))
         existing_is = existing.get("routes", {}).get(name) == "is"
         if existing_is:
@@ -83,21 +84,17 @@ def main() -> None:
             method = "ibis"
             reason = "sampling_incomplete"
             ibis_count += 1
-        elif per_drug_pass and cov_dev is not None and cov_dev <= STRICT_COVERAGE_OK:
+        elif calibrated_rejections == 0:
             method = "sbi"
-            reason = "sbc_and_coverage_ok"
+            reason = "size_calibrated_sbc_ok"
             sbi_count += 1
-        elif not per_drug_pass:
+        elif calibrated_rejections is None:
             method = "ibis"
-            reason = "sbc_failed"
-            ibis_count += 1
-        elif cov_dev is not None and cov_dev <= BORDERLINE_COVERAGE:
-            method = "ibis"
-            reason = "coverage_borderline"
+            reason = "missing_size_calibrated_check"
             ibis_count += 1
         else:
             method = "ibis"
-            reason = "coverage_hard_fail"
+            reason = "size_calibrated_rejection"
             ibis_count += 1
         routes[name] = method
         reasons[name] = {
@@ -106,6 +103,7 @@ def main() -> None:
             "coverage_max_deviation": cov_dev,
             "ks_pvalues": ks,
             "sbc_pass": per_drug_pass,
+            "size_calibrated_rejections": calibrated_rejections,
             "rejection_fallback_cases": rejection_cases,
         }
         override = existing.get("reasons", {}).get(name, {}).get("tdm_bias_override")
@@ -124,8 +122,8 @@ def main() -> None:
             raw_coverage = entry["coverage_max_deviation"]
             coverage = float(raw_coverage) if raw_coverage is not None else None
             rejection_cases = int(entry.get("rejection_fallback_cases", 0))
-            passed = (bool(entry.get("pass", False)) and coverage is not None
-                      and coverage <= STRICT_COVERAGE_OK
+            passed = (entry.get("pass") is not None
+                      and entry.get("size_calibrated_rejections") == 0
                       and rejection_cases == 0)
             decisions[name] = {
                 "use_native": passed,
@@ -133,6 +131,7 @@ def main() -> None:
                 "sbc_pass": bool(entry.get("pass", False)),
                 "coverage_max_deviation": coverage,
                 "ks_pvalues": entry["ks_pvalues"],
+                "size_calibrated_rejections": entry.get("size_calibrated_rejections"),
                 "rejection_fallback_cases": rejection_cases,
             }
         multi_observation = {
@@ -171,8 +170,8 @@ def main() -> None:
             rejection_cases = int(entry.get("rejection_fallback_cases", 0))
             raw_coverage = entry["coverage_max_deviation"]
             coverage = float(raw_coverage) if raw_coverage is not None else None
-            use_sbi = (bool(entry.get("pass", False)) and coverage is not None
-                       and coverage <= STRICT_COVERAGE_OK
+            use_sbi = (entry.get("pass") is not None
+                       and entry.get("size_calibrated_rejections") == 0
                        and rejection_cases == 0)
             decision = {
                 "population": entry["population"],
@@ -182,6 +181,7 @@ def main() -> None:
                 "sbc_pass": bool(entry.get("pass", False)),
                 "coverage_max_deviation": coverage,
                 "ks_pvalues": entry["ks_pvalues"],
+                "size_calibrated_rejections": entry.get("size_calibrated_rejections"),
                 "rejection_fallback_cases": rejection_cases,
             }
             if flow == "continuous":
@@ -206,13 +206,14 @@ def main() -> None:
     payload = {
         "source": str(args.sbc.resolve().relative_to(ROOT)),
         "policy": {
-            "strict_coverage_ok": STRICT_COVERAGE_OK,
-            "borderline_coverage": BORDERLINE_COVERAGE,
+            "original_strict_coverage_ok": STRICT_COVERAGE_OK,
+            "original_borderline_coverage": BORDERLINE_COVERAGE,
             "description": (
-                "SBI only where per-drug or covariate-pair SBC passes and coverage deviation "
-                "is ≤10pp of nominal across all CI levels, with no exact-rejection "
-                "SBC fallback cases. Existing IS routes "
-                "remain IS; other failures use IBIS."
+                "SBI only where per-drug or covariate-pair SBC has no exact rejection or "
+                "uncomputable case and none of its KS or coverage tests is rejected by "
+                "the flow-wide combined Holm family at FWER 0.01. Original uncorrected "
+                "per-row pass is reported, not used for routing. Existing IS routes remain "
+                "IS; other failures use IBIS."
             ),
         },
         "default": args.default,
