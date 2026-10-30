@@ -138,6 +138,12 @@ def main() -> None:
             "source": str(args.multi_observation_sbc.resolve().relative_to(ROOT)),
             "model": "multi_observation_nsf.pt",
             "global_sbc_gate_passed": multi_sbc.get("gate_passed"),
+            "size_calibrated_global_gate_status": multi_sbc.get(
+                "size_calibrated_global_gate", {}
+            ).get("status"),
+            "production_scope_gate_status": multi_sbc.get(
+                "production_scope_size_calibrated_gate", {}
+            ).get("status"),
             "native_count": sum(row["use_native"] for row in decisions.values()),
             "sbc_exact_rejection_cases_total": sum(
                 row["rejection_fallback_cases"] for row in decisions.values()
@@ -193,6 +199,12 @@ def main() -> None:
             "source": str(path.resolve().relative_to(ROOT)),
             "model": model,
             "global_sbc_gate_passed": flow_sbc.get("gate_passed"),
+            "size_calibrated_global_gate_status": flow_sbc.get(
+                "size_calibrated_global_gate", {}
+            ).get("status"),
+            "production_scope_gate_status": flow_sbc.get(
+                "production_scope_size_calibrated_gate", {}
+            ).get("status"),
             "sbi_pair_count": sum(row["use_sbi"] for row in pair_decisions),
             "sbc_exact_rejection_cases_total": sum(
                 row["rejection_fallback_cases"] for row in pair_decisions
@@ -224,6 +236,12 @@ def main() -> None:
             "is": is_count,
             "sbi_reweight_drugs": sum(bool(value) for value in reweight.values()),
             "global_sbc_gate_passed": sbc.get("gate_passed"),
+            "size_calibrated_global_gate_status": sbc.get(
+                "size_calibrated_global_gate", {}
+            ).get("status"),
+            "production_scope_gate_status": sbc.get(
+                "production_scope_size_calibrated_gate", {}
+            ).get("status"),
             "sbc_exact_rejection_cases_total": sum(
                 row.get("rejection_fallback_cases", 0) for row in sbc["drugs"]
             ),

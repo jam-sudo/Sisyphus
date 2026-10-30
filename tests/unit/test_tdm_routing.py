@@ -247,6 +247,8 @@ def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
     sbc_path.parent.mkdir(parents=True)
     sbc_path.write_text(json.dumps({
         "gate_passed": False,
+        "size_calibrated_global_gate": {"status": "INCOMPLETE"},
+        "production_scope_size_calibrated_gate": {"status": "PASS"},
         "drugs": [
             {"name": "morphine", "pass": True, "coverage_max_deviation": 0.05,
              "ks_pvalues": [0.5], "size_calibrated_rejections": 0},
@@ -267,6 +269,8 @@ def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
     assert rebuilt["summary"]["sbi"] == 1
     assert rebuilt["summary"]["ibis"] == 2
     assert rebuilt["summary"]["global_sbc_gate_passed"] is False
+    assert rebuilt["summary"]["size_calibrated_global_gate_status"] == "INCOMPLETE"
+    assert rebuilt["summary"]["production_scope_gate_status"] == "PASS"
     assert rebuilt["summary"]["sbc_exact_rejection_cases_total"] == 1
     assert rebuilt["summary"]["sbc_exact_rejection_cases_on_sbi_routes"] == 0
     assert rebuilt["reasons"]["pravastatin"]["reason"] == "exact_rejection_sbc_fallback"
