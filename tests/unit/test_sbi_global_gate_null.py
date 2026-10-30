@@ -3,6 +3,7 @@
 import numpy as np
 
 from scripts.sbi_global_gate_null import (
+    _exact_reference_ranks,
     _inside_quantile_interval,
     gate_probability,
     production_scope_probability,
@@ -25,6 +26,17 @@ def test_exact_rank_null_uses_all_three_parameters():
     assert result["holm"]["passed"] >= result["passed"]
     assert result["size_calibrated"]["simultaneous_tests"] == 30
     assert 0.9 < result["size_calibrated"]["pass_probability"] <= 1
+
+
+def test_exact_reference_rank_pool_retains_parameter_dependence():
+    grid = np.arange(40, dtype=float)
+    draws = np.column_stack((grid, grid, -grid))
+    ranks = _exact_reference_ranks(draws, 2000, np.random.default_rng(7))
+    assert np.all(np.abs(ranks.mean(axis=0) - 250) < 15)
+    assert np.corrcoef(ranks.T)[0, 1] > 0.9
+    assert np.corrcoef(ranks.T)[0, 2] < -0.9
+    result = gate_probability(2, 50, repetitions=20, seed=7, rank_pool=ranks)
+    assert result["simultaneous_ks_tests"] == 6
 
 
 def test_production_null_repeats_full_family_screening():

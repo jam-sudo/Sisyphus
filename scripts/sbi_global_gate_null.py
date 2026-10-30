@@ -20,6 +20,33 @@ KS_THRESHOLD_P = 0.01
 COVERAGE_TOLERANCE_FRACTION = 0.10
 # Source: predeclared size-calibrated policy in data/validation/sbi_global_gate_policy.json.
 SIZE_CALIBRATED_FWER_ALPHA_P = 0.01
+# Source: data/validation/sbi_global_gate_exact_reference_policy.json.
+EXACT_REFERENCE_RANK_BATCH_COUNT = 256
+# Source: data/validation/sbi_global_gate_exact_reference_policy.json.
+EXACT_REFERENCE_RANK_COUNT = 20000
+
+
+def _exact_reference_ranks(
+    draws: np.ndarray, count: int, rng: np.random.Generator,
+) -> np.ndarray:
+    """Use exchangeable exact posterior draws to retain parameter rank dependence."""
+    if draws.ndim != 2 or draws.shape[1] != 3 or len(draws) < 2 or count < 1:
+        raise ValueError("Exact reference draws must have shape (N>=2, 3)")
+    ranks = np.empty((count, 3), dtype=np.int16)
+    for start in range(0, count, EXACT_REFERENCE_RANK_BATCH_COUNT):
+        end = min(start + EXACT_REFERENCE_RANK_BATCH_COUNT, count)
+        values = draws[rng.integers(
+            0, len(draws), size=(end - start, POSTERIOR_DRAW_COUNT + 1),
+        )]
+        tie_breakers = rng.random(values.shape)
+        truth = values[:, :1, :]
+        ranks[start:end] = np.sum(
+            (values[:, 1:, :] < truth)
+            | ((values[:, 1:, :] == truth)
+               & (tie_breakers[:, 1:, :] < tie_breakers[:, :1, :])),
+            axis=1,
+        )
+    return ranks
 
 
 def _inside_quantile_interval(
@@ -49,6 +76,7 @@ def gate_probability(
     continuous_coverage: bool = False,
     repetitions: int = 10000,
     seed: int = 42,
+    rank_pool: np.ndarray | None = None,
 ) -> dict[str, float | int]:
     """Draw exact discrete-uniform SBC ranks and apply the existing global gate.
 
@@ -58,6 +86,11 @@ def gate_probability(
     """
     if n_pairs < 1 or n_calibration < 1 or repetitions < 1:
         raise ValueError("Pair, calibration, and repetition counts must be positive")
+    if rank_pool is not None and (
+        rank_pool.ndim != 2 or rank_pool.shape[1] != 3 or len(rank_pool) < 1
+        or np.any((rank_pool < 0) | (rank_pool > POSTERIOR_DRAW_COUNT))
+    ):
+        raise ValueError("Rank pool must have shape (N>=1, 3) and ranks in 0..500")
     rng = np.random.default_rng(seed)
     size_rng = np.random.default_rng(np.random.SeedSequence([seed, 1]))
     coverage_draws = n_calibration * (3 if continuous_coverage else 1)
@@ -72,7 +105,10 @@ def gate_probability(
     size_passed = 0
     size_test_count = n_pairs * (7 if continuous_coverage else 15)
     for _ in range(repetitions):
-        ranks = rng.integers(0, POSTERIOR_DRAW_COUNT + 1, size=(n_pairs, n_calibration, 3))
+        ranks = (rng.integers(0, POSTERIOR_DRAW_COUNT + 1,
+                              size=(n_pairs, n_calibration, 3))
+                 if rank_pool is None else
+                 rank_pool[rng.integers(0, len(rank_pool), size=(n_pairs, n_calibration))])
         sorted_ranks = np.sort(ranks / POSTERIOR_DRAW_COUNT, axis=1)
         grid = np.arange(1, n_calibration + 1)[None, :, None] / n_calibration
         d_stat = np.maximum(
@@ -199,22 +235,42 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repetitions", type=int, default=10000)
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--exact-reference", type=Path, action="append", default=[])
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
-    single_gate = gate_probability(13, 100, repetitions=args.repetitions, seed=args.seed)
+    rank_pool = None
+    if args.exact_reference:
+        reference_rng = np.random.default_rng(args.seed)
+        rank_pool = np.concatenate([
+            _exact_reference_ranks(
+                np.load(path)["theta"], EXACT_REFERENCE_RANK_COUNT, reference_rng,
+            ) for path in args.exact_reference
+        ])
+    single_gate = gate_probability(
+        13, 100, repetitions=args.repetitions, seed=args.seed, rank_pool=rank_pool,
+    )
     results = {
         "multi_drug": single_gate,
         "multi_observation": single_gate.copy(),
-        "hierarchical": gate_probability(26, 100, repetitions=args.repetitions, seed=args.seed + 1),
+        "hierarchical": gate_probability(
+            26, 100, repetitions=args.repetitions, seed=args.seed + 1, rank_pool=rank_pool,
+        ),
         "continuous": gate_probability(
             52, 50, continuous_coverage=True,
-            repetitions=args.repetitions, seed=args.seed + 2,
+            repetitions=args.repetitions, seed=args.seed + 2, rank_pool=rank_pool,
         ),
         "assumptions": (
+            "Exact exchangeable posterior draws from the supplied synthetic contexts; "
+            "parameter dependence retained within each rank triple; pairs and calibration "
+            "cases sampled independently; uniform location within posterior quantile gaps"
+            if rank_pool is not None else
             "Exact uniform marginal ranks; independent parameters and pairs; "
             "uniform location within posterior quantile gaps"
         ),
-        "method": "Exact calibrated-rank sampling by posterior exchangeability",
+        "method": ("Exact rejection posterior reference rank resampling"
+                   if rank_pool is not None else
+                   "Exact calibrated-rank sampling by posterior exchangeability"),
+        "exact_reference_files": [path.name for path in args.exact_reference],
         "gate": {
             "posterior_draws": POSTERIOR_DRAW_COUNT,
             "coverage_levels_percent": COVERAGE_LEVELS_PERCENT,

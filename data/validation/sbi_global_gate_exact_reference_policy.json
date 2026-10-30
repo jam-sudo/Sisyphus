@@ -1,0 +1,11 @@
+{
+  "status": "supplementary post hoc null sensitivity check; original SBC gate unchanged",
+  "source": "exact joint-prior rejection draws under the explicit Gaussian observation model",
+  "reference_drugs": ["pravastatin", "morphine", "ketorolac"],
+  "reference_contexts_per_drug": 1,
+  "posterior_draws_per_reference": 500,
+  "rank_triplets_per_reference": 20000,
+  "rank_generation_batch_count": 256,
+  "method": "Draw 501 exchangeable parameter vectors with replacement from each exact posterior reference, use one as the truth and rank it against the other 500, randomizing ties. Pool the resulting rank triplets across three drugs. Draw independent case and pair triplets from the pool and apply the existing KS and coverage gate without changing thresholds.",
+  "limitation": "This retains parameter dependence seen in three single synthetic contexts, but cannot represent all drugs, covariate contexts or cross-pair dependence; finite reference draws and pooled context sampling add uncertainty."
+}
