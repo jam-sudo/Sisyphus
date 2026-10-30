@@ -33,7 +33,24 @@
     "theta_per_drug": 500,
     "actual_epochs": 110
   },
-  "retrained_reason": "Rebuilt after the full Rodgers-Rowland engine change; 2/13 held-out drugs pass per-drug SBC and coverage gates",
+  "retrained_reason": "Rebuilt after the full Rodgers-Rowland engine change; raw-flow SBC at retraining passed 2/13 held-out drug gates",
   "artifact_status": "optional_runtime",
-  "runtime_loader": "sisyphus.regimen.tdm_sbi"
+  "runtime_loader": "sisyphus.regimen.tdm_sbi",
+  "inference_correction": {
+    "method": "pseudo_marginal_importance_resampling",
+    "proposal": "95% untruncated neural flow, 5% box prior",
+    "proposal_count": 256,
+    "nuisance_draws_per_proposal": 8,
+    "minimum_effective_sample_size": 32,
+    "low_ess_fallback": "IBIS via bayesian_update",
+    "budget_evidence": "data/validation/sbi_importance_pilot.json",
+    "corrected_sbc": "data/validation/sbi_sbc_multi_observation_corrected.json",
+    "ideal_gate_null": "data/validation/sbi_global_gate_null.json",
+    "proposal_retry_counts": [
+      256,
+      512,
+      1024
+    ],
+    "sbc_low_ess_fallback": "exact joint-prior rejection after all retries"
+  }
 }
