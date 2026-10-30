@@ -71,6 +71,9 @@ def aggregate_blocks(paths: list[Path], flow: str, expected_pairs: int) -> dict:
                 "rejection_fallback_cases": sum(
                     entry.get("rejection_fallback_cases", 0) for _, entry in parts
                 ),
+                "forced_exact_rejection_cases": sum(
+                    entry.get("forced_exact_rejection_cases", 0) for _, entry in parts
+                ),
             }
             if len(key) == 1:
                 row["name"] = key[0]
@@ -110,6 +113,9 @@ def aggregate_blocks(paths: list[Path], flow: str, expected_pairs: int) -> dict:
             "rejection_fallback_cases": sum(
                 entry.get("rejection_fallback_cases", 0) for _, entry in parts
             ),
+            "forced_exact_rejection_cases": sum(
+                entry.get("forced_exact_rejection_cases", 0) for _, entry in parts
+            ),
             "median_correction_ess": float(np.median(ess_values)) if ess_values else None,
             "max_proposals_used": max(proposal_counts, default=0),
         }
@@ -121,6 +127,9 @@ def aggregate_blocks(paths: list[Path], flow: str, expected_pairs: int) -> dict:
     output["pass_count"] = sum(row["pass"] for row in output[key_name])
     output["rejection_fallback_cases"] = sum(
         row.get("rejection_fallback_cases", 0) for row in output[key_name]
+    )
+    output["forced_exact_rejection_cases"] = sum(
+        row.get("forced_exact_rejection_cases", 0) for row in output[key_name]
     )
     output["total_pairs"] = expected_pairs
     output["gate_passed"] = output["pass_count"] == expected_pairs

@@ -26,6 +26,8 @@ def test_aggregate_blocks_counts_and_missing_case(tmp_path, monkeypatch):
                 "ranks": [[100, 200, 300], [400, 300, 200]],
                 "coverage_counts": {str(level): [1, 1, 1]
                                     for level in (50, 80, 90, 95)},
+                "rejection_fallback_cases": int(start == 0),
+                "forced_exact_rejection_cases": int(start == 0),
             }],
         }
         path = tmp_path / f"{start}.json"
@@ -36,6 +38,7 @@ def test_aggregate_blocks_counts_and_missing_case(tmp_path, monkeypatch):
     assert result["populations"][0]["bw"] == 70.0
     assert result["drugs"][0]["n_valid"] == 4
     assert result["drugs"][0]["coverage"]["50"] == [0.5, 0.5, 0.5]
+    assert result["forced_exact_rejection_cases"] == 1
     out = tmp_path.parent / "aggregated.json"
     monkeypatch.setattr("sys.argv", [
         "sbi_aggregate_sbc_blocks.py", "--flow", "multi_drug", "--blocks", str(tmp_path),

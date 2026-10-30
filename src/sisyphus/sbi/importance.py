@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from multiprocessing import get_context
 
 import numpy as np
 from scipy.special import logsumexp
@@ -22,10 +23,71 @@ MIN_IMPORTANCE_ESS_COUNT = 32.0
 DEFENSIVE_PRIOR_FRACTION = 0.05
 # Source: data/validation/sbi_exact_rejection.json; 100k exceeds 500 draws at ~4% acceptance.
 MAX_REJECTION_ATTEMPT_COUNT = 100000
+# Source: data/validation/sbi_exact_rejection.json; 16 chunks of this size
+# exceed 500 expected accepts at the measured approximately 4% rate.
+REJECTION_CHUNK_ATTEMPT_COUNT = 1024
+
+_parallel_log_draw: Callable[[np.ndarray, np.random.Generator], float] | None = None
 
 
 class LowImportanceESS(RuntimeError):
     """Raised when correction weights cannot support posterior summaries."""
+
+
+def _rejection_chunk(task: tuple[int, int, int, float]) -> list[np.ndarray]:
+    seed, chunk_index, count, max_log_likelihood = task
+    if _parallel_log_draw is None:
+        raise RuntimeError("Parallel rejection likelihood is not initialized")
+    rng = np.random.default_rng(np.random.SeedSequence([seed, chunk_index]))
+    accepted = []
+    for _ in range(count):
+        theta = rng.uniform(PRIOR_LOW, PRIOR_HIGH)
+        log_likelihood = _parallel_log_draw(theta, rng)
+        if rng.random() < np.exp(log_likelihood - max_log_likelihood):
+            accepted.append(theta)
+    return accepted
+
+
+def sample_exact_rejection_parallel(
+    log_likelihood_draw: Callable[[np.ndarray, np.random.Generator], float],
+    *,
+    n_draws: int,
+    seed: int,
+    max_log_likelihood: float,
+    workers: int,
+    max_attempts: int = MAX_REJECTION_ATTEMPT_COUNT,
+) -> tuple[np.ndarray, int]:
+    """Draw exact joint-prior rejection samples in deterministic proposal order."""
+    if n_draws < 1 or workers < 1 or max_attempts < 1:
+        raise ValueError("Draw, worker, and attempt counts must be positive")
+    if not np.isfinite(max_log_likelihood):
+        raise ValueError("The likelihood bound must be finite")
+    global _parallel_log_draw
+    _parallel_log_draw = log_likelihood_draw
+    accepted: list[np.ndarray] = []
+    attempts = 0
+    chunk_index = 0
+    try:
+        with get_context("fork").Pool(workers) as pool:
+            while len(accepted) < n_draws and attempts < max_attempts:
+                tasks = []
+                for _ in range(workers):
+                    remaining = max_attempts - attempts - sum(task[2] for task in tasks)
+                    if remaining <= 0:
+                        break
+                    tasks.append((
+                        seed, chunk_index, min(REJECTION_CHUNK_ATTEMPT_COUNT, remaining),
+                        max_log_likelihood,
+                    ))
+                    chunk_index += 1
+                for samples in pool.map(_rejection_chunk, tasks, chunksize=1):
+                    accepted.extend(samples)
+                attempts += sum(task[2] for task in tasks)
+    finally:
+        _parallel_log_draw = None
+    if len(accepted) < n_draws:
+        raise LowImportanceESS(f"Exact rejection yielded {len(accepted)}/{n_draws} samples")
+    return np.asarray(accepted[:n_draws]), attempts
 
 
 def sample_corrected(
@@ -104,14 +166,17 @@ class CorrectedSBCPosterior:
         seed: int,
         case_start: int = 0,
         multi_observation: bool = False,
+        exact_rejection_workers: int = 0,
     ) -> None:
         self.posterior = posterior
         self.simulator = simulator
         self.seed = seed
         self.case_index = case_start
         self.multi_observation = multi_observation
+        self.exact_rejection_workers = exact_rejection_workers
         self.ess: list[float] = []
         self.rejection_count = 0
+        self.forced_exact_rejection_count = 0
         self.proposal_counts: list[int] = []
 
     def sample(self, shape: tuple[int, ...], *, x: object, **_: object) -> object:
@@ -176,6 +241,16 @@ class CorrectedSBCPosterior:
                 residual = (observed - predicted) / sigma
                 return float(-0.5 * residual**2
                              - np.log(sigma) - 0.5 * np.log(2 * np.pi))
+
+        if self.exact_rejection_workers:
+            samples, _ = sample_exact_rejection_parallel(
+                log_draw, n_draws=shape[0], seed=seed + 1,
+                max_log_likelihood=max_log_likelihood,
+                workers=self.exact_rejection_workers,
+            )
+            self.rejection_count += 1
+            self.forced_exact_rejection_count += 1
+            return torch.as_tensor(samples, dtype=torch.float32)
 
         samples = None
         for proposal_count in (DEFAULT_PROPOSAL_COUNT, 2 * DEFAULT_PROPOSAL_COUNT,

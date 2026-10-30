@@ -102,6 +102,7 @@ def main() -> None:
     p.add_argument("--ks-threshold", type=float, default=0.01)
     p.add_argument("--coverage-tol", type=float, default=0.10)
     p.add_argument("--sampler", choices=("raw", "corrected"), default="corrected")
+    p.add_argument("--exact-rejection-workers", type=int, default=0)
     p.add_argument("--only-pair", type=int, default=0)
     p.add_argument("--case-start", type=int, default=0)
     p.add_argument("--case-end", type=int, default=None)
@@ -229,6 +230,7 @@ def main() -> None:
                 sampler = (CorrectedSBCPosterior(
                     result.posterior, sim, seed=args.seed + pair_idx,
                     case_start=args.case_start,
+                    exact_rejection_workers=args.exact_rejection_workers,
                 ) if args.sampler == "corrected" else result.posterior)
                 ranks, cov_counts = _coverage_and_ranks(
                     thetas_true, sampler, xs_packed, levels=levels,
@@ -249,6 +251,9 @@ def main() -> None:
                     "pass": False,
                     "sampling_error": str(exc),
                     "rejection_fallback_cases": getattr(sampler, "rejection_count", 0),
+                    "forced_exact_rejection_cases": getattr(
+                        sampler, "forced_exact_rejection_count", 0
+                    ),
                     "correction_ess": getattr(sampler, "ess", []),
                     "proposal_counts": getattr(sampler, "proposal_counts", []),
                     "elapsed_s": float(time.time() - t0),
@@ -295,6 +300,9 @@ def main() -> None:
                 "ranks": ranks.tolist(),
                 "coverage_counts": {str(k): v.tolist() for k, v in cov_counts.items()},
                 "rejection_fallback_cases": getattr(sampler, "rejection_count", 0),
+                "forced_exact_rejection_cases": getattr(
+                    sampler, "forced_exact_rejection_count", 0
+                ),
                 "correction_ess": getattr(sampler, "ess", []),
                 "proposal_counts": getattr(sampler, "proposal_counts", []),
                 "n_valid": len(thetas_true),

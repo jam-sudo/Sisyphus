@@ -113,6 +113,24 @@ def test_sbc_sampler_counts_exact_rejection_fallback(monkeypatch):
     assert 0.5 < draws[:, 0].mean() < 0.9
 
 
+def test_sbc_forced_exact_rejection_is_recorded(monkeypatch):
+    class Simulator:
+        obs_sigma_log10 = 0.2
+
+    def exact(log_draw, *, n_draws, seed, max_log_likelihood, workers):
+        assert workers == 2
+        return np.tile((PRIOR_LOW + PRIOR_HIGH) / 2, (n_draws, 1)), n_draws
+
+    monkeypatch.setattr(importance, "sample_exact_rejection_parallel", exact)
+    sampler = CorrectedSBCPosterior(
+        UniformPosterior(), Simulator(), seed=7, exact_rejection_workers=2
+    )
+    draws = sampler.sample((5,), x=torch.as_tensor([[0.0]]))
+    assert draws.shape == (5, 3)
+    assert sampler.rejection_count == 1
+    assert sampler.forced_exact_rejection_count == 1
+
+
 def test_sbc_case_streams_are_independent_of_block_boundaries(monkeypatch):
     class Simulator:
         obs_sigma_log10 = 0.2
