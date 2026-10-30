@@ -36,3 +36,9 @@ def test_production_null_repeats_full_family_screening():
     empty = production_scope_probability([False], [True], 50, repetitions=20, seed=7)
     assert empty["pass_probability"] == 0
     assert empty["nonempty_probability"] == 0
+    continuous = production_scope_probability(
+        [True, True], [False, False], 50, continuous_coverage=True,
+        repetitions=20, seed=7,
+    )
+    assert continuous["tests_per_pair"] == 7
+    assert 0 <= continuous["pass_probability"] <= 1
