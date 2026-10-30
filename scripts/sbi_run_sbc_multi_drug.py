@@ -32,6 +32,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import sys
 import time
 from pathlib import Path
@@ -100,6 +101,34 @@ def _coverage_and_ranks(
     return ranks, cov
 
 
+def _load_context_cache(
+    path: Path, *, drug: str, seed: int, n_calibration: int,
+) -> tuple[np.ndarray, np.ndarray]:
+    with np.load(path, allow_pickle=False) as cache:
+        if (str(cache["drug"]) != drug or int(cache["seed"]) != seed
+                or int(cache["n_calibration"]) != n_calibration):
+            raise ValueError(f"Timed context cache does not match {drug}, seed, or count: {path}")
+        thetas = cache["thetas_true"]
+        contexts = cache["xs_packed"]
+    if len(thetas) != len(contexts) or len(thetas) > n_calibration:
+        raise ValueError(f"Invalid timed context cache shape: {path}")
+    return thetas, contexts
+
+
+def _save_context_cache(
+    path: Path, *, drug: str, seed: int, n_calibration: int,
+    thetas: np.ndarray, contexts: np.ndarray,
+) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(".npz.tmp")
+    with temporary.open("wb") as handle:
+        np.savez_compressed(
+            handle, drug=drug, seed=seed, n_calibration=n_calibration,
+            thetas_true=thetas, xs_packed=contexts,
+        )
+    os.replace(temporary, path)
+
+
 def main() -> None:
     p = argparse.ArgumentParser()
     p.add_argument("--posterior", type=Path, required=True)
@@ -113,6 +142,8 @@ def main() -> None:
     p.add_argument("--ks-threshold", type=float, default=0.01)
     p.add_argument("--coverage-tol", type=float, default=0.10)
     p.add_argument("--multi-observation", action="store_true")
+    p.add_argument("--context-cache", type=Path)
+    p.add_argument("--write-context-cache-only", action="store_true")
     p.add_argument("--sampler", choices=("raw", "corrected"), default="corrected")
     p.add_argument("--exact-rejection-workers", type=int, default=0)
     p.add_argument("--fallback-rejection-workers", type=int, default=0)
@@ -122,6 +153,10 @@ def main() -> None:
     p.add_argument("--case-start", type=int, default=0)
     p.add_argument("--case-end", type=int, default=None)
     args = p.parse_args()
+    if args.write_context_cache_only and (not args.multi_observation or not args.context_cache):
+        raise ValueError(
+            "--write-context-cache-only requires --multi-observation and --context-cache"
+        )
 
     levels = tuple(int(x) for x in args.levels.split(","))
 
@@ -192,7 +227,12 @@ def main() -> None:
 
         rng = np.random.default_rng(args.seed + i * 1000)
         thetas_true = prior.sample_numpy(args.n_calibration, rng)
-        if args.multi_observation:
+        if args.multi_observation and args.context_cache and args.context_cache.exists():
+            thetas_true, xs_packed = _load_context_cache(
+                args.context_cache, drug=spec.name, seed=args.seed,
+                n_calibration=args.n_calibration,
+            )
+        elif args.multi_observation:
             contexts = []
             valid_thetas = []
             for theta in thetas_true:
@@ -211,6 +251,12 @@ def main() -> None:
                 raise RuntimeError(f"No valid SBC simulations for {spec.name}")
             xs_packed = np.asarray(contexts, dtype=np.float32)
             thetas_true = np.asarray(valid_thetas)
+            if args.context_cache:
+                _save_context_cache(
+                    args.context_cache, drug=spec.name, seed=args.seed,
+                    n_calibration=args.n_calibration,
+                    thetas=thetas_true, contexts=xs_packed,
+                )
         else:
             xs = np.zeros((args.n_calibration, 1), dtype=np.float64)
             for j in range(args.n_calibration):
@@ -222,6 +268,9 @@ def main() -> None:
             ).astype(np.float64)
 
         n_available = len(thetas_true)
+        if args.write_context_cache_only:
+            log.info("Cached %d timed contexts for %s", n_available, spec.name)
+            continue
         end = args.case_end if args.case_end is not None else n_available
         thetas_true = thetas_true[args.case_start:end]
         xs_packed = xs_packed[args.case_start:end]
