@@ -35,11 +35,11 @@ SMC_ADAPTATION_GAIN_FRACTION = 0.5
 # Source: data/validation/sbi_joint_smc_policy.json; bound for nuisance-dimension probe.
 SMC_PROBE_NORMAL_COUNT = 1024
 # Source: data/validation/sbi_joint_smc_policy.json; post-pilot ancestor floor.
-SMC_MIN_UNIQUE_INITIAL_ANCESTORS = 100
+SMC_MIN_UNIQUE_INITIAL_ANCESTOR_COUNT = 100
 # Source: data/validation/sbi_joint_smc_policy.json; sildenafil pilot recovery.
-SMC_GUARD_PARTICLE_MULTIPLIER = 4
+SMC_GUARD_PARTICLE_COUNT_RATIO = 4
 # Source: data/validation/sbi_joint_smc_policy.json; sildenafil pilot recovery.
-SMC_GUARD_EXTRA_SWEEPS = 1
+SMC_GUARD_EXTRA_SWEEP_COUNT = 1
 
 _joint_log_likelihood: Callable[[np.ndarray, _GaussianStream], float] | None = None
 
@@ -248,11 +248,11 @@ def sample_joint_smc(
         rejuvenation_sweeps=rejuvenation_sweeps,
     )
     if n_particles != SMC_PARTICLE_COUNT or (
-        diagnostics["unique_initial_ancestors"] >= SMC_MIN_UNIQUE_INITIAL_ANCESTORS
+        diagnostics["unique_initial_ancestors"] >= SMC_MIN_UNIQUE_INITIAL_ANCESTOR_COUNT
     ):
         diagnostics["ancestor_guard_passed"] = (
             n_particles < SMC_PARTICLE_COUNT
-            or diagnostics["unique_initial_ancestors"] >= SMC_MIN_UNIQUE_INITIAL_ANCESTORS
+            or diagnostics["unique_initial_ancestors"] >= SMC_MIN_UNIQUE_INITIAL_ANCESTOR_COUNT
         )
         return samples, diagnostics
 
@@ -264,14 +264,14 @@ def sample_joint_smc(
     }
     samples, diagnostics = _sample_joint_smc_once(
         log_likelihood, n_draws=n_draws, seed=seed + 1,
-        n_particles=n_particles * SMC_GUARD_PARTICLE_MULTIPLIER,
+        n_particles=n_particles * SMC_GUARD_PARTICLE_COUNT_RATIO,
         workers=workers, max_stages=max_stages,
-        rejuvenation_sweeps=rejuvenation_sweeps + SMC_GUARD_EXTRA_SWEEPS,
+        rejuvenation_sweeps=rejuvenation_sweeps + SMC_GUARD_EXTRA_SWEEP_COUNT,
     )
     diagnostics["first_attempt"] = first_attempt
     diagnostics["simulator_evaluations"] += first_attempt["simulator_evaluations"]
     diagnostics["elapsed_s"] += first_attempt["elapsed_s"]
     diagnostics["ancestor_guard_passed"] = (
-        diagnostics["unique_initial_ancestors"] >= SMC_MIN_UNIQUE_INITIAL_ANCESTORS
+        diagnostics["unique_initial_ancestors"] >= SMC_MIN_UNIQUE_INITIAL_ANCESTOR_COUNT
     )
     return samples, diagnostics

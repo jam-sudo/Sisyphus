@@ -13,7 +13,7 @@ from sisyphus.engine.solver import solve
 from sisyphus.regimen.solver import solve_regimen
 from sisyphus.regimen.types import DosingRegimen
 from sisyphus.sbi.joint_smc import (
-    SMC_MIN_UNIQUE_INITIAL_ANCESTORS,
+    SMC_MIN_UNIQUE_INITIAL_ANCESTOR_COUNT,
     SMC_PARTICLE_COUNT,
     SMC_REJUVENATION_SWEEP_COUNT,
 )
@@ -338,7 +338,7 @@ class CorrectedSBCPosterior:
             if not diagnostics["ancestor_guard_passed"]:
                 raise LowImportanceESS(
                     "Joint SMC retained fewer than "
-                    f"{SMC_MIN_UNIQUE_INITIAL_ANCESTORS} initial ancestors after "
+                    f"{SMC_MIN_UNIQUE_INITIAL_ANCESTOR_COUNT} initial ancestors after "
                     "the enlarged recovery run"
                 )
             return torch.as_tensor(samples, dtype=torch.float32)

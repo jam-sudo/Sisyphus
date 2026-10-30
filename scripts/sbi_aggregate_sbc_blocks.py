@@ -12,7 +12,7 @@ import numpy as np
 from scipy import stats
 
 from sisyphus.sbi.importance import MAX_REJECTION_ATTEMPT_COUNT
-from sisyphus.sbi.joint_smc import SMC_MIN_UNIQUE_INITIAL_ANCESTORS
+from sisyphus.sbi.joint_smc import SMC_MIN_UNIQUE_INITIAL_ANCESTOR_COUNT
 
 
 def aggregate_blocks(paths: list[Path], flow: str, expected_pairs: int) -> dict:
@@ -66,7 +66,7 @@ def aggregate_blocks(paths: list[Path], flow: str, expected_pairs: int) -> dict:
         low_ancestor_parts = [
             entry for _, entry in parts
             if any(diagnostics.get("unique_initial_ancestors", 0)
-                   < SMC_MIN_UNIQUE_INITIAL_ANCESTORS
+                   < SMC_MIN_UNIQUE_INITIAL_ANCESTOR_COUNT
                    for diagnostics in entry.get("joint_smc_diagnostics", []))
         ]
         if any(not entry.get("ranks") for _, entry in parts) or low_ancestor_parts:
