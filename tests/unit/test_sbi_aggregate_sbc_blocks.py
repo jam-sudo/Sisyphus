@@ -88,6 +88,8 @@ def test_aggregate_blocks_reports_sampling_errors(tmp_path, monkeypatch):
     written = json.loads(out.read_text())
     assert written["holm_global_gate"]["passed"] is None
     assert written["size_calibrated_global_gate"]["passed"] is None
+    assert written["size_calibrated_global_gate"]["status"] == "INCOMPLETE"
+    assert written["size_calibrated_global_gate"]["uncomputable_pairs"] == ["test"]
 
     block["drugs"].append({
         "name": "known_failure", "n_available": 2,

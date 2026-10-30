@@ -527,6 +527,9 @@
     0.1124036230166811
   ],
   "calibrated_null_assumptions": "Exact uniform marginal ranks; independent parameters and pairs; uniform location within posterior quantile gaps",
+  "uncomputable_pairs": [
+    "sildenafil"
+  ],
   "holm_global_gate": {
     "passed": false,
     "ks_rejections": 0,
@@ -543,6 +546,10 @@
   },
   "size_calibrated_global_gate": {
     "passed": null,
+    "status": "INCOMPLETE",
+    "uncomputable_pairs": [
+      "sildenafil"
+    ],
     "rejections": 0,
     "ks_test_count": 39,
     "coverage_test_count": 156,
@@ -554,6 +561,39 @@
       0.9877409379203101,
       0.9917660662919513
     ],
+    "calibrated_null_assumptions": "Exact uniform marginal ranks; independent parameters and pairs; uniform location within posterior quantile gaps"
+  },
+  "production_scope_size_calibrated_gate": {
+    "status": "PASS",
+    "passed": true,
+    "selected_count": 11,
+    "selected_pairs": [
+      "amantadine",
+      "clozapine",
+      "diclofenac",
+      "digoxin",
+      "indomethacin",
+      "ketorolac",
+      "morphine",
+      "phenytoin",
+      "posaconazole",
+      "rivaroxaban",
+      "tamoxifen"
+    ],
+    "excluded_pairs": [
+      "pravastatin",
+      "sildenafil"
+    ],
+    "test_count": 165,
+    "rejections": 0,
+    "family_wise_alpha": 0.01,
+    "predeclared_at_utc": "2026-10-30T10:12:40Z",
+    "calibrated_null_pass_probability": 0.9903,
+    "calibrated_null_ci_95": [
+      0.988179464523133,
+      0.9921271127212072
+    ],
+    "calibrated_null_repetitions": 10000,
     "calibrated_null_assumptions": "Exact uniform marginal ranks; independent parameters and pairs; uniform location within posterior quantile gaps"
   }
 }

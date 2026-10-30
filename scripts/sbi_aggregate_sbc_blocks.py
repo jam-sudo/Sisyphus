@@ -202,6 +202,10 @@ def main() -> None:
     policy = json.loads(policy_path.read_text())
     entries = result["drugs"] if args.flow in ("multi_drug", "multi_observation") \
         else result["pairs"]
+    result["uncomputable_pairs"] = [
+        entry["name"] if "name" in entry else f"{entry['population']}/{entry['drug']}"
+        for entry in entries if entry["pass"] is None
+    ]
     evaluable = [entry for entry in entries if entry["pass"] is not None]
     pvalues = [pvalue for entry in evaluable for pvalue in entry["ks_pvalues"]]
     missing_ks = 3 * (len(entries) - len(evaluable))
@@ -250,8 +254,10 @@ def main() -> None:
     size_alpha = policy["size_calibrated_gate"]["family_wise_alpha"]
     size_rejected = _holm_rejection_count(size_pvalues, size_alpha)
     result["size_calibrated_global_gate"] = {
-        "passed": (False if size_rejected else
-                   None if missing_ks else True),
+        "passed": None if missing_ks else size_rejected == 0,
+        "status": ("INCOMPLETE" if missing_ks else
+                   "FAIL" if size_rejected else "PASS"),
+        "uncomputable_pairs": result["uncomputable_pairs"],
         "rejections": size_rejected,
         "ks_test_count": len(pvalues) + missing_ks,
         "coverage_test_count": coverage_test_count,
