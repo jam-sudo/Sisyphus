@@ -203,6 +203,57 @@ def test_sbc_capped_rejection_uses_pseudo_marginal_mcmc(monkeypatch):
     assert sampler.rejection_attempt_counts == [1]
 
 
+def test_sbc_capped_rejection_uses_joint_smc(monkeypatch):
+    from types import SimpleNamespace
+
+    from sisyphus.sbi import joint_smc, simulator
+
+    class Drug:
+        administration_node = "site"
+        dose_mg = 1.0
+
+        def sample(self, stream):
+            stream.normal(0.0, 1.0)
+            return self
+
+    class Simulator:
+        obs_sigma_log10 = 0.2
+        nominal_drug = Drug()
+        nominal_peff = 1.0
+        compiled = SimpleNamespace(n_states=1, state_index={"site": 0})
+        obs_node = "venous_blood"
+        t_span = (0.0, 1.0)
+
+        def _sample_graph(self, stream):
+            stream.normal(0.0, 1.0)
+            return object()
+
+    def capped(*args, **kwargs):
+        raise LowImportanceESS("Exact rejection yielded 0/5 samples")
+
+    def smc(log_likelihood, *, n_draws, **kwargs):
+        value = log_likelihood(np.mean([PRIOR_LOW, PRIOR_HIGH], axis=0),
+                               joint_smc._GaussianStream(np.zeros(2)))
+        assert np.isfinite(value)
+        return np.zeros((n_draws, 3)), {"stages": [{"beta": 1.0}]}
+
+    monkeypatch.setattr(importance, "sample_exact_rejection_parallel", capped)
+    monkeypatch.setattr(importance, "ResolvedParams", lambda graph, drug: object())
+    monkeypatch.setattr(importance, "solve", lambda *args, **kwargs: SimpleNamespace(
+        solver_success=True, concentrations={"venous_blood": np.array([1.0])},
+    ))
+    monkeypatch.setattr(simulator, "apply_theta_to_drug", lambda drug, theta, peff: drug)
+    monkeypatch.setattr(joint_smc, "sample_joint_smc", smc)
+    sampler = CorrectedSBCPosterior(
+        UniformPosterior(), Simulator(), seed=7, exact_rejection_workers=1,
+        max_rejection_attempts=1, joint_smc_after_rejection=True,
+    )
+    draws = sampler.sample((5,), x=torch.as_tensor([[0.0]]))
+    assert draws.shape == (5, 3)
+    assert sampler.joint_smc_fallback_count == 1
+    assert sampler.joint_smc_diagnostics[0]["case_index"] == 0
+
+
 def test_sbc_case_streams_are_independent_of_block_boundaries(monkeypatch):
     class Simulator:
         obs_sigma_log10 = 0.2

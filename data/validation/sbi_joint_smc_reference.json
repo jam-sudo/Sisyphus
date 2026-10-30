@@ -1,0 +1,73 @@
+{
+  "flow": "multi_drug",
+  "drug": "pravastatin",
+  "calibration_case_index": 0,
+  "observation_model": "single noisy log10 Cmax",
+  "n_posterior_draws_each": 500,
+  "exact_reference": {
+    "sampler": "joint-prior rejection",
+    "attempts": 16384,
+    "elapsed_s": 374.696
+  },
+  "joint_smc": {
+    "particles": 1000,
+    "stages": 3,
+    "simulator_evaluations": 9260,
+    "elapsed_s": 212.854,
+    "unique_initial_ancestors": 253
+  },
+  "parameters": [
+    {
+      "parameter": "log10_clint_shift",
+      "exact_mean": 0.03130234777927399,
+      "smc_mean": -0.009049213491380215,
+      "exact_quantiles_05_50_95": [
+        -0.8809876173734665,
+        0.050915591418743134,
+        0.8858028203248975
+      ],
+      "smc_quantiles_05_50_95": [
+        -0.8829371303319931,
+        -0.05238525755703449,
+        0.9155015289783476
+      ],
+      "two_sample_ks_statistic": 0.062000006437301636,
+      "two_sample_ks_pvalue": 0.2919248938560486
+    },
+    {
+      "parameter": "logit_fup",
+      "exact_mean": -0.43208038806915283,
+      "smc_mean": -0.5525977611541748,
+      "exact_quantiles_05_50_95": [
+        -4.278911709785461,
+        -0.5702266991138458,
+        3.99946502447128
+      ],
+      "smc_quantiles_05_50_95": [
+        -4.1840370178222654,
+        -0.794361799955368,
+        3.9219536781311035
+      ],
+      "two_sample_ks_statistic": 0.0559999942779541,
+      "two_sample_ks_pvalue": 0.4134860932826996
+    },
+    {
+      "parameter": "log10_peff_shift",
+      "exact_mean": 0.3419228196144104,
+      "smc_mean": 0.3384277820587158,
+      "exact_quantiles_05_50_95": [
+        0.10413071997463703,
+        0.374777153134346,
+        0.48853849768638613
+      ],
+      "smc_quantiles_05_50_95": [
+        0.12750135697424414,
+        0.3547359108924866,
+        0.4873091012239456
+      ],
+      "two_sample_ks_statistic": 0.0820000171661377,
+      "two_sample_ks_pvalue": 0.06930076330900192
+    }
+  ],
+  "interpretation": "Single-case reference supports joint SMC in this tractable setting; it cannot certify every drug or the global SBC gate."
+}

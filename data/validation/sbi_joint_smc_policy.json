@@ -1,0 +1,18 @@
+{
+  "status": "post hoc exact-joint-target recovery for SBC cases with intractable nuisance averaging",
+  "target": "p(theta, z | x) proportional to p(theta) phi(z) times Gaussian observation likelihood, with z the standard-normal base of the simulator nuisance realization",
+  "reference": "Del Moral, Doucet and Jasra (2006), Sequential Monte Carlo samplers, doi:10.1111/j.1467-9868.2006.00553.x",
+  "nuisance_move_reference": "Cotter, Roberts, Stuart and White (2013), MCMC Methods for Functions, doi:10.1214/13-STS421",
+  "particles": 1000,
+  "incremental_ess_fraction": 0.5,
+  "rejuvenation_sweeps_per_stage": 2,
+  "maximum_stages": 100,
+  "theta_proposal_scale": "2.38/sqrt(3) times covariance of current theta particles, adjusted to 23.4% acceptance",
+  "theta_covariance_jitter_fraction_of_prior_span_squared": 0.0001,
+  "initial_nuisance_pcn_fraction": 0.25,
+  "proposal_adaptation_gain": 0.5,
+  "nuisance_probe_normal_count": 1024,
+  "returned_draws": 500,
+  "routing": "Any pair using joint SMC fallback is excluded from SBI routing",
+  "limitations": "Finite-particle SMC approximates the exact joint target; validate against exact rejection on a tractable case before accepting SBC recovery."
+}

@@ -260,6 +260,9 @@ def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
             {"name": "sildenafil", "pass": True, "coverage_max_deviation": 0.05,
              "ks_pvalues": [0.5], "size_calibrated_rejections": 0,
              "mcmc_fallback_cases": 1},
+            {"name": "ketorolac", "pass": True, "coverage_max_deviation": 0.05,
+             "ks_pvalues": [0.5], "size_calibrated_rejections": 0,
+             "joint_smc_fallback_cases": 1},
         ],
     }))
     monkeypatch.setattr("scripts.sbi_build_routing_table.ROOT", tmp_path)
@@ -270,7 +273,7 @@ def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
     assert rebuilt["source"] == "data/validation/sbi_sbc_multi_drug_corrected.json"
     assert rebuilt["sbi_reweight"] == original["sbi_reweight"]
     assert rebuilt["summary"]["sbi"] == 1
-    assert rebuilt["summary"]["ibis"] == 3
+    assert rebuilt["summary"]["ibis"] == 4
     assert rebuilt["summary"]["global_sbc_gate_passed"] is False
     assert rebuilt["summary"]["size_calibrated_global_gate_status"] == "INCOMPLETE"
     assert rebuilt["summary"]["production_scope_gate_status"] == "PASS"
@@ -280,6 +283,7 @@ def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
     assert rebuilt["reasons"]["sildenafil"]["reason"] == (
         "pseudo_marginal_mcmc_sbc_fallback"
     )
+    assert rebuilt["reasons"]["ketorolac"]["reason"] == "joint_smc_sbc_fallback"
     assert rebuilt["multi_observation"] == original["multi_observation"]
     assert (rebuilt["reasons"]["morphine"]["tdm_bias_override"]
             == original["reasons"]["morphine"]["tdm_bias_override"])

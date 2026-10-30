@@ -72,6 +72,7 @@ def main() -> None:
         calibrated_rejections = entry.get("size_calibrated_rejections")
         rejection_cases = int(entry.get("rejection_fallback_cases", 0))
         mcmc_cases = int(entry.get("mcmc_fallback_cases", 0))
+        smc_cases = int(entry.get("joint_smc_fallback_cases", 0))
         existing_is = existing.get("routes", {}).get(name) == "is"
         if existing_is:
             method = "is"
@@ -84,6 +85,10 @@ def main() -> None:
         elif mcmc_cases:
             method = "ibis"
             reason = "pseudo_marginal_mcmc_sbc_fallback"
+            ibis_count += 1
+        elif smc_cases:
+            method = "ibis"
+            reason = "joint_smc_sbc_fallback"
             ibis_count += 1
         elif entry.get("pass") is None:
             method = "ibis"
@@ -111,6 +116,7 @@ def main() -> None:
             "size_calibrated_rejections": calibrated_rejections,
             "rejection_fallback_cases": rejection_cases,
             "mcmc_fallback_cases": mcmc_cases,
+            "joint_smc_fallback_cases": smc_cases,
         }
         override = existing.get("reasons", {}).get(name, {}).get("tdm_bias_override")
         if override is not None:
@@ -129,9 +135,11 @@ def main() -> None:
             coverage = float(raw_coverage) if raw_coverage is not None else None
             rejection_cases = int(entry.get("rejection_fallback_cases", 0))
             mcmc_cases = int(entry.get("mcmc_fallback_cases", 0))
+            smc_cases = int(entry.get("joint_smc_fallback_cases", 0))
             passed = (entry.get("pass") is not None
                       and entry.get("size_calibrated_rejections") == 0
-                      and rejection_cases == 0 and mcmc_cases == 0)
+                      and rejection_cases == 0 and mcmc_cases == 0
+                      and smc_cases == 0)
             decisions[name] = {
                 "use_native": passed,
                 "smiles": smiles[name],
@@ -141,6 +149,7 @@ def main() -> None:
                 "size_calibrated_rejections": entry.get("size_calibrated_rejections"),
                 "rejection_fallback_cases": rejection_cases,
                 "mcmc_fallback_cases": mcmc_cases,
+                "joint_smc_fallback_cases": smc_cases,
             }
         multi_observation = {
             "source": str(args.multi_observation_sbc.resolve().relative_to(ROOT)),
@@ -183,11 +192,13 @@ def main() -> None:
         for entry in flow_sbc["pairs"]:
             rejection_cases = int(entry.get("rejection_fallback_cases", 0))
             mcmc_cases = int(entry.get("mcmc_fallback_cases", 0))
+            smc_cases = int(entry.get("joint_smc_fallback_cases", 0))
             raw_coverage = entry["coverage_max_deviation"]
             coverage = float(raw_coverage) if raw_coverage is not None else None
             use_sbi = (entry.get("pass") is not None
                        and entry.get("size_calibrated_rejections") == 0
-                       and rejection_cases == 0 and mcmc_cases == 0)
+                       and rejection_cases == 0 and mcmc_cases == 0
+                       and smc_cases == 0)
             decision = {
                 "population": entry["population"],
                 "drug": entry["drug"],
@@ -199,6 +210,7 @@ def main() -> None:
                 "size_calibrated_rejections": entry.get("size_calibrated_rejections"),
                 "rejection_fallback_cases": rejection_cases,
                 "mcmc_fallback_cases": mcmc_cases,
+                "joint_smc_fallback_cases": smc_cases,
             }
             if flow == "continuous":
                 population = populations[entry["population"]]

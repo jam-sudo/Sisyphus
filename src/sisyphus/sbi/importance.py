@@ -9,8 +9,10 @@ import numpy as np
 from scipy.special import logsumexp
 
 from sisyphus.engine.compiler import ResolvedParams
+from sisyphus.engine.solver import solve
 from sisyphus.regimen.solver import solve_regimen
 from sisyphus.regimen.types import DosingRegimen
+from sisyphus.sbi.joint_smc import SMC_PARTICLE_COUNT
 from sisyphus.sbi.mcmc import MCMC_MAX_RETAINED_STEP_COUNT
 from sisyphus.sbi.priors import PRIOR_HIGH, PRIOR_LOW
 
@@ -177,6 +179,9 @@ class CorrectedSBCPosterior:
         max_rejection_attempts: int = MAX_REJECTION_ATTEMPT_COUNT,
         mcmc_after_rejection: bool = False,
         mcmc_max_retained_steps: int = MCMC_MAX_RETAINED_STEP_COUNT,
+        joint_smc_after_rejection: bool = False,
+        joint_smc_particles: int = SMC_PARTICLE_COUNT,
+        joint_smc_workers: int = 1,
     ) -> None:
         if max_rejection_attempts < 1 or fallback_rejection_workers < 0:
             raise ValueError("Rejection attempts must be positive and workers nonnegative")
@@ -190,6 +195,9 @@ class CorrectedSBCPosterior:
         self.max_rejection_attempts = max_rejection_attempts
         self.mcmc_after_rejection = mcmc_after_rejection
         self.mcmc_max_retained_steps = mcmc_max_retained_steps
+        self.joint_smc_after_rejection = joint_smc_after_rejection
+        self.joint_smc_particles = joint_smc_particles
+        self.joint_smc_workers = joint_smc_workers
         self.ess: list[float] = []
         self.rejection_count = 0
         self.forced_exact_rejection_count = 0
@@ -197,6 +205,8 @@ class CorrectedSBCPosterior:
         self.rejection_attempt_counts: list[int] = []
         self.mcmc_fallback_count = 0
         self.mcmc_diagnostics: list[dict] = []
+        self.joint_smc_fallback_count = 0
+        self.joint_smc_diagnostics: list[dict] = []
 
     def sample(self, shape: tuple[int, ...], *, x: object, **_: object) -> object:
         """Draw corrected particles for one packed SBC observation."""
@@ -261,6 +271,44 @@ class CorrectedSBCPosterior:
                 return float(-0.5 * residual**2
                              - np.log(sigma) - 0.5 * np.log(2 * np.pi))
 
+            def log_joint(theta: np.ndarray, stream: object) -> float:
+                from sisyphus.sbi.simulator import apply_theta_to_drug
+
+                overridden = apply_theta_to_drug(sim.nominal_drug, theta, sim.nominal_peff)
+                realized = ResolvedParams(sim._sample_graph(stream), overridden.sample(stream))
+                y0 = np.zeros(sim.compiled.n_states)
+                y0[sim.compiled.state_index[overridden.administration_node]] = (
+                    overridden.dose_mg
+                )
+                try:
+                    result = solve(sim.compiled, realized, y0, t_span=sim.t_span)
+                except (KeyError, ValueError, RuntimeError):
+                    return -np.inf
+                if not result.solver_success or sim.obs_node not in result.concentrations:
+                    return -np.inf
+                cmax = float(result.concentrations[sim.obs_node].max())
+                if cmax <= 0 or not np.isfinite(cmax):
+                    return -np.inf
+                residual = (observed - np.log10(cmax)) / sigma
+                return float(-0.5 * residual**2
+                             - np.log(sigma) - 0.5 * np.log(2 * np.pi))
+
+        if self.multi_observation:
+            log_joint = log_draw
+
+        def joint_smc_fallback() -> object:
+            from sisyphus.sbi.joint_smc import sample_joint_smc
+
+            samples, diagnostics = sample_joint_smc(
+                log_joint, n_draws=shape[0], seed=seed + 2,
+                n_particles=self.joint_smc_particles, workers=self.joint_smc_workers,
+            )
+            diagnostics["case_index"] = self.case_index - 1
+            self.joint_smc_fallback_count += 1
+            self.joint_smc_diagnostics.append(diagnostics)
+            self.rejection_attempt_counts.append(self.max_rejection_attempts)
+            return torch.as_tensor(samples, dtype=torch.float32)
+
         def mcmc_fallback() -> object:
             from sisyphus.sbi.mcmc import sample_pseudo_marginal_mcmc
 
@@ -283,6 +331,8 @@ class CorrectedSBCPosterior:
                     max_attempts=self.max_rejection_attempts,
                 )
             except LowImportanceESS:
+                if self.joint_smc_after_rejection:
+                    return joint_smc_fallback()
                 if not self.mcmc_after_rejection:
                     raise
                 return mcmc_fallback()
@@ -334,6 +384,8 @@ class CorrectedSBCPosterior:
                         ) from None
                     samples = np.asarray(accepted)
             except LowImportanceESS:
+                if self.joint_smc_after_rejection:
+                    return joint_smc_fallback()
                 if not self.mcmc_after_rejection:
                     raise
                 return mcmc_fallback()
