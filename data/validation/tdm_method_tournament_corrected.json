@@ -7,7 +7,7 @@
     "sbi"
   ],
   "t_obs_h": 1.0,
-  "sbi_sampler": "pseudo_marginal_importance_corrected",
+  "sbi_sampler": "pseudo_marginal_importance_corrected_raw_flow_mixture",
   "drugs": [
     {
       "name": "morphine",
@@ -78,21 +78,21 @@
           "method": "sbi",
           "method_used": "sbi",
           "warnings": [],
-          "wall_seconds": 857.323301076889,
+          "wall_seconds": 843.673237323761,
           "prior_cmax_mean": 0.07792756022679037,
           "prior_cmax_cv": 0.5767072381343842,
-          "posterior_cmax_mean": 0.037638782993150634,
-          "posterior_cmax_cv": 0.8159732824642969,
-          "ess": 83.10900304266882,
+          "posterior_cmax_mean": 0.039159754349532075,
+          "posterior_cmax_cv": 0.9330612237055601,
+          "ess": 50.4376600806511,
           "n_successful": 200,
           "n_prior": 200,
           "posterior_params": {
-            "peff": 4.097111432436361,
-            "fup": 0.6016562376896607,
-            "total_enzyme_affinity": 3.6956829840127092
+            "total_enzyme_affinity": 6.03848698651301,
+            "peff": 4.852850105285438,
+            "fup": 0.5863935804918915
           },
           "ok": true,
-          "bias_pct_vs_obs": 32.06590523912502
+          "bias_pct_vs_obs": 37.40264684046342
         }
       ]
     },
@@ -165,21 +165,21 @@
           "method": "sbi",
           "method_used": "sbi",
           "warnings": [],
-          "wall_seconds": 909.3314280509949,
+          "wall_seconds": 911.3037095069885,
           "prior_cmax_mean": 0.06604515851353733,
           "prior_cmax_cv": 1.1117787288565286,
-          "posterior_cmax_mean": 0.21412126302685958,
-          "posterior_cmax_cv": 0.7731541056874375,
-          "ess": 109.50794847650148,
+          "posterior_cmax_mean": 0.24037570152070703,
+          "posterior_cmax_cv": 0.8383803039844379,
+          "ess": 112.96644255288444,
           "n_successful": 200,
           "n_prior": 200,
           "posterior_params": {
-            "peff": 8.839362936107387,
-            "total_enzyme_affinity": 3.77550339308783,
-            "fup": 0.565070687846934
+            "peff": 7.142099305495139,
+            "total_enzyme_affinity": 3.345893342037128,
+            "fup": 0.457021477763867
           },
           "ok": true,
-          "bias_pct_vs_obs": -2.6721531696092837
+          "bias_pct_vs_obs": 9.261682509412287
         }
       ]
     },
@@ -252,9 +252,9 @@
           "method": "sbi",
           "method_used": "ibis",
           "warnings": [
-            "SBI correction unavailable (Corrected SBI ESS 22.1 below floor 32.0); using IBIS instead"
+            "SBI correction unavailable (Corrected SBI ESS 14.8 below floor 32.0); using IBIS instead"
           ],
-          "wall_seconds": 1180.4891645908356,
+          "wall_seconds": 1322.3057963848114,
           "prior_cmax_mean": 0.17765773494616952,
           "prior_cmax_cv": 0.4755016739933588,
           "posterior_cmax_mean": 0.46268200067666765,
@@ -341,21 +341,21 @@
           "method": "sbi",
           "method_used": "sbi",
           "warnings": [],
-          "wall_seconds": 809.5834193229675,
+          "wall_seconds": 816.1266601085663,
           "prior_cmax_mean": 0.02105186401509082,
           "prior_cmax_cv": 0.782609718709531,
-          "posterior_cmax_mean": 0.11745336057343846,
-          "posterior_cmax_cv": 0.5422175028683454,
-          "ess": 116.39034343329166,
+          "posterior_cmax_mean": 0.13009598200009,
+          "posterior_cmax_cv": 0.5312120811552418,
+          "ess": 121.46550789008162,
           "n_successful": 200,
           "n_prior": 200,
           "posterior_params": {
-            "fup": 0.04559210996755567,
-            "total_enzyme_affinity": 0.9484289077092855,
-            "peff": 4.254310917089203
+            "total_enzyme_affinity": 0.9627640771478281,
+            "peff": 4.5166370167213445,
+            "fup": 0.03678140721533895
           },
           "ok": true,
-          "bias_pct_vs_obs": -17.97949680625806
+          "bias_pct_vs_obs": -9.150850558596357
         }
       ]
     },
@@ -428,9 +428,9 @@
           "method": "sbi",
           "method_used": "ibis",
           "warnings": [
-            "SBI correction unavailable (Corrected SBI ESS 1.9 below floor 32.0); using IBIS instead"
+            "SBI correction unavailable (Corrected SBI ESS 1.3 below floor 32.0); using IBIS instead"
           ],
-          "wall_seconds": 1050.155737876892,
+          "wall_seconds": 1049.7722835540771,
           "prior_cmax_mean": 0.10097086709934015,
           "prior_cmax_cv": 0.4247525858412191,
           "posterior_cmax_mean": 0.20039384633053497,
@@ -453,7 +453,7 @@
     "is": 811.2719202041626,
     "ibis": 19953.366340875626,
     "enkf": 6566.088148593903,
-    "sbi": 4806.883050918579
+    "sbi": 4943.181686878204
   },
   "skipped_drugs": [
     {
