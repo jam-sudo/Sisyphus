@@ -160,9 +160,12 @@ def sample_corrected(
         np.log1p(-actual_fraction) + log_q_flow,
         np.log(actual_fraction) + log_p if actual_fraction else -np.inf,
     )
+    # Proposals outside the box prior have zero weight; skip their ODE solves.
+    in_prior = np.flatnonzero(np.isfinite(log_p_theta))
+    log_likelihood = np.full(n_proposals, -np.inf)
     if workers == 1:
-        log_likelihood = np.empty(n_proposals)
-        for i, row in enumerate(theta):
+        for i in in_prior:
+            row = theta[i]
             draws = [log_likelihood_draw(row, rng) for _ in range(n_nuisance)]
             log_likelihood[i] = logsumexp(draws) - np.log(n_nuisance)
     else:
@@ -171,10 +174,9 @@ def sample_corrected(
         seeds = rng.integers(0, np.iinfo(np.int64).max, size=n_proposals)
         try:
             with get_context("fork").Pool(workers) as pool:
-                log_likelihood = np.asarray(pool.map(
+                log_likelihood[in_prior] = np.asarray(pool.map(
                     _importance_likelihood,
-                    ((row, int(row_seed), n_nuisance)
-                     for row, row_seed in zip(theta, seeds, strict=True)),
+                    ((theta[i], int(seeds[i]), n_nuisance) for i in in_prior),
                 ))
         finally:
             _parallel_log_draw = None

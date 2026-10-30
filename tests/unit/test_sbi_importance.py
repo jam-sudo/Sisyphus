@@ -115,12 +115,19 @@ def test_corrected_sampler_excludes_flow_draws_outside_box_prior():
                 np.tile(PRIOR_HIGH + 1.0, (shape[0], 1)), dtype=torch.float32,
             )
 
+    evaluated = []
+
+    def log_draw(theta, rng):
+        evaluated.append(theta)
+        return 0.0
+
     draws, ess = sample_corrected(
-        OutsidePosterior(), np.zeros(1), lambda theta, rng: 0.0,
+        OutsidePosterior(), np.zeros(1), log_draw,
         n_draws=100, n_proposals=100, n_nuisance=1, seed=7, ess_floor=1,
     )
     assert np.all((draws >= PRIOR_LOW) & (draws <= PRIOR_HIGH))
     assert ess == pytest.approx(5)
+    assert len(evaluated) == 5
 
 
 def test_sbc_sampler_counts_exact_rejection_fallback(monkeypatch):
