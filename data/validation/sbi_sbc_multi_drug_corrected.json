@@ -1,0 +1,532 @@
+{
+  "posterior": "models/sbi/multi_drug_nsf.pt",
+  "validation_set": "data/sbi/validation_drug_set.json",
+  "n_calibration": 100,
+  "n_posterior": 500,
+  "levels": [
+    50,
+    80,
+    90,
+    95
+  ],
+  "seed": 0,
+  "ks_threshold": 0.01,
+  "coverage_tol": 0.1,
+  "sampler": "corrected",
+  "drugs": [
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.04486029979085482,
+        0.2141463256991053,
+        0.3706320255863278
+      ],
+      "coverage": {
+        "50": [
+          0.48,
+          0.52,
+          0.64
+        ],
+        "80": [
+          0.76,
+          0.79,
+          0.82
+        ],
+        "90": [
+          0.91,
+          0.89,
+          0.9
+        ],
+        "95": [
+          0.92,
+          0.96,
+          0.93
+        ]
+      },
+      "coverage_max_deviation": 0.14,
+      "pass": false,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "median_correction_ess": 95.34934952644328,
+      "max_proposals_used": 512,
+      "name": "amantadine"
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.25269275700638894,
+        0.8948800679675544,
+        0.8428847956274123
+      ],
+      "coverage": {
+        "50": [
+          0.52,
+          0.57,
+          0.47
+        ],
+        "80": [
+          0.82,
+          0.79,
+          0.82
+        ],
+        "90": [
+          0.94,
+          0.89,
+          0.89
+        ],
+        "95": [
+          0.99,
+          0.95,
+          0.93
+        ]
+      },
+      "coverage_max_deviation": 0.06999999999999995,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "median_correction_ess": 121.37431782824672,
+      "max_proposals_used": 512,
+      "name": "clozapine"
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.5182193645480672,
+        0.8137761665209275,
+        0.8428847956274123
+      ],
+      "coverage": {
+        "50": [
+          0.52,
+          0.44,
+          0.55
+        ],
+        "80": [
+          0.82,
+          0.74,
+          0.8
+        ],
+        "90": [
+          0.9,
+          0.84,
+          0.92
+        ],
+        "95": [
+          0.98,
+          0.91,
+          0.96
+        ]
+      },
+      "coverage_max_deviation": 0.06000000000000005,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "median_correction_ess": 83.69413647824055,
+      "max_proposals_used": 512,
+      "name": "diclofenac"
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.7510610234994346,
+        0.48664471299257794,
+        0.9532159710635721
+      ],
+      "coverage": {
+        "50": [
+          0.47,
+          0.49,
+          0.52
+        ],
+        "80": [
+          0.74,
+          0.77,
+          0.76
+        ],
+        "90": [
+          0.81,
+          0.87,
+          0.89
+        ],
+        "95": [
+          0.9,
+          0.92,
+          0.93
+        ]
+      },
+      "coverage_max_deviation": 0.08999999999999997,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "median_correction_ess": 76.71227943371127,
+      "max_proposals_used": 512,
+      "name": "digoxin"
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.19663614878217184,
+        0.3445493220213226,
+        0.23282134931905185
+      ],
+      "coverage": {
+        "50": [
+          0.42,
+          0.39,
+          0.4
+        ],
+        "80": [
+          0.73,
+          0.71,
+          0.73
+        ],
+        "90": [
+          0.87,
+          0.84,
+          0.87
+        ],
+        "95": [
+          0.94,
+          0.93,
+          0.95
+        ]
+      },
+      "coverage_max_deviation": 0.10999999999999999,
+      "pass": false,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "median_correction_ess": 76.48112304817256,
+      "max_proposals_used": 512,
+      "name": "indomethacin"
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.7510610234994362,
+        0.8137761665209279,
+        0.3197089196627567
+      ],
+      "coverage": {
+        "50": [
+          0.55,
+          0.52,
+          0.44
+        ],
+        "80": [
+          0.76,
+          0.76,
+          0.81
+        ],
+        "90": [
+          0.9,
+          0.87,
+          0.9
+        ],
+        "95": [
+          0.96,
+          0.94,
+          0.94
+        ]
+      },
+      "coverage_max_deviation": 0.06,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "median_correction_ess": 108.54220786032545,
+      "max_proposals_used": 512,
+      "name": "ketorolac"
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.06897234094909266,
+        0.6509082962856887,
+        0.1251894873135425
+      ],
+      "coverage": {
+        "50": [
+          0.37,
+          0.45,
+          0.37
+        ],
+        "80": [
+          0.72,
+          0.82,
+          0.67
+        ],
+        "90": [
+          0.82,
+          0.91,
+          0.82
+        ],
+        "95": [
+          0.86,
+          0.98,
+          0.88
+        ]
+      },
+      "coverage_max_deviation": 0.13,
+      "pass": false,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "median_correction_ess": 70.91686240158515,
+      "max_proposals_used": 1024,
+      "name": "morphine"
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.3445493220213226,
+        0.7181574380356132,
+        0.48664471299257595
+      ],
+      "coverage": {
+        "50": [
+          0.5,
+          0.52,
+          0.5
+        ],
+        "80": [
+          0.82,
+          0.82,
+          0.81
+        ],
+        "90": [
+          0.89,
+          0.9,
+          0.9
+        ],
+        "95": [
+          0.95,
+          0.94,
+          0.93
+        ]
+      },
+      "coverage_max_deviation": 0.020000000000000018,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "median_correction_ess": 93.88284106387775,
+      "max_proposals_used": 512,
+      "name": "phenytoin"
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.5182193645480672,
+        0.3979325641016015,
+        0.25269275700638727
+      ],
+      "coverage": {
+        "50": [
+          0.45,
+          0.44,
+          0.5
+        ],
+        "80": [
+          0.73,
+          0.75,
+          0.75
+        ],
+        "90": [
+          0.83,
+          0.84,
+          0.86
+        ],
+        "95": [
+          0.87,
+          0.9,
+          0.87
+        ]
+      },
+      "coverage_max_deviation": 0.07999999999999996,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "median_correction_ess": 67.30024941557411,
+      "max_proposals_used": 1024,
+      "name": "posaconazole"
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.39793256410160727,
+        0.894880067967555,
+        0.7181574380356132
+      ],
+      "coverage": {
+        "50": [
+          0.45,
+          0.5,
+          0.55
+        ],
+        "80": [
+          0.78,
+          0.78,
+          0.89
+        ],
+        "90": [
+          0.91,
+          0.87,
+          0.93
+        ],
+        "95": [
+          0.94,
+          0.94,
+          0.96
+        ]
+      },
+      "coverage_max_deviation": 0.08999999999999997,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 100,
+      "forced_exact_rejection_cases": 100,
+      "median_correction_ess": null,
+      "max_proposals_used": 0,
+      "name": "pravastatin"
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.12518948731353796,
+        0.2961216072789328,
+        0.6171494172888633
+      ],
+      "coverage": {
+        "50": [
+          0.5,
+          0.41,
+          0.52
+        ],
+        "80": [
+          0.7,
+          0.77,
+          0.78
+        ],
+        "90": [
+          0.82,
+          0.88,
+          0.89
+        ],
+        "95": [
+          0.87,
+          0.93,
+          0.97
+        ]
+      },
+      "coverage_max_deviation": 0.10000000000000009,
+      "pass": false,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "median_correction_ess": 96.71469056431859,
+      "max_proposals_used": 256,
+      "name": "rivaroxaban"
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "coverage": {},
+      "coverage_max_deviation": 1.0,
+      "pass": false,
+      "sampling_error": "At least one calibration block had low ESS or failed",
+      "sampling_error_blocks": 1,
+      "rejection_fallback_cases": 3,
+      "forced_exact_rejection_cases": 3,
+      "name": "sildenafil"
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.5836423551202053,
+        0.15071744612730198,
+        0.8428847956274128
+      ],
+      "coverage": {
+        "50": [
+          0.55,
+          0.52,
+          0.54
+        ],
+        "80": [
+          0.76,
+          0.78,
+          0.87
+        ],
+        "90": [
+          0.87,
+          0.91,
+          0.9
+        ],
+        "95": [
+          0.95,
+          0.93,
+          0.98
+        ]
+      },
+      "coverage_max_deviation": 0.06999999999999995,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "median_correction_ess": 82.58419977940922,
+      "max_proposals_used": 512,
+      "name": "tamoxifen"
+    }
+  ],
+  "flow": "multi_drug",
+  "pass_count": 8,
+  "rejection_fallback_cases": 103,
+  "forced_exact_rejection_cases": 103,
+  "sampling_error_blocks": 1,
+  "total_pairs": 13,
+  "gate_passed": false,
+  "calibrated_null_global_pass_probability": 0.1062,
+  "calibrated_null_ci_95": [
+    0.10022679297089668,
+    0.1124036230166811
+  ],
+  "calibrated_null_assumptions": "Exact uniform marginal ranks; independent parameters and pairs; uniform location within posterior quantile gaps",
+  "holm_global_gate": {
+    "passed": false,
+    "ks_rejections": 3,
+    "coverage_passed": false,
+    "family_wise_alpha": 0.01,
+    "predeclared_at_utc": "2026-10-29T15:40:44Z",
+    "definition": "Holm-Bonferroni step-down across all three marginal KS p-values for every pair in a flow at family-wise alpha 0.01; pass if zero KS hypotheses are rejected and every pair's original coverage deviation is <= 0.10",
+    "calibrated_null_pass_probability": 0.1452,
+    "calibrated_null_ci_95": [
+      0.13834905421797616,
+      0.1522582618540306
+    ],
+    "calibrated_null_assumptions": "Exact uniform marginal ranks; independent parameters and pairs; uniform location within posterior quantile gaps"
+  },
+  "size_calibrated_global_gate": {
+    "passed": false,
+    "rejections": 15,
+    "ks_test_count": 39,
+    "coverage_test_count": 156,
+    "family_wise_alpha": 0.01,
+    "predeclared_at_utc": "2026-10-29T19:14:47Z",
+    "definition": "Test each pair's three marginal ranks with KS and each coverage level with an exact two-sided binomial test (per parameter for multi-drug, time-aware, and hierarchical flows; pooled across three parameters for continuous). Apply Holm-Bonferroni to the combined KS and coverage p-value family per flow at FWER 0.01; pass if no hypotheses are rejected.",
+    "calibrated_null_pass_probability": 0.9899,
+    "calibrated_null_ci_95": [
+      0.9877409379203101,
+      0.9917660662919513
+    ],
+    "calibrated_null_assumptions": "Exact uniform marginal ranks; independent parameters and pairs; uniform location within posterior quantile gaps"
+  }
+}
