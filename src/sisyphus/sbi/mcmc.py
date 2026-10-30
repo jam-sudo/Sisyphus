@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import os
 from collections.abc import Callable
 from multiprocessing import get_context
 
@@ -15,7 +16,7 @@ from sisyphus.sbi.priors import PRIOR_HIGH, PRIOR_LOW
 log = logging.getLogger(__name__)
 
 # Source: data/validation/sbi_mcmc_fallback_policy.json.
-MCMC_CHAIN_COUNT = 4
+MCMC_CHAIN_COUNT = int(os.environ.get("SISYPHUS_SBI_MCMC_CHAINS", "4"))
 # Source: data/validation/sbi_mcmc_fallback_policy.json.
 MCMC_BURNIN_STEP_COUNT = 500
 # Source: data/validation/sbi_mcmc_fallback_policy.json.
@@ -192,13 +193,14 @@ def sample_pseudo_marginal_mcmc(
     min_bulk_ess: float = MCMC_MIN_BULK_ESS_COUNT,
     max_rhat: float = MCMC_MAX_RHAT_RATIO,
 ) -> tuple[np.ndarray, dict]:
-    """Draw theta by four-chain pseudo-marginal random-walk Metropolis-Hastings.
+    """Draw theta by parallel-chain pseudo-marginal random-walk Metropolis-Hastings.
 
     Each chain retains its current unbiased nuisance likelihood estimate on
     rejection. Burn-in step-size adaptation stops before diagnostic draws.
     """
-    if n_draws < 1 or n_nuisance < 1 or max_retained_steps < MCMC_CHUNK_STEP_COUNT:
-        raise ValueError("MCMC draw, nuisance, and retained-step counts must be positive")
+    if (n_draws < 1 or n_nuisance < 1 or max_retained_steps < MCMC_CHUNK_STEP_COUNT
+            or MCMC_CHAIN_COUNT < 4):
+        raise ValueError("MCMC needs positive draws/nuisance, a full chunk, and >=4 chains")
     global _log_draw, _posterior
     _log_draw = log_likelihood_draw
     _posterior = posterior

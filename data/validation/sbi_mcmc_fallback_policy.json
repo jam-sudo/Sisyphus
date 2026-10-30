@@ -6,6 +6,7 @@
   "likelihood_estimator": "Mean of eight independent nuisance-realization Gaussian densities; for multiple observations, multiply their Gaussian densities within each realization before averaging",
   "nuisance_draws_per_likelihood": 8,
   "chains": 4,
+  "parallel_chain_override": "SISYPHUS_SBI_MCMC_CHAINS may increase the chain count when CPU and memory are available; every case records its actual chain count",
   "burnin_steps_per_chain": 500,
   "initial_random_walk_scale_fraction_of_prior_span": 0.1,
   "burnin_target_acceptance_fraction": 0.234,

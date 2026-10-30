@@ -1,10 +1,24 @@
 """Pseudo-marginal SBC fallback checks."""
 
+import os
+import subprocess
+import sys
+
 import numpy as np
 import pytest
 
 from sisyphus.sbi.mcmc import mcmc_diagnostics, sample_pseudo_marginal_mcmc
 from sisyphus.sbi.priors import PRIOR_HIGH, PRIOR_LOW
+
+
+def test_parallel_chain_override():
+    env = {**os.environ, "SISYPHUS_SBI_MCMC_CHAINS": "16"}
+    result = subprocess.run(
+        [sys.executable, "-c", "from sisyphus.sbi.mcmc import MCMC_CHAIN_COUNT; "
+         "print(MCMC_CHAIN_COUNT)"],
+        capture_output=True, check=True, text=True, env=env,
+    )
+    assert result.stdout.strip() == "16"
 
 
 def test_mcmc_diagnostics_separate_mixed_and_stuck_chains():
