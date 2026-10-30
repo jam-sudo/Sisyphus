@@ -38,7 +38,10 @@ log = logging.getLogger("sbi_sbc_continuous")
 MAX_SBC_SAMPLE_TIME_S = 30.0
 
 from sisyphus.physiology.correlation_registry import load_from_json  # noqa: E402
-from sisyphus.sbi.importance import CorrectedSBCPosterior  # noqa: E402
+from sisyphus.sbi.importance import (  # noqa: E402
+    MAX_REJECTION_ATTEMPT_COUNT,
+    CorrectedSBCPosterior,
+)
 from sisyphus.sbi.multi_drug import (  # noqa: E402
     extract_drug_features,
     load_drug_specs_from_json,
@@ -119,6 +122,9 @@ def main() -> int:
     p.add_argument("--coverage-tol", type=float, default=0.10)
     p.add_argument("--sampler", choices=("raw", "corrected"), default="corrected")
     p.add_argument("--exact-rejection-workers", type=int, default=0)
+    p.add_argument("--fallback-rejection-workers", type=int, default=0)
+    p.add_argument("--max-rejection-attempts", type=int,
+                   default=MAX_REJECTION_ATTEMPT_COUNT)
     p.add_argument("--only-pair", type=int, default=0)
     p.add_argument("--case-start", type=int, default=0)
     p.add_argument("--case-end", type=int, default=None)
@@ -268,6 +274,8 @@ def main() -> int:
                     posterior_obj, sim, seed=args.seed + pair_idx,
                     case_start=args.case_start,
                     exact_rejection_workers=args.exact_rejection_workers,
+                    fallback_rejection_workers=args.fallback_rejection_workers,
+                    max_rejection_attempts=args.max_rejection_attempts,
                 ) if args.sampler == "corrected" else posterior_obj)
                 ranks, cov = _coverage_and_ranks(
                     thetas_true, sampler, xs_packed, levels, args.n_posterior,
@@ -294,6 +302,10 @@ def main() -> int:
                     ),
                     "correction_ess": getattr(sampler, "ess", []),
                     "proposal_counts": getattr(sampler, "proposal_counts", []),
+                    "rejection_attempt_counts": getattr(
+                        sampler, "rejection_attempt_counts", []
+                    ),
+                    "max_rejection_attempts": args.max_rejection_attempts,
                     "wall_s": time.time() - t0,
                 })
                 continue
@@ -348,6 +360,8 @@ def main() -> int:
                 ),
                 "correction_ess": getattr(sampler, "ess", []),
                 "proposal_counts": getattr(sampler, "proposal_counts", []),
+                "rejection_attempt_counts": getattr(sampler, "rejection_attempt_counts", []),
+                "max_rejection_attempts": args.max_rejection_attempts,
                 "n_valid": len(thetas_true),
                 "n_available": n_available,
                 "max_coverage_deviation": max_cov_dev,

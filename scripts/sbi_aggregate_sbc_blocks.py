@@ -11,6 +11,8 @@ from pathlib import Path
 import numpy as np
 from scipy import stats
 
+from sisyphus.sbi.importance import MAX_REJECTION_ATTEMPT_COUNT
+
 
 def aggregate_blocks(paths: list[Path], flow: str, expected_pairs: int) -> dict:
     """Combine rank and coverage counts without changing the SBC test rules."""
@@ -68,6 +70,8 @@ def aggregate_blocks(paths: list[Path], flow: str, expected_pairs: int) -> dict:
                 "coverage_max_deviation": None,
                 "pass": None,
                 "sampling_error": "At least one calibration block had low ESS or failed",
+                "sampling_errors": [entry["sampling_error"] for _, entry in parts
+                                    if entry.get("sampling_error")],
                 "sampling_error_blocks": sum(
                     bool(entry.get("sampling_error")) for _, entry in parts
                 ),
@@ -76,6 +80,15 @@ def aggregate_blocks(paths: list[Path], flow: str, expected_pairs: int) -> dict:
                 ),
                 "forced_exact_rejection_cases": sum(
                     entry.get("forced_exact_rejection_cases", 0) for _, entry in parts
+                ),
+                "rejection_attempt_counts": [
+                    count for _, entry in parts
+                    for count in entry.get("rejection_attempt_counts", [])
+                ],
+                "max_rejection_attempts": max(
+                    (entry.get("max_rejection_attempts", MAX_REJECTION_ATTEMPT_COUNT)
+                     for _, entry in parts),
+                    default=0,
                 ),
             }
             if len(key) == 1:
@@ -119,6 +132,13 @@ def aggregate_blocks(paths: list[Path], flow: str, expected_pairs: int) -> dict:
             ),
             "forced_exact_rejection_cases": sum(
                 entry.get("forced_exact_rejection_cases", 0) for _, entry in parts
+            ),
+            "rejection_attempt_counts": [count for _, entry in parts
+                                         for count in entry.get("rejection_attempt_counts", [])],
+            "max_rejection_attempts": max(
+                (entry.get("max_rejection_attempts", MAX_REJECTION_ATTEMPT_COUNT)
+                 for _, entry in parts),
+                default=0,
             ),
             "median_correction_ess": float(np.median(ess_values)) if ess_values else None,
             "max_proposals_used": max(proposal_counts, default=0),

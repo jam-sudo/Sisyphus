@@ -48,6 +48,8 @@
       "sampling_error_blocks": 0,
       "rejection_fallback_cases": 0,
       "forced_exact_rejection_cases": 0,
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
       "median_correction_ess": 95.34934952644328,
       "max_proposals_used": 512,
       "name": "amantadine"
@@ -86,6 +88,8 @@
       "sampling_error_blocks": 0,
       "rejection_fallback_cases": 0,
       "forced_exact_rejection_cases": 0,
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
       "median_correction_ess": 121.37431782824672,
       "max_proposals_used": 512,
       "name": "clozapine"
@@ -124,6 +128,8 @@
       "sampling_error_blocks": 0,
       "rejection_fallback_cases": 0,
       "forced_exact_rejection_cases": 0,
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
       "median_correction_ess": 83.69413647824055,
       "max_proposals_used": 512,
       "name": "diclofenac"
@@ -162,6 +168,8 @@
       "sampling_error_blocks": 0,
       "rejection_fallback_cases": 0,
       "forced_exact_rejection_cases": 0,
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
       "median_correction_ess": 76.71227943371127,
       "max_proposals_used": 512,
       "name": "digoxin"
@@ -200,6 +208,8 @@
       "sampling_error_blocks": 0,
       "rejection_fallback_cases": 0,
       "forced_exact_rejection_cases": 0,
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
       "median_correction_ess": 76.48112304817256,
       "max_proposals_used": 512,
       "name": "indomethacin"
@@ -238,6 +248,8 @@
       "sampling_error_blocks": 0,
       "rejection_fallback_cases": 0,
       "forced_exact_rejection_cases": 0,
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
       "median_correction_ess": 108.54220786032545,
       "max_proposals_used": 512,
       "name": "ketorolac"
@@ -276,6 +288,8 @@
       "sampling_error_blocks": 0,
       "rejection_fallback_cases": 0,
       "forced_exact_rejection_cases": 0,
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
       "median_correction_ess": 70.91686240158515,
       "max_proposals_used": 1024,
       "name": "morphine"
@@ -314,6 +328,8 @@
       "sampling_error_blocks": 0,
       "rejection_fallback_cases": 0,
       "forced_exact_rejection_cases": 0,
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
       "median_correction_ess": 93.88284106387775,
       "max_proposals_used": 512,
       "name": "phenytoin"
@@ -352,6 +368,8 @@
       "sampling_error_blocks": 0,
       "rejection_fallback_cases": 0,
       "forced_exact_rejection_cases": 0,
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
       "median_correction_ess": 67.30024941557411,
       "max_proposals_used": 1024,
       "name": "posaconazole"
@@ -390,6 +408,8 @@
       "sampling_error_blocks": 0,
       "rejection_fallback_cases": 100,
       "forced_exact_rejection_cases": 100,
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
       "median_correction_ess": null,
       "max_proposals_used": 0,
       "name": "pravastatin"
@@ -428,6 +448,8 @@
       "sampling_error_blocks": 0,
       "rejection_fallback_cases": 0,
       "forced_exact_rejection_cases": 0,
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
       "median_correction_ess": 96.71469056431859,
       "max_proposals_used": 256,
       "name": "rivaroxaban"
@@ -439,9 +461,14 @@
       "coverage_max_deviation": null,
       "pass": null,
       "sampling_error": "At least one calibration block had low ESS or failed",
+      "sampling_errors": [
+        "Exact rejection yielded 7/500 samples"
+      ],
       "sampling_error_blocks": 1,
       "rejection_fallback_cases": 3,
       "forced_exact_rejection_cases": 3,
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
       "name": "sildenafil"
     },
     {
@@ -478,6 +505,8 @@
       "sampling_error_blocks": 0,
       "rejection_fallback_cases": 0,
       "forced_exact_rejection_cases": 0,
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
       "median_correction_ess": 82.58419977940922,
       "max_proposals_used": 512,
       "name": "tamoxifen"

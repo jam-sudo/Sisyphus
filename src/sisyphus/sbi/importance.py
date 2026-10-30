@@ -86,7 +86,10 @@ def sample_exact_rejection_parallel(
     finally:
         _parallel_log_draw = None
     if len(accepted) < n_draws:
-        raise LowImportanceESS(f"Exact rejection yielded {len(accepted)}/{n_draws} samples")
+        raise LowImportanceESS(
+            f"Exact rejection yielded {len(accepted)}/{n_draws} samples "
+            f"in {attempts} attempts"
+        )
     return np.asarray(accepted[:n_draws]), attempts
 
 
@@ -167,17 +170,24 @@ class CorrectedSBCPosterior:
         case_start: int = 0,
         multi_observation: bool = False,
         exact_rejection_workers: int = 0,
+        fallback_rejection_workers: int = 0,
+        max_rejection_attempts: int = MAX_REJECTION_ATTEMPT_COUNT,
     ) -> None:
+        if max_rejection_attempts < 1 or fallback_rejection_workers < 0:
+            raise ValueError("Rejection attempts must be positive and workers nonnegative")
         self.posterior = posterior
         self.simulator = simulator
         self.seed = seed
         self.case_index = case_start
         self.multi_observation = multi_observation
         self.exact_rejection_workers = exact_rejection_workers
+        self.fallback_rejection_workers = fallback_rejection_workers
+        self.max_rejection_attempts = max_rejection_attempts
         self.ess: list[float] = []
         self.rejection_count = 0
         self.forced_exact_rejection_count = 0
         self.proposal_counts: list[int] = []
+        self.rejection_attempt_counts: list[int] = []
 
     def sample(self, shape: tuple[int, ...], *, x: object, **_: object) -> object:
         """Draw corrected particles for one packed SBC observation."""
@@ -243,13 +253,15 @@ class CorrectedSBCPosterior:
                              - np.log(sigma) - 0.5 * np.log(2 * np.pi))
 
         if self.exact_rejection_workers:
-            samples, _ = sample_exact_rejection_parallel(
+            samples, attempts = sample_exact_rejection_parallel(
                 log_draw, n_draws=shape[0], seed=seed + 1,
                 max_log_likelihood=max_log_likelihood,
                 workers=self.exact_rejection_workers,
+                max_attempts=self.max_rejection_attempts,
             )
             self.rejection_count += 1
             self.forced_exact_rejection_count += 1
+            self.rejection_attempt_counts.append(attempts)
             return torch.as_tensor(samples, dtype=torch.float32)
 
         samples = None
@@ -269,19 +281,30 @@ class CorrectedSBCPosterior:
                 continue
         if samples is None:
             # Joint-prior rejection is exact for this theta prior and simulator.
-            accepted = []
-            rng = np.random.default_rng(seed + 1)
-            for _ in range(MAX_REJECTION_ATTEMPT_COUNT):
-                theta = rng.uniform(PRIOR_LOW, PRIOR_HIGH)
-                log_likelihood = log_draw(theta, rng)
-                if rng.random() < np.exp(log_likelihood - max_log_likelihood):
-                    accepted.append(theta)
-                    if len(accepted) == shape[0]:
-                        break
-            if len(accepted) < shape[0]:
-                raise LowImportanceESS(
-                    f"Exact rejection yielded {len(accepted)}/{shape[0]} samples"
-                ) from None
-            samples = np.asarray(accepted)
+            if self.fallback_rejection_workers:
+                samples, attempts = sample_exact_rejection_parallel(
+                    log_draw, n_draws=shape[0], seed=seed + 1,
+                    max_log_likelihood=max_log_likelihood,
+                    workers=self.fallback_rejection_workers,
+                    max_attempts=self.max_rejection_attempts,
+                )
+            else:
+                accepted = []
+                rng = np.random.default_rng(seed + 1)
+                attempts = 0
+                for attempts in range(1, self.max_rejection_attempts + 1):
+                    theta = rng.uniform(PRIOR_LOW, PRIOR_HIGH)
+                    log_likelihood = log_draw(theta, rng)
+                    if rng.random() < np.exp(log_likelihood - max_log_likelihood):
+                        accepted.append(theta)
+                        if len(accepted) == shape[0]:
+                            break
+                if len(accepted) < shape[0]:
+                    raise LowImportanceESS(
+                        f"Exact rejection yielded {len(accepted)}/{shape[0]} samples "
+                        f"in {attempts} attempts"
+                    ) from None
+                samples = np.asarray(accepted)
             self.rejection_count += 1
+            self.rejection_attempt_counts.append(attempts)
         return torch.as_tensor(samples, dtype=torch.float32)

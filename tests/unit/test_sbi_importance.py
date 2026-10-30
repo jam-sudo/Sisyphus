@@ -117,18 +117,46 @@ def test_sbc_forced_exact_rejection_is_recorded(monkeypatch):
     class Simulator:
         obs_sigma_log10 = 0.2
 
-    def exact(log_draw, *, n_draws, seed, max_log_likelihood, workers):
+    def exact(log_draw, *, n_draws, seed, max_log_likelihood, workers, max_attempts):
         assert workers == 2
+        assert max_attempts == 1234
         return np.tile((PRIOR_LOW + PRIOR_HIGH) / 2, (n_draws, 1)), n_draws
 
     monkeypatch.setattr(importance, "sample_exact_rejection_parallel", exact)
     sampler = CorrectedSBCPosterior(
-        UniformPosterior(), Simulator(), seed=7, exact_rejection_workers=2
+        UniformPosterior(), Simulator(), seed=7, exact_rejection_workers=2,
+        max_rejection_attempts=1234,
     )
     draws = sampler.sample((5,), x=torch.as_tensor([[0.0]]))
     assert draws.shape == (5, 3)
     assert sampler.rejection_count == 1
     assert sampler.forced_exact_rejection_count == 1
+    assert sampler.rejection_attempt_counts == [5]
+
+
+def test_sbc_low_ess_parallel_fallback_uses_cap(monkeypatch):
+    class Simulator:
+        obs_sigma_log10 = 0.2
+
+    def low_ess(*args, **kwargs):
+        raise LowImportanceESS("forced")
+
+    def exact(log_draw, *, n_draws, seed, max_log_likelihood, workers, max_attempts):
+        assert workers == 3
+        assert max_attempts == 2048
+        return np.tile((PRIOR_LOW + PRIOR_HIGH) / 2, (n_draws, 1)), 1024
+
+    monkeypatch.setattr(importance, "sample_corrected", low_ess)
+    monkeypatch.setattr(importance, "sample_exact_rejection_parallel", exact)
+    sampler = CorrectedSBCPosterior(
+        UniformPosterior(), Simulator(), seed=7, fallback_rejection_workers=3,
+        max_rejection_attempts=2048,
+    )
+    draws = sampler.sample((5,), x=torch.as_tensor([[0.0]]))
+    assert draws.shape == (5, 3)
+    assert sampler.rejection_count == 1
+    assert sampler.forced_exact_rejection_count == 0
+    assert sampler.rejection_attempt_counts == [1024]
 
 
 def test_sbc_case_streams_are_independent_of_block_boundaries(monkeypatch):
