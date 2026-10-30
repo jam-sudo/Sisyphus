@@ -19,6 +19,7 @@ from sisyphus.sbi.multi_drug import (
 from sisyphus.sbi.priors import PRIOR_HIGH, PRIOR_LOW, build_box_prior
 
 log = logging.getLogger(__name__)
+# Source: repository layout; this script resides in scripts/.
 ROOT_PATH = Path(__file__).resolve().parent.parent
 
 

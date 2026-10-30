@@ -13,6 +13,7 @@ import numpy as np
 from sisyphus.sbi.multi_drug import MultiDrugSimulator, load_drug_specs_from_json
 from sisyphus.sbi.priors import build_box_prior
 
+# Source: repository layout; this script resides in scripts/.
 ROOT_PATH = Path(__file__).resolve().parent.parent
 log = logging.getLogger(__name__)
 
