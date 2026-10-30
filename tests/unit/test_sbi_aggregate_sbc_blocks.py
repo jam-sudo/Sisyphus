@@ -76,6 +76,7 @@ def test_aggregate_blocks_reports_sampling_errors(tmp_path, monkeypatch):
     result = aggregate_blocks([path], "multi_drug", 1)
     assert result["sampling_error_blocks"] == 1
     assert result["drugs"][0]["pass"] is None
+    assert result["drugs"][0]["sampling_status"] == "uncomputable_by_exact_fallback"
     assert result["incomplete_count"] == 1
     assert result["failed_count"] == 0
     assert result["gate_passed"] is None

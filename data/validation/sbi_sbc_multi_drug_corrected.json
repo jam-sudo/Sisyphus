@@ -475,6 +475,7 @@
       "sampling_errors": [
         "Exact rejection yielded 7/500 samples"
       ],
+      "sampling_status": "uncomputable_by_exact_fallback",
       "sampling_error_blocks": 1,
       "rejection_fallback_cases": 3,
       "forced_exact_rejection_cases": 3,

@@ -72,6 +72,11 @@ def aggregate_blocks(paths: list[Path], flow: str, expected_pairs: int) -> dict:
                 "sampling_error": "At least one calibration block had low ESS or failed",
                 "sampling_errors": [entry["sampling_error"] for _, entry in parts
                                     if entry.get("sampling_error")],
+                "sampling_status": (
+                    "uncomputable_by_exact_fallback"
+                    if any("Exact rejection yielded" in entry.get("sampling_error", "")
+                           for _, entry in parts) else "incomplete"
+                ),
                 "sampling_error_blocks": sum(
                     bool(entry.get("sampling_error")) for _, entry in parts
                 ),
