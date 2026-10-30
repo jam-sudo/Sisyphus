@@ -60,6 +60,20 @@ def test_flow_numerical_failure_uses_existing_fallback():
         )
 
 
+def test_nan_flow_density_uses_existing_fallback():
+    class NaNPosterior(UniformPosterior):
+        def log_prob(self, theta, *, x):
+            values = super().log_prob(theta, x=x)
+            values[0] = float("nan")
+            return values
+
+    with pytest.raises(LowImportanceESS, match="NaN weights"):
+        sample_corrected(
+            NaNPosterior(), np.zeros(1), lambda theta, rng: 0.0,
+            n_draws=10, n_proposals=64, n_nuisance=1,
+        )
+
+
 def test_direct_posterior_uses_raw_flow_proposal_density():
     class DirectPosteriorStub(UniformPosterior):
         posterior_estimator = object()

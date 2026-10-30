@@ -149,6 +149,8 @@ def sample_corrected(
         draws = [log_likelihood_draw(row, rng) for _ in range(n_nuisance)]
         log_likelihood[i] = logsumexp(draws) - np.log(n_nuisance)
     log_weights = log_likelihood + log_p_theta - log_q
+    if np.any(np.isnan(log_weights)):
+        raise LowImportanceESS("SBI correction produced NaN weights")
     if not np.any(np.isfinite(log_weights)):
         raise LowImportanceESS("All corrected likelihood weights are zero")
     weights = np.exp(log_weights - logsumexp(log_weights))
