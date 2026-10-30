@@ -86,6 +86,13 @@ def aggregate_blocks(paths: list[Path], flow: str, expected_pairs: int) -> dict:
                 "forced_exact_rejection_cases": sum(
                     entry.get("forced_exact_rejection_cases", 0) for _, entry in parts
                 ),
+                "mcmc_fallback_cases": sum(
+                    entry.get("mcmc_fallback_cases", 0) for _, entry in parts
+                ),
+                "mcmc_diagnostics": [
+                    diagnostics for _, entry in parts
+                    for diagnostics in entry.get("mcmc_diagnostics", [])
+                ],
                 "rejection_attempt_counts": [
                     count for _, entry in parts
                     for count in entry.get("rejection_attempt_counts", [])
@@ -138,6 +145,13 @@ def aggregate_blocks(paths: list[Path], flow: str, expected_pairs: int) -> dict:
             "forced_exact_rejection_cases": sum(
                 entry.get("forced_exact_rejection_cases", 0) for _, entry in parts
             ),
+            "mcmc_fallback_cases": sum(
+                entry.get("mcmc_fallback_cases", 0) for _, entry in parts
+            ),
+            "mcmc_diagnostics": [
+                diagnostics for _, entry in parts
+                for diagnostics in entry.get("mcmc_diagnostics", [])
+            ],
             "rejection_attempt_counts": [count for _, entry in parts
                                          for count in entry.get("rejection_attempt_counts", [])],
             "max_rejection_attempts": max(
@@ -152,6 +166,8 @@ def aggregate_blocks(paths: list[Path], flow: str, expected_pairs: int) -> dict:
             row["name"] = key[0]
         else:
             row["population"], row["drug"] = key
+        if row["mcmc_fallback_cases"]:
+            row["sampling_status"] = "pseudo_marginal_mcmc_fallback"
         output[key_name].append(row)
     output["pass_count"] = sum(row["pass"] is True for row in output[key_name])
     output["incomplete_count"] = sum(row["pass"] is None for row in output[key_name])
@@ -161,6 +177,9 @@ def aggregate_blocks(paths: list[Path], flow: str, expected_pairs: int) -> dict:
     )
     output["forced_exact_rejection_cases"] = sum(
         row.get("forced_exact_rejection_cases", 0) for row in output[key_name]
+    )
+    output["mcmc_fallback_cases"] = sum(
+        row.get("mcmc_fallback_cases", 0) for row in output[key_name]
     )
     output["sampling_error_blocks"] = sum(
         row["sampling_error_blocks"] for row in output[key_name]

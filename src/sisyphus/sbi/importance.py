@@ -11,6 +11,7 @@ from scipy.special import logsumexp
 from sisyphus.engine.compiler import ResolvedParams
 from sisyphus.regimen.solver import solve_regimen
 from sisyphus.regimen.types import DosingRegimen
+from sisyphus.sbi.mcmc import MCMC_MAX_RETAINED_STEP_COUNT
 from sisyphus.sbi.priors import PRIOR_HIGH, PRIOR_LOW
 
 # Source: pilot in data/validation/sbi_importance_pilot.json (ODE budget versus ESS).
@@ -174,6 +175,8 @@ class CorrectedSBCPosterior:
         exact_rejection_workers: int = 0,
         fallback_rejection_workers: int = 0,
         max_rejection_attempts: int = MAX_REJECTION_ATTEMPT_COUNT,
+        mcmc_after_rejection: bool = False,
+        mcmc_max_retained_steps: int = MCMC_MAX_RETAINED_STEP_COUNT,
     ) -> None:
         if max_rejection_attempts < 1 or fallback_rejection_workers < 0:
             raise ValueError("Rejection attempts must be positive and workers nonnegative")
@@ -185,11 +188,15 @@ class CorrectedSBCPosterior:
         self.exact_rejection_workers = exact_rejection_workers
         self.fallback_rejection_workers = fallback_rejection_workers
         self.max_rejection_attempts = max_rejection_attempts
+        self.mcmc_after_rejection = mcmc_after_rejection
+        self.mcmc_max_retained_steps = mcmc_max_retained_steps
         self.ess: list[float] = []
         self.rejection_count = 0
         self.forced_exact_rejection_count = 0
         self.proposal_counts: list[int] = []
         self.rejection_attempt_counts: list[int] = []
+        self.mcmc_fallback_count = 0
+        self.mcmc_diagnostics: list[dict] = []
 
     def sample(self, shape: tuple[int, ...], *, x: object, **_: object) -> object:
         """Draw corrected particles for one packed SBC observation."""
@@ -254,13 +261,31 @@ class CorrectedSBCPosterior:
                 return float(-0.5 * residual**2
                              - np.log(sigma) - 0.5 * np.log(2 * np.pi))
 
-        if self.exact_rejection_workers:
-            samples, attempts = sample_exact_rejection_parallel(
-                log_draw, n_draws=shape[0], seed=seed + 1,
-                max_log_likelihood=max_log_likelihood,
-                workers=self.exact_rejection_workers,
-                max_attempts=self.max_rejection_attempts,
+        def mcmc_fallback() -> object:
+            from sisyphus.sbi.mcmc import sample_pseudo_marginal_mcmc
+
+            samples, diagnostics = sample_pseudo_marginal_mcmc(
+                self.posterior, context, log_draw, n_draws=shape[0],
+                seed=seed + 2, max_retained_steps=self.mcmc_max_retained_steps,
             )
+            diagnostics["case_index"] = self.case_index - 1
+            self.mcmc_fallback_count += 1
+            self.mcmc_diagnostics.append(diagnostics)
+            self.rejection_attempt_counts.append(self.max_rejection_attempts)
+            return torch.as_tensor(samples, dtype=torch.float32)
+
+        if self.exact_rejection_workers:
+            try:
+                samples, attempts = sample_exact_rejection_parallel(
+                    log_draw, n_draws=shape[0], seed=seed + 1,
+                    max_log_likelihood=max_log_likelihood,
+                    workers=self.exact_rejection_workers,
+                    max_attempts=self.max_rejection_attempts,
+                )
+            except LowImportanceESS:
+                if not self.mcmc_after_rejection:
+                    raise
+                return mcmc_fallback()
             self.rejection_count += 1
             self.forced_exact_rejection_count += 1
             self.rejection_attempt_counts.append(attempts)
@@ -283,30 +308,35 @@ class CorrectedSBCPosterior:
                 continue
         if samples is None:
             # Joint-prior rejection is exact for this theta prior and simulator.
-            if self.fallback_rejection_workers:
-                samples, attempts = sample_exact_rejection_parallel(
-                    log_draw, n_draws=shape[0], seed=seed + 1,
-                    max_log_likelihood=max_log_likelihood,
-                    workers=self.fallback_rejection_workers,
-                    max_attempts=self.max_rejection_attempts,
-                )
-            else:
-                accepted = []
-                rng = np.random.default_rng(seed + 1)
-                attempts = 0
-                for attempts in range(1, self.max_rejection_attempts + 1):
-                    theta = rng.uniform(PRIOR_LOW, PRIOR_HIGH)
-                    log_likelihood = log_draw(theta, rng)
-                    if rng.random() < np.exp(log_likelihood - max_log_likelihood):
-                        accepted.append(theta)
-                        if len(accepted) == shape[0]:
-                            break
-                if len(accepted) < shape[0]:
-                    raise LowImportanceESS(
-                        f"Exact rejection yielded {len(accepted)}/{shape[0]} samples "
-                        f"in {attempts} attempts"
-                    ) from None
-                samples = np.asarray(accepted)
+            try:
+                if self.fallback_rejection_workers:
+                    samples, attempts = sample_exact_rejection_parallel(
+                        log_draw, n_draws=shape[0], seed=seed + 1,
+                        max_log_likelihood=max_log_likelihood,
+                        workers=self.fallback_rejection_workers,
+                        max_attempts=self.max_rejection_attempts,
+                    )
+                else:
+                    accepted = []
+                    rng = np.random.default_rng(seed + 1)
+                    attempts = 0
+                    for attempts in range(1, self.max_rejection_attempts + 1):
+                        theta = rng.uniform(PRIOR_LOW, PRIOR_HIGH)
+                        log_likelihood = log_draw(theta, rng)
+                        if rng.random() < np.exp(log_likelihood - max_log_likelihood):
+                            accepted.append(theta)
+                            if len(accepted) == shape[0]:
+                                break
+                    if len(accepted) < shape[0]:
+                        raise LowImportanceESS(
+                            f"Exact rejection yielded {len(accepted)}/{shape[0]} samples "
+                            f"in {attempts} attempts"
+                        ) from None
+                    samples = np.asarray(accepted)
+            except LowImportanceESS:
+                if not self.mcmc_after_rejection:
+                    raise
+                return mcmc_fallback()
             self.rejection_count += 1
             self.rejection_attempt_counts.append(attempts)
         return torch.as_tensor(samples, dtype=torch.float32)

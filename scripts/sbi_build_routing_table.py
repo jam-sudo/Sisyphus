@@ -2,7 +2,7 @@
 """Build the per-drug TDM method routing table from SBC results.
 
 Policy:
-    - zero exact/uncomputable SBC cases and no combined-Holm rejection → "sbi"
+    - zero exact/MCMC/uncomputable SBC cases and no combined-Holm rejection → "sbi"
     - all other drugs → "ibis" (or existing "is" override)
 
 Drugs not in the validation set default to ``default`` (``ibis`` unless
@@ -71,6 +71,7 @@ def main() -> None:
         per_drug_pass = entry.get("pass")
         calibrated_rejections = entry.get("size_calibrated_rejections")
         rejection_cases = int(entry.get("rejection_fallback_cases", 0))
+        mcmc_cases = int(entry.get("mcmc_fallback_cases", 0))
         existing_is = existing.get("routes", {}).get(name) == "is"
         if existing_is:
             method = "is"
@@ -79,6 +80,10 @@ def main() -> None:
         elif rejection_cases:
             method = "ibis"
             reason = "exact_rejection_sbc_fallback"
+            ibis_count += 1
+        elif mcmc_cases:
+            method = "ibis"
+            reason = "pseudo_marginal_mcmc_sbc_fallback"
             ibis_count += 1
         elif entry.get("pass") is None:
             method = "ibis"
@@ -105,6 +110,7 @@ def main() -> None:
             "sbc_pass": per_drug_pass,
             "size_calibrated_rejections": calibrated_rejections,
             "rejection_fallback_cases": rejection_cases,
+            "mcmc_fallback_cases": mcmc_cases,
         }
         override = existing.get("reasons", {}).get(name, {}).get("tdm_bias_override")
         if override is not None:
@@ -122,9 +128,10 @@ def main() -> None:
             raw_coverage = entry["coverage_max_deviation"]
             coverage = float(raw_coverage) if raw_coverage is not None else None
             rejection_cases = int(entry.get("rejection_fallback_cases", 0))
+            mcmc_cases = int(entry.get("mcmc_fallback_cases", 0))
             passed = (entry.get("pass") is not None
                       and entry.get("size_calibrated_rejections") == 0
-                      and rejection_cases == 0)
+                      and rejection_cases == 0 and mcmc_cases == 0)
             decisions[name] = {
                 "use_native": passed,
                 "smiles": smiles[name],
@@ -133,6 +140,7 @@ def main() -> None:
                 "ks_pvalues": entry["ks_pvalues"],
                 "size_calibrated_rejections": entry.get("size_calibrated_rejections"),
                 "rejection_fallback_cases": rejection_cases,
+                "mcmc_fallback_cases": mcmc_cases,
             }
         multi_observation = {
             "source": str(args.multi_observation_sbc.resolve().relative_to(ROOT)),
@@ -174,11 +182,12 @@ def main() -> None:
         pair_decisions = []
         for entry in flow_sbc["pairs"]:
             rejection_cases = int(entry.get("rejection_fallback_cases", 0))
+            mcmc_cases = int(entry.get("mcmc_fallback_cases", 0))
             raw_coverage = entry["coverage_max_deviation"]
             coverage = float(raw_coverage) if raw_coverage is not None else None
             use_sbi = (entry.get("pass") is not None
                        and entry.get("size_calibrated_rejections") == 0
-                       and rejection_cases == 0)
+                       and rejection_cases == 0 and mcmc_cases == 0)
             decision = {
                 "population": entry["population"],
                 "drug": entry["drug"],
@@ -189,6 +198,7 @@ def main() -> None:
                 "ks_pvalues": entry["ks_pvalues"],
                 "size_calibrated_rejections": entry.get("size_calibrated_rejections"),
                 "rejection_fallback_cases": rejection_cases,
+                "mcmc_fallback_cases": mcmc_cases,
             }
             if flow == "continuous":
                 population = populations[entry["population"]]
@@ -221,7 +231,8 @@ def main() -> None:
             "original_strict_coverage_ok": STRICT_COVERAGE_OK,
             "original_borderline_coverage": BORDERLINE_COVERAGE,
             "description": (
-                "SBI only where per-drug or covariate-pair SBC has no exact rejection or "
+                "SBI only where per-drug or covariate-pair SBC has no exact rejection, "
+                "pseudo-marginal MCMC fallback, or "
                 "uncomputable case and none of its KS or coverage tests is rejected by "
                 "the flow-wide combined Holm family at FWER 0.01. Original uncorrected "
                 "per-row pass is reported, not used for routing. Existing IS routes remain "

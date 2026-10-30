@@ -54,6 +54,7 @@ from sisyphus.sbi.importance import (  # noqa: E402
     MAX_REJECTION_ATTEMPT_COUNT,
     CorrectedSBCPosterior,
 )
+from sisyphus.sbi.mcmc import MCMC_MAX_RETAINED_STEP_COUNT  # noqa: E402
 from sisyphus.sbi.multi_drug import (  # noqa: E402
     MultiDrugSimulator,
     extract_drug_features,
@@ -147,6 +148,9 @@ def main() -> None:
     p.add_argument("--sampler", choices=("raw", "corrected"), default="corrected")
     p.add_argument("--exact-rejection-workers", type=int, default=0)
     p.add_argument("--fallback-rejection-workers", type=int, default=0)
+    p.add_argument("--mcmc-after-rejection", action="store_true")
+    p.add_argument("--mcmc-max-retained-steps", type=int,
+                   default=MCMC_MAX_RETAINED_STEP_COUNT)
     p.add_argument("--max-rejection-attempts", type=int,
                    default=MAX_REJECTION_ATTEMPT_COUNT)
     p.add_argument("--only-drug", default="")
@@ -285,6 +289,8 @@ def main() -> None:
                 exact_rejection_workers=args.exact_rejection_workers,
                 fallback_rejection_workers=args.fallback_rejection_workers,
                 max_rejection_attempts=args.max_rejection_attempts,
+                mcmc_after_rejection=args.mcmc_after_rejection,
+                mcmc_max_retained_steps=args.mcmc_max_retained_steps,
             ) if args.sampler == "corrected" else result.posterior)
             ranks, cov_counts = _coverage_and_ranks(
                 thetas_true, sampler, xs_packed, levels=levels,
@@ -311,6 +317,8 @@ def main() -> None:
                 "correction_ess": getattr(sampler, "ess", []),
                 "proposal_counts": getattr(sampler, "proposal_counts", []),
                 "rejection_attempt_counts": getattr(sampler, "rejection_attempt_counts", []),
+                "mcmc_fallback_cases": getattr(sampler, "mcmc_fallback_count", 0),
+                "mcmc_diagnostics": getattr(sampler, "mcmc_diagnostics", []),
                 "max_rejection_attempts": args.max_rejection_attempts,
                 "elapsed_s": float(time.time() - t0),
             })
@@ -361,6 +369,8 @@ def main() -> None:
             "correction_ess": getattr(sampler, "ess", []),
             "proposal_counts": getattr(sampler, "proposal_counts", []),
             "rejection_attempt_counts": getattr(sampler, "rejection_attempt_counts", []),
+            "mcmc_fallback_cases": getattr(sampler, "mcmc_fallback_count", 0),
+            "mcmc_diagnostics": getattr(sampler, "mcmc_diagnostics", []),
             "max_rejection_attempts": args.max_rejection_attempts,
             "drug_features": feats.tolist(),
             "pass": drug_pass,

@@ -12,16 +12,17 @@ def test_production_scope_excludes_exact_and_uncomputable_rows():
         "size_calibrated_rejections": 0,
     }
     exact = {**valid, "name": "exact", "rejection_fallback_cases": 1}
+    mcmc = {**valid, "name": "mcmc", "mcmc_fallback_cases": 1}
     uncomputable = {**valid, "name": "uncomputable", "pass": None,
                     "sampling_error_blocks": 1}
     rejected = {**valid, "name": "rejected", "size_calibrated_rejections": 1}
     aggregate = {
-        "drugs": [valid, exact, uncomputable, rejected], "levels": [50, 80, 90, 95],
+        "drugs": [valid, exact, mcmc, uncomputable, rejected], "levels": [50, 80, 90, 95],
         "n_calibration": 100, "calibrated_null_assumptions": "exact ranks",
     }
     result = production_scope_gate(aggregate, "multi_drug", repetitions=20)
     assert result["selected_pairs"] == ["routed"]
-    assert result["excluded_pairs"] == ["exact", "uncomputable", "rejected"]
+    assert result["excluded_pairs"] == ["exact", "mcmc", "uncomputable", "rejected"]
     assert result["selected_count"] == 1
     assert result["test_count"] == 15
     assert result["status"] == "PASS"
