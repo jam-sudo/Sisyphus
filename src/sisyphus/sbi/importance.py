@@ -54,6 +54,15 @@ def _rejection_chunk(task: tuple[int, int, int, float]) -> list[np.ndarray]:
     return accepted
 
 
+def _importance_likelihood(task: tuple[np.ndarray, int, int]) -> float:
+    if _parallel_log_draw is None:
+        raise RuntimeError("Parallel importance likelihood is not initialized")
+    theta, seed, n_nuisance = task
+    rng = np.random.default_rng(seed)
+    draws = [_parallel_log_draw(theta, rng) for _ in range(n_nuisance)]
+    return float(logsumexp(draws) - np.log(n_nuisance))
+
+
 def sample_exact_rejection_parallel(
     log_likelihood_draw: Callable[[np.ndarray, np.random.Generator], float],
     *,
@@ -110,6 +119,7 @@ def sample_corrected(
     seed: int = 42,
     ess_floor: float = MIN_IMPORTANCE_ESS_COUNT,
     defensive_fraction: float = DEFENSIVE_PRIOR_FRACTION,
+    workers: int = 1,
 ) -> tuple[np.ndarray, float]:
     """Resample from a flow after unbiased nuisance-marginal likelihood weighting.
 
@@ -119,7 +129,7 @@ def sample_corrected(
     """
     import torch
 
-    if n_draws < 1 or n_proposals < 1 or n_nuisance < 1:
+    if n_draws < 1 or n_proposals < 1 or n_nuisance < 1 or workers < 1:
         raise ValueError("Sample and nuisance counts must be positive")
     if not 0 <= defensive_fraction < 1:
         raise ValueError("defensive_fraction must be in [0, 1)")
@@ -150,10 +160,24 @@ def sample_corrected(
         np.log1p(-actual_fraction) + log_q_flow,
         np.log(actual_fraction) + log_p if actual_fraction else -np.inf,
     )
-    log_likelihood = np.empty(n_proposals)
-    for i, row in enumerate(theta):
-        draws = [log_likelihood_draw(row, rng) for _ in range(n_nuisance)]
-        log_likelihood[i] = logsumexp(draws) - np.log(n_nuisance)
+    if workers == 1:
+        log_likelihood = np.empty(n_proposals)
+        for i, row in enumerate(theta):
+            draws = [log_likelihood_draw(row, rng) for _ in range(n_nuisance)]
+            log_likelihood[i] = logsumexp(draws) - np.log(n_nuisance)
+    else:
+        global _parallel_log_draw
+        _parallel_log_draw = log_likelihood_draw
+        seeds = rng.integers(0, np.iinfo(np.int64).max, size=n_proposals)
+        try:
+            with get_context("fork").Pool(workers) as pool:
+                log_likelihood = np.asarray(pool.map(
+                    _importance_likelihood,
+                    ((row, int(row_seed), n_nuisance)
+                     for row, row_seed in zip(theta, seeds, strict=True)),
+                ))
+        finally:
+            _parallel_log_draw = None
     log_weights = log_likelihood + log_p_theta - log_q
     if np.any(np.isnan(log_weights)):
         raise LowImportanceESS("SBI correction produced NaN weights")
@@ -184,9 +208,12 @@ class CorrectedSBCPosterior:
         joint_smc_particles: int = SMC_PARTICLE_COUNT,
         joint_smc_workers: int = 1,
         joint_smc_rejuvenation_sweeps: int = SMC_REJUVENATION_SWEEP_COUNT,
+        correction_workers: int = 1,
     ) -> None:
         if max_rejection_attempts < 1 or fallback_rejection_workers < 0:
             raise ValueError("Rejection attempts must be positive and workers nonnegative")
+        if correction_workers < 1:
+            raise ValueError("Correction workers must be positive")
         self.posterior = posterior
         self.simulator = simulator
         self.seed = seed
@@ -199,6 +226,7 @@ class CorrectedSBCPosterior:
         self.joint_smc_particles = joint_smc_particles
         self.joint_smc_workers = joint_smc_workers
         self.joint_smc_rejuvenation_sweeps = joint_smc_rejuvenation_sweeps
+        self.correction_workers = correction_workers
         self.ess: list[float] = []
         self.rejection_count = 0
         self.forced_exact_rejection_count = 0
@@ -341,6 +369,7 @@ class CorrectedSBCPosterior:
                     samples, ess = sample_corrected(
                         self.posterior, context, log_draw, n_draws=shape[0],
                         n_proposals=proposal_count, seed=seed + proposal_count,
+                        workers=self.correction_workers,
                     )
                 self.ess.append(ess)
                 self.proposal_counts.append(proposal_count)

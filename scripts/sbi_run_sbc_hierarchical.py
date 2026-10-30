@@ -111,6 +111,7 @@ def main() -> None:
     p.add_argument("--joint-smc-after-rejection", action="store_true")
     p.add_argument("--joint-smc-particles", type=int, default=SMC_PARTICLE_COUNT)
     p.add_argument("--joint-smc-workers", type=int, default=1)
+    p.add_argument("--correction-workers", type=int, default=1)
     p.add_argument("--joint-smc-sweeps", type=int, default=SMC_REJUVENATION_SWEEP_COUNT)
     p.add_argument("--max-rejection-attempts", type=int,
                    default=MAX_REJECTION_ATTEMPT_COUNT)
@@ -247,6 +248,7 @@ def main() -> None:
                     joint_smc_after_rejection=args.joint_smc_after_rejection,
                     joint_smc_particles=args.joint_smc_particles,
                     joint_smc_workers=args.joint_smc_workers,
+                    correction_workers=args.correction_workers,
                     joint_smc_rejuvenation_sweeps=args.joint_smc_sweeps,
                 ) if args.sampler == "corrected" else result.posterior)
                 ranks, cov_counts = _coverage_and_ranks(

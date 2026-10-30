@@ -39,6 +39,15 @@ def test_corrected_sampler_moves_toward_likelihood_peak():
     assert ess > 32
 
 
+def test_corrected_sampler_parallel_likelihood():
+    samples, ess = sample_corrected(
+        UniformPosterior(), np.zeros(1), lambda theta, rng: 0.0,
+        n_draws=50, n_proposals=100, n_nuisance=2, seed=7, workers=2,
+    )
+    assert samples.shape == (50, 3)
+    assert ess == pytest.approx(100)
+
+
 def test_corrected_sampler_rejects_degenerate_weights():
     with pytest.raises(LowImportanceESS):
         sample_corrected(
