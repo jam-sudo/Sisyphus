@@ -68,6 +68,9 @@ def aggregate_blocks(paths: list[Path], flow: str, expected_pairs: int) -> dict:
                 "coverage_max_deviation": 1.0,
                 "pass": False,
                 "sampling_error": "At least one calibration block had low ESS or failed",
+                "sampling_error_blocks": sum(
+                    bool(entry.get("sampling_error")) for _, entry in parts
+                ),
                 "rejection_fallback_cases": sum(
                     entry.get("rejection_fallback_cases", 0) for _, entry in parts
                 ),
@@ -110,6 +113,7 @@ def aggregate_blocks(paths: list[Path], flow: str, expected_pairs: int) -> dict:
             "coverage": coverage,
             "coverage_max_deviation": max_deviation,
             "pass": passed,
+            "sampling_error_blocks": 0,
             "rejection_fallback_cases": sum(
                 entry.get("rejection_fallback_cases", 0) for _, entry in parts
             ),
@@ -130,6 +134,9 @@ def aggregate_blocks(paths: list[Path], flow: str, expected_pairs: int) -> dict:
     )
     output["forced_exact_rejection_cases"] = sum(
         row.get("forced_exact_rejection_cases", 0) for row in output[key_name]
+    )
+    output["sampling_error_blocks"] = sum(
+        row["sampling_error_blocks"] for row in output[key_name]
     )
     output["total_pairs"] = expected_pairs
     output["gate_passed"] = output["pass_count"] == expected_pairs
