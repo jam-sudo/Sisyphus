@@ -1,9 +1,11 @@
 {
   "predeclared_at_utc": "2026-10-30T10:12:40Z",
-  "scope": "For each flow, include exactly the validation drugs or population-drug pairs with zero exact-rejection SBC cases and zero uncomputable SBC cases. Selection uses sampler behavior only, before inspecting their ranks or coverage results; it is the same exclusion rule used by production SBI routing.",
+  "amended_at_utc": "2026-10-30T10:24:43Z",
+  "amendment_reason": "The routing decision added a multiplicity-corrected per-row calibration check after the multi-drug results were known. This secondary production-scope analysis is post hoc for multi-drug and fixed before aggregating the other three flows; the original global gate is unchanged.",
+  "scope": "For each flow, route a validation drug or population-drug pair to SBI only if it has zero exact-rejection SBC cases, zero uncomputable SBC cases, and none of its KS or coverage tests is rejected in the flow-wide combined KS-plus-coverage Holm family. The original uncorrected per-row pass remains a reported comparison column, not a routing criterion. The production-scope gate tests exactly the routed set.",
   "test": "For selected rows, combine all three marginal KS rank p-values and all four exact two-sided binomial coverage p-values per parameter (pooled over parameters for continuous). Apply Holm-Bonferroni at family-wise alpha 0.01; pass if no hypothesis is rejected. An empty selected set is indeterminate.",
   "family_wise_alpha": 0.01,
-  "null_simulation": "Simulate 10,000 exact posterior-exchangeability rank sets conditional on the selected pair count, with 500 posterior draws, the flow's original calibration count, and independent parameters and pairs. Report the simulated pass probability and 95% binomial interval.",
+  "null_simulation": "Simulate 10,000 exact posterior-exchangeability rank sets with 500 posterior draws, the flow's original calibration count, and independent parameters and pairs. Hold the observed sampler-behavior eligibility mask fixed; within each simulation apply the full-flow Holm screening and then the production-scope Holm gate to its selected set. Report the resulting pass probability and 95% binomial interval.",
   "full_set_reporting": "Also report the unchanged original full-set KS p > 0.01 and coverage tolerance 0.10 gate, the predeclared full-set Holm-KS gate, and the predeclared full-set combined KS-plus-coverage Holm gate. A full-set gate with uncomputable rows is INCOMPLETE unless a fully evaluated row already proves failure; always list uncomputable rows separately.",
   "original_gate_unchanged": true
 }
