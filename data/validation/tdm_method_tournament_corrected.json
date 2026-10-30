@@ -78,21 +78,21 @@
           "method": "sbi",
           "method_used": "sbi",
           "warnings": [],
-          "wall_seconds": 843.673237323761,
+          "wall_seconds": 828.242356300354,
           "prior_cmax_mean": 0.07792756022679037,
           "prior_cmax_cv": 0.5767072381343842,
-          "posterior_cmax_mean": 0.039159754349532075,
-          "posterior_cmax_cv": 0.9330612237055601,
-          "ess": 50.4376600806511,
+          "posterior_cmax_mean": 0.043941015779858414,
+          "posterior_cmax_cv": 0.7814568172147146,
+          "ess": 102.43355331155034,
           "n_successful": 200,
           "n_prior": 200,
           "posterior_params": {
-            "total_enzyme_affinity": 6.03848698651301,
-            "peff": 4.852850105285438,
-            "fup": 0.5863935804918915
+            "fup": 0.5842990906125227,
+            "total_enzyme_affinity": 4.737597828197341,
+            "peff": 4.930805336752874
           },
           "ok": true,
-          "bias_pct_vs_obs": 37.40264684046342
+          "bias_pct_vs_obs": 54.1790027363453
         }
       ]
     },
@@ -165,21 +165,21 @@
           "method": "sbi",
           "method_used": "sbi",
           "warnings": [],
-          "wall_seconds": 911.3037095069885,
+          "wall_seconds": 905.9323403835297,
           "prior_cmax_mean": 0.06604515851353733,
           "prior_cmax_cv": 1.1117787288565286,
-          "posterior_cmax_mean": 0.24037570152070703,
-          "posterior_cmax_cv": 0.8383803039844379,
-          "ess": 112.96644255288444,
+          "posterior_cmax_mean": 0.27355133427966866,
+          "posterior_cmax_cv": 0.7678999234917918,
+          "ess": 101.69885418964456,
           "n_successful": 200,
           "n_prior": 200,
           "posterior_params": {
-            "peff": 7.142099305495139,
-            "total_enzyme_affinity": 3.345893342037128,
-            "fup": 0.457021477763867
+            "total_enzyme_affinity": 3.5307854203022284,
+            "fup": 0.493804104415871,
+            "peff": 8.623532369406947
           },
           "ok": true,
-          "bias_pct_vs_obs": 9.261682509412287
+          "bias_pct_vs_obs": 24.34151558166757
         }
       ]
     },
@@ -250,25 +250,23 @@
         },
         {
           "method": "sbi",
-          "method_used": "ibis",
-          "warnings": [
-            "SBI correction unavailable (Corrected SBI ESS 14.8 below floor 32.0); using IBIS instead"
-          ],
-          "wall_seconds": 1322.3057963848114,
+          "method_used": "sbi",
+          "warnings": [],
+          "wall_seconds": 5290.153974056244,
           "prior_cmax_mean": 0.17765773494616952,
           "prior_cmax_cv": 0.4755016739933588,
-          "posterior_cmax_mean": 0.46268200067666765,
-          "posterior_cmax_cv": 0.08308171938317836,
-          "ess": 1.014246940855079,
+          "posterior_cmax_mean": 0.4974768790807459,
+          "posterior_cmax_cv": 0.2388953398947061,
+          "ess": 60.262980060763944,
           "n_successful": 200,
           "n_prior": 200,
           "posterior_params": {
-            "fup": 0.021244369382963334,
-            "peff": 15.942457291600663,
-            "total_enzyme_affinity": 0.6133292971684384
+            "peff": 14.96386883024491,
+            "total_enzyme_affinity": 0.48820400292014965,
+            "fup": 0.017313810993552066
           },
           "ok": true,
-          "bias_pct_vs_obs": -46.81816084176234
+          "bias_pct_vs_obs": -42.81874953094874
         }
       ]
     },
@@ -341,21 +339,21 @@
           "method": "sbi",
           "method_used": "sbi",
           "warnings": [],
-          "wall_seconds": 816.1266601085663,
+          "wall_seconds": 805.0473568439484,
           "prior_cmax_mean": 0.02105186401509082,
           "prior_cmax_cv": 0.782609718709531,
-          "posterior_cmax_mean": 0.13009598200009,
-          "posterior_cmax_cv": 0.5312120811552418,
-          "ess": 121.46550789008162,
+          "posterior_cmax_mean": 0.1225660091935397,
+          "posterior_cmax_cv": 0.5769108738830193,
+          "ess": 132.77313279761648,
           "n_successful": 200,
           "n_prior": 200,
           "posterior_params": {
-            "total_enzyme_affinity": 0.9627640771478281,
-            "peff": 4.5166370167213445,
-            "fup": 0.03678140721533895
+            "total_enzyme_affinity": 0.9557757199223027,
+            "fup": 0.04500992067357524,
+            "peff": 4.546144140778198
           },
           "ok": true,
-          "bias_pct_vs_obs": -9.150850558596357
+          "bias_pct_vs_obs": -14.409211457025345
         }
       ]
     },
@@ -428,9 +426,9 @@
           "method": "sbi",
           "method_used": "ibis",
           "warnings": [
-            "SBI correction unavailable (Corrected SBI ESS 1.3 below floor 32.0); using IBIS instead"
+            "SBI correction unavailable (SBI correction remained below ESS floor after 1024 proposals); using IBIS instead"
           ],
-          "wall_seconds": 1049.7722835540771,
+          "wall_seconds": 5000.367169857025,
           "prior_cmax_mean": 0.10097086709934015,
           "prior_cmax_cv": 0.4247525858412191,
           "posterior_cmax_mean": 0.20039384633053497,
@@ -453,7 +451,7 @@
     "is": 811.2719202041626,
     "ibis": 19953.366340875626,
     "enkf": 6566.088148593903,
-    "sbi": 4943.181686878204
+    "sbi": 12829.743197441101
   },
   "skipped_drugs": [
     {
