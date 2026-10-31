@@ -127,7 +127,7 @@ jobs:
           curl --fail --silent --show-error -X POST http://127.0.0.1:7860/predict \
             -H 'Content-Type: application/json' \
             -d '{"smiles":"CCO","dose_mg":100}' -o /tmp/sisyphus-predict.json
-          python -c 'import json; p=json.load(open("/tmp/sisyphus-predict.json")); assert p["executionStatus"] == "ok" and p["meta"]["cmax"] > 0'
+          python -c 'import json; p=json.load(open("/tmp/sisyphus-predict.json")); assert p["executionStatus"] == "ok" and p["meta"]["cmax"] > 0 and p.get("residualInterval90")'
       - name: Build and smoke-test holdout evaluator image
         run: |
           docker build -f scripts/Dockerfile.holdout -t sisyphus-holdout:ci .

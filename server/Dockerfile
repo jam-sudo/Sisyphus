@@ -29,6 +29,10 @@ COPY data/sbi/prodrug_activation_registry.json /app/data/sbi/prodrug_activation_
 COPY data/validation/development_residual_interval.json /app/data/validation/development_residual_interval.json
 COPY data/validation/feature_schema_v1.json /app/data/validation/feature_schema_v1.json
 COPY data/validation/solver_settings_v1.json /app/data/validation/solver_settings_v1.json
+# The development residual interval is verified against the benchmark cache, reference set and holdout list.
+COPY data/training/4track_holdout_predictions.json /app/data/training/4track_holdout_predictions.json
+COPY data/reference/clinical_pk.json /app/data/reference/clinical_pk.json
+COPY data/reference/holdout.json /app/data/reference/holdout.json
 COPY models/adme /app/models/adme
 COPY models/direct_pk /app/models/direct_pk
 
