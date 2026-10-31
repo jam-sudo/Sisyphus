@@ -17,6 +17,7 @@ from sisyphus.engine.compiler import ODECompiler
 from sisyphus.graph.builder import build_from_yaml
 from sisyphus.regimen.tdm import Observation, TDMResult, bayesian_update
 from sisyphus.regimen.types import DosingRegimen
+from sisyphus.sbi.importance import LowImportanceESS
 
 MORPHINE_SMILES = "CN1CCC23C4C1CC5=C2C(=C(C=C5)O)OC3C(C=C4)O"
 
@@ -36,28 +37,38 @@ def case():
 
 
 def test_auto_routing_by_name_and_compound_smiles(capsys):
-    assert _resolve_auto_method("morphine") == ("ibis", False)
-    assert _resolve_auto_method(_route_drug_name(MORPHINE_SMILES, "morphine")) == (
-        "ibis", False
-    )
-    assert _resolve_auto_method("clozapine") == ("sbi", False)
+    root = Path(__file__).resolve().parents[2]
+    table = json.loads((root / "data/sbi/method_routing.json").read_text())
+    assert _resolve_auto_method("morphine")[0] == table["routes"]["morphine"]
+    assert (_resolve_auto_method(_route_drug_name(MORPHINE_SMILES, "morphine"))
+            == _resolve_auto_method("morphine"))
+    assert _resolve_auto_method("clozapine")[0] == table["routes"]["clozapine"]
     assert _route_drug_name("Cn1c(=O)c2c(ncn2C)n(C)c1=O", None) == "Caffeine"
     assert _resolve_auto_method("unlisted") == ("ibis", False)
     assert "not in routing table" in capsys.readouterr().err
 
 
 def test_multi_observation_auto_routing_uses_only_calibrated_valid_context():
+    root = Path(__file__).resolve().parents[2]
+    table = json.loads((root / "data/sbi/method_routing.json").read_text())
     regimen = DosingRegimen.single_oral(10.0)
     observations = (Observation(1.0, 0.02), Observation(4.0, 0.01))
-    assert _resolve_auto_method("morphine", regimen, observations) == ("sbi", False)
-    assert _resolve_auto_method("ketorolac", regimen, observations) == ("sbi", False)
+    pending = table["multi_observation"].get("validation_status") == "pending_corrected_sbc"
+    for name in ("morphine", "ketorolac", "rivaroxaban"):
+        decision = table["multi_observation"]["drugs"][name]
+        expected = "ibis" if pending else (
+            "sbi" if decision["use_native"] else table["routes"][name]
+        )
+        assert _resolve_auto_method(name, regimen, observations)[0] == expected
     assert _resolve_auto_method(
         "morphine", regimen, observations, SimpleNamespace(smiles="CCO")
-    ) == ("ibis", False)
-    assert _resolve_auto_method("rivaroxaban", regimen, observations) == ("ibis", False)
+    )[0] == ("ibis" if pending else table["routes"]["morphine"])
     invalid = (Observation(1.0, 0.02), Observation(3.0, 0.01))
-    assert _resolve_auto_method("morphine", regimen, invalid) == ("ibis", False)
-    assert _resolve_auto_method("morphine", regimen, observations[:1]) == ("ibis", False)
+    assert _resolve_auto_method("morphine", regimen, invalid)[0] == (
+        "ibis" if pending else table["routes"]["morphine"]
+    )
+    assert _resolve_auto_method("morphine", regimen, observations[:1])[0] == (
+        table["routes"]["morphine"])
 
 
 def test_multi_observation_model_matches_canonical_smiles():
@@ -65,21 +76,15 @@ def test_multi_observation_model_matches_canonical_smiles():
 
     root = Path(__file__).resolve().parents[2]
     validation = json.loads((root / "data/sbi/validation_drug_set.json").read_text())
-    morphine = next(row for row in validation["drugs"] if row["name"] == "morphine")
-    ketorolac = next(row for row in validation["drugs"] if row["name"] == "ketorolac")
-    clozapine = next(row for row in validation["drugs"] if row["name"] == "clozapine")
-    rivaroxaban = next(row for row in validation["drugs"] if row["name"] == "rivaroxaban")
-    assert _native_multi_observation_model(SimpleNamespace(smiles=morphine["smiles"])).name == (
-        "multi_observation_nsf.pt"
-    )
-    assert _native_multi_observation_model(SimpleNamespace(smiles=MORPHINE_SMILES)).name == (
-        "multi_observation_nsf.pt"
-    )
-    assert _native_multi_observation_model(SimpleNamespace(smiles=ketorolac["smiles"])).name == (
-        "multi_observation_nsf.pt"
-    )
-    assert _native_multi_observation_model(SimpleNamespace(smiles=clozapine["smiles"])) is None
-    assert _native_multi_observation_model(SimpleNamespace(smiles=rivaroxaban["smiles"])) is None
+    routing = json.loads((root / "data/sbi/method_routing.json").read_text())
+    for name in ("morphine", "ketorolac", "clozapine", "rivaroxaban"):
+        smiles = next(row["smiles"] for row in validation["drugs"] if row["name"] == name)
+        expected = routing["multi_observation"]["drugs"][name]["use_native"]
+        actual = _native_multi_observation_model(SimpleNamespace(smiles=smiles))
+        assert (actual is not None) == expected
+    expected_morphine = routing["multi_observation"]["drugs"]["morphine"]["use_native"]
+    actual_morphine = _native_multi_observation_model(SimpleNamespace(smiles=MORPHINE_SMILES))
+    assert (actual_morphine is not None) == expected_morphine
 
 
 def test_ibis_end_to_end_moves_toward_observation(case):
@@ -95,11 +100,13 @@ def test_ibis_end_to_end_moves_toward_observation(case):
     assert all(math.isfinite(value) for value in result.cmax_ci_90)
 
 
-def test_sbi_import_error_falls_back_and_discloses_covariates(case, monkeypatch):
+@pytest.mark.parametrize("failure", [ImportError("torch unavailable"),
+                                     LowImportanceESS("SBC excluded pair")])
+def test_sbi_unavailable_falls_back_and_discloses_covariates(case, monkeypatch, failure):
     from sisyphus.regimen import tdm_sbi
 
     def unavailable(*args, **kwargs):
-        raise ImportError("torch unavailable")
+        raise failure
 
     monkeypatch.setattr(tdm_sbi, "sbi_update", unavailable)
     compiled, graph, drug, regimen = case
@@ -109,7 +116,7 @@ def test_sbi_import_error_falls_back_and_discloses_covariates(case, monkeypatch)
         body_weight_kg=70.0, age_years=40.0,
     )
     assert result.method_used == "ibis"
-    assert "torch unavailable" in result.warnings[0]
+    assert str(failure) in result.warnings[0]
     assert "cannot use population" in result.warnings[0]
 
 
@@ -144,14 +151,22 @@ def test_cli_auto_uses_name_and_reports_actual_method(case, monkeypatch, capsys)
     )
     cli._run_tdm(args)
     out = capsys.readouterr()
-    assert called["method"] == "ibis"
-    assert "sbi_reweight" not in called
+    table = json.loads((Path(__file__).resolve().parents[2]
+                        / "data/sbi/method_routing.json").read_text())
+    assert called["method"] == table["routes"]["morphine"]
+    assert called.get("sbi_reweight", False) == (
+        table["routes"]["morphine"] == "sbi" and table["sbi_reweight"]["morphine"]
+    )
     assert "Method: ibis" in out.out
     assert "routing morphine" in out.err
 
     args.obs = ["1:0.0285", "4:0.010"]
+    called.clear()
     cli._run_tdm(args)
-    assert called["method"] == "sbi"
+    assert called["method"] == (
+        "ibis" if table["multi_observation"].get("validation_status") == "pending_corrected_sbc"
+        else "sbi"
+    )
 
     args.method = "ibis"
     args.population = "adult"
@@ -241,17 +256,28 @@ def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
     root = Path(__file__).resolve().parents[2]
     out = tmp_path / "method_routing.json"
     original = json.loads((root / "data/sbi/method_routing.json").read_text())
-    sbc_path = tmp_path / "data/validation/sbi_sbc_multi_drug_current.json"
+    sbc_path = tmp_path / "data/validation/sbi_sbc_multi_drug_corrected.json"
     sbc_path.parent.mkdir(parents=True)
+    validation_path = tmp_path / "data/sbi/validation_drug_set.json"
+    validation_path.parent.mkdir(parents=True)
+    validation_path.write_text(json.dumps({"drugs": [
+        {"name": name, "smiles": name} for name in ("morphine", "clozapine", "pravastatin")
+    ]}))
     sbc_path.write_text(json.dumps({
         "gate_passed": False,
+        "size_calibrated_global_gate": {"status": "INCOMPLETE"},
+        "production_scope_size_calibrated_gate": {"status": "PASS"},
         "drugs": [
             {"name": "morphine", "pass": True, "coverage_max_deviation": 0.05,
-             "ks_pvalues": [0.5]},
-            {"name": "pravastatin", "pass": False, "coverage_max_deviation": 0.20,
-             "ks_pvalues": [0.001]},
+             "ks_pvalues": [0.5], "size_calibrated_rejections": 0},
+            {"name": "pravastatin", "pass": True, "coverage_max_deviation": 0.05,
+             "ks_pvalues": [0.5], "size_calibrated_rejections": 0,
+             "rejection_fallback_cases": 1},
             {"name": "clozapine", "pass": True, "coverage_max_deviation": 0.12,
-             "ks_pvalues": [0.5]},
+             "ks_pvalues": [0.5], "size_calibrated_rejections": 1},
+            {"name": "ketorolac", "pass": True, "coverage_max_deviation": 0.05,
+             "ks_pvalues": [0.5], "size_calibrated_rejections": 0,
+             "joint_smc_fallback_cases": 1},
         ],
     }))
     monkeypatch.setattr("scripts.sbi_build_routing_table.ROOT", tmp_path)
@@ -259,12 +285,23 @@ def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
     monkeypatch.setattr(sys, "argv", ["sbi_build_routing_table", "--out", str(out)])
     main()
     rebuilt = json.loads(out.read_text())
-    assert rebuilt["source"] == "data/validation/sbi_sbc_multi_drug_current.json"
+    assert rebuilt["source"] == "data/validation/sbi_sbc_multi_drug_corrected.json"
     assert rebuilt["sbi_reweight"] == original["sbi_reweight"]
     assert rebuilt["summary"]["sbi"] == 1
-    assert rebuilt["summary"]["ibis"] == 2
+    assert rebuilt["summary"]["ibis"] == 3
     assert rebuilt["summary"]["global_sbc_gate_passed"] is False
-    assert rebuilt["multi_observation"] == original["multi_observation"]
+    assert rebuilt["summary"]["size_calibrated_global_gate_status"] == "INCOMPLETE"
+    assert "Amended after corrected multi-drug" in rebuilt["policy"]["routing_rule_decision_timing"]
+    assert rebuilt["summary"]["production_scope_gate_status"] == "PASS"
+    assert rebuilt["summary"]["sbc_exact_rejection_cases_total"] == 1
+    assert rebuilt["summary"]["sbc_exact_rejection_cases_on_sbi_routes"] == 0
+    assert rebuilt["reasons"]["pravastatin"]["reason"] == "exact_rejection_sbc_fallback"
+    assert rebuilt["reasons"]["ketorolac"]["reason"] == "joint_smc_sbc_fallback"
+    assert rebuilt["multi_observation"]["validation_status"] == "pending_corrected_sbc"
+    assert rebuilt["multi_observation"]["native_count"] == 0
+    assert all(not row["use_native"] for row in rebuilt["multi_observation"]["drugs"].values())
+    assert rebuilt["continuous"]["validation_status"] == "pending_corrected_sbc"
+    assert rebuilt["continuous"]["sbi_pair_count"] == 0
     assert (rebuilt["reasons"]["morphine"]["tdm_bias_override"]
             == original["reasons"]["morphine"]["tdm_bias_override"])
 
@@ -275,26 +312,75 @@ def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
     assert rebuilt["routes"]["pravastatin"] == "is"
     assert rebuilt["summary"]["is"] == 1
 
-    multi_path = tmp_path / "data/validation/sbi_sbc_multi_observation_current.json"
+    multi_path = tmp_path / "data/validation/sbi_sbc_multi_observation_corrected.json"
     multi_path.write_text(json.dumps({"gate_passed": False, "drugs": [
         {"name": "morphine", "pass": True, "coverage_max_deviation": 0.05,
-         "ks_pvalues": [0.2, 0.2, 0.2]},
+         "ks_pvalues": [0.2, 0.2, 0.2], "size_calibrated_rejections": 0},
         {"name": "clozapine", "pass": True, "coverage_max_deviation": 0.12,
-         "ks_pvalues": [0.2, 0.2, 0.2]},
-        {"name": "pravastatin", "pass": False, "coverage_max_deviation": 0.02,
-         "ks_pvalues": [0.001, 0.2, 0.2]},
-    ]}))
-    validation_path = tmp_path / "data/sbi/validation_drug_set.json"
-    validation_path.parent.mkdir(parents=True)
-    validation_path.write_text(json.dumps({"drugs": [
-        {"name": name, "smiles": name} for name in ("morphine", "clozapine", "pravastatin")
+         "ks_pvalues": [0.2, 0.2, 0.2], "size_calibrated_rejections": 1},
+        {"name": "pravastatin", "pass": True, "coverage_max_deviation": 0.02,
+         "ks_pvalues": [0.2, 0.2, 0.2], "size_calibrated_rejections": 0,
+         "rejection_fallback_cases": 1},
     ]}))
     main()
     decisions = json.loads(out.read_text())["multi_observation"]
+    assert decisions["validation_status"] == "complete"
     assert decisions["native_count"] == 1
+    assert decisions["sbc_exact_rejection_cases_total"] == 1
+    assert decisions["sbc_exact_rejection_cases_on_native_routes"] == 0
     assert [decisions["drugs"][name]["use_native"] for name in (
         "morphine", "clozapine", "pravastatin"
     )] == [True, False, False]
+
+    pairs = [
+        {"population": "adult", "drug": "morphine", "pass": True,
+         "coverage_max_deviation": 0.05, "ks_pvalues": [0.2, 0.2, 0.2],
+         "rejection_fallback_cases": 0, "size_calibrated_rejections": 0},
+        {"population": "adult", "drug": "pravastatin", "pass": True,
+         "coverage_max_deviation": 0.05, "ks_pvalues": [0.2, 0.2, 0.2],
+         "rejection_fallback_cases": 2, "size_calibrated_rejections": 0},
+    ]
+    hier_path = tmp_path / "data/validation/sbi_sbc_hierarchical_corrected.json"
+    hier_path.write_text(json.dumps({
+        "gate_passed": False, "populations": ["adult"], "pairs": pairs,
+    }))
+    cont_path = tmp_path / "data/validation/sbi_sbc_continuous_corrected.json"
+    cont_path.write_text(json.dumps({
+        "gate_passed": False,
+        "populations": [{"name": "adult", "bw": 70.0, "age": 35.0}],
+        "pairs": pairs,
+    }))
+    main()
+    rebuilt = json.loads(out.read_text())
+    for flow in ("hierarchical", "continuous"):
+        section = rebuilt[flow]
+        assert section["validation_status"] == "complete"
+        assert section["sbi_pair_count"] == 1
+        assert section["sbc_exact_rejection_cases_total"] == 2
+        assert section["sbc_exact_rejection_cases_on_sbi_routes"] == 0
+        assert [row["use_sbi"] for row in section["pairs"]] == [True, False]
+    assert rebuilt["continuous"]["pairs"][0]["body_weight_kg"] == 70.0
+    assert rebuilt["continuous"]["pairs"][0]["age_years"] == 35.0
+
+    incomplete = json.loads(sbc_path.read_text())
+    incomplete["drugs"].append({
+        "name": "amantadine", "pass": False, "coverage_max_deviation": 0.14,
+        "ks_pvalues": [0.1, 0.1, 0.1], "size_calibrated_rejections": 0,
+    })
+    sbc_path.write_text(json.dumps(incomplete))
+    main()
+    rebuilt = json.loads(out.read_text())
+    assert rebuilt["routes"]["amantadine"] == "sbi"
+    assert rebuilt["reasons"]["amantadine"]["sbc_pass"] is False
+
+    incomplete["drugs"][-1].update({
+        "pass": None, "coverage_max_deviation": None, "ks_pvalues": [],
+    })
+    sbc_path.write_text(json.dumps(incomplete))
+    main()
+    rebuilt = json.loads(out.read_text())
+    assert rebuilt["routes"]["amantadine"] == "ibis"
+    assert rebuilt["reasons"]["amantadine"]["reason"] == "sampling_incomplete"
 
 
 def test_sbi_warns_for_timed_multidose_observation(case, caplog):

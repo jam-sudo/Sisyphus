@@ -1,0 +1,136 @@
+{
+  "multi_drug": {
+    "pairs": 13,
+    "simultaneous_ks_tests": 39,
+    "n_calibration": 100,
+    "repetitions": 10000,
+    "passed": 1032,
+    "pass_probability": 0.1032,
+    "ci_95": [
+      0.09730357863813661,
+      0.10932862450314187
+    ],
+    "holm": {
+      "passed": 1499,
+      "pass_probability": 0.1499,
+      "ci_95": [
+        0.14295614726153605,
+        0.15704839724373335
+      ]
+    },
+    "size_calibrated": {
+      "simultaneous_tests": 195,
+      "passed": 9909,
+      "pass_probability": 0.9909,
+      "ci_95": [
+        0.9888388134702382,
+        0.9926671000717323
+      ]
+    }
+  },
+  "multi_observation": {
+    "pairs": 13,
+    "simultaneous_ks_tests": 39,
+    "n_calibration": 100,
+    "repetitions": 10000,
+    "passed": 1032,
+    "pass_probability": 0.1032,
+    "ci_95": [
+      0.09730357863813661,
+      0.10932862450314187
+    ],
+    "holm": {
+      "passed": 1499,
+      "pass_probability": 0.1499,
+      "ci_95": [
+        0.14295614726153605,
+        0.15704839724373335
+      ]
+    },
+    "size_calibrated": {
+      "simultaneous_tests": 195,
+      "passed": 9909,
+      "pass_probability": 0.9909,
+      "ci_95": [
+        0.9888388134702382,
+        0.9926671000717323
+      ]
+    }
+  },
+  "hierarchical": {
+    "pairs": 26,
+    "simultaneous_ks_tests": 78,
+    "n_calibration": 100,
+    "repetitions": 10000,
+    "passed": 108,
+    "pass_probability": 0.0108,
+    "ci_95": [
+      0.008867630217711028,
+      0.013024644293450469
+    ],
+    "holm": {
+      "passed": 209,
+      "pass_probability": 0.0209,
+      "ci_95": [
+        0.018186486984022303,
+        0.02389729994536788
+      ]
+    },
+    "size_calibrated": {
+      "simultaneous_tests": 390,
+      "passed": 9927,
+      "pass_probability": 0.9927,
+      "ci_95": [
+        0.990829977556022,
+        0.9942737267480048
+      ]
+    }
+  },
+  "continuous": {
+    "pairs": 52,
+    "simultaneous_ks_tests": 156,
+    "n_calibration": 50,
+    "repetitions": 10000,
+    "passed": 820,
+    "pass_probability": 0.082,
+    "ci_95": [
+      0.07669485532909107,
+      0.08755004381978854
+    ],
+    "holm": {
+      "passed": 3380,
+      "pass_probability": 0.338,
+      "ci_95": [
+        0.3287270925531938,
+        0.3473673386605173
+      ]
+    },
+    "size_calibrated": {
+      "simultaneous_tests": 364,
+      "passed": 9832,
+      "pass_probability": 0.9832,
+      "ci_95": [
+        0.9804855635108526,
+        0.9856274900772105
+      ]
+    }
+  },
+  "assumptions": "Exact exchangeable posterior draws from the supplied synthetic contexts; parameter dependence retained within each rank triple; pairs and calibration cases sampled independently; uniform location within posterior quantile gaps",
+  "method": "Exact rejection posterior reference rank resampling",
+  "exact_reference_files": [
+    "pravastatin-0-exact.npz",
+    "ketorolac-0-exact.npz",
+    "morphine-0-exact.npz"
+  ],
+  "gate": {
+    "posterior_draws": 500,
+    "coverage_levels_percent": [
+      50,
+      80,
+      90,
+      95
+    ],
+    "ks_threshold_p": 0.01,
+    "coverage_tolerance_fraction": 0.1
+  }
+}

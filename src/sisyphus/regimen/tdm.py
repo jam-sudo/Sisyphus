@@ -229,6 +229,7 @@ def bayesian_update(
     sbi_use_surrogate: bool = False,
     sbi_surrogate_std_threshold: float = 0.02,
     sbi_reweight: bool = False,
+    sbi_raw_npe: bool = False,
     logp_hint: float | None = None,
     min_ci_half_width_fraction: float = 0.0,
     population_class: str | None = None,
@@ -244,10 +245,11 @@ def bayesian_update(
             based inference via the Track A multi-drug conditional NSF).
         sbi_posterior_path: Path to the trained amortized posterior. If
             None, defaults to ``models/sbi/multi_drug_nsf.pt``.
-        sbi_fallback: If ``True`` (default) and the SBI posterior file is
-            missing, fall back to ``ibis`` rather than raising. Set to
+        sbi_fallback: If ``True`` (default) and the SBI posterior is
+            unavailable or correction ESS is too low, fall back to ``ibis``. Set to
             ``False`` to fail loudly in CI or production configs that
             require SBI to be available.
+        sbi_raw_npe: Explicitly use the uncorrected flow for diagnostics.
         logp_hint: Optional logP injection for SBI drug feature extraction.
             Unused by other methods.
         min_ci_half_width_fraction: Optional empirical-conformal floor on
@@ -346,6 +348,7 @@ def bayesian_update(
 
     if method == "sbi":
         from sisyphus.regimen.tdm_sbi import sbi_update
+        from sisyphus.sbi.importance import LowImportanceESS
 
         try:
             return _finalize(sbi_update(
@@ -362,11 +365,12 @@ def bayesian_update(
                 body_weight_kg=body_weight_kg,
                 age_years=age_years,
                 sbi_reweight=sbi_reweight,
+                raw_npe=sbi_raw_npe,
             ))
-        except (FileNotFoundError, ImportError, ModuleNotFoundError) as exc:
+        except (FileNotFoundError, ImportError, ModuleNotFoundError, LowImportanceESS) as exc:
             if not sbi_fallback:
                 raise
-            warning = f"SBI posterior unavailable ({exc}); using IBIS instead"
+            warning = f"SBI correction unavailable ({exc}); using IBIS instead"
             if population_class is not None or body_weight_kg is not None or age_years is not None:
                 warning += "; IBIS cannot use population, body weight, or age covariates"
             logger.warning("%s", warning)

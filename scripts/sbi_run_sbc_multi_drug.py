@@ -32,6 +32,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import sys
 import time
 from pathlib import Path
@@ -49,6 +50,11 @@ MAX_SBC_SAMPLE_TIME_S = 30.0
 
 from sisyphus.regimen.types import DosingRegimen  # noqa: E402
 from sisyphus.sbi.amortizer import load_result  # noqa: E402
+from sisyphus.sbi.importance import (  # noqa: E402
+    MAX_REJECTION_ATTEMPT_COUNT,
+    CorrectedSBCPosterior,
+)
+from sisyphus.sbi.joint_smc import SMC_PARTICLE_COUNT, SMC_REJUVENATION_SWEEP_COUNT  # noqa: E402
 from sisyphus.sbi.multi_drug import (  # noqa: E402
     MultiDrugSimulator,
     extract_drug_features,
@@ -96,6 +102,34 @@ def _coverage_and_ranks(
     return ranks, cov
 
 
+def _load_context_cache(
+    path: Path, *, drug: str, seed: int, n_calibration: int,
+) -> tuple[np.ndarray, np.ndarray]:
+    with np.load(path, allow_pickle=False) as cache:
+        if (str(cache["drug"]) != drug or int(cache["seed"]) != seed
+                or int(cache["n_calibration"]) != n_calibration):
+            raise ValueError(f"Timed context cache does not match {drug}, seed, or count: {path}")
+        thetas = cache["thetas_true"]
+        contexts = cache["xs_packed"]
+    if len(thetas) != len(contexts) or len(thetas) > n_calibration:
+        raise ValueError(f"Invalid timed context cache shape: {path}")
+    return thetas, contexts
+
+
+def _save_context_cache(
+    path: Path, *, drug: str, seed: int, n_calibration: int,
+    thetas: np.ndarray, contexts: np.ndarray,
+) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(".npz.tmp")
+    with temporary.open("wb") as handle:
+        np.savez_compressed(
+            handle, drug=drug, seed=seed, n_calibration=n_calibration,
+            thetas_true=thetas, xs_packed=contexts,
+        )
+    os.replace(temporary, path)
+
+
 def main() -> None:
     p = argparse.ArgumentParser()
     p.add_argument("--posterior", type=Path, required=True)
@@ -109,7 +143,26 @@ def main() -> None:
     p.add_argument("--ks-threshold", type=float, default=0.01)
     p.add_argument("--coverage-tol", type=float, default=0.10)
     p.add_argument("--multi-observation", action="store_true")
+    p.add_argument("--context-cache", type=Path)
+    p.add_argument("--write-context-cache-only", action="store_true")
+    p.add_argument("--sampler", choices=("raw", "corrected"), default="corrected")
+    p.add_argument("--exact-rejection-workers", type=int, default=0)
+    p.add_argument("--fallback-rejection-workers", type=int, default=0)
+    p.add_argument("--joint-smc-after-rejection", action="store_true")
+    p.add_argument("--joint-smc-particles", type=int, default=SMC_PARTICLE_COUNT)
+    p.add_argument("--joint-smc-workers", type=int, default=1)
+    p.add_argument("--correction-workers", type=int, default=1)
+    p.add_argument("--joint-smc-sweeps", type=int, default=SMC_REJUVENATION_SWEEP_COUNT)
+    p.add_argument("--max-rejection-attempts", type=int,
+                   default=MAX_REJECTION_ATTEMPT_COUNT)
+    p.add_argument("--only-drug", default="")
+    p.add_argument("--case-start", type=int, default=0)
+    p.add_argument("--case-end", type=int, default=None)
     args = p.parse_args()
+    if args.write_context_cache_only and (not args.multi_observation or not args.context_cache):
+        raise ValueError(
+            "--write-context-cache-only requires --multi-observation and --context-cache"
+        )
 
     levels = tuple(int(x) for x in args.levels.split(","))
 
@@ -149,6 +202,9 @@ def main() -> None:
         "ks_threshold": args.ks_threshold,
         "coverage_tol": args.coverage_tol,
         "multi_observation": args.multi_observation,
+        "sampler": args.sampler,
+        "case_start": args.case_start,
+        "case_end": args.case_end or args.n_calibration,
         "drugs": [],
     }
 
@@ -160,6 +216,8 @@ def main() -> None:
     val_meta = {d["name"]: d for d in val_data["drugs"]}
 
     for i, spec in enumerate(specs):
+        if args.only_drug and spec.name != args.only_drug:
+            continue
         t0 = time.time()
         log.info("[sbc-md] [%d/%d] %s", i + 1, len(specs), spec.name)
         sim_bundle = MultiDrugSimulator.for_single(spec)
@@ -175,7 +233,12 @@ def main() -> None:
 
         rng = np.random.default_rng(args.seed + i * 1000)
         thetas_true = prior.sample_numpy(args.n_calibration, rng)
-        if args.multi_observation:
+        if args.multi_observation and args.context_cache and args.context_cache.exists():
+            thetas_true, xs_packed = _load_context_cache(
+                args.context_cache, drug=spec.name, seed=args.seed,
+                n_calibration=args.n_calibration,
+            )
+        elif args.multi_observation:
             contexts = []
             valid_thetas = []
             for theta in thetas_true:
@@ -194,6 +257,12 @@ def main() -> None:
                 raise RuntimeError(f"No valid SBC simulations for {spec.name}")
             xs_packed = np.asarray(contexts, dtype=np.float32)
             thetas_true = np.asarray(valid_thetas)
+            if args.context_cache:
+                _save_context_cache(
+                    args.context_cache, drug=spec.name, seed=args.seed,
+                    n_calibration=args.n_calibration,
+                    thetas=thetas_true, contexts=xs_packed,
+                )
         else:
             xs = np.zeros((args.n_calibration, 1), dtype=np.float64)
             for j in range(args.n_calibration):
@@ -204,9 +273,32 @@ def main() -> None:
                 axis=1,
             ).astype(np.float64)
 
+        n_available = len(thetas_true)
+        if args.write_context_cache_only:
+            log.info("Cached %d timed contexts for %s", n_available, spec.name)
+            continue
+        end = args.case_end if args.case_end is not None else n_available
+        thetas_true = thetas_true[args.case_start:end]
+        xs_packed = xs_packed[args.case_start:end]
+        if not len(thetas_true):
+            continue
+
         try:
+            sampler = (CorrectedSBCPosterior(
+                result.posterior, sim, seed=args.seed + i,
+                case_start=args.case_start,
+                multi_observation=args.multi_observation,
+                exact_rejection_workers=args.exact_rejection_workers,
+                fallback_rejection_workers=args.fallback_rejection_workers,
+                max_rejection_attempts=args.max_rejection_attempts,
+                joint_smc_after_rejection=args.joint_smc_after_rejection,
+                joint_smc_particles=args.joint_smc_particles,
+                joint_smc_workers=args.joint_smc_workers,
+                correction_workers=args.correction_workers,
+                joint_smc_rejuvenation_sweeps=args.joint_smc_sweeps,
+            ) if args.sampler == "corrected" else result.posterior)
             ranks, cov_counts = _coverage_and_ranks(
-                thetas_true, result.posterior, xs_packed, levels=levels,
+                thetas_true, sampler, xs_packed, levels=levels,
                 n_posterior=args.n_posterior,
             )
         except RuntimeError as exc:
@@ -215,6 +307,7 @@ def main() -> None:
                 "name": spec.name,
                 "dose_mg": spec.dose_mg,
                 "n_valid": len(thetas_true),
+                "n_available": n_available,
                 "ks_stats": [1.0] * 3,
                 "ks_pvalues": [0.0] * 3,
                 "coverage": {},
@@ -222,6 +315,20 @@ def main() -> None:
                 "drug_features": feats.tolist(),
                 "pass": False,
                 "sampling_error": str(exc),
+                "rejection_fallback_cases": getattr(sampler, "rejection_count", 0),
+                "forced_exact_rejection_cases": getattr(
+                    sampler, "forced_exact_rejection_count", 0
+                ),
+                "correction_ess": getattr(sampler, "ess", []),
+                "proposal_counts": getattr(sampler, "proposal_counts", []),
+                "rejection_attempt_counts": getattr(sampler, "rejection_attempt_counts", []),
+                "joint_smc_fallback_cases": getattr(
+                    sampler, "joint_smc_fallback_count", 0
+                ),
+                "joint_smc_diagnostics": getattr(
+                    sampler, "joint_smc_diagnostics", []
+                ),
+                "max_rejection_attempts": args.max_rejection_attempts,
                 "elapsed_s": float(time.time() - t0),
             })
             continue
@@ -257,10 +364,27 @@ def main() -> None:
             "name": spec.name,
             "dose_mg": spec.dose_mg,
             "n_valid": len(thetas_true),
+            "n_available": n_available,
             "ks_stats": ks_stats.tolist(),
             "ks_pvalues": ks_p.tolist(),
             "coverage": coverage,
             "coverage_max_deviation": float(cov_max_dev),
+            "ranks": ranks.tolist(),
+            "coverage_counts": {str(k): v.tolist() for k, v in cov_counts.items()},
+            "rejection_fallback_cases": getattr(sampler, "rejection_count", 0),
+            "forced_exact_rejection_cases": getattr(
+                sampler, "forced_exact_rejection_count", 0
+            ),
+            "correction_ess": getattr(sampler, "ess", []),
+            "proposal_counts": getattr(sampler, "proposal_counts", []),
+            "rejection_attempt_counts": getattr(sampler, "rejection_attempt_counts", []),
+            "joint_smc_fallback_cases": getattr(
+                sampler, "joint_smc_fallback_count", 0
+            ),
+            "joint_smc_diagnostics": getattr(
+                sampler, "joint_smc_diagnostics", []
+            ),
+            "max_rejection_attempts": args.max_rejection_attempts,
             "drug_features": feats.tolist(),
             "pass": drug_pass,
             "elapsed_s": float(elapsed),

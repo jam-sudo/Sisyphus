@@ -1,0 +1,868 @@
+{
+  "posterior": "models/sbi/multi_drug_nsf.pt",
+  "validation_set": "data/sbi/validation_drug_set.json",
+  "n_calibration": 100,
+  "n_posterior": 500,
+  "levels": [
+    50,
+    80,
+    90,
+    95
+  ],
+  "seed": 0,
+  "ks_threshold": 0.01,
+  "coverage_tol": 0.1,
+  "sampler": "corrected",
+  "drugs": [
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.04486029979085482,
+        0.2141463256991053,
+        0.3706320255863278
+      ],
+      "coverage": {
+        "50": [
+          0.48,
+          0.52,
+          0.64
+        ],
+        "80": [
+          0.76,
+          0.79,
+          0.82
+        ],
+        "90": [
+          0.91,
+          0.89,
+          0.9
+        ],
+        "95": [
+          0.92,
+          0.96,
+          0.93
+        ]
+      },
+      "coverage_max_deviation": 0.14,
+      "pass": false,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 95.34934952644328,
+      "max_proposals_used": 512,
+      "name": "amantadine",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.25269275700638894,
+        0.8948800679675544,
+        0.8428847956274123
+      ],
+      "coverage": {
+        "50": [
+          0.52,
+          0.57,
+          0.47
+        ],
+        "80": [
+          0.82,
+          0.79,
+          0.82
+        ],
+        "90": [
+          0.94,
+          0.89,
+          0.89
+        ],
+        "95": [
+          0.99,
+          0.95,
+          0.93
+        ]
+      },
+      "coverage_max_deviation": 0.06999999999999995,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 121.37431782824672,
+      "max_proposals_used": 512,
+      "name": "clozapine",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.5182193645480672,
+        0.8137761665209275,
+        0.8428847956274123
+      ],
+      "coverage": {
+        "50": [
+          0.52,
+          0.44,
+          0.55
+        ],
+        "80": [
+          0.82,
+          0.74,
+          0.8
+        ],
+        "90": [
+          0.9,
+          0.84,
+          0.92
+        ],
+        "95": [
+          0.98,
+          0.91,
+          0.96
+        ]
+      },
+      "coverage_max_deviation": 0.06000000000000005,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 83.69413647824055,
+      "max_proposals_used": 512,
+      "name": "diclofenac",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.7510610234994346,
+        0.48664471299257794,
+        0.9532159710635721
+      ],
+      "coverage": {
+        "50": [
+          0.47,
+          0.49,
+          0.52
+        ],
+        "80": [
+          0.74,
+          0.77,
+          0.76
+        ],
+        "90": [
+          0.81,
+          0.87,
+          0.89
+        ],
+        "95": [
+          0.9,
+          0.92,
+          0.93
+        ]
+      },
+      "coverage_max_deviation": 0.08999999999999997,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 76.71227943371127,
+      "max_proposals_used": 512,
+      "name": "digoxin",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.19663614878217184,
+        0.3445493220213226,
+        0.23282134931905185
+      ],
+      "coverage": {
+        "50": [
+          0.42,
+          0.39,
+          0.4
+        ],
+        "80": [
+          0.73,
+          0.71,
+          0.73
+        ],
+        "90": [
+          0.87,
+          0.84,
+          0.87
+        ],
+        "95": [
+          0.94,
+          0.93,
+          0.95
+        ]
+      },
+      "coverage_max_deviation": 0.10999999999999999,
+      "pass": false,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 76.48112304817256,
+      "max_proposals_used": 512,
+      "name": "indomethacin",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.7510610234994362,
+        0.8137761665209279,
+        0.3197089196627567
+      ],
+      "coverage": {
+        "50": [
+          0.55,
+          0.52,
+          0.44
+        ],
+        "80": [
+          0.76,
+          0.76,
+          0.81
+        ],
+        "90": [
+          0.9,
+          0.87,
+          0.9
+        ],
+        "95": [
+          0.96,
+          0.94,
+          0.94
+        ]
+      },
+      "coverage_max_deviation": 0.06,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 108.54220786032545,
+      "max_proposals_used": 512,
+      "name": "ketorolac",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.06897234094909266,
+        0.6509082962856887,
+        0.1251894873135425
+      ],
+      "coverage": {
+        "50": [
+          0.37,
+          0.45,
+          0.37
+        ],
+        "80": [
+          0.72,
+          0.82,
+          0.67
+        ],
+        "90": [
+          0.82,
+          0.91,
+          0.82
+        ],
+        "95": [
+          0.86,
+          0.98,
+          0.88
+        ]
+      },
+      "coverage_max_deviation": 0.13,
+      "pass": false,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 70.91686240158515,
+      "max_proposals_used": 1024,
+      "name": "morphine",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.3445493220213226,
+        0.7181574380356132,
+        0.48664471299257595
+      ],
+      "coverage": {
+        "50": [
+          0.5,
+          0.52,
+          0.5
+        ],
+        "80": [
+          0.82,
+          0.82,
+          0.81
+        ],
+        "90": [
+          0.89,
+          0.9,
+          0.9
+        ],
+        "95": [
+          0.95,
+          0.94,
+          0.93
+        ]
+      },
+      "coverage_max_deviation": 0.020000000000000018,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 93.88284106387775,
+      "max_proposals_used": 512,
+      "name": "phenytoin",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.5182193645480672,
+        0.3979325641016015,
+        0.25269275700638727
+      ],
+      "coverage": {
+        "50": [
+          0.45,
+          0.44,
+          0.5
+        ],
+        "80": [
+          0.73,
+          0.75,
+          0.75
+        ],
+        "90": [
+          0.83,
+          0.84,
+          0.86
+        ],
+        "95": [
+          0.87,
+          0.9,
+          0.87
+        ]
+      },
+      "coverage_max_deviation": 0.07999999999999996,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 67.30024941557411,
+      "max_proposals_used": 1024,
+      "name": "posaconazole",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.39793256410160727,
+        0.894880067967555,
+        0.7181574380356132
+      ],
+      "coverage": {
+        "50": [
+          0.45,
+          0.5,
+          0.55
+        ],
+        "80": [
+          0.78,
+          0.78,
+          0.89
+        ],
+        "90": [
+          0.91,
+          0.87,
+          0.93
+        ],
+        "95": [
+          0.94,
+          0.94,
+          0.96
+        ]
+      },
+      "coverage_max_deviation": 0.08999999999999997,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 100,
+      "forced_exact_rejection_cases": 100,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": null,
+      "max_proposals_used": 0,
+      "name": "pravastatin",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.12518948731353796,
+        0.2961216072789328,
+        0.6171494172888633
+      ],
+      "coverage": {
+        "50": [
+          0.5,
+          0.41,
+          0.52
+        ],
+        "80": [
+          0.7,
+          0.77,
+          0.78
+        ],
+        "90": [
+          0.82,
+          0.88,
+          0.89
+        ],
+        "95": [
+          0.87,
+          0.93,
+          0.97
+        ]
+      },
+      "coverage_max_deviation": 0.10000000000000009,
+      "pass": false,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 96.71469056431859,
+      "max_proposals_used": 256,
+      "name": "rivaroxaban",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.01983924212565369,
+        0.06897234094909266,
+        0.9532159710635721
+      ],
+      "coverage": {
+        "50": [
+          0.6,
+          0.54,
+          0.53
+        ],
+        "80": [
+          0.85,
+          0.79,
+          0.8
+        ],
+        "90": [
+          0.91,
+          0.9,
+          0.89
+        ],
+        "95": [
+          0.95,
+          0.95,
+          0.93
+        ]
+      },
+      "coverage_max_deviation": 0.09999999999999998,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 5,
+      "joint_smc_diagnostics": [
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 54,
+          "stages": [
+            {
+              "beta": 0.0023210230810946086,
+              "incremental_ess": 500.00000000050824,
+              "theta_acceptance": 0.247,
+              "nuisance_acceptance": 0.946
+            },
+            {
+              "beta": 0.00987246313109234,
+              "incremental_ess": 500.0000000159944,
+              "theta_acceptance": 0.2345,
+              "nuisance_acceptance": 0.8385
+            },
+            {
+              "beta": 0.060948423660341394,
+              "incremental_ess": 500.0000000020278,
+              "theta_acceptance": 0.136,
+              "nuisance_acceptance": 0.512
+            },
+            {
+              "beta": 0.4291692581339491,
+              "incremental_ess": 500.00000000035726,
+              "theta_acceptance": 0.058,
+              "nuisance_acceptance": 0.2
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 829.190642094244,
+              "theta_acceptance": 0.046,
+              "nuisance_acceptance": 0.1485
+            }
+          ],
+          "unique_initial_ancestors": 150,
+          "simulator_evaluations": 15443,
+          "elapsed_s": 1632.2500289548188,
+          "case_index": 25
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 54,
+          "stages": [
+            {
+              "beta": 0.013587858324171975,
+              "incremental_ess": 500.00000000048345,
+              "theta_acceptance": 0.2395,
+              "nuisance_acceptance": 0.9285
+            },
+            {
+              "beta": 0.10225862037723277,
+              "incremental_ess": 500.00000000094985,
+              "theta_acceptance": 0.145,
+              "nuisance_acceptance": 0.669
+            },
+            {
+              "beta": 0.7308037102341407,
+              "incremental_ess": 500.0000000002151,
+              "theta_acceptance": 0.0575,
+              "nuisance_acceptance": 0.306
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 969.2763510301668,
+              "theta_acceptance": 0.058,
+              "nuisance_acceptance": 0.272
+            }
+          ],
+          "unique_initial_ancestors": 235,
+          "simulator_evaluations": 12572,
+          "elapsed_s": 1386.610143808648,
+          "case_index": 26
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 54,
+          "stages": [
+            {
+              "beta": 0.021126118211213907,
+              "incremental_ess": 500.0000000077893,
+              "theta_acceptance": 0.2385,
+              "nuisance_acceptance": 0.897
+            },
+            {
+              "beta": 0.14575497509540852,
+              "incremental_ess": 500.00000000044463,
+              "theta_acceptance": 0.116,
+              "nuisance_acceptance": 0.684
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 504.44638514643077,
+              "theta_acceptance": 0.0565,
+              "nuisance_acceptance": 0.3385
+            }
+          ],
+          "unique_initial_ancestors": 251,
+          "simulator_evaluations": 9442,
+          "elapsed_s": 1045.5949953552336,
+          "case_index": 27
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 4000,
+          "nuisance_dimensions": 54,
+          "stages": [
+            {
+              "beta": 0.0005926003595959628,
+              "incremental_ess": 2000.000000304423,
+              "theta_acceptance": 0.24183333333333334,
+              "nuisance_acceptance": 0.9574166666666667
+            },
+            {
+              "beta": 0.0014307918744569054,
+              "incremental_ess": 2000.0000014458603,
+              "theta_acceptance": 0.2025,
+              "nuisance_acceptance": 0.8659166666666667
+            },
+            {
+              "beta": 0.0032066742641061186,
+              "incremental_ess": 2000.0000006509654,
+              "theta_acceptance": 0.197,
+              "nuisance_acceptance": 0.687
+            },
+            {
+              "beta": 0.0072887010277822946,
+              "incremental_ess": 2000.0000000103835,
+              "theta_acceptance": 0.2145,
+              "nuisance_acceptance": 0.47291666666666665
+            },
+            {
+              "beta": 0.020343459698772777,
+              "incremental_ess": 2000.000000049683,
+              "theta_acceptance": 0.19991666666666666,
+              "nuisance_acceptance": 0.29675
+            },
+            {
+              "beta": 0.09040864061577704,
+              "incremental_ess": 2000.0000000025466,
+              "theta_acceptance": 0.14133333333333334,
+              "nuisance_acceptance": 0.15258333333333332
+            },
+            {
+              "beta": 0.6010095292619108,
+              "incremental_ess": 2000.0000000000898,
+              "theta_acceptance": 0.07758333333333334,
+              "nuisance_acceptance": 0.06783333333333333
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 3668.2458816431217,
+              "theta_acceptance": 0.06466666666666666,
+              "nuisance_acceptance": 0.06433333333333334
+            }
+          ],
+          "unique_initial_ancestors": 239,
+          "simulator_evaluations": 139941,
+          "elapsed_s": 3697.723657708615,
+          "ancestor_guard_passed": true,
+          "case_index": 28
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 54,
+          "stages": [
+            {
+              "beta": 0.026420767148920277,
+              "incremental_ess": 500.0000000035991,
+              "theta_acceptance": 0.228,
+              "nuisance_acceptance": 0.9295
+            },
+            {
+              "beta": 0.24471595866919627,
+              "incremental_ess": 500.0000000002502,
+              "theta_acceptance": 0.1405,
+              "nuisance_acceptance": 0.687
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 661.1248172634016,
+              "theta_acceptance": 0.0755,
+              "nuisance_acceptance": 0.4125
+            }
+          ],
+          "unique_initial_ancestors": 284,
+          "simulator_evaluations": 9302,
+          "elapsed_s": 792.6866662763059,
+          "case_index": 29
+        }
+      ],
+      "rejection_attempt_counts": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 118.32629549288592,
+      "max_proposals_used": 1024,
+      "name": "sildenafil",
+      "sampling_status": "joint_smc_fallback",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.5836423551202053,
+        0.15071744612730198,
+        0.8428847956274128
+      ],
+      "coverage": {
+        "50": [
+          0.55,
+          0.52,
+          0.54
+        ],
+        "80": [
+          0.76,
+          0.78,
+          0.87
+        ],
+        "90": [
+          0.87,
+          0.91,
+          0.9
+        ],
+        "95": [
+          0.95,
+          0.93,
+          0.98
+        ]
+      },
+      "coverage_max_deviation": 0.06999999999999995,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 82.58419977940922,
+      "max_proposals_used": 512,
+      "name": "tamoxifen",
+      "size_calibrated_rejections": 0
+    }
+  ],
+  "flow": "multi_drug",
+  "pass_count": 9,
+  "incomplete_count": 0,
+  "failed_count": 4,
+  "rejection_fallback_cases": 100,
+  "forced_exact_rejection_cases": 100,
+  "joint_smc_fallback_cases": 5,
+  "sampling_error_blocks": 0,
+  "total_pairs": 13,
+  "gate_passed": false,
+  "calibrated_null_global_pass_probability": 0.1062,
+  "calibrated_null_ci_95": [
+    0.10022679297089668,
+    0.1124036230166811
+  ],
+  "calibrated_null_assumptions": "Exact uniform marginal ranks; independent parameters and pairs; uniform location within posterior quantile gaps",
+  "exact_reference_null_global_pass_probability": 0.1032,
+  "exact_reference_null_ci_95": [
+    0.09730357863813661,
+    0.10932862450314187
+  ],
+  "exact_reference_null_assumptions": "Exact exchangeable posterior draws from the supplied synthetic contexts; parameter dependence retained within each rank triple; pairs and calibration cases sampled independently; uniform location within posterior quantile gaps",
+  "uncomputable_pairs": [],
+  "holm_global_gate": {
+    "passed": false,
+    "ks_rejections": 0,
+    "coverage_passed": false,
+    "family_wise_alpha": 0.01,
+    "predeclared_at_utc": "2026-10-29T15:40:44Z",
+    "definition": "Holm-Bonferroni step-down across all three marginal KS p-values for every pair in a flow at family-wise alpha 0.01; pass if zero KS hypotheses are rejected and every pair's original coverage deviation is <= 0.10",
+    "calibrated_null_pass_probability": 0.1452,
+    "calibrated_null_ci_95": [
+      0.13834905421797616,
+      0.1522582618540306
+    ],
+    "calibrated_null_assumptions": "Exact uniform marginal ranks; independent parameters and pairs; uniform location within posterior quantile gaps"
+  },
+  "size_calibrated_global_gate": {
+    "passed": true,
+    "status": "PASS",
+    "uncomputable_pairs": [],
+    "rejections": 0,
+    "ks_test_count": 39,
+    "coverage_test_count": 156,
+    "family_wise_alpha": 0.01,
+    "predeclared_at_utc": "2026-10-29T19:14:47Z",
+    "definition": "Test each pair's three marginal ranks with KS and each coverage level with an exact two-sided binomial test (per parameter for multi-drug, time-aware, and hierarchical flows; pooled across three parameters for continuous). Apply Holm-Bonferroni to the combined KS and coverage p-value family per flow at FWER 0.01; pass if no hypotheses are rejected.",
+    "calibrated_null_pass_probability": 0.9899,
+    "calibrated_null_ci_95": [
+      0.9877409379203101,
+      0.9917660662919513
+    ],
+    "calibrated_null_assumptions": "Exact uniform marginal ranks; independent parameters and pairs; uniform location within posterior quantile gaps"
+  },
+  "production_scope_size_calibrated_gate": {
+    "status": "PASS",
+    "passed": true,
+    "selected_count": 11,
+    "selected_pairs": [
+      "amantadine",
+      "clozapine",
+      "diclofenac",
+      "digoxin",
+      "indomethacin",
+      "ketorolac",
+      "morphine",
+      "phenytoin",
+      "posaconazole",
+      "rivaroxaban",
+      "tamoxifen"
+    ],
+    "excluded_pairs": [
+      "pravastatin",
+      "sildenafil"
+    ],
+    "test_count": 165,
+    "rejections": 0,
+    "family_wise_alpha": 0.01,
+    "predeclared_at_utc": "2026-10-30T10:12:40Z",
+    "amended_at_utc": "2026-10-30T10:24:43Z",
+    "calibrated_null_pass_probability": 0.9998,
+    "calibrated_null_ci_95": [
+      0.9992777199422761,
+      0.9999757781543596
+    ],
+    "calibrated_null_nonempty_probability": 1.0,
+    "calibrated_null_repetitions": 10000,
+    "calibrated_null_assumptions": "Exact uniform marginal ranks; independent parameters and pairs; uniform location within posterior quantile gaps"
+  }
+}

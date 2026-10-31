@@ -29,7 +29,11 @@
         "src/sisyphus/sbi/simulator.py",
         "src/sisyphus/graph/types.py",
         "src/sisyphus/predict/rr_full.py"
-      ]
+      ],
+      "verified_equivalent": {
+        "sha256": "6abad8149f62b8bc47f3b2171cf7b03c5914be3c621ac1ab542f0becf5947692",
+        "check": "Optional no-noise and graph-sampling flags preserve simulator defaults; fixed-seed simulator tests"
+      }
     },
     "hierarchical_nsf_2k.pt": {
       "commit": "562ded043aa40bae4fedbc7832a1ab58309a9b49",
@@ -59,7 +63,11 @@
         "src/sisyphus/sbi/simulator.py",
         "src/sisyphus/graph/types.py",
         "src/sisyphus/predict/rr_full.py"
-      ]
+      ],
+      "verified_equivalent": {
+        "sha256": "6abad8149f62b8bc47f3b2171cf7b03c5914be3c621ac1ab542f0becf5947692",
+        "check": "Optional no-noise and graph-sampling flags preserve simulator defaults; fixed-seed simulator tests"
+      }
     },
     "continuous_hierarchical_nsf.pt": {
       "commit": "562ded043aa40bae4fedbc7832a1ab58309a9b49",
@@ -90,7 +98,11 @@
         "src/sisyphus/sbi/simulator.py",
         "src/sisyphus/graph/types.py",
         "src/sisyphus/predict/rr_full.py"
-      ]
+      ],
+      "verified_equivalent": {
+        "sha256": "25b1286e5066e2cbda97e95b368f621695358be0612ebbd844c6fc0cac3eb81c",
+        "check": "Optional no-noise and graph-sampling flags preserve simulator defaults; fixed-seed simulator tests"
+      }
     },
     "clozapine_posterior_nsf.pt": {
       "commit": "7776de09143e6217f2dfad7bccb5b217ed161e6b",
@@ -175,7 +187,11 @@
         "src/sisyphus/sbi/multi_observation.py",
         "src/sisyphus/graph/types.py",
         "src/sisyphus/predict/rr_full.py"
-      ]
+      ],
+      "verified_equivalent": {
+        "sha256": "af375cd229b40fba3078fcb0e657e0ab7bc75bf287796c28f0ff137d677c8977",
+        "check": "Optional no-noise and graph-sampling flags preserve simulator defaults; fixed-seed simulator tests"
+      }
     }
   }
 }

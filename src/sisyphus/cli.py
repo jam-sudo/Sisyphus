@@ -511,6 +511,8 @@ def _resolve_auto_method(
             reweight = bool(flag)
             break
     if regimen is not None and observations is not None and len(observations) > 1:
+        if table.get("multi_observation", {}).get("validation_status") == "pending_corrected_sbc":
+            return "ibis", False
         multi = table.get("multi_observation", {}).get("drugs", {})
         for key, decision in multi.items():
             if key.lower().strip() == lower and decision.get("use_native", False):

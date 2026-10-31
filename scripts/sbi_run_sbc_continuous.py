@@ -38,6 +38,11 @@ log = logging.getLogger("sbi_sbc_continuous")
 MAX_SBC_SAMPLE_TIME_S = 30.0
 
 from sisyphus.physiology.correlation_registry import load_from_json  # noqa: E402
+from sisyphus.sbi.importance import (  # noqa: E402
+    MAX_REJECTION_ATTEMPT_COUNT,
+    CorrectedSBCPosterior,
+)
+from sisyphus.sbi.joint_smc import SMC_PARTICLE_COUNT, SMC_REJUVENATION_SWEEP_COUNT  # noqa: E402
 from sisyphus.sbi.multi_drug import (  # noqa: E402
     extract_drug_features,
     load_drug_specs_from_json,
@@ -116,6 +121,19 @@ def main() -> int:
     p.add_argument("--out", type=Path, required=True)
     p.add_argument("--ks-threshold", type=float, default=0.01)
     p.add_argument("--coverage-tol", type=float, default=0.10)
+    p.add_argument("--sampler", choices=("raw", "corrected"), default="corrected")
+    p.add_argument("--exact-rejection-workers", type=int, default=0)
+    p.add_argument("--fallback-rejection-workers", type=int, default=0)
+    p.add_argument("--joint-smc-after-rejection", action="store_true")
+    p.add_argument("--joint-smc-particles", type=int, default=SMC_PARTICLE_COUNT)
+    p.add_argument("--joint-smc-workers", type=int, default=1)
+    p.add_argument("--correction-workers", type=int, default=1)
+    p.add_argument("--joint-smc-sweeps", type=int, default=SMC_REJUVENATION_SWEEP_COUNT)
+    p.add_argument("--max-rejection-attempts", type=int,
+                   default=MAX_REJECTION_ATTEMPT_COUNT)
+    p.add_argument("--only-pair", type=int, default=0)
+    p.add_argument("--case-start", type=int, default=0)
+    p.add_argument("--case-end", type=int, default=None)
     p.add_argument("--populations", type=str, default="",
                    help="JSON list of {name, bw, age}; empty→default 4-pop grid")
     args = p.parse_args()
@@ -186,6 +204,9 @@ def main() -> int:
         "seed": args.seed,
         "ks_threshold": args.ks_threshold,
         "coverage_tol": args.coverage_tol,
+        "sampler": args.sampler,
+        "case_start": args.case_start,
+        "case_end": args.case_end or args.n_calibration,
         "pairs": [],
     }
 
@@ -203,6 +224,8 @@ def main() -> int:
 
         for spec in specs:
             pair_idx += 1
+            if args.only_pair and pair_idx != args.only_pair:
+                continue
             t0 = time.time()
             log.info("[sbc-cont] [%d/%d] %s / %s", pair_idx, total_pairs, pop_name, spec.name)
 
@@ -242,9 +265,31 @@ def main() -> int:
                 axis=1,
             )  # (n_cal, 15)
 
+            n_available = len(thetas_true)
+            end = args.case_end if args.case_end is not None else n_available
+            thetas_true = thetas_true[args.case_start:end]
+            xs_packed = xs_packed[args.case_start:end]
+            if not len(thetas_true):
+                continue
+
             try:
+                sim = EngineSimulator(
+                    graph, compiled, drug, nominal_peff, correlated_graph=False,
+                )
+                sampler = (CorrectedSBCPosterior(
+                    posterior_obj, sim, seed=args.seed + pair_idx,
+                    case_start=args.case_start,
+                    exact_rejection_workers=args.exact_rejection_workers,
+                    fallback_rejection_workers=args.fallback_rejection_workers,
+                    max_rejection_attempts=args.max_rejection_attempts,
+                    joint_smc_after_rejection=args.joint_smc_after_rejection,
+                    joint_smc_particles=args.joint_smc_particles,
+                    joint_smc_workers=args.joint_smc_workers,
+                    correction_workers=args.correction_workers,
+                    joint_smc_rejuvenation_sweeps=args.joint_smc_sweeps,
+                ) if args.sampler == "corrected" else posterior_obj)
                 ranks, cov = _coverage_and_ranks(
-                    thetas_true, posterior_obj, xs_packed, levels, args.n_posterior,
+                    thetas_true, sampler, xs_packed, levels, args.n_posterior,
                 )
             except (RuntimeError, AssertionError) as exc:
                 log.warning("  posterior sampling failed for %s / %s: %s", pop_name, spec.name, exc)
@@ -253,6 +298,8 @@ def main() -> int:
                     "bw": bw,
                     "age": age,
                     "drug": spec.name,
+                    "n_valid": len(thetas_true),
+                    "n_available": n_available,
                     "ks_pvalues": [0.0] * 3,
                     "coverage": {},
                     "max_coverage_deviation": 1.0,
@@ -260,6 +307,22 @@ def main() -> int:
                     "coverage_pass": False,
                     "pass": False,
                     "sampling_error": str(exc) or type(exc).__name__,
+                    "rejection_fallback_cases": getattr(sampler, "rejection_count", 0),
+                    "forced_exact_rejection_cases": getattr(
+                        sampler, "forced_exact_rejection_count", 0
+                    ),
+                    "correction_ess": getattr(sampler, "ess", []),
+                    "proposal_counts": getattr(sampler, "proposal_counts", []),
+                    "rejection_attempt_counts": getattr(
+                        sampler, "rejection_attempt_counts", []
+                    ),
+                    "joint_smc_fallback_cases": getattr(
+                        sampler, "joint_smc_fallback_count", 0
+                    ),
+                    "joint_smc_diagnostics": getattr(
+                        sampler, "joint_smc_diagnostics", []
+                    ),
+                    "max_rejection_attempts": args.max_rejection_attempts,
                     "wall_s": time.time() - t0,
                 })
                 continue
@@ -306,6 +369,24 @@ def main() -> int:
                 "drug": spec.name,
                 "ks_pvalues": ks_p,
                 "coverage": cov_summary,
+                "ranks": ranks.tolist(),
+                "coverage_counts": {str(k): v.tolist() for k, v in cov.items()},
+                "rejection_fallback_cases": getattr(sampler, "rejection_count", 0),
+                "forced_exact_rejection_cases": getattr(
+                    sampler, "forced_exact_rejection_count", 0
+                ),
+                "correction_ess": getattr(sampler, "ess", []),
+                "proposal_counts": getattr(sampler, "proposal_counts", []),
+                "rejection_attempt_counts": getattr(sampler, "rejection_attempt_counts", []),
+                "joint_smc_fallback_cases": getattr(
+                    sampler, "joint_smc_fallback_count", 0
+                ),
+                "joint_smc_diagnostics": getattr(
+                    sampler, "joint_smc_diagnostics", []
+                ),
+                "max_rejection_attempts": args.max_rejection_attempts,
+                "n_valid": len(thetas_true),
+                "n_available": n_available,
                 "max_coverage_deviation": max_cov_dev,
                 "ks_pass": ks_pass,
                 "coverage_pass": cov_pass,

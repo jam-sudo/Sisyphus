@@ -1,20 +1,8 @@
-"""Amortized SBI TDM update (Phase 2.0 Track B production integration).
+"""SBI TDM with a flow proposal and exact-engine likelihood correction.
 
-Wraps the multi-drug conditional NPE posterior trained in Track A as a
-drop-in TDM method on the same interface as the existing importance
-sampling / IBIS / EnKF code paths. One ``sbi_update`` call returns a
-``TDMResult`` comparable to the other methods.
-
-The amortized speedup is in the posterior sampling step (milliseconds
-instead of minutes). Posterior predictive Cmax still requires forward
-simulations — but only ``n_predictive_sims`` of them (≈ 100) instead of
-the 2000 particles IBIS propagates. Typical wall time: 5–30 seconds per
-query on CPU, compared with IBIS's 1200–1600 seconds on the same drug.
-
-Prior Cmax is computed the same way the other TDM paths compute it:
-draw from the drug's population ``Distribution`` prior, simulate, and
-collect Cmax. This keeps ``TDMResult.prior_cmax`` comparable across
-methods.
+The flow proposes theta, nuisance-averaged likelihood weights correct it,
+and a low-ESS result routes to IBIS through ``bayesian_update``. The
+correction requires ODE solves and no longer has the raw flow's latency.
 """
 
 from __future__ import annotations
@@ -29,7 +17,8 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 from sisyphus.core import Distribution, DrugOnGraph
-from sisyphus.engine.compiler import CompiledODE, ResolvedParams
+from sisyphus.engine.compiler import CompiledODE, ODECompiler, ResolvedParams
+from sisyphus.engine.solver import DETERMINISTIC_OUTPUT_POINTS
 from sisyphus.graph.body import BodyGraph
 from sisyphus.regimen.solver import DEFAULT_TAIL_H, solve_regimen
 from sisyphus.regimen.types import DosingRegimen
@@ -49,6 +38,8 @@ _TMAX_WARNING_DISTANCE_H = 2.0
 _TMAX_WARNING_FRACTION_RATIO = 0.5
 # Source: regimen/tdm.py uses 0.25 h output spacing for engine TDM simulations.
 _TMAX_SCAN_STEP_H = 0.25
+# Source: sisyphus/sbi/simulator.py::_DEFAULT_T_SPAN; training Cmax uses 0–48 h.
+_SIMULATOR_CMAX_HORIZON_H = 48.0
 
 
 def _warn_engine_revision(posterior_path: Path) -> None:
@@ -158,6 +149,49 @@ def _native_multi_observation_model(drug: DrugOnGraph) -> Path | None:
     return None
 
 
+def _sbc_covariate_exclusion(
+    drug: DrugOnGraph,
+    population_class: str | None,
+    body_weight_kg: float | None,
+    age_years: float | None,
+) -> str | None:
+    """Explain why a validated covariate–drug pair cannot use its SBI flow."""
+    flow = "continuous" if body_weight_kg is not None else (
+        "hierarchical" if population_class is not None else None
+    )
+    if flow is None:
+        return None
+    try:
+        from rdkit import Chem
+
+        table_path = get_resource_config().data("sbi", "method_routing.json", required=False)
+        section = json.loads(table_path.read_text())[flow]
+        if section.get("validation_status") == "pending_corrected_sbc":
+            return f"{flow} corrected SBC is pending"
+        pairs = section["pairs"]
+        molecule = Chem.MolFromSmiles(drug.smiles)
+        if molecule is None:
+            return None
+        canonical = Chem.MolToSmiles(molecule, isomericSmiles=False)
+        for row in pairs:
+            if flow == "hierarchical" and row["population"] != population_class:
+                continue
+            if flow == "continuous" and (
+                row["body_weight_kg"] != body_weight_kg or row["age_years"] != age_years
+            ):
+                continue
+            reference = Chem.MolFromSmiles(row["smiles"])
+            if (reference is not None
+                    and Chem.MolToSmiles(reference, isomericSmiles=False) == canonical):
+                if not row["use_sbi"]:
+                    return (f"{flow} SBC excludes {row['population']}/{row['drug']} "
+                            "from SBI routing")
+                return None
+    except (OSError, KeyError, TypeError, ValueError) as exc:
+        logger.warning("SBI covariate routing unavailable: %s", exc)
+    return None
+
+
 def sbi_update(
     compiled: CompiledODE,
     graph: BodyGraph,
@@ -177,6 +211,7 @@ def sbi_update(
     body_weight_kg: float | None = None,
     age_years: float | None = None,
     sbi_reweight: bool = False,
+    raw_npe: bool = False,
 ) -> TDMResult:
     """Amortized SBI TDM update via the multi-drug conditional posterior.
 
@@ -187,13 +222,13 @@ def sbi_update(
         regimen: Dosing regimen the patient received.
         observations: Observed concentrations. For calibrated drugs and supported
             oral regimens, two or three observations use the time-aware posterior.
-            Other SBI cases condition on the first observation and reweight
-            against later observations.
+            Other SBI cases condition the proposal on the first observation;
+            correction weights use the joint likelihood of all observations.
         posterior_path: Explicit path to a trained posterior .pt file. By
             default the routing table can select the time-aware model;
             otherwise ``models/sbi/multi_drug_nsf.pt`` is used. Expects a
             sibling ``.aux.pt`` holding the feature standardizer.
-        n_samples: Number of theta samples drawn from the amortized posterior.
+        n_samples: Number of corrected theta samples returned by resampling.
         n_predictive_sims: Number of posterior theta samples forwarded
             through the engine for the posterior-predictive Cmax distribution.
         seed: RNG seed base for the prior-Cmax and posterior-predictive loops.
@@ -202,25 +237,19 @@ def sbi_update(
             Without this the feature extractor defaults to 2.0 (sentinel).
             When called from ``bayesian_update`` with a fully built drug,
             pass ``compute_profile(drug.smiles).logp`` if available.
-        use_surrogate: If ``True`` and the surrogate ensemble loads
-            successfully, replace the scipy forward simulations in the
-            prior and posterior-predictive loops with a vectorised
-            neural-network call. Drops wall time from ~50 s to sub-second
-            per drug at the cost of ~20 % mean absolute bias in Cmax
-            (see ``data/validation/surrogate_production_accuracy.json``).
-            Default ``False`` — conservative scipy engine fallback.
+        use_surrogate: If ``True``, the prior and posterior-predictive
+            summaries can use the surrogate. The likelihood correction
+            always uses the scipy engine. Default ``False``.
         surrogate_model_dir: Override the default ``models/surrogate``
             directory for the ensemble weights + scaler.
         population_class: If set (e.g. ``"adult"``, ``"pediatric_5y"``),
             use the hierarchical posterior that conditions on population.
             Loads ``models/sbi/hierarchical_nsf_2k.pt`` by default.
             Requires the ``.aux.pt`` to contain ``population_order``.
+        raw_npe: Explicitly bypass likelihood correction for diagnostics.
 
     Returns:
-        TDMResult with prior/posterior Cmax distributions, parameter means,
-        and uniform weights on the posterior samples (NPE gives exact
-        samples, so the "ESS" field is set to the number of successful
-        posterior-predictive simulations for API consistency).
+        TDMResult with prior/posterior Cmax distributions and correction ESS.
 
     Raises:
         FileNotFoundError: if the posterior file is missing. The dispatcher
@@ -236,6 +265,26 @@ def sbi_update(
     observations = tuple(observations)
     if not observations:
         raise ValueError("At least one observation is required")
+    if (body_weight_kg is None) != (age_years is None):
+        raise ValueError("body_weight_kg and age_years must be provided together")
+    if body_weight_kg is not None and (
+        not np.isfinite(body_weight_kg) or body_weight_kg <= 0
+        or not np.isfinite(age_years) or age_years <= 0
+    ):
+        raise ValueError("body_weight_kg and age_years must be finite and positive")
+
+    if len(observations) > 1 and posterior_path is None and not raw_npe:
+        table_path = get_resource_config().data("sbi", "method_routing.json", required=False)
+        try:
+            status = json.loads(table_path.read_text())["multi_observation"].get(
+                "validation_status"
+            )
+        except (OSError, KeyError, TypeError, ValueError):
+            status = None
+        if status == "pending_corrected_sbc":
+            from sisyphus.sbi.importance import LowImportanceESS
+
+            raise LowImportanceESS("Multi-observation corrected SBC is pending")
 
     _extra_obs = observations[1:]
     native_context = None
@@ -268,6 +317,14 @@ def sbi_update(
         ppath = _DEFAULT_HIERARCHICAL_POSTERIOR_PATH
     else:
         ppath = _DEFAULT_POSTERIOR_PATH
+    if not raw_npe:
+        exclusion = _sbc_covariate_exclusion(
+            drug, population_class, body_weight_kg, age_years
+        )
+        if exclusion is not None:
+            from sisyphus.sbi.importance import LowImportanceESS
+
+            raise LowImportanceESS(exclusion)
     if not ppath.exists():
         raise FileNotFoundError(
             f"SBI posterior file not found: {ppath}. "
@@ -311,6 +368,38 @@ def sbi_update(
     if feat_mean is not None and len(feat_mean) == len(feats):
         feats_used = (feats - feat_mean) / feat_std
 
+    # Covariate flows need the same population graph in the likelihood and prediction.
+    original_graph = graph
+    if body_weight_kg is not None and age_years is not None:
+        from sisyphus.sbi.physiology_generator import generate_physiology
+
+        graph = generate_physiology(body_weight_kg, age_years)
+    elif population_class is not None:
+        from sisyphus.graph.builder import build_from_yaml
+        from sisyphus.sbi.multi_drug import load_populations
+
+        populations = load_populations()
+        if population_class not in populations:
+            raise ValueError(f"Unknown SBI population class: {population_class}")
+        physiology_path = populations[population_class].physiology_yaml
+        if not physiology_path.is_absolute():
+            physiology_path = get_resource_config().root / physiology_path
+        graph = build_from_yaml(physiology_path)
+    if graph is not original_graph:
+        from dataclasses import replace
+
+        old_enzymes = original_graph.nodes["liver"].enzymes
+        new_enzymes = graph.nodes["liver"].enzymes
+        drug = replace(drug, enzyme_affinity={
+            tag: replace(affinity, mean=(
+                affinity.mean * old_enzymes[tag].mean / new_enzymes[tag].mean
+                if tag in old_enzymes and tag in new_enzymes
+                and new_enzymes[tag].mean > 0 else affinity.mean
+            ))
+            for tag, affinity in drug.enzyme_affinity.items()
+        })
+        compiled = ODECompiler().compile(graph)
+
     # Packed observation: time-aware context or legacy first concentration + features.
     obs0 = observations[0]
     if native_context is None:
@@ -352,10 +441,86 @@ def sbi_update(
     x_t = torch.as_tensor(x_vec[None, :], dtype=torch.float32)
 
     t0_sample = time.time()
-    samples_t = result.posterior.sample(
-        (n_samples,), x=x_t, show_progress_bars=False
-    )
-    samples_np = samples_t.detach().cpu().numpy()  # (n_samples, 3)
+    corrected_ess = None
+    if raw_npe:
+        samples_t = result.posterior.sample(
+            (n_samples,), x=x_t, show_progress_bars=False
+        )
+        samples_np = samples_t.detach().cpu().numpy()
+    else:
+        from sisyphus.physiology.correlated import resample_correlated_abundances
+        from sisyphus.sbi.importance import (
+            DEFAULT_PROPOSAL_COUNT,
+            LowImportanceESS,
+            sample_corrected,
+        )
+
+        if any(obs.concentration <= 0 or obs.cv <= 0 for obs in observations):
+            raise ValueError("SBI observations must have positive concentration and CV")
+        log_obs = np.log10([obs.concentration for obs in observations])
+        log_sigma = np.log10(1.0 + np.array([obs.cv for obs in observations]))
+        if np.any(~np.isfinite(log_obs)) or np.any(~np.isfinite(log_sigma)):
+            raise ValueError("SBI observations must have positive concentration and CV")
+        t_total_likelihood = max(
+            max(obs.time_h for obs in observations), regimen.last_dose_end_h
+        ) + 24.0
+        if len(observations) == 1:
+            t_total_likelihood = max(t_total_likelihood, _SIMULATOR_CMAX_HORIZON_H)
+        likelihood_output_step_h = (
+            _SIMULATOR_CMAX_HORIZON_H / (DETERMINISTIC_OUTPUT_POINTS - 1)
+            if len(observations) == 1 and regimen.n_doses == 1
+            and t_total_likelihood == _SIMULATOR_CMAX_HORIZON_H else 0.25
+        )
+
+        def log_likelihood_draw(theta: np.ndarray, rng: np.random.Generator) -> float:
+            overridden = apply_theta_to_drug(drug, theta, float(drug.peff.mean))
+            realized_graph = resample_correlated_abundances(graph, rng).sample(rng)
+            realized_drug = overridden.sample(rng)
+            try:
+                sim = solve_regimen(
+                    compiled, ResolvedParams(realized_graph, realized_drug), regimen,
+                    t_total_h=t_total_likelihood, dt_output=likelihood_output_step_h,
+                )
+                if not sim.solver_success:
+                    return -np.inf
+                if len(observations) == 1:
+                    predicted = np.array([np.max(sim.concentrations[obs0.node])])
+                else:
+                    predicted = np.array([
+                        np.interp(obs.time_h, sim.time_h, sim.concentrations[obs.node])
+                        for obs in observations
+                    ])
+                if np.any(predicted <= 0) or np.any(~np.isfinite(predicted)):
+                    return -np.inf
+                residual = (log_obs - np.log10(predicted)) / log_sigma
+                return float(np.sum(-0.5 * residual**2
+                                    - np.log(log_sigma) - 0.5 * np.log(2 * np.pi)))
+            except (KeyError, ValueError, RuntimeError):
+                return -np.inf
+
+        proposal_counts = (
+            DEFAULT_PROPOSAL_COUNT, 2 * DEFAULT_PROPOSAL_COUNT, 4 * DEFAULT_PROPOSAL_COUNT
+        )
+        for proposal_count in proposal_counts:
+            try:
+                with torch.random.fork_rng(devices=[]):
+                    torch.manual_seed(seed + proposal_count)
+                    samples_np, corrected_ess = sample_corrected(
+                        result.posterior, x_vec, log_likelihood_draw,
+                        n_draws=n_samples, n_proposals=proposal_count,
+                        seed=seed + proposal_count,
+                    )
+                logger.info("SBI correction accepted %d proposals at ESS %.1f",
+                            proposal_count, corrected_ess)
+                break
+            except LowImportanceESS as exc:
+                logger.warning("SBI correction at %d proposals failed: %s", proposal_count, exc)
+        else:
+            raise LowImportanceESS(
+                f"SBI correction remained below ESS floor after {proposal_counts[-1]} proposals"
+            )
+        _extra_obs = ()
+        sbi_reweight = False
     posterior_sample_time = time.time() - t0_sample
     logger.info(
         "SBI TDM: posterior sampling (%d) took %.3fs",
@@ -600,15 +765,7 @@ def sbi_update(
             prior_cmax_list.append(cmax)
             prior_param_list.append(_extract_params(realized_drug))
 
-    # ── Posterior predictive Cmax (apply each sampled theta, simulate) ──
-    # For each theta draw we *fix* the inferred ADME at the posterior mean
-    # by collapsing the CV on overridden fields to zero. Theta-driven spread
-    # then dominates posterior Cmax variance; graph physiology still samples.
-    # This avoids double-counting variance (theta uncertainty + CV noise)
-    # that was inflating posterior CV above prior CV in early tests.
-    from dataclasses import replace as dc_replace
-
-    from sisyphus.core import Distribution as _Distribution
+    # ── Posterior predictive Cmax (sample theta and nuisance jointly) ──
 
     nominal_peff = float(drug.peff.mean)
     idx_rng = np.random.default_rng(seed + 9000)
@@ -624,17 +781,6 @@ def sbi_update(
         for k, j in enumerate(idx):
             theta_j = samples_np[j].astype(np.float64)
             overridden = apply_theta_to_drug(drug, theta_j, nominal_peff)
-            overridden = dc_replace(
-                overridden,
-                fup=_Distribution(mean=overridden.fup.mean, cv=0.0,
-                                  dist_type=overridden.fup.dist_type),
-                peff=_Distribution(mean=overridden.peff.mean, cv=0.0,
-                                   dist_type=overridden.peff.dist_type),
-                enzyme_affinity={
-                    tag: _Distribution(mean=d.mean, cv=0.0, dist_type=d.dist_type)
-                    for tag, d in overridden.enzyme_affinity.items()
-                },
-            )
             rng = np.random.default_rng(seed + 10000 + k)
             realized_graph = graph.sample(rng)
             realized_drug = overridden.sample(rng)
@@ -654,17 +800,6 @@ def sbi_update(
         for k, j in enumerate(idx):
             theta_j = samples_np[j].astype(np.float64)
             overridden = apply_theta_to_drug(drug, theta_j, nominal_peff)
-            overridden = dc_replace(
-                overridden,
-                fup=_Distribution(mean=overridden.fup.mean, cv=0.0,
-                                  dist_type=overridden.fup.dist_type),
-                peff=_Distribution(mean=overridden.peff.mean, cv=0.0,
-                                   dist_type=overridden.peff.dist_type),
-                enzyme_affinity={
-                    tag: _Distribution(mean=d.mean, cv=0.0, dist_type=d.dist_type)
-                    for tag, d in overridden.enzyme_affinity.items()
-                },
-            )
             rng = np.random.default_rng(seed + 10000 + k)
             realized_graph = graph.sample(rng)
             realized_drug = overridden.sample(rng)
@@ -717,9 +852,8 @@ def sbi_update(
     prior_arr = np.array(prior_cmax_list)
     post_arr = np.array(post_cmax_list)
 
-    # Compute posterior weights. Without multi-obs reweighting, weights are
-    # uniform (NPE gives exact samples conditioned on first obs). With extra
-    # observations, we log-normalize the likelihood weights via log-sum-exp.
+    # Corrected draws already encode the joint likelihood; legacy raw-flow
+    # reweighting still uses these separate predictive weights.
     n_post = len(post_cmax_list)
     multi_obs_used = False
     if (_extra_obs or sbi_reweight) and surrogate_bundle is None and 'post_log_weights' in dir() and post_log_weights:  # noqa: E501
@@ -765,7 +899,7 @@ def sbi_update(
             float(np.quantile(post_arr, 0.05)),
             float(np.quantile(post_arr, 0.95)),
         )
-        ess = float(n_post)
+        ess = corrected_ess if corrected_ess is not None else float(n_post)
 
     prior_mean = float(np.mean(prior_arr))
     prior_cv = float(np.std(prior_arr) / prior_mean) if prior_mean > 0 else 0.0

@@ -2451,6 +2451,7 @@ CI artifact: `data/validation/4track_ci_2026-05-03_v0.3.json` (10k bootstrap, se
 - Pitavastatin `metabolic_fraction` curation (~0.15-0.25 estimate; UGT1A3/2B7 + minor CYP2C9; needs primary literature). Promotion to `ecm_applicable=true` queued.
 - Rosuvastatin / atorvastatin: blocked on Peff over-prediction xfail (separate engine work) AND `metabolic_fraction` curation.
 - `data/sbi/method_routing.json` reassessed 2026-10-28 with `scripts/sbi_build_routing_table.py` against the committed SBC input: generated routes are 10 SBI / 3 IBIS, versus shipped 12 SBI / 1 IBIS. Diclofenac and posaconazole would switch SBI→IBIS. No routing edit was made because the forward-looking SBC/decorrelation gate (§4 of `cherry_picking_process_v1.md`) has not evaluated those changes; current routing remains as shipped.
+- 2026-10-31 reassessment (PR #140): the corrected multi-drug original SBC gate fails (9/13), and the hierarchical original gate fails (20/26). A supplementary combined KS/coverage Holm rule, adopted after corrected multi-drug results were visible, routes 11 multi-drug drugs and 20 hierarchical pairs to SBI; their complete-flow supplementary gates pass. Multi-observation and continuous corrected SBC are still running, so those routes are marked pending and use IBIS. This supersedes the uncommitted 2026-10-28 routing preview; the original gates remain unchanged.
 - v0.3.x optional: PredictionResult metadata fields (`ecm_activated: bool`, `phenotypes_applied: dict`) for GenoADME debugging.
 
 ### Closes

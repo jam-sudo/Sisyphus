@@ -1,0 +1,2904 @@
+{
+  "posterior": "models/sbi/hierarchical_nsf_2k.pt",
+  "validation_set": "data/sbi/validation_drug_set.json",
+  "n_calibration": 100,
+  "n_posterior": 500,
+  "levels": [
+    50,
+    80,
+    90,
+    95
+  ],
+  "seed": 0,
+  "ks_threshold": 0.01,
+  "coverage_tol": 0.1,
+  "populations": [
+    "adult",
+    "pediatric_5y"
+  ],
+  "sampler": "corrected",
+  "pairs": [
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.5836423551202053,
+        0.6846706791645845,
+        0.6171494172888641
+      ],
+      "coverage": {
+        "50": [
+          0.51,
+          0.56,
+          0.46
+        ],
+        "80": [
+          0.8,
+          0.8,
+          0.82
+        ],
+        "90": [
+          0.86,
+          0.89,
+          0.87
+        ],
+        "95": [
+          0.96,
+          0.93,
+          0.94
+        ]
+      },
+      "coverage_max_deviation": 0.06000000000000005,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 100.16164770439278,
+      "max_proposals_used": 256,
+      "population": "adult",
+      "drug": "amantadine",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.16496264039322728,
+        0.1374749336479988,
+        0.6509082962856887
+      ],
+      "coverage": {
+        "50": [
+          0.5,
+          0.64,
+          0.55
+        ],
+        "80": [
+          0.75,
+          0.81,
+          0.83
+        ],
+        "90": [
+          0.84,
+          0.92,
+          0.91
+        ],
+        "95": [
+          0.92,
+          0.95,
+          0.93
+        ]
+      },
+      "coverage_max_deviation": 0.14,
+      "pass": false,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 101.7960052466359,
+      "max_proposals_used": 512,
+      "population": "adult",
+      "drug": "clozapine",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.6509082962856874,
+        0.9532159710635721,
+        0.9366490408527515
+      ],
+      "coverage": {
+        "50": [
+          0.46,
+          0.47,
+          0.48
+        ],
+        "80": [
+          0.78,
+          0.8,
+          0.74
+        ],
+        "90": [
+          0.9,
+          0.9,
+          0.93
+        ],
+        "95": [
+          0.94,
+          0.93,
+          0.96
+        ]
+      },
+      "coverage_max_deviation": 0.06000000000000005,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 84.84888072892589,
+      "max_proposals_used": 512,
+      "population": "adult",
+      "drug": "diclofenac",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.03193610782727552,
+        0.1374749336479988,
+        0.8948800679675537
+      ],
+      "coverage": {
+        "50": [
+          0.53,
+          0.49,
+          0.47
+        ],
+        "80": [
+          0.81,
+          0.77,
+          0.75
+        ],
+        "90": [
+          0.89,
+          0.87,
+          0.88
+        ],
+        "95": [
+          0.94,
+          0.92,
+          0.95
+        ]
+      },
+      "coverage_max_deviation": 0.050000000000000044,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 76.73795458772264,
+      "max_proposals_used": 1024,
+      "population": "adult",
+      "drug": "digoxin",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.5836423551202043,
+        0.48664471299257794,
+        0.7830499882004676
+      ],
+      "coverage": {
+        "50": [
+          0.47,
+          0.48,
+          0.47
+        ],
+        "80": [
+          0.72,
+          0.81,
+          0.73
+        ],
+        "90": [
+          0.82,
+          0.87,
+          0.85
+        ],
+        "95": [
+          0.88,
+          0.94,
+          0.92
+        ]
+      },
+      "coverage_max_deviation": 0.08000000000000007,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 80.61373891461797,
+      "max_proposals_used": 1024,
+      "population": "adult",
+      "drug": "indomethacin",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.42641062421491094,
+        0.3197089196627554,
+        0.1649626403932185
+      ],
+      "coverage": {
+        "50": [
+          0.49,
+          0.35,
+          0.51
+        ],
+        "80": [
+          0.77,
+          0.76,
+          0.75
+        ],
+        "90": [
+          0.87,
+          0.89,
+          0.9
+        ],
+        "95": [
+          0.91,
+          0.95,
+          0.98
+        ]
+      },
+      "coverage_max_deviation": 0.15000000000000002,
+      "pass": false,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 91.2301546909822,
+      "max_proposals_used": 1024,
+      "population": "adult",
+      "drug": "ketorolac",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.4560077143943717,
+        0.5836423551202053,
+        0.985693019243091
+      ],
+      "coverage": {
+        "50": [
+          0.54,
+          0.53,
+          0.5
+        ],
+        "80": [
+          0.87,
+          0.82,
+          0.78
+        ],
+        "90": [
+          0.94,
+          0.87,
+          0.87
+        ],
+        "95": [
+          0.96,
+          0.94,
+          0.91
+        ]
+      },
+      "coverage_max_deviation": 0.06999999999999995,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 69.67396655545693,
+      "max_proposals_used": 512,
+      "population": "adult",
+      "drug": "morphine",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.8137761665209279,
+        0.9914656579497256,
+        0.48664471299257794
+      ],
+      "coverage": {
+        "50": [
+          0.55,
+          0.51,
+          0.58
+        ],
+        "80": [
+          0.83,
+          0.79,
+          0.82
+        ],
+        "90": [
+          0.95,
+          0.9,
+          0.94
+        ],
+        "95": [
+          0.97,
+          0.94,
+          1.0
+        ]
+      },
+      "coverage_max_deviation": 0.07999999999999996,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 110.24175146862481,
+      "max_proposals_used": 512,
+      "population": "adult",
+      "drug": "phenytoin",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.9989680779237511,
+        0.42641062421491094,
+        0.4560077143943717
+      ],
+      "coverage": {
+        "50": [
+          0.48,
+          0.42,
+          0.54
+        ],
+        "80": [
+          0.79,
+          0.78,
+          0.83
+        ],
+        "90": [
+          0.89,
+          0.85,
+          0.9
+        ],
+        "95": [
+          0.96,
+          0.9,
+          0.94
+        ]
+      },
+      "coverage_max_deviation": 0.08000000000000002,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 71.18438996487797,
+      "max_proposals_used": 1024,
+      "population": "adult",
+      "drug": "posaconazole",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.42641062421491094,
+        0.09360998082725935,
+        0.5182193645480672
+      ],
+      "coverage": {
+        "50": [
+          0.48,
+          0.58,
+          0.49
+        ],
+        "80": [
+          0.85,
+          0.82,
+          0.78
+        ],
+        "90": [
+          0.92,
+          0.93,
+          0.85
+        ],
+        "95": [
+          0.95,
+          0.97,
+          0.95
+        ]
+      },
+      "coverage_max_deviation": 0.07999999999999996,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 100,
+      "forced_exact_rejection_cases": 100,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [
+        14336,
+        14336,
+        14336,
+        14336,
+        14336,
+        13312,
+        13312,
+        13312,
+        13312,
+        13312,
+        8192,
+        8192,
+        8192,
+        16384,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        16384,
+        8192,
+        32768,
+        24576,
+        8192,
+        16384,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192
+      ],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": null,
+      "max_proposals_used": 0,
+      "population": "adult",
+      "drug": "pravastatin",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.48664471299257717,
+        0.2961216072789242,
+        0.4866447129925767
+      ],
+      "coverage": {
+        "50": [
+          0.56,
+          0.45,
+          0.53
+        ],
+        "80": [
+          0.86,
+          0.72,
+          0.81
+        ],
+        "90": [
+          0.91,
+          0.86,
+          0.89
+        ],
+        "95": [
+          0.97,
+          0.9,
+          0.97
+        ]
+      },
+      "coverage_max_deviation": 0.08000000000000007,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 94.16270190053613,
+      "max_proposals_used": 512,
+      "population": "adult",
+      "drug": "rivaroxaban",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.4866447129925767,
+        0.9532159710635721,
+        0.15071744612730198
+      ],
+      "coverage": {
+        "50": [
+          0.5,
+          0.51,
+          0.51
+        ],
+        "80": [
+          0.79,
+          0.79,
+          0.79
+        ],
+        "90": [
+          0.87,
+          0.88,
+          0.94
+        ],
+        "95": [
+          0.94,
+          0.91,
+          0.95
+        ]
+      },
+      "coverage_max_deviation": 0.039999999999999925,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 107.39872826300007,
+      "max_proposals_used": 256,
+      "population": "adult",
+      "drug": "sildenafil",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.39793256410160727,
+        0.19663614878216817,
+        0.4560077143943717
+      ],
+      "coverage": {
+        "50": [
+          0.46,
+          0.36,
+          0.47
+        ],
+        "80": [
+          0.71,
+          0.7,
+          0.79
+        ],
+        "90": [
+          0.81,
+          0.84,
+          0.87
+        ],
+        "95": [
+          0.9,
+          0.91,
+          0.96
+        ]
+      },
+      "coverage_max_deviation": 0.14,
+      "pass": false,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 84.62016586663252,
+      "max_proposals_used": 512,
+      "population": "adult",
+      "drug": "tamoxifen",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.6509082962856887,
+        0.0009010660148841554,
+        0.2737864840078562
+      ],
+      "coverage": {
+        "50": [
+          0.52,
+          0.5,
+          0.5
+        ],
+        "80": [
+          0.78,
+          0.79,
+          0.8
+        ],
+        "90": [
+          0.85,
+          0.91,
+          0.89
+        ],
+        "95": [
+          0.88,
+          0.95,
+          0.92
+        ]
+      },
+      "coverage_max_deviation": 0.06999999999999995,
+      "pass": false,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 5,
+      "joint_smc_diagnostics": [
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 26,
+          "stages": [
+            {
+              "beta": 0.0014166031460263184,
+              "incremental_ess": 500.00000015274804,
+              "theta_acceptance": 0.2755,
+              "nuisance_acceptance": 0.9615
+            },
+            {
+              "beta": 0.011918140870561991,
+              "incremental_ess": 500.00000000411603,
+              "theta_acceptance": 0.183,
+              "nuisance_acceptance": 0.788
+            },
+            {
+              "beta": 0.10028427332672767,
+              "incremental_ess": 500.00000000184804,
+              "theta_acceptance": 0.0825,
+              "nuisance_acceptance": 0.4315
+            },
+            {
+              "beta": 0.6969213224080495,
+              "incremental_ess": 500.0000000000813,
+              "theta_acceptance": 0.0345,
+              "nuisance_acceptance": 0.1565
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 952.9659292458151,
+              "theta_acceptance": 0.0385,
+              "nuisance_acceptance": 0.16
+            }
+          ],
+          "unique_initial_ancestors": 201,
+          "simulator_evaluations": 15632,
+          "elapsed_s": 495.92561458051205,
+          "ancestor_guard_passed": true,
+          "case_index": 55
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 26,
+          "stages": [
+            {
+              "beta": 0.005541257364711782,
+              "incremental_ess": 500.0000000152962,
+              "theta_acceptance": 0.233,
+              "nuisance_acceptance": 0.94
+            },
+            {
+              "beta": 0.041576013484729675,
+              "incremental_ess": 500.000000001418,
+              "theta_acceptance": 0.1335,
+              "nuisance_acceptance": 0.766
+            },
+            {
+              "beta": 0.34710548581392475,
+              "incremental_ess": 500.0000000000887,
+              "theta_acceptance": 0.06,
+              "nuisance_acceptance": 0.36
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 747.1888578616087,
+              "theta_acceptance": 0.037,
+              "nuisance_acceptance": 0.219
+            }
+          ],
+          "unique_initial_ancestors": 225,
+          "simulator_evaluations": 12308,
+          "elapsed_s": 399.4651035685092,
+          "ancestor_guard_passed": true,
+          "case_index": 56
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 4000,
+          "nuisance_dimensions": 26,
+          "stages": [
+            {
+              "beta": 0.00036812975304201245,
+              "incremental_ess": 2000.000000515435,
+              "theta_acceptance": 0.237,
+              "nuisance_acceptance": 0.9624166666666667
+            },
+            {
+              "beta": 0.001156830938655051,
+              "incremental_ess": 2000.0000002037368,
+              "theta_acceptance": 0.214,
+              "nuisance_acceptance": 0.8845
+            },
+            {
+              "beta": 0.0031562150882151656,
+              "incremental_ess": 2000.000000065511,
+              "theta_acceptance": 0.22558333333333333,
+              "nuisance_acceptance": 0.7309166666666667
+            },
+            {
+              "beta": 0.008311425666754977,
+              "incremental_ess": 2000.0000000133057,
+              "theta_acceptance": 0.20425,
+              "nuisance_acceptance": 0.5046666666666667
+            },
+            {
+              "beta": 0.02688865070252845,
+              "incremental_ess": 2000.0000000440523,
+              "theta_acceptance": 0.1735,
+              "nuisance_acceptance": 0.2836666666666667
+            },
+            {
+              "beta": 0.13346815408429796,
+              "incremental_ess": 2000.0000000065543,
+              "theta_acceptance": 0.11758333333333333,
+              "nuisance_acceptance": 0.1385
+            },
+            {
+              "beta": 0.892022649504922,
+              "incremental_ess": 2000.0000000000068,
+              "theta_acceptance": 0.05441666666666667,
+              "nuisance_acceptance": 0.066
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 3977.2080528709043,
+              "theta_acceptance": 0.0615,
+              "nuisance_acceptance": 0.07175
+            }
+          ],
+          "unique_initial_ancestors": 296,
+          "simulator_evaluations": 163989,
+          "elapsed_s": 5450.6001082621515,
+          "first_attempt": {
+            "particles": 1000,
+            "unique_initial_ancestors": 56,
+            "stages": [
+              {
+                "beta": 0.000357005988007586,
+                "incremental_ess": 500.0000001916696,
+                "theta_acceptance": 0.2695,
+                "nuisance_acceptance": 0.97
+              },
+              {
+                "beta": 0.0011310516607512958,
+                "incremental_ess": 500.0000000526766,
+                "theta_acceptance": 0.2195,
+                "nuisance_acceptance": 0.869
+              },
+              {
+                "beta": 0.003053783518382114,
+                "incremental_ess": 500.0000001151904,
+                "theta_acceptance": 0.214,
+                "nuisance_acceptance": 0.715
+              },
+              {
+                "beta": 0.008110765695405382,
+                "incremental_ess": 500.0000000027894,
+                "theta_acceptance": 0.226,
+                "nuisance_acceptance": 0.5105
+              },
+              {
+                "beta": 0.025312009832664434,
+                "incremental_ess": 500.0000000080684,
+                "theta_acceptance": 0.209,
+                "nuisance_acceptance": 0.3
+              },
+              {
+                "beta": 0.11259075033324636,
+                "incremental_ess": 500.0000000011795,
+                "theta_acceptance": 0.1355,
+                "nuisance_acceptance": 0.1415
+              },
+              {
+                "beta": 0.7186609199142181,
+                "incremental_ess": 500.00000000018105,
+                "theta_acceptance": 0.0735,
+                "nuisance_acceptance": 0.068
+              },
+              {
+                "beta": 1.0,
+                "incremental_ess": 958.7049876403905,
+                "theta_acceptance": 0.075,
+                "nuisance_acceptance": 0.081
+              }
+            ],
+            "simulator_evaluations": 23849,
+            "elapsed_s": 769.0920804031193
+          },
+          "ancestor_guard_passed": true,
+          "case_index": 57
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 26,
+          "stages": [
+            {
+              "beta": 0.005920115464505216,
+              "incremental_ess": 500.0000000041031,
+              "theta_acceptance": 0.2445,
+              "nuisance_acceptance": 0.943
+            },
+            {
+              "beta": 0.04840398238429011,
+              "incremental_ess": 500.00000000220376,
+              "theta_acceptance": 0.1355,
+              "nuisance_acceptance": 0.708
+            },
+            {
+              "beta": 0.410651135905437,
+              "incremental_ess": 500.0000000002947,
+              "theta_acceptance": 0.0505,
+              "nuisance_acceptance": 0.3155
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 794.1433805675273,
+              "theta_acceptance": 0.038,
+              "nuisance_acceptance": 0.207
+            }
+          ],
+          "unique_initial_ancestors": 241,
+          "simulator_evaluations": 12694,
+          "elapsed_s": 319.7085592970252,
+          "ancestor_guard_passed": true,
+          "case_index": 58
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 26,
+          "stages": [
+            {
+              "beta": 0.005974878064989753,
+              "incremental_ess": 500.000000006728,
+              "theta_acceptance": 0.2345,
+              "nuisance_acceptance": 0.943
+            },
+            {
+              "beta": 0.04767404482921795,
+              "incremental_ess": 500.00000000366316,
+              "theta_acceptance": 0.1395,
+              "nuisance_acceptance": 0.7465
+            },
+            {
+              "beta": 0.39289841556346017,
+              "incremental_ess": 500.00000000004377,
+              "theta_acceptance": 0.055,
+              "nuisance_acceptance": 0.3685
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 812.3142719234091,
+              "theta_acceptance": 0.043,
+              "nuisance_acceptance": 0.2295
+            }
+          ],
+          "unique_initial_ancestors": 215,
+          "simulator_evaluations": 12205,
+          "elapsed_s": 515.8997161779553,
+          "ancestor_guard_passed": true,
+          "case_index": 59
+        }
+      ],
+      "rejection_attempt_counts": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 82.12767673715192,
+      "max_proposals_used": 512,
+      "population": "pediatric_5y",
+      "drug": "amantadine",
+      "sampling_status": "joint_smc_fallback",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.2141463256991053,
+        0.7181574380356124,
+        0.7830499882004671
+      ],
+      "coverage": {
+        "50": [
+          0.57,
+          0.45,
+          0.52
+        ],
+        "80": [
+          0.82,
+          0.86,
+          0.77
+        ],
+        "90": [
+          0.9,
+          0.9,
+          0.9
+        ],
+        "95": [
+          0.93,
+          0.94,
+          0.94
+        ]
+      },
+      "coverage_max_deviation": 0.06999999999999995,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 98.13029908378664,
+      "max_proposals_used": 1024,
+      "population": "pediatric_5y",
+      "drug": "clozapine",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.5182193645480672,
+        0.5836423551202053,
+        0.25269275700639626
+      ],
+      "coverage": {
+        "50": [
+          0.57,
+          0.57,
+          0.39
+        ],
+        "80": [
+          0.8,
+          0.77,
+          0.76
+        ],
+        "90": [
+          0.9,
+          0.9,
+          0.84
+        ],
+        "95": [
+          0.96,
+          0.93,
+          0.92
+        ]
+      },
+      "coverage_max_deviation": 0.10999999999999999,
+      "pass": false,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 74.71558475190446,
+      "max_proposals_used": 512,
+      "population": "pediatric_5y",
+      "drug": "diclofenac",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.5836423551202053,
+        0.09360998082725935,
+        0.4560077143943717
+      ],
+      "coverage": {
+        "50": [
+          0.46,
+          0.4,
+          0.45
+        ],
+        "80": [
+          0.75,
+          0.74,
+          0.73
+        ],
+        "90": [
+          0.89,
+          0.87,
+          0.87
+        ],
+        "95": [
+          0.96,
+          0.91,
+          0.92
+        ]
+      },
+      "coverage_max_deviation": 0.09999999999999998,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 70.12083083739464,
+      "max_proposals_used": 512,
+      "population": "pediatric_5y",
+      "drug": "digoxin",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.583642355120206,
+        0.7181574380356124,
+        0.48664471299257595
+      ],
+      "coverage": {
+        "50": [
+          0.42,
+          0.51,
+          0.48
+        ],
+        "80": [
+          0.79,
+          0.81,
+          0.8
+        ],
+        "90": [
+          0.9,
+          0.94,
+          0.89
+        ],
+        "95": [
+          0.93,
+          0.98,
+          0.95
+        ]
+      },
+      "coverage_max_deviation": 0.08000000000000002,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 33,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 5,
+      "joint_smc_diagnostics": [
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 27,
+          "stages": [
+            {
+              "beta": 0.02313993287498306,
+              "incremental_ess": 500.00000000503894,
+              "theta_acceptance": 0.2175,
+              "nuisance_acceptance": 0.9205
+            },
+            {
+              "beta": 0.17762958688246966,
+              "incremental_ess": 500.0000000007173,
+              "theta_acceptance": 0.1295,
+              "nuisance_acceptance": 0.7155
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 548.2939270937804,
+              "theta_acceptance": 0.0515,
+              "nuisance_acceptance": 0.3795
+            }
+          ],
+          "unique_initial_ancestors": 263,
+          "simulator_evaluations": 9472,
+          "elapsed_s": 1714.3126511499286,
+          "ancestor_guard_passed": true,
+          "case_index": 45
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 4000,
+          "nuisance_dimensions": 27,
+          "stages": [
+            {
+              "beta": 0.0011541141893758322,
+              "incremental_ess": 2000.0000009586936,
+              "theta_acceptance": 0.23933333333333334,
+              "nuisance_acceptance": 0.9599166666666666
+            },
+            {
+              "beta": 0.003468702723219294,
+              "incremental_ess": 2000.0000000359569,
+              "theta_acceptance": 0.219,
+              "nuisance_acceptance": 0.8740833333333333
+            },
+            {
+              "beta": 0.010963427838298716,
+              "incremental_ess": 2000.0000000773655,
+              "theta_acceptance": 0.19783333333333333,
+              "nuisance_acceptance": 0.7094166666666667
+            },
+            {
+              "beta": 0.046731656185996576,
+              "incremental_ess": 2000.0000000106968,
+              "theta_acceptance": 0.15791666666666668,
+              "nuisance_acceptance": 0.42083333333333334
+            },
+            {
+              "beta": 0.2982058296277047,
+              "incremental_ess": 2000.000000000562,
+              "theta_acceptance": 0.08575,
+              "nuisance_acceptance": 0.17241666666666666
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 2808.049890932507,
+              "theta_acceptance": 0.05358333333333333,
+              "nuisance_acceptance": 0.09891666666666667
+            }
+          ],
+          "unique_initial_ancestors": 413,
+          "simulator_evaluations": 123895,
+          "elapsed_s": 2413.006194632966,
+          "first_attempt": {
+            "particles": 1000,
+            "unique_initial_ancestors": 80,
+            "stages": [
+              {
+                "beta": 0.001154588987446914,
+                "incremental_ess": 500.00000016867887,
+                "theta_acceptance": 0.256,
+                "nuisance_acceptance": 0.9665
+              },
+              {
+                "beta": 0.0033219160982116136,
+                "incremental_ess": 500.00000000252584,
+                "theta_acceptance": 0.228,
+                "nuisance_acceptance": 0.8955
+              },
+              {
+                "beta": 0.010798676246499807,
+                "incremental_ess": 500.00000000693444,
+                "theta_acceptance": 0.2215,
+                "nuisance_acceptance": 0.7155
+              },
+              {
+                "beta": 0.051081187374708736,
+                "incremental_ess": 500.00000000312576,
+                "theta_acceptance": 0.174,
+                "nuisance_acceptance": 0.414
+              },
+              {
+                "beta": 0.3580654180826336,
+                "incremental_ess": 500.0000000002886,
+                "theta_acceptance": 0.068,
+                "nuisance_acceptance": 0.1575
+              },
+              {
+                "beta": 1.0,
+                "incremental_ess": 758.3297395594395,
+                "theta_acceptance": 0.0505,
+                "nuisance_acceptance": 0.0885
+              }
+            ],
+            "simulator_evaluations": 18260,
+            "elapsed_s": 364.79002708802
+          },
+          "ancestor_guard_passed": true,
+          "case_index": 46
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 27,
+          "stages": [
+            {
+              "beta": 0.01005317968702002,
+              "incremental_ess": 500.0000000094819,
+              "theta_acceptance": 0.2495,
+              "nuisance_acceptance": 0.9575
+            },
+            {
+              "beta": 0.11464830610111643,
+              "incremental_ess": 500.00000000062664,
+              "theta_acceptance": 0.147,
+              "nuisance_acceptance": 0.835
+            },
+            {
+              "beta": 0.8766418183449765,
+              "incremental_ess": 500.0000000002048,
+              "theta_acceptance": 0.086,
+              "nuisance_acceptance": 0.505
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 992.713659827721,
+              "theta_acceptance": 0.0865,
+              "nuisance_acceptance": 0.428
+            }
+          ],
+          "unique_initial_ancestors": 230,
+          "simulator_evaluations": 12069,
+          "elapsed_s": 2421.900942290202,
+          "ancestor_guard_passed": true,
+          "case_index": 47
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 27,
+          "stages": [
+            {
+              "beta": 0.02828324686106498,
+              "incremental_ess": 500.00000000285513,
+              "theta_acceptance": 0.2105,
+              "nuisance_acceptance": 0.9305
+            },
+            {
+              "beta": 0.2559562017133498,
+              "incremental_ess": 500.0000000001053,
+              "theta_acceptance": 0.1125,
+              "nuisance_acceptance": 0.6915
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 673.2677257119235,
+              "theta_acceptance": 0.0615,
+              "nuisance_acceptance": 0.4085
+            }
+          ],
+          "unique_initial_ancestors": 286,
+          "simulator_evaluations": 9447,
+          "elapsed_s": 210.6001755334437,
+          "ancestor_guard_passed": true,
+          "case_index": 48
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 27,
+          "stages": [
+            {
+              "beta": 0.004377343106170883,
+              "incremental_ess": 500.00000001096106,
+              "theta_acceptance": 0.2705,
+              "nuisance_acceptance": 0.962
+            },
+            {
+              "beta": 0.027742040281436797,
+              "incremental_ess": 500.00000000583344,
+              "theta_acceptance": 0.174,
+              "nuisance_acceptance": 0.8155
+            },
+            {
+              "beta": 0.19136289489022842,
+              "incremental_ess": 500.00000000093803,
+              "theta_acceptance": 0.1065,
+              "nuisance_acceptance": 0.4555
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 586.2509065458328,
+              "theta_acceptance": 0.049,
+              "nuisance_acceptance": 0.21
+            }
+          ],
+          "unique_initial_ancestors": 199,
+          "simulator_evaluations": 12453,
+          "elapsed_s": 2204.1003261730075,
+          "ancestor_guard_passed": true,
+          "case_index": 49
+        }
+      ],
+      "rejection_attempt_counts": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 45.927548693165186,
+      "max_proposals_used": 1024,
+      "population": "pediatric_5y",
+      "drug": "indomethacin",
+      "sampling_status": "joint_smc_fallback",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.08468707199224002,
+        0.6171494172888625,
+        0.19663614878217184
+      ],
+      "coverage": {
+        "50": [
+          0.57,
+          0.56,
+          0.54
+        ],
+        "80": [
+          0.81,
+          0.8,
+          0.79
+        ],
+        "90": [
+          0.94,
+          0.88,
+          0.9
+        ],
+        "95": [
+          0.98,
+          0.96,
+          0.92
+        ]
+      },
+      "coverage_max_deviation": 0.06999999999999995,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 52,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 43.34016961480711,
+      "max_proposals_used": 1024,
+      "population": "pediatric_5y",
+      "drug": "ketorolac",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.9668325640890829,
+        0.7181574380356115,
+        0.19663614878217184
+      ],
+      "coverage": {
+        "50": [
+          0.52,
+          0.46,
+          0.46
+        ],
+        "80": [
+          0.83,
+          0.82,
+          0.77
+        ],
+        "90": [
+          0.92,
+          0.91,
+          0.9
+        ],
+        "95": [
+          0.96,
+          0.96,
+          0.93
+        ]
+      },
+      "coverage_max_deviation": 0.03999999999999998,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 40,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 10,
+      "joint_smc_diagnostics": [
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 27,
+          "stages": [
+            {
+              "beta": 0.008502456689711835,
+              "incremental_ess": 500.000000008929,
+              "theta_acceptance": 0.2275,
+              "nuisance_acceptance": 0.9645
+            },
+            {
+              "beta": 0.06364046638065256,
+              "incremental_ess": 500.0000000011922,
+              "theta_acceptance": 0.1915,
+              "nuisance_acceptance": 0.885
+            },
+            {
+              "beta": 0.48263767097642907,
+              "incremental_ess": 500.0000000002328,
+              "theta_acceptance": 0.1425,
+              "nuisance_acceptance": 0.617
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 863.7343406845963,
+              "theta_acceptance": 0.104,
+              "nuisance_acceptance": 0.439
+            }
+          ],
+          "unique_initial_ancestors": 182,
+          "simulator_evaluations": 12041,
+          "elapsed_s": 274.53331178613007,
+          "ancestor_guard_passed": true,
+          "case_index": 25
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 4000,
+          "nuisance_dimensions": 27,
+          "stages": [
+            {
+              "beta": 0.0009475162241869839,
+              "incremental_ess": 2000.0000017495884,
+              "theta_acceptance": 0.24675,
+              "nuisance_acceptance": 0.963
+            },
+            {
+              "beta": 0.002816191717974258,
+              "incremental_ess": 2000.0000001991748,
+              "theta_acceptance": 0.21441666666666667,
+              "nuisance_acceptance": 0.87525
+            },
+            {
+              "beta": 0.009295199036315569,
+              "incremental_ess": 2000.0000000119048,
+              "theta_acceptance": 0.21158333333333335,
+              "nuisance_acceptance": 0.702
+            },
+            {
+              "beta": 0.043669596785724046,
+              "incremental_ess": 2000.000000021805,
+              "theta_acceptance": 0.16483333333333333,
+              "nuisance_acceptance": 0.4041666666666667
+            },
+            {
+              "beta": 0.3031234604858415,
+              "incremental_ess": 2000.0000000004445,
+              "theta_acceptance": 0.07791666666666666,
+              "nuisance_acceptance": 0.16158333333333333
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 2865.3427040221736,
+              "theta_acceptance": 0.050416666666666665,
+              "nuisance_acceptance": 0.09733333333333333
+            }
+          ],
+          "unique_initial_ancestors": 439,
+          "simulator_evaluations": 124010,
+          "elapsed_s": 3520.788931997493,
+          "first_attempt": {
+            "particles": 1000,
+            "unique_initial_ancestors": 75,
+            "stages": [
+              {
+                "beta": 0.0009456637744733598,
+                "incremental_ess": 500.0000004186408,
+                "theta_acceptance": 0.2295,
+                "nuisance_acceptance": 0.9655
+              },
+              {
+                "beta": 0.0027001160773108416,
+                "incremental_ess": 500.00000008833666,
+                "theta_acceptance": 0.2195,
+                "nuisance_acceptance": 0.8805
+              },
+              {
+                "beta": 0.010022408422089304,
+                "incremental_ess": 500.00000001995517,
+                "theta_acceptance": 0.2,
+                "nuisance_acceptance": 0.7035
+              },
+              {
+                "beta": 0.04852674007991467,
+                "incremental_ess": 500.00000000335484,
+                "theta_acceptance": 0.166,
+                "nuisance_acceptance": 0.395
+              },
+              {
+                "beta": 0.3004534176989954,
+                "incremental_ess": 500.000000000376,
+                "theta_acceptance": 0.083,
+                "nuisance_acceptance": 0.1585
+              },
+              {
+                "beta": 1.0,
+                "incremental_ess": 731.5737151788855,
+                "theta_acceptance": 0.0445,
+                "nuisance_acceptance": 0.1065
+              }
+            ],
+            "simulator_evaluations": 17977,
+            "elapsed_s": 518.4056465458125
+          },
+          "ancestor_guard_passed": true,
+          "case_index": 26
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 27,
+          "stages": [
+            {
+              "beta": 0.004168829269474372,
+              "incremental_ess": 500.00000002370064,
+              "theta_acceptance": 0.231,
+              "nuisance_acceptance": 0.949
+            },
+            {
+              "beta": 0.02675094280782881,
+              "incremental_ess": 500.00000000009646,
+              "theta_acceptance": 0.17,
+              "nuisance_acceptance": 0.7735
+            },
+            {
+              "beta": 0.2097123665609025,
+              "incremental_ess": 500.00000000087687,
+              "theta_acceptance": 0.088,
+              "nuisance_acceptance": 0.394
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 600.1924271566031,
+              "theta_acceptance": 0.0455,
+              "nuisance_acceptance": 0.1895
+            }
+          ],
+          "unique_initial_ancestors": 192,
+          "simulator_evaluations": 12483,
+          "elapsed_s": 471.684956131503,
+          "ancestor_guard_passed": true,
+          "case_index": 27
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 27,
+          "stages": [
+            {
+              "beta": 0.003390670243788918,
+              "incremental_ess": 500.0000000571036,
+              "theta_acceptance": 0.2265,
+              "nuisance_acceptance": 0.9365
+            },
+            {
+              "beta": 0.020800849428289588,
+              "incremental_ess": 500.00000000759843,
+              "theta_acceptance": 0.1745,
+              "nuisance_acceptance": 0.7835
+            },
+            {
+              "beta": 0.1549154197415087,
+              "incremental_ess": 500.00000000084196,
+              "theta_acceptance": 0.1005,
+              "nuisance_acceptance": 0.4255
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 516.506137919961,
+              "theta_acceptance": 0.04,
+              "nuisance_acceptance": 0.17
+            }
+          ],
+          "unique_initial_ancestors": 190,
+          "simulator_evaluations": 12480,
+          "elapsed_s": 458.7827173434198,
+          "ancestor_guard_passed": true,
+          "case_index": 28
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 27,
+          "stages": [
+            {
+              "beta": 0.026645080023627088,
+              "incremental_ess": 500.0000000034465,
+              "theta_acceptance": 0.231,
+              "nuisance_acceptance": 0.9195
+            },
+            {
+              "beta": 0.24532940851428037,
+              "incremental_ess": 500.0000000001687,
+              "theta_acceptance": 0.107,
+              "nuisance_acceptance": 0.666
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 660.630145560805,
+              "theta_acceptance": 0.076,
+              "nuisance_acceptance": 0.3905
+            }
+          ],
+          "unique_initial_ancestors": 282,
+          "simulator_evaluations": 9437,
+          "elapsed_s": 208.12318992242217,
+          "ancestor_guard_passed": true,
+          "case_index": 29
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 27,
+          "stages": [
+            {
+              "beta": 0.001147280570876319,
+              "incremental_ess": 500.0000001459709,
+              "theta_acceptance": 0.2565,
+              "nuisance_acceptance": 0.9695
+            },
+            {
+              "beta": 0.003733478057592548,
+              "incremental_ess": 500.0000000895802,
+              "theta_acceptance": 0.2205,
+              "nuisance_acceptance": 0.879
+            },
+            {
+              "beta": 0.016410713607613453,
+              "incremental_ess": 500.00000000219507,
+              "theta_acceptance": 0.1695,
+              "nuisance_acceptance": 0.6655
+            },
+            {
+              "beta": 0.10086475619732058,
+              "incremental_ess": 500.00000000108713,
+              "theta_acceptance": 0.1105,
+              "nuisance_acceptance": 0.318
+            },
+            {
+              "beta": 0.6828678088867145,
+              "incremental_ess": 500.0000000002318,
+              "theta_acceptance": 0.059,
+              "nuisance_acceptance": 0.1395
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 949.4618055380216,
+              "theta_acceptance": 0.05,
+              "nuisance_acceptance": 0.116
+            }
+          ],
+          "unique_initial_ancestors": 112,
+          "simulator_evaluations": 18080,
+          "elapsed_s": 631.0973065830767,
+          "ancestor_guard_passed": true,
+          "case_index": 80
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 27,
+          "stages": [
+            {
+              "beta": 0.005657933356815192,
+              "incremental_ess": 500.0000000146328,
+              "theta_acceptance": 0.247,
+              "nuisance_acceptance": 0.9425
+            },
+            {
+              "beta": 0.03567747149426305,
+              "incremental_ess": 500.0000000029863,
+              "theta_acceptance": 0.154,
+              "nuisance_acceptance": 0.7635
+            },
+            {
+              "beta": 0.2691351752413759,
+              "incremental_ess": 500.0000000000735,
+              "theta_acceptance": 0.0735,
+              "nuisance_acceptance": 0.375
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 687.0442283641988,
+              "theta_acceptance": 0.046,
+              "nuisance_acceptance": 0.206
+            }
+          ],
+          "unique_initial_ancestors": 214,
+          "simulator_evaluations": 12580,
+          "elapsed_s": 562.6397067382932,
+          "ancestor_guard_passed": true,
+          "case_index": 81
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 27,
+          "stages": [
+            {
+              "beta": 0.0180376889584295,
+              "incremental_ess": 500.00000000394823,
+              "theta_acceptance": 0.261,
+              "nuisance_acceptance": 0.9565
+            },
+            {
+              "beta": 0.22577450090075063,
+              "incremental_ess": 500.00000000034044,
+              "theta_acceptance": 0.1435,
+              "nuisance_acceptance": 0.769
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 632.6301567825072,
+              "theta_acceptance": 0.083,
+              "nuisance_acceptance": 0.496
+            }
+          ],
+          "unique_initial_ancestors": 261,
+          "simulator_evaluations": 9355,
+          "elapsed_s": 292.78784885199275,
+          "ancestor_guard_passed": true,
+          "case_index": 82
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 27,
+          "stages": [
+            {
+              "beta": 0.0214000209562073,
+              "incremental_ess": 500.0000000012829,
+              "theta_acceptance": 0.233,
+              "nuisance_acceptance": 0.919
+            },
+            {
+              "beta": 0.17619635855345545,
+              "incremental_ess": 500.00000000067155,
+              "theta_acceptance": 0.1245,
+              "nuisance_acceptance": 0.657
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 577.9634990585622,
+              "theta_acceptance": 0.057,
+              "nuisance_acceptance": 0.34
+            }
+          ],
+          "unique_initial_ancestors": 270,
+          "simulator_evaluations": 9638,
+          "elapsed_s": 432.81900840625167,
+          "ancestor_guard_passed": true,
+          "case_index": 83
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 27,
+          "stages": [
+            {
+              "beta": 0.012748466950142756,
+              "incremental_ess": 500.00000000287423,
+              "theta_acceptance": 0.226,
+              "nuisance_acceptance": 0.926
+            },
+            {
+              "beta": 0.08018044597742971,
+              "incremental_ess": 500.0000000004886,
+              "theta_acceptance": 0.128,
+              "nuisance_acceptance": 0.7145
+            },
+            {
+              "beta": 0.5771939275994059,
+              "incremental_ess": 500.00000000026887,
+              "theta_acceptance": 0.064,
+              "nuisance_acceptance": 0.3645
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 916.9859710606684,
+              "theta_acceptance": 0.061,
+              "nuisance_acceptance": 0.266
+            }
+          ],
+          "unique_initial_ancestors": 231,
+          "simulator_evaluations": 12501,
+          "elapsed_s": 457.39825415983796,
+          "ancestor_guard_passed": true,
+          "case_index": 84
+        }
+      ],
+      "rejection_attempt_counts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 45.549746366782124,
+      "max_proposals_used": 1024,
+      "population": "pediatric_5y",
+      "drug": "morphine",
+      "sampling_status": "joint_smc_fallback",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.48664471299257794,
+        0.5506038212152977,
+        0.9668325640890827
+      ],
+      "coverage": {
+        "50": [
+          0.49,
+          0.52,
+          0.48
+        ],
+        "80": [
+          0.76,
+          0.78,
+          0.82
+        ],
+        "90": [
+          0.84,
+          0.85,
+          0.89
+        ],
+        "95": [
+          0.9,
+          0.93,
+          0.92
+        ]
+      },
+      "coverage_max_deviation": 0.06000000000000005,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 86.53186083116415,
+      "max_proposals_used": 512,
+      "population": "pediatric_5y",
+      "drug": "phenytoin",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.015483118346041325,
+        0.42641062421491094,
+        0.42641062421491094
+      ],
+      "coverage": {
+        "50": [
+          0.32,
+          0.52,
+          0.56
+        ],
+        "80": [
+          0.73,
+          0.81,
+          0.86
+        ],
+        "90": [
+          0.9,
+          0.91,
+          0.92
+        ],
+        "95": [
+          0.94,
+          0.96,
+          0.95
+        ]
+      },
+      "coverage_max_deviation": 0.18,
+      "pass": false,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 68.847062395195,
+      "max_proposals_used": 512,
+      "population": "pediatric_5y",
+      "drug": "posaconazole",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.6846706791645845,
+        0.05580722295912033,
+        0.7510610234994368
+      ],
+      "coverage": {
+        "50": [
+          0.54,
+          0.45,
+          0.47
+        ],
+        "80": [
+          0.77,
+          0.72,
+          0.79
+        ],
+        "90": [
+          0.92,
+          0.83,
+          0.9
+        ],
+        "95": [
+          0.94,
+          0.93,
+          0.93
+        ]
+      },
+      "coverage_max_deviation": 0.08000000000000007,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 85,
+      "forced_exact_rejection_cases": 85,
+      "joint_smc_fallback_cases": 15,
+      "joint_smc_diagnostics": [
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 26,
+          "stages": [
+            {
+              "beta": 0.08635770715500257,
+              "incremental_ess": 500.00000000050414,
+              "theta_acceptance": 0.2145,
+              "nuisance_acceptance": 0.9065
+            },
+            {
+              "beta": 0.7567712224600919,
+              "incremental_ess": 500.0000000000386,
+              "theta_acceptance": 0.128,
+              "nuisance_acceptance": 0.659
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 970.0989476563813,
+              "theta_acceptance": 0.1165,
+              "nuisance_acceptance": 0.541
+            }
+          ],
+          "unique_initial_ancestors": 311,
+          "simulator_evaluations": 9530,
+          "elapsed_s": 405.61632057093084,
+          "ancestor_guard_passed": true,
+          "case_index": 80
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 26,
+          "stages": [
+            {
+              "beta": 0.038167769006577146,
+              "incremental_ess": 500.00000000110913,
+              "theta_acceptance": 0.258,
+              "nuisance_acceptance": 0.9525
+            },
+            {
+              "beta": 0.34917079749262037,
+              "incremental_ess": 500.0000000000656,
+              "theta_acceptance": 0.1685,
+              "nuisance_acceptance": 0.7545
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 776.5350331595869,
+              "theta_acceptance": 0.124,
+              "nuisance_acceptance": 0.489
+            }
+          ],
+          "unique_initial_ancestors": 284,
+          "simulator_evaluations": 9243,
+          "elapsed_s": 282.4059603450587,
+          "ancestor_guard_passed": true,
+          "case_index": 81
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 26,
+          "stages": [
+            {
+              "beta": 0.04040498132144421,
+              "incremental_ess": 500.0000000024232,
+              "theta_acceptance": 0.2545,
+              "nuisance_acceptance": 0.9425
+            },
+            {
+              "beta": 0.35902360357744345,
+              "incremental_ess": 500.0000000004998,
+              "theta_acceptance": 0.171,
+              "nuisance_acceptance": 0.764
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 783.4630353882515,
+              "theta_acceptance": 0.1225,
+              "nuisance_acceptance": 0.5355
+            }
+          ],
+          "unique_initial_ancestors": 262,
+          "simulator_evaluations": 9146,
+          "elapsed_s": 406.1122335959226,
+          "ancestor_guard_passed": true,
+          "case_index": 82
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 26,
+          "stages": [
+            {
+              "beta": 0.02162749394938146,
+              "incremental_ess": 500.00000000952633,
+              "theta_acceptance": 0.2595,
+              "nuisance_acceptance": 0.9455
+            },
+            {
+              "beta": 0.15819492941331456,
+              "incremental_ess": 500.00000000058134,
+              "theta_acceptance": 0.196,
+              "nuisance_acceptance": 0.826
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 537.0828563287995,
+              "theta_acceptance": 0.128,
+              "nuisance_acceptance": 0.536
+            }
+          ],
+          "unique_initial_ancestors": 219,
+          "simulator_evaluations": 9047,
+          "elapsed_s": 353.7104859370738,
+          "ancestor_guard_passed": true,
+          "case_index": 83
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 26,
+          "stages": [
+            {
+              "beta": 0.011675986182126508,
+              "incremental_ess": 500.000000004933,
+              "theta_acceptance": 0.2395,
+              "nuisance_acceptance": 0.955
+            },
+            {
+              "beta": 0.0467593883557372,
+              "incremental_ess": 500.00000000779966,
+              "theta_acceptance": 0.207,
+              "nuisance_acceptance": 0.8415
+            },
+            {
+              "beta": 0.1290492715734176,
+              "incremental_ess": 500.0000000032535,
+              "theta_acceptance": 0.2235,
+              "nuisance_acceptance": 0.6685
+            },
+            {
+              "beta": 0.3750595296674938,
+              "incremental_ess": 500.00000000037005,
+              "theta_acceptance": 0.2065,
+              "nuisance_acceptance": 0.49
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 618.6952820629756,
+              "theta_acceptance": 0.1795,
+              "nuisance_acceptance": 0.3315
+            }
+          ],
+          "unique_initial_ancestors": 103,
+          "simulator_evaluations": 14530,
+          "elapsed_s": 283.67222350649536,
+          "ancestor_guard_passed": true,
+          "case_index": 84
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 26,
+          "stages": [
+            {
+              "beta": 0.06201318285548041,
+              "incremental_ess": 500.0000000006345,
+              "theta_acceptance": 0.261,
+              "nuisance_acceptance": 0.93
+            },
+            {
+              "beta": 0.6082669897727391,
+              "incremental_ess": 500.000000000204,
+              "theta_acceptance": 0.1385,
+              "nuisance_acceptance": 0.689
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 919.9527263274267,
+              "theta_acceptance": 0.1415,
+              "nuisance_acceptance": 0.5355
+            }
+          ],
+          "unique_initial_ancestors": 312,
+          "simulator_evaluations": 9405,
+          "elapsed_s": 180.78327699797228,
+          "ancestor_guard_passed": true,
+          "case_index": 90
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 26,
+          "stages": [
+            {
+              "beta": 0.0854006786021273,
+              "incremental_ess": 500.00000000005736,
+              "theta_acceptance": 0.229,
+              "nuisance_acceptance": 0.916
+            },
+            {
+              "beta": 0.7164961392697802,
+              "incremental_ess": 500.0000000001497,
+              "theta_acceptance": 0.1065,
+              "nuisance_acceptance": 0.6535
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 961.7199321807955,
+              "theta_acceptance": 0.1235,
+              "nuisance_acceptance": 0.54
+            }
+          ],
+          "unique_initial_ancestors": 331,
+          "simulator_evaluations": 9392,
+          "elapsed_s": 358.69070830754936,
+          "ancestor_guard_passed": true,
+          "case_index": 91
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 4000,
+          "nuisance_dimensions": 26,
+          "stages": [
+            {
+              "beta": 0.00992345481972734,
+              "incremental_ess": 2000.0000000195564,
+              "theta_acceptance": 0.24141666666666667,
+              "nuisance_acceptance": 0.9504166666666667
+            },
+            {
+              "beta": 0.03572571701841793,
+              "incremental_ess": 2000.0000000143843,
+              "theta_acceptance": 0.23125,
+              "nuisance_acceptance": 0.8481666666666666
+            },
+            {
+              "beta": 0.10706089464054583,
+              "incremental_ess": 2000.0000000104135,
+              "theta_acceptance": 0.21733333333333332,
+              "nuisance_acceptance": 0.67225
+            },
+            {
+              "beta": 0.37627246354223787,
+              "incremental_ess": 2000.0000000008552,
+              "theta_acceptance": 0.20366666666666666,
+              "nuisance_acceptance": 0.43933333333333335
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 2820.6708271804687,
+              "theta_acceptance": 0.1745,
+              "nuisance_acceptance": 0.26908333333333334
+            }
+          ],
+          "unique_initial_ancestors": 479,
+          "simulator_evaluations": 100571,
+          "elapsed_s": 2198.023625286296,
+          "first_attempt": {
+            "particles": 1000,
+            "unique_initial_ancestors": 89,
+            "stages": [
+              {
+                "beta": 0.009901380673909443,
+                "incremental_ess": 500.00000000489916,
+                "theta_acceptance": 0.256,
+                "nuisance_acceptance": 0.946
+              },
+              {
+                "beta": 0.035369724387652776,
+                "incremental_ess": 500.0000000103168,
+                "theta_acceptance": 0.2405,
+                "nuisance_acceptance": 0.855
+              },
+              {
+                "beta": 0.1053144392552765,
+                "incremental_ess": 500.0000000015302,
+                "theta_acceptance": 0.218,
+                "nuisance_acceptance": 0.6635
+              },
+              {
+                "beta": 0.3829523776008519,
+                "incremental_ess": 500.00000000049744,
+                "theta_acceptance": 0.212,
+                "nuisance_acceptance": 0.4085
+              },
+              {
+                "beta": 1.0,
+                "incremental_ess": 716.9682752543824,
+                "theta_acceptance": 0.162,
+                "nuisance_acceptance": 0.2785
+              }
+            ],
+            "simulator_evaluations": 14815,
+            "elapsed_s": 328.8236140087247
+          },
+          "ancestor_guard_passed": true,
+          "case_index": 92
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 26,
+          "stages": [
+            {
+              "beta": 0.08851794059137319,
+              "incremental_ess": 500.00000000096514,
+              "theta_acceptance": 0.2135,
+              "nuisance_acceptance": 0.9055
+            },
+            {
+              "beta": 0.6700728886414461,
+              "incremental_ess": 500.00000000010385,
+              "theta_acceptance": 0.1095,
+              "nuisance_acceptance": 0.653
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 943.0404277328824,
+              "theta_acceptance": 0.126,
+              "nuisance_acceptance": 0.521
+            }
+          ],
+          "unique_initial_ancestors": 312,
+          "simulator_evaluations": 9515,
+          "elapsed_s": 352.8802074175328,
+          "ancestor_guard_passed": true,
+          "case_index": 93
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 26,
+          "stages": [
+            {
+              "beta": 0.043276448131109646,
+              "incremental_ess": 500.00000000287423,
+              "theta_acceptance": 0.2695,
+              "nuisance_acceptance": 0.9385
+            },
+            {
+              "beta": 0.35921931920675787,
+              "incremental_ess": 500.00000000006645,
+              "theta_acceptance": 0.174,
+              "nuisance_acceptance": 0.7575
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 782.165434400128,
+              "theta_acceptance": 0.1325,
+              "nuisance_acceptance": 0.5435
+            }
+          ],
+          "unique_initial_ancestors": 285,
+          "simulator_evaluations": 9257,
+          "elapsed_s": 386.48390000872314,
+          "ancestor_guard_passed": true,
+          "case_index": 94
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 26,
+          "stages": [
+            {
+              "beta": 0.06836924184881354,
+              "incremental_ess": 500.0000000024625,
+              "theta_acceptance": 0.24,
+              "nuisance_acceptance": 0.9225
+            },
+            {
+              "beta": 0.5845523974725602,
+              "incremental_ess": 500.0000000002997,
+              "theta_acceptance": 0.16,
+              "nuisance_acceptance": 0.6765
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 915.1760120337934,
+              "theta_acceptance": 0.132,
+              "nuisance_acceptance": 0.5495
+            }
+          ],
+          "unique_initial_ancestors": 316,
+          "simulator_evaluations": 9464,
+          "elapsed_s": 169.16887918673456,
+          "ancestor_guard_passed": true,
+          "case_index": 95
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 26,
+          "stages": [
+            {
+              "beta": 0.018680745739402482,
+              "incremental_ess": 500.00000000599715,
+              "theta_acceptance": 0.255,
+              "nuisance_acceptance": 0.9595
+            },
+            {
+              "beta": 0.13023987192940717,
+              "incremental_ess": 500.00000000033015,
+              "theta_acceptance": 0.235,
+              "nuisance_acceptance": 0.823
+            },
+            {
+              "beta": 0.961234804650339,
+              "incremental_ess": 500.00000000012665,
+              "theta_acceptance": 0.145,
+              "nuisance_acceptance": 0.4725
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 999.3157435532119,
+              "theta_acceptance": 0.1565,
+              "nuisance_acceptance": 0.4205
+            }
+          ],
+          "unique_initial_ancestors": 209,
+          "simulator_evaluations": 12069,
+          "elapsed_s": 519.0980645157397,
+          "ancestor_guard_passed": true,
+          "case_index": 96
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 4000,
+          "nuisance_dimensions": 26,
+          "stages": [
+            {
+              "beta": 0.01171416445322393,
+              "incremental_ess": 2000.000000078848,
+              "theta_acceptance": 0.24133333333333334,
+              "nuisance_acceptance": 0.9510833333333333
+            },
+            {
+              "beta": 0.04495654768996901,
+              "incremental_ess": 2000.0000000027678,
+              "theta_acceptance": 0.22616666666666665,
+              "nuisance_acceptance": 0.8533333333333334
+            },
+            {
+              "beta": 0.1384759115607664,
+              "incremental_ess": 2000.000000010921,
+              "theta_acceptance": 0.19633333333333333,
+              "nuisance_acceptance": 0.6853333333333333
+            },
+            {
+              "beta": 0.4494466475076989,
+              "incremental_ess": 2000.0000000002372,
+              "theta_acceptance": 0.18633333333333332,
+              "nuisance_acceptance": 0.45925
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 2948.2409562175962,
+              "theta_acceptance": 0.17291666666666666,
+              "nuisance_acceptance": 0.31383333333333335
+            }
+          ],
+          "unique_initial_ancestors": 463,
+          "simulator_evaluations": 98459,
+          "elapsed_s": 3599.532313849777,
+          "first_attempt": {
+            "particles": 1000,
+            "unique_initial_ancestors": 96,
+            "stages": [
+              {
+                "beta": 0.011470908650153433,
+                "incremental_ess": 500.00000001206683,
+                "theta_acceptance": 0.26,
+                "nuisance_acceptance": 0.953
+              },
+              {
+                "beta": 0.045487651632511006,
+                "incremental_ess": 500.0000000080218,
+                "theta_acceptance": 0.2195,
+                "nuisance_acceptance": 0.847
+              },
+              {
+                "beta": 0.13820631282806536,
+                "incremental_ess": 500.0000000007349,
+                "theta_acceptance": 0.2125,
+                "nuisance_acceptance": 0.681
+              },
+              {
+                "beta": 0.4424595816198241,
+                "incremental_ess": 500.00000000037926,
+                "theta_acceptance": 0.191,
+                "nuisance_acceptance": 0.473
+              },
+              {
+                "beta": 1.0,
+                "incremental_ess": 723.0020386051175,
+                "theta_acceptance": 0.1625,
+                "nuisance_acceptance": 0.322
+              }
+            ],
+            "simulator_evaluations": 14421,
+            "elapsed_s": 541.8707624133676
+          },
+          "ancestor_guard_passed": true,
+          "case_index": 97
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 26,
+          "stages": [
+            {
+              "beta": 0.1017286130654611,
+              "incremental_ess": 500.00000000022726,
+              "theta_acceptance": 0.219,
+              "nuisance_acceptance": 0.903
+            },
+            {
+              "beta": 0.8193882736741769,
+              "incremental_ess": 500.0000000002274,
+              "theta_acceptance": 0.1295,
+              "nuisance_acceptance": 0.633
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 980.7219820994635,
+              "theta_acceptance": 0.1325,
+              "nuisance_acceptance": 0.5315
+            }
+          ],
+          "unique_initial_ancestors": 322,
+          "simulator_evaluations": 9606,
+          "elapsed_s": 187.78946463763714,
+          "ancestor_guard_passed": true,
+          "case_index": 98
+        },
+        {
+          "sampler": "joint_smc",
+          "particles": 1000,
+          "nuisance_dimensions": 26,
+          "stages": [
+            {
+              "beta": 0.03651485361842788,
+              "incremental_ess": 500.0000000033276,
+              "theta_acceptance": 0.2585,
+              "nuisance_acceptance": 0.944
+            },
+            {
+              "beta": 0.33918150005645753,
+              "incremental_ess": 500.00000000007026,
+              "theta_acceptance": 0.1705,
+              "nuisance_acceptance": 0.753
+            },
+            {
+              "beta": 1.0,
+              "incremental_ess": 752.4683271133036,
+              "theta_acceptance": 0.153,
+              "nuisance_acceptance": 0.5555
+            }
+          ],
+          "unique_initial_ancestors": 282,
+          "simulator_evaluations": 9221,
+          "elapsed_s": 343.571427134797,
+          "ancestor_guard_passed": true,
+          "case_index": 99
+        }
+      ],
+      "rejection_attempt_counts": [
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        16384,
+        8192,
+        16384,
+        16384,
+        8192,
+        8192,
+        16384,
+        8192,
+        24576,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        100000,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        16384,
+        8192,
+        8192,
+        8192,
+        16384,
+        8192,
+        8192,
+        8192,
+        14336,
+        14336,
+        14336,
+        14336,
+        14336,
+        26624,
+        13312,
+        13312,
+        13312,
+        13312,
+        8192,
+        8192,
+        32768,
+        8192,
+        8192,
+        8192,
+        32768,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        16384,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        16384,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        8192,
+        16384,
+        16384,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": null,
+      "max_proposals_used": 0,
+      "population": "pediatric_5y",
+      "drug": "pravastatin",
+      "sampling_status": "joint_smc_fallback",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.7510610234994346,
+        0.9775882715167403,
+        0.9668325640890824
+      ],
+      "coverage": {
+        "50": [
+          0.5,
+          0.47,
+          0.53
+        ],
+        "80": [
+          0.76,
+          0.8,
+          0.81
+        ],
+        "90": [
+          0.87,
+          0.88,
+          0.92
+        ],
+        "95": [
+          0.93,
+          0.91,
+          0.95
+        ]
+      },
+      "coverage_max_deviation": 0.040000000000000036,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 82.11591349404887,
+      "max_proposals_used": 512,
+      "population": "pediatric_5y",
+      "drug": "rivaroxaban",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.7830499882004671,
+        0.3445493220213226,
+        0.6846706791645845
+      ],
+      "coverage": {
+        "50": [
+          0.46,
+          0.46,
+          0.49
+        ],
+        "80": [
+          0.8,
+          0.71,
+          0.79
+        ],
+        "90": [
+          0.91,
+          0.82,
+          0.94
+        ],
+        "95": [
+          0.95,
+          0.9,
+          0.97
+        ]
+      },
+      "coverage_max_deviation": 0.09000000000000008,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 95.42176112232823,
+      "max_proposals_used": 256,
+      "population": "pediatric_5y",
+      "drug": "sildenafil",
+      "size_calibrated_rejections": 0
+    },
+    {
+      "n_valid": 100,
+      "ks_pvalues": [
+        0.8428847956274123,
+        0.42641062421491094,
+        0.6846706791645845
+      ],
+      "coverage": {
+        "50": [
+          0.48,
+          0.48,
+          0.51
+        ],
+        "80": [
+          0.71,
+          0.72,
+          0.79
+        ],
+        "90": [
+          0.84,
+          0.88,
+          0.89
+        ],
+        "95": [
+          0.87,
+          0.94,
+          0.93
+        ]
+      },
+      "coverage_max_deviation": 0.09000000000000008,
+      "pass": true,
+      "sampling_error_blocks": 0,
+      "rejection_fallback_cases": 0,
+      "forced_exact_rejection_cases": 0,
+      "joint_smc_fallback_cases": 0,
+      "joint_smc_diagnostics": [],
+      "rejection_attempt_counts": [],
+      "max_rejection_attempts": 100000,
+      "median_correction_ess": 73.14710570957322,
+      "max_proposals_used": 1024,
+      "population": "pediatric_5y",
+      "drug": "tamoxifen",
+      "size_calibrated_rejections": 0
+    }
+  ],
+  "flow": "hierarchical",
+  "pass_count": 20,
+  "incomplete_count": 0,
+  "failed_count": 6,
+  "rejection_fallback_cases": 310,
+  "forced_exact_rejection_cases": 185,
+  "joint_smc_fallback_cases": 35,
+  "sampling_error_blocks": 0,
+  "total_pairs": 26,
+  "gate_passed": false,
+  "calibrated_null_global_pass_probability": 0.0088,
+  "calibrated_null_ci_95": [
+    0.007063668692759798,
+    0.010830761334579353
+  ],
+  "calibrated_null_assumptions": "Exact uniform marginal ranks; independent parameters and pairs; uniform location within posterior quantile gaps",
+  "exact_reference_null_global_pass_probability": 0.0108,
+  "exact_reference_null_ci_95": [
+    0.008867630217711028,
+    0.013024644293450469
+  ],
+  "exact_reference_null_assumptions": "Exact exchangeable posterior draws from the supplied synthetic contexts; parameter dependence retained within each rank triple; pairs and calibration cases sampled independently; uniform location within posterior quantile gaps",
+  "uncomputable_pairs": [],
+  "holm_global_gate": {
+    "passed": false,
+    "ks_rejections": 0,
+    "coverage_passed": false,
+    "family_wise_alpha": 0.01,
+    "predeclared_at_utc": "2026-10-29T15:40:44Z",
+    "definition": "Holm-Bonferroni step-down across all three marginal KS p-values for every pair in a flow at family-wise alpha 0.01; pass if zero KS hypotheses are rejected and every pair's original coverage deviation is <= 0.10",
+    "calibrated_null_pass_probability": 0.0185,
+    "calibrated_null_ci_95": [
+      0.015949885124840416,
+      0.021335720477487666
+    ],
+    "calibrated_null_assumptions": "Exact uniform marginal ranks; independent parameters and pairs; uniform location within posterior quantile gaps"
+  },
+  "size_calibrated_global_gate": {
+    "passed": true,
+    "status": "PASS",
+    "uncomputable_pairs": [],
+    "rejections": 0,
+    "ks_test_count": 78,
+    "coverage_test_count": 312,
+    "family_wise_alpha": 0.01,
+    "predeclared_at_utc": "2026-10-29T19:14:47Z",
+    "definition": "Test each pair's three marginal ranks with KS and each coverage level with an exact two-sided binomial test (per parameter for multi-drug, time-aware, and hierarchical flows; pooled across three parameters for continuous). Apply Holm-Bonferroni to the combined KS and coverage p-value family per flow at FWER 0.01; pass if no hypotheses are rejected.",
+    "calibrated_null_pass_probability": 0.9922,
+    "calibrated_null_ci_95": [
+      0.9902746758735245,
+      0.9938296814077955
+    ],
+    "calibrated_null_assumptions": "Exact uniform marginal ranks; independent parameters and pairs; uniform location within posterior quantile gaps"
+  },
+  "production_scope_size_calibrated_gate": {
+    "status": "PASS",
+    "passed": true,
+    "selected_count": 20,
+    "selected_pairs": [
+      "adult/amantadine",
+      "adult/clozapine",
+      "adult/diclofenac",
+      "adult/digoxin",
+      "adult/indomethacin",
+      "adult/ketorolac",
+      "adult/morphine",
+      "adult/phenytoin",
+      "adult/posaconazole",
+      "adult/rivaroxaban",
+      "adult/sildenafil",
+      "adult/tamoxifen",
+      "pediatric_5y/clozapine",
+      "pediatric_5y/diclofenac",
+      "pediatric_5y/digoxin",
+      "pediatric_5y/phenytoin",
+      "pediatric_5y/posaconazole",
+      "pediatric_5y/rivaroxaban",
+      "pediatric_5y/sildenafil",
+      "pediatric_5y/tamoxifen"
+    ],
+    "excluded_pairs": [
+      "adult/pravastatin",
+      "pediatric_5y/amantadine",
+      "pediatric_5y/indomethacin",
+      "pediatric_5y/ketorolac",
+      "pediatric_5y/morphine",
+      "pediatric_5y/pravastatin"
+    ],
+    "test_count": 300,
+    "rejections": 0,
+    "family_wise_alpha": 0.01,
+    "predeclared_at_utc": "2026-10-30T10:12:40Z",
+    "amended_at_utc": "2026-10-30T10:24:43Z",
+    "calibrated_null_pass_probability": 0.9985,
+    "calibrated_null_ci_95": [
+      0.9975271830184442,
+      0.9991602259860376
+    ],
+    "calibrated_null_nonempty_probability": 1.0,
+    "calibrated_null_repetitions": 10000,
+    "calibrated_null_assumptions": "Exact uniform marginal ranks; independent parameters and pairs; uniform location within posterior quantile gaps"
+  }
+}

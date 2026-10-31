@@ -1,0 +1,70 @@
+{
+  "drug": "sildenafil",
+  "case_index": 28,
+  "observed_log10_cmax": -5.437824131314866,
+  "sigma_log10": 0.0414,
+  "theta": {
+    "truth": [
+      0.6332404475413775,
+      2.9565277585541567,
+      0.27105602240275617
+    ],
+    "flow_median": [
+      0.9098568558692932,
+      3.0211243629455566,
+      -0.30380576848983765
+    ]
+  },
+  "variance": {
+    "truth": {
+      "8": {
+        "variance_log_likelihood_estimate": 194031.57733341504,
+        "finite_replicates": 50,
+        "mean_log_likelihood_estimate": -1025.6861348377715
+      },
+      "16": {
+        "variance_log_likelihood_estimate": 116440.16032202316,
+        "finite_replicates": 50,
+        "mean_log_likelihood_estimate": -818.6309658048449
+      },
+      "32": {
+        "variance_log_likelihood_estimate": 54106.19342605694,
+        "finite_replicates": 50,
+        "mean_log_likelihood_estimate": -555.0235186739362
+      },
+      "64": {
+        "variance_log_likelihood_estimate": 38652.46480102051,
+        "finite_replicates": 50,
+        "mean_log_likelihood_estimate": -402.22208549157193
+      }
+    },
+    "flow_median": {
+      "8": {
+        "variance_log_likelihood_estimate": 41463.98526760769,
+        "finite_replicates": 50,
+        "mean_log_likelihood_estimate": -246.82549151664406
+      },
+      "16": {
+        "variance_log_likelihood_estimate": 19631.533654387174,
+        "finite_replicates": 50,
+        "mean_log_likelihood_estimate": -147.20322625432897
+      },
+      "32": {
+        "variance_log_likelihood_estimate": 3817.222946342578,
+        "finite_replicates": 50,
+        "mean_log_likelihood_estimate": -60.04400446904115
+      },
+      "64": {
+        "variance_log_likelihood_estimate": 1666.2910985923277,
+        "finite_replicates": 50,
+        "mean_log_likelihood_estimate": -28.890217001628198
+      }
+    }
+  },
+  "elapsed_s": {
+    "truth": 89.11564961075783,
+    "flow_median": 89.03834461979568
+  },
+  "method": "Fifty independent nuisance-marginal likelihood estimates at each K; variance is across log estimates, while each estimate before logging is an unbiased mean of Gaussian likelihoods.",
+  "interpretation": "Increasing K reduces log-estimator variance but remains impractical at this hard observation; this is a single-case diagnostic, not a global K optimization."
+}

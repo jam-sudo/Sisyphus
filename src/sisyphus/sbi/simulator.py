@@ -102,6 +102,7 @@ class EngineSimulator:
     obs_node: str = _DEFAULT_OBS_NODE
     t_span: tuple[float, float] = _DEFAULT_T_SPAN
     obs_sigma_log10: float = _DEFAULT_OBS_SIGMA_LOG10
+    correlated_graph: bool = True
     n_failures: int = field(default=0, init=False)
 
     @classmethod
@@ -137,7 +138,7 @@ class EngineSimulator:
             obs_sigma_log10=obs_sigma_log10,
         )
 
-    def simulate_single(self, theta: np.ndarray, seed: int) -> float:
+    def simulate_single(self, theta: np.ndarray, seed: int, add_noise: bool = True) -> float:
         """Simulate log10(Cmax) for one theta with Gaussian assay noise.
 
         Returns ``-np.inf`` if the solver fails or gives non-positive Cmax.
@@ -162,11 +163,15 @@ class EngineSimulator:
         if cmax <= 0 or not np.isfinite(cmax):
             self.n_failures += 1
             return float("-inf")
-        noise = rng.normal(0.0, self.obs_sigma_log10)
+        noise = rng.normal(0.0, self.obs_sigma_log10) if add_noise else 0.0
         return float(np.log10(cmax) + noise)
 
     def _sample_graph(self, rng: np.random.Generator) -> BodyGraph:
-        return resample_correlated_abundances(self.graph, rng).sample(rng)
+        graph = (
+            resample_correlated_abundances(self.graph, rng)
+            if self.correlated_graph else self.graph
+        )
+        return graph.sample(rng)
 
     def simulate_batch(
         self,

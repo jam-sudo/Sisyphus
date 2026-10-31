@@ -26,8 +26,6 @@ import sys
 import time
 from pathlib import Path
 
-import numpy as np
-
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 
@@ -92,6 +90,8 @@ def _run_one(method: str, compiled, graph, drug, regimen, observations, logp,
         elapsed = time.time() - t0
         return {
             "method": method,
+            "method_used": result.method_used,
+            "warnings": list(result.warnings),
             "wall_seconds": elapsed,
             "prior_cmax_mean": float(result.prior_cmax.mean),
             "prior_cmax_cv": float(result.prior_cmax.cv),
@@ -122,7 +122,7 @@ def main() -> None:
     p.add_argument("--out", type=Path, required=True)
     p.add_argument("--t-obs-h", type=float, default=1.0)
     p.add_argument("--sbi-reweight", action="store_true",
-                   help="Enable SBI posterior likelihood reweighting (P6 Option 2)")
+                   help="Legacy option; corrected SBI always uses the full likelihood")
     args = p.parse_args()
 
     methods = [m.strip() for m in args.methods.split(",") if m.strip()]
