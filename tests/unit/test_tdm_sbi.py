@@ -266,6 +266,7 @@ class TestSBIDispatch:
     def test_calibrated_multi_observation_uses_time_aware_posterior(
         self, physiology, morphine_drug, monkeypatch, caplog,
     ):
+        from sisyphus.regimen import tdm_sbi
         from sisyphus.regimen.tdm_sbi import sbi_update
         from sisyphus.sbi import amortizer
 
@@ -279,6 +280,10 @@ class TestSBIDispatch:
             return original_load(path)
 
         monkeypatch.setattr(amortizer, "load_result", record_load)
+        monkeypatch.setattr(
+            tdm_sbi, "_native_multi_observation_model",
+            lambda drug: pathlib.Path("models/sbi/multi_observation_nsf.pt"),
+        )
         result = sbi_update(
             compiled, graph, drug, DosingRegimen.single_oral(30.0),
             (Observation(1.0, 0.01865), Observation(4.0, 0.010)),
