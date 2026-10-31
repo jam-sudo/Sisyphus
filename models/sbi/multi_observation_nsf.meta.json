@@ -46,6 +46,15 @@
     "budget_evidence": "data/validation/sbi_importance_pilot.json",
     "corrected_sbc": "data/validation/sbi_sbc_multi_observation_corrected.json",
     "ideal_gate_null": "data/validation/sbi_global_gate_null.json",
+    "exact_reference_null": "data/validation/sbi_global_gate_exact_reference_null.json",
+    "validation_summary": {
+      "original_global_gate_passed": false,
+      "holm_global_gate_passed": false,
+      "size_calibrated_global_gate_status": "PASS",
+      "production_scope_gate_status": "INCOMPLETE",
+      "sbi_drug_count": 0,
+      "total_drugs": 13
+    },
     "proposal_retry_counts": [
       256,
       512,

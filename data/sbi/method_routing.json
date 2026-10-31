@@ -25,77 +25,195 @@
   "multi_observation": {
     "source": "data/validation/sbi_sbc_multi_observation_corrected.json",
     "model": "multi_observation_nsf.pt",
-    "validation_status": "pending_corrected_sbc",
-    "pending_reason": "Corrected multi-observation SBC is incomplete; use IBIS.",
-    "global_sbc_gate_passed": null,
-    "size_calibrated_global_gate_status": "PENDING",
-    "production_scope_gate_status": "PENDING",
+    "validation_status": "complete",
+    "global_sbc_gate_passed": false,
+    "size_calibrated_global_gate_status": "PASS",
+    "production_scope_gate_status": "INCOMPLETE",
     "native_count": 0,
+    "sbc_exact_rejection_cases_total": 90,
+    "sbc_exact_rejection_cases_on_native_routes": 0,
     "drugs": {
-      "morphine": {
-        "smiles": "CN1CC[C@]23c4c5ccc(O)c4O[C@H]2[C@@H](O)C=C[C@H]3[C@H]1C5",
+      "amantadine": {
         "use_native": false,
-        "reason": "corrected_sbc_pending"
+        "smiles": "NC12CC3CC(CC(C3)C1)C2",
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.08000000000000007,
+        "ks_pvalues": [
+          0.4560077143943717,
+          0.39793256410160727,
+          0.8948800679675544
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 26
       },
       "clozapine": {
+        "use_native": false,
         "smiles": "CN1CCN(C2=Nc3cc(Cl)ccc3Nc3ccccc32)CC1",
-        "use_native": false,
-        "reason": "corrected_sbc_pending"
-      },
-      "amantadine": {
-        "smiles": "NC12CC3CC(CC(C3)C1)C2",
-        "use_native": false,
-        "reason": "corrected_sbc_pending"
-      },
-      "ketorolac": {
-        "smiles": "O=C(c1ccccc1)c1ccc2n1CCC2C(=O)O",
-        "use_native": false,
-        "reason": "corrected_sbc_pending"
-      },
-      "rivaroxaban": {
-        "smiles": "O=C(NC[C@H]1CN(c2ccc(N3CCOCC3=O)cc2)C(=O)O1)c1ccc(Cl)s1",
-        "use_native": false,
-        "reason": "corrected_sbc_pending"
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.06999999999999995,
+        "ks_pvalues": [
+          0.06209234069876268,
+          0.7510610234994362,
+          0.6846706791645845
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 39
       },
       "diclofenac": {
-        "smiles": "O=C(O)Cc1ccccc1Nc1c(Cl)cccc1Cl",
         "use_native": false,
-        "reason": "corrected_sbc_pending"
+        "smiles": "O=C(O)Cc1ccccc1Nc1c(Cl)cccc1Cl",
+        "sbc_pass": false,
+        "coverage_max_deviation": 0.12,
+        "ks_pvalues": [
+          0.6509082962856874,
+          0.5182193645480672,
+          0.7830499882004671
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 1,
+        "joint_smc_fallback_cases": 38
       },
       "digoxin": {
+        "use_native": false,
         "smiles": "C[C@H]1O[C@@H](O[C@H]2[C@@H](O)C[C@H](O[C@H]3[C@@H](O)C[C@H](O[C@H]4CC[C@@]5(C)[C@H](CC[C@@H]6[C@@H]5C[C@@H](O)[C@]5(C)[C@@H](C7=CC(=O)OC7)CC[C@]65O)C4)O[C@@H]3C)O[C@@H]2C)C[C@H](O)[C@@H]1O",
-        "use_native": false,
-        "reason": "corrected_sbc_pending"
-      },
-      "pravastatin": {
-        "smiles": "CC[C@H](C)C(=O)O[C@H]1C[C@H](O)C=C2C=C[C@H](C)[C@H](CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H]21",
-        "use_native": false,
-        "reason": "corrected_sbc_pending"
-      },
-      "sildenafil": {
-        "smiles": "CCCc1nn(C)c2c(=O)[nH]c(-c3cc(S(=O)(=O)N4CCN(C)CC4)ccc3OCC)nc12",
-        "use_native": false,
-        "reason": "corrected_sbc_pending"
-      },
-      "phenytoin": {
-        "smiles": "O=C1NC(=O)C(c2ccccc2)(c2ccccc2)N1",
-        "use_native": false,
-        "reason": "corrected_sbc_pending"
-      },
-      "tamoxifen": {
-        "smiles": "CC/C(=C(\\c1ccccc1)c1ccc(OCCN(C)C)cc1)c1ccccc1",
-        "use_native": false,
-        "reason": "corrected_sbc_pending"
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.06000000000000005,
+        "ks_pvalues": [
+          0.23282134931905185,
+          0.9532159710635721,
+          0.9976624154037234
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 1,
+        "joint_smc_fallback_cases": 21
       },
       "indomethacin": {
-        "smiles": "COc1ccc2c(c1)c(CC(=O)O)c(C)n2C(=O)c1ccc(Cl)cc1",
         "use_native": false,
-        "reason": "corrected_sbc_pending"
+        "smiles": "COc1ccc2c(c1)c(CC(=O)O)c(C)n2C(=O)c1ccc(Cl)cc1",
+        "sbc_pass": false,
+        "coverage_max_deviation": 0.1100000000000001,
+        "ks_pvalues": [
+          0.7830499882004671,
+          0.27378648400785643,
+          0.25269275700639626
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 48
+      },
+      "ketorolac": {
+        "use_native": false,
+        "smiles": "O=C(c1ccccc1)c1ccc2n1CCC2C(=O)O",
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.06000000000000005,
+        "ks_pvalues": [
+          0.5836423551202043,
+          0.8428847956274123,
+          0.8428847956274123
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 38
+      },
+      "morphine": {
+        "use_native": false,
+        "smiles": "CN1CC[C@]23c4c5ccc(O)c4O[C@H]2[C@@H](O)C=C[C@H]3[C@H]1C5",
+        "sbc_pass": false,
+        "coverage_max_deviation": 0.13,
+        "ks_pvalues": [
+          0.6509082962856887,
+          0.2141463256991053,
+          0.2961216072789328
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 3,
+        "joint_smc_fallback_cases": 44
+      },
+      "phenytoin": {
+        "use_native": false,
+        "smiles": "O=C1NC(=O)C(c2ccccc2)(c2ccccc2)N1",
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.030000000000000027,
+        "ks_pvalues": [
+          0.18025478001338058,
+          0.8137761665209275,
+          0.7830499882004662
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 76
       },
       "posaconazole": {
-        "smiles": "CC[C@@H]([C@H](C)O)n1ncn(-c2ccc(N3CCN(c4ccc(OC[C@@H]5CO[C@@](Cn6cncn6)(c6ccc(F)cc6F)C5)cc4)CC3)cc2)c1=O",
         "use_native": false,
-        "reason": "corrected_sbc_pending"
+        "smiles": "CC[C@@H]([C@H](C)O)n1ncn(-c2ccc(N3CCN(c4ccc(OC[C@@H]5CO[C@@](Cn6cncn6)(c6ccc(F)cc6F)C5)cc4)CC3)cc2)c1=O",
+        "sbc_pass": false,
+        "coverage_max_deviation": 0.13,
+        "ks_pvalues": [
+          0.05007626057597703,
+          0.1802547800133869,
+          0.5182193645480672
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 64
+      },
+      "pravastatin": {
+        "use_native": false,
+        "smiles": "CC[C@H](C)C(=O)O[C@H]1C[C@H](O)C=C2C=C[C@H](C)[C@H](CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H]21",
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.07,
+        "ks_pvalues": [
+          0.3445493220213226,
+          0.6846706791645834,
+          0.6509082962856887
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 85,
+        "joint_smc_fallback_cases": 15
+      },
+      "rivaroxaban": {
+        "use_native": false,
+        "smiles": "O=C(NC[C@H]1CN(c2ccc(N3CCOCC3=O)cc2)C(=O)O1)c1ccc(Cl)s1",
+        "sbc_pass": false,
+        "coverage_max_deviation": 0.15000000000000002,
+        "ks_pvalues": [
+          0.03582511969274871,
+          0.2141463256991053,
+          0.42641062421491094
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 17
+      },
+      "sildenafil": {
+        "use_native": false,
+        "smiles": "CCCc1nn(C)c2c(=O)[nH]c(-c3cc(S(=O)(=O)N4CCN(C)CC4)ccc3OCC)nc12",
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.050000000000000044,
+        "ks_pvalues": [
+          0.05007626057597703,
+          0.3445493220213278,
+          0.8137761665209289
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 35
+      },
+      "tamoxifen": {
+        "use_native": false,
+        "smiles": "CC/C(=C(\\c1ccccc1)c1ccc(OCCN(C)C)cc1)c1ccccc1",
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.09999999999999998,
+        "ks_pvalues": [
+          0.1802547800133869,
+          0.2737864840078562,
+          0.2737864840078562
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 52
       }
     }
   },
