@@ -111,6 +111,26 @@ class TestSBIDispatch:
         assert tdm_sbi._sbc_covariate_exclusion(drug, None, 18.0, 5.0) is None
         assert tdm_sbi._sbc_covariate_exclusion(drug, "pediatric_5y", None, None) is None
 
+        path.write_text(json.dumps({
+            "continuous": {"validation_status": "pending_corrected_sbc", "pairs": []},
+        }))
+        assert "pending" in tdm_sbi._sbc_covariate_exclusion(drug, None, 70.0, 35.0)
+
+    def test_pending_multi_observation_falls_back_before_model_load(
+        self, physiology, morphine_drug,
+    ):
+        from sisyphus.regimen.tdm_sbi import sbi_update
+        from sisyphus.sbi.importance import LowImportanceESS
+
+        graph, compiled = physiology
+        drug, logp = morphine_drug
+        with pytest.raises(LowImportanceESS, match="Multi-observation corrected SBC is pending"):
+            sbi_update(
+                compiled, graph, drug, DosingRegimen.single_oral(30.0),
+                (Observation(1.0, 0.01865), Observation(4.0, 0.010)),
+                n_samples=2, n_predictive_sims=1, logp_hint=logp,
+            )
+
     @pytest.mark.parametrize("failed_attempts", [0, 2, 3])
     def test_default_sbi_uses_likelihood_correction(
         self, physiology, morphine_drug, monkeypatch, failed_attempts,

@@ -53,15 +53,20 @@ def test_multi_observation_auto_routing_uses_only_calibrated_valid_context():
     table = json.loads((root / "data/sbi/method_routing.json").read_text())
     regimen = DosingRegimen.single_oral(10.0)
     observations = (Observation(1.0, 0.02), Observation(4.0, 0.01))
+    pending = table["multi_observation"].get("validation_status") == "pending_corrected_sbc"
     for name in ("morphine", "ketorolac", "rivaroxaban"):
         decision = table["multi_observation"]["drugs"][name]
-        expected = "sbi" if decision["use_native"] else table["routes"][name]
+        expected = "ibis" if pending else (
+            "sbi" if decision["use_native"] else table["routes"][name]
+        )
         assert _resolve_auto_method(name, regimen, observations)[0] == expected
     assert _resolve_auto_method(
         "morphine", regimen, observations, SimpleNamespace(smiles="CCO")
-    )[0] == table["routes"]["morphine"]
+    )[0] == ("ibis" if pending else table["routes"]["morphine"])
     invalid = (Observation(1.0, 0.02), Observation(3.0, 0.01))
-    assert _resolve_auto_method("morphine", regimen, invalid)[0] == table["routes"]["morphine"]
+    assert _resolve_auto_method("morphine", regimen, invalid)[0] == (
+        "ibis" if pending else table["routes"]["morphine"]
+    )
     assert _resolve_auto_method("morphine", regimen, observations[:1])[0] == (
         table["routes"]["morphine"])
 
@@ -146,14 +151,22 @@ def test_cli_auto_uses_name_and_reports_actual_method(case, monkeypatch, capsys)
     )
     cli._run_tdm(args)
     out = capsys.readouterr()
-    assert called["method"] == "ibis"
-    assert "sbi_reweight" not in called
+    table = json.loads((Path(__file__).resolve().parents[2]
+                        / "data/sbi/method_routing.json").read_text())
+    assert called["method"] == table["routes"]["morphine"]
+    assert called.get("sbi_reweight", False) == (
+        table["routes"]["morphine"] == "sbi" and table["sbi_reweight"]["morphine"]
+    )
     assert "Method: ibis" in out.out
     assert "routing morphine" in out.err
 
     args.obs = ["1:0.0285", "4:0.010"]
+    called.clear()
     cli._run_tdm(args)
-    assert called["method"] == "sbi"
+    assert called["method"] == (
+        "ibis" if table["multi_observation"].get("validation_status") == "pending_corrected_sbc"
+        else "sbi"
+    )
 
     args.method = "ibis"
     args.population = "adult"
@@ -245,6 +258,11 @@ def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
     original = json.loads((root / "data/sbi/method_routing.json").read_text())
     sbc_path = tmp_path / "data/validation/sbi_sbc_multi_drug_corrected.json"
     sbc_path.parent.mkdir(parents=True)
+    validation_path = tmp_path / "data/sbi/validation_drug_set.json"
+    validation_path.parent.mkdir(parents=True)
+    validation_path.write_text(json.dumps({"drugs": [
+        {"name": name, "smiles": name} for name in ("morphine", "clozapine", "pravastatin")
+    ]}))
     sbc_path.write_text(json.dumps({
         "gate_passed": False,
         "size_calibrated_global_gate": {"status": "INCOMPLETE"},
@@ -279,7 +297,11 @@ def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
     assert rebuilt["summary"]["sbc_exact_rejection_cases_on_sbi_routes"] == 0
     assert rebuilt["reasons"]["pravastatin"]["reason"] == "exact_rejection_sbc_fallback"
     assert rebuilt["reasons"]["ketorolac"]["reason"] == "joint_smc_sbc_fallback"
-    assert rebuilt["multi_observation"] == original["multi_observation"]
+    assert rebuilt["multi_observation"]["validation_status"] == "pending_corrected_sbc"
+    assert rebuilt["multi_observation"]["native_count"] == 0
+    assert all(not row["use_native"] for row in rebuilt["multi_observation"]["drugs"].values())
+    assert rebuilt["continuous"]["validation_status"] == "pending_corrected_sbc"
+    assert rebuilt["continuous"]["sbi_pair_count"] == 0
     assert (rebuilt["reasons"]["morphine"]["tdm_bias_override"]
             == original["reasons"]["morphine"]["tdm_bias_override"])
 
@@ -300,13 +322,9 @@ def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
          "ks_pvalues": [0.2, 0.2, 0.2], "size_calibrated_rejections": 0,
          "rejection_fallback_cases": 1},
     ]}))
-    validation_path = tmp_path / "data/sbi/validation_drug_set.json"
-    validation_path.parent.mkdir(parents=True)
-    validation_path.write_text(json.dumps({"drugs": [
-        {"name": name, "smiles": name} for name in ("morphine", "clozapine", "pravastatin")
-    ]}))
     main()
     decisions = json.loads(out.read_text())["multi_observation"]
+    assert decisions["validation_status"] == "complete"
     assert decisions["native_count"] == 1
     assert decisions["sbc_exact_rejection_cases_total"] == 1
     assert decisions["sbc_exact_rejection_cases_on_native_routes"] == 0
@@ -336,6 +354,7 @@ def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
     rebuilt = json.loads(out.read_text())
     for flow in ("hierarchical", "continuous"):
         section = rebuilt[flow]
+        assert section["validation_status"] == "complete"
         assert section["sbi_pair_count"] == 1
         assert section["sbc_exact_rejection_cases_total"] == 2
         assert section["sbc_exact_rejection_cases_on_sbi_routes"] == 0

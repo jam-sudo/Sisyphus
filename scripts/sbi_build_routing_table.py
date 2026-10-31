@@ -145,6 +145,7 @@ def main() -> None:
         multi_observation = {
             "source": str(args.multi_observation_sbc.resolve().relative_to(ROOT)),
             "model": "multi_observation_nsf.pt",
+            "validation_status": "complete",
             "global_sbc_gate_passed": multi_sbc.get("gate_passed"),
             "size_calibrated_global_gate_status": multi_sbc.get(
                 "size_calibrated_global_gate", {}
@@ -162,6 +163,25 @@ def main() -> None:
             ),
             "drugs": decisions,
         }
+    else:
+        validation = json.loads((ROOT / "data/sbi/validation_drug_set.json").read_text())
+        multi_observation = {
+            "source": str(args.multi_observation_sbc.resolve().relative_to(ROOT)),
+            "model": "multi_observation_nsf.pt",
+            "validation_status": "pending_corrected_sbc",
+            "pending_reason": "Corrected multi-observation SBC is incomplete; use IBIS.",
+            "global_sbc_gate_passed": None,
+            "size_calibrated_global_gate_status": "PENDING",
+            "production_scope_gate_status": "PENDING",
+            "native_count": 0,
+            "drugs": {
+                entry["name"]: {
+                    "smiles": entry["smiles"], "use_native": False,
+                    "reason": "corrected_sbc_pending",
+                }
+                for entry in validation["drugs"]
+            },
+        }
 
     covariate_sections = {
         "hierarchical": existing.get("hierarchical"),
@@ -172,6 +192,17 @@ def main() -> None:
         ("continuous", args.continuous_sbc, "continuous_hierarchical_nsf.pt"),
     ):
         if not path.exists():
+            covariate_sections[flow] = {
+                "source": str(path.resolve().relative_to(ROOT)),
+                "model": model,
+                "validation_status": "pending_corrected_sbc",
+                "pending_reason": f"Corrected {flow} SBC is incomplete; use IBIS.",
+                "global_sbc_gate_passed": None,
+                "size_calibrated_global_gate_status": "PENDING",
+                "production_scope_gate_status": "PENDING",
+                "sbi_pair_count": 0,
+                "pairs": [],
+            }
             continue
         flow_sbc = json.loads(path.read_text())
         validation = json.loads((ROOT / "data/sbi/validation_drug_set.json").read_text())
@@ -208,6 +239,7 @@ def main() -> None:
         covariate_sections[flow] = {
             "source": str(path.resolve().relative_to(ROOT)),
             "model": model,
+            "validation_status": "complete",
             "global_sbc_gate_passed": flow_sbc.get("gate_passed"),
             "size_calibrated_global_gate_status": flow_sbc.get(
                 "size_calibrated_global_gate", {}

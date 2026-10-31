@@ -165,7 +165,10 @@ def _sbc_covariate_exclusion(
         from rdkit import Chem
 
         table_path = get_resource_config().data("sbi", "method_routing.json", required=False)
-        pairs = json.loads(table_path.read_text())[flow]["pairs"]
+        section = json.loads(table_path.read_text())[flow]
+        if section.get("validation_status") == "pending_corrected_sbc":
+            return f"{flow} corrected SBC is pending"
+        pairs = section["pairs"]
         molecule = Chem.MolFromSmiles(drug.smiles)
         if molecule is None:
             return None
@@ -269,6 +272,19 @@ def sbi_update(
         or not np.isfinite(age_years) or age_years <= 0
     ):
         raise ValueError("body_weight_kg and age_years must be finite and positive")
+
+    if len(observations) > 1 and posterior_path is None and not raw_npe:
+        table_path = get_resource_config().data("sbi", "method_routing.json", required=False)
+        try:
+            status = json.loads(table_path.read_text())["multi_observation"].get(
+                "validation_status"
+            )
+        except (OSError, KeyError, TypeError, ValueError):
+            status = None
+        if status == "pending_corrected_sbc":
+            from sisyphus.sbi.importance import LowImportanceESS
+
+            raise LowImportanceESS("Multi-observation corrected SBC is pending")
 
     _extra_obs = observations[1:]
     native_context = None
