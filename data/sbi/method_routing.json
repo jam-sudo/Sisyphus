@@ -197,7 +197,7 @@
       "tdm_bias_override": {
         "sbi_bias_pct": 80.2,
         "is_bias_pct": 3.3,
-        "reason": "Current 22.5 mg / 0.0285 mg/L comparison: SBI is biased and fails SBC; IBIS route retained."
+        "reason": "Historical pre-correction 22.5 mg / 0.0285 mg/L comparison; these bias figures do not govern corrected routing."
       }
     },
     "clozapine": {
