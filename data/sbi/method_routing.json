@@ -735,12 +735,950 @@
   "continuous": {
     "source": "data/validation/sbi_sbc_continuous_corrected.json",
     "model": "continuous_hierarchical_nsf.pt",
-    "validation_status": "pending_corrected_sbc",
-    "pending_reason": "Corrected continuous SBC is incomplete; use IBIS.",
-    "global_sbc_gate_passed": null,
-    "size_calibrated_global_gate_status": "PENDING",
-    "production_scope_gate_status": "PENDING",
-    "sbi_pair_count": 0,
-    "pairs": []
+    "validation_status": "complete",
+    "global_sbc_gate_passed": false,
+    "size_calibrated_global_gate_status": "PASS",
+    "production_scope_gate_status": "PASS",
+    "sbi_pair_count": 43,
+    "sbc_exact_rejection_cases_total": 135,
+    "sbc_exact_rejection_cases_on_sbi_routes": 0,
+    "pairs": [
+      {
+        "population": "adult",
+        "drug": "amantadine",
+        "smiles": "NC12CC3CC(CC(C3)C1)C2",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.053333333333333344,
+        "ks_pvalues": [
+          0.7099740927225346,
+          0.8226070473442811,
+          0.978464816965612
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 70.0,
+        "age_years": 35.0
+      },
+      {
+        "population": "adult",
+        "drug": "clozapine",
+        "smiles": "CN1CCN(C2=Nc3cc(Cl)ccc3Nc3ccccc32)CC1",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.026666666666666727,
+        "ks_pvalues": [
+          0.6862151269935497,
+          0.8013055710150196,
+          0.47640149959891964
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 70.0,
+        "age_years": 35.0
+      },
+      {
+        "population": "adult",
+        "drug": "diclofenac",
+        "smiles": "O=C(O)Cc1ccccc1Nc1c(Cl)cccc1Cl",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.06666666666666665,
+        "ks_pvalues": [
+          0.6383642238966601,
+          0.8430450355813026,
+          0.35528713558996927
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 70.0,
+        "age_years": 35.0
+      },
+      {
+        "population": "adult",
+        "drug": "digoxin",
+        "smiles": "C[C@H]1O[C@@H](O[C@H]2[C@@H](O)C[C@H](O[C@H]3[C@@H](O)C[C@H](O[C@H]4CC[C@@]5(C)[C@H](CC[C@@H]6[C@@H]5C[C@@H](O)[C@]5(C)[C@@H](C7=CC(=O)OC7)CC[C@]65O)C4)O[C@@H]3C)O[C@@H]2C)C[C@H](O)[C@@H]1O",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.026666666666666616,
+        "ks_pvalues": [
+          0.1295345016435021,
+          0.6623112704658186,
+          0.8979683012424811
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 70.0,
+        "age_years": 35.0
+      },
+      {
+        "population": "adult",
+        "drug": "indomethacin",
+        "smiles": "COc1ccc2c(c1)c(CC(=O)O)c(C)n2C(=O)c1ccc(Cl)cc1",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.0733333333333333,
+        "ks_pvalues": [
+          0.8013055710150206,
+          0.6144679259196915,
+          0.1788302080222789
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 70.0,
+        "age_years": 35.0
+      },
+      {
+        "population": "adult",
+        "drug": "ketorolac",
+        "smiles": "O=C(c1ccccc1)c1ccc2n1CCC2C(=O)O",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.08666666666666667,
+        "ks_pvalues": [
+          0.02893764724705561,
+          0.13839626223270962,
+          0.6383642238966599
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 70.0,
+        "age_years": 35.0
+      },
+      {
+        "population": "adult",
+        "drug": "morphine",
+        "smiles": "CN1CC[C@]23c4c5ccc(O)c4O[C@H]2[C@@H](O)C=C[C@H]3[C@H]1C5",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.053333333333333344,
+        "ks_pvalues": [
+          0.24172197153946684,
+          0.614467925919691,
+          0.8226070473442803
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 70.0,
+        "age_years": 35.0
+      },
+      {
+        "population": "adult",
+        "drug": "phenytoin",
+        "smiles": "O=C1NC(=O)C(c2ccccc2)(c2ccccc2)N1",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.040000000000000036,
+        "ks_pvalues": [
+          0.6623112704658186,
+          0.19026366518247895,
+          0.41326582882335705
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 70.0,
+        "age_years": 35.0
+      },
+      {
+        "population": "adult",
+        "drug": "posaconazole",
+        "smiles": "CC[C@@H]([C@H](C)O)n1ncn(-c2ccc(N3CCN(c4ccc(OC[C@@H]5CO[C@@](Cn6cncn6)(c6ccc(F)cc6F)C5)cc4)CC3)cc2)c1=O",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.04999999999999993,
+        "ks_pvalues": [
+          0.8430450355813035,
+          0.20225659695388243,
+          0.80130557101502
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 70.0,
+        "age_years": 35.0
+      },
+      {
+        "population": "adult",
+        "drug": "pravastatin",
+        "smiles": "CC[C@H](C)C(=O)O[C@H]1C[C@H](O)C=C2C=C[C@H](C)[C@H](CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H]21",
+        "use_sbi": false,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.046666666666666634,
+        "ks_pvalues": [
+          0.8624954708070612,
+          0.41326582882335705,
+          0.80130557101502
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 45,
+        "joint_smc_fallback_cases": 5,
+        "body_weight_kg": 70.0,
+        "age_years": 35.0
+      },
+      {
+        "population": "adult",
+        "drug": "rivaroxaban",
+        "smiles": "O=C(NC[C@H]1CN(c2ccc(N3CCOCC3=O)cc2)C(=O)O1)c1ccc(Cl)s1",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.039999999999999925,
+        "ks_pvalues": [
+          0.8226070473442815,
+          0.8226070473442815,
+          0.5439007965907301
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 70.0,
+        "age_years": 35.0
+      },
+      {
+        "population": "adult",
+        "drug": "sildenafil",
+        "smiles": "CCCc1nn(C)c2c(=O)[nH]c(-c3cc(S(=O)(=O)N4CCN(C)CC4)ccc3OCC)nc12",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.036666666666666514,
+        "ks_pvalues": [
+          0.6862151269935497,
+          0.8979683012424811,
+          0.9137863527969874
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 70.0,
+        "age_years": 35.0
+      },
+      {
+        "population": "adult",
+        "drug": "tamoxifen",
+        "smiles": "CC/C(=C(\\c1ccccc1)c1ccc(OCCN(C)C)cc1)c1ccccc1",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.046666666666666745,
+        "ks_pvalues": [
+          0.8808397019410223,
+          0.7792669264508326,
+          0.050794046662624104
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 70.0,
+        "age_years": 35.0
+      },
+      {
+        "population": "elderly",
+        "drug": "amantadine",
+        "smiles": "NC12CC3CC(CC(C3)C1)C2",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.04666666666666669,
+        "ks_pvalues": [
+          0.2279738116723229,
+          0.059203793031862406,
+          0.2417219715394695
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 65.0,
+        "age_years": 75.0
+      },
+      {
+        "population": "elderly",
+        "drug": "clozapine",
+        "smiles": "CN1CCN(C2=Nc3cc(Cl)ccc3Nc3ccccc32)CC1",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.040000000000000036,
+        "ks_pvalues": [
+          0.15758392405428878,
+          0.9412041580051129,
+          0.10568018540357527
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 65.0,
+        "age_years": 75.0
+      },
+      {
+        "population": "elderly",
+        "drug": "diclofenac",
+        "smiles": "O=C(O)Cc1ccccc1Nc1c(Cl)cccc1Cl",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.033333333333333215,
+        "ks_pvalues": [
+          0.2148224765245954,
+          0.16794194365412696,
+          0.5907081632400034
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 65.0,
+        "age_years": 75.0
+      },
+      {
+        "population": "elderly",
+        "drug": "digoxin",
+        "smiles": "C[C@H]1O[C@@H](O[C@H]2[C@@H](O)C[C@H](O[C@H]3[C@@H](O)C[C@H](O[C@H]4CC[C@@]5(C)[C@H](CC[C@@H]6[C@@H]5C[C@@H](O)[C@]5(C)[C@@H](C7=CC(=O)OC7)CC[C@]65O)C4)O[C@@H]3C)O[C@@H]2C)C[C@H](O)[C@@H]1O",
+        "use_sbi": true,
+        "sbc_pass": false,
+        "coverage_max_deviation": 0.1333333333333333,
+        "ks_pvalues": [
+          0.8226070473442815,
+          0.7099740927225349,
+          0.2560769945162349
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 65.0,
+        "age_years": 75.0
+      },
+      {
+        "population": "elderly",
+        "drug": "indomethacin",
+        "smiles": "COc1ccc2c(c1)c(CC(=O)O)c(C)n2C(=O)c1ccc(Cl)cc1",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.046666666666666745,
+        "ks_pvalues": [
+          0.9713066783517574,
+          0.3028590143234029,
+          0.6144679259196915
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 65.0,
+        "age_years": 75.0
+      },
+      {
+        "population": "elderly",
+        "drug": "ketorolac",
+        "smiles": "O=C(c1ccccc1)c1ccc2n1CCC2C(=O)O",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.053333333333333344,
+        "ks_pvalues": [
+          0.7334795935916122,
+          0.2279738116723229,
+          0.6623112704658186
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 65.0,
+        "age_years": 75.0
+      },
+      {
+        "population": "elderly",
+        "drug": "morphine",
+        "smiles": "CN1CC[C@]23c4c5ccc(O)c4O[C@H]2[C@@H](O)C=C[C@H]3[C@H]1C5",
+        "use_sbi": false,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.02000000000000013,
+        "ks_pvalues": [
+          0.09188724129186743,
+          0.3197072950775771,
+          0.2560769945162349
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 5,
+        "body_weight_kg": 65.0,
+        "age_years": 75.0
+      },
+      {
+        "population": "elderly",
+        "drug": "phenytoin",
+        "smiles": "O=C1NC(=O)C(c2ccccc2)(c2ccccc2)N1",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.03333333333333344,
+        "ks_pvalues": [
+          0.39333997730494386,
+          0.47640149959892053,
+          0.6862151269935504
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 65.0,
+        "age_years": 75.0
+      },
+      {
+        "population": "elderly",
+        "drug": "posaconazole",
+        "smiles": "CC[C@@H]([C@H](C)O)n1ncn(-c2ccc(N3CCN(c4ccc(OC[C@@H]5CO[C@@](Cn6cncn6)(c6ccc(F)cc6F)C5)cc4)CC3)cc2)c1=O",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.030000000000000027,
+        "ks_pvalues": [
+          0.13839626223270962,
+          0.8808397019410232,
+          0.27104737463991946
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 65.0,
+        "age_years": 75.0
+      },
+      {
+        "population": "elderly",
+        "drug": "pravastatin",
+        "smiles": "CC[C@H](C)C(=O)O[C@H]1C[C@H](O)C=C2C=C[C@H](C)[C@H](CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H]21",
+        "use_sbi": false,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.026666666666666727,
+        "ks_pvalues": [
+          0.10568018540357527,
+          0.08557425413007902,
+          0.2560769945162349
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 45,
+        "joint_smc_fallback_cases": 5,
+        "body_weight_kg": 65.0,
+        "age_years": 75.0
+      },
+      {
+        "population": "elderly",
+        "drug": "rivaroxaban",
+        "smiles": "O=C(NC[C@H]1CN(c2ccc(N3CCOCC3=O)cc2)C(=O)O1)c1ccc(Cl)s1",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.046666666666666745,
+        "ks_pvalues": [
+          0.5439007965907301,
+          0.35528713558996927,
+          0.8013055710150196
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 65.0,
+        "age_years": 75.0
+      },
+      {
+        "population": "elderly",
+        "drug": "sildenafil",
+        "smiles": "CCCc1nn(C)c2c(=O)[nH]c(-c3cc(S(=O)(=O)N4CCN(C)CC4)ccc3OCC)nc12",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.060000000000000164,
+        "ks_pvalues": [
+          0.9282171145452532,
+          0.3740090303163853,
+          0.6862151269935504
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 65.0,
+        "age_years": 75.0
+      },
+      {
+        "population": "elderly",
+        "drug": "tamoxifen",
+        "smiles": "CC/C(=C(\\c1ccccc1)c1ccc(OCCN(C)C)cc1)c1ccccc1",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.053333333333333344,
+        "ks_pvalues": [
+          0.2279738116723229,
+          0.4548228400774643,
+          0.7566170795017089
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 65.0,
+        "age_years": 75.0
+      },
+      {
+        "population": "infant_1y",
+        "drug": "amantadine",
+        "smiles": "NC12CC3CC(CC(C3)C1)C2",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.06000000000000005,
+        "ks_pvalues": [
+          0.13839626223271506,
+          0.157583924054294,
+          0.4548228400774643
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 8.0,
+        "age_years": 1.0
+      },
+      {
+        "population": "infant_1y",
+        "drug": "clozapine",
+        "smiles": "CN1CCN(C2=Nc3cc(Cl)ccc3Nc3ccccc32)CC1",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.026666666666666616,
+        "ks_pvalues": [
+          0.9842992882081265,
+          0.9995041663900837,
+          0.35528713558996927
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 8.0,
+        "age_years": 1.0
+      },
+      {
+        "population": "infant_1y",
+        "drug": "diclofenac",
+        "smiles": "O=C(O)Cc1ccccc1Nc1c(Cl)cccc1Cl",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.03999999999999998,
+        "ks_pvalues": [
+          0.27104737463991835,
+          0.07962858942979378,
+          0.1295345016435021
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 8.0,
+        "age_years": 1.0
+      },
+      {
+        "population": "infant_1y",
+        "drug": "digoxin",
+        "smiles": "C[C@H]1O[C@@H](O[C@H]2[C@@H](O)C[C@H](O[C@H]3[C@@H](O)C[C@H](O[C@H]4CC[C@@]5(C)[C@H](CC[C@@H]6[C@@H]5C[C@@H](O)[C@]5(C)[C@@H](C7=CC(=O)OC7)CC[C@]65O)C4)O[C@@H]3C)O[C@@H]2C)C[C@H](O)[C@@H]1O",
+        "use_sbi": false,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.040000000000000036,
+        "ks_pvalues": [
+          0.733479593591613,
+          0.6862151269935504,
+          0.5671625697701184
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 5,
+        "body_weight_kg": 8.0,
+        "age_years": 1.0
+      },
+      {
+        "population": "infant_1y",
+        "drug": "indomethacin",
+        "smiles": "COc1ccc2c(c1)c(CC(=O)O)c(C)n2C(=O)c1ccc(Cl)cc1",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.046666666666666634,
+        "ks_pvalues": [
+          0.8013055710150206,
+          0.4548228400774643,
+          0.6144679259196915
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 8.0,
+        "age_years": 1.0
+      },
+      {
+        "population": "infant_1y",
+        "drug": "ketorolac",
+        "smiles": "O=C(c1ccccc1)c1ccc2n1CCC2C(=O)O",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.019999999999999907,
+        "ks_pvalues": [
+          0.3197072950775802,
+          0.24172197153946684,
+          0.8979683012424806
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 8.0,
+        "age_years": 1.0
+      },
+      {
+        "population": "infant_1y",
+        "drug": "morphine",
+        "smiles": "CN1CC[C@]23c4c5ccc(O)c4O[C@H]2[C@@H](O)C=C[C@H]3[C@H]1C5",
+        "use_sbi": false,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.026666666666666672,
+        "ks_pvalues": [
+          0.3371844011250642,
+          0.5439007965907301,
+          0.9137863527969874
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 5,
+        "body_weight_kg": 8.0,
+        "age_years": 1.0
+      },
+      {
+        "population": "infant_1y",
+        "drug": "phenytoin",
+        "smiles": "O=C1NC(=O)C(c2ccccc2)(c2ccccc2)N1",
+        "use_sbi": false,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.05333333333333329,
+        "ks_pvalues": [
+          0.3371844011250642,
+          0.4548228400774643,
+          0.8226070473442811
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 5,
+        "body_weight_kg": 8.0,
+        "age_years": 1.0
+      },
+      {
+        "population": "infant_1y",
+        "drug": "posaconazole",
+        "smiles": "CC[C@@H]([C@H](C)O)n1ncn(-c2ccc(N3CCN(c4ccc(OC[C@@H]5CO[C@@](Cn6cncn6)(c6ccc(F)cc6F)C5)cc4)CC3)cc2)c1=O",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.036666666666666514,
+        "ks_pvalues": [
+          0.9784648169656118,
+          0.9924697629986744,
+          0.6144679259196915
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 8.0,
+        "age_years": 1.0
+      },
+      {
+        "population": "infant_1y",
+        "drug": "pravastatin",
+        "smiles": "CC[C@H](C)C(=O)O[C@H]1C[C@H](O)C=C2C=C[C@H](C)[C@H](CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H]21",
+        "use_sbi": false,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.040000000000000036,
+        "ks_pvalues": [
+          0.41326582882335705,
+          0.9713066783517571,
+          0.2279738116723229
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 50,
+        "body_weight_kg": 8.0,
+        "age_years": 1.0
+      },
+      {
+        "population": "infant_1y",
+        "drug": "rivaroxaban",
+        "smiles": "O=C(NC[C@H]1CN(c2ccc(N3CCOCC3=O)cc2)C(=O)O1)c1ccc(Cl)s1",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.013333333333333308,
+        "ks_pvalues": [
+          0.2279738116723229,
+          0.3197072950775802,
+          0.7334795935916134
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 8.0,
+        "age_years": 1.0
+      },
+      {
+        "population": "infant_1y",
+        "drug": "sildenafil",
+        "smiles": "CCCc1nn(C)c2c(=O)[nH]c(-c3cc(S(=O)(=O)N4CCN(C)CC4)ccc3OCC)nc12",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.019999999999999907,
+        "ks_pvalues": [
+          0.5209847934534002,
+          0.6623112704658182,
+          0.9137863527969872
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 8.0,
+        "age_years": 1.0
+      },
+      {
+        "population": "infant_1y",
+        "drug": "tamoxifen",
+        "smiles": "CC/C(=C(\\c1ccccc1)c1ccc(OCCN(C)C)cc1)c1ccccc1",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.026666666666666616,
+        "ks_pvalues": [
+          0.28663982433062885,
+          0.8808397019410223,
+          0.8430450355813026
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 8.0,
+        "age_years": 1.0
+      },
+      {
+        "population": "pediatric_5y",
+        "drug": "amantadine",
+        "smiles": "NC12CC3CC(CC(C3)C1)C2",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.019999999999999907,
+        "ks_pvalues": [
+          0.9137863527969872,
+          0.2560769945162349,
+          0.12953450164350444
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 18.0,
+        "age_years": 5.0
+      },
+      {
+        "population": "pediatric_5y",
+        "drug": "clozapine",
+        "smiles": "CN1CCN(C2=Nc3cc(Cl)ccc3Nc3ccccc32)CC1",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.03333333333333338,
+        "ks_pvalues": [
+          0.3028590143234029,
+          0.9412041580051127,
+          0.3028590143234029
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 18.0,
+        "age_years": 5.0
+      },
+      {
+        "population": "pediatric_5y",
+        "drug": "diclofenac",
+        "smiles": "O=C(O)Cc1ccccc1Nc1c(Cl)cccc1Cl",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.040000000000000036,
+        "ks_pvalues": [
+          0.8808397019410232,
+          0.4548228400774643,
+          0.13839626223271506
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 18.0,
+        "age_years": 5.0
+      },
+      {
+        "population": "pediatric_5y",
+        "drug": "digoxin",
+        "smiles": "C[C@H]1O[C@@H](O[C@H]2[C@@H](O)C[C@H](O[C@H]3[C@@H](O)C[C@H](O[C@H]4CC[C@@]5(C)[C@H](CC[C@@H]6[C@@H]5C[C@@H](O)[C@]5(C)[C@@H](C7=CC(=O)OC7)CC[C@]65O)C4)O[C@@H]3C)O[C@@H]2C)C[C@H](O)[C@@H]1O",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.026666666666666672,
+        "ks_pvalues": [
+          0.1679419436541263,
+          0.5907081632400053,
+          0.9412041580051126
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 18.0,
+        "age_years": 5.0
+      },
+      {
+        "population": "pediatric_5y",
+        "drug": "indomethacin",
+        "smiles": "COc1ccc2c(c1)c(CC(=O)O)c(C)n2C(=O)c1ccc(Cl)cc1",
+        "use_sbi": false,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.023333333333333317,
+        "ks_pvalues": [
+          0.8624954708070617,
+          0.8226070473442815,
+          0.4548228400774643
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 5,
+        "body_weight_kg": 18.0,
+        "age_years": 5.0
+      },
+      {
+        "population": "pediatric_5y",
+        "drug": "ketorolac",
+        "smiles": "O=C(c1ccccc1)c1ccc2n1CCC2C(=O)O",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.01333333333333342,
+        "ks_pvalues": [
+          0.6862151269935504,
+          0.8226070473442809,
+          0.2148224765245963
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 18.0,
+        "age_years": 5.0
+      },
+      {
+        "population": "pediatric_5y",
+        "drug": "morphine",
+        "smiles": "CN1CC[C@]23c4c5ccc(O)c4O[C@H]2[C@@H](O)C=C[C@H]3[C@H]1C5",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.04999999999999993,
+        "ks_pvalues": [
+          0.28663982433062807,
+          0.41326582882335705,
+          0.3740090303163859
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 18.0,
+        "age_years": 5.0
+      },
+      {
+        "population": "pediatric_5y",
+        "drug": "phenytoin",
+        "smiles": "O=C1NC(=O)C(c2ccccc2)(c2ccccc2)N1",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.039999999999999925,
+        "ks_pvalues": [
+          0.6623112704658173,
+          0.6144679259196915,
+          0.2417219715394675
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 18.0,
+        "age_years": 5.0
+      },
+      {
+        "population": "pediatric_5y",
+        "drug": "posaconazole",
+        "smiles": "CC[C@@H]([C@H](C)O)n1ncn(-c2ccc(N3CCN(c4ccc(OC[C@@H]5CO[C@@](Cn6cncn6)(c6ccc(F)cc6F)C5)cc4)CC3)cc2)c1=O",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.039999999999999925,
+        "ks_pvalues": [
+          0.05486088503033937,
+          0.47640149959892053,
+          0.35528713558996927
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 18.0,
+        "age_years": 5.0
+      },
+      {
+        "population": "pediatric_5y",
+        "drug": "pravastatin",
+        "smiles": "CC[C@H](C)C(=O)O[C@H]1C[C@H](O)C=C2C=C[C@H](C)[C@H](CC[C@@H](O)C[C@@H](O)CC(=O)O)[C@H]21",
+        "use_sbi": false,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.053333333333333344,
+        "ks_pvalues": [
+          0.8979683012424811,
+          0.39333997730494386,
+          0.41326582882335705
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 45,
+        "joint_smc_fallback_cases": 5,
+        "body_weight_kg": 18.0,
+        "age_years": 5.0
+      },
+      {
+        "population": "pediatric_5y",
+        "drug": "rivaroxaban",
+        "smiles": "O=C(NC[C@H]1CN(c2ccc(N3CCOCC3=O)cc2)C(=O)O1)c1ccc(Cl)s1",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.07999999999999996,
+        "ks_pvalues": [
+          0.7334795935916135,
+          0.8624954708070612,
+          0.2560769945162349
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 18.0,
+        "age_years": 5.0
+      },
+      {
+        "population": "pediatric_5y",
+        "drug": "sildenafil",
+        "smiles": "CCCc1nn(C)c2c(=O)[nH]c(-c3cc(S(=O)(=O)N4CCN(C)CC4)ccc3OCC)nc12",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.039999999999999925,
+        "ks_pvalues": [
+          0.5209847934534002,
+          0.7334795935916135,
+          0.39333997730494386
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 18.0,
+        "age_years": 5.0
+      },
+      {
+        "population": "pediatric_5y",
+        "drug": "tamoxifen",
+        "smiles": "CC/C(=C(\\c1ccccc1)c1ccc(OCCN(C)C)cc1)c1ccccc1",
+        "use_sbi": true,
+        "sbc_pass": true,
+        "coverage_max_deviation": 0.09333333333333327,
+        "ks_pvalues": [
+          0.779266926450832,
+          0.5209847934534002,
+          0.3740090303163859
+        ],
+        "size_calibrated_rejections": 0,
+        "rejection_fallback_cases": 0,
+        "joint_smc_fallback_cases": 0,
+        "body_weight_kg": 18.0,
+        "age_years": 5.0
+      }
+    ]
   }
 }

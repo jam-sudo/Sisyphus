@@ -47,6 +47,15 @@
     "budget_evidence": "data/validation/sbi_importance_pilot.json",
     "corrected_sbc": "data/validation/sbi_sbc_continuous_corrected.json",
     "ideal_gate_null": "data/validation/sbi_global_gate_null.json",
+    "exact_reference_null": "data/validation/sbi_global_gate_exact_reference_null.json",
+    "validation_summary": {
+      "original_global_gate_passed": false,
+      "holm_global_gate_passed": false,
+      "size_calibrated_global_gate_status": "PASS",
+      "production_scope_gate_status": "PASS",
+      "sbi_pair_count": 43,
+      "total_pairs": 52
+    },
     "proposal_retry_counts": [
       256,
       512,

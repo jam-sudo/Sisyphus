@@ -117,13 +117,24 @@ class TestSBIDispatch:
         assert "pending" in tdm_sbi._sbc_covariate_exclusion(drug, None, 70.0, 35.0)
 
     def test_pending_multi_observation_falls_back_before_model_load(
-        self, physiology, morphine_drug,
+        self, physiology, morphine_drug, monkeypatch, tmp_path,
     ):
+        from types import SimpleNamespace
+
+        from sisyphus.regimen import tdm_sbi
         from sisyphus.regimen.tdm_sbi import sbi_update
         from sisyphus.sbi.importance import LowImportanceESS
 
         graph, compiled = physiology
         drug, logp = morphine_drug
+        path = tmp_path / "routing.json"
+        path.write_text(json.dumps({
+            "multi_observation": {"validation_status": "pending_corrected_sbc"},
+        }))
+        monkeypatch.setattr(
+            tdm_sbi, "get_resource_config",
+            lambda: SimpleNamespace(data=lambda *args, **kwargs: path),
+        )
         with pytest.raises(LowImportanceESS, match="Multi-observation corrected SBC is pending"):
             sbi_update(
                 compiled, graph, drug, DosingRegimen.single_oral(30.0),
