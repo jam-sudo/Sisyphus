@@ -273,6 +273,7 @@ def test_routing_rebuild_preserves_tdm_overrides(tmp_path, monkeypatch):
     assert rebuilt["summary"]["ibis"] == 3
     assert rebuilt["summary"]["global_sbc_gate_passed"] is False
     assert rebuilt["summary"]["size_calibrated_global_gate_status"] == "INCOMPLETE"
+    assert "Amended after corrected multi-drug" in rebuilt["policy"]["routing_rule_decision_timing"]
     assert rebuilt["summary"]["production_scope_gate_status"] == "PASS"
     assert rebuilt["summary"]["sbc_exact_rejection_cases_total"] == 1
     assert rebuilt["summary"]["sbc_exact_rejection_cases_on_sbi_routes"] == 0

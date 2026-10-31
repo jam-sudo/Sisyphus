@@ -230,6 +230,10 @@ def main() -> None:
         "policy": {
             "original_strict_coverage_ok": STRICT_COVERAGE_OK,
             "original_borderline_coverage": BORDERLINE_COVERAGE,
+            "routing_rule_decision_timing": (
+                "Amended after corrected multi-drug SBC results were visible; "
+                "the original per-row gate remains informational."
+            ),
             "description": (
                 "SBI only where per-drug or covariate-pair SBC has no exact rejection, "
                 "joint SMC fallback, or "
