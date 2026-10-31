@@ -295,6 +295,8 @@ With `--method sbi` and both body weight and age supplied, TDM uses the continuo
 
 The completed corrected multi-drug SBC **fails the unchanged global gate**: 9 of 13 drug rows pass, four exceed the 0.10 coverage tolerance, and all 39 marginal KS p-values exceed 0.01. The supplementary size-calibrated full-set gate passes with zero rejections among 195 combined KS and coverage tests; its exact-rank null pass probability is 98.99%. The production-scope gate passes with zero rejections among 165 tests on 11 eligible drugs; its null pass probability is 99.98%. Pravastatin's 100 exact-rejection cases and sildenafil's five joint-SMC cases are ineligible under the corrected routing rule. See `data/validation/sbi_sbc_multi_drug_corrected.json`.
 
+The corrected hierarchical SBC also **fails the unchanged global gate**: 20 of 26 population–drug pairs pass, with six per-row failures. Its supplementary size-calibrated full-set gate passes with zero rejections among 390 tests; the production-scope gate passes with zero rejections among 300 tests on 20 eligible pairs. Exact posterior rank simulations put the unchanged 78-test gate's pass probability at 1.08% (95% CI 0.89–1.30%) for a calibrated sampler. See `data/validation/sbi_sbc_hierarchical_corrected.json`.
+
 </details>
 
 <details>
