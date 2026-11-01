@@ -44,9 +44,14 @@ VDF_MIN = 0.03
 VDF_MAX = 50.0
 
 
+from sisyphus.ml.registry import feature_schema_v2  # noqa: E402
+
+
 def compute_features(smiles: str) -> np.ndarray:
     """Compute 2057-element feature vector (Morgan FP + RDKit descriptors)."""
-    from sisyphus.descriptors import compute_features as _compute
+    from sisyphus.descriptors import compute_features_v2 as _compute
+
+
     return _compute(smiles)
 
 
@@ -317,6 +322,7 @@ def main() -> None:
     ):
         meta_path = path.with_suffix(".meta.json")
         metadata = json.loads(meta_path.read_text())
+        metadata["feature_schema"] = feature_schema_v2()
         metadata["artifact_sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
         metadata["trained_on"] = {
             "dataset_path": str(dataset.relative_to(ROOT)),

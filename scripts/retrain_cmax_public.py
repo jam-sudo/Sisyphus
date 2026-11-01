@@ -18,7 +18,8 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from scripts.train_clint_expanded import scaffold_split_indices  # noqa: E402
 from scripts.train_peff import build_holdout_keys, is_holdout  # noqa: E402
-from sisyphus.descriptors import compute_features  # noqa: E402
+from sisyphus.descriptors import compute_features_v2 as compute_features  # noqa: E402
+from sisyphus.ml.registry import feature_schema_v2  # noqa: E402
 
 SOURCE = ROOT / "data/training/omega_mmpk_clean.csv"
 SOURCE_SHA = "e7228d14bdfdfc6c790177207779630c1e5655c19d451528c87b80e2e9de9c3d"
@@ -166,6 +167,7 @@ def main() -> None:
     model = xgb.XGBRegressor(**params).fit(X, y)
     model.save_model(MODEL)
     metadata.update(
+        feature_schema=feature_schema_v2(),
         version="v3_public_omega",
         artifact_sha256=sha256(MODEL),
         trained_at=datetime.now(timezone.utc).isoformat(),

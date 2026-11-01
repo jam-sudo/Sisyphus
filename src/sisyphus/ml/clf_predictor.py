@@ -26,7 +26,7 @@ import numpy as np
 import xgboost as xgb
 
 from sisyphus.core import Distribution
-from sisyphus.descriptors import compute_features
+from sisyphus.descriptors import compute_features_v2
 from sisyphus.ml.registry import verify_model_artifact
 from sisyphus.resources import get_resource_config
 
@@ -57,17 +57,21 @@ class CLFPredictor:
     def __init__(self) -> None:
         self._clf_model: xgb.XGBRegressor | None = None
         self._vdf_model: xgb.XGBRegressor | None = None
+        self._n_features_clf = 0
+        self._n_features_vdf = 0
 
     def _ensure_loaded(self) -> None:
         if self._clf_model is None:
             path = _MODEL_DIR / "xgboost_clf.json"
-            verify_model_artifact(path)
+            manifest = verify_model_artifact(path)
+            self._n_features_clf = int(manifest["feature_schema"]["n_features"])
             self._clf_model = xgb.XGBRegressor()
             self._clf_model.load_model(str(path))
             logger.info("CL/F model loaded from %s", path)
         if self._vdf_model is None:
             path = _MODEL_DIR / "xgboost_vdf.json"
-            verify_model_artifact(path)
+            manifest = verify_model_artifact(path)
+            self._n_features_vdf = int(manifest["feature_schema"]["n_features"])
             self._vdf_model = xgb.XGBRegressor()
             self._vdf_model.load_model(str(path))
             logger.info("Vd/F model loaded from %s", path)
@@ -79,17 +83,25 @@ class CLFPredictor:
             (clf_L_h, vdf_L): CL/F in L/h and Vd/F in L (for BW=70 kg).
         """
         self._ensure_loaded()
-        features = compute_features(smiles).reshape(1, -1)
+        features = compute_features_v2(smiles)
 
         # CL/F: model predicts log10(CL/F in mL/min/kg)
-        log10_clf = float(self._clf_model.predict(features)[0])  # type: ignore[union-attr]
+        log10_clf = float(
+            self._clf_model.predict(  # type: ignore[union-attr]
+                features[: self._n_features_clf].reshape(1, -1)
+            )[0]
+        )
         clf_mL_min_kg = 10**log10_clf
 
         # mL/min/kg → L/h: × BW × 60 / 1000
         clf_L_h = clf_mL_min_kg * _BW_KG * 60.0 / 1000.0
 
         # Vd/F: model predicts log10(Vd/F in L/kg)
-        log10_vdf = float(self._vdf_model.predict(features)[0])  # type: ignore[union-attr]
+        log10_vdf = float(
+            self._vdf_model.predict(  # type: ignore[union-attr]
+                features[: self._n_features_vdf].reshape(1, -1)
+            )[0]
+        )
         vdf_L_kg = 10**log10_vdf
 
         # L/kg → L: × BW

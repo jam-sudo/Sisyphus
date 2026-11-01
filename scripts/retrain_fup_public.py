@@ -19,7 +19,8 @@ from sklearn.model_selection import KFold
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 
-from sisyphus.descriptors import compute_features  # noqa: E402
+from sisyphus.descriptors import compute_features_v2 as compute_features  # noqa: E402
+from sisyphus.ml.registry import feature_schema_v2  # noqa: E402
 from sisyphus.validation.identity import ik14  # noqa: E402
 
 SOURCE = ROOT / "data/ppbr_az.tab"
@@ -108,7 +109,8 @@ def main() -> None:
     model = xgb.XGBRegressor(**PARAMS).fit(X, y)
     model.save_model(MODEL)
     metadata = json.loads(META.read_text())
-    metadata.update(version="v2_public_tdc", artifact_sha256=sha256(MODEL),
+    metadata.update(feature_schema=feature_schema_v2(),
+                    version="v2_public_tdc", artifact_sha256=sha256(MODEL),
                     trained_at=datetime.now(timezone.utc).isoformat(),
                     n_drugs_original=human, n_drugs_excluded=human - len(fitted),
                     holdout_version="N=107 (data/reference/holdout.json)",

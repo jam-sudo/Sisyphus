@@ -13,6 +13,7 @@ from sisyphus.ml.registry import (
     check_feature_hash,
     compute_feature_hash_logp_corr_6,
     compute_feature_hash_v1,
+    compute_feature_hash_v2,
     load_manifest,
     manifest_path_for,
     validate_manifest,
@@ -103,7 +104,14 @@ def test_shipped_manifest_validates(model_path):
 # and the hash-match tests skip — manifest hashes are NOT meant to track
 # arbitrary dev environments, only the pinned production env.
 LOCKFILE_V1_HASH = "b41dddd78533661b8f4aed86bdb7c5f55d15ed3cd2ad20b39e9100557eda631e"
+LOCKFILE_V2_HASH = "578512ba6ad4a5a02dc95be40ec44bb22ef7c8ce35a80d1fe39742d920718a02"
 LOCKFILE_LOGP6_HASH = "a8da0c08b6425b5d5967e38d60fe0130119ad66282a1fac2016bcbf3e9ab0e6d"
+
+# feature_schema.name -> (current hash fn, hash pinned under the lockfile env)
+_FEATURE_PIPELINES = {
+    "compute_features_v1": (compute_feature_hash_v1, LOCKFILE_V1_HASH),
+    "compute_features_v2": (compute_feature_hash_v2, LOCKFILE_V2_HASH),
+}
 
 
 @pytest.mark.parametrize(
@@ -111,21 +119,28 @@ LOCKFILE_LOGP6_HASH = "a8da0c08b6425b5d5967e38d60fe0130119ad66282a1fac2016bcbf3e
     [p for p in ACTIVE_MODELS if p.name != "logp_correction.json"],
     ids=lambda p: p.name,
 )
-def test_shipped_manifest_feature_hash_matches_v1(model_path):
-    """Shipped manifest hash matches compute_features_v1 under the lockfile env.
+def test_shipped_manifest_feature_hash_matches_its_pipeline(model_path):
+    """Shipped manifest hash matches the pipeline its own manifest names.
 
+    Models declare ``feature_schema.name`` (``compute_features_v1`` or
+    ``compute_features_v2``), so v1 and v2 artifacts ship side by side.
     Skips when the runtime env differs from the lockfile env (e.g. local
     dev on older RDKit). CI installs the lockfile so this runs there.
     """
-    current = compute_feature_hash_v1()
-    if current != LOCKFILE_V1_HASH:
-        pytest.skip(
-            f"compute_features_v1 hash {current} differs from the "
-            f"lockfile-pinned {LOCKFILE_V1_HASH}; run under "
-            f"requirements-lock.txt to exercise this test"
-        )
     manifest = load_manifest(model_path)
     assert manifest is not None
+    name = manifest.get("feature_schema", {}).get("name")
+    if name not in _FEATURE_PIPELINES:
+        pytest.skip(
+            f"{model_path.name}: feature schema {name!r} is not a compute_features pipeline"
+        )
+    hash_fn, pinned = _FEATURE_PIPELINES[name]
+    current = hash_fn()
+    if current != pinned:
+        pytest.skip(
+            f"{name} hash {current} differs from the lockfile-pinned "
+            f"{pinned}; run under requirements-lock.txt to exercise this test"
+        )
     mismatch = check_feature_hash(manifest, current)
     assert mismatch is None, f"{model_path.name}: {mismatch}"
 

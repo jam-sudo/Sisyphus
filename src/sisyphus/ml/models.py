@@ -12,7 +12,7 @@ import logging
 import xgboost as xgb
 
 from sisyphus.core import Distribution
-from sisyphus.descriptors import compute_features
+from sisyphus.descriptors import compute_features_v2
 from sisyphus.ml.registry import verify_model_artifact
 from sisyphus.resources import get_resource_config
 
@@ -34,11 +34,13 @@ class PKPredictor:
 
     def __init__(self) -> None:
         self._model: xgb.XGBRegressor | None = None
+        self._n_features = 0
 
     def _ensure_loaded(self) -> None:
         if self._model is None:
             path = _MODEL_DIR / "direct_pk" / "xgboost_cmax.json"
-            verify_model_artifact(path)
+            manifest = verify_model_artifact(path)
+            self._n_features = int(manifest["feature_schema"]["n_features"])
             self._model = xgb.XGBRegressor()
             self._model.load_model(str(path))
             logger.info("XGBoost Cmax model loaded from %s", path)
@@ -58,7 +60,7 @@ class PKPredictor:
             ValueError: If the SMILES string is invalid.
         """
         self._ensure_loaded()
-        features = compute_features(smiles).reshape(1, -1)
+        features = compute_features_v2(smiles)[: self._n_features].reshape(1, -1)
         log_cmax_per_dose = float(self._model.predict(features)[0])  # type: ignore[union-attr]
         cmax = 10**log_cmax_per_dose * dose_mg  # mg/L
         cmax = max(cmax, 1e-10)  # floor to avoid zero/negative

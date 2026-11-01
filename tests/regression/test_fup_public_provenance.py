@@ -22,7 +22,7 @@ def test_public_fup_training_source_and_artifact_are_pinned():
     assert sha256(DATASET) == "e2c70c83707b2031904a351be76ce61899557a4b14316b9429c4a77fd2eac742"
     assert metadata["trained_on"]["n_drugs_clean"] == len(rows)
     assert metadata["artifact_sha256"] == sha256(MODEL)
-    assert sha256(MODEL) == "b0731734730746866646a2628dded73d74254eb06ef1a6c7b457bf273d867096"
+    assert sha256(MODEL) == "b4501d6db2121b20ab1c8815e02637af9b5760646416dc645d6c6e557d41ce3e"
 
 
 def test_missing_public_fup_model_does_not_load_legacy_artifact(tmp_path, monkeypatch):

@@ -33,7 +33,8 @@ from sklearn.model_selection import cross_val_predict
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 
-from sisyphus.descriptors import compute_features  # noqa: E402
+from sisyphus.descriptors import compute_features_v2 as compute_features  # noqa: E402
+from sisyphus.ml.registry import feature_schema_v2  # noqa: E402
 from sisyphus.validation.identity import ik14 as _inchikey_prefix  # noqa: E402
 
 logging.basicConfig(
@@ -276,6 +277,7 @@ def main() -> int:
     manifest_path = OUTPUT_MODEL.with_suffix(".meta.json")
     metadata = json.loads(manifest_path.read_text())
     metadata.update(
+        feature_schema=feature_schema_v2(),
         version="v1_public_tdc",
         artifact_sha256=hashlib.sha256(OUTPUT_MODEL.read_bytes()).hexdigest(),
         trained_at=datetime.now(timezone.utc).isoformat(),

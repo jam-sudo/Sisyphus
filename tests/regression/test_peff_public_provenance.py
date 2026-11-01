@@ -42,7 +42,7 @@ def test_public_peff_fitted_rows_and_artifact_are_pinned():
     metadata = json.loads(OUTPUT_MODEL.with_suffix(".meta.json").read_text())
     assert metadata["trained_on"]["dataset_path"] == str(DATASET.relative_to(ROOT))
     assert metadata["trained_on"]["sha256"] == _sha(DATASET)
-    assert _sha(DATASET) == "46a5a7c4f48b6d6f4f501fdca049c1fe25cadf115658bda504d2e41d2092a06c"
+    assert _sha(DATASET) == "5159f816c73f90c7c6ef8921983c082cf066a6a2ea18a91c415a04e3eb49e57b"
     assert metadata["trained_on"]["n_drugs_clean"] == 874
     assert metadata["artifact_sha256"] == _sha(OUTPUT_MODEL)
-    assert _sha(OUTPUT_MODEL) == "1566e5b7c9ced4c2c1ce6f0d7e693b0190ae7306a8f632a9486c1658dab6e1e7"
+    assert _sha(OUTPUT_MODEL) == "b3b62cb12f80785d44ffedfae6c50f202c47e06423f168591b7ee4877cfaf5c0"

@@ -7,57 +7,57 @@
   "n_training_reference": 36,
   "skipped_training_reference": [],
   "generated_from": "scripts/calibrate_conformal.py",
-  "source_cache_sha256": "7dbaee10f5f348e1e1871321cab51d4afcec8c503b2a0745d8b5864144b2a0d3",
+  "source_cache_sha256": "638d925f5bbfa3e309f79ea0f2c61c3eec9abfd0a8978a68a86e96fdc177a818",
   "calibration_reference_sha256": "48c0a4a904f56617bea084fa27b4deaefcbb5048994f88ce393cb2d40fb917ca",
   "holdout_membership_sha256": "8c5d1b0c42247749767ac3a7da3bd61573e0f9bf45f503347a70f87b6b3ad02a",
   "model_artifact_sha256": {
-    "models/direct_pk/xgboost_cmax.json": "9c5d11043b69fc13ac8a7b961dc1ece5036f923a5ff923464d7e9391ed5183ce",
-    "models/direct_pk/xgboost_clf.json": "6988da95b97a454d9085b15f4fa107012778dda91a203c1c0096c1af40695aeb",
-    "models/direct_pk/xgboost_vdf.json": "5ff06e9949661e696f70d51bae33e5a37124f6cab3e74f27edd96d63f3764462",
-    "models/adme/xgboost_fup_v2.json": "b0731734730746866646a2628dded73d74254eb06ef1a6c7b457bf273d867096",
-    "models/adme/xgboost_clint.json": "0ca4ee7e88367dfb3ad55f94adc8eaa025cdd40b5a308e584b89e05555d3ff42",
-    "models/adme/xgboost_vdss.json": "29f84cbff97da197ae516fccb2d91aff972f9bae661a8b2bde39786a984c1c35",
-    "models/adme/xgboost_peff.json": "1566e5b7c9ced4c2c1ce6f0d7e693b0190ae7306a8f632a9486c1658dab6e1e7"
+    "models/direct_pk/xgboost_cmax.json": "b1da19d87812b1d6372ac0b9d641d386a224be38a5bdaa74337f118c1964d634",
+    "models/direct_pk/xgboost_clf.json": "31d39edb4c96f24148a9b5d626cdc22d8ec4c6c751c122b552f9eb6feff07eee",
+    "models/direct_pk/xgboost_vdf.json": "3993ac2b75e4bf6405fa069f8d116277299427c1ef478f000bf72b86eac718a6",
+    "models/adme/xgboost_fup_v2.json": "b4501d6db2121b20ab1c8815e02637af9b5760646416dc645d6c6e557d41ce3e",
+    "models/adme/xgboost_clint.json": "066f7993b45484ab48eb06b3582f5c7e16995f6845c2586450da6968fd9fab8c",
+    "models/adme/xgboost_vdss.json": "a4d9b4ac42e4bdbb210155bd07ea7ccb03a86530c865dadb9c669b94c8704c6a",
+    "models/adme/xgboost_peff.json": "b3b62cb12f80785d44ffedfae6c50f202c47e06423f168591b7ee4877cfaf5c0"
   },
   "validity": "not split-conformal; fitted components saw calibration outcomes",
   "tracks": {
     "meta": {
-      "0.5": 0.3799252027623623,
-      "0.2": 0.707513757439617,
-      "0.1": 0.9713215723253055,
-      "0.05": 1.672042873029852
+      "0.5": 0.3382657746696545,
+      "0.2": 0.6840140786583102,
+      "0.1": 0.9563483409016478,
+      "0.05": 1.674762336327014
     },
     "engine": {
-      "0.5": 0.6350035622116892,
-      "0.2": 1.3035903521510765,
-      "0.1": 1.4424981111115374,
-      "0.05": 1.8637313665647977
+      "0.5": 0.6283950021354676,
+      "0.2": 1.2540232137271143,
+      "0.1": 1.3072638203537688,
+      "0.05": 1.9018563719592325
     },
     "ml": {
-      "0.5": 0.2891537182260584,
-      "0.2": 0.5563491892497154,
-      "0.1": 0.7547621107736406,
-      "0.05": 1.2050238218007645
+      "0.5": 0.284177859190315,
+      "0.2": 0.534949444051027,
+      "0.1": 0.7309176302591143,
+      "0.05": 1.559885558098372
     }
   },
   "consumed_development_benchmark_coverage": {
     "meta": {
       "0.5": 0.4795,
-      "0.2": 0.7945,
-      "0.1": 0.8904,
+      "0.2": 0.8082,
+      "0.1": 0.9178,
       "0.05": 0.9863
     },
     "engine": {
-      "0.5": 0.5753,
-      "0.2": 0.9178,
-      "0.1": 0.9315,
-      "0.05": 0.9452
+      "0.5": 0.589,
+      "0.2": 0.8904,
+      "0.1": 0.8904,
+      "0.05": 0.9589
     },
     "ml": {
       "0.5": 0.3973,
-      "0.2": 0.6438,
-      "0.1": 0.7123,
-      "0.05": 0.9452
+      "0.2": 0.6712,
+      "0.1": 0.8082,
+      "0.05": 0.9863
     }
   }
 }

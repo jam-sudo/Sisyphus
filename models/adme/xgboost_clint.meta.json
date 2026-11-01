@@ -1,6 +1,6 @@
 {
   "version": "v1_public_hepatocyte",
-  "artifact_sha256": "0ca4ee7e88367dfb3ad55f94adc8eaa025cdd40b5a308e584b89e05555d3ff42",
+  "artifact_sha256": "066f7993b45484ab48eb06b3582f5c7e16995f6845c2586450da6968fd9fab8c",
   "target": "log10(CLint uL/min/10^6 cells); floored at 0.1",
   "trained_on": {
     "dataset_path": "data/training/clint_tdc_public_clean.csv",
@@ -9,19 +9,19 @@
     "source_sha256": "2c217f46600c22e107b72faa2bfb1d9bf799213aee47b601f6e0d6d73b68f274"
   },
   "feature_schema": {
-    "name": "compute_features_v1",
-    "n_features": 2057,
-    "sha256": "b41dddd78533661b8f4aed86bdb7c5f55d15ed3cd2ad20b39e9100557eda631e",
-    "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, MolMR). See src/sisyphus/descriptors.py::compute_features."
+    "name": "compute_features_v2",
+    "n_features": 2074,
+    "sha256": "578512ba6ad4a5a02dc95be40ec44bb22ef7c8ce35a80d1fe39742d920718a02",
+    "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, MolMR) + 17-element pH-7.4 ionization block (strong-acid/strong-base group counts with aryl amines counted separately from aliphatic amines, net-charge class one-hot, formal charge). The first 2057 elements are bit-identical to compute_features_v1. See src/sisyphus/descriptors.py::compute_features_v2."
   },
-  "trained_at": "2026-09-24T03:13:52.787397+00:00",
+  "trained_at": "2026-11-01T17:04:55.613357+00:00",
   "n_drugs_original": 1213,
   "n_drugs_excluded": 218,
   "holdout_version": "N=107 (data/reference/holdout.json)",
   "holdout_metric": {
     "name": "five_fold_scaffold_cv_r2",
-    "value": 0.21514135616646846,
-    "aafe": 2.557336271573206
+    "value": 0.24053385479407774,
+    "aafe": 2.5154309550983656
   },
   "hyperparameters": {
     "n_estimators": 500,

@@ -17,7 +17,7 @@ import numpy as np
 import xgboost as xgb
 
 from sisyphus.core import Distribution
-from sisyphus.descriptors import compute_features
+from sisyphus.descriptors import compute_features_v2
 from sisyphus.predict.chemistry import MolecularProfile
 from sisyphus.resources import get_resource_config
 
@@ -155,6 +155,7 @@ class MeasuredADMEInput:
 # Model cache
 # ---------------------------------------------------------------------------
 _model_cache: dict[str, xgb.XGBRegressor] = {}
+_n_features_cache: dict[str, int] = {}
 
 
 def _load_model(filename: str) -> xgb.XGBRegressor:
@@ -167,12 +168,25 @@ def _load_model(filename: str) -> xgb.XGBRegressor:
             )
         from sisyphus.ml.registry import verify_model_artifact
 
-        verify_model_artifact(path)
+        manifest = verify_model_artifact(path)
         model = xgb.XGBRegressor()
         model.load_model(str(path))
         _model_cache[filename] = model
+        _n_features_cache[filename] = int(manifest["feature_schema"]["n_features"])
         logger.debug("Loaded ADME model: %s", path)
     return _model_cache[filename]
+
+
+def _model_features(filename: str, features_v2: np.ndarray) -> np.ndarray:
+    """Return ``features_v2`` trimmed to the width this model was trained on.
+
+    ``compute_features_v2`` is ``compute_features`` followed by the ionization
+    block, so the first 2057 elements are bit-identical to the v1 vector. One
+    featurization therefore serves v1 and v2 models side by side; each model's
+    manifest declares its own width.
+    """
+    _load_model(filename)
+    return features_v2[: _n_features_cache[filename]].reshape(1, -1)
 
 
 # ---------------------------------------------------------------------------
@@ -185,19 +199,19 @@ _FUP_CV_V2 = 0.40  # from 5-fold CV: AAFE=2.40, R²=0.41
 def _predict_fup(features: np.ndarray) -> Distribution:
     """Use the public, fitted-source-pinned logit model; fail if it is missing."""
     model = _load_model("xgboost_fup_v2.json")
-    logit_fup = float(model.predict(features)[0])
+    logit_fup = float(model.predict(_model_features("xgboost_fup_v2.json", features))[0])
     fup = float(1.0 / (1.0 + np.exp(-logit_fup)))
     return Distribution(mean=fup, cv=_FUP_CV_V2)
 
 
 def _predict_clint(features: np.ndarray) -> Distribution:
-    """Predict hepatocyte intrinsic clearance from 2057-element feature vector.
+    """Predict hepatocyte intrinsic clearance from the shared feature vector.
 
     Model predicts log10(CLint) in uL/min/10^6 cells.
     Output floored at 0.1 uL/min/10^6 cells.
     """
     model = _load_model("xgboost_clint.json")
-    log_clint = float(model.predict(features)[0])
+    log_clint = float(model.predict(_model_features("xgboost_clint.json", features))[0])
     clint = max(10**log_clint, 0.1)
     return Distribution(mean=clint, cv=_CLINT_CV)
 
@@ -227,12 +241,12 @@ def _predict_rbp() -> Distribution:
 
 
 def _predict_vdss(features: np.ndarray) -> Distribution:
-    """Predict volume of distribution at steady state from 2057-element feature vector.
+    """Predict volume of distribution at steady state from the shared feature vector.
 
     Model predicts log10(VDss) in L/kg.  Output floored at 0.01 L/kg.
     """
     model = _load_model("xgboost_vdss.json")
-    log_vdss = float(model.predict(features)[0])
+    log_vdss = float(model.predict(_model_features("xgboost_vdss.json", features))[0])
     vdss = max(10**log_vdss, 0.01)
     return Distribution(mean=vdss, cv=_VDSS_CV)
 
@@ -252,7 +266,9 @@ def _predict_peff_xgb(features: np.ndarray) -> Distribution:
     """
     _CACO2_TO_INVIVO_OFFSET = 1.29  # log10 units, ~20x (training-set calibrated)
     model = _load_model("xgboost_peff.json")
-    log_peff_caco2 = float(model.predict(features)[0])
+    log_peff_caco2 = float(
+        model.predict(_model_features("xgboost_peff.json", features))[0]
+    )
     log_peff_invivo = log_peff_caco2 + _CACO2_TO_INVIVO_OFFSET
     peff = float(np.clip(10**log_peff_invivo, 0.01, 100.0))
     return Distribution(mean=peff, cv=_PEFF_CV_TRAINED)
@@ -274,8 +290,8 @@ def _estimate_peff_heuristic(profile: MolecularProfile) -> Distribution:
 def _estimate_peff(profile: MolecularProfile) -> Distribution:
     """Use the trained Peff model when present; fall back only if absent."""
     if _PEFF_MODEL_PATH.exists():
-        features = compute_features(profile.smiles)
-        return _predict_peff_xgb(features.reshape(1, -1))
+        features = compute_features_v2(profile.smiles)
+        return _predict_peff_xgb(features)
     return _estimate_peff_heuristic(profile)
 
 
@@ -310,8 +326,8 @@ def predict_adme(profile: MolecularProfile) -> ADMEProperties:
     Returns:
         ADMEProperties with uncertainty (all fields are Distributions).
     """
-    features = compute_features(profile.smiles)
-    features_2d = features.reshape(1, -1)
+    features = compute_features_v2(profile.smiles)
+    features_2d = features
 
     # fup: DrugBank measured → XGBoost fallback on >5x disagreement
     #

@@ -115,14 +115,14 @@ def test_public_cmax_fitted_rows_and_artifact_are_pinned():
     assert metadata["trained_on"]["n_drugs_clean"] == 906
     assert metadata["trained_on"]["source_workbooks"] == SOURCE_WORKBOOKS
     assert metadata["artifact_sha256"] == sha256(MODEL)
-    assert sha256(MODEL) == "9c5d11043b69fc13ac8a7b961dc1ece5036f923a5ff923464d7e9391ed5183ce"
+    assert sha256(MODEL) == "b1da19d87812b1d6372ac0b9d641d386a224be38a5bdaa74337f118c1964d634"
     assert metadata["holdout_metric"]["name"] == "five_fold_scaffold_cv_aafe"
-    assert math.isclose(metadata["holdout_metric"]["value"], 3.3821222353454385)
+    assert math.isclose(metadata["holdout_metric"]["value"], 3.128948978219405)
 
     clf_dataset = ROOT / "data/training/clf_training.csv"
     for model_name, expected_n, expected_hash in (
-        ("clf", 898, "6988da95b97a454d9085b15f4fa107012778dda91a203c1c0096c1af40695aeb"),
-        ("vdf", 829, "5ff06e9949661e696f70d51bae33e5a37124f6cab3e74f27edd96d63f3764462"),
+        ("clf", 898, "31d39edb4c96f24148a9b5d626cdc22d8ec4c6c751c122b552f9eb6feff07eee"),
+        ("vdf", 829, "3993ac2b75e4bf6405fa069f8d116277299427c1ef478f000bf72b86eac718a6"),
     ):
         model = ROOT / f"models/direct_pk/xgboost_{model_name}.json"
         meta = json.loads(model.with_suffix(".meta.json").read_text())

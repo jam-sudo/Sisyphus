@@ -41,4 +41,4 @@ def test_public_vdss_fitted_rows_and_artifact_are_pinned():
     assert sha256(DATASET) == "778851b9dad82c2eb3d948b7ffb3ae829ce5fd529395b7d0599d4c86e02e5e54"
     assert metadata["trained_on"]["n_drugs_clean"] == 1055
     assert metadata["artifact_sha256"] == sha256(MODEL)
-    assert sha256(MODEL) == "29f84cbff97da197ae516fccb2d91aff972f9bae661a8b2bde39786a984c1c35"
+    assert sha256(MODEL) == "a4d9b4ac42e4bdbb210155bd07ea7ccb03a86530c865dadb9c669b94c8704c6a"

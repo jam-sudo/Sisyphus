@@ -1,6 +1,6 @@
 {
   "version": "v3_public_omega",
-  "artifact_sha256": "9c5d11043b69fc13ac8a7b961dc1ece5036f923a5ff923464d7e9391ed5183ce",
+  "artifact_sha256": "b1da19d87812b1d6372ac0b9d641d386a224be38a5bdaa74337f118c1964d634",
   "target": "log10(cmax_mg_L / dose_mg)",
   "trained_on": {
     "dataset_path": "data/training/cmax_omega_public_clean.csv",
@@ -19,19 +19,19 @@
     ]
   },
   "feature_schema": {
-    "name": "compute_features_v1",
-    "n_features": 2057,
-    "sha256": "b41dddd78533661b8f4aed86bdb7c5f55d15ed3cd2ad20b39e9100557eda631e",
-    "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, MolMR). See src/sisyphus/descriptors.py::compute_features."
+    "name": "compute_features_v2",
+    "n_features": 2074,
+    "sha256": "578512ba6ad4a5a02dc95be40ec44bb22ef7c8ce35a80d1fe39742d920718a02",
+    "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, MolMR) + 17-element pH-7.4 ionization block (strong-acid/strong-base group counts with aryl amines counted separately from aliphatic amines, net-charge class one-hot, formal charge). The first 2057 elements are bit-identical to compute_features_v1. See src/sisyphus/descriptors.py::compute_features_v2."
   },
-  "trained_at": "2026-09-25T07:07:25.147406+00:00",
+  "trained_at": "2026-11-01T17:05:03.218905+00:00",
   "n_drugs_original": 1128,
   "n_drugs_excluded": 222,
   "holdout_version": "N=107 (data/reference/holdout.json)",
   "holdout_metric": {
     "name": "five_fold_scaffold_cv_aafe",
-    "value": 3.3821222353454385,
-    "r2": 0.33690658176016797
+    "value": 3.128948978219405,
+    "r2": 0.4005298076216214
   },
   "hyperparameters": {
     "n_estimators": 200,
