@@ -21,12 +21,15 @@ app
 archive
 v4_build
 data/drugbank
-data/training
+data/training/*
+!data/training/4track_holdout_predictions.json
 data/docking
 data/chembl
 data/compounds
 data/features
-data/reference
+data/reference/*
+!data/reference/clinical_pk.json
+!data/reference/holdout.json
 data/validation/*
 !data/validation/development_residual_interval.json
 !data/validation/feature_schema_v1.json
