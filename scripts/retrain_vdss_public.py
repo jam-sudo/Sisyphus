@@ -20,7 +20,8 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from scripts.train_clint_expanded import scaffold_split_indices  # noqa: E402
 from scripts.train_peff import build_holdout_keys, is_holdout  # noqa: E402
-from sisyphus.descriptors import compute_features  # noqa: E402
+from sisyphus.descriptors import compute_features_v2 as compute_features  # noqa: E402
+from sisyphus.ml.registry import feature_schema_v2  # noqa: E402
 
 SOURCE = ROOT / "data/vdss_lombardo.tab"
 SOURCE_SHA = "00bb7e0dea19f78c4c1887e27ecf476135d9de2ef5ecc26d7c645c37bd9cb7af"
@@ -83,6 +84,7 @@ def main() -> None:
     model.save_model(MODEL)
     metadata = json.loads(META.read_text())
     metadata.update(
+        feature_schema=feature_schema_v2(),
         version="v1_public_lombardo",
         artifact_sha256=sha256(MODEL),
         trained_at=datetime.now(timezone.utc).isoformat(),

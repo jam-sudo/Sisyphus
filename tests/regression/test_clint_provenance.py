@@ -54,7 +54,7 @@ def test_production_clint_meta_declares_hepatocyte_only() -> None:
     assert sha256(DATASET) == "dbf2b750b58a68af02b01cfe90a370630908c311c8436f65818bbc08fcfaaa94"
     assert meta["trained_on"]["n_drugs_clean"] == 995
     assert meta["artifact_sha256"] == sha256(MODEL)
-    assert sha256(MODEL) == "0ca4ee7e88367dfb3ad55f94adc8eaa025cdd40b5a308e584b89e05555d3ff42"
+    assert sha256(MODEL) == "066f7993b45484ab48eb06b3582f5c7e16995f6845c2586450da6968fd9fab8c"
 
 
 def test_production_clint_fitted_rows_match_filtered_source() -> None:

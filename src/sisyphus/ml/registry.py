@@ -112,6 +112,38 @@ def compute_feature_hash_v1() -> str:
     return hashlib.sha256(feats.tobytes()).hexdigest()
 
 
+def compute_feature_hash_v2() -> str:
+    """Compute sha256 of compute_features_v2(caffeine) under the v2 pipeline.
+
+    The v1 pipeline plus the 17-element pH-7.4 ionization block.
+    """
+    from sisyphus.descriptors import compute_features_v2
+
+    feats = compute_features_v2(CANONICAL_SMILES)
+    return hashlib.sha256(feats.tobytes()).hexdigest()
+
+
+def feature_schema_v2() -> dict[str, Any]:
+    """Return the manifest ``feature_schema`` block for a v2-trained model."""
+    from sisyphus.descriptors import N_IONIZATION_FEATURES
+
+    return {
+        "name": "compute_features_v2",
+        "n_features": 2057 + N_IONIZATION_FEATURES,
+        "sha256": compute_feature_hash_v2(),
+        "description": (
+            "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit "
+            "descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, "
+            "RingCount, FractionCSP3, MolMR) + 17-element pH-7.4 ionization "
+            "block (strong-acid/strong-base group counts with aryl amines "
+            "counted separately from aliphatic amines, net-charge class "
+            "one-hot, formal charge). The first 2057 elements are "
+            "bit-identical to compute_features_v1. See "
+            "src/sisyphus/descriptors.py::compute_features_v2."
+        ),
+    }
+
+
 def compute_feature_hash_logp_corr_6() -> str:
     """Fingerprint the six Crippen-correction inputs on canonical caffeine."""
     import numpy as np
@@ -156,6 +188,12 @@ def _current_feature_hash_v1() -> str:
     return compute_feature_hash_v1()
 
 
+@functools.lru_cache(maxsize=1)
+def _current_feature_hash_v2() -> str:
+    """Current v2-pipeline feature hash, cached."""
+    return compute_feature_hash_v2()
+
+
 def verify_model_artifact(model_json_path: Path | str) -> dict[str, Any]:
     """Check artifact integrity and, where defined, feature-schema drift."""
 
@@ -180,6 +218,8 @@ def verify_model_artifact(model_json_path: Path | str) -> dict[str, Any]:
         return manifest
     if name == "compute_features_v1":
         expected = _current_feature_hash_v1()
+    elif name == "compute_features_v2":
+        expected = _current_feature_hash_v2()
     elif name == "logp_corr_6":
         expected = compute_feature_hash_logp_corr_6()
     else:

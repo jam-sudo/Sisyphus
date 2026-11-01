@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-10-29
+last_updated: 2026-11-01
 parent: ../../README.md
 charter: Chronological log of Sisyphus experiments (successes, negatives, infrastructure). Latest first.
 ---
@@ -7,6 +7,66 @@ charter: Chronological log of Sisyphus experiments (successes, negatives, infras
 # Experiment Log
 
 Reverse-chronological. The project README carries only the **current** headline numbers; this file is the history. For the authoritative failed-experiment list (with do-not-retry gating), see [dead-ends.md](./dead-ends.md). For the why-accuracy-is-bounded analysis, see [diagnosis.md](./diagnosis.md). **Note (PR #51, 2026-05-30):** several internal scratchpad docs (`backlog.md`, `phase-completion.md`, `landmarks.md`, `hardening_backlog.md`) moved to `docs/_internal/` (gitignored). Inline links to those paths in the dated entries below are immutable historical records and resolve only in a working tree that retains the internal docs.
+
+---
+
+## 2026-11-01 — Ionization-aware descriptor vector (`compute_features_v2`)
+
+**Defect.** The shared feature vector in `src/sisyphus/descriptors.py` was Morgan FP (2048 bits) plus nine RDKit descriptors (LogP, TPSA, MW, HBA, HBD, RotBonds, RingCount, FractionCSP3, MolMR). Every one is charge-blind: no pKa, no formal charge, no acid/base indicator. The training labels are not charge-blind — on the holdout-excluded Omega Cmax corpus mean log10(Cmax/dose) runs **-1.664 (acid) → -1.966 (zwitterion) → -2.177 (neutral) → -2.666 (base)**, a 1.0-log class effect the models had no feature to represent. On the N=73 cache all four tracks under-predicted anionic drugs in the same direction (acid mean log10 pred/obs: engine -0.88, ML -0.69, CL/F -0.75, VDss -0.51). The ML track is a pure structure→Cmax regression with no engine physics, so the shared cause was upstream of the engine.
+
+**Change.** `compute_features_v2` = the v1 vector followed by a 17-element pH-7.4 ionization block: strong-acid and strong-base group counts, **aryl amines counted separately from aliphatic amines** (aniline pKaH 4.6, diphenylamine 0.8 vs aliphatic 9–11; Perrin 1965), net-charge-class one-hot, and formal charge. No pKa prediction enters, so DE-08 does not apply. The first 2057 elements are bit-identical to v1, so v1 artifacts stay valid and one featurization serves both; each model declares its width in its manifest `feature_schema`, and `registry.verify_model_artifact` gained a `compute_features_v2` branch. Seven models retrained on v2 through their existing recipes: Cmax, VDss, CLint, fup, Peff, CL/F, Vd/F.
+
+**Pre-registered per-target check**, out-of-fold on each target's own holdout-excluded CSV with the repo 5-fold Murcko scaffold split and pinned hyperparameters — no holdout drug is read:
+
+| target | N | MAE v1→v2 | R² v1→v2 | class-bias spread v1→v2 |
+|---|---:|---|---|---|
+| Cmax | 906 | 0.5292→0.4954 | 0.3369→**0.4005** | 0.33→0.085 |
+| VDss | 1055 | 0.3543→0.3433 | 0.4830→**0.5067** | 0.416→0.194 |
+| CLint | 995 | 0.4070→0.4006 | 0.2167→**0.2405** | 0.313→0.159 |
+| fup | 1557 | 1.0013→0.9697 | 0.4561→**0.4925** | 0.310→0.132 |
+| CL/F | 1004 | 0.6743→0.6653 | 0.1778→**0.1870** | 0.158→0.036 |
+
+5/5 targets improve on both MAE and R², and the acid/base/zwitterion/neutral bias spread roughly halves or better. **Capacity control:** the nine descriptors plus the 17 ionization features with no fingerprint at all — 26 features — score Cmax OOF AAFE **3.262**, beating the full 2057-feature production model (**3.382**). The gain is the ionization information, not added capacity. CLint scaffold-CV R² **0.215→0.241** moves the number the accuracy-ceiling section calls the weakest link; it remains a weak predictor.
+
+**N=73 development benchmark**, public-clone state (`data/drugbank/` and `models/adme/logp_correction.json` moved aside for the run):
+
+| N=73 track | Previous | New | %2-fold old→new | %3-fold old→new | 95% CI old→new |
+|---|---:|---:|---:|---:|---|
+| Meta AAFE | 2.8251 | **2.5434** | 39.7→45.2% | 61.6→63.0% | [2.3102, 3.4935]→[2.1167, 3.0853] |
+| Engine AAFE | 4.6537 | **4.2593** | 30.1→34.2% | 46.6→47.9% | [3.4500, 6.4343]→[3.2304, 5.7359] |
+| ML AAFE | 3.0490 | **2.7861** | 41.1→42.5% | 57.5→63.0% | [2.4657, 3.7782]→[2.3120, 3.3969] |
+| In-domain Meta | 2.7623 (N=59) | **2.4631 (N=59)** | 37.3→42.4% | 62.7→64.4% | [2.2902, 3.3841]→[2.0691, 2.9545] |
+
+The engine moves because fup, CLint, VDss and Peff are engine inputs. Per-type Meta AAFE: acid **5.367→3.324** (bias -0.684→-0.502), zwitterion **3.750→2.626** (-0.574→-0.396), neutral 2.489→2.299, base 2.583→2.554 — the gain is concentrated where the defect predicted it. The N=59 in-domain membership is unchanged.
+
+**What this does and does not establish.** The -0.282 Meta move sits well inside the conditional N=73 bootstrap CI, so the benchmark alone does not establish it. The independent evidence is the 5/5 out-of-fold replication on train-split data plus the no-fingerprint capacity control; this is a missing-feature fix, not a fitted bias correction, so DE-56's placebo objection does not apply — the block is a per-drug structural feature with no free parameter and no holdout contact. It is still not independent external validation, and the adaptive-selection caveat stands unchanged. The residual band half-width moved **9.36→9.04-fold** with consumed-development coverage **89.0→91.8%** (67/73) at nominal 90%; neither is independent calibration. Existing SBI amortizers were trained on earlier ADME inputs, so their revision guard warns that posterior calibration may be stale; retraining them remains separate work. No new external holdout was evaluated.
+
+---
+
+## 2026-11-01 — Open defect: the full R&R cation branch is unidentifiable without a measured B:P
+
+Found while diagnosing the anionic residual above; **recorded, not yet fixed.**
+
+`predict/rr_full.py::compute_rr_kp` follows Rodgers et al. 2005 faithfully, including deriving the acidic-phospholipid affinity from the blood-cell relation `Kpu,BC = (Hct − 1 + B:P)/(Hct·fup)`. In that method B:P is a **measured** input. Production supplies `rbp = 1.0` for every drug — the deliberate honest default, because the bundled RBP model has scaffold-CV R² = −0.08.
+
+At exactly B:P = 1.0 the relation collapses to `Kpu,BC = 1/fup`, so `Ka,AP ∝ 1/fup`, and the closing `Kp = Kpu·fup` cancels it. Both drug inputs drop out and muscle Kp becomes a physiological constant:
+
+    Kp(muscle) = (AP_tissue/AP_bc) · 10^(pH_bc − pH_iw) = (1.53/0.50)·10^0.2 = 4.8498
+
+Verified numerically: sweeping fup over 0.002–0.9 and logP over 0–5 for a pKa-9 base returns Kp 4.8439 … 4.6667, constant to ~3%. **44 of the 73 scored drugs (60%) route through this branch**, so for 60% of the cohort the engine's tissue partitioning carries no drug-specific information; implied Vss is ~200–235 L for all of them, against a true range of 12 L (diclofenac) to 779 L (nilotinib).
+
+This is the mechanism behind the Engine 3.72→4.65 regression attributed on 2026-10-29 to "over-distribution of highly lipophilic compounds": the full-R&R switch promoted a degenerate branch to default. Kp-method ablation on N=73 with the pre-v2 models:
+
+| `kp_method` | Engine AAFE | Meta AAFE |
+|---|---:|---:|
+| `rodgers_rowland` (shipped default) | 4.654 | 2.825 |
+| `rodgers_rowland_approx` | 3.723 | **2.805** |
+| `berezhkovskiy` | 3.877 | 2.815 |
+| `poulin_theil` | 3.854 | 2.828 |
+
+Every alternative beats the shipped default on both tracks, but the Meta spread is only 0.023 — engine Kp is ~2% pass-through through the fixed meta, consistent with DE-43/DE-44. A fix is therefore a correctness item, not an accuracy lever, and it is deliberately **not** bundled with the descriptor change so the two effects stay separable. The honest framing for that fix: the full R&R cation branch is a measured-B:P method, and a structure-only prediction should route to a formulation that is identifiable from structure rather than substitute a placeholder into a required measurement.
+
+Related, in `predict/chemistry.py::_estimate_pka_type`: the basic-amine SMARTS does not exclude aryl amines, so 51/331 reference drugs (11 of the scored 73) are classified base or zwitterion on an aryl nitrogen alone. Diclofenac (diphenylamine, pKaH ≈ 0.8) becomes a zwitterion with default basic pKa 7.0 and takes the full cationic AP term, giving engine Vss 234 L against a label 12 L; methotrexate, furosemide, bumetanide, mefenamic acid and cefixime are likewise called zwitterions. A blanket "aryl N is never basic" rule would misclassify genuine aminopyridines (dalfampridine, pKa 9.1), so the fix needs pKa-free group counting of the kind now used in `compute_features_v2`, not a one-line SMARTS edit. DE-08 (a predicted pKa fed into R&R) does not cover this: the defect is branch selection, not pKa accuracy.
 
 ---
 

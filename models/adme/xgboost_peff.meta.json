@@ -1,28 +1,28 @@
 {
   "version": "v1_public_tdc",
-  "artifact_sha256": "1566e5b7c9ced4c2c1ce6f0d7e693b0190ae7306a8f632a9486c1658dab6e1e7",
+  "artifact_sha256": "b3b62cb12f80785d44ffedfae6c50f202c47e06423f168591b7ee4877cfaf5c0",
   "target": "log10(Peff x 10^-4 cm/s)",
   "trained_on": {
     "dataset_path": "data/training/peff_tdc_public_clean.csv",
-    "sha256": "46a5a7c4f48b6d6f4f501fdca049c1fe25cadf115658bda504d2e41d2092a06c",
+    "sha256": "5159f816c73f90c7c6ef8921983c082cf066a6a2ea18a91c415a04e3eb49e57b",
     "n_drugs_clean": 874,
     "source_sha256": "447d9f1af487c06b080145a2361dbe45af5b27afc83e1a975dd29b9ea535d6ab"
   },
   "feature_schema": {
-    "name": "compute_features_v1",
-    "n_features": 2057,
-    "sha256": "b41dddd78533661b8f4aed86bdb7c5f55d15ed3cd2ad20b39e9100557eda631e",
-    "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, MolMR). See src/sisyphus/descriptors.py::compute_features."
+    "name": "compute_features_v2",
+    "n_features": 2074,
+    "sha256": "578512ba6ad4a5a02dc95be40ec44bb22ef7c8ce35a80d1fe39742d920718a02",
+    "description": "Morgan fingerprint (2048 bits, radius=2) + 9 normalized RDKit descriptors (LogP, TPSA, MW, HAcceptors, HDonors, RotBonds, RingCount, FractionCSP3, MolMR) + 17-element pH-7.4 ionization block (strong-acid/strong-base group counts with aryl amines counted separately from aliphatic amines, net-charge class one-hot, formal charge). The first 2057 elements are bit-identical to compute_features_v1. See src/sisyphus/descriptors.py::compute_features_v2."
   },
-  "trained_at": "2026-09-23T23:01:28.912644+00:00",
+  "trained_at": "2026-11-01T17:03:56.138162+00:00",
   "n_drugs_original": 910,
   "n_drugs_excluded": 36,
   "holdout_version": "N=107 (data/reference/holdout.json)",
   "holdout_metric": {
     "name": "five_fold_cv_r2",
-    "value": 0.699723445510674,
-    "aafe": 2.1553577329080214,
-    "rmse_log10": 0.4274784865876935
+    "value": 0.7084086332011021,
+    "aafe": 2.133887793360676,
+    "rmse_log10": 0.42125093905462974
   },
   "hyperparameters": {
     "n_estimators": 500,

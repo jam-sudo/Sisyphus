@@ -138,12 +138,32 @@ def test_acceptance_15_flat_tail_ridge_warning():
     # #15: two MeasuredConc at DISTINCT within-interval phases but both on the flat
     # elimination tail (closely-spaced late troughs) route free-both yet emit the
     # ridge-wide / clint-axis warning (the phases do not identify the clint axis).
+    #
+    # The usable spacing band is narrow for this drug/regimen: free-both needs
+    # distinct phases (dt > 0.1*tau = 1.2 h) while _flat_tail needs |Δln c| < 0.5,
+    # which for caffeine here means dt < ~1.49 h. The original 1.5 h sat at 0.5024,
+    # just past the flat-tail threshold, so a few-percent CLint shift flipped the
+    # assertion. 1.3 h is mid-band (|Δln c| ≈ 0.436). The preconditions are asserted
+    # below so a future ADME shift reports "fixture drifted" instead of a bare
+    # missing-warning failure.
     reg = _reg()
     last = float(reg.last_dose_time_h)
+    t0, dt = last + 10.0, 1.3
     obs = [
-        MeasuredConc(value=1.0, t=last + 10.0),
-        MeasuredConc(value=0.95, t=last + 11.5),
+        MeasuredConc(value=1.0, t=t0),
+        MeasuredConc(value=0.95, t=t0 + dt),
     ]
+
+    tau = 12.0
+    grid, _, _ = build_oral_cl_grid(SMILES, reg, n_grid=9)
+    c0, c1 = (float(grid.conc_at(np.ones(1), t)[0]) for t in (t0, t0 + dt))
+    delta_ln = abs(np.log(c1) - np.log(c0))
+    assert dt > 0.1 * tau, f"fixture drifted: dt={dt} is not a distinct phase"
+    assert delta_ln < 0.5, (
+        f"fixture drifted: |Δln c|={delta_ln:.4f} is no longer a flat tail; "
+        "re-pick dt inside (1.2 h, flat-tail limit)"
+    )
+
     post = predict_tdm(SMILES, reg, obs, n_grid=9)
     assert post.cl_scale is not None
     assert any(("ridge-wide" in w) or ("clint axis" in w) for w in post.warnings)

@@ -43,10 +43,13 @@ from sisyphus.pipeline.predict import predict
 from tests._artifact_helpers import skip_if_local_artifacts
 
 _PINNED = {
-    "sepiapterin":       1.207040e+01,  # full R&R Kp (was 1.386895e+01)
-    "remdesivir":        4.498897e+00,  # full R&R Kp (was 5.890889e+00)
-    "tebipenem_pivoxil": 3.692924e-01,  # 2026-09 retrains + label screen (was 3.118914e-01)
-    "fostamatinib":      4.829905e-02,  # 2026-09 public retrains (was 6.675183e-02)
+    # Re-baselined 2026-11-01 on a clean public clone after the ionization-aware
+    # descriptor retrain (compute_features_v2): fup, CLint, VDss and Peff all moved,
+    # so every prodrug point estimate moved with them.
+    "sepiapterin":       1.341428e+01,  # ionization v2 (was 1.207040e+01)
+    "remdesivir":        4.528110e+00,  # ionization v2 (was 4.498897e+00)
+    "tebipenem_pivoxil": 2.797421e-01,  # ionization v2 (was 3.692924e-01)
+    "fostamatinib":      7.763713e-02,  # ionization v2 (was 4.829905e-02)
 }
 
 _RTOL = 0.05
