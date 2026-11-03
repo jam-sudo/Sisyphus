@@ -4,6 +4,7 @@
    to preserve the scientific-editorial look pixel-for-pixel.
    Ported from the prototype's charts.jsx / inline chart fns.
    ============================================================ */
+import { useState } from "react";
 import type { Pt, Band } from "../pk";
 
 function niceMax(v: number): number {
@@ -97,6 +98,16 @@ export function ConcChart(props: ConcChartProps) {
   const xticks = useTicks(xMax, 6);
   const yticks = useTicks(yMax, 4);
 
+  // Hover: time under the cursor (viewBox units), null when outside the plot.
+  const [hoverT, setHoverT] = useState<number | null>(null);
+  const onMove = (e: React.MouseEvent<SVGSVGElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    const t = ((e.clientX - r.left) * (w / r.width) - ml) / pw * xMax;
+    setHoverT(t >= 0 && t <= xMax ? t : null);
+  };
+  const nearest = (pts: Pt[], t: number): Pt =>
+    pts.reduce((a, b) => (Math.abs(b[0] - t) < Math.abs(a[0] - t) ? b : a));
+
   const linePath = (pts: Pt[]) =>
     "M" + pts.map((p) => X(p[0]).toFixed(1) + "," + Y(p[1]).toFixed(1)).join(" L");
   const areaPath = (b: Band) => {
@@ -109,7 +120,8 @@ export function ConcChart(props: ConcChartProps) {
   };
 
   return (
-    <svg className="chart" viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="xMidYMid meet" role="img">
+    <svg className="chart" viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="xMidYMid meet" role="img"
+      onMouseMove={onMove} onMouseLeave={() => setHoverT(null)}>
       <title>Plasma concentration versus time</title>
       {yticks.map((v, i) => (
         <g key={"y" + i}>
@@ -141,6 +153,23 @@ export function ConcChart(props: ConcChartProps) {
           {p.ring && <circle cx={X(p.t)} cy={Y(p.c)} r="7.5" fill="none" stroke={p.color || "var(--clay)"} strokeWidth="1" opacity="0.5" />}
         </g>
       ))}
+      {hoverT != null && (
+        <g pointerEvents="none">
+          <line x1={X(hoverT)} y1={mt} x2={X(hoverT)} y2={mt + ph} stroke="var(--ink-mute)" strokeWidth="1" strokeDasharray="2 3" opacity="0.6" />
+          {(props.series || []).filter((s) => s.pts.length).map((s, i) => {
+            const [t, c] = nearest(s.pts, hoverT);
+            const flip = X(t) > ml + pw * 0.7;
+            return (
+              <g key={"hv" + i}>
+                <circle cx={X(t)} cy={Y(c)} r="3.6" fill={s.color} stroke="var(--paper)" strokeWidth="1.4" />
+                <text className="tick" x={X(t) + (flip ? -8 : 8)} y={Y(c) - 6 - i * 12} textAnchor={flip ? "end" : "start"} style={{ fill: "var(--ink)" }}>
+                  {+t.toPrecision(3)} h · {+c.toPrecision(3)} mg/L
+                </text>
+              </g>
+            );
+          })}
+        </g>
+      )}
       <text className="alab" x={ml + pw / 2} y={h - 1} textAnchor="middle">{props.xLabel || "time (h)"}</text>
       <text className="alab" transform={`translate(12 ${mt + ph / 2}) rotate(-90)`} textAnchor="middle">{props.yLabel || "conc (mg/L)"}</text>
     </svg>
