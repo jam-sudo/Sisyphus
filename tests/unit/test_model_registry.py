@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -21,9 +22,30 @@ from sisyphus.ml.registry import (
 )
 
 ROOT = Path(__file__).resolve().parent.parent.parent
+
+
+def _tracked_models() -> set[Path] | None:
+    """Paths git tracks under models/, or None when that cannot be determined.
+
+    Shipping is defined by what the repository tracks, so local scratch files
+    (gitignored backups, experimental retrains) must not count as shipped.
+    Returns None outside a git checkout, leaving the listing unfiltered.
+    """
+    try:
+        out = subprocess.run(
+            ["git", "-C", str(ROOT), "ls-files", "-z", "--", "models"],
+            capture_output=True, check=True, timeout=30,
+        ).stdout.decode()
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return {ROOT / rel for rel in out.split("\0") if rel}
+
+
+_TRACKED_MODELS = _tracked_models()
 SHIPPED_MODELS = [
     path for path in (ROOT / "models").rglob("*")
     if path.is_file()
+    and (_TRACKED_MODELS is None or path in _TRACKED_MODELS)
     and path.name != ".gitkeep"
     and path.name not in ("artifact_loaders.json", "engine_revision.json")
     and not path.name.endswith(".meta.json")
