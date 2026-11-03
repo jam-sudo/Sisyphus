@@ -34,9 +34,12 @@ console.error = (...a) => {
 };
 
 let resolvePrediction;
+let healthChecked = false; // only a build with VITE_API_URL probes the live engine
 globalThis.fetch = async (url) => {
-  if (String(url).endsWith("/health"))
+  if (String(url).endsWith("/health")) {
+    healthChecked = true;
     return { ok: true, json: async () => ({ version: "0.4.0" }) };
+  }
   if (String(url).endsWith("/predict"))
     return new Promise((resolve) => { resolvePrediction = resolve; });
   return {
@@ -91,7 +94,7 @@ assert(!root.textContent.includes("external holdout"), "development set is not l
 assert(document.querySelector('input[type="number"]')?.disabled, "preset dose cannot be rescaled");
 assert(root.textContent.includes("Dose/AUC"), "24h exposure proxy is labeled without CL/F claim");
 assert(document.querySelector(".btn-run")?.textContent.includes("View prediction"), "preset action identifies frozen prediction");
-if (!process.env.SMOKE_LIVE_RACE) {
+if (!healthChecked) {
   assert(root.textContent.includes("Live engine not deployed in this build"), "static build explains live-engine state");
   assert(document.querySelector('.content a[href="/#quickstart"]'), "static build links to CLI usage");
 }
