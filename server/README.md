@@ -39,26 +39,38 @@ subject to memory limits for the loaded ML artifacts.
 
 ## Deploy to Hugging Face Spaces (Docker, free)
 
-1. Create a new **Space** → SDK: **Docker** → blank.
-2. Add a root `Dockerfile` with the contents of [`server/Dockerfile`](./Dockerfile)
-   (it copies only runtime source and artifacts, installs pinned production deps, and serves on port 7860). Commit/push to
-   the Space; HF builds it. First build takes a few minutes (rdkit/xgboost wheels).
-3. Note the Space URL, e.g. `https://<user>-sisyphus.hf.space`. Verify
-   `GET <url>/health` returns ok.
-4. Wire the frontend to it and redeploy the console:
-   ```bash
-   cd web
-   VITE_API_URL=https://<user>-sisyphus.hf.space npm run build:pages
-   cd .. && git add app && git commit -m "chore(web): point console at live engine" && git push
-   ```
-   The console then enables the **✎ Custom SMILES** option (free-text SMILES →
-   real prediction). Until then the public site runs the static preset tier.
+The live console uses the Space
+[`jam-sudo/sisyphus`](https://huggingface.co/spaces/jam-sudo/sisyphus)
+at `https://jam-sudo-sisyphus.hf.space`.
+
+1. The Space holds only a `README.md` (`sdk: docker`, `app_port: 7860`) and a
+   [`Dockerfile`](https://huggingface.co/spaces/jam-sudo/sisyphus/blob/main/Dockerfile).
+   That Dockerfile fetches one pinned commit of this repository and runs the
+   same install steps as [`server/Dockerfile`](./Dockerfile), which CI builds
+   and smoke-tests.
+2. To deploy a newer engine, change `SISYPHUS_COMMIT` in the Space Dockerfile to
+   the target commit on `main`. HF rebuilds on push; the first build takes a few
+   minutes (rdkit/xgboost wheels).
+3. Keep the Space variable `SISYPHUS_TRUST_PROXY=1` (see below).
+4. Verify `GET <url>/health` returns `"version": "0.4.x"`. The console only
+   enables live prediction when the major.minor version matches.
+
+The console's backend URL is committed in `web/.env.production`, so
+`npm run build:pages` produces the same `/app` bundle locally and in CI's
+bundle-sync check. Do not pass `VITE_API_URL` on the command line for a
+production build. `npm run dev` ignores that file; set `VITE_API_URL` there to
+use a local server.
 
 ### Security knobs (env-overridable, see `server/config.py`)
 - **CORS** is restricted to `https://sisyphus-pbpk.io` (the production console
   origin) — arbitrary origins are no longer reflected. Add more origins (e.g. a
   localhost dev origin) via `SISYPHUS_CORS_ORIGINS` (comma-separated), no code
-  change needed.
+  change needed. **On Hugging Face Spaces this allow-list is not effective:** the
+  `*.hf.space` proxy adds a reflected `Access-Control-Allow-Origin` to every
+  response, so any site can call the API from a browser. The API carries no
+  cookies or credentials, so this exposes compute, not user data; the per-client
+  rate limit still applies. Hosts that pass the app's headers through, such as
+  Cloud Run, enforce the allow-list.
 - **Rate limiting:** `POST /predict` is capped per client (default
   `20/minute`) via slowapi; over-cap requests get `429`. Tune with
   `SISYPHUS_PREDICT_RATE_LIMIT` (e.g. `10/minute`, read once at startup).

@@ -31,5 +31,7 @@ jobs:
       - run: npm run smoke # headless render guard for supported workflows
       - name: Production /app bundle is synchronized
         run: git diff --exit-code -- ../app
+      - run: VITE_API_URL= npm run build # static tier: no live engine configured
+      - run: npm run smoke
       - run: VITE_API_URL=http://localhost:8000 npm run build
       - run: SMOKE_LIVE_RACE=1 npm run smoke
