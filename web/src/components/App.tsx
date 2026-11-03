@@ -28,7 +28,7 @@ function sanitize(raw: unknown): AppState {
   return {
     drugId: typeof p.drugId === "string" && p.drugId !== "custom" ? p.drugId : b.drugId,
     dose: Math.max(0, num(p.dose, b.dose)),
-    route: "oral", // static tier is oral-only (IV arrives with the live engine tier)
+    route: "oral", // both tiers are oral-only; the live API accepts route="oral" only
     method: p.method === "engine" || p.method === "ml" ? p.method : "hybrid",
     benchSet: typeof p.benchSet === "string" ? p.benchSet : b.benchSet,
   };

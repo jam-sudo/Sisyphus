@@ -151,7 +151,7 @@ export function RailInputs({
             </div>
             <div className="field">
               <label>
-                Route <span className="hintdot">oral · static tier</span>
+                Route <span className="hintdot">oral only</span>
               </label>
               <div className="seg">
                 {(["oral"] as const).map((r) => (
